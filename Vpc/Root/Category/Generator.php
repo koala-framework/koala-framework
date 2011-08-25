@@ -304,6 +304,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
         $ret['actions']['properties'] = true;
         $ret['actions']['delete'] = true;
+        $ret['actions']['copy'] = true;
         $ret['actions']['visible'] = true;
         $ret['actions']['makeHome'] = true;
 
@@ -358,9 +359,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         if ($source->generator !== $this) {
             throw new Vps_Exception("you must call this only with the correct source");
         }
-        if ($parentTarget->generator !== $this) {
-            //TODO das ist nicht korrekt, es muss genschaut werden ob $parentTarget einen pagegenerator hat
-            //throw new Vps_Exception("you must call this only with the correct target");
+        if (!Vps_Component_Generator_Abstract::getInstances($parentTarget, array('whereGeneratorClass'=>get_class($this)))) {
+            throw new Vps_Exception("you must call this only with the correct target");
         }
 
         $target = $this->_duplicateChildPages($source->parent, $parentTarget, $source->id, $progressBar);

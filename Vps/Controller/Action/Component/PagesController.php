@@ -118,6 +118,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['actions'] = array_merge($data['actions'], array(
                 'properties' => false,
                 'delete' => false,
+                'copy' => false,
                 'visible' => false,
                 'makeHome' => false,
             ));
@@ -136,6 +137,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->getClass())
                     ->getControllerUrl('Generator');
                 $data['actions']['add'] = true;
+                $data['actions']['paste'] = true;
                 $data['allowDrop'] = true;
             }
         }
@@ -147,6 +149,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['actions'] = array_merge(array(
             'properties' => false,
             'delete' => false,
+            'copy' => false,
+            'paste' => false,
             'visible' => false,
             'makeHome' => false,
             'add' => false,
