@@ -294,8 +294,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return (count($this->_settings['component']) > 1);
     }
 
-    public function duplicateChild($source, $parentTarget)
+    public function getDuplicateProgressSteps($source)
     {
+        return 1; //fixed, as we don't go any deeper (would be too expensive)
+    }
+
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
+    {
+        if ($progressBar) $progressBar->next();
+        $progressBar = null; //stop here, as getDuplicateProgressSteps doesn't go any deeper
+
         if ($source->generator !== $this) {
             throw new Vps_Exception("you must call this only with the correct source");
         }
@@ -314,7 +322,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             return null;
             throw new Vps_Exception("Can't find just duplicated component in Generator '".get_class($this)."'. Parent '$parentTarget->componentId', childId '$id'");
         }
-        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
         return $target;
     }
 
