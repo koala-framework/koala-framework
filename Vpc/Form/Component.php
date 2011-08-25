@@ -33,8 +33,6 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $ret['buttonClass'] = 'vpsButtonFlat'; //um standard styles aus dem Vps zu umgehen
 
-        $ret['useJavascriptSubmit'] = false;
-
         return $ret;
     }
 
@@ -207,8 +205,6 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
         $ret['message'] = null;
-
-        $ret['useJavascriptSubmit'] = $this->_getSetting('useJavascriptSubmit');
 
         $ret['json'] = array(
             'controllerUrl' => Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm'),
