@@ -499,7 +499,14 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
         Vps_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
-        $newPage = Vps_Util_Component::duplicate($source, $target);
+        $progressBar = new Zend_ProgressBar(
+            new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+            0, Vps_Util_Component::getDuplicateProgressSteps($source)
+        );
+
+        $newPage = Vps_Util_Component::duplicate($source, $target, $progressBar);
+
+        $progressBar->finish();
 
 
         $s = new Vps_Model_Select();

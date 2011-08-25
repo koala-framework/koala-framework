@@ -396,10 +396,12 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         Ext.Ajax.request({
             url: this.treePanel.controllerUrl + '/json-paste',
             params: Ext.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
-            mask: this.el,
+            timeout: 5*60*1000,
+            progress: true,
+            progressTitle : trlVps('Paste Page'),
+            showCancel: false,
             success: function(response, options, result) {
-                //this.treePanel.reload();
-                this.treePanel.tree.getRootNode().reload();
+                this.treePanel.reload();
             },
             scope: this
         });

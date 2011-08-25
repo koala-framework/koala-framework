@@ -338,7 +338,22 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    public function duplicateChild($source, $parentTarget)
+    
+    public function getDuplicateProgressSteps($source)
+    {
+        $ret = 1;
+        $ret += Vpc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
+        if (isset($this->_pageChilds[$source->id])) {
+            foreach ($this->_pageChilds[$source->id] as $i) {
+                $data = $this->getChildData(null, array('id'=>$i));
+                $data = array_shift($data);
+                $ret += $this->getDuplicateProgressSteps($data);
+            }
+        }
+        return $ret;
+    }
+
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
     {
         if ($source->generator !== $this) {
             throw new Vps_Exception("you must call this only with the correct source");
@@ -348,29 +363,31 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             //throw new Vps_Exception("you must call this only with the correct target");
         }
 
-        $target = $this->_duplicateChildPages($source->parent, $parentTarget, $source->id);
+        $target = $this->_duplicateChildPages($source->parent, $parentTarget, $source->id, $progressBar);
         return $target;
     }
 
-    private function _duplicateChildPages($parentSource, $parentTarget, $childId)
+    private function _duplicateChildPages($parentSource, $parentTarget, $childId, Zend_ProgressBar $progressBar = null)
     {
+        if ($progressBar) $progressBar->next(1, trlVps("Pasting {0}", $this->_pageData[$childId]['name']));
+
         $data = array();
         $data['parent_id'] = $parentTarget->dbId;
         $sourceRow = $this->getModel()->getRow($childId);
         $newRow = $sourceRow->duplicate($data);
 
         //force reload to have the new row loaded
-        $this->_pageDataLoaded = false;
+        $this->_pageDataLoaded = false; //TODO do this only once
         $this->_loadPageData();
 
         $source = $parentSource->getChildComponent(array('id'=>$childId, 'ignoreVisible'=>true));
         $target = $parentTarget->getChildComponent(array('id'=>$newRow->id, 'ignoreVisible'=>true));
 
-        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
 
         if (isset($this->_pageChilds[$childId])) {
             foreach ($this->_pageChilds[$childId] as $i) {
-                $this->_duplicateChildPages($source, $target, $i);
+                $this->_duplicateChildPages($source, $target, $i, $progressBar);
             }
         }
         return $target;

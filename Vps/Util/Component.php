@@ -34,9 +34,14 @@ class Vps_Util_Component
         return $msg;
     }
 
-    public static function duplicate(Vps_Component_Data $source, Vps_Component_Data $parentTarget)
+    public static function getDuplicateProgressSteps(Vps_Component_Data $source)
     {
-        $new = $source->generator->duplicateChild($source, $parentTarget);
+        return $source->generator->getDuplicateProgressSteps($source);
+    }
+
+    public static function duplicate(Vps_Component_Data $source, Vps_Component_Data $parentTarget, Zend_ProgressBar $progressBar = null)
+    {
+        $new = $source->generator->duplicateChild($source, $parentTarget, $progressBar);
 
         Vps_Component_Generator_Abstract::clearInstances();
         Vps_Component_Data_Root::reset();
