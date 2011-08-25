@@ -87,7 +87,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             progressBar: this._createProgressDialog({
                 title: options.progressTitle || trlVps('Progress'),
                 transId: this.transId,
-                requestOptions: options
+                requestOptions: options,
+                showCancel: options.showCancel
             }),
             breakStatusRequests: false
         };

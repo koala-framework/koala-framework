@@ -33,7 +33,17 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         }
     }
 
-    public function duplicate($source, $target)
+    public function getDuplicateProgressSteps($source)
+    {
+        $ret = 0;
+        $s = array('inherit' => false, 'ignoreVisible'=>true);
+        foreach ($source->getChildComponents($s) as $c) {
+            $ret += $c->generator->getDuplicateProgressSteps($c);
+        }
+        return $ret;
+    }
+
+    public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
         if ($model = $source->getComponent()->getOwnModel()) {
             $row = $model->getRow($source->dbId);
@@ -46,7 +56,7 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
 
         $s = array('inherit' => false, 'ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
-            $c->generator->duplicateChild($c, $target);
+            $c->generator->duplicateChild($c, $target, $progressBar);
         }
     }
 
