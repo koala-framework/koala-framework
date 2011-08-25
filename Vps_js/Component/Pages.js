@@ -11,6 +11,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('properties'),
                 this.getAction('add'),
                 this.getAction('delete'),
+                this.getAction('copy'),
+                this.getAction('paste'),
                 this.getAction('visible'),
                 this.getAction('makeHome'),
                 this.getAction('preview')
@@ -101,6 +103,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('properties'),
                 this.getAction('add'),
                 this.getAction('delete'),
+                this.getAction('copy'),
+                this.getAction('paste'),
                 this.getAction('visible'),
                 this.getAction('makeHome'),
                 this.getAction('preview')
@@ -280,6 +284,26 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
+        } else if (type == 'copy') {
+            this.actions[type] = new Ext.Action({
+                text    : trlVps('Copy page'),
+                handler : function() {
+                    this.onCopy();
+                },
+                icon    : '/assets/silkicons/page_copy.png',
+                cls     : 'x-btn-text-icon',
+                scope   : this
+            });
+        } else if (type == 'paste') {
+            this.actions[type] = new Ext.Action({
+                text    : trlVps('Paste page'),
+                handler : function() {
+                    this.onPaste();
+                },
+                icon    : '/assets/silkicons/page_paste.png',
+                cls     : 'x-btn-text-icon',
+                scope   : this
+            });
         } else if (type == 'visible') {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Show / hide page'),
@@ -355,6 +379,32 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             throw 'unknown action-type: ' + type;
         }
         return this.actions[type];
+    },
+
+    onCopy: function(o, e) {
+        Ext.Ajax.request({
+            url: this.treePanel.controllerUrl + '/json-copy',
+            params: Ext.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
+            mask: this.el,
+            success: function(response, options, result) {
+            },
+            scope: this
+        });
+    },
+
+    onPaste: function() {
+        Ext.Ajax.request({
+            url: this.treePanel.controllerUrl + '/json-paste',
+            params: Ext.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
+            timeout: 5*60*1000,
+            progress: true,
+            progressTitle : trlVps('Paste Page'),
+            showCancel: false,
+            success: function(response, options, result) {
+                this.treePanel.reload();
+            },
+            scope: this
+        });
     }
 
 });

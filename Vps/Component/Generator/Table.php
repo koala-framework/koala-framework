@@ -294,21 +294,35 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return (count($this->_settings['component']) > 1);
     }
 
-    public function duplicateChild($source, $parentTarget)
+    public function getDuplicateProgressSteps($source)
     {
+        return 1; //fixed, as we don't go any deeper (would be too expensive)
+    }
+
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
+    {
+        if ($progressBar) $progressBar->next();
+        $progressBar = null; //stop here, as getDuplicateProgressSteps doesn't go any deeper
+
         if ($source->generator !== $this) {
             throw new Vps_Exception("you must call this only with the correct source");
         }
 
         $data = array();
-        if ($this->_getModel()->hasColumn('component_id')) {
+        if ($this->_getModel()->hasColumn('component_id')) { //only duplicate rows that are scoped to source component (using component_id)
             $data['component_id'] = $parentTarget->dbId;
+            $newRow = $source->row->duplicate($data);
+        } else {
+            $newRow = $source->row;
         }
-        $newRow = $source->row->duplicate($data);
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
         $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
-        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        if (!$target) {
+            return null;
+            throw new Vps_Exception("Can't find just duplicated component in Generator '".get_class($this)."'. Parent '$parentTarget->componentId', childId '$id'");
+        }
+        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
         return $target;
     }
 

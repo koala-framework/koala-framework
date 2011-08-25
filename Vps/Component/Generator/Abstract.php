@@ -749,9 +749,14 @@ abstract class Vps_Component_Generator_Abstract
         return $this->_inherits;
     }
 
-    public function duplicateChild($source, $parentTarget)
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Vps_Exception_NotYetImplemented("duplicating is not yet implemented in '".get_class($this)."'");
+    }
+
+    public function getDuplicateProgressSteps($source)
+    {
+        return 0;
     }
 
     public function makeChildrenVisible($source)

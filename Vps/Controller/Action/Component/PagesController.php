@@ -476,4 +476,49 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $acl = Vps_Registry::get('acl')->getComponentAcl();
         return $acl->isAllowed($user, $component);
     }
+
+    public function jsonCopyAction()
+    {
+        $id = $this->_getParam('id');
+        if (!Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Vps_Exception("Component with id '$id' not found");
+        }
+        $session = new Zend_Session_Namespace('PagesController:copy');
+        $session->id = $id;
+    }
+
+    public function jsonPasteAction()
+    {
+        $session = new Zend_Session_Namespace('PagesController:copy');
+        $id = $session->id;
+        if (!$id || !Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Vps_Exception_Client(trlVps('Clipboard is empty'));
+        }
+        $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+        $target = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('id'), array('ignoreVisible'=>true));
+
+        Vps_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+
+        $progressBar = new Zend_ProgressBar(
+            new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+            0, Vps_Util_Component::getDuplicateProgressSteps($source)
+        );
+
+        $newPage = Vps_Util_Component::duplicate($source, $target, $progressBar);
+
+        $progressBar->finish();
+
+
+        $s = new Vps_Model_Select();
+        $s->whereEquals('parent_id', $newPage->row->parent_id);
+        $s->order('pos', 'DESC');
+        $s->limit(1);
+        $lastRow = $newPage->generator->getModel()->getRow($s);
+        $row = $newPage->generator->getModel()->getRow($newPage->row->id);
+        $row->pos = $lastRow ? $lastRow->pos+1 : 1;
+        $row->visible = false;
+        $row->save();
+
+        Vps_Component_ModelObserver::getInstance()->enable();
+    }
 }
