@@ -43,6 +43,10 @@ class Vps_Util_Component
     {
         $new = $source->generator->duplicateChild($source, $parentTarget, $progressBar);
 
+        if (!$new) {
+            throw new Vps_Exception("Failed duplicating '$source->componentId'");
+        }
+
         Vps_Component_Generator_Abstract::clearInstances();
         Vps_Component_Data_Root::reset();
 
