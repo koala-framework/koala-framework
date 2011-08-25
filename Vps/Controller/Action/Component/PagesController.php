@@ -501,6 +501,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
         $target = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('id'), array('ignoreVisible'=>true));
 
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        if (!$acl->isAllowed($user, $source) || !$acl->isAllowed($user, $target)) {
+            throw new Vps_Exception_AccessDenied();
+        }
+
         Vps_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         $progressBar = new Zend_ProgressBar(
