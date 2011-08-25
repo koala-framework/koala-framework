@@ -309,9 +309,15 @@ class Vps_User_Model extends Vps_Model_RowCache
 
     public function lostPassword($email)
     {
-        $row = $this->getRow($this->select()->whereEquals('email', $email));
+        $row = $this->getRow($this->select()
+            ->whereEquals('email', $email)
+            ->whereEquals('deleted', 0)
+        );
         if (!$row) {
-            throw new Vps_ClientException(trlVps('User not existent in this web.'));
+            throw new Vps_Exception_Client(trlVps('User not existent in this web.'));
+        }
+        if ($row->locked) {
+            throw new Vps_Exception_Client(trlVps('User is currently locked.'));
         }
 
         if ($row->sendLostPasswordMail()) {
