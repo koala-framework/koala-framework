@@ -42,8 +42,6 @@
 
 - UserModel: im OSS-CMS Db Model verwenden, im Vps Service
 
-- alle direkten apc aufrufe optional machen
-
 - preLogin vivid:planet
   o standard im oss-cms test:test
   o standard im internen-cms vivid:planet
