@@ -32,9 +32,6 @@
   o Vps/Controller/Action/Spam
 
 - löschen?
-  o Vps/Db/TabesModel
-  o Vps/Db/TabeFieldsModel
-  o Vps/Update/Action/Db
   o Vps/Dao/* <- franz fragen
   o Vps/Controller/Action/Cli/Svn ?
 
