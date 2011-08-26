@@ -99,10 +99,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         //TODO: acceptLanguage berücksichtigen?
         $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'url-'.$cacheUrl;
-        if ($page = apc_fetch($cacheId)) {
+        $cacheId = 'url-'.$cacheUrl;
+        if ($page = Vps_Cache_Simple::fetch($cacheId)) {
             $exactMatch = true;
             $ret = Vps_Component_Data::vpsUnserialize($page);
         } else {
@@ -120,7 +118,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
-                apc_add($cacheId, $ret->vpsSerialize());
+                Vps_Cache_Simple::add($cacheId, $ret->vpsSerialize());
 
                 Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
                     array(array(

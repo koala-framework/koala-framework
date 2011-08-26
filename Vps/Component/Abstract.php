@@ -28,8 +28,8 @@ class Vps_Component_Abstract
         static $prefix;
         if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
 
-        $cacheId = $prefix.'-hasSettings-'.$class;
-        $ret = apc_fetch($cacheId, $success);
+        $cacheId = 'hasSettings-'.$class;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -37,7 +37,7 @@ class Vps_Component_Abstract
         //& für performance
         $s =& self::_getSettingsCached();
         $ret = isset($s[$class]);
-        apc_add($cacheId, $ret);
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -59,10 +59,8 @@ class Vps_Component_Abstract
             return isset($settings[$setting]);
         }
 
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'-has-'.$class.'-'.$setting;
-        $ret = apc_fetch($cacheId, $success);
+        $cacheId = 'has-'.$class.'-'.$setting;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -73,7 +71,7 @@ class Vps_Component_Abstract
             throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses. Requested setting: $setting");
         }
         $ret = array_key_exists($setting, $s[$class]);
-        apc_add($cacheId, $ret);
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -164,10 +162,8 @@ class Vps_Component_Abstract
             return $ret;
         }
 
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'-'.$class.'-'.$setting;
-        $ret = apc_fetch($cacheId, $success);
+        $cacheId = $class.'-'.$setting;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -189,7 +185,7 @@ class Vps_Component_Abstract
                 throw $e;
             }
         }
-        apc_add($cacheId, $ret);
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -197,17 +193,15 @@ class Vps_Component_Abstract
     {
         if (!Vps_Registry::get('config')->vpc->rootComponent) return 0;
 
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'-settingsMtime';
-        $ret = apc_fetch($cacheId, $success);
+        $cacheId = 'settingsMtime';
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
 
         $s =& self::_getSettingsCached();
         $ret = $s['mtime'];
-        apc_add($cacheId, $ret);
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -508,10 +502,8 @@ class Vps_Component_Abstract
 
     static public function getFlag($class, $flag)
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'-flag-'.$class.'-'.$flag;
-        $ret = apc_fetch($cacheId, $success);
+        $cacheId = 'flag-'.$class.'-'.$flag;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -522,7 +514,7 @@ class Vps_Component_Abstract
         } else {
             $ret = $flags[$flag];
         }
-        apc_add($cacheId, $ret);
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -531,10 +523,8 @@ class Vps_Component_Abstract
         $root = Vps_Component_Data_Root::getComponentClass();
         if (!$root) return array();
         if (!self::$_rebuildingSettings) {
-            static $prefix;
-            if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-            $cacheId = $prefix.'-componentClasses-'.Vps_Component_Data_Root::getComponentClass();
-            $ret = apc_fetch($cacheId, $success);
+            $cacheId = 'componentClasses-'.Vps_Component_Data_Root::getComponentClass();
+            $ret = Vps_Cache_Simple::fetch($cacheId, $success);
             if ($success) {
                 return $ret;
             }
@@ -543,7 +533,7 @@ class Vps_Component_Abstract
             unset($ret[array_search('mtime', $ret)]);
             unset($ret[array_search('mtimeFiles', $ret)]);
             $ret = array_values($ret);
-            apc_add($cacheId, $ret);
+            Vps_Cache_Simple::add($cacheId, $ret);
             return $ret;
         }
         $componentClasses = array($root);
