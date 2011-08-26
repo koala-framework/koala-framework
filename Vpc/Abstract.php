@@ -132,15 +132,13 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         static $ccc = array();
 
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $currentCacheId = $prefix.'iccc-'.md5($class.$cacheId);
+        $currentCacheId = 'iccc-'.md5($class.$cacheId);
 
         if (isset($ccc[$class.$cacheId])) {
             Vps_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
         }
-        $ret = apc_fetch($cacheId, $success);
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             $ccc[$class.$cacheId] = $ret;
             Vps_Benchmark::count('iccc cache semi-hit');
@@ -162,7 +160,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
 
-        apc_add($currentCacheId, $ccc[$class.$cacheId]);
+        Vps_Cache_Simple::add($currentCacheId, $ccc[$class.$cacheId]);
         return $ccc[$class.$cacheId];
 
     }
@@ -268,10 +266,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     protected function _callProcessInput()
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'procI-'.$this->getData()->getPageOrRoot()->componentId;
-        $processCached = apc_fetch($cacheId, $success);
+        $cacheId = 'procI-'.$this->getData()->getPageOrRoot()->componentId;
+        $processCached = Vps_Cache_Simple::fetch($cacheId, $success);
         if (!$success) {
             $process = $this->getData()
                 ->getRecursiveChildComponents(array(
@@ -297,7 +293,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             foreach ($process as $p) {
                 $datas[] = $p->vpsSerialize();
             }
-            apc_add($cacheId, $datas);
+            Vps_Cache_Simple::add($cacheId, $datas);
         } else {
             $process = array();
             foreach ($processCached as $d) {
@@ -469,9 +465,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if (!is_array($class)) $class = array($class);
 
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'cclsbpc-'.implode('-', $class);
-        $ret = apc_fetch($cacheId, $success);
+        $cacheId = 'cclsbpc-'.implode('-', $class);
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -488,7 +483,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 }
             }
         }
-        apc_add($cacheId, $ret);
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
     public static function getComponentClassByParentClass($class)

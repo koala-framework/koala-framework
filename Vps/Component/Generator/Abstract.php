@@ -242,8 +242,6 @@ abstract class Vps_Component_Generator_Abstract
 
     private static function _getGeneratorKeys($component, $componentClass)
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
         $cacheId = $componentClass;
         if ($component) {
             foreach ($component->inheritClasses as $inheritComponent) {
@@ -254,7 +252,7 @@ abstract class Vps_Component_Generator_Abstract
         if (isset(self::$_cachedGeneratorKeys[$cacheId])) {
             return self::$_cachedGeneratorKeys[$cacheId];
         }
-        $ret = apc_fetch($prefix.'genInst-'.$cacheId, $success);
+        $ret = Vps_Cache_Simple::fetch('genInst-'.$cacheId, $success);
         if ($success) {
             self::$_cachedGeneratorKeys[$cacheId] = $ret;
             return $ret;
@@ -335,7 +333,7 @@ abstract class Vps_Component_Generator_Abstract
                 'childComponentIds' => $childComponentIds
             );
         }
-        apc_add($prefix.'genInst-'.$cacheId, $ret);
+        Vps_Cache_Simple::add('genInst-'.$cacheId, $ret);
 
         self::$_cachedGeneratorKeys[$cacheId] = $ret;
         return $ret;

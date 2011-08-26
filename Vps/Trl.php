@@ -319,13 +319,8 @@ class Vps_Trl
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
 
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
-        $success = false;
-        if (function_exists('apc_fetch')) {
-            $ret = apc_fetch($cacheId, $success);
-        }
+        $cacheId = 'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -338,9 +333,7 @@ class Vps_Trl
         } else {
             $ret = $needle;
         }
-        if (function_exists('apc_add')) {
-            apc_add($cacheId, $ret);
-        }
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -350,10 +343,8 @@ class Vps_Trl
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
 
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        $cacheId = $prefix.'trlp-'.$source.'-'.$target.'-'.$plural.'-'.$context;
-        $ret = apc_fetch($cacheId, $success);
+        $cacheId = 'trlp-'.$source.'-'.$target.'-'.$plural.'-'.$context;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -366,7 +357,7 @@ class Vps_Trl
         } else {
             $ret = $plural;
         }
-        apc_add($cacheId, $ret);
+        Vps_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 

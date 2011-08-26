@@ -24,14 +24,12 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
     //aufgerufen von row beim speichern
     public function clearRowCache($id)
     {
-        apc_delete($this->_getCacheId($id));
+        Vps_Cache_Simple::delete($this->_getCacheId($id));
     }
 
     private function _getCacheId($id)
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
-        return $prefix.'rowCache-'.$this->getUniqueIdentifier().'-'.$id;
+        return 'rowCache-'.$this->getUniqueIdentifier().'-'.$id;
     }
 
     public function getRow($select)
@@ -43,7 +41,7 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
             if (isset($this->_cacheRows[$select])) return $this->_cacheRows[$select];
             $cacheId = $this->_getCacheId($select);
             $success = false;
-            $cacheData = apc_fetch($cacheId, $success);
+            $cacheData = Vps_Cache_Simple::fetch($cacheId, $success);
             if (!$success) {
                 $cacheData = array();
                 $row = parent::getRow($select);
@@ -52,7 +50,7 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
                 foreach ($this->_cacheColumns as $c) {
                     $cacheData[$c] = $row->$c;
                 }
-                apc_add($cacheId, $cacheData);
+                Vps_Cache_Simple::add($cacheId, $cacheData);
                 $this->_cacheRows[$select] = $row;
                 return $row;
             }
@@ -96,7 +94,7 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
                 $this->clearRowCache($r[$this->getPrimaryKey()]);
             }
         } else {
-            apc_delete_file(new APCIterator('user', '#^'.preg_quote($this->_getCacheId('')).'#'));
+            Vps_Cache_Simple::clear($this->_getCacheId(''));
         }
         parent::_afterImport($format, $data, $options);
     }
@@ -104,6 +102,6 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
     protected function _afterDeleteRows($where)
     {
         parent::_afterDeleteRows($where);
-        apc_delete_file(new APCIterator('user', '#^'.preg_quote($this->_getCacheId('')).'#'));
+        Vps_Cache_Simple::clear($this->_getCacheId(''));
     }
 }

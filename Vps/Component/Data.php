@@ -231,16 +231,14 @@ class Vps_Component_Data
             Vps_Component_Select::WHERE_COMPONENT_KEY,
         ), $select);
 
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
-        $cacheId = $prefix.'-recCCGen-'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
-        $generators = apc_fetch($cacheId, $success);
+        $cacheId = 'recCCGen-'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
+        $generators = Vps_Cache_Simple::fetch($cacheId, $success);
         if (!$success) {
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
-            apc_add($cacheId, $generators);
+            Vps_Cache_Simple::add($cacheId, $generators);
         }
 
         $noSubPages =
