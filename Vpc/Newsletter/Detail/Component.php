@@ -23,7 +23,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/Recipients.css';
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
-        $ret['checkRtrList'] = true;
+        $ret['checkRtrList'] = !!Vps_Registry::get('config')->service->rtrlist->url;
 
         $ret['extConfig'] = 'Vpc_Newsletter_Detail_ExtConfig';
         return $ret;
