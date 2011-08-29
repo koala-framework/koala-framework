@@ -4,7 +4,6 @@ class Vps_Mail_Template
     protected $_mail;
     protected $_view;
     protected $_masterTemplate = null;
-    protected $_mailVarsClassName = 'Vps_Dao_UserMails';
     protected $_txtTemplate;
     protected $_htmlTemplate;
 
@@ -37,11 +36,6 @@ class Vps_Mail_Template
     public function assign($spec, $value = null)
     {
         return $this->_view->assign($spec, $value);
-    }
-
-    public function setMailVarsClassName($name)
-    {
-        $this->_mailVarsClassName = $name;
     }
 
     public function setMail($mail)
