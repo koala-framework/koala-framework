@@ -1,1 +1,0 @@
- ALTER TABLE `cache_component` CHANGE `content` `content` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL  ;
