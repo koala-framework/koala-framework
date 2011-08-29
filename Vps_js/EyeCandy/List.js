@@ -9,6 +9,7 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
     //el
     //plugins[]
     //states[]
+    defaultState: 'normal',
     childSelector: '.listItem',
     _init: function() {
         this.addEvents({
@@ -27,28 +28,35 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
         this.el = Ext.get(this.el);
 
         this.items = [];
-        var items = Ext.query(this.childSelector, this.el);
+        var items = this.el.query(this.childSelector);
         var idx = 0;
         items.forEach(function(el) {
             var item = new Vps.EyeCandy.List.Item({
                 list: this,
-                el: el,
+                el: Ext.get(el),
                 listIndex: idx
             });
             item.on('mouseEnter', function(item) {
-                this.fireEvent('childMouseEnter', this, item);
+                this.fireEvent('childMouseEnter', item);
             }, this);
             item.on('mouseLeave', function(item) {
-                this.fireEvent('childMouseLeave', this, item);
+                this.fireEvent('childMouseLeave', item);
             }, this);
             item.on('click', function(item) {
-                this.fireEvent('childClick', this, item);
+                this.fireEvent('childClick', item);
             }, this);
             item.on('stateChanged', function(item) {
-                this.fireEvent('childStateChanged', this, item);
+                this.fireEvent('childStateChanged', item);
             }, this);
+            this.items.push(item);
             idx += 1;
         }, this);
+
+        if (this.defaultState) {
+            this.items.each(function(i) {
+                i.pushState(this.defaultState, 'startup');
+            }, this);
+        }
 
         this.plugins.each(function(p) {
             p.list = this;
