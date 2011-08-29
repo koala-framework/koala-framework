@@ -1,7 +1,6 @@
 - hashes im code entfernen
   o Vps_Util_FeedFetcher_Feed
 
-  o Vps/Util/RtrList.php + Newsletter
   o Vps_Setup::getConfigSection()
   o Vps_Setup: weg damit: if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
     
@@ -20,7 +19,8 @@ Vps/Update/*
      o akismet implementation im vps später?
 
 - löschen?
-  o Vps/Dao/* <- franz fragen
+  o Vps/Dao/Statistic/* <- franz fragen
+  
   o Vps/Controller/Action/Cli/Svn ?
 
 - license header überall einfügen
