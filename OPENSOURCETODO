@@ -1,35 +1,23 @@
 - hashes im code entfernen
   o Vps_Util_FeedFetcher_Feed
 
-- poi spezifisches verschieben
-  o Vps/Auth/Adapter/PartnerNet.php
-  o Vps/Pdf/Porsche*
-
-- in internes vps verschieben
-  o Vpc/Forum
-  o Vps/Util/FeedFetcher
-  o Vps/Util/Model/Feeds
-  o Vps/Update/[0-9]+\.(php|sql)
-  o Vps_js/ProjectTimer
-  o Vps/Controller/Action/ProjectTimer
-  o Vps/Controller/Action/Todo
-  o Vps/Controller/Action/Cli/(Import|Export|CopyToTest)Controller.php ?
-  o Vps/Controller/Action/Cli/GoOnline ?
-  o Vps/Controller/Action/Cli/Scp(Vps)?
-  o Vps/Controller/Action/Cli/SetupOnline ?
-  o Vps/Controller/Action/Cli/Git ?
-  o Vpc/Advanced/Imprint/VividPlanet
-  o Vpc/Advanced/Imprint/FacebookDisclaimer
-  o config.ini
-    > unsere sections
-    > statistics
-    > service urls
   o Vps/Util/RtrList.php + Newsletter
+  o Vps_Setup::getConfigSection()
+  o Vps_Setup: weg damit: if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
     
+- library
+  o zwei: public/private
+
+git format-patch --stdout --root -- Vps_js/ProjectTimer/* Vps/Controller/Action/ProjectTimer Vps/Controller/Action/Todo Vpc/Advanced/Imprint/VividPlanet Vpc/Advanced/Imprint/FacebookDisclaimer Vpc/Forum Vps/Update/*.php Vps/Update/*.sql Vps/Controller/Action/Cli/Web/SetupOnlineController.php Vps/Controller/Action/Cli/Web/Scp* Vps/Controller/Action/Cli/Web/GoOnlineController.php Vps/Controller/Action/Cli/Web/ImportController.php Vps/Controller/Action/Cli/Web/ExportController.php Vps/Controller/Action/Cli/Web/CopyToTestController.php Vps/Pdf/Porsche Vps/Pdf/Porsche.php Vps/Auth/Adapter/PartnerNet.php Vps/Controller/Action/Cli/Svn > internal.patch
+Action/Cli/Web/*
+Vps/Update/*
 
 - spamfilter?
   o Vps/Model/Mail/Row.php
   o Vps/Controller/Action/Spam
+  -> Abstrakte klasse im vps
+     o implemenation im internenen repo
+     o akismet implementation im vps später?
 
 - löschen?
   o Vps/Dao/* <- franz fragen
@@ -38,7 +26,3 @@
 - license header überall einfügen
 
 - UserModel: im OSS-CMS Db Model verwenden, im Vps Service
-
-- preLogin vivid:planet
-  o standard im oss-cms test:test
-  o standard im internen-cms vivid:planet
