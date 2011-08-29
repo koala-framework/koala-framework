@@ -21,8 +21,6 @@ Vps/Update/*
 - löschen?
   o Vps/Dao/Statistic/* <- franz fragen
   
-  o Vps/Controller/Action/Cli/Svn ?
-
 - license header überall einfügen
 
 - UserModel: im OSS-CMS Db Model verwenden, im Vps Service
