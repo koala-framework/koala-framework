@@ -144,9 +144,9 @@ class Vps_Config_Web extends Vps_Config_Ini
         return 'production';
     }
 
-    protected function _mergeWebConfig($path, $section)
+    protected function _mergeWebConfig($webConfigFile, $section)
     {
-        $this->_mergeFile($path, $section);
+        $this->_mergeFile($webConfigFile, $section);
     }
 
     protected final function _mergeFile($file, $section)
