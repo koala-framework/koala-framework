@@ -28,22 +28,33 @@ Ext.extend(Vps.EyeCandy.List.Item, Ext.util.Observable, {
             this.fireEvent('click', this);
         }, this);
     },
+
     getState: function()
     {
         if (!this.state.length) return null;
-        return this.state[this.state.length-1];
+        return this.state[this.state.length-1].state;
     },
-    pushState: function(state)
+    pushState: function(state, context)
     {
-        this.state.push(state);
+        //console.log('pushState', state, context);
+        this.state.push({state: state, context: context});
         this.fireEvent('stateChanged', this);
     },
-    popState: function(state)
+    removeState: function(state, context)
     {
-        var ret = this.state.pop(state);
-        this.fireEvent('stateChanged', this);
-        return ret;
+        //console.log('removeState', state, context);
+        for(var i=0; i<this.state.length; i++) {
+            var s = this.state[i];
+            if (s.state == state && s.context == context) {
+                this.state.splice(i, 1);
+                if (i == this.state.length) {
+                    this.fireEvent('stateChanged', this);
+                }
+                break;
+            }
+        }
     },
+
     getNextSibling: function()
     {
         return this.list.getItem(this.listIndex+1);

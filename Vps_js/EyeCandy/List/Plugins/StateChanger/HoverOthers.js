@@ -4,28 +4,28 @@ Vps.EyeCandy.List.Plugins.StateChanger.HoverOthers = Ext.extend(Vps.EyeCandy.Lis
         this.list.on('childMouseEnter', function(item) {
             i = item.getNextSibling(); //skip one
             if (i) {
-                while (i = item.getNextSibling()) {
-                    i.pushState(this.state);
+                while (i = i.getNextSibling()) {
+                    i.pushState(this.state, this);
                 }
             }
             i = item.getPreviousSibling(); //skip one
             if (i) {
-                while (i = item.getPreviousSibling()) {
-                    i.pushState(this.state);
+                while (i = i.getPreviousSibling()) {
+                    i.pushState(this.state, this);
                 }
             }
         }, this);
         this.list.on('childMouseLeave', function(item) {
             i = item.getNextSibling(); //skip one
             if (i) {
-                while (i = item.getNextSibling()) {
-                    i.popState();
+                while (i = i.getNextSibling()) {
+                    i.removeState(this.state, this);
                 }
             }
             i = item.getPreviousSibling(); //skip one
             if (i) {
-                while (i = item.getPreviousSibling()) {
-                    i.popState();
+                while (i = i.getPreviousSibling()) {
+                    i.removeState(this.state, this);
                 }
             }
         }, this);
