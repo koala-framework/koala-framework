@@ -62,8 +62,8 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
             item.on('mouseLeave', function(item) {
                 this.fireEvent('childMouseLeave', item);
             }, this);
-            item.on('click', function(item) {
-                this.fireEvent('childClick', item);
+            item.on('click', function(item, ev) {
+                this.fireEvent('childClick', item, ev);
             }, this);
             item.on('stateChanged', function(item) {
                 this.fireEvent('childStateChanged', item);
