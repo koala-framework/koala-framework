@@ -31,6 +31,16 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
             $g['chainedGenerator'] = $g['class'];
             $g['class'] = "Vpc_Chained_{$prefix}_Generator";
             if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
+            if (isset($g['plugins'])) {
+                foreach ($g['plugins'] as $pKey => $plugin) {
+                    $pc = Vpc_Admin::getComponentClass($plugin, "{$prefix}_Component");
+                    if ($pc != $plugin) {
+                        $g['plugins'][$pKey] = $pc;
+                    } else {
+                        unset($g['plugins'][$pKey]); // generator-plugins in Translation only if there is an translated plugin available
+                    }
+                }
+            }
         }
         foreach ($copySettings as $i) {
             if (Vpc_Abstract::hasSetting($masterComponentClass, $i)) {
