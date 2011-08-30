@@ -62,5 +62,13 @@ Ext.extend(Vps.EyeCandy.List.Item, Ext.util.Observable, {
     getPreviousSibling: function()
     {
         return this.list.getItem(this.listIndex-1);
+    },
+
+    getWidthIncludingMargin: function()
+    {
+        var w = this.list.getItem(0).el.getWidth();
+        var margins = this.list.getItem(0).el.getMargins();
+        w += margins.left + margins.right;
+        return w;
     }
 });
