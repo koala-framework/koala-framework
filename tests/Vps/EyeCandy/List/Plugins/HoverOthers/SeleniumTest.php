@@ -5,7 +5,6 @@
  * @group Vps_Js
  * @group Vps_Js_EyeCandy_List_Plugins_HoverOthers
  *
- * http://vps.markus.vivid/vps/test/vps_js_event_test
  */
 class Vps_EyeCandy_List_Plugins_HoverOthers_SeleniumTest extends Vps_Test_SeleniumTestCase
 {
