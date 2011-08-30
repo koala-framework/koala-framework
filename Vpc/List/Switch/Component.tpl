@@ -1,8 +1,15 @@
-<div class="vpsListSwitch <?=$this->cssClass?>">
+<div class="vpsEyeCandyList <?=$this->cssClass?>">
     <input type="hidden" class="options" value="<?= htmlspecialchars(Zend_Json::encode($this->options)) ?>" />
     <div class="listSwitchLargeWrapper">
         <div class="listSwitchLargeContent">
-            <?=$this->component($this->items[0]['large']);/*wg. Flackern */?>
+            <? foreach ($this->children as $child) {
+                // diese ausgabe ist nur um flackern zu unterbinden. könnte
+                // auch entfernt werden, da das bild sowieso vom javascript
+                // nochmal gesetzt wird.
+            ?>
+                <?= $this->component($child->getChildComponent('-large'));
+                break; ?>
+            <? } ?>
         </div>
         <a href="#" class="listSwitchPrevious"><?=$this->placeholder['prev'];?></a>
         <a href="#" class="listSwitchNext"><?=$this->placeholder['next'];?></a>
@@ -10,12 +17,20 @@
     </div>
 
     <div class="listSwitchPreviewWrapper <?=$this->previewCssClass?>">
-        <? foreach ($this->items as $item) {
-            ?><div class="listSwitchItem <?= $item['class']; ?>">
-                <a href="#" class="previewLink"><?=$this->component($item['preview']);?></a>
-                <div class="largeContent"><?= $this->component($item['large']); ?></div>
-            </div><?
-        } ?>
+        <? $i = 0; ?>
+        <? foreach ($this->children as $child) { ?>
+            <?
+                $class = '';
+                if ($i == 0) $class .= 'vpcFirst ';
+                if ($i == count($this->children)-1) $class .= 'vpcLast ';
+                $class = trim($class);
+                $i++;
+            ?>
+            <div class="listSwitchItem <?= $class; ?>">
+                <a href="#" class="previewLink"><?=$this->component($child);?></a>
+                <div class="largeContent"><?= $this->component($child->getChildComponent('-large')); ?></div>
+            </div>
+        <? } ?>
         <div class="clear"></div>
     </div>
 </div>

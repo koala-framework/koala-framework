@@ -24,8 +24,8 @@ Ext.extend(Vps.EyeCandy.List.Item, Ext.util.Observable, {
         Vps.Event.on(this.el, 'mouseLeave', function() {
             this.fireEvent('mouseLeave', this);
         }, this);
-        Ext.fly(this.el).on('click', function() {
-            this.fireEvent('click', this);
+        Ext.fly(this.el).on('click', function(ev) {
+            this.fireEvent('click', this, ev);
         }, this);
     },
 

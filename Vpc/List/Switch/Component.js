@@ -1,5 +1,33 @@
 Ext.namespace('Vpc.ListSwitch');
 
+Vpc.ListSwitch.Component = Ext.extend(Vps.EyeCandy.List,
+{
+    //settings for Vpc.ListSwitch.Component
+    //transition: {},
+    hideArrowsAtEnds: false,
+    showArrows: true,
+
+    //override from Vps.EyeCandy.List
+    init: function() {
+        this.states = [
+            'normal', 'active'
+        ];
+        this.plugins.push(new Vps.EyeCandy.List.Plugins.StateListener.LargeContent({
+            activatedState: 'active',
+            largeContentSelector: '.largeContent',
+            largeContainerSelector: '.listSwitchLargeContent',
+            transition: this.transition
+        }));
+        if (this.showArrows) {
+            //this.plugins.push(new Vps.EyeCandy.List.Plugins.StateListener.NextPreviousLinks({
+            //    hideArrowsAtEnds: this.hideArrowsAtEnds,
+            //}));
+        }
+        Vpc.ListSwitch.Component.superclass.init.call(this);
+    }
+});
+
+/*
 Vpc.ListSwitch.View = function(componentWrapper) {
     this.componentWrapper = Ext.get(componentWrapper);
     this.previewElements = [];
@@ -8,15 +36,9 @@ Vpc.ListSwitch.View = function(componentWrapper) {
     this.init();
 };
 
-Ext.extend(Vpc.ListSwitch.View, Ext.util.Observable, {
+Vpc.ListSwitch.View.prototype = {
     init: function() {
         if (this.componentWrapper.initDone) return;
-
-        this.addEvents({
-            'next': true,
-            'previous': true,
-            'setLarge': true
-        });
 
         var opts = this.componentWrapper.down(".options", true);
         if (!opts) {
@@ -50,7 +72,7 @@ Ext.extend(Vpc.ListSwitch.View, Ext.util.Observable, {
             this.setLarge(this.previewElements[0]);
         }
 
-        if (this.switchOptions.showArrows && !this.switchOptions.hideArrowsAtEnds && this.previewElements.length > 1) {
+        if (!this.switchOptions.hideArrowsAtEnds && this.previewElements.length > 1) {
             this.previousEl.setDisplayed('block');
             this.nextEl.setDisplayed('block');
         }
@@ -123,45 +145,41 @@ Ext.extend(Vpc.ListSwitch.View, Ext.util.Observable, {
         this.activePreviewLink.addClass('active');
 
         // pfeile ein / ausblenden
-        if (this.switchOptions.showArrows && this.switchOptions.hideArrowsAtEnds) {
+        if (this.switchOptions.hideArrowsAtEnds) {
             this.previousEl.setDisplayed(this.activePreviewLink.switchIndex == 0 ? false : 'block');
             this.nextEl.setDisplayed(
                 this.activePreviewLink.switchIndex >= (this.previewElements.length -1) ? false : 'block'
             );
         }
-
-        this.fireEvent('setLarge', this, previewEl.switchIndex);
     },
 
     showNext: function(ev) {
         if (this.previewElements[this.activePreviewLink.switchIndex+1]) {
-            var idx = this.activePreviewLink.switchIndex+1;
+            this.setLarge(this.previewElements[this.activePreviewLink.switchIndex+1]);
         } else {
-            var idx = 0;
+            this.setLarge(this.previewElements[0]);
         }
-        this.setLarge(this.previewElements[idx]);
         ev.stopEvent();
-        this.fireEvent('next', this, idx);
     },
 
     showPrevious: function(ev) {
         if (this.activePreviewLink.switchIndex >= 1) {
-            var idx = this.activePreviewLink.switchIndex-1;
+            this.setLarge(this.previewElements[this.activePreviewLink.switchIndex-1]);
         } else {
-            var idx = this.previewElements.length - 1;
+            this.setLarge(this.previewElements[this.previewElements.length-1]);
         }
-        this.setLarge(this.previewElements[idx]);
         ev.stopEvent();
-        this.fireEvent('previous', this, idx);
     }
-});
+};
 
 Vps.onContentReady(function() {
     var switches = Ext.DomQuery.select('div.vpsListSwitch');
     Ext.each(switches, function(sw) {
-        if (!sw.listSwitch) {
-            sw.listSwitch = new Vpc.ListSwitch.View(sw);
+        if (!sw.listSwitchInitDone) {
+            var list = new Vpc.ListSwitch.View(sw);
+            sw.listSwitchInitDone = true;
         }
     });
 });
 
+*/
