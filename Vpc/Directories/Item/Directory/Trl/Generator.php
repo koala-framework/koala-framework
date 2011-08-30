@@ -38,6 +38,16 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         return $ret;
     }
 
+    public function getModel()
+    {
+        $model = Vpc_Abstract::createChildModel($this->_class);
+        if ($model) {
+            return $model;
+        } else {
+            return parent::getModel();
+        }
+    }
+
     public function getChildIds($parentData, $select = array())
     {
         $ret = parent::getChildIds($parentData, $select);
