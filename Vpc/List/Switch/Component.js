@@ -16,7 +16,8 @@ Vpc.ListSwitch.Component = Ext.extend(Vps.EyeCandy.List,
             activatedState: 'active',
             largeContentSelector: '.largeContent',
             largeContainerSelector: '.listSwitchLargeContent',
-            transition: this.transition
+            transition: this.transition.type,
+            transitionConfig: this.transition
         }));
         if (this.showArrows) {
             //this.plugins.push(new Vps.EyeCandy.List.Plugins.StateListener.NextPreviousLinks({
