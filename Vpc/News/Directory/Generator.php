@@ -6,7 +6,6 @@ class Vpc_News_Directory_Generator extends Vps_Component_Generator_Page_Table
         $ret = parent::_formatSelect($parentData, $select);
         if (!$ret) return $ret;
 
-        if (is_array($select)) $select = $select['select'];
         if (!$select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
             $ret->where('publish_date <= NOW()');
             if (Vpc_Abstract::getSetting($this->_class, 'enableExpireDate')) {
