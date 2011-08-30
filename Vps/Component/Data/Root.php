@@ -143,6 +143,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                             )), array('buffer'=>true));
                     }
                 }
+            } else {
+                $exactMatch = false;
             }
         }
         return $ret;
