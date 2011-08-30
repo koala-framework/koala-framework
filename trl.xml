@@ -6309,7 +6309,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Show check all links</en>
-<de>Zeige alle auswählen Links</de>
+<de>Zeige alle ausw&#xE4;hlen Links</de>
 <id>1705</id>
 </text>
 <text>
@@ -6329,6 +6329,18 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Please choose a file</en>
 <de>Bitte Datei ausw&#xE4;hlen</de>
 <id>1657</id>
+</text>
+<text>
+<en>This field should only contain letters, numbers, - and _</en>
+<id>1707</id>
+</text>
+<text>
+<en>User is currently locked.</en>
+<id>1708</id>
+</text>
+<text>
+<en>Dimension: At least width or height must be set higher than 0.</en>
+<id>1709</id>
 </text>
 </trl>
 
