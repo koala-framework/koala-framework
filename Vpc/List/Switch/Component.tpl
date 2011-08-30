@@ -1,5 +1,5 @@
 <div class="vpsEyeCandyList <?=$this->cssClass?>">
-    <input type="hidden" class="options" value="<?= htmlspecialchars(Zend_Json::encode($this->options)) ?>" />
+    <?=$this->hiddenOptions($this->options)?>
     <div class="listSwitchLargeWrapper">
         <div class="listSwitchLargeContent">
             <? foreach ($this->children as $child) {
