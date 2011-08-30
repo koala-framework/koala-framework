@@ -90,7 +90,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         if (is_string($itemDirectory)) {
             $c = Vpc_Abstract::getComponentClassByParentClass($itemDirectory);
             $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
-            $items = $generator->getChildIds(null, array('select'=>$select));
+            $items = $generator->getChildIds(null, $select);
         } else {
             $items = $itemDirectory->getChildIds($select);
         }
@@ -105,7 +105,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         if (is_string($itemDirectory)) {
             $c = Vpc_Abstract::getComponentClassByParentClass($itemDirectory);
             $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
-            $items = $generator->getChildData(null, array('select'=>$select));
+            $items = $generator->getChildData(null, $select);
         } else {
             $select->whereGenerator('detail');
             $items = $itemDirectory->getChildComponents($select);
@@ -174,7 +174,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         if (is_string($dir)) {
             $c = Vpc_Abstract::getComponentClassByParentClass($dir);
             $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
-            $ret = $generator->countChildData(null, array('select'=>$select));
+            $ret = $generator->countChildData(null, $select);
         } else {
             $ret = $dir->countChildComponents($select);
         }
