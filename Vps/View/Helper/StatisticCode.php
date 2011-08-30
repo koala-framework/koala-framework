@@ -20,6 +20,22 @@ class Vps_View_Helper_StatisticCode
             $ret .= "    } catch(err) {}\n";
             $ret .= "</script>\n";
         }
+        $piwikDomain = $cfg->statistic->piwikDomain;
+        $piwikId = $cfg->statistic->piwikId;
+        if ($piwikDomain && $piwikId && !$cfg->statistic->ignorePiwikCode) {
+            $ret .= "<!-- Piwik -->";
+            $ret .= "<script type=\"text/javascript\">";
+            $ret .= "var pkBaseURL = ((\"https:\" == document.location.protocol) ? \"https://$piwikDomain/\" : \"http://$piwikDomain/\");";
+            $ret .= "document.write(unescape(\"%3Cscript src='\" + pkBaseURL + \"piwik.js' type='text/javascript'%3E%3C/script%3E\"));";
+            $ret .= "</script><script type=\"text/javascript\">";
+            $ret .= "try {";
+            $ret .= "var piwikTracker = Piwik.getTracker(pkBaseURL + \"piwik.php\", $piwikId);";
+            $ret .= "piwikTracker.trackPageView();";
+            $ret .= "piwikTracker.enableLinkTracking();";
+            $ret .= "} catch( err ) {}";
+            $ret .= "</script><noscript><p><img src=\"http://$piwikDomain/piwik.php?idsite=$piwikId\" style=\"border:0\" alt=\"\" /></p></noscript>";
+            $ret .= "<!-- End Piwik Tracking Code -->";
+        }
         return $ret;
     }
 }
