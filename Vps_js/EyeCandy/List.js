@@ -1,5 +1,23 @@
 Ext.namespace("Vps.EyeCandy");
 
+Vps.onContentReady(function() {
+    Ext.query('.vpsEyeCandyList').forEach(function(el) {
+        if (!el.list) {
+            var opts = Ext.fly(el).down('.options', true);
+            if (opts) {
+                opts = Ext.decode(opts.value);
+                var cls = Vps.EyeCandy.List;
+                if (opts.class) {
+                    cls = eval(opts.class);
+                    delete opts.class;
+                }
+                opts.el = el;
+                el.list = new cls(opts);
+            }
+        }
+    }, this);
+});
+
 Vps.EyeCandy.List = function(cfg) {
     Ext.apply(this, cfg);
     this._init();
@@ -31,8 +49,10 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
         var items = this.el.query(this.childSelector);
         var idx = 0;
         items.forEach(function(el) {
+
             var item = new Vps.EyeCandy.List.Item({
                 list: this,
+                id: Ext.id(el),
                 el: Ext.get(el),
                 listIndex: idx
             });
