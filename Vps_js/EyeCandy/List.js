@@ -71,6 +71,8 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
         return this.items;
     },
     getItem: function(idx) {
+        return this.items[idx];
+        /*
         var ret = null;
         this.items.each(function(i) {
             if (idx == i.listIndex) {
@@ -79,5 +81,13 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
             }
         }, this);
         return ret;
+        */
+    },
+    getLastItem: function() {
+        if (!this.items.length) return null;
+        return this.items[this.items.length-1];
+    },
+    getFirstItem: function() {
+        return this.items[0];
     }
 });
