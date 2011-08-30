@@ -20,7 +20,7 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
         return $ret;
     }
 
-    public function getPageByUrl($path, $acceptLangauge)
+    public function getPageByUrl($path, $acceptLanguage)
     {
         if ($path == '') {
             $ret = null;
@@ -28,7 +28,7 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
             foreach ($this->getData()->getChildComponents(array('pseudoPage'=>true)) as $c) {
                 $lngs[$c->filename] = $c;
             }
-            if(preg_match('#^([a-z]{2,3})#', $acceptLangauge, $m)) {
+            if(preg_match('#^([a-z]{2,3})#', $acceptLanguage, $m)) {
                 if (isset($lngs[$m[1]])) {
                     $ret = $lngs[$m[1]];
                 }
@@ -38,6 +38,6 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
             }
             return $ret->getChildPage(array('home' => true));
         }
-        return parent::getPageByUrl($path, $acceptLangauge);
+        return parent::getPageByUrl($path, $acceptLanguage);
     }
 }

@@ -97,7 +97,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
-        //TODO: acceptLanguage berücksichtigen?
         $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
         $cacheId = 'url-'.$cacheUrl;
         if ($page = Vps_Cache_Simple::fetch($cacheId)) {
@@ -141,6 +140,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                             )), array('buffer'=>true));
                     }
                 }
+            } else {
+                $exactMatch = false;
             }
         }
         return $ret;
