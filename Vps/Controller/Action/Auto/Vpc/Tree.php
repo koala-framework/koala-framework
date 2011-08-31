@@ -11,7 +11,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
                 $childModelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'childModel');
                 $this->_model = new $childModelName(array('componentClass'=>$this->_getParam('class')));
             } else {
-                throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+                throw new Vps_Exception('No tablename in Setting defined: ' . $class);
             }
         }
         parent::preDispatch();

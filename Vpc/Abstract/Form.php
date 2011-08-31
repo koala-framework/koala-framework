@@ -36,11 +36,11 @@ class Vpc_Abstract_Form extends Vps_Form
         }
 
         if (!$componentClass) {
-            throw new Vpc_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
+            throw new Vps_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
         }
         if (is_array($componentClass)) {
             if (sizeof($componentClass) > 1) {
-                throw new Vpc_Exception("Can't have multiple component classes");
+                throw new Vps_Exception("Can't have multiple component classes");
             }
             reset($componentClass);
             $componentClass = current($componentClass);
@@ -96,7 +96,7 @@ class Vpc_Abstract_Form extends Vps_Form
             }
         }
         if (!$childComponentClass) {
-            throw new Vpc_Exception("No child component with id '$id' for '$componentClass' found.");
+            throw new Vps_Exception("No child component with id '$id' for '$componentClass' found.");
         }
         $form = self::createComponentForm($childComponentClass, $name);
         if ($form) {
