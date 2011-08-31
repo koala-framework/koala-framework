@@ -187,9 +187,14 @@ class Vps_Assets_Dependencies
     private function _getDependenciesConfig($assetsType)
     {
         if (!isset($this->_dependenciesConfig[$assetsType])) {
-            $ret = new Zend_Config_Ini(VPS_PATH.'/config.ini', 'dependencies',
+            $f = Vps_Registry::get('config')->assets->dependencies->vps;
+            $ret = new Zend_Config_Ini($f, 'dependencies',
                                                 array('allowModifications'=>true));
-            $ret->merge(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+            foreach (Vps_Registry::get('config')->assets->dependencies as $k=>$d) {
+                if ($k != 'vps') {
+                    $ret->merge(new Zend_Config_Ini($d, 'dependencies'));
+                }
+            }
             if (strpos($assetsType, ':')) {
                 $configPath = str_replace('_', '/', substr($assetsType, 0, strpos($assetsType, ':')));
                 foreach(explode(PATH_SEPARATOR, get_include_path()) as $dir) {
