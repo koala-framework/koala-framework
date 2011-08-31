@@ -339,7 +339,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 if (isset($part['componentId'])) {
                     try {
                         $srcRow = $model->getRow($part['componentId']);
-                    } catch (Vpc_Exception $e) {
+                    } catch (Vps_Exception $e) {
                         $srcRow = false;
                     }
                     if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
