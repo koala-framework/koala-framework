@@ -20,7 +20,7 @@ class Vps_Controller_Action_User_Users_WebcodeData extends Vps_Data_Abstract
                 $row->webcode = '';
             } else if ($data && $row->webcode !== '') {
                 // webcode holen
-                $row->webcode = Zend_Registry::get('userModel')->getRowWebcode();
+                $row->webcode = Zend_Registry::get('userModel')->getWebcode();
             }
         }
     }

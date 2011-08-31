@@ -12,15 +12,6 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
     protected $_passwordSet = false;
     private $_sendMails = true; // whether to send mails on saving or not. used for resending emails
 
-    public static function getWebcode()
-    {
-        $webCode = Vps_Registry::get('config')->service->users->webcode;
-        if (is_null($webCode)) {
-            throw new Vps_Exception("'service.users.webcode' not defined in config");
-        }
-        return $webCode;
-    }
-
     public function __toString()
     {
         $ret = '';

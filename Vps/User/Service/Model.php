@@ -13,7 +13,7 @@ class Vps_User_Service_Model extends Vps_User_Model
     public function createUserRow($email, $webcode = null)
     {
         if (is_null($webcode)) {
-            $webcode = self::getWebcode();
+            $webcode = $this->getWebcode();
         }
 
         if (empty($webcode) && !is_null($webcode) && $email) {
