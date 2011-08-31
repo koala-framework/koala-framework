@@ -12,3 +12,11 @@ Vps/Update/*
 - license header überall einfügen
 
 - UserModel: im OSS-CMS Db Model verwenden, im Vps Service
+
+/**
+ * This file is part of VPCMS.
+ * Copyright 2007-2011 by Vivid Planet Software GmbH <office@vivid-planet.com>
+ *
+ * This program is free software licensed under the BSD license. You can
+ * find a copy of this license in COPYING in the top directory of the source code.
+ */
