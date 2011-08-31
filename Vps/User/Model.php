@@ -104,7 +104,7 @@ class Vps_User_Model extends Vps_Model_RowCache
         $row->role = 'guest';
     }
 
-    public static function getWebcode()
+    public function getWebcode()
     {
         $webCode = Vps_Registry::get('config')->service->users->webcode;
         if (is_null($webCode)) {
@@ -152,11 +152,6 @@ class Vps_User_Model extends Vps_Model_RowCache
     {
         $row = $this->getRowByIdentity($email);
         return $row ? true : false;
-    }
-
-    public function getRowWebcode()
-    {
-        return call_user_func(array($this->_rowClass, 'getWebcode'));
     }
 
     public function login($identity, $credential)
