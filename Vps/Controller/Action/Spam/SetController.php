@@ -24,7 +24,7 @@ class Vps_Controller_Action_Spam_SetController extends Vps_Controller_Action
         $row = Vps_Model_Abstract::getInstance('Vps_Model_Mail')->getRow($id);
         if (!$row) return false;
 
-        if (Vps_Model_Mail_Row::getSpamKey($row) != $key) {
+        if (Vps_Util_Check_Spam::getSpamKey($row) != $key) {
             return false;
         }
 
