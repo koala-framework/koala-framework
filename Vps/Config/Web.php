@@ -3,6 +3,8 @@ require_once 'Vps/Config/Ini.php';
 
 class Vps_Config_Web extends Vps_Config_Ini
 {
+    private $_section;
+
     static private $_instances = array();
     public static function getInstance($section = null)
     {
@@ -68,6 +70,8 @@ class Vps_Config_Web extends Vps_Config_Ini
 
     public function __construct($section, $options = array())
     {
+        $this->_section = $section;
+
         if (isset($options['vpsPath'])) {
             $vpsPath = $options['vpsPath'];
         } else {
@@ -101,6 +105,11 @@ class Vps_Config_Web extends Vps_Config_Ini
                                             array($this->libraryPath, $vpsPath),
                                             $i);
         }
+    }
+
+    public function getSection()
+    {
+        return $this->_section;
     }
 
     protected function _getWebSection($section, $webPath)
