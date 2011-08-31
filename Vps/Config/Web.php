@@ -7,6 +7,7 @@ class Vps_Config_Web extends Vps_Config_Ini
     public static function getInstance($section = null)
     {
         if (!$section) {
+            require_once str_replace('_', '/', Vps_Setup::$configClass).'.php';
             $section = call_user_func(array(Vps_Setup::$configClass, 'getConfigSection'));
         }
         if (!isset(self::$_instances[$section])) {
