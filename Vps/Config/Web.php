@@ -47,9 +47,48 @@ class Vps_Config_Web extends Vps_Config_Ini
             $webPath = '.';
         }
 
-        $vpsSection = false;
+        $webSection = $this->_getWebSection($section, $webPath);
+        $vpsSection = $this->_getVpsSection($section, $webPath, $vpsPath);
+        if (!$vpsSection) {
+            require_once 'Vps/Exception.php';
+            throw new Vps_Exception("Add either '$section' to vps/config.ini or set vpsConfigSection in web config.ini");
+        }
 
-        $webSection = $this->_getWebSection($webPath.'/application/config.ini', $section);
+        parent::__construct($vpsPath.'/config.ini', $vpsSection,
+                        array('allowModifications'=>true));
+
+        $this->_mergeWebConfig($section, $webPath);
+
+        foreach ($this->path as $k=>$i) {
+            $this->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
+                                            array($this->libraryPath, $vpsPath),
+                                            $i);
+        }
+        foreach ($this->includepath as $k=>$i) {
+            $this->includepath->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
+                                            array($this->libraryPath, $vpsPath),
+                                            $i);
+        }
+    }
+
+    protected function _getWebSection($section, $webPath)
+    {
+        $webConfigSections = array_keys(parse_ini_file($webPath.'/application/config.ini', true));
+        foreach ($webConfigSections as $i) {
+            if ($i == $section
+                || substr($i, 0, strlen($section)+1)==$section.' '
+                || substr($i, 0, strlen($section)+1)==$section.':'
+            ) {
+                return $section;
+            }
+        }
+        return 'production';
+    }
+
+    protected function _getVpsSection($section, $webPath, $vpsPath)
+    {
+        $vpsSection = false;
+        $webSection = $this->_getWebSection($section, $webPath);
         $webConfig = parse_ini_file($webPath.'/application/config.ini', true);
         foreach ($webConfig as $i=>$cfg) {
             if ($i == $webSection
@@ -74,84 +113,13 @@ class Vps_Config_Web extends Vps_Config_Ini
                 }
             }
         }
-        if (!$vpsSection) {
-            require_once 'Vps/Exception.php';
-            throw new Vps_Exception("Add either '$section' to vps/config.ini or set vpsConfigSection in web config.ini");
-        }
-
-        parent::__construct($vpsPath.'/config.ini', $vpsSection,
-                        array('allowModifications'=>true));
-
-        $fixes = array();
-        if ($webSection != $section && ($this->server->host == 'vivid' || $this->server->host == 'vivid-test-server')) {
-            $fixes = array(
-                'libraryPath' => $this->libraryPath,
-                'uploads' => $this->uploads,
-                'serverUser' => $this->server->user,
-                'serverHost' => $this->server->host,
-                'serverDir' => $this->server->dir,
-                'serverDomain' => $this->server->domain
-            );
-        }
-
-        $this->_mergeWebConfig($webPath.'/application/config.ini', $section);
-
-        if ($fixes) {
-            $this->libraryPath = $fixes['libraryPath'];
-            $this->uploads = $fixes['uploads'];
-            $this->server->user = $fixes['serverUser'];
-            $this->server->host = $fixes['serverHost'];
-            $this->server->dir = $fixes['serverDir'];
-            $this->server->domain = $fixes['serverDomain'];
-        }
-
-        foreach ($this->path as $k=>$i) {
-            $this->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($this->libraryPath, $vpsPath),
-                                            $i);
-        }
-        foreach ($this->includepath as $k=>$i) {
-            $this->includepath->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($this->libraryPath, $vpsPath),
-                                            $i);
-        }
-
-        $this->server->dir = str_replace('%id%', $this->application->id, $this->server->dir);
-        $this->server->domain = str_replace('%id%', $this->application->id, $this->server->domain);
-        $this->server->mongo->database = str_replace('%id%', $this->application->id, $this->server->mongo->database);
-        $this->uploads = str_replace('%id%', $this->application->id, $this->uploads);
+        return $vpsSection;
     }
 
-    private function _getWebSection($file, $section)
+    protected function _mergeWebConfig($section, $webPath)
     {
-        $webConfigSections = array_keys(parse_ini_file($file, true));
-        foreach ($webConfigSections as $i) {
-            if ($i == $section
-                || substr($i, 0, strlen($section)+1)==$section.' '
-                || substr($i, 0, strlen($section)+1)==$section.':'
-            ) {
-                return $section;
-            }
-        }
-        foreach ($webConfigSections as $i) {
-            if ($i == $section
-                || substr($i, 0, 6)=='vivid '
-                || substr($i, 0, 6)=='vivid:'
-            ) {
-                return 'vivid';
-            }
-        }
-        return 'production';
-    }
-
-    protected function _mergeWebConfig($webConfigFile, $section)
-    {
-        $this->_mergeFile($webConfigFile, $section);
-    }
-
-    protected final function _mergeFile($file, $section)
-    {
-        return self::mergeConfigs($this, new Vps_Config_Ini($file, $this->_getWebSection($file, $section)));
+        $webSection = $this->_getWebSection($section, $webPath);
+        self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/application/config.ini', $webSection));
     }
 
     /**
