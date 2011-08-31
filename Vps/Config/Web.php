@@ -105,6 +105,11 @@ class Vps_Config_Web extends Vps_Config_Ini
                                             array($this->libraryPath, $vpsPath),
                                             $i);
         }
+        foreach ($this->assets->dependencies as $k=>$i) {
+            $this->assets->dependencies->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
+                                            array($this->libraryPath, $vpsPath),
+                                            $i);
+        }
     }
 
     public function getSection()
