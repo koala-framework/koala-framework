@@ -175,6 +175,13 @@ class Vps_Setup
             $config->debug->benchmark = false;
         }
 
+        if (!$config->server->domain && isset($_SERVER['HTTP_HOST'])) {
+            //Now this is kind of a hack. We want to make setting server.domain optional for easy setup.
+            //But we need the domain at least for clearing the apc cache.
+            //(don't use this file for more advanced stuff)
+            file_put_contents('application/cache/lastdomain', $_SERVER['HTTP_HOST']);
+        }
+
         // Falls redirectToDomain eingeschalten ist, umleiten
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
         if ($host && $config->server->redirectToDomain) {

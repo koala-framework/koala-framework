@@ -188,6 +188,10 @@ class Vps_Util_ClearCache
             } else {
                 $config = Vps_Registry::get('config');
                 $d = $config->server->domain;
+                if (!$d && file_exists('application/cache/lastdomain')) {
+                    //this file gets written in Vps_Setup to make it "just work"
+                    $d = file_get_contents('application/cache/lastdomain');
+                }
                 $s = microtime(true);
                 $pwd = Vps_Util_Apc::getHttpPassword();
                 $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Vps_Util_Apc::getHttpPassword()."@";
