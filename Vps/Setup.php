@@ -100,7 +100,7 @@ class Vps_Setup
         require_once 'Vps/Config/Web.php';
         $config = Vps_Config_Web::getInstance();
         Vps_Registry::set('config', $config);
-        Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
+        Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime($config->getSection()));
 
 
         if ($config->debug->benchmark) {
@@ -312,7 +312,7 @@ class Vps_Setup
 
     public static function getConfigSection()
     {
-        throw new Vps_Exception_NotYetImplemented();
+        return Vps_Registry::get('config')->getSection();
     }
 
     public static function dispatchVpc()
