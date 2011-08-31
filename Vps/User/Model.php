@@ -104,15 +104,6 @@ class Vps_User_Model extends Vps_Model_RowCache
         $row->role = 'guest';
     }
 
-    public function getWebcode()
-    {
-        $webCode = Vps_Registry::get('config')->service->users->webcode;
-        if (is_null($webCode)) {
-            throw new Vps_Exception("'service.users.webcode' not defined in config");
-        }
-        return $webCode;
-    }
-
     /**
      * @deprecated
      * @see getRowByIdentity
@@ -134,16 +125,8 @@ class Vps_User_Model extends Vps_Model_RowCache
 
         $select = $this->select()
             ->whereEquals($identdType, $identd)
-            ->whereEquals('webcode', $this->getRowWebcode())
             ->whereEquals('deleted', 0);
         $row = $this->getRow($select);
-        if (!$row) {
-            $select = $this->select()
-                ->whereEquals($identdType, $identd)
-                ->whereEquals('webcode', '')
-                ->whereEquals('deleted', 0);
-            $row = $this->getRow($select);
-        }
 
         return $row;
     }

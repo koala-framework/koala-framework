@@ -10,6 +10,32 @@ class Vps_User_Service_Model extends Vps_User_Model
         parent::__construct($config);
     }
 
+    public function getRowByIdentity($identd)
+    {
+        if (is_null($identd)) {
+            throw new Vps_Exception("identity must not be null");
+        }
+        $identdType = 'email';
+        if (is_numeric($identd)) {
+            $identdType = 'id';
+        }
+
+        $select = $this->select()
+            ->whereEquals($identdType, $identd)
+            ->whereEquals('webcode', $this->getWebcode())
+            ->whereEquals('deleted', 0);
+        $row = $this->getRow($select);
+        if (!$row) {
+            $select = $this->select()
+                ->whereEquals($identdType, $identd)
+                ->whereEquals('webcode', '')
+                ->whereEquals('deleted', 0);
+            $row = $this->getRow($select);
+        }
+
+        return $row;
+    }
+
     public function createUserRow($email, $webcode = null)
     {
         if (is_null($webcode)) {
@@ -72,5 +98,14 @@ class Vps_User_Service_Model extends Vps_User_Model
         $row = parent::createRow(array('email' => $email, 'webcode' => $webcode));
         $this->_resetPermissions($row);
         return $row;
+    }
+
+    public function getWebcode()
+    {
+        $webCode = Vps_Registry::get('config')->service->users->webcode;
+        if (is_null($webCode)) {
+            throw new Vps_Exception("'service.users.webcode' not defined in config");
+        }
+        return $webCode;
     }
 }

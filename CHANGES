@@ -26,6 +26,7 @@ möglicherweise nicht kompatible Änderungen:
   Fixe Breiteneinstellungen gehören generell nicht mehr ins css
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 - application/config.ini dependencies section moved into application/dependencies.ini
+- Vps_User_Model is not a service model, that changed to Vps_User_Service_Model
 
 == 2.1 ==
 Erstellt: 21.06.11

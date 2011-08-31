@@ -2,17 +2,19 @@ git format-patch --stdout --root -- Vps_js/ProjectTimer/* Vps/Controller/Action/
 Action/Cli/Web/*
 Vps/Update/*
 
+
+Vps/Util/Model/ProjectTimer, ToDo
+
 - spamfilter?
   o Vps/Model/Mail/Row.php
   o Vps/Controller/Action/Spam
   -> Abstrakte klasse im vps
      o implemenation im internenen repo
      o akismet implementation im vps später?
-  
-- license header überall einfügen
 
 - UserModel: im OSS-CMS Db Model verwenden, im Vps Service
 
+- license header überall einfügen
 /**
  * This file is part of VPCMS.
  * Copyright 2007-2011 by Vivid Planet Software GmbH <office@vivid-planet.com>
