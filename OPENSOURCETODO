@@ -1,18 +1,9 @@
-git format-patch --stdout --root -- Vps_js/ProjectTimer/* Vps/Controller/Action/ProjectTimer Vps/Controller/Action/Todo Vpc/Advanced/Imprint/VividPlanet Vpc/Advanced/Imprint/FacebookDisclaimer Vpc/Forum Vps/Update/*.php Vps/Update/*.sql Vps/Controller/Action/Cli/Web/SetupOnlineController.php Vps/Controller/Action/Cli/Web/Scp* Vps/Controller/Action/Cli/Web/GoOnlineController.php Vps/Controller/Action/Cli/Web/ImportController.php Vps/Controller/Action/Cli/Web/ExportController.php Vps/Controller/Action/Cli/Web/CopyToTestController.php Vps/Pdf/Porsche Vps/Pdf/Porsche.php Vps/Auth/Adapter/PartnerNet.php Vps/Controller/Action/Cli/Svn > internal.patch
-Action/Cli/Web/*
-Vps/Update/*
-
-
-Vps/Util/Model/ProjectTimer, ToDo
-
 - spamfilter?
   o Vps/Model/Mail/Row.php
   o Vps/Controller/Action/Spam
   -> Abstrakte klasse im vps
      o implemenation im internenen repo
      o akismet implementation im vps später?
-
-- UserModel: im OSS-CMS Db Model verwenden, im Vps Service
 
 - license header überall einfügen
 /**
