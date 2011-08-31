@@ -100,7 +100,7 @@ class Vps_Setup
 
         self::$configClass = $configClass;
         require_once 'Vps/Config/Web.php';
-        $config = Vps_Config_Web::getInstance(self::getConfigSection());
+        $config = Vps_Config_Web::getInstance();
         Vps_Registry::set('config', $config);
         Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
 
@@ -314,40 +314,7 @@ class Vps_Setup
 
     public static function getConfigSection()
     {
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-
-        //www abschneiden damit www.test und www.preview usw auch funktionieren
-        if (substr($host, 0, 4)== 'www.') $host = substr($host, 4);
-
-        if (php_sapi_name() == 'cli') {
-            //wenn über kommandozeile aufgerufen
-            $path = getcwd();
-        } else {
-            $path = $_SERVER['SCRIPT_FILENAME'];
-        }
-        if (file_exists('application/config_section')) {
-            return trim(file_get_contents('application/config_section'));
-        } else if (file_exists('/var/www/vivid-test-server')) {
-            return 'vivid-test-server';
-        } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
-            if ($m[3]=='vps-projekte') return 'vivid';
-            return $m[3];
-        } else if (substr($host, 0, 9)=='dev.test.') {
-            return 'devtest';
-        } else if (substr($host, 0, 4)=='dev.') {
-            return 'dev';
-        } else if (substr($host, 0, 5)=='test.' ||
-                   substr($host, 0, 3)=='qa.' ||
-                   substr($path, 0, 17) == '/docs/vpcms/test.' ||
-                   substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
-                   substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
-                   substr($path, 0, 20) == '/var/www/vpcms/test.') {
-            return 'test';
-        } else if (substr($host, 0, 8)=='preview.') {
-            return 'preview';
-        } else {
-            return 'production';
-        }
+        throw new Vps_Exception_NotYetImplemented();
     }
 
     public static function dispatchVpc()

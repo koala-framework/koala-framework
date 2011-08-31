@@ -4,8 +4,11 @@ require_once 'Vps/Config/Ini.php';
 class Vps_Config_Web extends Vps_Config_Ini
 {
     static private $_instances = array();
-    public static function getInstance($section)
+    public static function getInstance($section = null)
     {
+        if (!$section) {
+            $section = call_user_func(array(Vps_Setup::$configClass, 'getConfigSection'));
+        }
         if (!isset(self::$_instances[$section])) {
             require_once 'Vps/Config/Cache.php';
             $cache = Vps_Config_Cache::getInstance();
@@ -32,6 +35,34 @@ class Vps_Config_Web extends Vps_Config_Ini
         require_once 'Vps/Config/Cache.php';
         $cache = Vps_Config_Cache::getInstance();
         return $cache->test('config_'.str_replace('-', '_', $section));
+    }
+
+    public static function getConfigSection()
+    {
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+
+        //www abschneiden damit www.test und www.preview usw auch funktionieren
+        if (substr($host, 0, 4)== 'www.') $host = substr($host, 4);
+
+        if (php_sapi_name() == 'cli') {
+            //wenn über kommandozeile aufgerufen
+            $path = getcwd();
+        } else {
+            $path = $_SERVER['SCRIPT_FILENAME'];
+        }
+        if (file_exists('application/config_section')) {
+            return trim(file_get_contents('application/config_section'));
+        } else if (substr($host, 0, 9)=='dev.test.') {
+            return 'devtest';
+        } else if (substr($host, 0, 4)=='dev.') {
+            return 'dev';
+        } else if (substr($host, 0, 5)=='test.') {
+            return 'test';
+        } else if (substr($host, 0, 8)=='preview.') {
+            return 'preview';
+        } else {
+            return 'production';
+        }
     }
 
     public function __construct($section, $options = array())
