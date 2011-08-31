@@ -51,8 +51,6 @@ class Vps_Setup
         require_once('Vps/Benchmark.php');
         Vps_Benchmark::$startTime = microtime(true);
 
-        if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
-
         self::setUpZend();
 
         //here to be as fast as possible (and have no session)
