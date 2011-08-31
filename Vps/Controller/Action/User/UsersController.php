@@ -73,7 +73,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
-        if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
+        if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin && $this->_model instanceof Vps_User_Service_Model) {
             $this->_columns->add(new Vps_Grid_Column_Checkbox('webcode', trlVps('Only for this web'), 110))
                  ->setData(new Vps_Controller_Action_User_Users_WebcodeData())
                  ->setShowIn(Vps_Grid_Column::SHOW_IN_ALL ^ Vps_Grid_Column::SHOW_IN_XLS);
