@@ -110,10 +110,6 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
         $this->password = '';
         $this->generatePasswordSalt();
         if (!$this->gender) $this->gender = '';
-
-        if (is_null($this->webcode)) {
-            $this->webcode = self::getWebcode();
-        }
     }
 
     protected function _beforeUpdate()
