@@ -24,6 +24,11 @@ class Vpc_Root_Abstract extends Vpc_Abstract
 
     public function formatPath($parsedUrl)
     {
+        if (!Zend_Registry::get('config')->server->domain) {
+            //domain is optional (but recommended)
+            //for easy setup of examples just ignore the domain (as we don't have anything to compare to anyway)
+            return $parsedUrl['path'];
+        }
         $b = Zend_Registry::get('config')->server->domain == $parsedUrl['host'];
         if (!$b && isset($parsedUrl['port'])) {
             $b = Zend_Registry::get('config')->server->domain == $parsedUrl['host'].':'.$parsedUrl['port'];
