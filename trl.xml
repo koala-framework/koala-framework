@@ -230,6 +230,12 @@ wurde soeben erstellt.</de>
 <en>Submit</en>
 <de>Senden</de>
 <id>81</id>
+<es>enviar</es>
+<pt>mandar</pt>
+<ru>&#x43F;&#x43E;&#x441;&#x43B;&#x430;&#x442;&#x44C;</ru>
+<jp>&#x4F1D;&#x9001;&#x3059;&#x308B;</jp>
+<fr>envoyer</fr>
+<it>inviare</it>
 </text>
 <text>
 <en>Validator</en>
@@ -3014,6 +3020,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Adresses</en>
 <de>Adressen</de>
 <id>870</id>
+<es>direcci&#xF3;n</es>
+<pt>endere&#xE7;o</pt>
+<ru>&#x430;&#x434;&#x440;&#x435;&#x441;</ru>
+<jp>&#x4F4F;&#x6240;</jp>
+<fr>adresse</fr>
+<it>indirizzo</it>
 </text>
 <text>
 <en>Abort</en>
@@ -3676,6 +3688,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Imprint.Imprint</en>
 <de>Impressum.Impressum</de>
 <id>1032</id>
+<es>imprimir</es>
+<pt>imprimir</pt>
+<ru>&#x43F;&#x435;&#x447;&#x430;&#x442;&#x44C;</ru>
+<jp>&#x30A4;&#x30F3;&#x30D7;&#x30EA;&#x30F3;&#x30C8;</jp>
+<fr>imprimer</fr>
+<it>marchio</it>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
