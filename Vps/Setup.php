@@ -45,6 +45,9 @@ class Vps_Setup
 
     public static function setUp($configClass = 'Vps_Config_Web')
     {
+        define('VPS_PATH', realpath(dirname(__FILE__).'/..'));
+        set_include_path(get_include_path().PATH_SEPARATOR.VPS_PATH);
+
         require_once('Vps/Benchmark.php');
         Vps_Benchmark::$startTime = microtime(true);
 
