@@ -143,11 +143,6 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $this->sendMail();
     }
 
-    static public function getSpamKey($enquiriesRow)
-    {
-        return substr(md5(serialize($enquiriesRow->id.$enquiriesRow->save_date)), 0, 15);
-    }
-
     protected function _checkIsSpam()
     {
         if (!$this->id) throw new Vps_Exception("row wurde noch nie gespeichert, daher spam check nicht möglich da keine id vorhanden");
@@ -162,27 +157,13 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         if (in_array('*', $spamFields)) {
             $spamFields = array_keys($mailVarsRow->toArray());
         }
-
-        $additionalData = array(
-            'http_host' => (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
-            'ham_url' => '/vps/spam/set?id='.$this->id.'&value=0&key='.self::getSpamKey($this)
-        );
-
         $text = array();
         foreach ($spamFields as $v) {
             $text[] = $mailVarsRow->$v;
         }
         $text = implode("\n", $text);
 
-        $req = new Zend_Http_Client('http://cms.vivid-planet.com/spamfilter/check.php?method=checkSpam');
-        $req->setMethod(Zend_Http_Client::POST);
-        $req->setParameterPost('text', (strlen($text) > 2000 ? substr($text, 0, 2000) : $text));
-        $req->setParameterPost('additional_data', $additionalData);
-        $res = $req->request();
-        if ($res) {
-            return $res->getBody();
-        }
-        return 0;
+        return Vps_Util_Check_Spam::checkIsSpam($text, $this);
     }
 
     // sets for mail essentails
