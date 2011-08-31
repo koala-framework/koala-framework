@@ -25,6 +25,7 @@ möglicherweise nicht kompatible Änderungen:
 - breite von innerContent, TwoColumns u.a. *nicht* mehr im css einstellen, sondern in Komponenten Settings
   Fixe Breiteneinstellungen gehören generell nicht mehr ins css
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
+- application/config.ini dependencies section moved into application/dependencies.ini
 
 == 2.1 ==
 Erstellt: 21.06.11
