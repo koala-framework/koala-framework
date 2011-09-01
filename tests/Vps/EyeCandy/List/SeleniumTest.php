@@ -3,6 +3,7 @@
  * @group slow
  * @group selenium
  * @group Vps_Js
+ * @group Vps_Js_EyeCandy_List
  *
  * http://vps.markus.vivid/vps/test/vps_js_event_test
  */
