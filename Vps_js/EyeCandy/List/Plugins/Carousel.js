@@ -1,35 +1,40 @@
 Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
-    nextSelector: 'a.carouselNext',
-    previousSelector: 'a.carouselPrevious',
     numberShown: 5,
     //animationConfig: { concurrent: true, duration: 0.25 },
+    moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
 
     _moveActive: false,
     init: function() {
         Ext.applyIf(this, {
             animationConfig: { concurrent: true, duration: 0.25 }
         });
+        this.moveElement = this.list.el;
+        if (this.moveElementSelector) {
+            this.moveElement = this.moveElement.child(this.moveElementSelector);
+        }
     },
     render: function() {
-        this.list.el.parent().query(this.nextSelector).each(function(el) {
-            Ext.fly(el).on('click', function(ev) {
-                ev.stopEvent();
-                this.onMoveNext();
-            }, this);
-        }, this);
-        this.list.el.parent().query(this.previousSelector).each(function(el) {
-            Ext.fly(el).on('click', function(ev) {
+        if (this.list.items.length > this.numberShown) {
+            this.list.el.createChild({
+                tag: 'a',
+                cls: 'carouselPrevious',
+                href: '#'
+            }).on('click', function(ev) {
                 ev.stopEvent();
                 this.onMovePrevious();
             }, this);
-        }, this);
-        for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
-            this.list.getItem(i).el.hide();
-        }
+            this.list.el.createChild({
+                tag: 'a',
+                cls: 'carouselNext',
+                href: '#'
+            }).on('click', function(ev) {
+                ev.stopEvent();
+                this.onMoveNext();
+            }, this);
 
-        if (this.list.items <= this.numberShown) {
-            this.list.el.parent().query(this.previousSelector).hide();
-            this.list.el.parent().query(this.nextSelector).hide();
+            for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
+                this.list.getItem(i).el.hide();
+            }
         }
     },
 
@@ -62,13 +67,13 @@ Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstra
                 }, this);
 
                 // left von wrapper wieder setzen
-                this.list.el.move('right', firstElWidth, false);
+                this.moveElement.move('right', firstElWidth, false);
 
                 this._moveActive = false;
             },
             scope: this
         }, this.animationConfig);
-        this.list.el.move('left', firstElWidth, cfg);
+        this.moveElement.move('left', firstElWidth, cfg);
     },
 
     onMovePrevious: function()
@@ -87,7 +92,7 @@ Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstra
         }, this);
 
         // left von wrapper setzen
-        this.list.el.move('left', this.list.getItem(0).getWidthIncludingMargin(), false);
+        this.moveElement.move('left', this.list.getItem(0).getWidthIncludingMargin(), false);
 
         // fade in first
         var cfg = Ext.applyIf({
@@ -103,7 +108,7 @@ Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstra
             },
             scope: this
         });
-        this.list.el.move('right', this.list.getItem(0).getWidthIncludingMargin(), cfg);
+        this.moveElement.move('right', this.list.getItem(0).getWidthIncludingMargin(), cfg);
     }
 
 });
