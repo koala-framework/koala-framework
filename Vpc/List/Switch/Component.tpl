@@ -11,8 +11,6 @@
                 break; ?>
             <? } ?>
         </div>
-        <a href="#" class="listSwitchPrevious"><?=$this->placeholder['prev'];?></a>
-        <a href="#" class="listSwitchNext"><?=$this->placeholder['next'];?></a>
         <div class="clear"></div>
     </div>
 
