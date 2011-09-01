@@ -14,9 +14,17 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
 
             // deactivate others
             for (var i in this.sizes) {
-                if (i != state) {
-                    for (var j in this.sizes[i].contentElements) {
-                        var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
+                for (var j in this.sizes[i].contentElements) {
+                    var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
+
+                    if (!this.sizes[i].contentElements[j].width) {
+                        this.sizes[i].contentElements[j].width = contentElement.getWidth();
+                    }
+                    if (!this.sizes[i].contentElements[j].height) {
+                        this.sizes[i].contentElements[j].height = contentElement.getHeight();
+                    }
+
+                    if (i != state) {
                         contentElement.setDisplayed(false);
                     }
                 }
@@ -67,9 +75,8 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
         for (var j in this.sizes[state].contentElements) {
             var contentElement = item.el.child(this.sizes[state].contentElements[j].selector);
 
-            var contentElementSizeReal = contentElement.getSize();
             contentElement.setSize(contentElementsOldSizes[j].width, contentElementsOldSizes[j].height);
-            contentElement.setSize(contentElementSizeReal.width, contentElementSizeReal.height, true);
+            contentElement.setSize(this.sizes[state].contentElements[j].width, this.sizes[state].contentElements[j].height, true);
         }
 
         item.el.setSize(
