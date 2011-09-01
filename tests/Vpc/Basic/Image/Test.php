@@ -51,7 +51,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $this->assertEquals(100, $im->getImageHeight());
         $this->assertContains(Vps_Model_Abstract::getInstance('Vpc_Basic_Image_UploadsModel')->getUploadDir().'/1', $o['mtimeFiles']);
         $this->assertContains(VPS_PATH.'/Vpc/Basic/Image/Component.php', $o['mtimeFiles']);
-        $this->assertContains('./tests/Vpc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
+        $this->assertContains(VPS_PATH.'/tests/Vpc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 
