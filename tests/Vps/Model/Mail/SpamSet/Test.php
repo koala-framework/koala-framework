@@ -10,11 +10,13 @@ class Vps_Model_Mail_SpamSet_Test extends Vps_Test_TestCase
     {
         parent::setUp();
         Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/../bootstrap.sql');
+        Vps_Util_Check_Spam::setBackend(new Vps_Model_Mail_SpamSet_TestSpamCheckBackend());
     }
 
     public function tearDown()
     {
         Vps_Test_SeparateDb::restoreTestDb();
+        Vps_Util_Check_Spam::setBackend(null);
         parent::tearDown();
     }
 
