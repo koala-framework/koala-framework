@@ -5,7 +5,6 @@ Vps.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext.extend(Vps.EyeCandy.
     //transitionConfig: {},
     init: function() {
         this.list.on('activeChanged', function(item) {
-            console.log('activeChanged', item);
             this._activate(item);
         }, this);
 
