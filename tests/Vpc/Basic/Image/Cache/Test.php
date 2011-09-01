@@ -72,6 +72,6 @@ class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
 
         $this->assertContains('vpcBasicImageCacheRootImagesEnlargeComponent', $html);
         $this->assertContains('vpcBasicImageCacheRootImageEnlargeComponent', $html);
-        $this->assertRegExp("#/media/Vpc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/9f822051339e96ee0316bb7c4e7619d7/[0-9]+/foo.png#ms", $html);
+        $this->assertRegExp("#/media/Vpc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/[^/]+/[0-9]+/foo.png#ms", $html);
     }
 }

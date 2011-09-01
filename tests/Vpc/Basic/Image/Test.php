@@ -60,7 +60,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $html = $this->_root->getComponentById(1600)->render();
 
         $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">'.
-            '\s*<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/74d187822e02d6b7e96b53938519c028/[0-9]+/foo.png" width="100" height="100" alt="" />'.
+            '\s*<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
             '\s*</div>\s*$#ms', $html);
     }
 
