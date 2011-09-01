@@ -28,13 +28,15 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
     //plugins[]
     //states[]
     defaultState: 'normal',
+    activeState: 'active',
     childSelector: '.listItem',
     _init: function() {
         this.addEvents({
             'childMouseEnter': true,
             'childMouseLeave': true,
             'childClick': true,
-            'childStateChanged': true
+            'childStateChanged': true,
+            'activeChanged': true
         });
         Ext.applyIf(this, {
             plugins: [],
@@ -66,13 +68,11 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
                 this.fireEvent('childClick', item, ev);
             }, this);
             item.on('stateChanged', function(item) {
-                /*
                 var msg = '';
                 this.items.each(function(i) {
                     msg += i.getState()+' ';
                 }, this);
                 console.log(msg);
-                */
                 this.fireEvent('childStateChanged', item);
             }, this);
             this.items.push(item);
@@ -110,11 +110,27 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
         return ret;
         */
     },
+
     getLastItem: function() {
         if (!this.items.length) return null;
         return this.items[this.items.length-1];
     },
     getFirstItem: function() {
         return this.items[0];
+    },
+
+    setActiveItem: function(item) {
+        var previousItem = this.activeItem;
+        this.activeItem = item;
+        if (previousItem != this.activeItem) {
+            this.fireEvent('activeChanged', this.activeItem);
+            if (previousItem) {
+                previousItem.removeState(this.activeState, 'active');
+            }
+            this.activeItem.pushState(this.activeState, 'active');
+        }
+    },
+    getActiveItem: function() {
+        return this.activeItem;
     }
 });
