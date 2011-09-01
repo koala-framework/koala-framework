@@ -1,6 +1,7 @@
 <?php
 /**
  * @group slow
+ * @group selenium
  * @group Vpc_Columns
  */
 class Vpc_Columns_SeleniumTest extends Vps_Test_SeleniumTestCase
