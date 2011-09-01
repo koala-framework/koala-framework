@@ -75,6 +75,8 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
 
     public function hasContent()
     {
-        return true;
+        $c = $this->getContentChild();
+        if (!$c) return false;
+        return $c->hasContent();
     }
 }

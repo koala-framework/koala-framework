@@ -1,6 +1,4 @@
 .cssClass .largeContent { display: none; }
 .cssClass .listSwitchItem { float: left; }
-.cssClass a.listSwitchNext,
-.cssClass a.listSwitchPrevious { display: none; }
 .cssClass .listSwitchLargeContent { position: relative; }
 .cssClass .listSwitchLargeContent .largeContent { position: absolute; top: 0px; }
