@@ -51,7 +51,6 @@ class Vps_Mail_Template_Test extends Vpc_TestAbstract
         $c = $this->_root->getChildComponent('-both');
         $m = new Vps_Mail_Template($c);
         $m->getView()->addScriptPath('.');
-        $m->setMailVarsClassName(null);
         $m->setMail($mockMail);
         $m->subject = 'a special subject';
         $m->foo = 'bar';
