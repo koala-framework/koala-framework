@@ -286,7 +286,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         field: editorField,
                         column: column
                     });
-                } else if (editorField instanceof Vps.Form.AbstractSelect) {
+                } else if (Vps.Form.AbstractSelect && editorField instanceof Vps.Form.AbstractSelect) {
                     editorConfig.allowBlur = true;
                 }
                 column.editor = new Ext.grid.GridEditor(editorField, editorConfig);
