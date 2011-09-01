@@ -40,7 +40,7 @@ class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1700)->render();
-        $this->assertRegExp('#^<a href="/vps/vpctest/Vpc_Basic_DownloadTag_Root/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/26ef864633eb161c415779746271adc8/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
+        $this->assertRegExp('#^<a href="/vps/vpctest/Vpc_Basic_DownloadTag_Root/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/[^/]+/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
     }
 
     public function testEmpty()

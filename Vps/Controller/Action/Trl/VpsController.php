@@ -12,12 +12,14 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
 
     protected function _initColumns()
     {
+        $lang = $this->_getLanguage();
+
         $this->_filters['text'] = array(
             'type'=>'TextField',
-            'width'=>80
+            'width'=>80,
+            'queryFields' => array($lang, $lang.'_plural')
         );
 
-        $lang = $this->_getLanguage();
 
         $this->_columns->add(new Vps_Grid_Column_Button('edit'));
         $this->_columns->add(new Vps_Grid_Column('id', 'Id', 50));
