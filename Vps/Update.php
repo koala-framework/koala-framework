@@ -148,8 +148,17 @@ abstract class Vps_Update
     {
         $ret = array();
         $paths = array();
-        foreach (array_reverse(array_unique(explode(PATH_SEPARATOR, get_include_path()))) as $dir) {
-            if ($dir == '.') $dir = getcwd();
+        $dirs = explode(PATH_SEPARATOR, get_include_path());
+        foreach ($dirs as $k=>$i) {
+            if ($i=='.') {
+                $dirs[$k] = getcwd();
+                continue;
+            }
+            if (substr($i, 0, 1)!='/') $dirs[$k] = getcwd().'/'.$i;
+        }
+        $dirs = array_unique($dirs);
+        $dirs = array_reverse($dirs);
+        foreach ($dirs as $dir) {
             if (substr($file, 0, strlen($dir)) == $dir) {
                 $file = substr($file, strlen($dir)+1);
             }
