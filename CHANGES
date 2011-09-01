@@ -27,6 +27,7 @@ möglicherweise nicht kompatible Änderungen:
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 - application/config.ini dependencies section moved into application/dependencies.ini
 - Vps_User_Model is not a service model, that changed to Vps_User_Service_Model
+- Vpc/List/Switch got completely changed
 
 == 2.1 ==
 Erstellt: 21.06.11

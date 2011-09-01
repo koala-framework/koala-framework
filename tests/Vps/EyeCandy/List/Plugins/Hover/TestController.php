@@ -1,5 +1,5 @@
 <?php
-class Vps_EyeCandy_List_TestController extends Vps_Controller_Action
+class Vps_EyeCandy_List_Plugins_Hover_TestController extends Vps_Controller_Action
 {
     public function indexAction()
     {
