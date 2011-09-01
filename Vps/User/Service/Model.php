@@ -95,7 +95,7 @@ class Vps_User_Service_Model extends Vps_User_Model
             $this->unlockCreateUser();
         }
 
-        $row = parent::createRow(array('email' => $email, 'webcode' => $webcode));
+        $row = parent::createUserRow($email, $webcode);
         $this->_resetPermissions($row);
         return $row;
     }
