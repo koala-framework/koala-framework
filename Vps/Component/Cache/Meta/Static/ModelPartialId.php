@@ -5,7 +5,7 @@ class Vps_Component_Cache_Meta_Static_ModelPartialId extends Vps_Component_Cache
     {
         $ret = parent::getDeleteWhere($pattern, $row, $dirtyColumns, $params);
         if (!$ret) return $ret;
-        $ret['value'] = $row->id;
+        if ($row->hasColumn('id')) $ret['value'] = $row->id;
         return $ret;
     }
 }
