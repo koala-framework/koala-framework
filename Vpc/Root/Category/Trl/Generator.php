@@ -51,7 +51,7 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         $select->ignoreVisible();
         $ret = array();
         foreach (parent::getChildData($parentData, $select) as $key => $c) {
-            if (($ignoreVisible || $c->visible) &&
+            if (($ignoreVisible || $c->visible || $c->isHome) &&
                 (!$filename || $c->filename == $filename)
             ){
                 $ret[$key] = $c;
