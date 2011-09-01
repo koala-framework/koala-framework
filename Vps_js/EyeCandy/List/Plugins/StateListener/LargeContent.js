@@ -30,6 +30,10 @@ Vps.EyeCandy.List.Plugins.StateListener.LargeContent = Ext.extend(Vps.EyeCandy.L
 
     _activate: function(item)
     {
+        if (this.activeItem && item.id == this.activeItem.id) return;
+
+        this.list.getFirstItem().removeState(this.activatedState, 'startup');
+
         var activeEl = null;
         if (this.activeItem) activeEl = this.largeContent[this.activeItem.id];
         var nextEl = this.largeContent[item.id];
