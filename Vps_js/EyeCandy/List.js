@@ -68,11 +68,13 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
                 this.fireEvent('childClick', item, ev);
             }, this);
             item.on('stateChanged', function(item) {
+                /*
                 var msg = '';
                 this.items.each(function(i) {
                     msg += i.getState()+' ';
                 }, this);
                 console.log(msg);
+                */
                 this.fireEvent('childStateChanged', item);
             }, this);
             this.items.push(item);
