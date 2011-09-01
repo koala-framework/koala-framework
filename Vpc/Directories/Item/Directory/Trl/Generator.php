@@ -10,7 +10,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
             $select->unsetPart(Vps_Component_Select::LIMIT_COUNT);
             $select->unsetPart(Vps_Component_Select::LIMIT_OFFSET);
         }
-        $m = Vpc_Abstract::createChildModel($this->_class);
+        $m = $this->getModel();
         $ret = parent::_getChainedChildComponents($parentData, $select);
         if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
             //kann nur gemacht werden nur wenn parentData vorhanden
@@ -38,10 +38,15 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         return $ret;
     }
 
+    public function getModel()
+    {
+        return Vpc_Abstract::createChildModel($this->_class);
+    }
+
     public function getChildIds($parentData, $select = array())
     {
         $ret = parent::getChildIds($parentData, $select);
-        $m = Vpc_Abstract::createChildModel($this->_class);
+        $m = $this->getModel();
         if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
             $ids = array();
             $prefix = $parentData->dbId . $this->getIdSeparator();
@@ -65,7 +70,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         //visible überprüfung wird _getChainedChildComponents auch schon gemacht
         //aber nur wenn parentData dort schon verfügbar ist
         //für fälle wo es das nicht war hier unten nochmal überprüfen
-        $m = Vpc_Abstract::createChildModel($this->_class);
+        $m = $this->getModel();
         if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
             $r = $this->_getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
             if (!$r || !$r->visible) {
@@ -78,7 +83,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);
-        $m = Vpc_Abstract::createChildModel($this->_class);
+        $m = $this->getModel();
         if ($m) {
             $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
             $ret['row'] = $this->_getRow($id);
@@ -86,8 +91,10 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
                 $ret['row'] = $m->createRow();
                 $ret['row']->component_id = $id;
             }
+            /* should not be necessary but I don't know if it's needed somewhere
         } else {
             $ret['row'] = $ret['chained']->row;
+            */
         }
 
         //TODO: nicht mit settings direkt arbeiten, besser das echte generator objekt holen
