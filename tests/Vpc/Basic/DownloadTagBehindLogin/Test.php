@@ -20,14 +20,15 @@ class Vpc_Basic_DownloadTagBehindLogin_Test extends Vps_Test_SeleniumTestCase
         $this->assertElementNotPresent("link=test");
 
         //login formular muss da sein
-        $this->assertElementPresent("css=input");
+        $this->assertElementPresent("css=div.login_password input");
 
         //einloggen
-        $this->type("css=input", "planet");
+        $this->type("css=div.login_password input", "planet");
+
         $this->submitAndWait("css=form");
 
         //login formular muss weg sein
-        $this->assertElementNotPresent("css=input");
+        $this->assertElementNotPresent("css=div.login_password input");
 
         //link muss da sein
         $this->assertElementPresent("link=test");
