@@ -1,5 +1,5 @@
 <?php
-class Vpc_Guestbook_CommentsController extends Vps_Controller_Action_Auto_Grid
+class Vpc_Guestbook_CommentsController extends Vpc_Directories_Item_Directory_Controller
 {
     protected $_defaultOrder = array('field' => 'id', 'direction' => 'DESC');
     protected $_filters = array('text' => true);
@@ -27,6 +27,6 @@ class Vpc_Guestbook_CommentsController extends Vps_Controller_Action_Auto_Grid
         $this->_columns->add(new Vps_Grid_Column('content', trlVps('Content'), 350));
         $this->_columns->add(new Vps_Grid_Column('name', trlVps('Name'), 130));
         $this->_columns->add(new Vps_Grid_Column('email', trlVps('E-Mail'), 150));
-        $this->_columns->add(new Vps_Grid_Column_Button('editdialog'));
+        parent::_initColumns();
     }
 }

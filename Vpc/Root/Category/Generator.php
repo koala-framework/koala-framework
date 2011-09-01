@@ -38,7 +38,10 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             $this->_pageFilename[$row['filename']][$parentId] = $id;
             $this->_pageComponentParent[$row['component']][$parentId][] = $id;
             $this->_pageComponent[$row['component']][] = $id;
-            if ($row['is_home']) $this->_pageHome[] = $id;
+            if ($row['is_home']) {
+                $this->_pageHome[] = $id;
+                $this->_pageData[$row['id']]['visible'] = 1;
+            }
         }
     }
 

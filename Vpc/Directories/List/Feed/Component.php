@@ -19,7 +19,7 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
         if (is_string($itemDirectory)) {
             $c = Vpc_Abstract::getComponentClassByParentClass($itemDirectory);
             $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
-            $items = $generator->getChildData(null, array('select'=>$select));
+            $items = $generator->getChildData(null, $select);
             //TODO: callModifyItemData aufrufen
         } else {
             $items = $itemDirectory->getChildComponents($select);
