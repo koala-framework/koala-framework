@@ -3,7 +3,7 @@ Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
 {
     fileSizeLimit: null,
     allowOnlyImages: false,
-    maxResolution: null,
+    maxResolution: 0,
     baseParams: {},
     controllerUrl: '',
     
