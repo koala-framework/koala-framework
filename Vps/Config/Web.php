@@ -95,6 +95,16 @@ class Vps_Config_Web extends Vps_Config_Ini
 
         $this->_mergeWebConfig($section, $webPath);
 
+        if (!$this->libraryPath) {
+            $p = trim(file_get_contents(VPS_PATH.'/include_path'));
+            if (preg_match('#(.*)/zend/%version%$#', $p, $m)) {
+                $this->libraryPath = $m[1];
+            } else {
+                require_once 'Vps/Exception.php';
+                throw new Vps_Exception("Can't detect libraryPath");
+            }
+        }
+
         foreach ($this->path as $k=>$i) {
             $this->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
                                             array($this->libraryPath, $vpsPath),
