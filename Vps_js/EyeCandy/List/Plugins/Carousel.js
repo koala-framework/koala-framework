@@ -26,6 +26,11 @@ Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstra
         for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
             this.list.getItem(i).el.hide();
         }
+
+        if (this.list.items <= this.numberShown) {
+            this.list.el.parent().query(this.previousSelector).hide();
+            this.list.el.parent().query(this.nextSelector).hide();
+        }
     },
 
     onMoveNext: function() {
