@@ -6,6 +6,7 @@ Vps.onContentReady(function() {
                 childSelector: '.testItem',
                 plugins: [
                     new Vps.EyeCandy.List.Plugins.StateChanger.HoverOthers({
+                        skipItems: 1,
                         state: 'tiny'
                     })
                 ]
