@@ -34,7 +34,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
      */
     public function testCreateRow()
     {
-        $m = new Vps_User_Model();
+        $m = new Vps_User_Service_Model();
         $r = $m->createRow();
     }
 
@@ -48,7 +48,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
         $email = $this->_getNewMailAddress();
 
         // CREATE USER \\
-        $m = new Vps_User_Model();
+        $m = new Vps_User_Service_Model();
         $r = $m->createUserRow($email);
         $r->gender = 'male';
         $r->title = 'Dr.';
@@ -129,7 +129,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
         $this->assertEquals(1, $mirr->deleted);
 
         // CREATE USER \\
-        $m2 = new Vps_User_Model();
+        $m2 = new Vps_User_Service_Model();
         $r2 = $m2->createUserRow($email);
         $r2->gender = 'male';
         $r2->title = 'Dr. 2';
@@ -182,7 +182,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
         $email = $this->_getNewMailAddress();
 
         // CREATE USER \\
-        $m = new Vps_User_Model();
+        $m = new Vps_User_Service_Model();
         $r = $m->createUserRow($email, $webcode);
         $r->gender = 'male';
         $r->title = 'Dr.';
@@ -278,7 +278,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
         $this->assertEquals(1, $mirr->deleted);
 
         // CREATE USER \\
-        $m2 = new Vps_User_Model();
+        $m2 = new Vps_User_Service_Model();
         $r2 = $m2->createUserRow($email, $webcode);
         $r2->title = 'Dr. 2';
         $r2->firstname = 'Test Global 2';
@@ -342,7 +342,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
 
         $email = $this->_getNewMailAddress();
 
-        $m = new Vps_User_Model();
+        $m = new Vps_User_Service_Model();
         $all = new Vps_User_All_Model();
 
         $newestAllRow = $all->getRow($all->select()->order('id', 'DESC'));
@@ -400,7 +400,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
 
         $email = $this->_getNewMailAddress();
 
-        $m = new Vps_User_Model();
+        $m = new Vps_User_Service_Model();
 
         $r = $m->createUserRow($email, $webcode);
         $r->gender = 'male';
@@ -452,7 +452,7 @@ class Vps_User_RealModelTest extends Vps_Test_TestCase
 
         $email = $this->_getNewMailAddress();
 
-        $m = new Vps_User_Model();
+        $m = new Vps_User_Service_Model();
 
         $r = $m->createUserRow($email, $webcode);
         $r->gender = 'male';
