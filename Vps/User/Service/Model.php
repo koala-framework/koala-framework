@@ -108,4 +108,9 @@ class Vps_User_Service_Model extends Vps_User_Model
         }
         return $webCode;
     }
+
+    public function synchronize($overrideMaxSyncDelay = Vps_Model_MirrorCache::SYNC_AFTER_DELAY)
+    {
+        $this->getProxyModel()->synchronize($overrideMaxSyncDelay);
+    }
 }
