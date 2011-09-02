@@ -40,7 +40,7 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
         });
         Ext.applyIf(this, {
             plugins: [],
-            states: [],
+            states: []
         });
 
         if (!this.el) throw 'el required';
