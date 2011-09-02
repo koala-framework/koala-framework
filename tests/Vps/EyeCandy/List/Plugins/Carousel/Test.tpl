@@ -8,14 +8,12 @@
     </head>
     <body>
         <div class="testItemWrapper">
-            <a href="#" class="carouselPrevious">««</a>
             <div id="ti1" class="testItem">Item 1</div>
             <div id="ti2" class="testItem">Item 2</div>
             <div id="ti3" class="testItem">Item 3</div>
             <div id="ti4" class="testItem">Item 4</div>
             <div id="ti5" class="testItem">Item 5</div>
             <div id="ti6" class="testItem">Item 6</div>
-            <a href="#" class="carouselNext">»»</a>
         </div>
     </body>
 </html>
