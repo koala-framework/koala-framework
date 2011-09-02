@@ -12,6 +12,12 @@ Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstra
         if (this.moveElementSelector) {
             this.moveElement = this.moveElement.child(this.moveElementSelector);
         }
+
+        if (this.list.items.length > this.numberShown) {
+            for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
+                this.list.getItem(i).el.hide();
+            }
+        }
     },
     render: function() {
         if (this.list.items.length > this.numberShown) {
@@ -31,10 +37,6 @@ Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstra
                 ev.stopEvent();
                 this.onMoveNext();
             }, this);
-
-            for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
-                this.list.getItem(i).el.hide();
-            }
         }
     },
 

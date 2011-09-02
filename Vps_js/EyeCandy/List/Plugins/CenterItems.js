@@ -1,10 +1,12 @@
 Vps.EyeCandy.List.Plugins.CenterItems = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
-    init: function() {
+    render: function() {
         var listWidth = this.list.el.getWidth();
         var itemsWidth = 0;
         var listItemWrapper = null;
         this.list.items.forEach(function(it) {
-            itemsWidth += it.el.getWidth();
+            if (it.el.isVisible()) {
+                itemsWidth += it.el.getWidth();
+            }
             if (!listItemWrapper) {
                 listItemWrapper = it.el.parent();
             }
