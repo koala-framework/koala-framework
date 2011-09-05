@@ -15,7 +15,7 @@ class Vpc_Shop_Component extends Vpc_Abstract_Composite_Component
         );
 
         $ret['componentName'] = trlVps('Shop');
-        $ret['extConfig'] = 'Vpc_Abstract_ExtConfigNone';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 }
