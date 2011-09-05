@@ -176,6 +176,9 @@ class Vps_Config_Web extends Vps_Config_Ini
     {
         $webSection = $this->_getWebSection($section, $webPath);
         self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/application/config.ini', $webSection));
+        if (file_exists($webPath.'/application/config.local.ini')) {
+            self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/application/config.local.ini', $webSection));
+        }
     }
 
     /**
