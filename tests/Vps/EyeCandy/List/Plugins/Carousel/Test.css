@@ -1,0 +1,3 @@
+.carouselNext,
+.carouselPrevious { position: absolute; display: block; background-color: red; width: 20px; height: 50px; }
+.carouselNext { left: 500px; }

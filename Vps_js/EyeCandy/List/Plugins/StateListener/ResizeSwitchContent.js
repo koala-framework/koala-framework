@@ -12,17 +12,26 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
             var state = item.getState();
             item.oldState = state;
 
-            // deactivate others
+            // measure the original sizes
             for (var i in this.sizes) {
                 for (var j in this.sizes[i].contentElements) {
                     var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
+                    if (!contentElement) continue;
 
-                    if (!this.sizes[i].contentElements[j].width) {
-                        this.sizes[i].contentElements[j].width = contentElement.getWidth();
+                    if (!contentElement.ResizeSwitchContentOriginalWidth) {
+                        contentElement.ResizeSwitchContentOriginalWidth = contentElement.getWidth();
                     }
-                    if (!this.sizes[i].contentElements[j].height) {
-                        this.sizes[i].contentElements[j].height = contentElement.getHeight();
+                    if (!contentElement.ResizeSwitchContentOriginalHeight) {
+                        contentElement.ResizeSwitchContentOriginalHeight = contentElement.getHeight();
                     }
+                }
+            }
+
+            // deactivate not active contentElements
+            for (var i in this.sizes) {
+                for (var j in this.sizes[i].contentElements) {
+                    var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
+                    if (!contentElement) continue;
 
                     if (i != state) {
                         contentElement.setDisplayed(false);
@@ -33,6 +42,7 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
             // activate self
             for (var j in this.sizes[state].contentElements) {
                 var contentElement = item.el.child(this.sizes[state].contentElements[j].selector);
+                if (!contentElement) continue;
                 contentElement.setDisplayed(true);
             }
         }, this);
@@ -44,6 +54,7 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
         var contentElementsOldSizes = {};
         for (var j in this.sizes[item.oldState].contentElements) {
             var contentElement = item.el.child(this.sizes[item.oldState].contentElements[j].selector);
+            if (!contentElement) continue;
             contentElementsOldSizes[j] = contentElement.getSize();
         }
 
@@ -52,6 +63,7 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
             if (i != state) {
                 for (var j in this.sizes[i].contentElements) {
                     var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
+                    if (!contentElement) continue;
                     contentElement.setDisplayed(false);
                 }
             }
@@ -60,6 +72,7 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
         // display new elements
         for (var j in this.sizes[state].contentElements) {
             var contentElement = item.el.child(this.sizes[state].contentElements[j].selector);
+            if (!contentElement) continue;
             contentElement.setDisplayed(true);
         }
 
@@ -74,9 +87,11 @@ Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.Eye
         // set the inner content elements to the old size and animate them to their original size
         for (var j in this.sizes[state].contentElements) {
             var contentElement = item.el.child(this.sizes[state].contentElements[j].selector);
+            if (!contentElement) continue;
+            if (this.sizes[state].contentElements[j].animate === false) continue;
 
             contentElement.setSize(contentElementsOldSizes[j].width, contentElementsOldSizes[j].height);
-            contentElement.setSize(this.sizes[state].contentElements[j].width, this.sizes[state].contentElements[j].height, true);
+            contentElement.setSize(contentElement.ResizeSwitchContentOriginalWidth, contentElement.ResizeSwitchContentOriginalHeight, true);
         }
 
         item.el.setSize(
