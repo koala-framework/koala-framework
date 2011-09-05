@@ -1,6 +1,7 @@
 <?php
 /**
  * @group slow
+ * @group selenium
  * @group Vps_Form_FieldsetInCards
  *
  * Testen den Bug der auftritt wenn in einem Cards ein fieldset ist das per checkbox

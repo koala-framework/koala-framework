@@ -2,6 +2,7 @@
 /**
  * @group Component_SharedData
  * @group slow
+ * @group selenium
  */
 // /vps/componentedittest/Vps_Component_SharedData_Component/Vps_Component_SharedData_Detail_SharedData_Component?componentId=root
 class Vps_Component_SharedData_SeleniumTest extends Vps_Test_SeleniumTestCase

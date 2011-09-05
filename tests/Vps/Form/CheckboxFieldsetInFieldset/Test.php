@@ -1,6 +1,7 @@
 <?php
 /**
  * @group slow
+ * @group selenium
  * @group Vps_Form_Fieldset
  * Langer Kommentar was das problem ist in Vps_Form_CheckboxFieldsetInCards_Test
  */
