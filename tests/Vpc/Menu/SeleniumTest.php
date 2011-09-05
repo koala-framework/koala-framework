@@ -2,6 +2,7 @@
 /**
  * @group Vpc_Menu
  * @group slow
+ * @group selenium
  */
 // /vps/componentedittest/Vpc_Menu_Root/Vpc_Menu_Menu_Component?componentId=root-menu
 // /vps/componentedittest/Vpc_Menu_Root/Vpc_Menu_Menu_Component?componentId=1-menu-subMenu

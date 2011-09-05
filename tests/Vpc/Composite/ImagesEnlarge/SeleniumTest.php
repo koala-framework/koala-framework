@@ -1,6 +1,7 @@
 <?php
 /**
  * @group slow
+ * @group selenium
  * @group Composite_ImagesEnlarge
  */
 class Vpc_Composite_ImagesEnlarge_SeleniumTest extends Vps_Test_SeleniumTestCase
