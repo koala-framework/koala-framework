@@ -250,7 +250,7 @@ Vps.Lightbox.Lightbox = (function(link, config) {
         
         getTemplate : function() {
             return [
-                '<div id="vpsLightbox" class="vpsLightbox">',
+                '<div id="vpsLightbox" class="vpsLightbox webStandard">',
                     '<div id="vpsLightbox-container" class="vpsLightboxContainer">',
                         '<div id="vpsLightbox-content" class="vpsLightboxContent">',
 
