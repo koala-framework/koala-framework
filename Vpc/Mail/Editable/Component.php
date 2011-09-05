@@ -10,7 +10,7 @@ class Vpc_Mail_Editable_Component extends Vpc_Mail_Component
     }
 
     // Wird hier verwendet: Vpc_Mail_Editable_ComponentsModel
-    public function getName()
+    public function getNameForEdit()
     {
         return Vpc_Abstract::getSetting($this->getData()->componentClass, 'componentName');
     }

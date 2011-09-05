@@ -11,7 +11,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Vpc_Mail_Ed
         return $ret;
     }
 
-    public function getName()
+    public function getNameForEdit()
     {
         return trlVps('Shop Confirmation Text') . ' ' . Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
     }

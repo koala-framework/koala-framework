@@ -11,7 +11,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component extends Vpc_
         return $ret;
     }
 
-    public function getName()
+    public function getNameForEdit()
     {
         return trlVps('Shop Shipped Mail') . ' ' . Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
     }
