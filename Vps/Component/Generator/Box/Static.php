@@ -28,16 +28,6 @@ class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static
         return array_keys($this->_settings['component']);
     }
 
-    public function removeBox($box)
-    {
-        if (isset($this->_settings['box'])) {
-            //there can be just one box
-            $this->_settings['component'] = array();
-        } else {
-            unset($this->_settings['component'][$box]);
-        }
-    }
-
     public function getGeneratorFlags()
     {
         $ret = parent::getGeneratorFlags();
