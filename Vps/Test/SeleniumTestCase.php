@@ -21,8 +21,8 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         foreach (Vps_Registry::get('config')->server->testBrowser as $b) {
             if (!$b->browser) continue; //deaktiviert
             $b = $b->toArray();
-            $b['port'] = (int)$b['port'];
-            $b['timeout'] = (int)$b['timeout'];
+            if (isset($b['port'])) $b['port'] = (int)$b['port'];
+            if (isset($b['timeout'])) $b['timeout'] = (int)$b['timeout'];
             self::$browsers[] = $b;
         }
         if (!self::$browsers) {
