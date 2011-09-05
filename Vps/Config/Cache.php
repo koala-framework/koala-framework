@@ -10,6 +10,7 @@ class Vps_Config_Cache extends Zend_Cache_Frontend_File
             VPS_PATH . '/config.ini'
         );
         if (file_exists('application/vps_branch')) $files[] = 'application/vps_branch';
+        if (file_exists('application/config.local.ini')) $files[] = 'application/config.local.ini';
         parent::__construct(array(
             'master_files' => $files,
             'automatic_serialization' => true
