@@ -1037,7 +1037,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         $config = Zend_Registry::get('config');
 
         $ret['mysqlDir'] = '';
-        if ($config->server->host == 'vivid-planet.com') {
+        if (trim(`hostname`) == "vivid-sun") {
             $ret['mysqlDir'] = '/usr/local/mysql/bin/';
         }
         $ret['tableName'] = $this->getTableName();
