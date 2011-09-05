@@ -1,4 +1,4 @@
-#ux-extbox-overlay {
+.vpsLightboxOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,19 +10,9 @@
     background: #000;
     cursor: pointer
 }
-#ux-extbox-shim {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 9998;
-    width: 100%;
-    height: 200px;
-    padding: 0;
-    margin: 0
-}
 
 /* the overlayed element */
-#ux-extbox {
+.vpsLightbox {
     background-color: #fff;
     z-index: 10000;
     position: absolute;
@@ -38,19 +28,19 @@
     -webkit-border-radius: 5px;
     border-radius: 5px;
 }
-#ux-extbox-container {
+.vpsLightboxContainer {
     position: relative;
 }
 
-#ux-extbox img,
-#ux-extbox iframe {
+.vpsLightbox img,
+.vpsLightbox iframe {
     border: none;
     padding: 0;
     margin: 0;
 }
 
 /* close button positioned on bottom right corner */
-#ux-extbox-navClose {
+.vpsLightboxNavClose {
     position:absolute;
     top: 0;
     right: 0;
@@ -72,8 +62,8 @@
     border-radius-bottomleft: 4px;
 }
 
-#ux-extbox-navNext,
-#ux-extbox-navPrev {
+.vpsLightboxNavNext,
+.vpsLightboxNavPrev {
 	position: absolute;
 	top: 40%;
 	border: 1px solid #fff;
@@ -89,7 +79,7 @@
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 }
-#ux-extbox-navPrev {
+.vpsLightboxNavPrev {
 	left:0;
 	border-left:0;
 	-moz-border-radius-topleft:0;
@@ -97,7 +87,7 @@
 	-webkit-border-bottom-left-radius:0;
 	-webkit-border-top-left-radius:0;
 }
-#ux-extbox-navNext {
+.vpsLightboxNavNext {
 	right:0;
 	border-right:0;
 	-moz-border-radius-topright:0;
@@ -106,11 +96,11 @@
 	-webkit-border-top-right-radius:0;
 }
 
-#ux-extbox-navNext:hover, #ux-extbox-navPrev:hover {
+.vpsLightboxNavNext:hover, .vpsLightboxNavPrev:hover {
 	opacity: 1;
 }
 /* the "information box" */
-#ux-extbox-info {
+.vpsLightboxInfo {
     position: absolute;
     width: 90%;
     height: 14px;
@@ -128,11 +118,11 @@
     border-radius-bottomright: 4px;
 }
 
-#ux-extbox-title {
+.vpsLightboxTitle {
     text-align: center;
     margin-left: 40px;
 }
-#ux-extbox-current {
+.vpsLightboxCurrent {
     position: absolute;
     left: 0;
     top: 0;
@@ -143,7 +133,7 @@
     color:#666;
     font: italic normal 11px/12px "Trebuchet MS", Arial, sans-serif;
 }
-#ux-extbox-loadingOverlay {
+.vpsLightboxLoadingOverlay {
     width: 20px;
     height: 20px;
     position: absolute;
@@ -153,16 +143,16 @@
     margin-top: -10px;
     z-index: 10006;
 }
-#ux-extbox-loading {
+.vpsLightboxLoading {
     font-size: 24px;
     line-height: 20px;
     color: #222;
     z-index: 10007;
 }
-#ux-extbox-loading:after {
+.vpsLightboxLoading:after {
     content: '↻';
 }
-#ux-extbox-content {
+.vpsLightboxContent {
     width: 200px;
     height: 200px;
     overflow: auto;
