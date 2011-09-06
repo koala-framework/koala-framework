@@ -154,12 +154,15 @@ abstract class Vps_Component_Generator_Abstract
 
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
+        } else if (is_array($component)) {
+            $componentClass = $component['componentClass'];
+            $component = null;
         } else {
             $componentClass = $component;
             $component = null;
         }
 
-        $generatorKeys = self::_getGeneratorKeys(null, $componentClass);
+        $generatorKeys = self::_getGeneratorKeys(array(), $componentClass);
 
         //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
         if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
@@ -208,12 +211,18 @@ abstract class Vps_Component_Generator_Abstract
 
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
+            $inheritClasses = $component->inheritClasses;
+        } else if (is_array($component)) {
+            $componentClass = $component['componentClass'];
+            $inheritClasses = $component['inheritClasses'];
+            $component = null;
         } else {
             $componentClass = $component;
+            $inheritClasses = array();
             $component = null;
         }
 
-        $generatorKeys = self::_getGeneratorKeys($component, $componentClass);
+        $generatorKeys = self::_getGeneratorKeys($inheritClasses, $componentClass);
 
         //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
         if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
@@ -239,13 +248,11 @@ abstract class Vps_Component_Generator_Abstract
         return self::_filterGenerators($generators, $component, $componentClass, $select);
     }
 
-    private static function _getGeneratorKeys($component, $componentClass)
+    private static function _getGeneratorKeys(array $inheritClasses, $componentClass)
     {
         $cacheId = $componentClass;
-        if ($component) {
-            foreach ($component->inheritClasses as $inheritComponent) {
-                $cacheId .= '__' . $inheritComponent;
-            }
+        foreach ($inheritClasses as $inheritComponent) {
+            $cacheId .= '__' . $inheritComponent;
         }
 
         if (isset(self::$_cachedGeneratorKeys[$cacheId])) {
@@ -262,8 +269,8 @@ abstract class Vps_Component_Generator_Abstract
             $generators = array_merge($generators, self::_getGeneratorsForComponent($pluginClass, $componentClass));
         }
         $inheritedGenerators = array();
-        if ($component && $component->inheritClasses) {
-            foreach ($component->inheritClasses as $inheritClass) {
+        if ($inheritClasses) {
+            foreach ($inheritClasses as $inheritClass) {
                 $gs = Vpc_Abstract::getSetting($inheritClass, 'generators');
                 foreach ($gs as $key => $inheritedGenerator) {
                     if (!$inheritedGenerator['component']) {
