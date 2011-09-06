@@ -42,7 +42,7 @@ class Vpc_FormStatic_SeleniumTest extends Vps_Test_SeleniumTestCase
             $this->assertContains('Email: test@vivid-planet.com', $mail->body_text);
             $this->assertContains('Fullname: myname', $mail->body_text);
             $this->assertContains('Content:'."\nlorem ipsum", $mail->body_text);
-        ]
+        }
 
         // enquiries checken
         $enquiries = Vps_Model_Abstract::getInstance('Vps_Model_Mail');
