@@ -115,6 +115,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                         $f->setName('gen_'.$g->getGeneratorKey());
                         $f->setIdTemplate('{0}-'.$g->getGeneratorKey());
                         $f->setCreateMissingRow(true);
+                        $f->setShowDependingOnComponent(true);
                         $fields->add($f);
                     }
                     $generatorForms[$g->getClass().'.'.$g->getGeneratorKey()] = $f;
@@ -124,7 +125,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                 }
             }
         }
-        $this->_form->setFormsForComponent($formsForComponent);
+        $fields['component']->setFormsForComponent($formsForComponent);
 
         /*
         foreach ($componentClasses as $key=>$componentClass) {
