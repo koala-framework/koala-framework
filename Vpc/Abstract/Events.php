@@ -14,9 +14,9 @@ class Vpc_Abstract_Events extends Vps_Component_Abstract_Events
         return $ret;
     }
 
-    public function onOwnRowUpdate($event, $data)
+    public function onOwnRowUpdate($event, $row)
     {
-        foreach ($this->_getComponentsByDbIdOwnClass($data['row']->component_id) as $c) {
+        foreach ($this->_getComponentsByDbIdOwnClass($row->component_id) as $c) {
             self::fireEvent(Vps_Component_Events::EVENT_COMPONENT_CONTENT_CHANGE, $c->componentClass, $c->componentId);
             self::fireEvent(Vps_Component_Events::EVENT_COMPONENT_HAS_CONTENT_CHANGE, $c->componentClass, $c->componentId);
             //$hc = $c->getComponent()->hasContent(); //todo: make this more selective

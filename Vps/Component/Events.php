@@ -1,8 +1,12 @@
 <?php
 class Vps_Component_Events
 {
+    const EVENT_ROW_DELETE = 'rowDelete';
+    const EVENT_ROW_ADD = 'rowAdd';
     const EVENT_ROW_UPDATE = 'rowUpdate';
+    const EVENT_ROW_INSERT = 'rowInsert';
     const EVENT_ROW_UPDATES_FINISHED = 'rowUpdatesFinished';
+    const EVENT_MODEL_UPDATE = 'modelUpdate';
     const EVENT_COMPONENT_CONTENT_CHANGE = 'componentContentChange';
     const EVENT_COMPONENT_HAS_CONTENT_CHANGE = 'componentHasContentChange';
 
@@ -42,6 +46,7 @@ class Vps_Component_Events
     {
         static $cache = null;
         if (!$cache) {
+            // todo: use Vps_Cache_Simple
             $cache = Vps_Cache::factory('Core', 'Apc', array(
                 'lifetime'=>null,
                 'automatic_cleaning_factor' => false,
@@ -51,7 +56,7 @@ class Vps_Component_Events
 
         $listeners = $cache->load($cacheId);
         if (!$listeners) {
-            $listeners = array();
+
             $eventObjects = array();
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
                 $eventObjects[] = Vps_Component_Abstract_Events::getInstance(
@@ -59,6 +64,8 @@ class Vps_Component_Events
                 );
             }
             $eventObjects[] = Vps_Component_Events_ViewCache::getInstance('Vps_Component_Events_ViewCache');
+
+            $listeners = array();
             foreach ($eventObjects as $eventObject) {
                 foreach ($eventObject->getListeners() as $listener) {
                     // todo: make it failproof
@@ -73,6 +80,7 @@ class Vps_Component_Events
                     );
                 }
             }
+
             $cache->save($listeners, $cacheId);
         }
         return $listeners;

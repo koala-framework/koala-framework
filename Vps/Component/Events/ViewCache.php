@@ -2,13 +2,6 @@
 class Vps_Component_Events_ViewCache extends Vps_Component_Events
 {
     private $_updatedDbIds = array();
-    private $_modelClass = 'Vps_Component_Cache_Mysql_Model';
-
-    public static function setModelClass($modelClass)
-    {
-        $instance = Vps_Component_Events_ViewCache::getInstance('Vps_Component_Events_ViewCache');
-        $instance->_modelClass = $modelClass;
-    }
 
     public function getListeners()
     {
