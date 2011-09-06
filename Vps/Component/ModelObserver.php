@@ -114,10 +114,15 @@ class Vps_Component_ModelObserver
             if ($this->_enableProcess) {
                 if ($row) {
                     $dirtyColumns = isset($source['dirtyColumns']) ? $source['dirtyColumns'] : null;
-                    Vps_Component_Cache::getInstance()->cleanByRow($row, $dirtyColumns);
+                    Vps_Component_Abstract_Events::fireEvent(
+                        Vps_Component_Abstract_Events::EVENT_ROW_UPDATE,
+                        get_class($row->getModel()),
+                        array('row' => $row, 'dirtyColumns' => $dirtyColumns)
+                    );
+                    //Vps_Component_Cache::getInstance()->cleanByRow($row, $dirtyColumns);
                 } else {
                     // Bei Import kommt ein Model daher
-                    Vps_Component_Cache::getInstance()->cleanByModel($model);
+                    //Vps_Component_Cache::getInstance()->cleanByModel($model);
                 }
             }
             return array($modelname => $id);

@@ -1,6 +1,37 @@
 <?php
 abstract class Vps_Component_Cache
 {
+    public function getListeners()
+    {
+        $ret = array();
+        $ret[] = array(
+            'class' => 'Vpc_Abstract',
+            'event' => Vps_Component_Abstract_Events::EVENT_COMPONENT_CONTENT_CHANGE,
+            'callback' => 'onContentChange'
+        );
+        return $ret;
+    }
+
+    public function onOwnRowUpdate($event, $class, $data)
+    {
+        d($data);
+        foreach ($this->_getComponentsByDbIdOwnClass($data['row']->component_id) as $c) {
+            self::fireEvent(Vps_Component_Abstract_Events::EVENT_COMPONENT_CONTENT_CHANGE, $c->componentClass, $c->componentId);
+            self::fireEvent(Vps_Component_Abstract_Events::EVENT_COMPONENT_HAS_CONTENT_CHANGE, $c->componentClass, $c->componentId);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     static private $_instance;
     static private $_backend = self::CACHE_BACKEND_MYSQL;
     const CACHE_BACKEND_MYSQL = 'Vps_Component_Cache_Mysql';
