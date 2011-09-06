@@ -59,16 +59,7 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
 
     public function getPagePropertiesForm()
     {
-        $form = new Vps_Form();
-        $form->setModel($this->_getModel());
-        $select = $form->add(new Vps_Form_Field_Select('component', trlVps('Box Type')));
-        $select->setAllowBlank(false);
-        $values = array();
-        foreach ($this->_settings['component'] as $k=>$c) {
-            $values[$k] = Vpc_Abstract::getSetting($c, 'componentName');
-        }
-        $select->setValues($values);
-        return $form;
+        return new Vps_Component_Generator_Box_StaticSelect_PagePropertiesForm($this);
     }
 
     public function getStaticChildComponentIds()
