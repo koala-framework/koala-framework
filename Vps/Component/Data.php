@@ -235,6 +235,7 @@ class Vps_Component_Data
         $cacheId = 'recCCGen-'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $generators = Vps_Cache_Simple::fetch($cacheId, $success);
         if (!$success) {
+            //get (statically=fast and cached) all generators that could create the component we are looking for
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
