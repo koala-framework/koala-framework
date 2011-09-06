@@ -38,17 +38,28 @@ class Vps_Component_Events
         return $componentClass;
     }
 
-    public static function getAllListeners()
+    public static final function getAllListeners()
     {
-        static $listeners; // todo: cache in apc
-        if (!isset($listeners)) {
+        static $cache = null;
+        if (!$cache) {
+            $cache = Vps_Cache::factory('Core', 'Apc', array(
+                'lifetime'=>null,
+                'automatic_cleaning_factor' => false,
+                'automatic_serialization'=>true));
+        }
+        $cacheId = 'Vps_Component_Events_listeners';
+
+        $listeners = $cache->load($cacheId);
+        if (!$listeners) {
             $listeners = array();
             $eventObjects = array();
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-                $eventObjects[] = Vps_Component_Abstract_Events::getInstance('Vps_Component_Abstract_Events', $componentClass);
+                $eventObjects[] = Vps_Component_Abstract_Events::getInstance(
+                    'Vps_Component_Abstract_Events', $componentClass
+                );
             }
             $eventObjects[] = Vps_Component_Events_ViewCache::getInstance('Vps_Component_Events_ViewCache');
-            foreach ($eventObjects as $eventObject)
+            foreach ($eventObjects as $eventObject) {
                 foreach ($eventObject->getListeners() as $listener) {
                     // todo: make it failproof
                     $event = $listener['event'];
@@ -61,6 +72,8 @@ class Vps_Component_Events
                             null
                     );
                 }
+            }
+            $cache->save($listeners, $cacheId);
         }
         return $listeners;
     }

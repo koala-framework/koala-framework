@@ -18,9 +18,10 @@ class Vpc_Abstract_Events extends Vps_Component_Abstract_Events
     {
         foreach ($this->_getComponentsByDbIdOwnClass($data['row']->component_id) as $c) {
             self::fireEvent(Vps_Component_Events::EVENT_COMPONENT_CONTENT_CHANGE, $c->componentClass, $c->componentId);
+            self::fireEvent(Vps_Component_Events::EVENT_COMPONENT_HAS_CONTENT_CHANGE, $c->componentClass, $c->componentId);
             //$hc = $c->getComponent()->hasContent(); //todo: make this more selective
             //if ($hc != getFromCache($c->componentId)) {
-                self::fireEvent(Vps_Component_Events::EVENT_COMPONENT_HAS_CONTENT_CHANGE, $c->componentClass, array('componentId'=>$c->componentId, 'hasContent'=>$hc));
+                //self::fireEvent(Vps_Component_Events::EVENT_COMPONENT_HAS_CONTENT_CHANGE, $c->componentClass, array('componentId'=>$c->componentId, 'hasContent'=>$hc));
             //}
         }
     }

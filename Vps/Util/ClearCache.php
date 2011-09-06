@@ -108,9 +108,9 @@ class Vps_Util_ClearCache
             if (in_array('cache_component', $this->getDbCacheTables())
                 && (in_array('component', $types) || in_array('cache_component', $types))
             ) {
-                if ($output) echo "Refresh static cache...";
+                if ($output) echo "Refresh events.........";
                 try {
-                    Vps_Component_Cache::saveStaticMeta();
+                    Vps_Component_Events::getAllListeners();
                     if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
                     if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";

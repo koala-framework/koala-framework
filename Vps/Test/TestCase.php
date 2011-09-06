@@ -7,7 +7,6 @@ class Vps_Test_TestCase extends PHPUnit_Framework_TestCase
     {
         Vps_Component_Data_Root::setComponentClass(false);
         Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
-        Vps_Component_Events_ViewCache::setModelClass('Vps_Component_Cache_Fnf_Model');
         Vps_Component_ModelObserver::getInstance()->clear();
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
         Vps_Media::getOutputCache()->clean();
