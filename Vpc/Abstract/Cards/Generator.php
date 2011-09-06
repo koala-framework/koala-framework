@@ -71,6 +71,6 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
 
     public function getStaticChildComponentIds()
     {
-        return array($this->_idSeparator.'cards');
+        return array($this->_idSeparator.'child');
     }
 }
