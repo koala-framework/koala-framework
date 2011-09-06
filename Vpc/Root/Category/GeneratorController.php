@@ -5,6 +5,8 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
     protected $_permissions = array('save' => true, 'add' => true);
     protected $_modelName = 'Vpc_Root_Category_GeneratorModel';
 
+    private $_dynamicForms = array();
+
     protected function _hasPermissions($row, $action)
     {
         $component = Vps_Component_Data_Root::getInstance()
@@ -116,6 +118,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                         $f->setIdTemplate('{0}-'.$g->getGeneratorKey());
                         $f->setCreateMissingRow(true);
                         $f->setShowDependingOnComponent(true);
+                        $this->_dynamicForms[] = $f;
                         $fields->add($f);
                     }
                     $generatorForms[$g->getClass().'.'.$g->getGeneratorKey()] = $f;
@@ -139,6 +142,21 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
         }
         + the same for child components (using editComponents?)
         */
+    }
+
+    protected function _beforeValidate(array $postData)
+    {
+        parent::_beforeValidate($postData);
+        //don't save hidden forms
+        $cmpField = $this->_form->fields['component'];
+        $component = $postData[$cmpField->getFieldName()];
+        $formsForComponent = $cmpField->getFormsForComponent();
+        $visibleForms = $formsForComponent[$component];
+        foreach ($this->_dynamicForms as $f) {
+            if (!in_array($f->getName(), $visibleForms)) {
+                $this->_form->fields->remove($f);
+            }
+        }
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
