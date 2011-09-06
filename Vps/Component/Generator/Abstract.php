@@ -448,9 +448,6 @@ abstract class Vps_Component_Generator_Abstract
                             }
                         }
                         if ($continue) continue;
-                    } else if (!in_array($key, $editComponents)) {
-                        //oder ein static generator (wenn er nur eine unter komponente hat)
-                        continue;
                     }
                     if (isset($g->_settings['unique']) && $g->_settings['unique']) {
                         //vererbte, unique nur bei eigener komponente zurückgeben
