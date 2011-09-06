@@ -444,8 +444,12 @@ abstract class Vps_Component_Generator_Abstract
                         continue;
                     }
                 } else {
-
-                    if (is_array($g->_settings['component'])) {
+                    if ($g instanceof Vps_Component_Generator_Box_StaticSelect) {
+                        if (!in_array($g->getGeneratorKey(), $editComponents)) {
+                            //oder ein static generator (wenn er nur eine unter komponente hat)
+                            continue;
+                        }
+                    } else {
                         //oder eine komponente eines static generators
                         $continue = true;
                         foreach (array_keys($g->_settings['component']) as $componentKey) {
