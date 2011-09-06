@@ -22,7 +22,7 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
             'isPseudoPage' => false,
             'inherit' => false
         );
-        $ret['box'] = $this->_settings['generator'];
+        $ret['box'] = $this->getGeneratorKey();
 
         $row = $this->_getModel()->getRow($parentData->dbId.'-'.$this->getGeneratorKey());
         if (!$row || !$row->component) {
