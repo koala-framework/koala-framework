@@ -31,19 +31,10 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
 
     public function onRowUpdatesFinished($event, $data)
     {
-        $model = Vps_Model_Abstract::getInstance($this->_modelClass);
-        $select = $model->select()->whereEquals('db_id', array_unique($this->_updatedDbIds));
-        foreach ($model->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
-            $cacheId = $this->_getCacheId($row['component_id'], 'component', null);
-            apc_delete($cacheId);
+        if ($this->_updatedDbIds) {
+            $select = new Vps_Model_Select();
+            $select->whereEquals('db_id', array_unique($this->_updatedDbIds));
+            Vps_Component_Cache::getInstance()->deleteViewCache($select);
         }
-        $model->updateRows(array('deleted' => true), $select);
-    }
-
-    protected static function _getCacheId($componentId, $type, $value)
-    {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix() . '-cc-';
-        return $prefix . "$componentId/$type/$value";
     }
 }
