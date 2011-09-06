@@ -69,10 +69,8 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
         );
     }
 
-    public function getGeneratorFlags()
+    public function getStaticChildComponentIds()
     {
-        $ret = parent::getGeneratorFlags();
-        $ret['cards'] = true; // Wird in Vps_Component_Generator_Abstract::_getGeneratorKeys() geprüft
-        return $ret;
+        return $this->_idSeparator.'cards';
     }
 }

@@ -318,19 +318,12 @@ abstract class Vps_Component_Generator_Abstract
         }
         $ret = array();
         foreach ($generators as $g) {
-            $childComponentIds = null;
-            if ($g instanceof Vps_Component_Generator_Static && !$g->getGeneratorFlag('cards')) {
-                $childComponentIds = array();
-                foreach (array_keys($g->_getChildComponentClasses()) as $c) {
-                    $childComponentIds[] = $g->getIdSeparator().$c;
-                }
-            }
             $ret[] = array(
                 'componentClass' => $g->_class,
                 'key' => $g->_settings['generator'],
                 'pluginBaseComponentClass' => $g->_pluginBaseComponentClass,
                 'inherited' => in_array($g, $inheritedGenerators, true),
-                'childComponentIds' => $childComponentIds
+                'childComponentIds' => $g->getStaticChildComponentIds()
             );
         }
         Vps_Cache_Simple::add('genInst-'.$cacheId, $ret);
@@ -816,5 +809,15 @@ abstract class Vps_Component_Generator_Abstract
     public function getStaticCacheVarsForMenu()
     {
         return array();
+    }
+
+    /**
+     * If this generator creates a fixed (static) datas, return the ids here.
+     *
+     * This will be used for performance optimisations.
+     */
+    public function getStaticChildComponentIds()
+    {
+        return null;
     }
 }
