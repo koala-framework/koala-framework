@@ -119,7 +119,11 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
     public function hasContent()
     {
-        $content = trim(strip_tags($this->_getRow()->content));
+        $content = $this->_getRow()->content;
+        $content = strip_tags($content);
+        // replace every non-word-character, to see if there is real content,
+        // or just a bunch of white-spaces
+        $content = preg_replace('/\W*/', '', $content);
         if (!empty($content)) return true;
         return false;
     }

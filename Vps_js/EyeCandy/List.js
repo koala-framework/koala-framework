@@ -7,9 +7,9 @@ Vps.onContentReady(function() {
             if (opts) {
                 opts = Ext.decode(opts.value);
                 var cls = Vps.EyeCandy.List;
-                if (opts.class) {
-                    cls = eval(opts.class);
-                    delete opts.class;
+                if (opts['class']) {
+                    cls = eval(opts['class']);
+                    delete opts['class'];
                 }
                 opts.el = el;
                 el.list = new cls(opts);
