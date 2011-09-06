@@ -245,11 +245,6 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    public function getPriority()
-    {
-        return $this->_getChainedGenerator()->getPriority();
-    }
-
     public function getBoxes()
     {
         return $this->_getChainedGenerator()->getBoxes();

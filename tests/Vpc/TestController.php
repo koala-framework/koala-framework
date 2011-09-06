@@ -22,6 +22,7 @@ class Vpc_TestController extends Vps_Controller_Action
             apc_clear_cache('user');
         }
         Vps_Component_Data_Root::setComponentClass($this->_getParam('root'));
+        Zend_Registry::set('testRootComponentClass', $this->_getParam('root'));
         $root = Vps_Component_Data_Root::getInstance();
         $root->setFilename('vps/vpctest/'.$this->_getParam('root'));
 

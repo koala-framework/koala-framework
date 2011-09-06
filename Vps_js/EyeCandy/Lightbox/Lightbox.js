@@ -28,8 +28,7 @@ Vps.Lightbox.Lightbox = (function(link, config) {
         currentX,
         currentY,
         initialized = false,
-        selectors = [],
-        wrapper = false;
+        selectors = [];
 
     return {
         version: '1.0',
@@ -135,7 +134,8 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                 var cnt = Ext.query(this.opts.href);
                 loadContent = {
                     tag: 'div',
-                    id: 'ux-extbox-loadedContent',
+                    id: 'vpsLightbox-loadedContent',
+                    'class': 'vpsLightboxLoadedContent',
                     html: cnt[0].innerHTML,
                     style: {display: 'none'}
                 };
@@ -152,7 +152,8 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                         currentY = false;
                         loadContent = {
                             tag: 'div',
-                            id: 'ux-extbox-loadedContent',
+                            id: 'vpsLightbox-loadedContent',
+                            'class': 'vpsLightboxLoadedContent',
                             html: response.responseText,
                             style: {display: 'none'}
                         };
@@ -200,19 +201,10 @@ Vps.Lightbox.Lightbox = (function(link, config) {
         
         initMarkup: function() {
             els.overlay = Ext.DomHelper.insertFirst(document.body, {
-                id: 'ux-extbox-overlay'
+                id: 'vpsLightbox-overlay',
+                'class': 'vpsLightboxOverlay'
             }, true);
             els.overlay.setVisibilityMode(Ext.Element.DISPLAY).hide();
-            
-            if (Ext.isIE6) {
-                els.shim = Ext.DomHelper.insertFirst(document.body, {
-                    tag: 'iframe',
-                    id: 'ux-extbox-shim',
-                    frameborder: 0
-                }, true);
-                els.shim.setVisibilityMode(Ext.Element.DISPLAY);
-                els.shim.hide();
-            }
             
             var extboxTpl = new Ext.Template(this.getTemplate());
             els.extbox = extboxTpl.insertAfter(els.overlay, {}, true);
@@ -220,7 +212,7 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             
             var ids = ['container', 'content', 'loadingOverlay', 'loading', 'navPrev', 'navNext', 'navClose', 'info', 'title', 'current'];
             Ext.each(ids, function(id){
-                els[id] = Ext.get('ux-extbox-' + id);
+                els[id] = Ext.get('vpsLightbox-' + id);
             });
             extboxBorders = [(
                 els.extbox.getPadding('t') +
@@ -254,34 +246,24 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                 width: currentWidth + 'px',
                 height: currentHeight + 'px'
             });
-            if (wrapper) {
-                els.wrapper = els.container.wrap({tag: 'div', id: 'ux-extbox-trc'})
-                .wrap({tag: 'div', id: 'ux-extbox-tlc'})
-                .wrap({tag: 'div', id: 'ux-extbox-tb'})
-                .wrap({tag: 'div', id: 'ux-extbox-brc'})
-                .wrap({tag: 'div', id: 'ux-extbox-blc'})
-                .wrap({tag: 'div', id: 'ux-extbox-bb'})
-                .wrap({tag: 'div', id: 'ux-extbox-rb'})
-                .wrap({tag: 'div', id: 'ux-extbox-lb'});
-            }
         },
         
         getTemplate : function() {
             return [
-                '<div id="ux-extbox">',
-                    '<div id="ux-extbox-container">',
-                        '<div id="ux-extbox-content">',
+                '<div id="vpsLightbox" class="vpsLightbox webStandard">',
+                    '<div id="vpsLightbox-container" class="vpsLightboxContainer">',
+                        '<div id="vpsLightbox-content" class="vpsLightboxContent">',
 
                         '</div>',
-                        '<div id="ux-extbox-loadingOverlay">',
-                            '<div id="ux-extbox-loading"></div>',
+                        '<div id="vpsLightbox-loadingOverlay" class="vpsLightboxLoadingOverlay">',
+                            '<div id="vpsLightbox-loading" class="vpsLightboxLoading"></div>',
                         '</div>',
-                        '<div id="ux-extbox-navPrev"></div>',
-                        '<div id="ux-extbox-navNext"></div>',
-                        '<div id="ux-extbox-navClose"></div>',
-                        '<div id="ux-extbox-info">',
-                            '<div id="ux-extbox-title"></div>',
-                            '<div id="ux-extbox-current"></div>',
+                        '<div id="vpsLightbox-navPrev" class="vpsLightboxNavPrev"></div>',
+                        '<div id="vpsLightbox-navNext" class="vpsLightboxNavNext"></div>',
+                        '<div id="vpsLightbox-navClose" class="vpsLightboxNavClose"></div>',
+                        '<div id="vpsLightbox-info" class="vpsLightboxInfo">',
+                            '<div id="vpsLightbox-title" class="vpsLightboxTitle"></div>',
+                            '<div id="vpsLightbox-current" class="vpsLightboxCurrent"></div>',
                         '</div>',
                     '</div>',
                 '</div>'
@@ -298,7 +280,7 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             els.navClose.on('click', close, this);
 
             els.extbox.on('click', function(ev) {
-                if(ev.getTarget().id == 'ux-extbox') {
+                if(ev.getTarget().id == 'vpsLightbox') {
                     this.close();
                 }
             }, this);
@@ -320,22 +302,10 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                 Math.max(Ext.lib.Dom.getViewWidth(), Ext.lib.Dom.getDocumentWidth()),
                 Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight())
             ];
-            if (Ext.isIE6) {
-                els.shim.setStyle({
-                    width: viewSize[0] + 'px',
-                    height: viewSize[1] + 'px'
-                }).setOpacity(0).show();
-                els.overlay.setStyle({
-                    width: viewSize[0] + 'px',
-                    height: viewSize[1] + 'px',
-                    position: 'absolute'
-                });
-            } else {
-                els.overlay.setStyle({
-                    width: viewSize[0] + 'px',
-                    height: viewSize[1] + 'px'
-                });
-            }
+            els.overlay.setStyle({
+                width: viewSize[0] + 'px',
+                height: viewSize[1] + 'px'
+            });
         },
         
         resize: function (w, h) {
@@ -390,7 +360,7 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                     }
                 }
             });
-            loadedContent = Ext.get('ux-extbox-loadedContent');
+            loadedContent = Ext.get('vpsLightbox-loadedContent');
             if (loadedContent !== null && loadedContent.isVisible()) {
                 loadedContent.shift({
                     width: x - 20,
@@ -451,7 +421,6 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             els.overlay.fadeOut({
                 duration: this.opts.overlayDuration
             });
-            if (Ext.isIE6) els.shim.hide();
             Ext.DomHelper.overwrite(els.content, '');
             Ext.DomHelper.overwrite(els.title, '');
             Ext.DomHelper.overwrite(els.current, '');

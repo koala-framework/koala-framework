@@ -14,7 +14,7 @@ class Vpc_Editable_Component extends Vpc_Abstract
     }
 
     // Wird hier verwendet: Vpc_Editable_ComponentsModel
-    public function getName()
+    public function getNameForEdit()
     {
         return Vpc_Abstract::getSetting($this->getData()->componentClass, 'componentName');
     }

@@ -37,17 +37,21 @@ Ext.extend(Vps.EyeCandy.List.Item, Ext.util.Observable, {
     pushState: function(state, context)
     {
         //console.log('pushState', state, context);
+        var curState = this.getState();        
         this.state.push({state: state, context: context});
-        this.fireEvent('stateChanged', this);
+        if (curState != this.getState()) {
+            this.fireEvent('stateChanged', this);
+        }
     },
     removeState: function(state, context)
     {
+        var curState = this.getState();
         //console.log('removeState', state, context);
         for(var i=0; i<this.state.length; i++) {
             var s = this.state[i];
             if (s.state == state && s.context == context) {
                 this.state.splice(i, 1);
-                if (i == this.state.length) {
+                if (i == this.state.length && this.getState() != curState) {
                     this.fireEvent('stateChanged', this);
                 }
                 break;
