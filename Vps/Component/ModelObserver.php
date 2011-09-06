@@ -114,8 +114,8 @@ class Vps_Component_ModelObserver
             if ($this->_enableProcess) {
                 if ($row) {
                     $dirtyColumns = isset($source['dirtyColumns']) ? $source['dirtyColumns'] : null;
-                    Vps_Component_Abstract_Events::fireEvent(
-                        Vps_Component_Abstract_Events::EVENT_ROW_UPDATE,
+                    Vps_Component_Events::fireEvent(
+                        Vps_Component_Events::EVENT_ROW_UPDATE,
                         get_class($row->getModel()),
                         array('row' => $row, 'dirtyColumns' => $dirtyColumns)
                     );
@@ -127,6 +127,7 @@ class Vps_Component_ModelObserver
             }
             return array($modelname => $id);
         }
+        Vps_Component_Events::fireEvent(Vps_Component_Events::EVENT_ROW_UPDATES_FINISHED);
         return array();
     }
 
