@@ -554,5 +554,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         return null;
     }
+
+    public function clearDataCache()
+    {
+        $this->_dataCache = array();
+        $this->_dataCacheIgnoreVisible = array();
+    }
 }
 ?>

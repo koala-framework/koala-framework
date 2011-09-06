@@ -14,4 +14,10 @@ class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
         $ret['string']->setHeader(trlVps('Link target'));
         return $ret;
     }
+
+    public function getPagePropertiesForm()
+    {
+        $ret = new Vpc_Basic_LinkTag_Form(null, $this->_class);
+        return $ret;
+    }
 }

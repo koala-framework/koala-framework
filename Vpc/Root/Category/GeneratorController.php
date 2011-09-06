@@ -100,7 +100,6 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
             }
         }
         unset($component);
-        $generators = array();
         $generatorForms = array();
         $formsForComponent = array();
         foreach ($componentClasses as $key=>$componentClass) {
@@ -110,8 +109,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
             );
             $formsForComponent[$key] = array();
             foreach (Vps_Component_Generator_Abstract::getInstances($component) as $g) {
-                if (!isset($generators[$g->getClass().'.'.$g->getGeneratorKey()])) {
-                    $generators[$g->getClass().'.'.$g->getGeneratorKey()] = $g;
+                if (!array_key_exists($g->getClass().'.'.$g->getGeneratorKey(), $generatorForms)) {
                     $f = $g->getPagePropertiesForm();
                     if ($f) {
                         $f->setName('gen_'.$g->getGeneratorKey());
@@ -128,20 +126,36 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                 }
             }
         }
-        $fields['component']->setFormsForComponent($formsForComponent);
 
-        /*
-        foreach ($componentClasses as $key=>$componentClass) {
-            $f = Vpc_Admin::getInstance($componentClass)->getPagePropertiesForm();
-            if ($f) {
-                $f->setName($key);
-                $f->setIdTemplate('{0}');
-                $f->setCreateMissingRow(true);
-                $fields->add($f);
+        if ($this->_getParam('id')) {
+            $componentForms = array();
+            $component = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($this->_getComponentOrParentId(), array('ignoreVisible' => true));
+            foreach ($componentClasses as $key=>$componentClass) {
+                $component->componentClass = $componentClass; //holy shit
+                $component->clearChildComponentsCache();
+                Vps_Component_Data_Root::getInstance()->clearDataCache();
+                $cmps = Vps_Controller_Action_Component_PagesController::getEditComponents($component);
+                foreach ($cmps as $cmp) {
+                    if (!array_key_exists($cmp->componentId.'_'.$cmp->componentClass, $componentForms)) {
+                        $f = Vpc_Admin::getInstance($cmp->componentClass)->getPagePropertiesForm();
+                        if ($f) {
+                            $f->setName('cmp_'.$cmp->componentId.'_'.$cmp->componentClass);
+                            $f->setIdTemplate($cmp->componentId);
+                            $f->setShowDependingOnComponent(true);
+                            $this->_dynamicForms[] = $f;
+                            $fields->add($f);
+                        }
+                        $componentForms[$cmp->componentId.'_'.$cmp->componentClass] = $f;
+                    }
+                    if ($componentForms[$cmp->componentId.'_'.$cmp->componentClass]) {
+                        $formsForComponent[$key][] = 'cmp_'.$cmp->componentId.'_'.$cmp->componentClass;
+                    }
+                }
             }
         }
-        + the same for child components (using editComponents?)
-        */
+
+        $fields['component']->setFormsForComponent($formsForComponent);
     }
 
     protected function _beforeValidate(array $postData)
