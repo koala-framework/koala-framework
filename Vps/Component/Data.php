@@ -431,6 +431,11 @@ class Vps_Component_Data
         return $generator->getChildIds($this, $select);
     }
 
+    public function clearChildComponentsCache()
+    {
+        $this->_childComponentsCache = array();
+    }
+
     public function getChildComponents($select = array())
     {
         $select = $this->_formatSelect($select);
