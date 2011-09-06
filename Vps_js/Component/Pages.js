@@ -95,7 +95,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.editDialog.getAutoForm().cascade(function(i) {
                     var showForms = component.formsForComponent[component.getValue()] || [];
                     if (i.showDependingOnComponent) {
-                        i.setVisible(showForms.indexOf(i.name) !== -1);
+                        if (showForms.indexOf(i.name) !== -1) {
+                            i.show();
+                            i.enableRecursive();
+                        } else {
+                            i.disableRecursive(); //to disable validation
+                            i.hide();
+                        }
                     }
                 }, this);
             }, this);
