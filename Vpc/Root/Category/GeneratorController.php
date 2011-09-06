@@ -68,6 +68,19 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
             ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
             ->setAllowBlank(false);
         $fields->add(new Vps_Form_Field_Checkbox('hide',  trlVps('Hide in Menu')));
+
+        $component = Vps_Component_Data_Root::getInstance()
+            ->getComponentById($this->_getComponentId(), array('ignoreVisible' => true));
+
+        foreach (Vps_Component_Generator_Abstract::getInstances($component) as $g) {
+            $f = $g->getPagePropertiesForm();
+            if ($f) {
+                $f->setName($g->getGeneratorKey());
+                $f->setIdTemplate('{0}');
+                $f->setCreateMissingRow(true);
+                $fields->add($f);
+            }
+        }
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)

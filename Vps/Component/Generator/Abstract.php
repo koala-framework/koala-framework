@@ -200,7 +200,6 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-
         //performance abkürzung: wenn direkt nach einem generator gesucht wird, ist das nie ein inherited
         if (($genKey = $select->getPart(Vps_Component_Select::WHERE_GENERATOR))) {
             return array();
@@ -784,6 +783,11 @@ abstract class Vps_Component_Generator_Abstract
         $flags = $this->getGeneratorFlags();
         if (!isset($flags[$flag])) return null;
         return $flags[$flag];
+    }
+
+    public function getPagePropertiesForm()
+    {
+        return null;
     }
 
     public final function getGeneratorPlugins()
