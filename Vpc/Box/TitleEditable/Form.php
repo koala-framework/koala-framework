@@ -5,6 +5,6 @@ class Vpc_Box_TitleEditable_Form extends Vpc_Abstract_Form
     {
         parent::_initFields();
         $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
-            ->setWidth(400);
+            ->setWidth(450);
     }
 }
