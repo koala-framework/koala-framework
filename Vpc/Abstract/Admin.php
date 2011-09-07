@@ -111,4 +111,9 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         );
         return $ret;
     }
+
+    public function getPagePropertiesForm()
+    {
+        return null;
+    }
 }

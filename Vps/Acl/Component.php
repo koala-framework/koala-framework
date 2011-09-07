@@ -17,6 +17,7 @@ class Vps_Acl_Component extends Vps_Acl
         $this->add(new Vps_Acl_Resource_MenuUrl('vps_component_pages',
             array('text'=>trlVps('Sitetree'), 'icon'=>'application_side_tree.png'),
             '/admin/component/pages'));
+            $this->add(new Zend_Acl_Resource('vps_component_page'), 'vps_component_pages');
             $this->add(new Zend_Acl_Resource('vps_component_components'),
                                 'vps_component_pages'); // für /component/show
             $this->add(new Zend_Acl_Resource('vps_component'),

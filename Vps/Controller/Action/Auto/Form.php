@@ -118,6 +118,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         // wird anstatt ->createRow() und diese dann im _form->getRow() zurück kommt
 
         $postData = $this->_form->processInput(null, $this->getRequest()->getParams());
+        $this->_beforeValidate($postData);
         $invalid = $this->_form->validate(null, $postData);
         if ($invalid) {
             $invalid = Vps_Form::formatValidationErrors($invalid);
@@ -224,6 +225,10 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     }
 
     protected function _beforeLoad(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeValidate(array $postData)
     {
     }
 

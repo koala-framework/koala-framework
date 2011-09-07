@@ -75,9 +75,16 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
+    /**
+     * get child component classes of a componentclass or a componentData
+     *
+     * @param string/Vps_Component_Data if data inherited generators are returned as well
+     * @param array Optional filtering (string to get for one generator)
+     */
     public static function getChildComponentClasses($class, $select = array())
     {
-        if (is_string($select)) {
+        if (is_string($select) && is_string($class)) {
+            //simple case no. 1: get from specific generator
             $g = Vpc_Abstract::getSetting($class, 'generators');
             $ret = $g[$select]['component'];
             if (!is_array($ret)) $ret = array($select => $ret);
@@ -85,7 +92,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 if (!$i) unset($ret[$k]);
             }
             return $ret;
-        } else if (!$select) {
+        } else if (!$select && is_string($class)) {
+            //simple case no. 2: get 'em all
             $ret = array();
             foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
                 if (is_array($g['component'])) {
@@ -100,6 +108,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         } else if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
+
+        //not so simple, else we ask Generator_Abstract::getInstances for help
         $ret = array();
         $generators = Vps_Component_Generator_Abstract::getInstances($class, $select);
         if (!$generators) {
