@@ -830,4 +830,9 @@ abstract class Vps_Component_Generator_Abstract
     {
         return null;
     }
+
+    public function getSetting($setting)
+    {
+        return $this->_settings[$setting];
+    }
 }
