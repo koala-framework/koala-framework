@@ -18,6 +18,12 @@ class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
     public function getPagePropertiesForm()
     {
         $ret = new Vpc_Basic_LinkTag_Form(null, $this->_class);
+        $fs = new Vps_Form_Container_FieldSet(trlVps('Link'));
+        foreach ($ret as $f) {
+            $ret->fields->remove($f);
+            $fs->add($f);
+        }
+        $ret->add($fs);
         return $ret;
     }
 }
