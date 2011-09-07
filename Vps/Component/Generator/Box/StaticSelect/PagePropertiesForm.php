@@ -15,6 +15,7 @@ class Vps_Component_Generator_Box_StaticSelect_PagePropertiesForm extends Vps_Fo
             $values[$k] = Vpc_Abstract::getSetting($c, 'componentName');
         }
         $select->setValues($values);
+        $select->setDefaultValue(array_shift(array_Keys($values)));
 
     }
 
