@@ -45,8 +45,10 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
 
     public function hasContent()
     {
-        //TODO, ist mit cache loeschen womoeglich ein problem
-        return true;
+        //TODO, ist mit cache loeschen ein problem
+        $c = $this->_getParentContentData();
+        if (!$c) return false;
+        return $c->hasContent();
     }
 
     public static function getStaticCacheMeta($componentClass)
