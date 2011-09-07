@@ -207,8 +207,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         } else {
             if (count($rowset)== 0) {
                 if ($this->getCreateMissingRow()) { //für Vps_Form_AddForm
-                    $this->_rows[$key] = $this->_model->createRow();
-                    $this->_rows[$key]->{$this->getPrimaryKey()} = $id;
+                    $this->_rows[$key] = $this->_createMissingRow($id);
                 } else {
                     throw new Vps_Exception('No database-entry found.');
                 }
@@ -221,6 +220,12 @@ class Vps_Form extends Vps_Form_NonTableForm
         return $this->_rows[$key];
     }
 
+    protected function _createMissingRow($id)
+    {
+        $ret = $this->_model->createRow();
+        $ret->{$this->getPrimaryKey()} = $id;
+        return $ret;
+    }
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {

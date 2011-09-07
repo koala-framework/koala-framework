@@ -93,13 +93,13 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['actions'] = array();
         $data['allowDrop'] = false;
         $data['disabled'] = !$enabled;
-        $data['editControllerUrl'] = '';
 
         if ($component->componentId == 'root') { // Root hat keinen Generator
             $data['bIcon'] = new Vps_Asset('world');
             $data['bIcon'] = $data['bIcon']->__toString();
             $data['expanded'] = true;
             $data['loadChildren'] = true;
+            $data['editControllerComponentId'] = 'root';
         } else {
             $config = $component->generator->getPagesControllerConfig($component);
             $data = array_merge($data, $config);
@@ -116,7 +116,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             //wenn komponente *selbst* nicht bearbeitbar ist actions deaktivieren
             //(in dem fall ist eine unterkomponente der seite bearbeitbar)
             $data['actions'] = array_merge($data['actions'], array(
-                'properties' => false,
                 'delete' => false,
                 'copy' => false,
                 'visible' => false,
@@ -134,8 +133,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 'pageGenerator' => true
             ));
             if ($pageGenerator) {
-                $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->getClass())
-                    ->getControllerUrl('Generator');
                 $data['actions']['add'] = true;
                 $data['actions']['paste'] = true;
                 $data['allowDrop'] = true;
@@ -147,7 +144,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
         //default werte
         $data['actions'] = array_merge(array(
-            'properties' => false,
             'delete' => false,
             'copy' => false,
             'paste' => false,
