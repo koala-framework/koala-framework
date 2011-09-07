@@ -83,7 +83,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
             //this code is very similar to Vps_Component_Data::__get inheritClasses
             $inheritClasses = array();
             $page = $component;
-            while (($page = $page->parent)) {
+            while ($page) {
                 foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                     if (isset($g['inherit']) && $g['inherit']) {
                         if (isset($g['unique']) && $g['unique']) continue; //ignore, not edited
@@ -97,6 +97,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                     $inheritClasses = array_merge($inheritClasses, $page->inheritClasses);
                     break; //aufhören, rest kommt durch rekursion daher
                 }
+                $page = $page->parent;
             }
         }
         unset($component);
