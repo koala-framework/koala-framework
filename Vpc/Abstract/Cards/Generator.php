@@ -23,8 +23,11 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
 
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
             $cc = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            $row = $this->_getModel()->find($parentData->dbId)->current();
-            if (!in_array($this->_settings['component'][$row->component], $cc)) return null;
+            if (is_array($parentData)) {
+            } else {
+                $row = $this->_getModel()->find($parentData->dbId)->current();
+                if (!in_array($this->_settings['component'][$row->component], $cc)) return null;
+            }
         }
         return parent::_formatSelect($parentData, $select);
     }
