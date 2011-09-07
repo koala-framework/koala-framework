@@ -25,7 +25,7 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
             $cc = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             if (is_array($parentData)) {
             } else {
-                $row = $this->_getModel()->find($parentData->dbId)->current();
+                $row = $this->_getModel()->getRow($parentData->dbId);
                 if (!in_array($this->_settings['component'][$row->component], $cc)) return null;
             }
         }
