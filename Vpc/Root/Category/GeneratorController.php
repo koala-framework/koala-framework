@@ -127,7 +127,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                     $formsForComponent[$key][] = 'gen_'.$g->getGeneratorKey();
                 }
 
-                $classesToCheckForPagePropertiesForm = array($componentClass);
+                $classesToCheckForPagePropertiesForm = array('__pageComponent' => $componentClass);
                 if ($g instanceof Vps_Component_Generator_Static) {
                     $classesToCheckForPagePropertiesForm = array_merge($classesToCheckForPagePropertiesForm, $g->getChildComponentClasses());
                 }
@@ -136,7 +136,11 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                         $f = Vpc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
                         if ($f) {
                             $f->setName('cmp_'.$childComponentKey.'_'.$childComponentClass);
-                            $f->setIdTemplate('{0}-'.$childComponentKey);
+                            if ($childComponentKey=='__pageComponent') {
+                                $f->setIdTemplate('{0}');
+                            } else {
+                                $f->setIdTemplate('{0}-'.$childComponentKey);
+                            }
                             $f->setShowDependingOnComponent(true);
                             $this->_dynamicForms[] = $f;
                             $fields->add($f);
