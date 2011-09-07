@@ -8,7 +8,9 @@ class Vps_Component_Generator_Box_StaticSelect_PagePropertiesForm extends Vps_Fo
         parent::__construct();
 
         $this->setModel($generator->getModel());
-        $select = $this->add(new Vps_Form_Field_Select('component', trlVps('Box Type')));
+        $label = $generator->getSetting('boxName');
+        if (!$label) $label = trlVps('Type');
+        $select = $this->add(new Vps_Form_Field_Select('component', $label));
         $select->setAllowBlank(false);
         $values = array();
         foreach ($generator->getChildComponentClasses() as $k=>$c) {

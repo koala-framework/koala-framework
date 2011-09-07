@@ -9,6 +9,9 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
         if (!isset($this->_settings['model'])) {
             $this->_settings['model'] = 'Vps_Component_Generator_Box_StaticSelect_Model';
         }
+        if (!isset($this->_settings['boxName'])) {
+            $this->_settings['boxName'] = null;
+        }
         parent::_init();
     }
 
