@@ -156,7 +156,10 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     public function openPreviewAction()
     {
-        $page = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'));
+        $page = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId'),
+            array('ignoreVisible'=>true, 'limit' => 1)
+        );
         if (!$page) {
             throw new Vps_Exception_Client(trlVps('Page not found'));
         }
