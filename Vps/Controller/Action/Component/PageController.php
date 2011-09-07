@@ -1,26 +1,34 @@
 <?php
-
-class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_Form
+class Vps_Controller_Action_Component_PageController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
-    protected $_modelName = 'Vpc_Root_Category_GeneratorModel';
 
     private $_dynamicForms = array();
 
     protected function _hasPermissions($row, $action)
     {
-        $component = Vps_Component_Data_Root::getInstance()
-            ->getComponentById($row->parent_id, array('ignoreVisible' => true));
+        if ($row->getModel() instanceof Vps_Component_Model) {
+            $component = $row->getData();
+        } else {
+            $component = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($row->parent_id, array('ignoreVisible' => true));
+        }
         $ret = false;
         while ($component) {
             if ($component->componentId == $this->_getParam('componentId')) $ret = true;
             $component = $component->parent;
         }
+
         if ($ret) {
             return parent::_hasPermissions($row, $action);
         } else {
             return false;
         }
+    }
+
+    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    {
+        $row->parent_id = $this->_getParam('parent_id');
     }
 
     private function _getComponentOrParentId()
@@ -35,43 +43,39 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
 
     protected function _initFields()
     {
-        $componentClasses = array();
-        $componentNames = array();
-        $component = Vps_Component_Data_Root::getInstance()
+        //--- main generator form (if Category_Generator this contains Pagename and Pagetype)
+        $componentOrParent = Vps_Component_Data_Root::getInstance()
             ->getComponentById($this->_getComponentOrParentId(), array('ignoreVisible' => true));
-        while (empty($componentClasses) && $component) {
-            foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $key => $generator) {
-                if (is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
-                    foreach ($generator['component'] as $k => $class) {
-                        $name = Vpc_Abstract::getSetting($class, 'componentName');
-                        if ($name) {
-                            $name = str_replace('.', ' ', $name);
-                            $componentNames[$k] = $name;
-                            $componentClasses[$k] = $class;
-                        }
-                    }
-                }
+        if ($this->_getParam('id')) {
+            if ($componentOrParent->componentId == 'root') {
+                $this->_form = null;
+            } else {
+                $this->_form = $componentOrParent->generator->getPagePropertiesForm($componentOrParent);
             }
-            $component = $component->parent;
+        } else {
+            $gens = Vps_Component_Generator_Abstract::getInstances($componentOrParent, array('pageGenerator'=>true));
+            if (count($gens)!=1) throw new Vps_Exception('pageGenerator not found');
+            $gen = array_shift($gens);
+            $this->_form = $gen->getPagePropertiesForm($componentOrParent);
         }
 
+        if (!$this->_form) {
+            $this->_form = new Vps_Form();
+            $this->_form->setModel(Vps_Model_Abstract::getInstance('Vps_Component_Model'));
+            $this->_form->add(new Vps_Form_Field_ShowField('name', trlVps('Name')));
+        }
+
+        //--- and
         $fields = $this->_form->fields;
-        $fields->add(new Vps_Form_Field_TextField('name', trlVps('Name of Page')))
-            ->setAllowBlank(false);
 
-        $fs = $fields->add(new Vps_Form_Container_FieldSet('name', trlVps('Name of Page')))
-            ->setTitle(trlVps('Custom Filename'))
-            ->setCheckboxName('custom_filename')
-            ->setCheckboxToggle(true);
-        $fs->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
-            ->setAllowBlank(false)
-            ->setVtype('alphanum');
-
-        $fields->add(new Vps_Form_Field_Select('component',  trlVps('Pagetype')))
-            ->setValues($componentNames)
-            ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
-            ->setAllowBlank(false);
-        $fields->add(new Vps_Form_Field_Checkbox('hide',  trlVps('Hide in Menu')));
+        if (isset($fields['component'])) {
+            $possibleComponentClasses = $fields['component']->getPossibleComponentClasses();
+        } else {
+            if (!$this->_getParam('id')) {
+                throw new Vps_Exception("not supported for adding");
+            }
+            $possibleComponentClasses = array($componentOrParent->componentClass);
+        }
 
         $component = Vps_Component_Data_Root::getInstance()
             ->getComponentById($this->_getComponentOrParentId(), array('ignoreVisible' => true));
@@ -104,13 +108,14 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
         $generatorForms = array();
         $componentForms = array();
         $formsForComponent = array();
-        foreach ($componentClasses as $key=>$componentClass) {
+        foreach ($possibleComponentClasses as $key=>$componentClass) {
             $component = array(
                 'componentClass' => $componentClass,
                 'inheritClasses' => $inheritClasses
             );
             $formsForComponent[$key] = array();
             foreach (Vps_Component_Generator_Abstract::getInstances($component) as $g) {
+                if ($g->getGeneratorFlag('page')) continue;
                 if (!array_key_exists($g->getClass().'.'.$g->getGeneratorKey(), $generatorForms)) {
                     $f = $g->getPagePropertiesForm();
                     if ($f) {
@@ -154,7 +159,9 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
             }
         }
 
-        $fields['component']->setFormsForComponent($formsForComponent);
+        if (isset($fields['component'])) {
+            $fields['component']->setFormsForComponent($formsForComponent);
+        }
     }
 
     protected function _beforeValidate(array $postData)
@@ -170,10 +177,5 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                 $this->_form->fields->remove($f);
             }
         }
-    }
-
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
-    {
-        $row->parent_id = $this->_getParam('parent_id');
     }
 }

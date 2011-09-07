@@ -773,8 +773,6 @@ abstract class Vps_Component_Generator_Abstract
 
         if (!$generatorClass) $generatorClass = $this->getClass();
         $data['editControllerComponentId'] = $component->componentId;
-        $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
-            ->getControllerUrl('Generator');
 
         $data['loadChildren'] = false;
 
