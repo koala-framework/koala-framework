@@ -74,6 +74,17 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             scope: this
         });
 
+        this.actions.showPreviewWeb = new Ext.Action({
+            text : trlVps('Preview in web'),
+            icon : '/assets/silkicons/zoom_in.png',
+            cls  : 'x-btn-text-icon',
+            handler: function(b) {
+                window.open(this.controllerUrl+'/open-preview?componentId='+
+                    this.getBaseParams().componentId);
+            },
+            scope: this
+        });
+
         this.actions.makeAllVisible = new Ext.Action({
             text : trlVps('All Visible'),
             icon : '/assets/silkicons/tick.png',
@@ -142,7 +153,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             };
         }
 
-        this.tbar = [ this.actions.showPreview ];
+        this.tbar = [ this.actions.showPreview, this.actions.showPreviewWeb ];
         if (this.actions.addparagraph) {
             this.tbar.push('-');
             this.tbar.push(this.actions.addparagraph);

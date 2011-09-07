@@ -25,6 +25,7 @@ möglicherweise nicht kompatible Änderungen:
 - Master.tpl muss $this->componentWithMaster($this->componentWithMaster) für die Haupt-Komponente verwenden
 - generators: box priority wurde entfernt
 - Image Resizing: exif drehung wird jetzt berücksichtigt
+- Config section 'preview' has to have server.domain set to use a real preview domain
 
 == 1.11 ==
 Erstellt: 17.08.10
