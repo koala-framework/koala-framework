@@ -65,7 +65,7 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
             $this->_form->add(new Vps_Form_Field_ShowField('name', trlVps('Name')));
         }
 
-        //--- and
+        //--- and now add the more complicated additional forms
         $fields = $this->_form->fields;
 
         if (isset($fields['component'])) {
