@@ -102,6 +102,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
         }
         unset($component);
         $generatorForms = array();
+        $componentForms = array();
         $formsForComponent = array();
         foreach ($componentClasses as $key=>$componentClass) {
             $component = array(
@@ -125,32 +126,25 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
                 if ($generatorForms[$g->getClass().'.'.$g->getGeneratorKey()]) {
                     $formsForComponent[$key][] = 'gen_'.$g->getGeneratorKey();
                 }
-            }
-        }
 
-        if ($this->_getParam('id')) {
-            $componentForms = array();
-            $component = Vps_Component_Data_Root::getInstance()
-                ->getComponentById($this->_getComponentOrParentId(), array('ignoreVisible' => true));
-            foreach ($componentClasses as $key=>$componentClass) {
-                $component->componentClass = $componentClass; //holy shit
-                $component->clearChildComponentsCache();
-                Vps_Component_Data_Root::getInstance()->clearDataCache();
-                $cmps = Vps_Controller_Action_Component_PagesController::getEditComponents($component);
-                foreach ($cmps as $cmp) {
-                    if (!array_key_exists($cmp->componentId.'_'.$cmp->componentClass, $componentForms)) {
-                        $f = Vpc_Admin::getInstance($cmp->componentClass)->getPagePropertiesForm();
+                $classesToCheckForPagePropertiesForm = array($componentClass);
+                if ($g instanceof Vps_Component_Generator_Static) {
+                    $classesToCheckForPagePropertiesForm = array_merge($classesToCheckForPagePropertiesForm, $g->getChildComponentClasses());
+                }
+                foreach ($classesToCheckForPagePropertiesForm as $childComponentKey=>$childComponentClass) {
+                    if (!array_key_exists($childComponentKey.'_'.$childComponentClass, $componentForms)) {
+                        $f = Vpc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
                         if ($f) {
-                            $f->setName('cmp_'.$cmp->componentId.'_'.$cmp->componentClass);
-                            $f->setIdTemplate($cmp->componentId);
+                            $f->setName('cmp_'.$childComponentKey.'_'.$childComponentClass);
+                            $f->setIdTemplate('{0}-'.$childComponentKey);
                             $f->setShowDependingOnComponent(true);
                             $this->_dynamicForms[] = $f;
                             $fields->add($f);
                         }
-                        $componentForms[$cmp->componentId.'_'.$cmp->componentClass] = $f;
+                        $componentForms[$childComponentKey.'_'.$childComponentClass] = $f;
                     }
-                    if ($componentForms[$cmp->componentId.'_'.$cmp->componentClass]) {
-                        $formsForComponent[$key][] = 'cmp_'.$cmp->componentId.'_'.$cmp->componentClass;
+                    if ($componentForms[$childComponentKey.'_'.$childComponentClass]) {
+                        $formsForComponent[$key][] = 'cmp_'.$childComponentKey.'_'.$childComponentClass;
                     }
                 }
             }
