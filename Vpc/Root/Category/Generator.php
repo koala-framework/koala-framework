@@ -305,7 +305,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     {
         $ret = parent::getPagesControllerConfig($component, $generatorClass);
 
-        $ret['actions']['properties'] = true;
         $ret['actions']['delete'] = true;
         $ret['actions']['copy'] = true;
         $ret['actions']['visible'] = true;
@@ -394,5 +393,10 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             }
         }
         return $target;
+    }
+
+    public function getPagePropertiesForm($componentOrParent)
+    {
+        return new Vpc_Root_Category_GeneratorForm($componentOrParent);
     }
 }

@@ -83,28 +83,30 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
        this.editDialog = new Vps.Auto.Form.Window({
             width: 600,
             height: 400,
-            controllerUrl: ' '
+            controllerUrl: '/admin/component/page'
         });
         this.editDialog.on('datachange', function(test) {
             this.treePanel.tree.root.reload();
         }, this);
         this.editDialog.on('renderform', function() {
             var component = this.editDialog.getAutoForm().findField('component');
-            component.on('changevalue', function() {
-                //hide/show forms depending on selected component
-                this.editDialog.getAutoForm().cascade(function(i) {
-                    var showForms = component.formsForComponent[component.getValue()] || [];
-                    if (i.showDependingOnComponent) {
-                        if (showForms.indexOf(i.name) !== -1) {
-                            i.show();
-                            i.enableRecursive();
-                        } else {
-                            i.disableRecursive(); //to disable validation
-                            i.hide();
+            if (component && component.formsForComponent) {
+                component.on('changevalue', function() {
+                    //hide/show forms depending on selected component
+                    this.editDialog.getAutoForm().cascade(function(i) {
+                        var showForms = component.formsForComponent[component.getValue()] || [];
+                        if (i.showDependingOnComponent) {
+                            if (showForms.indexOf(i.name) !== -1) {
+                                i.show();
+                                i.enableRecursive();
+                            } else {
+                                i.disableRecursive(); //to disable validation
+                                i.hide();
+                            }
                         }
-                    }
+                    }, this);
                 }, this);
-            }, this);
+            }
         }, this);
     },
 
@@ -148,9 +150,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     treeSelectionchange : function (node) {
         if (!node) return;
         var data = node.attributes;
-        
-        this.editDialog.getAutoForm().editControllerUrl = data.editControllerUrl;
-        this.editDialog.getAutoForm().addControllerUrl = data.addControllerUrl;
         
         if (data.disabled) {
             this.pageButton.disable();
@@ -265,7 +264,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : trlVps('Page properties'),
                 handler : function () {
                     this._removeEditDialogForm();
-                    this.editDialog.getAutoForm().controllerUrl = this.editDialog.getAutoForm().editControllerUrl;
                     var node = this.treePanel.tree.selModel.selNode;
                     this.editDialog.getAutoForm().setBaseParams({
                         componentId: node.attributes.editControllerComponentId
@@ -281,7 +279,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : trlVps('Add new child page'),
                 handler : function () {
                     this._removeEditDialogForm();
-                    this.editDialog.getAutoForm().controllerUrl = this.editDialog.getAutoForm().addControllerUrl;
                     var node = this.treePanel.tree.selModel.selNode;
                     this.editDialog.getAutoForm().setBaseParams({
                         componentId: node.attributes.editControllerComponentId,
