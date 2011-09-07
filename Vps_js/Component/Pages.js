@@ -91,6 +91,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         this.editDialog.on('renderform', function() {
             var component = this.editDialog.getAutoForm().findField('component');
             if (component && component.formsForComponent) {
+                //initially hide all to avoid flickr
+                this.editDialog.getAutoForm().cascade(function(i) {
+                    if (i.showDependingOnComponent) {
+                        i.disableRecursive(); //to disable validation
+                        i.hide();
+                    }
+                }, this);
                 component.on('changevalue', function() {
                     //hide/show forms depending on selected component
                     this.editDialog.getAutoForm().cascade(function(i) {
