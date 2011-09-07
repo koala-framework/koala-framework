@@ -81,7 +81,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     setupEditform : function ()
     {
        this.editDialog = new Vps.Auto.Form.Window({
-            width: 400,
+            width: 600,
             height: 400,
             controllerUrl: ' '
         });
