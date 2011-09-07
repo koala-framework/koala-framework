@@ -401,7 +401,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     public function openPreviewAction()
     {
-        $page = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('page_id'));
+        $page = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('page_id'), array('ignoreVisible' => true));
         if (!$page) {
             throw new Vps_Exception_Client(trlVps('Page not found'));
         }
