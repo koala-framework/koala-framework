@@ -111,9 +111,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     $currentPds = $currentPd;
                 }
                 foreach ($currentPds as $currentPd) {
-                    if ($currentPd->componentClass != $this->_class) {
-                        throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$currentPd->componentClass}' instead of '$this->_class'");
-                    }
                     $data = $this->_createData($currentPd, $row, $s);
                     if ($data) {
                         $ret[] = $data;

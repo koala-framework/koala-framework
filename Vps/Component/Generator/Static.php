@@ -159,4 +159,13 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $ret['static'] = true;
         return $ret;
     }
+
+    public function getStaticChildComponentIds()
+    {
+        $childComponentIds = array();
+        foreach (array_keys($this->_getChildComponentClasses()) as $c) {
+            $childComponentIds[] = $this->getIdSeparator().$c;
+        }
+        return $childComponentIds;
+    }
 }
