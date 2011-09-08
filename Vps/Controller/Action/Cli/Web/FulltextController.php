@@ -144,12 +144,18 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                         $doc->addField($field);
 
                         foreach ($fulltextComponents as $c) {
-                            $doc = $c->getComponent()->modifyFulltextDocument($doc);
+                            if (method_exists($c->getComponent(), 'modifyFulltextDocument')) {
+                                $doc = $c->getComponent()->modifyFulltextDocument($doc);
+                            }
                             //Komponente kann null zurückgeben um zu sagen dass gar nicht indiziert werden soll
                             if (!$doc) {
                                 echo " [no $c->componentId $c->componentClass]";
                                 break;
                             }
+                        }
+                        if (!$doc->getField('content')->value) {
+                            echo " [no content]";
+                            $doc = null;
                         }
                         echo "\n";
 
