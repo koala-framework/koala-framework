@@ -91,10 +91,11 @@ class Vps_Setup
 
     public static function setUpVps($configClass = 'Vps_Config_Web')
     {
-        require_once 'Vps/Registry.php';
 
+        require_once 'Vps/Registry.php';
         Zend_Registry::setClassName('Vps_Registry');
 
+        $start = microtime(true);
         self::$configClass = $configClass;
         require_once 'Vps/Config/Web.php';
         $config = Vps_Config_Web::getInstance(self::getConfigSection());
@@ -102,7 +103,7 @@ class Vps_Setup
         Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
 
 
-        if ($config->debug->benchmark) {
+        if ($config->debug->benchmark || isset($_GET['benchmark'])) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enable();
@@ -112,12 +113,17 @@ class Vps_Setup
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
         }
+        Vps_Benchmark::subCheckpoint('load zend', (microtime(true)-Vps_Benchmark::$startTime) - (microtime(true)-$start));
+        Vps_Benchmark::subCheckpoint('load webConfig', microtime(true)-$start);
+        $start = microtime(true);
 
         Vps_Loader::registerAutoload();
 
         require_once 'Vps/Debug.php';
         require_once 'Vps/Trl.php';
 
+        Vps_Benchmark::subCheckpoint('init 0', microtime(true)-$start);
+        $start = microtime(true);
 
         ini_set('memory_limit', '128M');
         error_reporting(E_ALL);
@@ -127,6 +133,10 @@ class Vps_Setup
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
+
+        Vps_Benchmark::subCheckpoint('init 1', microtime(true)-$start);
+        $start = microtime(true);
+
 
         $ip = get_include_path();
         foreach ($config->includepath as $t=>$p) {
@@ -140,6 +150,9 @@ class Vps_Setup
         set_include_path($ip);
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
+
+        Vps_Benchmark::subCheckpoint('init 2', microtime(true)-$start);
+        $start = microtime(true);
 
         if ($config->debug->firephp && php_sapi_name() != 'cli') {
             require_once 'FirePHPCore/FirePHP.class.php';
@@ -155,6 +168,9 @@ class Vps_Setup
         {
             ob_start();
         }
+
+        Vps_Benchmark::subCheckpoint('init 3', microtime(true)-$start);
+        $start = microtime(true);
 
         if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
             $validCommands = array('shell', 'export', 'copy-to-test');
@@ -173,6 +189,9 @@ class Vps_Setup
         if (isset($_COOKIE['unitTest'])) {
             $config->debug->benchmark = false;
         }
+
+        Vps_Benchmark::subCheckpoint('init 4', microtime(true)-$start);
+        $start = microtime(true);
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
@@ -232,6 +251,9 @@ class Vps_Setup
             Vps_Util_Apc::dispatchUtils();
         }
 
+        Vps_Benchmark::subCheckpoint('init 5', microtime(true)-$start);
+        $start = microtime(true);
+
         if ($config->showPlaceholder
                 && !$config->ignoreShowPlaceholder
                 && php_sapi_name() != 'cli'
@@ -267,6 +289,9 @@ class Vps_Setup
             }
         }
 
+        Vps_Benchmark::subCheckpoint('init 6', microtime(true)-$start);
+        $start = microtime(true);
+
         if ($tl = $config->debug->timeLimit) {
             set_time_limit((int)$tl);
         }
@@ -278,6 +303,9 @@ class Vps_Setup
         ) {
             self::_setLocale();
         }
+
+        Vps_Benchmark::subCheckpoint('setLocale', microtime(true)-$start);
+
         Vps_Benchmark::checkpoint('setUp');
     }
 
