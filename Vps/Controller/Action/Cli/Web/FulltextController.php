@@ -131,10 +131,11 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
                         $doc = new Zend_Search_Lucene_Document();
 
-                        //boost, keywords und disable:
-                        //können wenns benötigt werden über eigene komponente die als box eingefügt wird implementiert werden
-
+                        //whole content, for preview in search result
                         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('content', '', 'utf-8'));
+
+                        //normal content with boost=1 goes here
+                        $doc->addField(Zend_Search_Lucene_Field::UnStored('normalContent', '', 'utf-8'));
 
                         $t = $page->getTitle();
                         if (substr($t, -3) == ' - ') $t = substr($t, 0, -3);

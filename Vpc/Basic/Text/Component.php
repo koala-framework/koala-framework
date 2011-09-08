@@ -176,8 +176,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $html = $this->_stripTags($html);
         if ($html) {
-            $field = Zend_Search_Lucene_Field::UnStored($fieldName.'p', $html, 'utf-8');
-            $doc->addField($field);
+            $doc->getField('normalContent')->value .= ' '.$html;
         }
 
         return $doc;
