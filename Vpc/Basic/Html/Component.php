@@ -78,5 +78,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
 
         $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
         $doc->addField($field);
+
+        return $doc;
     }
 }
