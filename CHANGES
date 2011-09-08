@@ -19,6 +19,10 @@ Neue Features:
   führt auch SQL-Dateien aus, Beispiel: "vps update --class=Vpc_Abstract_Cards_Update_2"
 - Vpc_Abstract_Cards: Unterkomponente per Cards aus wählen, LinkTag basiert jetzt auf dieser 
   Komponente
+- new Generator_Box_StaticSelect: allows the user to select from different components
+                                  this can replace InheritContent in combination with
+                                  Vpc_Basic_ParentContent_Component
+                                  (it's more powerful and logical)
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente

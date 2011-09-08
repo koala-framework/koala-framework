@@ -363,14 +363,14 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             loadedContent = Ext.get('vpsLightbox-loadedContent');
             if (loadedContent !== null && loadedContent.isVisible()) {
                 loadedContent.shift({
-                    width: x - 20,
+                    width: x,
                     height: y,
                     easing: this.opts.easing,
                     duration: this.opts.resizeDuration
                 });
             } else {
                 loadedContent.shift({
-                    width: x - 20,
+                    width: x,
                     height: y,
                     easing: this.opts.easing,
                     duration: this.opts.resizeDuration
