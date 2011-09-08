@@ -20,7 +20,13 @@ class Vpc_Root_DomainRoot_Model extends Vps_Model_Data_Abstract
         $this->_data = array();
         foreach ($this->_domains as $key => $val) {
             $pattern = isset($val['pattern']) ? $val['pattern'] : null;
-            $this->_data[] = array('id' => $key, 'name' => $val['name'], 'domain' => $val['domain'], 'component' => $key, 'pattern' => $pattern);
+            $this->_data[] = array(
+                'id' => $key,
+                'name' => isset($val['name']) ? $val['name'] : $key,
+                'domain' => $val['domain'],
+                'component' => $key,
+                'pattern' => $pattern
+            );
         }
         parent::_init();
     }
