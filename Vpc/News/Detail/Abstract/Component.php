@@ -8,6 +8,7 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
         $ret['cssClass'] = 'webStandard';
         $ret['placeholder']['backLink'] = trlVps('Back to overview');
         $ret['editComponents'] = array('content');
+        $ret['flags']['hasFulltext'] = true;
         return $ret;
     }
 
@@ -29,5 +30,16 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
         parent::modifyItemData($new);
         $new->publish_date = $new->row->publish_date;
         $new->teaser = $new->row->teaser;
+    }
+
+    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    {
+        $fieldName = $this->getData()->componentId;
+
+        $field = Zend_Search_Lucene_Field::Keyword('vpcNews', 'vpcNews', 'utf-8');
+        $field->boost = 0.0001;
+        $doc->addField($field);
+
+        return $doc;
     }
 }
