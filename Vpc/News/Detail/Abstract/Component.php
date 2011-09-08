@@ -34,8 +34,6 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
 
     public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
     {
-        $fieldName = $this->getData()->componentId;
-
         $field = Zend_Search_Lucene_Field::Keyword('vpcNews', 'vpcNews', 'utf-8');
         $field->boost = 0.0001;
         $doc->addField($field);
