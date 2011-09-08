@@ -29,7 +29,8 @@ class Vps_Cache_Simple
         if (extension_loaded('apc')) {
             return apc_fetch($prefix.$cacheId, $success);
         } else {
-            $ret = self::_getCache()->load($prefix.$cacheId);
+            $cacheId = str_replace('-', '__', $prefix.$cacheId);
+            $ret = self::_getCache()->load($cacheId);
             $success = $ret !== false;
             return $ret;
         }
@@ -42,7 +43,8 @@ class Vps_Cache_Simple
         if (extension_loaded('apc')) {
             return apc_add($prefix.$cacheId, $data);
         } else {
-            return self::_getCache()->save($data, $prefix.$cacheId);
+            $cacheId = str_replace('-', '__', $prefix.$cacheId);
+            return self::_getCache()->save($data, $cacheId);
         }
     }
 
@@ -53,7 +55,8 @@ class Vps_Cache_Simple
         if (extension_loaded('apc')) {
             return apc_delete($prefix.$cacheId);
         } else {
-            return self::_getCache()->remove($prefix.$cacheId);
+            $cacheId = str_replace('-', '__', $prefix.$cacheId);
+            return self::_getCache()->remove($cacheId);
         }
     }
 
