@@ -252,16 +252,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     {
         if (!is_null($this->_pageGenerators)) return $this->_pageGenerators;
 
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Apc', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
         $cacheId = $this->componentClass . '_pageGenerators';
 
-        $generators = $cache->load($cacheId);
+        $generators = Vps_Cache_Simple::fetch($cacheId);
         if (!$generators) {
             $generators = array();
             foreach (Vpc_Abstract::getComponentClasses() as $class) {
@@ -274,7 +267,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     }
                 }
             }
-            $cache->save($generators, $cacheId);
+            Vps_Cache_Simple::add($cacheId, $generators);
         }
 
         $this->_pageGenerators = array();
@@ -436,17 +429,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private function _getGeneratorsForClasses($lookingForClasses)
     {
 
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Apc', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
-
         $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
-        } else if (($generators = $cache->load($cacheId)) !== false) {
+        } else if (($generators = Vps_Cache_Simple::fetch($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
@@ -469,7 +454,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
             }
             $generators = array_values($generators);
-            $cache->save($generators, $cacheId);
+            Vps_Cache_Simple::add($cacheId, $generators);
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
