@@ -70,6 +70,7 @@ class Vpc_Columns_Component extends Vpc_Abstract_List_Component
             }
         }
         $ownWidth -= $this->_getSetting('contentMargin')*($columns-1) + $sumUsedWith;
+        if ($noWidthColumns == 0) $noWidthColumns = 1;
         return round($ownWidth / $noWidthColumns);
     }
 

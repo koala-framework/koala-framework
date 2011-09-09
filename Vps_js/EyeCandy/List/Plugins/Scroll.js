@@ -1,6 +1,7 @@
 Vps.EyeCandy.List.Plugins.Scroll = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
+    createMoveElementSelectorWrapper: false,
     _currentPosition: 0,
     _previousButton: null,
     _nextButton: null,
@@ -19,6 +20,14 @@ Vps.EyeCandy.List.Plugins.Scroll = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract
             for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
                 this.list.getItem(i).el.hide();
             }
+        }
+
+        if (this.createMoveElementSelectorWrapper) {
+            var wrapper = this.moveElement.parent().createChild({
+                tag: 'div', cls: 'listPluginScrollMoveWrapper'
+            });
+            wrapper.insertBefore(this.moveElement);
+            this.moveElement.appendTo(wrapper);
         }
     },
     render: function() {

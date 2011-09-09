@@ -50,8 +50,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function getComponentClass()
     {
         if (is_null(self::$_rootComponentClass)) {
-            if (Vps_Registry::get('config')->vpc->rootComponent) {
-                self::$_rootComponentClass = Vps_Registry::get('config')->vpc->rootComponent;
+            if (Vps_Config_Web::getValue('vpc.rootComponent')) {
+                self::$_rootComponentClass = Vps_Config_Web::getValue('vpc.rootComponent');
             } else {
                 self::$_rootComponentClass = false;
             }
@@ -105,7 +105,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
-            $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+            $urlPrefix = Vps_Config_Web::getValue('vpc.urlPrefix');
             if ($urlPrefix) {
                 if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
                     return null;
@@ -117,27 +117,29 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
-                Vps_Cache_Simple::add($cacheId, $ret->vpsSerialize());
+                if ($ret->isVisible()) {
+                    Vps_Cache_Simple::add($cacheId, $ret->vpsSerialize());
 
-                Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
-                    array(array(
-                        'url' => $cacheUrl,
-                        'page_id' => $ret->componentId
-                    )), array('replace'=>true));
+                    Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                        array(array(
+                            'url' => $cacheUrl,
+                            'page_id' => $ret->componentId
+                        )), array('replace'=>true));
 
-                $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
-                $s = new Vps_Model_Select();
-                $s->whereEquals('page_id', $ret->componentId);
-                $m->deleteRows($s);
+                    $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
+                    $s = new Vps_Model_Select();
+                    $s->whereEquals('page_id', $ret->componentId);
+                    $m->deleteRows($s);
 
-                $c = $ret;
-                while($c = $c->parent) {
-                    if (isset($c->generator) && $c->generator->getGeneratorFlag('table')) {
-                        $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
-                            array(array(
-                                'page_id' => $ret->componentId,
-                                'parent_page_id' => $c->componentId
-                            )), array('buffer'=>true));
+                    $c = $ret;
+                    while($c = $c->parent) {
+                        if (isset($c->generator) && $c->generator->getGeneratorFlag('table')) {
+                            $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                                array(array(
+                                    'page_id' => $ret->componentId,
+                                    'parent_page_id' => $c->componentId
+                                )), array('buffer'=>true));
+                        }
                     }
                 }
             } else {
@@ -252,16 +254,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     {
         if (!is_null($this->_pageGenerators)) return $this->_pageGenerators;
 
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Apc', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
         $cacheId = $this->componentClass . '_pageGenerators';
 
-        $generators = $cache->load($cacheId);
+        $generators = Vps_Cache_Simple::fetch($cacheId);
         if (!$generators) {
             $generators = array();
             foreach (Vpc_Abstract::getComponentClasses() as $class) {
@@ -274,7 +269,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     }
                 }
             }
-            $cache->save($generators, $cacheId);
+            Vps_Cache_Simple::add($cacheId, $generators);
         }
 
         $this->_pageGenerators = array();
@@ -436,17 +431,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private function _getGeneratorsForClasses($lookingForClasses)
     {
 
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Apc', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
-
         $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
-        } else if (($generators = $cache->load($cacheId)) !== false) {
+        } else if (($generators = Vps_Cache_Simple::fetch($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
@@ -469,7 +456,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
             }
             $generators = array_values($generators);
-            $cache->save($generators, $cacheId);
+            Vps_Cache_Simple::add($cacheId, $generators);
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);

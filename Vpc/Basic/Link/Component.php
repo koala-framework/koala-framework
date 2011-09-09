@@ -31,12 +31,9 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
 
     public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
     {
-        $fieldName = $this->getData()->componentId;
-
         $doc->getField('content')->value .= ' '.$this->_getRow()->text;
-
-        $field = Zend_Search_Lucene_Field::UnStored($fieldName, $this->_getRow()->text, 'utf-8');
-        $doc->addField($field);
+        $doc->getField('normalContent')->value .= ' '.$this->_getRow()->text;
+        return $doc;
     }
 
     public function hasContent()

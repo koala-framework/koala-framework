@@ -279,7 +279,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
-        $data['visible'] = $page['visible'];
+        if (!$page['visible']) {
+            $data['invisible'] = true;
+        }
         return $data;
     }
     protected function _getIdFromRow($id)

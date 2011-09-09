@@ -16,7 +16,11 @@ class Vps_Assets_Dependencies
     {
         $this->_loader = $loader;
         $this->_config = $loader->getConfig();
-        $this->_path = $this->_config->path->toArray();
+        if ($this->_config) {
+            $this->_path = $this->_config->path->toArray();
+        } else {
+            $this->_path = Vps_Config_Web::getValueArray('path');
+        }
     }
 
     public function getMaxFileMTime()
@@ -28,9 +32,14 @@ class Vps_Assets_Dependencies
         if (($ret = $cache->load('maxFileMTime')) === false) {
             $ret = 0;
             $assetsType = 'Admin';
-            if (!isset($this->_config->assets->Admin)) {
+            if ($this->_config) {
+                $assets = $this->_config->assets;
+            } else {
+                $assets = Vps_Config_Web::getValueArray('assets');
+            }
+            if (!isset($assets['Admin'])) {
                 //für tests wenn keine Admin da, erste aus config nehmen
-                $assetsType = key($this->_config->assets->toArray());
+                $assetsType = key($assets);
             }
             $files = $this->getAssetFiles($assetsType, null, 'web', Vps_Component_Data_Root::getComponentClass());
             unset($files['mtime']);
@@ -51,7 +60,14 @@ class Vps_Assets_Dependencies
     public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
     {
         Vps_Benchmark::count('getAssetUrls');
-        if ($this->_config->debug->menu) {
+        if ($this->_config) {
+            $menu = $this->_config->debug->menu;
+            $assets = $this->_config->debug->assets;
+        } else {
+            $menu = Vps_Config_Web::getValue('debug.menu');
+            $assets = Vps_Config_Web::getValueArray('debug.assets');
+        }
+        if ($menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
                 $assetsType .= 'Debug';
@@ -59,7 +75,7 @@ class Vps_Assets_Dependencies
         }
         $allUsed = false;
         $ret = array();
-        if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
+        if (!$assets[$fileType] || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->getMaxFileMTime();
             if (!$language) $language = Vps_Trl::getInstance()->getTargetLanguage();
             $ret[] = "/assets/all/$section/"
@@ -106,7 +122,12 @@ class Vps_Assets_Dependencies
             if ($this->_files[$assetsType]===false) {
                 Vps_Benchmark::count('processing dependencies miss', $assetsType);
                 $this->_files[$assetsType] = array();
-                if (!isset($this->_config->assets->$assetsType)) {
+                if ($this->_config) {
+                    $allAssets = $this->_config->assets->toArray();
+                } else {
+                    $allAssets = Vps_Config_Web::getValueArray('assets');
+                }
+                if (!isset($allAssets[$assetsType])) {
                     if (strpos($assetsType, ':')) {
                         $configPath = str_replace('_', '/', substr($assetsType, 0, strpos($assetsType, ':')));
                         foreach(explode(PATH_SEPARATOR, get_include_path()) as $dir) {
@@ -129,7 +150,7 @@ class Vps_Assets_Dependencies
                         throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                     }
                 } else {
-                    $assets = $this->_config->assets->$assetsType;
+                    $assets = $allAssets[$assetsType];
                 }
                 foreach ($assets as $d=>$v) {
                     if ($v) {

@@ -13,15 +13,47 @@ class Vps_Config_Web extends Vps_Config_Ini
             $section = call_user_func(array(Vps_Setup::$configClass, 'getConfigSection'));
         }
         if (!isset(self::$_instances[$section])) {
-            require_once 'Vps/Config/Cache.php';
-            $cache = Vps_Config_Cache::getInstance();
             $cacheId = 'config_'.str_replace('-', '_', $section);
             $configClass = Vps_Setup::$configClass;
             require_once str_replace('_', '/', $configClass).'.php';
-            if(!$ret = $cache->load($cacheId)) {
-                $ret = new $configClass($section);
-                $mtime = time();
-                $cache->save($ret, $cacheId);
+            if (extension_loaded('apc')) {
+                $apcCacheId = $cacheId.getcwd();
+                $ret = apc_fetch($apcCacheId);
+                if ($ret && $ret->debug->componentCache->checkComponentModification) {
+                    $masterFiles = array(
+                        'application/config.ini',
+                        VPS_PATH . '/config.ini'
+                    );
+                    if (file_exists('application/vps_branch')) $masterFiles[] = 'application/vps_branch';
+                    if (file_exists('application/config.local.ini')) $files[] = 'application/config.local.ini';
+                    $mtime = apc_fetch($apcCacheId.'mtime');
+                    foreach ($masterFiles as $f) {
+                        if (filemtime($f) > $mtime) {
+                            apc_delete($apcCacheId);
+                            apc_delete($apcCacheId.'mtime');
+                            $ret = false;
+                            break;
+                        }
+                    }
+                }
+                if (!$ret) {
+                    //two level cache
+                    require_once 'Vps/Config/Cache.php';
+                    $cache = Vps_Config_Cache::getInstance();
+                    if(!$ret = $cache->load($cacheId)) {
+                        $ret = new $configClass($section);
+                        $cache->save($ret, $cacheId);
+                    }
+                    apc_add($apcCacheId, $ret);
+                    apc_add($apcCacheId.'mtime', time());
+                }
+            } else {
+                require_once 'Vps/Config/Cache.php';
+                $cache = Vps_Config_Cache::getInstance();
+                if(!$ret = $cache->load($cacheId)) {
+                    $ret = new $configClass($section);
+                    $cache->save($ret, $cacheId);
+                }
             }
             self::$_instances[$section] = $ret;
         }
@@ -35,9 +67,15 @@ class Vps_Config_Web extends Vps_Config_Ini
 
     public static function getInstanceMtime($section)
     {
-        require_once 'Vps/Config/Cache.php';
-        $cache = Vps_Config_Cache::getInstance();
-        return $cache->test('config_'.str_replace('-', '_', $section));
+        if (extension_loaded('apc')) {
+            $cacheId = 'config_'.str_replace('-', '_', $section);
+            $cacheId .= getcwd();
+            return apc_fetch($cacheId.'mtime');
+        } else {
+            require_once 'Vps/Config/Cache.php';
+            $cache = Vps_Config_Cache::getInstance();
+            return $cache->test('config_'.str_replace('-', '_', $section));
+        }
     }
 
     public static function getConfigSection()
@@ -232,5 +270,56 @@ class Vps_Config_Web extends Vps_Config_Ini
             }
         }
         return $main;
+    }
+
+    public static function getValueArray($var)
+    {
+        require_once 'Vps/Cache/Simple.php';
+
+        $cacheId = 'configAr-'.$var;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
+        $cfg = Vps_Registry::get('config');
+        foreach (explode('.', $var) as $i) {
+            $cfg = $cfg->$i;
+        }
+        $ret = $cfg->toArray();
+
+        Vps_Cache_Simple::add($cacheId, $ret);
+
+        return $ret;
+    }
+
+    public static function getValue($var)
+    {
+        require_once 'Vps/Cache/Simple.php';
+
+        $cacheId = 'config-'.$var;
+        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
+        $cfg = Vps_Registry::get('config');
+        foreach (explode('.', $var) as $i) {
+            $cfg = $cfg->$i;
+        }
+        $ret = $cfg;
+        if (is_object($ret)) {
+            throw new Vps_Exception("this would return an object, use getValueArray instead");
+        }
+
+        Vps_Cache_Simple::add($cacheId, $ret);
+
+        return $ret;
+    }
+
+    public static function clearValueCache()
+    {
+        Vps_Cache_Simple::clear('config-');
+        Vps_Cache_Simple::clear('configAr-');
     }
 }

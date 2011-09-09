@@ -44,6 +44,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
                 $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
                 $query->addSubquery($pathQuery, true /* required */);
             }
+            $this->_beforeFind($query);
             $time = microtime(true);
             try {
                 $this->_hits = $index->find($query);
@@ -58,6 +59,10 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
         }
 
         $this->_queryString = $queryString;
+    }
+
+    protected function _beforeFind($query)
+    {
     }
 
     public function getPagingCount()
