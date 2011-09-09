@@ -50,8 +50,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function getComponentClass()
     {
         if (is_null(self::$_rootComponentClass)) {
-            if (Vps_Registry::get('config')->vpc->rootComponent) {
-                self::$_rootComponentClass = Vps_Registry::get('config')->vpc->rootComponent;
+            if (Vps_Config_Web::getValue('vpc.rootComponent')) {
+                self::$_rootComponentClass = Vps_Config_Web::getValue('vpc.rootComponent');
             } else {
                 self::$_rootComponentClass = false;
             }
@@ -105,7 +105,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
-            $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+            $urlPrefix = Vps_Config_Web::getValue('vpc.urlPrefix');
             if ($urlPrefix) {
                 if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
                     return null;
