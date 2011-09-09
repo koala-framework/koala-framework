@@ -117,27 +117,29 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
-                Vps_Cache_Simple::add($cacheId, $ret->vpsSerialize());
+                if ($ret->isVisible()) {
+                    Vps_Cache_Simple::add($cacheId, $ret->vpsSerialize());
 
-                Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
-                    array(array(
-                        'url' => $cacheUrl,
-                        'page_id' => $ret->componentId
-                    )), array('replace'=>true));
+                    Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                        array(array(
+                            'url' => $cacheUrl,
+                            'page_id' => $ret->componentId
+                        )), array('replace'=>true));
 
-                $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
-                $s = new Vps_Model_Select();
-                $s->whereEquals('page_id', $ret->componentId);
-                $m->deleteRows($s);
+                    $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
+                    $s = new Vps_Model_Select();
+                    $s->whereEquals('page_id', $ret->componentId);
+                    $m->deleteRows($s);
 
-                $c = $ret;
-                while($c = $c->parent) {
-                    if (isset($c->generator) && $c->generator->getGeneratorFlag('table')) {
-                        $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
-                            array(array(
-                                'page_id' => $ret->componentId,
-                                'parent_page_id' => $c->componentId
-                            )), array('buffer'=>true));
+                    $c = $ret;
+                    while($c = $c->parent) {
+                        if (isset($c->generator) && $c->generator->getGeneratorFlag('table')) {
+                            $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                                array(array(
+                                    'page_id' => $ret->componentId,
+                                    'parent_page_id' => $c->componentId
+                                )), array('buffer'=>true));
+                        }
                     }
                 }
             } else {
