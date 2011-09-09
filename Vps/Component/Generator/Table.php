@@ -6,6 +6,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn = 'id';
     protected $_hasNumericIds = true;
+    protected $_eventsClass = 'Vps_Component_Generator_Events_Table';
 
     final public function getFormattedSelect($parentData)
     {

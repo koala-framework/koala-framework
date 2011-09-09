@@ -1,6 +1,11 @@
 <?php
 class Vpc_Abstract_Events extends Vps_Component_Abstract_Events
 {
+    protected function _init()
+    {
+        $this->_class = $this->_config['componentClass'];
+    }
+
     public function getListeners()
     {
         $ret = array();

@@ -16,6 +16,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     private $_pageChilds = array();
 
     private $_basesCache = array();
+    protected $_eventsClass = 'Vpc_Root_Category_GeneratorEvents';
 
     protected function _loadPageData()
     {
@@ -342,7 +343,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    
+
     public function getDuplicateProgressSteps($source)
     {
         $ret = 1;

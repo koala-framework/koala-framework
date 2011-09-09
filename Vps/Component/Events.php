@@ -6,62 +6,74 @@ class Vps_Component_Events
     const EVENT_ROW_UPDATE = 'rowUpdate';
     const EVENT_ROW_INSERT = 'rowInsert';
     const EVENT_ROW_UPDATES_FINISHED = 'rowUpdatesFinished';
+
     const EVENT_MODEL_UPDATE = 'modelUpdate';
+
     const EVENT_COMPONENT_CONTENT_CHANGE = 'componentContentChange';
     const EVENT_COMPONENT_HAS_CONTENT_CHANGE = 'componentHasContentChange';
 
-    protected $_class;
+    const EVENT_PAGE_CHANGE = 'pageChange';
+    const EVENT_PAGE_CHANGE_POS = 'pageChangePos';
+    const EVENT_PAGE_MOVE = 'pageMove';
+    const EVENT_PAGE_CLASS_CHANGE = 'pageClassChange';
+    const EVENT_PAGE_DELETE = 'pageDelete';
+    const EVENT_PAGE_ADD = 'pageAdd';
 
-    protected function __construct($class)
+    protected $_config;
+
+    protected function __construct($config = array())
     {
-        $this->_class = $class;
+        $this->_config = $config;
+        $this->_init();
     }
 
-    public function getClass()
+    public function getConfig()
     {
-        return $this->_class;
+        return $this->_config;
     }
+
+    protected function _init() {}
 
     /**
      * @return $this
      */
-    public static final function getInstance($class, $contextClass = null)
+    private static final function getInstance($class, $config = array())
     {
+        $id = md5(serialize(array($class, $config)));
         static $instances = array();
-        if (!$contextClass) $contextClass = $class;
-        if (!isset($instances[$contextClass])) {
-            $class = call_user_func(array($class, 'getGetInstanceClass'), $contextClass);
-            if (!$class) { return null; }
-            $instances[$contextClass] = new $class($contextClass);
+        if (!isset($instances[$id])) {
+            $instances[$id] = new $class($config);
         }
-        return $instances[$contextClass];
-    }
-
-    public static function getGetInstanceClass($componentClass)
-    {
-        return $componentClass;
+        return $instances[$id];
     }
 
     public static final function getAllListeners()
     {
-        static $cache = null;
-        if (!$cache) {
-            // todo: use Vps_Cache_Simple
-            $cache = Vps_Cache::factory('Core', 'Apc', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
         $cacheId = 'Vps_Component_Events_listeners';
-
-        $listeners = $cache->load($cacheId);
+        $listeners = Vps_Cache_Simple::fetch($cacheId);
         if (!$listeners) {
 
             $eventObjects = array();
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+                $eventsClass = Vpc_Admin::getComponentClass($componentClass, 'Events');
                 $eventObjects[] = Vps_Component_Abstract_Events::getInstance(
-                    'Vps_Component_Abstract_Events', $componentClass
+                    $eventsClass, array('componentClass' => $componentClass)
                 );
+                foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $null) {
+                    $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                        $componentClass, array('generator' => $generatorKey))
+                    );
+                    $eventsClass = $generator->getEventsClass();
+                    if ($eventsClass) {
+                        $eventObjects[] = Vps_Component_Generator_Events::getInstance(
+                            $eventsClass,
+                            array(
+                                'componentClass' => $componentClass,
+                                'generatorKey' => $generatorKey
+                            )
+                        );
+                    }
+                }
             }
             $eventObjects[] = Vps_Component_Events_ViewCache::getInstance('Vps_Component_Events_ViewCache');
 
@@ -74,14 +86,12 @@ class Vps_Component_Events
                     $listeners[$event][$class][] = array(
                         'class' => get_class($eventObject),
                         'method' => $listener['callback'],
-                        'getInstanceClass' => $eventObject instanceof Vps_Component_Abstract_Events ?
-                            $eventObject->getClass() :
-                            null
+                        'config' => $eventObject->getConfig()
                     );
                 }
             }
 
-            $cache->save($listeners, $cacheId);
+            Vps_Cache_Simple::add($cacheId, $listeners);
         }
         return $listeners;
     }
@@ -105,7 +115,7 @@ class Vps_Component_Events
             $ev = call_user_func(
                 array($callback['class'], 'getInstance'),
                 $callback['class'],
-                $callback['getInstanceClass']
+                $callback['config']
             );
             $ev->{$callback['method']}($event, $data);
         }
