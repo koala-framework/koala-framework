@@ -889,6 +889,23 @@ class Vps_Component_Data
         return $this->_languageCache;
     }
 
+    /**
+     * Returns if this component is visible
+     *
+     * A component is visible if all parents are visible.
+     */
+    public function isVisible()
+    {
+        $c = $this;
+        while($c) {
+            if (isset($this->invisible) && $this->invisible) {
+                return false;
+            }
+            $c = $c->parent;
+        }
+        return true;
+    }
+
     public function trlStaticExecute($trlStaticData)
     {
         return Vps_Trl::getInstance()->trlStaticExecute($trlStaticData, $this->getLanguage());
