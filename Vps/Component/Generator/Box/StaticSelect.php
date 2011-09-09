@@ -40,7 +40,7 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
             $cmps = $this->_settings['component'];
             $ret['componentClass'] = array_shift($cmps);
         } else {
-            $ret['componentClass'] = $this->_settings['component'][$row->component];
+            $ret['componentClass'] = $this->_settings['component'][$component];
         }
         return $ret;
     }
