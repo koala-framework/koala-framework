@@ -219,7 +219,7 @@ Vps.Fade.Elements.prototype = {
 
             if (this.elementAccessNextPrevious) {
                 var prevButton = Ext.get(this.selectorRoot).createChild({
-                    tag: 'a', cls: 'elementAccessPrevious', html: 'next', href: '#'
+                    tag: 'a', cls: 'elementAccessPrevious', html: '', href: '#'
                 });
                 prevButton.on('click', function(ev, el, opt) {
                     ev.stopEvent();
@@ -235,7 +235,7 @@ Vps.Fade.Elements.prototype = {
                 }, this);
 
                 var nextButton = Ext.get(this.selectorRoot).createChild({
-                    tag: 'a', cls: 'elementAccessNext', html: 'prev', href: '#'
+                    tag: 'a', cls: 'elementAccessNext', html: '', href: '#'
                 });
                 nextButton.on('click', function(ev, el, opt) {
                     ev.stopEvent();
