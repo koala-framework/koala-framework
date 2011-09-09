@@ -30,7 +30,10 @@ Ext.namespace("Vps.Fade");
 Vps.Fade.Elements = function(cfg) {
     this.selector = cfg.selector;
 
-    this.elementAccessLinks = false; // optional
+    this.elementAccessDirect = false; // optional: displays direct acces links to each image
+    this.elementAccessPlayPause = false; // optional: displayes play / pause button
+    this.elementAccessLinks = false; // optional, deprecated: displays both of above
+    this.elementAccessNextPrevious = false;
     this.selectorRoot = document;
     this.fadeDuration = 1.5;
     this.easingFadeOut = 'easeIn';
@@ -38,7 +41,13 @@ Vps.Fade.Elements = function(cfg) {
     this.fadeEvery = 7;
     this.startRandom = true;
 
-    if (typeof cfg.elementAccessLinks != 'undefined') this.elementAccessLinks = cfg.elementAccessLinks;
+    if (typeof cfg.elementAccessPlayPause != 'undefined') this.elementAccessPlayPause = cfg.elementAccessPlayPause;
+    if (typeof cfg.elementAccessDirect != 'undefined') this.elementAccessDirect = cfg.elementAccessDirect;
+    if (typeof cfg.elementAccessLinks != 'undefined' && cfg.elementAccessLinks) {
+        this.elementAccessPlayPause = cfg.elementAccessLinks;
+        this.elementAccessDirect = cfg.elementAccessLinks;
+    }
+    if (typeof cfg.elementAccessNextPrevious != 'undefined') this.elementAccessNextPrevious = cfg.elementAccessNextPrevious;
     if (typeof cfg.selectorRoot != 'undefined') this.selectorRoot = cfg.selectorRoot;
     if (typeof cfg.fadeDuration != 'undefined') this.fadeDuration = cfg.fadeDuration;
     if (typeof cfg.easingFadeOut != 'undefined') this.easingFadeOut = cfg.easingFadeOut;
@@ -84,7 +93,7 @@ Vps.Fade.Elements = function(cfg) {
     }
 
     // create the element access link if needed
-    if (this.elementAccessLinks && i >= 1) {
+    if ((this.elementAccessDirect || this.elementAccessPlayPause || this.elementAccessNextPrevious) && i >= 1) {
         this._createElementAccessLinks(this.active);
     }
 };
@@ -113,7 +122,7 @@ Vps.Fade.Elements.prototype = {
         var nextEl = Ext.get(this.fadeElements[this.next]);
         nextEl.fadeIn({ endOpacity: 1.0, easing: this.easingFadeIn, duration: this.fadeDuration, useDisplay: true });
 
-        if (this.elementAccessLinks) {
+        if (this.elementAccessDirect) {
             if (this._elementAccessLinkEls[this.active].hasClass('elementAccessLinkActive')) {
                 this._elementAccessLinkEls[this.active].removeClass('elementAccessLinkActive');
             }
@@ -157,50 +166,90 @@ Vps.Fade.Elements.prototype = {
     },
 
     _createElementAccessLinks: function(activeLinkIndex) {
-        var ul = Ext.get(this.selectorRoot).createChild({ tag: 'ul', cls: 'elementAccessLinks' });
-
         // accessLinks and play / pause button if there are at least 2 images
         if (this.fadeElements.length >= 2) {
-            var j = 0;
-            Ext.each(this.fadeElements, function(e) {
-                var a = ul.createChild({ tag: 'li' })
+            if (this.elementAccessDirect || this.elementAccessPlayPause) {
+                var ul = Ext.get(this.selectorRoot).createChild({ tag: 'ul', cls: 'elementAccessLinks' });
+            }
+
+            if (this.elementAccessDirect) {
+                var j = 0;
+                Ext.each(this.fadeElements, function(e) {
+                    var a = ul.createChild({ tag: 'li' })
+                        .createChild({
+                            tag: 'a',
+                            cls: 'elementAccessLink'+(activeLinkIndex==j ? ' elementAccessLinkActive' : ''),
+                            html: '',
+                            href: '#'
+                        });
+                    a.on('click', function(ev, el, opt) {
+                        ev.stopEvent();
+
+                        if (this._timeoutId) {
+                            window.clearTimeout(this._timeoutId);
+                        }
+                        this.next = opt.activateIdx;
+                        this.doFade();
+                        if (this.elementAccessPlayPause) this.pause();
+
+                    }, this, { activateIdx: j });
+                    this._elementAccessLinkEls.push(a);
+                    j += 1;
+                }, this);
+            }
+
+            if (this.elementAccessPlayPause) {
+                this._playPauseButton = ul.createChild({ tag: 'li' })
                     .createChild({
                         tag: 'a',
-                        cls: 'elementAccessLink'+(activeLinkIndex==j ? ' elementAccessLinkActive' : ''),
-                        html: '',
+                        cls: 'elementAccessPlayPauseButton elementAccessPause',
+                        html: '&nbsp;',
                         href: '#'
                     });
-                a.on('click', function(ev, el, opt) {
+                this._playPauseButton.on('click', function(ev, el, opt) {
                     ev.stopEvent();
 
-                    if (this._timeoutId) {
-                        window.clearTimeout(this._timeoutId);
+                    if (this._playPause == 'play') {
+                        this.pause();
+                    } else if (this._playPause == 'pause') {
+                        this.play();
                     }
-                    this.next = opt.activateIdx;
-                    this.doFade();
-                    this.pause();
+                }, this);
+            }
 
-                }, this, { activateIdx: j });
-                this._elementAccessLinkEls.push(a);
-                j += 1;
-            }, this);
-
-            this._playPauseButton = ul.createChild({ tag: 'li' })
-                .createChild({
-                    tag: 'a',
-                    cls: 'elementAccessPlayPauseButton elementAccessPause',
-                    html: '&nbsp;',
-                    href: '#'
+            if (this.elementAccessNextPrevious) {
+                var prevButton = Ext.get(this.selectorRoot).createChild({
+                    tag: 'a', cls: 'elementAccessPrevious', html: 'next', href: '#'
                 });
-            this._playPauseButton.on('click', function(ev, el, opt) {
-                ev.stopEvent();
+                prevButton.on('click', function(ev, el, opt) {
+                    ev.stopEvent();
 
-                if (this._playPause == 'play') {
-                    this.pause();
-                } else if (this._playPause == 'pause') {
-                    this.play();
-                }
-            }, this);
+                    if (this._timeoutId) window.clearTimeout(this._timeoutId);
+
+                    var nextIdx = this.active - 1;
+                    if (nextIdx < 0) nextIdx = this.fadeElements.length-1;
+
+                    this.next = nextIdx;
+                    this.doFade();
+                    if (this.elementAccessPlayPause) this.pause();
+                }, this);
+
+                var nextButton = Ext.get(this.selectorRoot).createChild({
+                    tag: 'a', cls: 'elementAccessNext', html: 'prev', href: '#'
+                });
+                nextButton.on('click', function(ev, el, opt) {
+                    ev.stopEvent();
+
+                    if (this._timeoutId) window.clearTimeout(this._timeoutId);
+
+                    var nextIdx = this.active + 1;
+                    if (nextIdx >= this.fadeElements.length) nextIdx = 0;
+
+                    this.next = nextIdx;
+                    this.doFade();
+                    if (this.elementAccessPlayPause) this.pause();
+                }, this);
+            }
         }
     }
 };
