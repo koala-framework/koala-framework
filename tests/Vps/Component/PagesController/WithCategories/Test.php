@@ -22,14 +22,12 @@ class Vps_Component_PagesController_WithCategories_Test extends Vpc_TestAbstract
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
         $this->assertFalse($cfg['actions']['add']);
         $this->assertFalse($cfg['allowDrop']);
-        $this->assertFalse($cfg['actions']['properties']);
         $this->assertFalse($cfg['actions']['delete']);
         $this->assertFalse($cfg['actions']['makeHome']);
         $this->assertFalse($cfg['allowDrag']);
 
         $c = Vps_Component_Data_Root::getInstance()->getComponentById('root-main');
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
-        $this->assertFalse($cfg['actions']['properties']);
         $this->assertFalse($cfg['actions']['delete']);
         $this->assertFalse($cfg['actions']['makeHome']);
         $this->assertTrue($cfg['actions']['add']);
@@ -38,7 +36,6 @@ class Vps_Component_PagesController_WithCategories_Test extends Vpc_TestAbstract
 
         $c = Vps_Component_Data_Root::getInstance()->getComponentById('1');
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
-        $this->assertTrue($cfg['actions']['properties']);
         $this->assertTrue($cfg['actions']['delete']);
         $this->assertTrue($cfg['actions']['makeHome']);
         $this->assertTrue($cfg['actions']['add']);
@@ -47,7 +44,6 @@ class Vps_Component_PagesController_WithCategories_Test extends Vpc_TestAbstract
 
         $c = Vps_Component_Data_Root::getInstance()->getComponentById('3');
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
-        $this->assertTrue($cfg['actions']['properties']);
         $this->assertTrue($cfg['actions']['delete']);
         $this->assertTrue($cfg['actions']['makeHome']);
         $this->assertTrue($cfg['actions']['add']);

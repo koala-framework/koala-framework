@@ -70,13 +70,11 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
 
     public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
     {
-        $fieldName = $this->getData()->componentId;
-
         $text = strip_tags($this->_getRow()->content);
 
         $doc->getField('content')->value .= ' '.$text;
+        $doc->getField('normalContent')->value .= ' '.$text;
 
-        $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
-        $doc->addField($field);
+        return $doc;
     }
 }

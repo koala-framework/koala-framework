@@ -71,5 +71,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
 
         $field = Zend_Search_Lucene_Field::UnStored($fieldName, $this->_getRow()->infotext, 'utf-8');
         $doc->addField($field);
+
+        return $doc;
     }
 }

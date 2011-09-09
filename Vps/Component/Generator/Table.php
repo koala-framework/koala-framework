@@ -275,6 +275,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             'isPage' => false,
             'isPseudoPage' => false
         );
+        if ($this->_getModel()->hasColumn('visible') && !$row->visible) {
+            $data['invisible'] = true;
+        }
         return $data;
     }
 

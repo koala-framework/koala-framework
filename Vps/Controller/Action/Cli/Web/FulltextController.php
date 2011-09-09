@@ -68,6 +68,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
         $queueFile = 'application/temp/fulltextRebuildQueue';
 
         $componentId = 'root';
+        if ($this->_getParam('componentId')) $componentId = $this->_getParam('componentId');
         file_put_contents($queueFile, $componentId);
         while(true) {
             $pid = pcntl_fork();
@@ -121,16 +122,20 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
                     //echo "checking for childComponents\n";
                     $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext'));
+                    if (Vpc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
+                        $fulltextComponents[] = $page;
+                    }
                     if ($fulltextComponents) {
-                        echo " *** indexing $page->componentId $page->url...\n";
+                        echo " *** indexing $page->componentId $page->url...";
                         $index = Vps_Util_Fulltext::getInstance();
 
                         $doc = new Zend_Search_Lucene_Document();
 
-                        //boost, keywords und disable:
-                        //können wenns benötigt werden über eigene komponente die als box eingefügt wird implementiert werden
-
+                        //whole content, for preview in search result
                         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('content', '', 'utf-8'));
+
+                        //normal content with boost=1 goes here
+                        $doc->addField(Zend_Search_Lucene_Field::UnStored('normalContent', '', 'utf-8'));
 
                         $t = $page->getTitle();
                         if (substr($t, -3) == ' - ') $t = substr($t, 0, -3);
@@ -139,10 +144,20 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                         $doc->addField($field);
 
                         foreach ($fulltextComponents as $c) {
-                            $doc = $c->getComponent()->modifyFulltextDocument($doc);
+                            if (method_exists($c->getComponent(), 'modifyFulltextDocument')) {
+                                $doc = $c->getComponent()->modifyFulltextDocument($doc);
+                            }
                             //Komponente kann null zurückgeben um zu sagen dass gar nicht indiziert werden soll
-                            if (!$doc) break;
+                            if (!$doc) {
+                                echo " [no $c->componentId $c->componentClass]";
+                                break;
+                            }
                         }
+                        if (!$doc->getField('content')->value) {
+                            echo " [no content]";
+                            $doc = null;
+                        }
+                        echo "\n";
 
                         if ($doc) {
                             //das wird verwendet um alle dokumente im index zu finden
@@ -166,9 +181,11 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                                 $field->boost = 0.0001;
                                 $doc->addField($field);
                             }
-                            foreach ($doc->getFieldNames() as $fieldName) {
-                                //echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
-                                //echo "$fieldName: ".$doc->$fieldName."\n";
+                            if ($this->_getParam('debug')) {
+                                foreach ($doc->getFieldNames() as $fieldName) {
+                                    echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
+                                    //echo "$fieldName: ".$doc->$fieldName."\n";
+                                }
                             }
 
                             $term = new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId');
@@ -221,6 +238,12 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
             $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
             $query->addSubquery($pathQuery, true /* required */);
         }
+        if ($this->_getParam('news')) {
+            $pathTerm  = new Zend_Search_Lucene_Index_Term('vpcNews', 'vpcNews');
+            $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
+            $query->addSubquery($pathQuery, true /* required */);
+        }
+
 
         $hits = $index->find($query);
         echo "searched in ".(microtime(true)-$start)."s\n";

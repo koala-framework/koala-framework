@@ -142,8 +142,6 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
     public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
     {
-        $fieldName = $this->getData()->componentId;
-
         $html = '';
         foreach ($this->_getRow()->getContentParts() as $part) {
             if (is_string($part)) $html .= ' '.$part;
@@ -166,9 +164,13 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                 foreach ($m[1] as $text) {
                     $text = $this->_stripTags($text);
                     if ($text) {
-                        $field = Zend_Search_Lucene_Field::UnStored($fieldName.$tag, $text, 'utf-8');
-                        $field->boost = $boost;
-                        $doc->addField($field);
+                        if (!in_array('content'.$tag, $doc->getFieldNames())) {
+                            $field = Zend_Search_Lucene_Field::UnStored('content'.$tag, $text, 'utf-8');
+                            $field->boost = $boost;
+                            $doc->addField($field);
+                        } else {
+                            $doc->getField('content'.$tag)->value .= ' '.$text;
+                        }
                     }
                 }
             }
@@ -176,8 +178,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $html = $this->_stripTags($html);
         if ($html) {
-            $field = Zend_Search_Lucene_Field::UnStored($fieldName.'p', $html, 'utf-8');
-            $doc->addField($field);
+            $doc->getField('normalContent')->value .= ' '.$html;
         }
 
         return $doc;
