@@ -83,8 +83,7 @@ class Vps_Cache_Simple
     {
         static $ret;
         if (!isset($ret)) {
-            //$ret = Zend_Registry::get('config')->application->id.'-'.Vps_Setup::getConfigSection().'-';
-            $ret = 'vwpkw-'.Vps_Setup::getConfigSection().'-';
+            $ret = getcwd().'-'.Vps_Setup::getConfigSection().'-';
         }
         return $ret;
     }
