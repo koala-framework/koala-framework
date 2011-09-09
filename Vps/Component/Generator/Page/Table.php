@@ -4,6 +4,7 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
     protected $_idSeparator = '_';
     protected $_inherits = true;
     protected $_maxNameLength;
+
     protected function _init()
     {
         parent::_init();
