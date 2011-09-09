@@ -34,7 +34,7 @@ function p($src, $Type = 'LOG')
 {
     if (!Vps_Debug::isEnabled()) return;
     $isToDebug = false;
-    if ($Type != 'ECHO' && Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance()) {
+    if ($Type != 'ECHO' && /*Zend_Registry::get('config')->debug->firephp && */class_exists('FirePHP') && FirePHP::getInstance()) {
         if (is_object($src) && method_exists($src, 'toArray')) {
             $src = $src->toArray();
         } else if (is_object($src)) {

@@ -24,7 +24,7 @@ class Vps_Cache_Core extends Zend_Cache_Core
             }
         }
 
-        if ($ret && Vps_Registry::get('config')->debug->componentCache->checkComponentModification)
+        if ($ret && Vps_Config_Web::getValue('debug.componentCache.checkComponentModification'))
         {
             if (isset($ret['mtimeFiles'])) {
                 foreach ($ret['mtimeFiles'] as $f) {

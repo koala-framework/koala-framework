@@ -8,6 +8,14 @@ class Vps_Registry extends Zend_Registry
             $v = Vps_Setup::createDb();
             $this->offsetSet('db', $v);
             return $v;
+        } else if ($index == 'config' && !parent::offsetExists($index)) {
+            $v = Vps_Config_Web::getInstance(Vps_Setup::getConfigSection());
+            $this->offsetSet('config', $v);
+            return $v;
+        } else if ($index == 'configMtime' && !parent::offsetExists($index)) {
+            $v = Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection());
+            $this->offsetSet('configMtime', $v);
+            return $v;
         } else if ($index == 'dao' && !parent::offsetExists($index)) {
             $v = Vps_Setup::createDao();
             $this->offsetSet('dao', $v);
@@ -42,7 +50,7 @@ class Vps_Registry extends Zend_Registry
 
     public function offsetExists($index)
     {
-        if (in_array($index, array('db', 'dao', 'acl', 'userModel', 'trl', 'hlp'))) {
+        if (in_array($index, array('db', 'config', 'configMtime', 'dao', 'acl', 'userModel', 'trl', 'hlp'))) {
             return true;
         }
         return parent::offsetExists($index);

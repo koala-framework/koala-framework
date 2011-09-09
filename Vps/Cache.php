@@ -51,10 +51,6 @@ class Vps_Cache extends Zend_Cache
      */
     public static function getUniquePrefix()
     {
-        static $ret;
-        if (!isset($ret)) {
-            $ret = Zend_Registry::get('config')->application->id.'-'.Vps_Setup::getConfigSection().'-';
-        }
-        return $ret;
+        return Vps_Cache_Simple::getUniquePrefix();
     }
 }

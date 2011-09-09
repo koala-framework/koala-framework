@@ -191,7 +191,7 @@ class Vps_Component_Abstract
 
     public static function getSettingMtime()
     {
-        if (!Vps_Registry::get('config')->vpc->rootComponent) return 0;
+        if (!Vps_Config_Web::getValue('vpc.rootComponent')) return 0;
 
         $cacheId = 'settingsMtime';
         $ret = Vps_Cache_Simple::fetch($cacheId, $success);
