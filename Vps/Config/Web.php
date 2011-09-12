@@ -258,7 +258,11 @@ class Vps_Config_Web extends Vps_Config_Ini
         foreach (explode('.', $var) as $i) {
             $cfg = $cfg->$i;
         }
-        $ret = $cfg->toArray();
+        if ($cfg) {
+            $ret = $cfg->toArray();
+        } else {
+            $ret = array();
+        }
 
         Vps_Cache_Simple::add($cacheId, $ret);
 
