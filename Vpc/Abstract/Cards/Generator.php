@@ -59,14 +59,7 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
             $dbId = $parentData->dbId . $this->_idSeparator;
         }
         $dbId .= $componentKey;
-        if ($this->_getModel()->getProxyModel() instanceof Vps_Model_Db) {
-            //performance, avoid model overhead
-            $sql = "SELECT component FROM ".$this->_getModel()->getProxyModel()->getTableName()." WHERE component_id=?";
-            $component = Vps_Registry::get('db')->query($sql, $parentData->dbId)->fetchColumn();
-        } else {
-            $row = $this->_getModel()->getRow($parentData->dbId);
-            $component = $row ? $row->component : null;
-        }
+        $component = $this->_getModel()->fetchColumnByPrimaryId('component', $parentData->dbId);
         if (!$component) $component = key($this->getChildComponentClasses()); //sollte eigentlich nicht vorkommen
         return array(
             'componentId' => $componentId,

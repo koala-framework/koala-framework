@@ -1171,4 +1171,16 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         return $ret;
     }
+
+    public function fetchColumnByPrimaryId($column, $id)
+    {
+        $sql = "SELECT $column FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKey()."=?";
+        return Vps_Registry::get('db')->query($sql, $id)->fetchColumn();
+    }
+
+    public function fetchColumnsByPrimaryId(array $columns, $id)
+    {
+        $sql = "SELECT ".implode(',', $columns)." FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKey()."=?";
+        return Vps_Registry::get('db')->query($sql, $id)->fetchAssoc();
+    }
 }

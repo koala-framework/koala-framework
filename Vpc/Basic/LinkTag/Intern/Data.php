@@ -6,14 +6,7 @@ class Vpc_Basic_LinkTag_Intern_Data extends Vps_Component_Data
     protected function _getData()
     {
         $m = Vpc_Abstract::createModel($this->componentClass);
-        if ($m->getProxyModel() instanceof Vps_Model_Db) {
-            //performance, avoid model overhead
-            $sql = "SELECT target FROM ".$m->getProxyModel()->getTableName()." WHERE component_id=?";
-            $target = Vps_Registry::get('db')->query($sql, $this->dbId)->fetchColumn();
-        } else {
-            $row = $m->getRow($this->dbId);
-            $target = $row ? $row->target : false;
-        }
+        $target = $m->fetchColumnByPrimaryId('target', $this->dbId);
         if ($target) {
             $ret = null;
             $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
