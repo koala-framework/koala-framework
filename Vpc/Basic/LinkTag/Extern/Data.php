@@ -6,7 +6,7 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
     {
         if (!isset($this->_linkRow)) {
             $m = Vpc_Abstract::createOwnModel($this->componentClass);
-            $cols = array('target', 'open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'socllbars', 'resizable');
+            $cols = array('target', 'open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable');
             $this->_linkRow = $m->fetchColumnsByPrimaryId($cols, $this->dbId);
         }
         return $this->_linkRow;
