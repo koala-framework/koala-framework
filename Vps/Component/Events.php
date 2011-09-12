@@ -16,11 +16,10 @@ class Vps_Component_Events
     const EVENT_COMPONENT_MOVE = 'componentMove';
     const EVENT_COMPONENT_CLASS_CHANGE = 'componentClassChange';
 
-    const EVENT_PAGE_CHANGE = 'pageChange';
-    const EVENT_PAGE_CHANGE_POS = 'pageChangePos';
+    const EVENT_PAGE_PARENT_CHANGE = 'pageParentChange';
     const EVENT_PAGE_MOVE = 'pageMove';
     const EVENT_PAGE_CLASS_CHANGE = 'pageClassChange';
-    const EVENT_PAGE_DELETE = 'pageDelete';
+    const EVENT_PAGE_REMOVE = 'pageRemove';
     const EVENT_PAGE_ADD = 'pageAdd';
 
     protected $_config;
