@@ -28,14 +28,7 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
         $ret['box'] = $this->getGeneratorKey();
 
         $id = $parentData->dbId.'-'.$this->getGeneratorKey();
-        if ($this->_getModel() instanceof Vps_Model_Db) {
-            //performance, avoid model overhead
-            $sql = "SELECT component FROM ".$this->_getModel()->getTableName()." WHERE component_id=?";
-            $component = Vps_Registry::get('db')->query($sql, $id)->fetchColumn();
-        } else {
-            $row = $this->_getModel()->getRow($id);
-            $component = $row ? $row->component : null;
-        }
+        $component = $this->_getModel()->fetchColumnByPrimaryId('component', $id);
         if (!$component) {
             $cmps = $this->_settings['component'];
             $ret['componentClass'] = array_shift($cmps);

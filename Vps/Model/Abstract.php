@@ -839,4 +839,22 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             $i->clearRows();
         }
     }
+
+    public function fetchColumnByPrimaryId($column, $id)
+    {
+        $row = $this->getRow($id);
+        if (!$row) return null;
+        return $row->$column;
+    }
+
+    public function fetchColumnsByPrimaryId(array $columns, $id)
+    {
+        $row = $this->getRow($id);
+        if (!$row) return array();
+        $ret = array();
+        foreach ($columns as $c) {
+            $ret[$c] = $row->$c;
+        }
+        return $ret;
+    }
 }
