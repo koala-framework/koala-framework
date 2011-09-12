@@ -95,8 +95,6 @@ class Vps_Component_ModelObserver
         if ($row) {
             if ($function == 'delete') {
                 $event = Vps_Component_Events::EVENT_ROW_DELETE;
-            } else if ($function == 'add') {
-                $event = Vps_Component_Events::EVENT_ROW_ADD;
             } else if ($function == 'update') {
                 $event = Vps_Component_Events::EVENT_ROW_UPDATE;
             } else if ($function == 'insert') {

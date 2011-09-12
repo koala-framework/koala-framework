@@ -2,7 +2,6 @@
 class Vps_Component_Events
 {
     const EVENT_ROW_DELETE = 'rowDelete';
-    const EVENT_ROW_ADD = 'rowAdd';
     const EVENT_ROW_UPDATE = 'rowUpdate';
     const EVENT_ROW_INSERT = 'rowInsert';
     const EVENT_ROW_UPDATES_FINISHED = 'rowUpdatesFinished';
@@ -11,6 +10,11 @@ class Vps_Component_Events
 
     const EVENT_COMPONENT_CONTENT_CHANGE = 'componentContentChange';
     const EVENT_COMPONENT_HAS_CONTENT_CHANGE = 'componentHasContentChange';
+
+    const EVENT_COMPONENT_REMOVE = 'componentRemove';
+    const EVENT_COMPONENT_ADD = 'componentAdd';
+    const EVENT_COMPONENT_MOVE = 'componentMove';
+    const EVENT_COMPONENT_CLASS_CHANGE = 'componentClassChange';
 
     const EVENT_PAGE_CHANGE = 'pageChange';
     const EVENT_PAGE_CHANGE_POS = 'pageChangePos';
@@ -37,7 +41,7 @@ class Vps_Component_Events
     /**
      * @return $this
      */
-    private static final function getInstance($class, $config = array())
+    public static final function getInstance($class, $config = array())
     {
         $id = md5(serialize(array($class, $config)));
         static $instances = array();
@@ -80,7 +84,12 @@ class Vps_Component_Events
             $listeners = array();
             foreach ($eventObjects as $eventObject) {
                 foreach ($eventObject->getListeners() as $listener) {
-                    // todo: make it failproof
+                    if (!is_array($listener) ||
+                        !isset($listener['event']) ||
+                        !isset($listener['callback'])
+                    ) {
+                        throw new Vps_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
+                    }
                     $event = $listener['event'];
                     $class = isset($listener['class']) ? $listener['class'] : 'all';
                     $listeners[$event][$class][] = array(
@@ -98,7 +107,7 @@ class Vps_Component_Events
 
     public function getListeners()
     {
-        return array();
+        return array(); // class, event, callback
     }
 
     public static function fireEvent($event, $class = null, $data = null)
