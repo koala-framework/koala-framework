@@ -9,7 +9,7 @@ class Vpc_Root_CategoryModel extends Vps_Model_Data_Abstract
         if (isset($config['pageCategories'])) {
             $this->_pageCategories = $config['pageCategories'];
         } else {
-            $this->_pageCategories = Vps_Registry::get('config')->vpc->pageCategories;
+            $this->_pageCategories = Vps_Config_Web::getValueArray('vpc.pageCategories');
         }
         parent::__construct($config);
     }

@@ -286,7 +286,11 @@ class Vps_Config_Web extends Vps_Config_Ini
         foreach (explode('.', $var) as $i) {
             $cfg = $cfg->$i;
         }
-        $ret = $cfg->toArray();
+        if ($cfg) {
+            $ret = $cfg->toArray();
+        } else {
+            $ret = array();
+        }
 
         Vps_Cache_Simple::add($cacheId, $ret);
 
@@ -315,6 +319,15 @@ class Vps_Config_Web extends Vps_Config_Ini
         Vps_Cache_Simple::add($cacheId, $ret);
 
         return $ret;
+    }
+
+    /**
+     * Delete the config cache for one variable. Needed for some tests.
+     */
+    public static function deleteValueCache($var)
+    {
+        Vps_Cache_Simple::delete('config-'.$var);
+        Vps_Cache_Simple::delete('configAr-'.$var);
     }
 
     public static function clearValueCache()
