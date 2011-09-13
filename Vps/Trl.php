@@ -138,7 +138,7 @@ class Vps_Trl
     {
 
         if (!isset($this->_languages)) {
-            $langauges = Vps_Config_Web::getValue('languages');
+            $langauges = Vps_Config::getValue('languages');
             if ($langauges) {
                 $this->_languages = array_values($langauges->toArray());
             } else {
@@ -180,7 +180,7 @@ class Vps_Trl
     public function getWebCodeLanguage()
     {
         if (!$this->_webCodeLanguage) {
-            $this->_webCodeLanguage = Vps_Config_Web::getValue('webCodeLanguage');
+            $this->_webCodeLanguage = Vps_Config::getValue('webCodeLanguage');
         }
         return $this->_webCodeLanguage;
     }

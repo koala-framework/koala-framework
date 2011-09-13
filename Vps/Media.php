@@ -118,7 +118,7 @@ class Vps_Media
     {
         $cacheId = self::createCacheId($class, $id, $type);
 
-        if (!Vps_Config_Web::getValue('debug.mediaCache') || !($output = self::getOutputCache()->load($cacheId))) {
+        if (!Vps_Config::getValue('debug.mediaCache') || !($output = self::getOutputCache()->load($cacheId))) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Vps_Media_Output_Interface')) {
                 // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
