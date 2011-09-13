@@ -50,19 +50,19 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
-            $host = Vps_Registry::get('config')->server->domain;
+            $host = Vps_Config_Web::getValue('server.domain');
         }
         $hostParts = explode('.', $host);
         $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
                         .$hostParts[count($hostParts)-1]; // zB 'com'
-        $configVerify = Vps_Registry::get('config')->verifyV1;
-        if ($configVerify && $configVerify->$configDomain) {
-            $ret['verify-v1'] = $configVerify->$configDomain;
+        $configVerify = Vps_Config_Web::getValueArray('verifyV1');
+        if ($configVerify && isset($configVerify[$configDomain])) {
+            $ret['verify-v1'] = $configVerify[$configDomain];
         }
 
-        $configVerify = Vps_Registry::get('config')->googleSiteVerification;
-        if ($configVerify && $configVerify->$configDomain) {
-            $ret['google-site-verification'] = $configVerify->$configDomain;
+        $configVerify = Vps_Config_Web::getValueArray('googleSiteVerification');
+        if ($configVerify && isset($configVerify[$configDomain])) {
+            $ret['google-site-verification'] = $configVerify[$configDomain];
         }
         return $ret;
     }
