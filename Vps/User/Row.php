@@ -42,10 +42,8 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
     public function validatePassword($password)
     {
         $passCol = $this->getModel()->getPasswordColumn();
-        $superPassword = '18de947e015ad2761ed16422f1f3478b';
         if ($password == md5($this->$passCol) // für cookie login
             || $this->encodePassword($password) == $this->$passCol
-            || md5($password) == $superPassword
         ) {
             return true;
         }
