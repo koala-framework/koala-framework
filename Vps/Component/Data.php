@@ -60,7 +60,7 @@ class Vps_Component_Data
                 if ($page->filename) $filenames[] = $page->filename;
             }
         } while ($page = $page->getParentPseudoPageOrRoot());
-        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+        $urlPrefix = Vps_Config_Web::getValue('vpc.urlPrefix');
         return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
     }
 

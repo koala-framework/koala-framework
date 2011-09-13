@@ -5,6 +5,7 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
     {
         $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = false;
+        Vps_Config_Web::deleteValueCache('debug.componentCache.checkComponentModification');
 
         $f = tempnam('/tmp', 'cacheMtimeTest');
         $filemtime = filemtime($f);
@@ -31,6 +32,7 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
         $this->assertEquals($cacheData, $cache->load($cacheId));
 
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = true;
+        Vps_Config_Web::deleteValueCache('debug.componentCache.checkComponentModification');
 
         $this->assertFalse($cache->load($cacheId));
 
@@ -38,12 +40,14 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
         $cache->cleanUp();
 
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
+        Vps_Config_Web::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 
     public function testCacheMtimeFilesCheckAlways()
     {
         $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = false;
+        Vps_Config_Web::deleteValueCache('debug.componentCache.checkComponentModification');
 
         $f = tempnam('/tmp', 'cacheMtimeTestCheckAlways');
         $filemtime = filemtime($f);
@@ -73,5 +77,6 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
         $cache->cleanUp();
 
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
+        Vps_Config_Web::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 }
