@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?>">
     <span class="imprintHeadline"><? if (!$this->row->hide_webdesign) { echo trlVps('Webdesign')." / "; } echo trlVps('Programming');?></span>
     <p>
-        <a href="http://www.vivid-planet.com/" title="Internet-Agentur Salzburg" rel="popup_blank"><img height="20" alt="Internet-Agentur Salzburg Logo" src="/assets/vps/Vpc/Advanced/Imprint/VividPlanet/vividplanet.png" width="87" /></a><br/>
+        <a href="http://www.vivid-planet.com/" title="Internet-Agentur Salzburg" rel="popup_blank"><img height="9" alt="Internet-Agentur Salzburg Logo" src="/assets/vps/Vpc/Advanced/Imprint/VividPlanet/vividplanet.png" width="85" /></a><br/>
         <?=trlVps('Vivid Planet Software GmbH');?><br/>
         <a href="http://www.vivid-planet.com/" rel="popup_blank" title="Internet-Agentur Salzburg"><?=trlVps('Internet-Agentur Salzburg');?></a><br/>
         <?=trlVps('Pfongauerstraße 67');?><br/>
