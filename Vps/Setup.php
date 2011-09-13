@@ -105,6 +105,7 @@ class Vps_Setup
                 VPS_PATH . '/config.ini'
             );
             if (file_exists('application/vps_branch')) $masterFiles[] = 'application/vps_branch';
+            require_once 'Vps/Config/Web.php';
             $mtime = Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection());
             foreach ($masterFiles as $f) {
                 if (filemtime($f) > $mtime) {
