@@ -266,31 +266,16 @@ class Vps_Setup
             && isset($_SERVER['REDIRECT_URL'])
         ) {
             $ignore = false;
-<<<<<<< HEAD
-            if ($config->preLoginIgnore) {
-                foreach ($config->preLoginIgnore as $i) {
-                    if (substr($_SERVER['REDIRECT_URL'], 0, strlen($i)) == $i) {
-                        $ignore = true;
-                        break;
-                    }
-                }
-            }
-            if ($config->preLoginIgnoreIp) {
-                foreach ($config->preLoginIgnoreIp as $i) {
-                    if ($_SERVER['REMOTE_ADDR'] == $i) $ignore = true;
-                }
-=======
-            foreach (Vps_Config_Web::getValue('preLoginIgnore') as $i) {
+            foreach (Vps_Config_Web::getValueArray('preLoginIgnore') as $i) {
                 if (substr($_SERVER['REDIRECT_URL'], 0, strlen($i)) == $i) {
                     $ignore = true;
                     break;
                 }
             }
-            foreach (Vps_Config_Web::getValue('preLoginIgnoreIp') as $i) {
+            foreach (Vps_Config_Web::getValueArray('preLoginIgnoreIp') as $i) {
                 if ($_SERVER['REMOTE_ADDR'] == $i) $ignore = true;
->>>>>>> 2.2
             }
-            
+
             if (!$ignore && (empty($_SERVER['PHP_AUTH_USER'])
                              || empty($_SERVER['PHP_AUTH_PW'])
                              || $_SERVER['PHP_AUTH_USER']!=Vps_Config_Web::getValue('preLoginUser')
