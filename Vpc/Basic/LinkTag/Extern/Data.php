@@ -7,7 +7,7 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
         if (!isset($this->_linkRow)) {
             $m = Vpc_Abstract::createOwnModel($this->componentClass);
             $cols = array('target', 'open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable');
-            $this->_linkRow = $m->fetchColumnsByPrimaryId($cols, $this->dbId);
+            $this->_linkRow = (object)$m->fetchColumnsByPrimaryId($cols, $this->dbId);
         }
         return $this->_linkRow;
     }
@@ -15,7 +15,7 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
     {
         if ($var == 'url') {
             $row = $this->_getLinkRow();
-            if (!$row) return '';
+            if (!isset($row->target) || !$row->target) return '';
             return $row->target;
         } else if ($var == 'rel') {
             if (!Vpc_Abstract::getSetting($this->componentClass, 'hasPopup')) {
@@ -28,7 +28,7 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
             }
             $ret = '';
             $row = $this->_getLinkRow();
-            if (!$row) return '';
+            if (!isset($row->open_type) || !$row->open_type) return '';
             if ($row->open_type == 'popup') {
                 $pop = array();
                 if ($row->width) $pop[] = 'width='.$row->width;
