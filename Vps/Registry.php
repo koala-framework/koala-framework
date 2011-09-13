@@ -9,6 +9,7 @@ class Vps_Registry extends Zend_Registry
             $this->offsetSet('db', $v);
             return $v;
         } else if ($index == 'config' && !parent::offsetExists($index)) {
+            require_once 'Vps/Config/Web.php';
             $v = Vps_Config_Web::getInstance(Vps_Setup::getConfigSection());
             $this->offsetSet('config', $v);
             return $v;
