@@ -20,7 +20,7 @@ class Vps_View_Helper_Assets
         }
         foreach ($this->_dep->getAssetUrls($type, 'printcss', $section, $rootComponent, $language) as $file) {
             $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($file)."\" ";
-            if (!Vps_Config_Web::getValue('debug.assets.usePrintCssForAllMedia')) {
+            if (!Vps_Config::getValue('debug.assets.usePrintCssForAllMedia')) {
                 $ret .= "media=\"print\" ";
             }
             $ret .= "/>\n";

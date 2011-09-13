@@ -24,12 +24,12 @@ class Vpc_Root_Abstract extends Vpc_Abstract
 
     public function formatPath($parsedUrl)
     {
-        $b = Vps_Config_Web::getValue('server.domain') == $parsedUrl['host'];
+        $b = Vps_Config::getValue('server.domain') == $parsedUrl['host'];
         if (!$b && isset($parsedUrl['port'])) {
-            $b = Vps_Config_Web::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port'];
+            $b = Vps_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port'];
         }
         if (!$b) {
-            $p =  Vps_Config_Web::getValue('server.noRedirectPattern');
+            $p =  Vps_Config::getValue('server.noRedirectPattern');
             if (!$p) return null;
             if (!preg_match('/'.$p.'/', $parsedUrl['host'])) {
                 return null;

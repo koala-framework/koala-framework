@@ -19,7 +19,7 @@ class Vps_Assets_Dependencies
         if ($this->_config) {
             $this->_path = $this->_config->path->toArray();
         } else {
-            $this->_path = Vps_Config_Web::getValueArray('path');
+            $this->_path = Vps_Config::getValueArray('path');
         }
     }
 
@@ -35,7 +35,7 @@ class Vps_Assets_Dependencies
             if ($this->_config) {
                 $assets = $this->_config->assets;
             } else {
-                $assets = Vps_Config_Web::getValueArray('assets');
+                $assets = Vps_Config::getValueArray('assets');
             }
             if (!isset($assets['Admin'])) {
                 //für tests wenn keine Admin da, erste aus config nehmen
@@ -64,8 +64,8 @@ class Vps_Assets_Dependencies
             $menu = $this->_config->debug->menu;
             $assets = $this->_config->debug->assets;
         } else {
-            $menu = Vps_Config_Web::getValue('debug.menu');
-            $assets = Vps_Config_Web::getValueArray('debug.assets');
+            $menu = Vps_Config::getValue('debug.menu');
+            $assets = Vps_Config::getValueArray('debug.assets');
         }
         if ($menu) {
             $session = new Zend_Session_Namespace('debug');
@@ -125,7 +125,7 @@ class Vps_Assets_Dependencies
                 if ($this->_config) {
                     $allAssets = $this->_config->assets->toArray();
                 } else {
-                    $allAssets = Vps_Config_Web::getValueArray('assets');
+                    $allAssets = Vps_Config::getValueArray('assets');
                 }
                 if (!isset($allAssets[$assetsType])) {
                     if (strpos($assetsType, ':')) {
