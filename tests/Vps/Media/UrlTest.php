@@ -80,6 +80,8 @@ class Vps_Media_UrlTest extends Vpc_TestAbstract
     {
         $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = true;
+        Vps_Config_Web::deleteValueCache('debug.componentCache.checkComponentModification');
+
         Vps_Media_TestMediaOutputClass::$called = 0;
 
         $f = tempnam('/tmp', 'outputTest');
@@ -112,5 +114,6 @@ class Vps_Media_UrlTest extends Vpc_TestAbstract
         $this->assertEquals(2, Vps_Media_TestMediaOutputClass::$called);
 
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
+        Vps_Config_Web::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 }

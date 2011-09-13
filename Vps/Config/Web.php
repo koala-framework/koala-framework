@@ -293,6 +293,15 @@ class Vps_Config_Web extends Vps_Config_Ini
         return $ret;
     }
 
+    /**
+     * Delete the config cache for one variable. Needed for some tests.
+     */
+    public static function deleteValueCache($var)
+    {
+        Vps_Cache_Simple::delete('config-'.$var);
+        Vps_Cache_Simple::delete('configAr-'.$var);
+    }
+
     public static function clearValueCache()
     {
         Vps_Cache_Simple::clear('config-');
