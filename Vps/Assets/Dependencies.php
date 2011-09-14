@@ -33,7 +33,7 @@ class Vps_Assets_Dependencies
             $ret = 0;
             $assetsType = 'Admin';
             if ($this->_config) {
-                $assets = $this->_config->assets;
+                $assets = $this->_config->assets->toArray();
             } else {
                 $assets = Vps_Config::getValueArray('assets');
             }
@@ -62,7 +62,7 @@ class Vps_Assets_Dependencies
         Vps_Benchmark::count('getAssetUrls');
         if ($this->_config) {
             $menu = $this->_config->debug->menu;
-            $assets = $this->_config->debug->assets;
+            $assets = $this->_config->debug->assets->toArray();
         } else {
             $menu = Vps_Config::getValue('debug.menu');
             $assets = Vps_Config::getValueArray('debug.assets');
