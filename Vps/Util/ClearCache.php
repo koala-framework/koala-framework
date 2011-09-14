@@ -73,9 +73,7 @@ class Vps_Util_ClearCache
         if (class_exists('Memcache')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
         if (extension_loaded('apc')) {
-            if (!ini_get('apc.stat')) {
-                $types[] = 'optcode';
-            }
+            $types[] = 'optcode';
         }
         $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
