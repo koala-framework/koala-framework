@@ -11,7 +11,8 @@ class Vps_Config_Web extends Vps_Config_Ini
             $configClass = Vps_Setup::$configClass;
             require_once str_replace('_', '/', $configClass).'.php';
             if (extension_loaded('apc')) {
-                $apcCacheId = $cacheId.getcwd();
+                require_once 'Vps/Cache/Simple.php';
+                $apcCacheId = Vps_Cache_Simple::getUniquePrefix().'-'.$cacheId;
                 $ret = apc_fetch($apcCacheId);
                 if ($ret && $ret->debug->componentCache->checkComponentModification) {
                     $masterFiles = array(
