@@ -47,12 +47,11 @@ class Vpc_Advanced_GoogleMapView_Test extends Vpc_TestAbstract
 
     public function testHtml()
     {
-        $this->markTestIncomplete();
         $html = $this->_root->getComponentById(2002)->render(false);
-        $this->assertContains('<div class="webStandard vpcAdvancedGoogleMapView vpcAdvancedGoogleMapViewTestComponent">', $html);
+        $this->assertContains('<div class="webStandard webForm vpcAdvancedGoogleMapView vpcAdvancedGoogleMapViewTestComponent">', $html);
 
         $this->assertEquals(1, preg_match('#value="([^"]+)"#', $html, $m));
-        $options = Zend_Json::decode((str_replace("'", '"', $m[1])));
+        $options = Zend_Json::decode((str_replace("'", '"', htmlspecialchars_decode($m[1]))));
         $this->assertNotNull($options);
         $this->assertEquals(13, $options['longitude']);
         $this->assertEquals(1, $options['routing']);

@@ -79,7 +79,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             }
             static $showInvisible;
             if (is_null($showInvisible)) {
-                $showInvisible = Vps_Registry::get('config')->showInvisible;
+                $showInvisible = Vps_Config::getValue('showInvisible');
             }
             if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
             } else if (!$showInvisible) {
@@ -279,7 +279,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
-        $data['visible'] = $page['visible'];
+        if (!$page['visible']) {
+            $data['invisible'] = true;
+        }
         return $data;
     }
     protected function _getIdFromRow($id)

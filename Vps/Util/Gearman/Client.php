@@ -10,7 +10,11 @@ class Vps_Util_Gearman_Client extends GearmanClient
             foreach ($c->jobServers as $k=>$server) {
                 if ($server) {
                     Vps_Util_Gearman_AdminClient::checkConnection($server);
-                    $i->addServer($server->host, $server->port);
+                    if ($server->tunnelUser) {
+                        $i->addServer('localhost', 4730);
+                    } else {
+                        $i->addServer($server->host, $server->port);
+                    }
                 }
             }
         }

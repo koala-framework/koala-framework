@@ -212,7 +212,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
         static $showInvisible;
         if (is_null($showInvisible)) {
-            $showInvisible = Vps_Registry::get('config')->showInvisible;
+            $showInvisible = Vps_Config::getValue('showInvisible');
         }
         if (!$select->getPart(Vps_Component_Select::IGNORE_VISIBLE)
             && $this->_getModel()->hasColumn('visible') && !$showInvisible) {
@@ -275,6 +275,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             'isPage' => false,
             'isPseudoPage' => false
         );
+        if ($this->_getModel()->hasColumn('visible') && !$row->visible) {
+            $data['invisible'] = true;
+        }
         return $data;
     }
 

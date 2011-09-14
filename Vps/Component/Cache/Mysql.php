@@ -93,7 +93,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     protected static function _getCacheId($componentId, $type, $value)
     {
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix() . '-cc-';
+        if (!isset($prefix)) $prefix = Vps_Cache_Simple::getUniquePrefix() . '-cc-';
         return $prefix . "$componentId/$type/$value";
     }
 

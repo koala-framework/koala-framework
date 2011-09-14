@@ -25,12 +25,14 @@ Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
     },
 
     onPastePlain: function() {
+        var bookmark = this.cmp.tinymceEditor.selection.getBookmark();
         Ext.Msg.show({
             title : trlVps('Insert Plain Text'),
             msg : '',
             buttons: Ext.Msg.OKCANCEL,
             fn: function(btn, text) {
                 if (btn == 'ok') {
+                    this.cmp.tinymceEditor.selection.moveToBookmark(bookmark);
                     text = text.replace(/\r/g, '');
                     text = text.replace(/\n/g, '</p>\n<p>');
                     text = String.format('<p>{0}</p>', text);

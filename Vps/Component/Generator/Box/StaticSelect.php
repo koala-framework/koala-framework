@@ -27,12 +27,13 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
         );
         $ret['box'] = $this->getGeneratorKey();
 
-        $row = $this->_getModel()->getRow($parentData->dbId.'-'.$this->getGeneratorKey());
-        if (!$row || !$row->component) {
+        $id = $parentData->dbId.'-'.$this->getGeneratorKey();
+        $component = $this->_getModel()->fetchColumnByPrimaryId('component', $id);
+        if (!$component) {
             $cmps = $this->_settings['component'];
             $ret['componentClass'] = array_shift($cmps);
         } else {
-            $ret['componentClass'] = $this->_settings['component'][$row->component];
+            $ret['componentClass'] = $this->_settings['component'][$component];
         }
         return $ret;
     }
