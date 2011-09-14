@@ -1,9 +1,10 @@
 <?php
 class Vps_Component_Abstract_Events extends Vps_Component_Events
 {
-    protected function _getComponentsByDbIdOwnClass($dbId)
+    protected $_class;
+
+    protected function _init()
     {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentsByDbId($dbId, array('componentClass'=>$this->_class));
+        $this->_class = $this->_config['componentClass'];
     }
 }

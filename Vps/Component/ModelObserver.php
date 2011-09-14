@@ -94,20 +94,15 @@ class Vps_Component_ModelObserver
         $data = null;
         if ($row) {
             if ($function == 'delete') {
-                $event = Vps_Component_Events::EVENT_ROW_DELETE;
+                $event = 'Vps_Component_Event_Row_Deleted';
             } else if ($function == 'update') {
-                $event = Vps_Component_Events::EVENT_ROW_UPDATE;
+                $event = 'Vps_Component_Event_Row_Updated';
             } else if ($function == 'insert') {
-                $event = Vps_Component_Events::EVENT_ROW_INSERT;
+                $event = 'Vps_Component_Event_Row_Inserted';
             }
-            $class = get_class($row->getModel());
-            $data = $row;
+            if ($event) Vps_Component_Events::fireEvent(new $event($row));
         } else {
-            $event = Vps_Component_Events::EVENT_MODEL_UPDATE;
-            $class = get_class($model);
-        }
-        if ($event) {
-            Vps_Component_Events::fireEvent($event, $class, $data);
+            Vps_Component_Events::fireEvent(new Vps_Component_Event_Model_Updated($model));
         }
     }
 /*
@@ -162,7 +157,7 @@ class Vps_Component_ModelObserver
 */
     public function process()
     {
-        Vps_Component_Events::fireEvent(Vps_Component_Events::EVENT_ROW_UPDATES_FINISHED);
+        Vps_Component_Events::fireEvent(new Vps_Component_Event_Row_UpdatesFinished());
 
         // Suchindex
         if (class_exists('Vps_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein

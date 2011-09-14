@@ -1,0 +1,4 @@
+<?php
+class Vps_Component_Event_Component_HasContendChanged extends Vps_Component_Event_Component_Abstract
+{
+}
