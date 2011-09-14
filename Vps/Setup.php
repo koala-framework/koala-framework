@@ -99,6 +99,7 @@ class Vps_Setup
         self::$configClass = $configClass;
 
         require_once 'Vps/Config.php';
+        require_once 'Vps/Config/Web.php';
 
         if (Vps_Config::getValue('debug.componentCache.checkComponentModification')) {
             $masterFiles = array(
@@ -188,7 +189,7 @@ class Vps_Setup
             //$config->debug->benchmark = false;
         }
 
-        if (!Vps_Config_Web::getValue('server.domain') && isset($_SERVER['HTTP_HOST'])) {
+        if (!Vps_Config::getValue('server.domain') && isset($_SERVER['HTTP_HOST'])) {
             //Now this is kind of a hack. We want to make setting server.domain optional for easy setup.
             //But we need the domain at least for clearing the apc cache.
             //(don't use this file for more advanced stuff)
@@ -331,7 +332,7 @@ class Vps_Setup
 
     public static function getConfigSection()
     {
-        return Vps_Registry::get('config')->getSection();
+        return call_user_func(array(Vps_Setup::$configClass, 'getConfigSection'));
     }
 
     public static function dispatchVpc()
