@@ -138,9 +138,9 @@ class Vps_Trl
     {
 
         if (!isset($this->_languages)) {
-            $langauges = Vps_Config::getValue('languages');
+            $langauges = Vps_Config::getValueArray('languages');
             if ($langauges) {
-                $this->_languages = array_values($langauges->toArray());
+                $this->_languages = array_values($langauges);
             } else {
                 $this->_languages = array($this->getWebCodeLanguage());
             }
