@@ -4,7 +4,7 @@ class Vps_View_Helper_DebugData
     public function debugData()
     {
         $ret = '';
-        $config = Vps_Config_Web::getValueArray('debug');
+        $config = Vps_Config::getValueArray('debug');
         if ($config['menu'] || !$config['error']['log']) {
             $indent = str_repeat(' ', 8);
             $ret .= "<script type=\"text/javascript\">\n";

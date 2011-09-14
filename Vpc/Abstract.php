@@ -276,7 +276,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     protected function _callProcessInput()
     {
-        $showInvisible = Vps_Config_Web::getValue('showInvisible');
+        $showInvisible = Vps_Config::getValue('showInvisible');
 
         $cacheId = 'procI-'.$this->getData()->getPageOrRoot()->componentId;
         $success = false;

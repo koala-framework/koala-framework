@@ -12,7 +12,7 @@ abstract class Vps_Component_Renderer_Abstract
     public function renderComponent($component)
     {
         if (is_null($this->_enableCache)) {
-            $this->_enableCache = !Vps_Config_Web::getValue('debug.componentCache.disable');
+            $this->_enableCache = !Vps_Config::getValue('debug.componentCache.disable');
         }
         $this->_renderComponent = $component;
         $content = $this->_renderComponentContent($component);

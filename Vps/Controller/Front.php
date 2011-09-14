@@ -58,7 +58,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
     public static function getInstance()
     {
         if (null === self::$_instance) {
-            $class = Vps_Config_Web::getValue('frontControllerClass');
+            $class = Vps_Config::getValue('frontControllerClass');
             if (!$class) {
                 $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
                 if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
