@@ -7,25 +7,25 @@ class Vps_Component_Events_Table_Events extends Vps_Component_Abstract_Events
     {
         $ret = parent::getListeners();
         $ret[] = array(
-            'event' => Vps_Component_Events::EVENT_COMPONENT_ADD,
+            'event' => 'Vps_Component_Event_Component_Added',
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => Vps_Component_Events::EVENT_COMPONENT_REMOVE,
+            'event' => 'Vps_Component_Event_Component_Removed',
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => Vps_Component_Events::EVENT_COMPONENT_MOVE,
+            'event' => 'Vps_Component_Event_Component_Moved',
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => Vps_Component_Events::EVENT_COMPONENT_CLASS_CHANGE,
+            'event' => 'Vps_Component_Event_Component_ClassChanged',
             'callback' => 'onComponentChange'
         );
         return $ret;
     }
 
-    public function onComponentChange($event, $row)
+    public function onComponentChange($event)
     {
         $this->countCalled++;
     }

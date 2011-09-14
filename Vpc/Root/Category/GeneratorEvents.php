@@ -6,19 +6,17 @@ class Vpc_Root_Category_GeneratorEvents extends Vps_Component_Generator_Page_Eve
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => get_class($this->_getGenerator()->getModel()),
-            'event' => Vps_Component_Events::EVENT_ROW_UPDATE,
+            'event' => 'Vps_Component_Event_Row_Updated',
             'callback' => 'onPageRowUpdate'
         );
         return $ret;
     }
 
-    public function onPageRowUpdate($event, $row)
+    public function onPageRowUpdate(Vps_Component_Event_Row_Updated $event)
     {
-        if (in_array('parent_id', $row->getDirtyColumns())) {
+        if (in_array('parent_id', $event->row->getDirtyColumns())) {
             $this->fireEvent(
-                Vps_Component_Events::EVENT_PAGE_PARENT_CHANGE,
-                $this->_config['componentClass'],
-                $row
+                new Vps_Component_Event_Page_ParentChanged($this->_class, $event->row)
             );
         }
     }

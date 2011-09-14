@@ -6,27 +6,26 @@ class Vps_Component_Generator_Page_Events_Table extends Vps_Component_Generator_
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => $this->_config['componentClass'],
-            'event' => Vps_Component_Events::EVENT_COMPONENT_ADD,
+            'event' => 'Vps_Component_Event_Component_Added',
             'callback' => 'onComponentEvent'
         );
         return $ret;
     }
 
-    public function onComponentEvent($event, $row)
+    public function onComponentEvent(Vps_Component_Event_Component_Abstract $event)
     {
-        if ($event == Vps_Component_Events::EVENT_COMPONENT_ADD) {
-            $event = Vps_Component_Events::EVENT_PAGE_ADD;
-        } else if ($event == Vps_Component_Events::EVENT_COMPONENT_REMOVE) {
-            $event = Vps_Component_Events::EVENT_PAGE_REMOVE;
-        } else if ($event == Vps_Component_Events::EVENT_COMPONENT_CLASS_CHANGE) {
-            $event = Vps_Component_Events::EVENT_PAGE_CLASS_CHANGE;
-        } else if ($event == Vps_Component_Events::EVENT_COMPONENT_MOVE) {
-            $event = Vps_Component_Events::EVENT_PAGE_MOVE;
-        } else {
-            $event = null;
+        $eventsClass = null;
+        if ($event instanceof Vps_Component_Event_Component_Added) {
+            $eventsClass = 'Vps_Component_Event_Page_Added';
+        } else if ($event instanceof Vps_Component_Event_Component_Removed) {
+            $eventsClass = 'Vps_Component_Event_Page_Removed';
+        } else if ($event instanceof Vps_Component_Event_Component_ClassChanged) {
+            $eventsClass = 'Vps_Component_Event_Page_ClassChanged';
+        } else if ($event instanceof Vps_Component_Event_Component_Moved) {
+            $eventsClass = 'Vps_Component_Event_Page_Moved';
         }
-        if ($event) {
-            $this->fireEvent($event, $this->_config['componentClass'], $row);
+        if ($eventsClass) {
+            $this->fireEvent(new $eventsClass($this->_class, $event->row));
         }
     }
 }

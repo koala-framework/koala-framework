@@ -1,27 +1,6 @@
 <?php
 class Vps_Component_Events
 {
-    const EVENT_ROW_DELETE = 'rowDelete';
-    const EVENT_ROW_UPDATE = 'rowUpdate';
-    const EVENT_ROW_INSERT = 'rowInsert';
-    const EVENT_ROW_UPDATES_FINISHED = 'rowUpdatesFinished';
-
-    const EVENT_MODEL_UPDATE = 'modelUpdate';
-
-    const EVENT_COMPONENT_CONTENT_CHANGE = 'componentContentChange';
-    const EVENT_COMPONENT_HAS_CONTENT_CHANGE = 'componentHasContentChange';
-
-    const EVENT_COMPONENT_REMOVE = 'componentRemove';
-    const EVENT_COMPONENT_ADD = 'componentAdd';
-    const EVENT_COMPONENT_MOVE = 'componentMove';
-    const EVENT_COMPONENT_CLASS_CHANGE = 'componentClassChange';
-
-    const EVENT_PAGE_PARENT_CHANGE = 'pageParentChange';
-    const EVENT_PAGE_MOVE = 'pageMove';
-    const EVENT_PAGE_CLASS_CHANGE = 'pageClassChange';
-    const EVENT_PAGE_REMOVE = 'pageRemove';
-    const EVENT_PAGE_ADD = 'pageAdd';
-
     protected $_config;
 
     protected function __construct($config = array())
@@ -90,6 +69,7 @@ class Vps_Component_Events
                         throw new Vps_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
                     }
                     $event = $listener['event'];
+                    if (!class_exists($event)) throw new Vps_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
                     $class = isset($listener['class']) ? $listener['class'] : 'all';
                     $listeners[$event][$class][] = array(
                         'class' => get_class($eventObject),
@@ -106,18 +86,20 @@ class Vps_Component_Events
 
     public function getListeners()
     {
-        return array(); // class, event, callback
+        return array();
     }
 
-    public static function fireEvent($event, $class = null, $data = null)
+    public static function fireEvent($event)
     {
         $listeners = self::getAllListeners();
+        $class = $event->class;
+        $eventClass = get_class($event);
         $callbacks = array();
-        if ($class && isset($listeners[$event][$class])) {
-            $callbacks = $listeners[$event][$class];
+        if ($class && isset($listeners[$eventClass][$class])) {
+            $callbacks = $listeners[$eventClass][$class];
         }
-        if (isset($listeners[$event]['all'])) {
-            $callbacks = array_merge($callbacks, $listeners[$event]['all']);
+        if (isset($listeners[$eventClass]['all'])) {
+            $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
         }
         foreach ($callbacks as $callback) {
             $ev = call_user_func(
@@ -125,7 +107,7 @@ class Vps_Component_Events
                 $callback['class'],
                 $callback['config']
             );
-            $ev->{$callback['method']}($event, $data);
+            $ev->{$callback['method']}($event);
         }
     }
 }
