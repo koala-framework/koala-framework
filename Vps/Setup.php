@@ -369,7 +369,8 @@ class Vps_Setup
 
         $urlParts = explode('/', substr($_SERVER['REDIRECT_URL'], 1));
         if (is_array($urlParts) && count($urlParts) == 2 && $urlParts[0] == 'media'
-            && $urlParts[1] == 'headline'
+            && $urlParts[1] == 'headline' &&
+            isset($_GET['selector']) && isset($_GET['text']) && isset($_GET['assetsType'])
         ) {
             Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
