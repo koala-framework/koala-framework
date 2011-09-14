@@ -110,6 +110,16 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $session->id = $id;
     }
 
+    public function jsonCopyAllAction()
+    {
+        $id = $this->_getParam('componentId');
+        if (!Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Vps_Exception("Component with id '$id' not found");
+        }
+        $session = new Zend_Session_Namespace('Vpc_Paragraphs:copy');
+        $session->id = $id;
+    }
+
     public function jsonPasteAction()
     {
         $session = new Zend_Session_Namespace('Vpc_Paragraphs:copy');
@@ -117,22 +127,8 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         if (!$id || !Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Vps_Exception_Client(trlVps('Clipboard is empty'));
         }
-        $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
         $target = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
-        $classes = Vpc_Abstract::getChildComponentClasses($target->componentClass, 'paragraphs');
-        $targetCls = false;
-        if (isset($classes[$source->row->component])) {
-            $targetCls = $classes[$source->row->component];
-        }
-        if ($source->componentClass != $targetCls) {
-            if (Vpc_Abstract::hasSetting($source->componentClass, 'componentName')) {
-                $name = Vpc_Abstract::getSetting($source->componentClass, 'componentName');
-                $msg = trlVps("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
-            } else {
-                $msg = trlVps('Source and target paragraphs are not compatible.');
-            }
-            throw new Vps_Exception_Client($msg);
-        }
+        $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
 
         $c = $target;
         while ($c->parent) {
@@ -142,12 +138,57 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $c = $c->parent;
         }
 
-        $newParagraph = Vps_Util_Component::duplicate($source, $target);
+        if (is_instance_of($source->componentClass, 'Vpc_Paragraphs_Component')) {
+            //a whole paragraphs component is in clipboard
+            $sources = $source->getChildComponents(array('generator'=>'paragraphs', 'ignoreVisible'=>true));
+        } else {
+            //a single paragraph (paragraphs child) is in clipboard
+            $sources = array($source);
+        }
+        $classes = Vpc_Abstract::getChildComponentClasses($target->componentClass, 'paragraphs');
 
-        $row = $newParagraph->row;
-        $row->pos = $this->_getParam('pos');
-        $row->visible = null;
-        $row->save();
+
+
+        Vps_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+
+        $progressBar = new Zend_ProgressBar(
+            new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+            0, Vps_Util_Component::getDuplicateProgressSteps($source)
+        );
+
+        $newPos = $this->_getParam('pos');
+        $countDuplicated = 0;
+        $errorMsg = false;
+        foreach ($sources as $source) {
+            $targetCls = false;
+            if (isset($classes[$source->row->component])) {
+                $targetCls = $classes[$source->row->component];
+            }
+            if ($source->componentClass != $targetCls) {
+                if (Vpc_Abstract::hasSetting($source->componentClass, 'componentName')) {
+                    $name = Vpc_Abstract::getSetting($source->componentClass, 'componentName');
+                    $errorMsg = trlVps("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
+                } else {
+                    $errorMsg = trlVps('Source and target paragraphs are not compatible.');
+                }
+                continue; //skip this one
+            }
+
+            $newParagraph = Vps_Util_Component::duplicate($source, $target, $progressBar);
+            $countDuplicated++;
+
+            $row = $newParagraph->row;
+            $row->pos = $newPos++;
+            $row->visible = false;
+            $row->save();
+        }
+        $progressBar->finish();
+        Vps_Component_ModelObserver::getInstance()->enable();
+
+        if (!$countDuplicated && $errorMsg) {
+            //if at least one was duplicated show no error, else show one
+            throw new Vps_Exception_Client($errorMsg);
+        }
     }
 
     public function jsonMakeAllVisibleAction()
