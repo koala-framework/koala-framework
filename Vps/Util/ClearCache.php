@@ -72,6 +72,9 @@ class Vps_Util_ClearCache
         $types = array('all');
         if (class_exists('Memcache')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
+        if (extension_loaded('apc')) {
+            $types[] = 'optcode';
+        }
         $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
         return $types;
@@ -168,6 +171,33 @@ class Vps_Util_ClearCache
     {
     }
 
+    private function _callApcUtil($type, $outputType, $output)
+    {
+        $config = Vps_Registry::get('config');
+        $d = $config->server->domain;
+        if (!$d && file_exists('application/cache/lastdomain')) {
+            //this file gets written in Vps_Setup to make it "just work"
+            $d = file_get_contents('application/cache/lastdomain');
+        }
+        $s = microtime(true);
+        $pwd = Vps_Util_Apc::getHttpPassword();
+        $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Vps_Util_Apc::getHttpPassword()."@";
+        $url = "$urlPart$d/vps/util/apc/clear-cache?type=".$type;
+        $c = @file_get_contents($url);
+        if (substr($c, 0, 2) != 'OK' && $config->server->noRedirectPattern) {
+            $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
+            $url2 = "$urlPart$d/vps/util/apc/clear-cache?type=".$type;
+            $c = @file_get_contents($url2);
+        }
+        if ($output) {
+            if (substr($c, 0, 2) == 'OK') {
+                if ($output) echo "cleared:     $outputType (".round((microtime(true)-$s)*1000)."ms) $c\n";
+            } else {
+                if ($output) echo "error:       $outputType ($url)\n$c\n\n";
+            }
+        }
+    }
+
     protected function _clearCache(array $types, $output, $server)
     {
         if (in_array('memcache', $types)) {
@@ -186,29 +216,14 @@ class Vps_Util_ClearCache
             if ($server) {
                 if ($output) echo "ignored:     apc\n";
             } else {
-                $config = Vps_Registry::get('config');
-                $d = $config->server->domain;
-                if (!$d && file_exists('application/cache/lastdomain')) {
-                    //this file gets written in Vps_Setup to make it "just work"
-                    $d = file_get_contents('application/cache/lastdomain');
-                }
-                $s = microtime(true);
-                $pwd = Vps_Util_Apc::getHttpPassword();
-                $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Vps_Util_Apc::getHttpPassword()."@";
-                $url = "$urlPart$d/vps/util/apc/clear-cache";
-                $c = @file_get_contents($url);
-                if (substr($c, 0, 2) != 'OK' && $config->server->noRedirectPattern) {
-                    $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-                    $url2 = "$urlPart$d/vps/util/apc/clear-cache";
-                    $c = @file_get_contents($url2);
-                }
-                if ($output) {
-                    if (substr($c, 0, 2) == 'OK') {
-                        if ($output) echo "cleared:     apc (".round((microtime(true)-$s)*1000)."ms) $c\n";
-                    } else {
-                        if ($output) echo "error:       apc ($url)\n$c\n\n";
-                    }
-                }
+                $this->_callApcUtil('user', 'apc', $output);
+            }
+        }
+        if (in_array('optcode', $types)) {
+            if ($server) {
+                if ($output) echo "ignored:     optcode\n";
+            } else {
+                $this->_callApcUtil('file', 'optcode', $output);
             }
         }
         foreach ($this->getDbCacheTables() as $t) {

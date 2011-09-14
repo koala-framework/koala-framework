@@ -98,29 +98,30 @@ class Vps_Setup
 
         self::$configClass = $configClass;
 
-        require_once 'Vps/Config/Web.php';
+        require_once 'Vps/Config.php';
 
-        if (Vps_Config_Web::getValue('debug.componentCache.checkComponentModification')) {
+        if (Vps_Config::getValue('debug.componentCache.checkComponentModification')) {
             $masterFiles = array(
                 'application/config.ini',
                 VPS_PATH . '/config.ini'
             );
             if (file_exists('application/vps_branch')) $masterFiles[] = 'application/vps_branch';
+            require_once 'Vps/Config/Web.php';
             $mtime = Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection());
             foreach ($masterFiles as $f) {
                 if (filemtime($f) > $mtime) {
-                    Vps_Config_Web::clearValueCache();
+                    Vps_Config::clearValueCache();
                     break;
                 }
             }
         }
 
-        if (Vps_Config_Web::getValue('debug.benchmark')) {
+        if (Vps_Config::getValue('debug.benchmark')) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enable();
         }
-        if (Vps_Config_Web::getValue('debug.benchmarkLog')) {
+        if (Vps_Config::getValue('debug.benchmarkLog')) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
@@ -142,7 +143,7 @@ class Vps_Setup
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
 
         $ip = get_include_path();
-        foreach (Vps_Config_Web::getValueArray('includepath') as $t=>$p) {
+        foreach (Vps_Config::getValueArray('includepath') as $t=>$p) {
             if ($t == 'phpunit') {
                 //vorne anh�ngen damit er vorrang vor /usr/share/php hat
                 $ip = $p . PATH_SEPARATOR . $ip;
@@ -154,27 +155,27 @@ class Vps_Setup
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
 
-        if (Vps_Config_Web::getValue('debug.firephp') && php_sapi_name() != 'cli') {
+        if (Vps_Config::getValue('debug.firephp') && php_sapi_name() != 'cli') {
             require_once 'FirePHPCore/FirePHP.class.php';
             FirePHP::init();
         }
 
-        if (Vps_Config_Web::getValue('debug.querylog') && php_sapi_name() != 'cli') {
+        if (Vps_Config::getValue('debug.querylog') && php_sapi_name() != 'cli') {
             header('X-Vps-RequestNum: '.Zend_Registry::get('requestNum'));
             register_shutdown_function(array('Vps_Setup', 'shutDown'));
         }
-        if ((Vps_Config_Web::getValue('debug.firephp') || Vps_Config_Web::getValue('debug.querylog'))
+        if ((Vps_Config::getValue('debug.firephp') || Vps_Config::getValue('debug.querylog'))
                 && php_sapi_name() != 'cli')
         {
             ob_start();
         }
 
-        if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != Vps_Config_Web::getValue('application.vps.version')) {
+        if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != Vps_Config::getValue('application.vps.version')) {
             $validCommands = array('shell', 'export', 'copy-to-test');
             if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
                 $required = trim(file_get_contents('application/vps_branch'));
                 $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
-                throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '".Vps_Config_Web::getValue('application.vps.version')."' (Git branch '$vpsBranch')");
+                throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '".Vps_Config::getValue('application.vps.version')."' (Git branch '$vpsBranch')");
             }
         }
 
@@ -196,9 +197,9 @@ class Vps_Setup
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
-        if ($host && Vps_Config_Web::getValue('server.redirectToDomain')) {
+        if ($host && Vps_Config::getValue('server.redirectToDomain')) {
             $redirect = false;
-            if ($domains = Vps_Config_Web::getValueArray('vpc.domains')) {
+            if ($domains = Vps_Config::getValueArray('vpc.domains')) {
                 $noRedirect = false;
                 foreach ($domains as $domain) {
                     if ($domain['domain'] == $host) {
@@ -222,11 +223,11 @@ class Vps_Setup
                         }
                     }
                 }
-            } else if (Vps_Config_Web::getValue('server.domain')
-                && $host != Vps_Config_Web::getValue('server.domain')
-                && (!Vps_Config_Web::getValue('server.noRedirectPattern') || !preg_match('/'.Vps_Config_Web::getValue('server.noRedirectPattern').'/', $host))
+            } else if (Vps_Config::getValue('server.domain')
+                && $host != Vps_Config::getValue('server.domain')
+                && (!Vps_Config::getValue('server.noRedirectPattern') || !preg_match('/'.Vps_Config::getValue('server.noRedirectPattern').'/', $host))
             ) {
-                $redirect = Vps_Config_Web::getValue('server.domain');
+                $redirect = Vps_Config::getValue('server.domain');
             }
             if ($redirect) {
                 $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
@@ -251,8 +252,8 @@ class Vps_Setup
             Vps_Util_Apc::dispatchUtils();
         }
 
-        if (Vps_Config_Web::getValue('showPlaceholder')
-                && !Vps_Config_Web::getValue('ignoreShowPlaceholder')
+        if (Vps_Config::getValue('showPlaceholder')
+                && !Vps_Config::getValue('ignoreShowPlaceholder')
                 && php_sapi_name() != 'cli'
                 && isset($_SERVER['REQUEST_URI'])
                 && substr($_SERVER['REQUEST_URI'], 0, 8)!='/assets/'
@@ -262,31 +263,31 @@ class Vps_Setup
             exit;
         }
 
-        if (php_sapi_name() != 'cli' && Vps_Config_Web::getValue('preLogin')
+        if (php_sapi_name() != 'cli' && Vps_Config::getValue('preLogin')
             && isset($_SERVER['REDIRECT_URL'])
         ) {
             $ignore = false;
-            foreach (Vps_Config_Web::getValueArray('preLoginIgnore') as $i) {
+            foreach (Vps_Config::getValueArray('preLoginIgnore') as $i) {
                 if (substr($_SERVER['REDIRECT_URL'], 0, strlen($i)) == $i) {
                     $ignore = true;
                     break;
                 }
             }
-            foreach (Vps_Config_Web::getValueArray('preLoginIgnoreIp') as $i) {
+            foreach (Vps_Config::getValueArray('preLoginIgnoreIp') as $i) {
                 if ($_SERVER['REMOTE_ADDR'] == $i) $ignore = true;
             }
 
             if (!$ignore && (empty($_SERVER['PHP_AUTH_USER'])
                              || empty($_SERVER['PHP_AUTH_PW'])
-                             || $_SERVER['PHP_AUTH_USER']!=Vps_Config_Web::getValue('preLoginUser')
-                             || $_SERVER['PHP_AUTH_PW']!=Vps_Config_Web::getValue('preLoginPassword'))
+                             || $_SERVER['PHP_AUTH_USER']!=Vps_Config::getValue('preLoginUser')
+                             || $_SERVER['PHP_AUTH_PW']!=Vps_Config::getValue('preLoginPassword'))
             ) {
                 header('WWW-Authenticate: Basic realm="Testserver"');
                 throw new Vps_Exception_AccessDenied();
             }
         }
 
-        if ($tl = Vps_Config_Web::getValue('debug.timeLimit')) {
+        if ($tl = Vps_Config::getValue('debug.timeLimit')) {
             set_time_limit((int)$tl);
         }
 
@@ -302,7 +303,7 @@ class Vps_Setup
 
     public static function shutDown()
     {
-        if (Vps_Config_Web::getValue('debug.querylog') && php_sapi_name() != 'cli') {
+        if (Vps_Config::getValue('debug.querylog') && php_sapi_name() != 'cli') {
             header('X-Vps-DbQueries: '.Vps_Db_Profiler::getCount());
         }
         Vps_Benchmark::shutDown();
@@ -341,7 +342,7 @@ class Vps_Setup
         $uri = substr($_SERVER['REDIRECT_URL'], 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
-        $urlPrefix = Vps_Config_Web::getValue('vpc.UrlPrefix');
+        $urlPrefix = Vps_Config::getValue('vpc.UrlPrefix');
 
         if ($uri == 'robots.txt') {
             Vps_Media_Output::output(array(
@@ -506,7 +507,7 @@ class Vps_Setup
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
-            $host = Vps_Config_Web::getValue('server.domain');
+            $host = Vps_Config::getValue('server.domain');
         }
         if ($includeProtocol) $host = 'http://' . $host;
         return $host;

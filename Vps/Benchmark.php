@@ -13,7 +13,7 @@ class Vps_Benchmark
     {
         static $i;
         if (!isset($i)) {
-            $c = Vps_Config_Web::getValue('benchmarkClass');
+            $c = Vps_Config::getValue('benchmarkClass');
             if (!class_exists($c)) {
                 $c = 'Vps_Benchmark';
             }
@@ -136,6 +136,8 @@ class Vps_Benchmark
 
         if (isset($_COOKIE['unitTest'])) return;
         if (!self::$_enabled) return;
+        self::disable();
+        self::$_logEnabled = false;
         if (PHP_SAPI != 'cli') {
             echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1000;width:200px;opacity:0.5" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">';
             echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
@@ -242,15 +244,15 @@ class Vps_Benchmark
     public static function info($msg)
     {
         if (!self::$_enabled) return;
-        if (Vps_Config_Web::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+        if (Vps_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
             p($msg, 'INFO');
         }
     }
 
     public static function cacheInfo($msg)
     {
-        if (!Vps_Config_Web::getValue('debug.componentCache.info')) return;
-        if (Vps_Config_Web::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+        if (!Vps_Config::getValue('debug.componentCache.info')) return;
+        if (Vps_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
             p($msg, 'INFO');
         }
     }

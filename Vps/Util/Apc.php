@@ -23,13 +23,27 @@ class Vps_Util_Apc
             throw new Vps_Exception_AccessDenied();
         }
 
-        if ($_SERVER['REQUEST_URI'] == '/vps/util/apc/clear-cache') {
+        if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/util/apc/clear-cache') {
             $s = microtime(true);
-            if (class_exists('APCIterator')) {
-                $prefix = Vps_Cache::getUniquePrefix();
-                apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix).'#'));
+            if ($_GET['type'] == 'user') {
+                if (class_exists('APCIterator')) {
+                    $prefix = Vps_Cache::getUniquePrefix();
+                    apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix, '#').'#'));
+                } else {
+                    apc_clear_cache('user');
+                }
             } else {
-                apc_clear_cache('user');
+                $paths = array(preg_quote(getcwd(), '#'));
+                foreach (explode(PATH_SEPARATOR, get_include_path()) as $p) {
+                    if (substr($p, 0, 1) == '/') {
+                        $paths[] = preg_quote($p, '#');
+                    }
+                }
+                if (class_exists('APCIterator')) {
+                    apc_delete_file(new APCIterator('file', '#^'.'('.implode('|', $paths).')'.'#'));
+                } else {
+                    apc_clear_cache('file');
+                }
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
             exit;
