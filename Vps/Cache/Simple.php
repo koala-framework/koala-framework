@@ -26,7 +26,7 @@ class Vps_Cache_Simple
     private static function _processId($cacheId)
     {
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix().'-';
+        if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         $cacheId = str_replace('-', '__', $prefix.$cacheId);
         $cacheId = preg_replace('#[^a-zA-Z0-9_]#', '_', $cacheId);
         return $cacheId;
@@ -35,7 +35,7 @@ class Vps_Cache_Simple
     public static function fetch($cacheId, &$success = true)
     {
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix().'-';
+        if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         if (extension_loaded('apc')) {
             return apc_fetch($prefix.$cacheId, $success);
         } else {
@@ -48,7 +48,7 @@ class Vps_Cache_Simple
     public static function add($cacheId, $data)
     {
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix().'-';
+        if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         if (extension_loaded('apc')) {
             return apc_add($prefix.$cacheId, $data);
         } else {
@@ -59,7 +59,7 @@ class Vps_Cache_Simple
     public static function delete($cacheId)
     {
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix().'-';
+        if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         if (extension_loaded('apc')) {
             return apc_delete($prefix.$cacheId);
         } else {
@@ -70,12 +70,21 @@ class Vps_Cache_Simple
     public static function clear($cacheIdPrefix)
     {
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix().'-';
+        if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         if (extension_loaded('apc')) {
             apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#'));
         } else {
             //we can't do any better here :/
             self::_getCache()->clean();
         }
+    }
+
+    public static function getUniquePrefix()
+    {
+        static $ret;
+        if (!isset($ret)) {
+            $ret = getcwd().'-'.Vps_Setup::getConfigSection().'-';
+        }
+        return $ret;
     }
 }

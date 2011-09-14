@@ -60,7 +60,7 @@ class Vps_Component_Data
                 if ($page->filename) $filenames[] = $page->filename;
             }
         } while ($page = $page->getParentPseudoPageOrRoot());
-        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+        $urlPrefix = Vps_Config::getValue('vpc.urlPrefix');
         return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
     }
 
@@ -887,6 +887,23 @@ class Vps_Component_Data
             }
         }
         return $this->_languageCache;
+    }
+
+    /**
+     * Returns if this component is visible
+     *
+     * A component is visible if all parents are visible.
+     */
+    public function isVisible()
+    {
+        $c = $this;
+        while($c) {
+            if (isset($this->invisible) && $this->invisible) {
+                return false;
+            }
+            $c = $c->parent;
+        }
+        return true;
     }
 
     public function trlStaticExecute($trlStaticData)

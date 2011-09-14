@@ -59,13 +59,12 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
             $dbId = $parentData->dbId . $this->_idSeparator;
         }
         $dbId .= $componentKey;
-        $row = $this->_getModel()->getRow($parentData->dbId);
-        if (!$row) $row = $this->_getModel()->createRow();
-        if (!$row->component) $row->component = key($this->getChildComponentClasses()); //sollte eigentlich nicht vorkommen
+        $component = $this->_getModel()->fetchColumnByPrimaryId('component', $parentData->dbId);
+        if (!$component) $component = key($this->getChildComponentClasses()); //sollte eigentlich nicht vorkommen
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,
-            'componentClass' => $this->_settings['component'][$row->component],
+            'componentClass' => $this->_settings['component'][$component],
             'parent' => $parentData,
             'isPage' => false,
             'isPseudoPage' => false

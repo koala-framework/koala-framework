@@ -138,9 +138,9 @@ class Vps_Trl
     {
 
         if (!isset($this->_languages)) {
-            $config = Zend_Registry::get('config');
-            if ($config->languages) {
-                $this->_languages = array_values($config->languages->toArray());
+            $langauges = Vps_Config::getValue('languages');
+            if ($langauges) {
+                $this->_languages = array_values($langauges->toArray());
             } else {
                 $this->_languages = array($this->getWebCodeLanguage());
             }
@@ -180,8 +180,7 @@ class Vps_Trl
     public function getWebCodeLanguage()
     {
         if (!$this->_webCodeLanguage) {
-            $config = Zend_Registry::get('config');
-            $this->_webCodeLanguage = $config->webCodeLanguage;
+            $this->_webCodeLanguage = Vps_Config::getValue('webCodeLanguage');
         }
         return $this->_webCodeLanguage;
     }

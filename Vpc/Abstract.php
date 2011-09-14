@@ -276,8 +276,13 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     protected function _callProcessInput()
     {
+        $showInvisible = Vps_Config::getValue('showInvisible');
+
         $cacheId = 'procI-'.$this->getData()->getPageOrRoot()->componentId;
-        $processCached = Vps_Cache_Simple::fetch($cacheId, $success);
+        $success = false;
+        if (!$showInvisible) { //don't cache in preview
+            $processCached = Vps_Cache_Simple::fetch($cacheId, $success);
+        }
         if (!$success) {
             $process = $this->getData()
                 ->getRecursiveChildComponents(array(
@@ -299,11 +304,13 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                     $process[] = $this->getData();
                 }
             }
-            $datas = array();
-            foreach ($process as $p) {
-                $datas[] = $p->vpsSerialize();
+            if (!$showInvisible) {
+                $datas = array();
+                foreach ($process as $p) {
+                    $datas[] = $p->vpsSerialize();
+                }
+                Vps_Cache_Simple::add($cacheId, $datas);
             }
-            Vps_Cache_Simple::add($cacheId, $datas);
         } else {
             $process = array();
             foreach ($processCached as $d) {

@@ -59,13 +59,13 @@ class Vps_Dao
 //             $this->_db[$db]->query("SET lc_time_names = '".trlVps('en_US')."'");
 
 
-            if (Zend_Registry::get('config')->debug->querylog) {
+            if (Vps_Config::getValue('debug.querylog')) {
                 $profiler = new Vps_Db_Profiler(true);
                 $this->_db[$db]->setProfiler($profiler);
-            } else if (Zend_Registry::get('config')->debug->queryTimeout) {
-                $profiler = new Vps_Db_Profiler_Timeout(Zend_Registry::get('config')->debug->queryTimeout, true);
+            } else if (Vps_Config::getValue('debug.queryTimeout')) {
+                $profiler = new Vps_Db_Profiler_Timeout(Vps_Config::getValue('debug.queryTimeout'), true);
                 $this->_db[$db]->setProfiler($profiler);
-            } else if (Zend_Registry::get('config')->debug->benchmark || Zend_Registry::get('config')->debug->benchmarkLog) {
+            } else if (Vps_Config::getValue('debug.benchmark') || Vps_Config::getValue('debug.benchmarkLog')) {
                 $profiler = new Vps_Db_Profiler_Count(true);
                 $this->_db[$db]->setProfiler($profiler);
             }
@@ -83,7 +83,7 @@ class Vps_Dao
         static $ret;
         if (!isset($ret)) {
             $connection = new Mongo(); // connects to localhost:27017
-            $mongoDb = Vps_Registry::get('config')->server->mongo->database;
+            $mongoDb = Vps_Config::getValue('server.mongo.database');
             $ret = $connection->$mongoDb;
         }
         return $ret;
