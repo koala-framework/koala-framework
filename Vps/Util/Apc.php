@@ -29,6 +29,7 @@ class Vps_Util_Apc
                 if (class_exists('APCIterator')) {
                     $prefix = Vps_Cache::getUniquePrefix();
                     apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix, '#').'#'));
+                    apc_delete_file(new APCIterator('user', '#^config_[^/]+'.preg_quote(getcwd(), '#').'#'));
                 } else {
                     apc_clear_cache('user');
                 }
