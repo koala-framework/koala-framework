@@ -187,7 +187,7 @@ class Vps_Setup
             //$config->debug->benchmark = false;
         }
 
-        if (!$config->server->domain && isset($_SERVER['HTTP_HOST'])) {
+        if (!Vps_Config_Web::getValue('server.domain') && isset($_SERVER['HTTP_HOST'])) {
             //Now this is kind of a hack. We want to make setting server.domain optional for easy setup.
             //But we need the domain at least for clearing the apc cache.
             //(don't use this file for more advanced stuff)
