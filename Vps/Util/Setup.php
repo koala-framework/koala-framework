@@ -128,9 +128,9 @@ class Vps_Util_Setup
         */
 
 
+        $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
         $ret .= "Vps_Setup::\$configSection = '".Vps_Setup::$configSection."';\n";
-        $ret .= "if (isset(\$_SERVER['HTTP_HOST'])) {\n";
-            $ret .= "    \$host = \$_SERVER['HTTP_HOST'];\n";
+        $ret .= "if (\$host) {\n";
             $ret .= "    //www abschneiden damit www.test und www.preview usw auch funktionieren\n";
             $ret .= "    if (substr(\$host, 0, 4)== 'www.') \$host = substr(\$host, 4);\n";
             $ret .= "    if (substr(\$host, 0, 9)=='dev.test.') {\n";
@@ -145,10 +145,8 @@ class Vps_Util_Setup
             $ret .= "    }\n";
         $ret .= "}\n";
 
-
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Vps_Config::getValue('server.redirectToDomain')) {
-            $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
             $ret .= "if (\$host) {\n";
             $ret .= "    \$redirect = false;\n";
             if ($domains = Vps_Config::getValueArray('vpc.domains')) {
@@ -164,7 +162,7 @@ class Vps_Util_Setup
                             $ret .= "            if (!preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
                             $ret .= "                \$redirect = '{$domain['domain']}';\n";
                             $ret .= "            }\n";
-                            $ret .= "            break;\n";
+                            //$ret .= "            break;\n";
                         }
                         $ret .= "        }\n";
                     } else {
