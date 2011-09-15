@@ -9,12 +9,12 @@ class Vps_Dao
     public function __construct(array $config = null)
     {
         if (is_null($config)) {
-	    if (file_exists('application/config.db.ini')) {
-                $config = new Zend_Config_Ini('application/config.db.ini', 'database');
-                $config = $config->toArray();
-	    } else {
-	        $config = array();
-	    }
+            if (file_exists('application/config.db.ini')) {
+                    $config = new Zend_Config_Ini('application/config.db.ini', 'database');
+                    $config = $config->toArray();
+            } else {
+                $config = array();
+            }
         }
         $this->_config = $config;
     }
