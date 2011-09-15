@@ -16,7 +16,9 @@ class Vpc_Abstract_Events extends Vps_Component_Abstract_Events
 
     public function onOwnRowUpdate(Vps_Component_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Vps_Component_Event_Component_ContentChanged($this->_class, $event->row));
+        $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+            $this->_class, $event->row->component_id
+        ));
         /*
         foreach (Vps_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id, array('componentClass'=>$this->_class)) as $c) {
             self::fireEvent('Vps_Component_Event_Component_ContentChanged', $c->componentClass, $c->componentId);

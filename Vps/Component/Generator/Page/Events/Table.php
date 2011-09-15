@@ -25,7 +25,7 @@ class Vps_Component_Generator_Page_Events_Table extends Vps_Component_Generator_
             $eventsClass = 'Vps_Component_Event_Page_Moved';
         }
         if ($eventsClass) {
-            $this->fireEvent(new $eventsClass($this->_class, $event->row));
+            $this->fireEvent(new $eventsClass($this->_class, $event->dbId));
         }
     }
 }
