@@ -75,6 +75,7 @@ class Vps_Util_ClearCache
         if (extension_loaded('apc')) {
             $types[] = 'optcode';
         }
+        $types[] = 'setup';
         $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
         return $types;
@@ -95,6 +96,11 @@ class Vps_Util_ClearCache
 
         if ($refresh) {
             if ($output) echo "\n";
+            
+            if ($output) echo "Refresh setup..........";
+            file_put_contents('application/cache/setup.php', Vps_Util_Setup::generateCode(Vps_Setup::$configClass));
+            if ($output) echo " [\033[00;32mOK\033[00m]\n";
+
             if ($output) echo "Refresh settings.......";
             Vps_Config_Web::clearInstances();
             $config = Vps_Config_Web::getInstance(Vps_Setup::getConfigSection());
@@ -221,6 +227,9 @@ class Vps_Util_ClearCache
             } else {
                 $this->_callApcUtil('file', 'optcode', $output);
             }
+        }
+        if (in_array('setup', $types)) {
+            unlink('application/cache/setup.php');
         }
         foreach ($this->getDbCacheTables() as $t) {
             if ($server) {

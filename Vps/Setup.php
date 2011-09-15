@@ -30,6 +30,45 @@ class Vps_Setup
         error_reporting(E_ALL);
         if (!include('application/cache/setup.php')) {
             if (!file_exists('application/cache/setup.php')) {
+                if (file_exists(VPS_PATH.'/include_path')) {
+                    $zendPath = trim(file_get_contents(VPS_PATH.'/include_path'));
+                    $zendPath = str_replace(
+                        '%version%',
+                        file_get_contents(VPS_PATH.'/include_path_version'),
+                        $zendPath);
+                } else {
+                    die ('zend not found');
+                }
+                set_include_path(get_include_path(). PATH_SEPARATOR . $zendPath);
+
+                require_once 'Vps/Loader.php';
+                Vps_Loader::registerAutoload();
+
+                Vps_Setup::$configClass = $configClass;
+                require_once 'Vps/Registry.php';
+                Zend_Registry::setClassName('Vps_Registry');
+
+                require_once 'Vps/Trl.php';
+
+                umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
+
+                $path = getcwd();
+                if (file_exists('application/config_section')) {
+                    Vps_Setup::$configSection = trim(file_get_contents('application/config_section'));
+                } else if (file_exists('/var/www/vivid-test-server')) {
+                    Vps_Setup::$configSection = 'vivid-test-server';
+                } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+                    if ($m[3]=='vps-projekte') return 'vivid';
+                    Vps_Setup::$configSection = $m[3];
+                } else if (substr($path, 0, 17) == '/docs/vpcms/test.' ||
+                        substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
+                        substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
+                        substr($path, 0, 20) == '/var/www/vpcms/test.') {
+                    Vps_Setup::$configSection = 'test';
+                } else {
+                    Vps_Setup::$configSection = 'production';
+                }
+
                 require_once 'Vps/Util/Setup.php';
                 file_put_contents('application/cache/setup.php', Vps_Util_Setup::generateCode($configClass));
                 die('created application/cache/setup.php');
