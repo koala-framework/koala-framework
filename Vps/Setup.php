@@ -40,7 +40,6 @@ class Vps_Setup
         set_include_path($includePath);
 
         require_once 'Vps/Loader.php';
-        require_once 'Zend/Loader/Autoloader.php';
     }
 
     public static function setUp($configClass = 'Vps_Config_Web')
@@ -116,12 +115,10 @@ class Vps_Setup
         }
 
         if (Vps_Config::getValue('debug.benchmark')) {
-            require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enable();
         }
         if (Vps_Config::getValue('debug.benchmarkLog')) {
-            require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
         }
