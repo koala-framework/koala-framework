@@ -2,6 +2,7 @@
 class Vps_Component_Events
 {
     protected $_config;
+    public static $_indent = 0;
 
     protected function __construct($config = array())
     {
@@ -91,6 +92,18 @@ class Vps_Component_Events
 
     public static function fireEvent($event)
     {
+        if ($event instanceof Vps_Component_Event_Row_Abstract ||
+            $event instanceof Vps_Component_Event_Row_UpdatesFinished)
+        {
+            self::$_indent = 0;
+        }
+
+        $logger = null;
+        if (Zend_Registry::get('config')->debug->eventlog) {
+            $logger = Vps_Component_Events_Log::getInstance();
+            if (self::$_indent == 0) $logger->info('----');
+        }
+
         $listeners = self::getAllListeners();
         $class = $event->class;
         $eventClass = get_class($event);
@@ -101,12 +114,17 @@ class Vps_Component_Events
         if (isset($listeners[$eventClass]['all'])) {
             $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
         }
+        self::$_indent++;
+        $loopIndent = self::$_indent;
         foreach ($callbacks as $callback) {
             $ev = call_user_func(
                 array($callback['class'], 'getInstance'),
                 $callback['class'],
                 $callback['config']
             );
+            if ($logger) {
+                $logger->logEvent($loopIndent, $callback, $event);
+            }
             $ev->{$callback['method']}($event);
         }
     }
