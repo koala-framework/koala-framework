@@ -1,11 +1,11 @@
 <?php
 abstract class Vps_Component_Event_Component_Abstract extends Vps_Component_Event_Abstract
 {
-    public $row;
+    public $dbId;
 
-    public function __construct($componentClass, $row)
+    public function __construct($componentClass, $dbId)
     {
         $this->class = $componentClass;
-        $this->row = $row;
+        $this->dbId = $dbId;
     }
 }

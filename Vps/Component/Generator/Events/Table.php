@@ -27,22 +27,22 @@ class Vps_Component_Generator_Events_Table extends Vps_Component_Generator_Event
         if (in_array('visible', $event->row->getDirtyColumns())) {
             if ($event->row->visible) {
                 $this->fireEvent(
-                    new Vps_Component_Event_Component_Added($this->_class, $event->row)
+                    new Vps_Component_Event_Component_Added($this->_class, $this->_getDbId($event->row))
                 );
             } else {
                 $this->fireEvent(
-                    new Vps_Component_Event_Component_Removed($this->_class, $event->row)
+                    new Vps_Component_Event_Component_Removed($this->_class, $this->_getDbId($event->row))
                 );
             }
         }
         if (in_array('pos', $event->row->getDirtyColumns()) && $event->row->visible) {
             $this->fireEvent(
-                new Vps_Component_Event_Component_Moved($this->_class, $event->row)
+                new Vps_Component_Event_Component_Moved($this->_class, $this->_getDbId($event->row))
             );
         }
         if (in_array('component', $event->row->getDirtyColumns()) && $event->row->visible) {
             $this->fireEvent(
-                new Vps_Component_Event_Component_ClassChanged($this->_class, $event->row)
+                new Vps_Component_Event_Component_ClassChanged($this->_class, $this->_getDbId($event->row))
             );
         }
     }
@@ -51,7 +51,7 @@ class Vps_Component_Generator_Events_Table extends Vps_Component_Generator_Event
     {
         if ($event->row->visible) {
             $this->fireEvent(
-                new Vps_Component_Event_Component_Added($this->_class, $event->row)
+                new Vps_Component_Event_Component_Added($this->_class, $this->_getDbId($event->row))
             );
         }
     }
@@ -60,8 +60,19 @@ class Vps_Component_Generator_Events_Table extends Vps_Component_Generator_Event
     {
         if ($event->row->visible) {
             $this->fireEvent(
-                new Vps_Component_Event_Component_Removed($this->_class, $event->row)
+                new Vps_Component_Event_Component_Removed($this->_class, $this->_getDbId($event->row))
             );
+        }
+    }
+
+    protected function _getDbId($row)
+    {
+        if ($row->hasColumn('component_id')) {
+            return $row->component_id .
+                $this->_getGenerator()->getIdSeparator() .
+                $row->id;
+        } else {
+            return $row->id;
         }
     }
 }

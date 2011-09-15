@@ -19,7 +19,7 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
 
     public function onContentChange(Vps_Component_Event_Component_ContentChanged $event)
     {
-        $this->_updatedDbIds[] = $event->row->component_id;
+        $this->_updatedDbIds[] = $event->dbId;
     }
 
     public function onRowUpdatesFinished(Vps_Component_Event_Row_UpdatesFinished $event)
