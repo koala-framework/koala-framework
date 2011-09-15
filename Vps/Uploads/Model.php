@@ -14,7 +14,7 @@ class Vps_Uploads_Model extends Vps_Model_Db_Proxy
     public function getUploadDir()
     {
         if (!isset($this->_uploadDir)) {
-            $this->_uploadDir = Zend_Registry::get('config')->uploads;
+            $this->_uploadDir = Vps_Config::getValue('uploads');
 
             if (!$this->_uploadDir) {
                 throw new Vps_Exception(('Param "uploads" has to be set in the file application/config.ini.'));
