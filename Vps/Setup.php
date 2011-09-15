@@ -94,6 +94,9 @@ class Vps_Setup
 
     public static function hasDb()
     {
+        static $ret;
+        if (isset($ret)) return $ret;
+
         $cacheId = 'hasDb';
         $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if (!$success) {
