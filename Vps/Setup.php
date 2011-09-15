@@ -53,18 +53,9 @@ class Vps_Setup
 
         //here to be as fast as possible (and have no session)
         if (isset($_SERVER['REQUEST_URI']) &&
-            substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status' &&
-            !empty($_REQUEST['progressNum'])
+            substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status'
         ) {
-            Vps_Loader::registerAutoload();
-            $pbarAdapter = new Vps_Util_ProgressBar_Adapter_Cache($_REQUEST['progressNum']);
-            $pbarStatus = $pbarAdapter->getStatus();
-            if (!$pbarStatus) {
-                $pbarStatus = array();
-            }
-            $pbarStatus['success'] = true;
-            echo Zend_Json::encode($pbarStatus);
-            exit;
+            Vps_Util_ProgressBar_DispatchStatus::dispatch();
         }
 
         //here to have less dependencies
