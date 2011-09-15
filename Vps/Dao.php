@@ -24,6 +24,9 @@ class Vps_Dao
         $this->_config = $config;
     }
 
+    /**
+     * @deprecated
+     */
     public static function getTable($tablename, $config = array())
     {
         static $tables;
