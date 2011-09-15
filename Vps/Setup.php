@@ -71,18 +71,10 @@ class Vps_Setup
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 17) == '/vps/check-config'
         ) {
-            Vps_Loader::registerAutoload();
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
-                header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Vps_Exception_AccessDenied();
-            }
-            $quiet = isset($_GET['quiet']);
-            Vps_Util_Check_Config::check($quiet);
+            Vps_Util_Check_Config::dispatch();
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
-            Vps_Loader::registerAutoload();
-            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
-            Vps_Util_Check_Config::check($quiet);
+            Vps_Util_Check_Config::dispatch();
         }
 
         self::setUpVps($configClass);

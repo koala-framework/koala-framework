@@ -1,6 +1,21 @@
 <?php
 class Vps_Util_Check_Config
 {
+    public static function dispatch()
+    {
+        Vps_Loader::registerAutoload();
+        if (php_sapi_name() == 'cli') {
+            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
+        } else {
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Check Config"');
+                throw new Vps_Exception_AccessDenied();
+            }
+            $quiet = isset($_GET['quiet']);
+        }
+        Vps_Util_Check_Config::check($quiet);
+    }
+
     public function check($quiet = false)
     {
         $checks = array();
