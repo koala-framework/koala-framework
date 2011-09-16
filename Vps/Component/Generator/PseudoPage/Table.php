@@ -97,4 +97,14 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         $ret['pseudoPage'] = true;
         return $ret;
     }
+
+    public function getNameColumn()
+    {
+        return $this->_settings['nameColumn'];
+    }
+
+    public function getFilenameColumn()
+    {
+        return $this->_settings['filenameColumn'];
+    }
 }

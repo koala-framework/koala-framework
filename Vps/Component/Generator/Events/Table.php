@@ -24,26 +24,27 @@ class Vps_Component_Generator_Events_Table extends Vps_Component_Generator_Event
 
     public function onRowUpdate(Vps_Component_Event_Row_Updated $event)
     {
-        if (in_array('visible', $event->row->getDirtyColumns())) {
+        $dc = array_flip($event->row->getDirtyColumns());
+        $dbId = $this->_getDbId($event->row);
+        $class = $this->_class;
+        if (isset($dc['visible'])) {
             if ($event->row->visible) {
-                $this->fireEvent(
-                    new Vps_Component_Event_Component_Added($this->_class, $this->_getDbId($event->row))
-                );
+                $this->fireEvent(new Vps_Component_Event_Component_Added($class, $dbId));
             } else {
-                $this->fireEvent(
-                    new Vps_Component_Event_Component_Removed($this->_class, $this->_getDbId($event->row))
-                );
+                $this->fireEvent(new Vps_Component_Event_Component_Removed($class, $dbId));
             }
+            unset($dc['visible']);
         }
-        if (in_array('pos', $event->row->getDirtyColumns()) && $event->row->visible) {
-            $this->fireEvent(
-                new Vps_Component_Event_Component_Moved($this->_class, $this->_getDbId($event->row))
-            );
+        if (isset($dc['pos']) && $event->row->visible) {
+            $this->fireEvent(new Vps_Component_Event_Component_PositionChanged($class, $dbId));
+            unset($dc['pos']);
         }
-        if (in_array('component', $event->row->getDirtyColumns()) && $event->row->visible) {
-            $this->fireEvent(
-                new Vps_Component_Event_Component_ClassChanged($this->_class, $this->_getDbId($event->row))
-            );
+        if (isset($dc['component']) && $event->row->visible) {
+            $this->fireEvent(new Vps_Component_Event_Component_ClassChanged($class, $dbId));
+            unset($dc['pos']);
+        }
+        if (!empty($db)) {
+            $this->fireEvent(new Vps_Component_Event_Component_ContentChanged($class, $dbId));
         }
     }
 
