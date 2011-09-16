@@ -1,14 +1,10 @@
 Vps.onContentReady(function() {
-    var btns = Ext.query('form button.submit', document);
-    Ext.each(btns, function(btn) {
-        btn = Ext.get(btn);
-        btn.on('click', function(e) {
-
-            var formDiv = Ext.get(this.findParent('.vpcForm'));
-            var config = formDiv.parent().down('.config', true);
-            if (!config) return;
-            config = Ext.decode(config.value);
-            if (!config) return;
+    Ext.select('.vpcForm').each(function(form) {
+        var config = formDiv.parent().down('.config', true);
+        if (!config) return;
+        config = Ext.decode(config.value);
+        if (!config) return;
+        form.child('form button.submit').on('click', function(e) {
             e.stopEvent();
             
             var button = formDiv.child('.button');
