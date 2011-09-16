@@ -8,6 +8,7 @@ class Vpc_Guestbook_ExtConfig extends Vpc_Directories_Item_Directory_ExtConfigEd
                     trlVps('Guestbook Settings'),
                     new Vps_Asset('wrench_orange'));
         $ret['settings'] = $config;
+        $ret['items']['controllerUrl'] = Vpc_Admin::getInstance($this->_class)->getControllerUrl('Comments');
         return $ret;
     }
 }
