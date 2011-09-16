@@ -396,4 +396,14 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         }
         return $target;
     }
+
+    public function getNameColumn()
+    {
+        return 'name';
+    }
+
+    public function getFilenameColumn()
+    {
+        return 'filename';
+    }
 }
