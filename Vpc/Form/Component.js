@@ -6,10 +6,10 @@ Vps.onContentReady(function() {
         btn.on('click', function(e) {
 
             var formDiv = Ext.get(this.findParent('.vpcForm'));
-            var data = formDiv.parent().down('.data', true);
-            if (!data) return;
-            data = Ext.decode(data.value);
-            if (!data) return;
+            var config = formDiv.parent().down('.config', true);
+            if (!config) return;
+            config = Ext.decode(config.value);
+            if (!config) return;
             e.stopEvent();
             
             var button = formDiv.child('.button');
@@ -17,9 +17,9 @@ Vps.onContentReady(function() {
             button.down('.submit').hide();
             
             Ext.Ajax.request({
-                url: data.controllerUrl + '/json-save',
+                url: config.controllerUrl + '/json-save',
                 params: {
-                    componentId: data.componentId
+                    componentId: config.componentId
                 },
                 form: formDiv.down('form'),
                 success: function(response, options, r) {

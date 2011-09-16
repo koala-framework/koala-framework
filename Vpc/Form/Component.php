@@ -212,7 +212,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             $controllerUrl = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm');
             Vps_Cache_Simple::add($cacheId, $controllerUrl);
         }
-        $ret['json'] = array(
+        $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
             'savingImage' => '/assets/vps/Vpc/Form/saving.gif'

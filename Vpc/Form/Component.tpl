@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?><?if($this->isPosted){?> vpsImportant<?}?><?if($this->useJavascriptSubmit){?> jsSubmit<?}?>">
-    <input type="hidden" class="data" value="<?= htmlspecialchars(Zend_Json::encode($this->json)) ?>" />
+    <input type="hidden" class="config" value="<?= htmlspecialchars(Zend_Json::encode($this->config)) ?>" />
 <?php
 if ($this->showSuccess) {
     echo $this->component($this->success);
