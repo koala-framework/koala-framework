@@ -60,7 +60,8 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
                     'home' => $home,
                     'page' => $page ? $page : $home,
                     'flag' => $l->getChildComponent('-flag'),
-                    'name' => $l->name
+                    'name' => $l->name,
+                    'current' => $this->getData()->getLanguageData()->componentId == $l->componentId
                 );
             }
         }

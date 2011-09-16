@@ -16,7 +16,10 @@ abstract class Vpc_List_Fade_Component extends Vpc_Abstract_List_Component
         $ret['textSelector'] = '';
 
         $ret['fadeConfig'] = array(
-            'elementAccessLinks' => false,
+            'elementAccessDirect' => false, // a button for each element to acces
+            'elementAccessPlayPause' => false, // a play pause button to break fade-switching
+            'elementAccessLinks' => false, // deprecated, sets both of above
+            'elementAccessNextPrevious' => false, // a previous and next button to switch pictures
             'fadeDuration'       => 1.5,
             'fadeEvery'          => 7,
             'easingFadeOut'      => 'easeIn',

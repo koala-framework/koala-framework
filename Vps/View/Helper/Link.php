@@ -8,6 +8,6 @@ class Vps_View_Helper_Link
             $withHttp = 'http://'.$withHttp;
         }
         $withoutHttp = substr($withHttp, 7);
-        return '<a href="'.$withHttp.'" target="_blank">'.$withoutHttp.'</a>';
+        return '<a href="'.$withHttp.'" rel="popup_blank">'.$withoutHttp.'</a>';
     }
 }
