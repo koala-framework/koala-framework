@@ -1,14 +1,15 @@
 Ext.ns('Vpc.Shop.Cart.Checkout');
 Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
     layout: 'border',
-    initComponent: function()
+
+    createItems: function()
     {
-        var order = new Vps.Auto.FormPanel({
+        this.order = new Vps.Auto.FormPanel({
             region: 'center',
             controllerUrl:  this.orderControllerUrl,
             baseParams: Vps.clone(this.baseParams)
         });
-        var orderProducts = new Vps.Auto.GridPanel({
+        this.orderProducts = new Vps.Auto.GridPanel({
             xtype: 'vps.autogrid',
             region: 'south',
             height: 180,
@@ -16,19 +17,19 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
             controllerUrl: this.orderProductsControllerUrl,
             baseParams: Vps.clone(this.baseParams)
         });
-        var orders = new Vps.Auto.GridPanel({
+        this.orders = new Vps.Auto.GridPanel({
             xtype: 'vps.autogrid',
             region: 'center',
             controllerUrl: this.ordersControllerUrl,
             baseParams: Vps.clone(this.baseParams),
-            bindings: [ order, { item: orderProducts, queryParam: 'shop_order_id' } ],
+            bindings: [ this.order, { item: this.orderProducts, queryParam: 'shop_order_id' } ],
             columnsConfig: {
                 invoice: {
                     clickHandler: function(grid, index, button, event) {
                         var row = grid.getStore().getAt(index);
                         window.open(this.ordersControllerUrl+'/pdf?'+Ext.urlEncode(this.baseParams)+'&id='+row.id);
                         (function() {
-                            order.reload(); //invoice_date wurde wom�glich gesetzt
+                            this.order.reload(); //invoice_date wurde wom�glich gesetzt
                         }).defer(500);
                     },
                     renderer: function(value, p, record, rowIndex, colIndex, store, column) {
@@ -58,8 +59,8 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                             scope: this,
                             mask: this.getEl(),
                             success: function() {
-                                orders.reload();
-                                order.reload();
+                                this.orders.reload();
+                                this.order.reload();
                             }
                         });
                     },
@@ -67,18 +68,21 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                 }
             }
         });
-        this.items = [orders, {
+        this.items = [this.orders, {
             layout: 'border',
             region: 'east',
             width: 500,
             split: true,
-            items: [order, orderProducts]
+            items: [this.order, this.orderProducts]
         }];
-
+    },
+    initComponent: function() {
+        this.createItems();
         Ext.TaskMgr.start({
             run: function() {
-                orders.reload();
+                this.orders.reload();
             },
+            scope: this,
             interval: 1000*60*5
         });
 
