@@ -156,7 +156,7 @@ Vps.onContentReady(function() {
         form.child('form button.submit').on('click', function(e) {
             e.stopEvent();
             
-            var button = formDiv.child('.button');
+            var button = form.child('.button');
             button.down('.saving').show();
             button.down('.submit').hide();
             
@@ -165,25 +165,25 @@ Vps.onContentReady(function() {
                 params: {
                     componentId: config.componentId
                 },
-                form: formDiv.down('form'),
+                form: form.down('form'),
                 success: function(response, options, r) {
                     
                     button.down('.saving').hide();
                     button.down('.submit').show();
                     
                     // remove and set error classes for fields
-                    Ext.each(formDiv.query('.vpsField'), function(field) {
+                    Ext.each(form.query('.vpsField'), function(field) {
                         Ext.fly(field).removeClass('vpsFieldError');
                     });
                     if (r.errorFields && r.errorFields.length) {
                         for (var i=0; i<r.errorFields.length; i++) {
-                            var field = formDiv.child('.' + r.errorFields[i]);
+                            var field = form.child('.' + r.errorFields[i]);
                             if (field) field.addClass('vpsFieldError');
                         }
                     }
                     
                     // remove and add error messages
-                    var error = formDiv.parent().down('.webFormError');
+                    var error = form.parent().down('.webFormError');
                     if (error) error.remove();
 
                     if (r.errorMessages && r.errorMessages.length) {
@@ -195,13 +195,13 @@ Vps.onContentReady(function() {
                         }
                         html += '</ul>';
                         html += '</div>';
-                        formDiv.parent().createChild(html, formDiv);
+                        form.parent().createChild(html, form);
                     }
                     
                     // show success content
                     if (r.successContent) {
-                        formDiv.parent().createChild(r.successContent);
-                        formDiv.remove();
+                        form.parent().createChild(r.successContent);
+                        form.remove();
                     }
                 },
                 scope: this
