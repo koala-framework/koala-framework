@@ -829,8 +829,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }, this);
         if (!ids.length) {
             Ext.Msg.show({
-                title:'Duplicate',
-                msg: 'No entries are selected'
+                title: trlVps('Duplicate'),
+                msg: trlVps('No entries are selected')
             });
             return;
         }
