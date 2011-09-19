@@ -55,6 +55,17 @@ class Vps_Form extends Vps_Form_NonTableForm
         return $ret;
     }
 
+    public function processInput($parentRow, array $postData = array())
+    {
+        $ret = parent::processInput($parentRow, $postData);
+        foreach ($this->_hideForValue as $v) {
+            if ($ret[$v['field']->getFieldName()] == $v) {
+                $this->fields->remove($v['hide']);
+            }
+        }
+        return $ret;
+    }
+
     //kann überschrieben werden wenn wir eine anderen row haben wollen
     //aber besser getRow überschreiben!!!
     protected function _getRowByParentRow($parentRow)
