@@ -14,4 +14,9 @@ class Vpc_Basic_Html_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
         $ret['content'] = $this->getRow()->content;
         return $ret;
     }
+
+    public function hasContent()
+    {
+        return trim($this->getRow()->content) != '';
+    }
 }

@@ -59,7 +59,7 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
                 }
                 $c = $c->parent;
             }
-            if (!$chainedFound) throw new Vps_Exception("No Flag chainedType set for {$component->componentClass} or parent");
+            //if (!$chainedFound) throw new Vps_Exception("No Flag chainedType set for {$component->componentClass} or parent");
 
         }
         return $ret;

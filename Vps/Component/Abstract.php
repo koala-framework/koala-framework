@@ -463,7 +463,8 @@ class Vps_Component_Abstract
         self::$_modelsCache = array(
             'own' => array(),
             'child' => array(),
-            'form' => array()
+            'form' => array(),
+            'table' => array()
         );
     }
 
