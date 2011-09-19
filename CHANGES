@@ -1,12 +1,3 @@
-== TODO ==
-- Model Typ-Strikt und Mongo                                       x
-- ACL mit Resourcen, sprerren von hinzufügen & löschen             8
-- MenuConfig, flexibleres erstellen von Menüpunkten in Komponenten 2
-- Zurück Button
-- Volltextsuche bei änderung neu indizieren                        4
-- mögliche wildcards im RTE anzeigen                               1
-- Bearbeitbare Mails für neue Benutzer usw                         4
-
 == 2.2 ==
 Erstellt: 21.06.11
 Stable: 
