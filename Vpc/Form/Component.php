@@ -22,10 +22,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtElement';
-        $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
-        $ret['assets']['files'][] = 'vps/Vps/Form/Field/MultiCheckbox/Component.js';
         $ret['assets']['files'][] = 'vps/Vpc/Form/Component.js';
-        $ret['assets']['files'][] = 'vps/Vps_js/Form/FieldSet/Component.js';
+        $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/Field.js';
+        $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/*';
 
         $ret['flags']['processInput'] = true;
 
@@ -206,10 +205,25 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         }
         $ret['message'] = null;
 
-        $ret['json'] = array(
-            'controllerUrl' => Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm'),
+        $cacheId = 'vpcFormCu-'.get_class($this);
+        $controllerUrl = Vps_Cache_Simple::fetch($cacheId);
+        if (!$controllerUrl) {
+            $controllerUrl = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm');
+            Vps_Cache_Simple::add($cacheId, $controllerUrl);
+        }
+        $hideForValue = array();
+        foreach ($this->_form->getHideForValue() as $v) {
+            $hideForValue[] = array(
+                'field' => $v['field']->getFieldName(),
+                'value' => $v['value'],
+                'hide' => $v['hide']->getFieldName(),
+            );
+        }
+        $ret['config'] = array(
+            'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
-            'savingImage' => '/assets/vps/Vpc/Form/saving.gif'
+            'savingImage' => '/assets/vps/Vpc/Form/saving.gif',
+            'hideForValue' => $hideForValue
         );
 
         return $ret;
