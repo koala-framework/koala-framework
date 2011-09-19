@@ -40,7 +40,6 @@ class Vps_Setup
         set_include_path($includePath);
 
         require_once 'Vps/Loader.php';
-        require_once 'Zend/Loader/Autoloader.php';
     }
 
     public static function setUp($configClass = 'Vps_Config_Web')
@@ -55,36 +54,19 @@ class Vps_Setup
 
         //here to be as fast as possible (and have no session)
         if (isset($_SERVER['REQUEST_URI']) &&
-            substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status' &&
-            !empty($_REQUEST['progressNum'])
+            substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status'
         ) {
-            Vps_Loader::registerAutoload();
-            $pbarAdapter = new Vps_Util_ProgressBar_Adapter_Cache($_REQUEST['progressNum']);
-            $pbarStatus = $pbarAdapter->getStatus();
-            if (!$pbarStatus) {
-                $pbarStatus = array();
-            }
-            $pbarStatus['success'] = true;
-            echo Zend_Json::encode($pbarStatus);
-            exit;
+            Vps_Util_ProgressBar_DispatchStatus::dispatch();
         }
 
         //here to have less dependencies
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 17) == '/vps/check-config'
         ) {
-            Vps_Loader::registerAutoload();
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
-                header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Vps_Exception_AccessDenied();
-            }
-            $quiet = isset($_GET['quiet']);
-            Vps_Util_Check_Config::check($quiet);
+            Vps_Util_Check_Config::dispatch();
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
-            Vps_Loader::registerAutoload();
-            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
-            Vps_Util_Check_Config::check($quiet);
+            Vps_Util_Check_Config::dispatch();
         }
 
         self::setUpVps($configClass);
@@ -118,12 +100,10 @@ class Vps_Setup
         }
 
         if (Vps_Config::getValue('debug.benchmark')) {
-            require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enable();
         }
         if (Vps_Config::getValue('debug.benchmarkLog')) {
-            require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
         }
@@ -451,56 +431,6 @@ class Vps_Setup
             }
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
-    }
-
-    /**
-     * Proxy, der zB für cross-domain ajax requests verwendet werden kann
-     *
-     * @param string|array $hosts Erlaubte Hostnamen (RegExp erlaubt, ^ vorne und $ hinten werden autom. angefügt)
-     */
-    public static function dispatchProxy($hostnames)
-    {
-        if (empty($_SERVER['REDIRECT_URL'])) return;
-
-        if (!preg_match('#^/vps/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
-
-        if (is_string($hostnames)) {
-            $hostnames = array($hostnames);
-        }
-
-        $proxyUrl = $_REQUEST['proxyUrl'];
-        $proxyPostVars = $_POST;
-        $proxyGetVars = $_GET;
-        if (array_key_exists('proxyUrl', $proxyPostVars)) unset($proxyPostVars['proxyUrl']);
-        if (array_key_exists('proxyUrl', $proxyGetVars)) unset($proxyGetVars['proxyUrl']);
-
-        // host checking
-        $proxyHost = parse_url($proxyUrl, PHP_URL_HOST);
-        $matched = false;
-        foreach ($hostnames as $hostname) {
-            if (preg_match('/^'.$hostname.'$/i', $proxyHost)) {
-                $matched = true;
-                break;
-            }
-        }
-        if (!$matched) return;
-
-        // proxying
-        $http = new Zend_Http_Client($proxyUrl);
-        if (count($_POST)) {
-            $http->setMethod(Zend_Http_Client::POST);
-        } else {
-            $http->setMethod(Zend_Http_Client::GET);
-        }
-        if (count($_GET)) $http->setParameterGet($proxyGetVars);
-        if (count($_POST)) $http->setParameterPost($proxyPostVars);
-        $response = $http->request();
-        $headers = $response->getHeaders();
-        if ($headers && !empty($headers['Content-type'])) {
-            header("Content-Type: ".$headers['Content-type']);
-        }
-        echo $response->getBody();
-        exit;
     }
 
     public static function getHost($includeProtocol = true)
