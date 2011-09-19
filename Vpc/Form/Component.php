@@ -212,10 +212,19 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             $controllerUrl = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm');
             Vps_Cache_Simple::add($cacheId, $controllerUrl);
         }
+        $hideForValue = array();
+        foreach ($this->_form->getHideForValue() as $v) {
+            $hideForValue[] = array(
+                'field' => $v['field']->getFieldName(),
+                'value' => $v['value'],
+                'hide' => $v['hide']->getFieldName(),
+            );
+        }
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
-            'savingImage' => '/assets/vps/Vpc/Form/saving.gif'
+            'savingImage' => '/assets/vps/Vpc/Form/saving.gif',
+            'hideForValue' => $hideForValue
         );
 
         return $ret;
