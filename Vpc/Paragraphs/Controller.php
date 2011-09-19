@@ -153,4 +153,19 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
         Vpc_Admin::getInstance($c->componentClass)->makeVisible($c);
     }
+
+    public function openPreviewAction()
+    {
+        $page = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId'),
+            array('ignoreVisible'=>true, 'limit' => 1)
+        );
+        if (!$page) {
+            throw new Vps_Exception_Client(trlVps('Page not found'));
+        }
+        $previewDomain = Vps_Config_Web::getInstance('preview')->server->domain;
+        $href = 'http://' . $previewDomain . $page->url;
+        header('Location: '.$href);
+        exit;
+    }
 }
