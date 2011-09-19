@@ -27,7 +27,7 @@ class Vps_Form extends Vps_Form_NonTableForm
      *
      * ATM only implemented in Frontend Form
      */
-    public function addHideForValue(Vps_Form_Field_Abstract $field, $value, Vps_Form_Field_Abstract $hideField)
+    public function hideForValue(Vps_Form_Field_Abstract $field, $value, Vps_Form_Field_Abstract $hideField)
     {
         $this->_hideForValue[] = array('field' => $field, 'value' => $value, 'hide' => $hideField);
         return $this;
