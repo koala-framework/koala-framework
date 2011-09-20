@@ -18,10 +18,6 @@ class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
         $postData = $this->getRequest()->getParams();
         if (!isset($postData['componentId'])) throw new Vps_Exception_Client('component not found');
 
-        if (Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
-            Vps_Registry::get('db')->beginTransaction();
-        }
-
         $component = Vps_Component_Data_Root::getInstance()
             ->getComponentById($postData['componentId'], array('ignoreVisible' => true));
         if (!$component) throw new Vps_Exception_Client('component not found');
@@ -47,10 +43,6 @@ class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
                 $renderer = new Vps_Component_Renderer();
                 $this->view->successContent = $renderer->renderComponent($success);
             }
-        }
-
-        if (Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
-            Vps_Registry::get('db')->commit();
         }
     }
 
