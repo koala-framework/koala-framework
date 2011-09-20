@@ -33,4 +33,5 @@ Ext.extend(Vps.FrontendForm.Field, Ext.util.Observable, {
     }
 });
 
+Vps.FrontendForm.fields = {};
 Vps.FrontendForm.fields['vpsField'] = Vps.FrontendForm.Field;
