@@ -80,6 +80,17 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
         return $ret;
     }
 
+    public function getCleanValue($name)
+    {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            return parent::getCleanValue($name);
+        } else if ($this->_row->hasColumn($name)) {
+            return $this->_row->getCleanValue($name);
+        } else {
+            return parent::getCleanValue($name);
+        }
+    }
+
     public function save()
     {
         $this->_beforeSave();
