@@ -30,7 +30,7 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                         window.open(this.ordersControllerUrl+'/pdf?'+Ext.urlEncode(this.baseParams)+'&id='+row.id);
                         (function() {
                             this.order.reload(); //invoice_date wurde wom�glich gesetzt
-                        }).defer(500);
+                        }).defer(500, this);
                     },
                     renderer: function(value, p, record, rowIndex, colIndex, store, column) {
                         p.css += 'vps-cell-button';
