@@ -197,7 +197,13 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['formName'] = $this->getData()->componentId;
         $ret['buttonClass'] = $this->_getSetting('buttonClass');
 
-        $ret['action'] = $this->getData()->url;
+        $cachedContent = Vps_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
+        if ($cachedContent) {
+            $targetPage = explode(';', $cachedContent);
+            $ret['action'] = $targetPage[0];
+        } else {
+            $ret['action'] = $this->getData()->url;
+        }
         $ret['method'] = $this->_getSetting('method');
 
         $ret['isUpload'] = false;
