@@ -159,7 +159,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = Vpc_Abstract::getTemplateVars();
 
         if (!$this->_processed) {
             throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
@@ -176,6 +176,12 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if ($this->isSaved()) {
             if (!$ret['errors'] && $class) {
                 $ret['showSuccess'] = true;
+            }
+        }
+
+        if ($ret['showSuccess']) {
+            foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
+                $ret[$c->id] = $c;
             }
         }
 
