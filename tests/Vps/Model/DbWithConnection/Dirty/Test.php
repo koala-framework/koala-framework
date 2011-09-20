@@ -143,9 +143,11 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
         $row = $model->getRow(1);
         $this->assertEquals($row->getDirtyColumns(), array());
         $this->assertEquals($row->isDirty(), false);
+        $this->assertEquals($row->getCleanValue('test1'), 'foo');
         $row->test1 = 'blubb';
         $this->assertEquals($row->getDirtyColumns(), array('test1'));
         $this->assertEquals($row->isDirty(), true);
+        $this->assertEquals($row->getCleanValue('test1'), 'foo');
     }
 
     public function testDirtyColumnsWithProxy()
@@ -159,8 +161,10 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
         $row = $model->getRow(1);
         $this->assertEquals($row->getDirtyColumns(), array());
         $this->assertEquals($row->isDirty(), false);
+        $this->assertEquals($row->getCleanValue('test1'), 'foo');
         $row->test1 = 'blubb';
         $this->assertEquals($row->getDirtyColumns(), array('test1'));
         $this->assertEquals($row->isDirty(), true);
+        $this->assertEquals($row->getCleanValue('test1'), 'foo');
     }
 }

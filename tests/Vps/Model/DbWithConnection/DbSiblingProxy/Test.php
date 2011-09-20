@@ -79,8 +79,10 @@ class Vps_Model_DbWithConnection_DbSiblingProxy_Test extends Vps_Test_TestCase
         $row = $this->_model->getRow(1);
         $this->assertEquals($row->getDirtyColumns(), array());
         $this->assertEquals($row->isDirty(), false);
+        $this->assertEquals($row->getCleanValue('baz'), 'aha');
         $row->baz = 'foo1';
         $this->assertEquals($row->getDirtyColumns(), array('baz'));
         $this->assertEquals($row->isDirty(), true);
+        $this->assertEquals($row->getCleanValue('baz'), 'aha');
     }
 }
