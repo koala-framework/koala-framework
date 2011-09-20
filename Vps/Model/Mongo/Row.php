@@ -8,7 +8,7 @@ class Vps_Model_Mongo_Row extends Vps_Model_Row_Data_Abstract
             //ist im moment aber noch nötig wegen updaten der expr werte
             $n = $this->_transformColumnName($name);
             if ($this->$name !== $value) {
-                $this->_setDirty(true);
+                $this->_setDirty($name);
             }
             $this->_data[$n] = $value;
             $this->_postSet($name, $value);
