@@ -92,9 +92,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         if (!isset($parsedUrl['host'])) {
             throw new Vps_Exception("Host is missing in url '$url'");
         }
-        if (substr($parsedUrl['host'], 0, 8) == 'preview.') {
-            $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 8);
-        } else if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
+        if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
         $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
