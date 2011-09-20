@@ -11,7 +11,7 @@ Vps.FrontendForm.TextArea = Ext.extend(Vps.FrontendForm.Field, {
     },
     getValue: function() {
         return this.el.child('textarea').dom.value;
-    },
+    }
 });
 
 Vps.FrontendForm.fields['vpsFormFieldTextArea'] = Vps.FrontendForm.TextArea;
