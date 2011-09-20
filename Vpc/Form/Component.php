@@ -83,9 +83,6 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         while ($m instanceof Vps_Model_Proxy) {
             $m = $m->getProxyModel();
         }
-        if (Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
-            Vps_Registry::get('db')->beginTransaction();
-        }
 
         $this->getForm()->initFields();
 
@@ -94,6 +91,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             $this->_posted = false;
         } else {
             $this->_posted = true;
+        }
+        if ($this->_posted && Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
+            Vps_Registry::get('db')->beginTransaction();
         }
         $postData = $this->_form->processInput(null, $postData);
         $this->_postData = $postData;
@@ -118,7 +118,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
-        if (Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
+        if ($this->_posted && Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
             Vps_Registry::get('db')->commit();
         }
     }
