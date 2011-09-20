@@ -11,16 +11,4 @@ class Vps_Component_Cache_HasContent_Root_Component extends Vpc_Abstract
         );
         return $ret;
     }
-
-    public function hasContent()
-    {
-        return $this->getData()->getChildComponent('_child')->hasContent();
-    }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vpc_Abstract_Composite_MetaHasContent('Vps_Component_Cache_HasContent_Root_Child_Component');
-        return $ret;
-    }
 }
