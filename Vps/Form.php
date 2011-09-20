@@ -59,7 +59,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     {
         $ret = parent::processInput($parentRow, $postData);
         foreach ($this->_hideForValue as $v) {
-            if ($ret[$v['field']->getFieldName()] == $v) {
+            if (isset($ret[$v['field']->getFieldName()]) && $ret[$v['field']->getFieldName()] == $v) {
                 $this->fields->remove($v['hide']);
             }
         }
