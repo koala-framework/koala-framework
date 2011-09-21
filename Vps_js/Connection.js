@@ -283,11 +283,36 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 
             if (!r.success && !options.ignoreErrors) {
                 if (r.wrongversion) {
-                    Ext.Msg.alert(trlVps('Error - wrong version'),
-                    trlVps('Because of an application update the application has to be reloaded.'),
-                    function(){
-                        location.reload();
+                    var dlg = new Ext.Window({
+                        autoCreate : true,
+                        title: trlVps('Error - wrong version'),
+                        resizable: false,
+                        modal: true,
+                        buttonAlign:"center",
+                        width:250,
+                        height:100,
+                        plain:true,
+                        closable: false,
+                        html: trlVps('Because of an application update the application has to be reloaded.'),
+                        buttons: [{
+                            text: trlVps('OK'),
+                            handler: function() {
+                                location.reload();
+                            },
+                            scope: this
+                        }, {
+                            text: trlVps('Ignore'),
+                            handler: function() {
+                                Vps.application.maxAssetsMTime = r.maxAssetsMTime;
+                                options.params.application_max_assets_mtime = Vps.application.maxAssetsMTime;
+                                this.repeatRequest(options);
+                            },
+                            scope: this
+                        }]
                     });
+                    dlg.show();
+                    dlg.getEl().addClass('x-window-dlg');
+
                     Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
                     return;
                 }
