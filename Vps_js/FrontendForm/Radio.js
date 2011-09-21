@@ -14,7 +14,7 @@ Vps.FrontendForm.Radio = Ext.extend(Vps.FrontendForm.Field, {
             }
         }, this);
         return ret;
-    },
+    }
 });
 
 Vps.FrontendForm.fields['vpsFormFieldRadio'] = Vps.FrontendForm.Radio;
