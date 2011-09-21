@@ -14,26 +14,56 @@ class Vps_Util_Setup
         }
         set_include_path(get_include_path(). PATH_SEPARATOR . $zendPath);
 
+        $ip = VPS_PATH.PATH_SEPARATOR.$zendPath.PATH_SEPARATOR.getcwd();
+        foreach (Vps_Config::getValueArray('includepath') as $t=>$p) {
+            $ip .= PATH_SEPARATOR . $p;
+        }
+
         $ret = "<?php\n";
-        $ret .= "require_once('Vps/Benchmark.php');\n";
+
+        $preloadClasses = array(
+            'Zend_Registry',
+            'Vps_Registry',
+            'Vps_Benchmark',
+            'Vps_Loader',
+            'Vps_Config',
+            'Vps_Cache_Simple',
+            'Vps_Debug',
+            'Vps_Trl',
+            'Vps_Component_Data',
+            'Vps_Component_Data_Root',
+            'Vps_Model_Select',
+            'Vps_Component_Select',
+            'Vps_Component_Abstract',
+            'Vpc_Abstract',
+            'Vpc_Paragraphs_Component',
+            'Vps_Component_Renderer_Abstract',
+            'Vps_Component_Renderer',
+            'Vps_Component_Cache',
+            'Vps_Component_Cache_Mysql',
+            'Vps_Component_View_Helper_Abstract',
+            'Vps_Component_View_Renderer',
+            'Vps_Component_View_Helper_Master',
+            'Vps_Component_View_Helper_Component',
+            'Vps_Component_View_Helper_ComponentLink',
+            'Vps_View_Helper_ComponentLink',
+        );
+        foreach ($preloadClasses as $cls) {
+            foreach (explode(PATH_SEPARATOR, $ip) as $path) {
+                $file = $path.'/'.str_replace('_', '/', $cls).'.php';
+                if (file_exists($file)) {
+                    $ret .= "require_once('".$file."');\n";
+                    break;
+                }
+            }
+        }
+
         $ret .= "Vps_Benchmark::\$startTime = microtime(true);\n";
         $ret .= "\n";
         $ret .= "if (isset(\$_SERVER['HTTP_CLIENT_IP'])) \$_SERVER['REMOTE_ADDR'] = \$_SERVER['HTTP_CLIENT_IP'];\n";
         $ret .= "\n";
 
-        $ip = get_include_path();
-        $ip .= PATH_SEPARATOR . $zendPath;
-        foreach (Vps_Config::getValueArray('includepath') as $t=>$p) {
-            if ($t == 'phpunit') {
-                //vorne anh�ngen damit er vorrang vor /usr/share/php hat
-                $ip = $p . PATH_SEPARATOR . $ip;
-            } else {
-                $ip .= PATH_SEPARATOR . $p;
-            }
-        }
         $ret .= "set_include_path('$ip');\n";
-        $ret .= "\n";
-        $ret .= "require_once 'Vps/Loader.php';\n";
         $ret .= "\n";
         $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
@@ -53,13 +83,11 @@ class Vps_Util_Setup
         $ret .= "    Vps_Util_Check_Config::dispatch();\n";
         $ret .= "}\n";
         $ret .= "\n";
-        $ret .= "require_once 'Vps/Registry.php';\n";
         $ret .= "Zend_Registry::setClassName('Vps_Registry');\n";
         $ret .= "\n";
         $ret .= "Vps_Setup::\$configClass = '$configClass';\n";
         $ret .= "\n";
         if (Vps_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $ret .= "require_once 'Vps/Config.php';\n";
             $ret .= "Vps_Config::checkMasterFiles();\n";
         }
 
@@ -74,9 +102,6 @@ class Vps_Util_Setup
 
         $ret .= "Vps_Loader::registerAutoload();\n";
 
-
-        $ret .= "require_once 'Vps/Debug.php';\n";
-        $ret .= "require_once 'Vps/Trl.php';\n";
         $ret .= "ini_set('memory_limit', '128M');\n";
         $ret .= "error_reporting(E_ALL);\n";
         $ret .= "date_default_timezone_set('Europe/Berlin');\n";

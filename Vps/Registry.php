@@ -1,5 +1,4 @@
 <?php
-require_once 'Zend/Registry.php';
 class Vps_Registry extends Zend_Registry
 {
     public function offsetGet($index)
