@@ -22,6 +22,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtElement';
+        $ret['assets']['dep'][] = 'ExtConnection';
         $ret['assets']['files'][] = 'vps/Vpc/Form/Component.js';
         $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/Field.js';
         $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/*';
