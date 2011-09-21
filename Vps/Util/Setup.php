@@ -111,8 +111,7 @@ class Vps_Util_Setup
         $ret .= "set_exception_handler(array('Vps_Debug', 'handleException'));\n";
         $ret .= "umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen\n";
 
-
-        $ret .= "Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));\n";
+        $ret .= "Zend_Registry::set('requestNum', ''.floor(Vps_Benchmark::\$startTime*100));\n";
 
         if (Vps_Config::getValue('debug.firephp') || Vps_Config::getValue('debug.querylog')) {
             $ret .= "if (php_sapi_name() != 'cli') {\n";
