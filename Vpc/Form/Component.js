@@ -68,18 +68,16 @@ Vps.onContentReady(function() {
                     
                     button.down('.saving').hide();
                     button.down('.submit').show();
-                    
+
                     // remove and set error classes for fields
-                    Ext.each(form.query('.vpsField'), function(field) {
-                        Ext.fly(field).removeClass('vpsFieldError');
-                    });
-                    if (r.errorFields && r.errorFields.length) {
-                        for (var i=0; i<r.errorFields.length; i++) {
-                            var field = form.child('.' + r.errorFields[i]);
-                            if (field) field.addClass('vpsFieldError');
-                        }
+                    fields.each(function(field) {
+                        field.hideError();
+                    }, this);
+                    for(var fieldName in r.errorFields) {
+                        var field = findField(fieldName);
+                        field.showError(r.errorFields[fieldName]);
                     }
-                    
+
                     // remove and add error messages
                     var error = form.parent().down('.webFormError');
                     if (error) error.remove();
