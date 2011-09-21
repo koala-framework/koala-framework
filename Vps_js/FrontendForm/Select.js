@@ -11,7 +11,7 @@ Vps.FrontendForm.Select = Ext.extend(Vps.FrontendForm.Field, {
     },
     getValue: function() {
         return this.el.child('select').dom.value;
-    },
+    }
 });
 
 Vps.FrontendForm.fields['vpsFormFieldSelect'] = Vps.FrontendForm.Select;
