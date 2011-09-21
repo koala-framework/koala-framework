@@ -110,7 +110,7 @@ Vps.onContentReady(function() {
             });
 
             e.stopEvent();
-        });
+        }, this);
 
     });
 });
