@@ -52,6 +52,7 @@ Vps.onContentReady(function() {
 
 
         form.child('form button.submit').on('click', function(e) {
+            if (form.dontUseAjaxRequest) return;
             e.stopEvent();
             
             var button = form.child('.button');
@@ -60,10 +61,16 @@ Vps.onContentReady(function() {
             
             Ext.Ajax.request({
                 url: config.controllerUrl + '/json-save',
+                ignoreErrors: true,
                 params: {
                     componentId: config.componentId
                 },
                 form: form.down('form'),
+                failure: function() {
+                    //on failure try a plain old post of the form
+                    form.dontUseAjaxRequest = true; //avoid endless recursion
+                    button.down('.submit').dom.click();
+                },
                 success: function(response, options, r) {
                     
                     button.down('.saving').hide();
