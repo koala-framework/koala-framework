@@ -69,6 +69,9 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                         items.push(item);
                     } else {
                         items = Ext.query(sel);
+                        while (items[index] && items[index].href != item.href) {
+                            index++;
+                        }
                     }
 
                     // calculate top and left offset for the extbox
