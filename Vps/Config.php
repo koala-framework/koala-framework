@@ -3,8 +3,6 @@ class Vps_Config
 {
     public static function getValueArray($var)
     {
-        require_once 'Vps/Cache/Simple.php';
-
         $cacheId = 'configAr-'.$var;
         $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
@@ -28,8 +26,6 @@ class Vps_Config
 
     public static function getValue($var)
     {
-        require_once 'Vps/Cache/Simple.php';
-
         $cacheId = 'config-'.$var;
         $ret = Vps_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
@@ -61,7 +57,6 @@ class Vps_Config
 
     public static function clearValueCache()
     {
-        require_once 'Vps/Cache/Simple.php';
         Vps_Cache_Simple::clear('config-');
         Vps_Cache_Simple::clear('configAr-');
     }
