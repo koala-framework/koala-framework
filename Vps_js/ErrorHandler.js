@@ -69,40 +69,39 @@ Vps.handleError = function(error) {
             }
         }
 
-            var win = new Ext.Window({
-                    autoCreate : true,
-                    title:title,
-                    resizable:true,
-                    constrain:true,
-                    constrainHeader:true,
-                    minimizable : false,
-                    maximizable : false,
-                    stateful: false,
-                    modal: true,
-                    shim:true,
-                    buttonAlign:"center",
-                    width:600,
-                    minHeight: 300,
-                    plain:true,
-                    footer:true,
-                    closable:false,
-                    html: msg,
-                    buttons: [{
-                        text     : trlVps('Retry'),
-                        handler  : function(){
-                            error.retry.call(error.scope || window);
-                            win.close();
-                        }
-                    },{
-                        text     : trlVps('Abort'),
-                        handler  : function(){
-                            error.abort.call(error.scope || window);
-                            win.close();
-                        }
-                }]
-
-                });
-                win.show();
+        var win = new Ext.Window({
+                autoCreate : true,
+                title:title,
+                resizable:true,
+                constrain:true,
+                constrainHeader:true,
+                minimizable : false,
+                maximizable : false,
+                stateful: false,
+                modal: true,
+                shim:true,
+                buttonAlign:"center",
+                width:600,
+                minHeight: 300,
+                plain:true,
+                footer:true,
+                closable:false,
+                html: msg,
+                buttons: [{
+                    text     : trlVps('Retry'),
+                    handler  : function(){
+                        error.retry.call(error.scope || window);
+                        win.close();
+                    }
+                },{
+                    text     : trlVps('Abort'),
+                    handler  : function(){
+                        error.abort.call(error.scope || window);
+                        win.close();
+                    }
+            }]
+        });
+        win.show();
     } else if (Vps.Debug.displayErrors) {
         Ext.Msg.show({
             title: error.title,
