@@ -52,6 +52,7 @@ class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
                 $this->view->successContent = $renderer->renderComponent($success);
             }
         }
+        $this->view->errorFields = (object)$this->view->errorFields;
     }
 
     protected function _isAllowedComponent()
