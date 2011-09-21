@@ -53,8 +53,7 @@ Vps.onContentReady(function() {
 
         form.child('form button.submit').on('click', function(e) {
             if (form.dontUseAjaxRequest) return;
-            e.stopEvent();
-            
+
             var button = form.child('.button');
             button.down('.saving').show();
             button.down('.submit').hide();
@@ -109,7 +108,9 @@ Vps.onContentReady(function() {
                 },
                 scope: this
             });
-                
+
+            e.stopEvent();
         });
+
     });
 });
