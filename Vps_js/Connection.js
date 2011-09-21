@@ -312,8 +312,6 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     });
                     dlg.show();
                     dlg.getEl().addClass('x-window-dlg');
-
-                    Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
                     return;
                 }
                 if (r.login) {
