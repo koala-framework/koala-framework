@@ -638,7 +638,7 @@ class Vps_Component_Data
                 //ist eine page
             } else {
                 if (strpos($id, '_') === false) {
-                    $id = substr($id, 0, strrpos($id, '-'));
+                    $id = substr($id, 0, strpos($id, '-'));
                     if (!is_numeric($id)) {
                         return null;
                     }
