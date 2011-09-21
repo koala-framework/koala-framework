@@ -110,6 +110,7 @@ Vps.handleError = function(error) {
             modal: true,
             width: 800
         });
+        if (error.abort) error.abort.call(error.scope || window); //there is no possibility to retry, so just abort
     } else {
         Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
         if (error.mail || (typeof error.mail == 'undefined')) {
@@ -123,5 +124,6 @@ Vps.handleError = function(error) {
                 }
             });
         }
+        if (error.abort) error.abort.call(error.scope || window); //there is no possibility to retry, so just abort
     }
 };
