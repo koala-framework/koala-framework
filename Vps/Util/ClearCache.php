@@ -229,7 +229,7 @@ class Vps_Util_ClearCache
             }
         }
         if (in_array('setup', $types)) {
-            unlink('application/cache/setup.php');
+            if (file_exists('application/cache/setup.php')) unlink('application/cache/setup.php');
         }
         foreach ($this->getDbCacheTables() as $t) {
             if ($server) {
