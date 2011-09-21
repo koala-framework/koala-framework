@@ -23,7 +23,7 @@ class Vpc_FormStatic_SeleniumTest extends Vps_Test_SeleniumTestCase
         $this->type('css=#form_content', 'lorem ipsum');
         $this->click('css=button');
         $this->waitForConnections();
-        $this->assertTextPresent('E-Mail: Please fill out the field');
+        $this->assertTextPresent('Please fill out the field');
 
         $this->type('css=#form_email', 'testmail@vivid');
         $this->click('css=button');
