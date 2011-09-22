@@ -17,6 +17,20 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
         parent::setUp('Vpc_Trl_MenuCache_Root');
     }
 
+    public function testComponentClasses()
+    {
+        $this->assertEquals($this->_root->getComponentById('root-master-main-mainMenu')->componentClass, 'Vpc_Trl_MenuCache_MainMenu_Component');
+
+        $this->assertEquals($this->_root->getComponentById('1-mainMenu')->componentClass, 'Vpc_Menu_ParentMenu_Component.Vpc_Trl_MenuCache_MainMenu_Component');
+        $this->assertEquals($this->_root->getComponentById('1-mainMenu-subMenu')->componentClass, 'Vpc_Trl_MenuCache_MainMenu_SubMenu_Component');
+
+        $this->assertEquals($this->_root->getComponentById('2-mainMenu')->componentClass, 'Vpc_Menu_ParentMenu_Component.Vpc_Trl_MenuCache_MainMenu_Component');
+        $this->assertEquals($this->_root->getComponentById('2-mainMenu-subMenu')->componentClass, 'Vpc_Menu_ParentMenu_Component.Vpc_Trl_MenuCache_MainMenu_SubMenu_Component');
+
+        $this->assertEquals($this->_root->getComponentById('4-mainMenu')->componentClass, 'Vpc_Basic_ParentContent_Component');
+        $this->assertEquals($this->_root->getComponentById('4-mainMenu-subMenu'), null);
+    }
+
     public function testMenuDe()
     {
         $c = $this->_root->getComponentById('1-mainMenu');
