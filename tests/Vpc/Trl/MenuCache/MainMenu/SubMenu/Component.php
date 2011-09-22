@@ -1,10 +1,11 @@
 <?php
-class Vps_Component_Cache_Menu_Root3_Menu2_Component extends Vpc_Menu_Component
+class Vpc_Trl_MenuCache_MainMenu_SubMenu_Component extends Vpc_Menu_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['level'] = 2;
+        $ret['cssClass'] .= ' webListNone';
         return $ret;
     }
 }

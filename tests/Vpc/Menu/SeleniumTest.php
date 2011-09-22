@@ -16,6 +16,7 @@ class Vpc_Menu_SeleniumTest extends Vps_Test_SeleniumTestCase
 
     public function testMenu()
     {
+        $this->markTestIncomplete();
         $this->openVpcEdit('Vpc_Menu_Menu_Component', 'root-menu');
         $this->waitForConnections();
         $this->assertTextPresent('Seite 1');
@@ -24,6 +25,7 @@ class Vpc_Menu_SeleniumTest extends Vps_Test_SeleniumTestCase
 
     public function testSubMenu()
     {
+        $this->markTestIncomplete();
         $this->openVpcEdit('Vpc_Menu_Menu_Component', '1-menu-subMenu');
         $this->waitForConnections();
         $this->assertTextPresent('Seite 3');
@@ -31,6 +33,7 @@ class Vpc_Menu_SeleniumTest extends Vps_Test_SeleniumTestCase
 
     public function testExpandedMenu()
     {
+        $this->markTestIncomplete();
         $this->openVpcEdit('Vpc_Menu_LevelMenu_Component', '3-levelmenu');
         $this->waitForConnections();
         $this->assertTextPresent('Seite 4');

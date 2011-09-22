@@ -5,7 +5,6 @@ class Vps_Component_Cache_Menu_Root_Menu_Component extends Vpc_Menu_Component
     {
         $ret = parent::getSettings();
         $ret['level'] = 'root';
-        $ret['maxLevel'] = 1;
         unset($ret['generators']['subMenu']);
         return $ret;
     }

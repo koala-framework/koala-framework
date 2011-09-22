@@ -10,9 +10,9 @@ class Vpc_Menu_Expanded_Component extends Vpc_Menu_Abstract_Component
 
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
-        $level = self::_getMenuLevel($componentClass, $parentData, $generator);
-        $maxLevel = (int)Vpc_Abstract::getSetting($componentClass, 'level');
-        return $level > ($maxLevel + 2);
+        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        return $menuLevel > ($level + 2);
     }
 
     public function getTemplateVars()
