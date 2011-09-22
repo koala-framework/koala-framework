@@ -4,11 +4,17 @@ class Vps_Component_Generator_AlternativeComponent_Default_Component extends Vpc
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['flags']['alternativeComponent'] = 'Vps_Component_Generator_AlternativeComponent_Alternative_Component';
+        $ret['flags']['hasAlternativeComponent'] = true;
         return $ret;
     }
+    public static function getAlternativeComponents()
+    {
+        return array(
+            'alternative'=>'Vps_Component_Generator_AlternativeComponent_Alternative_Component'
+        );
+    }
 
-    public static function useAlternativeComponent($componentClass, $parentData)
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
         $data = $parentData;
         $level = 1;
@@ -16,6 +22,10 @@ class Vps_Component_Generator_AlternativeComponent_Default_Component extends Vpc
             $data = $data->parent;
             $level++;
         }
-        return $level >= 4;
+        if ($level >= 4) {
+            return 'alternative';
+        } else {
+            return false;
+        }
     }
 }

@@ -4,8 +4,15 @@ class Vps_Component_Generator_InheritDifferentComponentClass_Box_Component exten
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['flags']['alternativeComponent'] = 'Vps_Component_Generator_InheritDifferentComponentClass_Box_Inherit_Component';
+        $ret['flags']['hasAlternativeComponent'] = true;
         return $ret;
+    }
+
+    public static function getAlternativeComponents()
+    {
+        return array(
+            'inherit'=>'Vps_Component_Generator_InheritDifferentComponentClass_Box_Inherit_Component'
+        );
     }
 
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
@@ -22,7 +29,7 @@ class Vps_Component_Generator_InheritDifferentComponentClass_Box_Component exten
         ));
         if (in_array($generator, $instances, true)) {
             //wir wurden geerbt weils über uns ein parentData mit dem gleichen generator gibt
-            return true;
+            return 'inherit';
         } else {
             return false;
         }

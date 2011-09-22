@@ -21,7 +21,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['level'] = 'main';
         $ret['dataModel'] = 'Vpc_Menu_Abstract_Model';
         $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
-        $ret['flags']['alternativeComponent'] = 'Vpc_Basic_ParentContent_Component';
+        $ret['flags']['hasAlternativeComponent'] = true;
 
         $ret['extConfig'] = 'Vpc_Menu_Abstract_ExtConfig';
         return $ret;
@@ -34,13 +34,31 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
             throw new Vps_Exception("showAsEditComponent setting doesn't exist anymore");
         }
         */
+
+        if ($settings['showParentPage'] || $settings['showParentPageLink']) {
+            if (is_string($settings['level'])) {
+                throw new Vps_Exception("You can't use showParentPage for MainMenus (what should that do?)");
+            }
+        }
+    }
+
+    public static function getAlternativeComponents($componentClass)
+    {
+        if (!$componentClass) throw new Vps_Exception("componentClass required");
+        return array(
+            'parentMenu' => 'Vpc_Menu_ParentMenu_Component.'.$componentClass,
+            'parentContent' => 'Vpc_Basic_ParentContent_Component',
+        );
     }
 
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
         $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
         $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
-        return $menuLevel > $level;
+        if ($menuLevel > $level) {
+            return 'parentContent';
+        }
+        return false;
     }
 
 
@@ -58,26 +76,18 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+
         $ret['parentPage'] = null;
-        $ret['parentPageLink'] = false;
-        if ($this->_getSetting('showParentPage') || $this->_getSetting('showParentPageLink')) {
-            if ($this->_getSetting('showParentPageLink')) $ret['parentPageLink'] = true;
-            $currentPages = array_reverse($this->_getCurrentPagesCached());
-            if (isset($this->getData()->level)) {
-                $level = $this->getData()->level;
-            } else {
-                $level = $this->_getSetting('level');
-            }
-            if (is_string($level)) {
-                throw new Vps_Exception("You can't use showParentPage for MainMenus (what should that do?)");
-            }
-            if (isset($currentPages[$level-2])) {
-                $ret['parentPage'] = $currentPages[$level-2];
-            }
+        $ret['parentPageLink'] = $this->_getSetting('showParentPageLink');
+        if ($this->_getSetting('showParentPage') || $ret['parentPageLink']) {
+            $ret['parentPage'] = $this->getData()->getPage();
         }
         return $ret;
     }
 
+    /**
+     * Used in PagesController
+     */
     public function getMenuComponent()
     {
         $component = $this->getData()->parent;
@@ -103,20 +113,17 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $this->_getMenuData($parentData, $select);
     }
 
+    /**
+     * Returns the data whose child pages will be displayed in that menu
+     *
+     * TODO: remove parentData parameter, that doesn't make any sense
+     */
     public function getPageComponent($parentData = null)
     {
-        $ret = null;
-
-        $ret = array();
-        $currentPages = array_reverse($this->_getCurrentPagesCached());
         if ($parentData) {
             $ret = $parentData;
         } else {
-            if (isset($this->getData()->level)) {
-                $level = $this->getData()->level;
-            } else if ($this->_hasSetting('level')) {
-                $level = $this->_getSetting('level');
-            }
+            $level = $this->_getSetting('level');
             if (is_string($level)) {
                 $component = $this->getData()->parent;
                 while ($component && !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory')) {
@@ -142,9 +149,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 }
                 $ret = $category;
             } else {
-                if (isset($currentPages[$level-2])) {
-                    $ret = $currentPages[$level-2];
-                }
+                $ret = $this->getData()->getPage();
             }
         }
         return $ret;
@@ -196,26 +201,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret = $this->_config[$id];
         if ($key) {
             $ret = isset($ret[$key]) ? $ret[$key] : null;
-        }
-        return $ret;
-    }
-
-    // Array mit aktueller Seiten und Parent Pages
-    protected final function _getCurrentPagesCached()
-    {
-        if (!isset($this->_currentPages)) {
-            $this->_currentPages = $this->_getCurrentPages();
-        }
-        return $this->_currentPages;
-    }
-
-    protected function _getCurrentPages()
-    {
-        $ret = array();
-        $p = $this->getData()->getPage();
-        while ($p) {
-            $ret[] = $p;
-            $p = $p->getParentPage();
         }
         return $ret;
     }

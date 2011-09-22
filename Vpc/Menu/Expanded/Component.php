@@ -12,7 +12,15 @@ class Vpc_Menu_Expanded_Component extends Vpc_Menu_Abstract_Component
     {
         $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
         $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
-        return $menuLevel > ($level + 2);
+        $shownLevel = Vpc_Abstract::getSetting($componentClass, 'level');
+        if (!is_numeric($shownLevel)) $shownLevel = 1;
+        $ret = false;
+        if ($menuLevel > ($level + 2)) {
+            $ret = 'parentContent';
+        } else if ($shownLevel <= $menuLevel) {
+            $ret = 'parentMenu';
+        }
+        return $ret;
     }
 
     public function getTemplateVars()
