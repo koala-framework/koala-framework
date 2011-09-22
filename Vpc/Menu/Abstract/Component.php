@@ -73,7 +73,13 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         } while ($data = $data->parent);
         if (!$foundPageOrCategory) return 'empty';
 
-        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $data = $parentData;
+        $menuLevel = $generator->getGeneratorFlag('page') ? 1 : 0; // falls zu erstellendes Data eigene Page ist (tritt eigentlich nur bei Tests auf)
+        while ($data && !Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
+            if ($data->isPage) $menuLevel++;
+            $data = $data->parent;
+        }
+
         $shownLevel = Vpc_Abstract::getSetting($componentClass, 'level');
         if (!is_numeric($shownLevel)) $shownLevel = 1;
         $requiredLevels = call_user_func(array($componentClass, '_requiredLevels'), $componentClass);
@@ -114,17 +120,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
         //echo "$ret:: $parentData->componentId: menuLevel=$menuLevel requiredLevels=$requiredLevels shownLevel=$shownLevel level=".Vpc_Abstract::getSetting($componentClass, 'level')."\n";
         return $ret;
-    }
-
-    protected static function _getMenuLevel($componentClass, $parentData, Vps_Component_Generator_Abstract $generator)
-    {
-        $data = $parentData;
-        $level = $generator->getGeneratorFlag('page') ? 1 : 0; // falls zu erstellendes Data eigene Page ist (tritt eigentlich nur bei Tests auf)
-        while ($data && !Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
-            if ($data->isPage) $level++;
-            $data = $data->parent;
-        }
-        return $level;
     }
 
     public function getTemplateVars()
