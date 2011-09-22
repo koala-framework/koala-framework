@@ -69,7 +69,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 $level = $this->_getSetting('level');
             }
             if (is_string($level)) {
-                throw new Vps_Exception("You can't use showParentMenu for MainMenus (what should that do?)");
+                throw new Vps_Exception("You can't use showParentPage for MainMenus (what should that do?)");
             }
             if (isset($currentPages[$level-2])) {
                 $ret['parentPage'] = $currentPages[$level-2];
@@ -162,13 +162,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     protected function _getMenuData($parentData = null, $select = array())
     {
-        $currentPageIds = array();
-        $currentPages = array_reverse($this->_getCurrentPagesCached());
-        foreach ($currentPages as $page) {
-            if (!$page instanceof Vps_Component_Data_Root) {
-                $currentPageIds[] = $page->getComponentId();
-            }
-        }
         $i = 0;
         $ret = array();
         $pages = $this->_getMenuPages($parentData, $select);
@@ -180,10 +173,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
             if ($i == count($pages)-1) { $class[] = 'last'; }
-            if (in_array($p->componentId, $currentPageIds)) {
-                $class[] ='current';
-                $r['current'] = true;
-            }
             $cssClass = $this->_getConfig($p, 'cssClass');
             if ($cssClass) $class[] = $cssClass;
             $r['class'] = implode(' ', $class);
