@@ -12,18 +12,10 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['cssClass'] = 'webStandard';
         $ret['showParentPage'] = false;
         $ret['showParentPageLink'] = false;
-        $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Menu/Abstract/Panel.js';
-        $ret['showAsEditComponent'] = false;
-        $ret['liCssClasses'] = array(
-            'offset' => trlVps('Offset')
-        );
         $ret['level'] = 'main';
         $ret['dataModel'] = 'Vpc_Menu_Abstract_Model';
         $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
         $ret['flags']['hasAlternativeComponent'] = true;
-
-        //$ret['extConfig'] = 'Vpc_Menu_Abstract_ExtConfig';
         return $ret;
     }
 
@@ -147,29 +139,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    /**
-     * Used in PagesController
-     */
-    public function getMenuComponent()
-    {
-        $component = $this->getData()->parent;
-        $level = 1;
-        while ($component) {
-            $menuCategory = Vpc_Abstract::getFlag($component->componentClass, 'menuCategory');
-            if ($menuCategory) {
-                $component = null;
-                if ($level == 1) $level = $menuCategory;
-            } else {
-                $component = $component->parent;
-                $level++;
-            }
-        }
-        if ($level == $this->_getSetting('level') && $this->_getMenuData()) {
-            return $this->getData();
-        }
-        return null;
-    }
-
     public function getMenuData($parentData = null, $select = array())
     {
         return $this->_getMenuData($parentData, $select);
@@ -240,29 +209,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
             if ($i == count($pages)-1) { $class[] = 'last'; }
-            $cssClass = $this->_getConfig($p, 'cssClass');
-            if ($cssClass) $class[] = $cssClass;
             $r['class'] = implode(' ', $class);
             $ret[] = $r;
             $i++;
-        }
-        return $ret;
-    }
-
-    protected function _getConfig($component, $key = null)
-    {
-        if (!$this->_getSetting('showAsEditComponent')) return null;
-        $id = $component->componentId;
-        if (!isset($this->_config[$id])) {
-            $model = $this->_hasSetting('dataModel') ?
-                Vps_Model_Abstract::getInstance($this->_getSetting('dataModel')) :
-                null;
-            $row = $model ? $model->getRow($id) : null;
-            $this->_config[$id] = $row ? unserialize($row->data) : null;
-        }
-        $ret = $this->_config[$id];
-        if ($key) {
-            $ret = isset($ret[$key]) ? $ret[$key] : null;
         }
         return $ret;
     }
@@ -282,7 +231,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         }
 
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Menu_Abstract_Model');
 
         return $ret;
     }

@@ -169,10 +169,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 if (!$acl->isAllowed($user, $c)) continue;
                 $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
             }
-            foreach (self::getMenuEditComponents($editComponent) as $c) {
-                if (!$acl->isAllowed($user, $c)) continue;
-                $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
-            }
             foreach (self::getSharedComponents($editComponent) as $componentClass => $c) {
                 if (!$acl->isAllowed($user, $c)) continue;
                 $ec = array_merge($ec, self::_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED, $componentConfigs));
@@ -247,36 +243,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 )
             )
         );
-        return $editComponents;
-    }
-
-    // static zum Testen
-    public static function getMenuEditComponents($component)
-    {
-        static $menuClasses = null;
-        if (!is_array($menuClasses)) {
-            $componentClasses = Vpc_Abstract::getComponentClasses();
-            $menuClasses = array();
-            foreach ($componentClasses as $class) {
-                if (is_instance_of($class, 'Vpc_Menu_Abstract_Component') &&
-                    Vpc_Abstract::hasSetting($class, 'level') &&
-                    Vpc_Abstract::getSetting($class, 'showAsEditComponent')
-                ) {
-                    $menuClasses[Vpc_Abstract::getSetting($class, 'level')] = $class;
-                }
-            }
-        }
-        $editComponents = array();
-        foreach ($menuClasses as $level => $class) {
-            $menuComponents = $component->getChildComponents(array(
-                'componentClasses' => array($class)
-            ));
-            foreach ($menuComponents as $menuComponent) {
-                if (!is_instance_of($menuComponent->componentClass, 'Vpc_Menu_Abstract_Component')) continue; // Falls alternativeComponent
-                $c = $menuComponent->getComponent()->getMenuComponent();
-                if ($c) $editComponents[] = $c;
-            }
-        }
         return $editComponents;
     }
 

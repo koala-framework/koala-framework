@@ -51,29 +51,6 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
         return $requiredLevels;
     }
 
-    /**
-     * Used in PagesController
-     */
-    public function getMenuComponent()
-    {
-        $menuComponent = $this->getData();
-        $component = $menuComponent->parent;
-        while ($component && $menuComponent &&
-            !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory') &&
-            $component->componentId != $this->_getSetting('level')
-        ) {
-            $menuComponent = $menuComponent->getChildComponent('-subMenu');
-            $component = $component->parent;
-        }
-        $ret = null;
-        if ($this->getPageComponent() && $component->componentId == $this->getPageComponent()->componentId &&
-            $menuComponent && $menuComponent->getComponent()->_getMenuData()
-        ) {
-            $ret = $menuComponent;
-        }
-        return $ret;
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
