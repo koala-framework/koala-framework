@@ -19,7 +19,14 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
 
     public function testComponentClasses()
     {
+        $this->assertEquals($this->_root->getComponentById('root-mainMenu')->componentClass, 'Vpc_Basic_Empty_Component');
+        $this->assertEquals($this->_root->getComponentById('root-mainMenu-subMenu'), null);
+
+        $this->assertEquals($this->_root->getComponentById('root-master-mainMenu')->componentClass, 'Vpc_Basic_Empty_Component');
+        $this->assertEquals($this->_root->getComponentById('root-master-mainMenu-subMenu'), null);
+
         $this->assertEquals($this->_root->getComponentById('root-master-main-mainMenu')->componentClass, 'Vpc_Trl_MenuCache_MainMenu_Component');
+        $this->assertEquals($this->_root->getComponentById('root-master-main-mainMenu-subMenu')->componentClass, 'Vpc_Basic_Empty_Component');
 
         $this->assertEquals($this->_root->getComponentById('1-mainMenu')->componentClass, 'Vpc_Menu_ParentMenu_Component.Vpc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('1-mainMenu-subMenu')->componentClass, 'Vpc_Trl_MenuCache_MainMenu_SubMenu_Component');

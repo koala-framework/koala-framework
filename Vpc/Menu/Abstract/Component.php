@@ -23,7 +23,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
         $ret['flags']['hasAlternativeComponent'] = true;
 
-        $ret['extConfig'] = 'Vpc_Menu_Abstract_ExtConfig';
+        //$ret['extConfig'] = 'Vpc_Menu_Abstract_ExtConfig';
         return $ret;
     }
 
@@ -45,22 +45,84 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     public static function getAlternativeComponents($componentClass)
     {
         if (!$componentClass) throw new Vps_Exception("componentClass required");
+
         return array(
+
+            //content is fetch from parent and slightly modified (current added etc)
             'parentMenu' => 'Vpc_Menu_ParentMenu_Component.'.$componentClass,
+
+            //a category is shown but the current page is in another one. gets templateVars from the right component
+            'otherCategory' => 'Vpc_Menu_OtherCategory_Component.'.$componentClass,
+
+            //if deep enough so no difference in menu content (depth is defined by _requiredLevels)
             'parentContent' => 'Vpc_Basic_ParentContent_Component',
+
+            //if above categories
+            'empty' => 'Vpc_Basic_Empty_Component',
         );
+    }
+
+    protected static function _requiredLevels($componentClass)
+    {
+        $shownLevel = Vpc_Abstract::getSetting($componentClass, 'level');
+        if (!is_numeric($shownLevel)) $shownLevel = 1;
+        return $shownLevel;
     }
 
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
-        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
-        $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
-        if ($menuLevel > $level) {
-            return 'parentContent';
-        }
-        return false;
-    }
+        $foundPageOrCategory = false;
+        $data = $parentData;
+        do {
+            if ($data->isPage || Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
+                $foundPageOrCategory = true;
+                break;
+            }
+        } while ($data = $data->parent);
+        if (!$foundPageOrCategory) return 'empty';
 
+        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $shownLevel = Vpc_Abstract::getSetting($componentClass, 'level');
+        if (!is_numeric($shownLevel)) $shownLevel = 1;
+        $requiredLevels = call_user_func(array($componentClass, '_requiredLevels'), $componentClass);
+
+        $ret = false;
+        if ($menuLevel > $requiredLevels) {
+            $ret = 'parentContent';
+        } else if ($shownLevel <= $menuLevel) {
+            $ret = 'parentMenu';
+            if (!is_numeric(Vpc_Abstract::getSetting($componentClass, 'level'))) {
+                $data = $parentData;
+                do {
+                    if (Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) break;
+                } while ($data = $data->parent);
+                if (Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
+                    if ($data->id != Vpc_Abstract::getSetting($componentClass, 'level')) {
+                        //there are categories and we are in a different category than the menu is
+                        //(so none is active and we can just show the parentContent (=efficient))
+                        $ret = 'parentContent';
+                    }
+                }
+            }
+        } else if ($menuLevel < $shownLevel-1) {
+            return 'empty';
+        }
+
+        if ($ret == false) {
+            if (!is_numeric(Vpc_Abstract::getSetting($componentClass, 'level'))) {
+                if (Vpc_Abstract::getFlag($parentData->componentClass, 'menuCategory')) {
+                    if ($parentData->id != Vpc_Abstract::getSetting($componentClass, 'level')) {
+                        $ret = 'otherCategory';
+                    }
+                } else {
+                    //this would just display all pages (there are no categories)
+                }
+            }
+        }
+
+        //echo "$ret:: $parentData->componentId: menuLevel=$menuLevel requiredLevels=$requiredLevels shownLevel=$shownLevel level=".Vpc_Abstract::getSetting($componentClass, 'level')."\n";
+        return $ret;
+    }
 
     protected static function _getMenuLevel($componentClass, $parentData, Vps_Component_Generator_Abstract $generator)
     {
