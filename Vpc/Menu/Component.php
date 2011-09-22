@@ -9,10 +9,9 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['maxLevel'] = 1;
         $ret['generators']['subMenu'] = array(
             'class' => 'Vpc_Menu_Generator',
-            'component' => 'Vpc_Menu_Component'
+            'component' => false
         );
         $ret['separator'] = '';
         $ret['linkPrefix'] = '';
@@ -21,23 +20,36 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
         return $ret;
     }
 
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+        if (isset($settings['maxLevel'])) {
+            if (is_numeric($settings['level'])) {
+                if ($settings['level'] < $settings['maxLevel']) {
+                    throw new Vps_Exception("maxLevel setting doesn't exist anymore, you need to manually create a submenu");
+                }
+            } else {
+                if ($settings['maxLevel'] > 1) {
+                    throw new Vps_Exception("maxLevel setting doesn't exist anymore, you need to manually create a submenu");
+                }
+            }
+            throw new Vps_Exception("maxLevel setting doesn't exist anymore, please simply remove");
+        }
+    }
+
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
         $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
-        $maxLevel = Vpc_Abstract::getSetting($componentClass, 'maxLevel');
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
-        $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        $level = Vpc_Abstract::getSetting($componentClass, 'level');
+        if (!is_numeric($level)) $level = 1;
         while (isset($generators['subMenu'])) {
             $class = $generators['subMenu']['component'];
             if (!is_instance_of($class, 'Vpc_Menu_Abstract_Component')) break;
-            $maxLevel = max($maxLevel, Vpc_Abstract::getSetting($class, 'maxLevel'));
-            if ($level >= $maxLevel) break;
             $generators = Vpc_Abstract::getSetting($class, 'generators');
             $level++;
         }
-        $level = Vpc_Abstract::getSetting($componentClass, 'level');
-        if ($level > $maxLevel) $maxLevel = $level;
-        return $menuLevel > $maxLevel;
+        return $menuLevel > $level;
     }
 
     public function getMenuComponent()

@@ -21,6 +21,7 @@ möglicherweise nicht kompatible Änderungen:
   Fixe Breiteneinstellungen gehören generell nicht mehr ins css
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 - Vpc/List/Switch got completely changed
+- Menu: maxLevel setting removed (create own SubMenu component with different level)
 
 == 2.1 ==
 Erstellt: 21.06.11

@@ -11,6 +11,7 @@ class Vpc_Menu_Test extends Vpc_TestAbstract
 
     public function testEditComponents()
     {
+        $this->markTestIncomplete();
         /*
         So sieht die Struktur aus:
         root (menu)

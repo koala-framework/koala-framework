@@ -27,12 +27,22 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public static function validateSettings($settings, $componentClass)
+    {
+        /*
+        if (isset($settings['showAsEditComponent'])) {
+            throw new Vps_Exception("showAsEditComponent setting doesn't exist anymore");
+        }
+        */
+    }
+
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
-        $level = self::_getMenuLevel($componentClass, $parentData, $generator);
-        $maxLevel = (int)Vpc_Abstract::getSetting($componentClass, 'level');
-        return $level > $maxLevel;
+        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        return $menuLevel > $level;
     }
+
 
     protected static function _getMenuLevel($componentClass, $parentData, Vps_Component_Generator_Abstract $generator)
     {
