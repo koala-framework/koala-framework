@@ -37,28 +37,18 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
         }
     }
 
-    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    protected static function _requiredLevels($componentClass)
     {
-        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $requiredLevels= parent::_requiredLevels($componentClass);
+
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
-        $shownLevel = Vpc_Abstract::getSetting($componentClass, 'level');
-        if (!is_numeric($shownLevel)) $shownLevel = 1;
-        $requiredLevels = $shownLevel;
         while (isset($generators['subMenu'])) {
             $class = $generators['subMenu']['component'];
             if (!is_instance_of($class, 'Vpc_Menu_Abstract_Component')) break;
             $generators = Vpc_Abstract::getSetting($class, 'generators');
             $requiredLevels++;
         }
-        $ret = false;
-        if ($menuLevel > $requiredLevels) {
-            $ret = 'parentContent';
-        } else if ($shownLevel <= $menuLevel) {
-            $ret = 'parentMenu';
-        }
-
-        //echo "$ret:: $parentData->componentId: menuLevel=$menuLevel requiredLevels=$requiredLevels shownLevel=$shownLevel level=".Vpc_Abstract::getSetting($componentClass, 'level')."\n";
-        return $ret;
+        return $requiredLevels;
     }
 
     /**

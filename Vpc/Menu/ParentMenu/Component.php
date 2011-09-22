@@ -50,6 +50,9 @@ class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $menu = $this->_getParentContentData();
+        if (!is_instance_of($menu->componentClass, 'Vpc_Menu_Abstract_Component')) {
+            throw new Vps_Exception("got invalid menu component '$menu->componentClass'");
+        }
 
         $ret = $menu->getComponent()->getTemplateVars();
 
