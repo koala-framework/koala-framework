@@ -144,54 +144,12 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $this->_getMenuData($parentData, $select);
     }
 
-    /**
-     * Returns the data whose child pages will be displayed in that menu
-     *
-     * TODO: remove parentData parameter, that doesn't make any sense
-     */
-    public function getPageComponent($parentData = null)
-    {
-        if ($parentData) {
-            $ret = $parentData;
-        } else {
-            $level = $this->_getSetting('level');
-            if (is_string($level)) {
-                $component = $this->getData()->parent;
-                while ($component && !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory')) {
-                    $component = $component->parent;
-                }
-                $category = null;
-                if (!$component) {
-                    //wenn seite nicht _unter_ einer kategorie anders suchen
-                    $component = $this->getData()->parent;
-                    while ($component && !$category) {
-                        $component = $component->parent;
-                        if ($component) {
-                            $category = $component->getChildComponent('-' . $level);
-                            if ($category && !Vpc_Abstract::getFlag($category->componentClass, 'menuCategory')) {
-                                $category = false;
-                            }
-                        }
-                    }
-                } else if ($component->parent) {
-                    $category = $component->parent->getChildComponent('-' . $level);
-                } else {
-                    $category = $component;
-                }
-                $ret = $category;
-            } else {
-                $ret = $this->getData()->getPage();
-            }
-        }
-        return $ret;
-    }
-
     protected function _getMenuPages($parentData, $select)
     {
         if (is_array($select)) $select = new Vps_Component_Select($select);
         $select->whereShowInMenu(true);
         $ret = array();
-        $pageComponent = $this->getPageComponent($parentData);
+        $pageComponent = $this->getData()->parent;
         if ($pageComponent) $ret = $pageComponent->getChildPages($select);
         return $ret;
     }
