@@ -152,7 +152,11 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         if ($parentData) {
             $pageComponent = $parentData;
         } else {
-            $pageComponent = $this->getData()->parent;
+            $pageComponent = $this->getData();
+            while ($pageComponent = $pageComponent->parent) {
+                if ($pageComponent->isPage) break;
+                if (Vpc_Abstract::getFlag($pageComponent->componentClass, 'menuCategory')) break;
+            }
         }
         if ($pageComponent) $ret = $pageComponent->getChildPages($select);
         return $ret;
