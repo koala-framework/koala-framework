@@ -13,8 +13,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['showParentPage'] = false;
         $ret['showParentPageLink'] = false;
         $ret['level'] = 'main';
-        $ret['dataModel'] = 'Vpc_Menu_Abstract_Model';
-        $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
         $ret['flags']['hasAlternativeComponent'] = true;
         return $ret;
     }
@@ -94,8 +92,10 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 do {
                     if (Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) break;
                 } while ($data = $data->parent);
-                if (Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
-                    if ($data->id != Vpc_Abstract::getSetting($componentClass, 'level')) {
+                $cat = Vpc_Abstract::getFlag($data->componentClass, 'menuCategory');
+                if ($cat) {
+                    if ($cat === true) $cat = $data->id;
+                    if ($cat != Vpc_Abstract::getSetting($componentClass, 'level')) {
                         //there are categories and we are in a different category than the menu is
                         //(so none is active and we can just show the parentContent (=efficient))
                         $ret = 'parentContent';
