@@ -14,6 +14,7 @@ Neue Features:
                                   this can replace InheritContent in combination with
                                   Vpc_Basic_ParentContent_Component
                                   (it's more powerful and logical)
+- Vpc_Menu_EditableItems: allows attach components to menu items (including images)
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
