@@ -72,7 +72,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         if (!$foundPageOrCategory) return 'empty';
 
         $data = $parentData;
-        $menuLevel = $generator->getGeneratorFlag('page') ? 1 : 0; // falls zu erstellendes Data eigene Page ist (tritt eigentlich nur bei Tests auf)
+        $menuLevel = 0;
         while ($data && !Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
             if ($data->isPage) $menuLevel++;
             $data = $data->parent;
@@ -108,8 +108,10 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
         if ($ret == false) {
             if (!is_numeric(Vpc_Abstract::getSetting($componentClass, 'level'))) {
-                if (Vpc_Abstract::getFlag($parentData->componentClass, 'menuCategory')) {
-                    if ($parentData->id != Vpc_Abstract::getSetting($componentClass, 'level')) {
+                $cat = Vpc_Abstract::getFlag($parentData->componentClass, 'menuCategory');
+                if ($cat) {
+                    if ($cat === true) $cat = $parentData->id;
+                    if ($cat != Vpc_Abstract::getSetting($componentClass, 'level')) {
                         $ret = 'otherCategory';
                     }
                 } else {
