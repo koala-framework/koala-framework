@@ -47,6 +47,11 @@ class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function getMenuData()
+    {
+        return $this->_getParentContentData()->getComponent()->getMenuData();
+    }
+
     public function getTemplateVars()
     {
         $menu = $this->_getParentContentData();
