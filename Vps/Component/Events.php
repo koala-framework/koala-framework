@@ -62,7 +62,12 @@ class Vps_Component_Events
 
             $listeners = array();
             foreach ($eventObjects as $eventObject) {
+                if (get_class($eventObject) == 'Vps_Component_Generator_Events_Table') {
+
+                }
+
                 foreach ($eventObject->getListeners() as $listener) {
+                    /*
                     if (!is_array($listener) ||
                         !isset($listener['event']) ||
                         !isset($listener['callback'])
@@ -77,6 +82,7 @@ class Vps_Component_Events
                         'method' => $listener['callback'],
                         'config' => $eventObject->getConfig()
                     );
+                    */
                 }
             }
 

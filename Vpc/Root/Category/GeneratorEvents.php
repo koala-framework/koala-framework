@@ -10,15 +10,21 @@ class Vpc_Root_Category_GeneratorEvents extends Vps_Component_Generator_Page_Eve
             'callback' => 'onPageRowUpdate'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Page_FilenameChanged',
+            'event' => 'Vps_Component_Event_Page_RecursiveFilenameChanged',
             'callback' => 'onPageFilenameChanged'
         );
         return $ret;
     }
 
-    public function onPageFilenameChanged(Vps_Component_Event_Page_FilenameChanged $event)
+    public function onPageFilenameChanged(Vps_Component_Event_Page_RecursiveFilenameChanged $event)
     {
-        d($event);
+        if (is_numeric($event->componentId)) {
+            foreach ($this->_getRecursiveChildIds($event->componentId, $ids) as $id) {
+                $this->fireEvent(
+                    new Vps_Component_Event_Page_RecursiveFilenameChanged($this->_class, $id)
+                );
+            }
+        }
     }
 
     public function onPageRowUpdate(Vps_Component_Event_Row_Updated $event)
