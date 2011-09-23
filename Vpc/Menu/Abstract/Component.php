@@ -136,6 +136,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
+    /**
+     * Used by chained
+     */
     public function getMenuData($parentData = null, $select = array())
     {
         return $this->_getMenuData($parentData, $select);
@@ -146,7 +149,11 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         if (is_array($select)) $select = new Vps_Component_Select($select);
         $select->whereShowInMenu(true);
         $ret = array();
-        $pageComponent = $this->getData()->parent;
+        if ($parentData) {
+            $pageComponent = $parentData;
+        } else {
+            $pageComponent = $this->getData()->parent;
+        }
         if ($pageComponent) $ret = $pageComponent->getChildPages($select);
         return $ret;
     }
