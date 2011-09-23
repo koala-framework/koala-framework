@@ -33,9 +33,4 @@ class Vpc_Basic_Flash_Upload_Component extends Vpc_Abstract_Flash_Upload_Compone
         }
         return $ret;
     }
-
-    public function hasContent()
-    {
-        return !!$this->_getUploadUrl();
-    }
 }
