@@ -24,7 +24,7 @@ class Vpc_Advanced_DownloadsTree_Events extends Vpc_Abstract_Events
 
     public function onRowInsertOrDelete(Vps_Component_Event_Row_Abstract $event)
     {
-        $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+        $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
             $this->_class, $event->row->getParentRow('Project')->component_id
         ));
     }
@@ -32,7 +32,7 @@ class Vpc_Advanced_DownloadsTree_Events extends Vpc_Abstract_Events
     public function onRowUpdate(Vps_Component_Event_Row_Updated $event)
     {
         if ($event->isDirty('visible')) {
-            $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+            $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
                 $this->_class, $event->row->getParentRow('Project')->component_id
             ));
         }

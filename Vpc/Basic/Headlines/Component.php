@@ -10,6 +10,7 @@ class Vpc_Basic_Headlines_Component extends Vpc_Abstract
             'cssClass'      => 'webStandard',
             'extConfig'     => 'Vps_Component_Abstract_ExtConfig_Form'
         ));
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = array('headline1', 'headline2');
         return $ret;
     }
 

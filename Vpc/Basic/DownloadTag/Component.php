@@ -12,6 +12,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
         $ret['dataClass'] = 'Vpc_Basic_DownloadTag_Data';
         $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/DownloadTag/Panel.js';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'vps_upload_id';
         return $ret;
     }
 

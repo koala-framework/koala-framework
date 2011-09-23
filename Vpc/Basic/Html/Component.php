@@ -14,6 +14,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
         ));
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
         return $ret;
     }
 

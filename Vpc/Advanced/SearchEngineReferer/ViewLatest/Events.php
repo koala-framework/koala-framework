@@ -14,7 +14,7 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Events extends Vpc_Abstract_Ev
 
     public function onRowInsert(Vps_Component_Event_Row_Inserted $event)
     {
-        $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+        $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
             $this->_class, $event->row->component_id
         ));
     }
