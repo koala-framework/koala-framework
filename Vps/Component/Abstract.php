@@ -560,7 +560,8 @@ class Vps_Component_Abstract
             $classes = array_merge($classes, $plugins);
         }
         if (Vpc_Abstract::getFlag($class, 'hasAlternativeComponent')) {
-            $alternativeComponents = call_user_func(array($class, 'getAlternativeComponents'), $class);
+            $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            $alternativeComponents = call_user_func(array($c, 'getAlternativeComponents'), $class);
             $classes = array_merge($classes, $alternativeComponents);
         }
         foreach ($classes as $c) {
