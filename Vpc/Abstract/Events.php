@@ -19,5 +19,13 @@ class Vpc_Abstract_Events extends Vps_Component_Abstract_Events
         $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
             $this->_class, $event->row->component_id
         ));
+        if (Vpc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate')) {
+            $columns = Vpc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate');
+            if ($event->isDirty($columns)) {
+                $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
+                    $this->_class, $event->row->component_id
+                ));
+            }
+        }
     }
 }

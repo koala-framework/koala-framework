@@ -17,7 +17,7 @@ class Vpc_Abstract_Cards_Events extends Vpc_Abstract_Events
 
     public function onChildHasContentChange(Vps_Component_Event_Component_HasContentChanged $event)
     {
-        $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+        $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
             $this->_class, str_replace('-child', '', $event->dbId)
         ));
     }

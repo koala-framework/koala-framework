@@ -55,6 +55,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/Image/DimensionField.js';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'vps_upload_id';
         return $ret;
     }
 
