@@ -33,12 +33,18 @@ class Vpc_Abstract_List_Events extends Vpc_Abstract_Events
         $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
             $this->_class, $event->row->component_id
         ));
+        $this->fireEvent(new Vps_Component_Event_HasComponent_ContentChanged(
+            $this->_class, $event->row->component_id
+        ));
     }
 
     public function onRowUpdate(Vps_Component_Event_Row_Updated $event)
     {
+        $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+            $this->_class, $event->row->component_id
+        ));
         if ($event->isDirty('visible')) {
-            $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+            $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
                 $this->_class, $event->row->component_id
             ));
         }
@@ -46,7 +52,7 @@ class Vpc_Abstract_List_Events extends Vpc_Abstract_Events
 
     public function onChildContentChange(Vps_Component_Event_Component_ContentChanged $event)
     {
-        $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
+        $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
             $this->_class, $event->getParentComponentId($event->dbId)
         ));
     }

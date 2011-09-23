@@ -7,6 +7,7 @@ class Vpc_Box_AssetsSelect_Component extends Vpc_Box_Assets_Component
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['componentName'] = trlVps('Assets Select');
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'section';
         return $ret;
     }
 
@@ -16,7 +17,7 @@ class Vpc_Box_AssetsSelect_Component extends Vpc_Box_Assets_Component
         if (!$ret) $ret = 'web';
         return $ret;
     }
-    
+
     public function hasContent()
     {
         return (bool)$this->getRow()->section;
