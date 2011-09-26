@@ -19,12 +19,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     public static function validateSettings($settings, $componentClass)
     {
-        /*
         if (isset($settings['showAsEditComponent'])) {
             throw new Vps_Exception("showAsEditComponent setting doesn't exist anymore");
         }
-        */
-
         if ($settings['showParentPage'] || $settings['showParentPageLink']) {
             if (is_string($settings['level'])) {
                 throw new Vps_Exception("You can't use showParentPage for MainMenus (what should that do?)");
