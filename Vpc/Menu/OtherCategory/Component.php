@@ -23,4 +23,11 @@ class Vpc_Menu_OtherCategory_Component extends Vpc_Abstract
 
         return $ret;
     }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $c = Vpc_Abstract::getSetting($componentClass, 'menuComponentClass');
+        return call_user_func(array($c, 'getStaticCacheMeta'), $c);
+        return $ret;
+    }
 }
