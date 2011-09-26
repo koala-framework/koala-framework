@@ -43,8 +43,6 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
         $html = $page->render(true, true);
         //p($html);
 
-        $this->markTestIncomplete("cache is not cleared correctly, I'll wait for cache events before investigating this");
-
         $this->assertEquals(3, substr_count($html, '<li'));
         $this->assertEquals(3, substr_count($html, 'g1'));
         $this->assertEquals(2, substr_count($html, 'f4'));

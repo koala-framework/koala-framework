@@ -8,6 +8,7 @@ class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
         if (isset($generators['subMenu'])) {
             $ret['generators']['subMenu'] = $generators['subMenu'];
         }
+        $ret['menuComponentClass'] = $menuComponentClass;
         return $ret;
     }
 
@@ -80,6 +81,13 @@ class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
             }
         }
 
+        return $ret;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $c = Vpc_Abstract::getSetting($componentClass, 'menuComponentClass');
+        return call_user_func(array($c, 'getStaticCacheMeta'), $c);
         return $ret;
     }
 }
