@@ -77,7 +77,9 @@ class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             if ($i->getAutoFillWithFilename()) {
                 $ret[] = $i;
             }
-            $ret = array_merge($ret, $this->_getAutoFillFilenameField($i));
+            if (!$i instanceof Vps_Form_Field_MultiFields) {
+                $ret = array_merge($ret, $this->_getAutoFillFilenameField($i));
+            }
         }
         return $ret;
     }

@@ -46,12 +46,8 @@ class Vps_Controller_Action_Component_ClearCacheController extends Vps_Controlle
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
         parent::_beforeSave($row);
-
-        $cmd = "php bootstrap.php clear-cache";
-
-        $ret = $output = null;
-        exec($cmd, $output, $ret);
-        if ($ret != 0) throw new Vps_Exception_Client("Cache clearing failed");
+        
+        Vps_Util_ClearCache::getInstance()->clearCache();
 
         $mail = new Vps_Mail();
         $user = Vps_Registry::get('userModel')->getAuthedUser();

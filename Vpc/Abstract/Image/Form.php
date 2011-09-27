@@ -3,6 +3,14 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
+        $this->_initFieldsUpload();
+        $this->_initFieldsCaption();
+
+        parent::_initFields();
+    }
+
+    protected function _initFieldsUpload()
+    {
         // Dateiname
         if (Vpc_Abstract::getSetting($this->getClass(), 'editFilename')) {
             $this->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
@@ -33,14 +41,16 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
                 ->setAllowBlank(false)
                 ->setDimensions($dimensions);
         }
+    }
 
+    
+    protected function _initFieldsCaption()
+    {
         // Bildunterschrift
         if (Vpc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
             $this->add(new Vps_Form_Field_TextField('image_caption', trlVps('Image caption')))
                 ->setWidth(300);
         }
-
-        parent::_initFields();
     }
 
     public function setFieldLabel($label)

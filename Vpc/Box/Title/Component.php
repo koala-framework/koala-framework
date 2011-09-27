@@ -18,7 +18,7 @@ class Vpc_Box_Title_Component extends Vpc_Abstract
 
     protected function _getApplicationTitle()
     {
-        return Zend_Registry::get('config')->application->name;
+        return Vps_Config::getValue('application.name');
     }
 
     public function getTemplateVars()

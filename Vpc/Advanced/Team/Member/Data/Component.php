@@ -68,14 +68,10 @@ class Vpc_Advanced_Team_Member_Data_Component extends Vpc_Abstract
 
     public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
     {
-        $fieldName = $this->getData()->componentId;
-
         $text = strip_tags($this->getSearchContent());
 
         $doc->getField('content')->value .= ' '.$text;
-
-        $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
-        $doc->addField($field);
+        $doc->getField('normalContent')->value .= ' '.$text;
 
         return $doc;
     }

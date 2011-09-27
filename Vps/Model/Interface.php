@@ -53,6 +53,9 @@ interface Vps_Model_Interface
 
     public function callMultiple(array $call);
 
+    public function fetchColumnByPrimaryId($column, $id);
+    public function fetchColumnsByPrimaryId(array $columns, $id);
+
     //deprecated
     public function find($id);
     public function fetchAll($where=null, $order=null, $limit=null, $start=null);

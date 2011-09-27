@@ -70,8 +70,8 @@ Ext.extend(Vps.EyeCandy.List.Item, Ext.util.Observable, {
 
     getWidthIncludingMargin: function()
     {
-        var w = this.list.getItem(0).el.getWidth();
-        var margins = this.list.getItem(0).el.getMargins();
+        var w = this.el.getWidth();
+        var margins = this.el.getMargins();
         w += margins.left + margins.right;
         return w;
     }

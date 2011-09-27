@@ -76,6 +76,17 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             scope: this
         });
 
+        this.actions.showPreviewWeb = new Ext.Action({
+            text : trlVps('Preview in web'),
+            icon : '/assets/silkicons/zoom_in.png',
+            cls  : 'x-btn-text-icon',
+            handler: function(b) {
+                window.open(this.controllerUrl+'/open-preview?componentId='+
+                    this.getBaseParams().componentId);
+            },
+            scope: this
+        });
+
         this.actions.makeAllVisible = new Ext.Action({
             text : trlVps('All Visible'),
             icon : '/assets/silkicons/tick.png',
@@ -122,9 +133,12 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             this.actions.copyPaste = {
                 text: trlVps('copy/paste'),
                 menu: [{
-                    text: trlVps('Copy Paragraph'),
+                    text: trlVps('Copy all Paragraphs'),
                     icon: '/assets/silkicons/page_white_copy.png',
-                    disabled: true
+                    scope: this,
+                    handler: function() {
+                        this.onCopyAllParagraphs();
+                    }
                 },{
                     text: trlVps('Paste Paragraph'),
                     icon: '/assets/silkicons/page_white_copy.png',
@@ -144,7 +158,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             };
         }
 
-        this.tbar = [ this.actions.showPreview ];
+        this.tbar = [ this.actions.showPreview, this.actions.showPreviewWeb ];
         if (this.actions.addparagraph) {
             this.tbar.push('-');
             this.tbar.push(this.actions.addparagraph);
@@ -392,6 +406,8 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             params: params,
             mask: this.el,
             scope: this,
+            progress: true,
+            progressTitle : trlVps('Paste Paragraph'),
             success: function() {
                 this.reload();
                 this.fireEvent('datachange');
@@ -401,6 +417,14 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onCopyPasteMenuShow: function(record) {
         this.copyPasteParagraphPos = parseInt(record.get('pos'))+1;
+    },
+
+    onCopyAllParagraphs: function() {
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-copy-all',
+            params: this.getBaseParams(),
+            mask: this.el
+        });
     }
 
 });

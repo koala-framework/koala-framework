@@ -28,17 +28,19 @@ class Vps_Util_Gearman_AdminClient
             $server = Vps_Registry::get('config')->server->gearman->jobServers->$server;
         }
         if ($server->tunnelUser) {
-            $fp = fsockopen('localhost', 4730, $errno, $errstr, 5);
+            $fp = @fsockopen('localhost', 4730, $errno, $errstr, 5);
             if (!$fp) {
-                system("ssh $server->tunnelUser@$server->host -L $server->port:localhost:4730 >/dev/null 2>&1 &");
+                system("ssh $server->tunnelUser@$server->host -L $server->port:localhost:4730 sleep 60 >application/log/gearman-tunnel.log 2>&1 &");
+                sleep(2);
+            } else {
+                fclose($fp);
             }
-            fclose($fp);
         }
     }
 
     public function __destruct()
     {
-        fclose($this->_connection);
+        if ($this->_connection) fclose($this->_connection);
     }
 
     public function getStatus()

@@ -5,6 +5,7 @@ abstract class Vpc_Directories_Top_Component extends Vpc_Directories_List_Compon
     {
         $ret = parent::getSettings();
         $ret['limit'] = 5;
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 
