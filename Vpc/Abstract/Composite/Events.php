@@ -5,12 +5,14 @@ class Vpc_Abstract_Composite_Events extends Vpc_Abstract_Events
     {
         $ret = parent::getListeners();
         $generators = Vpc_Abstract::getSetting($this->_class, 'generators');
-        foreach ($generators['child']['component'] as $component) {
-            $ret[] = array(
-                'class' => $component,
-                'event' => 'Vps_Component_Event_Component_HasContentChanged',
-                'callback' => 'onChildHasContentChange'
-            );
+        if (is_array($generators['child']['component'])) {
+            foreach ($generators['child']['component'] as $component) {
+                $ret[] = array(
+                    'class' => $component,
+                    'event' => 'Vps_Component_Event_Component_HasContentChanged',
+                    'callback' => 'onChildHasContentChange'
+                );
+            }
         }
         return $ret;
     }

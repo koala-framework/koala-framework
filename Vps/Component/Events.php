@@ -67,7 +67,6 @@ class Vps_Component_Events
                 }
 
                 foreach ($eventObject->getListeners() as $listener) {
-                    /*
                     if (!is_array($listener) ||
                         !isset($listener['event']) ||
                         !isset($listener['callback'])
@@ -82,7 +81,6 @@ class Vps_Component_Events
                         'method' => $listener['callback'],
                         'config' => $eventObject->getConfig()
                     );
-                    */
                 }
             }
 

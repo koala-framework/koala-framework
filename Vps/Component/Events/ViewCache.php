@@ -23,10 +23,6 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
             'callback' => 'onPageChanged'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Page_ParentChanged',
-            'callback' => 'onPageChanged'
-        );
-        $ret[] = array(
             'event' => 'Vps_Component_Event_Page_RecursiveFilenameChanged',
             'callback' => 'onPageRecursiveChanged'
         );
