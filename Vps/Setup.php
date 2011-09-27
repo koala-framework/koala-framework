@@ -130,6 +130,7 @@ class Vps_Setup
                 $ip .= PATH_SEPARATOR . $p;
             }
         }
+        $ip .= PATH_SEPARATOR . getcwd().'/application/cache/generated';
         set_include_path($ip);
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
