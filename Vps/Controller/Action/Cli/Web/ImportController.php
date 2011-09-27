@@ -451,8 +451,8 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
 
         if ($targetUrl == $sourceUrl) return;
 
-        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl, 'timeout' => 120));
-        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl, 'timeout' => 120));
+        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl, 'timeout' => 180));
+        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl, 'timeout' => 180));
 
         echo "importiere service...\nsource=$sourceUrl target=$targetUrl\n";
 
@@ -461,9 +461,47 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             return;
         }
 
-        echo "importiere users tabelle...\n";
+        echo "importiere users tabelle...";
 
-        $targetModel->copyDataFromModel($sourceModel, null, array('replace' => true));
+        if ($targetModel->countRows() == 0) {
+            $userCopySelect = null;
+        } else {
+            $userCopySelect = null;
+            // 10-tage-weise stichproben nehmen ob die daten übereinstimmen
+            $time = time();
+            $i = 1;
+            while (true) {
+                $date = date('Y-m-d H:i:s', $time - ($i*86400*10));
+                $sel = new Vps_Model_Select();
+                $sel->where(new Vps_Model_Select_Expr_Smaller('last_modified', $date))
+                    ->order('last_modified', 'DESC')
+                    ->limit(5);
+                $targetRows = $targetModel->getRows($sel);
+                $sourceRows = $sourceModel->getRows($sel);
+
+                if (count($sourceRows) == 5 && count($targetRows) == 5
+                    && $sourceRows->toArray() === $targetRows->toArray()
+                ) {
+                    $sourceRows->rewind();
+                    $checkLastModified = $sourceRows->current()->last_modified;
+                    $userCopySelect = new Vps_Model_Select();
+                    $userCopySelect->where(new Vps_Model_Select_Expr_Higher('last_modified', $checkLastModified));
+                    break;
+                }
+
+                $i++;
+                if ($i >= 5) break; // nach max x mal aufhören und alles kopiern
+            }
+            // sync last 6 month
+        }
+
+        if (is_null($userCopySelect)) {
+            echo " Kopiere alle Datesätze...\n";
+        } else {
+            echo " Kopiere ".($sourceModel->countRows($userCopySelect))." Datensätze seit ".$checkLastModified." ($i)...\n";
+        }
+
+        $targetModel->copyDataFromModel($sourceModel, $userCopySelect, array('replace' => true));
 
         // copy users_to_web
         $targetUrl = Vps_Registry::get('config')->service->usersRelation->url;
