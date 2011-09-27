@@ -67,39 +67,6 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         }
     }
 
-    function createFormTable($tablename, $fields)
-    {
-        if (!$this->_tableExists($tablename)) {
-            $f = array();
-            $f['component_id'] = 'varchar(255) NOT NULL';
-            $f = array_merge($f, $fields);
-
-            $sql = "CREATE TABLE `$tablename` (";
-            foreach ($f as $field => $data) {
-                $sql .= " `$field` $data," ;
-            }
-            $sql .= 'PRIMARY KEY (component_id))';
-            $sql .= 'ENGINE=InnoDB DEFAULT CHARSET=utf8';
-            Vps_Registry::get('db')->query($sql);
-
-            if (isset($fields['vps_upload_id'])) {
-                Vps_Registry::get('db')->query("ALTER TABLE $tablename
-                    ADD INDEX (vps_upload_id)");
-                Vps_Registry::get('db')->query("ALTER TABLE $tablename
-                    ADD FOREIGN KEY (vps_upload_id)
-                    REFERENCES vps_uploads (id)
-                    ON DELETE RESTRICT ON UPDATE RESTRICT");
-            }
-            return true;
-        }
-        return false;
-    }
-
-    protected function _tableExists($tablename)
-    {
-        return in_array($tablename, Vps_Registry::get('db')->listTables());
-    }
-
     public function getCardForms()
     {
         $ret = array();
