@@ -128,17 +128,16 @@ class Vps_Util_Setup
             $ret .= "}\n";
         }
 
-        /*
-        //TODO
-        if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != Vps_Config::getValue('application.vps.version')) {
-            $validCommands = array('shell', 'export', 'copy-to-test');
-            if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
-                $required = trim(file_get_contents('application/vps_branch'));
-                $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
-                throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '".Vps_Config::getValue('application.vps.version')."' (Git branch '$vpsBranch')");
-            }
+        if (Vps_Config::getValue('debug.checkBranch')) {
+            $ret .= "if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != Vps_Config::getValue('application.vps.version')) {\n";
+            $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
+            $ret .= "    if (php_sapi_name() != 'cli' || !isset(\$_SERVER['argv'][1]) || !in_array(\$_SERVER['argv'][1], \$validCommands)) {\n";
+            $ret .= "        \$required = trim(file_get_contents('application/vps_branch'));\n";
+            $ret .= "        \$vpsBranch = Vps_Util_Git::vps()->getActiveBranch();\n";
+            $ret .= "        throw new Vps_Exception_Client(\"Invalid Vps branch. Required: '\$required', used: '\".Vps_Config::getValue('application.vps.version').\"' (Git branch '\$vpsBranch')\");\n";
+            $ret .= "    }\n";
+            $ret .= "}\n";
         }
-        */
 
         $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";
         $ret .= "    //für swfupload\n";
