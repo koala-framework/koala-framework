@@ -52,34 +52,38 @@ Vps.onContentReady(function() {
 
 
         form.child('form button.submit').on('click', function(e) {
-            e.stopEvent();
-            
+            if (form.dontUseAjaxRequest) return;
+
             var button = form.child('.button');
             button.down('.saving').show();
             button.down('.submit').hide();
             
             Ext.Ajax.request({
                 url: config.controllerUrl + '/json-save',
+                ignoreErrors: true,
                 params: {
                     componentId: config.componentId
                 },
                 form: form.down('form'),
+                failure: function() {
+                    //on failure try a plain old post of the form
+                    form.dontUseAjaxRequest = true; //avoid endless recursion
+                    button.down('.submit').dom.click();
+                },
                 success: function(response, options, r) {
                     
                     button.down('.saving').hide();
                     button.down('.submit').show();
-                    
+
                     // remove and set error classes for fields
-                    Ext.each(form.query('.vpsField'), function(field) {
-                        Ext.fly(field).removeClass('vpsFieldError');
-                    });
-                    if (r.errorFields && r.errorFields.length) {
-                        for (var i=0; i<r.errorFields.length; i++) {
-                            var field = form.child('.' + r.errorFields[i]);
-                            if (field) field.addClass('vpsFieldError');
-                        }
+                    fields.each(function(field) {
+                        field.hideError();
+                    }, this);
+                    for(var fieldName in r.errorFields) {
+                        var field = findField(fieldName);
+                        field.showError(r.errorFields[fieldName]);
                     }
-                    
+
                     // remove and add error messages
                     var error = form.parent().down('.webFormError');
                     if (error) error.remove();
@@ -104,7 +108,9 @@ Vps.onContentReady(function() {
                 },
                 scope: this
             });
-                
-        });
+
+            e.stopEvent();
+        }, this);
+
     });
 });

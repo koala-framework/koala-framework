@@ -27,14 +27,22 @@ class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
         $errors = $component->getErrors();
         $this->view->errorPlaceholder = $component->getPlaceholder('error');
         $this->view->errorFields = array();
-        foreach ($errors as $error) {
-            if (isset($error['field'])) {
-                $this->view->errorFields[] = $error['field']->getFieldName();
-            }
-        }
         $this->view->errorMessages = array();
-        foreach (Vps_Form::formatValidationErrors($errors) as $error) {
-            $this->view->errorMessages[] = htmlspecialchars($error);
+        foreach ($errors as $error) {
+            if (isset($error['message'])) {
+                $error['messages'] = array($error['message']);
+            }
+            $msgs = array();
+            foreach ($error['messages'] as $msg) {
+                $msgs[] = htmlspecialchars($msg);
+            }
+            if (isset($error['field'])) {
+                //if message is associated with a specific field show it there
+                $this->view->errorFields[$error['field']->getFieldName()] = implode('<br />', $msgs);
+            } else {
+                //else just above the form
+                $this->view->errorMessages = array_merge($this->view->errorMessages, $msgs);
+            }
         }
         $this->view->successContent = null;
         if (!$this->view->errorMessages && !$this->view->errorFields) {
@@ -44,6 +52,7 @@ class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
                 $this->view->successContent = $renderer->renderComponent($success);
             }
         }
+        $this->view->errorFields = (object)$this->view->errorFields;
     }
 
     protected function _isAllowedComponent()

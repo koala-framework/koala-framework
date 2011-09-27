@@ -1,9 +1,4 @@
 <?php
-/**
- * Vivid Planet Component (Vpc)
- * @package Vpc
- * @copyright Copyright (c) 2007, Vivid Planet Software GmbH
- */
 abstract class Vpc_Abstract extends Vps_Component_Abstract
 {
     private $_data;
