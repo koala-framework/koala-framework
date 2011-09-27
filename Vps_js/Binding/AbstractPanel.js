@@ -78,6 +78,10 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                 }
                 this._loadBinding(b);
             }, this);
+        } else {
+            this.bindings.each(function(b) {
+                b.item.disable();
+            }, this);
         }
     },
 
