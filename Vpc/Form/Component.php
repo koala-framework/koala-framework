@@ -22,10 +22,10 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtElement';
-        $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
-        $ret['assets']['files'][] = 'vps/Vps/Form/Field/MultiCheckbox/Component.js';
+        $ret['assets']['dep'][] = 'ExtConnection';
         $ret['assets']['files'][] = 'vps/Vpc/Form/Component.js';
-        $ret['assets']['files'][] = 'vps/Vps_js/Form/FieldSet/Component.js';
+        $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/Field.js';
+        $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/*';
 
         $ret['flags']['processInput'] = true;
 
@@ -84,9 +84,6 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         while ($m instanceof Vps_Model_Proxy) {
             $m = $m->getProxyModel();
         }
-        if (Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
-            Vps_Registry::get('db')->beginTransaction();
-        }
 
         $this->getForm()->initFields();
 
@@ -95,6 +92,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             $this->_posted = false;
         } else {
             $this->_posted = true;
+        }
+        if ($this->_posted && Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
+            Vps_Registry::get('db')->beginTransaction();
         }
         $postData = $this->_form->processInput(null, $postData);
         $this->_postData = $postData;
@@ -119,7 +119,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
-        if (Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
+        if ($this->_posted && Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
             Vps_Registry::get('db')->commit();
         }
     }
@@ -160,7 +160,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = Vpc_Abstract::getTemplateVars();
 
         if (!$this->_processed) {
             throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
@@ -180,6 +180,12 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
+        if ($ret['showSuccess']) {
+            foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
+                $ret[$c->id] = $c;
+            }
+        }
+
         $values = $this->getForm()->load(null, $this->_postData);
         $ret['form'] = $this->getForm()->getTemplateVars($values);
 
@@ -192,7 +198,13 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['formName'] = $this->getData()->componentId;
         $ret['buttonClass'] = $this->_getSetting('buttonClass');
 
-        $ret['action'] = $this->getData()->url;
+        $cachedContent = Vps_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
+        if ($cachedContent) {
+            $targetPage = explode(';', $cachedContent);
+            $ret['action'] = $targetPage[0];
+        } else {
+            $ret['action'] = $this->getData()->url;
+        }
         $ret['method'] = $this->_getSetting('method');
 
         $ret['isUpload'] = false;
@@ -212,10 +224,19 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             $controllerUrl = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm');
             Vps_Cache_Simple::add($cacheId, $controllerUrl);
         }
-        $ret['json'] = array(
+        $hideForValue = array();
+        foreach ($this->_form->getHideForValue() as $v) {
+            $hideForValue[] = array(
+                'field' => $v['field']->getFieldName(),
+                'value' => $v['value'],
+                'hide' => $v['hide']->getFieldName(),
+            );
+        }
+        $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
-            'savingImage' => '/assets/vps/Vpc/Form/saving.gif'
+            'savingImage' => '/assets/vps/Vpc/Form/saving.gif',
+            'hideForValue' => $hideForValue
         );
 
         return $ret;

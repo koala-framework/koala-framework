@@ -45,17 +45,9 @@ class Vps_Component_Abstract
     {
         if (self::$_rebuildingSettings) {
             //um endlosschleife in settingsCache zu verhindern
-            $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-            if (!class_exists($c)) {
-                throw new Vps_Exception("Invalid component '$class'");
-            }
-            $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
-            if (isset(self::$_cacheSettings[$c][$param])) {
-                $settings = self::$_cacheSettings[$c][$param];
-            } else {
-                $settings = call_user_func(array($c, 'getSettings'), $param);
-                self::$_cacheSettings[$c][$param] = $settings;
-            }
+
+            self::_verifyComponentClass($class);
+            $settings = self::_loadCacheSettings($class);
             return isset($settings[$setting]);
         }
 
@@ -75,14 +67,151 @@ class Vps_Component_Abstract
         return $ret;
     }
 
+    private static function _verifyComponentClass($class)
+    {
+        $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+        if (!class_exists($c)) {
+            $file = str_replace('_', '/', $c).'.yml';
+            if (file_exists($file)) {
+                $input = file_get_contents($file);
+                $yaml = new sfYamlParser();
+                try {
+                    $settings = $yaml->parse($input);
+                } catch (Exception $e) {
+                    throw new Vps_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
+                }
+                if (!isset($settings['base'])) {
+                    throw new Vps_Exception("'base' setting is required in '$file'");
+                }
+                if (!class_exists($settings['base'])) {
+                    throw new Vps_Exception("'$file' base class '$settings[base]' does not exist");
+                }
+                $code = "<?php\nclass $c extends $settings[base]\n{\n";
+                $code .= "    public static \$YAML_CONFIG_FILE = '$file';\n";
+                $code .= "}\n";
+                $classFile = 'application/cache/generated/'.str_replace('_', '/', $c).'.php';
+                mkdir(substr($classFile, 0, strrpos($classFile, '/')), 0777, true);
+                file_put_contents($classFile, $code);
+                if (!class_exists($c)) {
+                    throw new Vps_Exception("just generated class still does not exist");
+                }
+            } else {
+                throw new Vps_Exception("Invalid component '$class'");
+            }
+        }
+    }
+
+    private static function _processYamlSettings(&$settings)
+    {
+        foreach ($settings as $k=>$i) {
+            if (is_string($i) && preg_match('#^\\s*(trl|trlVps)\\(\'(.*)\'\\)\s*$#', $i, $m)) {
+                $settings[$k] = Vps_Trl::getInstance()->trl($m[2], array(), $m[1]=='trlVps' ? Vps_Trl::SOURCE_VPS : Vps_Trl::SOURCE_WEB);
+            } else if (is_string($i) && preg_match('#^\\.\'(.*)\'$#', $i, $m)) {
+                if (isset($settings[$k])) {
+                    $settings[$k] = $settings[$k] . $m[1];
+                } else {
+                    $settings[$k] = $m[1];
+                }
+            }
+            if (is_array($i)) {
+                self::_processYamlSettings($settings[$k]);
+            }
+        }
+    }
+
+    private static function _mergeSettings(&$settings, $mergeSettings)
+    {
+        foreach ($mergeSettings as $k=>$i) {
+            if ($k=='_merge') {
+                //ignore, not a setting; only for controling merging
+                continue;
+            }
+            if (is_array($i)) {
+                /*
+                if (isset($i['_merge']) && $i['_merge'] == 'parentComponent') {
+                    //keep $settings[$k]
+                    if (!isset($settings[$k])) $settings[$k] = array();
+                } else {
+                    $settings[$k] = array(); //no merge; empty parent settings
+                }
+                */
+                if (isset($i['_merge']) && $i['_merge'] == 'reset') {
+                    $settings[$k] = array(); //no merge; empty parent settings
+                } else {
+                    $keys = array_keys($settings[$k]);
+                    if ($keys[0] == 0) {
+                        $settings[$k] = array(); //array; no merge; empty parent settings
+                    } else {
+                        //keep $settings[$k]
+                        if (!isset($settings[$k])) $settings[$k] = array();
+                    }
+                }
+                self::_mergeSettings($settings[$k], $i);
+            } else {
+                $settings[$k] = $i;
+            }
+        }
+    }
+
+    private static function _loadCacheSettings($class)
+    {
+        $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+        $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
+        if (!isset(self::$_cacheSettings[$c][$param])) {
+            $settings = call_user_func(array($c, 'getSettings'), $param);
+            if (isset($c::$YAML_CONFIG_FILE)) {
+                $input = file_get_contents($c::$YAML_CONFIG_FILE);
+                $yaml = new sfYamlParser();
+                try {
+                    $mergeSettings = $yaml->parse($input);
+                } catch (Exception $e) {
+                    throw new Vps_Exception(sprintf('Unable to parse %s: %s', $c::$YAML_CONFIG_FILE, $e->getMessage()));
+                }
+                if (isset($mergeSettings['settings'])) {
+                    self::_processYamlSettings($mergeSettings['settings']);
+                    self::_mergeSettings($settings, $mergeSettings['settings']);
+                }
+                if (isset($mergeSettings['childSettings'])) {
+                    if (isset($settings['childSettings'])) {
+                        self::_processYamlSettings($mergeSettings['childSettings']);
+                        self::_mergeSettings($settings['childSettings'], $mergeSettings['childSettings']);
+                    } else {
+                        $settings['childSettings'] = $mergeSettings['childSettings'];
+                    }
+                }
+            }
+            if (substr($param, 0, 2)=='cs') { //child settings
+                $childSettingsComponentClass = substr($param, 2, strpos($param, '>')-2);
+                $childSettingsKey = substr($param, strpos($param, '>')+1);
+                $childSettingsKey = str_replace('>', '.', $childSettingsKey);
+                $cs = self::getSetting($childSettingsComponentClass, 'childSettings');
+                if (isset($cs[$childSettingsKey])) {
+                    self::_mergeSettings($settings, $cs[$childSettingsKey]);
+                }
+            }
+            if (isset($settings['componentIcon']) && is_string($settings['componentIcon'])) {
+                $settings['componentIcon'] = new Vps_Asset($settings['componentIcon']);
+            }
+            self::$_cacheSettings[$c][$param] = $settings;
+        }
+        return self::$_cacheSettings[$c][$param];
+    }
+
+    private static function _addChildSettingsParam($componentClass, $csParam)
+    {
+        if (substr($componentClass, -strlen($csParam)-3) == '.cs'.$csParam) return $componentClass;
+        if (preg_match('#^[a-z0-9_]+.cs[a-z0-9_]+>#i', $componentClass)) {
+            throw new Vps_Exception("can't add another childSettings parameter '$csParam' to '$componentClass'");
+        }
+        return $componentClass . '.cs' . $csParam;
+    }
+
     public static function getSetting($class, $setting)
     {
         if (self::$_rebuildingSettings) {
             //um endlosschleife in settingsCache zu verhindern
 
-            if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {
-                throw new Vps_Exception("Invalid component '$class'");
-            }
+            self::_verifyComponentClass($class);
             if ($setting == 'parentClasses') {
                 $p = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
                 $ret = array();
@@ -123,21 +252,63 @@ class Vps_Component_Abstract
                     'printcss' => array('filename'=>'Component', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
                 ));
             } else {
-                $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-                $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
-                if (isset(self::$_cacheSettings[$c][$param])) {
-                    $settings = self::$_cacheSettings[$c][$param];
-                } else {
-                    $settings = call_user_func(array($c, 'getSettings'), $param);
-                    self::$_cacheSettings[$c][$param] = $settings;
-                }
+                $settings = self::_loadCacheSettings($class);
                 if (!array_key_exists($setting, $settings)) {
-                    throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
+                    throw new Vps_Exception("Couldn't find required setting '$setting' for $class.");
                 }
                 $ret = $settings[$setting];
                 if ($setting == 'generators') {
-                    $ret = array();
-                    foreach ($settings[$setting] as $k=>$g) {
+                    if (isset($settings['childSettings'])) {
+                        $processed = array();
+                        foreach ($settings['childSettings'] as $csKeys=>$childSettings) {
+                            $csKeys = explode('.', $csKeys);
+                            $csKey = explode('_', $csKeys[0]); //just the first
+                            if (!isset($ret[$csKey[0]])) {
+                                throw new Vps_Exception("invalid childSetting; generator '$csKey[0]' does not exist");
+                            }
+                            if (is_array($ret[$csKey[0]]['component'])) {
+                                if (!isset($csKey[1])) {
+                                    throw new Vps_Exception("invalid childSetting; component key required");
+                                }
+                                if (!isset($ret[$csKey[0]]['component'][$csKey[1]])) {
+                                    throw new Vps_Exception("invalid childSetting; component '$csKey[1]' does not exist for generator '$csKey[0]'");
+                                }
+                                $ret[$csKey[0]]['component'][$csKey[1]] = self::_addChildSettingsParam($ret[$csKey[0]]['component'][$csKey[1]], $class.'>'.$csKey[0].'_'.$csKey[1]);
+                            } else {
+                                $ret[$csKey[0]]['component'] = self::_addChildSettingsParam($ret[$csKey[0]]['component'], $class.'>'.$csKey[0]);
+                            }
+                        }
+                    }
+
+                    $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
+                    if ($param && substr($param, 0, 2)=='cs') {
+                        $childSettingsComponentClass = substr($param, 2, strpos($param, '>')-2);
+                        $childSettingsKey = str_replace('>', '.', substr($param, strpos($param, '>')+1));
+                        $allChildSettings = Vpc_Abstract::getSetting($childSettingsComponentClass, 'childSettings');
+                        foreach ($allChildSettings as $csKeys=>$childSettings) {
+                            if (substr($csKeys, 0, strlen($childSettingsKey)) != $childSettingsKey) continue;
+                            if ($csKeys == $childSettingsKey) continue;
+                            $csKeys = explode('.', substr($csKeys, strlen($childSettingsKey)+1));
+                            $csKey = explode('_', $csKeys[0]); //just the first
+                            if (!isset($ret[$csKey[0]])) {
+                                throw new Vps_Exception("invalid childSetting; generator '$csKey[0]' does not exist");
+                            }
+                            if (is_array($ret[$csKey[0]]['component'])) {
+                                if (!isset($csKey[1])) {
+                                    throw new Vps_Exception("invalid childSetting; component key required");
+                                }
+                                if (!isset($ret[$csKey[0]]['component'][$csKey[1]])) {
+                                    throw new Vps_Exception("invalid childSetting; component '$csKey[1]' does not exist for generator '$csKey[0]'");
+                                }
+                                $ret[$csKey[0]]['component'][$csKey[1]] = self::_addChildSettingsParam($ret[$csKey[0]]['component'][$csKey[1]], substr($param, 2).'>'.$csKey[0].'_'.$csKey[1]);
+                            } else {
+                                $ret[$csKey[0]]['component'] = self::_addChildSettingsParam($ret[$csKey[0]]['component'], substr($param, 2).'>'.$csKey[0]);
+                            }
+                        }
+                    }
+
+                    $retModified = array();
+                    foreach ($ret as $k=>$g) {
                         if (is_array($g['component'])) {
                             foreach ($g['component'] as $l=>$cc) {
                                 if (!$cc) continue;
@@ -155,8 +326,9 @@ class Vps_Component_Abstract
                                 $g['component'] .= '.'.$class;
                             }
                         }
-                        $ret[$k] = $g;
+                        $retModified[$k] = $g;
                     }
+                    $ret = $retModified;
                 }
             }
             return $ret;
@@ -227,9 +399,7 @@ class Vps_Component_Abstract
                 self::$_settings['mtimeFiles'] = array();
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
-                    $realCls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                    $param = strpos($c, '.') ? substr($c, strpos($c, '.')+1) : null;
-                    self::$_settings[$c] = call_user_func(array($realCls, 'getSettings'), $param);
+                    self::$_settings[$c] = self::_loadCacheSettings($c);
 
                     //generators �ber getSetting holen, da dort noch die aus der config dazugemixt werden
                     self::$_settings[$c]['generators'] = self::getSetting($c, 'generators', false/*don't use settings cache*/);
@@ -463,7 +633,8 @@ class Vps_Component_Abstract
         self::$_modelsCache = array(
             'own' => array(),
             'child' => array(),
-            'form' => array()
+            'form' => array(),
+            'table' => array()
         );
     }
 
@@ -558,9 +729,10 @@ class Vps_Component_Abstract
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
-        $alternativeComponent = Vpc_Abstract::getFlag($class, 'alternativeComponent');
-        if ($alternativeComponent) {
-            $classes[] = $alternativeComponent;
+        if (Vpc_Abstract::getFlag($class, 'hasAlternativeComponent')) {
+            $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            $alternativeComponents = call_user_func(array($c, 'getAlternativeComponents'), $class);
+            $classes = array_merge($classes, $alternativeComponents);
         }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {

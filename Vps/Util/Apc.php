@@ -26,12 +26,21 @@ class Vps_Util_Apc
         if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/util/apc/clear-cache') {
             $s = microtime(true);
             if ($_GET['type'] == 'user') {
+                /*
                 if (class_exists('APCIterator')) {
                     $prefix = Vps_Cache::getUniquePrefix();
                     apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix, '#').'#'));
                     apc_delete_file(new APCIterator('user', '#^config_[^/]+'.preg_quote(getcwd(), '#').'#'));
                 } else {
                     apc_clear_cache('user');
+                }
+                */
+                $cacheInfo = apc_cache_info('user');
+                $prefix = Vps_Cache::getUniquePrefix();
+                foreach ($cacheInfo['cache_list'] as $i) {
+                    if (substr($i['info'], 0, strlen($prefix))==$prefix) {
+                        apc_delete($i['info']);
+                    }
                 }
             } else {
                 $paths = array(preg_quote(getcwd(), '#'));

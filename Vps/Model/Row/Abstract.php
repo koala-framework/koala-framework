@@ -9,7 +9,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     private $_internalId;
     protected $_siblingRows;
     protected $_exprValues = array();
-    private $_dirtyColumns = array();
+    private $_cleanData = array();
     static private $_internalIdCounter = 0;
 
     //damit im save() die childRows autom. mitgespeichert werden können
@@ -178,14 +178,14 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _setDirty($column)
     {
-        if (!in_array($column, $this->_dirtyColumns)) {
-            $this->_dirtyColumns[] = $column;
+        if (!array_key_exists($column, $this->_cleanData)) {
+            $this->_cleanData[$column] = $this->$column;
         }
     }
 
     protected function _resetDirty()
     {
-        $this->_dirtyColumns = array();
+        $this->_cleanData = array();
     }
 
     /**
@@ -193,7 +193,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
      */
     protected function _isDirty()
     {
-        return !empty($this->_dirtyColumns);
+        return !empty($this->_cleanData);
     }
 
     /**
@@ -213,11 +213,29 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
      */
     public function getDirtyColumns()
     {
-        $ret = $this->_dirtyColumns;
+        $ret = array_keys($this->_cleanData);
         foreach ($this->_getSiblingRows() as $r) {
             $ret = array_merge($ret, $r->getDirtyColumns());
         }
         return $ret;
+    }
+
+    /**
+     * Returns the original value of a column, like it exists in the data source.
+     *
+     * After save() it will return the new value.
+     */
+    public function getCleanValue($name)
+    {
+        if (array_key_exists($name, $this->_cleanData)) {
+            return $this->_cleanData[$name];
+        }
+        foreach ($this->_getSiblingRows() as $r) {
+            if (array_key_exists($name, $r->_cleanData)) {
+                return $r->_cleanData[$name];
+            }
+        }
+        return $this->__get($name);
     }
 
     /**

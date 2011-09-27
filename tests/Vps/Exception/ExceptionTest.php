@@ -23,6 +23,7 @@ class Vps_Exception_ExceptionTest extends Vps_Test_TestCase
 
         // Mit Mail
         Zend_Registry::get('config')->debug->error->log = true;
+        Vps_Config::deleteValueCache('debug.error.log');
         $exception = new Vps_Exception();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
@@ -31,6 +32,7 @@ class Vps_Exception_ExceptionTest extends Vps_Test_TestCase
 
         // Nicht-Vps_Exception mit Mail
         Zend_Registry::get('config')->debug->error->log = true;
+        Vps_Config::deleteValueCache('debug.error.log');
         $e = new Zend_Exception();
         $exception = new Vps_Exception_Other($e);
         $view = $this->_processException($exception);
@@ -38,14 +40,17 @@ class Vps_Exception_ExceptionTest extends Vps_Test_TestCase
         $this->assertFalse($view->debug);
         $this->assertEquals($view->template, 'error.tpl');
         Zend_Registry::get('config')->debug->error->log = false;
+        Vps_Config::deleteValueCache('debug.error.log');
 
         // Vps_Exception_NoLog mit Debug
         Zend_Registry::get('config')->debug->error->log = true;
+        Vps_Config::deleteValueCache('debug.error.log');
         $exception = new Vps_Exception_NoLog();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertFalse($view->debug);
         Zend_Registry::get('config')->debug->error->log = false;
+        Vps_Config::deleteValueCache('debug.error.log');
         $this->assertEquals($view->template, 'error.tpl');
 
         // Vps_Exception_NoLog ohne Debug
