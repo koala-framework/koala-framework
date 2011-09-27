@@ -17,6 +17,7 @@ Neue Features:
 - Component.yml: instead of creating Component.php it is possible to create Component.yml for easier creating
   custom components
 - childSettings: Components can change the settings of their children without inheriting
+- Vpc_Menu_EditableItems: allows attach components to menu items (including images)
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
@@ -24,6 +25,7 @@ möglicherweise nicht kompatible Änderungen:
   Fixe Breiteneinstellungen gehören generell nicht mehr ins css
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 - Vpc/List/Switch got completely changed
+- Menu: maxLevel setting removed (create own SubMenu component with different level)
 
 == 2.1 ==
 Erstellt: 21.06.11

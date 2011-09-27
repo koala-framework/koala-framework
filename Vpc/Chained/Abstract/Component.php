@@ -8,6 +8,19 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
             throw new Vps_Exception("This component requires a parameter");
         }
         $ret['masterComponentClass'] = $masterComponentClass;
+
+        $ret['alternativeComponents'] = array();
+        if (Vpc_Abstract::getFlag($masterComponentClass, 'hasAlternativeComponent')) {
+            $alternativeComponents = call_user_func(array($masterComponentClass, 'getAlternativeComponents'), $masterComponentClass);
+            foreach ($alternativeComponents as $acKey => $alternativeComponent) {
+                $cmp = $alternativeComponent;
+                $cmp = Vpc_Admin::getComponentClass($cmp, "{$prefix}_Component");
+                if (!$cmp) $cmp = "Vpc_Chained_{$prefix}_Component";
+                $cmp .= '.'.$alternativeComponent;
+                $ret['alternativeComponents'][$acKey] = $cmp;
+            }
+        }
+
         $ret['generators'] = Vpc_Abstract::getSetting($masterComponentClass, 'generators');
         foreach ($ret['generators'] as $k=>&$g) {
             if (!is_array($g['component'])) $g['component'] = array($k=>$g['component']);
@@ -17,12 +30,18 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
                 $c = Vpc_Admin::getComponentClass($c, "{$prefix}_Component");
                 if (!$c) $c = "Vpc_Chained_{$prefix}_Component";
                 $c .= '.'.$masterC;
-                $g['masterComponentsMap'][$masterC] = $key;
+                $g['masterComponentsMap'][$masterC] = $c;
+
                 // Für jede Unterkomponente mit einer AlternativeComponent muss es auch einen Eintrag in der masterComponentsMap geben
-                $alternativeComponent = Vpc_Abstract::getFlag($masterC, 'alternativeComponent');
-                if ($alternativeComponent) {
-                    $g['masterComponentsMap'][$alternativeComponent] = $masterC;
-                    $g['component'][$masterC] = $alternativeComponent;
+                if (Vpc_Abstract::getFlag($masterC, 'hasAlternativeComponent')) {
+                    $alternativeComponents = call_user_func(array($masterC, 'getAlternativeComponents'), $masterC);
+                    foreach ($alternativeComponents as $alternativeComponent) {
+                        $cmp = $alternativeComponent;
+                        $cmp = Vpc_Admin::getComponentClass($cmp, "{$prefix}_Component");
+                        if (!$cmp) $cmp = "Vpc_Chained_{$prefix}_Component";
+                        $cmp .= '.'.$alternativeComponent;
+                        $g['masterComponentsMap'][$alternativeComponent] = $cmp;
+                    }
                 }
             }
             if (!isset($g['class'])) {
@@ -54,6 +73,11 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
             }
         }
         return $ret;
+    }
+
+    public static function getAlternativeComponents($componentClass)
+    {
+        return Vpc_Abstract::getSetting($componentClass, 'alternativeComponents');
     }
 
     public function preProcessInput($postData)

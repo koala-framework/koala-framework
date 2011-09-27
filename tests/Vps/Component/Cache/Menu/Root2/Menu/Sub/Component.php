@@ -4,7 +4,7 @@ class Vps_Component_Cache_Menu_Root2_Menu_Sub_Component extends Vps_Component_Ca
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['level'] = 1;
+        $ret['level'] = 2;
         return $ret;
     }
 }

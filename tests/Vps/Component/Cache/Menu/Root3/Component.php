@@ -6,9 +6,16 @@ class Vps_Component_Cache_Menu_Root3_Component extends Vps_Component_NoCategorie
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = 'Vps_Component_Cache_Menu_Root3_Model';
         $ret['generators']['page']['component'] = array(
-            'menu1' => 'Vps_Component_Cache_Menu_Root3_Menu1_Component',
-            'menu2' => 'Vps_Component_Cache_Menu_Root3_Menu2_Component',
-            'menu3' => 'Vps_Component_Cache_Menu_Root3_Menu3_Component',
+            'empty' => 'Vpc_Basic_Empty_Component',
+        );
+        $ret['generators']['menus'] = array(
+            'class' => 'Vps_Component_Generator_Box_Static',
+            'inherit' => true,
+            'component' => array(
+                'menu1' => 'Vps_Component_Cache_Menu_Root3_Menu1_Component',
+                'menu2' => 'Vps_Component_Cache_Menu_Root3_Menu2_Component',
+                'menu3' => 'Vps_Component_Cache_Menu_Root3_Menu3_Component',
+            )
         );
         $ret['flags']['menuCategory'] = 'root';
         return $ret;

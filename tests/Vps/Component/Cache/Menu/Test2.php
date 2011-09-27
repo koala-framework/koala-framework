@@ -10,23 +10,24 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
         /*
         root
           -menu
-          _1
+          _1 (/f1)
             -menu
-            _2
+            _2 (/f1/f2)
               -menu
-              _3
+              _3 (f1/f2/f3)
                 -parent-menu
-          _4
+          _4 (/f4)
             -menu-menu
         */
     }
 
     public function testMenu2Page1()
     {
-        $page = $this->_root->getComponentById(1);
+
+        $page = $this->_root->getComponentById('1');
 
         $html = $page->render(true, true);
-        //d($html);
+        //p($html);
         $this->assertEquals(3, substr_count($html, '<li'));
         $this->assertEquals(3, substr_count($html, 'f1'));
         $this->assertEquals(2, substr_count($html, 'f4'));
@@ -37,9 +38,11 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
         $row->name = 'g1';
         $row->filename = 'g1';
         $row->save();
+
         $this->_process();
         $html = $page->render(true, true);
-        //d($html);
+        //p($html);
+
         $this->assertEquals(3, substr_count($html, '<li'));
         $this->assertEquals(3, substr_count($html, 'g1'));
         $this->assertEquals(2, substr_count($html, 'f4'));
@@ -58,7 +61,7 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
         $row->save();
         $this->_process();
         $html = $page->render(true, true);
-        //d($html);
+        //p($html);
         $this->assertEquals(5, substr_count($html, '<li'));
         $this->assertEquals(4, substr_count($html, 'g1'));
         $this->assertEquals(2, substr_count($html, 'f6'));
