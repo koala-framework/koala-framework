@@ -153,7 +153,26 @@ class Vps_Util_Setup
 
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
-        $ret .= "Vps_Setup::\$configSection = '".Vps_Setup::$configSection."';\n";
+
+
+        $path = getcwd();
+        if (file_exists('application/config_section')) {
+            $configSection = trim(file_get_contents('application/config_section'));
+        } else if (file_exists('/var/www/vivid-test-server')) {
+            $configSection = 'vivid-test-server';
+        } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+            if ($m[3]=='vps-projekte') return 'vivid';
+            $configSection = $m[3];
+        } else if (substr($path, 0, 17) == '/docs/vpcms/test.' ||
+                substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
+                substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
+                substr($path, 0, 20) == '/var/www/vpcms/test.') {
+            $configSection = 'test';
+        } else {
+            $configSection = 'production';
+        }
+
+        $ret .= "Vps_Setup::\$configSection = '".$configSection."';\n";
         $ret .= "if (\$host) {\n";
             $ret .= "    //www abschneiden damit www.test und www.preview usw auch funktionieren\n";
             $ret .= "    if (substr(\$host, 0, 4)== 'www.') \$host = substr(\$host, 4);\n";
