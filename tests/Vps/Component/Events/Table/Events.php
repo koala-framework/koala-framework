@@ -15,7 +15,7 @@ class Vps_Component_Events_Table_Events extends Vps_Component_Abstract_Events
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Component_Moved',
+            'event' => 'Vps_Component_Event_Component_PositionChanged',
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
