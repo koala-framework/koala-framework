@@ -193,7 +193,7 @@ class Vps_Component_Abstract_Admin
         $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
-        if ($hasTrl  || count($components) > 1) {
+        if ($hasTrl || $isTrl || count($components) > 1) {
             if (!$acl->has($dropdownName)) {
                 $acl->add(
                     new Vps_Acl_Resource_MenuDropdown(

@@ -36,6 +36,7 @@ class Vps_Setup
                         '%version%',
                         file_get_contents(VPS_PATH.'/include_path_version'),
                         $zendPath);
+
                 } else {
                     die ('zend not found');
                 }

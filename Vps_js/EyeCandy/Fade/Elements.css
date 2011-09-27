@@ -19,3 +19,5 @@
 .elementAccessLinks .elementAccessPlay {
     background-image: url(/assets/vps/images/play.png);
 }
+.elementAccessNext,
+.elementAccessPrevious { position: relative; z-index: 2; }

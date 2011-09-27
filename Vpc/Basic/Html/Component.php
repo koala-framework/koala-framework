@@ -56,10 +56,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
 
     public function hasContent()
     {
-        if (trim($this->_getRow()->content) != "") {
-            return true;
-        }
-        return false;
+        return trim($this->getRow()->content) != '';
     }
 
     public function getSearchContent()

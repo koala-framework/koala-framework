@@ -1,12 +1,3 @@
-== TODO ==
-- Model Typ-Strikt und Mongo                                       x
-- ACL mit Resourcen, sprerren von hinzufügen & löschen             8
-- MenuConfig, flexibleres erstellen von Menüpunkten in Komponenten 2
-- Zurück Button
-- Volltextsuche bei änderung neu indizieren                        4
-- mögliche wildcards im RTE anzeigen                               1
-- Bearbeitbare Mails für neue Benutzer usw                         4
-
 == 2.2 ==
 Erstellt: 21.06.11
 Stable: 
@@ -23,6 +14,10 @@ Neue Features:
                                   this can replace InheritContent in combination with
                                   Vpc_Basic_ParentContent_Component
                                   (it's more powerful and logical)
+- Component.yml: instead of creating Component.php it is possible to create Component.yml for easier creating
+  custom components
+- childSettings: Components can change the settings of their children without inheriting
+- Vpc_Menu_EditableItems: allows attach components to menu items (including images)
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
@@ -30,6 +25,7 @@ möglicherweise nicht kompatible Änderungen:
   Fixe Breiteneinstellungen gehören generell nicht mehr ins css
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 - Vpc/List/Switch got completely changed
+- Menu: maxLevel setting removed (create own SubMenu component with different level)
 
 == 2.1 ==
 Erstellt: 21.06.11
@@ -56,6 +52,7 @@ möglicherweise nicht kompatible Änderungen:
 - Master.tpl muss $this->componentWithMaster($this->componentWithMaster) für die Haupt-Komponente verwenden
 - generators: box priority wurde entfernt
 - Image Resizing: exif drehung wird jetzt berücksichtigt
+- Config section 'preview' has to have server.domain set to use a real preview domain
 
 == 1.11 ==
 Erstellt: 17.08.10

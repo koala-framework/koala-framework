@@ -64,8 +64,9 @@ abstract class Vps_Component_Renderer_Abstract
 
             $statType = null;
             $content = null;
-            $saveCache = true;
+            $saveCache = false; //disable cache saving completely in preview
             if ($this->_enableCache) {
+                $saveCache = true;
                 $content = Vps_Component_Cache::NO_CACHE;
                 if ($helper->enableCache()) {
                     $content = Vps_Component_Cache::getInstance()->load($componentId, $type, $value);

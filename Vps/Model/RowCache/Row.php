@@ -61,6 +61,7 @@ class Vps_Model_RowCache_Row extends Vps_Model_Proxy_Row
         if (!$this->_row) {
             $id = $this->_cacheData[$this->_model->getPrimaryKey()];
             $this->_row = $this->_model->getSourceRowByIdForRow($id);
+            if (!$this->_row) throw new Vps_Exception("can't get row '$id'");
         }
         return $this->_row;
     }

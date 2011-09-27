@@ -26,6 +26,7 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
         exit;
     }
 
+    /*
     private function _generate($componentId)
     {
         $domain = $this->_getParam('domain');
@@ -36,6 +37,21 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
         //$b = Vps_Benchmark::start('render');
         $content = file_get_contents($url);
         //$b->stop();
+        echo round(strlen($content) / 1000, 2) . 'KB';
+        echo " rendered\n";
+    }
+    */
+    private function _generate($componentId)
+    {
+        echo $componentId.' ';
+        $renderer = new Vps_Component_Renderer();
+        $renderer->setEnableCache(true);
+        try {
+            $content = $renderer->renderComponent(Vps_Component_Data_Root::getInstance()->getComponentById($componentId));
+        } catch (Vps_Exception $e) {
+            echo $e->getMessage().' ';
+            $content = '';
+        }
         echo round(strlen($content) / 1000, 2) . 'KB';
         echo " rendered\n";
     }
@@ -88,6 +104,7 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
 
                     //echo "==> ".$componentId.' ';
                     $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+                    if (!$page) continue;
                     //echo "$page->url\n";
                     foreach ($page->getChildPseudoPages(array(), array('pseudoPage'=>false)) as $c) {
                         //echo "queued $c->componentId\n";
