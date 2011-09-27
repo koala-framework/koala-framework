@@ -8,11 +8,10 @@ class Vpc_Menu_Expanded_Component extends Vpc_Menu_Abstract_Component
         return $ret;
     }
 
-    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    protected static function _requiredLevels($componentClass)
     {
-        $level = self::_getMenuLevel($componentClass, $parentData, $generator);
-        $maxLevel = (int)Vpc_Abstract::getSetting($componentClass, 'level');
-        return $level > ($maxLevel + 2);
+        $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        return $level + 2;
     }
 
     public function getTemplateVars()

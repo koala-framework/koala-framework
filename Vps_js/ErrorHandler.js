@@ -69,40 +69,39 @@ Vps.handleError = function(error) {
             }
         }
 
-            var win = new Ext.Window({
-                    autoCreate : true,
-                    title:title,
-                    resizable:true,
-                    constrain:true,
-                    constrainHeader:true,
-                    minimizable : false,
-                    maximizable : false,
-                    stateful: false,
-                    modal: false,
-                    shim:true,
-                    buttonAlign:"center",
-                    width:400,
-                    minHeight: 300,
-                    plain:true,
-                    footer:true,
-                    closable:false,
-                    html: msg,
-                    buttons: [{
-                        text     : trlVps('Retry'),
-                        handler  : function(){
-                            error.retry.call(error.scope || window);
-                            win.close();
-                        }
-                    },{
-                        text     : trlVps('Abort'),
-                        handler  : function(){
-                            error.abort.call(error.scope || window);
-                            win.close();
-                        }
-                }]
-
-                });
-                win.show();
+        var win = new Ext.Window({
+                autoCreate : true,
+                title:title,
+                resizable:true,
+                constrain:true,
+                constrainHeader:true,
+                minimizable : false,
+                maximizable : false,
+                stateful: false,
+                modal: true,
+                shim:true,
+                buttonAlign:"center",
+                width:600,
+                minHeight: 300,
+                plain:true,
+                footer:true,
+                closable:false,
+                html: msg,
+                buttons: [{
+                    text     : trlVps('Retry'),
+                    handler  : function(){
+                        error.retry.call(error.scope || window);
+                        win.close();
+                    }
+                },{
+                    text     : trlVps('Abort'),
+                    handler  : function(){
+                        error.abort.call(error.scope || window);
+                        win.close();
+                    }
+            }]
+        });
+        win.show();
     } else if (Vps.Debug.displayErrors) {
         Ext.Msg.show({
             title: error.title,
@@ -111,6 +110,7 @@ Vps.handleError = function(error) {
             modal: true,
             width: 800
         });
+        if (error.abort) error.abort.call(error.scope || window); //there is no possibility to retry, so just abort
     } else {
         Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
         if (error.mail || (typeof error.mail == 'undefined')) {
@@ -124,5 +124,6 @@ Vps.handleError = function(error) {
                 }
             });
         }
+        if (error.abort) error.abort.call(error.scope || window); //there is no possibility to retry, so just abort
     }
 };
