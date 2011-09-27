@@ -588,9 +588,15 @@ abstract class Vps_Component_Generator_Abstract
             $componentClass = current($c);
         }
 
-        $alternativeComponent = Vpc_Abstract::getFlag($componentClass, "alternativeComponent");
-        if ($alternativeComponent && call_user_func(array($componentClass, 'useAlternativeComponent'), $componentClass, $parentData, $this)) {
-            $componentClass = $alternativeComponent;
+        if (Vpc_Abstract::getFlag($componentClass, "hasAlternativeComponent")) {
+            $useAC = call_user_func(array($componentClass, 'useAlternativeComponent'), $componentClass, $parentData, $this);
+            if ($useAC) {
+                $alternativeComponents = call_user_func(array($componentClass, 'getAlternativeComponents'), $componentClass);
+                if (!isset($alternativeComponents[$useAC])) {
+                    throw new Vps_Exception("Alternative component $useAC not set, returned by $componentClass::getAlternativeComponents");
+                }
+                $componentClass = $alternativeComponents[$useAC];
+            }
         }
 
         return $componentClass;

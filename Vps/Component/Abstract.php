@@ -729,9 +729,10 @@ class Vps_Component_Abstract
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
-        $alternativeComponent = Vpc_Abstract::getFlag($class, 'alternativeComponent');
-        if ($alternativeComponent) {
-            $classes[] = $alternativeComponent;
+        if (Vpc_Abstract::getFlag($class, 'hasAlternativeComponent')) {
+            $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            $alternativeComponents = call_user_func(array($c, 'getAlternativeComponents'), $class);
+            $classes = array_merge($classes, $alternativeComponents);
         }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {
