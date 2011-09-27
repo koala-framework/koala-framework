@@ -14,6 +14,9 @@ Neue Features:
                                   this can replace InheritContent in combination with
                                   Vpc_Basic_ParentContent_Component
                                   (it's more powerful and logical)
+- Component.yml: instead of creating Component.php it is possible to create Component.yml for easier creating
+  custom components
+- childSettings: Components can change the settings of their children without inheriting
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
