@@ -80,7 +80,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             }
             static $showInvisible;
             if (is_null($showInvisible)) {
-                $showInvisible = Vps_Registry::get('config')->showInvisible;
+                $showInvisible = Vps_Config::getValue('showInvisible');
             }
             if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
             } else if (!$showInvisible) {
@@ -127,8 +127,16 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                 $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
                 if (isset($this->_pageFilename[$filename])) {
                     foreach ($this->_pageFilename[$filename] as $pId => $pageId) {
-                        if (substr($pId, 0, strlen($parentId)) == $parentId)
-                            $pageIds[] = $pageId;
+                        if (is_numeric($parentId)) {
+                            if ($pId == $parentId) {
+                                $pageIds[] = $pageId;
+                            }
+                        } else {
+                            //this is ugly. but we don't get the categories in the parentId
+                            if (substr($pId, 0, strlen($parentId)) == $parentId) {
+                                $pageIds[] = $pageId;
+                            }
+                        }
                     }
                 }
             } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
@@ -272,7 +280,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
-        $data['visible'] = $page['visible'];
+        if (!$page['visible']) {
+            $data['invisible'] = true;
+        }
         return $data;
     }
     protected function _getIdFromRow($id)
@@ -306,7 +316,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     {
         $ret = parent::getPagesControllerConfig($component, $generatorClass);
 
-        $ret['actions']['properties'] = true;
         $ret['actions']['delete'] = true;
         $ret['actions']['copy'] = true;
         $ret['actions']['visible'] = true;
@@ -405,5 +414,10 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     public function getFilenameColumn()
     {
         return 'filename';
+    }
+
+    public function getPagePropertiesForm($componentOrParent)
+    {
+        return new Vpc_Root_Category_GeneratorForm($componentOrParent);
     }
 }

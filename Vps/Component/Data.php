@@ -12,7 +12,7 @@ class Vps_Component_Data
     protected $_inheritClasses;
     protected $_uniqueParentDatas;
 
-    private $_constraintsCache = array();
+    private $_childComponentsCache = array();
     private $_recursiveGeneratorsCache = array();
     private $_languageCache;
 
@@ -60,7 +60,7 @@ class Vps_Component_Data
                 if ($page->filename) $filenames[] = $page->filename;
             }
         } while ($page = $page->getParentPseudoPageOrRoot());
-        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+        $urlPrefix = Vps_Config::getValue('vpc.urlPrefix');
         return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
     }
 
@@ -235,6 +235,7 @@ class Vps_Component_Data
         $cacheId = 'recCCGen-'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $generators = Vps_Cache_Simple::fetch($cacheId, $success);
         if (!$success) {
+            //get (statically=fast and cached) all generators that could create the component we are looking for
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
@@ -434,18 +435,18 @@ class Vps_Component_Data
     {
         $select = $this->_formatSelect($select);
         $sc = $select->getHash();
-        if (isset($this->_constraintsCache[$sc])) {
+        if (isset($this->_childComponentsCache[$sc])) {
             Vps_Benchmark::count('getChildComponents cached');
         } else {
             Vps_Benchmark::count('getChildComponents uncached');
         }
 
-        if (!isset($this->_constraintsCache[$sc])) {
+        if (!isset($this->_childComponentsCache[$sc])) {
 
-            $this->_constraintsCache[$sc] = array();
+            $this->_childComponentsCache[$sc] = array();
 
             if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
-                return $this->_constraintsCache[$sc]; //vorzeitig abbrechen, da kommt sicher kein ergebnis
+                return $this->_childComponentsCache[$sc]; //vorzeitig abbrechen, da kommt sicher kein ergebnis
             }
 
             if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
@@ -463,9 +464,9 @@ class Vps_Component_Data
                 $ret += $this->_getChildComponentsFromGenerators($generators, $select, $limitCount); //kein array_merge, da wuerden die keys verloren gehen - und die sind eh eindeutig
             }
 
-            $this->_constraintsCache[$sc] = $ret;
+            $this->_childComponentsCache[$sc] = $ret;
         }
-        return $this->_constraintsCache[$sc];
+        return $this->_childComponentsCache[$sc];
     }
 
     private function _getChildComponentsFromGenerators($generators, $select, $limitCount)
@@ -637,7 +638,7 @@ class Vps_Component_Data
                 //ist eine page
             } else {
                 if (strpos($id, '_') === false) {
-                    $id = substr($id, 0, strrpos($id, '-'));
+                    $id = substr($id, 0, strpos($id, '-'));
                     if (!is_numeric($id)) {
                         return null;
                     }
@@ -888,6 +889,23 @@ class Vps_Component_Data
         return $this->_languageCache;
     }
 
+    /**
+     * Returns if this component is visible
+     *
+     * A component is visible if all parents are visible.
+     */
+    public function isVisible()
+    {
+        $c = $this;
+        while($c) {
+            if (isset($this->invisible) && $this->invisible) {
+                return false;
+            }
+            $c = $c->parent;
+        }
+        return true;
+    }
+
     public function trlStaticExecute($trlStaticData)
     {
         return Vps_Trl::getInstance()->trlStaticExecute($trlStaticData, $this->getLanguage());
@@ -959,7 +977,7 @@ class Vps_Component_Data
             if ($k == '_component') continue;
             if ($k == '_inheritClasses') continue;
             if ($k == '_uniqueParentDatas') continue;
-            if ($k == '_constraintsCache') continue;
+            if ($k == '_childComponentsCache') continue;
             if ($k == '_recursiveGeneratorsCache') continue;
             if ($k == 'generator') {
                 $v = array($v->getClass(), $v->getGeneratorKey());

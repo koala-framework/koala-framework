@@ -6,7 +6,7 @@ class Vpc_Box_MetaTagsContent_Component extends Vpc_Box_MetaTags_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Meta Tags');
         $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
     protected function _getMetaTags()

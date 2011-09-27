@@ -13,7 +13,10 @@
             $text = $l['name'];
         }
 
-        echo $this->componentLink($l['page'], $text);
+        $cssClass = '';
+        if ($l['current']) $cssClass = 'active';
+		
+        echo $this->componentLink($l['page'], $text, $cssClass);
 
         $i++;
     } ?>

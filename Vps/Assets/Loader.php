@@ -28,7 +28,6 @@ class Vps_Assets_Loader
 
     public function __construct($config = null)
     {
-        if (!$config) $config = Vps_Registry::get('config');
         $this->_config = $config;
     }
 

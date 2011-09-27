@@ -12,6 +12,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract_Cards_Component
         $ret['componentName'] = trlVps('Link');
         $ret['componentIcon'] = new Vps_Asset('page_link');
         $ret['default']['component'] = 'intern';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         $ret['generators']['child']['component'] = array(
             'intern'   => 'Vpc_Basic_LinkTag_Intern_Component',
             'extern'   => 'Vpc_Basic_LinkTag_Extern_Component',

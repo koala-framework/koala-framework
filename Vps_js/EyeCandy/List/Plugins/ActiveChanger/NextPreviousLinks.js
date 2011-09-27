@@ -23,21 +23,23 @@ Vps.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Vps.EyeCa
 
         this.list.on('activeChanged', function(item) {
             if (item == this.list.getFirstItem()) {
-                this.previousLink.hide();
+                this.previousLink.addClass('listSwitchInactive');
             } else {
-                this.previousLink.show();
+                this.previousLink.removeClass('listSwitchInactive');
             }
             if (item == this.list.getLastItem()) {
-                this.nextLink.hide();
+                this.nextLink.addClass('listSwitchInactive');
             } else {
-                this.nextLink.show();
+                this.nextLink.removeClass('listSwitchInactive');
             }
         }, this);
     },
     onPrevious: function() {
-        this.list.setActiveItem(this.list.getItem(this.list.getActiveItem().listIndex-1));
+        var item = this.list.getItem(this.list.getActiveItem().listIndex-1);
+        if (item) this.list.setActiveItem(item);
     },
     onNext: function() {
-        this.list.setActiveItem(this.list.getItem(this.list.getActiveItem().listIndex+1));
+        var item = this.list.getItem(this.list.getActiveItem().listIndex+1);
+        if (item) this.list.setActiveItem(item);
     }
 });

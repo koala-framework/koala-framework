@@ -9,46 +9,76 @@ class Vps_Component_Cache_Menu_TestAlternativeComponent extends Vpc_TestAbstract
     {
         parent::setUp('Vps_Component_Cache_Menu_Root3_Component');
         /*
-        root (menuCategory)
-          _1 (menu1) Vpc_Menu_Component, level root, maxlevel 2
-            _2 (menu1)
-              _3 (menu1 -> parentMenu)
-          _11 (menu2) Vpc_Menu_Component, level 2, maxlevel 2
-            _12 (menu2)
-              _13 (menu2 -> parentMenu)
-          _21 (menu3) Vpc_Menu_Expanded_Component, level 'root'
-            _22 (menu3)
-              _23 (menu3 -> parentMenu)
+      root (menuCategory)
+        root-menu1 (menu) Vpc_Menu_Component, level root, including subMenu
+          root-menu1-subMenu (empty)
+          1-menu1 (parentMenu)
+            1-menu1-subMenu (menu)
+            2-menu1 (parentMenu, because of submenu)
+              2-menu1-subMenu (parentMenu)
+              3-menu1 (parentContent)
+
+        root-menu2 (empty) Vpc_Menu_Component, level 2
+          1-menu2 (menu)
+            2-menu2 (parentMenu)
+              3-menu2 (parentContent)
+
+        root-menu3 (menu) Vpc_Menu_Expanded_Component, level 'root'
+          1-menu3 (parentMenu)
+            2-menu3 (parentMenu)
+              3-menu3 (parentContent)
         */
     }
 
     public function testMenu1()
     {
-        $menu = $this->_root->getComponentById(2);
+        $menu = $this->_root->getComponentById('root-menu1');
         $this->assertEquals('Vps_Component_Cache_Menu_Root3_Menu1_Component', $menu->componentClass);
-        $menu = $this->_root->getComponentById('2-subMenu');
+        $menu = $this->_root->getComponentById('root-menu1-subMenu');
+        $this->assertEquals('Vpc_Basic_Empty_Component', $menu->componentClass);
+
+        $menu = $this->_root->getComponentById('1-menu1');
+        $this->assertEquals('Vpc_Menu_ParentMenu_Component.Vps_Component_Cache_Menu_Root3_Menu1_Component', $menu->componentClass);
+        $menu = $this->_root->getComponentById('1-menu1-subMenu');
         $this->assertEquals('Vps_Component_Cache_Menu_Root3_Menu1_Sub_Component', $menu->componentClass);
 
-        $menu = $this->_root->getComponentById(3);
+        $menu = $this->_root->getComponentById('2-menu1');
+        $this->assertEquals('Vpc_Menu_ParentMenu_Component.Vps_Component_Cache_Menu_Root3_Menu1_Component', $menu->componentClass);
+        $menu = $this->_root->getComponentById('2-menu1-subMenu');
+        $this->assertEquals('Vpc_Menu_ParentMenu_Component.Vps_Component_Cache_Menu_Root3_Menu1_Sub_Component', $menu->componentClass);
+
+        $menu = $this->_root->getComponentById('3-menu1');
         $this->assertEquals('Vpc_Basic_ParentContent_Component', $menu->componentClass);
-        $this->assertNull($this->_root->getComponentById('3-subMenu'));
+        $this->assertNull($this->_root->getComponentById('3-menu1-subMenu'));
     }
 
     public function testMenu2()
     {
-        $menu = $this->_root->getComponentById(12);
+        $menu = $this->_root->getComponentById('root-menu2');
+        $this->assertEquals('Vpc_Basic_Empty_Component', $menu->componentClass);
+
+        $menu = $this->_root->getComponentById('1-menu2');
         $this->assertEquals('Vps_Component_Cache_Menu_Root3_Menu2_Component', $menu->componentClass);
 
-        $menu = $this->_root->getComponentById(13);
+        $menu = $this->_root->getComponentById('2-menu2');
+        $this->assertEquals('Vpc_Menu_ParentMenu_Component.Vps_Component_Cache_Menu_Root3_Menu2_Component', $menu->componentClass);
+
+        $menu = $this->_root->getComponentById('3-menu2');
         $this->assertEquals('Vpc_Basic_ParentContent_Component', $menu->componentClass);
     }
 
     public function testMenu3()
     {
-        $menu = $this->_root->getComponentById(22);
+        $menu = $this->_root->getComponentById('root-menu3');
         $this->assertEquals('Vps_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
 
-        $menu = $this->_root->getComponentById(23);
+        $menu = $this->_root->getComponentById('1-menu3');
+        $this->assertEquals('Vpc_Menu_ParentMenu_Component.Vps_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
+
+        $menu = $this->_root->getComponentById('2-menu3');
+        $this->assertEquals('Vpc_Menu_ParentMenu_Component.Vps_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
+
+        $menu = $this->_root->getComponentById('3-menu3');
         $this->assertEquals('Vpc_Basic_ParentContent_Component', $menu->componentClass);
     }
 }

@@ -14,7 +14,7 @@ abstract class Vps_Exception_Abstract extends Exception
 
     public static function isDebug()
     {
-        return !Zend_Registry::get('config')->debug->error->log;
+        return !Vps_Config::getValue('debug.error.log');
     }
 
     public function getException()

@@ -66,7 +66,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         if (is_object($modelName)) return $modelName;
         static $config;
-        if (!isset($config)) $config = Vps_Registry::get('config')->models->toArray();
+        if (!isset($config)) $config = Vps_Config::getValueArray('models');
         if (array_key_exists($modelName, $config)) {
             if (!$config[$modelName]) return null;
             $modelName = $config[$modelName];
@@ -694,6 +694,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 }
             }
             return $ret;
+        } else if ($expr instanceof Vps_Model_Select_Expr_If) {
+            if ($this->getExprValue($row, $expr->getIf())) {
+                return $this->getExprValue($row, $expr->getThen());
+            } else {
+                return $this->getExprValue($row, $expr->getElse());
+            }
         } else {
             throw new Vps_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
@@ -838,5 +844,23 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         foreach (self::$_instances as $i) {
             $i->clearRows();
         }
+    }
+
+    public function fetchColumnByPrimaryId($column, $id)
+    {
+        $row = $this->getRow($id);
+        if (!$row) return null;
+        return $row->$column;
+    }
+
+    public function fetchColumnsByPrimaryId(array $columns, $id)
+    {
+        $row = $this->getRow($id);
+        if (!$row) return array();
+        $ret = array();
+        foreach ($columns as $c) {
+            $ret[$c] = $row->$c;
+        }
+        return $ret;
     }
 }

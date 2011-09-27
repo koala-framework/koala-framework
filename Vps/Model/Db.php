@@ -615,6 +615,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $this->_formatFieldInternal($f, $dbSelect);
             }
             return '('.$expr->getSql().')';
+        } else if ($expr instanceof Vps_Model_Select_Expr_If) {
+            $if = $this->_createDbSelectExpression($expr->getIf(), $dbSelect);
+            $then = $this->_createDbSelectExpression($expr->getThen(), $dbSelect);
+            $else = $this->_createDbSelectExpression($expr->getElse(), $dbSelect);
+            return "IF($if, $then, $else)";
         } else {
             throw new Vps_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }
@@ -1170,5 +1175,17 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $ret = Vps_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
         }
         return $ret;
+    }
+
+    public function fetchColumnByPrimaryId($column, $id)
+    {
+        $sql = "SELECT $column FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKey()."=?";
+        return Vps_Registry::get('db')->query($sql, $id)->fetchColumn();
+    }
+
+    public function fetchColumnsByPrimaryId(array $columns, $id)
+    {
+        $sql = "SELECT ".implode(',', $columns)." FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKey()."=?";
+        return Vps_Registry::get('db')->query($sql, $id)->fetch();
     }
 }

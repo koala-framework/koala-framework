@@ -8,7 +8,7 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
         $ret['cssClass'] = 'webStandard';
         $ret['iconSet'] = 'Rounded';
-        $ret['flags']['alternativeComponent'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
+        $ret['flags']['hasAlternativeComponent'] = true;
         $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigForm';
         return $ret;
     }
@@ -59,6 +59,13 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         return $this->getTemplateVarsWithNetworks($this->getData()->parent);
     }
 
+    public static function getAlternativeComponents()
+    {
+        return array(
+            'inherit'=>'Vpc_Advanced_SocialBookmarks_Inherit_Component'
+        );
+    }
+
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
         $c = $parentData;
@@ -73,7 +80,7 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         ));
         if (in_array($generator, $instances, true)) {
             //wir wurden geerbt weils über uns ein parentData mit dem gleichen generator gibt
-            return true;
+            return 'inherit';
         } else {
             return false;
         }

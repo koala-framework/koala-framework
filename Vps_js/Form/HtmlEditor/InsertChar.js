@@ -39,8 +39,11 @@ Vps.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
             });
             Vps.Form.HtmlEditor.insertCharWindow = win;
         }
+
+        var bookmark = this.cmp.tinymceEditor.selection.getBookmark();
         win.purgeListeners();
         win.on('insertchar', function(win, ch) {
+            this.cmp.tinymceEditor.selection.moveToBookmark(bookmark);
             this.cmp.insertAtCursor(ch);
             win.hide();
         }, this);

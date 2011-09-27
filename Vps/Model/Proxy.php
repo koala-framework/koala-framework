@@ -237,4 +237,14 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         parent::clearRows();
         $this->getProxyModel()->clearRows();
     }
+
+    public function fetchColumnByPrimaryId($column, $id)
+    {
+        return $this->getProxyModel()->fetchColumnByPrimaryId($column, $id);
+    }
+
+    public function fetchColumnsByPrimaryId(array $columns, $id)
+    {
+        return $this->getProxyModel()->fetchColumnsByPrimaryId($columns, $id);
+    }
 }

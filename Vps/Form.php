@@ -6,6 +6,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     protected $_model;
     private $_primaryKey;
     private $_rows = array();
+    private $_hideForValue = array();
 
     protected function _init()
     {
@@ -21,9 +22,48 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
     }
 
+    /**
+     * Hide a field has a specific value, hide other fields
+     *
+     * ATM only implemented in Frontend Form
+     */
+    public function hideForValue(Vps_Form_Field_Abstract $field, $value, Vps_Form_Field_Abstract $hideField)
+    {
+        $this->_hideForValue[] = array('field' => $field, 'value' => $value, 'hide' => $hideField);
+        return $this;
+    }
+
+    public function getHideForValue()
+    {
+        return $this->_hideForValue;
+    }
+
     public function getMetaData()
     {
-        return parent::getMetaData($this->getModel());
+        $ret = parent::getMetaData($this->getModel());
+        /*
+        TODO: implement hideForValue in Ext forms, then this below is needed
+        $ret['hideForValue'] = array();
+        foreach ($this->_hideForValue as $v) {
+            $ret['hideForValue'][] = array(
+                'field' => $v['field']->getFieldName(),
+                'value' => $v['value'],
+                'hide' => $v['hide']->getFieldName(),
+            );
+        }
+        */
+        return $ret;
+    }
+
+    public function processInput($parentRow, array $postData = array())
+    {
+        $ret = parent::processInput($parentRow, $postData);
+        foreach ($this->_hideForValue as $v) {
+            if (isset($ret[$v['field']->getFieldName()]) && $ret[$v['field']->getFieldName()] == $v) {
+                $this->fields->remove($v['hide']);
+            }
+        }
+        return $ret;
     }
 
     //kann überschrieben werden wenn wir eine anderen row haben wollen
@@ -207,8 +247,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         } else {
             if (count($rowset)== 0) {
                 if ($this->getCreateMissingRow()) { //für Vps_Form_AddForm
-                    $this->_rows[$key] = $this->_model->createRow();
-                    $this->_rows[$key]->{$this->getPrimaryKey()} = $id;
+                    $this->_rows[$key] = $this->_createMissingRow($id);
                 } else {
                     throw new Vps_Exception('No database-entry found.');
                 }
@@ -221,6 +260,12 @@ class Vps_Form extends Vps_Form_NonTableForm
         return $this->_rows[$key];
     }
 
+    protected function _createMissingRow($id)
+    {
+        $ret = $this->_model->createRow();
+        $ret->{$this->getPrimaryKey()} = $id;
+        return $ret;
+    }
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {

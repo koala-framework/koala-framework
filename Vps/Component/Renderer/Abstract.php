@@ -12,7 +12,7 @@ abstract class Vps_Component_Renderer_Abstract
     public function renderComponent($component)
     {
         if (is_null($this->_enableCache)) {
-            $this->_enableCache = !Vps_Registry::get('config')->debug->componentCache->disable;
+            $this->_enableCache = !Vps_Config::getValue('debug.componentCache.disable');
         }
         $this->_renderComponent = $component;
         $content = $this->_renderComponentContent($component);
@@ -61,8 +61,9 @@ abstract class Vps_Component_Renderer_Abstract
 
             $statType = null;
             $content = null;
-            $saveCache = true;
+            $saveCache = false; //disable cache saving completely in preview
             if ($this->_enableCache) {
+                $saveCache = true;
                 $content = Vps_Component_Cache::NO_CACHE;
                 if ($helper->enableCache()) {
                     $content = Vps_Component_Cache::getInstance()->load($componentId, $type, $value);

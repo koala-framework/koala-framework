@@ -81,12 +81,39 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     setupEditform : function ()
     {
        this.editDialog = new Vps.Auto.Form.Window({
-            width: 400,
+            width: 620,
             height: 400,
-            controllerUrl: ' '
+            controllerUrl: '/admin/component/page'
         });
         this.editDialog.on('datachange', function(test) {
             this.treePanel.tree.root.reload();
+        }, this);
+        this.editDialog.on('renderform', function() {
+            var component = this.editDialog.getAutoForm().findField('component');
+            if (component && component.formsForComponent) {
+                //initially hide all to avoid flickr
+                this.editDialog.getAutoForm().cascade(function(i) {
+                    if (i.showDependingOnComponent) {
+                        i.disableRecursive(); //to disable validation
+                        i.hide();
+                    }
+                }, this);
+                component.on('changevalue', function() {
+                    //hide/show forms depending on selected component
+                    this.editDialog.getAutoForm().cascade(function(i) {
+                        var showForms = component.formsForComponent[component.getValue()] || [];
+                        if (i.showDependingOnComponent) {
+                            if (showForms.indexOf(i.name) !== -1) {
+                                i.show();
+                                i.enableRecursive();
+                            } else {
+                                i.disableRecursive(); //to disable validation
+                                i.hide();
+                            }
+                        }
+                    }, this);
+                }, this);
+            }
         }, this);
     },
 
@@ -130,9 +157,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     treeSelectionchange : function (node) {
         if (!node) return;
         var data = node.attributes;
-        
-        this.editDialog.getAutoForm().editControllerUrl = data.editControllerUrl;
-        this.editDialog.getAutoForm().addControllerUrl = data.addControllerUrl;
         
         if (data.disabled) {
             this.pageButton.disable();
@@ -229,6 +253,15 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         return panel;
     },
 
+    _removeEditDialogForm: function()
+    {
+        var form = this.editDialog.getAutoForm();
+        if (form.formPanel) {
+            form.remove(form.formPanel, true);
+            this.editDialog.getAutoForm().formPanel = null;
+        }
+    },
+
     getAction : function(type)
     {
         if (this.actions[type]) return this.actions[type];
@@ -237,12 +270,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Page properties'),
                 handler : function () {
-                    var form = this.editDialog.getAutoForm();
-                    form.controllerUrl = form.editControllerUrl;
-                    if (form.formPanel) {
-                        form.remove(form.formPanel, true);
-                        this.editDialog.getAutoForm().formPanel = null;
-                    }
+                    this._removeEditDialogForm();
                     var node = this.treePanel.tree.selModel.selNode;
                     this.editDialog.getAutoForm().setBaseParams({
                         componentId: node.attributes.editControllerComponentId
@@ -257,12 +285,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Add new child page'),
                 handler : function () {
-            		var form = this.editDialog.getAutoForm();
-                    form.controllerUrl = form.addControllerUrl;
-	                if (form.formPanel) {
-	                    form.remove(form.formPanel, true);
-	                    this.editDialog.getAutoForm().formPanel = null;
-	                }
+                    this._removeEditDialogForm();
                     var node = this.treePanel.tree.selModel.selNode;
                     this.editDialog.getAutoForm().setBaseParams({
                         componentId: node.attributes.editControllerComponentId,
