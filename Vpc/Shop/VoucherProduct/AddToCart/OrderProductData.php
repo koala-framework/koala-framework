@@ -1,17 +1,17 @@
 <?php
 class Vpc_Shop_VoucherProduct_AddToCart_OrderProductData extends Vpc_Shop_AddToCartAbstract_OrderProductData
 {
-    public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getPrice($orderProduct)
     {
         return $orderProduct->amount;
     }
 
-    public function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getAmount($orderProduct)
     {
         return 1;
     }
 
-    public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getAdditionalOrderData($orderProduct)
     {
         $ret = parent::getAdditionalOrderData($orderProduct);
         /*
@@ -24,7 +24,7 @@ class Vpc_Shop_VoucherProduct_AddToCart_OrderProductData extends Vpc_Shop_AddToC
         return $ret;
     }
 
-    public function orderConfirmed(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function orderConfirmed($orderProduct)
     {
         //gutschein erstellen
         $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Plugins_Voucher_Vouchers')->createRow();
@@ -34,7 +34,7 @@ class Vpc_Shop_VoucherProduct_AddToCart_OrderProductData extends Vpc_Shop_AddToC
         $row->save();
     }
 
-    public function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getProductText($orderProduct)
     {
         return trlVps('Voucher');
     }
