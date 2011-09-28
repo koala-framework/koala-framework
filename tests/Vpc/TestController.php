@@ -52,7 +52,10 @@ class Vpc_TestController extends Vps_Controller_Action
             throw new Vps_Exception_NotFound();
         }
         $root->setCurrentPage($data);
-        $data->getComponent()->sendContent();
+        $contentSender = Vpc_Abstract::getSetting($data->componentClass, 'contentSender');
+        $contentSender = new $contentSender($data);
+        $contentSender->sendContent();
+
 
         $this->_helper->viewRenderer->setNoRender(true);
     }

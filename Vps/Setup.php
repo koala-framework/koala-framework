@@ -390,7 +390,9 @@ class Vps_Setup
                 exit;
             }
             $root->setCurrentPage($data);
-            $data->getComponent()->sendContent();
+            $contentSender = Vpc_Abstract::getSetting($data->componentClass, 'contentSender');
+            $contentSender = new $contentSender($data);
+            $contentSender->sendContent();
             Vps_Benchmark::shutDown();
 
             //TODO: ein flag oder sowas ähnliches stattdessen verwenden
