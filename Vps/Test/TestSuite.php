@@ -48,6 +48,7 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
         $ret = array();
         foreach ($dir as $file) {
             $file = substr($file, strlen($basePath)+1);
+            if (substr($file, 0, 6)=='cache/') continue;
             if (substr($file, -8) != 'Test.php' && $onlyTestPrefix) {
                 continue;
             }
