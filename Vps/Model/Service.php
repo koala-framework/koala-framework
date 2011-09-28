@@ -79,7 +79,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
                 $backend = 'Apc';
             } else {
                 $backendOptions = array(
-                    'cache_dir' => 'application/cache/model',
+                    'cache_dir' => 'cache/model',
                     'file_name_prefix' => 'servicemeta'
                 );
                 $backend = 'File';

@@ -80,7 +80,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         self::initForTests();
 
         if (!Vps_Registry::get('config')->server->domain) {
-            throw new Vps_Exception_Client("Can't run tests; server.domain is not set. Please set in application/config.local.ini");
+            throw new Vps_Exception_Client("Can't run tests; server.domain is not set. Please set in tests/config.local.ini");
         }
         $arguments = array();
         $arguments['colors'] = true;

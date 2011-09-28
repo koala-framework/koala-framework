@@ -15,7 +15,7 @@ class Vps_Exception_JsErrorHandler_TestController extends Vps_Controller_Action
     public function getErrorLogEntryAction()
     {
         $error = '';
-        foreach (glob('application/log/error/'.date('Y-m-d').'/*.txt') as $f) {
+        foreach (glob('log/error/'.date('Y-m-d').'/*.txt') as $f) {
             preg_match('#([0-9]{2})_([0-9]{2})_([0-9]{2})_#', $f, $m);
             $t = strtotime(date('Y-m-d').' '.$m[1].':'.$m[2].':'.$m[3]);
             if ($t >= $this->_getParam('start')) {

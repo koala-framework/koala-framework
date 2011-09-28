@@ -85,10 +85,10 @@ class Vps_Setup
 
         if (Vps_Config::getValue('debug.componentCache.checkComponentModification')) {
             $masterFiles = array(
-                'application/config.ini',
+                'config.ini',
                 VPS_PATH . '/config.ini'
             );
-            if (file_exists('application/vps_branch')) $masterFiles[] = 'application/vps_branch';
+            if (file_exists('vps_branch')) $masterFiles[] = 'vps_branch';
             require_once 'Vps/Config/Web.php';
             $mtime = Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection());
             foreach ($masterFiles as $f) {
@@ -132,7 +132,7 @@ class Vps_Setup
                 $ip .= PATH_SEPARATOR . $p;
             }
         }
-        $ip .= PATH_SEPARATOR . getcwd().'/application/cache/generated';
+        $ip .= PATH_SEPARATOR . getcwd().'/cache/generated';
         set_include_path($ip);
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
@@ -152,10 +152,10 @@ class Vps_Setup
             ob_start();
         }
 
-        if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != Vps_Config::getValue('application.vps.version')) {
+        if (is_file('ps_branch') && trim(file_get_contents('vps_branch')) != Vps_Config::getValue('application.vps.version')) {
             $validCommands = array('shell', 'export', 'copy-to-test');
             if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
-                $required = trim(file_get_contents('application/vps_branch'));
+                $required = trim(file_get_contents('vps_branch'));
                 $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
                 throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '".Vps_Config::getValue('application.vps.version')."' (Git branch '$vpsBranch')");
             }
@@ -174,7 +174,7 @@ class Vps_Setup
             //Now this is kind of a hack. We want to make setting server.domain optional for easy setup.
             //But we need the domain at least for clearing the apc cache.
             //(don't use this file for more advanced stuff)
-            file_put_contents('application/cache/lastdomain', $_SERVER['HTTP_HOST']);
+            file_put_contents('cache/lastdomain', $_SERVER['HTTP_HOST']);
         }
 
         // Falls redirectToDomain eingeschalten ist, umleiten
@@ -300,7 +300,7 @@ class Vps_Setup
 
     public static function hasDb()
     {
-        return file_exists('application/config.db.ini');
+        return file_exists('config.db.ini');
     }
 
     public static function createDao()
@@ -313,6 +313,7 @@ class Vps_Setup
 
     public static function getConfigSection()
     {
+        require_once str_replace('_', '/', Vps_Setup::$configClass).'.php';
         return call_user_func(array(Vps_Setup::$configClass, 'getConfigSection'));
     }
 

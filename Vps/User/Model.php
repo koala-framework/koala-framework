@@ -58,7 +58,7 @@ class Vps_User_Model extends Vps_Model_RowCache
 
     public static function isLockedCreateUser()
     {
-        $lock = fopen("application/temp/create-user.lock", "w");
+        $lock = fopen("temp/create-user.lock", "w");
         $ret = !flock($lock, LOCK_EX | LOCK_NB);
         fclose($lock);
         return $ret;
@@ -74,7 +74,7 @@ class Vps_User_Model extends Vps_Model_RowCache
         if ($this->_lock) {
             throw new Vps_Exception('Already locked');
         }
-        $this->_lock = fopen("application/temp/create-user.lock", "w");
+        $this->_lock = fopen("temp/create-user.lock", "w");
 
         $startTime = microtime(true); 
         while(true) {

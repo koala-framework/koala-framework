@@ -47,7 +47,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->fetch();
         Vps_Util_Git::web()->fetch();
 
-        Vps_Util_Git::vps()->checkout(trim(file_get_contents('application/vps_branch')));
+        Vps_Util_Git::vps()->checkout(trim(file_get_contents('vps_branch')));
         $appId = Vps_Registry::get('config')->application->id;
         Vps_Util_Git::web()->checkout("master");
         exit;
@@ -98,7 +98,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         $host = Vps_Registry::get('config')->server->host;
         if ($host == 'vivid' && Vps_Setup::getConfigSection()!='vivid') {
             echo "Converting ".VPS_PATH."\n";
-            $branch = file_get_contents('application/vps_branch');
+            $branch = file_get_contents('vps_branch');
             chdir(VPS_PATH);
             $this->_convertWcToGit('vps', $branch);
         } else {
@@ -112,7 +112,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
                 echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
 
-                $branch = file_get_contents('application/vps_branch');
+                $branch = file_get_contents('vps_branch');
 
                 chdir('vps-lib');
 
@@ -128,7 +128,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
                 copy(VPS_PATH.'/include_path', 'vps-lib/include_path');
 
-                unlink('application/include_path');
+                unlink('include_path');
             }
         }
     }
@@ -228,7 +228,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
     {
         $doUpdate = true;
 
-        $previousVpsBranch = trim(file_get_contents('application/vps_branch'));
+        $previousVpsBranch = trim(file_get_contents('vps_branch'));
 
         Vps_Util_Git::web()->fetch();
         if (Vps_Util_Git::web()->getActiveBranch() == 'master') {
@@ -249,14 +249,14 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         }
 
         //neu laden, da er sich geaendert haben kann
-        if (file_exists('application/include_path')) {
-            $vp = str_replace('%vps_branch%', trim(file_get_contents('application/vps_branch')), trim(file_get_contents('application/include_path')));
+        if (file_exists('include_path')) {
+            $vp = str_replace('%vps_branch%', trim(file_get_contents('vps_branch')), trim(file_get_contents('include_path')));
         } else {
             $vp = getcwd().'/vps-lib';
         }
         $g = new Vps_Util_Git($vp);
         $g->fetch();
-        $vpsBranch = trim(file_get_contents('application/vps_branch'));
+        $vpsBranch = trim(file_get_contents('vps_branch'));
         if ($previousVpsBranch != $vpsBranch) {
             echo "vps: web hat vps_branch von $previousVpsBranch auf $vpsBranch geaendert;\n";
             if ($g->getActiveBranch() == $previousVpsBranch) {

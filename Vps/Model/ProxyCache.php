@@ -133,7 +133,7 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
                 'automatic_serialization' => true
             );
             $backendOptions = array(
-                'cache_dir' => 'application/cache/model',
+                'cache_dir' => 'cache/model',
                 'file_name_prefix' => 'proxycache'
             );
             $this->_cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);

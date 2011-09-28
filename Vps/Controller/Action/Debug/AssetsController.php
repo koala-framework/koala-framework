@@ -3,7 +3,7 @@ class Vps_Controller_Action_Debug_AssetsController extends Vps_Controller_Action
 {
     public function jsonClearAssetsCacheAction()
     {
-        foreach (new DirectoryIterator('application/cache/assets') as $file) {
+        foreach (new DirectoryIterator('cache/assets') as $file) {
             if ($file->isFile()) {
                 unlink($file->getPathname());
             }

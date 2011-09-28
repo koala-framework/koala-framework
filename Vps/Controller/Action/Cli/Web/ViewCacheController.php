@@ -60,8 +60,8 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
     {
         if ($this->_getParam('componentId')) $this->generateOneAction();
 
-        $queueFile = 'application/temp/viewCacheGenerateQueue';
-        $processedFile = 'application/temp/viewCacheGenerateProcessed';
+        $queueFile = 'temp/viewCacheGenerateQueue';
+        $processedFile = 'temp/viewCacheGenerateProcessed';
 
         $componentId = 'root';
         file_put_contents($processedFile, $componentId);

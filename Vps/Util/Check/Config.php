@@ -219,19 +219,19 @@ class Vps_Util_Check_Config
 
     private static function _log_write()
     {
-        if (file_exists('application/log/error/test-config-check')) {
-            if (file_exists('application/log/error/test-config-check/test.log')) {
-                unlink('application/log/error/test-config-check/test.log');
+        if (file_exists('log/error/test-config-check')) {
+            if (file_exists('log/error/test-config-check/test.log')) {
+                unlink('log/error/test-config-check/test.log');
             }
-            rmdir('application/log/error/test-config-check');
+            rmdir('log/error/test-config-check');
         }
-        mkdir('application/log/error/test-config-check');
-        file_put_contents('application/log/error/test-config-check/test.log', 'blah');
-        if (file_get_contents('application/log/error/test-config-check/test.log') != 'blah') {
+        mkdir('log/error/test-config-check');
+        file_put_contents('log/error/test-config-check/test.log', 'blah');
+        if (file_get_contents('log/error/test-config-check/test.log') != 'blah') {
             throw new Vps_Exception("reading test log failed");
         }
-        unlink('application/log/error/test-config-check/test.log');
-        rmdir('application/log/error/test-config-check');
+        unlink('log/error/test-config-check/test.log');
+        rmdir('log/error/test-config-check');
     }
 
     private static function _imagick_functionality_1()

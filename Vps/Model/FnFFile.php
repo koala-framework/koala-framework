@@ -6,19 +6,19 @@ class Vps_Model_FnFFile extends Vps_Model_FnF
     public function __construct(array $config = array())
     {
         if (isset($config['fileName'])) {
-            $this->_fileName = 'application/temp/fnf-file-'.$config['fileName'];
+            $this->_fileName = 'temp/fnf-file-'.$config['fileName'];
         }
         if (!$this->_fileName && $this->_uniqueIdentifier) {
-            $this->_fileName = 'application/temp/fnf-file-'.$this->_uniqueIdentifier;
+            $this->_fileName = 'temp/fnf-file-'.$this->_uniqueIdentifier;
         }
         if (!$this->_fileName && isset($config['uniqueIdentifier'])) {
-            $this->_fileName = 'application/temp/fnf-file-'.$config['uniqueIdentifier'];
+            $this->_fileName = 'temp/fnf-file-'.$config['uniqueIdentifier'];
         }
         if (!$this->_fileName) {
             if (get_class($this) == 'Vps_Model_FnFFile') {
                 throw new Vps_Exception("Inhert from Vps_Model_FnFFile or set an filename/uniqueIdentifier");
             }
-            $this->_fileName = 'application/temp/fnf-file-'.get_class($this);
+            $this->_fileName = 'temp/fnf-file-'.get_class($this);
         }
         parent::__construct($config);
     }

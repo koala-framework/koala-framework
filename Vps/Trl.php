@@ -285,7 +285,7 @@ class Vps_Trl
                 'caching' => !isset($this->_modelVps) && !isset($this->_modelWeb)
             ),
             array(
-                'cache_dir' => 'application/cache/model'
+                'cache_dir' => 'cache/model'
             )
         );
         $cacheId = 'trl_'.$source.$target.$plural;

@@ -50,7 +50,7 @@ class Vps_Exception_JavaScript extends Vps_Exception
         $body .= $this->_format('User', $user);
         $body .= $this->_format('Time', date('H:i:s'));
 
-        $path = 'application/log/error/' . date('Y-m-d');
+        $path = 'log/error/' . date('Y-m-d');
 
         $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 

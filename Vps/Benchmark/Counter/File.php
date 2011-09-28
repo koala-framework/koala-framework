@@ -8,10 +8,10 @@ class Vps_Benchmark_Counter_File implements Vps_Benchmark_Counter_Interface
         if ($this->_lock) {
             throw new Vps_Exception("Already locked");
         }
-        if (!file_exists('application/temp/counter')) {
-            mkdir('application/temp/counter');
+        if (!file_exists('temp/counter')) {
+            mkdir('temp/counter');
         }
-        $file = 'application/temp/counter/'.$name.'.lock';
+        $file = 'temp/counter/'.$name.'.lock';
         $this->_lock = fopen($file, 'w');
         flock($this->_lock, LOCK_EX);
     }
@@ -24,7 +24,7 @@ class Vps_Benchmark_Counter_File implements Vps_Benchmark_Counter_Interface
 
     private function _open($name, $mode)
     {
-        $file = 'application/temp/counter/'.$name;
+        $file = 'temp/counter/'.$name;
         if (!file_exists($file)) {
             if ($mode == 'r') {
                 return false;

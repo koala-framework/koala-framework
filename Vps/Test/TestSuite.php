@@ -5,7 +5,11 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
     {
         parent::__construct($name);
         $this->setBackupGlobals(false);
-        $classes = $this->_addDirectory('./tests', false);
+        if (file_exists('tests')) {
+            $classes = $this->_addDirectory('./tests', false);
+        } else {
+            $classes = $this->_addDirectory('.', false);
+        }
 
         // damit der js test auch im web immer ausgeführt wird
         if (!in_array('Vps_Js_SyntaxTest', $classes)) {

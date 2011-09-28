@@ -77,8 +77,8 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
     public function logclearAction()
     {
         foreach ($this->_commands as $requiredCmd) {
-            file_put_contents("application/log/$requiredCmd[cmd].log", '');
-            file_put_contents("application/log/$requiredCmd[cmd].err", '');
+            file_put_contents("log/$requiredCmd[cmd].log", '');
+            file_put_contents("log/$requiredCmd[cmd].err", '');
         }
         exit;
     }
@@ -90,13 +90,13 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
             if ($includeLogFiles) {
                 $files[] = array(
                     'prefix' => "[L/$requiredCmd[cmd]] ",
-                    'file' => "application/log/$requiredCmd[cmd].log",
+                    'file' => "log/$requiredCmd[cmd].log",
                     'initialRead' => 80
                 );
             }
             $files[] = array(
                 'prefix' => "[E/$requiredCmd] ",
-                'file' => "application/log/$requiredCmd.err",
+                'file' => "log/$requiredCmd.err",
                 'initialRead' => 1024
             );
         }
@@ -138,8 +138,8 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
                 if (!$this->_getParam('silent')) echo "Process $requiredCmd[cmd] isn't running. Starting...\n";
                 $cmd = "php bootstrap.php $requiredCmd[cmd] ";
                 if ($this->_getParam('debug')) $cmd .= "--debug ";
-                $cmd .= " 2>>application/log/$requiredCmd[cmd].err";
-                $cmd .= " 1>>application/log/$requiredCmd[cmd].log";
+                $cmd .= " 2>>log/$requiredCmd[cmd].err";
+                $cmd .= " 1>>log/$requiredCmd[cmd].log";
                 $cmd .= " &";
                 //if (!$this->_getParam('silent')) echo $cmd."\n";
                 passthru($cmd);

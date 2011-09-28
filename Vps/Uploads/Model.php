@@ -17,7 +17,7 @@ class Vps_Uploads_Model extends Vps_Model_Db_Proxy
             $this->_uploadDir = Vps_Config::getValue('uploads');
 
             if (!$this->_uploadDir) {
-                throw new Vps_Exception(('Param "uploads" has to be set in the file application/config.ini.'));
+                throw new Vps_Exception(('Param "uploads" has to be set in the file config.ini.'));
             }
             if (!is_dir($this->_uploadDir) || !is_writable($this->_uploadDir)) {
                 throw new Vps_Exception("Path for uploads is not writeable: {$this->_uploadDir}");

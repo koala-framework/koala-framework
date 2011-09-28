@@ -213,11 +213,11 @@ class Vps_Assets_Loader
                         $cacheData['contents'] = str_replace('../images/', '/assets/ext/resources/images/', $cacheData['contents']);
                     }
 
-                    if (file_exists('application/assetVariables.ini')) {
-                        $cacheData['mtimeFiles'][] = 'application/assetVariables.ini';
+                    if (file_exists('assetVariables.ini')) {
+                        $cacheData['mtimeFiles'][] = 'assetVariables.ini';
                         static $assetVariables = array();
                         if (!isset($assetVariables[$section])) {
-                            $assetVariables[$section] = new Zend_Config_Ini('application/assetVariables.ini', $section);
+                            $assetVariables[$section] = new Zend_Config_Ini('assetVariables.ini', $section);
                         }
                         foreach ($assetVariables[$section] as $k=>$i) {
                             $cacheData['contents'] = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $cacheData['contents']);

@@ -82,7 +82,7 @@ class Vps_Srpc_Client
     public function __call($method, $args)
     {
         $log = date('Y-m-d H:i:s')." (start) $this->_serverUrl $method ".(isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '?')."\n";
-        file_put_contents('application/log/srpc-call', $log, FILE_APPEND);
+        file_put_contents('log/srpc-call', $log, FILE_APPEND);
         $start = microtime(true);
         $b = Vps_Benchmark::start('srpc call', $this->_serverUrl.' '.$method);
 
@@ -104,7 +104,7 @@ class Vps_Srpc_Client
         $response = $this->_performRequest($params);
 
         $log = date('Y-m-d H:i:s').' '.round(microtime(true)-$start, 2)."s $this->_serverUrl $method ".(isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '?')."\n";
-        file_put_contents('application/log/srpc-call', $log, FILE_APPEND);
+        file_put_contents('log/srpc-call', $log, FILE_APPEND);
         if ($b) $b->stop();
 
         try {

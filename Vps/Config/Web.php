@@ -21,11 +21,11 @@ class Vps_Config_Web extends Vps_Config_Ini
                 $ret = apc_fetch($apcCacheId);
                 if ($ret && $ret->debug->componentCache->checkComponentModification) {
                     $masterFiles = array(
-                        'application/config.ini',
                         VPS_PATH . '/config.ini'
                     );
-                    if (file_exists('application/vps_branch')) $masterFiles[] = 'application/vps_branch';
-                    if (file_exists('application/config.local.ini')) $files[] = 'application/config.local.ini';
+                    if (file_exists('config.ini')) $masterFiles[] = 'config.ini';
+                    if (file_exists('vps_branch')) $masterFiles[] = 'vps_branch';
+                    if (file_exists('config.local.ini')) $files[] = 'config.local.ini';
                     $mtime = apc_fetch($apcCacheId.'mtime');
                     foreach ($masterFiles as $f) {
                         if (filemtime($f) > $mtime) {
@@ -91,8 +91,8 @@ class Vps_Config_Web extends Vps_Config_Ini
         } else {
             $path = $_SERVER['SCRIPT_FILENAME'];
         }
-        if (file_exists('application/config_section')) {
-            return trim(file_get_contents('application/config_section'));
+        if (file_exists('config_section')) {
+            return trim(file_get_contents('config_section'));
         } else if (substr($host, 0, 9)=='dev.test.') {
             return 'devtest';
         } else if (substr($host, 0, 4)=='dev.') {
@@ -167,7 +167,7 @@ class Vps_Config_Web extends Vps_Config_Ini
 
     protected function _getWebSection($section, $webPath)
     {
-        $webConfigSections = array_keys(parse_ini_file($webPath.'/application/config.ini', true));
+        $webConfigSections = array_keys(parse_ini_file($webPath.'/config.ini', true));
         foreach ($webConfigSections as $i) {
             if ($i == $section
                 || substr($i, 0, strlen($section)+1)==$section.' '
@@ -183,7 +183,7 @@ class Vps_Config_Web extends Vps_Config_Ini
     {
         $vpsSection = false;
         $webSection = $this->_getWebSection($section, $webPath);
-        $webConfig = parse_ini_file($webPath.'/application/config.ini', true);
+        $webConfig = parse_ini_file($webPath.'/config.ini', true);
         foreach ($webConfig as $i=>$cfg) {
             if ($i == $webSection
                 || substr($i, 0, strlen($webSection)+1)==$webSection.' '
@@ -213,9 +213,9 @@ class Vps_Config_Web extends Vps_Config_Ini
     protected function _mergeWebConfig($section, $webPath)
     {
         $webSection = $this->_getWebSection($section, $webPath);
-        self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/application/config.ini', $webSection));
-        if (file_exists($webPath.'/application/config.local.ini')) {
-            self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/application/config.local.ini', $webSection));
+        self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/config.ini', $webSection));
+        if (file_exists($webPath.'/config.local.ini')) {
+            self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/config.local.ini', $webSection));
         }
     }
 
