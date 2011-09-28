@@ -21,7 +21,7 @@ class Vps_Util_PubSubHubbub
         $log .= print_r($_GET, true);
         $log .= "-----------------------\n";
         $log .= file_get_contents("php://input");
-        //file_put_contents('application/log/pshb_cb'.date('Y-m-d_H:i:s'), $log);
+        //file_put_contents('log/pshb_cb'.date('Y-m-d_H:i:s'), $log);
 
         if (isset($_GET['hub_challenge'])) {
             //TODO: check if this is real - 404 if not

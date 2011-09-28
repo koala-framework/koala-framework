@@ -26,7 +26,7 @@ class Vps_Util_ClearCache
     protected function _getCacheDirs($mode = self::MODE_CLEAR)
     {
         $ret = array();
-        foreach (new DirectoryIterator('application/cache') as $d) {
+        foreach (new DirectoryIterator('cache') as $d) {
             if ($d->isDir() && substr($d->getFilename(), 0, 1) != '.') {
                 if ($d->getFilename() == 'searchindex') continue;
                 if ($d->getFilename() == 'fulltext') continue;
@@ -175,9 +175,9 @@ class Vps_Util_ClearCache
     {
         $config = Vps_Registry::get('config');
         $d = $config->server->domain;
-        if (!$d && file_exists('application/cache/lastdomain')) {
+        if (!$d && file_exists('cache/lastdomain')) {
             //this file gets written in Vps_Setup to make it "just work"
-            $d = file_get_contents('application/cache/lastdomain');
+            $d = file_get_contents('cache/lastdomain');
         }
         $s = microtime(true);
         $pwd = Vps_Util_Apc::getHttpPassword();
@@ -240,8 +240,8 @@ class Vps_Util_ClearCache
         }
         foreach ($this->getCacheDirs() as $d) {
             if (in_array($d, $types)) {
-                if (is_dir("application/cache/$d")) {
-                    $this->_removeDirContents("application/cache/$d", $server);
+                if (is_dir("cache/$d")) {
+                    $this->_removeDirContents("cache/$d", $server);
                 } else if (is_dir($d)) {
                     $this->_removeDirContents($d, $server);
                 }

@@ -66,7 +66,7 @@ class Vps_Exception extends Vps_Exception_NoLog
             $body .= $this->_format('_SESSION', print_r($_SESSION, true));
         }
 
-        $path = 'application/log/error/' . date('Y-m-d');
+        $path = 'log/error/' . date('Y-m-d');
 
         $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 

@@ -89,7 +89,7 @@ class Vps_Component_Abstract
                 $code = "<?php\nclass $c extends $settings[base]\n{\n";
                 $code .= "    public static \$YAML_CONFIG_FILE = '$file';\n";
                 $code .= "}\n";
-                $classFile = 'application/cache/generated/'.str_replace('_', '/', $c).'.php';
+                $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
                 mkdir(substr($classFile, 0, strrpos($classFile, '/')), 0777, true);
                 file_put_contents($classFile, $code);
                 if (!class_exists($c)) {

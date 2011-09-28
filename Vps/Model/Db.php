@@ -893,7 +893,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $select = $this->select($select);
             }
 
-            $tmpExportFolder = realpath('application/temp').'/modelcsvex'.uniqid();
+            $tmpExportFolder = realpath('temp').'/modelcsvex'.uniqid();
             $filename = $tmpExportFolder.'/csvexport';
 
             $dbSelect = $this->_createDbSelectWithColumns($select, $options);
@@ -978,7 +978,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             // if no data is recieved, quit
             if (!$data) return;
 
-            $tmpImportFolder = realpath('application/temp').'/modelcsvim'.uniqid();
+            $tmpImportFolder = realpath('temp').'/modelcsvim'.uniqid();
             mkdir($tmpImportFolder, 0777);
             $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);
@@ -1167,7 +1167,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $backend = 'Apc';
             } else {
                 $backendOptions = array(
-                    'cache_dir' => 'application/cache/model',
+                    'cache_dir' => 'cache/model',
                     'file_name_prefix' => 'servicemeta'
                 );
                 $backend = 'File';

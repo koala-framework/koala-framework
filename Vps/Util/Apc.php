@@ -5,7 +5,7 @@ class Vps_Util_Apc
 {
     public static function getHttpPassword()
     {
-        $file = 'application/cache/apcutilspass';
+        $file = 'cache/apcutilspass';
         if (!file_exists($file)) {
             file_put_contents($file, time().rand(100000, 1000000));
         }

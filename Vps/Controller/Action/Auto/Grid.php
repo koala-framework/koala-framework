@@ -860,7 +860,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
 
         $downloadkey = uniqid();
-        file_put_contents('application/temp/'.$downloadkey.'.csv', $csvReturn);
+        file_put_contents('temp/'.$downloadkey.'.csv', $csvReturn);
 
         $this->_progressBar->finish();
 
@@ -872,14 +872,14 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!isset($this->_permissions['csv']) || !$this->_permissions['csv']) {
             throw new Vps_Exception("CSV is not allowed.");
         }
-        if (!file_exists('application/temp/'.$this->_getParam('downloadkey').'.csv')) {
+        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.csv')) {
             throw new Vps_Exception('Wrong downloadkey submitted');
         }
 
         Vps_Util_TempCleaner::clean();
 
         $file = array(
-            'contents' => file_get_contents('application/temp/'.$this->_getParam('downloadkey').'.csv'),
+            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.csv'),
             'mimeType' => 'application/octet-stream',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.csv'
         );
@@ -975,7 +975,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         // write the file
         $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
         $downloadkey = uniqid();
-        $objWriter->save('application/temp/'.$downloadkey.'.xls');
+        $objWriter->save('temp/'.$downloadkey.'.xls');
 
         $this->_progressBar->finish();
 
@@ -987,13 +987,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Vps_Exception("XLS is not allowed.");
         }
-        if (!file_exists('application/temp/'.$this->_getParam('downloadkey').'.xls')) {
+        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.xls')) {
             throw new Vps_Exception('Wrong downloadkey submitted');
         }
         Vps_Util_TempCleaner::clean();
 
         $file = array(
-            'contents' => file_get_contents('application/temp/'.$this->_getParam('downloadkey').'.xls'),
+            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xls'),
             'mimeType' => 'application/octet-stream',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
         );

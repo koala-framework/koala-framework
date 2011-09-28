@@ -23,7 +23,7 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
     {
         $ret = new Zend_Config_Ini(VPS_PATH.'/config.ini', 'dependencies',
                                             array('allowModifications'=>true));
-        $ret->merge(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+        $ret->merge(new Zend_Config_Ini('config.ini', 'dependencies'));
         return $ret;
     }
 

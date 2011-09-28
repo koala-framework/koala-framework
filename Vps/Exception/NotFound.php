@@ -27,7 +27,7 @@ class Vps_Exception_NotFound extends Vps_Exception_Abstract
         $body .= $this->_format('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '(none)');
         $body .= $this->_format('Time', date('H:i:s'));
 
-        $path = 'application/log/notfound/' . date('Y-m-d');
+        $path = 'log/notfound/' . date('Y-m-d');
 
         $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 

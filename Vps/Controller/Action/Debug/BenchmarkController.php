@@ -130,7 +130,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
             'automatic_serialization' => true
         );
         $backendOptions = array(
-            'cache_dir' => 'application/cache/benchmark/'
+            'cache_dir' => 'cache/benchmark/'
         );
         $cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
         $cacheId = md5('graph_'.$this->_getParam('rrd').'_'.$this->_getParam('name')

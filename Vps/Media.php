@@ -85,7 +85,7 @@ class Vps_Media
         $isValidCache = Vps_Cache::factory('Core', 'File',
             array('lifetime'=>60*60, 'automatic_serialization'=>true),
             array('file_name_prefix' => 'isValid',
-                'cache_dir' => 'application/cache/media',
+                'cache_dir' => 'cache/media',
                 'cache_file_umask' => 0666,
                 'hashed_directory_umask' => 0777
             ));

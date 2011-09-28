@@ -4,7 +4,7 @@ class Vpc_Basic_DownloadTagBehindLogin_UploadsModel extends Vps_Test_Uploads_Mod
     public function __construct($config = array())
     {
         $config = array();
-        $config['uploadDir'] = 'application/temp/tests/DownloadTagBehindLogin/uploads';
+        $config['uploadDir'] = 'temp/tests/DownloadTagBehindLogin/uploads';
         if (!file_exists($config['uploadDir'])) mkdir($config['uploadDir'], 0777, true);
         parent::__construct($config);
 

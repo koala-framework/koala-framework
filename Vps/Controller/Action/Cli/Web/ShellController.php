@@ -90,7 +90,7 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
                 if ($this->_getParam('debug')) $cmd .= " --debug";
                 if ($this->_getParam('exec')) {
                     $exec = $this->_getParam('exec');
-                    //nützlich um sowas tun zu können: vps shell --server=$SERVER --exec="echo -n \"%VPS_CONFIG_SECTION%\" > application/config_section"
+                    //nützlich um sowas tun zu können: vps shell --server=$SERVER --exec="echo -n \"%VPS_CONFIG_SECTION%\" > config_section"
                     $exec = str_replace('%VPS_CONFIG_SECTION%', $section, $exec);
                     $cmd .= " --exec=".escapeshellarg($exec);
                 }

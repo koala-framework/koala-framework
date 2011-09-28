@@ -10,7 +10,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
     {
         $this->setDispatcher(new Vps_Controller_Dispatcher());
 
-        $this->setControllerDirectory('application/controllers');
+        $this->setControllerDirectory('controllers');
         $this->returnResponse(true);
         $this->setParam('disableOutputBuffering', true);
 
@@ -40,8 +40,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
         $this->addControllerDirectory('tests', 'web_test');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Trl',
                                 'vps_controller_action_trl');
-        if (file_exists('application/controllers/Cli')) {
-            $this->addControllerDirectory('application/controllers/Cli', 'cli');
+        if (file_exists('controllers/Cli')) {
+            $this->addControllerDirectory('controllers/Cli', 'cli');
         }
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Component',
                                         'vps_controller_action_component');
@@ -62,7 +62,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             if (!$class) {
                 $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
                 if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
-                    throw new Vps_Exception("frontControllerClass must be set in application/config.ini");
+                    throw new Vps_Exception("frontControllerClass must be set in config.ini");
                 }
                 $class = 'Vps_Controller_Front';
             }

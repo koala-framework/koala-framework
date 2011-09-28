@@ -10,7 +10,7 @@ class Vps_Controller_Action_Cli_Web_HlpParseController extends Vps_Controller_Ac
     {
         $maskedTexts = $this->_findMaskedTexts('./');
         $trl = Vps_Trl::getInstance();
-        $this->_createXmlFromTexts($maskedTexts, 'application/hlp.xml', $trl->getLanguages());
+        $this->_createXmlFromTexts($maskedTexts, 'hlp.xml', $trl->getLanguages());
 
         $vpsLanguages = array_unique(array_merge(array('en'), $trl->getLanguages()));
         $maskedTexts = $this->_findMaskedTexts(VPS_PATH, true);

@@ -85,7 +85,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
     private function _getLastSyncFile()
     {
-        return 'application/cache/model/mirrorcache_'.md5(
+        return 'cache/model/mirrorcache_'.md5(
                         $this->getSourceModel()->getUniqueIdentifier()
                         .$this->getUniqueIdentifier()
                         .$this->_syncTimeField
@@ -307,7 +307,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             $msg .= ' export: '.round($exportTime, 2).'s';
             $msg .= ' import: '.round($importTime, 2).'s';
             //$msg .= ' SELECT: '.str_replace("\n", " ", print_r($select, true));
-            file_put_contents('application/log/mirrorcache', $msg."\n", FILE_APPEND);
+            file_put_contents('log/mirrorcache', $msg."\n", FILE_APPEND);
         }
     }
 

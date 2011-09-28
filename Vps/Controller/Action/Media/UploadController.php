@@ -51,7 +51,7 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
             }
             if (isset($_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION']) && $_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION'] > 0) {
                 $maxResolution = $_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION'];
-                $tempFile = tempnam('application/temp', 'upload');
+                $tempFile = tempnam('temp', 'upload');
                 file_put_contents($tempFile, $fileData);
                 $fileData = Vps_Media_Image::scale($tempFile, array('width' => $maxResolution, 'height' => $maxResolution, 'scale' => Vps_Media_Image::SCALE_BESTFIT));
                 unlink($tempFile);

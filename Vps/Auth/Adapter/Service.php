@@ -128,7 +128,7 @@ class Vps_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
                 'automatic_serialization'=>true
             ),
             array(
-                'cache_dir' => 'application/cache/config'
+                'cache_dir' => 'cache/config'
             )
         );
     }

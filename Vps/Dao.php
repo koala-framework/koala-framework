@@ -12,8 +12,8 @@ class Vps_Dao
             $cacheId = 'dbconfig';
             $config = Vps_Cache_Simple::fetch($cacheId, $success);
             if (!$success) {
-                if (file_exists('application/config.db.ini')) {
-                    $config = new Zend_Config_Ini('application/config.db.ini', 'database');
+                if (file_exists('config.db.ini')) {
+                    $config = new Zend_Config_Ini('config.db.ini', 'database');
                     $config = $config->toArray();
                 } else {
                     $config = array();

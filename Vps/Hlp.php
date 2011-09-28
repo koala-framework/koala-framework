@@ -5,7 +5,7 @@ class Vps_Hlp {
     
     public function __construct()
     {
-        $filename = 'application/hlp.xml';
+        $filename = 'hlp.xml';
         if (is_file($filename)) {
             $this->_xml = new SimpleXMLElement(file_get_contents($filename));
         }

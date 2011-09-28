@@ -21,7 +21,7 @@ class Vps_Util_Country {
                'automatic_serialization' => true
             ),
             array(
-                'cache_dir' => 'application/cache/config'
+                'cache_dir' => 'cache/config'
             )
         );
         $result = $cache->load($cacheId);

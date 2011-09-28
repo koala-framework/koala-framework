@@ -57,7 +57,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
     protected static function _getConfigSections()
     {
         $configClass = get_class(Vps_Registry::get('config'));
-        $configFull = new Zend_Config_Ini('application/config.ini', null);
+        $configFull = new Zend_Config_Ini('config.ini', null);
         $sections = array();
         $processedServers = array();
         foreach ($configFull as $k=>$i) {
@@ -75,7 +75,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
     }
     protected static function _getConfigSectionsWithTestDomain()
     {
-        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
+        $webConfigFull = new Zend_Config_Ini('config.ini', null);
         $sections = array();
         $processedDomains = array();
         foreach ($webConfigFull as $k=>$i) {
@@ -103,7 +103,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
 
     protected static function _getConfigSectionsWithHost()
     {
-        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
+        $webConfigFull = new Zend_Config_Ini('config.ini', null);
         $sections = array();
         $processedDomains = array();
         foreach ($webConfigFull as $k=>$i) {

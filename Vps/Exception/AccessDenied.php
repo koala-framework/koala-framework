@@ -20,7 +20,7 @@ class Vps_Exception_AccessDenied extends Vps_Exception_Abstract
         $body .= $this->_format('_GET', print_r($_GET, true));
         $body .= $this->_format('_POST', print_r($_POST, true));
 
-        $path = 'application/log/accessdenied/' . date('Y-m-d');
+        $path = 'log/accessdenied/' . date('Y-m-d');
 
         $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 

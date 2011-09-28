@@ -91,16 +91,16 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
 
     private static function _getDoneNames()
     {
-        if (!file_exists('application/update')) {
+        if (!file_exists('update')) {
             $doneNames = array();
             foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
                 $doneNames[] = $u->getUniqueName();
             }
-            file_put_contents('application/update', serialize($doneNames));
-            echo "No application/update revision found, assuming up-to-date\n";
+            file_put_contents('update', serialize($doneNames));
+            echo "No update revision found, assuming up-to-date\n";
             exit;
         }
-        $doneNames = file_get_contents('application/update');
+        $doneNames = file_get_contents('update');
         if (is_numeric(trim($doneNames))) {
             //UPDATE applicaton/update format
             $r = trim($doneNames);
@@ -142,7 +142,7 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
             }
         }
         if (!$doneNames) {
-            throw new Vps_ClientException("Invalid application/update revision");
+            throw new Vps_ClientException("Invalid update revision");
         }
         return $doneNames;
     }
@@ -178,7 +178,7 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
                     $doneNames[] = $u->getUniqueName();
                 }
             }
-            file_put_contents('application/update', serialize($doneNames));
+            file_put_contents('update', serialize($doneNames));
             echo "\n\033[32mupdate finished\033[0m\n";
 
             if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {

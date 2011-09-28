@@ -12,7 +12,7 @@ class Vps_Util_Fulltext
             Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
             Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
             Zend_Search_Lucene_Storage_Directory_Filesystem::setDefaultFilePermissions(0666);
-            $path = 'application/cache/fulltext';
+            $path = 'cache/fulltext';
             try {
                 $instance = Zend_Search_Lucene::open($path);
             } catch (Zend_Search_Lucene_Exception $e) {

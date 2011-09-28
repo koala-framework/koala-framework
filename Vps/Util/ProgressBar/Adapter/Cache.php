@@ -36,7 +36,7 @@ class Vps_Util_ProgressBar_Adapter_Cache extends Zend_ProgressBar_Adapter
                 'automatic_serialization' => true
             ),
             array(
-                'cache_dir' => 'application/cache/model',
+                'cache_dir' => 'cache/model',
                 'file_name_prefix' => 'progressbar'
             )
         );
