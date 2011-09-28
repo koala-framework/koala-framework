@@ -4,7 +4,7 @@
  * @group Model_MirrorCache_Delay
  * @group slow
  */
-class Vps_Model_MirrorCache_ModelDelayTest extends PHPUnit_Framework_TestCase
+class Vps_Model_MirrorCache_ModelDelayTest extends Vps_Test_TestCase
 {
     private $_sourceModel;
     private $_mirrorModel;
@@ -12,6 +12,7 @@ class Vps_Model_MirrorCache_ModelDelayTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
         $this->_sourceModel = new Vps_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'lastname', 'timefield'),

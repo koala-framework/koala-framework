@@ -30,6 +30,34 @@ class Vpc_Mail_HtmlParser
         }
     }
 
+    private static function _matchesStyle($stack, $style)
+    {
+        $tag = $stack[count($stack)-1]['tag'];
+        $class = $stack[count($stack)-1]['class'];
+        if (isset($style['tag'])) {
+            if (isset($style['selector'])) throw new Vps_Exception("don't use tag AND selector");
+            return ($style['tag'] == '*' || $style['tag'] == $tag) && (!isset($style['class']) || $class == $style['class']);
+        } else if (isset($style['selector'])) {
+            $selectors = explode(' ', $style['selector']); //css-artiger selector
+            $selectors = array_reverse($selectors);
+            $stack = array_reverse($stack);
+            foreach ($selectors as $selector) {
+                foreach ($stack as $stackItem=>$s) {
+                    if ($selector == $s['tag']
+                        || (isset($s['class']) && $selector == '.'.$s['class'])
+                        || (isset($s['class']) && $selector == $s['tag'].'.'.$s['class'])
+                    ) {
+                        $stack = array_slice($stack, $stackItem);
+                        continue 2;
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
     protected function startElement($parser, $tag, $attributes)
     {
         $tag = strtolower($tag);
@@ -39,9 +67,16 @@ class Vpc_Mail_HtmlParser
         if (isset($attributes['CLASS'])) {
             $class = $attributes['CLASS'];
         }
+        $stack = $this->_stack;
+        $stack[] = array( //extra stack der _matches übergeben werden kann, den richtigen stack kömma nu ned bauen
+            'tag' => $tag,
+            'class' => $class,
+            'appendedTags' => array()
+        );
+
         $appendTags = array();
         foreach ($this->_styles as $s) {
-            if (($s['tag'] == '*' || $s['tag'] == $tag) && (!isset($s['class']) || $class == $s['class'])) {
+            if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
                 if (isset($s['styles'])) {
                     foreach ($s['styles'] as $style=>$value) {
@@ -75,6 +110,7 @@ class Vpc_Mail_HtmlParser
 
         $stackItem = array(
             'tag' => $tag,
+            'class' => $class,
             'appendedTags' => array()
         );
         foreach ($appendTags as $t=>$attr) {

@@ -61,10 +61,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         self::reset();
     }
 
-    public static function reset()
+    public static function reset($resetCache = true)
     {
         self::$_instance = null;
-        Vps_Component_Abstract::resetSettingsCache();
+        Vps_Component_Generator_Abstract::clearInstances();
+        Vps_Component_Abstract::clearModelInstances();
+        if ($resetCache) Vps_Component_Abstract::resetSettingsCache();
     }
 
     public function __get($var)
@@ -76,6 +78,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return parent::__get($var);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPageByUrl($url, $acceptLangauge)
     {
         $parsedUrl = parse_url($url);
@@ -102,6 +107,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentById($componentId, $select = array())
     {
         if (is_array($select)) {
@@ -205,6 +213,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentByDbId($dbId, $select = array())
     {
         $components = $this->getComponentsByDbId($dbId, $select);

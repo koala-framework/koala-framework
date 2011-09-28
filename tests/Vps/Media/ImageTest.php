@@ -2,7 +2,7 @@
 /**
  * @group MediaImage
  */
-class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
+class Vps_Media_ImageTest extends Vps_Test_TestCase
 {
     public function testImageScaleDimensions()
     {

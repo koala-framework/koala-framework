@@ -21,7 +21,7 @@ class Vps_Media_Headline_Asset implements Vps_Assets_Dynamic_Interface
     {
         $ret = array();
         $dep = $this->_loader->getDependencies();
-        $language = Zend_Registry::get('trl')->getTargetLanguage();
+        $language = Vps_Trl::getInstance()->getTargetLanguage();
 
         foreach ($this->_getFiles() as $file) {
             try {

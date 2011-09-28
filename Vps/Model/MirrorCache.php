@@ -179,10 +179,18 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->_unlockSync();
     }
 
+    /**
+     * Wird aufgerufen bevor ein sync stattfindet, nicht wenn kein sync notwendig ist
+     */
+    protected function _beforeSynchronize()
+    {
+    }
+
     private function _synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
         $select = $this->_getSynchronizeSelect($overrideMaxSyncDelay);
         if ($select !== false) {
+            $this->_beforeSynchronize();
             // it's possible to use $this->getProxyModel()->copyDataFromModel()
             // but if < 20 rows are copied, array is faster than sql or csv
             $format = null;

@@ -1,11 +1,9 @@
 <?php
-class Vps_Component_Generator_MultiBoxes_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_MultiBoxes_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_MultiBoxes_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_Generator_MultiBoxes_Root');
     }
 
     public function testBoxes()
@@ -44,7 +42,7 @@ class Vps_Component_Generator_MultiBoxes_Test extends PHPUnit_Framework_TestCase
     {
         $vars = $this->_root->getChildComponent('_page1')->getChildComponent('-foo')
                     ->getComponent()->getTemplateVars();
-            
+
         $this->_assertIds($vars['boxes'], array('root_page1-multibox3', 'root_page1-multibox1', 'root_page1-multibox2'));
     }
     private function _assertIds($components, $ids)

@@ -3,11 +3,12 @@
  * @group Model
  * @group Model_Tree
  */
-class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Tree_Test extends Vps_Test_TestCase
 {
     private $_model;
     public function setUp()
     {
+        parent::setUp();
         $this->_model = new Vps_Model_Tree_TestModel();
     }
 
@@ -38,10 +39,10 @@ class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase
 
         $row = $this->_model->getRow(4);
         $this->assertEquals(array(4), $row->getRecursiveIds());
-        
+
         $row = $this->_model->getRow(3);
         $this->assertEquals(array(3), $row->getRecursiveIds());
-        
+
         $row = $this->_model->getRow(2);
         $ids = $row->getRecursiveIds();
         asort($ids);

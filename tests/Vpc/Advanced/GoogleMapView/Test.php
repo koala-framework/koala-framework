@@ -2,14 +2,11 @@
 /**
  * @group Advanced_GoogleMap
  */
-class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
+class Vpc_Advanced_GoogleMapView_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Advanced_GoogleMapView_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Advanced_GoogleMapView_Root');
     }
 
     public function testNoCoordinatesOptionException()

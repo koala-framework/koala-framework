@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_AutoFillTest extends PHPUnit_Framework_TestCase
+class Vps_Filter_Row_AutoFillTest extends Vps_Test_TestCase
 {
     public function testAutoFill()
     {

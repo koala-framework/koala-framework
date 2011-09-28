@@ -2,7 +2,7 @@
 /**
  * @group Util
  */
-class Vps_Util_Mysql_Test extends PHPUnit_Framework_TestCase
+class Vps_Util_Mysql_Test extends Vps_Test_TestCase
 {
     public function testGrantFileRight()
     {

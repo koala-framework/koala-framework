@@ -31,7 +31,7 @@ class Vps_Media_Headline
 
         $loader = new Vps_Assets_Loader();
         $dep = $loader->getDependencies();
-        $language = Zend_Registry::get('trl')->getTargetLanguage();
+        $language = Vps_Trl::getInstance()->getTargetLanguage();
         $cacheId = 'headline'.md5($selector.$text);
         $cache = new Vps_Assets_Cache();
         $cacheData = $cache->load($cacheId);

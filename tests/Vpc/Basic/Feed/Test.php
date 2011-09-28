@@ -2,14 +2,11 @@
 /**
  * @group Vpc_Basic_Feed
  **/
-class Vpc_Basic_Feed_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Feed_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Feed_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_Feed_Root');
     }
 
     public function testFeed()

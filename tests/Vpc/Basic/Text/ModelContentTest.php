@@ -5,14 +5,11 @@
  *
  * @group Vpc_Basic_Text
  **/
-class Vpc_Basic_Text_ModelContentTest extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Text_ModelContentTest extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Text_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_Text_Root');
     }
 
     public function testOnlyText()
@@ -158,7 +155,7 @@ class Vpc_Basic_Text_ModelContentTest extends PHPUnit_Framework_TestCase
                             'html' => '<a href="1000-d1">',
                         ), 'foo</a></p>'), $parts);
     }
-    
+
     public function testContentPartsValidImage()
     {
         $c = $this->_root->getComponentById(1003)->getComponent();

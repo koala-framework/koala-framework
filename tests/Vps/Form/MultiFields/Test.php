@@ -2,7 +2,7 @@
 /**
  * @group Form_MultiFields
  */
-class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
+class Vps_Form_MultiFields_Test extends Vps_Test_TestCase
 {
     public function testSimple()
     {

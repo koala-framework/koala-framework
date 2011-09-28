@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_Field
  */
-class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Field_Test extends Vps_Test_TestCase
 {
     public function testFnFField()
     {

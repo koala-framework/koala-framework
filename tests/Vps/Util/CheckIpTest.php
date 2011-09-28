@@ -2,7 +2,7 @@
 /**
  * @group Util
  */
-class Vps_Util_CheckIpTest extends PHPUnit_Framework_TestCase
+class Vps_Util_CheckIpTest extends Vps_Test_TestCase
 {
     private $_standardChecker = 'Vps_Util_CheckIpMock';
 

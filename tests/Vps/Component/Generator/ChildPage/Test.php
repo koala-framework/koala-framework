@@ -1,18 +1,19 @@
 <?php
-class Vps_Component_Generator_ChildPage_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_ChildPage_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_ChildPage_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_Generator_ChildPage_Root');
         Vps_Benchmark::enable();
         Vps_Benchmark::reset();
     }
+
     public function tearDown()
     {
+        parent::tearDown();
         Vps_Benchmark::disable();
     }
+
     public function testComponentClassConstraint()
     {
         $c = $this->_root->getComponentById('root-child');
@@ -46,7 +47,7 @@ class Vps_Component_Generator_ChildPage_Test extends PHPUnit_Framework_TestCase
         $page = $this->_root->getChildPage(array('filename' => '1_foo'));
         $this->assertEquals('root-child_1', $page->dbId);
     }
-    
+
     public function testSubpageForm()
     {
         $formSelect = array(

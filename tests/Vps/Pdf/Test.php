@@ -2,7 +2,7 @@
 /**
  * @group Pdf
  */
-class Vps_Pdf_Test extends PHPUnit_Framework_TestCase
+class Vps_Pdf_Test extends Vps_Test_TestCase
 {
     /**
      * Http host muss gesetzt werden da sonst in der config von tcpdf
@@ -11,11 +11,13 @@ class Vps_Pdf_Test extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        parent::setUp();
         $_SERVER['HTTP_HOST'] = Zend_Registry::get('testDomain');
     }
 
     public function tearDown()
     {
+        parent::tearDown();
         unset($_SERVER['HTTP_HOST']);
     }
 

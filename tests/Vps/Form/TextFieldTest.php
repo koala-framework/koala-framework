@@ -2,12 +2,13 @@
 /**
  * @group Form_TextField
  */
-class Vps_Form_TextFieldTest extends PHPUnit_Framework_TestCase
+class Vps_Form_TextFieldTest extends Vps_Test_TestCase
 {
     private $_textField;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_textField = new Vps_Form_Field_TextField('test12');
     }
 

@@ -2,7 +2,7 @@
 /**
  * @group AutoGrid
  */
-class Vps_AutoGrid_GridTest extends PHPUnit_Framework_TestCase
+class Vps_AutoGrid_GridTest extends Vps_Test_TestCase
 {
     public function testExprEqualsSelect()
     {

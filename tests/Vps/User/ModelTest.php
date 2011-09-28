@@ -2,14 +2,14 @@
 /**
  * @group User
  */
-class Vps_User_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_User_ModelTest extends Vps_Test_TestCase
 {
     private $_serviceFnf;
     private $_userModel;
 
     public function setUp()
     {
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
         $this->_serviceFnf = new Vps_Model_FnF(array(
             'data' => array(
                 array(

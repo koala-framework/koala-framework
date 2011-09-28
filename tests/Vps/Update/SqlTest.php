@@ -2,7 +2,7 @@
 /**
  * @group Update
  */
-class Vps_Update_SqlTest extends PHPUnit_Framework_TestCase
+class Vps_Update_SqlTest extends Vps_Test_TestCase
 {
     public function testSql()
     {

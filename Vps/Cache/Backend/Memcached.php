@@ -59,7 +59,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
                 $server['failure_callback'] = self::DEFAULT_FAILURE_CALLBACK;
             }
 
-            if (version_compare(phpversion('memcache'), '2.1.0') == -1) { // < 2.1.0
+            if (version_compare(phpversion('memcache'), '2.1.0') == -1  // < 2.1.0
+                || phpversion('memcache')=='2.2.4') { // vivid-sun
                 $this->_memcache->addServer($server['host'], $server['port'], $server['persistent'],
                                         $server['weight'], $server['timeout'],
                                         $server['retry_interval']);
