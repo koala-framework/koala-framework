@@ -71,10 +71,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
 
     public function getTotal()
     {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Shop_Cart_Component')
-            ->getChildComponent('_checkout')
-            ->getComponent()->getTotal($this);
+        return Vpc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getTotal($this);
     }
 
     public function getSalutation()
