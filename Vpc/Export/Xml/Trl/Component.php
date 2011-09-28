@@ -1,9 +1,11 @@
 <?php
 class Vpc_Export_Xml_Trl_Component extends Vpc_Chained_Trl_MasterAsChild_Component
 {
-    public function sendContent()
+    public static function getSettings($masterComponentClass)
     {
-        $this->getData()->getChildComponent('-child')->getComponent()->sendContent();
+        $ret = parent::getSettings($masterComponentClass);
+        $ret['contentSender'] = 'Vpc_Export_Xml_Trl_ContentSender';
+        return $ret;
     }
 
     public function getExportData()
