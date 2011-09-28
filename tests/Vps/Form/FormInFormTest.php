@@ -1,4 +1,4 @@
- <?php
+<?php
  /**
   * @group Vps_Form
   */
