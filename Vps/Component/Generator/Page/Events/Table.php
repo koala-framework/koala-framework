@@ -27,7 +27,7 @@ class Vps_Component_Generator_Page_Events_Table extends Vps_Component_Generator_
         $ret[] = array(
             'class' => $this->_config['componentClass'],
             'event' => 'Vps_Component_Event_Page_FilenameChanged',
-            'callback' => 'onPageFilenameChangedEvent'
+            'callback' => 'onPageFilenameChanged'
         );
         return $ret;
     }
@@ -89,7 +89,7 @@ class Vps_Component_Generator_Page_Events_Table extends Vps_Component_Generator_
         }
     }
 
-    public function onPageFilenameChangedEvent(Vps_Component_Event_Page_FilenameChanged $event)
+    public function onPageFilenameChanged(Vps_Component_Event_Page_FilenameChanged $event)
     {
         $components = Vps_Component_Data_Root::getInstance()
             ->getComponentsByDbId($event->dbId);

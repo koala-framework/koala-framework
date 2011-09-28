@@ -76,6 +76,7 @@ class Vps_Component_Events
                     $event = $listener['event'];
                     if (!class_exists($event)) throw new Vps_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
                     $class = isset($listener['class']) ? $listener['class'] : 'all';
+                    if (is_object($class)) $class = get_class($class);
                     $listeners[$event][$class][] = array(
                         'class' => get_class($eventObject),
                         'method' => $listener['callback'],
