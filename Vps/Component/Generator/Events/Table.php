@@ -50,7 +50,7 @@ class Vps_Component_Generator_Events_Table extends Vps_Component_Generator_Event
 
     public function onRowAdd(Vps_Component_Event_Row_Inserted $event)
     {
-        if ($event->row->visible) {
+        if (!$event->row->hasColumn('visible') || $event->row->visible) {
             $this->fireEvent(
                 new Vps_Component_Event_Component_Added($this->_class, $this->_getDbId($event->row))
             );
@@ -59,7 +59,7 @@ class Vps_Component_Generator_Events_Table extends Vps_Component_Generator_Event
 
     public function onRowDelete(Vps_Component_Event_Row_Deleted $event)
     {
-        if ($event->row->visible) {
+        if (!$event->row->hasColumn('visible') || $event->row->visible) {
             $this->fireEvent(
                 new Vps_Component_Event_Component_Removed($this->_class, $this->_getDbId($event->row))
             );

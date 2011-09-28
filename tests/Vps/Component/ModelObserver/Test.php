@@ -10,7 +10,7 @@ class Vps_Component_ModelObserver_Test extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Data_Root');
+        $this->markTestIncomplete();
         $this->_observer = Vps_Component_ModelObserver::getInstance();
         $this->_observer->setEnableProcess(false);
         $this->_observer->setSkipFnF(false);

@@ -9,17 +9,13 @@ class Vpc_Root_Category_GeneratorEvents extends Vps_Component_Generator_Page_Eve
             'event' => 'Vps_Component_Event_Row_Updated',
             'callback' => 'onPageRowUpdate'
         );
-        $ret[] = array(
-            'event' => 'Vps_Component_Event_Page_RecursiveFilenameChanged',
-            'callback' => 'onPageFilenameChanged'
-        );
         return $ret;
     }
 
-    public function onPageFilenameChanged(Vps_Component_Event_Page_RecursiveFilenameChanged $event)
+    public function onPageFilenameChanged(Vps_Component_Event_Page_FilenameChanged $event)
     {
-        if (is_numeric($event->componentId)) {
-            foreach ($this->_getRecursiveChildIds($event->componentId, $ids) as $id) {
+        if (is_numeric($event->dbId)) {
+            foreach ($this->_getRecursiveChildIds($event->dbId, $this->_getGenerator()->getModel()) as $id) {
                 $this->fireEvent(
                     new Vps_Component_Event_Page_RecursiveFilenameChanged($this->_class, $id)
                 );
@@ -30,11 +26,7 @@ class Vpc_Root_Category_GeneratorEvents extends Vps_Component_Generator_Page_Eve
     public function onPageRowUpdate(Vps_Component_Event_Row_Updated $event)
     {
         if (in_array('parent_id', $event->row->getDirtyColumns())) {
-            $ids = array();
-            foreach ($event->row->getModel()->getRows() as $row) {
-                $ids[$row->parent_id][] = $row->id;
-            }
-            foreach ($this->_getRecursiveChildIds($event->row->id, $ids) as $id) {
+            foreach ($this->_getRecursiveChildIds($event->row->id, $event->row->getModel()) as $id) {
                 $this->fireEvent(
                     new Vps_Component_Event_Page_ParentChanged($this->_class, $id)
                 );
@@ -42,12 +34,21 @@ class Vpc_Root_Category_GeneratorEvents extends Vps_Component_Generator_Page_Eve
         }
     }
 
-    private function _getRecursiveChildIds($id, $ids)
+    private function _getRecursiveChildIds($id, $model)
+    {
+        $ids = array();
+        foreach ($model->getRows() as $row) {
+            $ids[$row->parent_id][] = $row->id;
+        }
+        return $this->_rekGetRecursiveChildIds($id, $ids);
+    }
+
+    private function _rekGetRecursiveChildIds($id, $ids)
     {
         $ret = array($id);
         if (isset($ids[$id])) {
             foreach ($ids[$id] as $id) {
-                $ret = array_merge($ret, $this->_getRecursiveChildIds($id, $ids));
+                $ret = array_merge($ret, $this->_rekGetRecursiveChildIds($id, $ids));
             }
         }
         return $ret;

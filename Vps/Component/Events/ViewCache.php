@@ -24,7 +24,11 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
         );
         $ret[] = array(
             'event' => 'Vps_Component_Event_Page_RecursiveFilenameChanged',
-            'callback' => 'onPageRecursiveChanged'
+            'callback' => 'onPageRecursiveFilenameChanged'
+        );
+        $ret[] = array(
+            'event' => 'Vps_Component_Event_Page_ParentChanged',
+            'callback' => 'onPageParentChanged'
         );
         return $ret;
     }
@@ -67,11 +71,19 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
         );
     }
 
-    public function onPageRecursiveChanged(Vps_Component_Event_Page_RecursiveFilenameChanged $event)
+    public function onPageRecursiveFilenameChanged(Vps_Component_Event_Page_RecursiveFilenameChanged $event)
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
             'component_id' => $event->componentId . '%'
+        );
+    }
+
+    public function onPageParentChanged(Vps_Component_Event_Page_ParentChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'componentLink',
+            'component_id' => $event->dbId . '%'
         );
     }
 }
