@@ -28,6 +28,8 @@ möglicherweise nicht kompatible Änderungen:
 - Vps_User_Model is not a service model, that changed to Vps_User_Service_Model
 - Vpc/List/Switch got completely changed
 - Menu: maxLevel setting removed (create own SubMenu component with different level)
+- Vps and Vpc renamed into Kwf and Kwc
+- application/* moved into web root
 
 == 2.1 ==
 Erstellt: 21.06.11
