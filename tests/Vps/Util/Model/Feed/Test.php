@@ -3,7 +3,7 @@
  * @group Feed
  * @group slow
  */
-class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
+class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 {
     public function testRss20()
     {
@@ -136,10 +136,12 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         Vps_Model_Abstract::clearInstances();
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds');
 
+        /*
         $feeds = $m->findFeeds('http://www.prosalzburg.at');
         $this->assertEquals(1, count($feeds));
         $feeds = array_keys($feeds);
         $this->assertEquals('http://www.prosalzburg.at/news/feed', $feeds[0]);
+        */
 
         $feeds = $m->findFeeds('http://www.orf.at');
         $this->assertEquals(1, count($feeds));

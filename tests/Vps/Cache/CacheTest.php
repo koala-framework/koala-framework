@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache_CacheTest extends PHPUnit_Framework_TestCase
+class Vps_Cache_CacheTest extends Vps_Test_TestCase
 {
     public function testCacheMtimeFiles()
     {

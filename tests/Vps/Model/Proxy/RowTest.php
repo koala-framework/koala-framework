@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_Proxy
  */
-class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Proxy_RowTest extends Vps_Test_TestCase
 {
     /**
      * @expectedException Vps_Exception

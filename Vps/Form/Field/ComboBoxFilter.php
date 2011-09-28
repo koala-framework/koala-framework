@@ -94,6 +94,20 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         return $postData;
     }
 
+    public function load($row, array $postData = array())
+    {
+        $ret = parent::load($row, $postData);
+        if (!$this->getFilteredCombo()) {
+            throw new Vps_Exception("No filteredCombo set");
+        }
+        $value = $ret[$this->getFieldName()];
+        if ($value) {
+            $filtered = $this->getFilteredCombo();
+            $filtered->setFilterValue($value);
+        }
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $this->setSubmitOnChange(true);

@@ -2,7 +2,7 @@
 /**
  * @group Form_File
  */
-class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
+class Vps_Form_File_FileTest extends Vps_Test_TestCase
 {
     private $_model;
     private $_uploadsModel;
@@ -11,7 +11,7 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
         $this->_uploadsModel = Vps_Model_Abstract::getInstance('Vps_Form_File_UploadsTestModel');
 
         $this->_model = new Vps_Model_FnF(array(

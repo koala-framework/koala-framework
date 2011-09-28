@@ -172,7 +172,7 @@ class Vps_Assets_Loader
 
             if (substr($ret['mimeType'], 0, 5) == 'text/') { //nur texte cachen
                 if (!$language) {
-                    $language = Zend_Registry::get('trl')->getTargetLanguage();
+                    $language = Vps_Trl::getInstance()->getTargetLanguage();
                 }
 
                 $cache = Vps_Assets_Cache::getInstance();

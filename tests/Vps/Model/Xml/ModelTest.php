@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_Xml
  */
-class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 {
     public function setUp()
     {

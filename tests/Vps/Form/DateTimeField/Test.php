@@ -2,7 +2,7 @@
 /**
  * @group Vps_Form_DateTimeField
  */
-class Vps_Form_DateTimeField_Test extends PHPUnit_Framework_TestCase
+class Vps_Form_DateTimeField_Test extends Vps_Test_TestCase
 {
     public function testDateTime()
     {

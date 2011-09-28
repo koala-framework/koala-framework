@@ -18,7 +18,7 @@ class Vps_Auth_PartnerNetTestRequest extends Zend_Controller_Request_Http
 /**
  * @group Vps_Auth
  */
-class Vps_Auth_PartnerNetTest extends PHPUnit_Framework_TestCase
+class Vps_Auth_PartnerNetTest extends Vps_Test_TestCase
 {
     public function testSuccessfulLogin()
     {

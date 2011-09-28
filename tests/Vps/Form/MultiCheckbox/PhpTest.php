@@ -2,7 +2,7 @@
 /**
  * @group Vps_Form_MultiCheckbox
  */
-class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
+class Vps_Form_MultiCheckbox_PhpTest extends Vps_Test_TestCase
 {
     public function testRelation()
     {

@@ -3,11 +3,12 @@
  * @group Model_MirrorCache
  * @group Model_MirrorCache_Sibling
  */
-class Vps_Model_MirrorCache_ModelSiblingTest extends PHPUnit_Framework_TestCase
+class Vps_Model_MirrorCache_ModelSiblingTest extends Vps_Test_TestCase
 {
     public function setUp()
     {
         $this->_proxyModel = Vps_Model_Abstract::getInstance('Vps_Model_MirrorCache_MirrorCacheModel');
+        parent::setUp();
     }
 
     public function testNoSyncWhenOnlySavedToSibling()

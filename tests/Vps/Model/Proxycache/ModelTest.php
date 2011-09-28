@@ -3,7 +3,7 @@
  * @group Model
  * @group proxycache
  */
-class Vps_Model_Proxycache_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 {
 
     public function testCache()

@@ -2,7 +2,7 @@
 /**
  * @group Benchmark
  */
-class Vps_Benchmark_CounterTest extends PHPUnit_Framework_TestCase
+class Vps_Benchmark_CounterTest extends Vps_Test_TestCase
 {
     public function testMemcache()
     {

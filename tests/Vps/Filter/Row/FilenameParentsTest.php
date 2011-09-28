@@ -22,7 +22,7 @@ class Vps_Filter_Row_AutoFillTestRow extends Vps_Model_Row_Data_Abstract
     }
 }
 
-class Vps_Filter_Row_FilenameParentsTest extends PHPUnit_Framework_TestCase
+class Vps_Filter_Row_FilenameParentsTest extends Vps_Test_TestCase
 {
     public function testFilenameParents()
     {

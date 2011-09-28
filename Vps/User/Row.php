@@ -254,7 +254,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         return $this->_sendMail('UserDeleted', $subject);
     }
 
-    private function _sendMail($tpl, $subject, $tplParams = null)
+    protected function _sendMail($tpl, $subject, $tplParams = null)
     {
         if (!$this->email || !$this->_sendMails) {
             return false;

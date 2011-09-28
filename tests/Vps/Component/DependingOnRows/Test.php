@@ -2,13 +2,11 @@
 /**
  * @group DependingOnRows
  */
-class Vps_Component_DependingOnRows_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_DependingOnRows_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_DependingOnRows_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_DependingOnRows_Root');
     }
 
     public function testSimple()

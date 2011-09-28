@@ -8,35 +8,35 @@ function hlpVps($string) {
 }
 
 function trl($string, $text = array()) {
-    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlc($context, $string, $text = array()) {
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlp($single, $plural, $text =  array()) {
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlcp($context, $single, $plural, $text = array()) {
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlVps($string, $text = array()) {
-    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_VPS);
 }
 
 function trlcVps($context, $string, $text = array()) {
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
 }
 
 function trlpVps($single, $plural, $text =  array()) {
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
 function trlcpVps($context, $single, $plural, $text = array()) {
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
 // trl functions for e.g. placeholders
@@ -99,6 +99,16 @@ class Vps_Trl
         self::ERROR_WRONG_NR_OF_ARGUMENTS => 'To few arguments.'
     );
 
+
+    private static $_instance = null;
+
+    public static function getInstance()
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
 
     public function __construct($config = array())
     {

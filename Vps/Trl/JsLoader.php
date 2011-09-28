@@ -3,8 +3,8 @@ class Vps_Trl_JsLoader
 {
     public function trlLoad($contents, $language)
     {
-        $elements = Zend_Registry::get('trl')->parse($contents, 'js');
-        $trl = Zend_Registry::get('trl');
+        $elements = Vps_Trl::getInstance()->parse($contents, 'js');
+        $trl = Vps_Trl::getInstance();
         foreach ($elements as $i=>$trlelement) {
             $values = array();
             if (!isset($trlelement['error'])) {
@@ -41,7 +41,7 @@ class Vps_Trl_JsLoader
                     $values['single'] = $trlelement['text'];
                     $values['plural'] = $trlelement['plural'];
 
-                    $newValues = Zend_Registry::get('trl')->getTrlpValues(null, $values['single'],
+                    $newValues = Vps_Trl::getInstance()->getTrlpValues(null, $values['single'],
                                                 $values['plural'], $trlelement['source'], $language);
 
                     $method = $trlelement['type'];
@@ -57,7 +57,7 @@ class Vps_Trl_JsLoader
                     $values['single'] = $trlelement['text'];
                     $values['plural'] = $trlelement['plural'];
 
-                    $newValues = Zend_Registry::get('trl')->getTrlpValues($values['context'],
+                    $newValues = Vps_Trl::getInstance()->getTrlpValues($values['context'],
                                 $values['single'], $values['plural'], $trlelement['source'], $language );
 
                     $method = 'trlcp'.$mode;

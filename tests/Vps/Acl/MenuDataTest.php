@@ -2,12 +2,8 @@
 /**
  * @group Vps_Acl
  */
-class Vps_Acl_MenuDataTest extends PHPUnit_Framework_TestCase
+class Vps_Acl_MenuDataTest extends Vps_Test_TestCase
 {
-    public function setUp()
-    {
-        Vps_Component_Data_Root::setComponentClass(false);
-    }
     public function testMenuData()
     {
         $acl = new Vps_Acl();

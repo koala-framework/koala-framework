@@ -6,8 +6,13 @@ class Vps_Util_FeedFetcher_Feed_Updater_HttpRequest extends HttpRequest
 
     public function __construct(Vps_Util_FeedFetcher_FeedRow $feed)
     {
-        $options = Vps_Util_FeedFetcher_Feed::getRequestOptions($feed->id);
-        parent::__construct($feed->url, HTTP_METH_GET, $options);
+        $feedData = Vps_Util_FeedFetcher_Feed_Cache::getInstance()
+            ->load(Vps_Util_FeedFetcher_Feed::getCacheId($feed->id));
+
+        $options = Vps_Util_FeedFetcher_Feed::getRequestOptions($feedData);
+
+        $url = Vps_Util_FeedFetcher_Feed::getRequestUrl($feedId, $feed->url);
+        parent::__construct($url, HTTP_METH_GET, $options);
         $this->_feed = $feed;
 
         $this->_start = microtime(true);

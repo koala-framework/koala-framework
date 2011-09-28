@@ -22,7 +22,7 @@ class Vps_Registry extends Zend_Registry
             $this->offsetSet('userModel', $v);
             return $v;
         } else if ($index == 'trl' && !parent::offsetExists($index)) {
-            $v = new Vps_Trl();
+            $v = Vps_Trl::getInstance();
             $this->offsetSet('trl', $v);
             return $v;
         } else if ($index == 'hlp' && !parent::offsetExists($index)) {

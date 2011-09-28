@@ -7,6 +7,11 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
         $this->setBackupGlobals(false);
         $classes = $this->_addDirectory('./tests', false);
 
+        // damit der js test auch im web immer ausgeführt wird
+        if (!in_array('Vps_Js_SyntaxTest', $classes)) {
+            $classes[] = 'Vps_Js_SyntaxTest';
+        }
+
         if (file_exists("/www/testtimes")) {
             $app = Vps_Registry::get('config')->application->id;
             if (!file_exists("/www/testtimes/failure_$app")) mkdir("/www/testtimes/failure_$app");
@@ -43,6 +48,7 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
         $ret = array();
         foreach ($dir as $file) {
             $file = substr($file, strlen($basePath)+1);
+            if (substr($file, 0, 6)=='cache/') continue;
             if (substr($file, -8) != 'Test.php' && $onlyTestPrefix) {
                 continue;
             }

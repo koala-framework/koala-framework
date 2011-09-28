@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_FnF
  */
-class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
+class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 {
     public function testExprNullSelect()
     {

@@ -1,6 +1,7 @@
 <?php
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+    protected $backupStaticAttributes = false;
     protected $autoStop = false;
     protected $_unitTestCookie;
     protected $_domain = null;

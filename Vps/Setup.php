@@ -214,6 +214,7 @@ class Vps_Setup
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
+            && substr($_SERVER['REDIRECT_URL'], 0, 17) != '/wirecard_confirm' //rssinclude
         ) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
             if (empty($sessionPhpAuthed->success)) {
@@ -288,9 +289,9 @@ class Vps_Setup
             return trim(file_get_contents('application/config_section'));
         } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
-        } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
-            if ($m[2]=='vps-projekte') return 'vivid';
-            return $m[2];
+        } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+            if ($m[3]=='vps-projekte') return 'vivid';
+            return $m[3];
         } else if (substr($host, 0, 9)=='dev.test.') {
             return 'devtest';
         } else if (substr($host, 0, 4)=='dev.') {
@@ -326,7 +327,7 @@ class Vps_Setup
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Registry::get('trl')->setUseUserLanguage(false);
+            Vps_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
@@ -341,7 +342,7 @@ class Vps_Setup
                 exit;
             }
             // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
-            Vps_Registry::get('trl')->overrideTargetLanguage($data->getLanguage());
+            Vps_Trl::getInstance()->overrideTargetLanguage($data->getLanguage());
             $page = $data->getComponent();
             $page->sendContent();
 

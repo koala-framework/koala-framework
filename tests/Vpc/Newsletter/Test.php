@@ -3,7 +3,7 @@
  * @group slow
  * @group Vpc_Newsletter
  */
-class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
+class Vpc_Newsletter_Test extends Vps_Test_TestCase
 {
     public function testMailSending()
     {
