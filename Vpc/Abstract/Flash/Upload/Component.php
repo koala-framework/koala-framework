@@ -40,12 +40,6 @@ abstract class Vpc_Abstract_Flash_Upload_Component extends Vpc_Abstract_Flash_Co
             return null;
         }
 
-        if ($row) {
-            Vps_Component_Cache::getInstance()->saveMeta(
-                new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
-            );
-        }
-
         return array(
             'file' => $file,
             'mimeType' => $mimeType
@@ -56,13 +50,5 @@ abstract class Vpc_Abstract_Flash_Upload_Component extends Vpc_Abstract_Flash_Co
     {
         if ($this->_getUploadUrl()) return true;
         return false;
-    }
-
-    public function onCacheCallback($row)
-    {
-        $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->componentId, 'default'
-        );
-        Vps_Media::getOutputCache()->remove($cacheId);
     }
 }
