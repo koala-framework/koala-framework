@@ -95,11 +95,4 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         }
         return false;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
-        return $ret;
-    }
 }
