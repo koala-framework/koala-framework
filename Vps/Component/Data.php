@@ -86,6 +86,11 @@ class Vps_Component_Data
             if (/*$childs || */Vps_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
             }
+            $contentSender = Vpc_Abstract::getSetting($page->componentClass, 'contentSender');
+            if ($contentSender != 'Vps_Component_Abstract_ContentSender_Default') { //skip for performance
+                $contentSender = new $contentSender($page);
+                $rel .= ' '.$contentSender->getLinkRel();
+            }
             return trim($rel);
         } else if ($var == 'filename') {
             return rawurlencode($this->getPseudoPageOrRoot()->_filename);
