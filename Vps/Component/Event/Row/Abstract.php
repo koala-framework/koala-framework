@@ -18,4 +18,12 @@ abstract class Vps_Component_Event_Row_Abstract extends Vps_Component_Event_Abst
         }
         return false;
     }
+
+    protected function _getVarsStringArray()
+    {
+        return array(
+            $this->class,
+            $this->row->{$this->row->getModel()->getPrimaryKey()}
+        );
+    }
 }
