@@ -26,6 +26,7 @@ möglicherweise nicht kompatible Änderungen:
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 - Vpc/List/Switch got completely changed
 - Menu: maxLevel setting removed (create own SubMenu component with different level)
+- Vpc_Abstract::sendContent moved to ContentSender class
 
 == 2.1 ==
 Erstellt: 21.06.11
