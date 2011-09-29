@@ -405,31 +405,8 @@ class Vps_Setup
             }
             exit;
 
-        } else if ($_SERVER['REDIRECT_URL'] == '/vps/util/render/render') {
-
-            if (!isset($_REQUEST['url']) || !$_REQUEST["url"]) {
-                throw new Vps_Exception_Client('Need URL.');
-            }
-            $url = $_REQUEST['url'];
-            $componentId = isset($_REQUEST['componentId']) ? $_REQUEST['componentId'] : null;
-            $parsedUrl = parse_url($url);
-            $_GET = array();
-            if (isset($parsedUrl['query'])) {
-                foreach (explode('&' , $parsedUrl['query']) as $get) {
-                    if (!$get) continue;
-                    $pos = strpos($get, '=');
-                    $_GET[substr($get, 0, $pos)] = substr($get, $pos+1);
-                }
-            }
-            if ($componentId) {
-                $data = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
-            } else {
-                $data = Vps_Component_Data_Root::getInstance()->getPageByUrl($url, null);
-            }
-            if (!$data) throw new Vps_Exception_NotFound();
-            $data->getComponent()->sendContent(false);
-            Vps_Benchmark::shutDown();
-            exit;
+        } else if ($_SERVER['REDIRECT_URL'] == '/vps/util/vpc/render') {
+            Vps_Util_Component::dispatchRender();
         }
     }
 

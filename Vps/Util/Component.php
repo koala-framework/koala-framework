@@ -57,4 +57,34 @@ class Vps_Util_Component
 
         return $new;
     }
+
+    public static function dispatchRender()
+    {
+        if (!isset($_REQUEST['url']) || !$_REQUEST["url"]) {
+            throw new Vps_Exception('Url Parameter required');
+        }
+        $url = $_REQUEST['url'];
+        $componentId = isset($_REQUEST['componentId']) ? $_REQUEST['componentId'] : null;
+        $parsedUrl = parse_url($url);
+        $_GET = array();
+        if (isset($parsedUrl['query'])) {
+            foreach (explode('&' , $parsedUrl['query']) as $get) {
+                if (!$get) continue;
+                $pos = strpos($get, '=');
+                $_GET[substr($get, 0, $pos)] = substr($get, $pos+1); //ouch
+            }
+        }
+        if ($componentId) {
+            $data = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+        } else {
+            $data = Vps_Component_Data_Root::getInstance()->getPageByUrl($url, null);
+        }
+        if (!$data) throw new Vps_Exception_NotFound();
+        $contentSender = Vpc_Abstract::getSetting($data->componentClass, 'contentSender');
+        $contentSender = new $contentSender($data);
+        $contentSender->sendContent(false);
+
+        Vps_Benchmark::shutDown();
+        exit;
+    }
 }
