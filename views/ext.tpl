@@ -1,3 +1,4 @@
+    <meta name="viewport" content="user-scalable=no" />
     <style type="text/css">
     #loading {
         position:absolute;
