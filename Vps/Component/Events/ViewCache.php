@@ -30,6 +30,10 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
             'event' => 'Vps_Component_Event_Page_ParentChanged',
             'callback' => 'onPageParentChanged'
         );
+        $ret[] = array(
+            'event' => 'Vps_Component_Event_Media_Changed',
+            'callback' => 'onMediaChanged'
+        );
         return $ret;
     }
 
@@ -55,6 +59,7 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
             }
             $select->where(new Vps_Model_Select_Expr_Or($or));
             Vps_Component_Cache::getInstance()->deleteViewCache($select);
+            $this->_updates = array();
         }
     }
 
@@ -85,5 +90,12 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
             'type' => 'componentLink',
             'component_id' => $event->dbId . '%'
         );
+    }
+
+    public function onMediaChanged(Vps_Component_Event_Media_Changed $event)
+    {
+        Vps_Media::getOutputCache()->remove(Vps_Media::createCacheId(
+            $event->class, $event->componentId, $event->type
+        ));
     }
 }
