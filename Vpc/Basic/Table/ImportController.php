@@ -1,49 +1,13 @@
 <?php
-class Vpc_Basic_Table_ImportController extends Vps_Controller_Action_Auto_Vpc_Form
+class Vpc_Basic_Table_ImportController extends Vps_Controller_Action_Auto_Import
 {
-    protected $_permissions = array('add', 'save');
-
-    protected function _initFields()
+    protected function _import($excel)
     {
-        $this->_form->setModel(new Vps_Model_FnF(array(
-            'columns' => array('id', 'upload_id'),
-            'primaryKey' => 'id',
-            'referenceMap' => array(
-                'import' => array(
-                    'refModelClass' => 'Vps_Uploads_Model',
-                    'column' => 'upload_id'
-                )
-            )
-        )));
-
-        $this->_form->add(new Vps_Form_Field_Static(trlVps('Upload a file and click "Save" to import.')));
-        $this->_form->add(new Vps_Form_Field_File('import', 'Import'))
-            ->setAllowBlank(false);
-    }
-
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
-    {
-        $model = Vps_Model_Abstract::getInstance('Vps_Uploads_Model');
-        $ulRow = $model->getRow($row->upload_id);
-
-        $import = $this->_import($ulRow, $row);
-
-        unlink($ulRow->getFileSource());
-        $ulRow->delete();
-    }
-
-    private function _import($fileRow, $formRow)
-    {
-        if ($fileRow->extension != 'xls') {
-            throw new Vps_Exception_Client(trlVps('Uploaded file is not of type "xls".'));
-        }
-        $xls = PHPExcel_IOFactory::load($fileRow->getFileSource())->getActiveSheet();
-
         $settingsRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Table_Model')
             ->getRow($this->_getParam('componentId'));
         $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Table_ModelData');
 
-        $xlsRows = $xls->toArray();
+        $xlsRows = $excel->toArray();
 
         $importColumns = 0;
         $importRows = null;
@@ -79,5 +43,6 @@ class Vpc_Basic_Table_ImportController extends Vps_Controller_Action_Auto_Vpc_Fo
                 $newRow->save();
             }
         }
+        return true;
     }
 }

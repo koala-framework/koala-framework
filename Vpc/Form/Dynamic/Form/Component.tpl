@@ -1,4 +1,5 @@
 <div class="<?=$this->cssClass?><?if($this->isPosted){?> vpsImportant<?}?>">
+    <input type="hidden" class="config" value="<?= htmlspecialchars(Zend_Json::encode($this->config)) ?>" />
 <?php
 if ($this->showSuccess) {
     echo $this->component($this->success);
@@ -12,7 +13,7 @@ if ($this->showSuccess) {
         echo '<p class="error">'.$this->placeholder['error'].':</p>';
         echo '<ul>';
         foreach ($this->errors as $error) {
-            echo "<li>$error</li>";
+            echo '<li>' . htmlspecialchars($error) . '</li>';
         }
         echo '</ul>';
         echo '</div>';
@@ -27,6 +28,7 @@ if ($this->showSuccess) {
         <div class="submitWrapper">
             <div class="beforeButton"></div>
             <div class="button">
+                <div class="saving"></div>
                 <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button>
             </div>
             <div class="afterButton"></div>

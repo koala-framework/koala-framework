@@ -70,5 +70,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
     {
         $this->view->wrongversion = true;
         $this->view->success = false;
+        $l = new Vps_Assets_Loader();
+        $this->view->maxAssetsMTime = $l->getDependencies()->getMaxFileMTime();
     }
 }
