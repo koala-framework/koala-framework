@@ -42,7 +42,9 @@ class Vps_Component_Data
     }
 
     /**
-     * So wie ->url aber funktioniert auch fuer pseudoPages
+     * Like ->url but also works for pseudoPages
+     *
+     * overridden in Data_Home
      */
     protected function _getPseudoPageUrl()
     {
