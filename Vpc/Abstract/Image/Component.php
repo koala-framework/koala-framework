@@ -323,4 +323,18 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         );
         Vps_Media::getOutputCache()->remove($cacheId);
     }
+
+    public function getContentWidth()
+    {
+        $row = $this->_getRow();
+        $fileRow = false;
+        if ($row) $fileRow = $row->getParentRow('Image');
+        if ($fileRow) {
+            $info = $fileRow->getFileInfo();
+            if (isset($info['imageWidth'])) {
+                return $info['imageWidth'];
+            }
+        }
+        return 0;
+    }
 }

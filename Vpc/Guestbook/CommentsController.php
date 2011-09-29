@@ -1,13 +1,14 @@
 <?php
 class Vpc_Guestbook_CommentsController extends Vpc_Directories_Item_Directory_Controller
 {
-    protected $_defaultOrder = array('field' => 'id', 'direction' => 'DESC');
+    protected $_defaultOrder = array('field' => 'create_time', 'direction' => 'DESC');
     protected $_filters = array('text' => true);
     protected $_paging = 25;
     protected $_editDialog = array(
         'width' =>  500,
         'height' =>  400
     );
+    protected $_buttons = array('save', 'delete');
 
     public function preDispatch()
     {

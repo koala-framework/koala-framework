@@ -1,2 +1,3 @@
+#tags: vpc
 TRUNCATE TABLE `cache_component`; 
 ALTER TABLE `cache_component` CHANGE `type` `type` ENUM( 'page', 'component', 'master', 'partial', 'mail', 'componentLink' ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ;

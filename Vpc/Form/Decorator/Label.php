@@ -30,9 +30,16 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
             }
             if ($item['item']) {
                 $c = get_class($item['item']);
-                if (substr($c, -10) == '_Component') $c = substr($c, 0, -10);
-                $c = str_replace('_', '', $c);
-                $class .= ' '.strtolower(substr($c, 0, 1)).substr($c, 1);
+                $classParts = array();
+                while ($c) {
+                    $i = $c;
+                    if (substr($i, -10) == '_Component') $i = substr($i, 0, -10);
+                    $i = str_replace('_', '', $i);
+                    $classParts[] = ' '.strtolower(substr($i, 0, 1)).substr($i, 1);
+                    $c = get_parent_class($c);
+                    if ($c == 'Vps_Form_Field_Abstract' || $c == 'Vps_Form_Field_SimpleAbstract') break;
+                }
+                $class .= implode(' ', array_reverse($classParts));
 				if (!isset($item['id'])) {
                     $class .= ' '.$item['item']->getFieldName();
                 }

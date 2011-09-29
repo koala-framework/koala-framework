@@ -9,16 +9,24 @@ class Vps_Dao
     public function __construct(array $config = null)
     {
         if (is_null($config)) {
-	    if (file_exists('application/config.db.ini')) {
-                $config = new Zend_Config_Ini('application/config.db.ini', 'database');
-                $config = $config->toArray();
-	    } else {
-	        $config = array();
-	    }
+            $cacheId = 'dbconfig';
+            $config = Vps_Cache_Simple::fetch($cacheId, $success);
+            if (!$success) {
+                if (file_exists('application/config.db.ini')) {
+                    $config = new Zend_Config_Ini('application/config.db.ini', 'database');
+                    $config = $config->toArray();
+                } else {
+                    $config = array();
+                }
+                Vps_Cache_Simple::add($cacheId, $config);
+            }
         }
         $this->_config = $config;
     }
 
+    /**
+     * @deprecated
+     */
     public static function getTable($tablename, $config = array())
     {
         static $tables;

@@ -59,4 +59,9 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
         }
         return $ret;
     }
+
+    public function getContentWidth()
+    {
+        return $this->_getParentContentData()->getComponent()->getContentWidth();
+    }
 }
