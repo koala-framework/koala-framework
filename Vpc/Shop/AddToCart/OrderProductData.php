@@ -1,23 +1,23 @@
 <?php
 class Vpc_Shop_AddToCart_OrderProductData extends Vpc_Shop_AddToCartAbstract_OrderProductData
 {
-    public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getPrice($orderProduct)
     {
         return $orderProduct->getParentRow('ProductPrice')->price * $orderProduct->amount;
     }
 
-    public function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getAmount($orderProduct)
     {
         return $orderProduct->amount;
     }
 
-    public function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getProductText($orderProduct)
     {
         $product = $orderProduct->getParentRow('ProductPrice')->getParentRow('Product');
         return $product->__toString();
     }
 
-    public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
+    public function getAdditionalOrderData($row)
     {
         $ret = parent::getAdditionalOrderData($row);
         $ret[] = array(
