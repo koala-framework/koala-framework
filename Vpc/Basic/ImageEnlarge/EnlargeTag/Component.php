@@ -7,9 +7,14 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['componentName'] = trlVps('Enlarge Image');
         $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
-        $ret['showInactiveSwitchLinks'] = false;
         $ret['imageTitle'] = true;
         $ret['dimensions'] = array(array('width'=>800, 'height'=>600, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
+
+        $ret['generators']['imagePage'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'name' => trlVpsStatic('Image'),
+            'component' => 'Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component'
+        );
 
         $ret['assets']['files'][] = 'vps/Vpc/Basic/ImageEnlarge/EnlargeTag/Component.js';
         $ret['assets']['dep'][] = 'ExtElement';
@@ -20,26 +25,27 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         return $ret;
     }
 
+    
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+        if (isset($settings['showInactiveSwitchLinks'])) {
+            throw new Vps_Exception("'showInactiveSwitchLinks' setting got removed; style them using css");
+        }
+    }
+
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-
-        $size = $this->getImageDimensions();
-        $ret['width'] = $size['width'];
-        $ret['height'] = $size['height'];
-
         $ret['imageUrl'] = $this->getImageUrl();
-
-        $ret['options'] = (object)$this->_getOptions();
-
+        $ret['imagePage'] = $this->getData()->getChildComponent('_imagePage', array('ignoreVisible'=>true));
         return $ret;
     }
 
     protected function _getOptions()
     {
         $ret = array();
-        $ret['showInactiveSwitchLinks'] = $this->_getSetting('showInactiveSwitchLinks');
-
         if ($this->_getSetting('imageTitle')) {
             $ret['title'] = nl2br($this->getRow()->title);
         }
@@ -55,6 +61,11 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
             $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()->getRow()->image_caption;
         }
         return $ret;
+    }
+
+    public final function getOptions()
+    {
+        return $this->_getOptions();
     }
 
     private function _getImageEnlargeComponentData()

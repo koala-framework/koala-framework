@@ -95,12 +95,12 @@ class Vps_Component_Abstract_ContentSender_Default extends Vps_Component_Abstrac
         }
     }
 
-    public function sendContent()
+    public function sendContent($includeMaster = true)
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
         Vps_Benchmark::checkpoint('processInput');
-        echo $this->_data->render(null, true);
+        echo $this->_data->render(null, $includeMaster);
         Vps_Benchmark::checkpoint('render');
         $this->_callPostProcessInput($process);
         Vps_Benchmark::checkpoint('postProcessInput');
