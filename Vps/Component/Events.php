@@ -119,7 +119,7 @@ class Vps_Component_Events
         if (isset($listeners[$eventClass]['all'])) {
             $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
         }
-        self::$_indent++;
+        if (!empty($callbacks)) self::$_indent++;
         $loopIndent = self::$_indent;
         foreach ($callbacks as $callback) {
             $ev = call_user_func(
@@ -130,6 +130,7 @@ class Vps_Component_Events
             if ($logger) {
                 $logger->logEvent($loopIndent, $callback, $event);
             }
+            self::$_indent = $loopIndent;
             $ev->{$callback['method']}($event);
         }
     }

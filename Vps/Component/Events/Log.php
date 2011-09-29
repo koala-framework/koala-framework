@@ -15,12 +15,12 @@ class Vps_Component_Events_Log extends Zend_Log
         parent::__construct($writer);
     }
 
-    public function logEvent($indent, $callback, $event)
+    public function logEvent($indent, $callback, Vps_Component_Event_Abstract $event)
     {
         $message =
             str_repeat(' ', ($indent - 1) * 2) .
-            get_class($event) . ': ' .
-            $callback['class'] . '::' . $callback['method'];
+            $event->__toString() . ': ' .
+            $callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')';
         $this->log($message, Zend_Log::INFO);
     }
 }
