@@ -58,7 +58,6 @@
     background-image: url(/assets/vps/Vps_js/EyeCandy/Lightbox/loading.gif);
     background-repeat: no-repeat;
     height: 66px;
-    display: none; /* shown by javascript*/
 }
 .vpsLightbox .lightboxBody .image { z-index: 1; }
 .vpsLightbox .lightboxBody .image .centerImage { margin-bottom: -3px; }
