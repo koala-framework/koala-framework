@@ -48,22 +48,25 @@ class Vps_Component_Data
      */
     protected function _getPseudoPageUrl()
     {
-        $page = $this;
-        if (!$page->isPseudoPage) {
-            $page = $page->getParentPseudoPageOrRoot();
-        }
-        if (!$page) return '';
-        $filenames = array();
+        $data = $this;
+        $filename = '';
         do {
-            if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
-                $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
-                break;
+            if ($data->isPseudoPage || $data->componentId == 'root') {
+                if (!empty($filenames) && Vpc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
+                    $filename = call_user_func(array($data->componentClass, 'getShortcutUrl'), $data->componentClass, $data).($filename ? '/' : '').$filename;
+                    break;
+                } else {
+                    if ($data->filename) $filename = $data->filename.($filename ? '/' : '').$filename;
+                }
             } else {
-                if ($page->filename) $filenames[] = $page->filename;
+                if ($data->generator->getGeneratorFlag('table')) {
+                    $filename = $data->id.($filename ? ':' : '').$filename;
+                }
             }
-        } while ($page = $page->getParentPseudoPageOrRoot());
+        } while ($data = $data->parent);
+
         $urlPrefix = Vps_Config::getValue('vpc.urlPrefix'); //TODO urlPrefix vs. root filename: both do the same
-        return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
+        return ($urlPrefix ? $urlPrefix : '').'/'.$filename;
     }
 
     public function __get($var)
@@ -854,12 +857,24 @@ class Vps_Component_Data
     public function getChildPageByPath($path)
     {
         $page = $this;
-        foreach (explode('/', $path) as $pathPart) {
-            $pages = $page->getRecursiveChildComponents(array(
+        $pathParts = preg_split('#([/:])#', $path, -1, PREG_SPLIT_DELIM_CAPTURE);
+        for($i=0; $i<count($pathParts); $i++) {
+            $pathPart = $pathParts[$i];
+            $i++;
+            $nextSeparator = isset($pathParts[$i]) ? $pathParts[$i] : '/';
+            if ($nextSeparator == '/') {
+                $pages = $page->getRecursiveChildComponents(array(
                                 'filename' => $pathPart,
                                 'pseudoPage'=>true,
                                 'limit'=>1),
                             array('pseudoPage'=>false));
+            } else {
+                $pages = $page->getRecursiveChildComponents(array(
+                                'id' => $pathPart,
+                                'pseudoPage'=>false,
+                                'limit'=>1),
+                            array('pseudoPage'=>false));
+            }
             $page = current($pages);
             if (!$page) break;
         }
