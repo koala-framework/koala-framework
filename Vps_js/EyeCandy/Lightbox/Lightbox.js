@@ -25,6 +25,7 @@ Vps.onContentReady(function() {
 });
 
 Ext.ns('Vps.EyeCandy.Lightbox');
+Vps.EyeCandy.Lightbox.currentOpen = null;
 Vps.EyeCandy.Lightbox.Lightbox = function(linkEl, options) {
     this.linkEl = linkEl;
     this.options = options;
@@ -36,6 +37,10 @@ Vps.EyeCandy.Lightbox.Lightbox = function(linkEl, options) {
 };
 Vps.EyeCandy.Lightbox.Lightbox.prototype = {
     show: function() {
+        if (Vps.EyeCandy.Lightbox.currentOpen) {
+            Vps.EyeCandy.Lightbox.currentOpen.close();
+        }
+        Vps.EyeCandy.Lightbox.currentOpen = this;
         var lightbox = Ext.getBody().createChild({
             cls: 'vpsLightbox vpsLightbox'+this.options.style,
             html: '<div class="loading"></div>'
@@ -86,6 +91,7 @@ Vps.EyeCandy.Lightbox.Lightbox.prototype = {
         this.style.onClose();
         this.lightboxEl.remove();
         delete this.lightboxEl;
+        Vps.EyeCandy.Lightbox.currentOpen = null;
     },
     initialize: function()
     {
