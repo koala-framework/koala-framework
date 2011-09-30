@@ -7,15 +7,12 @@
 class Vps_Component_Output_CacheSlowTest extends Vps_Test_TestCase
 {
     private $_root;
-    private $_renderer;
 
     private function _setup($rootClass)
     {
         Vps_Component_Data_Root::setComponentClass($rootClass);
         $this->_root = Vps_Component_Data_Root::getInstance();
 
-        $this->_renderer = new Vps_Component_Renderer();
-        $this->_renderer->setEnableCache(true);
         Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
         apc_clear_cache('user');
 
