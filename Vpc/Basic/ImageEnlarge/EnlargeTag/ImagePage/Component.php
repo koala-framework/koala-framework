@@ -24,26 +24,37 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Vpc_Abstract
         $ret['options'] = (object)$c->getOptions();
 
 
-        $this->getData()->parent->parent;
         $enlargeTag = $this->getData()->parent;
         $imageEnlarge = $enlargeTag->parent;
+        if (is_instance_of($imageEnlarge->componentClass, 'Vpc_Basic_LinkTag_Component')) {
+            $imageEnlarge = $imageEnlarge->parent;
+        }
         $parent = $imageEnlarge->parent;
 
         //TODO optimize in generator using something like whereNextSiblingOf / wherePreviousSiblingOf
         $allImages = $parent->getChildComponents(array('componentClass'=>$imageEnlarge->componentClass));
-
         $previous = null;
         foreach ($allImages as $c) {
             if ($c === $imageEnlarge) {
-                $ret['previous'] = $previous;
+                $ret['previous'] = self::_getImagePage($previous);
             }
             if ($previous === $imageEnlarge) {
-                $ret['next'] = $c;
+                $ret['next'] = self::_getImagePage($c);
                 break;
             }
             $previous = $c;
         }
+        return $ret;
+    }
 
+    private static function _getImagePage($data)
+    {
+        if (!$data) return null;
+        $ret = $data->getChildComponent('-linkTag');
+        if (is_instance_of($ret->componentClass, 'Vpc_Basic_LinkTag_Component')) {
+            $ret = $ret->getChildComponent('-child');
+        }
+        $ret = $ret->getChildComponent('_imagePage');
         return $ret;
     }
 }
