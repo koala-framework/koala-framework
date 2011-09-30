@@ -1,11 +1,11 @@
 <div class="<?=$this->cssClass?>">
     <div class="lightboxHeader">
-        <?=$this->componentLink($this->data->parent, '&nbsp', 'closeButton')?>
+        <?=$this->componentLink($this->data->parent, '&nbsp;', 'closeButton')?>
     </div>
     <div class="lightboxBody">
         <? if($this->previous) { ?>
         <div class="prevBtn">
-            <?=$this->componentLink($this->previous, '&nbsp',  'preload')?>
+            <?=$this->componentLink($this->previous, '&nbsp;',  'preload')?>
         </div>
         <? } else { ?>
         <div class="prevBtnInactive"></div>
@@ -13,7 +13,7 @@
 
         <? if($this->next) { ?>
         <div class="nextBtn">
-            <?=$this->componentLink($this->next, '&nbsp',  'preload')?>
+            <?=$this->componentLink($this->next, '&nbsp;',  'preload')?>
         </div>
         <? } else { ?>
         <div class="nextBtnInactive"></div>
