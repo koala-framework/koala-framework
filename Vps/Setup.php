@@ -55,6 +55,7 @@ class Vps_Setup
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status'
         ) {
+            Vps_Loader::registerAutoload();
             Vps_Util_ProgressBar_DispatchStatus::dispatch();
         }
 
@@ -62,9 +63,11 @@ class Vps_Setup
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 17) == '/vps/check-config'
         ) {
+            Vps_Loader::registerAutoload();
             Vps_Util_Check_Config::dispatch();
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
+            Vps_Loader::registerAutoload();
             Vps_Util_Check_Config::dispatch();
         }
 
