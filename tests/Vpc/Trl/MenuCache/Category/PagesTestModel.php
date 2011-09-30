@@ -10,5 +10,10 @@ class Vpc_Trl_MenuCache_Category_PagesTestModel extends Vps_Model_FnF
                   'parent_id'=>1, 'component'=>'test', 'is_home'=>false, 'hide'=>false),
             array('id'=>4, 'pos'=>1, 'visible'=>true, 'name'=>'Test4', 'filename' => 'test4',
                   'parent_id'=>2, 'component'=>'test', 'is_home'=>false, 'hide'=>false),
+
+            array('id'=>5, 'pos'=>1, 'visible'=>true, 'name'=>'Test5', 'filename' => 'test5',
+                  'parent_id'=>'root-master-bottom', 'component'=>'test', 'is_home'=>false, 'hide'=>false),
+            array('id'=>6, 'pos'=>1, 'visible'=>true, 'name'=>'Test6', 'filename' => 'test6',
+                  'parent_id'=>5, 'component'=>'test', 'is_home'=>false, 'hide'=>false),
     );
 }
