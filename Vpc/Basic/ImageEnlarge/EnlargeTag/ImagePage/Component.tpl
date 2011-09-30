@@ -5,7 +5,7 @@
     <div class="lightboxBody">
         <? if($this->previous) { ?>
         <div class="prevBtn">
-            <?=$this->component($this->previous)?>
+            <?=$this->componentLink($this->previous, '&nbsp')?>
         </div>
         <? } else { ?>
         <div class="prevBtnInactive"></div>
@@ -13,7 +13,7 @@
 
         <? if($this->next) { ?>
         <div class="nextBtn">
-            <?=$this->component($this->next)?>
+            <?=$this->componentLink($this->next, '&nbsp')?>
         </div>
         <? } else { ?>
         <div class="nextBtnInactive"></div>
