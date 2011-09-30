@@ -18,6 +18,9 @@ class Vps_Component_Output_CacheSlowTest extends Vps_Test_TestCase
         $this->_renderer->setEnableCache(true);
         Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
         apc_clear_cache('user');
+
+        Vps_Registry::get('config')->debug->componentCache->disable = false;
+        Vps_Config::deleteValueCache('debug.componentCache.disable');
     }
 
     /*
