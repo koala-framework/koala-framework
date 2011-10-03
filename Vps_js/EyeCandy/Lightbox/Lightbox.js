@@ -114,6 +114,7 @@ Vps.EyeCandy.Lightbox.Lightbox.prototype = {
 
         this.createLightboxEl();
         this.style.onShow();
+        this.lightboxEl.addClass('vpsLightboxOpen');
         if (this.fetched) {
             if (!this.lightboxEl.isVisible()) {
                 this.lightboxEl.fadeIn();
@@ -127,6 +128,7 @@ Vps.EyeCandy.Lightbox.Lightbox.prototype = {
     close: function() {
         this.style.onClose();
         this.lightboxEl.fadeOut();
+        this.lightboxEl.removeClass('vpsLightboxOpen');
         Vps.EyeCandy.Lightbox.currentOpen = null;
     },
     initialize: function()
