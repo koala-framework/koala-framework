@@ -50,6 +50,7 @@ class Vps_Component_Data
     {
         $data = $this;
         $filename = '';
+        $hadStaticPage = false;
         do {
             if ($data->isPseudoPage || $data->componentId == 'root') {
                 if (!empty($filenames) && Vpc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
@@ -58,8 +59,13 @@ class Vps_Component_Data
                 } else {
                     if ($data->filename) $filename = $data->filename.($filename ? '/' : '').$filename;
                 }
+                if ($data->componentId != 'root' && $data->generator->getGeneratorFlag('static')) {
+                    $hadStaticPage = true;
+                } else {
+                    $hadStaticPage = false;
+                }
             } else {
-                if ($data->generator->getGeneratorFlag('table')) {
+                if ($hadStaticPage && $data->generator->getGeneratorFlag('table')) {
                     $filename = $data->id.($filename ? ':' : '').$filename;
                 }
             }
