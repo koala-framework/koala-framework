@@ -1,5 +1,8 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head><?=$this->assets('Vpc_TextImage:Test')?></head>
+    <head>
+        <?=$this->assets('Vpc_TextImage:Test')?>
+        <?=$this->debugData()?>
+    </head>
     <body><?=$this->componentWithMaster($this->componentWithMaster)?></body>
 </html>
