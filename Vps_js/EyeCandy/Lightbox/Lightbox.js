@@ -100,7 +100,7 @@ Vps.EyeCandy.Lightbox.Lightbox.prototype = {
             },
             failure: function() {
                 //fallback
-                location.href = el.dom.href;
+                location.href = this.linkEl.dom.href;
             },
             scope: this
         });
