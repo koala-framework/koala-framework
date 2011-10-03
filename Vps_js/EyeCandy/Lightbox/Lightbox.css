@@ -57,6 +57,7 @@
     position: absolute; top: 40%; text-align: center; width:100%;
     background-image: url(/assets/vps/Vps_js/EyeCandy/Lightbox/loading.gif);
     background-repeat: no-repeat;
+	background-position: center center;
     height: 66px;
 }
 .vpsLightbox .lightboxBody .image { z-index: 1; }
