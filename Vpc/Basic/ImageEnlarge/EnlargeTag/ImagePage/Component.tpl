@@ -23,12 +23,12 @@
         </div>
     </div>
     <div class="lightboxFooter">
-        <? if($this->options->title) { ?>
+        <? if(isset($this->options->title) && $this->options->title) { ?>
             <p class="imageCaption<? if($this->options->title) { ?>Title<? } ?>">
                 <strong><?=$this->options->imageCaption?></strong>
             </p>
         <? } ?>
-        <? if($this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>
+        <? if(isset($this->options->title) && $this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>
         <? if(isset($this->options->fullSizeUrl)) { ?>
             <p class="fullSizeLink">
                 <a href="<?=$this->options->fullSizeUrl?>" class="fullSizeLink"><?=$this->data->trlVps('Download original image')?></a>
