@@ -16,18 +16,21 @@ class Vpc_Composite_ImagesEnlarge_SeleniumTest extends Vps_Test_SeleniumTestCase
         $this->openVpc('/foo');
         $this->assertElementPresent('css=.vpcCompositeImagesEnlarge a img');
         $this->click('css=a');
-        $this->assertVisible('css=.lightbox');
-        $this->assertElementPresent('css=.lightbox img.centerImage');
-        $this->assertElementPresent('css=.lightbox a.nextSwitchButton');
-        $this->assertElementNotPresent('css=.lightbox a.previousSwitchButton');
-        $this->click('css=.lightbox a.nextSwitchButton');
-        $this->assertElementPresent('css=.lightbox a.nextSwitchButton');
-        $this->assertElementPresent('css=.lightbox a.previousSwitchButton');
-        $this->click('css=.lightbox a.nextSwitchButton');
-        $this->assertElementNotPresent('css=.lightbox a.nextSwitchButton');
-        $this->assertElementPresent('css=.lightbox a.previousSwitchButton');
-        $this->click('css=.lightbox a.previousSwitchButton');
-        $this->assertElementPresent('css=.lightbox a.nextSwitchButton');
-        $this->assertElementPresent('css=.lightbox a.previousSwitchButton');
+        $this->waitForConnections();
+        $this->assertElementPresent('css=.vpsLightboxOpen');
+        $this->assertVisible('css=.vpsLightboxOpen');
+        $this->assertElementPresent('css=.vpsLightboxOpen div.image');
+        $this->assertElementPresent('css=.vpsLightboxOpen div.image img');
+        $this->assertElementPresent('css=.vpsLightboxOpen .nextBtn a');
+        $this->assertElementNotPresent('css=.vpsLightboxOpen .prevBtn a');
+        $this->click('css=.vpsLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.vpsLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.vpsLightboxOpen .prevBtn a');
+        $this->click('css=.vpsLightboxOpen .nextBtn a');
+        $this->assertElementNotPresent('css=.vpsLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.vpsLightboxOpen .prevBtn a');
+        $this->click('css=.vpsLightboxOpen .prevBtn a');
+        $this->assertElementPresent('css=.vpsLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.vpsLightboxOpen .prevBtn a');
     }
 }
