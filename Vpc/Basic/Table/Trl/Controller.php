@@ -13,11 +13,11 @@ class Vpc_Basic_Table_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     protected function _initColumns()
     {
         $this->_columns->add(new Vps_Grid_Column('pos'));
+        $this->_columns->add(new Vps_Grid_Column_Visible());
         for ($i = 1; $i <= $this->_getComponent()->chained->getComponent()->getColumnCount(); $i++) {
-            $this->_columns->add(new Vps_Grid_Column("column$i", trlVps('Column {0}', $i), 150))
+            $this->_columns->add(new Vps_Grid_Column("column$i", $this->_getColumnLetterByIndex($i-1), 150))
                 ->setEditor(new Vps_Form_Field_TextField());
         }
-        $this->_columns->add(new Vps_Grid_Column_Visible());
     }
 
     private function _getComponent()

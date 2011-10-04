@@ -1,1 +1,1 @@
-<?=$this->imageAsset('/assets/vps/images/rating/ratingStarFull.jpg');?>
+<?=$this->image('/assets/vps/images/rating/ratingStarFull.jpg');?>

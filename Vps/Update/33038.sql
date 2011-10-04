@@ -1,0 +1,1 @@
+ALTER TABLE `cache_component_meta_model` ADD `params` TEXT NOT NULL AFTER `meta_class` ;

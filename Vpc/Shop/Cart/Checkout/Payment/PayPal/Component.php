@@ -8,8 +8,6 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         $ret['generators']['child']['component']['confirmLink'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component';
         $ret['generators']['confirm']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';
         $ret['generators']['confirm']['name'] = trlVps('done');
-        $ret['generators']['mail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Mail_Component';
-        $ret['generators']['shippedMail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ShippedMail_Component';
 
         $ret['business'] = '';
         return $ret;

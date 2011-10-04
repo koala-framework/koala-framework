@@ -5,11 +5,12 @@
  * @group Model_DbWithConnection
  * @group Model_Db_Dirty
  */
-class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTestCase
+class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
 {
     private $_tableName;
     public function setUp()
     {
+        parent::setUp();
         $this->_tableName = 'test'.uniqid();
         $sql = "CREATE TABLE $this->_tableName (
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -31,6 +32,7 @@ class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTes
     public function tearDown()
     {
         Vps_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
+        parent::tearDown();
     }
 
     public function testDontSaveNotDirtyRow()
@@ -55,6 +57,30 @@ class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTes
         $row->save();
 
         $this->assertEquals(0, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+    }
+
+    public function testNotDirtyForceSave()
+    {
+        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+
+        $table = new Vps_Db_Table(array(
+            'name' => $this->_tableName,
+            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
+        ));
+        $model = new Vps_Model_Db(array(
+            'table' => $table
+        ));
+
+        $row = $model->getRow(1);
+        $row->forceSave();
+
+        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+
+        $row = $model->getRow(1);
+        $row->test1 = 'foo';
+        $row->forceSave();
+
+        $this->assertEquals(2, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
     public function testSaveNewRowNotDirty()
@@ -106,5 +132,35 @@ class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTes
         $row->save();
 
         $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+    }
+
+    public function testDirtyColumns()
+    {
+        $model = new Vps_Model_Db(array(
+            'table' => $this->_tableName
+        ));
+
+        $row = $model->getRow(1);
+        $this->assertEquals($row->getDirtyColumns(), array());
+        $this->assertEquals($row->isDirty(), false);
+        $row->test1 = 'blubb';
+        $this->assertEquals($row->getDirtyColumns(), array('test1'));
+        $this->assertEquals($row->isDirty(), true);
+    }
+
+    public function testDirtyColumnsWithProxy()
+    {
+        $model = new Vps_Model_Proxy(array(
+            'proxyModel' => new Vps_Model_Db(array(
+                'table' => $this->_tableName
+            )
+        )));
+
+        $row = $model->getRow(1);
+        $this->assertEquals($row->getDirtyColumns(), array());
+        $this->assertEquals($row->isDirty(), false);
+        $row->test1 = 'blubb';
+        $this->assertEquals($row->getDirtyColumns(), array('test1'));
+        $this->assertEquals($row->isDirty(), true);
     }
 }

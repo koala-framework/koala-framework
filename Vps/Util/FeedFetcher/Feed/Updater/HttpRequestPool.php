@@ -32,7 +32,7 @@ class Vps_Util_FeedFetcher_Feed_Updater_HttpRequestPool extends HttpRequestPool
         }
 
         while (true) {
-            if ($this->_debug) echo (microtime(true)-$start)."\n"; flush();
+            //if ($this->_debug) echo (microtime(true)-$start)."\n"; flush();
             try {
                 if (!$this->socketPerform()) {
                     break;
@@ -77,7 +77,7 @@ class Vps_Util_FeedFetcher_Feed_Updater_HttpRequestPool extends HttpRequestPool
             Vps_Util_FeedFetcher_Feed::handleResponse($f, $this->_updateServer, $request->getStart(), $response, $error);
             if ($this->_debug) {
                 $duration = microtime(true)-$request->getStart();
-                echo (microtime(true)-$start) ." [";
+                echo "\n".(microtime(true)-$start) ." [";
                 echo $error ? 'ERROR' : 'OK';
                 echo "] feched in $duration $f->url\n";
             }

@@ -100,7 +100,7 @@ class Vps_Media_UrlTest extends Vpc_TestAbstract
         $this->assertTrue(touch($f, $newTime));
         clearstatcache();
         $this->assertEquals($newTime, filemtime($f));
-        
+
         $o = Vps_Media::getOutput('Vps_Media_TestMediaOutputClass', $id, 'mtimeFiles');
         $this->assertEquals(array('mimeType' => 'text/plain',
                                   'contents'=>'foobar'.$id,

@@ -29,8 +29,8 @@ class Vps_Trl_Parser
         $this->_usedIds[get_class($modelWeb)] = array();
 
         $this->_mode = $mode;
-        $this->_languages = Zend_Registry::get('trl')->getLanguages();
-        $this->_codeLanguage = Zend_Registry::get('trl')->getWebCodeLanguage();
+        $this->_languages = Vps_Trl::getInstance()->getLanguages();
+        $this->_codeLanguage = Vps_Trl::getInstance()->getWebCodeLanguage();
     }
 
     public function setDebug($debug)
@@ -94,7 +94,7 @@ class Vps_Trl_Parser
                                   echo '.';
                               }
                           }
-                          $ret = Zend_Registry::get('trl')->parse(file_get_contents($file), $extension);
+                          $ret = Vps_Trl::getInstance()->parse(file_get_contents($file), $extension);
                           if ($ret){
                               $errors = array_merge($errors, $this->insertToXml($ret, $file->getPathname(), $dirKey));
                           }
@@ -206,7 +206,7 @@ class Vps_Trl_Parser
         if ($type == Vps_Trl::SOURCE_VPS) {
             return 'en';
         } else {
-            return Zend_Registry::get('trl')->getWebCodeLanguage();
+            return Vps_Trl::getInstance()->getWebCodeLanguage();
         }
     }
 

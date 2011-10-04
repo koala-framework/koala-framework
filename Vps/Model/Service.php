@@ -74,9 +74,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
                 'automatic_serialization' => true,
                 'write_control' => false,
             );
-            if (class_exists('Memcache')) {
+            if (extension_loaded('apc') && php_sapi_name() != 'cli') {
                 $backendOptions = array();
-                $backend = 'Memcached';
+                $backend = 'Apc';
             } else {
                 $backendOptions = array(
                     'cache_dir' => 'application/cache/model',

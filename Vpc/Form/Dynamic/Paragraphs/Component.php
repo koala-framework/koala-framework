@@ -12,6 +12,7 @@ class Vpc_Form_Dynamic_Paragraphs_Component extends Vpc_Paragraphs_Component
                 'fieldSet' => 'Vpc_Form_Container_FieldSet_Component',
                 'select' => 'Vpc_Form_Field_Select_Component',
                 'radio' => 'Vpc_Form_Field_Radio_Component',
+                'file' => 'Vpc_Form_Field_File_Component'
             ),
             $ret['generators']['paragraphs']['component']
         );

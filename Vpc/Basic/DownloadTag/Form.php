@@ -11,7 +11,7 @@ class Vpc_Basic_DownloadTag_Form extends Vpc_Abstract_Form
             ->setAllowBlank(false);
         $this->fields->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
             ->setVtype('alphanum')
-            ->setIsFilename(true) //um es im JavaScript zu finden
+            ->setAutoFillWithFilename('filename') //um es beim MultiFileUpload und im JavaScript zu finde
             ->setHelpText(hlpVps('vps_download_filename'))
             ->setAllowBlank(false);
     }

@@ -16,11 +16,6 @@ class Vpc_Shop_Products_Directory_Controller extends Vpc_Directories_Item_Direct
         $this->_columns->add(new Vps_Grid_Column('current_price', trlVps('Current Price'), 100))
             ->setRenderer('euroMoney');
         $this->_columns->add(new Vps_Grid_Column_Visible());
-        $this->_columns->add(new Vps_Grid_Column_Button('properties', ' ', 20))
-            ->setButtonIcon('/assets/silkicons/newspaper.png')
-            ->setToolTip(trlVps('Properties'));
-        $this->_columns->add(new Vps_Grid_Column_Button('edit', ' ', 20))
-            ->setButtonIcon('/assets/silkicons/newspaper_go.png')
-            ->setToolTip(trlVps('Edit Product'));
+        parent::_initColumns();
     }
 }

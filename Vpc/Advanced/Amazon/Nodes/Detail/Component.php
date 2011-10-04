@@ -11,9 +11,9 @@ class Vpc_Advanced_Amazon_Nodes_Detail_Component extends Vpc_Directories_List_Co
     {
         return $this->getData()->parent->getChildComponent('_products');
     }
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
-        $select = parent::getSelect($overrideValues);
+        $select = parent::getSelect();
         if (!$select) return $select;
 
         $select->whereEquals('BrowseNode', $this->getData()->row->node_id);

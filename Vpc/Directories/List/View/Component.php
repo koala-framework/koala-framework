@@ -15,6 +15,18 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         return $ret;
     }
 
+    public function getPartialClass()
+    {
+        if ($this->_hasSetting('partialClass')) {
+            return $this->_getSetting('partialClass');
+        }
+        if ($this->_getSearchForm()) {
+            return 'Vps_Component_Partial_Id';
+        } else {
+            return 'Vps_Component_Partial_Paging';
+        }
+    }
+
     public function processInput(array $postData)
     {
         // Wenn es eine Search-Form gibt und diese nicht unter der eigenen Page
@@ -48,6 +60,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     protected function _getSelect()
     {
         $ret = $this->getData()->parent->getComponent()->getSelect();
+        if (!$ret) return $ret;
 
         $searchForm = $this->_getSearchForm();
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
@@ -94,6 +107,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
             $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
             $items = $generator->getChildData(null, array('select'=>$select));
         } else {
+            $select->whereGenerator('detail');
             $items = $itemDirectory->getChildComponents($select);
         }
         foreach ($items as &$item) {
@@ -151,15 +165,6 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         return $ret;
     }
 
-    public function getPartialClass()
-    {
-        $partialClass = 'Vps_Component_Partial_Paging';
-        if ($this->_getSearchForm()) {
-            $partialClass = 'Vps_Component_Partial_Id';
-        }
-        return $partialClass;
-    }
-
     public function getPagingCount($select = null)
     {
         if (!$select) $select = $this->_getSelect();
@@ -210,48 +215,36 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         }
     }
 
-    public function getCacheVars()
-    {
-        $ret = parent::getCacheVars();
-        $ret = array_merge($ret, $this->_getCacheData());
-        return $ret;
-    }
-
-    private function _getCacheData($nr = null)
+    public function getCacheMeta()
     {
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
-        $generator = null;
-        if ($dir instanceof Vps_Component_Data) {
-            $generator = $dir->getGenerator('detail');
-        } else if (is_string($dir)) {
-            $generator = Vps_Component_Generator_Abstract::getInstance(
-                Vpc_Abstract::getComponentClassByParentClass($dir), 'detail'
-            );
+        if (!$dir) return array();
+        $dirClass = $dir;
+        if ($dir instanceof Vps_Component_Data) $dirClass = $dir->componentClass;
+        $callClass = $dirClass;
+        if (strpos($dirClass, '.') !== false) {
+            $callClass = substr($dirClass, 0, strpos($dirClass, '.'));
         }
 
-        if ($generator) {
-            $ret = $generator->getCacheVars($dir instanceof Vps_Component_Data ? $dir : null);
-            if ($nr) {
-                foreach ($ret as $k=>$i) {
-                    if (!$i['field']) {
-                        $ret[$k]['id'] = $nr;
-                    }
+        // Das Directory fragen, weil nur das weiß, welches Meta/Pattern benötigt wird
+        $ret = call_user_func(array($callClass, 'getCacheMetaForView'), $this->getData());
+
+        // View ist bei Trl auch die Gleiche, deshalb hier Partial-Meta dazugeben
+        // mit dem Generator-Model, weil das ist das Model mit den Daten für die View
+        if (is_string($dir)) {
+            $dirs = Vps_Component_Data_Root::getInstance()->getComponentsByClass($dir);
+        } else {
+            $dirs = array($dir);
+        }
+        foreach ($dirs as $dir) {
+            $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
+            if (isset($generators[0])) {
+                if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Id')) {
+                    $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartialId($generators[0]->getModel());
+                } else {
+                    $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartial($generators[0]->getModel());
                 }
             }
-            return $ret;
-        }
-        return array();
-    }
-
-    public function getPartialCacheVars($nr)
-    {
-        $ret = array();
-        if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Id')) {
-            $ret = array_merge($ret, $this->_getCacheData($nr));
-        } else if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Paging')) {
-            $ret = array_merge($ret, $this->_getCacheData());
-        } else if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Random')) {
-            $ret = array_merge($ret, $this->_getCacheData());
         }
         return $ret;
     }

@@ -38,7 +38,7 @@ class Vps_Validate_DateLessThan extends Zend_Validate_Abstract
         if ($value) {
             $this->_setValue(date(trlVps('Y-m-d'), $value));
             if ($this->_max <= $value) {
-                $this->_error();
+                $this->_error(self::NOT_LESS);
                 return false;
             }
         }

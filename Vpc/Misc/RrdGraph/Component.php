@@ -54,7 +54,8 @@ class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
 
         $row = $component->getComponent()->getRow();
         Vps_Component_Cache::getInstance()->saveMeta(
-            get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+            $component,
+            new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
         );
 
         $start = strtotime('-'.$row->duration.' days');

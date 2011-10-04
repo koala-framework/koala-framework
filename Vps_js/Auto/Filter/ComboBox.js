@@ -20,7 +20,8 @@ Vps.Auto.Filter.ComboBox = function(config)
                 valueField: 'id',
                 mode: 'local',
                 triggerAction: 'all',
-                editable: false,
+                editable: config.editable || false,
+                forceSelection: true,
                 width: config.width || 200
             });
     }

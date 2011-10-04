@@ -14,7 +14,7 @@ class Vps_Component_Dynamic_NewColumn
     }
     public function getContent()
     {
-        $info = $this->_info['partial'];
+        $info = $this->_info;
         // bei number == 0 nichts machen - das erste <ul> wird händisch hingeschrieben
         if ($info['number'] == 0) return '';
 

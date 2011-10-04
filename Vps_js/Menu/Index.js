@@ -3,13 +3,12 @@ Ext.namespace('Vps.Menu');
 Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 {
     controllerUrl: '/vps/user/menu',
-	changeUserTpl: ['<tpl for=".">',
+    changeUserTpl: ['<tpl for=".">',
                         '<div class="x-combo-list-item changeuser-list-item<tpl if="locked != 0"> changeuser-locked</tpl>">',
                             '<h3>{lastname}&nbsp;{firstname}</h3>',
                             '{email} <span class="changeuser-role">({role})</span>',
                         '</div>',
                       '</tpl>'],
-    tplDataControllerUrl: '/vps/user/changeUser/json-data',
 
     initComponent : function()
     {
@@ -127,10 +126,27 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 
         this.add(new Ext.Toolbar.Fill());
 
+        this.showUserMenu = new Ext.Button({
+            tooltip: trlVps('Show User Menu'),
+            cls: 'x-btn-icon',
+            icon: '/assets/silkicons/bullet_arrow_down.png',
+            handler: function() {
+                if (!this.userToolbar.isVisible()) {
+                    this.showUserMenu.btnEl.setStyle('background-image', 'url(/assets/silkicons/bullet_arrow_up.png)');
+                    this.userToolbar.show();
+                } else {
+                    this.showUserMenu.btnEl.setStyle('background-image', 'url(/assets/silkicons/bullet_arrow_down.png)');
+                    this.userToolbar.hide();
+                }
+            },
+            scope: this
+        });
+        this.add(this.showUserMenu);
+
         if (result.changeUser) {
             var changeUser = new Vps.Form.ComboBox({
                 store: {
-                    url: this.tplDataControllerUrl
+                    url: '/vps/user/changeUser/json-data'
                 },
                 mode: 'remote',
                 editable: true,
@@ -141,7 +157,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 maxHeight: 350,
                 listWidth: 280,
                 tpl: new Ext.XTemplate(
-				        this.changeUserTpl
+                        this.changeUserTpl
                       )
             });
             changeUser.on('render', function(combo) {
@@ -158,18 +174,24 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 });
             }, this);
             this.add(changeUser);
+            this.add(' ');
+            this.add(' ');
+            this.add('-');
         }
 
+        this.userToolbar = new Ext.Toolbar({
+            renderTo: this.el,
+            style: 'position:absolute;right:0'
+        });
+
         if (result.fullname && result.userSelfControllerUrl) {
-            this.add({
+            this.userToolbar.add({
                 id: 'currentUser',
                 text: result.fullname,
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/user.png',
                 handler: function() {
                     var dlg = new Vps.Auto.Form.Window({
-                        width: 450,
-                        height: 370,
                         formConfig: {
                             controllerUrl: result.userSelfControllerUrl
                         }
@@ -183,7 +205,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             });
         }
         if (result.showLogout) {
-            this.add({
+            this.userToolbar.add({
                 cls: 'x-btn-icon',
                 tooltip: trlVps('Logout'),
                 icon: '/assets/silkicons/door_out.png',
@@ -201,7 +223,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 scope: this
             });
         }
-        this.add({
+        this.userToolbar.add({
             cls: 'x-btn-icon',
             icon: '/assets/vps/images/information.png',
             tooltip: trlVps('Information'),
@@ -211,6 +233,28 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             },
             scope: this
         });
+
+        if (Vps.Debug.showMenu) {
+            this.userToolbar.add('-');
+            this.userToolbar.add({
+                cls: 'x-btn-icon',
+                icon: '/assets/silkicons/bug.png',
+                menu: new Vps.Debug.Menu()
+            });
+        } else if (Vps.Debug.showActivator) {
+            this.userToolbar.add('-');
+            this.userToolbar.add({
+                tooltip: 'Activate Debugging',
+                cls: 'x-btn-icon',
+                icon: '/assets/silkicons/bug.png',
+                handler: function() {
+                    location.href = '/vps/debug/activate?url=' + location.href;
+                }
+            });
+        }
+        this.userToolbar.hide();
+
+
         if (result.hasFrontend) {
             this.add({
                 tooltip: trlVps('Open frontend in a new window'),
@@ -220,25 +264,6 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                     window.open('/');
                 },
                 scope: this
-            });
-        }
-
-        if (Vps.Debug.showMenu) {
-            this.add('-');
-            this.add({
-                cls: 'x-btn-icon',
-                icon: '/assets/silkicons/bug.png',
-                menu: new Vps.Debug.Menu()
-            });
-        } else if (Vps.Debug.showActivator) {
-            this.add('-');
-            this.add({
-                tooltip: 'Activate Debugging',
-                cls: 'x-btn-icon',
-                icon: '/assets/silkicons/bug.png',
-                handler: function() {
-                    location.href = '/vps/debug/activate?url=' + location.href;
-                }
             });
         }
     }

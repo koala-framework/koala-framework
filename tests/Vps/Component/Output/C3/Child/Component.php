@@ -4,10 +4,10 @@ class Vps_Component_Output_C3_Child_Component extends Vpc_Abstract_Composite_Com
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['plugins'] = array('Vps_Component_Output_Plugin');
+        $ret['plugins'] = array('Vps_Component_Output_Plugin_Plugin');
         return $ret;
     }
-    
+
     public function hasContent()
     {
         return true;

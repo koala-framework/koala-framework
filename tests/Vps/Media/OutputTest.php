@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_OutputTest extends PHPUnit_Framework_TestCase
+class Vps_Media_OutputTest extends Vps_Test_TestCase
 {
     public function testOutput()
     {

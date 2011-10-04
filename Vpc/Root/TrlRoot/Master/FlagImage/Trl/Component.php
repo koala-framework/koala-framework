@@ -17,4 +17,12 @@ class Vpc_Root_TrlRoot_Master_FlagImage_Trl_Component extends Vpc_Abstract_Compo
         $ret['image'] = $this->getData()->getChildComponent('-image');
         return $ret;
     }
+
+    public function hasContent()
+    {
+        $ret = parent::hasContent();
+        if ($ret) return $ret;
+
+        return $this->getData()->getChildComponent('-image')->hasContent();
+    }
 }

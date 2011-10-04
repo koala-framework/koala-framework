@@ -14,6 +14,11 @@ class Vpc_List_Gallery_Image_Component extends Vpc_Basic_ImageEnlarge_Component
         return $ret;
     }
 
+    public function getImageKey()
+    {
+        return $this->getData()->parent->getComponent()->getVariant();
+    }
+
     protected function _getImageDimensions()
     {
         $dimensions = Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'dimensions');
@@ -21,20 +26,13 @@ class Vpc_List_Gallery_Image_Component extends Vpc_Basic_ImageEnlarge_Component
         return $dimensions[$variant];
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $settingsRow = $this->getData()->parent->getComponent()->getRow();
-
-        $ret[] = array(
-            'model' => $settingsRow->getModel(),
-            'id' => $settingsRow->component_id
-        );
-        $ret[] = array(
-            'model' => $settingsRow->getModel(),
-            'id' => $settingsRow->component_id,
-            'callback' => true
-        );
+        $ret = parent::getCacheMeta();
+        $model = $this->getData()->parent->getComponent()->getRow()->getModel();
+        // wenn sich im Setting die Bildgröße ändert, müssen alle Komponenten gelöscht
+        // werden (Bilder nicht, haben eigenen Image Key für die Größe)
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, '{component_id}-%');
         return $ret;
     }
 }

@@ -2,6 +2,6 @@
 
     <?=$this->mailEncodeText($this->text)?>
 
-<?=$this->ifHasContent($this->linkTag)?>
+<?if ($this->hasContent($this->linkTag)) {?>
 </a>
-<?=$this->ifHasContent()?>
+<?}?>

@@ -40,6 +40,7 @@ class Vpc_Trl_ImageEnlarge_Master extends Vpc_Abstract
             'component' => 'Vpc_Trl_ImageEnlarge_ImageEnlarge_Component',
             'name' => 'test6',
         );
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 }

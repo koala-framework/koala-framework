@@ -16,6 +16,7 @@ class Vpc_Trl_Image_Master extends Vpc_Abstract
             'component' => 'Vpc_Trl_Image_Image_Component',
             'name' => 'test2',
         );
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 }

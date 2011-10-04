@@ -1,8 +1,8 @@
-.$cssClass span.imprintHeadline {
+.cssClass span.imprintHeadline {
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
     margin-bottom: 8px;
     display: block;
 }
-.$cssClass .vpsSwitchDisplay { margin-bottom: 10px; }
+.cssClass .vpsSwitchDisplay { margin-bottom: 10px; }

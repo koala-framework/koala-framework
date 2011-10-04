@@ -2,11 +2,12 @@
 /**
  * @group trl
  */
-class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
+class Vps_Trl_TrlTest extends Vps_Test_TestCase
 {
     private $_trlObject;
     public function setUp()
     {
+        parent::setUp();
         $this->_trlObject = new Vps_Trl();
     }
 

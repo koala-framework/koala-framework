@@ -25,7 +25,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
 
     //setValues
         //url (string), rowset, array
-    
+
     //setFields
         //array mit feldern
 
@@ -38,13 +38,13 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
 
     //setEmptyText
         //text fuer keine auswahl
-    
+
     //setFilterValue
         //wird von ComboBoxFilter aufgerufen
 
     //setDisplayField (name)
     //setListWidth
-        
+
 
     public function getMetaData($model)
     {
@@ -61,14 +61,15 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     public function trlStaticExecute($language = null)
     {
         parent::trlStaticExecute($language);
+        $trl = Vps_Trl::getInstance();
 
         $values = $this->getProperty('values');
         if (is_array($values)) {
             foreach ($values as $k => $v) {
                 $newKey = $k;
                 $newValue = $v;
-                if (is_string($k)) $newKey = Zend_Registry::get('trl')->trlStaticExecute($k, $language); //TODO key nicht (immer) übersetzen
-                if (is_string($v)) $newValue = Zend_Registry::get('trl')->trlStaticExecute($v, $language);
+                if (is_string($k)) $newKey = $trl->trlStaticExecute($k, $language); //TODO key nicht (immer) übersetzen
+                if (is_string($v)) $newValue = $trl->trlStaticExecute($v, $language);
 
                 unset($values[$k]);
                 $values[$newKey] = $newValue;

@@ -1,0 +1,4 @@
+<?php
+class Vpc_Directories_Item_Directory_ExtConfigEditButtons extends Vpc_Directories_Item_Directory_ExtConfigAbstract
+{
+}

@@ -80,14 +80,11 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
 
     public function testEnAlternativeClearCache()
     {
-//         file_put_contents('log', "\ntest start testEnAlternativeClearCache\n", FILE_APPEND);
         $c = $this->_root->getComponentById('root-en_test1');
 
-//         file_put_contents('log', "\n120x120 zum ersten mal\n", FILE_APPEND);
         $this->_checkTheSizes($c->render(), 1, 120, 120);
 
         $this->_process();
-//         file_put_contents('log', "\n120x120 gleich nochmal, jetzt gecached\n", FILE_APPEND);
         $this->_checkTheSizes($c->render(), 1, 120, 120);
 
         $row = $c->getComponent()->getRow();
@@ -99,18 +96,25 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
         $row->vps_upload_id = 2;
         $row->save();
         $this->_process();
-        
-//         file_put_contents('log', "\n120x101 wurde geaendert, ungecached\n", FILE_APPEND);
+
+        sleep(1);
         $this->_checkTheSizes($c->render(), 2, 120, 101);
     }
 
     private function _checkTheSizes($html, $smallImageNum, $smallWidth, $smallHeight)
     {
+        // getMediaOutput aufrufen, damit Cache-Meta geschrieben wird (wegen d0cf3812b20fa19c40617ac5b08ed08a18ff808d)
+        // muss so gemacht werden, weil der request über getimagesize weiter unten
+        // nicht das FnF-Cache Model dieses Request schreiben kann
+        preg_match('/.*\/media\/([\w\.]+)\/([\w\-]+)\/(\w+)\/.*/', $html, $matches);
+        $class = $matches[1];
+        $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+        call_user_func(array($classWithoutDot, 'getMediaOutput'), $matches[2], $matches[3], $class);
+
         $this->assertRegExp('#<img.+?src=".+?'.$smallImageNum.'\.jpg.+width="'.$smallWidth.'".+height="'.$smallHeight.'"#ms', $html);
 
         preg_match('#src="(.+?)"#ms', $html, $matches);
 
-        file_put_contents('log', "\nhttp request\n", FILE_APPEND);
         $smallSrcSize = getimagesize('http://'.Vps_Registry::get('testDomain').$matches[1]);
 
         $this->assertEquals($smallWidth, $smallSrcSize[0]);

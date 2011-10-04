@@ -1,0 +1,1 @@
+ALTER TABLE `vps_enquiries` CHANGE `sent_mail_content_html` `sent_mail_content_html` TEXT NULL ;

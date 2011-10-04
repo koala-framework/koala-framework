@@ -13,19 +13,16 @@ class Vpc_Basic_Image_CacheSimple_Test extends Vpc_TestAbstract
 
     public function testCacheClearing()
     {
-        $this->_process();
-
         // check empty
+        $cache = Vps_Component_Cache::getInstance();
         $cacheModel = Vps_Component_Cache::getInstance()->getModel();
-        $this->assertNull($cacheModel->getRow('root'));
-        $this->assertEquals(0, $cacheModel->getRows()->count());
-        $this->_root->render();
-        $this->assertNotNull($cacheModel->getRow('root'));
-        $this->assertEquals(1, $cacheModel->getRows()->count());
+        $this->assertNull($cache->load($this->_root));
+        $this->_root->render(true);
+        $this->assertNotNull($cache->load($this->_root));
+    }
 
-        $html = $this->_root->render();
-        $this->assertNotContains('<img', $html);
-
+    public function testRender()
+    {
         // check testModel row with no upload_id
         $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel');
         $row = $model->createRow(array(

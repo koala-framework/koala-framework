@@ -5,9 +5,6 @@ class Vpc_Shop_Cart_Checkout_Payment_PrePayment_Component extends Vpc_Shop_Cart_
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Pre Payment');
-        $ret['generators']['mail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PrePayment_Mail_Component';
-        $ret['generators']['confirm']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PrePayment_Confirm_Component';
-        $ret['generators']['shippedMail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PrePayment_ShippedMail_Component';
         return $ret;
     }
 }

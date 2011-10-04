@@ -7,7 +7,7 @@
     line-height: 20px;
     clear: both;
 }
-.cssClass form button {
+.cssClass .vpsButtonFlat button {
     font-weight: bold;
     border: 1px solid #000;
     background-color: #fff;
@@ -18,6 +18,7 @@
 }
 .cssClass .submitWrapper {
     text-align: center;
+    clear: both;
 }
 .cssClass .submitWrapper .beforeButton,
 .cssClass .submitWrapper .button,
@@ -80,12 +81,19 @@
 .cssClass .vpsFormFieldRadio {
     margin-left: -10px;
 }
-.cssClass form .vpsFormFieldRadio label{
+.cssClass form .vpsFormFieldRadio label {
     margin-left: 10px;
     margin-right: 20px;
     clear: none;
 }
-.cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; }
+.cssClass form .vpsFormFieldRadio input { margin: 0px; padding: 0px; }
+.cssClass form .vpsFormFieldRadioVertical,
+.cssClass form .vpsFormFieldRadioHorizontal { margin-left: 150px; }
+.cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; margin-left: 0px; }
+.cssClass form .vpsFormFieldRadioHorizontal span { white-space: nowrap; }
+.cssClass form .vpsFormFieldRadioVertical span { display: block; }
+.cssClass form .vpsFormFieldRadioVertical span label { margin-left: 0px; }
+.cssClass form .vpsFormFieldRadioVertical label { float: none; }
 .ext-ie .cssClass .form_title {
     margin-top: -5px;
     padding-bottom: 5px;
@@ -107,3 +115,5 @@
 }
 .cssClass span.comment { margin-left: 10px; color: #999; }
 .cssClass .vpsField { clear: both; }
+
+.cssClass .vpsFieldError label { color: red; } /* TODO beserer standard-wert */

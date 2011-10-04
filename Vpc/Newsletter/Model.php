@@ -15,8 +15,8 @@ class Vpc_Newsletter_Model extends Vps_Model_Db_Proxy
         // kleinsten ID hat, von der wird dann gesendet
         $select = $this->select()
             ->where(new Vps_Model_Select_Expr_Or(array(
-                new Vps_Model_Select_Expr_Equals('status', 'start'),
-                new Vps_Model_Select_Expr_Equals('status', 'sending')
+                new Vps_Model_Select_Expr_Equal('status', 'start'),
+                new Vps_Model_Select_Expr_Equal('status', 'sending')
             )));
         $nlRow = null;
         $id = 0;

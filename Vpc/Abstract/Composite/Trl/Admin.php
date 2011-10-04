@@ -1,14 +1,23 @@
 <?php
-                                               //sollte eigentlich abhängig von der verwendeten admin im master von einer untersch. admin erben
-class Vpc_Abstract_Composite_Trl_Admin extends Vpc_Abstract_Composite_TabsAdmin
+class Vpc_Abstract_Composite_Trl_Admin extends Vpc_Admin
 {
-    public function getExtConfig()
+    public function gridColumns()
     {
-        $masterAdmin = Vpc_Admin::getInstance(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'));
-        if ($masterAdmin instanceof Vpc_Abstract_Composite_TabsAdmin) {
-            $ret = parent::getExtConfig();
-        } else {
-            $ret = Vpc_Abstract_Composite_Admin::getExtConfig();
+        $ret = parent::gridColumns();
+        unset($ret['string']);
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
+        foreach ($classes as $key => $class) {
+            $columns = Vpc_Admin::getInstance($class)->gridColumns();
+            foreach ($columns as $k => $column) {
+                $column->setDataIndex($key.'_'.$column->getDataIndex());
+                $childData = $column->getData();
+                if ($childData instanceof Vps_Data_Vpc_ListInterface) {
+                    $childData->setSubComponent('-'.$key);
+                    $ret[$key.'_'.$k] = $column->setData(
+                        new Vpc_Abstract_Composite_ChildData($childData)
+                    );
+                }
+            }
         }
         return $ret;
     }

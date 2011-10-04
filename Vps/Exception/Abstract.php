@@ -51,4 +51,41 @@ abstract class Vps_Exception_Abstract extends Exception
     {
         return "** $part **\n$text\n-- $part --\n\n";
     }
+
+    public function render($ignoreCli = false)
+    {
+        if (!$ignoreCli && php_sapi_name() == 'cli') {
+            file_put_contents('php://stderr', $this->getException()->__toString()."\n");
+            exit(1);
+        }
+
+        $view = Vps_Debug::getView();
+        $view->exception = $this->getException();
+        $view->message = $this->getException()->getMessage();
+        $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
+            $_SERVER['REQUEST_URI'] : '' ;
+        $view->debug = Vps_Exception::isDebug();
+
+        $header = $this->getHeader();
+        $template = $this->getTemplate();
+        $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
+        $this->log();
+
+        if (!headers_sent()) {
+            header($header);
+            header('Content-Type: text/html; charset=utf-8');
+        }
+
+        try {
+            echo $view->render($template);
+        } catch (Exception $e) {
+            echo '<pre>';
+            echo $this->__toString();
+            echo "\n\n\nError happened while handling exception:";
+            echo $e->__toString();
+            echo '</pre>';
+        }
+        Vps_Benchmark::shutDown();
+        Vps_Benchmark::output();
+   }
 }

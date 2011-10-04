@@ -2,6 +2,9 @@ Vps.onContentReady(function()
 {
     var fadeComponents = Ext.query('div.vpsFadeElements');
     Ext.each(fadeComponents, function(c) {
+        var extWrapperEl = Ext.get(c);
+        if (extWrapperEl.fadeElementsObject) return; // nur einmal initialisieren
+
         var selector = Ext.query('.fadeSelector', c)[0].value;
         var config = Ext.query('.fadeConfig', c); // optional
         if (config && config[0]) {
@@ -17,8 +20,8 @@ Vps.onContentReady(function()
         config.selector = selector;
         config.selectorRoot = c;
 
-        var fade = new Vps.Fade.Elements(config);
-        fade.start();
+        extWrapperEl.fadeElementsObject = new Vps.Fade.Elements(config);
+        extWrapperEl.fadeElementsObject.start();
     });
 });
 
@@ -35,14 +38,13 @@ Vps.Fade.Elements = function(cfg) {
     this.fadeEvery = 7;
     this.startRandom = true;
 
-    if (cfg.elementAccessLinks) this.elementAccessLinks = cfg.elementAccessLinks;
-    if (cfg.selectorRoot) this.selectorRoot = cfg.selectorRoot;
-    if (cfg.fadeDuration) this.fadeDuration = cfg.fadeDuration;
-    if (cfg.easingFadeOut) this.easingFadeOut = cfg.easingFadeOut;
-    if (cfg.easingFadeIn) this.easingFadeIn = cfg.easingFadeIn;
-    if (cfg.fadeEvery) this.fadeEvery = cfg.fadeEvery;
-    if (cfg.startRandom) this.startRandom = cfg.startRandom;
-
+    if (typeof cfg.elementAccessLinks != 'undefined') this.elementAccessLinks = cfg.elementAccessLinks;
+    if (typeof cfg.selectorRoot != 'undefined') this.selectorRoot = cfg.selectorRoot;
+    if (typeof cfg.fadeDuration != 'undefined') this.fadeDuration = cfg.fadeDuration;
+    if (typeof cfg.easingFadeOut != 'undefined') this.easingFadeOut = cfg.easingFadeOut;
+    if (typeof cfg.easingFadeIn != 'undefined') this.easingFadeIn = cfg.easingFadeIn;
+    if (typeof cfg.fadeEvery != 'undefined') this.fadeEvery = cfg.fadeEvery;
+    if (typeof cfg.startRandom != 'undefined') this.startRandom = cfg.startRandom;
 
     this.fadeElements = Ext.query(this.selector, this.selectorRoot);
 

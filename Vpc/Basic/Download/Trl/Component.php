@@ -33,4 +33,11 @@ class Vpc_Basic_Download_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
         */
         return $return;
     }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vpc_Chained_Abstract_ParentIdCacheMeta(Vpc_Abstract::getSetting($componentClass, 'ownModel'));
+        return $ret;
+    }
 }

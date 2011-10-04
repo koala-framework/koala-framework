@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_FieldRows_Row extends Vps_Model_Row_Data_Abstract
+class Vps_Model_FieldRows_Row extends Vps_Model_Row_Data_Abstract implements Vps_Model_RowsSubModel_Row_Interface
 {
     protected $_parentRow;
     public function __construct(array $config)
@@ -8,17 +8,8 @@ class Vps_Model_FieldRows_Row extends Vps_Model_Row_Data_Abstract
         parent::__construct($config);
     }
 
-    public function getModelParentRow()
+    public function getSubModelParentRow()
     {
         return $this->_parentRow;
     }
-
-    protected function _refresh($id)
-    {
-        $select = new Vps_Model_Select();
-        $select->whereId($id);
-        $this->_data = $this->_model->getRowsByParentRow($this->_parentRow, $select)->current()->_data;
-        $this->_cleanData = $this->_data;
-    }
-
 }

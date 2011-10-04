@@ -9,30 +9,18 @@ class Vpc_Directories_Item_Detail_AssignedCategories_View_Component
         return $ret;
     }
 
-    public function getPartialCacheVars($nr)
+    public function getCacheMeta()
     {
-        return array_merge(parent::getPartialCacheVars($nr), $this->_doClearCache());
-    }
-
-    public function getCacheVars()
-    {
-        return array_merge(parent::getCacheVars(), $this->_doClearCache());
-    }
-
-    private function _doClearCache()
-    {
+        $ret = parent::getCacheMeta();
+        /* TODO Cache: so funktionierts nicht (%_{$column} wird nicht mit {} reingeschrieben, ist nur langsam, findet aber nichts), also mal auskommentiert, wenn es mal auftritt, beheben
         $c = $this->getData()->parent->getComponent()->getItemDirectory()->getComponent();
         $modelName = Vpc_Abstract::getSetting(get_class($c), 'categoryToItemModelName');
         $itemRef = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
             $modelName, 'Item'
         );
-
-        $ret = array();
-        $ret[] = array(
-            'model' => $modelName,
-            'id' => $this->getData()->parent->getComponent()->getItemDetail()->getRow()->{$itemRef['refItemColumn']},
-            'field' => $itemRef['itemColumn']
-        );
+        $column = $itemRef['refItemColumn'];
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($modelName, "%_{$column}");
+        */
         return $ret;
     }
 }

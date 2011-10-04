@@ -1,0 +1,1 @@
+<?php echo $this->hasContent($this->data) ?>

@@ -43,20 +43,30 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
         }
 
         $t = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($class, 'stylesModel'));
-        $styles = $t->getStyles();
-        $field->setInlineStyles($styles['inline']);
-        $field->setBlockStyles($styles['block']);
+        $field->setStyles($t->getStyles());
         $field->setComponentClass($class);
 
-        $field->setStylesCssFile('/assets/dynamic/Frontend/'.Vps_Component_Data_Root::getComponentClass().'/Vpc_Basic_Text_StylesAsset');
-
         $field->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl());
+        $this->fields->add($field);
 
+        $this->setAssetsType('Frontend');
+    }
+
+    //für tests
+    public function setAssetsType($type)
+    {
         $loader = new Vps_Assets_Loader();
         $dep = $loader->getDependencies();
-        $field->setCssFiles($dep->getAssetUrls('Frontend', 'css', 'web', Vps_Component_Data_Root::getComponentClass()));
+        $urls = $dep->getAssetUrls($type, 'css', 'web', Vps_Component_Data_Root::getComponentClass());
 
-        $this->fields->add($field);
+        $this->fields['content']->setCssFiles($urls);
+
+        foreach ($urls as $url) {
+            if (strpos($url, 'Vpc_Basic_Text_StylesAsset')!==false) {
+                $this->fields['content']->setStylesCssFile($url);
+                break;
+            }
+        }
     }
 
     public function setHtmlEditorLabel($title)

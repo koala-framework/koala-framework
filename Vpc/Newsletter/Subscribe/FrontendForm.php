@@ -24,7 +24,7 @@ class Vpc_Newsletter_Subscribe_FrontendForm extends Vps_Form
             ->setAllowBlank(false);
 
         $validator = new Vps_Validate_Row_Unique();
-        $validator->addSelectExpr(new Vps_Model_Select_Expr_Equals('unsubscribed', 0));
+        $validator->addSelectExpr(new Vps_Model_Select_Expr_Equal('unsubscribed', 0));
         $this->add(new Vps_Form_Field_TextField('email', trlVpsStatic('E-Mail')))
             ->setWidth(255)
             ->setVtype('email')

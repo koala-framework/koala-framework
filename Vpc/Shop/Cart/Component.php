@@ -26,6 +26,7 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtConnection';
 
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         $ret['orderData'] = 'Vpc_Shop_Cart_OrderData';
         return $ret;
     }

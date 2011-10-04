@@ -1,0 +1,1 @@
+<?= $this->componentLink($this->data->getChildComponent('_1')); ?>

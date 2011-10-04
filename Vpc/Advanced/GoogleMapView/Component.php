@@ -9,7 +9,7 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
         $ret['assets']['dep'][] = 'VpsGoogleMap';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['placeholder']['noCoordinates'] = ''; //leer, wird in GoogleMap benötgit damit man im backend sieht was falsch ist
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'webStandard webForm';
         return $ret;
     }
 

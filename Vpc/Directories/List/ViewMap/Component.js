@@ -43,7 +43,9 @@ Vpc.Directories.List.ViewMap.renderMap = function(map) {
     }
 
     if (lowestLng && highestLng && lowestLat && highestLat) {
-        cfg.zoom = [ highestLat, highestLng, lowestLat, lowestLng ];
+        if (!cfg.zoom) {
+            cfg.zoom = [ highestLat, highestLng, lowestLat, lowestLng ];
+        }
         cfg.longitude = (lowestLng + highestLng) / 2;
         cfg.latitude = (lowestLat + highestLat) / 2;
     }

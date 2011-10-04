@@ -13,6 +13,12 @@ class Vpc_Editable_Component extends Vpc_Abstract
         return $ret;
     }
 
+    // Wird hier verwendet: Vpc_Editable_ComponentsModel
+    public function getName()
+    {
+        return Vpc_Abstract::getSetting($this->getData()->componentClass, 'componentName');
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

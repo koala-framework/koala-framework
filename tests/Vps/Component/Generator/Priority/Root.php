@@ -13,7 +13,6 @@ class Vps_Component_Generator_Priority_Root extends Vps_Component_NoCategoriesRo
             'name' => 'page1'
         );
 
-        $ret['generators']['box']['priority'] = 1;
         $ret['generators']['box']['component'] = array();
         $ret['generators']['box']['component']['foo'] = 'Vpc_Basic_Empty_Component';
         unset($ret['generators']['title']);

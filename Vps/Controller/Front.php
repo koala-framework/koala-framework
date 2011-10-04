@@ -40,6 +40,10 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_spam');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Enquiries',
                                         'vps_controller_action_enquiries');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Redirects',
+                                        'vps_controller_action_redirects');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Util',
+                                'vps_controller_action_util');
         $this->addControllerDirectory(VPS_PATH . '/tests', 'vps_test');
         $this->addControllerDirectory('tests', 'web_test');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Trl',
@@ -61,8 +65,15 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
     public static function getInstance()
     {
-        $class = Vps_Registry::get('config')->frontControllerClass;
         if (null === self::$_instance) {
+            $class = Vps_Registry::get('config')->frontControllerClass;
+            if (!$class) {
+                $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
+                if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
+                    throw new Vps_Exception("frontControllerClass must be set in application/config.ini");
+                }
+                $class = 'Vps_Controller_Front';
+            }
             self::$_instance = new $class();
             self::$_instance->_init();
         }

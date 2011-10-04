@@ -10,12 +10,17 @@ class Vpc_TestController extends Vps_Controller_Action
     {
         Zend_Registry::get('config')->debug->componentCache->disable = true;
         Zend_Registry::set('db', false);
+        Vps_Test_SeparateDb::setDbFromCookie(); // setzt es nur wenn es das cookie wirklich gibt
 
         //FnF models setzen damit tests nicht in echte tabellen schreiben
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
 
+        if (class_exists('APCIterator')) {
+            $prefix = Vps_Cache::getUniquePrefix();
+            apc_delete_file(new APCIterator('user', '#^'.$prefix.'#'));
+        } else {
+            apc_clear_cache('user');
+        }
         Vps_Component_Data_Root::setComponentClass($this->_getParam('root'));
         $root = Vps_Component_Data_Root::getInstance();
         $root->setFilename('vps/vpctest/'.$this->_getParam('root'));

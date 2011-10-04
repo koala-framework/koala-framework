@@ -42,7 +42,6 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
             ),
             array(
                 'param'=> 'server',
-                'value'=> self::_getConfigSectionsWithHost(),
                 'help' => 'server',
                 'allowBlank' => true
             )

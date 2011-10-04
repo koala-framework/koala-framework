@@ -1,2 +1,2 @@
-.cssClass,
-.cssClass a { position: relative; }
+.cssClass { position: relative; }
+.cssClass a.vpcEnlargeTag { position: relative; }

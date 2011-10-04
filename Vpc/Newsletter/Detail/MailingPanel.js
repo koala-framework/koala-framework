@@ -77,8 +77,8 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         this.progress.onResize =  function(w, h) {
             var inner = Ext.get(this.el.child('.x-progress-inner')),
                 bar = inner.child('.x-progress-bar'),
-                pt = inner.child('.x-progress-text');
-                ptb = inner.child('.x-progress-text-back'),
+                pt = inner.child('.x-progress-text'),
+                ptb = inner.child('.x-progress-text-back');
             Ext.ProgressBar.superclass.onResize.apply(this, arguments);
             inner.setHeight(h);
             bar.setHeight(h);

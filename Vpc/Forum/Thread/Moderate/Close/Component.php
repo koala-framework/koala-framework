@@ -38,14 +38,11 @@ class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
         return $this->getData()->parent->parent->row->closed;
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $row = $this->getData()->parent->parent->row;
-        $ret[] = array(
-            'model' => get_class($row->getModel()),
-            'id' => $row->id
-        );
+        $ret = parent::getCacheMeta();
+        $model = $this->getData()->parent->parent->row->getModel();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($row, '{component_id}-moderate-close');
         return $ret;
     }
 }

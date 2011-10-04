@@ -37,7 +37,7 @@ class Vpc_Shop_Cart_OrderData
     }
 
     //kann überschrieben werden um shipping zB abhängig von bestellmenge zu machen
-    protected function _getShipping(Vpc_Shop_Cart_Order $order)
+    protected function _getShipping($order)
     {
         return Vpc_Abstract::getSetting(
             Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'),
@@ -45,7 +45,7 @@ class Vpc_Shop_Cart_OrderData
         );
     }
 
-    public final function getTotal(Vpc_Shop_Cart_Order $order)
+    public final function getTotal($order)
     {
         $ret = $order->getSubTotal();
         $ret += $this->_getShipping($order);
@@ -56,7 +56,7 @@ class Vpc_Shop_Cart_OrderData
     }
 
     //kann überschrieben werden um zeilen für alle payments zu ändern
-    protected function _getAdditionalSumRows(Vpc_Shop_Cart_Order $order, $total)
+    protected function _getAdditionalSumRows($order, $total)
     {
         $ret = array();
         $payments = Vpc_Abstract::getChildComponentClasses(
@@ -76,20 +76,35 @@ class Vpc_Shop_Cart_OrderData
         return $ret;
     }
 
-    public final function getSumRows(Vpc_Shop_Cart_Order $order)
+    public final function getSumRows($order)
     {
         $ret = array();
         $subTotal = $order->getSubTotal();
         $ret[] = array(
-            'class' => 'subtotal',
-            'text' => trlVps('Subtotal').':',
+            'class' => 'valueOfGoods',
+            'text' => trlVps('value of goods').':',
             'amount' => $subTotal
+        );
+        $ret[] = array(
+            'text' => trlVps('net amount').':',
+            'amount' => round($subTotal/1.2, 2)
+        );
+        $ret[] = array(
+            'text' => trlVps('+20% VAT').':',
+            'amount' => round($subTotal - $subTotal/1.2, 2)
         );
         $shipping = $this->_getShipping($order);
         $ret[] = array(
+            'class' => 'shippingHandling',
             'text' => trlVps('Shipping and Handling').':',
-            'amount' => $shipping
+            'amount' => round($shipping/1.2, 2)
         );
+        if ($shipping) {
+            $ret[] = array(
+                'text' => trlVps('+20% VAT').':',
+                'amount' => round($shipping - $shipping/1.2, 2)
+            );
+        }
         $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
         $ret[] = array(
             'class' => 'totalAmount',

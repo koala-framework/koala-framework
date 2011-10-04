@@ -56,6 +56,11 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
         return $this->_referersCache;
     }
 
+    public function emptyReferersCache()
+    {
+        $this->_referersCache = null;
+    }
+
     public function hasContent()
     {
         $refs = $this->_getReferers();
@@ -68,5 +73,12 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
         return $model->select()
             ->order('id', 'DESC')
             ->limit($this->_getSetting('limit'));
+    }
+
+    public function getCacheMeta()
+    {
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($this->_getParentModel());
+        return $ret;
     }
 }

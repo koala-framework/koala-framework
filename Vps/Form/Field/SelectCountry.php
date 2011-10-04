@@ -14,7 +14,7 @@ class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
         parent::trlStaticExecute($language);
 
         $values = array();
-        if (!$language) $language = Vps_Registry::get('trl')->getTargetLanguage();
+        if (!$language) $language = Vps_Trl::getInstance()->getTargetLanguage();
         $nameColumn = 'name_'.$language;
         foreach (Vps_Model_Abstract::getInstance('Vps_Util_Model_Countries')->getRows() as $row) {
             $values[$row->id] = $row->$nameColumn;

@@ -19,23 +19,29 @@ Vps.Switch.Overlay = function(el) {
     this._lockAnimation = false;
 
     this.el = el;
-    this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
+    this.switchLinks = Ext.query('.switchLink', this.el.dom);
     this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
 
     // if it is important, show on startup
     if (this.switchContent.child('.vpsImportant')) {
         this.switchContent.setStyle('display', 'block');
-        this.switchLink.addClass('switchLinkOpened');
+        this.switchLinks.each(function(sl) {
+        	Ext.get(sl).addClass('switchLinkOpened');	
+        }, this);
     }
 
-    if (this.switchLink && this.switchContent) {
-        Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
-            if (this.switchLink.hasClass('switchLinkOpened')) {
-                this.doClose();
-            } else {
-                this.doOpen();
-            }
-        }, this, { stopEvent: true });
+    if (this.switchLinks.length && this.switchContent) {
+    	this.switchLinks.each(function(sl) {
+	        Ext.EventManager.addListener(sl, 'click', function(e) {
+	        	this.switchLinks.each(function(sl) {
+		            if (Ext.get(sl).hasClass('switchLinkOpened')) {
+		                this.doClose();
+		            } else {
+		                this.doOpen();
+		            }
+	        	}, this);
+	        }, this, { stopEvent: true });
+    	}, this);
     }
 };
 
@@ -57,7 +63,9 @@ Ext.extend(Vps.Switch.Overlay, Ext.util.Observable, {
             },
             scope: this
         });
-        this.switchLink.removeClass('switchLinkOpened');
+        this.switchLinks.each(function(sl) {
+        	Ext.get(sl).removeClass('switchLinkOpened');
+        }, this);
     },
 
     doOpen: function() {
@@ -77,6 +85,8 @@ Ext.extend(Vps.Switch.Overlay, Ext.util.Observable, {
             },
             scope: this
         });
-        this.switchLink.addClass('switchLinkOpened');
+        this.switchLinks.each(function(sl) {
+        	Ext.get(sl).addClass('switchLinkOpened');
+        }, this);
     }
 });

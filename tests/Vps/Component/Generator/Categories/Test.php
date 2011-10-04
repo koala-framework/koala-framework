@@ -3,13 +3,11 @@
  * @group Generator_Categories
  * @group Vpc_UrlResolve
  */
-class Vps_Component_Generator_Categories_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_Categories_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Categories_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_Generator_Categories_Root');
     }
 
     public function testCategories()

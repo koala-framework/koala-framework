@@ -10,7 +10,7 @@ class Vps_Cache extends Zend_Cache
     {
         $frontendClass = 'Zend_Cache_' . ($frontend != 'Core' ? 'Frontend_' : '') . $frontend;
         $backendClass = 'Zend_Cache_Backend_' . $backend;
-        if ($backend == 'Memcached' || $backend == 'File' || $backend == 'TwoLevels') {
+        if ($backend == 'Memcached' || $backend == 'File' || $backend == 'TwoLevels' || $backend == 'Apc') {
             $backendClass = 'Vps_Cache_Backend_' . $backend;
         }
         $frontendObject = new $frontendClass($frontendOptions);
@@ -44,5 +44,17 @@ class Vps_Cache extends Zend_Cache
         if (isset(self::$_instances[$type])) {
             unset(self::$_instances[$type]);
         }
+    }
+
+    /**
+     * Hilfsfunktion die einen eindeutigen Prefix zurückgibt
+     */
+    public static function getUniquePrefix()
+    {
+        static $ret;
+        if (!isset($ret)) {
+            $ret = Zend_Registry::get('config')->application->id.'-'.Vps_Setup::getConfigSection().'-';
+        }
+        return $ret;
     }
 }

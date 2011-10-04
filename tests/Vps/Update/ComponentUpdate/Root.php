@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_ComponentUpdate_Root extends Vpc_Root_Component
+class Vps_Update_ComponentUpdate_Root extends Vps_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {

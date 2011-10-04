@@ -49,6 +49,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
     }
     public function hasContent()
     {
+        if (!$this->_getCart()) return false;
         return (bool)$this->_getCart()->countChildComponents(array('generator'=>'detail'));
     }
 }

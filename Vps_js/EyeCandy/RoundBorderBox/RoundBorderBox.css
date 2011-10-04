@@ -1,42 +1,42 @@
-.vpsRoundBoderBox {
+.vpsRoundBorderBox {
     position: relative;
 }
-.vpsRoundBoderBox .vpsRoundBorder {
+.vpsRoundBorderBox .vpsRoundBorder {
     position: absolute;
 }
 
 /* top */
-.vpsRoundBoderBox .vpsTopLeft {
+.vpsRoundBorderBox .vpsTopLeft {
     top: 0px; left: 0px;
     width: 11px; height: 10px;
     background: url(/assets/vps/images/roundborderbox/circle.png) left top no-repeat;
 }
-.vpsRoundBoderBox .vpsTopCenter {
+.vpsRoundBorderBox .vpsTopCenter {
     top: 0px; left: 0px;
     height: 10px;
     margin: 0px 17px 0px 11px;
     background: url(/assets/vps/images/roundborderbox/horizontal.png) left top repeat-x;
 }
-.vpsRoundBoderBox .vpsTopRight {
+.vpsRoundBorderBox .vpsTopRight {
     top: 0px; right: 0px;
     width: 17px; height: 10px;
     background: url(/assets/vps/images/roundborderbox/circle.png) right top no-repeat;
 }
 
 /* middle */
-.vpsRoundBoderBox .vpsMiddleLeft {
+.vpsRoundBorderBox .vpsMiddleLeft {
     top: 0px; left: 0px;
     width: 11px;
     margin: 10px 0px 17px 0px;
     background: url(/assets/vps/images/roundborderbox/vertical.png) left top repeat-y;
 }
-.vpsRoundBoderBox .vpsMiddleCenter {
+.vpsRoundBorderBox .vpsMiddleCenter {
     padding: 10px 17px 17px 11px;
 }
-.vpsRoundBoderBox .vpsMiddleCenter .vpsMiddleCenterContent {
+.vpsRoundBorderBox .vpsMiddleCenter .vpsMiddleCenterContent {
     background: url(/assets/vps/images/roundborderbox/background.png) left top repeat;
 }
-.vpsRoundBoderBox .vpsMiddleRight {
+.vpsRoundBorderBox .vpsMiddleRight {
     top: 0px; right: 0px;
     width: 17px;
     margin: 10px 0px 17px 0px;
@@ -44,18 +44,18 @@
 }
 
 /* bottom */
-.vpsRoundBoderBox .vpsBottomLeft {
+.vpsRoundBorderBox .vpsBottomLeft {
     bottom: 0px; left: 0px;
     width: 11px; height: 17px;
     background: url(/assets/vps/images/roundborderbox/circle.png) left bottom no-repeat;
 }
-.vpsRoundBoderBox .vpsBottomCenter {
+.vpsRoundBorderBox .vpsBottomCenter {
     bottom: 0px; left: 0px;
     height: 17px;
     margin: 0px 17px 0px 11px;
     background: url(/assets/vps/images/roundborderbox/horizontal.png) left bottom repeat-x;
 }
-.vpsRoundBoderBox .vpsBottomRight {
+.vpsRoundBorderBox .vpsBottomRight {
     bottom: 0px; right: 0px;
     width: 17px; height: 17px;
     background: url(/assets/vps/images/roundborderbox/circle.png) right bottom no-repeat;

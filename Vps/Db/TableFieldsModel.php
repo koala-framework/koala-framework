@@ -86,7 +86,7 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
 
     public function update(Vps_Model_Row_Interface $row, $rowData)
     {
-        $iId = $row->getModelParentRow()->getInternalId();
+        $iId = $row->getSubModelParentRow()->getInternalId();
         foreach ($this->_rows[$iId] as $k=>$i) {
             if ($row === $i) {
                 $this->_alterTableField($row, $this->_data[$iId][$k]['field']);
@@ -108,9 +108,9 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         if (!$row->null && is_null($row->default) && $row->extra != 'auto_increment') {
             throw new Vps_ClientException("invalid default value, null is not allowed");
         }
-        $iId = $row->getModelParentRow()->getInternalId();
+        $iId = $row->getSubModelParentRow()->getInternalId();
         $sql = "ALTER TABLE ";
-        $sql .= $row->getModelParentRow()->table." ";
+        $sql .= $row->getSubModelParentRow()->table." ";
         if ($changeName) {
             $sql .= "CHANGE $changeName ";
         } else {
@@ -125,12 +125,12 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
             $sql .= "DEFAULT '{$row->default}' ";
         }
         $sql .= $row->extra;
-        $row->getModelParentRow()->getModel()->getDb()->query(trim($sql));
+        $row->getSubModelParentRow()->getModel()->getDb()->query(trim($sql));
     }
 
     public function insert(Vps_Model_Row_Interface $row, $rowData)
     {
-        $iId = $row->getModelParentRow()->getInternalId();
+        $iId = $row->getSubModelParentRow()->getInternalId();
         $this->_alterTableField($row);
         $this->_data[$iId][] = $rowData;
         $this->_rows[$iId][count($this->_data[$iId])-1] = $row;
@@ -139,15 +139,15 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
 
     public function delete(Vps_Model_Row_Interface $row)
     {
-        $iId = $row->getModelParentRow()->getInternalId();
+        $iId = $row->getSubModelParentRow()->getInternalId();
 
         if (!$row->field) {
             throw new Vps_ClientException("field is required");
         }
         $sql = "ALTER TABLE ";
-        $sql .= $row->getModelParentRow()->table." ";
+        $sql .= $row->getSubModelParentRow()->table." ";
         $sql .= "DROP {$row->field}";
-        $row->getModelParentRow()->getModel()->getDb()->query(trim($sql));
+        $row->getSubModelParentRow()->getModel()->getDb()->query(trim($sql));
 
         foreach ($this->_rows[$iId] as $k=>$i) {
             if ($row === $i) {

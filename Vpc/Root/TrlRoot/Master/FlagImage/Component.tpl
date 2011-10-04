@@ -1,0 +1,1 @@
+<?=$this->image($this->image, '', $this->imgCssClass)?>

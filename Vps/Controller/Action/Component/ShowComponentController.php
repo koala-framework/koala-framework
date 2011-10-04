@@ -16,7 +16,7 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
         if (!$c) {
             throw new Vps_ClientException("Component with id '$id' not found");
         }
-        
+
         $process = $c
             ->getRecursiveChildComponents(array(
                     'page' => false,
@@ -36,7 +36,7 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
             if (method_exists($i->getComponent(), 'processInput')) {
                 $i->getComponent()->processInput($postData);
             }
-        }        
+        }
 
         /*
         //deaktivert: funktioniert nicht
@@ -45,8 +45,7 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
 
         //zwischenlösung:
         //(unschön: keine assets, kein html-header usw)
-        $output = new Vps_Component_Output_NoCache();
-        echo $output->render($c);
+        echo $c->render();
 
         Vps_Benchmark::output();
         $this->_helper->viewRenderer->setNoRender(true);

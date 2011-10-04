@@ -1,20 +1,23 @@
 <?php
 class Vpc_Root_TrlRoot_Model extends Vps_Model_FnF
 {
-    protected $_columns = array('component_id', 'filename', 'name', 'master');
-    protected $_primaryKey = 'component_id';
-    protected $_siblingModels = array('Vpc_Root_TrlRoot_FieldModel');
+    protected $_columns = array('id', 'filename', 'name', 'master');
+    protected $_primaryKey = 'id';
+    protected $_toStringField = 'name';
+    // TODO: Auskommentiert, muss an nicht mehr vorhandene component_id-Spalte angepasst werden
+    //protected $_siblingModels = array('Vpc_Root_TrlRoot_FieldModel');
 
-    public function __construct(array $languages = array())
+    public function __construct(array $values = array())
     {
         $config['data'] = array();
         $master = true;
-        foreach ($languages as $key => $language) {
+        foreach ($values as $key => $value) {
             $config['data'][] = array(
-                'component_id' => 'root-' . $key,
+                'id' => $key,
                 'filename' => $key,
-                'name' => $language,
-                'master' => $master
+                'name' => $value,
+                'master' => $master,
+                'visible' => 1
             );
             $master = false;
         }

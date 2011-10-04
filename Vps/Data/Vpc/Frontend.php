@@ -40,7 +40,9 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                     $i->getComponent()->processInput(array());
                 }
             }
-            return Vps_View_Component::renderComponent($data, true);
+            $view = new Vps_Component_Renderer();
+            $view->setEnableCache(true);
+            return $view->renderComponent($data);
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(
                 'parentModel' => $row->getModel(),

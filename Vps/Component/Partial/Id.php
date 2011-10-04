@@ -7,7 +7,7 @@ class Vps_Component_Partial_Id extends
         $ret = array();
         $class = $this->getParam('class', false);
         $paramName = $this->getParam('paramName', false);
-        $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->getParam('componentId'));
+        $component = Vps_Component_Data_Root::getInstance()->getComponentById($this->getParam('componentId'));
         $count = null;
         $offset = null;
         if ($class && $paramName) {

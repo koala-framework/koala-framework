@@ -53,7 +53,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
     {
         $ret = parent::load($row, $postData);
         $filteredCombo = $this->getFilteredCombo();
-        if ($filteredCombo->getSave() !== false && $filteredCombo->getInternalSave() !== false) {
+        if ($filteredCombo->getSave() !== false && $row) {
             $ret = array_merge($ret, $filteredCombo->load($row, $postData));
         }
         return $ret;
@@ -63,7 +63,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
     {
         parent::prepareSave($row, $postData);
         $filteredCombo = $this->getFilteredCombo();
-        if ($filteredCombo->getSave() !== false && $filteredCombo->getInternalSave() !== false) {
+        if ($filteredCombo->getSave() !== false) {
             $filteredCombo->prepareSave($row, $postData);
         }
     }
@@ -92,6 +92,20 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
             $filtered->setFilterValue($value);
         }
         return $postData;
+    }
+
+    public function load($row, array $postData = array())
+    {
+        $ret = parent::load($row, $postData);
+        if (!$this->getFilteredCombo()) {
+            throw new Vps_Exception("No filteredCombo set");
+        }
+        $value = $ret[$this->getFieldName()];
+        if ($value) {
+            $filtered = $this->getFilteredCombo();
+            $filtered->setFilterValue($value);
+        }
+        return $ret;
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '')

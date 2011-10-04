@@ -8,7 +8,6 @@ class Vpc_News_Month_Directory_Component extends Vpc_Directories_Month_Directory
         $ret['generators']['detail']['model'] = 'Vpc_News_Directory_Model';
 
         //für News-Kategorien Box
-        $ret['categoryChildId'] = 'month';
         $ret['categoryName'] = trlVps('Months');
 
         $ret['dateColumn'] = 'publish_date';

@@ -100,8 +100,10 @@ class Vpc_Directories_Month_Directory_Generator extends Vps_Component_Generator_
     protected function _getNameFromRow($row)
     {
         $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
-        $date = new Vps_Date(strtotime($row->$dateColumn));
-        return $date->get(Vps_Date::MONTH_NAME).' '.$date->get(Vps_Date::YEAR);
+        $months = Zend_Locale::getTranslationList('Month',
+            Vps_Registry::get('trl')->getTargetLanguage());
+        $date = strtotime($row->$dateColumn);
+        return $months[date('n', $date)].' '.date('Y', $date);
     }
 
     protected function _getFilenameFromRow($row)

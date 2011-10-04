@@ -16,6 +16,15 @@ class Vpc_Basic_ImageEnlarge_Component extends Vpc_Abstract_Image_Component
         return $ret;
     }
 
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, '{component_id}-linkTag');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model, '{component_id}-linkTag');
+        return $ret;
+    }
+
     public function getImageData()
     {
         $c = $this->getData()->getChildComponent('-linkTag');

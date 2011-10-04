@@ -1,0 +1,21 @@
+.cssClass {
+    padding: 25px 0px;
+    text-align: center;
+    line-height: 20px;
+    z-index: 1000;
+    clear: both;
+}
+.cssClass a {
+    padding: 1px 3px;
+    border: 1px solid #000;
+    color: #000;
+    padding: 3px 5px;
+    font-weight: bold;
+}
+.cssClass a:hover,
+.cssClass a.active {
+    color: #000;
+    font-weight: bold;
+    background-color: #fff;
+}
+.cssClass span { font-weight: bold; }

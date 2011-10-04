@@ -9,7 +9,7 @@ class Vpc_Root_TrlRoot_Chained_Admin extends Vpc_Abstract_Admin
         foreach ($chained as $c) {
             $sourceChained = Vpc_Chained_Trl_Component::getChainedByMaster($source, $c, array('ignoreVisible'=>true));
             $newChained = Vpc_Chained_Trl_Component::getChainedByMaster($new, $c, array('ignoreVisible'=>true));
-            if (!$sourceChained) continue; //wenn sourceChained nicht gefunden handelt es sich zB um ein MasterAsChild - was ignoriert werden muss
+            if (!$sourceChained || $source->componentId==$sourceChained->componentId) continue; //wenn sourceChained nicht gefunden handelt es sich zB um ein MasterAsChild - was ignoriert werden muss
             if (!$newChained) {
                 throw new Vps_Exception("can't find chained components");
             }

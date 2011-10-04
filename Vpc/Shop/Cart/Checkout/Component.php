@@ -37,14 +37,4 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
     {
         return Vpc_Shop_Cart_OrderData::getInstance($this->getData()->parent->componentClass)->getSumRows($order);
     }
-
-    public final function getShipping($order)
-    {
-        throw new Vps_Exception('removed');
-    }
-
-    protected final function _getAdditionalSumRows($order, $total)
-    {
-        throw new Vps_Exception('removed');
-    }
 }

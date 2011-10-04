@@ -22,10 +22,10 @@ class Vpc_Trl_Menu_Test extends Vpc_TestAbstract
         $vars = $c->getComponent()->getTemplateVars();
         $m = $vars['menu'];
         $this->assertEquals(2, count($m));
-        $this->assertEquals('root-en-main_1', $m[0]->componentId);
-        $this->assertEquals('Page 1', $m[0]->name);
-        $this->assertEquals('p1', $m[0]->filename);
-        $this->assertEquals('root-en-main_2', $m[1]->componentId);
+        $this->assertEquals('root-en-main_1', $m[0]['data']->componentId);
+        $this->assertEquals('Page 1', $m[0]['data']->name);
+        $this->assertEquals('p1', $m[0]['data']->filename);
+        $this->assertEquals('root-en-main_2', $m[1]['data']->componentId);
         $m = $vars['subMenu'];
         $this->assertEquals('root-en-main_1-menu-subMenu', $m->componentId);
 
@@ -33,7 +33,7 @@ class Vpc_Trl_Menu_Test extends Vpc_TestAbstract
         $vars = $m->getComponent()->getTemplateVars();
         $m = $vars['menu'];
         $this->assertEquals(1, count($m));
-        $this->assertEquals('root-en-main_3', $m[0]->componentId);
+        $this->assertEquals('root-en-main_3', $m[0]['data']->componentId);
         $this->assertNull($vars['subMenu']);
 
         // ExpandedMenu
@@ -41,10 +41,10 @@ class Vpc_Trl_Menu_Test extends Vpc_TestAbstract
         $vars = $c->getComponent()->getTemplateVars();
         $m = $vars['menu'];
         $this->assertEquals(1, count($m));
-        $this->assertEquals('root-en-main_3', $m[0]->componentId);
-        $m = $m[0]->submenu;
+        $this->assertEquals('root-en-main_3', $m[0]['data']->componentId);
+        $m = $m[0]['submenu'];
         $this->assertEquals(1, count($m));
-        $this->assertEquals('root-en-main_4', $m[0]->componentId);
+        $this->assertEquals('root-en-main_4', $m[0]['data']->componentId);
         $this->assertFalse(isset($m[0]->submenu));
     }
 
@@ -55,8 +55,8 @@ class Vpc_Trl_Menu_Test extends Vpc_TestAbstract
         $vars = $c->getComponent()->getTemplateVars();
         $m = $vars['menu'];
         $this->assertEquals(2, count($m));
-        $this->assertEquals('root-en-main_1', $m[0]->componentId);
-        $this->assertEquals('root-en-main_2', $m[1]->componentId);
+        $this->assertEquals('root-en-main_1', $m[0]['data']->componentId);
+        $this->assertEquals('root-en-main_2', $m[1]['data']->componentId);
         $m = $vars['subMenu'];
         $this->assertEquals('root-en-main_2-menu-subMenu', $m->componentId);
 

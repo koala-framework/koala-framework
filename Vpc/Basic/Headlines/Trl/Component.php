@@ -5,6 +5,7 @@ class Vpc_Basic_Headlines_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 

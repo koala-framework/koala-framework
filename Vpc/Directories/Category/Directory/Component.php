@@ -11,7 +11,6 @@ class Vpc_Directories_Category_Directory_Component extends Vpc_Directories_ItemP
         $ret['generators']['detail']['nameColumn'] = 'name';
 
         // zB für Kategorien Box
-        $ret['categoryChildId'] = 'categories';
         $ret['categoryName'] = trlVps('Categories');
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Category/Directory/Plugin.js';

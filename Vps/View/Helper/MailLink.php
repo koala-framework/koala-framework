@@ -23,7 +23,7 @@ class Vps_View_Helper_MailLink extends Vps_View_Helper_Abstract_MailLink
                     if (empty($subjectBody)) {
                         $subjectBody .= '?';
                     } else {
-                        $subjectBody .= '&';
+                        $subjectBody .= '&amp;';
                     }
                     $subjectBody .= "body=$i";
                 } else {

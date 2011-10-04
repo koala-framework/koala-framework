@@ -1,12 +1,28 @@
 <?php
-Zend_Date::setOptions(array(
-    'format_type' => 'php'
-));
-class Vps_Date extends Zend_Date
+class Vps_Date
 {
-    public function __construct($date = null, $part = null, $locale = null)
+    //TODO: DateTime verwenden, das unterstützt datum vor 1970 und nach 2038
+    protected $_timestamp;
+
+    public function __construct($date)
     {
-        if (!$locale) $locale = Zend_Registry::get('trl')->getTargetLanguage();
-        parent::__construct($date, $part, $locale);
+        if (is_int($date)) {
+            $this->_timestamp = $date;
+        } else {
+            $this->_timestamp = strtotime($date);
+        }
+        if (!$this->_timestamp) {
+            throw new Vps_Exception('Invalid date');
+        }
+    }
+
+    public function format($format = 'Y-m-d')
+    {
+        return date($format, $this->_timestamp);
+    }
+
+    public function getTimestamp()
+    {
+        return $this->_timestamp;
     }
 }

@@ -3,8 +3,8 @@
     <h3><?=$type?></h3>
     <ul>
         <? foreach($links as $m) { ?>
-            <li class="<?= $m->class ?>">
-                <?=$this->componentLink($m)?>
+            <li class="<?= $m['class'] ?>">
+                <?=$this->componentLink($m['data'])?>
             </li>
         <? } ?>
     </ul>

@@ -6,6 +6,7 @@ class Vpc_Newsletter_Subscribe_RecipientsController extends Vpc_Newsletter_Subsc
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
     protected $_queryFields = array('id', 'email', 'firstname', 'lastname');
+    protected $_modelName = 'Vpc_Newsletter_Subscribe_Model';
 
     public function indexAction()
     {
@@ -20,7 +21,6 @@ class Vpc_Newsletter_Subscribe_RecipientsController extends Vpc_Newsletter_Subsc
 
     public function preDispatch()
     {
-        $this->_model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_Subscribe_Model');
         parent::preDispatch();
     }
 

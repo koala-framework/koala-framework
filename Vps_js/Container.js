@@ -22,5 +22,5 @@ Ext.Container.prototype.enableRecursive = function() {
     Ext.Container.superclass.enableRecursive.call(this);
 };
 
-//bubble sollte auch für form-felder funktionieren
+//bubble sollte auch fÃ¼r form-felder funktionieren
 Ext.Component.prototype.bubble = Ext.Container.prototype.bubble;

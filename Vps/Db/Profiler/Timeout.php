@@ -17,7 +17,7 @@ class Vps_Db_Profiler_Timeout extends Vps_Db_Profiler_Count
             return null;
         }
         $this->_lastQuery = new Zend_Db_Profiler_Query($queryText, $queryType);
-        parent::queryStart($queryText, $queryType = null);
+        parent::queryStart($queryText, $queryType);
         return $this->_count;
     }
 

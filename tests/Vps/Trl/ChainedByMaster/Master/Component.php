@@ -19,6 +19,7 @@ class Vps_Trl_ChainedByMaster_Master_Component extends Vpc_Abstract
             'component' => 'Vpc_Basic_Empty_Component'
         );
         $ret['flags']['hasLanguage'] = true;
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 }

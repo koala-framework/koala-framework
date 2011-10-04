@@ -77,4 +77,15 @@ class Vps_Dao
     {
         return isset($this->_db[$db]);
     }
+
+    public function getMongoDb()
+    {
+        static $ret;
+        if (!isset($ret)) {
+            $connection = new Mongo(); // connects to localhost:27017
+            $mongoDb = Vps_Registry::get('config')->server->mongo->database;
+            $ret = $connection->$mongoDb;
+        }
+        return $ret;
+    }
 }

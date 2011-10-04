@@ -1,0 +1,4 @@
+<?php
+class Vps_Component_Generator_AlternativeComponent_Alternative_Component extends Vpc_Basic_ParentContent_Component
+{
+}

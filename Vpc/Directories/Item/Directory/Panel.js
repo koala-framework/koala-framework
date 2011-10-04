@@ -1,8 +1,6 @@
 Ext.namespace('Vpc.Directories.Item.Directory');
 Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
 {
-    idTemplate: false,
-    idPostfix: false,
     initComponent: function() {
         if (this.componentPlugins) {
             this.plugins = [ ];
@@ -13,36 +11,27 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
             }, this);
         }
 
-        this.columnsConfig = {
-            edit: {
-                clickHandler: function(grid, rowIndex) {
-                    var row = grid.getStore().getAt(rowIndex);
-                    this.fireEditComponent(row);
-                },
-                scope: this
-            }
-        };
+        this.on('cellclick', function(grid, rowIndex, columnIndex, e) {
+            var col = grid.getColumnModel().config[columnIndex];
+            if (col.columnType != 'editContent') return;
+
+            var row = grid.getStore().getAt(rowIndex);
+            var componentId = col.editIdTemplate.replace('{0}', row.data.id);
+            componentId = componentId.replace('{componentId}', this.getBaseParams().componentId);
+            this.fireEvent('editcomponent', {
+                componentClass: col.editComponentClass,
+                type: col.editType,
+                componentIdSuffix: col.editComponentIdSuffix,
+                editComponents: this.contentEditComponents,
+                componentId: componentId,
+                text: trlVps('Details') //TODO stimmt des?
+            });
+
+        }, this);
+
         this.fireEvent('gotComponentConfigs', this.componentConfigs);
 
         Vpc.Directories.Item.Directory.Panel.superclass.initComponent.call(this);
-    },
-
-    fireEditComponent : function(row)
-    {
-        var componentId;
-        if (!this.idTemplate) {
-            componentId = this.getBaseParams().componentId + this.idSeparator + row.data.id;
-            if (this.idPostfix) componentId += this.idPostfix;
-        } else {
-            componentId = this.idTemplate.replace('{0}', row.data.id);
-        }
-        this.fireEvent('editcomponent', {
-            componentClass: this.contentClass,
-            type: this.contentType,
-            editComponents: this.contentEditComponents,
-            componentId: componentId,
-            text: trlVps('Details')
-        });
     }
 });
 

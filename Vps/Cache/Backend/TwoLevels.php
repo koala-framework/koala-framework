@@ -19,7 +19,11 @@ class Vps_Cache_Backend_TwoLevels extends Zend_Cache_Backend_TwoLevels
             $options['fast_backend_autoload'] = true;
         }
         if (!isset($options['fast_backend'])) {
-            $options['fast_backend'] = 'Vps_Cache_Backend_Memcached';
+            if (extension_loaded('apc')) {
+                $options['fast_backend'] = 'Vps_Cache_Backend_Apc';
+            } else {
+                $options['fast_backend'] = 'Vps_Cache_Backend_Memcached';
+            }
             $options['fast_backend_custom_naming'] = true;
         }
         parent::__construct($options);

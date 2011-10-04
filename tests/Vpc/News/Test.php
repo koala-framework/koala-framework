@@ -3,14 +3,12 @@
 /**
  * @group Vpc_News
  */
-class Vpc_News_Test extends PHPUnit_Framework_TestCase
+class Vpc_News_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_News_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_News_Root');
+        $this->_root->setFilename(null);
     }
 
     public function testBasic()

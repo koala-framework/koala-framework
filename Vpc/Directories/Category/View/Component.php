@@ -47,6 +47,44 @@ class Vpc_Directories_Category_View_Component
         return preg_replace('/[^a-zA-Z0-9_]/', '_', $cacheClassId).'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getModel()).$row->id.'_itemCount';
     }
 
+    public function getPagingCount($select = null)
+    {
+        if ($this->_getSetting('hideCategoriesWithoutEntries')) {
+            if (!$select) $select = $this->_getSelect();
+            if (!$select) return 0;
+
+            $items = $this->_getItems($select);
+            $ret = 0;
+            foreach ($items as $item) {
+                if ($item->listCount) $ret++;
+            }
+            if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
+                $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+                if ($ret > $limitCount) $ret = $limitCount;
+            }
+            return $ret;
+        } else {
+            return parent::getPagingCount($select);
+        }
+    }
+
+    public function getItemIds($count = null, $offset = null)
+    {
+        if ($this->_getSetting('hideCategoriesWithoutEntries')) {
+            $select = $this->_getSelect();
+            if (!$select) return array();
+            if ($count) $select->limit($count, $offset);
+            $items = $this->_getItems($select);
+            $ret = array();
+            foreach ($items as $item) {
+                if ($item->listCount) $ret[] = $item->row->id;
+            }
+            return $ret;
+        } else {
+            return parent::getItemIds($count, $offset);
+        }
+    }
+
     public static function getItemCountCache()
     {
         $frontendOptions = array('lifetime' => 3600, 'automatic_serialization' => true);

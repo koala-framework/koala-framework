@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_Proxy
  */
-class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Proxy_RowTest extends Vps_Test_TestCase
 {
     /**
      * @expectedException Vps_Exception
@@ -41,7 +41,7 @@ class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase
         $fnf = new Vps_Model_FnF(array(
             'columns' => array('id', 'name', 'data'),
             'data' => array(
-                array('id' => 4, 'name' => 'foo', 'data' => serialize(array('name1'=>'foo1'))),
+                array('id' => 4, 'name' => 'foo', 'data' => json_encode(array('name1'=>'foo1'))),
             ),
             'siblingModels' => array(
                 new Vps_Model_Field(array(
@@ -86,7 +86,7 @@ class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase
         $fnf = new Vps_Model_FnF(array(
             'columns' => array('id', 'name', 'data'),
             'data' => array(
-                array('id' => 4, 'name' => 'foo', 'data' => serialize(array('name1'=>'foo1'))),
+                array('id' => 4, 'name' => 'foo', 'data' => json_encode(array('name1'=>'foo1'))),
             )
         ));
         $model = new Vps_Model_Proxy(array(

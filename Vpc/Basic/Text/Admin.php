@@ -58,4 +58,11 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
             'content'      => $content
         ));
     }
+
+    public function componentToString(Vps_Component_Data $data)
+    {
+        $truncate = new Vps_View_Helper_Truncate;
+        $ret = $truncate->truncate($data->getComponent()->getSearchContent(),15);
+        return $ret;
+    }
 }

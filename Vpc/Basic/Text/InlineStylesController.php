@@ -3,7 +3,6 @@ class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_G
 {
     protected $_buttons = array('add', 'delete');
     protected $_position = 'pos';
-    protected $_modelName = 'Vpc_Basic_Text_StylesModel';
 
     public function init()
     {
@@ -13,6 +12,7 @@ class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_G
         ) {
             throw new Vps_Exception("Styles are disabled");
         }
+        $this->_model = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($class, 'stylesModel'));
         parent::init();
     }
 
@@ -22,23 +22,29 @@ class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_G
         $this->_columns->add(new Vps_Grid_Column('name', 'Name', 100));
     }
 
-    protected function _getWhere()
+    protected function _formatSelectTag($select)
     {
-        $where = parent::_getWhere();
-        $where[] = 'master=0';
-        $where[] = "tag = 'span'";
+        $select->whereEquals('tag', 'span');
+    }
+
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
 
         $pattern = Vpc_Abstract::getSetting($this->_getParam('componentClass'),
                                                             'stylesIdPattern');
         if ($pattern) {
             if (preg_match('#'.$pattern.'#', $this->_getParam('componentId'), $m)) {
-                $where['ownStyles = ?'] = $m[0];
+                $ret->whereEquals('ownStyles', $m[0]);
             }
         } else {
-            $where[] = "ownStyles = ''";
+            $ret->whereEquals('ownStyles', '');
         }
-        return $where;
+
+        $this->_formatSelectTag($ret);
+        return $ret;
     }
+
     protected function _beforeDelete(Vps_Model_Row_Interface $row)
     {
         if ($this->_getUserRole() != 'admin' && $row->master) {

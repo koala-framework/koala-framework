@@ -13,10 +13,8 @@
             $class = trim($class);
             $i++;
         ?>
-        <div class="<?=$class;?>">
-            <div class="column" style="width: <?=$child['width']?>">
-                <?=$this->component($child['data']);?>
-            </div>
+        <div class="column <?=$class;?>" style="width: <?=$child['width']?>">
+            <?=$this->component($child['data']);?>
         </div>
     <? } ?>
     <div class="clear"></div>

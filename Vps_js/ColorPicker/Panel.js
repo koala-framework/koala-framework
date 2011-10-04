@@ -386,10 +386,10 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
 
     onRender: function()
     {
-        debugger;
+//         debugger;
         if (this.el)
         {
-            debugger;
+//             debugger;
             Vps.ColorPicker.Panel.superclass.onRender.apply(this, arguments);
             this.initMarkup();
             this.initLayers();

@@ -8,7 +8,7 @@ class Vpc_Directories_TopChoose_Form extends Vpc_Abstract_Form
         $showDirectoryClass = Vpc_Abstract::getSetting($class, 'showDirectoryClass');
 
         $directories = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass($showDirectoryClass);
+            ->getComponentsByClass($showDirectoryClass, array('ignoreVisible' => true));
 
         $values = array();
         foreach ($directories as $directory) {

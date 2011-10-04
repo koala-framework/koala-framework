@@ -16,6 +16,7 @@ class Vpc_Form_Field_TextField_Component extends Vpc_Form_Field_Abstract_Compone
         $ret->setWidth($this->getRow()->width);
         $ret->setDefaultValue($this->getRow()->default_value);
         $ret->setAllowBlank(!$this->getRow()->required);
+        $ret->setHideLabel($this->getRow()->hide_label);
         $ret->setVtype($this->getRow()->vtype);
         return $ret;
     }

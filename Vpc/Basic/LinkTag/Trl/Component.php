@@ -16,14 +16,4 @@ class Vpc_Basic_LinkTag_Trl_Component extends Vpc_Chained_Trl_Component
         ));
         return $ret;
     }
-
-    public function getCacheVars()
-    {
-        $ret = parent::getCacheVars();
-        $link = $this->getData()->getChildComponent('-link');
-        if ($link) {
-            $ret['linkTagLink']['componentId'] = $link->componentId;
-        }
-        return $ret;
-    }
 }

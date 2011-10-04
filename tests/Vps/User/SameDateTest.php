@@ -6,7 +6,7 @@
  * @group Model_User
  * @group Real_Model_User
  */
-class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
+class Vps_User_SameDateTest extends Vps_Test_TestCase
 {
     private static $_lastMailNumber = 0;
 
@@ -29,61 +29,15 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
         return 'vpstestsu'.time().'_'.(self::$_lastMailNumber).'@vivid.vps';
     }
 
-    public function testCreateUserSameDateGlobal()
-    {
-        // es wäre möglich, dass zwei user in der selben sekunde angelegt werden
-        // aber dann nur der erste gesynct wird, weil das web glaubt am aktuellen
-        // stand zu sein, da der neueste user im web das gleiche datum wie der
-        // neueste im Service hat. Dies wird hier getestet und wurde im service
-        // durch den Filter 'Vps_Filter_Row_CurrentDateTimeUnique' behoben
-
-        $webId = Vps_Registry::get('config')->application->id;
-        $webcode = '';
-
-        $m = new Vps_User_Model();
-        $all = new Vps_User_All_Model();
-
-        $mailAddresses = array();
-
-        for ($i=0; $i<10; $i++) {
-            $email = $this->_getNewMailAddress();
-            $mailAddresses[] = $email;
-
-            // globalen user erstellen, nicht in web
-            $allr = $all->createRow(array(
-                'email' => $email,
-                'password' => '',
-                'password_salt' => 'abcdefg',
-                'gender' => 'male',
-                'title' => '',
-                'firstname' => 'm',
-                'lastname' => 'h',
-                'webcode' => '',
-                'created' => date('Y-m-d H:i:s', time())
-            ));
-            $allr->save();
-        }
-
-        // alle diese user im web erstellen
-        $lastModifiedDates = array();
-        foreach ($mailAddresses as $ma) {
-            $r = $m->createUserRow($ma, $webcode);
-            if (in_array($r->last_modified, $lastModifiedDates)) {
-                $this->fail("last_modified must be unique");
-            }
-            $lastModifiedDates[] = $r->last_modified;
-        }
-    }
-
-    public function testCreateUserSameDateWeb()
+    public function testCreateUserSameDate()
     {
         $webId = Vps_Registry::get('config')->application->id;
         $webcode = Vps_Registry::get('config')->service->users->webcode;
 
         $m = new Vps_User_Model();
-
         $mailAddresses = array();
         $timeBefore = $timeAfter = array();
+        $rows = array();
 
         $lastModifiedDates = array();
         for ($i=0; $i<10; $i++) {
@@ -98,10 +52,61 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
             $r->created = date('Y-m-d H:i:s', time());
             $r->save();
 
-            if (in_array($r->last_modified, $lastModifiedDates)) {
-                $this->fail("last_modified must be unique");
-            }
+            $rows[] = $r;
             $lastModifiedDates[] = $r->last_modified;
         }
+
+        // aus web alle user holen ob sie korrekt gesynct sind
+        if (!count($mailAddresses)) {
+            $this->fail("no users created");
+        }
+
+        $db = Vps_Registry::get('db');
+        $users = $db->query("SELECT * FROM cache_users WHERE email IN('".implode("','", $mailAddresses)."')")->fetchAll();
+        if (count($users) != 10) {
+            $this->fail("exactly 10 users must be created and synced");
+        }
+
+        sleep(2);
+        // Step 1: user normal über model ändern
+        // Step 2: anderen user direkt im service ändern
+        // Step 3: check, ob der sync inkorrekt ist (soll so sein)
+        // Step 4: syncen
+        // Step 5: in service geänderter muss auch in web korrekt da sein
+        $allModel = new Vps_User_All_Model();
+        $allRow2 = $allModel->getRow($rows[9]->id);
+        $r1 = $rows[0];
+        $i = 1;
+        while ($i==1 || $r1->last_modified != $allRow2->last_modified) {
+            $allRow2->title = 'Mag.'.($i);
+
+            $r1->title = 'Dr.'.($i++);
+            $r1->save(); // Step 1
+
+            $allRow2->save(); // Step 2
+
+            if ($i >= 10) {
+                $this->fail("No same date within 10 tries...damn test");
+                break;
+            }
+        }
+
+        // Step 3
+        $m = new Vps_User_Model();
+        $checkRow = $m->getRow($allRow2->id);
+        if ($checkRow->last_modified == $allRow2->last_modified) {
+            $this->fail("last_modified should not be the same here. possible bad written test.");
+        }
+
+        // Step 4
+        $m = new Vps_User_Model();
+        $m->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
+
+        // Step 5
+        $checkRow = $m->getRow($allRow2->id);
+        if ($checkRow->last_modified != $allRow2->last_modified) {
+            $this->fail("Web is not in sync after synchronize-call. last_modified Web: {$checkRow->last_modified} Service: {$allRow2->last_modified}");
+        }
+
     }
 }

@@ -6,6 +6,7 @@ class Vpc_Box_TitleEditable_Component extends Vpc_Box_Title_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Title');
         $ret['ownModel'] = 'Vps_Component_FieldModel';
+	$ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 

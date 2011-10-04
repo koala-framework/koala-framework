@@ -7,11 +7,12 @@ class Vpc_Basic_Headlines_Component extends Vpc_Abstract
             'componentName' => trlVps('Headlines'),
             'componentIcon' => new Vps_Asset('text_padding_top'),
             'ownModel'      => 'Vps_Component_FieldModel',
-            'cssClass'      => 'webStandard'
+            'cssClass'      => 'webStandard',
+            'extConfig'     => 'Vps_Component_Abstract_ExtConfig_Form'
         ));
         return $ret;
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

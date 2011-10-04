@@ -21,12 +21,10 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Vpc_Abstract_
         return false;
     }
 
-    public static function getStaticCacheVars($componentClass)
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheVars($componentClass);
-        $ret[] = array(
-            'model' => 'Vpc_Root_Category_Trl_GeneratorModel'
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_Trl_GeneratorModel');
         return $ret;
     }
 }

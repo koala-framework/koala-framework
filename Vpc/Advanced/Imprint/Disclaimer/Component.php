@@ -9,6 +9,7 @@ class Vpc_Advanced_Imprint_Disclaimer_Component extends Vpc_Abstract
             'cssClass' => 'webStandard'
         ));
         $ret['assets']['dep'][] = 'VpsSwitchDisplay';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 }

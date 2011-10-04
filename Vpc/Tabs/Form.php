@@ -1,4 +1,5 @@
 <?php
+//Standardmäßig nicht verwendet
 class Vpc_Tabs_Form extends Vpc_Abstract_List_FormWithEditButton
 {
     protected function _getMultiFieldsFieldset()

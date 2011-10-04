@@ -63,7 +63,7 @@ class Vpc_Shop_Cart_Checkout_Form_FrontendForm extends Vps_Form
         return $this;
     }
 
-    
+
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
         parent::_beforeSave($row);

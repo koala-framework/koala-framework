@@ -1,1 +1,1 @@
-childpage
+c3_childpage

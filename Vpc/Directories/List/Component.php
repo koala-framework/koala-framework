@@ -42,7 +42,7 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
 
     abstract protected function _getItemDirectory();
 
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
         $itemDirectory = $this->getItemDirectory();
         if (!$itemDirectory) return null;
@@ -55,7 +55,7 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
                 ->select(null);
         } else {
             if ($this->_getSetting('useDirectorySelect')) {
-                $ret = $itemDirectory->getComponent()->getSelect($overrideValues);
+                $ret = $itemDirectory->getComponent()->getSelect();
             } else {
                 $ret = $itemDirectory->getGenerator('detail')
                     ->select($this->getItemDirectory());

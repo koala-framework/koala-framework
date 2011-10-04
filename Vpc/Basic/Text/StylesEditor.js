@@ -17,12 +17,8 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
                 title: trlVps('Inline-Styles'),
                 controllerUrl: this.inlineStyleUrl
             });
-        this.master = new Vpc.Basic.Text.StylesEditorTab({
-                title: trlVps('Master-Styles'),
-                controllerUrl: this.masterStyleUrl
-            });
         this.items = new Ext.TabPanel({
-            items: [this.block, this.inline/*, this.master*/],
+            items: [this.block, this.inline],
             activeTab: 0
         });
 
@@ -31,12 +27,10 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
     applyBaseParams: function(params) {
         this.block.applyBaseParams(params);
         this.inline.applyBaseParams(params);
-        this.master.applyBaseParams(params);
     },
     show: function() {
         this.block.load();
         this.inline.load();
-        this.master.load();
         Vpc.Basic.Text.StylesEditor.superclass.show.call(this);
     }
 /*

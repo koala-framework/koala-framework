@@ -6,11 +6,11 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
         $ret = parent::getSettings();
         unset($ret['generators']['box']);
         $ret['generators']['master'] = array(
-            'class' => 'Vpc_Root_TrlRoot_MasterGenerator',
+            'class' => 'Vpc_Chained_Trl_MasterGenerator',
             'component' => 'Vpc_Root_TrlRoot_Master_Component',
         );
         $ret['generators']['chained'] = array(
-            'class' => 'Vpc_Root_TrlRoot_ChainedGenerator',
+            'class' => 'Vpc_Chained_Trl_ChainedGenerator',
             'component' => 'Vpc_Root_TrlRoot_Chained_Component.Vpc_Root_TrlRoot_Master_Component',
             'filenameColumn' => 'filename',
             'nameColumn' => 'name',

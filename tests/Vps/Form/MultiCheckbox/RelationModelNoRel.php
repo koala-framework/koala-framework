@@ -10,4 +10,5 @@ class Vps_Form_MultiCheckbox_RelationModelNoRel extends Vps_Model_FnF
             'column' => 'values_id',
             'refModelClass' => 'Vps_Form_MultiCheckbox_ValueModel'
         )
-    );}
+    );
+}

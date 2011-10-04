@@ -10,6 +10,7 @@ class Vpc_Basic_Text_TestComponent extends Vpc_Basic_Text_Component
         $ret['generators']['child']['component']['link'] = 'Vpc_Basic_Text_Link_TestComponent';
         $ret['generators']['child']['component']['image'] = 'Vpc_Basic_Text_Image_TestComponent';
         $ret['generators']['child']['component']['download'] = 'Vpc_Basic_Text_Download_TestComponent';
+        $ret['assets']['files']['styles'] = 'dynamic/Vpc_Basic_Text_StylesAsset:Vpc_Basic_Text_TestStylesModel';
         return $ret;
     }
 

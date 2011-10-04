@@ -5,6 +5,7 @@ class Vpc_Basic_Table_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['childModel'] = 'Vpc_Basic_Table_Trl_DataModel';
+        $ret['extConfig'] = 'Vpc_Basic_Table_Trl_ExtConfig';
         return $ret;
     }
 
@@ -36,11 +37,10 @@ class Vpc_Basic_Table_Trl_Component extends Vpc_Chained_Trl_Component
         ));
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        return array(array(
-            'model' => 'Vpc_Basic_Table_Trl_DataModel',
-            'component_id' => $this->getData()->componentId
-        ));
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Basic_Table_Trl_DataModel');
+        return $ret;
     }
 }

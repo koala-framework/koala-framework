@@ -1,1 +1,1 @@
-child <?= $this->component($this->child) ?>
+c1_child <?= $this->component($this->child) ?>

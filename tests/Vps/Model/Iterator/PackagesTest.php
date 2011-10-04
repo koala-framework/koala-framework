@@ -2,7 +2,7 @@
 /**
  * @group Model_Iterator_PackagesTest
  */
-class Vps_Model_Iterator_PackagesTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Iterator_PackagesTest extends Vps_Test_TestCase
 {
     public function testIt()
     {

@@ -91,4 +91,9 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
         }
         return $this->_rows[$pId][$key];
     }
+
+    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    {
+        throw new Vps_Exception("read only");
+    }
 }

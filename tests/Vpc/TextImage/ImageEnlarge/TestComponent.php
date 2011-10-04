@@ -16,13 +16,13 @@ class Vpc_TextImage_ImageEnlarge_TestComponent extends Vpc_TextImage_ImageEnlarg
             'small' => array(
                 'text' => 'Small',
                 'width' => 150,
-		'height'=>null,
-                'scale' => Vps_Media_Image::SCALE_BESTFIT
+                'height'=>null,
+                'scale' => Vps_Media_Image::SCALE_DEFORM
             ),
             'original' => array(
                 'text' => 'Original',
-		'width'=>null,
-		'height'=>null,
+                'width'=>null,
+                'height'=>null,
                 'scale' => Vps_Media_Image::SCALE_ORIGINAL
             ),
             'custom' => array(

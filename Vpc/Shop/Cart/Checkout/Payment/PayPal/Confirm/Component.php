@@ -1,13 +1,6 @@
 <?php
 class Vpc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component extends Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component
 {
-    public static function getSettings()
-    {
-        $ret = parent::getSettings();
-        $ret['componentName'] .= ' '.trlVps('PayPal');
-        return $ret;
-    }
-
     public function processInput($data)
     {
         $data = Vps_Util_PayPal_Ipn_LogModel::decodeCallback($data['custom']);

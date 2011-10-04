@@ -21,7 +21,7 @@ class Vpc_Directories_List_Trl_Component extends Vpc_Abstract_Composite_Trl_Comp
         );
     }
 
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
         $itemDirectory = $this->getItemDirectory();
         if (!$itemDirectory) return null;
@@ -29,7 +29,7 @@ class Vpc_Directories_List_Trl_Component extends Vpc_Abstract_Composite_Trl_Comp
             throw new Vps_Exception_NotYetImplemented();
         } else {
             if (Vpc_Abstract::getSetting($this->getData()->chained->componentClass, 'useDirectorySelect')) {
-                $ret = $itemDirectory->getComponent()->getSelect($overrideValues);
+                $ret = $itemDirectory->getComponent()->getSelect();
             } else {
                 $ret = $itemDirectory->getGenerator('detail')
                     ->select($this->getItemDirectory());

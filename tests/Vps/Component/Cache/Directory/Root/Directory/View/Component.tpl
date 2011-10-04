@@ -1,0 +1,1 @@
+<?= $this->data->getComponent()->getPagingCount() ?> <?=$this->partials($this->data);?>

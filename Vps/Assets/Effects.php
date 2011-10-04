@@ -29,4 +29,11 @@ class Vps_Assets_Effects
         $overlay->readImage(VPS_PATH."/Vps/Assets/Overlay/forbidden.png");
         $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 16-10, 16-10);
     }
+
+    public static function arrow(Imagick $image)
+    {
+        $overlay = new Imagick();
+        $overlay->readImage(VPS_PATH."/Vps/Assets/Overlay/bullet_go_small.png");
+        $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 16-10, 16-10);
+    }
 }

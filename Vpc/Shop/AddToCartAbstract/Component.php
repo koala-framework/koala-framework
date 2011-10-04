@@ -14,8 +14,9 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $m = Vps_Component_Data_Root::getInstance()->getComponentByClass('Vpc_Shop_Cart_Component')
-                ->getComponent()->getChildModel();
+        $cart = Vps_Component_Data_Root::getInstance()->getComponentByClass('Vpc_Shop_Cart_Component', array('ignoreVisible' => true));
+        if (!$cart) throw new Vps_Exception_Client(trl('Need cart for shop but could not find it. Please add in Admin.'));
+        $m = $cart->getComponent()->getChildModel();
         $this->_form->setModel($m);
     }
 

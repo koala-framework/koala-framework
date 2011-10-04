@@ -26,10 +26,20 @@ if (!Vps.Debug.displayErrors) {
     Ext.ux.ErrorHandler.init();
 }
 
-
+/**
+ * message
+ * title
+ * mail bool
+ * url
+ * errorText nur für tests glaub ich, WTF?
+ * checkRetry bool
+ * mail bool
+ * retry function
+ * abort function
+ */
 Vps.handleError = function(error) {
 
-    if (error instanceof String) error = { message: error };
+    if (typeof error == 'string') error = { message: error };
     if (arguments[1]) error.title = arguments[1];
     if (arguments[2]) error.mail = arguments[2];
     if (!error.url) error.url = '';

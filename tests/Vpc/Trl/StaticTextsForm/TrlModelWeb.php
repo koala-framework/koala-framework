@@ -1,9 +1,9 @@
 <?php
-class Vpc_Trl_StaticTextsForm_TrlModelWeb extends Vps_Trl_Model_Web
+class Vpc_Trl_StaticTextsForm_TrlModelWeb extends Vps_Model_FnF
 {
-    public function __construct(array $config = array())
+    public function __construct()
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config = array(
             'data' => array(
                 array('id'=>'1', 'en' => 'Firstname', 'de' => 'Vorname'),
                 array('id'=>'2', 'en' => 'Lastname', 'de' => 'Nachname'),
@@ -11,7 +11,7 @@ class Vpc_Trl_StaticTextsForm_TrlModelWeb extends Vps_Trl_Model_Web
             ),
             'uniqueIdentifier' => 'Vpc_Trl_StaticTextsForm_TrlModelWeb',
             'columns' => array('id', 'en', 'de', 'en_plural', 'de_plural', 'context')
-        ));
+        );
         parent::__construct($config);
     }
 }

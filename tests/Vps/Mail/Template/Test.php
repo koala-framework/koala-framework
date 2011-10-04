@@ -1,14 +1,13 @@
 <?php
 /**
  * @group Mail
+ * @group Mail_Template
  */
-class Vps_Mail_Template_Test extends PHPUnit_Framework_TestCase
+class Vps_Mail_Template_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Mail_Template_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Mail_Template_Root');
     }
 
     public function testMailComponent()
@@ -19,27 +18,23 @@ class Vps_Mail_Template_Test extends PHPUnit_Framework_TestCase
         $m = new Vps_Mail_Template($c);
         $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
-        $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
 
         $c = $this->_root->getChildComponent('-both');
         $m = new Vps_Mail_Template($c->getComponent());
         $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
-        $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
 
         $c = $this->_root->getChildComponent('-both');
         $classname = get_class($c->getComponent());
         $m = new Vps_Mail_Template($classname);
         $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
-        $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
 
 
         $c = $this->_root->getChildComponent('-txtonly');
         $m = new Vps_Mail_Template($c);
         $this->assertEquals($path.'/TxtOnly/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals(null, $m->getHtmlTemplate());
-        $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
     }
 
     public function testMailString()
@@ -47,7 +42,6 @@ class Vps_Mail_Template_Test extends PHPUnit_Framework_TestCase
         $m = new Vps_Mail_Template('UserActivation');
         $this->assertEquals('mails/UserActivation.txt.tpl', $m->getTxtTemplate());
         $this->assertEquals('mails/UserActivation.html.tpl', $m->getHtmlTemplate());
-        $this->assertEquals('UserActivation', $m->getTemplateForDbVars());
     }
 
     public function testMailSending()

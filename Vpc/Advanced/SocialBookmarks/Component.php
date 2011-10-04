@@ -6,9 +6,10 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Social Bookmarks');
         $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
-        $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
         $ret['cssClass'] = 'webStandard';
-        $ret['iconSet'] = 'Default';
+        $ret['iconSet'] = 'Rounded';
+        $ret['flags']['alternativeComponent'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
+        $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigForm';
         return $ret;
     }
 
@@ -56,5 +57,25 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         return $this->getTemplateVarsWithNetworks($this->getData()->parent);
+    }
+
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        $c = $parentData;
+        while (!$c->inherits) $c = $c->parent;
+
+        $c = $c->parent;
+        if (!$c) return false;
+        while (!$c->inherits) $c = $c->parent;
+
+        $instances = Vps_Component_Generator_Abstract::getInstances($c, array(
+                'inherit' => true
+        ));
+        if (in_array($generator, $instances, true)) {
+            //wir wurden geerbt weils über uns ein parentData mit dem gleichen generator gibt
+            return true;
+        } else {
+            return false;
+        }
     }
 }

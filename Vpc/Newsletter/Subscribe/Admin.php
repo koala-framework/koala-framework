@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_Subscribe_Admin extends Vpc_Form_Admin
+class Vpc_Newsletter_Subscribe_Admin extends Vpc_Abstract_Composite_Admin
 {
     public function addResources(Vps_Acl $acl)
     {

@@ -4,6 +4,6 @@
         <?=$this->assets('Frontend')?>
     </head>
     <body>
-        <?=$this->component($this->component)?>
+        <?=$this->componentWithMaster($this->componentWithMaster)?>
     </body>
 </html>

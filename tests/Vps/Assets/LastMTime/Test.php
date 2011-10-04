@@ -4,7 +4,7 @@
  * @group slow
  * slow weil sie den assets cache löschen
  */
-class Vps_Assets_LastMTime_Test extends PHPUnit_Framework_TestCase
+class Vps_Assets_LastMTime_Test extends Vps_Test_TestCase
 {
     public function testMaxFileMTime()
     {

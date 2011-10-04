@@ -7,11 +7,8 @@ class Vpc_Basic_Text_BlockStylesController extends Vpc_Basic_Text_InlineStylesCo
         $this->_columns->add(new Vps_Grid_Column('tag', trlVps('Tag'), 40));
     }
 
-    protected function _getWhere()
+    protected function _formatSelectTag($select)
     {
-        $where = parent::_getWhere();
-        unset($where[array_search("tag = 'span'", $where)]);
-        $where[] = "tag != 'span'";
-        return $where;
+        $select->whereNotEquals('tag', 'span');
     }
 }

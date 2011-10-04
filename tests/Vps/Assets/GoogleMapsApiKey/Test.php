@@ -2,7 +2,7 @@
 /**
  * @group Assets
  */
-class Vps_Assets_GoogleMapsApiKey_Test extends PHPUnit_Framework_TestCase
+class Vps_Assets_GoogleMapsApiKey_Test extends Vps_Test_TestCase
 {
     public function testBuildConfigDomain()
     {

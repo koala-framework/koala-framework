@@ -49,48 +49,53 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
     {
         $ret = parent::validate($row, $postData);
 
-        if ($this->getInternalSave() !== false) {
+        $data = $this->_getValueFromPostData($postData);
+        if (!is_string($data)) {
+            return $ret;
+        }
+        $data = Zend_Json::decode($data);
+        $dimensions = $this->getDimensions();
+        reset($dimensions);
 
-            $data = $this->_getValueFromPostData($postData);
-            if (!is_string($data)) {
-                return $ret;
-            }
-            $data = Zend_Json::decode($data);
-            $dimensions = $this->getDimensions();
-            reset($dimensions);
-            
-            if ($this->getAllowBlank() === false
-                || $this->getAllowBlank() === 0
-                || $this->getAllowBlank() === '0') {
-                if (!isset($dimensions[$data['dimension']])) {
-                    $name = $this->getFieldLabel();
-                    if (!$name) $name = $this->getName();
-                    $ret[] = $name.': '.trlVps("Value is empty, but a non-empty value is required");
-                }
-            }
-
-            if (!empty($data['dimension'])) {
-                $dimension = $dimensions[$data['dimension']];
-            } else {
-                $dimension = current($dimensions);
-            }
-            if ($dimension) {
-                if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
-                    $dimension['scale'] == Vps_Media_Image::SCALE_CROP) &&
-                    (empty($data['width']) && empty($dimension['width'])) &&
-                    (empty($data['height']) && empty($dimension['height']))
-                ) {
-                    $ret[] = trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.');
-                }
-                if ($dimension['scale'] == Vps_Media_Image::SCALE_DEFORM &&
-                    ((empty($data['width']) && empty($dimension['width'])) ||
-                    (empty($data['height']) && empty($dimension['height'])))
-                ) {
-                    $ret[] = trlVps('Dimension: At width and height must be set higher than 0 when using deform.');
-                }
-                
+        if ($this->getAllowBlank() === false
+            || $this->getAllowBlank() === 0
+            || $this->getAllowBlank() === '0') {
+            if (!isset($dimensions[$data['dimension']])) {
+                $ret[] = array(
+                    'message' => trlVps("Please fill out the field"),
+                    'field' => $this
+                );
             }
         }
+
+        if (!empty($data['dimension'])) {
+            $dimension = $dimensions[$data['dimension']];
+        } else {
+            $dimension = current($dimensions);
+        }
+        if ($dimension) {
+            if ($dimension['scale'] == Vps_Media_Image::SCALE_CROP &&
+                (empty($data['width']) && empty($dimension['width'])) &&
+                (empty($data['height']) && empty($dimension['height']))
+            ) {
+                $ret[] = array(
+                    'message' => trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.'),
+                    'field' => $this
+                );
+            }
+            if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
+                $dimension['scale'] == Vps_Media_Image::SCALE_DEFORM) &&
+                ((empty($data['width']) && empty($dimension['width'])) ||
+                (empty($data['height']) && empty($dimension['height'])))
+            ) {
+                $ret[] = array(
+                    'message' => trlVps('Dimension: At width and height must be set higher than 0 when using deform.'),
+                    'field' => $this
+                );
+            }
+
+        }
+
         return $ret;
     }
 }

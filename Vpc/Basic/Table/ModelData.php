@@ -2,6 +2,7 @@
 class Vpc_Basic_Table_ModelData extends Vps_Model_Db_Proxy
 {
     protected $_table = 'vpc_basic_table_data';
+    protected $_rowClass = 'Vpc_Basic_Table_RowData';
     protected $_referenceMap = array(
         'table' => array(
             'column' => 'component_id',

@@ -1,13 +1,19 @@
 
 Vps.onContentReady(function() {
-    var lightbox = new Vpc.Basic.ImageEnlarge();
+    // wenn schon eine lightbox vorhanden, keine mehr erstellen
+    if (Ext.query('.webLightbox').length == 0) {
+        var lightbox = new Vpc.Basic.ImageEnlarge();
+    }
     var els = document.getElementsByTagName('a');
     for (var i=0; i<els.length; i++) {
+        if (els[i].rel.match(/processedEnlarge/)) continue;
+
         if (els[i].rel.match(/enlarge_[0-9]+_[0-9]+/)) {
             Ext.EventManager.addListener(els[i], 'click', function(e) {
                 lightbox.show(Ext.get(this), e);
                 e.stopEvent();
             }, els[i], { stopEvent: true });
+            els[i].rel = els[i].rel + ' processedEnlarge';
         }
         if (els[i].className.match(/vpcEnlargeTag/)) {
             Ext.DomHelper.append(els[i],
@@ -44,7 +50,13 @@ Vpc.Basic.ImageEnlarge.tplHeader = new Ext.XTemplate(
 Vpc.Basic.ImageEnlarge.tplBody = new Ext.XTemplate(
     '<div class="prevBtn">{previousImageButton}</div>',
     '<div class="nextBtn">{nextImageButton}</div>',
+    /* alter Style, wird noch unterstützt, ersetzt durch die zwei folgenden Zeilen
     '<img src="{values.image.src}" width="{values.image.width}" height="{values.image.height}" class="centerImage" />'
+     */
+    '<div class="loading"><img src="/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/loading.gif" width="66" height="66" class="preloadImage" /></div>',
+    '<div class="image" style="width:{values.image.width}px; height:{values.image.height}px"><img class="centerImage" /></div>'
+    /*
+    */
 );
 
 Vpc.Basic.ImageEnlarge.tplFooter = new Ext.XTemplate(
@@ -112,7 +124,7 @@ Vpc.Basic.ImageEnlarge.prototype =
                 }
             } else if (i == 'fullSizeUrl') {
                 if (options.fullSizeUrl) {
-                    data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('image in originalsize')+'" target="_blank">'+trlVps('image in originalsize')+'</a> ';
+                    data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('Download original image')+'">'+trlVps('Download original image')+'</a> ';
                 } else {
                     data.fullSizeLink = '';
                 }
@@ -165,6 +177,16 @@ Vpc.Basic.ImageEnlarge.prototype =
 
         tpls.tpl.overwrite(this.lightbox, data);
 
+        var image = new Image();
+        image.onload = (function(){
+            if (this.lightbox.child('.image')) {
+                this.lightbox.child('.loading').hide();
+                this.lightbox.child('.centerImage').dom.src = linkEl.dom.href;
+                this.lightbox.child('.image').fadeIn();
+            }
+        }).createDelegate(this);
+        image.src = linkEl.dom.href;
+
         this.lightbox.child('.lightboxFooter').setWidth(m[1]);
 
         var applyNextPreviousEvents = function(imageLink, type) {
@@ -174,8 +196,21 @@ Vpc.Basic.ImageEnlarge.prototype =
             // next small button
             this.lightbox.query('.'+type+'SwitchButton').each(function(el) {
                 el = Ext.fly(el);
+                if (type == 'next') {
+                    el.setStyle('background-position', 'right '+Math.floor(m[2]*0.2)+'px');
+                } else {
+                    el.setStyle('background-position', 'left '+Math.floor(m[2]*0.2)+'px');
+                }
+
                 el.on('click', function(e) {
-                    this.lightbox.show(this.imageLink);
+                    if (this.lightbox.lightbox.child('.image')) {
+                        this.lightbox.lightbox.child('.image').fadeOut({
+                            callback: this.lightbox.show(this.imageLink),
+                            scope: this
+                        });
+                    } else {
+                        this.lightbox.show(this.imageLink);
+                    }
                 }, {lightbox: this, imageLink: imageLink}, { stopEvent: true });
             }, this);
         };

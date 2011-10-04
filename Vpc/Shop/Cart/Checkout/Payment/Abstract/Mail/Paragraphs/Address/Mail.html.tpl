@@ -1,22 +1,22 @@
 <table width="100%" cellspacing="0" cellpadding="0">
     <tr>
         <td>
-            <?=$this->order->title.' '.$this->order->firstname.' '.$this->order->lastname;?>
+            <?=htmlspecialchars($this->order->title.' '.$this->order->firstname.' '.$this->order->lastname);?>
         </td>
     </tr>
     <tr>
         <td>
-            <?=$this->order->street;?>
+            <?=htmlspecialchars($this->order->street);?>
         </td>
     </tr>
     <tr>
         <td>
-            <?=$this->order->zip;?> <?=$this->order->city;?>
+            <?=htmlspecialchars($this->order->zip);?> <?=htmlspecialchars($this->order->city);?>
         </td>
     </tr>
     <tr>
         <td>
-            <?=$this->order->country;?>
+            <?=htmlspecialchars($this->order->country);?>
         </td>
     </tr>
 </table>

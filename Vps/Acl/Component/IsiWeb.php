@@ -30,6 +30,11 @@ class Vps_Acl_Component_IsiWeb extends Vps_Acl_Component
             $this->add(new Vps_Acl_Resource_MenuUrl('vps_component_clear-cache',
                     array('text'=>trlVps('Clear Cache'), 'icon'=>'database.png'),
                     '/admin/component/clear-cache'), 'settings');
+            $this->add(new Vps_Acl_Resource_MenuUrl('vps_redirects_redirects',
+                    array('text'=>trlVps('Redirects'), 'icon'=>'page_white_go.png'),
+                    '/vps/redirects/redirects'), 'settings');
+                $this->add(new Zend_Acl_Resource('vps_redirects_redirect'), 'vps_redirects_redirects');
+                    $this->add(new Zend_Acl_Resource('vps_redirects_pages'), 'vps_redirects_redirect');
 
 
         $this->allow('admin', null);

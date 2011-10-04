@@ -5,6 +5,7 @@ class Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_OrderData extends Vpc_Shop_C
     {
         $ret = parent::getAdditionalSumRows($order);
         $ret[] = array(
+            'class' => 'cashOnDelivery',
             'text' => trlVps('Cash on Delivery Charge').':',
             'amount' => $this->_getCashOnDeliveryCharge($order)
         );

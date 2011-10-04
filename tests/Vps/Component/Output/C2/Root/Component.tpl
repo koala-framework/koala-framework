@@ -1,0 +1,1 @@
+c2_root <? foreach($this->keys as $k) { echo $this->component($this->$k) . ' '; } ?>

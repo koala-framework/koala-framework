@@ -4,11 +4,12 @@
  * @group trl
  *
  */
-class Vps_Trl_JsLoaderTest extends PHPUnit_Framework_TestCase
+class Vps_Trl_JsLoaderTest extends Vps_Test_TestCase
 {
     private $_jsLoader;
     public function setUp()
     {
+        parent::setUp();
         $this->_jsLoader = new Vps_Trl_JsLoader();
     }
 
