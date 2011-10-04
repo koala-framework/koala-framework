@@ -8,7 +8,8 @@ class Vpc_Shop_AddToCart_FrontendForm extends Vpc_Shop_AddToCartAbstract_Fronten
         parent::_initFields();
         $this->add(new Vps_Form_Field_Select('amount', trlVps('Amount')))
             ->setAllowBlank(false)
-            ->setValues($this->_getAmountValues());
+            ->setValues($this->_getAmountValues())
+            ->setEditable(true);
     }
 
     protected function _getAmountValues($count = 10)

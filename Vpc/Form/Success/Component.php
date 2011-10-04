@@ -5,7 +5,7 @@ class Vpc_Form_Success_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['cssClass'] = 'webStandard webSuccess';
-        $ret['placeholder']['success'] = trlVpsStatic('The Form has been submitted successfully.');
+        $ret['placeholder']['success'] = trlVpsStatic('The form has been submitted successfully.');
         return $ret;
     }
 

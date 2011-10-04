@@ -45,7 +45,7 @@ class Vps_Util_FeedFetcher_Feed
                     $useProxy = true;
                 }
             }
-            if ($useProxy) {
+            if ($useProxy && rand(0,1)==0) {
                 shuffle($proxies);
                 $url = $proxies[0]['url'].'?url='.rawurlencode($url).'&hash='.md5($url.'w3rklslfsdlj');
             }

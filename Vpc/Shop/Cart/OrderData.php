@@ -37,7 +37,7 @@ class Vpc_Shop_Cart_OrderData
     }
 
     //kann überschrieben werden um shipping zB abhängig von bestellmenge zu machen
-    protected function _getShipping(Vpc_Shop_Cart_Order $order)
+    protected function _getShipping($order)
     {
         return Vpc_Abstract::getSetting(
             Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'),
@@ -45,7 +45,7 @@ class Vpc_Shop_Cart_OrderData
         );
     }
 
-    public final function getTotal(Vpc_Shop_Cart_Order $order)
+    public final function getTotal($order)
     {
         $ret = $order->getSubTotal();
         $ret += $this->_getShipping($order);
@@ -56,17 +56,19 @@ class Vpc_Shop_Cart_OrderData
     }
 
     //kann überschrieben werden um zeilen für alle payments zu ändern
-    protected function _getAdditionalSumRows(Vpc_Shop_Cart_Order $order, $total)
+    protected function _getAdditionalSumRows($order, $total)
     {
         $ret = array();
-        $payments = Vpc_Abstract::getChildComponentClasses(
-            Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
-        if (isset($payments[$order->payment])) {
-            $rows = Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData
-                ::getInstance($payments[$order->payment])
-                ->getAdditionalSumRows($order);
-            foreach ($rows as $r) $total += $r['amount'];
-            $ret = array_merge($ret, $rows);
+        if ($order instanceof Vpc_Shop_Cart_Order) {
+            $payments = Vpc_Abstract::getChildComponentClasses(
+                Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
+            if (isset($payments[$order->payment])) {
+                $rows = Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData
+                    ::getInstance($payments[$order->payment])
+                    ->getAdditionalSumRows($order);
+                foreach ($rows as $r) $total += $r['amount'];
+                $ret = array_merge($ret, $rows);
+            }
         }
         foreach ($this->getShopCartPlugins() as $p) {
             $rows = $p->getAdditionalSumRows($order, $total);
@@ -76,7 +78,7 @@ class Vpc_Shop_Cart_OrderData
         return $ret;
     }
 
-    public final function getSumRows(Vpc_Shop_Cart_Order $order)
+    public final function getSumRows($order)
     {
         $ret = array();
         $subTotal = $order->getSubTotal();
