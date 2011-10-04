@@ -9,7 +9,7 @@ class Vpc_TextImage_ImageEnlarge_LinkTag_Component extends Vpc_Basic_LinkTag_Com
         $ret['generators']['child']['component'] = array_merge(
             array(
                 'none' => 'Vpc_Basic_LinkTag_Empty_Component',
-                'enlarge' => 'Vpc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_Component'
+                'enlarge' => 'Vpc_Basic_ImageEnlarge_EnlargeTag_Component'
             ),
             $ret['generators']['child']['component']
         );

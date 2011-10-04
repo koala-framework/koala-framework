@@ -253,9 +253,11 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         }
 
         //paragraphs vorschau im backend
-        $authData = Vps_Registry::get('userModel')->getAuthedUser();
-        if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
-            return self::VALID_DONT_CACHE;
+        if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+            $authData = Vps_Registry::get('userModel')->getAuthedUser();
+            if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
+                return self::VALID_DONT_CACHE;
+            }
         }
 
         return self::INVALID;

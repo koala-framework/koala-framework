@@ -17,7 +17,6 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Form extends Vpc_Abstract_Composite_Form
                 ->setIdTemplate('{0}');
         }
 
-        //absichtlich nicht aufrufen: parent::_initFields();
-        //benötigen wir hier nicht, und abgeleitete komponenten können es noch tun
+        parent::_initFields();
     }
 }

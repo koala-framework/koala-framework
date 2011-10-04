@@ -67,6 +67,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
         $ret['allowIsolatedRender'] = false;
+        $ret['contentSender'] = 'Vps_Component_Abstract_ContentSender_Default';
         return $ret;
     }
 
@@ -248,111 +249,6 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             $this->_pdfWriter = new $class($this, $pdf);
         }
         return $this->_pdfWriter;
-    }
-
-    private function _getRequestWithFiles()
-    {
-        $ret = $_REQUEST;
-        //in _REQUEST sind _FILES nicht mit drinnen
-        foreach ($_FILES as $k=>$file) {
-            if (is_array($file['tmp_name'])) {
-                //wenn name[0] dann kommts in komischer form daher -> umwandeln
-                foreach (array_keys($file['tmp_name']) as $i) {
-                    foreach (array_keys($file) as $prop) {
-                        $ret[$k][$i][$prop] = $file[$prop][$i];
-                    }
-                }
-            } else {
-                $ret[$k] = $file;
-            }
-        }
-        return $ret;
-    }
-
-    protected function _callProcessInput()
-    {
-        $showInvisible = Vps_Config::getValue('showInvisible');
-
-        $cacheId = 'procI-'.$this->getData()->getPageOrRoot()->componentId;
-        $success = false;
-        if (!$showInvisible) { //don't cache in preview
-            $processCached = Vps_Cache_Simple::fetch($cacheId, $success);
-        }
-        if (!$success) {
-            $process = $this->getData()
-                ->getRecursiveChildComponents(array(
-                        'page' => false,
-                        'flags' => array('processInput' => true)
-                    ));
-            if (Vps_Component_Abstract::getFlag($this->getData()->componentClass, 'processInput')) {
-                $process[] = $this->getData();
-            }
-
-            // TODO: Äußerst suboptimal
-            if ($this instanceof Vpc_Show_Component) {
-                $process += $this->getShowComponent()
-                    ->getRecursiveChildComponents(array(
-                        'page' => false,
-                        'flags' => array('processInput' => true)
-                    ));
-                if (Vps_Component_Abstract::getFlag(get_class($this->getShowComponent()->getComponent()), 'processInput')) {
-                    $process[] = $this->getData();
-                }
-            }
-            if (!$showInvisible) {
-                $datas = array();
-                foreach ($process as $p) {
-                    $datas[] = $p->vpsSerialize();
-                }
-                Vps_Cache_Simple::add($cacheId, $datas);
-            }
-        } else {
-            $process = array();
-            foreach ($processCached as $d) {
-                $process[] = Vps_Component_Data::vpsUnserialize($d);
-            }
-        }
-
-        $postData = $this->_getRequestWithFiles();
-        foreach ($process as $i) {
-            Vps_Benchmark::count('processInput', $i->componentId);
-            if (method_exists($i->getComponent(), 'preProcessInput')) {
-                $i->getComponent()->preProcessInput($postData);
-            }
-        }
-        foreach ($process as $i) {
-            if (method_exists($i->getComponent(), 'processInput')) {
-                $i->getComponent()->processInput($postData);
-            }
-        }
-        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_ModelObserver::getInstance()->process(false);
-        }
-        return $process;
-    }
-
-    protected function _callPostProcessInput($process)
-    {
-        $postData = $this->_getRequestWithFiles();
-        foreach ($process as $i) {
-            if (method_exists($i->getComponent(), 'postProcessInput')) {
-                $i->getComponent()->postProcessInput($postData);
-            }
-        }
-        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_ModelObserver::getInstance()->process();
-        }
-    }
-
-    public function sendContent($renderMaster = true)
-    {
-        header('Content-Type: text/html; charset=utf-8');
-        $process = $this->_callProcessInput();
-        Vps_Benchmark::checkpoint('processInput');
-        echo $this->getData()->render(null, $renderMaster);
-        Vps_Benchmark::checkpoint('render');
-        $this->_callPostProcessInput($process);
-        Vps_Benchmark::checkpoint('postProcessInput');
     }
 
     /**
@@ -550,4 +446,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         return $ret;
     }
+
+    /**
+     * @deprecated use ContentSender instead
+     */
+    final public function sendContent() {}
+    final protected function _callProcessInput() {}
+    final protected function _callPostProcessInput($process) {}
 }

@@ -10,7 +10,8 @@ class Vpc_Trl_MenuCache_Master extends Vpc_Root_TrlRoot_Master_Component
             'component' => 'Vpc_Trl_MenuCache_Category_Component',
             'model' => new Vps_Model_FnF(array(
                 'data' => array(
-                    array('id' => 'main', 'name' => 'main')
+                    array('id' => 'main', 'name' => 'main'),
+                    array('id' => 'bottom', 'name' => 'bottom'),
                 )
             ))
         );

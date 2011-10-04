@@ -18,6 +18,8 @@ Neue Features:
   custom components
 - childSettings: Components can change the settings of their children without inheriting
 - Vpc_Menu_EditableItems: allows attach components to menu items (including images)
+- It's now possible to have any content in a lightbox and still have an unique url
+
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
@@ -26,6 +28,8 @@ möglicherweise nicht kompatible Änderungen:
 - LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 - Vpc/List/Switch got completely changed
 - Menu: maxLevel setting removed (create own SubMenu component with different level)
+- Vpc_Abstract::sendContent moved to ContentSender class
+- ImageEnlarge changed a lot: JS Template got replaced by normal Component.tpl, HTML Layout changed a bit
 
 == 2.1 ==
 Erstellt: 21.06.11
