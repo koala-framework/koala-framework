@@ -43,6 +43,9 @@ class Vps_Component_View_Helper_Partials extends Vps_Component_View_Renderer
             }
             $ret .= $this->_getRenderPlaceholder($componentId, $config, $id, $type);
         }
+        if (empty($ids) && isset($params['noEntriesFound']) && $params['noEntriesFound']) {
+            $ret .= '<span class="noEntriesFound">' . $params['noEntriesFound'] . '<span>';
+        }
         return $ret;
     }
 
