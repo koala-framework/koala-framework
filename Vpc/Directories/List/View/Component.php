@@ -8,7 +8,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['paging'] = 'Vpc_Paging_Component';
-        $ret['placeholder']['noEntriesFound'] = trlVps('No entries were found.');
+        $ret['placeholder']['noEntriesFound'] = '';
         $ret['groupById'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['searchQueryFields'] = '*';
@@ -143,6 +143,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         if ($paging) {
             $ret = array_merge($ret, $paging->getComponent()->getPartialParams());
         }
+        $ret['noEntriesFound'] = $this->_getPlaceholder('noEntriesFound');
         return $ret;
     }
 
