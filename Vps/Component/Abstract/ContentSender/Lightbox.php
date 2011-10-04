@@ -30,7 +30,9 @@ class Vps_Component_Abstract_ContentSender_Lightbox extends Vps_Component_Abstra
             if (isset($options['height'])) $style .= "height: $options[height]px";
             $class = 'vpsLightbox';
             if (isset($options['style'])) $class .= " vpsLightbox$options[style]";
+            $options = htmlspecialchars(json_encode($options));
             $lightboxContent = "<div id=\"vpsLightbox\" class=\"$class\" style=\"$style\">\n".
+                "<input type=\"hidden\" class=\"options\" value=\"$options\" />".
                 "$lightboxContent\n</div>\n";
             echo preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
