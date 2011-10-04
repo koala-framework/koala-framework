@@ -11,6 +11,9 @@ class Vpc_Abstract_Events extends Vps_Component_Abstract_Events
                 'callback' => 'onOwnRowUpdate'
             );
         }
+        if (Vpc_Admin::getComponentFile($this->_class, 'Master', 'tpl')) {
+            //p('A');
+        }
         return $ret;
     }
 

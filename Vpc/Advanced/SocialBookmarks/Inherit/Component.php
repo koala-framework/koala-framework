@@ -25,13 +25,4 @@ class Vpc_Advanced_SocialBookmarks_Inherit_Component extends Vpc_Abstract
         }
         return null;
     }
-
-    public function getCacheMeta()
-    {
-        $ret = parent::getCacheMeta();
-        if ($c = $this->_getBookmarksComponent()) {
-            $ret[] = new Vps_Component_Cache_Meta_Component($c);
-        }
-        return $ret;
-    }
 }
