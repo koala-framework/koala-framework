@@ -19,7 +19,7 @@ Neue Features:
 - childSettings: Components can change the settings of their children without inheriting
 - Vpc_Menu_EditableItems: allows attach components to menu items (including images)
 - It's now possible to have any content in a lightbox and still have an unique url
-
+- Directories: Month/Category links now automatically show the number of items in componentLinks
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
