@@ -5,6 +5,7 @@ class Vpc_Directories_Month_Detail_Component extends Vpc_Directories_List_Compon
     {
         $ret = parent::getSettings();
         $ret['useDirectorySelect'] = false;
+        $ret['flags']['hasComponentLinkModifiers'] = true;
         return $ret;
     }
 
@@ -28,5 +29,16 @@ class Vpc_Directories_Month_Detail_Component extends Vpc_Directories_List_Compon
     protected function _getItemDirectory()
     {
         return $this->getData()->parent->parent;
+    }
+
+    public function getComponentLinkModifiers()
+    {
+        $cnt = $this->getItemDirectory()->countChildComponents($this->getSelect());
+        return array(
+            array(
+                'type' => 'appendText',
+                'text' => ' ('.$cnt.')'
+            )
+        );
     }
 }
