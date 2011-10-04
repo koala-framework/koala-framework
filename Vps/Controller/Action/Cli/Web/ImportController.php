@@ -6,6 +6,8 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
     private $_sshDir;
     public function indexAction()
     {
+        Vps_Component_ModelObserver::getInstance()->disable();
+
         $this->_useSshVps = file_exists('/usr/local/bin/sshvps');
         $localHosts = array(
             'vivid',
