@@ -29,6 +29,7 @@ class Vpc_Shop_Cart_Plugins_Discount_Component extends Vps_Component_Plugin_Abst
         $fs->add(new Vps_Form_Field_NumberField('discount_amount', trlcVps('Amount of Money', 'Amount')))
             ->setComment('€')
             ->setWidth(50);
+        $fs->add(new Vps_Form_Field_TextField('discount_comment', trlVps('Comment')));
     }
 
     public function getPlaceholders(Vpc_Shop_Cart_Order $order) {}
