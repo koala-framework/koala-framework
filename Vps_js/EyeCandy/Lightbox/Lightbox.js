@@ -1,437 +1,192 @@
-Vps.onContentReady(function()
-{
-    var components = Ext.query('a.vpsLightbox');
-    Ext.each(components, function(c) {
-        var link = Ext.get(c);
-        var settings = Ext.decode(link.child('.settings').getValue());
-        if (!link.lightboxProcessed) {
-            link.lightboxProcessed = true;
-            link.on('click', function (ev) {
-                ev.preventDefault();
-                Vps.Lightbox.Lightbox.open(link.dom, '.' + settings.sel, settings);
-            });
-            
+Vps.onContentReady(function() {
+    var els = document.getElementsByTagName('a');
+    for (var i=0; i<els.length; i++) {
+        if (els[i].vpsLightbox) continue;
+        var m = els[i].rel.match(/(^lightbox| lightbox)({.*?})?/)
+        if (m) {
+            var options = {};
+            if (m[2]) options = Ext.decode(m[2]);
+            var l;
+            if (Vps.EyeCandy.Lightbox.allByUrl[els[i].href]) {
+                l = Vps.EyeCandy.Lightbox.allByUrl[els[i].href];
+            } else {
+                l = new Vps.EyeCandy.Lightbox.Lightbox(Ext.get(els[i]), options);
+            }
+            els[i].vpsLightbox = l;
+            Ext.EventManager.addListener(els[i], 'click', function(ev) {
+                this.show();
+                ev.stopEvent();
+            }, l, { stopEvent: true });
         }
+    }
+
+    Ext.query('.vpsLightbox').each(function(el) {
+        if (el.vpsLightbox) return;
+        var lightboxEl = Ext.get(el);
+        var options = Ext.decode(lightboxEl.child('input.options').dom.value);
+        var l = new Vps.EyeCandy.Lightbox.Lightbox(null, options);
+        l.lightboxEl = lightboxEl;
+        l.style.afterCreateLightboxEl();
+        l.initialize();
+        l.style.onShow();
+        el.vpsLightbox = l;
+        Vps.EyeCandy.Lightbox.currentOpen = l;
     });
 });
 
-Ext.namespace("Vps.Lightbox");
-Vps.Lightbox.Lightbox = (function(link, config) {
-    var els = {},
-        items = [],
-        activeItem,
-        extboxBorders = [],
-        interfaceWidth,
-        interfaceHeight,
-        currentWidth = 250,
-        currentHeight = 250,
-        currentX,
-        currentY,
-        initialized = false,
-        selectors = [];
+Ext.ns('Vps.EyeCandy.Lightbox');
+Vps.EyeCandy.Lightbox.currentOpen = null;
+Vps.EyeCandy.Lightbox.allByUrl = {};
+Vps.EyeCandy.Lightbox.Lightbox = function(linkEl, options) {
+    this.linkEl = linkEl;
+    if (linkEl) Vps.EyeCandy.Lightbox.allByUrl[linkEl.dom.href] = this;
+    this.options = options;
+    if (options.style) {
+        this.style = new Vps.EyeCandy.Lightbox.Styles[options.style](this);
+    } else {
+        this.style = new Vps.EyeCandy.Lightbox.Styles.CenterBox(this);
+    }
+};
+Vps.EyeCandy.Lightbox.Lightbox.prototype = {
+    fetched: false,
+    createLightboxEl: function()
+    {
+        if (this.lightboxEl) return;
 
-    return {
-        version: '1.0',
-        opts: {},
-        defaults: {
-            current: trlVps('Entry {current} of {total}'),
-            previous: '&#8592;',
-            next: '&#8594;',
-            close: 'close',
-            width: false,
-            height: false,
-            innerWidth: false,
-            innerHeight: false,
-            maxWidth: '90%',
-            maxHeight: '90%',
-            group: true,
-            resizeDuration: 0.3,
-            overlayOpacity: 0.1,
-            overlayDuration: 0.2,
-            hideInfo: false,
-            easing: 'easeNone',
-            title: false,
-            navigate: true
-        },
-        
-        // ************* open *****************
-        open: function(item, sel, options) {
-            Ext.apply(this.opts, options, this.defaults);
-            this.setViewSize();
-            els.overlay.fadeIn({
-                duration: this.opts.overlayDuration,
-                endOpacity: this.opts.overlayOpacity,
-                callback: function() {
-                    items = [];
-                    var index = 0;
-                    if(!this.opts.group) {
-                        items.push(item);
-                    } else {
-                        var currentItems = Ext.query(sel);
-                        var currentIndex = 0;
-                        for (var i in currentItems) {
-                            var currentItem = Ext.get(currentItems[i]);
-                            if (currentItem && currentItem.isVisible(true)) {
-                                items.push(currentItem.dom);
-                                if (currentItem.dom == item) index = currentIndex;
-                                currentIndex++;
+        var lightbox = Ext.getBody().createChild({
+            cls: 'vpsLightbox vpsLightbox'+this.options.style,
+            html: '<div class="loading"></div>'
+        });
+        lightbox.dom.vpsLightbox = this; //don't initialize again in onContentReady
+        lightbox.enableDisplayMode('block');
+        if (this.options.width) {
+            lightbox.setWidth(this.options.width + lightbox.getBorderWidth("lr") + lightbox.getPadding("lr"));
+        }
+        if (this.options.height) {
+            lightbox.setHeight(this.options.height + lightbox.getBorderWidth("tb") + lightbox.getPadding("tb"));
+        }
+        this.lightboxEl = lightbox;
+        this.style.afterCreateLightboxEl();
+        lightbox.hide();
+    },
+    fetchContent: function()
+    {
+        if (this.fetched) return;
+        this.fetched = true;
+
+        var url = '/vps/util/vpc/render';
+        if (Vps.Debug.rootFilename) url = Vps.Debug.rootFilename + url;
+        Ext.Ajax.request({
+            params: { url: this.linkEl.dom.href },
+            url: url,
+            success: function(response, options) {
+                var contentEl = this.lightboxEl.createChild();
+                if (this.lightboxEl.isVisible()) contentEl.hide();
+                contentEl.update(response.responseText);
+                var imagesToLoad = 0;
+                contentEl.query('img').each(function(imgEl) {
+                    imagesToLoad++;
+                    imgEl.onload = (function() {
+                        imagesToLoad--;
+                        if (imagesToLoad <= 0) {
+                            this.lightboxEl.child('.loading').hide();
+                            if (this.lightboxEl.isVisible()) {
+                                contentEl.fadeIn();
+                                this.preloadLinks();
                             }
                         }
-                    }
-
-                    // calculate top and left offset for the extbox
-                    var pageScroll = Ext.fly(document).getScroll();
-                    var extboxTop = (Ext.lib.Dom.getViewportHeight() - currentHeight) / 2 + pageScroll.top;
-                    var extboxLeft = (Ext.lib.Dom.getViewportWidth() - currentWidth) / 2 + pageScroll.left;
-
-                    els.extbox.setStyle({
-                        top: extboxTop + 'px',
-                        left: extboxLeft + 'px'
-                    }).show();
-
-                    this.loadItem(index);
-
-                    // update controls
-                    if (this.opts.navigate) {
-                        els.navPrev.update(this.opts.previous);
-                        els.navNext.update(this.opts.next);
-                    }
-                    els.navClose.update(this.opts.close);
-                    
-                    // check info visibility
-                    if (this.opts.hideInfo == 'auto') {
-                        els.extbox.on('mouseenter', this.showInfo, this);
-                        els.extbox.on('mouseleave', this.hideInfo, this);
-                        els.info.hide();
-                    } else if (this.opts.hideInfo === false) {
-                        els.extbox.un('mouseenter', this.showInfo, this);
-                        els.extbox.un('mouseleave', this.hideInfo, this);
-                        els.info.show();
-                    } else if (this.opts.hideInfo === true) {
-                        els.extbox.un('mouseenter', this.showInfo, this);
-                        els.extbox.un('mouseleave', this.hideInfo, this);
-                        els.info.hide();
-                    }
-
-                    Ext.fly(window).on('resize', this.resizeWindow, this);
-                    this.fireEvent('open', items[index]);
-                },
-                scope: this
-            });
-        },
-        
-        loadItem: function(index) {
-            var timeout, loadContent = {};
-            activeItem = index;
-            this.disableKeyNav();
-            els.loadingOverlay.show();
-            els.loading.show();
-
-            if (this.opts.inline) {
-                isImg = false;
-                currentX = false;
-                currentY = false;
-                var cnt = Ext.query(this.opts.href);
-                loadContent = {
-                    tag: 'div',
-                    id: 'vpsLightbox-loadedContent',
-                    'class': 'vpsLightboxLoadedContent',
-                    html: cnt[0].innerHTML,
-                    style: {display: 'none'}
-                };
-                
-                Ext.DomHelper.overwrite(els.content, loadContent);
-                this.resize();
-            } else {
-                var url = items[activeItem].href;
-                Ext.Ajax.request({
-                    params: {url: url},
-                    url: '/vps/util/render/render',
-                    success: function(response, options, r) {
-                        currentX = false;
-                        currentY = false;
-                        loadContent = {
-                            tag: 'div',
-                            id: 'vpsLightbox-loadedContent',
-                            'class': 'vpsLightboxLoadedContent',
-                            html: response.responseText,
-                            style: {display: 'none'}
-                        };
-                        Ext.DomHelper.overwrite(els.content, loadContent);
-                        Vps.callOnContentReady();
-                        this.resize();
-                    },
-                    scope: this
-                });
-            }
-            
-            // update Nav
-            (function () {
-                this.enableKeyNav();
-
-                // if not first image in set, display prev image button
-                if (activeItem < 1) {
-                    els.navPrev.hide();
-                } else {
-                    els.navPrev.show();
-                }
-
-                // if not last image in set, display next image button
-                if (activeItem >= (items.length - 1)) {
-                    els.navNext.hide();
-                } else {
-                    els.navNext.show();
-                }
-                els.loadingOverlay.hide();
-                els.loading.hide();
-            }).defer(this.opts.resizeDuration * 1000, this);
-        },
-        
-        // ************* init *****************
-        init: function() {
-            if(!initialized) {
-                Ext.apply(this, Ext.util.Observable.prototype);
-                Ext.util.Observable.constructor.call(this);
-                this.addEvents('open', 'close');
-                this.initMarkup();
-                this.initEvents();
-                initialized = true;
-            }
-        },
-        
-        initMarkup: function() {
-            els.overlay = Ext.DomHelper.insertFirst(document.body, {
-                id: 'vpsLightbox-overlay',
-                'class': 'vpsLightboxOverlay'
-            }, true);
-            els.overlay.setVisibilityMode(Ext.Element.DISPLAY).hide();
-            
-            var extboxTpl = new Ext.Template(this.getTemplate());
-            els.extbox = extboxTpl.insertAfter(els.overlay, {}, true);
-            els.extbox.setVisibilityMode(Ext.Element.DISPLAY).hide();
-            
-            var ids = ['container', 'content', 'loadingOverlay', 'loading', 'navPrev', 'navNext', 'navClose', 'info', 'title', 'current'];
-            Ext.each(ids, function(id){
-                els[id] = Ext.get('vpsLightbox-' + id);
-            });
-            extboxBorders = [(
-                els.extbox.getPadding('t') +
-                els.extbox.getBorderWidth('t')
-            ), (
-                els.extbox.getPadding('r') +
-                els.extbox.getBorderWidth('r')
-            ), (
-                els.extbox.getPadding('b') +
-                els.extbox.getBorderWidth('b')
-            ), (
-                els.extbox.getPadding('l') +
-                els.extbox.getBorderWidth('l')
-            )];
-            interfaceWidth =
-                els.container.getPadding('rl') +
-                els.container.getBorderWidth('rl') +
-                els.content.getPadding('rl') +
-                els.content.getBorderWidth('rl') +
-                parseInt(els.container.getStyle('margin-left'), 10) +
-                parseInt(els.container.getStyle('margin-right'), 10);
-            interfaceHeight =
-                els.container.getPadding('tb') +
-                els.container.getBorderWidth('tb') +
-                els.content.getPadding('tb') +
-                els.content.getBorderWidth('tb') +
-                parseInt(els.container.getStyle('margin-top'), 10) +
-                parseInt(els.container.getStyle('margin-bottom'), 10);
-
-            els.extbox.setStyle({
-                width: currentWidth + 'px',
-                height: currentHeight + 'px'
-            });
-        },
-        
-        getTemplate : function() {
-            return [
-                '<div id="vpsLightbox" class="vpsLightbox webStandard">',
-                    '<div id="vpsLightbox-container" class="vpsLightboxContainer">',
-                        '<div id="vpsLightbox-content" class="vpsLightboxContent">',
-
-                        '</div>',
-                        '<div id="vpsLightbox-loadingOverlay" class="vpsLightboxLoadingOverlay">',
-                            '<div id="vpsLightbox-loading" class="vpsLightboxLoading"></div>',
-                        '</div>',
-                        '<div id="vpsLightbox-navPrev" class="vpsLightboxNavPrev"></div>',
-                        '<div id="vpsLightbox-navNext" class="vpsLightboxNavNext"></div>',
-                        '<div id="vpsLightbox-navClose" class="vpsLightboxNavClose"></div>',
-                        '<div id="vpsLightbox-info" class="vpsLightboxInfo">',
-                            '<div id="vpsLightbox-title" class="vpsLightboxTitle"></div>',
-                            '<div id="vpsLightbox-current" class="vpsLightboxCurrent"></div>',
-                        '</div>',
-                    '</div>',
-                '</div>'
-            ];
-        },
-        
-        initEvents: function() {
-            var close = function(ev) {
-                ev.preventDefault();
-                this.close();
-            };
-
-            els.overlay.on('click', close, this);
-            els.navClose.on('click', close, this);
-
-            els.extbox.on('click', function(ev) {
-                if(ev.getTarget().id == 'vpsLightbox') {
-                    this.close();
-                }
-            }, this);
-            
-            els.navPrev.on('click', function(ev) {
-                ev.preventDefault();
-                this.loadItem(activeItem - 1);
-            }, this);
-
-            els.navNext.on('click', function(ev) {
-                ev.preventDefault();
-                this.loadItem(activeItem + 1);
-            }, this);
-        },
-        
-        // ************* helping methods *****************
-        setViewSize: function() {
-            var viewSize = [
-                Math.max(Ext.lib.Dom.getViewWidth(), Ext.lib.Dom.getDocumentWidth()),
-                Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight())
-            ];
-            els.overlay.setStyle({
-                width: viewSize[0] + 'px',
-                height: viewSize[1] + 'px'
-            });
-        },
-        
-        resize: function (w, h) {
-            var c, x, y, cx, cy, cl, ct, loadedContent;
-            var viewSize = [Ext.lib.Dom.getViewWidth(), Ext.lib.Dom.getViewHeight()];
-            var pageScroll = Ext.fly(document).getScroll();
-            var maxW = this.setSize(this.opts.maxWidth, 'x') - extboxBorders[3] - extboxBorders[1] - interfaceWidth;
-            var maxH = this.setSize(this.opts.maxWidth, 'y') - extboxBorders[0] - extboxBorders[2] - interfaceHeight;
-            cx = w || this.opts.innerWidth;
-            cy = h || this.opts.innerHeight;
-            x = (cx) ?
-                cx : (this.opts.width) ?
-                    this.opts.width - extboxBorders[3] - extboxBorders[1] : maxW;
-            y = (cy) ?
-                cy : (this.opts.height) ?
-                    this.opts.height - extboxBorders[0] - extboxBorders[2] : maxH;
-            x = parseInt(x, 10);
-            y = parseInt(y, 10);
-            currentWidth = x + interfaceWidth + extboxBorders[1] + extboxBorders[3];
-            currentHeight = y + interfaceHeight + extboxBorders[0] + extboxBorders[2];
-            cl = ((viewSize[0] - x - extboxBorders[1] - extboxBorders[3] - interfaceWidth) / 2) + pageScroll.left;
-            ct = ((viewSize[1] - y - extboxBorders[0] - extboxBorders[2] - interfaceHeight) / 2)  + pageScroll.top;
-            cl = (cl > 0) ? cl : 0;
-            ct = (ct > 0) ? ct : 0;
-            Ext.Fx.syncFx();
-
-            els.extbox.shift({
-                width: currentWidth,
-                height: currentHeight,
-                left: cl,
-                top: ct,
-                easing: this.opts.easing,
-                duration: this.opts.resizeDuration,
-                scope: this
-            });
-            els.content.shift({
-                width: x,
-                height: y,
-                easing: this.opts.easing,
-                duration: this.opts.resizeDuration,
-                scope: this,
-                callback: function() {
-                    // update details
-                    var title = this.opts.title || items[activeItem].title
-                    els.title.update(title);
-                    //els.title.show();
-                    if (items.length > 1) {
-                        els.current.update(this.opts.current.replace(/\{current\}/, activeItem+1).replace(/\{total\}/, items.length));
-                        //els.current.show();
-                    } else {
-                        els.current.update('');
-                    }
-                }
-            });
-            loadedContent = Ext.get('vpsLightbox-loadedContent');
-            if (loadedContent !== null && loadedContent.isVisible()) {
-                loadedContent.shift({
-                    width: x,
-                    height: y,
-                    easing: this.opts.easing,
-                    duration: this.opts.resizeDuration
-                });
-            } else {
-                loadedContent.shift({
-                    width: x,
-                    height: y,
-                    easing: this.opts.easing,
-                    duration: this.opts.resizeDuration
-                }).fadeIn({duration: this.opts.resizeDuration/2});
-            }
-            Ext.Fx.sequenceFx();
-        },
-        
-        resizeWindow: function() {
-                    this.setViewSize();
-                    this.resize(currentX, currentY);
-        },
-        
-        showInfo: function() {
-            els.info.stopFx().fadeIn({duration: this.opts.resizeDuration});
-        },
-        
-        hideInfo: function() {
-            els.info.stopFx().fadeOut({duration: this.opts.resizeDuration});
-        },
-        
-        enableKeyNav: function() {
-            Ext.fly(document).on('keydown', this.keyNavAction, this);
-        },
-        
-        disableKeyNav: function() {
-            Ext.fly(document).un('keydown', this.keyNavAction, this);
-        },
-        
-        keyNavAction: function(ev) {
-            var keyCode = ev.getKey();
-            if (keyCode == 27) { // Esc
-                this.close();
-            } else if (keyCode == 80 || keyCode == 37) { // display previous item
-                if (activeItem != 0){
-                    this.loadItem(activeItem - 1);
-                }
-            } else if (keyCode == 78 || keyCode == 39) { // display next item
-                if (activeItem != (items.length - 1)) {
-                    this.loadItem(activeItem + 1);
-                }
-            }
-        },
-        
-        close: function() {
-            this.disableKeyNav();
-            els.extbox.hide();
-            els.overlay.fadeOut({
-                duration: this.opts.overlayDuration
-            });
-            Ext.DomHelper.overwrite(els.content, '');
-            Ext.DomHelper.overwrite(els.title, '');
-            Ext.DomHelper.overwrite(els.current, '');
-            Ext.fly(window).un('resize', this.resizeWindow, this);
-            this.fireEvent('close', activeItem);
-        },
-        
-        setSize: function (size, dimension) {
-            dimension = dimension === 'x' ? Ext.lib.Dom.getViewWidth() : Ext.lib.Dom.getViewHeight();
-            return (typeof size === 'string') ? Math.round((size.match(/%/) ? (dimension / 100) * parseInt(size, 10) : parseInt(size, 10))) : size;
+                    }).createDelegate(this);
+                }, this);
+                Vps.callOnContentReady();
+                this.initialize();
+            },
+            failure: function() {
+                //fallback
+                location.href = this.linkEl.dom.href;
+            },
+            scope: this
+        });
+    },
+    show: function()
+    {
+        if (Vps.EyeCandy.Lightbox.currentOpen) {
+            Vps.EyeCandy.Lightbox.currentOpen.close();
         }
+        Vps.EyeCandy.Lightbox.currentOpen = this;
+
+        this.createLightboxEl();
+        this.style.onShow();
+        this.lightboxEl.addClass('vpsLightboxOpen');
+        if (this.fetched) {
+            if (!this.lightboxEl.isVisible()) {
+                this.lightboxEl.fadeIn();
+                this.preloadLinks();
+            }
+        } else {
+            this.lightboxEl.show();
+            this.fetchContent();
+        }
+    },
+    close: function() {
+        this.style.onClose();
+        this.lightboxEl.fadeOut();
+        this.lightboxEl.removeClass('vpsLightboxOpen');
+        Vps.EyeCandy.Lightbox.currentOpen = null;
+    },
+    initialize: function()
+    {
+        this.lightboxEl.child('.closeButton').on('click', function(ev) {
+            this.close();
+            ev.stopEvent();
+        }, this);
+    },
+    preloadLinks: function() {
+        this.lightboxEl.query('a.preload').each(function(el) {
+            el.vpsLightbox.preload();
+        }, this);
+    },
+    preload: function() {
+        this.createLightboxEl();
+        this.fetchContent();
     }
-})();
-Ext.onReady(Vps.Lightbox.Lightbox.init, Vps.Lightbox.Lightbox);
+};
+
+
+
+Vps.EyeCandy.Lightbox.Styles = {};
+Vps.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
+    this.lightbox = lightbox;
+};
+Vps.EyeCandy.Lightbox.Styles.Abstract.prototype = {
+    afterCreateLightboxEl: Ext.emptyFn,
+    onShow: Ext.emptyFn,
+    onClose: Ext.emptyFn,
+
+    mask: function() {
+        var maskEl = Ext.getBody().mask();
+        Ext.getBody().removeClass('x-masked');
+        maskEl.addClass('lightboxMask');
+
+        maskEl.setHeight(Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight()));
+
+        maskEl.on('click', function() {
+            this.lightbox.close();
+        }, this);
+    },
+    unmask: function() {
+        Ext.getBody().unmask();
+        Ext.getBody().removeClass('lightboxShowOverflow');
+    }
+};
+
+Vps.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Vps.EyeCandy.Lightbox.Styles.Abstract, {
+    afterCreateLightboxEl: function() {
+        this.lightbox.lightboxEl.center();
+    },
+    onShow: function() {
+        this.mask();
+    },
+    onClose: function() {
+        this.unmask();
+    }
+});

@@ -7,12 +7,8 @@ class Vpc_Export_Json_Component extends Vpc_Abstract
         // TODO: viewcache nicht deaktiveren
         // löschen muss korrekt eingebaut werden
         $ret['viewCache'] = false;
-        return $ret;
-    }
 
-    public function sendContent()
-    {
-        header('Content-type: application/json; charset: utf-8');
-        echo Zend_Json::encode($this->getData()->parent->getComponent()->getExportData());
+        $ret['contentSender'] = 'Vpc_Export_Json_ContentSender';
+        return $ret;
     }
 }

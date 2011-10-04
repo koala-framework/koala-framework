@@ -4,7 +4,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Chained_Abstract_Component
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings();
-        $copySettings = array('componentName', 'componentIcon', 'editComponents', 'viewCache');
+        $copySettings = array('componentName', 'componentIcon', 'editComponents', 'viewCache', 'contentSender');
         $copyFlags = array('processInput', 'menuCategory', 'chainedType', 'subroot', 'hasAlternativeComponent');
         $ret = Vpc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Trl', $copySettings, $copyFlags);
         return $ret;

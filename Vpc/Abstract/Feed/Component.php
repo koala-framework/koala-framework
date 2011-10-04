@@ -1,18 +1,18 @@
 <?php
 abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['contentSender'] = 'Vpc_Abstract_Feed_ContentSender';
+        return $ret;
+    }
+
     abstract protected function _getRssEntries();
 
     protected function _getRssTitle()
     {
         return Zend_Registry::get('config')->application->name;
-    }
-
-    public function sendContent()
-    {
-        $xml = $this->getXml();
-        header('Content-type: application/rss+xml; charset: utf-8');
-        echo $xml;
     }
 
     public function getXml()
