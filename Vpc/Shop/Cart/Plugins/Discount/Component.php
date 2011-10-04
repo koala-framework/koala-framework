@@ -9,8 +9,9 @@ class Vpc_Shop_Cart_Plugins_Discount_Component extends Vps_Component_Plugin_Abst
         return $ret;
     }
 
-    public function getAdditionalSumRows(Vpc_Shop_Cart_Order $order, $total)
+    public function getAdditionalSumRows($order, $total)
     {
+        if (!$order instanceof Vpc_Shop_Cart_Order) return array();
         if (!$order->discount_amount) return array();
 
         $amount = -(float)$order->discount_amount;
