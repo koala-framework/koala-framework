@@ -1,27 +1,17 @@
 <?php
-class Vpc_Advanced_SocialBookmarks_TestModel extends Vps_Model_FnF
+class Vpc_Advanced_SocialBookmarks_TestModel extends Vpc_Advanced_SocialBookmarks_Model
 {
-    protected $_primaryKey = 'component_id';
-    protected function _init()
+    public function __construct(array $config = array())
     {
-        $this->_data = array(
-            array(
-                'component_id'=>'root-socialBookmarks',
-                'data'=>serialize(array(
-                    'autoId' => 3,
-                    'data' => array(
-                        array('id'=>1, 'network_id'=>'facebook'),
-                        array('id'=>2, 'network_id'=>'twitter'),
-                    )
-                ))
-            )
-        );
+        $config['proxyModel'] = new Vps_Model_FnFFile(array(
+            'primaryKey' => 'component_id',
+            'data' => array(
+                array('component_id'=>'root-socialBookmarks'),
+            ),
+            'uniqueIdentifier' => get_class($this).'-Proxy'
+        ));
 
-        $this->_dependentModels = array(
-            'Networks' => new Vps_Model_FieldRows(array(
-                'fieldName' => 'data'
-            ))
-        );
-        parent::_init();
+        $this->_dependentModels['Networks'] = 'Vpc_Advanced_SocialBookmarks_TestNetworksModel';
+        parent::__construct($config);
     }
 }
