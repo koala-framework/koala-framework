@@ -496,11 +496,19 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function setCurrentPage(Vps_Component_Data $page)
     {
         $this->_currentPage = $page;
     }
 
+    /**
+     * @deprecated
+     *
+     * I will kick your ass if you use this
+     */
     public function getCurrentPage()
     {
         return $this->_currentPage;
