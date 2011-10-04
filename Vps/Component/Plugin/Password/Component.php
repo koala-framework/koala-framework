@@ -55,6 +55,16 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         return $session->login;
     }
 
+    public function getTemplateVars()
+    {
+        $templateVars = array();
+        $templateVars['loginForm'] = Vps_Component_Data_Root::getInstance()
+            ->getComponentById($this->_componentId, array('ignoreVisible' => true))->getChildComponent('-loginForm');
+        $templateVars['wrongLogin'] = isset($_POST['login_password']);
+        $templateVars['placeholder'] = Vpc_Abstract::getSetting(get_class($this), 'placeholder');
+        return $templateVars;
+    }
+
     public function processOutput($output)
     {
         //TODO: nicht auf $_POST zugreifen sondern loginForm->getFormRow()
@@ -65,15 +75,9 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
             return $output;
         }
 
-        $templateVars = array();
-        $templateVars['loginForm'] = Vps_Component_Data_Root::getInstance()
-            ->getComponentById($this->_componentId, array('ignoreVisible' => true))->getChildComponent('-loginForm');
-        $templateVars['wrongLogin'] = isset($_POST['login_password']);
-        $templateVars['placeholder'] = Vpc_Abstract::getSetting(get_class($this), 'placeholder');
-
         $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
         $view = new Vps_View_Component();
-        $view->assign($templateVars);
+        $view->assign($this->getTemplateVars());
         return $view->render($template);
     }
 }

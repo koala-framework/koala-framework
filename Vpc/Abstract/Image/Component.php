@@ -227,9 +227,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $s = $this->_getImageDimensions();
 
         if ($data && $data['file'] && file_exists($data['file'])) {
-            $sourceSize = @getimagesize($data['file']);
-            if (!$sourceSize) return null;
-            return Vps_Media_Image::calculateScaleDimensions($sourceSize, $s);
+            return Vps_Media_Image::calculateScaleDimensions($data['file'], $s);
         }
         return $s;
     }

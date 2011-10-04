@@ -4,7 +4,6 @@ class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Compon
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['detail']['class'] = 'Vpc_Newsletter_GeneratorDetail';
         $ret['generators']['detail']['component'] = 'Vpc_Newsletter_Detail_Component';
 
         // wird von der Mail_Redirect gerendered

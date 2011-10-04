@@ -191,9 +191,22 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         return $this->_isDirty();
     }
 
+    /**
+     * Nötig wenn man in einer Form Cards hat (jede Card mit eigener Form) und die
+     * Card-Forms als Sibling gespeichert werden. Da will man dann immer nur ein
+     * Sibling speichern (das von der ausgewählten Card), aber beim load() will
+     * man alle Siblings dabei haben. Wenn man dann diese Funktion überschreibt
+     * kann man nur ein Sibling zurückgeben und genau das wird dann beim speichern
+     * verwendet und beim load() wird _getSiblingRows() direkt verwendet.
+     */
+    protected function _getSiblingRowsForSave()
+    {
+        return $this->_getSiblingRows();
+    }
+
     public function save()
     {
-        foreach ($this->_getSiblingRows() as $k=>$r) {
+        foreach ($this->_getSiblingRowsForSave() as $k=>$r) {
             if (!$r->getModel() instanceof Vps_Model_SubModel_Interface) {
                 $ref = $r->getModel()->getReferenceByModelClass(get_class($this->_model), $k);
                 if (!$r->{$ref['column']}) {

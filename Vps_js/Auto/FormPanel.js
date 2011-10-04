@@ -161,7 +161,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().resetDirty();
         }
 
-        Ext.Ajax.request({
+        if (!this.loadConn) this.loadConn = new Vps.Connection({ autoAbort: true });
+        this.loadConn.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
             loadOptions: options,
             url: this.controllerUrl+'/json-load',
@@ -352,7 +353,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
         });
     },
-    onAdd : function() {
+    onAdd : function(options) {
         var cb = function() {
             this.enable();
             if (this.deleteButton) this.deleteButton.disable();
@@ -362,19 +363,23 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().clearInvalid();
             this.fireEvent('addaction', this);
 
-			if (this.ownerCt instanceof Ext.TabPanel) {
+            if (this.ownerCt instanceof Ext.TabPanel) {
                 //wenn  form in einem tab, die form anzeigen
                 //nach addaction, damit in grid an dem die form gebunden ist die activeId
                 //auf 0 gesetzt werden kann
                 this.ownerCt.setActiveTab(this);
             } else if (this.getFormPanel() && this.getFormPanel().items.first()
                         && this.getFormPanel().items.first().items.first()
-						&& this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel
+                        && this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel
                         && this.getFormPanel().items.first().items.first().items.first()) {
                 //und das gleiche auch noch wenn IN der form tabs sind
                 //da den ersten tab öffnen
                 var tabs = this.getFormPanel().items.first().items.first();
                 tabs.setActiveTab(tabs.items.first());
+            }
+
+            if (options && options.success) {
+                options.success.call(options.scope || this);
             }
         };
         if (!this.getForm()) {

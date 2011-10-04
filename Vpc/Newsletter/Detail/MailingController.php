@@ -58,7 +58,10 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
             ->whereEquals('newsletter_id', $this->_getNewsletterRow()->id);
         $count = $this->_model->countRows($select);
 
-        $select->whereEquals('status', 'queued');
+        $select->where(new Vps_Model_Select_Expr_Or(array(
+            new Vps_Model_Select_Expr_Equals('status', 'queued'),
+            new Vps_Model_Select_Expr_Equals('status', 'userNotFound')
+        )));
         $count2 = $this->_model->countRows($select);
         $this->_model->deleteRows($select);
         $this->view->message = trlVps(
@@ -69,8 +72,8 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
 
     protected function _hasPermissions($row, $action)
     {
-        if ($action == 'delete' && $row->status != 'queued') {
-            throw new Vps_ClientException(trlVps('Can only delete queued recipients'));
+        if ($action == 'delete' && $row->status != 'queued' && $row->status != 'userNotFound') {
+            throw new Vps_Exception_Client(trlVps('Can only delete queued recipients'));
         }
         return parent::_hasPermissions($row, $action);
     }

@@ -79,7 +79,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return parent::__get($var);
     }
 
-    public function getPageByUrl($url, $acceptLangauge)
+    /**
+     * @return Vps_Component_Data
+     */
+    public function getPageByUrl($url, $acceptLanguage)
     {
         $parsedUrl = parse_url($url);
         if (!isset($parsedUrl['path'])) return null;
@@ -102,9 +105,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
         }
         $path = trim($path, '/');
-        return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
+        return $this->getComponent()->getPageByUrl($path, $acceptLanguage);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentById($componentId, $select = array())
     {
         if (isset($this->_dataCache[$componentId])) {
