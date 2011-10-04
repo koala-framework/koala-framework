@@ -1,0 +1,1 @@
+<?=$this->componentLink($this->data->parent->getChildComponent('_page1'))?>

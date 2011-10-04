@@ -1,12 +1,19 @@
 <?php
 class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
 {
-    public function componentLink($target, $text = null, $cssClass = null, $get = array(), $anchor = null)
+    /**
+     * @param Vps_Component_Data target page
+     * @param string custom text, if empty component name will be used
+     * @param config array: cssClass, get, anchor, skipComponentLinkModifiers
+     */
+    public function componentLink($target, $text = null, $config = array())
     {
+        if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
+
         if ($target instanceof Vps_Component_Data) {
             $target = $this->getTargetPage($target);
             if (!$text) $text = $target->name;
-            return $this->getLink($target->url, $target->rel, $text, $cssClass, $get, $anchor);
+            return $this->getLink($target->url, $target->rel, $text, $config);
         } else {
             if (is_array($target)) {
                 $url = $target['url'];
@@ -15,23 +22,29 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
                 $url = $target;
                 $rel = '';
             }
-            return $this->getLink($url, $rel, $text, $cssClass, $get, $anchor);
+            return $this->getLink($url, $rel, $text, $config);
         }
     }
 
-    public function getLink($url, $rel, $text, $cssClass, $get, $anchor)
+    public function getLink($url, $rel, $text, $config)
     {
-        if (!empty($get)) {
+        if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
+
+        if (!empty($config['get'])) {
             $url .= '?';
-            foreach ($get as $key => $val) $url .= "&$key=$val";
+            foreach ($config['get'] as $key => $val) $url .= "&$key=$val";
         }
         if ($this->_getRenderer() instanceof Vps_View_MailInterface) {
             $url = '*redirect*' . $url . '*';
         }
 
-        if ($anchor) $url .= "#$anchor";
-        if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
-        $cssClass = $cssClass ? " class=\"$cssClass\"" : '';
+        if (!empty($config['get'])) $url .= "#".$config['get'];
+        $cssClass = '';
+        if (!empty($config['cssClass'])) {
+            $cssClass = $config['cssClass'];
+            if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
+            $cssClass = " class=\"$cssClass\"";
+        }
         return "<a href=\"".htmlspecialchars($url)."\" rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
     }
 

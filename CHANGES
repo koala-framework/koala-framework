@@ -30,6 +30,7 @@ möglicherweise nicht kompatible Änderungen:
 - Menu: maxLevel setting removed (create own SubMenu component with different level)
 - Vpc_Abstract::sendContent moved to ContentSender class
 - ImageEnlarge changed a lot: JS Template got replaced by normal Component.tpl, HTML Layout changed a bit
+- componentLink helper: parameters $get and $anchor got removed, 3rd parameter now is a config array
 
 == 2.1 ==
 Erstellt: 21.06.11
