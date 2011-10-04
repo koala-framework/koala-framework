@@ -22,8 +22,10 @@ Vps.onContentReady(function() {
 
     Ext.query('.vpsLightbox').each(function(el) {
         if (el.vpsLightbox) return;
-        var l = new Vps.EyeCandy.Lightbox.Lightbox(null, {});
-        l.lightboxEl = Ext.get(el);
+        var lightboxEl = Ext.get(el);
+        var options = Ext.decode(lightboxEl.child('input.options').dom.value);
+        var l = new Vps.EyeCandy.Lightbox.Lightbox(null, options);
+        l.lightboxEl = lightboxEl;
         l.style.afterCreateLightboxEl();
         l.initialize();
         l.style.onShow();
