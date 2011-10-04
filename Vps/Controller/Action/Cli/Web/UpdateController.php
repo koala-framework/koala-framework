@@ -28,6 +28,8 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
     }
     public function indexAction()
     {
+        Vps_Component_ModelObserver::getInstance()->disable();
+
         if ($this->_getParam('class')) {
             $update = Vps_Update::createUpdate($this->_getParam('class'));
             if (!$update) { echo 'could not create update.'; exit; }
