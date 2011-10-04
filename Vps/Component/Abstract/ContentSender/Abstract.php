@@ -1,6 +1,9 @@
 <?php
 abstract class Vps_Component_Abstract_ContentSender_Abstract
 {
+    /**
+     * @var Vps_Component_Data
+     */
     protected $_data;
     public function __construct(Vps_Component_Data $data)
     {
