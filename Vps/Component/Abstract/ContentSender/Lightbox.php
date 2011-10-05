@@ -3,7 +3,11 @@ class Vps_Component_Abstract_ContentSender_Lightbox extends Vps_Component_Abstra
 {
     protected function _getOptions()
     {
-        return array();
+        $ret = array();
+        if (Vpc_Abstract::hasSetting($this->_data->componentClass, 'lightboxOptions')) {
+            $ret =  Vpc_Abstract::getSetting($this->_data->componentClass, 'lightboxOptions');
+        }
+        return $ret;
     }
 
     public function sendContent($includeMaster = true)
