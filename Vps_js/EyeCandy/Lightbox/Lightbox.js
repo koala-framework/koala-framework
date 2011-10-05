@@ -24,6 +24,7 @@ Vps.onContentReady(function() {
         if (el.vpsLightbox) return;
         var l = new Vps.EyeCandy.Lightbox.Lightbox(null, {});
         l.lightboxEl = Ext.get(el);
+        l.lightboxEl.enableDisplayMode('block');
         l.style.afterCreateLightboxEl();
         l.initialize();
         l.style.onShow();
