@@ -53,10 +53,6 @@ class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
         if (!$graph) return null;
 
         $row = $component->getComponent()->getRow();
-        Vps_Component_Cache::getInstance()->saveMeta(
-            $component,
-            new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
-        );
 
         $start = strtotime('-'.$row->duration.' days');
         $output = $graph->getContents(array(
@@ -70,13 +66,5 @@ class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
             'mimeType' => 'image/png',
             'mtime' => time()
         );
-    }
-
-    public function onCacheCallback($row)
-    {
-        $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->componentId, 'default'
-        );
-        Vps_Media::getOutputCache()->remove($cacheId);
     }
 }

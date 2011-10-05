@@ -36,7 +36,7 @@ class Vpc_Basic_Feed_Test extends Vpc_TestAbstract
         $this->assertEquals($row->content, $feed->getComponent()->getXml());
 
         // Cache löschen
-        Vps_Component_Cache::getInstance()->cleanByRow($feedRow);
+        $this->_process();
         $xml = $feed->getComponent()->getXml();
         $this->assertEquals('<?xml', substr($xml, 0, 5));
         $this->assertTrue(strpos($xml, '<rss') !== false);

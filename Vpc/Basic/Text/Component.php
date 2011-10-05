@@ -62,6 +62,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
         return $ret;
     }
 

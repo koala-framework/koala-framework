@@ -14,6 +14,7 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
         );
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'text';
         return $ret;
     }
 

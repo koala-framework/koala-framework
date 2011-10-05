@@ -123,6 +123,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
         $c = $this->_root->getComponentById('1605');
         $row = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel')->getRow('1605');
+        $row->vps_upload_id = 2;
         $row->save();
         Vps_Component_ModelObserver::getInstance()->process();
         Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
@@ -148,6 +149,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
 
         $c = $this->_root->getComponentById('1600');
         $row = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel')->getRow('1600');
+        $row->vps_upload_id = 2;
         $row->save();
         Vps_Component_ModelObserver::getInstance()->process();
         Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');

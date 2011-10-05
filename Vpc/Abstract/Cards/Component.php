@@ -31,12 +31,4 @@ class Vpc_Abstract_Cards_Component extends Vpc_Abstract
             'generator' => 'child'
         ))->hasContent();
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, '{component_id}-child');
-        return $ret;
-    }
 }
