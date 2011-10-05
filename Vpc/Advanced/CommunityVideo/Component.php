@@ -11,6 +11,7 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
             'ownModel'     => 'Vpc_Advanced_CommunityVideo_Model',
             'extConfig' => 'Vps_Component_Abstract_ExtConfig_Form'
         ));
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
         return $ret;
     }
 

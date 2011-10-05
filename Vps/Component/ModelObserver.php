@@ -49,7 +49,7 @@ class Vps_Component_ModelObserver
     {
         $this->_enableProcess = $enableProcess;
     }
-
+/*
     public function clear()
     {
         foreach (array_keys($this->_process) as $i) {
@@ -57,25 +57,55 @@ class Vps_Component_ModelObserver
         }
         $this->_processed = array();
     }
-
+*/
 
     public function add($function, $source)
     {
-        if (!$this->_disabled) {
-            $source = array('source' => $source);
-            if ($function == 'delete') {
-                // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
-                if (!Vps_Component_Data_Root::getComponentClass()) return;
-                $this->_processCache($source);
+        if ($this->_disabled) return;
+
+        if ($source instanceof Vps_Model_Interface) {
+            $model = $source;
+            $row = null;
+        } else {
+            $row = $source;
+            if ($row instanceof Zend_Db_Table_Row_Abstract) {
+                $model = $row->getTable();
+                $primary = current($model->info('primary'));
             } else {
-                if ($source['source'] instanceof Vps_Model_Row_Abstract) {
-                    $source['dirtyColumns'] = $source['source']->getDirtyColumns();
-                }
-                $this->_process[$function][] = $source;
+                $model = $row->getModel();
+                $primary = $model->getPrimaryKey();
+                if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
             }
         }
-    }
+        if ($model instanceof Vps_Component_Cache_MetaModel ||
+            $model instanceof Vps_Component_Cache_Model ||
+            ($model instanceof  Vps_Model_Field && !$primary)
+        ) {
+            return;
+        }
+        if (get_class($model) == 'Vps_Db_Table') return;
+        if ($this->_skipFnF) {
+            $m = $model;
+            while ($m instanceof Vps_Model_Proxy) { $m = $m->getProxyModel(); }
+            if ($m instanceof Vps_Model_FnF) return;
+        }
 
+        $event = null;
+        $data = null;
+        if ($row) {
+            if ($function == 'delete') {
+                $event = 'Vps_Component_Event_Row_Deleted';
+            } else if ($function == 'update') {
+                $event = 'Vps_Component_Event_Row_Updated';
+            } else if ($function == 'insert') {
+                $event = 'Vps_Component_Event_Row_Inserted';
+            }
+            if ($event) Vps_Component_Events::fireEvent(new $event($row));
+        } else {
+            Vps_Component_Events::fireEvent(new Vps_Component_Event_Model_Updated($model));
+        }
+    }
+/*
     protected function _processCache($source)
     {
         if ($source['source'] instanceof Vps_Model_Interface) {
@@ -124,29 +154,15 @@ class Vps_Component_ModelObserver
         }
         return array();
     }
-
+*/
     public function process()
     {
-        $ret = array();
-
-        // View Cache
-        if (!Vps_Component_Data_Root::getComponentClass()) return $ret;
-        foreach ($this->_process as $action => $process) {
-            foreach (array_reverse($process) as $source) {
-                foreach ($this->_processCache($source) as $modelname => $id) {
-                    if (!isset($ret[$modelname])) $ret[$modelname] = array();
-                    $ret[$modelname][] = $id;
-                }
-            }
-        }
-        $this->clear();
+        Vps_Component_Events::fireEvent(new Vps_Component_Event_Row_UpdatesFinished());
 
         // Suchindex
         if (class_exists('Vps_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
             Vps_Dao_Index::process();
         }
-
-        return $ret;
     }
 
     // Nur für Tests

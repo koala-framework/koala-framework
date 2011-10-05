@@ -1,4 +1,4 @@
-v<?php
+<?php
 /**
  * @group Vps_Model_Db_SiblingRelationExpr
  */
@@ -53,5 +53,5 @@ class Vps_Model_DbWithConnection_SiblingRelationExpr_Test extends Vps_Test_TestC
         $this->assertEquals((int)$row->sum_fooplusone, 0);
     }
 
-    
+
 }

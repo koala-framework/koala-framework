@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SocialBookmarks_NetworksModel extends Vps_Model_Db
+class Vpc_Advanced_SocialBookmarks_NetworksModel extends Vps_Model_Db_Proxy
 {
     protected $_table = 'vpc_socialbookmarks';
     protected $_referenceMap = array(
