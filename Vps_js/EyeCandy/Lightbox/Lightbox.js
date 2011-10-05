@@ -82,20 +82,24 @@ Vps.EyeCandy.Lightbox.Lightbox.prototype = {
                 var contentEl = this.lightboxEl.createChild();
                 if (this.lightboxEl.isVisible()) contentEl.hide();
                 contentEl.update(response.responseText);
+
+                var showContent = function() {
+                    this.lightboxEl.child('.loading').hide();
+                    if (this.lightboxEl.isVisible()) {
+                        contentEl.fadeIn();
+                        this.preloadLinks();
+                    }
+                    this.style.afterContentShown();
+                };
                 var imagesToLoad = 0;
                 contentEl.query('img').each(function(imgEl) {
                     imagesToLoad++;
                     imgEl.onload = (function() {
                         imagesToLoad--;
-                        if (imagesToLoad <= 0) {
-                            this.lightboxEl.child('.loading').hide();
-                            if (this.lightboxEl.isVisible()) {
-                                contentEl.fadeIn();
-                                this.preloadLinks();
-                            }
-                        }
+                        if (imagesToLoad <= 0) showContent.call(this)
                     }).createDelegate(this);
                 }, this);
+                if (imagesToLoad == 0) showContent.call(this);
                 Vps.callOnContentReady();
                 this.initialize();
             },
@@ -158,6 +162,7 @@ Vps.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
 };
 Vps.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     afterCreateLightboxEl: Ext.emptyFn,
+    afterContentShown: Ext.emptyFn,
     onShow: Ext.emptyFn,
     onClose: Ext.emptyFn,
 
@@ -180,6 +185,9 @@ Vps.EyeCandy.Lightbox.Styles.Abstract.prototype = {
 
 Vps.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Vps.EyeCandy.Lightbox.Styles.Abstract, {
     afterCreateLightboxEl: function() {
+        this.lightbox.lightboxEl.center();
+    },
+    afterContentShown: function() {
         this.lightbox.lightboxEl.center();
     },
     onShow: function() {
