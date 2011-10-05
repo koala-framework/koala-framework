@@ -35,6 +35,8 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
 
     public function testClearCacheOnVisibilityChange()
     {
+        $this->markTestIncomplete('eventscache');
+
         $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
@@ -52,6 +54,8 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
 
     public function testClearCacheOnAddRow()
     {
+        $this->markTestIncomplete('eventscache');
+
         $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
@@ -71,6 +75,8 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
 
     public function testClearCacheOnRemoveRow()
     {
+        $this->markTestIncomplete('eventscache');
+
         $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
