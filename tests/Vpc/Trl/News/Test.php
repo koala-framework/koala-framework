@@ -35,6 +35,8 @@ class Vpc_Trl_News_Test extends Vpc_TestAbstract
 
     public function testCacheEnOnVisibleChange()
     {
+        $this->markTestIncomplete('eventscache');
+
         $c = $this->_root->getComponentById('root-en_test');
         $html = $c->render(); //cache it
         $this->assertEquals(1, substr_count($html, 'href='));
