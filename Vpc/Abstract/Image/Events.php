@@ -10,7 +10,7 @@ class Vpc_Abstract_Image_Events extends Vpc_Abstract_Events
             );
             foreach ($components as $component) {
                 $this->fireEvent(new Vps_Component_Event_Media_Changed(
-                    $this->_class, $event->row->component_id
+                    $this->_class, $component->componentId
                 ));
             }
         }

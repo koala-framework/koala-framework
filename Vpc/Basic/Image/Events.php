@@ -16,7 +16,6 @@ class Vpc_Basic_Image_Events extends Vpc_Abstract_Image_Events
     public function onMediaChanged(Vps_Component_Event_Media_Changed $event)
     {
         $c = Vps_Component_Data_Root::getInstance()->getComponentById($event->componentId);
-        if (!$c) return;
         $components = $c->getChildComponents(array('componentClass' => $this->_class));
         foreach ($components as $component) {
             $this->fireEvent(new Vps_Component_Event_Media_Changed(
