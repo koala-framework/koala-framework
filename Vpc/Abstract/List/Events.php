@@ -33,7 +33,7 @@ class Vpc_Abstract_List_Events extends Vpc_Abstract_Events
         $this->fireEvent(new Vps_Component_Event_Component_ContentChanged(
             $this->_class, $event->row->component_id
         ));
-        $this->fireEvent(new Vps_Component_Event_HasComponent_ContentChanged(
+        $this->fireEvent(new Vps_Component_Event_Component_HasContentChanged(
             $this->_class, $event->row->component_id
         ));
     }
