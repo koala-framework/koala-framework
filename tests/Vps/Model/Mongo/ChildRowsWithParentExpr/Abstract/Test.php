@@ -1,6 +1,7 @@
 <?php
 abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends Vps_Test_TestCase
 {
+/*
     protected $_modelClass;
     protected $_parentModelClass;
 
@@ -66,4 +67,5 @@ abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends Vps
         $rows = $row->getChildRows('Foo');
         $this->assertEquals('onex', $rows->current()->parent_name);
     }
+*/
 }

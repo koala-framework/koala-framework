@@ -7,6 +7,7 @@
  */
 class Vps_Model_Mongo_ChildExprWithProxyTest_Test extends Vps_Test_TestCase
 {
+/*
     private $_model;
     public function setUp()
     {
@@ -64,4 +65,5 @@ class Vps_Model_Mongo_ChildExprWithProxyTest_Test extends Vps_Test_TestCase
     {
         $this->markTestIncomplete();
     }
+*/
 }
