@@ -38,7 +38,7 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
             $url = '*redirect*' . $url . '*';
         }
 
-        if (!empty($config['get'])) $url .= "#".$config['get'];
+        if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
         $cssClass = '';
         if (!empty($config['cssClass'])) {
             $cssClass = $config['cssClass'];
