@@ -388,7 +388,7 @@ class Kwf_Assets_Dependencies
         }
         $p = $this->_path[$type];
         if (!file_exists($p.'/'.$url)) {
-            throw new Kwf_Assets_NotFoundException("Assets '$p/$url' not found");
+            return null;
         }
         return $p.'/'.$url;
     }
