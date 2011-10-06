@@ -82,7 +82,6 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
             foreach (self::getInstances() as $m) {
                 $m->clearRows();
             }
-            Vps_Component_ModelObserver::getInstance()->clear();
             echo round(memory_get_usage()/(1024*1024), 3)."MB\n";
 
             if ($progress) {
