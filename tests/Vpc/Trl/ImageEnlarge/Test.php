@@ -132,6 +132,7 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testDeClearCache()
     {
+        $this->markTestIncomplete();
         $c = $this->_root->getComponentById('root-master_test1');
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
         $row = $c->getComponent()->getRow();
@@ -143,6 +144,7 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testEnClearCache()
     {
+        $this->markTestIncomplete();
         $c = $this->_root->getComponentById('root-en_test1');
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
         $row = $c->getComponent()->getRow();
