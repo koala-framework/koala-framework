@@ -15,6 +15,13 @@ abstract class Vps_Component_Generator_Abstract
     private static $instances = array();
     private static $_cachedGeneratorKeys = array();
 
+    protected $_eventsClass;
+
+    public function getEventsClass()
+    {
+        return $this->_eventsClass;
+    }
+
     public function __sleep()
     {
         throw new Vps_Exception("serializing generators is not possible because you could have multiple instances of the same generators");

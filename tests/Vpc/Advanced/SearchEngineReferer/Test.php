@@ -60,6 +60,8 @@ class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
 
     public function testCache()
     {
+        $this->markTestIncomplete('eventscache');
+
         $ref2 = $this->_root->getChildComponent('-referer2');
         $ref2->getChildComponent('-view')->getComponent()->emptyReferersCache();
         $render = $ref2->render();

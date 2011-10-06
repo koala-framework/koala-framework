@@ -49,8 +49,19 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('enlarge_16_16', (string)$a[0]['rel']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$a[0]['href'], $m));
+        $this->assertEquals('lightbox{"width":16,"height":16,"style":"CenterBox"}', (string)$a[0]['rel']);
+        $this->assertEquals('/foo1/image', (string)$a[0]['href']);
+
+
+        $html = $this->_root->getComponentById('1800-linkTag_imagePage')->render();
+        $doc = new DOMDocument();
+        $doc->strictErrorChecking = FALSE;
+        $doc->loadHTML($html);
+        $xml = simplexml_import_dom($doc);
+
+        $img = $xml->xpath("//img");
+        $this->assertEquals(1, count($img));
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -99,8 +110,20 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('enlarge_16_16', (string)$a[0]['rel']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$a[0]['href'], $m));
+        $this->assertEquals('lightbox{"width":16,"height":16,"style":"CenterBox"}', (string)$a[0]['rel']);
+        $this->assertEquals('/foo2/image', (string)$a[0]['href']);
+
+
+
+        $html = $this->_root->getComponentById('1801-linkTag_imagePage')->render();
+        $doc = new DOMDocument();
+        $doc->strictErrorChecking = FALSE;
+        $doc->loadHTML($html);
+        $xml = simplexml_import_dom($doc);
+
+        $img = $xml->xpath("//img");
+
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -158,8 +181,19 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('enlarge_210_70', (string)$a[0]['rel']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$a[0]['href'], $m));
+        $this->assertEquals('lightbox{"width":210,"height":70,"style":"CenterBox"}', (string)$a[0]['rel']);
+        $this->assertEquals('/foo3/image', (string)$a[0]['href']);
+
+
+        $html = $this->_root->getComponentById('1802-linkTag_imagePage')->render();
+        $doc = new DOMDocument();
+        $doc->strictErrorChecking = FALSE;
+        $doc->loadHTML($html);
+        $xml = simplexml_import_dom($doc);
+
+        $img = $xml->xpath("//img");
+
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/gif', $o['mimeType']);
         $im = new Imagick();
@@ -172,17 +206,16 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithOriginalHtml()
     {
-        $html = $this->_root->getComponentById(1803)->render();
+        $html = $this->_root->getComponentById('1803-linkTag_imagePage')->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
         $doc->loadHTML($html);
         $xml = simplexml_import_dom($doc);
 
-        $opt = $xml->xpath("//input");
-        $this->assertEquals(1, count($opt));
-        $opt = Zend_Json::decode((string)$opt[0]['value']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', $opt['fullSizeUrl'], $m));
+        $a = $xml->xpath("//p/a");
+        $this->assertEquals(1, count($a));
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$a[0]['href'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('application/octet-stream', $o['mimeType']);
         $im = new Imagick();

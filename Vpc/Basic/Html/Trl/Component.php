@@ -5,6 +5,7 @@ class Vpc_Basic_Html_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
     {
         $ret = parent::getSettings($childComponentClass);
         $ret['ownModel'] = 'Vpc_Basic_Html_Model';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
         return $ret;
     }
 

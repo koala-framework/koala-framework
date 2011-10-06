@@ -7,6 +7,7 @@ class Vpc_Basic_Flash_Code_Component extends Vpc_Abstract_Flash_Component
         $ret['componentName'] = trlVps('Flash.Code');
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'code';
         return $ret;
     }
 

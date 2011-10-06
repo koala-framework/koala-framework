@@ -1,1 +1,1 @@
-<?php echo $this->hasContent($this->data) ?>
+<?php echo $this->hasContent($this->data->getChildComponent('_child')) ?>

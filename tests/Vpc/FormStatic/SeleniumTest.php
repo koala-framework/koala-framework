@@ -22,17 +22,21 @@ class Vpc_FormStatic_SeleniumTest extends Vps_Test_SeleniumTestCase
         $this->type('css=#form_fullname', 'myname');
         $this->type('css=#form_content', 'lorem ipsum');
         $this->click('css=button');
+        sleep(1);
         $this->waitForConnections();
         $this->assertTextPresent('Please fill out the field');
 
         $this->type('css=#form_email', 'testmail@vivid');
         $this->click('css=button');
+        sleep(1);
         $this->waitForConnections();
         $this->assertTextPresent('is not a valid email address');
 
         $this->type('css=#form_email', 'test@vivid-planet.com');
         $this->click('css=button');
+        sleep(1);
         $this->waitForConnections();
+        sleep(1);
         $this->assertTextPresent('The form has been submitted successfully');
 
         if (Vps_Util_Model_MailLog::isAvailable()) {

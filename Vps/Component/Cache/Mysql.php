@@ -7,10 +7,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     {
         $this->_models = array (
             'cache' => 'Vps_Component_Cache_Mysql_Model',
-            'metaModel' => 'Vps_Component_Cache_Mysql_MetaModelModel',
-            'metaRow' => 'Vps_Component_Cache_Mysql_MetaRowModel',
-            'metaComponent' => 'Vps_Component_Cache_Mysql_MetaComponentModel',
-            'metaChained' => 'Vps_Component_Cache_Mysql_MetaChainedModel',
             'url' => 'Vps_Component_Cache_Mysql_UrlModel',
             'urlParents' => 'Vps_Component_Cache_Mysql_UrlParentsModel',
         );
@@ -90,6 +86,16 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $content;
     }
 
+    public function deleteViewCache($select)
+    {
+        $model = $this->getModel();
+        foreach ($model->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
+            $cacheId = $this->_getCacheId($row['component_id'], 'component', null);
+            apc_delete($cacheId);
+        }
+        $model->updateRows(array('deleted' => true), $select);
+    }
+
     protected static function _getCacheId($componentId, $type, $value)
     {
         static $prefix;
@@ -103,334 +109,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return !is_null($this->load($componentId, $type, $value));
     }
 
-    protected function _addRowWhere($wheres, $row, $metaType = Vps_Component_Cache_Meta_Abstract::META_TYPE_DEFAULT)
-    {
-        // Das suchen wir
-        // $searchModel = model, column, value, component_id, meta_class
-        // $searchModel->model = $row->model && $searchModel->value=$row->{$searchModel->column}
-        $searchModel = $this->getModel('metaRow');
-
-        $select = $searchModel->select()
-            ->whereEquals('model', $this->_getModelname($row));
-
-        // Alle Rows mit betreffenden model holen und columns suchen
-        $columns = array();
-        foreach ($searchModel->getRows($select) as $r) $columns[] = $r->column;
-        $columns = array_unique($columns);
-
-        // Für die Columns Values einsetzen
-        $or = array();
-        foreach ($columns as $column) {
-            $or[] = new Vps_Model_Select_Expr_And(array(
-                new Vps_Model_Select_Expr_Equal('column', $column),
-                new Vps_Model_Select_Expr_Equal('value', $row->$column)
-            ));
-        }
-
-        // Rausgesuchte Columns mit Values zu Select hinzufügen
-        if ($or) {
-            $select->where(new Vps_Model_Select_Expr_Or($or));
-            foreach ($searchModel->getRows($select) as $metaRow) {
-                $type = call_user_func(array($metaRow->meta_class, 'getMetaType'));
-                if ($type != $metaType) continue;
-                $where = call_user_func(
-                    array($metaRow->meta_class, 'getDeleteWhere'),
-                    $metaRow->component_id
-                );
-                $wheres[$metaRow->component_class][] = $where;
-            }
-        }
-        return $wheres;
-    }
-
-    protected function _addModelWhere($wheres, $row, $dirtyColumns, $metaType = Vps_Component_Cache_Meta_Abstract::META_TYPE_DEFAULT)
-    {
-        $model = $this->getModel('metaModel');
-
-        $select = $model->select()
-            ->whereEquals('model', $this->_getModelname($row));
-
-        foreach ($model->getRows($select) as $metaRow) {
-            $type = call_user_func(array($metaRow->meta_class, 'getMetaType'));
-            if ($type != $metaType) continue;
-            $where = call_user_func(
-                array($metaRow->meta_class, 'getDeleteWhere'),
-                $metaRow->pattern, $row, $dirtyColumns, unserialize($metaRow->params)
-            );
-            if ($where) $wheres[$metaRow->component_class][] = $where;
-        }
-        return $wheres;
-    }
-
-    protected function _addComponentWhere($wheres)
-    {
-        $model = $this->getModel('metaComponent');
-
-        // Die cache_component-Tabelle so lange in einer Schleife durchlaufe
-        // bis zu den bisherigen Einträgen keine neuen mehr dazukommen
-        // allIds, newIds, searchIds haben alle das gleiche Format und werden
-        // verwendet, um rauszufinden, welche Ids schon bearbeitet wurden
-
-        // Alle bisherigen wheres durchgehen und nur die nehmen, wo eine db_id gelöscht wird
-        $allIds = array();
-        $dbIds = array();
-        foreach ($wheres as $class => $where) {
-            $allIds[$class] = array();
-            foreach ($where as $w) {
-                if (isset($w['db_id'])) {
-                    $ids = is_array($w['db_id']) ? $w['db_id'] : array($w['db_id']);
-                    $allIds[$class] = array_merge($allIds[$class], $ids);
-                }
-            }
-        }
-        $searchIds = $allIds;
-
-        $select = $model->select();
-        $select->whereEquals('db_id', '');
-        $staticEntries = array();
-        foreach ($model->getRows($select) as $row) {
-            $staticEntries[$row->component_class][] = $row;
-        }
-
-        do {
-            // Tabelle durchsuchen und Ergebnisse in newIds speichern
-            $newIds = array();
-            $uniqueDbIds = array();
-            foreach ($searchIds as $class => $dbIds) {
-                // Einträge ohne db_id
-                if (!isset($staticEntries[$class])) $staticEntries[$class] = array();
-                foreach ($staticEntries[$class] as $r) {
-                    foreach ($dbIds as $dbId) {
-                        $ids = call_user_func(
-                            array($r->meta_class, 'getDeleteDbId'), $r, $dbId
-                        );
-                        if (!is_null($ids) && !is_array($ids)) $ids = array($ids);
-                        if (is_array($ids)) {
-                            $tcc = $r->target_component_class;
-                            if (!isset($newIds[$tcc])) $newIds[$tcc] = array();
-                            $newIds[$tcc] = array_merge($newIds[$tcc], $ids);
-                        }
-                    }
-                }
-                $uniqueDbIds = array_unique(array_merge($uniqueDbIds, $dbIds));
-            }
-            // Einträge mit db_id
-            if ($uniqueDbIds) {
-                $select = $model->select();
-                $select->whereEquals('db_id', $uniqueDbIds);
-                foreach ($model->getRows($select) as $r) {
-                    $newIds[$r->target_component_class][] = $r->target_db_id;
-                }
-            }
-
-            // searchIds neu berechnen und wheres hinzufügen
-            $searchIds = array();
-            foreach ($newIds as $class => $ids) {
-                $ids = array_unique($ids);
-
-                // where schreiben
-                $where = array();
-                if (count($ids) > 0 && $ids[0]) $where = array('db_id' => $ids);
-                $wheres[$class][] = $where;
-                // alles was schon in allIds vorkommt nicht mehr zu searchIds hinzufügen
-                if (!isset($allIds[$class])) $allIds[$class] = array();
-                $diff = array_diff($ids, $allIds[$class]);
-                if ($diff) {
-                    $searchIds[$class] = $diff;
-                    $allIds[$class] = array_unique(array_merge($allIds[$class], $searchIds[$class]));
-                }
-            }
-        } while ($searchIds);
-        return $wheres;
-    }
-
-    protected function _addChainedWhere($wheres)
-    {
-        $model = $this->getModel('metaChained');
-        $select = $model->select()
-            ->whereEquals('source_component_class', array_keys($wheres));
-        foreach ($model->getRows($select) as $row) { // Alle infrage kommenden target_component_classes
-            // Alle master-componentIds der target_component_class
-            $scc = $row->source_component_class;
-            $tcc = $row->target_component_class;
-            if (!isset($wheres[$scc])) continue;
-            $componentIds = $this->_getComponentIdsFromWheres(array($wheres[$scc]));
-            if (!isset($wheres[$tcc])) $wheres[$tcc] = array();
-            $wheres[$tcc] = array_merge(
-                $wheres[$tcc],
-                Vps_Component_Cache_Meta_Static_Chained::getDeleteWheres($componentIds)
-            );
-        }
-        return $wheres;
-    }
-
-    protected function _cleanByWheres($wheres)
-    {
-        $unions = array();
-        //p($wheres);
-        foreach ($wheres as $cClass => $where) {
-            foreach ($where as $w) {
-                $and = array();
-                foreach ($w as $key => $val) {
-                    if ($key != 'db_id') {
-                        $and[] = new Vps_Model_Select_Expr_Equal($key, $val);
-                    }
-                }
-                if (isset($w['db_id'])) {
-                    $dbIdOr = array();
-                    $dbIds = array();
-                    $vals = $w['db_id'];
-                    if (!is_array($vals)) $vals = array($val);
-                    foreach ($vals as $val) {
-                        if (strpos($val, '%') !== false) {
-                            $dbIdOr[] = new Vps_Model_Select_Expr_And(array(
-                                new Vps_Model_Select_Expr_Like('db_id', $val),
-                                new Vps_Model_Select_Expr_Equal('component_class', $cClass)
-                            ));
-                        } else {
-                            $dbIds[] = (string)$val;
-                        }
-                    }
-                    if ($dbIds) {
-                        // Hier keine componentClass-where, damit man im Pattern andere Komponente angeben kann
-                        $dbIdOr[] = new Vps_Model_Select_Expr_Equal('db_id', $dbIds);
-                    }
-                    if (count($dbIdOr) > 1) {
-                        $and[] = new Vps_Model_Select_Expr_Or($dbIdOr);
-                    } else {
-                        $and[] = $dbIdOr[0];
-                    }
-                } else if ($w != array('type' => 'master')) { // Hack, componentClass sollte in der Meta zurückgegeben und nicht automatisch dazugeschwindelt werden, hier Ausnahme für Vps_Component_Cache_Meta_Static_Master
-                    $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
-                }
-                $keys = array_keys($w);
-                asort($keys);
-                $key = '';
-                foreach ($keys as $k) $key .=  substr($k, 0, 1);
-                if (count($and) > 1) {
-                    $unions[$key][] = new Vps_Model_Select_Expr_And($and);
-                } else {
-                    $unions[$key][] = $and[0];
-                }
-            }
-        }
-        foreach ($unions as $or) {
-            $select = $this->getModel('cache')->select();
-            if (count($or) > 1) {
-                $select->where(new Vps_Model_Select_Expr_Or($or));
-            } else {
-                $select->where($or[0]);
-            }
-            foreach ($this->getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
-                $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
-                apc_delete($cacheId);
-            }
-            //p($this->getModel()->getRows($select)->toArray());
-            $this->getModel()->updateRows(array('deleted' => true), $select);
-            //d($this->getModel('metaModel')->getRows()->toArray());
-            //d($this->getModel()->getRows()->toArray());
-        }
-    }
-
-    public function cleanByModel(Vps_Model_Abstract $model)
-    {
-        $select = $this->getModel('metaModel')->select()
-            ->whereEquals('model', get_class($model))
-            ->whereNull('pattern');
-        $componentClasses = array();
-        foreach ($this->getModel('metaModel')->getRows($select) as $r) {
-            if (call_user_func(array($r->meta_class, 'getMetaType')) == Vps_Component_Cache_Meta_Abstract::META_TYPE_DEFAULT) {
-                $componentClasses[] = $r->component_class;
-            }
-        }
-        $componentSelect = $this->getModel('metaComponent')->select()
-            ->whereEquals('component_class', $componentClasses);
-        foreach ($this->getModel('metaComponent')->getRows($componentSelect) as $r) {
-            $componentClasses[] = $r->target_component_class;
-        }
-
-        $select = $this->getModel('cache')->select()
-            ->whereEquals('component_class', array_unique($componentClasses));
-        foreach ($this->getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
-            $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
-            apc_delete($cacheId);
-        }
-        $this->getModel('cache')->updateRows(
-            array('deleted' => true),
-            $select
-        );
-    }
-
-    protected function _saveMetaModel($componentClass, $modelName, $pattern, $metaClass, $params)
-    {
-        $data = array(
-            'model' => $modelName,
-            'component_class' => $componentClass,
-            'pattern' => $pattern ? $pattern : '',
-            'meta_class' => $metaClass,
-            'params' => serialize($params)
-        );
-        $options = array(
-            'buffer' => true,
-            'replace' => true
-        );
-        $this->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
-    }
-
-    protected function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $metaClass)
-    {
-        // TODO: checken, ob component->componentClass eh nicht schon in cache_component_meta_model mit gleichem Model steht
-        $data = array(
-            'model' => $modelName,
-            'column' => $column,
-            'value' => $value,
-            'component_id' => $component->componentId,
-            'component_class' => $component->componentClass,
-            'meta_class' => $metaClass
-        );
-        $options = array(
-            'buffer' => true,
-            'replace' => true
-        );
-        $this->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
-    }
-
-    protected function _saveMetaComponent($dbId, $componentClass, $targetDbId, $targetComponentClass, $metaClass)
-    {
-        $data = array(
-            'db_id' => $dbId,
-            'component_class' => $componentClass,
-            'target_db_id' => $targetDbId,
-            'target_component_class' => $targetComponentClass,
-            'meta_class' => $metaClass,
-        );
-        $options = array(
-            'buffer' => true,
-            'replace' => true
-        );
-        $this->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
-    }
-
-    protected function _saveMetaChained($sourceComponentClass, $targetComponentClass)
-    {
-        $data = array(
-            'source_component_class' => $sourceComponentClass,
-            'target_component_class' => $targetComponentClass
-        );
-        $options = array(
-            'buffer' => true,
-            'replace' => true
-        );
-        $this->getModel('metaChained')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
-    }
-
-    public function writeBuffer()
-    {
-        foreach ($this->_models as $m) {
-            if (is_object($m)) $m->writeBuffer();
-        }
-    }
-
+/*
     protected function _cleanUrl(Vps_Component_Data $component)
     {
         $ids[] = $component->componentId;
@@ -459,9 +138,5 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $cacheId = $prefix.'procI-'.$component->getPageOrRoot()->componentId;
         apc_delete($cacheId);
     }
-
-    public function cleanByRow($row, $dirtyColumns = array())
-    {
-        parent::cleanByRow($row, $dirtyColumns);
-    }
+    */
 }
