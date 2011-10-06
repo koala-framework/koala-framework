@@ -49,15 +49,6 @@ class Vps_Component_ModelObserver
     {
         $this->_enableProcess = $enableProcess;
     }
-/*
-    public function clear()
-    {
-        foreach (array_keys($this->_process) as $i) {
-            $this->_process[$i] = array();
-        }
-        $this->_processed = array();
-    }
-*/
 
     public function add($function, $source)
     {
