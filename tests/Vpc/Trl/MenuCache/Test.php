@@ -14,6 +14,8 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
+        $this->markTestIncomplete('eventscache');
+
         parent::setUp('Vpc_Trl_MenuCache_Root');
     }
 
@@ -36,6 +38,18 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
 
         $this->assertEquals($this->_root->getComponentById('4-mainMenu')->componentClass, 'Vpc_Basic_ParentContent_Component');
         $this->assertEquals($this->_root->getComponentById('4-mainMenu-subMenu'), null);
+    }
+
+    public function testComponentClassesBottom()
+    {
+        $this->assertEquals($this->_root->getComponentById('root-master-bottom-mainMenu')->componentClass, 'Vpc_Menu_OtherCategory_Component.Vpc_Trl_MenuCache_MainMenu_Component');
+        $this->assertEquals($this->_root->getComponentById('root-master-bottom-mainMenu-subMenu'), null);
+
+        $this->assertEquals($this->_root->getComponentById('5-mainMenu')->componentClass, 'Vpc_Basic_ParentContent_Component');
+        $this->assertEquals($this->_root->getComponentById('5-mainMenu-subMenu'), null);
+
+        $this->assertEquals($this->_root->getComponentById('6-mainMenu')->componentClass, 'Vpc_Basic_ParentContent_Component');
+        $this->assertEquals($this->_root->getComponentById('6-mainMenu-subMenu'), null);
     }
 
     public function testMenuDe()
@@ -76,5 +90,39 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
         $html = $c->render();
         $this->assertContains('Home en</a>', $html);
         $this->assertContains('Testxen</a>', $html);
+    }
+
+    public function testMenuOtherCategoryDe()
+    {
+        $c = $this->_root->getComponentById('root-master-bottom-mainMenu');
+        $html = $c->render();
+        $this->assertContains('Home de</a>', $html);
+
+        $row = Vps_Model_Abstract::getInstance('Vpc_Trl_MenuCache_Category_PagesTestModel')
+            ->getRow(1);
+        $row->name = 'Homex de';
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertContains('Homex de</a>', $html);
+    }
+
+    public function testMenuOtherCategoryEn()
+    {
+        $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
+        $html = $c->render();
+        $this->assertContains('Home en</a>', $html);
+
+        $row = Vps_Model_Abstract::getInstance('Vpc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_1');
+        $row->name = 'Homex en';
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertContains('Homex en</a>', $html);
     }
 }

@@ -22,16 +22,16 @@ abstract class Vpc_Shop_AddToCartAbstract_OrderProductData
     }
 
 
-    public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
+    public function getAdditionalOrderData($row)
     {
         return array();
     }
 
-    abstract public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct);
-    abstract public function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct);
-    abstract public function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct);
+    abstract public function getPrice($orderProduct);
+    abstract public function getAmount($orderProduct);
+    abstract public function getProductText($orderProduct);
 
-    public function orderConfirmed(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function orderConfirmed($orderProduct)
     {
     }
 

@@ -16,13 +16,6 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         return $ret;
     }
 
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vpc_Advanced_SearchEngineReferer_CacheMeta(Vpc_Abstract::getSetting($componentClass, 'childModel'), '{component_id}');
-        return $ret;
-    }
-
     public function getViewCacheLifetime()
     {
         return $this->getData()->getChildComponent('-view')->getComponent()->getViewCacheLifetime();

@@ -87,7 +87,7 @@ class Vps_Component_Abstract
                     throw new Vps_Exception("'$file' base class '$settings[base]' does not exist");
                 }
                 $code = "<?php\nclass $c extends $settings[base]\n{\n";
-                $code .= "    public static \$YAML_CONFIG_FILE = '$file';\n";
+                $code .= "    public static _getYamlConfigFile() { return '$file'; }\n";
                 $code .= "}\n";
                 $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
                 mkdir(substr($classFile, 0, strrpos($classFile, '/')), 0777, true);
@@ -159,13 +159,14 @@ class Vps_Component_Abstract
         $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
         if (!isset(self::$_cacheSettings[$c][$param])) {
             $settings = call_user_func(array($c, 'getSettings'), $param);
-            if (isset($c::$YAML_CONFIG_FILE)) {
-                $input = file_get_contents($c::$YAML_CONFIG_FILE);
+            if (method_exists($c, '_getYamlConfigFile')) {
+                $file = call_user_func(array($c, '_getYamlConfigFile'));
+                $input = file_get_contents($file);
                 $yaml = new sfYamlParser();
                 try {
                     $mergeSettings = $yaml->parse($input);
                 } catch (Exception $e) {
-                    throw new Vps_Exception(sprintf('Unable to parse %s: %s', $c::$YAML_CONFIG_FILE, $e->getMessage()));
+                    throw new Vps_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
                 }
                 if (isset($mergeSettings['settings'])) {
                     self::_processYamlSettings($mergeSettings['settings']);

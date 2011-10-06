@@ -1,20 +1,26 @@
 <?php
 /**
- * @group selenium
- * @group slow
+ * @group Advanced_SocialBookmarks
  */
-class Vpc_Advanced_SocialBookmarks_Test extends Vps_Test_SeleniumTestCase
+class Vpc_Advanced_SocialBookmarks_Test extends Vpc_TestAbstract
 {
-    public function setUp()
-    {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Advanced_SocialBookmarks_Root');
-        parent::setUp();
-    }
     public function testIt()
     {
-        $this->openVpc('/page1');
-        $this->assertElementPresent('css=a');
-        $this->openVpc('/page1/page2');
-        $this->assertElementPresent('css=a');
+        $this->markTestIncomplete('eventscache');
+
+        $this->_init('Vpc_Advanced_SocialBookmarks_Root');
+        $page1 = $this->_root->getChildComponent('_page1');
+        $page2 = $page1->getChildComponent('_page2');
+
+        $this->assertTrue(strpos($page1->render(true, true), 'Twitter') !== false);
+        $this->assertTrue(strpos($page2->render(true, true), 'Twitter') !== false);
+        Vps_Model_Abstract::getInstance('Vpc_Advanced_SocialBookmarks_TestModel')
+            ->getRow('root-socialBookmarks')
+            ->getChildRows('Networks', 2)->current()->delete();
+        $this->_process();
+        $this->assertTrue(strpos($page1->render(false, true), 'Twitter') === false);
+        $this->assertTrue(strpos($page2->render(false, true), 'Twitter') === false);
+        $this->assertTrue(strpos($page1->render(true, true), 'Twitter') === false);
+        $this->assertTrue(strpos($page2->render(true, true), 'Twitter') === false);
     }
 }

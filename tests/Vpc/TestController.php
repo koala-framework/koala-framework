@@ -45,6 +45,10 @@ class Vpc_TestController extends Vps_Controller_Action
             }
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
+        if ($url == 'vps/util/vpc/render') {
+            $_REQUEST['url'] = str_replace('/'.$root->filename, '', $_REQUEST['url']);
+            Vps_Util_Component::dispatchRender();
+        }
 
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
         $data = $root->getPageByUrl($domain.'/'.$url, null);
@@ -52,7 +56,10 @@ class Vpc_TestController extends Vps_Controller_Action
             throw new Vps_Exception_NotFound();
         }
         $root->setCurrentPage($data);
-        $data->getComponent()->sendContent();
+        $contentSender = Vpc_Abstract::getSetting($data->componentClass, 'contentSender');
+        $contentSender = new $contentSender($data);
+        $contentSender->sendContent();
+
 
         $this->_helper->viewRenderer->setNoRender(true);
     }

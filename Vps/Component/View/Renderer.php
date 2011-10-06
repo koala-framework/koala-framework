@@ -62,13 +62,6 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
             $value
         );
 
-        // Meta-Cache
-        if ($content != Vps_Component_Cache::NO_CACHE) { //ist bei partials NO_CACHE
-            foreach ($component->getComponent()->getCacheMeta() as $m) {
-                Vps_Component_Cache::getInstance()->saveMeta($component, $m);
-            }
-        }
-
         return true;
     }
 

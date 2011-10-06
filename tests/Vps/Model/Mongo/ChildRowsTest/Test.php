@@ -7,6 +7,7 @@
  */
 class Vps_Model_Mongo_ChildRowsTest_Test extends Vps_Test_TestCase
 {
+/*
     private $_model;
     public function setUp()
     {
@@ -81,5 +82,5 @@ class Vps_Model_Mongo_ChildRowsTest_Test extends Vps_Test_TestCase
         $this->assertEquals(2, count($row['foo']));
         $this->assertEquals(1234, $row['foo'][0]['x']);
     }
-
+*/
 }

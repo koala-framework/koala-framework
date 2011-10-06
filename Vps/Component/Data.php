@@ -42,32 +42,42 @@ class Vps_Component_Data
     }
 
     /**
-     * So wie ->url aber funktioniert auch fuer pseudoPages
+     * Like ->url but also works for pseudoPages
+     *
+     * overridden in Data_Home
      */
     protected function _getPseudoPageUrl()
     {
-        $page = $this;
-        if (!$page->isPseudoPage) {
-            $page = $page->getParentPseudoPageOrRoot();
-        }
-        if (!$page) return '';
-        $filenames = array();
+        $data = $this;
+        $filename = '';
+        $hadStaticPage = false;
         do {
-            if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
-                $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
-                break;
+            if ($data->isPseudoPage || $data->componentId == 'root') {
+                if (!empty($filenames) && Vpc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
+                    $filename = call_user_func(array($data->componentClass, 'getShortcutUrl'), $data->componentClass, $data).($filename ? '/' : '').$filename;
+                    break;
+                } else {
+                    if ($data->filename) $filename = $data->filename.($filename ? '/' : '').$filename;
+                }
+                if ($data->componentId != 'root' && $data->generator->getGeneratorFlag('static')) {
+                    $hadStaticPage = true;
+                } else {
+                    $hadStaticPage = false;
+                }
             } else {
-                if ($page->filename) $filenames[] = $page->filename;
+                if ($hadStaticPage && $data->generator->getGeneratorFlag('table')) {
+                    $filename = $data->id.($filename ? ':' : '').$filename;
+                }
             }
-        } while ($page = $page->getParentPseudoPageOrRoot());
-        $urlPrefix = Vps_Config::getValue('vpc.urlPrefix');
-        return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
+        } while ($data = $data->parent);
+
+        $urlPrefix = Vps_Config::getValue('vpc.urlPrefix'); //TODO urlPrefix vs. root filename: both do the same
+        return ($urlPrefix ? $urlPrefix : '').'/'.$filename;
     }
 
     public function __get($var)
     {
         if ($var == 'url') {
-            $filenames = array();
             if (!$this->isPage) {
                 $page = $this->getPage();
                 if (!$page) return '';
@@ -85,6 +95,11 @@ class Vps_Component_Data
             $rel = $page->_rel;
             if (/*$childs || */Vps_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
+            }
+            $contentSender = Vpc_Abstract::getSetting($page->componentClass, 'contentSender');
+            if ($contentSender != 'Vps_Component_Abstract_ContentSender_Default') { //skip for performance
+                $contentSender = new $contentSender($page);
+                $rel .= ' '.$contentSender->getLinkRel();
             }
             return trim($rel);
         } else if ($var == 'filename') {
@@ -847,12 +862,24 @@ class Vps_Component_Data
     public function getChildPageByPath($path)
     {
         $page = $this;
-        foreach (explode('/', $path) as $pathPart) {
-            $pages = $page->getRecursiveChildComponents(array(
+        $pathParts = preg_split('#([/:])#', $path, -1, PREG_SPLIT_DELIM_CAPTURE);
+        for($i=0; $i<count($pathParts); $i++) {
+            $pathPart = $pathParts[$i];
+            $i++;
+            $nextSeparator = isset($pathParts[$i]) ? $pathParts[$i] : '/';
+            if ($nextSeparator == '/') {
+                $pages = $page->getRecursiveChildComponents(array(
                                 'filename' => $pathPart,
                                 'pseudoPage'=>true,
                                 'limit'=>1),
                             array('pseudoPage'=>false));
+            } else {
+                $pages = $page->getRecursiveChildComponents(array(
+                                'id' => $pathPart,
+                                'pseudoPage'=>false,
+                                'limit'=>1),
+                            array('pseudoPage'=>false));
+            }
             $page = current($pages);
             if (!$page) break;
         }

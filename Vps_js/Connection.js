@@ -310,6 +310,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                             Vps.application.maxAssetsMTime = r.maxAssetsMTime;
                             options.params.application_max_assets_mtime = Vps.application.maxAssetsMTime;
                             this.repeatRequest(options);
+                            dlg.hide();
                         },
                         scope: this
                     }]

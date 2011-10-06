@@ -5,12 +5,15 @@ class Vps_View_Helper_DebugData
     {
         $ret = '';
         $config = Vps_Config::getValueArray('debug');
-        if ($config['menu'] || !$config['error']['log']) {
+        if ($config['menu'] || !$config['error']['log'] || (Vps_Component_Data_Root::getInstance() && Vps_Component_Data_Root::getInstance()->filename)) {
             $indent = str_repeat(' ', 8);
             $ret .= "<script type=\"text/javascript\">\n";
             $ret .=$indent."if (typeof Vps == 'undefined') Vps = {};\n";
             $ret .=$indent."Vps.Debug = {};\n";
             $ret .=$indent.'Vps.Debug.displayErrors = '.(!$config['error']['log'] ? 'true' : 'false').";\n";
+            if (Vps_Component_Data_Root::getInstance() && Vps_Component_Data_Root::getInstance()->filename) {
+                $ret .=$indent.'Vps.Debug.rootFilename = \'/'.Vps_Component_Data_Root::getInstance()->filename."';\n";
+            }
             $session = new Zend_Session_Namespace('debug');
             if ($session->enable) {
                 $js = $config['assets']['js'];

@@ -13,27 +13,10 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
     {
         $ret = parent::getTemplateVars();
 
-        $imageTitleSetting = Vpc_Abstract::getSetting(
-            $this->_getSetting('masterComponentClass'), 'imageTitle'
-        );
-        if ($imageTitleSetting) {
-            $ret['options']->title = $this->getRow()->title;
-        }
-
-        $masterEnlargeComponentClass = Vpc_Abstract::getSetting(
-            $this->_getImageEnlargeComponentData()->componentClass, 'masterComponentClass'
-        );
-
-        if (Vpc_Abstract::getSetting($masterEnlargeComponentClass, 'imageCaption')) {
-            $ret['options']->imageCaption = $this->_getImageEnlargeComponentData()
-                ->getComponent()->getRow()->image_caption;
-        }
-
         $childImageComponent = $this->getData()->getChildComponent('-image')->getComponent();
         $ret['imageUrl'] = $childImageComponent->getImageUrl();
-        $size = $childImageComponent->getImageDimensions();
-        $ret['width'] = $size['width'];
-        $ret['height'] = $size['height'];
+
+        $ret['imagePage'] = $this->getData()->getChildComponent('_imagePage');
 
         return $ret;
     }
@@ -58,13 +41,4 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
         $ret[] = new Vps_Component_Cache_Meta_Static_Model($model);
         return $ret;
     }
-/*
-    public function onCacheCallback($row)
-    {
-        $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->componentId, 'default'
-        );
-        Vps_Media::getOutputCache()->remove($cacheId);
-    }
-    */
 }
