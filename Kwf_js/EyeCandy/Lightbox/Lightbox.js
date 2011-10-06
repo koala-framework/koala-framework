@@ -27,7 +27,6 @@ Kwf.onContentReady(function() {
         var l = new Kwf.EyeCandy.Lightbox.Lightbox(null, options);
         lightboxEl.enableDisplayMode('block');
         l.lightboxEl = lightboxEl;
-        var l = new Kwf.EyeCandy.Lightbox.Lightbox(null, {});
         l.style.afterCreateLightboxEl();
         l.initialize();
         l.style.onShow();
