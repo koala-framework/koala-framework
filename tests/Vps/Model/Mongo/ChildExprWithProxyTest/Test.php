@@ -7,6 +7,7 @@
  */
 class Vps_Model_Mongo_ChildExprWithProxyTest_Test extends Vps_Test_TestCase
 {
+    public function testNoop() {}
 /*
     private $_model;
     public function setUp()
