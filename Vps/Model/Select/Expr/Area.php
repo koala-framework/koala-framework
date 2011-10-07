@@ -38,4 +38,24 @@ class Vps_Model_Select_Expr_Area implements Vps_Model_Select_Expr_Interface
     {
         return Vps_Model_Interface::TYPE_BOOLEAN;
     }
+
+    public function toArray()
+    {
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'latitude' =>  $this->_latitude,
+            'longitude' => $this->_longitude,
+            'radius' =>  $this->_radius,
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $expressions = array();
+        foreach ($data['expressions'] as $i) {
+            $expressions[] = Vps_Model_Select_Expr::fromArray($i);
+        }
+        return new $cls($data['latitude'], $data['longitude'], $data['radius']);
+    }
 }
