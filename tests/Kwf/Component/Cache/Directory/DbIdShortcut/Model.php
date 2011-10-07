@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Directory_DbIdShortcut_Model extends Vps_Model_FnF
+class Kwf_Component_Cache_Directory_DbIdShortcut_Model extends Kwf_Model_FnF
 {
     protected $_columns = array('id', 'content');
     protected $_data = array(

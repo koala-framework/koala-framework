@@ -1,8 +1,8 @@
-Ext.namespace('Vps.PagingToolbar');
+Ext.namespace('Kwf.PagingToolbar');
 
-Vps.PagingToolbar.Date = Ext.extend(Ext.PagingToolbar, {
+Kwf.PagingToolbar.Date = Ext.extend(Ext.PagingToolbar, {
     initComponent: function() {
-        Vps.PagingToolbar.Date.superclass.initComponent.call(this);
+        Kwf.PagingToolbar.Date.superclass.initComponent.call(this);
         this.cursor = new Date();
     },
     // private
@@ -16,7 +16,7 @@ Vps.PagingToolbar.Date = Ext.extend(Ext.PagingToolbar, {
         });
         this.addSeparator();
 
-        this.field = new Vps.Form.DateField({
+        this.field = new Kwf.Form.DateField({
             width: 80
         });
         this.add(this.field);

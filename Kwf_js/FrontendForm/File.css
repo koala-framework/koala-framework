@@ -1,15 +1,15 @@
-.vpsFormFieldFileInner img {
+.kwfFormFieldFileInner img {
     margin-top: -20px;
 }
-.vpsFormFieldFileInnerContent { float: left; white-space: nowrap; }
-.vpsFormFieldFileUploadWrapper { position: relative; }
-.vpsFormFieldFileUploadWrapper .fileSelector,
-.vpsFormFieldFileUploadWrapper .underlayFileSelector {
+.kwfFormFieldFileInnerContent { float: left; white-space: nowrap; }
+.kwfFormFieldFileUploadWrapper { position: relative; }
+.kwfFormFieldFileUploadWrapper .fileSelector,
+.kwfFormFieldFileUploadWrapper .underlayFileSelector {
     position: absolute; top: 0px; left: 0px;
 }
-.vpsFormFieldFileUploadWrapper .fileSelector {
+.kwfFormFieldFileUploadWrapper .fileSelector {
     z-index: 2;
     opacity: 0;
     filter: alpha(opacity=0);
 }
-.vpsFormFieldFileUploadWrapper .underlayFileSelector { z-index: 1; }
+.kwfFormFieldFileUploadWrapper .underlayFileSelector { z-index: 1; }

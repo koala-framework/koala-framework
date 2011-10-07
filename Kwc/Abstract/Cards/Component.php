@@ -1,18 +1,18 @@
 <?php
-class Vpc_Abstract_Cards_Component extends Vpc_Abstract
+class Kwc_Abstract_Cards_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vpc_Abstract_Cards_Model';
+        $ret['ownModel'] = 'Kwc_Abstract_Cards_Model';
         $ret['default']['component'] = 'none';
         $ret['generators']['child'] = array(
-            'class' => 'Vpc_Abstract_Cards_Generator',
+            'class' => 'Kwc_Abstract_Cards_Generator',
             'component' => array(),
         );
-        $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
-        $ret['componentName'] = trlVps('Choose Child');
+        $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        $ret['componentName'] = trlKwf('Choose Child');
         return $ret;
     }
 

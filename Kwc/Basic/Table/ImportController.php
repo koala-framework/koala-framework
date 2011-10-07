@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_Table_ImportController extends Vps_Controller_Action_Auto_Import
+class Kwc_Basic_Table_ImportController extends Kwf_Controller_Action_Auto_Import
 {
     protected function _import($excel)
     {
-        $settingsRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Table_Model')
+        $settingsRow = Kwf_Model_Abstract::getInstance('Kwc_Basic_Table_Model')
             ->getRow($this->_getParam('componentId'));
-        $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Table_ModelData');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Table_ModelData');
 
         $xlsRows = $excel->toArray();
 

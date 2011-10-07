@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Plugin_Abstract extends Vps_Component_Abstract
+abstract class Kwf_Component_Plugin_Abstract extends Kwf_Component_Abstract
 {
     protected function _getSetting($setting)
     {

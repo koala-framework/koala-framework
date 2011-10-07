@@ -1,4 +1,4 @@
 <?php
-class Vpc_User_Activate_Form_Success_Component extends Vpc_Form_Success_Component
+class Kwc_User_Activate_Form_Success_Component extends Kwc_Form_Success_Component
 {
 }

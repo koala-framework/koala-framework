@@ -1,8 +1,8 @@
 <div class="<?=$this->cssClass?>">
-    <h1 class="mainHeadline"><?=trlVps('Lost your password?')?></h1>
+    <h1 class="mainHeadline"><?=trlKwf('Lost your password?')?></h1>
     <p>
-        <?=trlVps('Please type in your {0} email address in the field below.', Vps_Registry::get('config')->application->name)?><br />
-        <?=trlVps('You will receive an email with a passwort reset link and further instructions.')?>
+        <?=trlKwf('Please type in your {0} email address in the field below.', Kwf_Registry::get('config')->application->name)?><br />
+        <?=trlKwf('You will receive an email with a passwort reset link and further instructions.')?>
     </p>
 
     <?=$this->component($this->form)?>

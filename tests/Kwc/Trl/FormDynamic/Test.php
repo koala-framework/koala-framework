@@ -2,23 +2,23 @@
 /**
  * @group slow
  * @group selenium
- * @group Vpc_FormDynamic
- * @group Vpc_Trl
+ * @group Kwc_FormDynamic
+ * @group Kwc_Trl
  *
- * http://vps.vps.niko.vivid/vps/vpctest/Vpc_Trl_FormDynamic_Root/de/test1
- * http://vps.vps.niko.vivid/vps/vpctest/Vpc_Trl_FormDynamic_Root/en/test1
+ * http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_FormDynamic_Root/de/test1
+ * http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_FormDynamic_Root/en/test1
  */
-class Vpc_Trl_FormDynamic_Test extends Vps_Test_SeleniumTestCase
+class Kwc_Trl_FormDynamic_Test extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
         parent::setUp();
-        Vps_Component_Data_Root::setComponentClass('Vpc_Trl_FormDynamic_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_Trl_FormDynamic_Root');
     }
 
     public function testTextField()
     {
-        $this->openVpc('/de/test1');
-        $this->openVpc('/en/test1');
+        $this->openKwc('/de/test1');
+        $this->openKwc('/en/test1');
     }
 }

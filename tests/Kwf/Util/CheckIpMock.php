@@ -1,6 +1,6 @@
 <?php
 
-class Vps_Util_CheckIpMock extends Vps_Util_Check_Ip
+class Kwf_Util_CheckIpMock extends Kwf_Util_Check_Ip
 {
     protected function _getAllowedAddresses()
     {

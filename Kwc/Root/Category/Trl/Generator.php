@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
+class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
 {
     public function getPagesControllerConfig($component)
     {
@@ -23,30 +23,30 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
     public function getChildData($parentData, $select = array())
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
 
         $filename = null;
         $limit = null;
-        $ignoreVisible = $select->hasPart(Vps_Component_Select::IGNORE_VISIBLE) ?
-            $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) : false;
+        $ignoreVisible = $select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE) ?
+            $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) : false;
             static $showInvisible;
         if (is_null($showInvisible)) {
-            $showInvisible = Vps_Registry::get('config')->showInvisible;
+            $showInvisible = Kwf_Registry::get('config')->showInvisible;
         }
         if ($showInvisible) $ignoreVisible = true;
 
         $select = clone $select;
 
         // Nach Filename selbst suchen, da ja andere Sprache
-        if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
-            $select->unsetPart(Vps_Component_Select::WHERE_FILENAME);
+        if ($select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Kwf_Component_Select::WHERE_FILENAME);
+            $select->unsetPart(Kwf_Component_Select::WHERE_FILENAME);
         }
         // Limit auch selbst beachten, da in slave eigenes visible gesetzt ist
-        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
-            $limit = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
-            $select->unsetPart(Vps_Component_Select::LIMIT_COUNT);
+        if ($select->hasPart(Kwf_Component_Select::LIMIT_COUNT)) {
+            $limit = $select->getPart(Kwf_Component_Select::LIMIT_COUNT);
+            $select->unsetPart(Kwf_Component_Select::LIMIT_COUNT);
         }
         $select->ignoreVisible();
         $ret = array();
@@ -69,7 +69,7 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
 
         //im pages generator fangen die ids immer von vorne an
         $id = $this->_getIdFromRow($row);
-        if (!is_numeric($id)) throw new Vps_Exception("Id must be numeric");
+        if (!is_numeric($id)) throw new Kwf_Exception("Id must be numeric");
         $idParent = $parentData;
         while ($idParent->componentClass != $this->_class) {
             $idParent = $idParent->parent;
@@ -80,7 +80,7 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
 
         //parent geradebiegen
         if (!$parentData || ($parentData->componentClass == $this->_class && is_numeric($ret['chained']->parent->componentId))) {
-            $c = new Vps_Component_Select();
+            $c = new Kwf_Component_Select();
             $c->ignoreVisible(true);
             $c->whereId('_'.$ret['chained']->parent->componentId);
             $parentData = $parentData->getChildComponent($c);
@@ -113,7 +113,7 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
     protected function _getDataClass($config, $id)
     {
         if (isset($config['isHome']) && $config['isHome']) {
-            return 'Vps_Component_Data_Home';
+            return 'Kwf_Component_Data_Home';
         } else {
             return parent::_getDataClass($config, $id);
         }

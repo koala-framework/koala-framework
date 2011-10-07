@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Vpc_ComponentIds extends Vps_Data_Table
+class Kwf_Data_Kwc_ComponentIds extends Kwf_Data_Table
 {
     public function load($row)
     {

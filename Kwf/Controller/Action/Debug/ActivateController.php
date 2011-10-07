@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Debug_ActivateController extends Vps_Controller_Action
+class Kwf_Controller_Action_Debug_ActivateController extends Kwf_Controller_Action
 {
     public function indexAction()
     {

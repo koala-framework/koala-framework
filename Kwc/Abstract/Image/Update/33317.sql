@@ -1,1 +1,1 @@
-ALTER TABLE `vpc_basic_image` DROP `scale`;
+ALTER TABLE `kwc_basic_image` DROP `scale`;

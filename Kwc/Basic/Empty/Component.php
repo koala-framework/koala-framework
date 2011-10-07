@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Empty_Component extends Vpc_Abstract
+class Kwc_Basic_Empty_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Empty');
+        $ret['componentName'] = trlKwf('Empty');
         return $ret;
     }
     public function hasContent()

@@ -1,11 +1,11 @@
 <?php
-class Vpc_Shop_AddToCart_Component extends Vpc_Shop_AddToCartAbstract_Component
+class Kwc_Shop_AddToCart_Component extends Kwc_Shop_AddToCartAbstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['orderProductData'] = 'Vpc_Shop_AddToCart_OrderProductData';
-        $ret['productTypeText'] = trlVps('Product');
+        $ret['orderProductData'] = 'Kwc_Shop_AddToCart_OrderProductData';
+        $ret['productTypeText'] = trlKwf('Product');
         return $ret;
     }
 
@@ -15,7 +15,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Shop_AddToCartAbstract_Component
         $this->_form->setProduct($this->_getProduct());
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
         $row->shop_product_price_id = $this->_getProduct()->current_price_id;

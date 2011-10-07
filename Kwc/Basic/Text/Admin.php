@@ -1,22 +1,22 @@
 <?php
-class Vpc_Basic_Text_Admin extends Vpc_Admin
+class Kwc_Basic_Text_Admin extends Kwc_Admin
 {
     public function setup()
     {
         //TODO: kann das ned einfach für alle unterkomponenten gemacht werden?!
-        $generators = Vpc_Abstract::getSetting($this->_class, 'generators');
+        $generators = Kwc_Abstract::getSetting($this->_class, 'generators');
         if ($generators['child']['component']['link']) {
-            Vpc_Admin::getInstance($generators['child']['component']['link'])->setup();
+            Kwc_Admin::getInstance($generators['child']['component']['link'])->setup();
         }
         if ($generators['child']['component']['image']) {
-            Vpc_Admin::getInstance($generators['child']['component']['image'])->setup();
+            Kwc_Admin::getInstance($generators['child']['component']['image'])->setup();
         }
         if ($generators['child']['component']['download']) {
-            Vpc_Admin::getInstance($generators['child']['component']['download'])->setup();
+            Kwc_Admin::getInstance($generators['child']['component']['download'])->setup();
         }
 
         $fields['content'] = 'text NOT NULL';
-        $this->createFormTable('vpc_basic_text', $fields);
+        $this->createFormTable('kwc_basic_text', $fields);
     }
 
     public function duplicate($source, $target)
@@ -30,7 +30,7 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
 
         foreach ($source->getChildComponents(array('inherit' => false)) as $c) {
             $newChild = $c->generator->duplicateChild($c, $target);
-            if ($c->generator instanceof Vpc_Basic_Text_Generator) {
+            if ($c->generator instanceof Kwc_Basic_Text_Generator) {
                 $idMap[$c->dbId] = $newChild;
             }
         }
@@ -59,9 +59,9 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
         ));
     }
 
-    public function componentToString(Vps_Component_Data $data)
+    public function componentToString(Kwf_Component_Data $data)
     {
-        $truncate = new Vps_View_Helper_Truncate;
+        $truncate = new Kwf_View_Helper_Truncate;
         $ret = $truncate->truncate($data->getComponent()->getSearchContent(),15);
         return $ret;
     }

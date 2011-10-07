@@ -1,37 +1,37 @@
 <?php
 /**
- * @package Vpc
+ * @package Kwc
  * @subpackage Paragraphs
  */
-class Vpc_Paragraphs_Component extends Vpc_Abstract
+class Kwc_Paragraphs_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Paragraphs'),
-            'componentIcon' => new Vps_Asset('page')
+            'componentName' => trlKwf('Paragraphs'),
+            'componentIcon' => new Kwf_Asset('page')
         ));
-        $ret['childModel'] = 'Vpc_Paragraphs_Model';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/DataView.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/AddParagraphButton.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.css';
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['childModel'] = 'Kwc_Paragraphs_Model';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/DataView.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/AddParagraphButton.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/Panel.css';
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
         $ret['generators']['paragraphs'] = array(
-            'class' => 'Vps_Component_Generator_Table',
+            'class' => 'Kwf_Component_Generator_Table',
             'component' => array(
-                'textImage' => 'Vpc_TextImage_Component',
+                'textImage' => 'Kwc_TextImage_Component',
             )
         );
-        $cc = Vps_Registry::get('config')->vpc->childComponents;
-        if (isset($cc->Vpc_Paragraphs_Component)) {
+        $cc = Kwf_Registry::get('config')->kwc->childComponents;
+        if (isset($cc->Kwc_Paragraphs_Component)) {
             $ret['generators']['paragraphs']['component'] = array_merge(
                 $ret['generators']['paragraphs']['component'],
-                $cc->Vpc_Paragraphs_Component->toArray()
+                $cc->Kwc_Paragraphs_Component->toArray()
             );
         }
         $ret['showCopyPaste'] = true;
-        $ret['extConfig'] = 'Vpc_Paragraphs_ExtConfig';
+        $ret['extConfig'] = 'Kwc_Paragraphs_ExtConfig';
         return $ret;
     }
 
@@ -55,7 +55,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
+        $ret[] = new Kwf_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

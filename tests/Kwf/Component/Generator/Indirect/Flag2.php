@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Indirect_Flag2 extends Vpc_Abstract
+class Kwf_Component_Generator_Indirect_Flag2 extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -7,8 +7,8 @@ class Vps_Component_Generator_Indirect_Flag2 extends Vpc_Abstract
         $ret['flags']['foo'] = true;
         $ret['flags']['bar'] = true;
         $ret['generators']['test'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vps_Component_Generator_Indirect_Flag3'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwf_Component_Generator_Indirect_Flag3'
         );
         return $ret;
     }

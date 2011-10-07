@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
+class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
 {
     private $_checkboxHiddenField = null;
     public function __construct($title = null)
@@ -22,7 +22,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
      */
     public function setCheckboxName($name)
     {
-        $this->_checkboxHiddenField = new Vps_Form_Container_FieldSet_Hidden($name);
+        $this->_checkboxHiddenField = new Kwf_Form_Container_FieldSet_Hidden($name);
         $this->fields->add($this->_checkboxHiddenField);
         return $this;
     }
@@ -75,7 +75,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         }
         $ret['preHtml'] = '<fieldset';
         if ($this->getCheckboxToggle() && $this->_checkboxHiddenField && !$value) {
-            $ret['preHtml'] .= ' class="vpsFormContainerFieldSetCollapsed"';
+            $ret['preHtml'] .= ' class="kwfFormContainerFieldSetCollapsed"';
         }
         $ret['preHtml'] .= '>';
         if ($this->getTitle()) {
@@ -95,18 +95,18 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses']['textfield'] = 'Vps_Form_Field_TextField';
-        $ret['childComponentClasses']['checkbox'] = 'Vps_Form_Field_Checkbox';
-        $ret['childComponentClasses']['select'] = 'Vps_Form_Field_Select';
-        $ret['childComponentClasses']['numberfield'] = 'Vps_Form_Field_NumberField';
-        $ret['childComponentClasses']['textarea'] = 'Vps_Form_Field_TextArea';
-        $ret['childComponentClasses']['fieldset'] = 'Vps_Form_Container_FieldSet';
-        $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
-        $ret['tablename'] = 'Vpc_Formular_Dynamic_Model';
-        $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
-        $ret['componentName'] = trlVps('Fieldset');
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vps/Form/Container/FieldSet/Panel.js';
+        $ret['childComponentClasses']['textfield'] = 'Kwf_Form_Field_TextField';
+        $ret['childComponentClasses']['checkbox'] = 'Kwf_Form_Field_Checkbox';
+        $ret['childComponentClasses']['select'] = 'Kwf_Form_Field_Select';
+        $ret['childComponentClasses']['numberfield'] = 'Kwf_Form_Field_NumberField';
+        $ret['childComponentClasses']['textarea'] = 'Kwf_Form_Field_TextArea';
+        $ret['childComponentClasses']['fieldset'] = 'Kwf_Form_Container_FieldSet';
+        $ret['childComponentClasses']['text'] = 'Kwc_Basic_Text_Component';
+        $ret['tablename'] = 'Kwc_Formular_Dynamic_Model';
+        $ret['decorator'] = 'Kwc_Formular_Decorator_Label';
+        $ret['componentName'] = trlKwf('Fieldset');
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwf/Form/Container/FieldSet/Panel.js';
         return $ret;
     }
 }

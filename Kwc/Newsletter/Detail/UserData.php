@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_Detail_UserData extends Vps_Data_Abstract
+class Kwc_Newsletter_Detail_UserData extends Kwf_Data_Abstract
 {
     private $_fieldname;
 

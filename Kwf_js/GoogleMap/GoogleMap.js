@@ -1,44 +1,44 @@
-Ext.namespace('Vps.GoogleMap');
-Vps.GoogleMap.isLoaded = false;
-Vps.GoogleMap.isCallbackCalled = false;
-Vps.GoogleMap.callbacks = [];
+Ext.namespace('Kwf.GoogleMap');
+Kwf.GoogleMap.isLoaded = false;
+Kwf.GoogleMap.isCallbackCalled = false;
+Kwf.GoogleMap.callbacks = [];
 
-Vps.GoogleMap.load = function(callback, scope)
+Kwf.GoogleMap.load = function(callback, scope)
 {
-    if (Vps.GoogleMap.isCallbackCalled) {
+    if (Kwf.GoogleMap.isCallbackCalled) {
         callback.call(scope || window);
         return;
     }
-    Vps.GoogleMap.callbacks.push({
+    Kwf.GoogleMap.callbacks.push({
         callback: callback,
         scope: scope
     });
-    if (Vps.GoogleMap.isLoaded) return;
+    if (Kwf.GoogleMap.isLoaded) return;
 
-    Vps.GoogleMap.isLoaded = true;
+    Kwf.GoogleMap.isLoaded = true;
 
-    var url = 'http:/'+'/maps.google.com/maps?file=api&v=2.x&key={Vps_Assets_GoogleMapsApiKey::getKey()}&c&async=2&hl='+trlVps('en');
-    url += '&callback=Vps.GoogleMap._loaded';
+    var url = 'http:/'+'/maps.google.com/maps?file=api&v=2.x&key={Kwf_Assets_GoogleMapsApiKey::getKey()}&c&async=2&hl='+trlKwf('en');
+    url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
     s.setAttribute('src', url);
     document.getElementsByTagName("head")[0].appendChild(s);
 };
 
-Vps.GoogleMap._loaded = function()
+Kwf.GoogleMap._loaded = function()
 {
-    Vps.GoogleMap.isCallbackCalled = true;
-    Vps.GoogleMap.callbacks.forEach(function(i) {
+    Kwf.GoogleMap.isCallbackCalled = true;
+    Kwf.GoogleMap.callbacks.forEach(function(i) {
         i.callback.call(i.scope || window);
     });
 };
 
 
 
-Vps.GoogleMap.maps = [];
+Kwf.GoogleMap.maps = [];
 
 /**
- * The Vps GoogleMaps object
+ * The Kwf GoogleMaps object
  *
  * @param config The configuration object that may / must contain the following values
  *     mapContainer (mandatory): The wrapper element of the map (id, dom-element or ext-element).
@@ -75,7 +75,7 @@ Vps.GoogleMap.maps = [];
  *            1 to show small zoom an move controls. Defaults to 0.
  *     overview (optional): 0 or 1, whether to show a small overview map at the bottom.
  */
-Vps.GoogleMap.Map = function(config) {
+Kwf.GoogleMap.Map = function(config) {
     if (!config.mapContainer) throw new Error('config value mapContainer not set');
 
     this.addEvents({
@@ -93,7 +93,7 @@ Vps.GoogleMap.Map = function(config) {
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
-    if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/vps/images/googlemap/markerBlue.png';
+    if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
 
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&
@@ -159,10 +159,10 @@ Vps.GoogleMap.Map = function(config) {
     }
 
     if (typeof this.config.markers == 'string') {
-        if (typeof Vps.Connection == 'undefined') {
-            alert('Dependency ExtConnection (that includes Vps.Connection object) must be set when you wish to reload markers in an google map');
+        if (typeof Kwf.Connection == 'undefined') {
+            alert('Dependency ExtConnection (that includes Kwf.Connection object) must be set when you wish to reload markers in an google map');
         }
-        this.ajax = new Vps.Connection({
+        this.ajax = new Kwf.Connection({
             autoAbort : true
         });
     }
@@ -173,7 +173,7 @@ Vps.GoogleMap.Map = function(config) {
 
 };
 
-Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
+Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
 
     markers: [ ],
 
@@ -244,19 +244,19 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
         // Opens the first InfoWindow. Must be deferred, because there were
         // problems opening InfoWindows in multiple maps on one site
         var showNextWindow = function() {
-            var map = Vps.GoogleMap.maps.shift();
+            var map = Kwf.GoogleMap.maps.shift();
             if (!map) return;
             map.markers.each(function(m) {
-                if (m.vpsConfig.autoOpenInfoWindow) this.showWindow(m);
+                if (m.kwfConfig.autoOpenInfoWindow) this.showWindow(m);
             }, map);
-            if (Vps.GoogleMap.maps.length) {
+            if (Kwf.GoogleMap.maps.length) {
                 showNextWindow.defer(1500, this);
             }
         };
-        if (Vps.GoogleMap.maps.length == 0) {
+        if (Kwf.GoogleMap.maps.length == 0) {
             showNextWindow.defer(1, this);
         }
-        Vps.GoogleMap.maps.push(this);
+        Kwf.GoogleMap.maps.push(this);
 
         var mapTypes = this.gmap.getMapTypes();
         var minRes = this.config.minimumResolution;
@@ -283,7 +283,7 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
 
         if (!this.gmapLoader) {
             this.gmapLoader = Ext.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
-            this.gmapLoader.dom.innerHTML = trlVps('Loading...');
+            this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
             this.gmapLoader.alignTo(this.mapContainer, 'tr-tr', [ -10, 50 ]);
         }
         this.gmapLoader.show();
@@ -295,8 +295,8 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
                 ret.markers.each(function(m) {
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {
-                        if (this.markers[i].vpsConfig.latitude == m.latitude
-                            && this.markers[i].vpsConfig.longitude == m.longitude
+                        if (this.markers[i].kwfConfig.latitude == m.latitude
+                            && this.markers[i].kwfConfig.longitude == m.longitude
                         ) {
                             doAdd = false;
                             break;
@@ -331,7 +331,7 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
                 parseFloat(markerConfig.longitude)),
             gmarkCfg
         );
-        marker.vpsConfig = markerConfig;
+        marker.kwfConfig = markerConfig;
         this.markers.push(marker);
         this.gmap.addOverlay(marker);
 
@@ -353,13 +353,13 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
     },
 
     /**
-     * @param marker: The marker with 'vpsConfig' property inside
+     * @param marker: The marker with 'kwfConfig' property inside
      */
     showWindow : function(marker) {
-        if (marker.vpsConfig.infoHtml && marker.vpsConfig.infoHtml != ""
-            && "<br />" != marker.vpsConfig.infoHtml.toLowerCase()
+        if (marker.kwfConfig.infoHtml && marker.kwfConfig.infoHtml != ""
+            && "<br />" != marker.kwfConfig.infoHtml.toLowerCase()
         ) {
-            marker.openInfoWindowHtml(marker.vpsConfig.infoHtml, {
+            marker.openInfoWindowHtml(marker.kwfConfig.infoHtml, {
                 maxWidth: parseInt(this.config.width * 0.8)
             });
         }
@@ -373,7 +373,7 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
     },
     testCallback : function(o) {
         if (!o.Placemark) {
-            alert(trlVps('Entered place could not been found!'));
+            alert(trlKwf('Entered place could not been found!'));
         } else {
             this.useFrom(o.Placemark[0], false);
             this.suggestLocations(o.Placemark);

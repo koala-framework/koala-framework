@@ -1,5 +1,5 @@
 <?php
-class Vps_Acl_Role extends Zend_Acl_Role
+class Kwf_Acl_Role extends Zend_Acl_Role
 {
     protected $_roleName;
 

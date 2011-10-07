@@ -1,5 +1,5 @@
 <?php
-class Vps_Validate_NotEmptyNotZero extends Vps_Validate_NotEmpty
+class Kwf_Validate_NotEmptyNotZero extends Kwf_Validate_NotEmpty
 {
     public function isValid($value)
     {

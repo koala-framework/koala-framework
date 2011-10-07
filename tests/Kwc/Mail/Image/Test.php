@@ -1,13 +1,13 @@
 <?php
 /**
- * @group Vpc_Mail
+ * @group Kwc_Mail
  */
-class Vpc_Mail_Image_Test extends Vpc_TestAbstract
+class Kwc_Mail_Image_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Mail_Image_Mail_Component');
-        Vps_Registry::get('config')->debug->componentCache->disable = true;
+        parent::setUp('Kwc_Mail_Image_Mail_Component');
+        Kwf_Registry::get('config')->debug->componentCache->disable = true;
     }
 
     public function testImage()
@@ -15,7 +15,7 @@ class Vpc_Mail_Image_Test extends Vpc_TestAbstract
         $mail = $this->_root;
         $c = $mail->getComponent();
 
-        $url = '/assets/vps/images/rating/ratingStarFull.jpg';
+        $url = '/assets/kwf/images/rating/ratingStarFull.jpg';
         $this->assertEquals('<img src="cid:' . md5($url) . '" width="13" height="12" alt="" />', $c->getHtml(null, true));
         $this->assertEquals('<img src="' . $url . '" width="13" height="12" alt="" />', $c->getHtml());
         $images = $this->_root->getComponent()->getImages();

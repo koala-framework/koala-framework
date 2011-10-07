@@ -1,1 +1,1 @@
-<?php/** * @deprectated */class Vpc_Directories_List_View_ComponentNonPartial extends Vpc_Directories_List_View_Component{    public function getTemplateVars()    {        $ret = parent::getTemplateVars();        $ret['items'] = $this->_getItems();        return $ret;    }}
+<?php/** * @deprectated */class Kwc_Directories_List_View_ComponentNonPartial extends Kwc_Directories_List_View_Component{    public function getTemplateVars()    {        $ret = parent::getTemplateVars();        $ret['items'] = $this->_getItems();        return $ret;    }}

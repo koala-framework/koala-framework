@@ -1,12 +1,12 @@
 <?php
-abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composite_Component
+abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'vps/Vpc/Advanced/GoogleMapView/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Advanced/GoogleMapView/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
-        $ret['assets']['dep'][] = 'VpsGoogleMap';
+        $ret['assets']['dep'][] = 'KwfGoogleMap';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['placeholder']['noCoordinates'] = ''; //leer, wird in GoogleMap benötgit damit man im backend sieht was falsch ist
         $ret['cssClass'] = 'webStandard webForm';
@@ -19,7 +19,7 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
 
         $options = $this->_getOptions();
         if (!isset($options['coordinates'])) {
-            throw new Vps_Exception("You must return coordinates in _getOptions");
+            throw new Kwf_Exception("You must return coordinates in _getOptions");
         }
         $split = explode(';', $options['coordinates']);
         if (count($split) == 2) {

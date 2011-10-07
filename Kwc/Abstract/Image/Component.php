@@ -1,6 +1,6 @@
 <?php
-class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
-    implements Vps_Media_Output_IsValidInterface
+class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
+    implements Kwf_Media_Output_IsValidInterface
 {
     const USER_SELECT = 'user';
     const CONTENT_WIDTH = 'contentWidth';
@@ -9,42 +9,42 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vpc_Abstract_Image_Model';
+        $ret['ownModel'] = 'Kwc_Abstract_Image_Model';
 
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlVps('default'),
+                'text' => trlKwf('default'),
                 'width' => 300,
                 'height' => 200,
-                'scale' => Vps_Media_Image::SCALE_BESTFIT
+                'scale' => Kwf_Media_Image::SCALE_BESTFIT
             ),
             'original'=>array(
-                'text' => trlVps('original'),
+                'text' => trlKwf('original'),
                 'width' => 0,
                 'height' => 0,
-                'scale' => Vps_Media_Image::SCALE_ORIGINAL
+                'scale' => Kwf_Media_Image::SCALE_ORIGINAL
             ),
             'custombestfit'=>array(
-                'text' => trlVps('user-defined'),
+                'text' => trlKwf('user-defined'),
                 'width' => self::USER_SELECT,
                 'height' => self::USER_SELECT,
-                'scale' => Vps_Media_Image::SCALE_BESTFIT
+                'scale' => Kwf_Media_Image::SCALE_BESTFIT
             ),
             'customcrop'=>array(
-                'text' => trlVps('user-defined'),
+                'text' => trlKwf('user-defined'),
                 'width' => self::USER_SELECT,
                 'height' => self::USER_SELECT,
-                'scale' => Vps_Media_Image::SCALE_CROP
+                'scale' => Kwf_Media_Image::SCALE_CROP
             ),
             'fullWidth'=>array(
-                'text' => trlVps('full width'),
+                'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
-                'scale' => Vps_Media_Image::SCALE_DEFORM
+                'scale' => Kwf_Media_Image::SCALE_DEFORM
             ),
         );
 
-        $ret['imageLabel'] = trlVps('Image');
+        $ret['imageLabel'] = trlKwf('Image');
         $ret['maxResolution'] = null;
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
@@ -52,41 +52,41 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
-        $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
+        $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/Image/DimensionField.js';
-        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'vps_upload_id';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
     }
 
     public static function validateSettings($settings, $componentClass)
     {
         if (!$settings['dimensions']) {
-            throw new Vps_Exception('Dimension setting required');
+            throw new Kwf_Exception('Dimension setting required');
         }
         if (!is_array($settings['dimensions'])) {
-            throw new Vps_Exception('Dimension setting must be an array');
+            throw new Kwf_Exception('Dimension setting must be an array');
         }
         foreach ($settings['dimensions'] as $k=>$d) {
             if (!is_array($d)) {
-                throw new Vps_Exception('Dimension setting must contain array of arrays');
+                throw new Kwf_Exception('Dimension setting must contain array of arrays');
             }
             if (!array_key_exists('width', $d)) {
-                throw new Vps_Exception('Dimension \''.$k.'\' must contain width');
+                throw new Kwf_Exception('Dimension \''.$k.'\' must contain width');
             }
             if (!array_key_exists('height', $d)) {
-                throw new Vps_Exception('Dimension \''.$k.'\' must contain height');
+                throw new Kwf_Exception('Dimension \''.$k.'\' must contain height');
             }
             if (!array_key_exists('scale', $d)) {
-                throw new Vps_Exception('Dimension \''.$k.'\' must contain scale');
+                throw new Kwf_Exception('Dimension \''.$k.'\' must contain scale');
             }
-            $validScales = array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_ORIGINAL, Vps_Media_Image::SCALE_DEFORM);
+            $validScales = array(Kwf_Media_Image::SCALE_BESTFIT, Kwf_Media_Image::SCALE_CROP, Kwf_Media_Image::SCALE_ORIGINAL, Kwf_Media_Image::SCALE_DEFORM);
             if (!in_array($d['scale'], $validScales)) {
-                throw new Vps_Exception("Invalid Scale '$d[scale]' for Dimension \''.$k.'\'");
+                throw new Kwf_Exception("Invalid Scale '$d[scale]' for Dimension \''.$k.'\'");
             }
-            if ($d['scale'] != Vps_Media_Image::SCALE_ORIGINAL) {
+            if ($d['scale'] != Kwf_Media_Image::SCALE_ORIGINAL) {
                 if (!$d['width'] && !$d['height']) {
-                    throw new Vps_Exception('Dimension \''.$k.'\' must contain width or height');
+                    throw new Kwf_Exception('Dimension \''.$k.'\' must contain width or height');
                 }
             }
         }
@@ -95,12 +95,12 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         //width oder height gesetzt sein
         reset($settings['dimensions']);
         $firstDimension = current($settings['dimensions']);
-        if (($firstDimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
-            $firstDimension['scale'] == Vps_Media_Image::SCALE_CROP) &&
+        if (($firstDimension['scale'] == Kwf_Media_Image::SCALE_BESTFIT ||
+            $firstDimension['scale'] == Kwf_Media_Image::SCALE_CROP) &&
             empty($firstDimension['width']) &&
             empty($firstDimension['height'])
         ) {
-            throw new Vps_Exception('The first dimension must contain width or height if bestfit or crop is used');
+            throw new Kwf_Exception('The first dimension must contain width or height if bestfit or crop is used');
         }
     }
 
@@ -137,7 +137,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data && $data['filename']) {
             $id = $this->getData()->componentId;
-            return Vps_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
+            return Kwf_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
         }
         return null;
     }
@@ -235,27 +235,27 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $s = $this->_getImageDimensions();
 
         if ($data && $data['file'] && file_exists($data['file'])) {
-            return Vps_Media_Image::calculateScaleDimensions($data['file'], $s);
+            return Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
         }
         return $s;
     }
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        if (Vps_Component_Data_Root::getInstance()->getComponentById($id)) {
+        if (Kwf_Component_Data_Root::getInstance()->getComponentById($id)) {
             return self::VALID;
         }
-        if (Vps_Registry::get('config')->showInvisible) {
+        if (Kwf_Registry::get('config')->showInvisible) {
             //preview im frontend
-            if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+            if (Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
                 return self::VALID_DONT_CACHE;
             }
         }
 
         //paragraphs vorschau im backend
-        if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
-            $authData = Vps_Registry::get('userModel')->getAuthedUser();
-            if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
+        if (Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+            $authData = Kwf_Registry::get('userModel')->getAuthedUser();
+            if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
                 return self::VALID_DONT_CACHE;
             }
         }
@@ -265,7 +265,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $component = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         if (!$component) return null;
 
         $data = $component->getComponent()->_getImageDataOrEmptyImageData();
@@ -275,7 +275,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
         $dim = $component->getComponent()->_getImageDimensions();
         if ($dim) {
-            $output = Vps_Media_Image::scale($data['file'], $dim);
+            $output = Kwf_Media_Image::scale($data['file'], $dim);
         } else {
             $output = file_get_contents($data['file']);
         }
@@ -283,10 +283,10 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             'contents' => $output,
             'mimeType' => $data['mimeType'],
         );
-        if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
+        if (Kwf_Registry::get('config')->debug->componentCache->checkComponentModification) {
             $mtimeFiles = array();
             $mtimeFiles[] = $data['file'];
-            $classes = Vpc_Abstract::getParentClasses($className);
+            $classes = Kwc_Abstract::getParentClasses($className);
             $classes[] = $className;
             $incPaths = explode(PATH_SEPARATOR, get_include_path());
             foreach ($classes as $c) {

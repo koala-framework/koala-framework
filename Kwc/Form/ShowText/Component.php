@@ -1,5 +1,5 @@
 <?php
-class Vpc_Form_ShowText_Component extends Vpc_Form_Field_Abstract
+class Kwc_Form_ShowText_Component extends Kwc_Form_Field_Abstract
 {
     public static function getSettings()
     {

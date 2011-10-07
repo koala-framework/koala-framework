@@ -1,20 +1,20 @@
-Vps.Form.GoogleMapsField = Ext.extend(Ext.form.TriggerField,
+Kwf.Form.GoogleMapsField = Ext.extend(Ext.form.TriggerField,
 {
 	triggerClass : 'x-form-search-trigger',
 	readOnly : false,
 	width : 200,
 	onTriggerClick : function(){
-        var win = Vps.Form.GoogleMapsField.GoogleMapWindow; //statische var, nur ein window erstellen??
+        var win = Kwf.Form.GoogleMapsField.GoogleMapWindow; //statische var, nur ein window erstellen??
         if (!win) {
-            win = new Vps.Form.GoogleMapWindow({
+            win = new Kwf.Form.GoogleMapWindow({
 				modal: true,
-				title: trlVps('Select your Position'),
+				title: trlKwf('Select your Position'),
 				width:535,
 				height:500,
 				shadow:true,
 				closeAction: 'hide'
             });
-            Vps.Form.GoogleMapsField.GoogleMapWindow = win;
+            Kwf.Form.GoogleMapsField.GoogleMapWindow = win;
         }
 		win.purgeListeners();
         win.on('confirm', function(win, ch) {
@@ -32,4 +32,4 @@ Vps.Form.GoogleMapsField = Ext.extend(Ext.form.TriggerField,
 		win.setMarkerPoint(this.getValue());
     }
 });
-Ext.reg('googlemapsfield', Vps.Form.GoogleMapsField);
+Ext.reg('googlemapsfield', Kwf.Form.GoogleMapsField);

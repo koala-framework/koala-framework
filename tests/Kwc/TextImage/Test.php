@@ -1,18 +1,18 @@
 <?php
 /**
- * @group Vpc_TextImage
+ * @group Kwc_TextImage
  */
-class Vpc_TextImage_Test extends Vpc_TestAbstract
+class Kwc_TextImage_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_TextImage_Root');
+        parent::setUp('Kwc_TextImage_Root');
     }
 
     public function testIt()
     {
 
-        // http://prosalzburg.vps.niko.vivid/vps/componentedittest/Vpc_TextImage_Root/Vpc_TextImage_TestComponent?componentId=root_textImage1
-        // http://prosalzburg.vps.niko.vivid/vps/vpctest/Vpc_TextImage_Root/textimage1
+        // http://prosalzburg.kwf.niko.vivid/kwf/componentedittest/Kwc_TextImage_Root/Kwc_TextImage_TestComponent?componentId=root_textImage1
+        // http://prosalzburg.kwf.niko.vivid/kwf/kwctest/Kwc_TextImage_Root/textimage1
     }
 }

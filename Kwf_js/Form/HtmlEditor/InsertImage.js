@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.InsertImage = function(config) {
+Kwf.Form.HtmlEditor.InsertImage = function(config) {
     Ext.apply(this, config);
 
     var panel = Ext.ComponentMgr.create(Ext.applyIf(this.componentConfig, {
@@ -8,14 +8,14 @@ Vps.Form.HtmlEditor.InsertImage = function(config) {
         },
         autoLoad: false
     }));
-    this.imageDialog = new Vps.Auto.Form.Window({
+    this.imageDialog = new Kwf.Auto.Form.Window({
         autoForm: panel,
         width: 450,
         height: 400
     });
 
 };
-Ext.extend(Vps.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
+Ext.extend(Kwf.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -30,8 +30,8 @@ Ext.extend(Vps.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: trlVps('Image'),
-                text: trlVps('Insert new image or edit selected image.')
+                title: trlKwf('Image'),
+                text: trlKwf('Insert new image or edit selected image.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',

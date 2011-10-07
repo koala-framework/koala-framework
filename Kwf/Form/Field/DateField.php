@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -24,7 +24,7 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        if ($ret == trlVps('yyyy-mm-dd')) return null;
+        if ($ret == trlKwf('yyyy-mm-dd')) return null;
         if (!$ret) return null;
 
         //format das von ext kommt
@@ -41,7 +41,7 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
     {
         $name = $this->getFieldName();
         $value = $values[$name];
-        if (!$value) $value = trlVps('yyyy-mm-dd');
+        if (!$value) $value = trlKwf('yyyy-mm-dd');
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $value = htmlspecialchars($value);

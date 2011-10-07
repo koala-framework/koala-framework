@@ -1,5 +1,5 @@
 <?php
-class Vps_Hlp {
+class Kwf_Hlp {
     
     protected $_xml;
     
@@ -9,14 +9,14 @@ class Vps_Hlp {
         if (is_file($filename)) {
             $this->_xml = new SimpleXMLElement(file_get_contents($filename));
         }
-        $filename = VPS_PATH . '/hlp.xml';
+        $filename = KWF_PATH . '/hlp.xml';
         if (is_file($filename)) {
-            $this->_xmlVps = new SimpleXMLElement(file_get_contents($filename));
+            $this->_xmlKwf = new SimpleXMLElement(file_get_contents($filename));
         }
     }
     
     function hlp($key) {
-        $language = Vps_Trl::getInstance()->getTargetLanguage();
+        $language = Kwf_Trl::getInstance()->getTargetLanguage();
         if ($this->_xml) {
             $element = $this->_xml->xpath("/hlp/text[@key='$key']/$language");
             if ($element) {
@@ -26,10 +26,10 @@ class Vps_Hlp {
         return null;
     }
 
-    function hlpVps($key) {
-        $language = Vps_Trl::getInstance()->getTargetLanguage();
+    function hlpKwf($key) {
+        $language = Kwf_Trl::getInstance()->getTargetLanguage();
         if ($this->_xml) {
-            $element = $this->_xmlVps->xpath("/hlp/text[@key='$key']/$language");
+            $element = $this->_xmlKwf->xpath("/hlp/text[@key='$key']/$language");
             if ($element) {
                 return (string)$element[0];
             }

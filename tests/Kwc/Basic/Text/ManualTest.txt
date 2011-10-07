@@ -1,5 +1,5 @@
 *** Enter erzeugt Absatz ***
-- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- url aufrufen http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Basic_Text_Root/Kwc_Basic_Text_TestComponent/Index?componentId=1000
 - hinter foo klicken
 - Enter drücken
 - bar schreiben
@@ -9,7 +9,7 @@
 - Erwarteter HTML-Code: <p>foo</p><p>bar<br />baz</p>
 
 *** Fett setzen ***
-- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- url aufrufen http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Basic_Text_Root/Kwc_Basic_Text_TestComponent/Index?componentId=1000
 - 'foo bar baz' in rte schreiben
 - bar markieren
 - 'B' klicken
@@ -20,7 +20,7 @@
 - Erwartet: bar ist immer noch fett
 
 *** Fett zurücksetzen ***
-- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- url aufrufen http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Basic_Text_Root/Kwc_Basic_Text_TestComponent/Index?componentId=1000
 - 'foo bar baz' in rte schreiben
 - bar markieren
 - 'B' klicken
@@ -38,13 +38,13 @@
 - Erwartet: bar ist nicht mehr fett
 
 *** Cursor beim einfügen ***
-- url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- url aufrufen: http://fnprofile.markus.vivid/kwf/componentedittest/Kwc_Basic_Text_Root/Kwc_Basic_Text_TestComponent/Index?componentId=1000
 - 'Text' in Zwischenablage kopieren
 - in RTE Strg+V drücken
 - Erwartet: Cursor muss blinkend sichtbar sein
 
 *** Markierter text beim einfügen entfernen ***
-- url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- url aufrufen: http://fnprofile.markus.vivid/kwf/componentedittest/Kwc_Basic_Text_Root/Kwc_Basic_Text_TestComponent/Index?componentId=1000
 - 'Ich mag Kekse!' in rte schreiben
 - 'Hunde' in Zwischenablage kopieren
 - 'Kekse' in RTE markieren
@@ -52,7 +52,7 @@
 - Erwarteter Text in RTE: 'Ich mag Hunde!'
 
 *** Cursor nach einfügen ganz am Anfang ***
-- url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- url aufrufen: http://fnprofile.markus.vivid/kwf/componentedittest/Kwc_Basic_Text_Root/Kwc_Basic_Text_TestComponent/Index?componentId=1000
 - 'ein text' in die Zwischenablage
 - nach 'f' in 'foo' in den rte klicken und Strg+V drücken
 - Erwartet: cursor ist nach 'ein text' und vor 'oo'

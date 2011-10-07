@@ -1,11 +1,11 @@
 <?php
-class Vps_Model_Select_Expr_Child implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Child implements Kwf_Model_Select_Expr_Interface
 {
     private $_child;
     private $_expr;
     private $_select;
 
-    public function __construct($child, Vps_Model_Select_Expr_Interface $expr, Vps_Model_Select $select=null)
+    public function __construct($child, Kwf_Model_Select_Expr_Interface $expr, Kwf_Model_Select $select=null)
     {
         $this->_child = $child;
         $this->_expr = $expr;

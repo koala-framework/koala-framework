@@ -1,11 +1,11 @@
-Ext.namespace("Vps.EyeCandy.List");
+Ext.namespace("Kwf.EyeCandy.List");
 
-Vps.EyeCandy.List.Item = function(cfg) {
+Kwf.EyeCandy.List.Item = function(cfg) {
     Ext.apply(this, cfg);
     this._init();
 };
 
-Ext.extend(Vps.EyeCandy.List.Item, Ext.util.Observable, {
+Ext.extend(Kwf.EyeCandy.List.Item, Ext.util.Observable, {
     //list
     //listIndex
     //el
@@ -18,10 +18,10 @@ Ext.extend(Vps.EyeCandy.List.Item, Ext.util.Observable, {
 
         this.state = [];
 
-        Vps.Event.on(this.el, 'mouseEnter', function() {
+        Kwf.Event.on(this.el, 'mouseEnter', function() {
             this.fireEvent('mouseEnter', this);
         }, this);
-        Vps.Event.on(this.el, 'mouseLeave', function() {
+        Kwf.Event.on(this.el, 'mouseLeave', function() {
             this.fireEvent('mouseLeave', this);
         }, this);
         Ext.fly(this.el).on('click', function(ev) {

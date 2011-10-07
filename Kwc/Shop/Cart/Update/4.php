@@ -1,9 +1,9 @@
 <?php
-class Vpc_Shop_Cart_Update_4 extends Vps_Update
+class Kwc_Shop_Cart_Update_4 extends Kwf_Update
 {
     public function update()
     {
-        $rows = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_OrderProducts')->getRows();
+        $rows = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_OrderProducts')->getRows();
         echo "updading ".count($rows)." rows...\n";
         foreach ($rows as $row) {
             $row->size = (int)$row->size_backup;

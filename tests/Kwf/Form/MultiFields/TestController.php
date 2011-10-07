@@ -1,14 +1,14 @@
 <?php
 // zum manuell testen
-// /vps/test/vps_form_multi-fields_test
-class Vps_Form_MultiFields_TestController extends Vps_Controller_Action_Auto_Form
+// /kwf/test/kwf_form_multi-fields_test
+class Kwf_Form_MultiFields_TestController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
 
     public function preDispatch()
     {
-        $this->_model = Vps_Model_Abstract::getInstance('Vps_Form_MultiFields_TestModel1');
+        $this->_model = Kwf_Model_Abstract::getInstance('Kwf_Form_MultiFields_TestModel1');
         parent::preDispatch();
     }
 
@@ -16,8 +16,8 @@ class Vps_Form_MultiFields_TestController extends Vps_Controller_Action_Auto_For
     {
         $fs = $this->_form;
 
-        $mf = $fs->add(new Vps_Form_Field_MultiFields('Model2'));
-        $mf->fields->add(new Vps_Form_Field_TextField('seltestfield', 'Sel Test Label'));
+        $mf = $fs->add(new Kwf_Form_Field_MultiFields('Model2'));
+        $mf->fields->add(new Kwf_Form_Field_TextField('seltestfield', 'Sel Test Label'));
     }
 
     public function indexAction()
@@ -29,10 +29,10 @@ class Vps_Form_MultiFields_TestController extends Vps_Controller_Action_Auto_For
             $config,
             array(
                 'controllerUrl' => $this->getRequest()->getPathInfo(),
-                'assetsType' => 'Vps_Form_MultiFields:Test',
+                'assetsType' => 'Kwf_Form_MultiFields:Test',
             )
         );
-        $this->view->ext('Vps.Auto.FormPanel', $config, 'Vps.Test.Viewport');
+        $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }
 

@@ -1,10 +1,10 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Auto_Synctree
+abstract class Kwf_Controller_Action_Auto_Tree extends Kwf_Controller_Action_Auto_Synctree
 {
     public function indexAction()
     {
         parent::indexAction();
-        $this->view->xtype = 'vps.autotree';
+        $this->view->xtype = 'kwf.autotree';
     }
 
     protected function _formatNodes($parentId = null)
@@ -21,7 +21,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
             $data = $this->_formatNode($row);
             if ($data) {
                 foreach ($data as $k=>$i) {
-                    if ($i instanceof Vps_Asset) {
+                    if ($i instanceof Kwf_Asset) {
                         $data[$k] = $i->__toString();
                     }
                 }

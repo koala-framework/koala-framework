@@ -4,7 +4,7 @@
  * @group Model_Db
  * @group Model_DbWithConnection
  */
-class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
+class Kwf_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 {
     protected $backupStaticAttributes = false;
     private $_tableName;
@@ -16,8 +16,8 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
             `test1` VARCHAR( 200 ) character set utf8 NOT NULL,
             `test2` VARCHAR( 200 ) character set utf8 NOT NULL
         ) ENGINE = INNODB DEFAULT CHARSET=utf8";
-        Vps_Registry::get('db')->query($sql);
-        $m = new Vps_Model_Db(array(
+        Kwf_Registry::get('db')->query($sql);
+        $m = new Kwf_Model_Db(array(
             'table' => $this->_tableName
         ));
         $r = $m->createRow();
@@ -28,12 +28,12 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 
     public function tearDown()
     {
-        Vps_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
+        Kwf_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
     }
 
     public function testIt()
     {
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $this->_tableName
         ));
         $this->assertEquals('1x1', $model->getRow(1)->test1);
@@ -50,7 +50,7 @@ AUSKOMMENTIERT WEIL:
             array(0xfb, 0xc4, 0x4a, 0xde, 0x9d, 0x63, 0x9e, 0x5d, 0x27, 0xa9),
             ':a\\\'', 'a\'b', '\'?', '?', 'a?b', 'a"b', 'a\\b', 'a\\\'b'
         );
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $this->_tableName
         ));
 
@@ -67,7 +67,7 @@ AUSKOMMENTIERT WEIL:
             $s = $model->select()->whereEquals('test1', $v);
             $model->getRow($s);
 
-            $s = $model->select()->where(new Vps_Model_Select_Expr_Equal('test1', $v));
+            $s = $model->select()->where(new Kwf_Model_Select_Expr_Equal('test1', $v));
             $model->getRow($s);
         }
     }
@@ -83,7 +83,7 @@ AUSKOMMENTIERT WEIL:
 
     public function testEscapingBruteForce()
     {
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $this->_tableName
         ));
         for($i=0;$i<1000;$i++) {

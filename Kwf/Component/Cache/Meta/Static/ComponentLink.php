@@ -1,11 +1,11 @@
 <?php
-class Vps_Component_Cache_Meta_Static_ComponentLink extends Vps_Component_Cache_Meta_Static_Model
+class Kwf_Component_Cache_Meta_Static_ComponentLink extends Kwf_Component_Cache_Meta_Static_Model
 {
     public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
     {
         $ret = parent::getDeleteWhere($pattern, $row, $dirtyColumns, $params);
         $ret['type'] = array('componentLink');
-        if ($row->getModel() instanceof Vpc_Root_Category_GeneratorModel) {
+        if ($row->getModel() instanceof Kwc_Root_Category_GeneratorModel) {
             $ret['db_id'] = array_merge(
                 array($ret['db_id']),
                 self::_getRecursiveIds($ret['db_id'], $row->getModel())

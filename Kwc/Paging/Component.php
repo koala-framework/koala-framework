@@ -1,4 +1,4 @@
 <?php
-class Vpc_Paging_Component extends Vpc_Paging_Link_Component
+class Kwc_Paging_Component extends Kwc_Paging_Link_Component
 {
 }

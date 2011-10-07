@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_VerboseResultPrinter extends PHPUnit_TextUI_ResultPrinter
+class Kwf_Test_VerboseResultPrinter extends PHPUnit_TextUI_ResultPrinter
 {
     public function __construct($out = NULL, $colors = FALSE)
     {

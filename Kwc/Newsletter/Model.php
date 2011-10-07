@@ -1,12 +1,12 @@
 <?php
-class Vpc_Newsletter_Model extends Vps_Model_Db_Proxy
+class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_newsletter';
-    protected $_rowClass = 'Vpc_Newsletter_Row';
+    protected $_table = 'kwc_newsletter';
+    protected $_rowClass = 'Kwc_Newsletter_Row';
     protected $_dependentModels = array(
-        'Queue' => 'Vpc_Newsletter_QueueModel',
-        'Log' => 'Vpc_Newsletter_LogModel',
-        'Mail' => 'Vpc_Mail_Model'
+        'Queue' => 'Kwc_Newsletter_QueueModel',
+        'Log' => 'Kwc_Newsletter_LogModel',
+        'Mail' => 'Kwc_Mail_Model'
     );
 
     public function send($timeLimit = 60, $mailsPerMinute = 20, $debugOutput = false)
@@ -14,9 +14,9 @@ class Vpc_Newsletter_Model extends Vps_Model_Db_Proxy
         // Newsletter-ID rausfinden, die den Eintrag in der Queue mit der
         // kleinsten ID hat, von der wird dann gesendet
         $select = $this->select()
-            ->where(new Vps_Model_Select_Expr_Or(array(
-                new Vps_Model_Select_Expr_Equal('status', 'start'),
-                new Vps_Model_Select_Expr_Equal('status', 'sending')
+            ->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('status', 'start'),
+                new Kwf_Model_Select_Expr_Equal('status', 'sending')
             )));
         $nlRow = null;
         $id = 0;
@@ -25,7 +25,7 @@ class Vpc_Newsletter_Model extends Vps_Model_Db_Proxy
             // Wenn Newsletter auf "sending" ist, aber seit mehr als 5 Minuten
             // nichts mehr gesendet wurde, auf "start" stellen
             if ($r->status == 'sending') {
-                $lastRow = $r->getLastRow($r->id, 'Vpc_Newsletter_QueueModel');
+                $lastRow = $r->getLastRow($r->id, 'Kwc_Newsletter_QueueModel');
                 if ($lastRow && time() - strtotime($lastRow->sent_date) > 5*60) {
                     $r->status = 'start';
                     $r->save();

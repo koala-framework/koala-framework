@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_FileSize
+class Kwf_View_Helper_FileSize
 {
     public function fileSize($filesize)
     {

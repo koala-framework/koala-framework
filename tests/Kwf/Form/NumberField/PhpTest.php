@@ -1,16 +1,16 @@
 <?php
 /**
- * @group Vps_Form_NumberField
+ * @group Kwf_Form_NumberField
  */
-class Vps_Form_NumberField_PhpTest extends Vps_Test_TestCase
+class Kwf_Form_NumberField_PhpTest extends Kwf_Test_TestCase
 {
     public function testNoSettings()
     {
-        $m1 = new Vps_Form_NumberField_TestModel();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Form_NumberField_TestModel();
+        $form = new Kwf_Form();
         $form->setModel($m1);
         $form->setId(1);
-        $nrField = $form->add(new Vps_Form_Field_NumberField('nr', 'Number'));
+        $nrField = $form->add(new Kwf_Form_Field_NumberField('nr', 'Number'));
 
         $post = array(
             $nrField->getFieldName() => 1
@@ -27,11 +27,11 @@ class Vps_Form_NumberField_PhpTest extends Vps_Test_TestCase
 
     public function testValue0()
     {
-        $m1 = new Vps_Form_NumberField_TestModel();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Form_NumberField_TestModel();
+        $form = new Kwf_Form();
         $form->setModel($m1);
         $form->setId(1);
-        $nrField = $form->add(new Vps_Form_Field_NumberField('nr', 'Number'));
+        $nrField = $form->add(new Kwf_Form_Field_NumberField('nr', 'Number'));
 
         $post = array(
             $nrField->getFieldName() => 0

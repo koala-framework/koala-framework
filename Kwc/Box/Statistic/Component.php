@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_Statistic_Component extends Vpc_Abstract
+class Kwc_Box_Statistic_Component extends Kwc_Abstract
 {
     protected function _getStatisticVars()
     {

@@ -1,13 +1,13 @@
 <?php
 /**
  * @group Generator_Categories
- * @group Vpc_UrlResolve
+ * @group Kwc_UrlResolve
  */
-class Vps_Component_Generator_Categories_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_Categories_Root');
+        parent::setUp('Kwf_Component_Generator_Categories_Root');
     }
 
     public function testCategories()
@@ -23,8 +23,8 @@ class Vps_Component_Generator_Categories_Test extends Vpc_TestAbstract
 
         $this->assertNotNull($this->_root->getComponentById('root-main'));
 
-        $this->assertEquals(3, count($this->_root->getComponentsByClass('Vpc_Root_Category_Component')));
-        $this->assertNotNull($this->_root->getComponentByClass('Vpc_Root_Category_Component',
+        $this->assertEquals(3, count($this->_root->getComponentsByClass('Kwc_Root_Category_Component')));
+        $this->assertNotNull($this->_root->getComponentByClass('Kwc_Root_Category_Component',
                                         array('id' => '-main')));
     }
 
@@ -33,7 +33,7 @@ class Vps_Component_Generator_Categories_Test extends Vpc_TestAbstract
         $main = $this->_root->getChildComponent('-main');
         $this->assertEquals(2, count($main->getChildComponents()));
         $this->assertEquals(1, $main->getChildComponent()->componentId);
-        $this->assertEquals('Vpc_Basic_Empty_Component', $main->getChildComponent()->componentClass);
+        $this->assertEquals('Kwc_Basic_Empty_Component', $main->getChildComponent()->componentClass);
         $this->assertEquals('root-main', $main->getChildComponent()->parent->componentId);
         $this->assertEquals(2, $main->getChildComponent()->getChildComponent()->componentId);
     }
@@ -69,7 +69,7 @@ class Vps_Component_Generator_Categories_Test extends Vpc_TestAbstract
 
     public function testModel()
     {
-        $model = new Vps_Component_Model();
+        $model = new Kwf_Component_Model();
         $model->setRoot($this->_root);
 
         $select = $model->select()->whereNull('parent_id');

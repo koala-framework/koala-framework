@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Action_Rrd_RenameDs extends Vps_Update_Action_Rrd_Abstract
+class Kwf_Update_Action_Rrd_RenameDs extends Kwf_Update_Action_Rrd_Abstract
 {
     public $name;
     public $newName;
@@ -8,8 +8,8 @@ class Vps_Update_Action_Rrd_RenameDs extends Vps_Update_Action_Rrd_Abstract
     {
         if (!file_exists($this->file)) return array();
 
-        $this->name = Vps_Util_Rrd_Field::escapeField($this->name);
-        $this->newName = Vps_Util_Rrd_Field::escapeField($this->newName);
+        $this->name = Kwf_Util_Rrd_Field::escapeField($this->name);
+        $this->newName = Kwf_Util_Rrd_Field::escapeField($this->newName);
 
         if (!$this->silent) {
             echo "renaming rrd field: ".$this->name."\n";
@@ -25,7 +25,7 @@ class Vps_Update_Action_Rrd_RenameDs extends Vps_Update_Action_Rrd_Abstract
             }
         }
         if (!$found) {
-            throw new Vps_ClientException("Field '{$this->name}' not found");
+            throw new Kwf_ClientException("Field '{$this->name}' not found");
         }
         $this->_restore($xml);
         return array();

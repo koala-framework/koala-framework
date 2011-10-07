@@ -1,14 +1,14 @@
 <?php
-class Vpc_TextImage_ImageEnlarge_LinkTag_TestComponent extends Vpc_TextImage_ImageEnlarge_LinkTag_Component
+class Kwc_TextImage_ImageEnlarge_LinkTag_TestComponent extends Kwc_TextImage_ImageEnlarge_LinkTag_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vpc_TextImage_ImageEnlarge_LinkTag_TestModel';
+        $ret['ownModel'] = 'Kwc_TextImage_ImageEnlarge_LinkTag_TestModel';
         $ret['generators']['child']['component'] = array(
-            'none' => 'Vpc_Basic_LinkTag_Empty_Component',
-            'download' => 'Vpc_Basic_LinkTag_Empty_Component',
-            'enlarge' => 'Vpc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_TestComponent'
+            'none' => 'Kwc_Basic_LinkTag_Empty_Component',
+            'download' => 'Kwc_Basic_LinkTag_Empty_Component',
+            'enlarge' => 'Kwc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_TestComponent'
         );
         return $ret;
     }

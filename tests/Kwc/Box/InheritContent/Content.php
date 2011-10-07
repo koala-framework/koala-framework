@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_InheritContent_Content extends Vpc_Box_InheritContent_Component
+class Kwc_Box_InheritContent_Content extends Kwc_Box_InheritContent_Component
 {
     public function hasContent()
     {
@@ -12,7 +12,7 @@ class Vpc_Box_InheritContent_Content extends Vpc_Box_InheritContent_Component
         } else if ($this->getData()->componentId == 'root-ic-child') {
             return true;
         } else {
-            throw new Vps_Exception("Don't know If I have content for ({$this->getData()->componentId})");
+            throw new Kwf_Exception("Don't know If I have content for ({$this->getData()->componentId})");
         }
     }
 }

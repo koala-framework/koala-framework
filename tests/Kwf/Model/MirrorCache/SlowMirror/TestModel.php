@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_MirrorCache_SlowMirror_TestModel_SlowModel extends Vps_Model_FnFFile
+class Kwf_Model_MirrorCache_SlowMirror_TestModel_SlowModel extends Kwf_Model_FnFFile
 {
     protected $_columns = array('id', 'foo');
     protected $_uniqueIdentifier = 'test-mirrorcache-slowmirror-mirror';
@@ -11,12 +11,12 @@ class Vps_Model_MirrorCache_SlowMirror_TestModel_SlowModel extends Vps_Model_FnF
     }
 }
 
-class Vps_Model_MirrorCache_SlowMirror_TestModel extends Vps_Model_MirrorCache
+class Kwf_Model_MirrorCache_SlowMirror_TestModel extends Kwf_Model_MirrorCache
 {
     protected $_maxSyncDelay = 10;
     public function __construct()
     {
-        $mirrorModel = new Vps_Model_FnF(array(
+        $mirrorModel = new Kwf_Model_FnF(array(
             'uniqueIdentifier' => 'test-mirrorcache-slowmirror-src',
             'columns' => array('id', 'foo'),
             'data' => array(
@@ -26,7 +26,7 @@ class Vps_Model_MirrorCache_SlowMirror_TestModel extends Vps_Model_MirrorCache
             )
         ));
         $config = array(
-            'proxyModel' => 'Vps_Model_MirrorCache_SlowMirror_TestModel_SlowModel',
+            'proxyModel' => 'Kwf_Model_MirrorCache_SlowMirror_TestModel_SlowModel',
             'sourceModel' => $mirrorModel,
             'truncateBeforeFullImport' => true,
         );

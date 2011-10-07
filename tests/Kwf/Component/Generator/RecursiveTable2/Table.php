@@ -1,18 +1,18 @@
 <?php
-class Vps_Component_Generator_RecursiveTable2_Table extends Vpc_Abstract
+class Kwf_Component_Generator_RecursiveTable2_Table extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['table'] = array(
-            'class' => 'Vps_Component_Generator_Table',
+            'class' => 'Kwf_Component_Generator_Table',
             'component' => array(
-                'empty'=>'Vpc_Basic_Empty_Component',
-                'flagged'=>'Vps_Component_Generator_RecursiveTable2_Flagged',
-                'table'=>'Vps_Component_Generator_RecursiveTable2_Table',
+                'empty'=>'Kwc_Basic_Empty_Component',
+                'flagged'=>'Kwf_Component_Generator_RecursiveTable2_Flagged',
+                'table'=>'Kwf_Component_Generator_RecursiveTable2_Table',
             ),
             'nameColumn' => 'id',
-            'model' => 'Vps_Component_Generator_RecursiveTable2_Model',
+            'model' => 'Kwf_Component_Generator_RecursiveTable2_Model',
         );
         return $ret;
     }

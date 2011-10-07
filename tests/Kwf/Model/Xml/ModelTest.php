@@ -3,21 +3,21 @@
  * @group Model
  * @group Model_Xml
  */
-class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
+class Kwf_Model_Xml_ModelTest extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass(false);
+        Kwf_Component_Data_Root::setComponentClass(false);
     }
 
     public function tearDown()
     {
-        Vps_Component_Data_Root::setComponentClass(null);
+        Kwf_Component_Data_Root::setComponentClass(null);
     }
 
     public function testXmlBasic()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
@@ -43,7 +43,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
         $this->assertEquals(3, $model->getRows()->count());
 
         //model zum testen der inhalte
-        $testmodel = new Vps_Model_Xml(array(
+        $testmodel = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => $model->getXmlContentString()
@@ -63,7 +63,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlBasicAndCheck()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
@@ -78,7 +78,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlPaths()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>test</en><de>versuch</de></text></trl>'
@@ -86,7 +86,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
        $row = $model->getRow(1);
        $this->assertEquals("versuch", $row->de);
 
-       $model = new Vps_Model_Xml(array(
+       $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text></text></trl>'
@@ -97,8 +97,8 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlPathsInsertException()
     {
-        $this->setExpectedException('Vps_Exception');
-        $model = new Vps_Model_Xml(array(
+        $this->setExpectedException('Kwf_Exception');
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trlaaa', //hier ist ein fehler
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
@@ -108,7 +108,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlInsert()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl', //hier ist ein fehler
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
@@ -121,7 +121,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlOutOfRange()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl', //hier ist ein fehler
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
@@ -131,7 +131,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlSelect ()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
@@ -163,8 +163,8 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlSelectException ()
     {
-        $this->setExpectedException('Vps_Exception');
-        $model = new Vps_Model_Xml(array(
+        $this->setExpectedException('Kwf_Exception');
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
@@ -177,7 +177,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlDelete()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
@@ -197,7 +197,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlNoId()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
@@ -218,8 +218,8 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlNoIdException()
     {
-        $this->setExpectedException('Vps_Exception');
-        $model = new Vps_Model_Xml(array(
+        $this->setExpectedException('Kwf_Exception');
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
@@ -238,7 +238,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlDifferentIdString ()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
@@ -267,7 +267,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlDifferentIdInt ()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
@@ -283,8 +283,8 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlDifferentIdIntExcpetion ()
     {
-        $this->setExpectedException('Vps_Exception');
-        $model = new Vps_Model_Xml(array(
+        $this->setExpectedException('Kwf_Exception');
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
@@ -301,7 +301,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlDefaultValues ()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'default' => array('foo'=>'defaultFoo')
         ));
         $row = $model->createRow();
@@ -313,7 +313,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
         $tmpfname = tempnam("/tmp", "XMLTEST");
         file_put_contents($tmpfname, "<trl></trl>");
 
-         $model = new Vps_Model_Xml(array(
+         $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'filepath' => $tmpfname
@@ -354,7 +354,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testXmlFindContextNull ()
     {
-         $model = new Vps_Model_Xml(array(
+         $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
@@ -368,7 +368,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testAddNullToXml ()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
@@ -382,7 +382,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
         $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
         $this->assertNull($row);
 
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => $model->getXmlContentString()
@@ -396,7 +396,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testAddEmptyStringToXml ()
     {
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
@@ -411,7 +411,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
         $this->assertEquals('dingsbums', $row->de);
 
 
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => $model->getXmlContentString()
@@ -425,7 +425,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
 
     public function testUpdateValueToNull ()
     {
-          $model = new Vps_Model_Xml(array(
+          $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
@@ -442,7 +442,7 @@ class Vps_Model_Xml_ModelTest extends Vps_Test_TestCase
         $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
         $this->assertNull($row);
 
-        $model = new Vps_Model_Xml(array(
+        $model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => $model->getXmlContentString()

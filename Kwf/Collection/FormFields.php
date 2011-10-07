@@ -1,5 +1,5 @@
 <?php
-class Vps_Collection_FormFields extends Vps_Collection
+class Kwf_Collection_FormFields extends Kwf_Collection
 {
     private $_formName = null;
 

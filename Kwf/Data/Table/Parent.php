@@ -1,12 +1,12 @@
 <?php
-class Vps_Data_Table_Parent extends Vps_Data_Abstract
+class Kwf_Data_Table_Parent extends Kwf_Data_Abstract
 {
     protected $_dataIndex;
     protected $_parentTable;
     protected $_ruleKey;
 
     /**
-     * @param string $parentTable wenn Zend_Db_Table: table, wenn Vps_Model: rule
+     * @param string $parentTable wenn Zend_Db_Table: table, wenn Kwf_Model: rule
      * @param string $dataIndex row die angezeigt werden soll, wenn null wird __toString verwendet
      * @param string $ruleKey nur wenn Zend_Db_Table
      */
@@ -37,7 +37,7 @@ class Vps_Data_Table_Parent extends Vps_Data_Abstract
             return $row->__toString();
         }
         if (!isset($row->$name) && !is_null($row->$name)) { //scheiß php
-            throw new Vps_Exception("Index '$name' doesn't exist in row.");
+            throw new Kwf_Exception("Index '$name' doesn't exist in row.");
         }
         return $row->$name;
     }

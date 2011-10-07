@@ -2,13 +2,13 @@
 /**
  * @group Component_Cache_Directory
  */
-class Vps_Component_Cache_Directory_Test extends Vpc_TestAbstract
+class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
         $this->markTestIncomplete('eventscache');
 
-        parent::setUp('Vps_Component_Cache_Directory_Root_Component');
+        parent::setUp('Kwf_Component_Cache_Directory_Root_Component');
         /*
         root
          _dir (kein itemPage, keine Einträge, ist trlRoot)
@@ -26,12 +26,12 @@ class Vps_Component_Cache_Directory_Test extends Vpc_TestAbstract
         $dir = $root->getChildComponent('_dir');
         $list = $root->getChildComponent('_list');
         $dirModel = $dir->getComponent()->getChildModel();
-        $cacheModel = Vps_Component_Cache::getInstance()->getModel();
+        $cacheModel = Kwf_Component_Cache::getInstance()->getModel();
 
         $this->assertEquals('0 ', $dir->render());
         $this->assertEquals('0 ', $list->render());
 
-        $dirModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+        $dirModel->import(Kwf_Model_Abstract::FORMAT_ARRAY, array(
             array('id' => 1, 'component_id' => 'root_dir', 'content' => 'd1'),
             array('id' => 2, 'component_id' => 'root_dir', 'content' => 'd2')
         ));
@@ -70,11 +70,11 @@ class Vps_Component_Cache_Directory_Test extends Vpc_TestAbstract
 
         $this->assertEquals('0 ', $trldir->render());
 
-        $dirModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+        $dirModel->import(Kwf_Model_Abstract::FORMAT_ARRAY, array(
             array('id' => 1, 'component_id' => 'root_dir', 'content' => 'd1'),
             array('id' => 2, 'component_id' => 'root_dir', 'content' => 'd2')
         ));
-        $trlModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+        $trlModel->import(Kwf_Model_Abstract::FORMAT_ARRAY, array(
             array('component_id' => 'root_trldir-1', 'visible' => false),
             array('component_id' => 'root_trldir-2', 'content' => 'foo', 'visible' => true)
         ));

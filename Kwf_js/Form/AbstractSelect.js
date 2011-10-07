@@ -1,4 +1,4 @@
-Vps.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
+Kwf.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
 {
     triggerClass : 'x-form-search-trigger',
     readOnly: true,
@@ -23,17 +23,17 @@ Vps.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
                 height: this.windowHeight || 500,
                 modal: true,
                 closeAction: 'hide',
-                title: trlVps('Please choose'),
+                title: trlKwf('Please choose'),
                 layout: 'fit',
                 buttons: [{
-                    text: trlVps('OK'),
+                    text: trlKwf('OK'),
                     handler: function() {
                         this.setValue(this._selectWin.value);
                         this._selectWin.hide();
                     },
                     scope: this
                 }, {
-                    text: trlVps('Cancel'),
+                    text: trlKwf('Cancel'),
                     handler: function() {
                         this._selectWin.hide();
                     },
@@ -56,10 +56,10 @@ Vps.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
 
     setValue: function(value) {
         if (value && typeof value.name != 'undefined') {
-            Vps.Form.AbstractSelect.superclass.setValue.call(this, value.name);
+            Kwf.Form.AbstractSelect.superclass.setValue.call(this, value.name);
             this.value = value.id;
         } else {
-            Vps.Form.AbstractSelect.superclass.setValue.call(this, value);
+            Kwf.Form.AbstractSelect.superclass.setValue.call(this, value);
             this.value = value;
         }
     }

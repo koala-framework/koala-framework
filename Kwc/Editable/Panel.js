@@ -1,18 +1,18 @@
-Ext.namespace('Vpc.Editable');
-Vpc.Editable.Panel = Ext.extend(Ext.Panel, {
+Ext.namespace('Kwc.Editable');
+Kwc.Editable.Panel = Ext.extend(Ext.Panel, {
     layout: 'border',
     initComponent: function() {
-        var componentsGrid = new Vps.Auto.GridPanel({
+        var componentsGrid = new Kwf.Auto.GridPanel({
             controllerUrl: this.componentsControllerUrl,
             region: 'west',
             width: 200
         });
 
-        var content = new Vps.Component.ComponentPanel({
+        var content = new Kwf.Component.ComponentPanel({
             region: 'center',
             componentConfigs: this.componentConfigs,
             autoLoad: false,
-            mainComponentText: trlVps('Content'),
+            mainComponentText: trlKwf('Content'),
             mainComponentIcon: '/assets/silkicons/page_white_text.png'
         });
 
@@ -34,7 +34,7 @@ Vpc.Editable.Panel = Ext.extend(Ext.Panel, {
         }, this);
 
         this.items = [content, componentsGrid];
-        Vpc.Editable.Panel.superclass.initComponent.call(this);
+        Kwc.Editable.Panel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('vpc.editable', Vpc.Editable.Panel);
+Ext.reg('kwc.editable', Kwc.Editable.Panel);

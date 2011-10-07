@@ -1,7 +1,7 @@
 <?php
-class Vpc_News_List_Feed_Component extends Vpc_Directories_List_Feed_Component
+class Kwc_News_List_Feed_Component extends Kwc_Directories_List_Feed_Component
 {
-    protected function _getRssEntryByItem(Vps_Component_Data $item)
+    protected function _getRssEntryByItem(Kwf_Component_Data $item)
     {
         $ret = parent::_getRssEntryByItem($item);
         $ret['description'] = $item->teaser;

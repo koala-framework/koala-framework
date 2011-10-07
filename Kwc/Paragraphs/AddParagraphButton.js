@@ -1,6 +1,6 @@
-Vpc.Paragraphs.AddParagraphButton = Ext.extend(Ext.Button, {
-    text : trlVps('Add Paragraph'),
-    icon : '/assets/vps/images/paragraphAdd.png',
+Kwc.Paragraphs.AddParagraphButton = Ext.extend(Ext.Button, {
+    text : trlKwf('Add Paragraph'),
+    icon : '/assets/kwf/images/paragraphAdd.png',
     cls  : 'x-btn-text-icon',
     initComponent: function() {
         this.addEvents('addParagraph');
@@ -30,6 +30,6 @@ Vpc.Paragraphs.AddParagraphButton = Ext.extend(Ext.Button, {
         this.menu = new Ext.menu.Menu();
         buildMenu.call(this, this.components, this.menu);
 
-        Vpc.Paragraphs.AddParagraphButton.superclass.initComponent.call(this);
+        Kwc.Paragraphs.AddParagraphButton.superclass.initComponent.call(this);
     }
 });

@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface, Serializable
+class Kwf_Model_Rowset_Abstract implements Kwf_Model_Rowset_Interface, Serializable
 {
     protected $_pointer = 0;
     protected $_dataKeys; //wenn objekt normal erstellt wurde

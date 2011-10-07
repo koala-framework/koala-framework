@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Partial_Paging extends Vps_Component_Partial_Abstract
+class Kwf_Component_Partial_Paging extends Kwf_Component_Partial_Abstract
 {
     public function getIds()
     {

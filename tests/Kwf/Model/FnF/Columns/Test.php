@@ -2,14 +2,14 @@
 /**
  * @group Model
  */
-class Vps_Model_FnF_Columns_Test extends Vps_Test_TestCase
+class Kwf_Model_FnF_Columns_Test extends Kwf_Test_TestCase
 {
     private $_model;
 
     public function setUp()
     {
         parent::setUp();
-        $this->_model = new Vps_Model_FnF(array(
+        $this->_model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'value1', 'value2'),
             'data' => array(
                 array('id' => 1, 'value1' => 'foo')
@@ -24,7 +24,7 @@ class Vps_Model_FnF_Columns_Test extends Vps_Test_TestCase
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testException()
     {

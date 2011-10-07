@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?> vpsFadeElements">
+<div class="<?=$this->cssClass?> kwfFadeElements">
     <? /* fadeSelector ist pflicht, alles andere optional */ ?>
     <input type="hidden" name="fadeSelector" class="fadeSelector" value="<?= $this->selector; ?>" />
     <input type="hidden" name="textSelector" class="textSelector" value="<?= $this->textSelector; ?>" />
@@ -8,12 +8,12 @@
     <? foreach ($this->children as $child) { ?>
         <?
             $class = '';
-            if ($i == 0) $class .= 'vpcFirst ';
-            if ($i == count($this->children)-1) $class .= 'vpcLast ';
+            if ($i == 0) $class .= 'kwcFirst ';
+            if ($i == count($this->children)-1) $class .= 'kwcLast ';
             if ($i % 2 == 0) {
-                $class .= ' vpcEven';
+                $class .= ' kwcEven';
             } else {
-                $class .= ' vpcOdd';
+                $class .= ' kwcOdd';
             }
             $class = trim($class);
             $i++;

@@ -1,14 +1,14 @@
 <?php
-class Vpc_List_ChildPages_Teaser_TeaserImage_Image_Component extends Vpc_Basic_Image_Component
+class Kwc_List_ChildPages_Teaser_TeaserImage_Image_Component extends Kwc_Basic_Image_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['dimensions']['default'] = array(
-            'text' => trlVps('default'),
+            'text' => trlKwf('default'),
             'width' => 100,
             'height' => 75,
-            'scale' => Vps_Media_Image::SCALE_BESTFIT
+            'scale' => Kwf_Media_Image::SCALE_BESTFIT
         );
         return $ret;
     }

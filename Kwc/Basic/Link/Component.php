@@ -1,16 +1,16 @@
 <?php
-class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'ownModel' => 'Vpc_Basic_Link_Model',
-            'componentName' => trlVps('Link'),
-            'componentIcon' => new Vps_Asset('page_white_link'),
+            'ownModel' => 'Kwc_Basic_Link_Model',
+            'componentName' => trlKwf('Link'),
+            'componentIcon' => new Kwf_Asset('page_white_link'),
             'default' => array(),
         ));
         $ret['generators']['child']['component'] = array(
-            'linkTag' => 'Vpc_Basic_LinkTag_Component',
+            'linkTag' => 'Kwc_Basic_LinkTag_Component',
         );
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;

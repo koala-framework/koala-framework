@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_DomainRoot_Domain_Data extends Vps_Component_Data
+class Kwc_Root_DomainRoot_Domain_Data extends Kwf_Component_Data
 {
     public function __get($var)
     {

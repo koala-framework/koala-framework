@@ -1,4 +1,4 @@
 <?php
-class Vpc_Newsletter_Detail_RecipientController extends Vpc_Newsletter_Subscribe_RecipientController
+class Kwc_Newsletter_Detail_RecipientController extends Kwc_Newsletter_Subscribe_RecipientController
 {
 }

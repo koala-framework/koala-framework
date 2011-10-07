@@ -1,4 +1,4 @@
-Vps.ColorPicker.Radio = {
+Kwf.ColorPicker.Radio = {
     groups: {},
     callbacks: {},
 
@@ -89,14 +89,14 @@ Vps.ColorPicker.Radio = {
  * @param {Object} config The config object
  */
 
-Vps.ColorPicker.Panel = function()
+Kwf.ColorPicker.Panel = function()
 {
     this.modeFields = {};
     this.preloads = [];
-    Vps.Form.ColorPicker.Panel.superclass.constructor.apply(this, arguments);
+    Kwf.Form.ColorPicker.Panel.superclass.constructor.apply(this, arguments);
 };
 
-Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
+Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
 {
     width: 400,
     height: 305,
@@ -390,7 +390,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
         if (this.el)
         {
 //             debugger;
-            Vps.ColorPicker.Panel.superclass.onRender.apply(this, arguments);
+            Kwf.ColorPicker.Panel.superclass.onRender.apply(this, arguments);
             this.initMarkup();
             this.initLayers();
             this.initConsole();
@@ -408,8 +408,8 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
             this.height = 310;
         }
         this.preloadImages();
-        Vps.ColorPicker.Panel.superclass.initComponent.apply(this, arguments);
-        this.color = new Vps.Colorpicker.color.Color();
+        Kwf.ColorPicker.Panel.superclass.initComponent.apply(this, arguments);
+        this.color = new Kwf.Colorpicker.color.Color();
         this.color.setHex(this.hex);
     },
 

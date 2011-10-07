@@ -2,43 +2,43 @@
 /**
  * @group Util
  */
-class Vps_Util_CheckIpTest extends Vps_Test_TestCase
+class Kwf_Util_CheckIpTest extends Kwf_Test_TestCase
 {
-    private $_standardChecker = 'Vps_Util_CheckIpMock';
+    private $_standardChecker = 'Kwf_Util_CheckIpMock';
 
     /**
-     * @expectedException Vps_Util_Check_Ip_Exception
+     * @expectedException Kwf_Util_Check_Ip_Exception
      */
     public function testCheckIpFalseIp()
     {
-        Vps_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.3');
+        Kwf_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.3');
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testCheckNoIp()
     {
-        Vps_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('intern.vivid-planet.com');
+        Kwf_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('intern.vivid-planet.com');
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testCheckWrongMock()
     {
-        Vps_Util_Check_Ip::getInstance('Vps_Util_CheckIpMockError')->checkIp('192.168.0.1');
+        Kwf_Util_Check_Ip::getInstance('Kwf_Util_CheckIpMockError')->checkIp('192.168.0.1');
     }
 
     public function testCheckIpReturn()
     {
-        $res = Vps_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.1', true);
+        $res = Kwf_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.1', true);
         $this->assertTrue($res);
-        $res = Vps_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.1', true);
+        $res = Kwf_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.1', true);
         $this->assertTrue($res);
-        $res = Vps_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.123.9', true);
+        $res = Kwf_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.123.9', true);
         $this->assertTrue($res);
-        $res = Vps_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.3', true);
+        $res = Kwf_Util_Check_Ip::getInstance($this->_standardChecker)->checkIp('192.168.0.3', true);
         $this->assertFalse($res);
     }
 }

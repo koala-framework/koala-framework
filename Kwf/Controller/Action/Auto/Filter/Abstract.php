@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collection_Item_Interface
+abstract class Kwf_Controller_Action_Auto_Filter_Abstract implements Kwf_Collection_Item_Interface
 {
     private $_properties = array();
     protected $_defaultPropertyValues = array();
@@ -15,7 +15,7 @@ abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collect
     {
         if (substr($method, 0, 3) == 'set') {
             if (!isset($arguments[0])) {
-                throw new Vps_Exception("Missing argument 1 (value)");
+                throw new Kwf_Exception("Missing argument 1 (value)");
             }
             $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
             return $this->setProperty($name, $arguments[0]);
@@ -23,7 +23,7 @@ abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collect
             $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
             return $this->getProperty($name);
         } else {
-            throw new Vps_Exception("Invalid method called: '$method'");
+            throw new Kwf_Exception("Invalid method called: '$method'");
         }
     }
 
@@ -40,7 +40,7 @@ abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collect
         } else if (isset($this->_defaultPropertyValues[$name])) {
             return $this->_defaultPropertyValues[$name];
         } else if (!$ignoreMandatory && in_array($name, $this->_mandatoryProperties)) {
-            throw new Vps_Exception("Parameter '$name' has to be set for Filter " . get_class($this));
+            throw new Kwf_Exception("Parameter '$name' has to be set for Filter " . get_class($this));
         } else {
             return null;
         }
@@ -53,7 +53,7 @@ abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collect
     public function getExtConfig()
     {
         if (!$this->_type) {
-            throw new Vps_Exception("property '_type' must be set.");
+            throw new Kwf_Exception("property '_type' must be set.");
         }
 
         $ret = $this->_properties;

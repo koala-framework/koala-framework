@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `vpc_news` (
+CREATE TABLE IF NOT EXISTS `kwc_news` (
   `id` smallint(6) NOT NULL auto_increment,
   `component_id` varchar(255) collate utf8_unicode_ci NOT NULL,
   `visible` tinyint(4) NOT NULL,

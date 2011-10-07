@@ -1,9 +1,9 @@
 <?php
-class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
+class Kwf_Benchmark_Rrd extends Kwf_Util_Rrd_File
 {
     public function getTitle()
     {
-        return trlVps('Vps Benchmark');
+        return trlKwf('Kwf Benchmark');
     }
 
     public function __construct()
@@ -106,7 +106,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $load = explode(' ', $load);
         $values[] = $load[0];
 
-        $counter = new Vps_Benchmark_Counter_Memcache();
+        $counter = new Kwf_Benchmark_Counter_Memcache();
         $memcache = $counter->getMemcache();
         $memcacheStats = $memcache->getStats();
         $values[] = $memcacheStats['bytes_read'];
@@ -124,10 +124,10 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
             'others' => 0,
             'locked' => 0
         );
-        if (Vps_Registry::get('dao')) {
-            $dbConfig = Vps_Registry::get('dao')->getDbConfig();
+        if (Kwf_Registry::get('dao')) {
+            $dbConfig = Kwf_Registry::get('dao')->getDbConfig();
             $dbName = $dbConfig['dbname'];
-            foreach (Vps_Registry::get('db')->query('SHOW PROCESSLIST')->fetchAll() as $row) {
+            foreach (Kwf_Registry::get('db')->query('SHOW PROCESSLIST')->fetchAll() as $row) {
                 if ($row['db'] != $dbName) continue;
                 if ($row['Command'] == 'Sleep') continue;
                 $sql = strtolower(trim($row['Info']));
@@ -160,7 +160,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
 
     public function getGraphs()
     {
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setVerticalLabel('requests / s');
         $g->addField('asset-requests', '#00FF00', 'assets');
         $g->addField('cli-requests', '#999999', 'cli');
@@ -170,7 +170,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $g->addField('content-requests', '#000000', 'content');
         $ret['requests'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setDevideBy('content-requests');
         $g->setVerticalLabel('components rendered / request');
         $g->addField('content-rendered cache', '#00FF00', 'cache');
@@ -181,7 +181,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $g->addField('content-rendered nocache', '#FF0000', 'nocache');
         $ret['cache'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setVerticalLabel('processing time / request [s]');
         $g->setDevideBy('content-requests');
         $g->addField('admin-duration', array(
@@ -194,7 +194,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         ));
         $ret['duration'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setDevideBy('content-requests');
         $g->setVerticalLabel('objects / request');
         $g->addField('content-componentDatas', '#FF0000');
@@ -203,7 +203,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $g->addField('content-components', '#00FFFF');
         $ret['objects'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setDevideBy('content-requests');
         $g->setVerticalLabel('calls / request');
         $g->addField('content-getChildComponents uncached', '#FF0000');
@@ -212,7 +212,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $g->addField('content-countChildComponents', '#666666');
         $ret['getChildComponents'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setDevideBy('content-requests');
         $g->setVerticalLabel('Generator::getInst calls / request');
         $g->addField('content-Generator::getInst semi-hit', '#0000FF', 'semi-hit');
@@ -220,47 +220,47 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $g->addField('content-Generator::getInst hit', '#00FF00', 'hit');
         $ret['generators'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setTitle('Memcache');
         $g->setVerticalLabel('accesses');
         $g->addField('getHits', '#00FF00');
         $g->addField('getMisses', '#FF0000');
         $ret['memcacheHits'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setTitle('Memcache');
         $g->setVerticalLabel('bytes');
         $g->addField('bytesRead');
         $g->addField('bytesWritten');
         $ret['memcacheBytes'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setTitle('Memcache');
         $g->setVerticalLabel('bytes');
         $g->addField('memcache-bytes');
         $g->addField('memcache-limit-maxbytes');
         $ret['memcacheBytesAbs'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setTitle('Memcache');
         $g->setVerticalLabel('items');
         $g->addField('memcache-curr-items');
         $ret['memcacheItems'] = $g;
 
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setTitle('Memcache');
         $g->setVerticalLabel('connections');
         $g->addField('memcache-curr-connections');
         $ret['memcacheConnections'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setVerticalLabel('[load]');
         $g->setLowerLimit(0);
         $g->addField('load', '#000000');
         $ret['load'] = $g;
 
-        $g = new Vps_Util_Rrd_Graph($this);
+        $g = new Kwf_Util_Rrd_Graph($this);
         $g->setVerticalLabel('[processes]');
         $g->setLowerLimit(0);
         $g->addField('mysql-processes');

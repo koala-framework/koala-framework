@@ -1,14 +1,14 @@
-div.vpsSwitchDisplay a.switchLink {
-    background: url(/assets/vps/images/bullet_arrow_right.png) 0px 0px no-repeat;
+div.kwfSwitchDisplay a.switchLink {
+    background: url(/assets/kwf/images/bullet_arrow_right.png) 0px 0px no-repeat;
     padding-left: 18px;
 }
-div.vpsSwitchDisplay a.switchLink.switchLinkOpened {
+div.kwfSwitchDisplay a.switchLink.switchLinkOpened {
     background: url(/assets/silkicons/bullet_arrow_down.png) 0px 0px no-repeat;
 
 }
 /* z-index unter 50 lassen. bildgalerie hat 50 auf die mask und 100 auf die box
    und da sollten wir drunter bleiben. */
-div.vpsSwitchDisplay div.switchContent { 
+div.kwfSwitchDisplay div.switchContent { 
     overflow: hidden; z-index: 45; position: relative; 
     margin-left: 19px;
 }
@@ -19,4 +19,4 @@ der beim schließen die Bilder nicht sofort verschwinden ließ, sondern
 über die schrift nach oben schob. Das hier war ein fix dafür, der allerdings
 die steuerung (zoom +/-) einer GoogleMap in einem switchDisplay zerstören würde.
 */
-/* div.vpsSwitchDisplay div.switchContent img { position: relative; z-index: 500;} */
+/* div.kwfSwitchDisplay div.switchContent img { position: relative; z-index: 500;} */

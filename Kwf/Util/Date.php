@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Date
+class Kwf_Util_Date
 {
     public static function dateForCalendarWeek($week, $year = null)
     {

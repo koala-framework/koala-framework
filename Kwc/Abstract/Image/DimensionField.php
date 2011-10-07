@@ -1,15 +1,15 @@
 <?php
-class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
+class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
 {
     public function __construct($name = null, $fieldLabel = null)
     {
         parent::__construct($name, $fieldLabel);
-        $this->setXtype('vpc.image.dimensionfield');
+        $this->setXtype('kwc.image.dimensionfield');
     }
 
     public function load($row)
     {
-        //Standardwert so wie in Vpc_Abstract_Image_Component::getImageDimensions
+        //Standardwert so wie in Kwc_Abstract_Image_Component::getImageDimensions
         $dimensions = $this->getDimensions();
         $dimension = $row->dimension;
         if (!isset($dimensions[$dimension])) {
@@ -25,9 +25,9 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
         return array($this->getFieldName() => $value);
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
-        Vps_Form_Field_Abstract::prepareSave($row, $postData);
+        Kwf_Form_Field_Abstract::prepareSave($row, $postData);
         $value = $this->_getValueFromPostData($postData);
         if (is_string($value)) {
             $value = Zend_Json::decode($value);
@@ -62,7 +62,7 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
             || $this->getAllowBlank() === '0') {
             if (!isset($dimensions[$data['dimension']])) {
                 $ret[] = array(
-                    'message' => trlVps("Please fill out the field"),
+                    'message' => trlKwf("Please fill out the field"),
                     'field' => $this
                 );
             }
@@ -74,14 +74,14 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
             $dimension = current($dimensions);
         }
         if ($dimension) {
-            if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
-                $dimension['scale'] == Vps_Media_Image::SCALE_CROP ||
-                $dimension['scale'] == Vps_Media_Image::SCALE_DEFORM) &&
+            if (($dimension['scale'] == Kwf_Media_Image::SCALE_BESTFIT ||
+                $dimension['scale'] == Kwf_Media_Image::SCALE_CROP ||
+                $dimension['scale'] == Kwf_Media_Image::SCALE_DEFORM) &&
                 (empty($data['width']) && empty($dimension['width'])) &&
                 (empty($data['height']) && empty($dimension['height']))
             ) {
                 $ret[] = array(
-                    'message' => trlVps('Dimension: At least width or height must be set higher than 0.'),
+                    'message' => trlKwf('Dimension: At least width or height must be set higher than 0.'),
                     'field' => $this
                 );
             }

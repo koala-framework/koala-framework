@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Action_Db_TestModel extends Vps_Model_FnF
+class Kwf_Update_Action_Db_TestModel extends Kwf_Model_FnF
 {
     protected $_columns = array('table', 'data');
     protected $_primaryKey = 'table';
@@ -14,7 +14,7 @@ class Vps_Update_Action_Db_TestModel extends Vps_Model_FnF
             ))))
         );
         $this->_dependentModels = array(
-            'Fields' => new Vps_Model_FieldRows(array(
+            'Fields' => new Kwf_Model_FieldRows(array(
                 'primaryKey' => 'field',
                 'columns' => array('field', 'type', 'null', 'key', 'default', 'extra'),
                 'fieldName' => 'data'

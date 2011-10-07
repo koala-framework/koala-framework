@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_MailFormat
+class Kwf_View_Helper_MailFormat
 {
     public function mailFormat($text, $values)
     {

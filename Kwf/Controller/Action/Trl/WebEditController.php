@@ -1,7 +1,7 @@
 <?php
-class Vps_Controller_Action_Trl_WebEditController extends Vps_Controller_Action_Trl_VpsEditController
+class Kwf_Controller_Action_Trl_WebEditController extends Kwf_Controller_Action_Trl_KwfEditController
 {
-    protected $_modelName = 'Vps_Trl_Model_Web';
+    protected $_modelName = 'Kwf_Trl_Model_Web';
 
     protected function _getLanguage()
     {

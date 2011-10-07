@@ -1,8 +1,8 @@
 <?php
-class Vpc_Basic_LinkTag_Abstract_Admin extends Vpc_Admin
+class Kwc_Basic_LinkTag_Abstract_Admin extends Kwc_Admin
 {
     public final function getLinkTagForms()
     {
-        throw new Vps_Exception('deprecated, use getCardForms()');
+        throw new Kwf_Exception('deprecated, use getCardForms()');
     }
 }

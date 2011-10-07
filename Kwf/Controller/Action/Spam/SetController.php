@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Spam_SetController extends Vps_Controller_Action
+class Kwf_Controller_Action_Spam_SetController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
@@ -21,10 +21,10 @@ class Vps_Controller_Action_Spam_SetController extends Vps_Controller_Action
      */
     public static function sendSpammedMail($id, $key)
     {
-        $row = Vps_Model_Abstract::getInstance('Vps_Model_Mail')->getRow($id);
+        $row = Kwf_Model_Abstract::getInstance('Kwf_Model_Mail')->getRow($id);
         if (!$row) return false;
 
-        if (Vps_Util_Check_Spam::getSpamKey($row) != $key) {
+        if (Kwf_Util_Check_Spam::getSpamKey($row) != $key) {
             return false;
         }
 

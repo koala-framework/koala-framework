@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail_Trl_Component
+class Kwc_News_Detail_Abstract_Trl_Component extends Kwc_Directories_Item_Detail_Trl_Component
 {
     public function getTemplateVars()
     {
@@ -15,7 +15,7 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
         return $this->getData()->getChildComponent('-content')->hasContent();
     }
 
-    public static function modifyItemData(Vps_Component_Data $new)
+    public static function modifyItemData(Kwf_Component_Data $new)
     {
         parent::modifyItemData($new);
         $new->publish_date = $new->chained->row->publish_date;

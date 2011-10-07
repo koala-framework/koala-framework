@@ -1,6 +1,6 @@
 <?php
-class Vpc_Newsletter_TestUserRow extends Vps_Model_Row_Abstract
-implements Vpc_Mail_Recipient_Interface
+class Kwc_Newsletter_TestUserRow extends Kwf_Model_Row_Abstract
+implements Kwc_Mail_Recipient_Interface
 {
     public function getMailFirstname()
     {
@@ -14,12 +14,12 @@ implements Vpc_Mail_Recipient_Interface
 
     public function getMailEmail()
     {
-        return 'franz@vivid.vps';
+        return 'franz@vivid.kwf';
     }
 
     public function getMailFormat()
     {
-        return Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
+        return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 
 }

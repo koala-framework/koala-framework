@@ -1,6 +1,6 @@
-Ext.namespace('Vps.Auto.Grid');
+Ext.namespace('Kwf.Auto.Grid');
 
-Vps.Auto.Grid.Window = Ext.extend(Ext.Window, {
+Kwf.Auto.Grid.Window = Ext.extend(Ext.Window, {
     layout: 'fit',
     modal: true,
     closeAction: 'hide',
@@ -12,10 +12,10 @@ Vps.Auto.Grid.Window = Ext.extend(Ext.Window, {
             autoLoad: false,
             baseParams: this.baseParams
         }, this.autoGridConfig);
-        this.autoGrid = new Vps.Auto.GridPanel(cfg);
+        this.autoGrid = new Kwf.Auto.GridPanel(cfg);
         this.items = [this.autoGrid];
 
-        Vps.Auto.Grid.Window.superclass.initComponent.call(this);
+        Kwf.Auto.Grid.Window.superclass.initComponent.call(this);
     },
 
     showEdit: function(id, record) {
@@ -46,4 +46,4 @@ Vps.Auto.Grid.Window = Ext.extend(Ext.Window, {
     }
 });
 
-Ext.reg('vps.autogridwindow', Vps.Auto.Grid.Window);
+Ext.reg('kwf.autogridwindow', Kwf.Auto.Grid.Window);

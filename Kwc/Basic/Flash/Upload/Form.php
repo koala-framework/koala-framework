@@ -1,31 +1,31 @@
 <?php
-class Vpc_Basic_Flash_Upload_Form extends Vpc_Abstract_Form
+class Kwc_Basic_Flash_Upload_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
         $this->setLabelWidth(120);
 
-        $this->add(new Vps_Form_Field_File('FileMedia', trlVps('swf File')));
+        $this->add(new Kwf_Form_Field_File('FileMedia', trlKwf('swf File')));
 
-        $this->add(new Vps_Form_Field_NumberField('width', trlVps('Width')))
+        $this->add(new Kwf_Form_Field_NumberField('width', trlKwf('Width')))
                 ->setMinValue(0)
                 ->setMaxValue(9999)
                 ->setWidth(75)
                 ->setAllowEmpty(false);
-        $this->add(new Vps_Form_Field_NumberField('height', trlVps('Height')))
+        $this->add(new Kwf_Form_Field_NumberField('height', trlKwf('Height')))
                 ->setMinValue(0)
                 ->setMaxValue(9999)
                 ->setWidth(75)
                 ->setAllowEmpty(false);
-        $this->add(new Vps_Form_Field_Checkbox('allow_fullscreen', trlVps('Allow fullscreen')));
-        $this->add(new Vps_Form_Field_Checkbox('menu', trlVps('Menu')));
+        $this->add(new Kwf_Form_Field_Checkbox('allow_fullscreen', trlKwf('Allow fullscreen')));
+        $this->add(new Kwf_Form_Field_Checkbox('menu', trlKwf('Menu')));
 
-        $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps('Flash variables')));
-        $mf = $fs->add(new Vps_Form_Field_MultiFields('FlashVars'));
-        $mf->fields->add(new Vps_Form_Field_TextField('key', trlVps('Variable name')))
+        $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Flash variables')));
+        $mf = $fs->add(new Kwf_Form_Field_MultiFields('FlashVars'));
+        $mf->fields->add(new Kwf_Form_Field_TextField('key', trlKwf('Variable name')))
             ->setLabelWidth(120);
-        $mf->fields->add(new Vps_Form_Field_TextField('value', trlVps('Value')))
+        $mf->fields->add(new Kwf_Form_Field_TextField('value', trlKwf('Value')))
             ->setLabelWidth(120);
     }
 }

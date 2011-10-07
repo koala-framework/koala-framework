@@ -1,12 +1,12 @@
 <?php
-class Vpc_Misc_RrdGraph_Form extends Vpc_Abstract_Form
+class Kwc_Misc_RrdGraph_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
 
         $this->_rrds = array();
-        foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
+        foreach (Kwf_Registry::get('config')->rrd as $k=>$n) {
             $this->_rrds[$k] = new $n;
         }
         $this->_rrds = array_reverse($this->_rrds);
@@ -19,14 +19,14 @@ class Vpc_Misc_RrdGraph_Form extends Vpc_Abstract_Form
             }
         }
 
-        $this->add(new Vps_Form_Field_Select('graph', trlVps('Graph')))
+        $this->add(new Kwf_Form_Field_Select('graph', trlKwf('Graph')))
             ->setValues($values)
             ->setWidth(300);
 
-        $this->add(new Vps_Form_Field_NumberField('duration', trlVps('duration (days)')));
-        $this->add(new Vps_Form_Field_NumberField('cache_lifetime', trlVps('Cache lifetime (minutes)')));
+        $this->add(new Kwf_Form_Field_NumberField('duration', trlKwf('duration (days)')));
+        $this->add(new Kwf_Form_Field_NumberField('cache_lifetime', trlKwf('Cache lifetime (minutes)')));
 
-        $this->add(new Vps_Form_Field_NumberField('width', trlVps('Width')));
-        $this->add(new Vps_Form_Field_NumberField('height', trlVps('Height')));
+        $this->add(new Kwf_Form_Field_NumberField('width', trlKwf('Width')));
+        $this->add(new Kwf_Form_Field_NumberField('height', trlKwf('Height')));
     }
 }

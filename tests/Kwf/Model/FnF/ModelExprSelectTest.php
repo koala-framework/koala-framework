@@ -3,11 +3,11 @@
  * @group Model
  * @group Model_FnF
  */
-class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
+class Kwf_Model_FnF_ModelExprSelectTest extends Kwf_Test_TestCase
 {
     public function testExprNullSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => null),
@@ -15,7 +15,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $select = $model->select();
-        $select->where(new Vps_Model_Select_Expr_IsNull('value'));
+        $select->where(new Kwf_Model_Select_Expr_IsNull('value'));
         $rows = $model->getRows($select);
         $count = $rows->count();
         $current = $rows->current();
@@ -25,14 +25,14 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprEqualsInSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
         ));
 
         $select = $model->select();
-        $select->where(new Vps_Model_Select_Expr_Equal('value', array('bar', 'foo')));
+        $select->where(new Kwf_Model_Select_Expr_Equal('value', array('bar', 'foo')));
         $rows = $model->getRows($select);
         $count = $rows->count();
         $current = $rows->current();
@@ -40,19 +40,19 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         $this->assertEquals(1, $current->id);
 
         $this->assertEquals(1, $model->getRows($model->select()
-                                ->where(new Vps_Model_Select_Expr_Equal('value', 'foo')))->current()->id);
+                                ->where(new Kwf_Model_Select_Expr_Equal('value', 'foo')))->current()->id);
     }
 
     public function testExprEqualsSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
         ));
 
         $select = $model->select();
-        $select->where(new Vps_Model_Select_Expr_Equal('value', 'bar'));
+        $select->where(new Kwf_Model_Select_Expr_Equal('value', 'bar'));
         $rows = $model->getRows($select);
         $count = $rows->count();
         $current = $rows->current();
@@ -60,19 +60,19 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         $this->assertEquals(2, $current->id);
 
         $this->assertEquals(1, $model->getRows($model->select()
-                                ->where(new Vps_Model_Select_Expr_Equal('value', 'foo')))->current()->id);
+                                ->where(new Kwf_Model_Select_Expr_Equal('value', 'foo')))->current()->id);
     }
 
     public function testExprHigherSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 5),
             array('id' => 2, 'value' => 8),
         ));
 
         $select = $model->select();
-        $select->where(new Vps_Model_Select_Expr_Higher('value', 6));
+        $select->where(new Kwf_Model_Select_Expr_Higher('value', 6));
         $rows = $model->getRows($select);
         $count = $rows->count();
         $current = $rows->current();
@@ -82,7 +82,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprHigherAndEqualSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 5),
             array('id' => 2, 'value' => 8),
@@ -90,15 +90,15 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
         $select = $model->select();
 
-        $select->where(new Vps_Model_Select_Expr_Higher('value', 6));
-        $select->where(new Vps_Model_Select_Expr_Equal('value', 7));
+        $select->where(new Kwf_Model_Select_Expr_Higher('value', 6));
+        $select->where(new Kwf_Model_Select_Expr_Equal('value', 7));
 
         $rows = $model->getRows($select);
         $count = $rows->count();
         $this->assertEquals(0, $count);
 
         $select = $model->select();
-        $select->where(new Vps_Model_Select_Expr_Higher('value', 6));
+        $select->where(new Kwf_Model_Select_Expr_Higher('value', 6));
         $select->whereEquals('value', 8);
 
         $rows = $model->getRows($select);
@@ -108,7 +108,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprOrSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 5),
             array('id' => 2, 'value' => 8),
@@ -116,8 +116,8 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $select = $model->select();
-        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Higher('value', 6),
-                                                           new Vps_Model_Select_Expr_Equal('value', 5)));
+        $orExpression = new Kwf_Model_Select_Expr_Or(array(new Kwf_Model_Select_Expr_Higher('value', 6),
+                                                           new Kwf_Model_Select_Expr_Equal('value', 5)));
         $select->where($orExpression);
         $rows = $model->getRows($select);
         $count = $rows->count();
@@ -127,7 +127,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprNotSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 5),
             array('id' => 2, 'value' => 8),
@@ -135,7 +135,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $select = $model->select();
-        $notExpression = new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Higher('value', 6));
+        $notExpression = new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_Higher('value', 6));
         $select->where($notExpression);
         $rows = $model->getRows($select);
         $count = $rows->count();
@@ -146,7 +146,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprSmaller()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 5),
             array('id' => 2, 'value' => 8),
@@ -158,7 +158,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $select = $model->select();
-        $smallExpression = new Vps_Model_Select_Expr_Lower('value', 13);
+        $smallExpression = new Kwf_Model_Select_Expr_Lower('value', 13);
 
         $select = $model->select();
         $select->where($smallExpression);
@@ -169,7 +169,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprContains()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'Herbert'),
             array('id' => 2, 'value' => 'Kurt'),
@@ -181,14 +181,14 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $select = $model->select();
-        $containsExpression = new Vps_Model_Select_Expr_Contains('value', 'Kla');
+        $containsExpression = new Kwf_Model_Select_Expr_Contains('value', 'Kla');
         $select = $model->select();
         $select->where($containsExpression);
         $rows = $model->getRows($select);
         $count = $rows->count();
         $this->assertEquals(1, $count);
 
-        $containsExpression = new Vps_Model_Select_Expr_Contains('value', 'n');
+        $containsExpression = new Kwf_Model_Select_Expr_Contains('value', 'n');
         $select = $model->select();
         $select->where($containsExpression);
         $rows = $model->getRows($select);
@@ -198,7 +198,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprLike()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'aaa'),
             array('id' => 2, 'value' => 'aba'),
@@ -207,29 +207,29 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $rows = $model->getRows($model->select()->where(
-            new Vps_Model_Select_Expr_Like('value', 'a%')
+            new Kwf_Model_Select_Expr_Like('value', 'a%')
         ));
         $this->assertEquals(3, $rows->count());
 
         $rows = $model->getRows($model->select()->where(
-            new Vps_Model_Select_Expr_Like('value', 'a%_%')
+            new Kwf_Model_Select_Expr_Like('value', 'a%_%')
         ));
         $this->assertEquals(1, $rows->count());
 
         $rows = $model->getRows($model->select()->where(
-            new Vps_Model_Select_Expr_Like('value', '%c%')
+            new Kwf_Model_Select_Expr_Like('value', '%c%')
         ));
         $this->assertEquals(1, $rows->count());
 
         $rows = $model->getRows($model->select()->where(
-            new Vps_Model_Select_Expr_Like('value', '%f%')
+            new Kwf_Model_Select_Expr_Like('value', '%f%')
         ));
         $this->assertEquals(0, $rows->count());
     }
 
     public function testExprExtraBig()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 5),
             array('id' => 2, 'value' => 8),
@@ -241,10 +241,10 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $select = $model->select();
-        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Lower('value', 8),
-                                                           new Vps_Model_Select_Expr_Higher('value', 13)));
+        $orExpression = new Kwf_Model_Select_Expr_Or(array(new Kwf_Model_Select_Expr_Lower('value', 8),
+                                                           new Kwf_Model_Select_Expr_Higher('value', 13)));
 
-        $notExpression = new Vps_Model_Select_Expr_Not($orExpression);
+        $notExpression = new Kwf_Model_Select_Expr_Not($orExpression);
         $select->where($notExpression);
         $rows = $model->getRows($select);
         $count = $rows->count();
@@ -254,7 +254,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 
     public function testExprStartsWith()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'Herbert'),
             array('id' => 2, 'value' => 'Kurt'),
@@ -266,15 +266,15 @@ class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
         ));
 
         $rows = $model->getRows($model->select()
-            ->where(new Vps_Model_Select_Expr_StartsWith('value', 'Kla')));
+            ->where(new Kwf_Model_Select_Expr_StartsWith('value', 'Kla')));
         $this->assertEquals(1, $rows->count());
 
         $rows = $model->getRows($model->select()
-            ->where(new Vps_Model_Select_Expr_StartsWith('value', 'laus')));
+            ->where(new Kwf_Model_Select_Expr_StartsWith('value', 'laus')));
         $this->assertEquals(0, $rows->count());
 
         $rows = $model->getRows($model->select()
-            ->where(new Vps_Model_Select_Expr_StartsWith('value', 'kla')));
+            ->where(new Kwf_Model_Select_Expr_StartsWith('value', 'kla')));
         $this->assertEquals(0, $rows->count());
     }
 }

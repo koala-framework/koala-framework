@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Plugin_Tags_Controller extends Vps_Controller_Action_Auto_AssignGrid
+class Kwf_Component_Generator_Plugin_Tags_Controller extends Kwf_Controller_Action_Auto_AssignGrid
 {
     protected $_assignFromReference = 'Tag';
 
@@ -14,8 +14,8 @@ class Vps_Component_Generator_Plugin_Tags_Controller extends Vps_Controller_Acti
     protected function _initColumns()
     {
         parent::_initColumns();
-        $this->setModel(Vpc_Abstract::createChildModel($this->_getParam('class')));
-        $this->_columns->add(new Vps_Grid_Column('tag_text', trlVps('Tag')));
+        $this->setModel(Kwc_Abstract::createChildModel($this->_getParam('class')));
+        $this->_columns->add(new Kwf_Grid_Column('tag_text', trlKwf('Tag')));
     }
 
     protected function _getSelect()

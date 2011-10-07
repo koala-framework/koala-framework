@@ -5,11 +5,11 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
     if (ex.url && ex.url.substr(0, 9) == 'chrome:/'+'/') {
         return;
     }
-    if (Vps.Debug.displayErrors) {
+    if (Kwf.Debug.displayErrors) {
         throw ex;
     }
     Ext.Ajax.request({
-        url: '/vps/error/error/json-mail',
+        url: '/kwf/error/error/json-mail',
         ignoreErrors: true,
         params: {
             url: ex.url,
@@ -22,7 +22,7 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
     });
 });
 
-if (!Vps.Debug.displayErrors) {
+if (!Kwf.Debug.displayErrors) {
     Ext.ux.ErrorHandler.init();
 }
 
@@ -37,7 +37,7 @@ if (!Vps.Debug.displayErrors) {
  * retry function
  * abort function
  */
-Vps.handleError = function(error) {
+Kwf.handleError = function(error) {
 
     if (typeof error == 'string') error = { message: error };
     if (arguments[1]) error.title = arguments[1];
@@ -45,19 +45,19 @@ Vps.handleError = function(error) {
     if (!error.url) error.url = '';
 
 
-    if ((error.checkRetry || Vps.Debug.displayErrors) && error.retry) {
-        if (Vps.Debug.displayErrors) {
+    if ((error.checkRetry || Kwf.Debug.displayErrors) && error.retry) {
+        if (Kwf.Debug.displayErrors) {
             title = error.title;
             msg = error.message;
         } else if (error.errorText) {
             title = error.errorText;
             msg = error.errorText;
         } else {
-            title = (trlVps('Error'));
-            msg = trlVps("A Server failure occured.");
+            title = (trlKwf('Error'));
+            msg = trlKwf("A Server failure occured.");
             if (error.mail || (typeof error.mail == 'undefined')) {
                 Ext.Ajax.request({
-                    url: '/vps/error/error/json-mail',
+                    url: '/kwf/error/error/json-mail',
                     params: {
                         url: error.url,
                         message: error.message,
@@ -88,13 +88,13 @@ Vps.handleError = function(error) {
                 closable:false,
                 html: msg,
                 buttons: [{
-                    text     : trlVps('Retry'),
+                    text     : trlKwf('Retry'),
                     handler  : function(){
                         error.retry.call(error.scope || window);
                         win.close();
                     }
                 },{
-                    text     : trlVps('Abort'),
+                    text     : trlKwf('Abort'),
                     handler  : function(){
                         error.abort.call(error.scope || window);
                         win.close();
@@ -102,7 +102,7 @@ Vps.handleError = function(error) {
             }]
         });
         win.show();
-    } else if (Vps.Debug.displayErrors) {
+    } else if (Kwf.Debug.displayErrors) {
         Ext.Msg.show({
             title: error.title,
             msg: error.message,
@@ -112,10 +112,10 @@ Vps.handleError = function(error) {
         });
         if (error.abort) error.abort.call(error.scope || window); //there is no possibility to retry, so just abort
     } else {
-        Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
+        Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
         if (error.mail || (typeof error.mail == 'undefined')) {
             Ext.Ajax.request({
-                url: '/vps/error/error/json-mail',
+                url: '/kwf/error/error/json-mail',
                 params: {
                     url: error.url,
                     message: error.message,

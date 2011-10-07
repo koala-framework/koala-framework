@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Rrd_Graph
+class Kwf_Util_Rrd_Graph
 {
     private static $_defaultColors = array('#249900', '#999999', '#FF0000',
         '#00FFFF', '#0000FF', '#000000', '#FFFF00', '#C05800', '#FF9500', '#FF9500',
@@ -15,9 +15,9 @@ class Vps_Util_Rrd_Graph
     private $_upperLimit = null;
 
     /**
-     * @param Vps_Util_Rrd_File wenn leer müssen alle fields als objekte angegeben werden
+     * @param Kwf_Util_Rrd_File wenn leer müssen alle fields als objekte angegeben werden
      */
-    public function __construct(Vps_Util_Rrd_File $rrd = null)
+    public function __construct(Kwf_Util_Rrd_File $rrd = null)
     {
         $this->_rrd = $rrd;
     }
@@ -61,12 +61,12 @@ class Vps_Util_Rrd_Graph
             $f = $field;
             $field = false;
             if (isset($f['field'])) $field = $f['field'];
-            if ($color || $text) throw new Vps_Exception("so ned");
+            if ($color || $text) throw new Kwf_Exception("so ned");
         } else {
             if (is_array($color)) {
                 $f = $color;
                 $f['field'] = $field;
-                if ($text) throw new Vps_Exception("so ned");
+                if ($text) throw new Kwf_Exception("so ned");
             } else {
                 $f = array(
                     'field' => $field,
@@ -91,7 +91,7 @@ class Vps_Util_Rrd_Graph
             }
         }
         if (!isset($f['color']) || !$f['color']) {
-            throw new Vps_Exception("no more avaliable default colors");
+            throw new Kwf_Exception("no more avaliable default colors");
         }
         if ((!isset($f['text'])) && isset($f['field'])) {
             $f['text'] = $f['field']->getText();
@@ -199,7 +199,7 @@ class Vps_Util_Rrd_Graph
         }
         exec($cmd, $out, $ret);
         if ($ret) {
-            throw new Vps_Exception(implode('', $out)."\n".$cmd);
+            throw new Kwf_Exception(implode('', $out)."\n".$cmd);
         }
         $ret = file_get_contents($tmpFile);
         unlink($tmpFile);
@@ -208,7 +208,7 @@ class Vps_Util_Rrd_Graph
 
     public function output($start, $end = null)
     {
-        Vps_Media_Output::output(array(
+        Kwf_Media_Output::output(array(
             'contents' => $this->getContents($start, $end),
             'mimeType' => 'image/png'
         ));

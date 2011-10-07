@@ -2,6 +2,6 @@
 /**
  * @deprecated
  */
-class Vpc_Menu_Abstract extends Vpc_Menu_Abstract_Component
+class Kwc_Menu_Abstract extends Kwc_Menu_Abstract_Component
 {
 }

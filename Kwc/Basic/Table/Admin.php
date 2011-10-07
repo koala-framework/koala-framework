@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Table_Admin extends Vpc_Admin
+class Kwc_Basic_Table_Admin extends Kwc_Admin
 {
     public function duplicate($source, $target)
     {

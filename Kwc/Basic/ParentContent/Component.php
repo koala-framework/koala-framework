@@ -1,14 +1,14 @@
 <?php
 /**
- * @package Vpc
+ * @package Kwc
  * @subpackage Basic
  */
-class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
+class Kwc_Basic_ParentContent_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Show Parent');
+        $ret['componentName'] = trlKwf('Show Parent');
         return $ret;
     }
 
@@ -54,8 +54,8 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Vps_Component_Data_Root::getInstance()->getPageGenerators() as $generator) {
-            $ret[] = new Vpc_Basic_ParentContent_CacheMeta($generator->getModel());
+        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $generator) {
+            $ret[] = new Kwc_Basic_ParentContent_CacheMeta($generator->getModel());
         }
         return $ret;
     }

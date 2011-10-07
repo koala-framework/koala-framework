@@ -1,6 +1,6 @@
-Vps.Auto.Filter.TextColumn = function(config)
+Kwf.Auto.Filter.TextColumn = function(config)
 {
-    Vps.Auto.Filter.TextColumn.superclass.constructor.call(this, config);
+    Kwf.Auto.Filter.TextColumn.superclass.constructor.call(this, config);
 
     var record = Ext.data.Record.create(['id', 'name']);
     var filterStore = new Ext.data.Store({
@@ -8,7 +8,7 @@ Vps.Auto.Filter.TextColumn = function(config)
         data: config.data
     });
     if (!config['default'] && filterStore.find('id', 0) == -1) {
-        filterStore.insert(0, [new record({id: 0, name: config['defaultText'] ? config['defaultText'] : trlVps('all')})]);
+        filterStore.insert(0, [new record({id: 0, name: config['defaultText'] ? config['defaultText'] : trlKwf('all')})]);
         config['default'] = 0;
     }
     this.combo = new Ext.form.ComboBox({
@@ -24,11 +24,11 @@ Vps.Auto.Filter.TextColumn = function(config)
     this.combo.on('select', function() {
         this.fireEvent('filter', this, this.getParams(config.paramName));
     }, this);
-    this.toolbarItems.add((config.columnsLabel || trlVps('Column')+':'));
+    this.toolbarItems.add((config.columnsLabel || trlKwf('Column')+':'));
     this.toolbarItems.add(this.combo);
 };
 
-Ext.extend(Vps.Auto.Filter.TextColumn, Vps.Auto.Filter.Text, {
+Ext.extend(Kwf.Auto.Filter.TextColumn, Kwf.Auto.Filter.Text, {
     reset: function() {
         this.textField.reset();
         this.combo.setValue(0);

@@ -1,12 +1,12 @@
 <?php
-class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Action
+class Kwf_Controller_Action_Debug_BenchmarkController extends Kwf_Controller_Action
 {
     private $_rrds;
     public function preDispatch()
     {
         parent::preDispatch();
         $this->_rrds = array();
-        foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
+        foreach (Kwf_Registry::get('config')->rrd as $k=>$n) {
             if ($n) {
                 $this->_rrds[$k] = new $n;
             }
@@ -38,7 +38,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         }
         $this->_printReloadJs();
         echo "<form action=\"\" method=\"post\" style=\"position: absolute; right:0; top:0; text-align:right; margin-right:10px;\">";
-        echo "<a href=\"/vps/debug/benchmark/values\">current values</a><br />";
+        echo "<a href=\"/kwf/debug/benchmark/values\">current values</a><br />";
         foreach ($this->_rrds as $name=>$rrd) {
             $title = $rrd->getTitle();
             if (!$title) $title = $name;
@@ -80,7 +80,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         setcookie('benchmark-start', $start, time()+60*60*24*14);
 
         foreach ($startDates as $k=>$i) {
-            echo "<a href=\"/vps/debug/benchmark?start=$i\"";
+            echo "<a href=\"/kwf/debug/benchmark?start=$i\"";
             if ($i == $start) echo " style=\"font-weight: bold\"";
             echo ">$k</a> ";
         }
@@ -89,8 +89,8 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
             foreach (array_keys($rrd->getGraphs()) as $gName) {
                 $n = "{$name}_{$gName}";
                 if (in_array($n, $active)) {
-                    echo "<a href=\"/vps/debug/benchmark/detail?rrd=$name&name=$gName\">";
-                    echo "<img style=\"border:none\" src=\"/vps/debug/benchmark/graph?rrd=$name&name=$gName&start=".urlencode($start)."\" />";
+                    echo "<a href=\"/kwf/debug/benchmark/detail?rrd=$name&name=$gName\">";
+                    echo "<img style=\"border:none\" src=\"/kwf/debug/benchmark/graph?rrd=$name&name=$gName&start=".urlencode($start)."\" />";
                     echo "</a>";
                 }
             }
@@ -104,7 +104,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         $this->_printReloadJs();
         $rrd = $this->_getParam('rrd');
         $name = $this->_getParam('name');
-        echo "<a href=\"/vps/debug/benchmark\">overview</a><br /><br />";
+        echo "<a href=\"/kwf/debug/benchmark\">overview</a><br /><br />";
         $startDates = array(
             'last 3 hours' => '-3 hours',
             'last 6 hours' => '-6 hours',
@@ -118,7 +118,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
 
         );
         foreach ($startDates as $d) {
-            echo "<img src=\"/vps/debug/benchmark/graph?rrd=$rrd&name=$name&start=".urlencode($d)."\" />";
+            echo "<img src=\"/kwf/debug/benchmark/graph?rrd=$rrd&name=$name&start=".urlencode($d)."\" />";
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -132,7 +132,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         $backendOptions = array(
             'cache_dir' => 'cache/benchmark/'
         );
-        $cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        $cache = Kwf_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
         $cacheId = md5('graph_'.$this->_getParam('rrd').'_'.$this->_getParam('name')
                     .'_'.$this->_getParam('start'));
         if (!$output = $cache->load($cacheId)) {
@@ -142,18 +142,18 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
             $output = array();
             $start = strtotime($this->_getParam('start'));
             if (!$start) {
-                throw new Vps_ClientException("invalid start");
+                throw new Kwf_ClientException("invalid start");
             }
             $output['contents'] = $g->getContents($start);
             $output['mimeType'] = 'image/png';
             $cache->save($output, $cacheId);
         }
-        Vps_Media_Output::output($output);
+        Kwf_Media_Output::output($output);
     }
 
     public function valuesAction()
     {
-        echo "<a href=\"/vps/debug/benchmark\">graphs</a><br /><br />";
+        echo "<a href=\"/kwf/debug/benchmark\">graphs</a><br /><br />";
         foreach ($this->_rrds as $rrd) {
             $values = array_values($rrd->getRecordValues());
             $cnt = 0;

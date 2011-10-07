@@ -1,12 +1,12 @@
 <?php
-class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
-    implements Vps_Media_Output_Interface
+class Kwc_Misc_RrdGraph_Component extends Kwc_Abstract
+    implements Kwf_Media_Output_Interface
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['componentName'] = trlVps('Rrd Graph');
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['componentName'] = trlKwf('Rrd Graph');
         return $ret;
     }
 
@@ -15,7 +15,7 @@ class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['src'] = false;
         if ($this->_getGraph()) {
-            $ret['src'] = Vps_Media::getUrl(
+            $ret['src'] = Kwf_Media::getUrl(
                             get_class($this),
                             $this->getData()->componentId,
                             'default',
@@ -31,13 +31,13 @@ class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
         $graph = explode(':', $row->graph);
         if (count($graph) == 2) {
             $rrd = $graph[0];
-            if (!in_array($rrd, Vps_Registry::get('config')->rrd->toArray())) {
-                throw new Vps_Exception("Invalid class '$rrd', not defined in config");
+            if (!in_array($rrd, Kwf_Registry::get('config')->rrd->toArray())) {
+                throw new Kwf_Exception("Invalid class '$rrd', not defined in config");
             }
             $rrd = new $rrd();
             $graphs = $rrd->getGraphs();
             if (!isset($graphs[$graph[1]])) {
-                throw new Vps_Exception("Invalid graph '$graph[1]'");
+                throw new Kwf_Exception("Invalid graph '$graph[1]'");
             }
             return $graphs[$graph[1]];
         }
@@ -47,7 +47,7 @@ class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
     public static function getMediaOutput($id, $type, $className)
     {
         if ($type != 'default') return null;
-        $component = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         if (!$component) return null;
         $graph = $component->getComponent()->_getGraph();
         if (!$graph) return null;

@@ -1,11 +1,11 @@
 <?php
-class Vpc_Root_TrlRoot_Master_FlagImage_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
+class Kwc_Root_TrlRoot_Master_FlagImage_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['image'] = array(
-            'class' => 'Vps_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Static',
             'component' => $masterComponentClass,
         );
         return $ret;

@@ -1,11 +1,11 @@
 <?php
-class Vps_Update_Action_Component_ConvertToChainedTrl extends Vps_Update_Action_Abstract
+class Kwf_Update_Action_Component_ConvertToChainedTrl extends Kwf_Update_Action_Abstract
 {
     public $rootPrefix = 'root-';
     public function update()
     {
         $db = Zend_Registry::get('db');
-        $db->query("UPDATE vps_pages
+        $db->query("UPDATE kwf_pages
             SET parent_id=CONCAT('root-master-', MID(parent_id, ".(strlen($this->rootPrefix)+1)."))
             WHERE parent_id LIKE ".$db->quote(str_replace('_', '\_', $this->rootPrefix).'%'));
 
@@ -22,7 +22,7 @@ class Vps_Update_Action_Component_ConvertToChainedTrl extends Vps_Update_Action_
                         WHERE component_id LIKE ".$db->quote(str_replace('_', '\_', $this->rootPrefix).'%'));
             }
         }
-        $db->query("UPDATE vpc_basic_text SET content =
+        $db->query("UPDATE kwc_basic_text SET content =
                 REPLACE(content, 'href=\"$this->rootPrefix', 'href=\"root-master-')");
         //TODO: Images
 

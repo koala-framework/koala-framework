@@ -1,5 +1,5 @@
 <?php
-class Vpc_Export_Xml_Component extends Vpc_Abstract
+class Kwc_Export_Xml_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -8,7 +8,7 @@ class Vpc_Export_Xml_Component extends Vpc_Abstract
         // löschen muss korrekt eingebaut werden
         $ret['viewCache'] = false;
 
-        $ret['contentSender'] = 'Vpc_Export_Xml_ContentSender';
+        $ret['contentSender'] = 'Kwc_Export_Xml_ContentSender';
         return $ret;
     }
 }

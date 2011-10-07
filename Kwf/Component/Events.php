@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Events
+class Kwf_Component_Events
 {
     protected $_config;
     public static $_indent = 0;
@@ -32,23 +32,23 @@ class Vps_Component_Events
 
     public static final function getAllListeners()
     {
-        $cacheId = 'Vps_Component_Events_listeners';
-        $listeners = Vps_Cache_Simple::fetch($cacheId);
+        $cacheId = 'Kwf_Component_Events_listeners';
+        $listeners = Kwf_Cache_Simple::fetch($cacheId);
         if (!$listeners) {
 
             $eventObjects = array();
-            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-                $eventsClass = Vpc_Admin::getComponentClass($componentClass, 'Events');
-                $eventObjects[] = Vps_Component_Abstract_Events::getInstance(
+            foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
+                $eventsClass = Kwc_Admin::getComponentClass($componentClass, 'Events');
+                $eventObjects[] = Kwf_Component_Abstract_Events::getInstance(
                     $eventsClass, array('componentClass' => $componentClass)
                 );
-                foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $null) {
-                    $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $null) {
+                    $generator = current(Kwf_Component_Generator_Abstract::getInstances(
                         $componentClass, array('generator' => $generatorKey))
                     );
                     $eventsClass = $generator->getEventsClass();
                     if ($eventsClass) {
-                        $eventObjects[] = Vps_Component_Generator_Events::getInstance(
+                        $eventObjects[] = Kwf_Component_Generator_Events::getInstance(
                             $eventsClass,
                             array(
                                 'componentClass' => $componentClass,
@@ -58,11 +58,11 @@ class Vps_Component_Events
                     }
                 }
             }
-            $eventObjects[] = Vps_Component_Events_ViewCache::getInstance('Vps_Component_Events_ViewCache');
+            $eventObjects[] = Kwf_Component_Events_ViewCache::getInstance('Kwf_Component_Events_ViewCache');
 
             $listeners = array();
             foreach ($eventObjects as $eventObject) {
-                if (get_class($eventObject) == 'Vps_Component_Generator_Events_Table') {
+                if (get_class($eventObject) == 'Kwf_Component_Generator_Events_Table') {
 
                 }
 
@@ -71,10 +71,10 @@ class Vps_Component_Events
                         !isset($listener['event']) ||
                         !isset($listener['callback'])
                     ) {
-                        throw new Vps_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
+                        throw new Kwf_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
                     }
                     $event = $listener['event'];
-                    if (!class_exists($event)) throw new Vps_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
+                    if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
                     $class = isset($listener['class']) ? $listener['class'] : 'all';
                     if (is_object($class)) $class = get_class($class);
                     $listeners[$event][$class][] = array(
@@ -85,7 +85,7 @@ class Vps_Component_Events
                 }
             }
 
-            Vps_Cache_Simple::add($cacheId, $listeners);
+            Kwf_Cache_Simple::add($cacheId, $listeners);
         }
         return $listeners;
     }
@@ -97,15 +97,15 @@ class Vps_Component_Events
 
     public static function fireEvent($event)
     {
-        if ($event instanceof Vps_Component_Event_Row_Abstract ||
-            $event instanceof Vps_Component_Event_Row_UpdatesFinished)
+        if ($event instanceof Kwf_Component_Event_Row_Abstract ||
+            $event instanceof Kwf_Component_Event_Row_UpdatesFinished)
         {
             self::$_indent = 0;
         }
 
         $logger = null;
         if (Zend_Registry::get('config')->debug->eventlog) {
-            $logger = Vps_Component_Events_Log::getInstance();
+            $logger = Kwf_Component_Events_Log::getInstance();
             if (self::$_indent == 0) $logger->info('----');
         }
 

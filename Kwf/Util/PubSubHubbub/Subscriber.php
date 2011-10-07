@@ -4,7 +4,7 @@
 // written by Josh Fraser | joshfraser.com | josh@eventvue.com
 // Released under Apache License 2.0
 
-class Vps_Util_PubSubHubbub_Subscriber
+class Kwf_Util_PubSubHubbub_Subscriber
 {
     protected $_hubUrl;
     protected $_callbackUrl;
@@ -21,7 +21,7 @@ class Vps_Util_PubSubHubbub_Subscriber
 
         $this->_hubUrl = $hubUrl;
 
-        $this->_callbackUrl = 'http://'.Vps_Registry::get('config')->server->domain.'/pshb_cb';
+        $this->_callbackUrl = 'http://'.Kwf_Registry::get('config')->server->domain.'/pshb_cb';
         $this->_credentials = $credentials;
     }
 
@@ -47,10 +47,10 @@ class Vps_Util_PubSubHubbub_Subscriber
     private function _changeSubscription($mode, $topicUrl)
     {
         if (!isset($topicUrl))
-            throw new Vps_Exception('Please specify a topic url');
+            throw new Kwf_Exception('Please specify a topic url');
 
          if (!preg_match("|^https?://|i",$topicUrl))
-            throw new Vps_Exception('The specified topic url does not appear to be valid: '.$topicUrl);
+            throw new Kwf_Exception('The specified topic url does not appear to be valid: '.$topicUrl);
 
         // set the mode subscribe/unsubscribe
         $data = array(
@@ -70,7 +70,7 @@ class Vps_Util_PubSubHubbub_Subscriber
         $client->setParameterPost($data);
         $response = $client->request();
         if ($response->isError()) {
-            throw new Vps_Exception("$mode failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
+            throw new Kwf_Exception("$mode failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
         }
         return $response;
     }

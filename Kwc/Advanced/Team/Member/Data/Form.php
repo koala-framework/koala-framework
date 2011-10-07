@@ -1,27 +1,27 @@
 <?php
-class Vpc_Advanced_Team_Member_Data_Form extends Vpc_Abstract_Form
+class Kwc_Advanced_Team_Member_Data_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
+        $this->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')))
             ->setWidth(400);
-        $this->add(new Vps_Form_Field_TextField('firstname', trlVps('First name')))
+        $this->add(new Kwf_Form_Field_TextField('firstname', trlKwf('First name')))
             ->setWidth(400);
-        $this->add(new Vps_Form_Field_TextField('lastname', trlVps('Last name')))
+        $this->add(new Kwf_Form_Field_TextField('lastname', trlKwf('Last name')))
             ->setWidth(400);
-        $this->add(new Vps_Form_Field_TextField('working_position', trlVps('Position')))
+        $this->add(new Kwf_Form_Field_TextField('working_position', trlKwf('Position')))
             ->setWidth(400);
-        $this->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')))
+        $this->add(new Kwf_Form_Field_TextField('phone', trlKwf('Phone')))
             ->setWidth(400);
-        $this->add(new Vps_Form_Field_TextField('mobile', trlVps('Mobile')))
+        $this->add(new Kwf_Form_Field_TextField('mobile', trlKwf('Mobile')))
             ->setWidth(400);
 
-        if (Vpc_Abstract::getSetting($this->getClass(), 'faxPerPerson')) {
-            $this->add(new Vps_Form_Field_TextField('fax', trlVps('Fax')))
+        if (Kwc_Abstract::getSetting($this->getClass(), 'faxPerPerson')) {
+            $this->add(new Kwf_Form_Field_TextField('fax', trlKwf('Fax')))
                 ->setWidth(400);
         }
-        $this->add(new Vps_Form_Field_TextField('email', trlVps('Email')))
+        $this->add(new Kwf_Form_Field_TextField('email', trlKwf('Email')))
             ->setWidth(400);
     }
 }

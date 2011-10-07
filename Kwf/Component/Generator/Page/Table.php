@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoPage_Table
+class Kwf_Component_Generator_Page_Table extends Kwf_Component_Generator_PseudoPage_Table
 {
     protected $_idSeparator = '_';
     protected $_inherits = true;
     protected $_maxNameLength;
-    protected $_eventsClass = 'Vps_Component_Generator_Page_Events_Table';
+    protected $_eventsClass = 'Kwf_Component_Generator_Page_Events_Table';
 
     protected function _init()
     {

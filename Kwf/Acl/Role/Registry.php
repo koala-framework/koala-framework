@@ -1,5 +1,5 @@
 <?php
-class Vps_Acl_Role_Registry extends Zend_Acl_Role_Registry
+class Kwf_Acl_Role_Registry extends Zend_Acl_Role_Registry
 {
     public function getRoles()
     {

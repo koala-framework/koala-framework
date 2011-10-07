@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Cache_Meta_Static_Abstract extends Vps_Component_Cache_Meta_Abstract
+abstract class Kwf_Component_Cache_Meta_Static_Abstract extends Kwf_Component_Cache_Meta_Abstract
 {
     protected $_pattern;
     protected $_params;

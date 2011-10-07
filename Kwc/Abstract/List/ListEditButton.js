@@ -1,6 +1,6 @@
-Vpc.Abstract.List.ListEditButton = Ext.extend(Vps.Auto.GridPanel, {
+Kwc.Abstract.List.ListEditButton = Ext.extend(Kwf.Auto.GridPanel, {
     initComponent: function() {
-        Vpc.Abstract.List.ListEditButton.superclass.initComponent.call(this);
+        Kwc.Abstract.List.ListEditButton.superclass.initComponent.call(this);
 
         this.on('cellclick', function(grid, rowIndex, columnIndex, e) {
             var col = grid.getColumnModel().config[columnIndex];
@@ -23,4 +23,4 @@ Vpc.Abstract.List.ListEditButton = Ext.extend(Vps.Auto.GridPanel, {
         this.fireEvent('gotComponentConfigs', this.componentConfigs);
     }
 });
-Ext.reg('vpc.list.listEditButton', Vpc.Abstract.List.ListEditButton);
+Ext.reg('kwc.list.listEditButton', Kwc.Abstract.List.ListEditButton);

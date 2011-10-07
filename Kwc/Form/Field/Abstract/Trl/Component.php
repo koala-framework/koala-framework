@@ -1,10 +1,10 @@
 <?php
-class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Form_Field_Abstract_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['flags']['formField'] = true;
         $ret['viewCache'] = false;
         return $ret;
@@ -12,7 +12,7 @@ class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
 
     public function getTemplateVars()
     {
-        $ret = Vpc_Abstract::getTemplateVars();
+        $ret = Kwc_Abstract::getTemplateVars();
         $form = $this->_getForm();
         $postData = array();
         $errors = array();
@@ -22,7 +22,7 @@ class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
             $errors = $this->_getForm()->getComponent()->getErrors();
         }
         $fieldVars = $this->getFormField()->getTemplateVars($postData);
-        $dec = Vpc_Abstract::getSetting($form->componentClass, 'decorator');
+        $dec = Kwc_Abstract::getSetting($form->componentClass, 'decorator');
         if ($dec && is_string($dec)) {
             $dec = new $dec();
             $fieldVars = $dec->processItem($fieldVars, $errors);
@@ -34,7 +34,7 @@ class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
     private function _getForm()
     {
         $ret = $this->getData();
-        while ($ret && !is_instance_of($ret->componentClass, 'Vpc_Form_Dynamic_Trl_Component')) {
+        while ($ret && !is_instance_of($ret->componentClass, 'Kwc_Form_Dynamic_Trl_Component')) {
             $ret = $ret->parent;
         }
         $ret = $ret->getChildComponent('-form');
@@ -42,7 +42,7 @@ class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
     }
 
     /**
-     * @return Vps_Form_Field_Abstract
+     * @return Kwf_Form_Field_Abstract
     */
     protected function _getFormField()
     {
@@ -53,7 +53,7 @@ class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
     }
 
     /**
-     * @return Vps_Form_Field_Abstract
+     * @return Kwf_Form_Field_Abstract
     */
     public final function getFormField()
     {

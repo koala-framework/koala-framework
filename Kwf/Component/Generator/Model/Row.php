@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Model_Row extends Vps_Model_Row_Abstract
+class Kwf_Component_Generator_Model_Row extends Kwf_Model_Row_Abstract
 {
     protected $_data;
     protected $_model;
@@ -45,7 +45,7 @@ class Vps_Component_Generator_Model_Row extends Vps_Model_Row_Abstract
 
     public function delete()
     {
-        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel');
         $row = $m->getRow($this->componentId)->current();
         $row->delete();
     }

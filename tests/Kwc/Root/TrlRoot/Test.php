@@ -1,29 +1,29 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_TrlRoot
- * @group Vpc_UrlResolve
+ * @group Kwc_Trl
+ * @group Kwc_TrlRoot
+ * @group Kwc_UrlResolve
 
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/de/test
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/de/home_de
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/de/test2
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/de
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/en/test
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/en/test2_en
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/en/home_de
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Root_TrlRoot_TestComponent/en
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/de/test
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/de/home_de
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/de/test2
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/de
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/en/test
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/en/test2_en
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/en/home_de
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Root_TrlRoot_TestComponent/en
  */
-class Vpc_Root_TrlRoot_Test extends Vpc_TestAbstract
+class Kwc_Root_TrlRoot_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Root_TrlRoot_TestComponent');
+        parent::setUp('Kwc_Root_TrlRoot_TestComponent');
         $this->_root->setFilename(null);
     }
 
     public function testIt()
     {
-        $domain = Vps_Registry::get('config')->server->domain;
+        $domain = Kwf_Registry::get('config')->server->domain;
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'de');
         $this->assertEquals('1', $data->componentId);

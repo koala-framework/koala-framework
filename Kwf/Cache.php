@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache extends Zend_Cache
+class Kwf_Cache extends Zend_Cache
 {
     private static $_instances = array();
 
@@ -11,7 +11,7 @@ class Vps_Cache extends Zend_Cache
         $frontendClass = 'Zend_Cache_' . ($frontend != 'Core' ? 'Frontend_' : '') . $frontend;
         $backendClass = 'Zend_Cache_Backend_' . $backend;
         if ($backend == 'Memcached' || $backend == 'File' || $backend == 'TwoLevels' || $backend == 'Apc') {
-            $backendClass = 'Vps_Cache_Backend_' . $backend;
+            $backendClass = 'Kwf_Cache_Backend_' . $backend;
         }
         $frontendObject = new $frontendClass($frontendOptions);
         $backendObject = new $backendClass($backendOptions);
@@ -21,17 +21,17 @@ class Vps_Cache extends Zend_Cache
 
     /**
      * @param string entweder aus config (caches.type)
-     * @return Vps_Cache_Core
+     * @return Kwf_Cache_Core
      *
-     * ähnlich wie Vps_Model_Abstract::getInstance()
+     * ähnlich wie Kwf_Model_Abstract::getInstance()
      */
     public static function getInstance($type)
     {
         if (!isset(self::$_instances[$type])) {
             static $config;
-            if (!isset($config)) $config = Vps_Registry::get('config')->caches->toArray();
+            if (!isset($config)) $config = Kwf_Registry::get('config')->caches->toArray();
             if (!isset($config[$type])) {
-                throw new Vps_Exception("unknown type '$type'");
+                throw new Kwf_Exception("unknown type '$type'");
             }
             $cls = $config[$type];
             self::$_instances[$type] = new $cls();
@@ -51,6 +51,6 @@ class Vps_Cache extends Zend_Cache
      */
     public static function getUniquePrefix()
     {
-        return Vps_Cache_Simple::getUniquePrefix();
+        return Kwf_Cache_Simple::getUniquePrefix();
     }
 }

@@ -1,1 +1,1 @@
-ALTER TABLE `vpc_basic_space` CHANGE `height` `height` SMALLINT( 6 ) NULL;
+ALTER TABLE `kwc_basic_space` CHANGE `height` `height` SMALLINT( 6 ) NULL;

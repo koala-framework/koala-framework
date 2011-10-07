@@ -1,13 +1,13 @@
 <?php
-class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
+class Kwf_Form_Field_DoublePassword extends Kwf_Form_Field_Abstract
 {
     protected $_passwordField1;
     protected $_passwordField2;
     public function __construct($fieldName = null, $fieldLabel = null)
     {
-        $this->_passwordField1 = new Vps_Form_Field_Password($fieldName, $fieldLabel);
+        $this->_passwordField1 = new Kwf_Form_Field_Password($fieldName, $fieldLabel);
         $this->_passwordField1->setAllowBlank(false);
-        $this->_passwordField2 = new Vps_Form_Field_Password($fieldName.'_repeat', trlVps('repeat {0}', $fieldLabel));
+        $this->_passwordField2 = new Kwf_Form_Field_Password($fieldName.'_repeat', trlKwf('repeat {0}', $fieldLabel));
         $this->_passwordField2->setSave(false);
         parent::__construct(null, null);
     }
@@ -24,7 +24,7 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
     }
     public function getChildren()
     {
-        $ret = new Vps_Collection_FormFields();
+        $ret = new Kwf_Collection_FormFields();
         $ret[] = $this->_passwordField1;
         $ret[] = $this->_passwordField2;
         return $ret;
@@ -36,7 +36,7 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
                             $postData[$this->_passwordField2->getFieldName()])
         {
             $ret[] = array(
-                'message' => trlVps("Passwords are different. Please try again."),
+                'message' => trlKwf("Passwords are different. Please try again."),
                 'field' => $this->_passwordField1
             );
         }

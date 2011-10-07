@@ -1,9 +1,9 @@
 <?php
-class Vps_EyeCandy_List_Plugins_HoverOthers_TestController extends Vps_Controller_Action
+class Kwf_EyeCandy_List_Plugins_HoverOthers_TestController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
-        $view = new Vps_View();
+        $view = new Kwf_View();
         echo $view->render(dirname(__FILE__).'/Test.tpl');
         $this->_helper->viewRenderer->setNoRender(true);
     }

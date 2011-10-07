@@ -1,11 +1,11 @@
-Ext.namespace('Vps.Test');
+Ext.namespace('Kwf.Test');
 
-Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
+Kwf.Test.ConnectionsError = Ext.extend(Ext.Panel, {
     html: 'test',
     id: 'blub',
     initComponent: function()
     {
-        Vps.Debug.displayErrors = false;
+        Kwf.Debug.displayErrors = false;
         this.buttons = [];
         this.buttons.push(
             new Ext.Button({
@@ -15,7 +15,7 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
                     timeout: 1000,
                     params: {test:1},
                     errorText: 'foo1',
-                    url: '/vps/test/vps_connection_test/json-timeout',
+                    url: '/kwf/test/kwf_connection_test/json-timeout',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"abort\">abort</div>");
                     },
@@ -31,12 +31,12 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
             new Ext.Button({
             text:'testC',
             handler : function(){
-                Vps.Debug.displayErrors = true;
+                Kwf.Debug.displayErrors = true;
                 Ext.Ajax.request({
                     timeout: 1000,
                     params: {test:1},
                     errorText: 'timeoutError',
-                    url: '/vps/test/vps_connection_test/json-timeout',
+                    url: '/kwf/test/kwf_connection_test/json-timeout',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"aborttimeout\">aborttimeout</div>");
                     },
@@ -49,7 +49,7 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
                     timeout: 1000,
                     params: {test:2},
                     errorText: 'exceptionError',
-                    url: '/vps/test/vps_connection_test/json-exception',
+                    url: '/kwf/test/kwf_connection_test/json-exception',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"abortexception\">abortexception</div>");
                     },
@@ -65,10 +65,10 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
             new Ext.Button({
             text:'testD',
             handler : function(){
-                Vps.Debug.displayErrors = true;
+                Kwf.Debug.displayErrors = true;
                 Ext.Ajax.request({
                     params: {test:1},
-                    url: '/vps/test/vps_connection_test/json-real-exception',
+                    url: '/kwf/test/kwf_connection_test/json-real-exception',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"abort\">abort</div>");
                     },
@@ -80,6 +80,6 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
             },
             scope: this
         }));
-        Vps.Test.ConnectionsError.superclass.initComponent.call(this);
+        Kwf.Test.ConnectionsError.superclass.initComponent.call(this);
     }
 });

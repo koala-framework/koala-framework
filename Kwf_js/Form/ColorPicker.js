@@ -1,12 +1,12 @@
-Vps.Form.ColorPicker = Ext.extend(Ext.form.TriggerField,
+Kwf.Form.ColorPicker = Ext.extend(Ext.form.TriggerField,
 {
     triggerClass : 'x-form-search-trigger',
     readOnly : true,
     width : 200,
     onTriggerClick : function(){
-        win = new Vps.ColorPicker.Window({
+        win = new Kwf.ColorPicker.Window({
                 modal: true,
-                title: trlVps('Select your Position'),
+                title: trlKwf('Select your Position'),
                 width:535,
                 height:500,
                 shadow:true,
@@ -17,4 +17,4 @@ Vps.Form.ColorPicker = Ext.extend(Ext.form.TriggerField,
         win.focus();
     }
 });
-Ext.reg('colorpickerfield', Vps.ColorPicker.Window);
+Ext.reg('colorpickerfield', Kwf.ColorPicker.Window);

@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_Abstract
+class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_Abstract
 {
     public $search;
     public $replace;
@@ -8,7 +8,7 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
     {
         parent::checkSettings();
         if (!$this->search || is_null($this->replace)) {
-            throw new Vps_ClientException("Required parameters: search, replace");
+            throw new Kwf_ClientException("Required parameters: search, replace");
         }
     }
 
@@ -26,7 +26,7 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
             $hasComponentId = false;
             $column = 'component_id';
             foreach ($db->query("SHOW FIELDS FROM $table")->fetchAll() as $field) {
-                if ($table == 'vps_pages') {
+                if ($table == 'kwf_pages') {
                     $column = 'parent_id';
                     $hasComponentId = true;
                 } else if ($field['Field'] == 'component_id') {
@@ -48,7 +48,7 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
                         WHERE $column LIKE '$dbPattern'");
             }
         }
-        $db->query("UPDATE vpc_basic_text SET content =
+        $db->query("UPDATE kwc_basic_text SET content =
                 REPLACE(content, 'href=\"$search-', 'href=\"$replace-')");
         //TODO: Images
 

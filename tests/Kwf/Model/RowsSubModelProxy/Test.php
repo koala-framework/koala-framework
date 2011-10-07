@@ -3,11 +3,11 @@
  * @group Model
  * @group Model_RowsSubModelProxy
  */
-class Vps_Model_RowsSubModelProxy_Test extends Vps_Test_TestCase
+class Kwf_Model_RowsSubModelProxy_Test extends Kwf_Test_TestCase
 {
     public function testIt()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array(),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'data'=>serialize(
@@ -22,8 +22,8 @@ class Vps_Model_RowsSubModelProxy_Test extends Vps_Test_TestCase
                 )
             ),
             'dependentModels' => array(
-                'Child' => new Vps_Model_RowsSubModel_Proxy(array(
-                    'proxyModel' => new Vps_Model_FieldRows(array(
+                'Child' => new Kwf_Model_RowsSubModel_Proxy(array(
+                    'proxyModel' => new Kwf_Model_FieldRows(array(
                         'fieldName' => 'data',
                     )),
                 )),

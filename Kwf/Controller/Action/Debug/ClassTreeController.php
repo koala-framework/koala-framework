@@ -1,13 +1,13 @@
 <?php
-class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Action
+class Kwf_Controller_Action_Debug_ClassTreeController extends Kwf_Controller_Action
 {
     private function _graphData($class, $parent = '')
     {
-        if (is_instance_of($class, 'Vpc_Paragraphs_Component')) return;
+        if (is_instance_of($class, 'Kwc_Paragraphs_Component')) return;
         static $processed = array();
         $ret = '';
         $last = $class . $parent;
-        foreach (Vpc_Abstract::getSetting($class, 'generators') as $generatorKey => $generator) {
+        foreach (Kwc_Abstract::getSetting($class, 'generators') as $generatorKey => $generator) {
             $g = $this->_getGenerator($class, $generatorKey);
             $shape = $this->_getShape($g);
             foreach ($this->_getChildren($generator) as $child) {
@@ -46,7 +46,7 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
 
     private function _getGenerator($class, $generatorKey)
     {
-        return Vps_Component_Generator_Abstract::getInstance($class, $generatorKey);
+        return Kwf_Component_Generator_Abstract::getInstance($class, $generatorKey);
     }
 
     private function _getChildren($generator)
@@ -63,7 +63,7 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
     private function _getColor($child)
     {
         $ret = 'blue';
-        if (file_exists(VPS_PATH.'/'.str_replace('_', '/', $child).'.php')) {
+        if (file_exists(KWF_PATH.'/'.str_replace('_', '/', $child).'.php')) {
             $ret = 'red';
         }
         return $ret;
@@ -77,7 +77,7 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
             $ret = substr($ret, strlen($parentPre));
         } else {
             $ret = substr($ret, 4);
-            if (!file_exists(VPS_PATH.'/'.str_replace('_', '/', $class).'.php')) {
+            if (!file_exists(KWF_PATH.'/'.str_replace('_', '/', $class).'.php')) {
                 $ret = substr($ret, strpos($ret, '_') + 1);
             }
         }
@@ -87,7 +87,7 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
     public function indexAction()
     {
         $class = $this->_getParam('class');
-        if (!$class) throw new Vps_Exception_Client('Bitte Klasse als Get-Parameter "class" angeben.');
+        if (!$class) throw new Kwf_Exception_Client('Bitte Klasse als Get-Parameter "class" angeben.');
 
         $classname = $this->_getClassName($class);
         $color = $this->_getColor($class);
@@ -118,10 +118,10 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
             fclose($pipes[2]);
             $returnValue = proc_close($process);
         } else {
-            throw new Vps_Exception('Can\'t open process.');
+            throw new Kwf_Exception('Can\'t open process.');
         }
         if ($returnValue) {
-//             throw new Vps_Exception('Error: '.$errout);
+//             throw new Kwf_Exception('Error: '.$errout);
         }
         header('Content-Type: image/png');
         echo $image;

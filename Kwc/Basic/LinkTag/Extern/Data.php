@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
+class Kwc_Basic_LinkTag_Extern_Data extends Kwf_Component_Data
 {
     private $_linkRow;
     private function _getLinkRow()
     {
         if (!isset($this->_linkRow)) {
-            $m = Vpc_Abstract::createOwnModel($this->componentClass);
+            $m = Kwc_Abstract::createOwnModel($this->componentClass);
             $cols = array('target', 'open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable');
             $this->_linkRow = (object)$m->fetchColumnsByPrimaryId($cols, $this->dbId);
         }
@@ -18,12 +18,12 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
             if (!isset($row->target) || !$row->target) return '';
             return $row->target;
         } else if ($var == 'rel') {
-            if (!Vpc_Abstract::getSetting($this->componentClass, 'hasPopup')) {
-                $type = Vpc_Abstract::getSetting($this->componentClass, 'openType');
+            if (!Kwc_Abstract::getSetting($this->componentClass, 'hasPopup')) {
+                $type = Kwc_Abstract::getSetting($this->componentClass, 'openType');
                 if ($type == 'blank') {
                     return 'popup_blank';
                 } else {
-                    throw new Vps_Exception_NotYetImplemented();
+                    throw new Kwf_Exception_NotYetImplemented();
                 }
             }
             $ret = '';

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_None_Component extends Vpc_Shop_Cart_Checkout_Payment_Abstract_Component
+class Kwc_Shop_Cart_Checkout_Payment_None_Component extends Kwc_Shop_Cart_Checkout_Payment_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('None');
+        $ret['componentName'] = trlKwf('None');
         return $ret;
     }
 

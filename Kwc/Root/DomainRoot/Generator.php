@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_DomainRoot_Generator extends Vps_Component_Generator_PseudoPage_Table
+class Kwc_Root_DomainRoot_Generator extends Kwf_Component_Generator_PseudoPage_Table
 {
     protected $_hasNumericIds = false;
     protected $_nameColumn = 'name';
@@ -30,7 +30,7 @@ class Vpc_Root_DomainRoot_Generator extends Vps_Component_Generator_PseudoPage_T
 
     protected function _getParentDataByRow($row)
     {
-        return Vps_Component_Data_Root::getInstance();
+        return Kwf_Component_Data_Root::getInstance();
     }
 
     public function getGeneratorFlags()

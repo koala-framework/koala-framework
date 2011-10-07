@@ -1,9 +1,9 @@
 <?php
-class Vps_Filter_Row_NumberizeTest extends Vps_Test_TestCase
+class Kwf_Filter_Row_NumberizeTest extends Kwf_Test_TestCase
 {
     public function testNumberize()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'pos'=>1, 'foo'=>'foo1'),
             array('id'=>2, 'pos'=>2, 'foo'=>'foo2'),
             array('id'=>3, 'pos'=>3, 'foo'=>'foo3')
@@ -36,9 +36,9 @@ class Vps_Filter_Row_NumberizeTest extends Vps_Test_TestCase
 
     public function testNumberizeGroupBy()
     {
-        $f = new Vps_Filter_Row_Numberize();
+        $f = new Kwf_Filter_Row_Numberize();
         $f->setGroupBy('group');
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'pos'=>1, 'group'=>1, 'foo'=>'foo1'),
             array('id'=>2, 'pos'=>1, 'group'=>2, 'foo'=>'foo2'),
             array('id'=>3, 'pos'=>2, 'group'=>1, 'foo'=>'foo3')

@@ -1,14 +1,14 @@
 <?php
-abstract class Vps_Component_Cache
+abstract class Kwf_Component_Cache
 {
     static private $_instance;
     static private $_backend = self::CACHE_BACKEND_MYSQL;
-    const CACHE_BACKEND_MYSQL = 'Vps_Component_Cache_Mysql';
-    const CACHE_BACKEND_FNF = 'Vps_Component_Cache_Fnf';
+    const CACHE_BACKEND_MYSQL = 'Kwf_Component_Cache_Mysql';
+    const CACHE_BACKEND_FNF = 'Kwf_Component_Cache_Fnf';
     const NO_CACHE = '{nocache}';
 
     /**
-     * @return Vps_Component_Cache_Mysql
+     * @return Kwf_Component_Cache_Mysql
      */
     public static function getInstance()
     {
@@ -42,21 +42,21 @@ abstract class Vps_Component_Cache
     public static function saveStaticMeta()
     {
         // getStaticCacheMeta
-        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+        foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
             $class = $componentClass;
             if (($pos = strpos($class, '.')) !== false)
                 $class = substr($componentClass, 0, $pos);
-            if (!is_instance_of($class, 'Vpc_Abstract')) continue;
+            if (!is_instance_of($class, 'Kwc_Abstract')) continue;
             $metas = call_user_func(array($class, 'getStaticCacheMeta'), $componentClass);
             foreach ($metas as $meta) {
                 self::getInstance()->saveMeta($componentClass, $meta);
             }
         }
         // für componentLink+UrlCache: alle Komponenten, die als Page erstellt werden können
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $setting) {
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwc_Abstract::getSetting($class, 'generators') as $key => $setting) {
                 if (!isset($setting['class'])) continue;
-                $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                $generator = current(Kwf_Component_Generator_Abstract::getInstances(
                     $class, array('generator' => $key))
                 );
                 if ($generator &&
@@ -65,7 +65,7 @@ abstract class Vps_Component_Cache
                 ) {
                     //ComponentLink
                     $model = $generator->getModel();
-                    if ($model instanceof Vpc_Root_Category_GeneratorModel) {
+                    if ($model instanceof Kwc_Root_Category_GeneratorModel) {
                         $primaryKey = 'id';
                     } else {
                         $primaryKey = $model->getPrimaryKey();
@@ -74,18 +74,18 @@ abstract class Vps_Component_Cache
                     if (isset($setting['dbIdShortcut'])) {
                         $pattern = $setting['dbIdShortcut'] . $pattern;
                     }
-                    $meta = new Vps_Component_Cache_Meta_Static_ComponentLink($model, $pattern);
+                    $meta = new Kwf_Component_Cache_Meta_Static_ComponentLink($model, $pattern);
                     foreach ($generator->getChildComponentClasses() as $c) {
                         self::getInstance()->saveMeta($c, $meta);
                     }
                     // Komponenten, die im Seitenbaum vorkommen
-                    if ($generator->getModel() instanceof Vpc_Root_Category_GeneratorModel) {
-                        $meta = new Vps_Component_Cache_Meta_Static_ComponentLink('Vps_Component_Model');
+                    if ($generator->getModel() instanceof Kwc_Root_Category_GeneratorModel) {
+                        $meta = new Kwf_Component_Cache_Meta_Static_ComponentLink('Kwf_Component_Model');
                         foreach ($generator->getChildComponentClasses() as $c) {
                             self::getInstance()->saveMeta($c, $meta);
                         }
                         // Wenns ein hascontent(menu) im master.tpl gibt
-                        $meta = new Vpc_Menu_Abstract_CacheMetaMaster('Vps_Component_Model');
+                        $meta = new Kwc_Menu_Abstract_CacheMetaMaster('Kwf_Component_Model');
                         foreach ($generator->getChildComponentClasses() as $c) {
                             self::getInstance()->saveMeta($c, $meta);
                         }
@@ -95,11 +95,11 @@ abstract class Vps_Component_Cache
                     $generator->getGeneratorFlag('table')
                 ) {
                     //UrlCache
-                    $meta = new Vps_Component_Cache_Meta_Static_UrlCache($generator);
+                    $meta = new Kwf_Component_Cache_Meta_Static_UrlCache($generator);
                     self::getInstance()->saveMeta($class, $meta); //$class wird nicht verwendet, ist aber im primaryKey wird nur darum gesetzt
 
                     //ProcessInputCache
-                    $meta = new Vps_Component_Cache_Meta_Static_ProcessInputCache($generator);
+                    $meta = new Kwf_Component_Cache_Meta_Static_ProcessInputCache($generator);
                     self::getInstance()->saveMeta($class, $meta); //$class wird nicht verwendet, ist aber im primaryKey wird nur darum gesetzt
                 }
             }

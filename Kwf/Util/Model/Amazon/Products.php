@@ -1,11 +1,11 @@
 <?php
-class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
+class Kwf_Util_Model_Amazon_Products extends Kwf_Model_Abstract
 {
     protected $_dependentModels = array(
-        'ProductsToNodes' => 'Vps_Util_Model_Amazon_ProductsToNodes'
+        'ProductsToNodes' => 'Kwf_Util_Model_Amazon_ProductsToNodes'
     );
 
-    protected $_rowClass = 'Vps_Util_Model_Amazon_Products_Row';
+    protected $_rowClass = 'Kwf_Util_Model_Amazon_Products_Row';
     protected $_toStringField = 'title';
 
     protected $_responseGroup = 'Small,BrowseNodes,Similarities,ItemAttributes,Reviews,EditorialReview,Images';
@@ -23,7 +23,7 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
     protected function _init()
     {
         if (!$this->_amazon) {
-            $this->_amazon = new Vps_Service_Amazon();
+            $this->_amazon = new Kwf_Service_Amazon();
         }
         parent::_init();
     }
@@ -46,18 +46,18 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
     private function _getOptions($select)
     {
         $options = array();
-        if ($select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
-            foreach ($select->getPart(Vps_Model_Select::WHERE_EQUALS) as $f=>$v) {
+        if ($select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
+            foreach ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) as $f=>$v) {
                 $options[$f] = $v;
             }
         }
-        if ($c = $select->getPart(Vps_Model_Select::LIMIT_COUNT)) {
+        if ($c = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
             if ($c > 10) {
-                throw new Vps_Exception('limitCount can\'t be higher than 10');
+                throw new Kwf_Exception('limitCount can\'t be higher than 10');
             }
         }
-        if ($select->getPart(Vps_Model_Select::WHERE_ID)) {
-            $options['asin'] = $select->getPart(Vps_Model_Select::WHERE_ID);
+        if ($select->getPart(Kwf_Model_Select::WHERE_ID)) {
+            $options['asin'] = $select->getPart(Kwf_Model_Select::WHERE_ID);
         }
         if (isset($options['asin'])) {
             //wenn nach asin gesucht wird alles andere ignorieren
@@ -67,17 +67,17 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
                 $options['AssociateTag'] = $o['AssociateTag'];
             }
         }
-        if ($offs = $select->getPart(Vps_Model_Select::LIMIT_OFFSET)) {
+        if ($offs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET)) {
             $options['ItemPage'] = floor($offs/10) + 1;
         }
-        if ($ord = $select->getPart(Vps_Model_Select::ORDER)) {
+        if ($ord = $select->getPart(Kwf_Model_Select::ORDER)) {
             $ord = array_values($ord);
             if (sizeof($ord) > 1) {
-                throw new Vps_Exception('There can only be one order');
+                throw new Kwf_Exception('There can only be one order');
             }
             $ord = $ord[0];
             if ($ord['direction'] != 'ASC') {
-                throw new Vps_Exception('you can only sort by ASC');
+                throw new Kwf_Exception('you can only sort by ASC');
             }
             $options['Sort'] = $ord['field'];
         }
@@ -103,8 +103,8 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
             $dataKeys = array($asin);
         } else {
             $results = $this->_itemSearch($options);
-            $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
-            $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
+            $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
+            $limitOffset = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
             $limitOffset = $limitOffset - (floor($limitOffset/10)*10);
             $i = 0;
             $dataKeys = array();
@@ -167,7 +167,7 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     public function transformColumnName($name)

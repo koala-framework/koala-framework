@@ -1,9 +1,9 @@
-Vps.Form.MultiCheckbox = Ext.extend(Vps.Form.FieldSet, {
+Kwf.Form.MultiCheckbox = Ext.extend(Kwf.Form.FieldSet, {
     afterRender: function() {
-        Vps.Form.MultiCheckbox.superclass.afterRender.call(this);
+        Kwf.Form.MultiCheckbox.superclass.afterRender.call(this);
 
         if (this.showCheckAllLinks && this.header) {
-            var checkAllWrapper = this.header.createChild({ tag: 'span', cls: 'vpsCheckAllWrapper' });
+            var checkAllWrapper = this.header.createChild({ tag: 'span', cls: 'kwfCheckAllWrapper' });
             checkAllWrapper.createChild({ tag: 'span', html: ' ('});
             var checkAllLink = checkAllWrapper.createChild({
                 tag: 'a',
@@ -39,4 +39,4 @@ Vps.Form.MultiCheckbox = Ext.extend(Vps.Form.FieldSet, {
     }
 });
 
-Ext.reg('multicheckbox', Vps.Form.MultiCheckbox);
+Ext.reg('multicheckbox', Kwf.Form.MultiCheckbox);

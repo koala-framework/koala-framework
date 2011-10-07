@@ -2,16 +2,16 @@
 /**
  * @group Generator_GetComponentByClassSubPage
  */
-class Vps_Component_Generator_GetComponentByClassSubPage_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_GetComponentByClassSubPage_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_GetComponentByClassSubPage_Root');
+        parent::setUp('Kwf_Component_Generator_GetComponentByClassSubPage_Root');
     }
 
     public function testById()
     {
         $this->assertNotNull($this->_root->getComponentById(2));
-        $this->assertEquals(2, count($this->_root->getComponentsByClass('Vpc_Basic_Empty_Component')));
+        $this->assertEquals(2, count($this->_root->getComponentsByClass('Kwc_Basic_Empty_Component')));
     }
 }

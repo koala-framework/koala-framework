@@ -1,12 +1,12 @@
 <?php
-class Vps_AutoGrid_BasicController extends Vps_Controller_Action_Auto_Grid
+class Kwf_AutoGrid_BasicController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_defaultOrder = 'id';
 
     public function indexAction()
     {
-        $this->view->assetsType = 'Vps_AutoGrid:Test';
-        $this->view->viewport = 'Vps.Test.Viewport';
+        $this->view->assetsType = 'Kwf_AutoGrid:Test';
+        $this->view->viewport = 'Kwf.Test.Viewport';
         parent::indexAction();
     }
 
@@ -19,7 +19,7 @@ class Vps_AutoGrid_BasicController extends Vps_Controller_Action_Auto_Grid
                 'data' => array(array('X', 'X'), array('Y', 'Y'), array('Z', 'Z'))
             )
         );
-        $this->_model = new Vps_Model_FnF();
+        $this->_model = new Kwf_Model_FnF();
         $this->_model->setData(array(
             array('id' => 1, 'value' => 'Herbert', 'value2' => 'Lorenz', 'testtime' => '2008-12-03', 'type' => 'X'),
             array('id' => 2, 'value' => 'Kurt', 'value2' => 'Herbert', 'testtime' => '2008-12-06', 'type' => 'X'),
@@ -41,10 +41,10 @@ class Vps_AutoGrid_BasicController extends Vps_Controller_Action_Auto_Grid
             'text' => 'Filter'
         );
 
-        $this->_columns->add(new Vps_Grid_Column('id', 'Id', 50));
-        $this->_columns->add(new Vps_Grid_Column('value', 'Context', 100));
-        $this->_columns->add(new Vps_Grid_Column('value2', 'Context2', 100));
-        $this->_columns->add(new Vps_Grid_Column('type', 'Type', 50));
+        $this->_columns->add(new Kwf_Grid_Column('id', 'Id', 50));
+        $this->_columns->add(new Kwf_Grid_Column('value', 'Context', 100));
+        $this->_columns->add(new Kwf_Grid_Column('value2', 'Context2', 100));
+        $this->_columns->add(new Kwf_Grid_Column('type', 'Type', 50));
         parent::_initColumns();
     }
 

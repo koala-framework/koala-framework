@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_LostPassword_Form_UserEMail extends Vps_Form_Field_TextField
+class Kwc_User_LostPassword_Form_UserEMail extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -9,6 +9,6 @@ class Vpc_User_LostPassword_Form_UserEMail extends Vps_Form_Field_TextField
     protected function _addValidators()
     {
         parent::_addValidators();
-        $this->addValidator(new Vpc_User_LostPassword_Form_ValidateEMail());
+        $this->addValidator(new Kwc_User_LostPassword_Form_ValidateEMail());
     }
 }

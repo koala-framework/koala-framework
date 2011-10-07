@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Image_Trl_ImageData extends Vps_Data_Abstract implements Vps_Data_Vpc_ListInterface
+class Kwc_Abstract_Image_Trl_ImageData extends Kwf_Data_Abstract implements Kwf_Data_Kwc_ListInterface
 {
     private $_size;
     private $_subComponent;
@@ -20,7 +20,7 @@ class Vpc_Abstract_Image_Trl_ImageData extends Vps_Data_Abstract implements Vps_
 
     protected function _getImageUrl($componentId)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($componentId, array('ignoreVisible'=>true));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId, array('ignoreVisible'=>true));
         if ($c->getComponent()->getRow()->own_image) {
             $row = $c->getChildComponent('-image')->getComponent()->getRow()->getParentRow('Image');
         } else {
@@ -34,9 +34,9 @@ class Vpc_Abstract_Image_Trl_ImageData extends Vps_Data_Abstract implements Vps_
 
     protected function _getMasterImageUrl($componentId)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($componentId, array('ignoreVisible'=>true));
-        if (!is_instance_of($c->componentClass, 'Vpc_Abstract_Image_Component')
-            && !is_instance_of($c->componentClass, 'Vpc_Abstract_Image_Trl_Component')
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId, array('ignoreVisible'=>true));
+        if (!is_instance_of($c->componentClass, 'Kwc_Abstract_Image_Component')
+            && !is_instance_of($c->componentClass, 'Kwc_Abstract_Image_Trl_Component')
         ) {
             //kann vorkommen bei TextImage->LinkTag->EnlargeTag wenn was anderes als EnlergeTag einstellt ist
             return null;
@@ -50,7 +50,7 @@ class Vpc_Abstract_Image_Trl_ImageData extends Vps_Data_Abstract implements Vps_
 
     private function _createPreviewFilename($info)
     {
-        return "/vps/media/upload/preview?uploadId=$info[uploadId]&hashKey=$info[hashKey]&size=".$this->_size;
+        return "/kwf/media/upload/preview?uploadId=$info[uploadId]&hashKey=$info[hashKey]&size=".$this->_size;
     }
 
     public function setSubComponent($key)

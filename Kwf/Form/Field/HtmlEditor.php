@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_HtmlEditor extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_HtmlEditor extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {

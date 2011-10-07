@@ -1,25 +1,25 @@
 <?php
-class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
+class Kwc_Root_TrlRoot_Master_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['flag'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Root_TrlRoot_Master_FlagImage_Component',
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Root_TrlRoot_Master_FlagImage_Component',
         );
         $ret['generators']['box'] = array(
-            'class' => 'Vps_Component_Generator_Box_Static',
+            'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => array(
-                'switchLanguage' => 'Vpc_Box_SwitchLanguage_Component'
+                'switchLanguage' => 'Kwc_Box_SwitchLanguage_Component'
             ),
             'inherit' => true,
             'priority' => 0
         );
         $ret['generators']['category'] = array(
-            'class' => 'Vpc_Root_CategoryGenerator',
-            'component' => 'Vpc_Root_Category_Component',
-            'model' => 'Vpc_Root_CategoryModel'
+            'class' => 'Kwc_Root_CategoryGenerator',
+            'component' => 'Kwc_Root_Category_Component',
+            'model' => 'Kwc_Root_CategoryModel'
         );
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;

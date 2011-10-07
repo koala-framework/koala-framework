@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Detail_Form_Component extends Vpc_Form_Component
+class Kwc_Shop_Cart_Detail_Form_Component extends Kwc_Form_Component
 {
     public static function getSettings()
     {
@@ -10,7 +10,7 @@ class Vpc_Shop_Cart_Detail_Form_Component extends Vpc_Form_Component
 
     protected function _initForm()
     {
-        $addToCart = Vps_Component_Data_Root::getInstance()
+        $addToCart = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->getData()->parent->row->add_component_id);
         if ($addToCart) {
             $f = $addToCart->getComponent()->getForm();

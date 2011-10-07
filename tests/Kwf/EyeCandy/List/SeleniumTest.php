@@ -2,16 +2,16 @@
 /**
  * @group slow
  * @group selenium
- * @group Vps_Js
- * @group Vps_Js_EyeCandy_List
+ * @group Kwf_Js
+ * @group Kwf_Js_EyeCandy_List
  *
- * http://vps.markus.vivid/vps/test/vps_js_event_test
+ * http://kwf.markus.vivid/kwf/test/kwf_js_event_test
  */
-class Vps_EyeCandy_List_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwf_EyeCandy_List_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function testEyeCandyList()
     {
-        $this->open('/vps/test/vps_eye-candy_list_test');
+        $this->open('/kwf/test/kwf_eye-candy_list_test');
         $checkStr = '';
 
         $this->mouseOver('css=#ti2');

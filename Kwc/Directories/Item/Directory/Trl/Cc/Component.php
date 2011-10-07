@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_Cc_Component extends Vpc_Directories_Item_Directory_Cc_Component
+class Kwc_Directories_Item_Directory_Trl_Cc_Component extends Kwc_Directories_Item_Directory_Cc_Component
 {
     protected function _getChainedComponent()
     {

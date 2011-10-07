@@ -1,4 +1,4 @@
 <?php
-class Vpc_Composite_TextImageLink_Trl_Admin extends Vpc_Composite_TextImageLink_Admin
+class Kwc_Composite_TextImageLink_Trl_Admin extends Kwc_Composite_TextImageLink_Admin
 {
 }

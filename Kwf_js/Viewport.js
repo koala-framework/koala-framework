@@ -1,5 +1,5 @@
 
-Vps.ViewportWithoutMenu = Ext.extend(Ext.Viewport, {
+Kwf.ViewportWithoutMenu = Ext.extend(Ext.Viewport, {
     layout: 'fit',
     mabySubmit: function(cb, options) {
         var ret = true;
@@ -14,20 +14,20 @@ Vps.ViewportWithoutMenu = Ext.extend(Ext.Viewport, {
 
 });
 
-Vps.Viewport = Ext.extend(Vps.ViewportWithoutMenu, {
+Kwf.Viewport = Ext.extend(Kwf.ViewportWithoutMenu, {
     initComponent: function()
     {
-        Vps.menu = Ext.ComponentMgr.create({
-                    xtype: 'vps.menu',
+        Kwf.menu = Ext.ComponentMgr.create({
+                    xtype: 'kwf.menu',
                     region: 'north',
                     height: 30
                 });
         this.items.push({
-            xtype: 'vps.menu',
+            xtype: 'kwf.menu',
             region: 'north',
             height: 30
         });
         this.layout = 'border';
-        Vps.Viewport.superclass.initComponent.call(this);
+        Kwf.Viewport.superclass.initComponent.call(this);
     }
 });

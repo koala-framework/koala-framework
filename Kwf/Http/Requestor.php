@@ -1,5 +1,5 @@
 <?php
-class Vps_Http_Requestor
+class Kwf_Http_Requestor
 {
     private $_cache = array();
 
@@ -8,7 +8,7 @@ class Vps_Http_Requestor
         static $i;
         if (!isset($i)) {
             if (class_exists('HttpRequest')) {
-                $i = new Vps_Http_Pecl_Requestor();
+                $i = new Kwf_Http_Pecl_Requestor();
             } else {
                 $i = new self();
             }
@@ -28,7 +28,7 @@ class Vps_Http_Requestor
     protected function _request($url)
     {
         $client = new Zend_Http_Client($url, array('timeout'=>30));
-        return new Vps_Http_Requestor_Response($client->request());
+        return new Kwf_Http_Requestor_Response($client->request());
     }
 
     public function clearCache()
@@ -36,7 +36,7 @@ class Vps_Http_Requestor
         $this->_cache = array();
     }
 
-    public function cacheResponse($url, Vps_Http_Requestor_Response_Interface $response = null)
+    public function cacheResponse($url, Kwf_Http_Requestor_Response_Interface $response = null)
     {
         $this->_cache[$url] = $response;
     }

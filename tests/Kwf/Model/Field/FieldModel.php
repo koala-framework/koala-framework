@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Field_FieldModel extends Vps_Model_Field
+class Kwf_Model_Field_FieldModel extends Kwf_Model_Field
 {
-    protected $_rowClass = 'Vps_Model_Field_FieldModelRow';
+    protected $_rowClass = 'Kwf_Model_Field_FieldModelRow';
 }

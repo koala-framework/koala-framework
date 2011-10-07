@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Tags_Update_101 extends Vps_Update
+class Kwf_Update_Tags_Update_101 extends Kwf_Update
 {
-    protected $_tags = array('vps');
+    protected $_tags = array('kwf');
 }

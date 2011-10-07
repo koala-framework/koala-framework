@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_User_Detail_Abstract_Component extends Vpc_Abstract_Composite_Component
+abstract class Kwc_User_Detail_Abstract_Component extends Kwc_Abstract_Composite_Component
 {
     public function getTemplateVars()
     {
@@ -11,8 +11,8 @@ abstract class Vpc_User_Detail_Abstract_Component extends Vpc_Abstract_Composite
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $model = Vps_Registry::get('config')->user->model;
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, 'users_{id}-general');
+        $model = Kwf_Registry::get('config')->user->model;
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model($model, 'users_{id}-general');
         return $ret;
     }
 }

@@ -1,14 +1,14 @@
 <?php
-class Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel extends Vps_Model_Db
+class Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel extends Kwf_Model_Db
 {
-    protected $_table = 'vpc_components_to_tags';
+    protected $_table = 'kwc_components_to_tags';
     protected $_referenceMap = array(
         'Tag' => array(
-            'refModelClass' => 'Vps_Component_Generator_Plugin_Tags_TagsModel',
+            'refModelClass' => 'Kwf_Component_Generator_Plugin_Tags_TagsModel',
             'column' => 'tag_id'
         ),
         'Component' => array(
-            'refModelClass' => 'Vps_Component_Model', //ungetestet
+            'refModelClass' => 'Kwf_Component_Model', //ungetestet
             'column' => 'component_id'
         )
     );
@@ -16,6 +16,6 @@ class Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel extends Vps_Mode
     protected function _init()
     {
         parent::_init();
-        $this->_exprs['tag_text'] = new Vps_Model_Select_Expr_Parent('Tag', 'text');
+        $this->_exprs['tag_text'] = new Kwf_Model_Select_Expr_Parent('Tag', 'text');
     }
 }

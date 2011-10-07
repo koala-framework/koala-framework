@@ -1,9 +1,9 @@
 <?php
-class Vps_Controller_Action_Cli_Web_CreateUsersController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_CreateUsersController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
-        return 'Creates users in the service from vps_users table';
+        return 'Creates users in the service from kwf_users table';
     }
     public static function getHelpOptions()
     {
@@ -12,11 +12,11 @@ class Vps_Controller_Action_Cli_Web_CreateUsersController extends Vps_Controller
     }
     public function indexAction()
     {
-        $appId = Vps_Registry::get('config')->application->id;
+        $appId = Kwf_Registry::get('config')->application->id;
 
-        $webModel = new Vps_User_Web_Model();
+        $webModel = new Kwf_User_Web_Model();
         $amount = $webModel->countRows();
-        $relationModel = new Vps_User_Relation_Model();
+        $relationModel = new Kwf_User_Relation_Model();
         $rows = $webModel->getRows();
         $i=1;
         foreach ($rows as $row) {
@@ -37,7 +37,7 @@ class Vps_Controller_Action_Cli_Web_CreateUsersController extends Vps_Controller
         }
         echo "\nfertig, service up to date.\n\n";
         
-        Vps_Util_ClearCache::getInstance()->clearCache('cache_users', true);
+        Kwf_Util_ClearCache::getInstance()->clearCache('cache_users', true);
         exit;
     }
 }

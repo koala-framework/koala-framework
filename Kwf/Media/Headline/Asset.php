@@ -1,11 +1,11 @@
 <?php
-class Vps_Media_Headline_Asset implements Vps_Assets_Dynamic_Interface
+class Kwf_Media_Headline_Asset implements Kwf_Assets_Dynamic_Interface
 {
     private $_loader;
     private $_assetsType;
     private $_rootComponent;
 
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
+    public function __construct(Kwf_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
     {
         $this->_loader = $loader;
         $this->_assetsType = $assetsType;
@@ -21,24 +21,24 @@ class Vps_Media_Headline_Asset implements Vps_Assets_Dynamic_Interface
     {
         $ret = array();
         $dep = $this->_loader->getDependencies();
-        $language = Vps_Trl::getInstance()->getTargetLanguage();
+        $language = Kwf_Trl::getInstance()->getTargetLanguage();
 
         foreach ($this->_getFiles() as $file) {
             try {
                 $c = $this->_loader->getFileContents($file, $language);
-            } catch (Vps_Exception_NotFound $e) {
-                throw new Vps_Exception("File not found: $file");
+            } catch (Kwf_Exception_NotFound $e) {
+                throw new Kwf_Exception("File not found: $file");
             }
-            foreach (Vps_Media_Headline::getHeadlineStyles($c['contents']) as $selector => $styles) {
+            foreach (Kwf_Media_Headline::getHeadlineStyles($c['contents']) as $selector => $styles) {
                 if (!in_array($selector, $ret)) {
                     $ret[] = $selector;
                 }
             }
         }
         $ret = Zend_Json::encode($ret);
-        return "Ext.namespace('Vps.Headline');\n".
-            "Vps.Headline.assetsType = '$this->_assetsType';\n".
-            "Vps.Headline.selectors = ".$ret;
+        return "Ext.namespace('Kwf.Headline');\n".
+            "Kwf.Headline.assetsType = '$this->_assetsType';\n".
+            "Kwf.Headline.selectors = ".$ret;
     }
 
     private function _getFiles()

@@ -2,15 +2,15 @@
 /**
  * @group Cc
  * @group Paragraphs_Cc
- * http://vps.vps.niko.vivid/vps/vpctest/Vpc_Cc_Paragraphs_Root/master/paragraphs
- * http://vps.vps.niko.vivid/vps/vpctest/Vpc_Cc_Paragraphs_Root/slave/paragraphs
+ * http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Cc_Paragraphs_Root/master/paragraphs
+ * http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Cc_Paragraphs_Root/slave/paragraphs
  */
-class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
+class Kwc_Cc_Paragraphs_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Cc_Paragraphs_Root');
-        $model = Vps_Model_Abstract::getInstance('Vpc_Cc_Paragraphs_Master_Paragraphs_TestModel');
+        parent::setUp('Kwc_Cc_Paragraphs_Root');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Cc_Paragraphs_Master_Paragraphs_TestModel');
         $model->getProxyModel()->setData(array(
             array('id' => 1, 'component_id'=>'root-master_paragraphs', 'pos'=>1, 'visible' => 1, 'component' => 'simple'),
             array('id' => 2, 'component_id'=>'root-master_paragraphs', 'pos'=>2, 'visible' => 1, 'component' => 'simple'),
@@ -41,7 +41,7 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
 
-        $model = Vps_Model_Abstract::getInstance('Vpc_Cc_Paragraphs_Master_Paragraphs_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Cc_Paragraphs_Master_Paragraphs_TestModel');
         $r = $model->getRow('1');
         $r->visible = 0;
         $r->save();
@@ -60,7 +60,7 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
 
-        $model = Vps_Model_Abstract::getInstance('Vpc_Cc_Paragraphs_Master_Paragraphs_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Cc_Paragraphs_Master_Paragraphs_TestModel');
         $r = $model->createRow();
         $r->component_id = 'root-master_paragraphs';
         $r->component = 'simple';
@@ -81,7 +81,7 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
 
-        $model = Vps_Model_Abstract::getInstance('Vpc_Cc_Paragraphs_Master_Paragraphs_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Cc_Paragraphs_Master_Paragraphs_TestModel');
         $r = $model->getRow('1');
         $r->delete();
 

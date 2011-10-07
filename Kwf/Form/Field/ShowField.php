@@ -1,12 +1,12 @@
 <?php
-class Vps_Form_Field_ShowField extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('showfield');
     }
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
     }
     public function getTemplateVars($values, $fieldNamePostfix = '')
@@ -16,7 +16,7 @@ class Vps_Form_Field_ShowField extends Vps_Form_Field_SimpleAbstract
         //todo: escapen
         $ret['id'] = $name.$fieldNamePostfix;
         if ($this->getShowText()) {
-            throw new Vps_Exception("ShowField shows a field of a row, but no static text set by 'setShowText'. Use Vps_Form_Field_Panel instead.");
+            throw new Kwf_Exception("ShowField shows a field of a row, but no static text set by 'setShowText'. Use Kwf_Form_Field_Panel instead.");
         }
 
         $ret['html'] = '&nbsp;';
@@ -29,7 +29,7 @@ class Vps_Form_Field_ShowField extends Vps_Form_Field_SimpleAbstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Show field')
+            'componentName' => trlKwf('Show field')
         ));
     }
 }

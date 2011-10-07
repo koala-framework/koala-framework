@@ -4,18 +4,18 @@
  * @group slow
  * alle sleeps damit der webservice nicht überfordert wird
  */
-class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
+class Kwf_Util_Model_Amazon_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
         parent::setUp();
         sleep(1);
-        Vps_Model_Abstract::clearInstances();
+        Kwf_Model_Abstract::clearInstances();
     }
 
     public function testNodes()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Amazon_Products');
 
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
@@ -38,7 +38,7 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
     }
     public function testPaging()
     {
-        $m = new Vps_Util_Model_Amazon_Products;
+        $m = new Kwf_Util_Model_Amazon_Products;
 
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
@@ -64,9 +64,9 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
 
     public function testPaging2()
     {
-        Vps_Benchmark::enable();
-        Vps_Benchmark::reset();
-        $m = new Vps_Util_Model_Amazon_Products;
+        Kwf_Benchmark::enable();
+        Kwf_Benchmark::reset();
+        $m = new Kwf_Util_Model_Amazon_Products;
 
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
@@ -94,13 +94,13 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
         $this->assertEquals($asins[0], $rows1->current()->asin);
         $this->assertEquals($asins[1], $rows2->current()->asin);
 
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('Service Amazon request'));
         sleep(1);
     }
 
     public function testGetRow()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Amazon_Products');
         $this->assertNotNull($m->getRow('3772369197'));
         $this->assertNotNull($m->getRows($m->select()->whereId('3772369197')));
         $this->assertNotNull($m->getRows($m->select()->whereEquals('asin', '3772369197')));
@@ -108,8 +108,8 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
 
     public function testInvalidLimit()
     {
-        $this->setExpectedException("Vps_Exception");
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $this->setExpectedException("Kwf_Exception");
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Amazon_Products');
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
         $select->whereEquals('SearchIndex', 'Books');
@@ -118,8 +118,8 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
     }
     public function testMultipleOrder()
     {
-        $this->setExpectedException("Vps_Exception");
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $this->setExpectedException("Kwf_Exception");
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Amazon_Products');
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
         $select->whereEquals('SearchIndex', 'Books');
@@ -130,8 +130,8 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
     }
     public function testOrderDesc()
     {
-        $this->setExpectedException("Vps_Exception");
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $this->setExpectedException("Kwf_Exception");
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Amazon_Products');
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
         $select->whereEquals('SearchIndex', 'Books');
@@ -142,9 +142,9 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
 
     public function testPerformance()
     {
-        Vps_Benchmark::enable();
-        Vps_Benchmark::reset();
-        $m = new Vps_Util_Model_Amazon_Products();
+        Kwf_Benchmark::enable();
+        Kwf_Benchmark::reset();
+        $m = new Kwf_Util_Model_Amazon_Products();
 
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
@@ -152,26 +152,26 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
         $select->limit(10);
         $m->getRows($select);
 
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('Service Amazon request'));
 
         $m->countRows($select);
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('Service Amazon request'));
 
         $select->limit(10, 10);
         $m->countRows($select);
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('Service Amazon request'));
         sleep(1);
 
-        Vps_Benchmark::reset();
-        $m = new Vps_Util_Model_Amazon_Products();
+        Kwf_Benchmark::reset();
+        $m = new Kwf_Util_Model_Amazon_Products();
         $select->limit(10, 10);
         $m->getRows($select);
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('Service Amazon request'));
 
         $select->limit(10, 0);
         $m->countRows($select);
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('Service Amazon request'));
 
-        Vps_Benchmark::disable();
+        Kwf_Benchmark::disable();
     }
 }

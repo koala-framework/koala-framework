@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
+abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 {
     private $_skipFilters = false; //für saveSkipFilters
 
@@ -87,7 +87,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         $filters = $this->getTable()->getFilters();
         foreach($filters as $k=>$f) {
-            if ($f instanceof Vps_Filter_Row_Abstract) {
+            if ($f instanceof Kwf_Filter_Row_Abstract) {
                 if ($f->skipFilter($this)) continue;
                 if ($f->filterAfterSave() != $filterAfterSave) continue;
                 $this->$k = $f->filter($this);
@@ -113,7 +113,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         parent::_delete();
         $filters = $this->getTable()->getFilters();
         foreach($filters as $k=>$f) {
-            if ($f instanceof Vps_Filter_Row_Abstract) {
+            if ($f instanceof Kwf_Filter_Row_Abstract) {
                 $f->onDeleteRow($this);
             }
         }
@@ -171,29 +171,29 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     protected function _postUpdate()
     {
         parent::_postUpdate();
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_ModelObserver::getInstance()->add('update', $this);
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            Kwf_Component_ModelObserver::getInstance()->add('update', $this);
         }
     }
 
     protected function _postInsert()
     {
         parent::_postInsert();
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_ModelObserver::getInstance()->add('insert', $this);
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            Kwf_Component_ModelObserver::getInstance()->add('insert', $this);
         }
     }
 
     protected function _postDelete()
     {
         parent::_postDelete();
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_ModelObserver::getInstance()->add('delete', $this);
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            Kwf_Component_ModelObserver::getInstance()->add('delete', $this);
         }
     }
 
     /**
-     * @deprecated in neuerem vps haben auch die Vps_Models dieses feature, das verwenden!
+     * @deprecated in neuerem kwf haben auch die Kwf_Models dieses feature, das verwenden!
      * das hier ist nur da weil es bei rssinclude benötigt wurde
      */
     public function ___getDirtyColumns()

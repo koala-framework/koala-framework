@@ -1,19 +1,19 @@
 <?php
-class Vps_Util_Check_Config
+class Kwf_Util_Check_Config
 {
     public static function dispatch()
     {
-        Vps_Loader::registerAutoload();
+        Kwf_Loader::registerAutoload();
         if (php_sapi_name() == 'cli') {
             $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
         } else {
             if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
                 header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Vps_Exception_AccessDenied();
+                throw new Kwf_Exception_AccessDenied();
             }
             $quiet = isset($_GET['quiet']);
         }
-        Vps_Util_Check_Config::check($quiet);
+        Kwf_Util_Check_Config::check($quiet);
     }
 
     public function check($quiet = false)
@@ -64,7 +64,7 @@ class Vps_Util_Check_Config
 
         //ab hier wird die config geladen
         $checks['setup_vps'] = array(
-            'name' => 'loading vps'
+            'name' => 'loading kwf'
         );
         $checks['db_connection'] = array(
             'name' => 'db connection'
@@ -88,7 +88,7 @@ class Vps_Util_Check_Config
         if ($quiet) {
             foreach ($checks as $k=>$i) {
                 try {
-                    call_user_func(array('Vps_Util_Check_Config', '_'.$k));
+                    call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
                 } catch (Exception $e) {
                     echo "\nERROR: " . $e->getMessage();
                 }
@@ -106,7 +106,7 @@ class Vps_Util_Check_Config
                 $res .= "<p style=\"margin:0;\">";
                 $res .= $i['name'].': ';
                 try {
-                    call_user_func(array('Vps_Util_Check_Config', '_'.$k));
+                    call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
                     $res .= "<span style=\"background-color:green\">OK</span>";
                 } catch (Exception $e) {
                     $res .= "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
@@ -131,7 +131,7 @@ class Vps_Util_Check_Config
     private static function _php()
     {
         if (version_compare(PHP_VERSION, '5.1.6') < 0) {
-            throw new Vps_Exception("Php version '".PHP_VERSION."' is too old");
+            throw new Kwf_Exception("Php version '".PHP_VERSION."' is too old");
         }
     }
 
@@ -139,49 +139,49 @@ class Vps_Util_Check_Config
     {
         //if (!extension_loaded('imagick')) {
         if (!class_exists('Imagick')) {
-            throw new Vps_Exception("Extension 'imagick' is not loaded");
+            throw new Kwf_Exception("Extension 'imagick' is not loaded");
         }
     }
 
     private static function _exif()
     {
         if (!function_exists('exif_read_data')) {
-            throw new Vps_Exception("Function exif_read_data is not available");
+            throw new Kwf_Exception("Function exif_read_data is not available");
         }
     }
 
     private static function _gd()
     {
         if (!extension_loaded('gd')) {
-            throw new Vps_Exception("Extension 'gd' is not loaded");
+            throw new Kwf_Exception("Extension 'gd' is not loaded");
         }
     }
 
     private static function _fileinfo()
     {
         if (!function_exists('finfo_file')) {
-            throw new Vps_Exception("Extension 'fileinfo' is not loaded");
+            throw new Kwf_Exception("Extension 'fileinfo' is not loaded");
         }
     }
 
     private static function _simplexml()
     {
         if (!class_exists('SimpleXMLElement')) {
-            throw new Vps_Exception("Extension 'simplexml' is not loaded");
+            throw new Kwf_Exception("Extension 'simplexml' is not loaded");
         }
     }
 
     private static function _tidy()
     {
         if (!extension_loaded('tidy')) {
-            throw new Vps_Exception("Extension 'tidy' is not loaded");
+            throw new Kwf_Exception("Extension 'tidy' is not loaded");
         }
     }
 
     private static function _pdo_mysql()
     {
         if (!extension_loaded('pdo_mysql')) {
-            throw new Vps_Exception("Extension 'pdo_mysql' is not loaded");
+            throw new Kwf_Exception("Extension 'pdo_mysql' is not loaded");
         }
     }
 
@@ -189,31 +189,31 @@ class Vps_Util_Check_Config
     {
         $out = shell_exec("ls");
         if (!$out) {
-            throw new Vps_Exception("executing 'ls' returned nothing");
+            throw new Kwf_Exception("executing 'ls' returned nothing");
         }
     }
 
     private static function _setup_vps()
     {
-        Vps_Setup::setUpVps();
+        Kwf_Setup::setUpKwf();
     }
 
     private static function _db_connection()
     {
-        Vps_Registry::get('db')->query("SHOW TABLES")->fetchAll();
+        Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
     }
     private static function _git()
     {
         $gitVersion = exec("git --version", $out, $ret);
         if ($ret) {
-            throw new Vps_Exception("Git command failed");
+            throw new Kwf_Exception("Git command failed");
         }
         if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
-            throw new Vps_Exception("Invalid git --version response");
+            throw new Kwf_Exception("Invalid git --version response");
         }
         $gitVersion = $m[1];
         if (version_compare($gitVersion, "1.5.0") < 0) {
-            throw new Vps_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
+            throw new Kwf_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
         }
     }
 
@@ -228,7 +228,7 @@ class Vps_Util_Check_Config
         mkdir('log/error/test-config-check');
         file_put_contents('log/error/test-config-check/test.log', 'blah');
         if (file_get_contents('log/error/test-config-check/test.log') != 'blah') {
-            throw new Vps_Exception("reading test log failed");
+            throw new Kwf_Exception("reading test log failed");
         }
         unlink('log/error/test-config-check/test.log');
         rmdir('log/error/test-config-check');
@@ -237,7 +237,7 @@ class Vps_Util_Check_Config
     private static function _imagick_functionality_1()
     {
         if (!class_exists('Imagick', false)) {
-            throw new Vps_Exception("Imagick class doesn't exist");
+            throw new Kwf_Exception("Imagick class doesn't exist");
         }
         $im = new Imagick();
         $im->readImage(dirname(__FILE__).'/Config/testImage.jpg');
@@ -251,7 +251,7 @@ class Vps_Util_Check_Config
     private static function _imagick_functionality_2()
     {
         if (!class_exists('Imagick', false)) {
-            throw new Vps_Exception("Imagick class doesn't exist");
+            throw new Kwf_Exception("Imagick class doesn't exist");
         }
         $im = new Imagick();
         $im->readImage(dirname(__FILE__).'/Config/testImage.png');
@@ -265,18 +265,18 @@ class Vps_Util_Check_Config
     private static function _memory_limit()
     {
         $m = ini_get('memory_limit');
-        if ((int)$m < 128) throw new Vps_Exception("need 128M, got $m");
+        if ((int)$m < 128) throw new Kwf_Exception("need 128M, got $m");
     }
 
     private static function _uploads()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Uploads_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
         $dir = $m->getUploadDir();
         if (!file_exists($dir)) {
-             throw new Vps_Exception("Path for uploads does not eixst");
+             throw new Kwf_Exception("Path for uploads does not eixst");
         }
         if (!is_writable($dir)) {
-            throw new Vps_Exception("Path for uploads is not writeable");
+            throw new Kwf_Exception("Path for uploads is not writeable");
         }
     }
 
@@ -284,9 +284,9 @@ class Vps_Util_Check_Config
     {
         $locale = setlocale(LC_ALL, 0); //backup locale
 
-        $l = Vps_Trl::getInstance()->trlc('locale', 'C', array(), Vps_Trl::SOURCE_VPS, 'de');
+        $l = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, 'de');
         if (!setlocale(LC_ALL, explode(', ', $l))) {
-            throw new Vps_Exception("Locale not installed, tried: ".$l);
+            throw new Kwf_Exception("Locale not installed, tried: ".$l);
         }
 
         if (is_string($locale) && strpos($locale, ';')) {
@@ -303,9 +303,9 @@ class Vps_Util_Check_Config
 
     private static function _fileinfo_functionality()
     {
-        $mime = Vps_Uploads_Row::detectMimeType(false, file_get_contents(VPS_PATH.'/images/information.png'));
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
         if (substr($mime, 0, 9) != 'image/png') {
-            throw new Vps_Exception("fileinfo returned wrong information");
+            throw new Kwf_Exception("fileinfo returned wrong information");
         }
     }
 
@@ -314,27 +314,27 @@ class Vps_Util_Check_Config
         if (php_sapi_name() == 'cli') return; //apc gibts im cli nicht
 
         if (!extension_loaded('apc')) {
-            throw new Vps_Exception("apc extension not loaded");
+            throw new Kwf_Exception("apc extension not loaded");
         }
         $info = apc_sma_info(false);
         if ($info['num_seg'] * $info['seg_size'] < 128*1000*1000) {
-            throw new Vps_Exception("apc memory size < 128");
+            throw new Kwf_Exception("apc memory size < 128");
         }
         $value = uniqid();
         if (!apc_store('foobar', $value)) {
-            throw new Vps_Exception("apc_store returned false");
+            throw new Kwf_Exception("apc_store returned false");
         }
         if (apc_fetch('foobar') != $value) {
-            throw new Vps_Exception("apc_fetch returned something different");
+            throw new Kwf_Exception("apc_fetch returned something different");
         }
         while (strlen($value) < 1500) {
             $value .= chr(rand(0,255));
         }
         if (!apc_store('foobar', $value)) {
-            throw new Vps_Exception("apc_store returned false");
+            throw new Kwf_Exception("apc_store returned false");
         }
         if (!apc_delete('foobar')) {
-            throw new Vps_Exception("apc_delete returned false");
+            throw new Kwf_Exception("apc_delete returned false");
         }
     }
 
@@ -343,7 +343,7 @@ class Vps_Util_Check_Config
         if (php_sapi_name()!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
             && get_magic_quotes_gpc()
         ) {
-            throw new Vps_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .httaccess or turn off in php.ini");
+            throw new Kwf_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .httaccess or turn off in php.ini");
         }
     }
 }

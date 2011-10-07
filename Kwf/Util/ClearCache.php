@@ -1,18 +1,18 @@
 <?php
-class Vps_Util_ClearCache
+class Kwf_Util_ClearCache
 {
     const MODE_CLEAR = 'clear';
     const MODE_IMPORT = 'import';
 
     /**
-     * @return Vps_Util_ClearCache
+     * @return Kwf_Util_ClearCache
      */
     public function getInstance()
     {
         static $i;
         if (!isset($i)) {
-            $c = Vps_Registry::get('config')->clearCacheClass;
-            if (!$c) $c = 'Vps_Util_ClearCache';
+            $c = Kwf_Registry::get('config')->clearCacheClass;
+            if (!$c) $c = 'Kwf_Util_ClearCache';
             $i = new $c();
         }
         return $i;
@@ -33,8 +33,8 @@ class Vps_Util_ClearCache
                 $ret[] = $d->getFilename();
             }
         }
-        if (Vps_Registry::get('config')->server->cacheDirs) {
-            foreach (Vps_Registry::get('config')->server->cacheDirs as $d) {
+        if (Kwf_Registry::get('config')->server->cacheDirs) {
+            foreach (Kwf_Registry::get('config')->server->cacheDirs as $d) {
                 if (substr($d, -2)=='/*') {
                     foreach (new DirectoryIterator(substr($d, 0, -1)) as $i) {
                         if ($i->isDir() && substr($i->getFilename(), 0, 1) != '.') {
@@ -98,19 +98,19 @@ class Vps_Util_ClearCache
             if ($output) echo "\n";
             
             if ($output) echo "Refresh setup..........";
-            file_put_contents('cache/setup.php', Vps_Util_Setup::generateCode(Vps_Setup::$configClass));
+            file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
             if ($output) echo " [\033[00;32mOK\033[00m]\n";
 
             if ($output) echo "Refresh settings.......";
-            Vps_Config_Web::clearInstances();
-            $config = Vps_Config_Web::getInstance(Vps_Setup::getConfigSection());
-            Vps_Registry::set('config', $config);
-            Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection()));
+            Kwf_Config_Web::clearInstances();
+            $config = Kwf_Config_Web::getInstance(Kwf_Setup::getConfigSection());
+            Kwf_Registry::set('config', $config);
+            Kwf_Registry::set('configMtime', Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection()));
             if ($output) echo " [\033[00;32mOK\033[00m]\n";
 
-            if (Vps_Component_Data_Root::getComponentClass()) {
+            if (Kwf_Component_Data_Root::getComponentClass()) {
                 if ($output) echo "Refresh component......";
-                Vpc_Abstract::getSettingMtime();
+                Kwc_Abstract::getSettingMtime();
                 if ($output) echo " [\033[00;32mOK\033[00m]\n";
             }
 
@@ -119,45 +119,45 @@ class Vps_Util_ClearCache
             ) {
                 if ($output) echo "Refresh events.........";
                 try {
-                    Vps_Component_Events::getAllListeners();
+                    Kwf_Component_Events::getAllListeners();
                     if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
                     if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
                 }
             }
             try {
-                $db = Vps_Registry::get('db');
+                $db = Kwf_Registry::get('db');
             } catch (Exception $e) {
                 $db = false;
             }
             if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
-                $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
-                if (in_array('vps_users', $tables) && in_array('cache_users', $tables)) {
+                $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
+                if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
                     if ($output) echo "Synchronize users......";
                     try {
-                        Vps_Registry::get('userModel')->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
+                        Kwf_Registry::get('userModel')->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
                         if ($output) echo " [\033[00;32mOK\033[00m]\n";
                     } catch (Exception $e) {
                         if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
                     }
 
-                    // alle zeilen löschen die zuviel sind in vps_users
+                    // alle zeilen löschen die zuviel sind in kwf_users
                     // nötig für lokale tests
-                    if (Vps_Registry::get('config')->cleanupVpsUsersOnClearCache) {
-                        if ($output) echo "vps_users cleanup......";
+                    if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
+                        if ($output) echo "kwf_users cleanup......";
 
                         $dbRes = $db->query('SELECT COUNT(*) `cache_users_count` FROM `cache_users`')->fetchAll();
                         if ($dbRes[0]['cache_users_count'] >= 1) {
-                            $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `vps_users`
+                            $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `kwf_users`
                                     WHERE NOT (SELECT cache_users.id
                                                 FROM cache_users
-                                                WHERE cache_users.id = vps_users.id
+                                                WHERE cache_users.id = kwf_users.id
                                                )'
                             )->fetchAll();
-                            $db->query('DELETE FROM `vps_users`
+                            $db->query('DELETE FROM `kwf_users`
                                     WHERE NOT (SELECT cache_users.id
                                                 FROM cache_users
-                                                WHERE cache_users.id = vps_users.id
+                                                WHERE cache_users.id = kwf_users.id
                                                )'
                             );
                             if ($output) echo " [\033[00;32mOK: ".$dbRes[0]['sort_out_count']." rows cleared\033[00m]\n";
@@ -165,7 +165,7 @@ class Vps_Util_ClearCache
                             if ($output) echo " [\033[01;33mskipping: cache_users is empty\033[00m]\n";
                         }
                     } else {
-                        if ($output) echo "vps_users cleanup...... [\033[00;32mskipped by config\033[00m]\n";
+                        if ($output) echo "kwf_users cleanup...... [\033[00;32mskipped by config\033[00m]\n";
                     }
                 }
             }
@@ -179,20 +179,20 @@ class Vps_Util_ClearCache
 
     private function _callApcUtil($type, $outputType, $output)
     {
-        $config = Vps_Registry::get('config');
+        $config = Kwf_Registry::get('config');
         $d = $config->server->domain;
         if (!$d && file_exists('cache/lastdomain')) {
-            //this file gets written in Vps_Setup to make it "just work"
+            //this file gets written in Kwf_Setup to make it "just work"
             $d = file_get_contents('cache/lastdomain');
         }
         $s = microtime(true);
-        $pwd = Vps_Util_Apc::getHttpPassword();
-        $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Vps_Util_Apc::getHttpPassword()."@";
-        $url = "$urlPart$d/vps/util/apc/clear-cache?type=".$type;
+        $pwd = Kwf_Util_Apc::getHttpPassword();
+        $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
+        $url = "$urlPart$d/kwf/util/apc/clear-cache?type=".$type;
         $c = @file_get_contents($url);
         if (substr($c, 0, 2) != 'OK' && $config->server->noRedirectPattern) {
             $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-            $url2 = "$urlPart$d/vps/util/apc/clear-cache?type=".$type;
+            $url2 = "$urlPart$d/kwf/util/apc/clear-cache?type=".$type;
             $c = @file_get_contents($url2);
         }
         if ($output) {
@@ -210,7 +210,7 @@ class Vps_Util_ClearCache
             if ($server) {
                 if ($output) echo "ignored:     memcache\n";
             } else {
-                $cache = Vps_Cache::factory('Core', 'Memcached', array(
+                $cache = Kwf_Cache::factory('Core', 'Memcached', array(
                     'lifetime'=>null,
                     'automatic_cleaning_factor' => false,
                     'automatic_serialization'=>true));
@@ -264,10 +264,10 @@ class Vps_Util_ClearCache
         if ($server) {
             $cmd = "clear-cache-dir --path=$path";
             $cmd = "sshvps $server->user@$server->host $server->dir $cmd";
-            $cmd = "sudo -u vps $cmd";
+            $cmd = "sudo -u kwf $cmd";
             passthru($cmd, $ret);
             if ($ret != 0) {
-                throw new Vps_ClientException("Clearing remote cache '$path' failed");
+                throw new Kwf_ClientException("Clearing remote cache '$path' failed");
             }
         } else {
             $dir = new DirectoryIterator($path);

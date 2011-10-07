@@ -1,12 +1,12 @@
 <?php
-class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Component
+class Kwc_Composite_ImagesEnlarge_Component extends Kwc_Composite_Images_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component'] = 'Vpc_Basic_ImageEnlarge_Component';
-        $ret['componentName'] = trlVps('Gallery').' '.trlVps('old');
-        $ret['assets']['dep'][] = 'VpsEnlargeNextPrevious';
+        $ret['generators']['child']['component'] = 'Kwc_Basic_ImageEnlarge_Component';
+        $ret['componentName'] = trlKwf('Gallery').' '.trlKwf('old');
+        $ret['assets']['dep'][] = 'KwfEnlargeNextPrevious';
         return $ret;
     }
 

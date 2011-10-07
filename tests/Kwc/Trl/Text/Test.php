@@ -1,23 +1,23 @@
 <?
 /**
- * @group Vpc_Trl
+ * @group Kwc_Trl
  *
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_Text_Root/de/text
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_Text_Root/en/text
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_Text_Root/de/text
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_Text_Root/en/text
 
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_Text_Root/Vpc_Trl_Text_Text_Component?componentId=root-de_text
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_Text_Root/Vpc_Basic_Text_Trl_Component.Vpc_Trl_Text_Text_Component?componentId=root-en_text
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_Text_Root/Kwc_Trl_Text_Text_Component?componentId=root-de_text
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_Text_Root/Kwc_Basic_Text_Trl_Component.Kwc_Trl_Text_Text_Component?componentId=root-en_text
 */
-class Vpc_Trl_Text_Test extends Vpc_TestAbstract
+class Kwc_Trl_Text_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_Text_Root');
+        parent::setUp('Kwc_Trl_Text_Root');
     }
 
     public function testDe()
     {
-        $domain = Vps_Registry::get('config')->server->domain;
+        $domain = Kwf_Registry::get('config')->server->domain;
         $c = $this->_root->getPageByUrl('http://'.$domain.'/de/text', 'en');
         $this->assertEquals($c->componentId, 'root-master_text');
         $this->assertContains('<p>foo</p>', $c->render());
@@ -25,7 +25,7 @@ class Vpc_Trl_Text_Test extends Vpc_TestAbstract
 
     public function testEn()
     {
-        $domain = Vps_Registry::get('config')->server->domain;
+        $domain = Kwf_Registry::get('config')->server->domain;
         $c = $this->_root->getPageByUrl('http://'.$domain.'/en/text', 'en');
         $this->assertEquals($c->componentId, 'root-en_text');
         $this->assertContains('<p>fooen</p>', $c->render());

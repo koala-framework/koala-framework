@@ -1,9 +1,9 @@
 <?php
-class Vpc_Abstract_Composite_ChildData extends Vps_Data_Abstract implements Vps_Data_Vpc_ListInterface
+class Kwc_Abstract_Composite_ChildData extends Kwf_Data_Abstract implements Kwf_Data_Kwc_ListInterface
 {
     protected $_parentData = null;
 
-    public function __construct(Vps_Data_Interface $parentData)
+    public function __construct(Kwf_Data_Interface $parentData)
     {
         $this->_parentData = $parentData;
     }

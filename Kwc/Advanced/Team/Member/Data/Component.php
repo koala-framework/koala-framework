@@ -1,29 +1,29 @@
 <?php
-class Vpc_Advanced_Team_Member_Data_Component extends Vpc_Abstract
+class Kwc_Advanced_Team_Member_Data_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
 
         $ret['generators']['vcard'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Advanced_Team_Member_Data_Vcard_Component',
-            'name' => trlVps('vCard')
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Advanced_Team_Member_Data_Vcard_Component',
+            'name' => trlKwf('vCard')
         );
 
-        $ret['componentName'] = trlVps('Team member data');
-        $ret['ownModel'] = 'Vpc_Advanced_Team_Member_Data_Model';
+        $ret['componentName'] = trlKwf('Team member data');
+        $ret['ownModel'] = 'Kwc_Advanced_Team_Member_Data_Model';
 
         $ret['labelSeparator'] = ':';
         $ret['showLabels'] = true;
 
-        $ret['placeholder']['nameLabel'] = trlVpsStatic('Name');
-        $ret['placeholder']['positionLabel'] = trlVpsStatic('Position');
-        $ret['placeholder']['phoneLabel'] = trlVpsStatic('Phone');
-        $ret['placeholder']['mobileLabel'] = trlVpsStatic('Mobile');
-        $ret['placeholder']['faxLabel'] = trlVpsStatic('Fax');
-        $ret['placeholder']['emailLabel'] = trlVpsStatic('E-Mail');
-        $ret['placeholder']['vcardLabel'] = trlVpsStatic('vCard');
+        $ret['placeholder']['nameLabel'] = trlKwfStatic('Name');
+        $ret['placeholder']['positionLabel'] = trlKwfStatic('Position');
+        $ret['placeholder']['phoneLabel'] = trlKwfStatic('Phone');
+        $ret['placeholder']['mobileLabel'] = trlKwfStatic('Mobile');
+        $ret['placeholder']['faxLabel'] = trlKwfStatic('Fax');
+        $ret['placeholder']['emailLabel'] = trlKwfStatic('E-Mail');
+        $ret['placeholder']['vcardLabel'] = trlKwfStatic('vCard');
 
         $ret['cssClass'] = 'webStandard webListNone';
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_FormDynamic_Basic_Form_Paragraphs_Checkbox_TestModel extends Vps_Model_FnF
+class Kwc_FormDynamic_Basic_Form_Paragraphs_Checkbox_TestModel extends Kwf_Model_FnF
 {
     protected $_primaryKey = 'component_id';
     protected $_data = array(

@@ -2,16 +2,16 @@
 /**
  * @group Advanced_GoogleMap
  */
-class Vpc_Advanced_GoogleMapView_Test extends Vpc_TestAbstract
+class Kwc_Advanced_GoogleMapView_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Advanced_GoogleMapView_Root');
+        parent::setUp('Kwc_Advanced_GoogleMapView_Root');
     }
 
     public function testNoCoordinatesOptionException()
     {
-        $this->setExpectedException("Vps_Exception");
+        $this->setExpectedException("Kwf_Exception");
         $this->_root->getComponentById(2000)->getComponent()->getTemplateVars();
     }
 
@@ -48,7 +48,7 @@ class Vpc_Advanced_GoogleMapView_Test extends Vpc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(2002)->render(false);
-        $this->assertContains('<div class="webStandard webForm vpcAdvancedGoogleMapView vpcAdvancedGoogleMapViewTestComponent">', $html);
+        $this->assertContains('<div class="webStandard webForm kwcAdvancedGoogleMapView kwcAdvancedGoogleMapViewTestComponent">', $html);
 
         $this->assertEquals(1, preg_match('#value="([^"]+)"#', $html, $m));
         $options = Zend_Json::decode((str_replace("'", '"', htmlspecialchars_decode($m[1]))));

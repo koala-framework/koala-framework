@@ -1,11 +1,11 @@
 <?php
-abstract class Vps_Component_Abstract_ContentSender_Abstract
+abstract class Kwf_Component_Abstract_ContentSender_Abstract
 {
     /**
-     * @var Vps_Component_Data
+     * @var Kwf_Component_Data
      */
     protected $_data;
-    public function __construct(Vps_Component_Data $data)
+    public function __construct(Kwf_Component_Data $data)
     {
         $this->_data = $data;
     }

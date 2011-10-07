@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_Simple_Test_Test2_Component extends Vpc_Abstract
+class Kwc_Trl_Simple_Test_Test2_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {

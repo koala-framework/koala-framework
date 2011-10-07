@@ -2,11 +2,11 @@
 /**
  * @group Component_SharedData
  */
-class Vps_Component_SharedData_Test extends Vpc_TestAbstract
+class Kwf_Component_SharedData_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_SharedData_Component');
+        parent::setUp('Kwf_Component_SharedData_Component');
     }
 
     public function testIt()
@@ -14,7 +14,7 @@ class Vps_Component_SharedData_Test extends Vpc_TestAbstract
         $root = $this->_root;
         $component = $root->getComponentById('root_2-shared');
 
-        $sharedComponents = Vps_Controller_Action_Component_PagesController::getSharedComponents($root);
+        $sharedComponents = Kwf_Controller_Action_Component_PagesController::getSharedComponents($root);
         $expected = array($component->componentClass => $root);
         $this->assertEquals($expected, $sharedComponents);
 

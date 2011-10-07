@@ -1,6 +1,6 @@
-Vps.onContentReady(function()
+Kwf.onContentReady(function()
 {
-    var fadeComponents = Ext.query('div.vpsFadeElements');
+    var fadeComponents = Ext.query('div.kwfFadeElements');
     Ext.each(fadeComponents, function(c) {
         var extWrapperEl = Ext.get(c);
         if (extWrapperEl.fadeElementsObject) return; // nur einmal initialisieren
@@ -20,14 +20,14 @@ Vps.onContentReady(function()
         config.selector = selector;
         config.selectorRoot = c;
 
-        extWrapperEl.fadeElementsObject = new Vps.Fade.Elements(config);
+        extWrapperEl.fadeElementsObject = new Kwf.Fade.Elements(config);
         extWrapperEl.fadeElementsObject.start();
     });
 });
 
-Ext.namespace("Vps.Fade");
+Ext.namespace("Kwf.Fade");
 
-Vps.Fade.Elements = function(cfg) {
+Kwf.Fade.Elements = function(cfg) {
     this.selector = cfg.selector;
 
     this.elementAccessDirect = false; // optional: displays direct acces links to each image
@@ -73,7 +73,7 @@ Vps.Fade.Elements = function(cfg) {
     Ext.each(this.fadeElements, function(e) {
         var ee = Ext.get(e);
 
-        ee.addClass('vpsFadeElement');
+        ee.addClass('kwfFadeElement');
         if (i != this.active) {
             ee.setStyle('display', 'none');
         } else {
@@ -98,7 +98,7 @@ Vps.Fade.Elements = function(cfg) {
     }
 };
 
-Vps.Fade.Elements.prototype = {
+Kwf.Fade.Elements.prototype = {
 
     active: 0,
     next: 1,

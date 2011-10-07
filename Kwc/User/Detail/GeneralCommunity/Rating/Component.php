@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
+class Kwc_User_Detail_GeneralCommunity_Rating_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -29,13 +29,13 @@ class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
     {
         $userId = $this->getData()->parent->parent->row->id;
         $select = Zend_Registry::get('db')->select();
-        $select->from(array('p'=> 'vpc_posts'), array('count'=>'COUNT(p.id)'))
+        $select->from(array('p'=> 'kwc_posts'), array('count'=>'COUNT(p.id)'))
                 ->where('p.user_id = ?', $userId);
         $posts = $select->query()->fetchAll();
         $posts = $posts[0]['count'];
 
         $select = Zend_Registry::get('db')->select();
-        $select->from(array('t'=> 'vpc_forum_threads'), array('count'=>'COUNT(t.id)'))
+        $select->from(array('t'=> 'kwc_forum_threads'), array('count'=>'COUNT(t.id)'))
                 ->where('t.user_id = ?', $userId);
         $threads = $select->query()->fetchAll();
         $threads = $threads[0]['count'];
@@ -53,8 +53,8 @@ class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Forum_Directory_Model');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Posts_Directory_Model');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Forum_Directory_Model');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Posts_Directory_Model');
         return $ret;
     }
 }

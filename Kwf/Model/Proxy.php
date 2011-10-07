@@ -1,12 +1,12 @@
 <?php
-class Vps_Model_Proxy extends Vps_Model_Abstract
+class Kwf_Model_Proxy extends Kwf_Model_Abstract
 {
     /**
-     * @var Vps_Model_Interface
+     * @var Kwf_Model_Interface
      */
     protected $_proxyModel;
-    protected $_rowClass = 'Vps_Model_Proxy_Row';
-    protected $_rowsetClass = 'Vps_Model_Proxy_Rowset';
+    protected $_rowClass = 'Kwf_Model_Proxy_Row';
+    protected $_rowsetClass = 'Kwf_Model_Proxy_Rowset';
 
     public function __construct(array $config = array())
     {
@@ -18,7 +18,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         parent::_init();
         if (!$this->_proxyModel) {
-            throw new Vps_Exception("proxyModel config is required for model '".get_class($this)."'");
+            throw new Kwf_Exception("proxyModel config is required for model '".get_class($this)."'");
         }
         if (!is_string($this->_proxyModel)) {
             $this->_proxyModel->addProxyContainerModel($this);
@@ -35,7 +35,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function getProxyModel()
     {
         if (is_string($this->_proxyModel)) {
-            $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
+            $this->_proxyModel = Kwf_Model_Abstract::getInstance($this->_proxyModel);
             $this->_proxyModel->addProxyContainerModel($this);
         }
         return $this->_proxyModel;
@@ -74,10 +74,10 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         $exprValues = array();
         if ($this->_exprs) {
             $r = $proxiedRow;
-            while ($r instanceof Vps_Model_Proxy_Row) {
+            while ($r instanceof Kwf_Model_Proxy_Row) {
                 $r = $r->getProxiedRow();
             }
-            if ($r instanceof Vps_Model_Db_Row) {
+            if ($r instanceof Kwf_Model_Db_Row) {
                 $r = $r->getRow();
                 foreach (array_keys($this->_exprs) as $k) {
                     if (isset($r->$k)) {
@@ -94,10 +94,10 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return $this->getProxyModel()->getPrimaryKey();
     }
 
-    public function isEqual(Vps_Model_Interface $other)
+    public function isEqual(Kwf_Model_Interface $other)
     {
         if ($this->getProxyModel()->isEqual($other)) return true;
-        if ($other instanceof Vps_Model_Proxy) {
+        if ($other instanceof Kwf_Model_Proxy) {
             return $this->getProxyModel()->isEqual($other->getProxyModel());
         }
         return false;
@@ -157,17 +157,17 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function deleteRows($where)
     {
-        Vps_Component_ModelObserver::getInstance()->disable();
+        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->getProxyModel()->deleteRows($where);
-        Vps_Component_ModelObserver::getInstance()->enable();
+        Kwf_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
 
     public function updateRows($data, $where)
     {
-        Vps_Component_ModelObserver::getInstance()->disable();
+        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->getProxyModel()->updateRows($data, $where);
-        Vps_Component_ModelObserver::getInstance()->enable();
+        Kwf_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
 
@@ -192,9 +192,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function import($format, $data, $options = array())
     {
-        Vps_Component_ModelObserver::getInstance()->disable();
+        Kwf_Component_ModelObserver::getInstance()->disable();
         $this->getProxyModel()->import($format, $data, $options);
-        Vps_Component_ModelObserver::getInstance()->enable();
+        Kwf_Component_ModelObserver::getInstance()->enable();
     }
 
     public function writeBuffer()
@@ -212,13 +212,13 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return $this->getProxyModel()->getSqlForSelect($select);
     }
 
-    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    public function dependentModelRowUpdated(Kwf_Model_Row_Abstract $row, $action)
     {
         parent::dependentModelRowUpdated($row, $action);
         $this->getProxyModel()->dependentModelRowUpdated($row, $action);
     }
 
-    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    public function childModelRowUpdated(Kwf_Model_Row_Abstract $row, $action)
     {
         parent::childModelRowUpdated($row, $action);
         $this->getProxyModel()->childModelRowUpdated($row, $action);

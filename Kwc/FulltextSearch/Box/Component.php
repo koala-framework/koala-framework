@@ -1,5 +1,5 @@
 <?php
-class Vpc_FulltextSearch_Box_Component extends Vpc_Abstract
+class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -10,8 +10,8 @@ class Vpc_FulltextSearch_Box_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['searchPage'] = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_FulltextSearch_Search_Component',
+        $ret['searchPage'] = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_FulltextSearch_Search_Component',
                                    array('subroot'=>$this->getData()));
         return $ret;
     }

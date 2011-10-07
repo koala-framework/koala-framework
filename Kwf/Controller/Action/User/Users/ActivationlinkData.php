@@ -1,18 +1,18 @@
 <?php
-class Vps_Controller_Action_User_Users_ActivationlinkData extends Vps_Data_Abstract
+class Kwf_Controller_Action_User_Users_ActivationlinkData extends Kwf_Data_Abstract
 {
 
     public function load($row)
     {
         if (empty($row->password)) {
-            return '<a href="/vps/user/login/activate?code='.$row->id.'-'.$row->getActivationCode()
-                .'" target="_blank">'.trlVps('Click here').'</a>';
+            return '<a href="/kwf/user/login/activate?code='.$row->id.'-'.$row->getActivationCode()
+                .'" target="_blank">'.trlKwf('Click here').'</a>';
         } else {
-            return trlVps('Already activated');
+            return trlKwf('Already activated');
         }
     }
 
-    public function save(Vps_Model_Row_Interface $row, $data)
+    public function save(Kwf_Model_Row_Interface $row, $data)
     {
     }
 

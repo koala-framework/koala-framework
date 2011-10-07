@@ -5,7 +5,7 @@
  *
  * (ungetestet, nicht in dependencies, nicht als enableBlock setting in HtmlEditor)
  */
-Vps.Form.HtmlEditor.FormatBlock = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.FormatBlock = Ext.extend(Ext.util.Observable, {
     formatBlocks : {
         'h1': 'Heading 1',
         'h2': 'Heading 2',

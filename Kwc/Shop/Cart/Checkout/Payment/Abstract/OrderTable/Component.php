@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_Abstract
+class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -18,7 +18,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
         $ret['items'] = array();
         $ret['additionalOrderDataHeaders'] = array();
         foreach ($items as $i) {
-            $addComponent = Vps_Component_Data_Root::getInstance()
+            $addComponent = Kwf_Component_Data_Root::getInstance()
                             ->getComponentByDbId($i->add_component_id);
             $additionalOrderData = $addComponent->getComponent()->getAdditionalOrderData($i);
             foreach ($additionalOrderData as $d) {
@@ -44,7 +44,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
 
     protected function _getOrder()
     {
-        return Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+        return Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
     }
 

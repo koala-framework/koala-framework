@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Model_Row_Pool extends Vps_Model_Proxy_Row
+class Kwf_Util_Model_Row_Pool extends Kwf_Model_Proxy_Row
 {
     public function __toString()
     {

@@ -1,7 +1,7 @@
-Vps.onContentReady(function() {
-    Vps.Basic.LinkTag.Extern.processLinks();
+Kwf.onContentReady(function() {
+    Kwf.Basic.LinkTag.Extern.processLinks();
 });
-Vps.Basic.LinkTag.Extern.processLinks = function(root) {
+Kwf.Basic.LinkTag.Extern.processLinks = function(root) {
     // links holen und durchgehen
     var lnks = Ext.query('a', root || document);
     Ext.each(lnks, function(lnk) {

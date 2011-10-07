@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_InheritContentWithVisible_Box_Child_Component extends Vpc_Abstract
+class Kwc_Trl_InheritContentWithVisible_Box_Child_Component extends Kwc_Abstract
 {
     public function hasContent()
     {

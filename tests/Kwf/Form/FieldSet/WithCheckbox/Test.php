@@ -1,20 +1,20 @@
 <?php
 /**
- * @group Vps_Form_FieldSet
+ * @group Kwf_Form_FieldSet
  */
-class Vps_Form_FieldSet_WithCheckbox_Test extends Vps_Test_TestCase
+class Kwf_Form_FieldSet_WithCheckbox_Test extends Kwf_Test_TestCase
 {
     private $_form;
     public function setUp()
     {
         parent::setUp();
-        $m1 = new Vps_Model_FnF();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Model_FnF();
+        $form = new Kwf_Form();
         $form->setModel($m1);
-        $fs = $form->add(new Vps_Form_Container_FieldSet('fs'))
+        $fs = $form->add(new Kwf_Form_Container_FieldSet('fs'))
             ->setCheckboxToggle(true)
             ->setCheckboxName('fs');
-        $fs->add(new Vps_Form_Field_TextField('text'))
+        $fs->add(new Kwf_Form_Field_TextField('text'))
             ->setAllowBlank(false);
 
         $this->_form = $form;

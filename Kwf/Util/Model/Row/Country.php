@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Model_Row_Country extends Vps_Model_Row_Data_Abstract
+class Kwf_Util_Model_Row_Country extends Kwf_Model_Row_Data_Abstract
 {
     public function __get($name)
     {

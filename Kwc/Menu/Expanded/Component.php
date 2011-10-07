@@ -1,16 +1,16 @@
 <?php
-class Vpc_Menu_Expanded_Component extends Vpc_Menu_Abstract_Component
+class Kwc_Menu_Expanded_Component extends Kwc_Menu_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['menuModel'] = 'Vpc_Menu_Expanded_MenuModel';
+        $ret['menuModel'] = 'Kwc_Menu_Expanded_MenuModel';
         return $ret;
     }
 
     protected static function _requiredLevels($componentClass)
     {
-        $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        $level = (int)Kwc_Abstract::getSetting($componentClass, 'level');
         return $level + 2;
     }
 

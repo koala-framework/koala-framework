@@ -1,13 +1,13 @@
 <?php
-class Vps_Util_ProgressBar_DispatchStatus
+class Kwf_Util_ProgressBar_DispatchStatus
 {
     public static function dispatch()
     {
-        Vps_Loader::registerAutoload();
+        Kwf_Loader::registerAutoload();
         if (empty($_REQUEST['progressNum'])) {
-            throw new Vps_Exception('progressNum required');
+            throw new Kwf_Exception('progressNum required');
         }
-        $pbarAdapter = new Vps_Util_ProgressBar_Adapter_Cache($_REQUEST['progressNum']);
+        $pbarAdapter = new Kwf_Util_ProgressBar_Adapter_Cache($_REQUEST['progressNum']);
         $pbarStatus = $pbarAdapter->getStatus();
         if (!$pbarStatus) {
             $pbarStatus = array();

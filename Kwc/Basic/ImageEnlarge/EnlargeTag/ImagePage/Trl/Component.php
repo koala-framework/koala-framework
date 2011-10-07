@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['contentSender'] = 'Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_ContentSender';
+        $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_ContentSender';
         return $ret;
     }
     public function getTemplateVars()

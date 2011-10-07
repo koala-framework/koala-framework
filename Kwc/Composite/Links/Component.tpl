@@ -4,8 +4,8 @@
         <? foreach ($this->children as $child) { ?>
             <?
                 $class = '';
-                if ($i == 0) $class .= 'vpcFirst ';
-                if ($i == count($this->children)-1) $class .= 'vpcLast ';
+                if ($i == 0) $class .= 'kwcFirst ';
+                if ($i == count($this->children)-1) $class .= 'kwcLast ';
                 $class = trim($class);
                 $i++;
             ?>

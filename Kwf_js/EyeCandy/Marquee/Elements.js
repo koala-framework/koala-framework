@@ -1,19 +1,19 @@
-Vps.onContentReady(function()
+Kwf.onContentReady(function()
 {
-    var MarqueeComponents = Ext.query('div.vpsMarqueeElements');
+    var MarqueeComponents = Ext.query('div.kwfMarqueeElements');
     Ext.each(MarqueeComponents, function(c) {
-        if (!c.vpsMarqueeInitDone) {
+        if (!c.kwfMarqueeInitDone) {
             var config = Ext.decode(Ext.query('> input.settings', c)[0].value);
             config.selectorRoot = new Ext.Element(c);
-            var Marquee = new Vps.Marquee.Elements(config);
+            var Marquee = new Kwf.Marquee.Elements(config);
             Marquee.start();
-            c.vpsMarqueeInitDone = true;
+            c.kwfMarqueeInitDone = true;
         }
     });
 });
 
-Ext.namespace("Vps.Marquee");
-Vps.Marquee.Elements = function(cfg) {
+Ext.namespace("Kwf.Marquee");
+Kwf.Marquee.Elements = function(cfg) {
     this.selector = cfg.selector;
     this.selectorRoot = cfg.selectorRoot;
     this.scrollAmount = cfg.scrollAmount;
@@ -21,7 +21,7 @@ Vps.Marquee.Elements = function(cfg) {
     this.scrollDirection = cfg.scrollDirection;
 };
 
-Vps.Marquee.Elements.prototype = {
+Kwf.Marquee.Elements.prototype = {
     paused: false,
     _elSize: function(el)
     {
@@ -88,7 +88,7 @@ Vps.Marquee.Elements.prototype = {
         while((matches = re.exec(c)) != null){
             var name = matches[1];
             var value = matches[2];
-            if(name == "vpsMarqueePosition"){
+            if(name == "kwfMarqueePosition"){
                 return value;
             }
         }
@@ -98,6 +98,6 @@ Vps.Marquee.Elements.prototype = {
     // private
     setCookie : function(value){
         //TODO: möglicherweise mal mehrere marquees auf einer seite ermöglichen
-        document.cookie = "vpsMarqueePosition="+value+"; path=/; domain="+document.location.host+";";
+        document.cookie = "kwfMarqueePosition="+value+"; path=/; domain="+document.location.host+";";
     }
 };

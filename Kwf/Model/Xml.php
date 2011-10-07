@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Xml extends Vps_Model_Data_Abstract
+class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
 {
     protected $_filepath;
     protected $_xpath;
@@ -8,8 +8,8 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     protected $_xmlContent;
     private $_simpleXml;
 
-    protected $_rowClass = 'Vps_Model_Xml_Row';
-    protected $_rowSetClass = 'Vps_Model_Xml_Rowset';
+    protected $_rowClass = 'Kwf_Model_Xml_Row';
+    protected $_rowSetClass = 'Kwf_Model_Xml_Rowset';
 
     public function __construct(array $config = array())
     {
@@ -52,7 +52,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         return $this->_rows[$key];
     }
 
-    public function update(Vps_Model_Row_Interface $row, $rowData)
+    public function update(Kwf_Model_Row_Interface $row, $rowData)
     {
         $id = $row->{$this->getPrimaryKey()};
         $simpleXml = $this->_getSimpleXml();
@@ -90,14 +90,14 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         return $row->{$this->getPrimaryKey()};
     }
 
-    public function insert(Vps_Model_Row_Interface $row, $rowData)
+    public function insert(Kwf_Model_Row_Interface $row, $rowData)
     {
         $data = $this->getData();
         if (!$this->getPrimaryKey()) {
-            throw new Vps_Exception("No Insertion without a primary key");
+            throw new Kwf_Exception("No Insertion without a primary key");
         }
         if ($this->_idExists($rowData[$this->getPrimaryKey()])){
-            throw new Vps_Exception("Id is already used");
+            throw new Kwf_Exception("Id is already used");
         }
 
 
@@ -109,7 +109,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         $id = null;
 
         if (!array_key_exists($this->getPrimaryKey(), $rowData)) {
-            throw new Vps_Exception("No Id was set, inserting impossible");
+            throw new Kwf_Exception("No Id was set, inserting impossible");
         }
         foreach ($rowData as $k=>$i) {
 
@@ -120,7 +120,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
                $id = $i;
            }
            if (is_array($i)) {
-               throw  new Vps_Exception("No arguments allowed in a Xml Node");
+               throw  new Kwf_Exception("No arguments allowed in a Xml Node");
            }
            if ($i !== null) {
                $i =  str_replace('&', '&amp;', $i); //bugfix für php bug, sonst kommt der fehler "unterminated entity reference"
@@ -152,7 +152,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         return max(array_keys($this->_data))+1;
     }
 
-    public function delete(Vps_Model_Row_Interface $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         $id = $row->{$this->getPrimaryKey()};
         $xml = $this->_getRootElement();
@@ -178,7 +178,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         if ($this->_filepath) {
             file_put_contents($this->_filepath, self::asPrettyXML($xml->asXML()));
         }
-        if (!$check) throw new Vps_Exception("Can't find entry with id '$id'");
+        if (!$check) throw new Kwf_Exception("Can't find entry with id '$id'");
     }
 
     private function _getSimpleXml()
@@ -192,7 +192,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
                 } elseif (isset($this->_rootNode)) {
                     $contents = "<$this->_rootNode ></$this->_rootNode>";
                 } else {
-                    throw new Vps_Exception("Neither a rootnode nor a filepath is set");
+                    throw new Kwf_Exception("Neither a rootnode nor a filepath is set");
                 }
             }
             $this->_simpleXml = new SimpleXMLElement($contents);
@@ -215,7 +215,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         $simpleXml = $this->_getSimpleXml();
 
         if (!$simpleXml->xpath($this->_xpath)) {
-            throw new Vps_Exception("Wrong Xpath '$this->_xpath' for model '".get_class($this)."'");
+            throw new Kwf_Exception("Wrong Xpath '$this->_xpath' for model '".get_class($this)."'");
         }
         return $simpleXml->xpath($this->_xpath."/".$this->_topNode);
     }
@@ -225,7 +225,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         $simpleXml = $this->_getSimpleXml();
         $ret = $simpleXml->xpath($this->_xpath);
         if (!$ret) {
-            throw new Vps_Exception("Wrong Xpath '$this->_xpath' for model '".get_class($this)."'");
+            throw new Kwf_Exception("Wrong Xpath '$this->_xpath' for model '".get_class($this)."'");
         }
         return $ret[0];
     }
@@ -246,13 +246,13 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         } else if (isset($this->_xmlContent)) {
             return md5($this->_xmlContent);
         } else {
-            throw new Vps_Exception("no unique identifier set");
+            throw new Kwf_Exception("no unique identifier set");
         }
     }
 
-    public function isEqual(Vps_Model_Interface $other)
+    public function isEqual(Kwf_Model_Interface $other)
     {
-        if ($other instanceof Vps_Model_Xml && $this->getFilepath() ==  $other->getFilepath()) {
+        if ($other instanceof Kwf_Model_Xml && $this->getFilepath() ==  $other->getFilepath()) {
             return true;
         } else {
             return false;

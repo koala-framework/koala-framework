@@ -1,15 +1,15 @@
 
-Ext.namespace("Vps.User.Grid");
+Ext.namespace("Kwf.User.Grid");
 
-Vps.User.Grid.Grid = Ext.extend(Vps.Auto.GridPanel,
+Kwf.User.Grid.Grid = Ext.extend(Kwf.Auto.GridPanel,
 {
     initComponent: function() {
-        Vps.User.Grid.Grid.superclass.initComponent.call(this);
+        Kwf.User.Grid.Grid.superclass.initComponent.call(this);
         if (!this.columnsConfig) this.columnsConfig = { };
         this.columnsConfig['resend_mails'] = {
             clickHandler: function(grid, rowIndex, col, e) {
                 var r = grid.getStore().getAt(rowIndex);
-                var win = new Vps.User.Grid.SendMailWindow({
+                var win = new Kwf.User.Grid.SendMailWindow({
                     controllerUrl: this.controllerUrl,
                     baseParams: { user_id: r.data.id }
                 });
@@ -19,14 +19,14 @@ Vps.User.Grid.Grid = Ext.extend(Vps.Auto.GridPanel,
         };
 
         this.actions.userdelete = new Ext.Action({
-            text    : trlVps('Delete user'),
+            text    : trlKwf('Delete user'),
             icon    : '/assets/silkicons/delete.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDelete,
             scope: this
         });
         this.actions.userlock = new Ext.Action({
-            text    : trlVps('Lock / unlock user'),
+            text    : trlKwf('Lock / unlock user'),
             icon    : '/assets/silkicons/lock.png',
             cls     : 'x-btn-text-icon',
             handler : this.onUnLock,
@@ -36,8 +36,8 @@ Vps.User.Grid.Grid = Ext.extend(Vps.Auto.GridPanel,
 
     onUnLock: function() {
         Ext.Msg.show({
-            title: trlVps('Lock user'),
-            msg: trlVps('Do you really wish to (un)lock this user?'),
+            title: trlKwf('Lock user'),
+            msg: trlKwf('Do you really wish to (un)lock this user?'),
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {
@@ -55,7 +55,7 @@ Vps.User.Grid.Grid = Ext.extend(Vps.Auto.GridPanel,
 
                     params[this.store.reader.meta.id] = ids.join(';');
 
-                    this.el.mask(trlVps('Locking / unlocking...'));
+                    this.el.mask(trlKwf('Locking / unlocking...'));
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/json-user-lock',
                         params: params,
@@ -75,8 +75,8 @@ Vps.User.Grid.Grid = Ext.extend(Vps.Auto.GridPanel,
 
     onDelete : function() {
         Ext.Msg.show({
-            title: trlVps('Delete user'),
-            msg: trlVps('Do you really wish to delete this user?'),
+            title: trlKwf('Delete user'),
+            msg: trlKwf('Do you really wish to delete this user?'),
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {
@@ -94,7 +94,7 @@ Vps.User.Grid.Grid = Ext.extend(Vps.Auto.GridPanel,
 
                     params[this.store.reader.meta.id] = ids.join(';');
 
-                    this.el.mask(trlVps('Deleting...'));
+                    this.el.mask(trlKwf('Deleting...'));
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/json-user-delete',
                         params: params,

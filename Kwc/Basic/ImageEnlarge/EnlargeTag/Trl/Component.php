@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image_Trl_Component
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Abstract_Image_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['image']['component'] =
-            'Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Image_Component.'.$masterComponentClass;
+            'Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Image_Component.'.$masterComponentClass;
         return $ret;
     }
 
@@ -24,7 +24,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
     private function _getImageEnlargeComponentData()
     {
         $d = $this->getData();
-        while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Trl_Component')) {
+        while (!is_instance_of($d->componentClass, 'Kwc_Basic_ImageEnlarge_Trl_Component')) {
             $d = $d->parent;
         }
         return $d;
@@ -38,7 +38,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
         $row = $this->_getImageEnlargeComponentData()->getComponent()->getRow();
         $model = $row->getModel();
         $primaryKey = $model->getPrimaryKey();
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model);
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model($model);
         return $ret;
     }
 }

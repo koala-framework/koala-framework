@@ -1,6 +1,6 @@
 <?php
-require_once 'Vps/Exception/Abstract.php';
-class Vps_Exception_NoLog extends Vps_Exception_Abstract
+require_once 'Kwf/Exception/Abstract.php';
+class Kwf_Exception_NoLog extends Kwf_Exception_Abstract
 {
     public function getHeader()
     {

@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Field_Rowset implements Vps_Model_Rowset_Interface
+class Kwf_Model_Field_Rowset implements Kwf_Model_Rowset_Interface
 {
     protected $_fieldName;
     protected $_parentRowset;

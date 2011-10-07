@@ -8,7 +8,7 @@
  *  -Removed changed trigger image because it didn't handle state.
  *     -Added colors config property so you can overide the default color palette * 
  * 
- * @class Vps.Form.ColorField
+ * @class Kwf.Form.ColorField
  * @extends Ext.form.TriggerField
  * Provides a very simple color form field with a ColorMenu dropdown.
  * Values are stored as a six-character hex value without the '#'.
@@ -26,7 +26,7 @@ var cf = new Ext.form.ColorField({
  */
 
 
-Vps.Form.ColorField =  Ext.extend(function(config){
+Kwf.Form.ColorField =  Ext.extend(function(config){
     
     this.menu = new Ext.menu.ColorMenu();
     this.menu.palette.on('select', this.handleSelect, this );
@@ -40,7 +40,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
         this.menu.palette.colors=config.colors;
     }
   
-    Vps.Form.ColorField.superclass.constructor.call(this, config);
+    Kwf.Form.ColorField.superclass.constructor.call(this, config);
   
 },Ext.form.TriggerField,  {
 
@@ -65,10 +65,10 @@ Vps.Form.ColorField =  Ext.extend(function(config){
      * A string to be displayed when the length of the input field is
      * not 3 or 6, i.e. 'fff' or 'ffccff'.
      */
-    lengthText: trlVps("Color hex values must be either 3 or 6 characters."),
+    lengthText: trlKwf("Color hex values must be either 3 or 6 characters."),
     
     //text to use if blank and allowBlank is false
-    blankText: trlVps("Must have a hexidecimal value in the format ABCDEF."),
+    blankText: trlKwf("Must have a hexidecimal value in the format ABCDEF."),
     
     /**
      * @cfg {String} color
@@ -85,21 +85,21 @@ Vps.Form.ColorField =  Ext.extend(function(config){
 
     initComponent: function() {
         this.addEvents('select');
-        Vps.Form.ColorField.superclass.initComponent.call(this);
+        Kwf.Form.ColorField.superclass.initComponent.call(this);
     },
 
     alignHelpAndComment: function() {
-        Vps.Form.ColorField.superclass.alignHelpAndComment.apply(this, arguments);
+        Kwf.Form.ColorField.superclass.alignHelpAndComment.apply(this, arguments);
         if (this.colorPreview) {
             this.colorPreview.alignTo(this.getEl(), 'tr', [25, 0]);
         }
     },
 
     onRender: function(ct, position) {
-        Vps.Form.ColorField.superclass.onRender.apply(this, arguments);
+        Kwf.Form.ColorField.superclass.onRender.apply(this, arguments);
         this.colorPreview = this.wrap.createChild({
             tag: 'div',
-            cls: 'vps-form-color-preview',
+            cls: 'kwf-form-color-preview',
             style: 'left: '+(this.width+10+15)+'px'
         });
         this.setColor(this.value);
@@ -131,7 +131,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     // Manually apply the invalid line image since the background
     // was previously cleared so the color would show through.
     markInvalid : function( msg ) {
-        Vps.Form.ColorField.superclass.markInvalid.call(this, msg);
+        Kwf.Form.ColorField.superclass.markInvalid.call(this, msg);
         this.colorPreview.setStyle({
             'background-image': 'url(/assets/ext/resources/images/default/grid/invalid_line.gif)'
         });
@@ -151,7 +151,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
    * @param {String} hex The color value
    */
   setValue : function(hex){
-        Vps.Form.ColorField.superclass.setValue.call(this, hex);
+        Kwf.Form.ColorField.superclass.setValue.call(this, hex);
         this.setColor(hex);
   },
     
@@ -203,4 +203,4 @@ Vps.Form.ColorField =  Ext.extend(function(config){
   }
 });
 
-Ext.reg('colorfield', Vps.Form.ColorField);
+Ext.reg('colorfield', Kwf.Form.ColorField);

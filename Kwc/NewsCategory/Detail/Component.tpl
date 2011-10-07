@@ -2,7 +2,7 @@
     <h3><?= $this->title ?></h3>
     <div class="publishDate"><?=$this->date($this->row->publish_date)?>
         <? if ($this->categories) { ?>
-            | <?=$this->data->trlpVps('Category', 'Categories', count($this->categories));?>:
+            | <?=$this->data->trlpKwf('Category', 'Categories', count($this->categories));?>:
             <? $nci = 0;
             foreach ($this->categories as $nc) {
                 if ($nci++ >= 1) echo ', ';

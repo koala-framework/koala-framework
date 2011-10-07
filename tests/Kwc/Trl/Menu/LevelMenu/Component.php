@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_Menu_LevelMenu_Component extends Vpc_Menu_Expanded_Component
+class Kwc_Trl_Menu_LevelMenu_Component extends Kwc_Menu_Expanded_Component
 {
     public static function getSettings()
     {

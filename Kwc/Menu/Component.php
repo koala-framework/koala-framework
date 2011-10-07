@@ -2,15 +2,15 @@
 /**
  * Menübox. Speichert in Template-Variable alle Werte, die
  * für das Menü benötigt werden.
- * @package Vpc
+ * @package Kwc
  */
-class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
+class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['subMenu'] = array(
-            'class' => 'Vpc_Menu_Generator',
+            'class' => 'Kwc_Menu_Generator',
             'component' => false
         );
         $ret['separator'] = '';
@@ -26,14 +26,14 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
         if (isset($settings['maxLevel'])) {
             if (is_numeric($settings['level'])) {
                 if ($settings['level'] < $settings['maxLevel']) {
-                    throw new Vps_Exception("maxLevel setting doesn't exist anymore, you need to manually create a submenu");
+                    throw new Kwf_Exception("maxLevel setting doesn't exist anymore, you need to manually create a submenu");
                 }
             } else {
                 if ($settings['maxLevel'] > 1) {
-                    throw new Vps_Exception("maxLevel setting doesn't exist anymore, you need to manually create a submenu");
+                    throw new Kwf_Exception("maxLevel setting doesn't exist anymore, you need to manually create a submenu");
                 }
             }
-            throw new Vps_Exception("maxLevel setting doesn't exist anymore, please simply remove");
+            throw new Kwf_Exception("maxLevel setting doesn't exist anymore, please simply remove");
         }
     }
 
@@ -41,11 +41,11 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
     {
         $requiredLevels= parent::_requiredLevels($componentClass);
 
-        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
+        $generators = Kwc_Abstract::getSetting($componentClass, 'generators');
         while (isset($generators['subMenu'])) {
             $class = $generators['subMenu']['component'];
-            if (!is_instance_of($class, 'Vpc_Menu_Abstract_Component')) break;
-            $generators = Vpc_Abstract::getSetting($class, 'generators');
+            if (!is_instance_of($class, 'Kwc_Menu_Abstract_Component')) break;
+            $generators = Kwc_Abstract::getSetting($class, 'generators');
             $requiredLevels++;
         }
         return $requiredLevels;

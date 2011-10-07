@@ -1,5 +1,5 @@
 <?php
-class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
+class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
 {
     public function processItem($item, $errors)
     {
@@ -18,15 +18,15 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                     }
                 }
             }
-            $class = 'vpsField';
+            $class = 'kwfField';
             if ($item['item'] && $item['item']->getLabelAlign()) {
-                $class .= ' vpsFieldLabelAlign'.ucfirst($item['item']->getLabelAlign());
+                $class .= ' kwfFieldLabelAlign'.ucfirst($item['item']->getLabelAlign());
             }
             if ($hasErrors) {
-                $class .= ' vpsFieldError';
+                $class .= ' kwfFieldError';
             }
             if ($item['item'] && $item['item']->getAllowBlank()===false) {
-                $class .= ' vpsFieldRequired';
+                $class .= ' kwfFieldRequired';
             }
             if ($item['item']) {
                 $c = get_class($item['item']);
@@ -37,7 +37,7 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                     $i = str_replace('_', '', $i);
                     $classParts[] = ' '.strtolower(substr($i, 0, 1)).substr($i, 1);
                     $c = get_parent_class($c);
-                    if ($c == 'Vps_Form_Field_Abstract' || $c == 'Vps_Form_Field_SimpleAbstract') break;
+                    if ($c == 'Kwf_Form_Field_Abstract' || $c == 'Kwf_Form_Field_SimpleAbstract') break;
                 }
                 $class .= implode(' ', array_reverse($classParts));
 				if (!isset($item['id'])) {

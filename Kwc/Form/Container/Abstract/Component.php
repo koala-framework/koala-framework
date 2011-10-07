@@ -1,12 +1,12 @@
 <?php
-abstract class Vpc_Form_Container_Abstract_Component extends Vpc_Form_Field_Abstract_Component
+abstract class Kwc_Form_Container_Abstract_Component extends Kwc_Form_Field_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['paragraphs'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Form_Dynamic_Paragraphs_Component'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Form_Dynamic_Paragraphs_Component'
         );
         $ret['editComponents'] = array('paragraphs');
         return $ret;

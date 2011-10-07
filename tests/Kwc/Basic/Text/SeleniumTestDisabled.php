@@ -1,26 +1,26 @@
 <?php
-class Vpc_Basic_Text_SeleniumTest extends Vpc_TestAbstract
+class Kwc_Basic_Text_SeleniumTest extends Kwc_TestAbstract
 {
 }
 /**
 das funktioniert alles nicht; sowas zu testen ist mit selenium _etwas_ schwierig
 
-http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Basic_Text_Root/Kwc_Basic_Text_TestComponent/Index?componentId=1000
 
 
  * @group slow
- * @group Vpc_Basic_Text
-class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase
+ * @group Kwc_Basic_Text
+class Kwc_Basic_Text_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Text_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_Basic_Text_Root');
         parent::setUp();
     }
 
     public function testAdmin()
     {
-        $this->openVpcEdit('Vpc_Basic_Text_TestComponent', 1000);
+        $this->openKwcEdit('Kwc_Basic_Text_TestComponent', 1000);
         $this->waitForConnections();
 
 
@@ -47,7 +47,7 @@ class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase
 //         $this->keyPress('dom=window.frames[0].document.body', '\\38');
 //         $this->assertElementValueEquals("//select[@class='x-font-select']", 'h2');
 
-//         $this->click("//button[text()='".trlVps('Save')."']");
+//         $this->click("//button[text()='".trlKwf('Save')."']");
         sleep(500);
         //$this->assertEquals('foo', $this->getText('dom=window.frames[0].document.body'));
 

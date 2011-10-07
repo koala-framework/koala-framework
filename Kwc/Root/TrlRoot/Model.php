@@ -1,11 +1,11 @@
 <?php
-class Vpc_Root_TrlRoot_Model extends Vps_Model_FnF
+class Kwc_Root_TrlRoot_Model extends Kwf_Model_FnF
 {
     protected $_columns = array('id', 'filename', 'name', 'master');
     protected $_primaryKey = 'id';
     protected $_toStringField = 'name';
     // TODO: Auskommentiert, muss an nicht mehr vorhandene component_id-Spalte angepasst werden
-    //protected $_siblingModels = array('Vpc_Root_TrlRoot_FieldModel');
+    //protected $_siblingModels = array('Kwc_Root_TrlRoot_FieldModel');
 
     public function __construct(array $values = array())
     {

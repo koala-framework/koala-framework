@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.InsertLink = function(config) {
+Kwf.Form.HtmlEditor.InsertLink = function(config) {
     Ext.apply(this, config);
 
     var panel = Ext.ComponentMgr.create(Ext.applyIf(this.componentConfig, {
@@ -8,13 +8,13 @@ Vps.Form.HtmlEditor.InsertLink = function(config) {
         },
         autoLoad: false
     }));
-    this.linkDialog = new Vps.Auto.Form.Window({
+    this.linkDialog = new Kwf.Auto.Form.Window({
         autoForm: panel,
         width: 665,
         height: 400
     });
 };
-Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
+Ext.extend(Kwf.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -31,8 +31,8 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: trlVps('Hyperlink'),
-                text: trlVps('Create new Link for the selected text or edit selected Link.')
+                title: trlKwf('Hyperlink'),
+                text: trlKwf('Create new Link for the selected text or edit selected Link.')
             },
             cls: 'x-btn-icon x-edit-createlink',
             clickEvent: 'mousedown',

@@ -1,5 +1,5 @@
 <?php
-class Vps_Exception_AccessDenied extends Vps_Exception_Abstract
+class Kwf_Exception_AccessDenied extends Kwf_Exception_Abstract
 {
     public function getHeader()
     {

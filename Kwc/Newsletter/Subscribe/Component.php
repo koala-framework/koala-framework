@@ -1,9 +1,9 @@
 <?php
 /**
  * Wird auch zum bearbeiten verwendet.
- * @see Vpc_Newsletter_Subscribe_Edit_Component
+ * @see Kwc_Newsletter_Subscribe_Edit_Component
  */
-class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
+class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
 {
     const CONFIRM_MAIL_ONLY = 'confirm-mail-only';
     const DOUBLE_OPT_IN = 'double-opt-in';
@@ -11,30 +11,30 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Newsletter subscribing');
-        $ret['placeholder']['submitButton'] = trlVpsStatic('Subscribe the newsletter');
+        $ret['componentName'] = trlKwf('Newsletter subscribing');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Subscribe the newsletter');
         $ret['subscribeType'] = self::CONFIRM_MAIL_ONLY;
         $ret['flags']['hasResources'] = true;
 
-        $ret['generators']['child']['component']['mail'] = 'Vpc_Newsletter_Subscribe_Mail_Component';
-        $ret['generators']['child']['component']['doubleOptIn'] = 'Vpc_Newsletter_Subscribe_DoubleOptIn_Component';
+        $ret['generators']['child']['component']['mail'] = 'Kwc_Newsletter_Subscribe_Mail_Component';
+        $ret['generators']['child']['component']['doubleOptIn'] = 'Kwc_Newsletter_Subscribe_DoubleOptIn_Component';
 
         $ret['from'] = ''; // would be good if overwritten
 
         return $ret;
     }
 
-    public function insertSubscription(Vpc_Newsletter_Subscribe_Row $row)
+    public function insertSubscription(Kwc_Newsletter_Subscribe_Row $row)
     {
         if ($row->id) {
-            throw new Vps_Exception("you can only insert unsaved rows");
+            throw new Kwf_Exception("you can only insert unsaved rows");
         }
         $this->_beforeInsert($row);
         $row->save();
         $this->_afterInsert($row);
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
         $row->subscribe_date = date('Y-m-d H:i:s');
@@ -49,20 +49,20 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
         }
     }
 
-    protected function _afterInsert(Vps_Model_Row_Interface $row)
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_afterInsert($row);
 
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
-            $host = Vps_Registry::get('config')->server->domain;
+            $host = Kwf_Registry::get('config')->server->domain;
         }
 
-        $nlData = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Newsletter_Component', array('subroot' => $this->getData()));
+        $nlData = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot' => $this->getData()));
         if (!$nlData) {
-            throw new Vps_Exception('Cannot find newsletter component');
+            throw new Kwf_Exception('Cannot find newsletter component');
         }
         $editComponentId = $nlData->getChildComponent('-editSubscriber')->componentId;
         $unsubscribeComponentId = null;

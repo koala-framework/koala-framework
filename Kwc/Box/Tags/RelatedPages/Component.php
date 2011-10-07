@@ -1,11 +1,11 @@
 <?php
-class Vpc_Box_Tags_RelatedPages_Component extends Vpc_Abstract
+class Kwc_Box_Tags_RelatedPages_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['cssClass'] = 'webStandard webListNone';
-        $ret['placeholder']['headline'] = trlVpsStatic('More about this Topic');
+        $ret['placeholder']['headline'] = trlKwfStatic('More about this Topic');
         return $ret;
     }
 
@@ -40,7 +40,7 @@ class Vpc_Box_Tags_RelatedPages_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel');
         return $ret;
     }
 }

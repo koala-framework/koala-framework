@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Team_Member_Data_Row extends Vps_Model_Proxy_Row
+class Kwc_Advanced_Team_Member_Data_Row extends Kwf_Model_Proxy_Row
 {
     public function __toString()
     {

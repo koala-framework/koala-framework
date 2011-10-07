@@ -1,3 +1,3 @@
 <? if ($this->imageUrl) { ?>
-    <a class="vpcEnlargeTag" href="<?=$this->imagePage->url?>" rel="<?=htmlspecialchars($this->imagePage->rel)?>">
+    <a class="kwcEnlargeTag" href="<?=$this->imagePage->url?>" rel="<?=htmlspecialchars($this->imagePage->rel)?>">
 <? } ?>

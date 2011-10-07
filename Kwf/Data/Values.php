@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Values extends Vps_Data_Abstract
+class Kwf_Data_Values extends Kwf_Data_Abstract
 {
     protected $_values;
 

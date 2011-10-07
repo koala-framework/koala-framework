@@ -1,20 +1,20 @@
 <?php
-abstract class Vpc_Abstract extends Vps_Component_Abstract
+abstract class Kwc_Abstract extends Kwf_Component_Abstract
 {
     private $_data;
     protected $_row;
     private $_pdfWriter;
     const LOREM_IPSUM = 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.';
 
-    public function __construct(Vps_Component_Data $data)
+    public function __construct(Kwf_Component_Data $data)
     {
         $this->_data = $data;
         parent::__construct();
-        Vps_Benchmark::count('components', $data->componentClass.' '.$data->componentId);
+        Kwf_Benchmark::count('components', $data->componentClass.' '.$data->componentId);
     }
 
     /**
-     * @return Vps_Component_Data
+     * @return Kwf_Component_Data
      */
     public function getData()
     {
@@ -59,7 +59,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
      */
     protected function _showInvisible()
     {
-        return Vps_Registry::get('config')->showInvisible;
+        return Kwf_Registry::get('config')->showInvisible;
     }
 
     public static function getSettings()
@@ -67,21 +67,21 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
         $ret['allowIsolatedRender'] = false;
-        $ret['contentSender'] = 'Vps_Component_Abstract_ContentSender_Default';
+        $ret['contentSender'] = 'Kwf_Component_Abstract_ContentSender_Default';
         return $ret;
     }
 
     /**
      * get child component classes of a componentclass or a componentData
      *
-     * @param string/Vps_Component_Data if data inherited generators are returned as well
+     * @param string/Kwf_Component_Data if data inherited generators are returned as well
      * @param array Optional filtering (string to get for one generator)
      */
     public static function getChildComponentClasses($class, $select = array())
     {
         if (is_string($select) && is_string($class)) {
             //simple case no. 1: get from specific generator
-            $g = Vpc_Abstract::getSetting($class, 'generators');
+            $g = Kwc_Abstract::getSetting($class, 'generators');
             $ret = $g[$select]['component'];
             if (!is_array($ret)) $ret = array($select => $ret);
             foreach ($ret as $k=>$i) {
@@ -91,7 +91,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         } else if (!$select && is_string($class)) {
             //simple case no. 2: get 'em all
             $ret = array();
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
+            foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
                 if (is_array($g['component'])) {
                     foreach ($g['component'] as $c) {
                         if ($c) $ret[] = $c;
@@ -102,23 +102,23 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
             return array_unique($ret);
         } else if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
 
         //not so simple, else we ask Generator_Abstract::getInstances for help
         $ret = array();
-        $generators = Vps_Component_Generator_Abstract::getInstances($class, $select);
+        $generators = Kwf_Component_Generator_Abstract::getInstances($class, $select);
         if (!$generators) {
             return $ret;
         }
         foreach ($generators as $generator) {
             $c = $generator->getChildComponentClasses($select);
-            if (!$select->hasPart(Vps_Component_Select::WHERE_GENERATOR)) {
+            if (!$select->hasPart(Kwf_Component_Select::WHERE_GENERATOR)) {
                 $c = array_values($c);
             }
             $ret = array_merge($ret, $c);
         }
-        if (!$select->hasPart(Vps_Component_Select::WHERE_GENERATOR)) {
+        if (!$select->hasPart(Kwf_Component_Select::WHERE_GENERATOR)) {
             $ret = array_unique($ret);
         }
         return $ret;
@@ -127,7 +127,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     public static function getIndirectChildComponentClasses($class, $select = array())
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
         $cacheId = $select->getHash();
         $ret = self::_getIndirectChildComponentClasses($class, $select, $cacheId);
@@ -141,32 +141,32 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $currentCacheId = 'iccc-'.md5($class.$cacheId);
 
         if (isset($ccc[$class.$cacheId])) {
-            Vps_Benchmark::count('iccc cache hit');
+            Kwf_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
         }
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             $ccc[$class.$cacheId] = $ret;
-            Vps_Benchmark::count('iccc cache semi-hit');
+            Kwf_Benchmark::count('iccc cache semi-hit');
             return $ret;
         }
 
-        Vps_Benchmark::count('iccc cache miss', $class.' '.print_r($select->getParts(), true));
+        Kwf_Benchmark::count('iccc cache miss', $class.' '.print_r($select->getParts(), true));
         $childConstraints = array('page' => false);
         $ccc[$class.$cacheId] = array();
-        foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
-            if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
+        foreach (Kwc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
+            if (Kwc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
                 $ccc[$class.$cacheId][] = $childClass;
                 continue;
             }
-            $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
+            $classes = Kwc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
             if ($classes) {
                 $ccc[$class.$cacheId][] = $childClass;
             }
         }
         $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
 
-        Vps_Cache_Simple::add($currentCacheId, $ccc[$class.$cacheId]);
+        Kwf_Cache_Simple::add($currentCacheId, $ccc[$class.$cacheId]);
         return $ccc[$class.$cacheId];
 
     }
@@ -179,7 +179,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if ($componentKey) $constraints['componentKey'] = $componentKey;
         $classes = array_values(self::getChildComponentClasses($class, $constraints));
         if (!isset($classes[0])) {
-            throw new Vps_Exception("childComponentClass '$componentKey' for generator '$generator' not set for '$class'");
+            throw new Kwf_Exception("childComponentClass '$componentKey' for generator '$generator' not set for '$class'");
         }
         return $classes[0];
     }
@@ -204,7 +204,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if (!isset($this->_row)) {
             $model = $this->getModel();
             if (!$model) return null;
-            if ($model instanceof Vps_Model_Interface) {
+            if ($model instanceof Kwf_Model_Interface) {
 
                 $dbId = $this->getDbId();
                 $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
@@ -245,7 +245,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     public function getPdfWriter($pdf)
     {
         if (!isset($this->_pdfWriter)) {
-            $class = Vpc_Admin::getComponentFile(get_class($this), 'Pdf', 'php', true);
+            $class = Kwc_Admin::getComponentFile(get_class($this), 'Pdf', 'php', true);
             $this->_pdfWriter = new $class($this, $pdf);
         }
         return $this->_pdfWriter;
@@ -283,7 +283,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
      */
     public function getExportData()
     {
-        throw new Vps_Exception_NotYetImplemented("getExportData is not yet implemented for component '".get_class($this)."'");
+        throw new Kwf_Exception_NotYetImplemented("getExportData is not yet implemented for component '".get_class($this)."'");
     }
 
     public function getMailVars($user = null)
@@ -293,11 +293,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     // deprecated
     public function getCacheVars() {
-        throw new Vps_Exception('getCacheVars is not supported anymore.');
+        throw new Kwf_Exception('getCacheVars is not supported anymore.');
     }
 
     public static function getStaticCacheVars() {
-        throw new Vps_Exception('getStaticCacheVars is not supported anymore.');
+        throw new Kwf_Exception('getStaticCacheVars is not supported anymore.');
     }
 
     public function getCacheMeta()
@@ -307,8 +307,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public static function getStaticCacheMeta($componentClass) {
         $ret = array();
-        if (Vpc_Abstract::hasSetting($componentClass, 'ownModel')) {
-            $ret[] = new Vps_Component_Cache_Meta_Static_OwnModel();
+        if (Kwc_Abstract::hasSetting($componentClass, 'ownModel')) {
+            $ret[] = new Kwf_Component_Cache_Meta_Static_OwnModel();
         }
         return $ret;
     }
@@ -317,7 +317,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public static function getTemplateFile($componentClass, $filename = 'Component')
     {
-        return Vpc_Admin::getComponentFile($componentClass, $filename, 'tpl');
+        return Kwc_Admin::getComponentFile($componentClass, $filename, 'tpl');
     }
 
     static public function getCssClass($component)
@@ -326,25 +326,25 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return self::getSetting($component, 'processedCssClass');
     }
 
-    static public function getShortcutUrl($componentClass, Vps_Component_Data $data)
+    static public function getShortcutUrl($componentClass, Kwf_Component_Data $data)
     {
-        if (!Vpc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
-            throw new Vps_Exception("You must either have the setting 'shortcutUrl' or reimplement getShortcutUrl method for '$componentClass'");
+        if (!Kwc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
+            throw new Kwf_Exception("You must either have the setting 'shortcutUrl' or reimplement getShortcutUrl method for '$componentClass'");
         }
-        return Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
+        return Kwc_Abstract::getSetting($componentClass, 'shortcutUrl');
     }
 
     public static function getDataByShortcutUrl($componentClass, $url)
     {
-        if (!Vpc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
-            throw new Vps_Exception("You must either have the setting 'shortcutUrl' or reimplement getDataByShortcutUrl method for '$componentClass'");
+        if (!Kwc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
+            throw new Kwf_Exception("You must either have the setting 'shortcutUrl' or reimplement getDataByShortcutUrl method for '$componentClass'");
         }
-        $sc = Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
+        $sc = Kwc_Abstract::getSetting($componentClass, 'shortcutUrl');
         $parts = explode('/', $url);
         $constraints = array();
         $isDomain = is_instance_of(
-            Vps_Component_Data_Root::getInstance()->componentClass,
-           'Vpc_Root_DomainRoot_Component'
+            Kwf_Component_Data_Root::getInstance()->componentClass,
+           'Kwc_Root_DomainRoot_Component'
         );
         if ($isDomain) {
             $pos = strpos($url, '/', 1);
@@ -354,13 +354,13 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $shortcut = substr($url, 0, strpos($url, '/', 1));
         if ($shortcut != $sc) return false;
         if ($isDomain) {
-            $components = Vps_Component_Data_Root::getInstance()->
-                getComponentsByClass('Vpc_Root_DomainRoot_Domain_Component', array('id' => '-' . $domain));
+            $components = Kwf_Component_Data_Root::getInstance()->
+                getComponentsByClass('Kwc_Root_DomainRoot_Domain_Component', array('id' => '-' . $domain));
             foreach ($components as $c) {
                 if ($c->row->id == $domain) $constraints = array('subroot' => $c);
             }
         }
-        $component = Vps_Component_Data_Root::getInstance()
+        $component = Kwf_Component_Data_Root::getInstance()
             ->getComponentBySameClass($componentClass, $constraints);
         if ($component) {
             return $component->getChildPageByPath(substr($url, strlen($sc) + 1));
@@ -374,24 +374,24 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
         static $prefix;
         $cacheId = 'cclsbpc-'.implode('-', $class);
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
         $ret = array();
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (in_array($c, $class) || in_array((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c), $class)) {
                 $ret[] = $c;
                 continue;
             }
-            foreach (Vpc_Abstract::getParentClasses($c) as $p) {
+            foreach (Kwc_Abstract::getParentClasses($c) as $p) {
                 if (in_array($p, $class)) {
                     $ret[] = $c;
                     break;
                 }
             }
         }
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
     public static function getComponentClassByParentClass($class)
@@ -399,9 +399,9 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret = self::getComponentClassesByParentClass($class);
         if (count($ret) != 1) {
             if (!$ret) {
-                throw new Vps_Exception("No Component with class '$class' found");
+                throw new Kwf_Exception("No Component with class '$class' found");
             }
-            throw new Vps_Exception("More then one component with class '$class' found, there should exist only one");
+            throw new Kwf_Exception("More then one component with class '$class' found, there should exist only one");
         }
         return $ret[0];
     }
@@ -438,7 +438,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
      *
      * In den meisten Fällen wird contentWidthSubtract setting reichen
      */
-    protected function _getChildContentWidth(Vps_Component_Data $child)
+    protected function _getChildContentWidth(Kwf_Component_Data $child)
     {
         $ret = $this->getContentWidth();
         if ($this->_hasSetting('contentWidthSubtract')) {

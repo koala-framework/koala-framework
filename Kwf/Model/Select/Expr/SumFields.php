@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_SumFields implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_SumFields implements Kwf_Model_Select_Expr_Interface
 {
     private $_fields;
     public function __construct(array $fields)
@@ -15,12 +15,12 @@ class Vps_Model_Select_Expr_SumFields implements Vps_Model_Select_Expr_Interface
     public function validate()
     {
         if (count($this->_fields) == 0) {
-            throw new Vps_Exception("'".get_class($this)."' has to contain at least one field");
+            throw new Kwf_Exception("'".get_class($this)."' has to contain at least one field");
         }
     }
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_INTEGER;
+        return Kwf_Model_Interface::TYPE_INTEGER;
     }
 }

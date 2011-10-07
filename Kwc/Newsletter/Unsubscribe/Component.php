@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_Unsubscribe_Component extends Vpc_Form_Component
+class Kwc_Newsletter_Unsubscribe_Component extends Kwc_Form_Component
 {
     protected $_recipient;
 
@@ -7,16 +7,16 @@ class Vpc_Newsletter_Unsubscribe_Component extends Vpc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] =
-            'Vpc_Newsletter_Unsubscribe_Success_Component';
-        $ret['placeholder']['submitButton'] = trlVpsStatic('Unsubscribe newsletter');
+            'Kwc_Newsletter_Unsubscribe_Success_Component';
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Unsubscribe newsletter');
         return $ret;
     }
 
     public function processMailRedirectInput($recipient, $params)
     {
         $this->_recipient = $recipient;
-        if (!($recipient instanceof Vpc_Mail_Recipient_UnsubscribableInterface)) {
-            throw new Vps_Exception("To unsubscribe from a newsletter, the recipient row must implement 'Vpc_Mail_Recipient_UnsubscribableInterface'");
+        if (!($recipient instanceof Kwc_Mail_Recipient_UnsubscribableInterface)) {
+            throw new Kwf_Exception("To unsubscribe from a newsletter, the recipient row must implement 'Kwc_Mail_Recipient_UnsubscribableInterface'");
         }
         $this->processInput($params);
     }
@@ -34,12 +34,12 @@ class Vpc_Newsletter_Unsubscribe_Component extends Vpc_Form_Component
             $this->_form->setModel($this->_recipient->getModel());
             $this->_form->setId($this->_recipient->id);
 
-            $this->getParentField()->add(new Vps_Form_Field_ShowField('firstname_interface', trlVpsStatic('Firstname')))
-                ->setData(new Vpc_Newsletter_Unsubscribe_RecipientData('getMailFirstname'));
-            $this->getParentField()->add(new Vps_Form_Field_ShowField('lastname_interface', trlVpsStatic('Lastname')))
-                ->setData(new Vpc_Newsletter_Unsubscribe_RecipientData('getMailLastname'));
-            $this->getParentField()->add(new Vps_Form_Field_ShowField('email_interface', trlVpsStatic('E-Mail')))
-                ->setData(new Vpc_Newsletter_Unsubscribe_RecipientData('getMailEmail'));
+            $this->getParentField()->add(new Kwf_Form_Field_ShowField('firstname_interface', trlKwfStatic('Firstname')))
+                ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailFirstname'));
+            $this->getParentField()->add(new Kwf_Form_Field_ShowField('lastname_interface', trlKwfStatic('Lastname')))
+                ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailLastname'));
+            $this->getParentField()->add(new Kwf_Form_Field_ShowField('email_interface', trlKwfStatic('E-Mail')))
+                ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailEmail'));
         }
     }
 
@@ -59,7 +59,7 @@ class Vpc_Newsletter_Unsubscribe_Component extends Vpc_Form_Component
         return $ret;
     }
 
-    protected function _afterSave(Vps_Model_Row_Interface $row)
+    protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
         $row->mailUnsubscribe();
     }

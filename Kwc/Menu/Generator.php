@@ -1,4 +1,4 @@
 <?php
-class Vpc_Menu_Generator extends Vps_Component_Generator_Static
+class Kwc_Menu_Generator extends Kwf_Component_Generator_Static
 {
 }

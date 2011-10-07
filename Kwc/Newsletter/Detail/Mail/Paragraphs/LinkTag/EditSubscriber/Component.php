@@ -1,12 +1,12 @@
 <?php
-class Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_EditSubscriber_Component
-    extends Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
+class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_EditSubscriber_Component
+    extends Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Newsletter Subscriber settings')
+            'componentName' => trlKwf('Newsletter Subscriber settings')
         ));
         return $ret;
     }

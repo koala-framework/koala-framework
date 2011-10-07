@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Html_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
+class Kwc_Basic_Html_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($childComponentClass)
     {
         $ret = parent::getSettings($childComponentClass);
-        $ret['ownModel'] = 'Vpc_Basic_Html_Model';
+        $ret['ownModel'] = 'Kwc_Basic_Html_Model';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
         return $ret;
     }

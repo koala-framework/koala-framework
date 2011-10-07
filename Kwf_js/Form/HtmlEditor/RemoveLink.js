@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.RemoveLink = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.RemoveLink = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -14,8 +14,8 @@ Vps.Form.HtmlEditor.RemoveLink = Ext.extend(Ext.util.Observable, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: trlVps('Remove Hyperlink'),
-                text: trlVps('Remove the selected link.')
+                title: trlKwf('Remove Hyperlink'),
+                text: trlKwf('Remove the selected link.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',

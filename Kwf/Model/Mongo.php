@@ -1,7 +1,7 @@
 <?php
-class Vps_Model_Mongo extends Vps_Model_Abstract
+class Kwf_Model_Mongo extends Kwf_Model_Abstract
 {
-    protected $_rowClass = 'Vps_Model_Mongo_Row';
+    protected $_rowClass = 'Kwf_Model_Mongo_Row';
     protected $_data = array();
 
     /**
@@ -12,7 +12,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     public function __construct(array $config = array())
     {
         if (!isset($config['db'])) {
-            $config['db'] = Vps_Registry::get('dao')->getMongoDb();
+            $config['db'] = Kwf_Registry::get('dao')->getMongoDb();
         }
         if (isset($config['collection'])) {
             $this->_collection = $config['collection'];
@@ -32,21 +32,21 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     {
     }
 
-    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    public function dependentModelRowUpdated(Kwf_Model_Row_Abstract $row, $action)
     {
         parent::dependentModelRowUpdated($row, $action);
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
         foreach ($models as $model) {
             foreach ($model->_exprs as $column=>$expr) {
-                if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+                if ($expr instanceof Kwf_Model_Select_Expr_Parent) {
                     if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
 
                         //blöd dass diese schleife hier notwendig ist
                         //TODO: getDependentModels sollte was anderes zurückgeben
                         //gleiches problem wie bei getChildRows
                         foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
-                            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+                            if (!$m instanceof Kwf_Model_Abstract) $m = Kwf_Model_Abstract::getInstance($m);
                             if ($m === $model) {
                                 $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
                                 foreach ($rows as $r) {
@@ -61,14 +61,14 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         }
     }
 
-    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    public function childModelRowUpdated(Kwf_Model_Row_Abstract $row, $action)
     {
         parent::childModelRowUpdated($row, $action);
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
         foreach ($models as $model) {
             foreach ($model->_exprs as $column=>$expr) {
-                if ($expr instanceof Vps_Model_Select_Expr_Child) {
+                if ($expr instanceof Kwf_Model_Select_Expr_Child) {
                     if ($model->getDependentModel($expr->getChild()) === $row->getModel()) {
                         $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($model));
                         $parentRow = $row->getParentRow($rule);
@@ -80,7 +80,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         }
     }
 
-    public function update(Vps_Model_Row_Interface $row, $rowData)
+    public function update(Kwf_Model_Row_Interface $row, $rowData)
     {
         $ret = $this->_collection->update(
             array('_id' => $row->_id),
@@ -88,29 +88,29 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
             array('safe'=>true, 'multiple'=>false)
         );
         if (!$ret || $ret['ok'] != 1) {
-            throw new Vps_Exception("update failed");
+            throw new Kwf_Exception("update failed");
         }
     }
 
-    public function insert(Vps_Model_Row_Interface $row, $rowData)
+    public function insert(Kwf_Model_Row_Interface $row, $rowData)
     {
         //TODO: id?
         $ret = $this->getCollection()->insert(
             $rowData
         , array('safe'=>true));
         if (!$ret || $ret['ok'] != 1) {
-            throw new Vps_Exception("insert failed");
+            throw new Kwf_Exception("insert failed");
         }
     }
 
-    public function delete(Vps_Model_Row_Interface $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         $ret = $this->_collection->remove(
             array('_id' => $row->_id),
             array('safe'=>true, 'multiple'=>false)
         );
         if (!$ret || $ret['ok'] != 1) {
-            throw new Vps_Exception("delete failed");
+            throw new Kwf_Exception("delete failed");
         }
     }
 
@@ -138,40 +138,40 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         } else {
             $select = $where;
         }
-        $profiler = Vps_Registry::get('db')->getProfiler();
+        $profiler = Kwf_Registry::get('db')->getProfiler();
         $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         $ret = $this->_collection->find($this->_getQuery($select))->count();
-        if ($profiler instanceof Vps_Db_Profiler) $profiler->getLogger()->info('(count) count result '.$ret);
+        if ($profiler instanceof Kwf_Db_Profiler) $profiler->getLogger()->info('(count) count result '.$ret);
         $p = $profiler->queryEnd($p);
         return $ret;
     }
 
-    private function _getQuery(Vps_Model_Select $select)
+    private function _getQuery(Kwf_Model_Select $select)
     {
         $where = array();
-        if ($equals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
+        if ($equals = $select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
             foreach ($equals as $k=>$v) {
                 $where[$k] = $v;
             }
         }
-        if ($exprs = $select->getPart(Vps_Model_Select::WHERE_EXPRESSION)) {
+        if ($exprs = $select->getPart(Kwf_Model_Select::WHERE_EXPRESSION)) {
             foreach ($exprs as $e) {
-                if ($e instanceof Vps_Model_Select_Expr_Equals) {
+                if ($e instanceof Kwf_Model_Select_Expr_Equals) {
                     $where[$e->getField()] = $e->getValue();
-                } else if ($e instanceof Vps_Model_Select_Expr_NotEquals) {
+                } else if ($e instanceof Kwf_Model_Select_Expr_NotEquals) {
                     $where[$e->getField()]['$ne'] = $e->getValue();
-                } else if ($e instanceof Vps_Model_Select_Expr_HigherDate) {
+                } else if ($e instanceof Kwf_Model_Select_Expr_HigherDate) {
                     $where[$e->getField()]['$gt'] = new MongoDate(strtotime($e->getValue()));
-                } else if ($e instanceof Vps_Model_Select_Expr_SmallerDate) {
+                } else if ($e instanceof Kwf_Model_Select_Expr_SmallerDate) {
                     $where[$e->getField()]['$lt'] = new MongoDate(strtotime($e->getValue()));
-                } else if ($e instanceof Vps_Model_Select_Expr_HigherEqualDate) {
+                } else if ($e instanceof Kwf_Model_Select_Expr_HigherEqualDate) {
                     $where[$e->getField()]['$gte'] = new MongoDate(strtotime($e->getValue()));
-                } else if ($e instanceof Vps_Model_Select_Expr_SmallerEqualDate) {
+                } else if ($e instanceof Kwf_Model_Select_Expr_SmallerEqualDate) {
                     $where[$e->getField()]['$lte'] = new MongoDate(strtotime($e->getValue()));
                 }
             }
         }
-        if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
+        if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
             $where['id'] = $id; //TODO dynam.
         }
         return $where;
@@ -187,12 +187,12 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         }
         $cursor = $this->_getCursor($select)->fields(array('id'=>1)); //TODO 'id' dynam.
         $ret = array();
-        $profiler = Vps_Registry::get('db')->getProfiler();
+        $profiler = Kwf_Registry::get('db')->getProfiler();
         $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         foreach ($cursor as $row) {
             $ret[] = $row['id']; //TODO: dynam.
         }
-        if ($profiler instanceof Vps_Db_Profiler) {
+        if ($profiler instanceof Kwf_Db_Profiler) {
             $profiler->getLogger()->info('(ids) count result '.count($ret));
             //$profiler->getLogger()->debug(print_r($cursor->explain(), true));
         }
@@ -203,7 +203,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     private function _getCursor($select)
     {
         $cursor = $this->_collection->find($this->_getQuery($select));
-        if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
+        if ($order = $select->getPart(Kwf_Model_Select::ORDER)) {
             $o = array();
             foreach ($order as $i) {
                 if (isset($i['direction']) && $i['direction']=='DESC') {
@@ -214,11 +214,11 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
             }
             $cursor->sort($o);
         }
-        if ($select->getPart(Vps_Model_Select::LIMIT_COUNT)) {
-            $cursor->limit($select->getPart(Vps_Model_Select::LIMIT_COUNT));
+        if ($select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
+            $cursor->limit($select->getPart(Kwf_Model_Select::LIMIT_COUNT));
         }
-        if ($select->getPart(Vps_Model_Select::LIMIT_OFFSET)) {
-            $cursor->skip($select->getPart(Vps_Model_Select::LIMIT_OFFSET));
+        if ($select->getPart(Kwf_Model_Select::LIMIT_OFFSET)) {
+            $cursor->skip($select->getPart(Kwf_Model_Select::LIMIT_OFFSET));
         }
         return $cursor;
     }
@@ -228,7 +228,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         if (!is_object($select)) {
             $select = $this->select($select);
         }
-        $profiler = Vps_Registry::get('db')->getProfiler();
+        $profiler = Kwf_Registry::get('db')->getProfiler();
         $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         $row = $this->_collection->findOne($this->_getQuery($select));
         $p = $profiler->queryEnd($p);
@@ -259,7 +259,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         $cursor = $this->_getCursor($select);
 
 
-        $profiler = Vps_Registry::get('db')->getProfiler();
+        $profiler = Kwf_Registry::get('db')->getProfiler();
         $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         foreach($cursor as $row) {
             $id = $row['_id'];
@@ -270,7 +270,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
             $keys[] = $id;
         }
         $p = $profiler->queryEnd($p);
-        if ($profiler instanceof Vps_Db_Profiler) {
+        if ($profiler instanceof Kwf_Db_Profiler) {
             $profiler->getLogger()->debug('(rows) count result '.count($keys));
             /*
             $profiler->getLogger()->debug(print_r($cursor->explain(), true));
@@ -318,7 +318,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         } else {
             $select = $where;
         }
-        $profiler = Vps_Registry::get('db')->getProfiler();
+        $profiler = Kwf_Registry::get('db')->getProfiler();
         $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         $ret = $this->_collection->remove(
             $this->_getQuery($select),
@@ -326,7 +326,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         );
         $p = $profiler->queryEnd($p);
         if (!$ret || !$ret['ok']) {
-            throw new Vps_Exception("delete failed");
+            throw new Kwf_Exception("delete failed");
         }
     }
 
@@ -334,11 +334,11 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     {
         if ($format == self::FORMAT_ARRAY) {
             if (isset($options['replace']) && $options['replace']) {
-                throw new Vps_Exception_NotYetImplemented();
+                throw new Kwf_Exception_NotYetImplemented();
             }
             $ret = $this->getCollection()->batchInsert($data, array('safe'=>true));
             if (!$ret || !$ret['ok']) {
-                throw new Vps_Exception("import failed");
+                throw new Kwf_Exception("import failed");
             }
         } else {
             parent::import($format, $data, $options);

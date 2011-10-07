@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
+class Kwc_User_Detail_General_Form extends Kwc_Abstract_Composite_Form
 {
     protected $_useFieldset = true;
     protected $_generalFieldset;
@@ -17,34 +17,34 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
     protected function _initFields()
     {
         if ($this->_useFieldset) {
-            $this->_generalFieldset = $this->add(new Vps_Form_Container_FieldSet(trlVps('General')));
+            $this->_generalFieldset = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('General')));
             $fieldsContainer = $this->_generalFieldset;
         } else {
             $fieldsContainer = $this;
         }
 
-        $fieldsContainer->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
+        $fieldsContainer->add(new Kwf_Form_Field_TextField('email', trlKwf('E-Mail')))
                     ->setVtype('email')
                     ->setAllowBlank(false)
                     ->setWidth(250)
-                    ->addValidator(new Vpc_User_Detail_General_Validate_UniqueEmail());
+                    ->addValidator(new Kwc_User_Detail_General_Validate_UniqueEmail());
 
-        $fieldsContainer->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
+        $fieldsContainer->add(new Kwf_Form_Field_TextField('firstname', trlKwf('Firstname')))
                     ->setAllowBlank(false)
                     ->setWidth(250);
 
-        $fieldsContainer->add(new Vps_Form_Field_TextField('lastname', trlVps('Lastname')))
+        $fieldsContainer->add(new Kwf_Form_Field_TextField('lastname', trlKwf('Lastname')))
                     ->setAllowBlank(false)
                     ->setWidth(250);
 
-        $fieldsContainer->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
+        $fieldsContainer->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')))
                     ->setWidth(250);
 
-        $fieldsContainer->add(new Vps_Form_Field_Select('gender', trlVps('Gender')))
+        $fieldsContainer->add(new Kwf_Form_Field_Select('gender', trlKwf('Gender')))
                     ->setShowNoSelection(true)
                     ->setValues(array(
-                            'female' => trlVps('Female'),
-                            'male'   => trlVps('Male')
+                            'female' => trlKwf('Female'),
+                            'male'   => trlKwf('Male')
                     ));
         parent::_initFields();
     }

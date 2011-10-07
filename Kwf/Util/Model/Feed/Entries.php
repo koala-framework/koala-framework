@@ -1,9 +1,9 @@
 <?php
-class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
-    implements Vps_Model_RowsSubModel_Interface
+class Kwf_Util_Model_Feed_Entries extends Kwf_Model_Abstract
+    implements Kwf_Model_RowsSubModel_Interface
 {
-    protected $_rowsetClass = 'Vps_Model_Rowset_ParentRow';
-    protected $_rowClass = 'Vps_Util_Model_Feed_Row_Entry';
+    protected $_rowsetClass = 'Kwf_Model_Rowset_ParentRow';
+    protected $_rowClass = 'Kwf_Util_Model_Feed_Row_Entry';
 
     protected function _getOwnColumns()
     {
@@ -21,19 +21,19 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
     }
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
-    public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
+    public function getRowsByParentRow(Kwf_Model_Row_Interface $parentRow, $select = array())
     {
         $select = $this->select($select);
-        if (!($parentRow instanceof Vps_Util_Model_Feed_Row_Feed)) {
-            throw new Vps_Exception('Only possible with feed row');
+        if (!($parentRow instanceof Kwf_Util_Model_Feed_Row_Feed)) {
+            throw new Kwf_Exception('Only possible with feed row');
         }
         return $parentRow->getEntries($select);
     }
 
-    //"darf" nur von Vps_Util_Model_Feed_Row_Feed aufgerufen werden!
+    //"darf" nur von Kwf_Util_Model_Feed_Row_Feed aufgerufen werden!
     public function _getFeedEntries($parentRow, $xml, $select = array())
     {
         $select = $this->select($select);
@@ -41,12 +41,12 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
         $pId = $parentRow->getInternalId();
         $this->_data[$pId] = array();
 
-        if ($parentRow->format == Vps_Util_Model_Feed_Row_Feed::FORMAT_RSS) {
+        if ($parentRow->format == Kwf_Util_Model_Feed_Row_Feed::FORMAT_RSS) {
             if (in_array('http://purl.org/rss/1.0/', $xml->getNamespaces(true))) {
                 $xml->registerXPathNamespace('rss', 'http://purl.org/rss/1.0/');
                 foreach ($xml->xpath('//rss:item') as $item) {
                     $this->_data[$pId][] = $item;
-                    if (($l = $select->getPart(Vps_Model_Select::LIMIT_COUNT))
+                    if (($l = $select->getPart(Kwf_Model_Select::LIMIT_COUNT))
                         && count($this->_data[$pId]) == $l)
                     {
                         break;
@@ -55,7 +55,7 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
             } else {
                 foreach ($xml->channel->item as $item) {
                     $this->_data[$pId][] = $item;
-                    if (($l = $select->getPart(Vps_Model_Select::LIMIT_COUNT))
+                    if (($l = $select->getPart(Kwf_Model_Select::LIMIT_COUNT))
                         && count($this->_data[$pId]) == $l)
                     {
                         break;
@@ -65,7 +65,7 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
         } else {
             foreach ($xml->entry as $item) {
                 $this->_data[$pId][] = $item;
-                if (($l = $select->getPart(Vps_Model_Select::LIMIT_COUNT))
+                if (($l = $select->getPart(Kwf_Model_Select::LIMIT_COUNT))
                     && count($this->_data[$pId]) == $l)
                 {
                     break;
@@ -92,8 +92,8 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
         return $this->_rows[$pId][$key];
     }
 
-    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    public function createRowByParentRow(Kwf_Model_Row_Interface $parentRow, array $data = array())
     {
-        throw new Vps_Exception("read only");
+        throw new Kwf_Exception("read only");
     }
 }

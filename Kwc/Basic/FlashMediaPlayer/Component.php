@@ -1,13 +1,13 @@
 <?php
-class Vpc_Basic_FlashMediaPlayer_Component extends Vpc_Abstract_Flash_Upload_Component
+class Kwc_Basic_FlashMediaPlayer_Component extends Kwc_Abstract_Flash_Upload_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Flash.Media Player');
-        $ret['ownModel'] = 'Vpc_Basic_FlashMediaPlayer_Model';
-        $ret['playerPath'] = '/assets/vps/Vpc/Basic/FlashMediaPlayer/player.swf';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['componentName'] = trlKwf('Flash.Media Player');
+        $ret['ownModel'] = 'Kwc_Basic_FlashMediaPlayer_Model';
+        $ret['playerPath'] = '/assets/kwf/Kwc/Basic/FlashMediaPlayer/player.swf';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 

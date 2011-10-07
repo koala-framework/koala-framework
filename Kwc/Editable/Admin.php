@@ -1,13 +1,13 @@
 <?php
-class Vpc_Editable_AdminResource extends Vps_Acl_Resource_MenuUrl
-    implements Vps_Acl_Resource_ComponentClass_Interface
+class Kwc_Editable_AdminResource extends Kwf_Acl_Resource_MenuUrl
+    implements Kwf_Acl_Resource_ComponentClass_Interface
 {
     protected $_componentClass;
 
     public function __construct($componentClass, $menuConfig = null, $menuUrl = null)
     {
         $this->_componentClass = $componentClass;
-        parent::__construct('vpc_Vpc_Editable', $menuConfig, $menuUrl);
+        parent::__construct('kwc_Kwc_Editable', $menuConfig, $menuUrl);
     }
 
     public function getComponentClass()
@@ -16,15 +16,15 @@ class Vpc_Editable_AdminResource extends Vps_Acl_Resource_MenuUrl
     }
 }
 
-class Vpc_Editable_Admin extends Vpc_Admin
+class Kwc_Editable_Admin extends Kwc_Admin
 {
-    public function addResources(Vps_Acl $acl)
+    public function addResources(Kwf_Acl $acl)
     {
         parent::addResources($acl);
-        if (!$acl->has('vpc_Vpc_Editable')) {
-            $acl->add(new Vpc_Editable_AdminResource($this->_class,
-                    array('text'=>trlVps('Texts'), 'icon'=>'page_white_text.png'),
-                    $this->getControllerUrl('Components')), 'vps_component_root');
+        if (!$acl->has('kwc_Kwc_Editable')) {
+            $acl->add(new Kwc_Editable_AdminResource($this->_class,
+                    array('text'=>trlKwf('Texts'), 'icon'=>'page_white_text.png'),
+                    $this->getControllerUrl('Components')), 'kwf_component_root');
         }
     }
 }

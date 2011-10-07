@@ -1,17 +1,17 @@
 <?php
-class Vps_Component_Generator_ChildPage_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_ChildPage_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_ChildPage_Root');
-        Vps_Benchmark::enable();
-        Vps_Benchmark::reset();
+        parent::setUp('Kwf_Component_Generator_ChildPage_Root');
+        Kwf_Benchmark::enable();
+        Kwf_Benchmark::reset();
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        Vps_Benchmark::disable();
+        Kwf_Benchmark::disable();
     }
 
     public function testComponentClassConstraint()
@@ -19,13 +19,13 @@ class Vps_Component_Generator_ChildPage_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('root-child');
         $this->assertNotNull($c);
 
-        $c = $this->_root->getComponentById('root-child', array('componentClass'=>'Vps_Component_Generator_ChildPage_Child'));
+        $c = $this->_root->getComponentById('root-child', array('componentClass'=>'Kwf_Component_Generator_ChildPage_Child'));
         $this->assertNotNull($c);
 
         $c = $this->_root->getComponentById('root-child', array('componentClass'=>'NotExistent'));
         $this->assertNull($c);
 
-        $c = $this->_root->getComponentById('root-child_1', array('componentClass'=>'Vpc_Basic_Empty_Component'));
+        $c = $this->_root->getComponentById('root-child_1', array('componentClass'=>'Kwc_Basic_Empty_Component'));
         $this->assertNotNull($c);
     }
 
@@ -36,9 +36,9 @@ class Vps_Component_Generator_ChildPage_Test extends Vpc_TestAbstract
                             ->getChildComponent('_1');
         $this->assertEquals('root-child_1', $page->dbId);
         /*
-        $this->assertEquals(Vps_Benchmark::getCounterValue('generators'), 2);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('componentDatas'), 2);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('getChildComponents'), 3);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('generators'), 2);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('componentDatas'), 2);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('getChildComponents'), 3);
         */
 
         $page = $this->_root->getChildComponent('-child')->getChildComponent(array('filename' => '1_foo'));
@@ -58,10 +58,10 @@ class Vps_Component_Generator_ChildPage_Test extends Vpc_TestAbstract
         $this->assertEquals(1, count($forms));
         $this->assertEquals('root-form', current($forms)->dbId);
         /*
-        $this->assertEquals(Vps_Benchmark::getCounterValue('generators'), 3);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('componentDatas'), 1);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('getChildComponents'), 2);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('getRecursiveChildComponents'), 1);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('generators'), 3);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('componentDatas'), 1);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('getChildComponents'), 2);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('getRecursiveChildComponents'), 1);
         */
     }
     public function testSubpageForm2()
@@ -77,10 +77,10 @@ class Vps_Component_Generator_ChildPage_Test extends Vpc_TestAbstract
         $this->assertEquals(1, count($forms));
         $this->assertEquals('root-child_1-form', current($forms)->dbId);
         /*
-        $this->assertEquals(Vps_Benchmark::getCounterValue('generators'), 3);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('componentDatas'), 3);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('getChildComponents'), 4);
-        $this->assertEquals(Vps_Benchmark::getCounterValue('getRecursiveChildComponents'), 1);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('generators'), 3);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('componentDatas'), 3);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('getChildComponents'), 4);
+        $this->assertEquals(Kwf_Benchmark::getCounterValue('getRecursiveChildComponents'), 1);
         */
     }
 }

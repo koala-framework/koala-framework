@@ -1,5 +1,5 @@
 <?php
-class Vpc_Menu_Expanded_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
+class Kwc_Menu_Expanded_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
 {
     public function getTemplateVars()
     {
@@ -7,12 +7,12 @@ class Vpc_Menu_Expanded_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
         $menu = array();
         $masterMenu = $this->getData()->chained->getComponent()->getMenuData(null, array('ignoreVisible'=>true));
         foreach ($masterMenu as $m) {
-            $component = Vpc_Chained_Trl_Component::getChainedByMaster($m['data'], $this->getData());
+            $component = Kwc_Chained_Trl_Component::getChainedByMaster($m['data'], $this->getData());
             if ($component) {
                 $m['submenu'] = array();
                 $masterSubMenu = $this->getData()->chained->getComponent()->getMenuData($m['data'], array('ignoreVisible'=>true));
                 foreach ($masterSubMenu as $sm) {
-                    $sComponent = Vpc_Chained_Trl_Component::getChainedByMaster($sm['data'], $this->getData());
+                    $sComponent = Kwc_Chained_Trl_Component::getChainedByMaster($sm['data'], $this->getData());
                     if ($sComponent) {
                         $sm['data'] = $sComponent;
                         $sm['text'] = $sComponent->name;

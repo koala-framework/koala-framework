@@ -1,11 +1,11 @@
 <?php
-class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
+class Kwf_Util_Model_Amazon_Nodes extends Kwf_Model_Abstract
 {
     protected $_dependentModels = array(
-        'ProductsToNodes' => 'Vps_Util_Model_Amazon_ProductsToNodes'
+        'ProductsToNodes' => 'Kwf_Util_Model_Amazon_ProductsToNodes'
     );
 
-    protected $_rowClass = 'Vps_Util_Model_Amazon_Nodes_Row';
+    protected $_rowClass = 'Kwf_Util_Model_Amazon_Nodes_Row';
     protected $_toStringField = 'name';
 
     protected $_responseGroup = 'Small,BrowseNodes';
@@ -22,7 +22,7 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
     protected function _init()
     {
         if (!$this->_amazon) {
-            $this->_amazon = new Vps_Service_Amazon();
+            $this->_amazon = new Kwf_Service_Amazon();
         }
         parent::_init();
     }
@@ -32,19 +32,19 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
             $select = $this->select($select);
         }
         if (count($select->getParts()) != 1) {
-            throw new Vps_Exception("only whereId in select allowed");
+            throw new Kwf_Exception("only whereId in select allowed");
         }
-        if ($select->getPart(Vps_Model_Select::WHERE_ID)) {
-            $BrowseNodeId = $select->getPart(Vps_Model_Select::WHERE_ID);
-        } else if ($w = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
+        if ($select->getPart(Kwf_Model_Select::WHERE_ID)) {
+            $BrowseNodeId = $select->getPart(Kwf_Model_Select::WHERE_ID);
+        } else if ($w = $select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
             foreach ($w as $f=>$i) {
                 if ($f != $this->getPrimaryKey()) {
-                    throw new Vps_Exception("only whereEquals with primaryKey in select allowed");
+                    throw new Kwf_Exception("only whereEquals with primaryKey in select allowed");
                 }
                 $BrowseNodeId = $i;
             }
         } else {
-            throw new Vps_Exception("only whereEquals or whereId in select allowed");
+            throw new Kwf_Exception("only whereEquals or whereId in select allowed");
         }
         if (!isset($this->_rows[$BrowseNodeId])) {
             $result = $this->_amazon->browseNodeLookup($BrowseNodeId);
@@ -58,7 +58,7 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     public function getPrimaryKey()
@@ -73,7 +73,7 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
     public function transformColumnName($name)
     {

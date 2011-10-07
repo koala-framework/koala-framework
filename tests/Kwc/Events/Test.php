@@ -1,13 +1,13 @@
 <?php
-// dient zB auch dem Vpc_Basic_LinkTagEvent test
+// dient zB auch dem Kwc_Basic_LinkTagEvent test
 /**
- * @group Vpc_Events
+ * @group Kwc_Events
  */
-class Vpc_Events_Test extends Vpc_TestAbstract
+class Kwc_Events_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Events_Root');
+        parent::setUp('Kwc_Events_Root');
         $this->_root->setFilename(null);
     }
 

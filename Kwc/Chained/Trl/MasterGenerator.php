@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Trl_MasterGenerator extends Vpc_Chained_Abstract_MasterGenerator
+class Kwc_Chained_Trl_MasterGenerator extends Kwc_Chained_Abstract_MasterGenerator
 {
     private $_languageRow = null;
 
@@ -13,7 +13,7 @@ class Vpc_Chained_Trl_MasterGenerator extends Vpc_Chained_Abstract_MasterGenerat
     private function _getLanguageRow()
     {
         if (!$this->_languageRow) {
-            $s = new Vps_Model_Select();
+            $s = new Kwf_Model_Select();
             $s->whereEquals('master', 1);
             $this->_languageRow = $this->_getModel()->getRow($s);
         }

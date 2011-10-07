@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Basic_LinkTagExtern
+ * @group Kwc_Basic_LinkTagExtern
  **/
-class Vpc_Basic_LinkTagExtern_Test extends Vpc_TestAbstract
+class Kwc_Basic_LinkTagExtern_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_LinkTagExtern_Root');
+        parent::setUp('Kwc_Basic_LinkTagExtern_Root');
     }
 
     public function testUrlAndRel()

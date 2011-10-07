@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Component_PagesController
+class Kwc_Basic_LinkTag_Intern_PagesController extends Kwf_Controller_Action_Component_PagesController
 {
     protected function _isAllowedComponent()
     {
@@ -10,7 +10,7 @@ class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Com
 
     public function init()
     {
-        $this->_pc = Vps_PageCollection_TreeBase::getInstance(false);
+        $this->_pc = Kwf_PageCollection_TreeBase::getInstance(false);
         parent::init();
     }
 
@@ -77,7 +77,7 @@ class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Com
             $data['children'] = array();
             $data['expanded'] = true;
         }
-        $data['uiProvider'] = 'Vps.Component.PagesNode';
+        $data['uiProvider'] = 'Kwf.Component.PagesNode';
         return $data;
     }
     */

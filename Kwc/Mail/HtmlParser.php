@@ -1,5 +1,5 @@
 <?php
-class Vpc_Mail_HtmlParser
+class Kwc_Mail_HtmlParser
 {
     //aktueller zustand von parser währen des parsens
     private $_parser;
@@ -35,7 +35,7 @@ class Vpc_Mail_HtmlParser
         $tag = $stack[count($stack)-1]['tag'];
         $class = $stack[count($stack)-1]['class'];
         if (isset($style['tag'])) {
-            if (isset($style['selector'])) throw new Vps_Exception("don't use tag AND selector");
+            if (isset($style['selector'])) throw new Kwf_Exception("don't use tag AND selector");
             return ($style['tag'] == '*' || $style['tag'] == $tag) && (!isset($style['class']) || $class == $style['class']);
         } else if (isset($style['selector'])) {
             $selectors = explode(' ', $style['selector']); //css-artiger selector
@@ -55,7 +55,7 @@ class Vpc_Mail_HtmlParser
             }
             return true;
         }
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     protected function startElement($parser, $tag, $attributes)
@@ -169,7 +169,7 @@ class Vpc_Mail_HtmlParser
             // macht aber normal weiter. wenns zu oft vorkommt, evtl. exception
             // entfernen und ignorieren, oder was andres überlegen :-)
             $errorCode = xml_get_error_code($this->_parser);
-            $ex = new Vps_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode));
+            $ex = new Kwf_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode));
             $ex->logOrThrow();
         }
 

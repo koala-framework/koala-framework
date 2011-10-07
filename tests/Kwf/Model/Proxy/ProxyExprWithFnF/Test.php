@@ -3,14 +3,14 @@
  * @group Model
  * @group Model_ProxyExprWithFnF
  */
-class Vps_Model_Proxy_ProxyExprWithFnF_Test extends Vps_Test_TestCase
+class Kwf_Model_Proxy_ProxyExprWithFnF_Test extends Kwf_Test_TestCase
 {
     public function testIt()
     {
-        $model = new Vps_Model_Proxy(array(
-            'proxyModel' => new Vps_Model_FnF(),
+        $model = new Kwf_Model_Proxy(array(
+            'proxyModel' => new Kwf_Model_FnF(),
             'exprs' => array(
-                'foo' => new Vps_Model_Select_Expr_String('bar')
+                'foo' => new Kwf_Model_Select_Expr_String('bar')
             )
         ));
         $row = $model->createRow();

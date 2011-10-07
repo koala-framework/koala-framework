@@ -1,9 +1,9 @@
 <?php
-abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serializable
+abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serializable
 {
     private $_skipFilters = false; //für saveSkipFilters
     /**
-     * @var Vps_Model_Abstract
+     * @var Kwf_Model_Abstract
      **/
     protected $_model;
     private $_internalId;
@@ -31,13 +31,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
         $this->_init();
 
-        //Vps_Benchmark::count('Model_Row', get_class($this->_model).' '.$this->{$this->_model->getPrimaryKey()});
+        //Kwf_Benchmark::count('Model_Row', get_class($this->_model).' '.$this->{$this->_model->getPrimaryKey()});
     }
 
     public function serialize()
     {
-        if (Vps_Model_Abstract::getInstance(get_class($this->getModel())) !== $this->getModel()) {
-            throw new Vps_Exception("You can only serialize rows of models that where created with Vps_Model_Abstract::getInstance()");
+        if (Kwf_Model_Abstract::getInstance(get_class($this->getModel())) !== $this->getModel()) {
+            throw new Kwf_Exception("You can only serialize rows of models that where created with Kwf_Model_Abstract::getInstance()");
         }
         $data = array(
             'model' => get_class($this->getModel()),
@@ -50,7 +50,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     {
         $data = unserialize($str);
         $this->_siblingRows = $data['siblingRows'];
-        $this->_model = Vps_Model_Abstract::getInstance($data['model']);
+        $this->_model = Kwf_Model_Abstract::getInstance($data['model']);
         $this->_internalId = self::$_internalIdCounter++;
     }
 
@@ -80,7 +80,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         if (!isset($this->_siblingRows)) {
             $this->_siblingRows = array();
             foreach ($this->_model->getSiblingModels() as $k=>$m) {
-                if ($m instanceof Vps_Model_SubModel_Interface) {
+                if ($m instanceof Kwf_Model_SubModel_Interface) {
                     $r = $m->getRowBySiblingRow($this);
                 } else {
                     $ref = $m->getReferenceByModelClass(get_class($this->_model), $k);
@@ -112,7 +112,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     public function __unset($name)
     {
         if (in_array($name, $this->_model->getExprColumns())) {
-            throw new Vps_Exception("Expr Columns are read only");
+            throw new Kwf_Exception("Expr Columns are read only");
         }
         foreach ($this->_getSiblingRows() as $r) {
             if ($r->hasColumn($name)) {
@@ -120,7 +120,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 return;
             }
         }
-        throw new Vps_Exception("Invalid column '$name'");
+        throw new Kwf_Exception("Invalid column '$name'");
     }
 
     public function __get($name)
@@ -136,13 +136,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 return $r->$name;
             }
         }
-        throw new Vps_Exception("Invalid column '$name'");
+        throw new Kwf_Exception("Invalid column '$name'");
     }
 
     public function __set($name, $value)
     {
         if (in_array($name, $this->_model->getExprColumns())) {
-            throw new Vps_Exception("Expr Columns are read only");
+            throw new Kwf_Exception("Expr Columns are read only");
         }
         if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             foreach ($this->_getSiblingRows() as $r) {
@@ -151,7 +151,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                     return;
                 }
             }
-            throw new Vps_Exception("Invalid column '$name'");
+            throw new Kwf_Exception("Invalid column '$name'");
         }
     }
 
@@ -159,7 +159,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     {
         if ($name == $this->_getPrimaryKey()) {
             foreach ($this->_getSiblingRows() as $k=>$r) {
-                if (!$r->getModel() instanceof Vps_Model_SubModel_Interface) {
+                if (!$r->getModel() instanceof Kwf_Model_SubModel_Interface) {
                     $ref = $r->getModel()->getReferenceByModelClass(get_class($this->_model), $k);
                     $r->{$ref['column']} = $value;
                 }
@@ -254,7 +254,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     public function save()
     {
         foreach ($this->_getSiblingRowsForSave() as $k=>$r) {
-            if (!$r->getModel() instanceof Vps_Model_SubModel_Interface) {
+            if (!$r->getModel() instanceof Kwf_Model_SubModel_Interface) {
                 $ref = $r->getModel()->getReferenceByModelClass(get_class($this->_model), $k);
                 if (!$r->{$ref['column']}) {
                     $r->{$ref['column']} = $this->{$this->_getPrimaryKey()};
@@ -285,7 +285,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function getChildRows($rule, $select = array())
     {
-        if ($rule instanceof Vps_Model_Abstract) {
+        if ($rule instanceof Kwf_Model_Abstract) {
             $m = $rule;
             $dependentOf = $this->_model;
         } else {
@@ -294,10 +294,10 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             $dependentOf = $dependent['dependentOf'];
         }
 
-        if ($m instanceof Vps_Model_RowsSubModel_Interface) {
+        if ($m instanceof Kwf_Model_RowsSubModel_Interface) {
             $ret = $m->getRowsByParentRow($this, $select);
         } else {
-            if (!$select instanceof Vps_Model_Select) {
+            if (!$select instanceof Kwf_Model_Select) {
                 $select = $m->select($select);
             } else {
                 $select = clone $select; //nicht select objekt ändern
@@ -318,13 +318,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function createChildRow($rule, array $data = array())
     {
-        if ($rule instanceof Vps_Model_Abstract) {
+        if ($rule instanceof Kwf_Model_Abstract) {
             $m = $rule;
         } else {
             $m = $this->_model->getDependentModel($rule);
         }
 
-        if ($m instanceof Vps_Model_RowsSubModel_Interface) {
+        if ($m instanceof Kwf_Model_RowsSubModel_Interface) {
             $ret = $m->createRowByParentRow($this, $data);
         } else {
             $ret = $m->createRow($data);
@@ -338,23 +338,23 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     public function getParentRow($rule)
     {
         $ref = $this->_model->getReference($rule);
-        if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
-            if (!($this instanceof  Vps_Model_RowsSubModel_Row_Interface)) {
-                throw new Vps_Exception("row '".get_class($this)."' must implement Vps_Model_RowsSubModel_Row_Interface");
+        if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+            if (!($this instanceof  Kwf_Model_RowsSubModel_Row_Interface)) {
+                throw new Kwf_Exception("row '".get_class($this)."' must implement Kwf_Model_RowsSubModel_Row_Interface");
             }
             return $this->getSubModelParentRow();
         }
         if (!isset($ref['column'])) {
-            throw new Vps_Exception("column for reference '$rule' not set");
+            throw new Kwf_Exception("column for reference '$rule' not set");
         }
         $id = $this->{$ref['column']};
         if (!$id) return null;
         if (isset($ref['refModelClass'])) {
-            $refModel = Vps_Model_Abstract::getInstance($ref['refModelClass']);
+            $refModel = Kwf_Model_Abstract::getInstance($ref['refModelClass']);
         } else if (isset($ref['refModel'])) {
             $refModel = $ref['refModel'];
         } else {
-            throw new Vps_Exception("refModel or refModelClass for reference '$rule' not set");
+            throw new Kwf_Exception("refModel or refModelClass for reference '$rule' not set");
         }
         return $refModel->getRow($id);
     }
@@ -366,7 +366,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             if (method_exists($this, '__toString')) {
                 $i .= " (".$this->__toString().")\n";
             }
-        } catch (Vps_Exception $e) {}
+        } catch (Kwf_Exception $e) {}
         $ret = print_r($this->toArray(), true);
         $ret = preg_replace('#^Array#', $i, $ret);
         $ret .= "Model: ".get_class($this->getModel());
@@ -380,7 +380,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         if ($field && isset($this->$field)) {
             return $this->$field;
         }
-        throw new Vps_Exception('Either override __toString() or define $_toStringField in Model '.get_class($this->getModel()).'');
+        throw new Kwf_Exception('Either override __toString() or define $_toStringField in Model '.get_class($this->getModel()).'');
     }
 
     /**
@@ -399,7 +399,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         foreach ($this->_childRows as $row) {
             if ($row->_isDeleted) continue;
             //if (method_exists($row->getModel(), 'createRowByParentRow')) {
-            if ($row->getModel() instanceof Vps_Model_RowsSubModel_Interface) {
+            if ($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface) {
                 //FieldRows müssen *vor* der row gespeichert werden, damit das data Feld die korrekten Werte hat
                 $row->save();
             }
@@ -409,14 +409,14 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _callObserver($fn)
     {
-        Vps_Component_ModelObserver::getInstance()->add($fn, $this);
+        Kwf_Component_ModelObserver::getInstance()->add($fn, $this);
     }
 
     protected function _afterSave()
     {
         foreach ($this->_childRows as $row) {
             if ($row->_isDeleted) continue;
-            if (!($row->getModel() instanceof Vps_Model_RowsSubModel_Interface)) {
+            if (!($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface)) {
                 if (!$row->{$row->_getPrimaryKey()}) {
                     //Tabellen Relationen müssen *nach* der row gespeichert werden,
                     //da beim hinzufügen die id noch nicht verfügbar ist
@@ -445,7 +445,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
         $called = array();
         foreach ($this->getModel()->getReferences() as $refName) {
-            if ($this->getModel()->getReference($refName) === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+            if ($this->getModel()->getReference($refName) === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                 continue;
             }
             $m = $this->getModel()->getReferencedModel($refName);
@@ -479,7 +479,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     {
         $filters = $this->getModel()->getFilters();
         foreach($filters as $k=>$f) {
-            if ($f instanceof Vps_Filter_Row_Abstract) {
+            if ($f instanceof Kwf_Filter_Row_Abstract) {
                 $f->onDeleteRow($this);
             }
         }
@@ -499,7 +499,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
         $filters = $this->getModel()->getFilters();
         foreach($filters as $k=>$f) {
-            if ($f instanceof Vps_Filter_Row_Abstract) {
+            if ($f instanceof Kwf_Filter_Row_Abstract) {
                 if ($f->skipFilter($this, $k)) continue;
                 if ($f->filterAfterSave() != $filterAfterSave) continue;
                 $this->$k = $f->filter($this);

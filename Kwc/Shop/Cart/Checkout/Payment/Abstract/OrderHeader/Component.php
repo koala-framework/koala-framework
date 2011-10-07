@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component extends Vpc_Abstract
+class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -14,15 +14,15 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component extends Vpc_
         $ret['order'] = $this->_getOrder();
         $ret['paymentTypeText'] = null;
         $c = $this->getData()->parent->componentClass;
-        if (!is_instance_of($c, 'Vpc_Shop_Cart_Checkout_Payment_None_Component')) {
-            $ret['paymentTypeText'] = Vpc_Abstract::getSetting($c, 'componentName');
+        if (!is_instance_of($c, 'Kwc_Shop_Cart_Checkout_Payment_None_Component')) {
+            $ret['paymentTypeText'] = Kwc_Abstract::getSetting($c, 'componentName');
         }
         return $ret;
     }
 
     protected function _getOrder()
     {
-        return Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+        return Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
     }
 }

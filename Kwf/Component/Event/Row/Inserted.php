@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_Event_Row_Inserted extends Vps_Component_Event_Row_Abstract
+class Kwf_Component_Event_Row_Inserted extends Kwf_Component_Event_Row_Abstract
 {
 }

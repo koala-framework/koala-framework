@@ -1,6 +1,6 @@
 <?php
 /**
- * @group Vps_Component_Acl
+ * @group Kwf_Component_Acl
  *
  * Special-Komponente (die erlaubt ist) liegt unter
  * - Root [Component]
@@ -11,22 +11,22 @@
  *        - PageDetail [Page] (erzeugt von Generator_Static; showInPageTreeAdmin=false)
  *          -> Special [Component]
  */
-class Vps_Component_Acl_AllowedComponents_Test extends Vpc_TestAbstract
+class Kwf_Component_Acl_AllowedComponents_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Acl_AllowedComponents_Root');
+        parent::setUp('Kwf_Component_Acl_AllowedComponents_Root');
 
-        $acl = new Vps_Acl();
+        $acl = new Kwf_Acl();
         $this->_acl = $acl->getComponentAcl();
         $acl->addRole(new Zend_Acl_Role('special'));
-        $this->_acl->allowComponent('special', 'Vps_Component_Acl_AllowedComponents_Special');
+        $this->_acl->allowComponent('special', 'Kwf_Component_Acl_AllowedComponents_Special');
     }
 
     public function testGetAllSpecial()
     {
-        $cmps = Vps_Component_Data_Root::getInstance()->getRecursiveChildComponents(array(
-            'componentClass' => 'Vps_Component_Acl_AllowedComponents_Special',
+        $cmps = Kwf_Component_Data_Root::getInstance()->getRecursiveChildComponents(array(
+            'componentClass' => 'Kwf_Component_Acl_AllowedComponents_Special',
         ), array());
         $this->assertEquals(2, count($cmps));
     }

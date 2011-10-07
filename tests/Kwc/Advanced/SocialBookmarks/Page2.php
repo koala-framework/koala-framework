@@ -1,4 +1,4 @@
 <?php
-class Vpc_Advanced_SocialBookmarks_Page2 extends Vpc_Basic_Empty_Component
+class Kwc_Advanced_SocialBookmarks_Page2 extends Kwc_Basic_Empty_Component
 {
 }

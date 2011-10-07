@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData extends Vps_Data_Abstract
+class Kwc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData extends Kwf_Data_Abstract
 {
     private $_componentId;
     public function __construct($componentId)
@@ -9,19 +9,19 @@ class Vpc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData extends Vps
     public function load($row)
     {
         $pk = $row->getModel()->getPrimaryKey();
-        $url = Vps_Media::getUrl(get_class($row->getModel()), $this->_componentId.'_'.$row->$pk, 'File', $row->getParentRow('File'));
-        return '<a class="vpcAdvancedDownloadsTreeLink" href="'.$url.'" target="_blank">'.$row->text.'</a>';
+        $url = Kwf_Media::getUrl(get_class($row->getModel()), $this->_componentId.'_'.$row->$pk, 'File', $row->getParentRow('File'));
+        return '<a class="kwcAdvancedDownloadsTreeLink" href="'.$url.'" target="_blank">'.$row->text.'</a>';
     }
 }
 
-class Vpc_Advanced_DownloadsTree_ViewDownloadsController extends Vps_Controller_Action_Auto_Grid
+class Kwc_Advanced_DownloadsTree_ViewDownloadsController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array();
     protected $_defaultOrder = array('field'=>'date', 'direction'=>'DESC');
 
     public function preDispatch()
     {
-        $this->_modelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'downloadsModel');
+        $this->_modelName = Kwc_Abstract::getSetting($this->_getParam('class'), 'downloadsModel');
         parent::preDispatch();
     }
 
@@ -29,15 +29,15 @@ class Vpc_Advanced_DownloadsTree_ViewDownloadsController extends Vps_Controller_
     {
         parent::_initColumns();
 
-        $this->_columns->add(new Vps_Grid_Column('type', trlVps('Typ'), 30))
-            ->setData(new Vpc_Advanced_DownloadsTree_Data_Fileicon())
+        $this->_columns->add(new Kwf_Grid_Column('type', trlKwf('Typ'), 30))
+            ->setData(new Kwc_Advanced_DownloadsTree_Data_Fileicon())
             ->setRenderer('image');
-        $this->_columns->add(new Vps_Grid_Column('text', trlVps('Document'), 320))
-            ->setData(new Vpc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData($this->_getParam('componentId')));
-        $this->_columns->add(new Vps_Grid_Column('filesize', trlVps('Size'), 60))
-            ->setData(new Vpc_Advanced_DownloadsTree_Data_Filesize())
+        $this->_columns->add(new Kwf_Grid_Column('text', trlKwf('Document'), 320))
+            ->setData(new Kwc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData($this->_getParam('componentId')));
+        $this->_columns->add(new Kwf_Grid_Column('filesize', trlKwf('Size'), 60))
+            ->setData(new Kwc_Advanced_DownloadsTree_Data_Filesize())
             ->setRenderer('fileSize');
-        $this->_columns->add(new Vps_Grid_Column_Date('date', trlVps('Date')));
+        $this->_columns->add(new Kwf_Grid_Column_Date('date', trlKwf('Date')));
     }
 
     protected function _getSelect()
@@ -63,10 +63,10 @@ class Vpc_Advanced_DownloadsTree_ViewDownloadsController extends Vps_Controller_
 
     protected function _isAllowedComponent()
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'));
         while($c) {
-            foreach (Vpc_Abstract::getSetting($c->componentClass, 'plugins') as $p) {
-                if (is_instance_of($p, 'Vps_Component_Plugin_Interface_Login')) {
+            foreach (Kwc_Abstract::getSetting($c->componentClass, 'plugins') as $p) {
+                if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_Login')) {
                     $p = new $p($c->componentId);
                     if (!$p->isLoggedIn()) {
                         return false;

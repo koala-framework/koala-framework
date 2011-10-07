@@ -1,6 +1,6 @@
 <?php
 
-class Vps_Auth extends Zend_Auth
+class Kwf_Auth extends Zend_Auth
 {
 
     // Kopiert von Zend_Auth und abgeändert
@@ -11,7 +11,7 @@ class Vps_Auth extends Zend_Auth
 
             // automatisches einloggen
             $autologin = Zend_Registry::get('config')->autologin;
-            if ($autologin && Vps_Setup::hasDb()) {
+            if ($autologin && Kwf_Setup::hasDb()) {
                 $storage = self::$_instance->getStorage();
                 $loginData = $storage->read();
 
@@ -21,7 +21,7 @@ class Vps_Auth extends Zend_Auth
                     $r = $userModel->getRow($userModel->select()->whereEquals('email', $autologin));
                     if (!$r) {
                         $msg = "Autologin email '$autologin' does not exists";
-                        throw new Vps_Exception("autologin failed: $msg");
+                        throw new Kwf_Exception("autologin failed: $msg");
                     }
 
                     $loginData['userId'] = $r->id;
@@ -36,7 +36,7 @@ class Vps_Auth extends Zend_Auth
     public function clearIdentity()
     {
         $ret = parent::clearIdentity();
-        $userModel = Vps_Registry::get('userModel');
+        $userModel = Kwf_Registry::get('userModel');
         if ($userModel) $userModel->clearAuthedUser();
         return $ret;
     }

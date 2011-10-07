@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_InheritNotFromPage_Page2 extends Vpc_Abstract
+class Kwf_Component_Generator_InheritNotFromPage_Page2 extends Kwc_Abstract
 {
     public static function getSettings()
     {

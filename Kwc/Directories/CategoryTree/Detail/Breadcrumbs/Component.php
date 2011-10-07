@@ -1,11 +1,11 @@
 <?php
-class Vpc_Directories_CategoryTree_Detail_Breadcrumbs_Component
-    extends Vpc_Abstract
+class Kwc_Directories_CategoryTree_Detail_Breadcrumbs_Component
+    extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['currentCategories'] = trlVps('Current category:');
+        $ret['placeholder']['currentCategories'] = trlKwf('Current category:');
         $ret['placeholder']['categoryTreeRootText'] = null;
         $ret['cssClass'] = 'webStandard';
         return $ret;

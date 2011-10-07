@@ -2,11 +2,11 @@
 /**
  * @group Generator_RecursiveTable
  */
-class Vps_Component_Generator_RecursiveTable_RecursiveTest extends Vpc_TestAbstract
+class Kwf_Component_Generator_RecursiveTable_RecursiveTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_RecursiveTable_Root');
+        parent::setUp('Kwf_Component_Generator_RecursiveTable_Root');
     }
 
     public function testPages()
@@ -19,7 +19,7 @@ class Vps_Component_Generator_RecursiveTable_RecursiveTest extends Vpc_TestAbstr
         $this->assertEquals(count($c), 1);
 
         $c = $this->_root->getChildComponent('-1');
-        Vps_Debug::enable();
+        Kwf_Debug::enable();
         $c = $c->getChildComponents(array('filename' => 'bar'));
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 'root-1_1');

@@ -1,13 +1,13 @@
 <?php
 /**
- * @group Vpc_Basic_Text
- * @group Vpc_Basic_Text_Model
+ * @group Kwc_Basic_Text
+ * @group Kwc_Basic_Text_Model
  */
-class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
+class Kwc_Basic_TextConvertLinkOnlyExtern_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_TextConvertLinkOnlyExtern_Root');
+        parent::setUp('Kwc_Basic_TextConvertLinkOnlyExtern_Root');
     }
 
     public function testCreatesLinkComponent()
@@ -22,7 +22,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1003-l1', current($cc)->componentId);
 
-        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
             ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003'));
         $this->assertEquals(1, count($rows));
@@ -30,7 +30,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
         $this->assertEquals('link', $row->component);
         $this->assertEquals('1', $row->nr);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_TextConvertLinkOnlyExtern_LinkExtern_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_TextConvertLinkOnlyExtern_LinkExtern_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003-l1'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -47,7 +47,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
 
         $html = $c->getData()->render();
 
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextConvertLinkOnlyExternTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextConvertLinkOnlyExternTestComponent\">\n".
                     "<p>\n  <a href=\"http://www.vivid-planet.com/\">foo</a>\n</p>".
                     "</div>", $html);
     }
@@ -62,7 +62,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
         $row->save();
 
 
-        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
             ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1005'));
         $this->assertEquals(1, count($rows));
@@ -70,7 +70,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
         $this->assertEquals('link', $row->component);
         $this->assertEquals('1', $row->nr);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_TextConvertLinkOnlyExtern_LinkExtern_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_TextConvertLinkOnlyExtern_LinkExtern_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1005-l1'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -86,7 +86,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextConvertLinkOnlyExternTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextConvertLinkOnlyExternTestComponent\">\n".
                     "<p>\n  <a href=\"http://vivid.com\">foo</a>\n</p>".
                     "</div>", $html);
     }

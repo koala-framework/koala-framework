@@ -1,5 +1,5 @@
 <?php
-class Vps_Grid_Pdf_Table extends Vps_Grid_Pdf_Abstract
+class Kwf_Grid_Pdf_Table extends Kwf_Grid_Pdf_Abstract
 {
 
     protected $_fields = array();
@@ -37,7 +37,7 @@ class Vps_Grid_Pdf_Table extends Vps_Grid_Pdf_Abstract
     {
         $xy = strtolower($xy);
         if ($xy != 'x' && $xy != 'y') {
-            throw new Vps_Exception("Only `x` or `y` allowed for first parameter "
+            throw new Kwf_Exception("Only `x` or `y` allowed for first parameter "
                                    ."of `setLineValue` (case-insensitive)");
         }
 

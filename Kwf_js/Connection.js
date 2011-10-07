@@ -1,4 +1,4 @@
-Vps.Connection = Ext.extend(Ext.data.Connection, {
+Kwf.Connection = Ext.extend(Ext.data.Connection, {
     _progressData    : { },
 
     /**
@@ -12,49 +12,49 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
 
-        Vps.requestSentSinceLastKeepAlive = true;
-        Vps.Connection.runningRequests++;
+        Kwf.requestSentSinceLastKeepAlive = true;
+        Kwf.Connection.runningRequests++;
 
         if (options.mask) {
             if (options.mask instanceof Ext.Element) {
-                options.mask.mask(options.maskText || trlVps('Loading...'));
+                options.mask.mask(options.maskText || trlKwf('Loading...'));
             } else {
-                if (Vps.Connection.masks == 0) {
+                if (Kwf.Connection.masks == 0) {
                     if (Ext.get('loading')) {
                         Ext.getBody().mask();
                     } else {
-                        Ext.getBody().mask(options.maskText || trlVps('Loading...'));
+                        Ext.getBody().mask(options.maskText || trlKwf('Loading...'));
                     }
                 }
-                Vps.Connection.masks++;
+                Kwf.Connection.masks++;
             }
         }
 
         if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9\-]+(\/|\?|)/)) {
-            options.vpsCallback = {
+            options.kwfCallback = {
                 success: options.success,
                 failure: options.failure,
                 callback: options.callback,
                 scope: options.scope
             };
-            options.success = this.vpsJsonSuccess;
-            options.failure = this.vpsJsonFailure;
-            options.callback = this.vpsCallback;
+            options.success = this.kwfJsonSuccess;
+            options.failure = this.kwfJsonFailure;
+            options.callback = this.kwfCallback;
             options.scope = this;
         } else {
-            options.vpsCallback = {
+            options.kwfCallback = {
                 success: options.success,
                 failure: options.failure,
                 callback: options.callback,
                 scope: options.scope
             };
-            options.success = this.vpsNoJsonSuccess;
-            options.failure = this.vpsNoJsonFailure;
-            options.callback = this.vpsCallback;
+            options.success = this.kwfNoJsonSuccess;
+            options.failure = this.kwfNoJsonFailure;
+            options.callback = this.kwfCallback;
             options.scope = this;
         }
         if (!options.params) options.params = {};
-        options.params.application_max_assets_mtime = Vps.application.maxAssetsMTime;
+        options.params.application_max_assets_mtime = Kwf.application.maxAssetsMTime;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
             //wird benötigt wenn fkt über mozrepl aufgerufen wird
@@ -71,7 +71,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             options.params.progressNum = progressNum;
         }
 
-        var ret = Vps.Connection.superclass.request.call(this, options);
+        var ret = Kwf.Connection.superclass.request.call(this, options);
 
         if (options.progress) {
             this._showProgress(options);
@@ -86,7 +86,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 
         this._progressData[progressNum] = {
             progressBar: this._createProgressDialog({
-                title: options.progressTitle || trlVps('Progress'),
+                title: options.progressTitle || trlKwf('Progress'),
                 transId: this.transId,
                 requestOptions: options,
                 showCancel: options.showCancel
@@ -101,7 +101,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     _doProgressStatusRequest: function(progressNum)
     {
         this.request({
-            url: '/vps/json-progress-status',
+            url: '/kwf/json-progress-status',
             params: { progressNum: progressNum },
             success: function(response, options, r) {
                 var progressNum = options.params.progressNum;
@@ -110,7 +110,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 if (typeof r.finished != 'undefined') {
                     if (r.finished) {
                         this._progressData[progressNum].progressBar.updateProgress(
-                            1, '100%', trlVps('Finished')
+                            1, '100%', trlKwf('Finished')
                         );
                         return;
                     }
@@ -138,7 +138,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             animate: true
         });
         cfg = Ext.applyIf(cfg, {
-            title: trlVps('Progress'),
+            title: trlKwf('Progress'),
             autoCreate : true,
             resizable:false,
             constrain:true,
@@ -158,7 +158,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 
         if (typeof cfg.showCancel == 'undefined' || cfg.showCancel) {
             dlg.addButton(
-                { text: trlVps('Cancel') },
+                { text: trlKwf('Cancel') },
                 (function(dialog) {
                     Ext.Ajax.abort(dialog.transId);
 
@@ -166,8 +166,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                         dialog.transId, null, true
                     );
                     Ext.callback(
-                        dialog.requestOptions.vpsCallback.failure,
-                        dialog.requestOptions.vpsCallback.scope,
+                        dialog.requestOptions.kwfCallback.failure,
+                        dialog.requestOptions.kwfCallback.scope,
                         [responseObject, dialog.requestOptions]
                     );
                     dialog.requestOptions.callback.call(
@@ -183,9 +183,9 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         dlg.render(document.body);
         dlg.myEls = { };
         dlg.myEls.bodyEl = dlg.body.createChild({
-            html:'<div class="vps-progress-content"><span class="vps-progress-text"></span><br /></div>'
+            html:'<div class="kwf-progress-content"><span class="kwf-progress-text"></span><br /></div>'
         });
-        dlg.myEls.bodyEl.addClass('vps-progress-window');
+        dlg.myEls.bodyEl.addClass('kwf-progress-window');
         dlg.myEls.msgEl = Ext.get(dlg.myEls.bodyEl.dom.childNodes[0].firstChild);
 
         dlg.progressBar = new Ext.ProgressBar({
@@ -206,17 +206,17 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     },
 
     repeatRequest: function(options) {
-        Vps.Connection.runningRequests++;
-        delete options.vpsIsSuccess;
-        Vps.Connection.superclass.request.call(this, options);
+        Kwf.Connection.runningRequests++;
+        delete options.kwfIsSuccess;
+        Kwf.Connection.superclass.request.call(this, options);
         if (options.progress) {
             this._showProgress(options);
         }
     },
-    vpsJsonSuccess: function(response, options)
+    kwfJsonSuccess: function(response, options)
     {
-        options.vpsIsSuccess = false;
-        options.vpsLogin = false;
+        options.kwfIsSuccess = false;
+        options.kwfLogin = false;
 
         var errorMsg = false;
 
@@ -236,14 +236,14 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             errorMsg = e.toString()+': <br />'+response.responseText;
             var errorMsgTitle = 'Javascript Parse Exception';
         }
-        if (Vps.Debug.querylog && r && r.requestNum) {
+        if (Kwf.Debug.querylog && r && r.requestNum) {
             var rm = location.protocol + '/'+'/' + location.host;
             var url = options.url;
             if (url.substr(0, rm.length) == rm) {
                 url = url.substr(rm.length);
             }
             var data = [[new Date(), url, encParams, r.requestNum]];
-            Vps.Debug.requestsStore.loadData(data, true);
+            Kwf.Debug.requestsStore.loadData(data, true);
         }
         if (!errorMsg && r.exception) {
             var p;
@@ -264,9 +264,9 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 errorText = null;
             }
             if (options.ignoreErrors) {
-                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+                Ext.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
             } else {
-                Vps.handleError({
+                Kwf.handleError({
                     url: options.url,
                     message: errorMsg,
                     title: errorMsgTitle,
@@ -277,7 +277,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                         this.connection.repeatRequest(this.options);
                     },
                     abort: function() {
-                        Ext.callback(this.options.vpsCallback.failure, this.options.vpsCallback.scope, [this.response, this.options]);
+                        Ext.callback(this.options.kwfCallback.failure, this.options.kwfCallback.scope, [this.response, this.options]);
                     },
                     scope: { connection: this, options: options, response: response }
                 });
@@ -289,7 +289,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             if (r.wrongversion && !options.ignoreErrors) {
                 var dlg = new Ext.Window({
                     autoCreate : true,
-                    title: trlVps('Error - wrong version'),
+                    title: trlKwf('Error - wrong version'),
                     resizable: false,
                     modal: true,
                     buttonAlign:"center",
@@ -297,18 +297,18 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     height:100,
                     plain:true,
                     closable: false,
-                    html: trlVps('Because of an application update the application has to be reloaded.'),
+                    html: trlKwf('Because of an application update the application has to be reloaded.'),
                     buttons: [{
-                        text: trlVps('OK'),
+                        text: trlKwf('OK'),
                         handler: function() {
                             location.reload();
                         },
                         scope: this
                     }, {
-                        text: trlVps('Ignore'),
+                        text: trlKwf('Ignore'),
                         handler: function() {
-                            Vps.application.maxAssetsMTime = r.maxAssetsMTime;
-                            options.params.application_max_assets_mtime = Vps.application.maxAssetsMTime;
+                            Kwf.application.maxAssetsMTime = r.maxAssetsMTime;
+                            options.params.application_max_assets_mtime = Kwf.application.maxAssetsMTime;
                             this.repeatRequest(options);
                             dlg.hide();
                         },
@@ -320,8 +320,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 return;
             }
             if (r.login && !options.ignoreErrors) {
-                options.vpsLogin = true;
-                var dlg = new Vps.User.Login.Dialog({
+                options.kwfLogin = true;
+                var dlg = new Kwf.User.Login.Dialog({
                     message: r.message,
                     success: function() {
                         //redo action...
@@ -335,49 +335,49 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             if (!options.ignoreErrors) {
                 if (r.error) {
-                    Ext.Msg.alert(trlVps('Error'), r.error);
+                    Ext.Msg.alert(trlKwf('Error'), r.error);
                 } else {
-                    Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
+                    Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
                 }
             }
-            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+            Ext.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
             return;
         }
-        options.vpsIsSuccess = true;
-        if (options.vpsCallback.success) {
-            options.vpsCallback.success.call(options.vpsCallback.scope, response, options, r);
+        options.kwfIsSuccess = true;
+        if (options.kwfCallback.success) {
+            options.kwfCallback.success.call(options.kwfCallback.scope, response, options, r);
         }
     },
-    vpsNoJsonSuccess: function(response, options)
+    kwfNoJsonSuccess: function(response, options)
     {
-        options.vpsIsSuccess = true;
-        if (options.vpsCallback.success) {
-            options.vpsCallback.success.call(options.vpsCallback.scope, response, options);
+        options.kwfIsSuccess = true;
+        if (options.kwfCallback.success) {
+            options.kwfCallback.success.call(options.kwfCallback.scope, response, options);
         }
     },
-    vpsNoJsonFailure: function(response, options)
+    kwfNoJsonFailure: function(response, options)
     {
-        options.vpsIsSuccess = false;
-        if (options.vpsCallback.failure) {
-            options.vpsCallback.failure.call(options.vpsCallback.scope, response, options);
+        options.kwfIsSuccess = false;
+        if (options.kwfCallback.failure) {
+            options.kwfCallback.failure.call(options.kwfCallback.scope, response, options);
         }
     },
-    vpsJsonFailure: function(response, options)
+    kwfJsonFailure: function(response, options)
     {
-        options.vpsIsSuccess = false;
+        options.kwfIsSuccess = false;
 
-        errorMsgTitle = trlVps('Error');
+        errorMsgTitle = trlKwf('Error');
         if (options.errorText) {
             errorText = options.errorText;
             errorMsg = options.errorText;
         } else {
-            errorMsg = trlVps("A connection problem occured.");
+            errorMsg = trlKwf("A connection problem occured.");
             errorText = null;
         }
         if (options.ignoreErrors) {
-            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+            Ext.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
         } else {
-            Vps.handleError({
+            Kwf.handleError({
                 url: options.url,
                 message: errorMsg,
                 title: errorMsgTitle,
@@ -388,25 +388,25 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     this.repeatRequest(options);
                 },
                 abort: function() {
-                    Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+                    Ext.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
                 },
                 scope: this
             });
         }
     },
 
-    vpsCallback: function(options, success, response)
+    kwfCallback: function(options, success, response)
     {
         //wenn login-fenster angezeigt wird keinen callback aufrufen - weil der request
         //wird ja erneut gesendet und da dann der callback aufgerufen.
-        if (options.vpsLogin) return;
+        if (options.kwfLogin) return;
 
         if (options.mask) {
             if (options.mask instanceof Ext.Element) {
                 options.mask.unmask();
             } else {
-                Vps.Connection.masks--;
-                if (Vps.Connection.masks == 0) {
+                Kwf.Connection.masks--;
+                if (Kwf.Connection.masks == 0) {
                     Ext.getBody().unmask();
                     if (Ext.get('loading')) {
                         Ext.get('loading').fadeOut({remove: true});
@@ -420,17 +420,17 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             delete this._progressData[options.params.progressNum];
         }
 
-        if(success && !options.vpsIsSuccess) {
+        if(success && !options.kwfIsSuccess) {
             success = false;
         }
-        Ext.callback(options.vpsCallback.callback, options.vpsCallback.scope, [options, success, response]);
-        Vps.Connection.runningRequests--;
+        Ext.callback(options.kwfCallback.callback, options.kwfCallback.scope, [options, success, response]);
+        Kwf.Connection.runningRequests--;
     }
 });
-Vps.Connection.masks = 0; //static var that hols number of masked requests
-Vps.Connection.runningRequests = 0;
+Kwf.Connection.masks = 0; //static var that hols number of masked requests
+Kwf.Connection.runningRequests = 0;
 
-Ext.Ajax = new Vps.Connection({
+Ext.Ajax = new Kwf.Connection({
     /**
      * The timeout in milliseconds to be used for requests. (defaults
      * to 30000)

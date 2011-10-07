@@ -1,4 +1,4 @@
 <?php
-class Vps_Loader_TestClass
+class Kwf_Loader_TestClass
 {
 }

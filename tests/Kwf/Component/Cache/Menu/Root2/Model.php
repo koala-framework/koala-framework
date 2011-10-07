@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Menu_Root2_Model extends Vpc_Root_Category_GeneratorModel
+class Kwf_Component_Cache_Menu_Root2_Model extends Kwc_Root_Category_GeneratorModel
 {
     public function __construct()
     {
@@ -13,7 +13,7 @@ class Vps_Component_Cache_Menu_Root2_Model extends Vpc_Root_Category_GeneratorMo
             array('id'=>4, 'pos'=>2, 'visible'=>true, 'name'=>'f4', 'filename' => 'f4',
                   'parent_id'=>'root', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'custom_filename' => null),
         ));
-        $config = array('proxyModel' => new Vps_Model_FnF($config));
+        $config = array('proxyModel' => new Kwf_Model_FnF($config));
         parent::__construct($config);
     }
 

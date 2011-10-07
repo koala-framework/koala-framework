@@ -1,11 +1,11 @@
 <?php
-class Vps_Validate_NotNegative extends Zend_Validate_Abstract
+class Kwf_Validate_NotNegative extends Zend_Validate_Abstract
 {
     const NEGATIVE = 'negative';
 
     public function __construct()
     {
-        $this->_messageTemplates[self::NEGATIVE] = trlVps("Must not be negative");
+        $this->_messageTemplates[self::NEGATIVE] = trlKwf("Must not be negative");
     }
 
     public function isValid($value)

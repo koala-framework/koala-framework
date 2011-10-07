@@ -1,19 +1,19 @@
 <?php
-class Vpc_Shop_Cart_Orders extends Vps_Model_Db
+class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
 {
-    protected $_table = 'vpc_shop_orders';
-    protected $_rowClass = 'Vpc_Shop_Cart_Order';
-    protected $_siblingModels = array('Vpc_Shop_Cart_Checkout_Model');
-    protected $_dependentModels = array('Products'=>'Vpc_Shop_Cart_OrderProducts');
+    protected $_table = 'kwc_shop_orders';
+    protected $_rowClass = 'Kwc_Shop_Cart_Order';
+    protected $_siblingModels = array('Kwc_Shop_Cart_Checkout_Model');
+    protected $_dependentModels = array('Products'=>'Kwc_Shop_Cart_OrderProducts');
     private static $_cartOrderId; //order-id falls sie in der session schon ge-resetted wurde
 
     protected function _init()
     {
         parent::_init();
-        $this->_exprs['order_number'] = new Vps_Model_Select_Expr_SumFields(
+        $this->_exprs['order_number'] = new Kwf_Model_Select_Expr_SumFields(
             array('number', 11000)
         );
-        $this->_exprs['customer_number'] = new Vps_Model_Select_Expr_SumFields(
+        $this->_exprs['customer_number'] = new Kwf_Model_Select_Expr_SumFields(
             array('number', 1100)
         );
     }
@@ -24,7 +24,7 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
         if (!$ret->status) {
             $ret->status = 'cart';
             $ret->save();
-            $session = new Zend_Session_Namespace('vpcShopCart');
+            $session = new Zend_Session_Namespace('kwcShopCart');
             $session->orderId = $ret->id;
         }
         return $ret;
@@ -52,14 +52,14 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
         if (isset(self::$_cartOrderId)) {
             return self::$_cartOrderId;
         }
-        $session = new Zend_Session_Namespace('vpcShopCart');
+        $session = new Zend_Session_Namespace('kwcShopCart');
         return $session->orderId;
     }
 
     public static function setCartOrderId($cartOrderId)
     {
         self::$_cartOrderId = $cartOrderId;
-        $session = new Zend_Session_Namespace('vpcShopCart');
+        $session = new Zend_Session_Namespace('kwcShopCart');
         $session->orderId = $cartOrderId;
     }
 
@@ -70,7 +70,7 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
 
     public static function resetCartOrderId()
     {
-        $session = new Zend_Session_Namespace('vpcShopCart');
+        $session = new Zend_Session_Namespace('kwcShopCart');
         
         //merken damit wir noch auf die order zugreifen können
         if (!isset(self::$_cartOrderId)) {

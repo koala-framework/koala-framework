@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_DomainRoot_Model extends Vps_Model_Data_Abstract
+class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
 {
     private $_domains;
     protected $_columns = array('id', 'name', 'domain', 'component', 'pattern');
@@ -10,7 +10,7 @@ class Vpc_Root_DomainRoot_Model extends Vps_Model_Data_Abstract
         if (isset($config['domains'])) {
             $this->_domains = $config['domains'];
         } else {
-            $this->_domains = Vps_Registry::get('config')->vpc->domains->toArray();
+            $this->_domains = Kwf_Registry::get('config')->kwc->domains->toArray();
         }
         parent::__construct($config);
     }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_InheritContentWithVisible_Box_Child_Trl_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
+class Kwc_Trl_InheritContentWithVisible_Box_Child_Trl_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
 {
     protected function _getConfig()
     {

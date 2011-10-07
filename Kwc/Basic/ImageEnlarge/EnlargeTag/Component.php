@@ -1,22 +1,22 @@
 <?php
-class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Component
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Enlarge Image');
+        $ret['componentName'] = trlKwf('Enlarge Image');
         $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
         $ret['imageTitle'] = true;
-        $ret['dimensions'] = array(array('width'=>800, 'height'=>600, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
+        $ret['dimensions'] = array(array('width'=>800, 'height'=>600, 'scale'=>Kwf_Media_Image::SCALE_BESTFIT));
 
         $ret['generators']['imagePage'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'name' => trlVpsStatic('Image'),
-            'component' => 'Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component'
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'name' => trlKwfStatic('Image'),
+            'component' => 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component'
         );
 
-        $ret['assets']['files'][] = 'vps/Vpc/Basic/ImageEnlarge/EnlargeTag/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/Component.js';
         $ret['assets']['dep'][] = 'ExtElement';
         $ret['assets']['dep'][] = 'ExtConnection';
         $ret['assets']['dep'][] = 'ExtDomHelper';
@@ -31,7 +31,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     {
         parent::validateSettings($settings, $componentClass);
         if (isset($settings['showInactiveSwitchLinks'])) {
-            throw new Vps_Exception("'showInactiveSwitchLinks' setting got removed; style them using css");
+            throw new Kwf_Exception("'showInactiveSwitchLinks' setting got removed; style them using css");
         }
     }
 
@@ -53,12 +53,12 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         if ($this->_getSetting('fullSizeDownloadable')) {
             $data = $this->getImageData();
             if ($data && $data['filename']) {
-                $ret['fullSizeUrl'] = Vps_Media::getUrl($this->getData()->componentClass,
+                $ret['fullSizeUrl'] = Kwf_Media::getUrl($this->getData()->componentClass,
                     $this->getData()->componentId, 'original', $data['filename']);
             }
         }
 
-        if (Vpc_Abstract::getSetting($this->_getImageEnlargeComponentData()->componentClass, 'imageCaption')) {
+        if (Kwc_Abstract::getSetting($this->_getImageEnlargeComponentData()->componentClass, 'imageCaption')) {
             $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()->getRow()->image_caption;
         }
         return $ret;
@@ -72,7 +72,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     private function _getImageEnlargeComponentData()
     {
         $d = $this->getData();
-        while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Component')) {
+        while (!is_instance_of($d->componentClass, 'Kwc_Basic_ImageEnlarge_Component')) {
             $d = $d->parent;
         }
         return $d;
@@ -92,7 +92,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     public static function getMediaOutput($id, $type, $className)
     {
         if ($type == 'original') {
-            $data = Vps_Component_Data_Root::getInstance()
+            $data = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($id, array('limit'=>1, 'ignoreVisible' => true))
                 ->getComponent()->getImageData();
             if (!$data || !$data['file']) {

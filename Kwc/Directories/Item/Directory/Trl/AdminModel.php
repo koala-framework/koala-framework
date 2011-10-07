@@ -1,29 +1,29 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_AdminModel extends Vps_Model_Proxy
+class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
 {
-    protected $_rowClass = 'Vpc_Directories_Item_Directory_Trl_AdminModelRow';
-    protected $_rowsetClass = 'Vpc_Directories_Item_Directory_Trl_AdminModelRowset';
+    protected $_rowClass = 'Kwc_Directories_Item_Directory_Trl_AdminModelRow';
+    protected $_rowsetClass = 'Kwc_Directories_Item_Directory_Trl_AdminModelRowset';
     protected $_trlModel;
 
     public function __construct($config)
     {
-        if (isset($config['proxyModel'])) $config['proxyModel'] = Vps_Model_Abstract::getInstance($config['proxyModel']);
-        if (isset($config['trlModel'])) $this->_trlModel = Vps_Model_Abstract::getInstance($config['trlModel']);
+        if (isset($config['proxyModel'])) $config['proxyModel'] = Kwf_Model_Abstract::getInstance($config['proxyModel']);
+        if (isset($config['trlModel'])) $this->_trlModel = Kwf_Model_Abstract::getInstance($config['trlModel']);
         parent::__construct($config);
     }
 
     public function createRow(array $data = array())
     {
-        throw new Vps_Exception("Not possible");
+        throw new Kwf_Exception("Not possible");
     }
 
     protected function _getComponentId($select)
     {
         $componentId = null;
-        foreach ($select->getPart(Vps_Model_Select::WHERE_EQUALS) as $k=>$i) {
+        foreach ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) as $k=>$i) {
             if ($k == 'component_id') $componentId = $i;
         }
-        if (!$componentId) throw new Vps_Exception_NotYetImplemented();
+        if (!$componentId) throw new Kwf_Exception_NotYetImplemented();
         return $componentId;
     }
 
@@ -33,7 +33,7 @@ class Vpc_Directories_Item_Directory_Trl_AdminModel extends Vps_Model_Proxy
         $componentId = $this->_getComponentId($select);
 
         if ($componentId) {
-            $c = Vps_Component_Data_Root::getInstance()
+            $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
         }
@@ -53,7 +53,7 @@ class Vpc_Directories_Item_Directory_Trl_AdminModel extends Vps_Model_Proxy
         $componentId = $this->_getComponentId($select);
 
         if ($componentId) {
-            $c = Vps_Component_Data_Root::getInstance()
+            $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
         }

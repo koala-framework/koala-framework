@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Row_Item_Abstract extends Vps_Model_Row_Abstract
+class Kwf_Model_Row_Item_Abstract extends Kwf_Model_Row_Abstract
 {
     protected $_item;
 

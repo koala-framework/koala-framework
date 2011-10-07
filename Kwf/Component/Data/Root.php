@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Data_Root extends Vps_Component_Data
+class Kwf_Component_Data_Root extends Kwf_Component_Data
 {
     private static $_instance;
     private static $_rootComponentClass;
@@ -32,7 +32,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     }
 
     /**
-     * @return Vps_Component_Data_Root
+     * @return Kwf_Component_Data_Root
      */
     public static function getInstance()
     {
@@ -50,8 +50,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function getComponentClass()
     {
         if (is_null(self::$_rootComponentClass)) {
-            if (Vps_Config::getValue('vpc.rootComponent')) {
-                self::$_rootComponentClass = Vps_Config::getValue('vpc.rootComponent');
+            if (Kwf_Config::getValue('kwc.rootComponent')) {
+                self::$_rootComponentClass = Kwf_Config::getValue('kwc.rootComponent');
             } else {
                 self::$_rootComponentClass = false;
             }
@@ -68,42 +68,42 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function reset($resetCache = true)
     {
         self::$_instance = null;
-        Vps_Component_Generator_Abstract::clearInstances();
-        Vps_Component_Abstract::clearModelInstances();
-        if ($resetCache) Vps_Component_Abstract::resetSettingsCache();
+        Kwf_Component_Generator_Abstract::clearInstances();
+        Kwf_Component_Abstract::clearModelInstances();
+        if ($resetCache) Kwf_Component_Abstract::resetSettingsCache();
     }
 
     public function __get($var)
     {
         if ($var == 'filename') {
-            //hier ohne rawurlencode, ist bei tetss auf 'vps/vpctest/...' gesetzt
+            //hier ohne rawurlencode, ist bei tetss auf 'kwf/kwctest/...' gesetzt
             return $this->_filename;
         }
         return parent::__get($var);
     }
 
     /*
-     * @return Vps_Component_Data
+     * @return Kwf_Component_Data
      */
     public function getPageByUrl($url, $acceptLanguage, &$exactMatch = true)
     {
         $parsedUrl = parse_url($url);
         if (!isset($parsedUrl['path'])) return null;
         if (!isset($parsedUrl['host'])) {
-            throw new Vps_Exception("Host is missing in url '$url'");
+            throw new Kwf_Exception("Host is missing in url '$url'");
         }
         if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
         $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
         $cacheId = 'url-'.$cacheUrl;
-        if ($page = Vps_Cache_Simple::fetch($cacheId)) {
+        if ($page = Kwf_Cache_Simple::fetch($cacheId)) {
             $exactMatch = true;
-            $ret = Vps_Component_Data::vpsUnserialize($page);
+            $ret = Kwf_Component_Data::kwfUnserialize($page);
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
-            $urlPrefix = Vps_Config::getValue('vpc.urlPrefix');
+            $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
             if ($urlPrefix) {
                 if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
                     return null;
@@ -116,23 +116,23 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
                 if ($ret->isVisible()) {
-                    Vps_Cache_Simple::add($cacheId, $ret->vpsSerialize());
+                    Kwf_Cache_Simple::add($cacheId, $ret->kwfSerialize());
 
-                    Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                    Kwf_Component_Cache::getInstance()->getModel('url')->import(Kwf_Model_Abstract::FORMAT_ARRAY,
                         array(array(
                             'url' => $cacheUrl,
                             'page_id' => $ret->componentId
                         )), array('replace'=>true));
 
-                    $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
-                    $s = new Vps_Model_Select();
+                    $m = Kwf_Component_Cache::getInstance()->getModel('urlParents');
+                    $s = new Kwf_Model_Select();
                     $s->whereEquals('page_id', $ret->componentId);
                     $m->deleteRows($s);
 
                     $c = $ret;
                     while($c = $c->parent) {
                         if (isset($c->generator) && $c->generator->getGeneratorFlag('table')) {
-                            $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                            $m->import(Kwf_Model_Abstract::FORMAT_ARRAY,
                                 array(array(
                                     'page_id' => $ret->componentId,
                                     'parent_page_id' => $c->componentId
@@ -148,7 +148,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     }
 
     /**
-     * @return Vps_Component_Data
+     * @return Kwf_Component_Data
      */
     public function getComponentById($componentId, $select = array())
     {
@@ -157,25 +157,25 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else {
             $partTypes = $select->getPartTypes();
         }
-        if (!$partTypes || $partTypes == array(Vps_Component_Select::IGNORE_VISIBLE)) {
+        if (!$partTypes || $partTypes == array(Kwf_Component_Select::IGNORE_VISIBLE)) {
             if (isset($this->_dataCache[$componentId])) {
                 return $this->_dataCache[$componentId];
             }
             if (is_array($select)) {
-                if (isset($select[Vps_Component_Select::IGNORE_VISIBLE])) {
-                    $ignoreVisible = $select[Vps_Component_Select::IGNORE_VISIBLE];
+                if (isset($select[Kwf_Component_Select::IGNORE_VISIBLE])) {
+                    $ignoreVisible = $select[Kwf_Component_Select::IGNORE_VISIBLE];
                 } else {
                     $ignoreVisible = false;
                 }
             } else {
-                $ignoreVisible = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+                $ignoreVisible = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
             }
             if ($ignoreVisible && isset($this->_dataCacheIgnoreVisible[$componentId])) {
                 return $this->_dataCacheIgnoreVisible[$componentId];
             }
         }
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         } else {
             $select = clone $select;
         }
@@ -192,13 +192,13 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $found = true;
             } else {
                 if (is_array($select)) {
-                    if (isset($select[Vps_Component_Select::IGNORE_VISIBLE])) {
-                        $ignoreVisible = $select[Vps_Component_Select::IGNORE_VISIBLE];
+                    if (isset($select[Kwf_Component_Select::IGNORE_VISIBLE])) {
+                        $ignoreVisible = $select[Kwf_Component_Select::IGNORE_VISIBLE];
                     } else {
                         $ignoreVisible = false;
                     }
                 } else {
-                    $ignoreVisible = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+                    $ignoreVisible = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
                 }
                 if ($ignoreVisible && isset($this->_dataCacheIgnoreVisible[$id])) {
                     $ret = $this->_dataCacheIgnoreVisible[$id];
@@ -220,17 +220,17 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     $s = $select;
                 } else {
                     $s = array('id'=>$idPart);
-                    if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                    if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
                         //ignoreVisible doch mitnehmen damit wir unterkomponeten von unsichtbaren
                         //komponenten finden
-                        $s['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+                        $s['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
                     }
-                    if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                    if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
                         //ignoreVisible doch mitnehmen damit wir unterkomponeten von unsichtbaren
                         //komponenten finden
-                        $s['subroot'] = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                        $s['subroot'] = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
                     }
-                    $s = new Vps_Component_Select($s);
+                    $s = new Kwf_Component_Select($s);
                 }
 
                 if ($i == 0 && !$found) { // Muss eine Page sein
@@ -254,25 +254,25 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $cacheId = $this->componentClass . '_pageGenerators';
 
-        $generators = Vps_Cache_Simple::fetch($cacheId);
+        $generators = Kwf_Cache_Simple::fetch($cacheId);
         if (!$generators) {
             $generators = array();
-            foreach (Vpc_Abstract::getComponentClasses() as $class) {
-                foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+            foreach (Kwc_Abstract::getComponentClasses() as $class) {
+                foreach (Kwc_Abstract::getSetting($class, 'generators') as $key => $generator) {
                     if (!isset($generator['class'])) {
-                        throw new Vps_Exception("no generator class set for generator '$key' in component '$class'");
+                        throw new Kwf_Exception("no generator class set for generator '$key' in component '$class'");
                     }
-                    if (is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
+                    if (is_instance_of($generator['class'], 'Kwc_Root_Category_Generator')) {
                         $generators[] = array('class' => $class, 'key' => $key, 'generator' => $generator);
                     }
                 }
             }
-            Vps_Cache_Simple::add($cacheId, $generators);
+            Kwf_Cache_Simple::add($cacheId, $generators);
         }
 
         $this->_pageGenerators = array();
         foreach ($generators as $g) {
-            $this->_pageGenerators[] = Vps_Component_Generator_Abstract::getInstance(
+            $this->_pageGenerators[] = Kwf_Component_Generator_Abstract::getInstance(
                 $g['class'], $g['key'], $g['generator']
             );
         }
@@ -298,7 +298,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     }
 
     /**
-     * @return Vps_Component_Data
+     * @return Kwf_Component_Data
      */
     public function getComponentByDbId($dbId, $select = array())
     {
@@ -313,7 +313,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentsByDbId($dbId, $select = array())
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
 
         $cacheId = $dbId.$select->getHash();
@@ -328,25 +328,25 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
             }
 
-            if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
-                $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+            if ($select->hasPart(Kwf_Component_Select::LIMIT_COUNT)) {
+                $limitCount = $select->getPart(Kwf_Component_Select::LIMIT_COUNT);
             }
             $ret = array();
-            foreach (Vpc_Abstract::getComponentClasses() as $class) {
-                foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+            foreach (Kwc_Abstract::getComponentClasses() as $class) {
+                foreach (Kwc_Abstract::getSetting($class, 'generators') as $key => $generator) {
                     if (isset($generator['dbIdShortcut'])
                             && substr($dbId, 0, strlen($generator['dbIdShortcut'])) == $generator['dbIdShortcut']) {
                         $idParts = $this->_getIdParts(substr($dbId, strlen($generator['dbIdShortcut']) - 1));
-                        $generator = Vps_Component_Generator_Abstract::getInstance($class, $key);
+                        $generator = Kwf_Component_Generator_Abstract::getInstance($class, $key);
                         if (count($idParts) <= 1) {
                             $generatorSelect = clone $select;
                         } else {
-                            $generatorSelect = new Vps_Component_Select(); // Select erst bei letzten Part
-                            if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-                                $generatorSelect->ignoreVisible($select->getPart(Vps_Component_Select::IGNORE_VISIBLE));
+                            $generatorSelect = new Kwf_Component_Select(); // Select erst bei letzten Part
+                            if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
+                                $generatorSelect->ignoreVisible($select->getPart(Kwf_Component_Select::IGNORE_VISIBLE));
                             }
-                            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
-                                $generatorSelect->whereSubroot($select->getPart(Vps_Component_Select::WHERE_SUBROOT));
+                            if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
+                                $generatorSelect->whereSubroot($select->getPart(Kwf_Component_Select::WHERE_SUBROOT));
                             }
                         }
                         if (isset($limitCount)) {
@@ -375,14 +375,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentsByClass($class, $select = array())
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
         $cacheId = (is_array($class) ? implode(',', $class) : $class).$select->getHash();
         if (!isset($this->_componentsByClassCache[$cacheId])) {
 
-            $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
+            $lookingForChildClasses = Kwc_Abstract::getComponentClassesByParentClass($class);
             foreach ($lookingForChildClasses as $c) {
-                if (is_instance_of($c, 'Vpc_Root_Abstract')) {
+                if (is_instance_of($c, 'Kwc_Root_Abstract')) {
                     return array($this);
                 }
             }
@@ -396,7 +396,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentsBySameClass($lookingForChildClasses, $select = array())
     {
         if (!is_array($lookingForChildClasses) &&
-            is_instance_of($lookingForChildClasses, 'Vpc_Root_Abstract')
+            is_instance_of($lookingForChildClasses, 'Kwc_Root_Abstract')
         ) {
             return array($this);
         }
@@ -406,12 +406,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
 
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
         $select->whereComponentClasses($lookingForChildClasses);
 
-        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
-            $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+        if ($select->hasPart(Kwf_Component_Select::LIMIT_COUNT)) {
+            $limitCount = $select->getPart(Kwf_Component_Select::LIMIT_COUNT);
         }
 
         $ret = array();
@@ -431,16 +431,16 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
-        } else if (($generators = Vps_Cache_Simple::fetch($cacheId)) !== false) {
+        } else if (($generators = Kwf_Cache_Simple::fetch($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
-                $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
+                $ret[] = Kwf_Component_Generator_Abstract::getInstance($g[0], $g[1]);
             }
             $this->_generatorsForClassesCache[$cacheId] = $ret;
         } else {
             $generators = array();
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
+            foreach (Kwc_Abstract::getComponentClasses() as $c) {
+                foreach (Kwc_Abstract::getSetting($c, 'generators') as $key => $generator) {
                     if (is_array($generator['component'])) {
                         $childClasses = $generator['component'];
                     } else {
@@ -454,10 +454,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
             }
             $generators = array_values($generators);
-            Vps_Cache_Simple::add($cacheId, $generators);
+            Kwf_Cache_Simple::add($cacheId, $generators);
             $ret = array();
             foreach ($generators as $g) {
-                $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
+                $ret[] = Kwf_Component_Generator_Abstract::getInstance($g[0], $g[1]);
             }
             $this->_generatorsForClassesCache[$cacheId] = $ret;
         }
@@ -491,7 +491,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             foreach ($components as $c) {
                 $ids[] = $c->componentId;
             }
-            $e = new Vps_Exception('getComponentByXxx must not get more than one component but got these: ' . implode(', ', $ids));
+            $e = new Kwf_Exception('getComponentByXxx must not get more than one component but got these: ' . implode(', ', $ids));
             $e->logOrThrow();
         }
     }
@@ -499,7 +499,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     /**
      * @deprecated
      */
-    public function setCurrentPage(Vps_Component_Data $page)
+    public function setCurrentPage(Kwf_Component_Data $page)
     {
         $this->_currentPage = $page;
     }
@@ -520,13 +520,13 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     }
 
     /**
-     * @internal siehe Vps_Component_Generator_Abstract
+     * @internal siehe Kwf_Component_Generator_Abstract
      *
      * für getComponentById
      */
-    public function addToDataCache(Vps_Component_Data $d, Vps_Component_Select $select)
+    public function addToDataCache(Kwf_Component_Data $d, Kwf_Component_Select $select)
     {
-        if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+        if ($select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
             $this->_dataCacheIgnoreVisible[$d->componentId] = $d;
         } else {
             $this->_dataCache[$d->componentId] = $d;
@@ -534,9 +534,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     }
 
     /**
-     * @internal siehe Vps_Component_Generator_Abstract
+     * @internal siehe Kwf_Component_Generator_Abstract
      *
-     * für Component_Data::vpsUnserialize
+     * für Component_Data::kwfUnserialize
      */
     public function getFromDataCache($id)
     {

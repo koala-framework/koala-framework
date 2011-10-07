@@ -4,14 +4,14 @@
  * @group Service
  * @group Model_Service
  */
-class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
+class Kwf_Model_Service_ModelTest extends Kwf_Test_TestCase
 {
     private $_client;
 
     public function setUp()
     {
         parent::setUp();
-        $this->_client = $this->getMock('Vps_Srpc_Client',
+        $this->_client = $this->getMock('Kwf_Srpc_Client',
             array('getColumns', 'getPrimaryKey', 'getRow', 'countRows', 'getRows'),
             array(array('serverUrl' => 'invalid'.uniqid())), '', true
         );
@@ -20,9 +20,9 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
 
     public function testIsEqual()
     {
-        $model = new Vps_Model_Service(array('client' => $this->_client));
-        $modelEqual = new Vps_Model_Service(array('client' => $this->_client));
-        $modelNotEqual = new Vps_Model_Service(array('serverUrl' => 'http://service.vps-projekte.vivid'));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
+        $modelEqual = new Kwf_Model_Service(array('client' => $this->_client));
+        $modelNotEqual = new Kwf_Model_Service(array('serverUrl' => 'http://service.kwf-projekte.vivid'));
 
         $this->assertEquals(true, $model->isEqual($modelEqual));
         $this->assertEquals(false, $model->isEqual($modelNotEqual));
@@ -34,7 +34,7 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
             ->method('getColumns')
             ->will($this->returnValue(array('id', 'name')));
 
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
         $cols = $model->getColumns();
         $this->assertEquals(array('id', 'name'), $cols);
     }
@@ -46,7 +46,7 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
             ->with($this->equalTo(array('name LIKE ?', "%hans%")))
             ->will($this->returnValue(4));
 
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
 
         $result = $model->countRows(array('name LIKE ?', "%hans%"));
         $this->assertEquals(4, $result);
@@ -75,7 +75,7 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
                 array('id' => 8, 'name' => 'mahans')
             )));
 
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
 
         $fetchRowset = $model->getRows(array('name LIKE ?', "%hans%"), 'name', 10, 30);
         $rowsArray = $fetchRowset->toArray();
@@ -106,7 +106,7 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
                 array('id' => 4, 'firstname' => 'Foo', 'lastname' => 'Bar')
             )));
 
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
 
         $findRow = $model->getRow(3);
         $this->assertEquals(3, $findRow->id);
@@ -116,8 +116,8 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
 
     public function testSelect()
     {
-        $model = new Vps_Model_Service(array('client' => $this->_client));
-        $this->assertEquals('Vps_Model_Select', get_class($model->select()));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
+        $this->assertEquals('Kwf_Model_Select', get_class($model->select()));
     }
 
     public function testCreateRow()
@@ -125,7 +125,7 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
         $this->_client->expects($this->any())
             ->method('getPrimaryKey')
             ->will($this->returnValue('id'));
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
         $newRow = $model->createRow(array('name' => 'foo', 'type' => 'bar'));
         $this->assertEquals('foo', $newRow->name);
         $this->assertEquals('bar', $newRow->type);
@@ -137,7 +137,7 @@ class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
             ->method('getPrimaryKey')
             ->will($this->returnValue('id2'));
 
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
         $pk = $model->getPrimaryKey();
         $this->assertEquals('id2', $pk);
     }

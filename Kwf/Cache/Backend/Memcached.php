@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
+class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
 {
     private $_fillingPercentageFactor = 1;
 
@@ -7,8 +7,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
     {
         if (!isset($options['servers'])) {
             $options['servers'] = array(array(
-                'host' => Vps_Registry::get('config')->server->memcache->host,
-                'port' => Vps_Registry::get('config')->server->memcache->port
+                'host' => Kwf_Registry::get('config')->server->memcache->host,
+                'port' => Kwf_Registry::get('config')->server->memcache->port
             ));
         }
         foreach ($options['servers'] as &$s) {
@@ -18,7 +18,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         if (isset($options['filling_percentage_factor'])) {
             $this->_fillingPercentageFactor = $options['filling_percentage_factor'];
             if ($this->_fillingPercentageFactor > 1 || $this->_fillingPercentageFactor <= 0) {
-                throw new Vps_Exception("Invalid filling_percentage_factor");
+                throw new Kwf_Exception("Invalid filling_percentage_factor");
             }
             unset($options['filling_percentage_factor']);
         }
@@ -88,7 +88,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             return parent::load($id, $doNotTestCacheValidity);
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
-                $e = new Vps_Exception_Other($e);
+                $e = new Kwf_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -103,7 +103,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             return parent::test($id);
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
-                $e = new Vps_Exception_Other($e);
+                $e = new Kwf_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -118,7 +118,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             return parent::save($data, $id, $tags, $specificLifetime);
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
-                $e = new Vps_Exception_Other($e);
+                $e = new Kwf_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -133,7 +133,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             return parent::remove($id);
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
-                $e = new Vps_Exception_Other($e);
+                $e = new Kwf_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -148,7 +148,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             return parent::getMetadatas($id);
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
-                $e = new Vps_Exception_Other($e);
+                $e = new Kwf_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -163,7 +163,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             return parent::touch($id, $extraLifetime);
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
-                $e = new Vps_Exception_Other($e);
+                $e = new Kwf_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -177,9 +177,9 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         if (!isset($cacheIdPrefix)) {
             $cacheIdPrefix = Zend_Registry::get('config')->application->id;
             if (!$cacheIdPrefix) {
-                throw new Vps_Exception("application.id has to be set in config");
+                throw new Kwf_Exception("application.id has to be set in config");
             }
-            $cacheIdPrefix .= Vps_Setup::getConfigSection();
+            $cacheIdPrefix .= Kwf_Setup::getConfigSection();
         }
         return $cacheIdPrefix;
     }

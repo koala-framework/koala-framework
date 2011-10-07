@@ -2,11 +2,11 @@
 /**
  * @group Component_ContentWidth
  */
-class Vps_Component_ContentWidth_Test extends Vpc_TestAbstract
+class Kwf_Component_ContentWidth_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_ContentWidth_Root_Component');
+        parent::setUp('Kwf_Component_ContentWidth_Root_Component');
     }
 
     public function testFullWidthPage()

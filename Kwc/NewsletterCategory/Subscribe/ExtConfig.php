@@ -1,9 +1,9 @@
 <?php
-class Vpc_NewsletterCategory_Subscribe_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
+class Kwc_NewsletterCategory_Subscribe_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
 {
     protected function _getConfig()
     {
-        $config = $this->_getStandardConfig('vps.autogrid', 'Categories', trlVps('Categories'), new Vps_Asset('application_form'));
+        $config = $this->_getStandardConfig('kwf.autogrid', 'Categories', trlKwf('Categories'), new Kwf_Asset('application_form'));
         return array(
             'categories' => $config
         );

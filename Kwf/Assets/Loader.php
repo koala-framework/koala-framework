@@ -1,8 +1,8 @@
 <?php
-class Vps_Assets_Loader
+class Kwf_Assets_Loader
 {
     /**
-     * @var Vps_Assets_Dependencies
+     * @var Kwf_Assets_Dependencies
      */
     private $_dep = null;
     private $_config = null;
@@ -10,7 +10,7 @@ class Vps_Assets_Loader
     static public function load()
     {
         if (!isset($_SERVER['REQUEST_URI'])) return;
-        require_once 'Vps/Loader.php';
+        require_once 'Kwf/Loader.php';
         if (substr($_SERVER['REQUEST_URI'], 0, 8)=='/assets/') {
             $url = substr($_SERVER['REQUEST_URI'], 8);
             if (strpos($url, '?') !== false) {
@@ -19,9 +19,9 @@ class Vps_Assets_Loader
 
             try {
                 $l = new self();
-                Vps_Media_Output::output($l->getFileContents($url));
-            } catch (Vps_Assets_NotFoundException $e) {
-                throw new Vps_Exception_NotFound();
+                Kwf_Media_Output::output($l->getFileContents($url));
+            } catch (Kwf_Assets_NotFoundException $e) {
+                throw new Kwf_Exception_NotFound();
             }
         }
     }
@@ -59,15 +59,15 @@ class Vps_Assets_Loader
         $ret = array();
         if (substr($file, 0, 8) == 'dynamic/') {
             if (!preg_match('#^dynamic/([a-z0-9_:]+)/(([a-z0-9_]+)/)?([a-z0-9_:]+)$#i', $file, $m)) {
-                throw new Vps_Exception_NotFound();
+                throw new Kwf_Exception_NotFound();
             }
             $assetsType = $m[1];
             $rootComponent = $m[3];
             $m = explode(':', $m[4]);
             $assetClass = array_shift($m);
             $arguments = $m;
-            if (!class_exists($assetClass) || !is_instance_of($assetClass, 'Vps_Assets_Dynamic_Interface')) {
-                throw new Vps_Exception_NotFound();
+            if (!class_exists($assetClass) || !is_instance_of($assetClass, 'Kwf_Assets_Dynamic_Interface')) {
+                throw new Kwf_Exception_NotFound();
             }
             $file = new $assetClass($this, $assetsType, $rootComponent, $arguments);
             $ret = array();
@@ -79,12 +79,12 @@ class Vps_Assets_Loader
             } else if ($file->getType() == 'css' || $file->getType() == 'printcss') {
                 $ret['mimeType'] = 'text/css; charset=utf8';
             } else {
-                throw new Vps_Exception("Unknown type");
+                throw new Kwf_Exception("Unknown type");
             }
         } else if (substr($file, 0, 4) == 'all/') {
-            $encoding = Vps_Media_Output::getEncoding();
+            $encoding = Kwf_Media_Output::getEncoding();
             $cacheId = md5($file.$encoding.$this->_getHostForCacheId());
-            $cache = Vps_Assets_Cache::getInstance();
+            $cache = Kwf_Assets_Cache::getInstance();
             $cacheData = $cache->load($cacheId);
             if ($cacheData) {
                 if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {
@@ -92,22 +92,22 @@ class Vps_Assets_Loader
                 }
             }
             if (!$cacheData) {
-                Vps_Benchmark::count('load asset all');
+                Kwf_Benchmark::count('load asset all');
                 if (strpos($file, '?') !== false) {
                     $file = substr($file, 0, strpos($file, '?'));
                 }
                 if (!preg_match('#^all/([a-z0-9]+)/(([a-z0-9_]+)/)?([a-z]+)/([a-z0-9_:]+)\\.(printcss|js|css)$#i', $file, $m)) {
-                    throw new Vps_Exception_NotFound("Invalid Url '$file'");
+                    throw new Kwf_Exception_NotFound("Invalid Url '$file'");
                 }
                 $section = $m[1];
                 $rootComponent = $m[3];
                 $language = $m[4];
                 $assetsType = $m[5];
                 $fileType = $m[6];
-                Vps_Component_Data_Root::setComponentClass($rootComponent);
+                Kwf_Component_Data_Root::setComponentClass($rootComponent);
 
                 if (substr($assetsType, -5) == 'Debug' && !$this->_getConfig()->debug->menu) {
-                    throw new Vps_Exception("Debug Assets are not avaliable as the debug menu is disabled");
+                    throw new Kwf_Exception("Debug Assets are not avaliable as the debug menu is disabled");
                 }
 
                 $cacheData  = array();
@@ -119,8 +119,8 @@ class Vps_Assets_Loader
                         if (substr($file, 0, 8) == 'dynamic/') {
                             $arguments = explode(':', substr($file, 8));
                             $file = array_shift($arguments);
-                            if (!is_instance_of($file, 'Vps_Assets_Dynamic_Interface')) {
-                                throw new Vps_Exception_NotFound();
+                            if (!is_instance_of($file, 'Kwf_Assets_Dynamic_Interface')) {
+                                throw new Kwf_Exception_NotFound();
                             }
                             $file = new $file($this, $assetsType, $rootComponent, $arguments);
                             if (!$file->getIncludeInAll()) continue;
@@ -130,8 +130,8 @@ class Vps_Assets_Loader
                         } else {
                             try {
                                 $c = $this->getFileContents($file, $language);
-                            } catch (Vps_Assets_NotFoundException $e) {
-                                throw new Vps_Exception($file.': '.$e->getMessage());
+                            } catch (Kwf_Assets_NotFoundException $e) {
+                                throw new Kwf_Exception($file.': '.$e->getMessage());
                             }
                         }
                         $cacheData['contents'] .=  $c['contents']."\n";
@@ -139,7 +139,7 @@ class Vps_Assets_Loader
                     }
                 }
                 $cacheData['contents'] = $this->pack($cacheData['contents'], $fileType);
-                $cacheData['contents'] = Vps_Media_Output::encode($cacheData['contents'], $encoding);
+                $cacheData['contents'] = Kwf_Media_Output::encode($cacheData['contents'], $encoding);
                 $cacheData['maxFileMTime'] = $this->getDependencies()->getMaxFileMTime();
                 if ($fileType == 'js') {
                     $cacheData['mimeType'] = 'text/javascript; charset=utf8';
@@ -182,20 +182,20 @@ class Vps_Assets_Loader
             } else if (substr($file, -5)=='.woff') { // für Schriften
                 $ret['mimeType'] = 'application/x-woff';
             } else {
-                throw new Vps_Assets_NotFoundException("Invalid filetype ($file)");
+                throw new Kwf_Assets_NotFoundException("Invalid filetype ($file)");
             }
 
             if (substr($ret['mimeType'], 0, 5) == 'text/') { //nur texte cachen
                 if (!$language) {
-                    $language = Vps_Trl::getInstance()->getTargetLanguage();
+                    $language = Kwf_Trl::getInstance()->getTargetLanguage();
                 }
 
-                $cache = Vps_Assets_Cache::getInstance();
+                $cache = Kwf_Assets_Cache::getInstance();
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
                 $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
                     str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file).
-                    Vps_Component_Data_Root::getComponentClass();
+                    Kwf_Component_Data_Root::getComponentClass();
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
                     if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {
@@ -203,7 +203,7 @@ class Vps_Assets_Loader
                     }
                 }
                 if (!$cacheData) {
-                    Vps_Benchmark::count('load asset');
+                    Kwf_Benchmark::count('load asset');
                     $cacheData['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
                     $cacheData['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
                     if ((substr($file, 0, strlen($section)+5)==$section.'-ext/' || substr($file, 0, 4)=='ext/')
@@ -230,7 +230,7 @@ class Vps_Assets_Loader
                         if (substr($cssClass, 0, strlen($section)+5) == $section.'-web/') {
                             $cssClass = substr($cssClass, strlen($section)+5);
                         }
-                        if (substr($cssClass, 0, strlen($section)+5) == $section.'-vps/') {
+                        if (substr($cssClass, 0, strlen($section)+5) == $section.'-kwf/') {
                             $cssClass = substr($cssClass, strlen($section)+5);
                         }
                         if (substr($cssClass, -4) == '.css') {
@@ -277,17 +277,17 @@ class Vps_Assets_Loader
             } else {
                 $fx = substr($file, 0, strpos($file, '/'));
                 if (substr($fx, 0, 3) == 'fx_') {
-                    $cache = Vps_Assets_Cache::getInstance();
+                    $cache = Kwf_Assets_Cache::getInstance();
                     $cacheId = 'fileContents'.str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file);
                     if (!$cacheData = $cache->load($cacheId)) {
                         if (substr($ret['mimeType'], 0, 6) != 'image/') {
-                            throw new Vps_Exception("Fx is only possible for images");
+                            throw new Kwf_Exception("Fx is only possible for images");
                         }
                         $im = new Imagick();
                         $im->readImage($this->_getDep()->getAssetPath($file));
                         $fx = explode('_', substr($fx, 3));
                         foreach ($fx as $i) {
-                            call_user_func(array('Vps_Assets_Effects', $i), $im);
+                            call_user_func(array('Kwf_Assets_Effects', $i), $im);
                         }
                         $cacheData['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
                         $cacheData['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
@@ -312,7 +312,7 @@ class Vps_Assets_Loader
     private function _getConfig()
     {
         if (!isset($this->_config)) {
-            $this->_config = Vps_Registry::get('config');
+            $this->_config = Kwf_Registry::get('config');
         }
         return $this->_config;
     }
@@ -320,7 +320,7 @@ class Vps_Assets_Loader
     private function _getDep()
     {
         if (!isset($this->_dep)) {
-            $this->_dep = new Vps_Assets_Dependencies($this);
+            $this->_dep = new Kwf_Assets_Dependencies($this);
         }
         return $this->_dep;
     }
@@ -380,7 +380,7 @@ class Vps_Assets_Loader
     private function _getJsLoader()
     {
         static $ret;
-        if (!isset($ret)) $ret = new Vps_Trl_JsLoader();
+        if (!isset($ret)) $ret = new Kwf_Trl_JsLoader();
         return $ret;
     }
 }

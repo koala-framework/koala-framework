@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Component
+class Kwc_Posts_Detail_Edit_Form_Component extends Kwc_Posts_Write_Form_Component
 {
     protected function _getPostsComponent()
     {
@@ -20,7 +20,7 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
     public function processInput($postData)
     {
         if (!$this->_getPostComponent()->getChildComponent('-actions')->getComponent()->mayEditPost()) {
-            throw new Vps_Exception_AccessDenied();
+            throw new Kwf_Exception_AccessDenied();
         }
         parent::processInput($postData);
     }
@@ -28,7 +28,7 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlVpsStatic('save');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('save');
         return $ret;
     }
 }

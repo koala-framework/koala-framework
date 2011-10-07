@@ -1,24 +1,24 @@
 <?php
-class Vpc_Basic_Text_Trl_Form extends Vpc_Abstract_Form
+class Kwc_Basic_Text_Trl_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-child", 'child'));
+        $this->add(Kwc_Abstract_Form::createChildComponentForm($this->getClass(), "-child", 'child'));
 
-        $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps("Original")));
+        $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf("Original")));
 
-        $fs->add(new Vps_Form_Field_Panel('copy'))
+        $fs->add(new Kwf_Form_Field_Panel('copy'))
             ->setHideLabel(true)
-            ->setXtype('vpc.basic.text.trl.copybutton');
+            ->setXtype('kwc.basic.text.trl.copybutton');
 
-        $fs->add(new Vps_Form_Field_ShowField('content'))
+        $fs->add(new Kwf_Form_Field_ShowField('content'))
             ->setHideLabel(true)
             ->setCls('webStandard')
-            ->setData(new Vps_Data_Trl_OriginalComponent());
+            ->setData(new Kwf_Data_Trl_OriginalComponent());
 
         if (!$this->getModel()) {
-            $this->setModel(new Vps_Model_FnF());
+            $this->setModel(new Kwf_Model_FnF());
             $this->setCreateMissingRow(true);
         }
     }

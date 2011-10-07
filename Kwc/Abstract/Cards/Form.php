@@ -1,13 +1,13 @@
 <?php
-class Vpc_Abstract_Cards_Form extends Vpc_Abstract_Form
+class Kwc_Abstract_Cards_Form extends Kwc_Abstract_Form
 {
     protected function _init()
     {
         parent::_init();
 
-        $gen = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        $gen = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $gen['child']['component'];
-        $cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Type')))
+        $cards = $this->add(new Kwf_Form_Container_Cards('component', trlKwf('Type')))
             ->setDefaultValue(key($classes));
         $cards->getCombobox()
             ->setWidth(250)
@@ -15,12 +15,12 @@ class Vpc_Abstract_Cards_Form extends Vpc_Abstract_Form
 
         foreach ($classes as $name => $class) {
             $forms = array();
-            $admin = Vpc_Admin::getInstance($class);
+            $admin = Kwc_Admin::getInstance($class);
             $forms = $admin->getCardForms();
             if (!$forms) {
                 //wenns gar keine forms gibt
                 $card = $cards->add();
-                $card->setTitle(Vpc_Abstract::getSetting($class, 'componentName'));
+                $card->setTitle(Kwc_Abstract::getSetting($class, 'componentName'));
                 $card->setName($name);
             }
             foreach ($forms as $k=>$i) {

@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.Formats = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.Formats = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.on('initialize', this.onInit, this, {delay: 1, single: true});
@@ -22,8 +22,8 @@ Vps.Form.HtmlEditor.Formats = Ext.extend(Ext.util.Observable, {
             handler: this.onBold,
             scope: this,
             tooltip: {
-                title: trlVps('Bold (Ctrl+B)'),
-                text: trlVps('Make the selected text bold.'),
+                title: trlKwf('Bold (Ctrl+B)'),
+                text: trlKwf('Make the selected text bold.'),
                 cls: 'x-html-editor-tip'
             },
             cls : 'x-btn-icon x-edit-bold',
@@ -37,8 +37,8 @@ Vps.Form.HtmlEditor.Formats = Ext.extend(Ext.util.Observable, {
             handler: this.onItalic,
             scope: this,
             tooltip: {
-                title: trlVps('Italic (Ctrl+I)'),
-                text: trlVps('Make the selected text italic.'),
+                title: trlKwf('Italic (Ctrl+I)'),
+                text: trlKwf('Make the selected text italic.'),
                 cls: 'x-html-editor-tip'
             },
             cls : 'x-btn-icon x-edit-italic',

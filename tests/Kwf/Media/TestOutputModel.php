@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_TestOutputModel extends Vps_Model_FnF implements Vps_Media_Output_Interface
+class Kwf_Media_TestOutputModel extends Kwf_Model_FnF implements Kwf_Media_Output_Interface
 {
     public static function getMediaOutput($id, $type, $className)
     {

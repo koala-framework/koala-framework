@@ -1,16 +1,16 @@
 <?php
-class Vpc_Posts_Write_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Posts_Write_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['preview'] = 'Vpc_Posts_Write_Preview_Component';
-        $ret['generators']['child']['component']['form'] = 'Vpc_Posts_Write_Form_Component';
-        $ret['generators']['child']['component']['lastPosts'] = 'Vpc_Posts_Write_LastPosts_Component';
-        $ret['placeholder']['lastPosts'] = trlVpsStatic('Last Posts');
+        $ret['generators']['child']['component']['preview'] = 'Kwc_Posts_Write_Preview_Component';
+        $ret['generators']['child']['component']['form'] = 'Kwc_Posts_Write_Form_Component';
+        $ret['generators']['child']['component']['lastPosts'] = 'Kwc_Posts_Write_LastPosts_Component';
+        $ret['placeholder']['lastPosts'] = trlKwfStatic('Last Posts');
         $ret['flags']['noIndex'] = true;
         $ret['cssClass'] = 'webStandard';
-        $ret['plugins'] = array('Vps_Component_Plugin_Login_Component');
+        $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
         $ret['viewCache'] = false; //wegen isSaved
         return $ret;
     }

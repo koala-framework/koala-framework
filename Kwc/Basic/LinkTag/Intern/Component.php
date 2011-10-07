@@ -1,18 +1,18 @@
 <?php
 /**
- * @package Vpc
+ * @package Kwc
  * @subpackage Basic
  */
-class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Component
+class Kwc_Basic_LinkTag_Intern_Component extends Kwc_Basic_LinkTag_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'dataClass' => 'Vpc_Basic_LinkTag_Intern_Data',
-            'ownModel'     => 'Vpc_Basic_LinkTag_Intern_Model',
-            'componentName' => trlVps('Link.Intern'),
+            'dataClass' => 'Kwc_Basic_LinkTag_Intern_Data',
+            'ownModel'     => 'Kwc_Basic_LinkTag_Intern_Model',
+            'componentName' => trlKwf('Link.Intern'),
         ));
-        $ret['assetsAdmin']['dep'][] = 'VpsPageSelectField';
+        $ret['assetsAdmin']['dep'][] = 'KwfPageSelectField';
         return $ret;
     }
 }

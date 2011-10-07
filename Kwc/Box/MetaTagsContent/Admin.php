@@ -1,10 +1,10 @@
 <?php
-class Vpc_Box_MetaTagsContent_Admin extends Vpc_Abstract_Admin
+class Kwc_Box_MetaTagsContent_Admin extends Kwc_Abstract_Admin
 {
     public function getPagePropertiesForm()
     {
-        $form = new Vpc_Box_MetaTagsContent_Form(null, $this->_class);
-        $fs = new Vps_Form_Container_FieldSet(trlVps('Meta Tags'));
+        $form = new Kwc_Box_MetaTagsContent_Form(null, $this->_class);
+        $fs = new Kwf_Form_Container_FieldSet(trlKwf('Meta Tags'));
         $fs->setCollapsible(true);
         $fs->setCollapsed(true);
         foreach ($form as $f) {

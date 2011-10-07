@@ -1,5 +1,5 @@
 <?php
-class Vpc_FulltextSearch_Search_Update_2 extends Vps_Update
+class Kwc_FulltextSearch_Search_Update_2 extends Kwf_Update
 {
     public function update()
     {

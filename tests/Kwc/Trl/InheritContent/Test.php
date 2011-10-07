@@ -1,13 +1,13 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_InheritContent
+ * @group Kwc_Trl
+ * @group Kwc_InheritContent
  */
-class Vpc_Trl_InheritContent_Test extends Vpc_TestAbstract
+class Kwc_Trl_InheritContent_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_InheritContent_Root');
+        parent::setUp('Kwc_Trl_InheritContent_Root');
     }
 
     public function testHasContentDe()

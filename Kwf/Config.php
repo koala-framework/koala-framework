@@ -1,15 +1,15 @@
 <?php
-class Vps_Config
+class Kwf_Config
 {
     public static function getValueArray($var)
     {
         $cacheId = 'configAr-'.$var;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
 
-        $cfg = Vps_Registry::get('config');
+        $cfg = Kwf_Registry::get('config');
         foreach (explode('.', $var) as $i) {
             $cfg = $cfg->$i;
         }
@@ -19,7 +19,7 @@ class Vps_Config
             $ret = array();
         }
 
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
 
         return $ret;
     }
@@ -27,21 +27,21 @@ class Vps_Config
     public static function getValue($var)
     {
         $cacheId = 'config-'.$var;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
 
-        $cfg = Vps_Registry::get('config');
+        $cfg = Kwf_Registry::get('config');
         foreach (explode('.', $var) as $i) {
             $cfg = $cfg->$i;
         }
         $ret = $cfg;
         if (is_object($ret)) {
-            throw new Vps_Exception("this would return an object, use getValueArray instead");
+            throw new Kwf_Exception("this would return an object, use getValueArray instead");
         }
 
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
 
         return $ret;
     }
@@ -51,28 +51,28 @@ class Vps_Config
      */
     public static function deleteValueCache($var)
     {
-        Vps_Cache_Simple::delete('config-'.$var);
-        Vps_Cache_Simple::delete('configAr-'.$var);
+        Kwf_Cache_Simple::delete('config-'.$var);
+        Kwf_Cache_Simple::delete('configAr-'.$var);
     }
 
     public static function clearValueCache()
     {
-        Vps_Cache_Simple::clear('config-');
-        Vps_Cache_Simple::clear('configAr-');
+        Kwf_Cache_Simple::clear('config-');
+        Kwf_Cache_Simple::clear('configAr-');
     }
 
     public static function checkMasterFiles()
     {
         $masterFiles = array(
-            'application/config.ini',
-            VPS_PATH . '/config.ini'
+            'config.ini',
+            KWF_PATH . '/config.ini'
         );
-        if (file_exists('application/vps_branch')) $masterFiles[] = 'application/vps_branch';
-        require_once 'Vps/Config/Web.php';
-        $mtime = Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection());
+        if (file_exists('kwf_branch')) $masterFiles[] = 'kwf_branch';
+        require_once 'Kwf/Config/Web.php';
+        $mtime = Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection());
         foreach ($masterFiles as $f) {
             if (filemtime($f) > $mtime) {
-                Vps_Config::clearValueCache();
+                Kwf_Config::clearValueCache();
                 break;
             }
         }

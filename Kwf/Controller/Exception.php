@@ -1,4 +1,4 @@
 <?php
-class Vps_Controller_Exception extends Vps_Exception
+class Kwf_Controller_Exception extends Kwf_Exception
 {
 }

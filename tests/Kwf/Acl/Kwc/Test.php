@@ -1,17 +1,17 @@
 <?php
 /**
- * @group Vps_Acl
+ * @group Kwf_Acl
  */
-class Vps_Acl_Vpc_Test extends Vpc_TestAbstract
+class Kwf_Acl_Kwc_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Acl_Vpc_Root');
+        parent::setUp('Kwf_Acl_Kwc_Root');
     }
 
-    public function testVpcAcl()
+    public function testKwcAcl()
     {
-        $acl = new Vps_Acl();
+        $acl = new Kwf_Acl();
         $acl->add(new Zend_Acl_Resource('misc'));
 
         $acl->allow(null, 'misc');

@@ -1,14 +1,14 @@
 <?php
-class Vps_Form_CheckboxFieldsetInCards_TestController extends Vps_Controller_Action_Auto_Form
+class Kwf_Form_CheckboxFieldsetInCards_TestController extends Kwf_Controller_Action_Auto_Form
 {
-    protected $_modelName = 'Vps_Form_CheckboxFieldsetInCards_TestModel';
+    protected $_modelName = 'Kwf_Form_CheckboxFieldsetInCards_TestModel';
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
 
     protected function _initFields()
     {
-        $cards = $this->_form->add(new Vps_Form_Container_Cards('cards', "Foo"));
-        $cards->setCombobox(new Vps_Form_Field_Radio('cards', 'Foo'));
+        $cards = $this->_form->add(new Kwf_Form_Container_Cards('cards', "Foo"));
+        $cards->setCombobox(new Kwf_Form_Field_Radio('cards', 'Foo'));
 
         $card0 = $cards->add();
         $card0->setName('card1');
@@ -18,18 +18,18 @@ class Vps_Form_CheckboxFieldsetInCards_TestController extends Vps_Controller_Act
         $card1->setName('card2');
         $card1->setTitle('Card2');
 
-        $fs = $card1->add(new Vps_Form_Container_FieldSet("Bar"))
+        $fs = $card1->add(new Kwf_Form_Container_FieldSet("Bar"))
             ->setCheckboxToggle(true)
             ->setCheckboxName('fs2');
-        $fs->add(new Vps_Form_Field_TextField("text2", "Text2"))
+        $fs->add(new Kwf_Form_Field_TextField("text2", "Text2"))
             ->setAllowBlank(false);
 
         $card2 = $cards->add();
         $card2->setName('card3');
         $card2->setTitle('Card3');
-        $subCards = $card2->add(new Vps_Form_Container_Cards('subcards', "SubCards"));
+        $subCards = $card2->add(new Kwf_Form_Container_Cards('subcards', "SubCards"));
         $cb = $subCards->getCombobox();
-        $cb->setCls('vps-test-subcards');
+        $cb->setCls('kwf-test-subcards');
         $subCard1 = $subCards->add();
         $subCard1->setName('subcard1');
         $subCard1->setTitle('subcard1');
@@ -42,12 +42,12 @@ class Vps_Form_CheckboxFieldsetInCards_TestController extends Vps_Controller_Act
         $card3->setName('card4');
         $card3->setTitle('Card4');
 
-        $fs = $card3->add(new Vps_Form_Container_FieldSet("Bar4"))
+        $fs = $card3->add(new Kwf_Form_Container_FieldSet("Bar4"))
             ->setCheckboxToggle(true)
             ->setCheckboxName('fs3');
-        $fs->add(new Vps_Form_Field_TextField("text4", "Text4"))
+        $fs->add(new Kwf_Form_Field_TextField("text4", "Text4"))
             ->setAllowBlank(false)
-            ->setCls('vps-test-text4');;
+            ->setCls('kwf-test-text4');;
 
     }
 
@@ -60,10 +60,10 @@ class Vps_Form_CheckboxFieldsetInCards_TestController extends Vps_Controller_Act
             $config,
             array(
                 'controllerUrl' => $this->getRequest()->getPathInfo(),
-                'assetsType' => 'Vps_Form_CheckboxFieldsetInCards:Test',
+                'assetsType' => 'Kwf_Form_CheckboxFieldsetInCards:Test',
             )
         );
-        $this->view->ext('Vps.Auto.FormPanel', $config, 'Vps.Test.Viewport');
+        $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
+class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 {
     protected $_componentClass = 'row';
     protected $_idSeparator = false;
@@ -16,7 +16,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     private $_pageChilds = array();
 
     private $_basesCache = array();
-    protected $_eventsClass = 'Vpc_Root_Category_GeneratorEvents';
+    protected $_eventsClass = 'Kwc_Root_Category_GeneratorEvents';
 
     protected function _loadPageData()
     {
@@ -30,7 +30,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $this->_pageHome = null;
         $this->_pageChilds = array();
         $select = $this->_getModel()->select()->order('pos');
-        $rows = $this->_getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select);
+        $rows = $this->_getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select);
         foreach ($rows as $row) {
             $this->_pageData[$row['id']] = $row;
             $parentId = $row['parent_id'];
@@ -46,24 +46,24 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         }
     }
 
-    protected function _formatSelectFilename(Vps_Component_Select $select)
+    protected function _formatSelectFilename(Kwf_Component_Select $select)
     {
         return $select;
     }
 
-    protected function _formatSelectHome(Vps_Component_Select $select)
+    protected function _formatSelectHome(Kwf_Component_Select $select)
     {
         return $select;
     }
 
     public function getChildIds($parentData, $select = array())
     {
-        throw new Vps_Exception('Not supported yet');
+        throw new Kwf_Exception('Not supported yet');
     }
 
     public function getChildData($parentData, $select = array())
     {
-        Vps_Benchmark::count('GenPage::getChildData');
+        Kwf_Benchmark::count('GenPage::getChildData');
 
         $this->_loadPageData();
 
@@ -74,23 +74,23 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $ret = array();
         foreach ($pageIds as $pageId) {
             $page = $this->_pageData[$pageId];
-            if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
-                $menu = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+            if ($select->hasPart(Kwf_Component_Select::WHERE_SHOW_IN_MENU)) {
+                $menu = $select->getPart(Kwf_Component_Select::WHERE_SHOW_IN_MENU);
                 if ($menu == $page['hide']) continue;
             }
             static $showInvisible;
             if (is_null($showInvisible)) {
-                $showInvisible = Vps_Config::getValue('showInvisible');
+                $showInvisible = Kwf_Config::getValue('showInvisible');
             }
-            if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+            if ($select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
             } else if (!$showInvisible) {
                 if (!$this->_pageData[$pageId]['visible']) continue;
             }
             $d = $this->_createData($parentData, $pageId, $select);
             if ($d) $ret[] = $d;
 
-            if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
-                if (count($ret) >= $select->getPart(Vps_Model_Select::LIMIT_COUNT)) break;
+            if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
+                if (count($ret) >= $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) break;
             }
         }
         return $ret;
@@ -98,16 +98,16 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getPageIds($parentData, $select)
     {
-        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE))) {
+        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE))) {
             if ($p->getPage()) $p = $p->getPage();
             $parentData = $p;
         }
         $pageIds = array();
 
-        if ($parentData && !$select->hasPart(Vps_Component_Select::WHERE_ID)) {
+        if ($parentData && !$select->hasPart(Kwf_Component_Select::WHERE_ID)) {
             // diese Abfragen sind implizit recursive=true
             $parentId = $parentData->dbId;
-            if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
+            if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
                 foreach ($this->_pageHome as $pageId) {
                     if (substr($this->_pageData[$pageId]['parent_id'], 0, strlen($parentId)) == $parentId) {
                         $pageIds[] = $pageId;
@@ -123,8 +123,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                         }
                     }
                 }
-            } else if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-                $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+            } else if ($select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
+                $filename = $select->getPart(Kwf_Component_Select::WHERE_FILENAME);
                 if (isset($this->_pageFilename[$filename])) {
                     foreach ($this->_pageFilename[$filename] as $pId => $pageId) {
                         if (is_numeric($parentId)) {
@@ -139,8 +139,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                         }
                     }
                 }
-            } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
                 $keys = array();
                 foreach ($selectClasses as $selectClass) {
                     $key = array_search($selectClass, $this->_settings['component']);
@@ -165,12 +165,12 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
         } else {
 
-            if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
+            if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
                 $pageIds = $this->_pageHome;
-            } else if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
+            } else if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
                 if (isset($this->_pageData[$id])) {
-                    if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                        $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+                    if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                        $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
                         $class = $this->_settings['component'][$this->_pageData[$id]['component']];
                         if (in_array($class, $selectClasses)) {
                             $pageIds[] = $id;
@@ -179,8 +179,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                         $pageIds[] = $id;
                     }
                 }
-            } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
                 $keys = array();
                 foreach ($selectClasses as $selectClass) {
                     $key = array_search($selectClass, $this->_settings['component']);
@@ -192,17 +192,17 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                     }
                 }
             } else {
-                throw new Vps_Exception("This would return all pages. You don't want this.");
+                throw new Kwf_Exception("This would return all pages. You don't want this.");
             }
 
-            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+            if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
 
-                $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                $subroot = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
                 $subroot = $subroot[0];
 
                 if (!isset($this->_basesCache[$subroot->componentId])) {
                     //alle category komponenten der aktuellen domain suchen
-                    $this->_basesCache[$subroot->componentId] = Vps_Component_Data_Root::getInstance()->
+                    $this->_basesCache[$subroot->componentId] = Kwf_Component_Data_Root::getInstance()->
                         getComponentsBySameClass($this->getClass(), array('subroot' => $subroot));
                 }
 
@@ -220,7 +220,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                         auskommentiert, das ist langsam
                         und es muss mir erst wer zeigen *wo* das wirklich benötigt wird
                         if (!$allowed) {
-                            $component = Vps_Component_Data_Root::getInstance()
+                            $component = Kwf_Component_Data_Root::getInstance()
                                 ->getComponentById($id)->parent;
                             while (!$allowed && $component) {
                                 if ($component->componentId == $base->componentId) {
@@ -248,10 +248,10 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
         if (!$parentData || ($parentData->componentClass == $this->_class && $page['parent_id'])) {
             $c = array();
-            if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-                $c['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+            if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
+                $c['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
             }
-            $parentData = Vps_Component_Data_Root::getInstance()
+            $parentData = Kwf_Component_Data_Root::getInstance()
                                 ->getComponentById($page['parent_id'], $c);
             if (!$parentData) return null; // Kommt vor wenn data gefunden wird, parentData aber invisible ist
         }
@@ -293,7 +293,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     protected function _getDataClass($config, $id)
     {
         if ($this->_pageData[$id]['is_home']) {
-            return 'Vps_Component_Data_Home';
+            return 'Kwf_Component_Data_Home';
         } else {
             return parent::_getDataClass($config, $id);
         }
@@ -356,7 +356,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     public function getDuplicateProgressSteps($source)
     {
         $ret = 1;
-        $ret += Vpc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
+        $ret += Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         if (isset($this->_pageChilds[$source->id])) {
             foreach ($this->_pageChilds[$source->id] as $i) {
                 $data = $this->getChildData(null, array('id'=>$i));
@@ -370,10 +370,10 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
     {
         if ($source->generator !== $this) {
-            throw new Vps_Exception("you must call this only with the correct source");
+            throw new Kwf_Exception("you must call this only with the correct source");
         }
-        if (!Vps_Component_Generator_Abstract::getInstances($parentTarget, array('whereGeneratorClass'=>get_class($this)))) {
-            throw new Vps_Exception("you must call this only with the correct target");
+        if (!Kwf_Component_Generator_Abstract::getInstances($parentTarget, array('whereGeneratorClass'=>get_class($this)))) {
+            throw new Kwf_Exception("you must call this only with the correct target");
         }
 
         $target = $this->_duplicateChildPages($source->parent, $parentTarget, $source->id, $progressBar);
@@ -382,7 +382,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
     private function _duplicateChildPages($parentSource, $parentTarget, $childId, Zend_ProgressBar $progressBar = null)
     {
-        if ($progressBar) $progressBar->next(1, trlVps("Pasting {0}", $this->_pageData[$childId]['name']));
+        if ($progressBar) $progressBar->next(1, trlKwf("Pasting {0}", $this->_pageData[$childId]['name']));
 
         $data = array();
         $data['parent_id'] = $parentTarget->dbId;
@@ -396,7 +396,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $source = $parentSource->getChildComponent(array('id'=>$childId, 'ignoreVisible'=>true));
         $target = $parentTarget->getChildComponent(array('id'=>$newRow->id, 'ignoreVisible'=>true));
 
-        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
+        Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
 
         if (isset($this->_pageChilds[$childId])) {
             foreach ($this->_pageChilds[$childId] as $i) {
@@ -418,6 +418,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
     public function getPagePropertiesForm($componentOrParent)
     {
-        return new Vpc_Root_Category_GeneratorForm($componentOrParent);
+        return new Kwc_Root_Category_GeneratorForm($componentOrParent);
     }
 }

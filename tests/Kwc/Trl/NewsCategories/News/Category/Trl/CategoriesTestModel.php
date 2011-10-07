@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_NewsCategories_News_Category_Trl_CategoriesTestModel extends Vps_Model_FnF
+class Kwc_Trl_NewsCategories_News_Category_Trl_CategoriesTestModel extends Kwf_Model_FnF
 {
     protected $_toStringField = 'name';
     protected $_primaryKey = 'component_id';

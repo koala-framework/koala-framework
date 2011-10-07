@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Events extends Vps_Component_Events
+class Kwf_Component_Generator_Events extends Kwf_Component_Events
 {
     protected $_class;
 
@@ -10,7 +10,7 @@ class Vps_Component_Generator_Events extends Vps_Component_Events
 
     protected function _getGenerator()
     {
-        return Vps_Component_Generator_Abstract::getInstance(
+        return Kwf_Component_Generator_Abstract::getInstance(
             $this->_config['componentClass'], $this->_config['generatorKey']
         );
     }

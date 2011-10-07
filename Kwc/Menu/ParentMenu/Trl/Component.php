@@ -1,4 +1,4 @@
 <?php
-class Vpc_Menu_ParentMenu_Trl_Component extends Vpc_Menu_Trl_Component
+class Kwc_Menu_ParentMenu_Trl_Component extends Kwc_Menu_Trl_Component
 {
 }

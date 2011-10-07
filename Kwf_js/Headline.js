@@ -1,4 +1,4 @@
-Vps.onContentReady(function() {
+Kwf.onContentReady(function() {
     if (Ext.isIE6) return;
 
     var getElementText = function(element) {
@@ -22,7 +22,7 @@ Vps.onContentReady(function() {
         }
         return text;
     };
-    var selectors = Vps.Headline.selectors;
+    var selectors = Kwf.Headline.selectors;
     selectors.each(function(selector) {
         var elements = Ext.DomQuery.select(selector);
         elements.each(function(element) {
@@ -31,7 +31,7 @@ Vps.onContentReady(function() {
             element.dom.innerHTML = '<img src="/media/headline?selector='
                                         +encodeURIComponent(selector)+
                                     '&text='+encodeURIComponent(text)+
-                                    '&assetsType='+encodeURIComponent(Vps.Headline.assetsType)+
+                                    '&assetsType='+encodeURIComponent(Kwf.Headline.assetsType)+
                                     '" />';
         });
     });

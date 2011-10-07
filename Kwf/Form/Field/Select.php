@@ -2,7 +2,7 @@
 /**
  * Auswahl wo man nicht reinschreiben kann, so wie eine HTML-Select-Box
  **/
-class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
+class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -10,7 +10,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
 
         $this->setEditable(false);
         $this->setTriggerAction('all');
-        $this->setEmptyMessage(trlVpsStatic('Please select a value'));
+        $this->setEmptyMessage(trlKwfStatic('Please select a value'));
     }
 
     //setHideIfNoValues
@@ -62,7 +62,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Select Field'),
+            'componentName' => trlKwf('Select Field'),
             'default' => array(
                 'width' => 100
             )

@@ -1,5 +1,5 @@
 
-CREATE TABLE IF NOT EXISTS `vps_enquiries` (
+CREATE TABLE IF NOT EXISTS `kwf_enquiries` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `save_date` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `is_spam` tinyint(1) NOT NULL default '0',
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `vps_enquiries` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 ;
 
-INSERT INTO `vps_enquiries` (`id`, `save_date`, `is_spam`, `mail_sent`,
+INSERT INTO `kwf_enquiries` (`id`, `save_date`, `is_spam`, `mail_sent`,
     `serialized_mail_vars`, `serialized_mail_essentials`,
     `mail_attachments`, `sent_mail_content_text`, `sent_mail_content_html`
 ) VALUES

@@ -1,9 +1,9 @@
 <?php
-class Vps_Component_Generator_DbId_StaticGenerator extends Vps_Component_Generator_Page_Table
+class Kwf_Component_Generator_DbId_StaticGenerator extends Kwf_Component_Generator_Page_Table
 {
     protected function _getParentDataByRow($row)
     {
-        return Vps_Component_Data_Root::getInstance()
+        return Kwf_Component_Data_Root::getInstance()
             ->getChildComponent('_static');
     }
 }

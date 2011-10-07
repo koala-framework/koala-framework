@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
+class Kwf_Model_MirrorCacheSimple extends Kwf_Model_Proxy
 {
-    protected $_rowClass = 'Vps_Model_MirrorCacheSimple_Row';
+    protected $_rowClass = 'Kwf_Model_MirrorCacheSimple_Row';
 
     /**
-     * @var Vps_Model_Interface
+     * @var Kwf_Model_Interface
      */
     protected $_sourceModel;
 
@@ -18,7 +18,7 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
     {
         parent::_init();
         if (is_string($this->_sourceModel)) {
-            $this->_sourceModel = Vps_Model_Abstract::getInstance($this->_sourceModel);
+            $this->_sourceModel = Kwf_Model_Abstract::getInstance($this->_sourceModel);
         }
     }
 
@@ -48,7 +48,7 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
         $this->getProxyModel()->deleteRows(array()); //alles löschen
 
         for ($offset=0; $offset < $count; $offset += $stepSize) {
-            $s = new Vps_Model_Select();
+            $s = new Kwf_Model_Select();
             $s->limit($stepSize, $offset);
             /*
             $data = $this->_sourceModel->export($format, $s);
@@ -59,11 +59,11 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
                 $data = $row->toArray();
                 $newRow = $this->createRow($data);
                 foreach ($this->getDependentModels() as $rule=>$depModel) {
-                    if ($depModel instanceof Vps_Model_RowsSubModel_MirrorCacheSimple) {
-                        //dieser code könne vielleicht im Vps_Model_RowsSubModel_MirrorCacheSimple liegen
+                    if ($depModel instanceof Kwf_Model_RowsSubModel_MirrorCacheSimple) {
+                        //dieser code könne vielleicht im Kwf_Model_RowsSubModel_MirrorCacheSimple liegen
                         $m = $depModel->getSourceModel();
                         $ref = $m->getReferenceByModelClass(get_class($this), null);
-                        $select = new Vps_Model_Select();
+                        $select = new Kwf_Model_Select();
                         $select->whereEquals($ref['column'], $row->{$this->getPrimaryKey()});
                         $childRows = $m->getRows($select);
                         foreach ($childRows as $childRow) {

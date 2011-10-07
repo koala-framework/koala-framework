@@ -1,10 +1,10 @@
 <?php
-class Vpc_List_ChildPages_PageNameOnly_Component extends Vpc_Abstract
+class Kwc_List_ChildPages_PageNameOnly_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('List child page names');
+        $ret['componentName'] = trlKwf('List child page names');
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }
@@ -20,8 +20,8 @@ class Vpc_List_ChildPages_PageNameOnly_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model', '{componentId}');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel', '{id}');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Model', '{componentId}');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Root_Category_GeneratorModel', '{id}');
         return $ret;
     }
 }

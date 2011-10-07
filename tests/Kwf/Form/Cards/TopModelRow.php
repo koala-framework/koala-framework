@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Cards_TopModelRow extends Vps_Model_Row_Data_Abstract
+class Kwf_Form_Cards_TopModelRow extends Kwf_Model_Row_Data_Abstract
 {
     protected function _getSiblingRows()
     {

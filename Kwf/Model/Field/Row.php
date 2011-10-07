@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Field_Row extends Vps_Model_Row_Data_Abstract
+class Kwf_Model_Field_Row extends Kwf_Model_Row_Data_Abstract
 {
     protected $_fieldName;
     protected $_siblingRow;
@@ -41,7 +41,7 @@ class Vps_Model_Field_Row extends Vps_Model_Row_Data_Abstract
             $this->_beforeUpdate();
         }
 
-        Vps_Model_Row_Abstract::save();
+        Kwf_Model_Row_Abstract::save();
 
         if ($this->_isNewRow) {
             $this->_afterInsert();
@@ -55,6 +55,6 @@ class Vps_Model_Field_Row extends Vps_Model_Row_Data_Abstract
 
     public function delete()
     {
-        throw new Vps_Exception("Can't delete sibling row");
+        throw new Kwf_Exception("Can't delete sibling row");
     }
 }

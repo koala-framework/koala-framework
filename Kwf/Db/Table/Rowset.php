@@ -1,4 +1,4 @@
 <?php
-class Vps_Db_Table_Rowset extends Vps_Db_Table_Rowset_Abstract
+class Kwf_Db_Table_Rowset extends Kwf_Db_Table_Rowset_Abstract
 {
 }

@@ -1,12 +1,12 @@
 <?php
-class Vpc_Directories_Item_Detail_AssignedCategories_Component
-    extends Vpc_Directories_List_Component
+class Kwc_Directories_Item_Detail_AssignedCategories_Component
+    extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] =
-            'Vpc_Directories_Item_Detail_AssignedCategories_View_Component';
+            'Kwc_Directories_Item_Detail_AssignedCategories_View_Component';
         $ret['useDirectorySelect'] = false;
         return $ret;
     }
@@ -39,8 +39,8 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
         $ret = parent::getSelect();
         $categoryDirectory = $this->getItemDirectory()->getComponent();
 
-        $refData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
-            Vpc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemModelName'),
+        $refData = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData(
+            Kwc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemModelName'),
             'Category'
         );
 
@@ -49,8 +49,8 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
                 ."{$refData['tableName']}.{$refData['itemColumn']}", array()
         );
 
-        $refDataItem = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
-            Vpc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemModelName'),
+        $refDataItem = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData(
+            Kwc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemModelName'),
             'Item'
         );
 

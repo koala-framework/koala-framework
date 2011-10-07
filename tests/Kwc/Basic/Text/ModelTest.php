@@ -1,13 +1,13 @@
 <?php
 /**
- * @group Vpc_Basic_Text
- * @group Vpc_Basic_Text_Model
+ * @group Kwc_Basic_Text
+ * @group Kwc_Basic_Text_Model
  **/
-class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
+class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_Text_Root');
+        parent::setUp('Kwc_Basic_Text_Root');
     }
 
     public function testCreatesLinkComponent()
@@ -22,7 +22,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1003-l1', current($cc)->componentId);
 
-        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
             ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003'));
         $this->assertEquals(1, count($rows));
@@ -30,13 +30,13 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals('link', $row->component);
         $this->assertEquals('1', $row->nr);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Link_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003-l1'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
         $this->assertEquals('extern', $row->component);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_Extern_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Link_Extern_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003-l1-child'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -53,7 +53,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
 
         $html = $c->getData()->render();
 
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"http://www.vivid-planet.com/\">foo</a>\n</p>".
                     "</div>", $html);
 
@@ -73,7 +73,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1014-l1', current($cc)->componentId);
 
-        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
             ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1014'));
         $this->assertEquals(1, count($rows));
@@ -81,21 +81,21 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals('link', $row->component);
         $this->assertEquals('1', $row->nr);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Link_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1014-l1'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
         $this->assertEquals('intern', $row->component);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_Intern_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Link_Intern_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1014-l1-child'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
         $this->assertEquals('1001', $row->target);
 
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/foo1\">foo</a>\n</p>".
+        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
+                    "<p>\n  <a href=\"/kwf/kwctest/Kwc_Basic_Text_Root/foo1\">foo</a>\n</p>".
                     "</div>", $html);
     }
 
@@ -108,7 +108,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"mailto:foo(vpsat)example(vpsdot)com\">foo</a>\n</p>".
                     "</div>", $html);
     }
@@ -122,7 +122,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"http://vivid.com\">foo</a>\n</p>".
                     "</div>", $html);
     }
@@ -133,13 +133,13 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row = $c->getRow();
         $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
         $html = $row->tidy($html);
-        $this->assertRegExp("#^<p>\n  <img src=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1008-i1/default/[0-9a-z]+/[0-9]+/logo.png\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
+        $this->assertRegExp("#^<p>\n  <img src=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1008-i1/default/[0-9a-z]+/[0-9]+/logo.png\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
 
         $cc = array_values($c->getData()->getChildComponents());
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1008-i1', current($cc)->componentId);
 
-        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
             ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008'));
         $this->assertEquals(1, count($rows));
@@ -147,13 +147,13 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals('image', $row->component);
         $this->assertEquals('1', $row->nr);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Image_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008-i1'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
-        $this->assertEquals(2, $row->vps_upload_id);
+        $this->assertEquals(2, $row->kwf_upload_id);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Image_UploadsModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_UploadsModel');
         $row = $m->getRow(2);
         $this->assertEquals('image/png', $row->mime_type);
         $this->assertEquals('png', $row->extension);
@@ -171,9 +171,9 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'.
-                    '\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
+        $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'.
+                    '\s*<p>\s*<div class="kwcBasicTextImageTestComponent">'
+                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1009-i1/default/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
 
@@ -183,14 +183,14 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
     {
         $c = $this->_root->getComponentById(1010)->getComponent();
         $row = $c->getRow();
-        $html = '<p><img src="/media/Vpc_Basic_Text_Image_TestComponent/1011-i1/default/asdf/blub.png" /></p>';
+        $html = '<p><img src="/media/Kwc_Basic_Text_Image_TestComponent/1011-i1/default/asdf/blub.png" /></p>';
         $row->content = $html;
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
-                    .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
+        $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'
+                    .'\s*<p>\s*<div class="kwcBasicTextImageTestComponent">'
+                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1010-i1/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }
@@ -204,8 +204,8 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertRegExp("#^<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
+        $this->assertRegExp("#^<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
+                    "<p>\n  <a href=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
                     "</div>$#ms", $html);
     }
 
@@ -213,16 +213,16 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
     {
         $c = $this->_root->getComponentById(1015)->getComponent();
         $row = $c->getRow();
-        $html = '<p><img src="/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319" /></p>';
+        $html = '<p><img src="/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319" /></p>';
         $row->content = $html;
         $row->save();
         $html = $row->content;
-        $this->assertEquals("<p>\n  <img src=\n  \"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319\" />\n</p>", $html);
+        $this->assertEquals("<p>\n  <img src=\n  \"/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319\" />\n</p>", $html);
 
         $html = $c->getData()->render();
-        $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
-                    .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
+        $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'
+                    .'\s*<p>\s*<div class="kwcBasicTextImageTestComponent">'
+                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }

@@ -1,17 +1,17 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action_Auto_Tree
+abstract class Kwf_Controller_Action_Auto_Kwc_Tree extends Kwf_Controller_Action_Auto_Tree
 {
     public function preDispatch()
     {
         if (!isset($this->_table) && !isset($this->_tableName)) {
-            if (Vpc_Abstract::hasSetting($this->_getParam('class'), 'tablename')) {
-                $tablename = Vpc_Abstract::getSetting($this->_getParam('class'), 'tablename');
+            if (Kwc_Abstract::hasSetting($this->_getParam('class'), 'tablename')) {
+                $tablename = Kwc_Abstract::getSetting($this->_getParam('class'), 'tablename');
                 $this->_table = new $tablename(array('componentClass'=>$this->_getParam('class')));
-            } else if (Vpc_Abstract::hasSetting($this->_getParam('class'), 'childModel')) {
-                $childModelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'childModel');
+            } else if (Kwc_Abstract::hasSetting($this->_getParam('class'), 'childModel')) {
+                $childModelName = Kwc_Abstract::getSetting($this->_getParam('class'), 'childModel');
                 $this->_model = new $childModelName(array('componentClass'=>$this->_getParam('class')));
             } else {
-                throw new Vps_Exception('No tablename in Setting defined: ' . $class);
+                throw new Kwf_Exception('No tablename in Setting defined: ' . $class);
             }
         }
         parent::preDispatch();
@@ -32,6 +32,6 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
     public function indexAction()
     {
         parent::indexAction();
-        $this->view->apply(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
+        $this->view->apply(Kwc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
     }
 }

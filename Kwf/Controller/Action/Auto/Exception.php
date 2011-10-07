@@ -1,4 +1,4 @@
 <?php
-class Vps_Controller_Action_Auto_Exception extends Vps_Exception
+class Kwf_Controller_Action_Auto_Exception extends Kwf_Exception
 {
 }

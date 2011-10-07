@@ -1,16 +1,16 @@
 <?php
 // zum manuell testen; gibt keinen test der den controller verwendet
-// /vps/test/vps_form_radio_test
-class Vps_Form_Radio_TestController extends Vps_Controller_Action_Auto_Form
+// /kwf/test/kwf_form_radio_test
+class Kwf_Form_Radio_TestController extends Kwf_Controller_Action_Auto_Form
 {
-    protected $_modelName = 'Vps_Form_Radio_TestModel';
+    protected $_modelName = 'Kwf_Form_Radio_TestModel';
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
 
     protected function _initFields()
     {
-        $this->_form->add(new Vps_Form_Field_TextField("text", "Text"));
-        $this->_form->add(new Vps_Form_Field_Radio("foo", "Foo"))
+        $this->_form->add(new Kwf_Form_Field_TextField("text", "Text"));
+        $this->_form->add(new Kwf_Form_Field_Radio("foo", "Foo"))
             ->setValues(array(
                 'foo' => 'Foo',
                 'bar' => 'Bar'
@@ -28,7 +28,7 @@ class Vps_Form_Radio_TestController extends Vps_Controller_Action_Auto_Form
                 'controllerUrl' => $this->getRequest()->getPathInfo()
             )
         );
-        $this->view->ext('Vps.Auto.FormPanel', $config);
+        $this->view->ext('Kwf.Auto.FormPanel', $config);
     }
 }
 

@@ -1,7 +1,7 @@
-Ext.namespace('Vpc.Basic.Text');
-Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
+Ext.namespace('Kwc.Basic.Text');
+Kwc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
 {
-    title: trlVps('Edit Styles'),
+    title: trlKwf('Edit Styles'),
     modal: true,
     width: 650,
     height: 400,
@@ -9,12 +9,12 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
     closeAction: 'hide',
     initComponent: function()
     {
-        this.block = new Vpc.Basic.Text.StylesEditorTab({
-                title: trlVps('Block-Styles'),
+        this.block = new Kwc.Basic.Text.StylesEditorTab({
+                title: trlKwf('Block-Styles'),
                 controllerUrl: this.blockStyleUrl
             });
-        this.inline = new Vpc.Basic.Text.StylesEditorTab({
-                title: trlVps('Inline-Styles'),
+        this.inline = new Kwc.Basic.Text.StylesEditorTab({
+                title: trlKwf('Inline-Styles'),
                 controllerUrl: this.inlineStyleUrl
             });
         this.items = new Ext.TabPanel({
@@ -22,7 +22,7 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
             activeTab: 0
         });
 
-        Vpc.Basic.Text.StylesEditor.superclass.initComponent.call(this);
+        Kwc.Basic.Text.StylesEditor.superclass.initComponent.call(this);
     },
     applyBaseParams: function(params) {
         this.block.applyBaseParams(params);
@@ -31,7 +31,7 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
     show: function() {
         this.block.load();
         this.inline.load();
-        Vpc.Basic.Text.StylesEditor.superclass.show.call(this);
+        Kwc.Basic.Text.StylesEditor.superclass.show.call(this);
     }
 /*
         this.form.on('renderform', function() {
@@ -57,7 +57,7 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
         var values = {};
         this.form.getForm().items.each(function(i) {
             if (i.isFormField && i.getValue()) {
-                if (i instanceof Vps.Form.ColorField) {
+                if (i instanceof Kwf.Form.ColorField) {
                     values[i.getName()] = '#'+i.getValue();
                 } else if (i instanceof Ext.form.NumberField) {
                     values[i.getName()] = i.getValue()+'px';
@@ -82,5 +82,5 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
 */
 });
 
-Ext.reg('vpc.basic.text.styleseditor', Vpc.Basic.Text.StylesEditor);
+Ext.reg('kwc.basic.text.styleseditor', Kwc.Basic.Text.StylesEditor);
 

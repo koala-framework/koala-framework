@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Success_Component extends Vpc_Form_Success_Component
+class Kwc_Posts_Success_Component extends Kwc_Form_Success_Component
 {
     protected function _getTargetPage()
     {

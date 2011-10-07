@@ -1,13 +1,13 @@
 <?php
-// dient zB auch dem Vpc_Basic_LinkTagNews test
+// dient zB auch dem Kwc_Basic_LinkTagNews test
 /**
- * @group Vpc_News
+ * @group Kwc_News
  */
-class Vpc_News_Test extends Vpc_TestAbstract
+class Kwc_News_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_News_Root');
+        parent::setUp('Kwc_News_Root');
         $this->_root->setFilename(null);
     }
 

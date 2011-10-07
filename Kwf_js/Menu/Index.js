@@ -1,8 +1,8 @@
-Ext.namespace('Vps.Menu');
+Ext.namespace('Kwf.Menu');
 
-Vps.Menu.Index = Ext.extend(Ext.Toolbar,
+Kwf.Menu.Index = Ext.extend(Ext.Toolbar,
 {
-    controllerUrl: '/vps/user/menu',
+    controllerUrl: '/kwf/user/menu',
     changeUserTpl: ['<tpl for=".">',
                         '<div class="x-combo-list-item changeuser-list-item<tpl if="locked != 0"> changeuser-locked</tpl>">',
                             '<h3>{lastname}&nbsp;{firstname}</h3>',
@@ -15,11 +15,11 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         this.addEvents(
             'menuevent'
         );
-        Vps.Menu.Index.superclass.initComponent.call(this);
+        Kwf.Menu.Index.superclass.initComponent.call(this);
 
     },
     afterRender: function() {
-        Vps.Menu.Index.superclass.afterRender.call(this);
+        Kwf.Menu.Index.superclass.afterRender.call(this);
         this.reload();
     },
     reload: function()
@@ -54,10 +54,10 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                             location.href = o.href;
                         }
                     };
-                    if (!Vps.currentViewport || !Vps.currentViewport.mabySubmit) {
+                    if (!Kwf.currentViewport || !Kwf.currentViewport.mabySubmit) {
                         cb();
                     } else {
-                        if (Vps.currentViewport.mabySubmit({
+                        if (Kwf.currentViewport.mabySubmit({
                             callback: cb,
                             scope: this
                         })) {
@@ -87,14 +87,14 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 }
             } else if (m.type == 'command') {
                 subMenu.handler = function(o) {
-                    Vps.currentViewport.remove(Vps.currentViewport.items.item('mainPanel'));
+                    Kwf.currentViewport.remove(Kwf.currentViewport.items.item('mainPanel'));
                     var c = eval(o.commandClass);
                     var panel = new c(o.commandConfig);
                     panel.region = 'center';
                     panel.id = 'mainPanel';
-                    Vps.currentViewport.add(panel);
-                    Vps.currentViewport.layout.rendered = false;
-                    Vps.currentViewport.doLayout();
+                    Kwf.currentViewport.add(panel);
+                    Kwf.currentViewport.layout.rendered = false;
+                    Kwf.currentViewport.doLayout();
                 };
                 subMenu.scope = this;
                 subMenu.commandClass = m.commandClass;
@@ -127,7 +127,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         this.add(new Ext.Toolbar.Fill());
 
         this.showUserMenu = new Ext.Button({
-            tooltip: trlVps('Show User Menu'),
+            tooltip: trlKwf('Show User Menu'),
             cls: 'x-btn-icon',
             icon: '/assets/silkicons/bullet_arrow_down.png',
             handler: function() {
@@ -144,9 +144,9 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         this.add(this.showUserMenu);
 
         if (result.changeUser) {
-            var changeUser = new Vps.Form.ComboBox({
+            var changeUser = new Kwf.Form.ComboBox({
                 store: {
-                    url: '/vps/user/changeUser/json-data'
+                    url: '/kwf/user/changeUser/json-data'
                 },
                 mode: 'remote',
                 editable: true,
@@ -165,10 +165,10 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             }, this, {delay: 10});
             changeUser.on('select', function(combo, record, index) {
                 Ext.Ajax.request({
-                    url: '/vps/user/changeUser/json-change-user',
+                    url: '/kwf/user/changeUser/json-change-user',
                     params: { userId: record.id },
                     success: function() {
-                        location.href = '/vps/welcome';
+                        location.href = '/kwf/welcome';
                     },
                     scope: this
                 });
@@ -191,7 +191,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/user.png',
                 handler: function() {
-                    var dlg = new Vps.Auto.Form.Window({
+                    var dlg = new Kwf.Auto.Form.Window({
                         formConfig: {
                             controllerUrl: result.userSelfControllerUrl
                         }
@@ -207,15 +207,15 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         if (result.showLogout) {
             this.userToolbar.add({
                 cls: 'x-btn-icon',
-                tooltip: trlVps('Logout'),
+                tooltip: trlKwf('Logout'),
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
                     Ext.Ajax.request({
-                        url : '/vps/user/login/json-logout-user',
+                        url : '/kwf/user/login/json-logout-user',
                         success : function(form, action) {
                             //nicht reload, weil user nach erneutem login vielleicht
                             //die aktuelle seite gar nicht mehr sehen darf
-                            location.href = '/vps/welcome';
+                            location.href = '/kwf/welcome';
                         },
                         scope: this
                     });
@@ -225,30 +225,30 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         }
         this.userToolbar.add({
             cls: 'x-btn-icon',
-            icon: '/assets/vps/images/information.png',
-            tooltip: trlVps('Information'),
+            icon: '/assets/kwf/images/information.png',
+            tooltip: trlKwf('Information'),
             handler: function() {
-                var about = new Vps.About();
+                var about = new Kwf.About();
                 about.show();
             },
             scope: this
         });
 
-        if (Vps.Debug.showMenu) {
+        if (Kwf.Debug.showMenu) {
             this.userToolbar.add('-');
             this.userToolbar.add({
                 cls: 'x-btn-icon',
                 icon: '/assets/silkicons/bug.png',
-                menu: new Vps.Debug.Menu()
+                menu: new Kwf.Debug.Menu()
             });
-        } else if (Vps.Debug.showActivator) {
+        } else if (Kwf.Debug.showActivator) {
             this.userToolbar.add('-');
             this.userToolbar.add({
                 tooltip: 'Activate Debugging',
                 cls: 'x-btn-icon',
                 icon: '/assets/silkicons/bug.png',
                 handler: function() {
-                    location.href = '/vps/debug/activate?url=' + location.href;
+                    location.href = '/kwf/debug/activate?url=' + location.href;
                 }
             });
         }
@@ -257,7 +257,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 
         if (result.hasFrontend) {
             this.add({
-                tooltip: trlVps('Open frontend in a new window'),
+                tooltip: trlKwf('Open frontend in a new window'),
                 cls: 'x-btn-icon',
                 icon: '/assets/silkicons/world.png',
                 handler: function() {
@@ -268,4 +268,4 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         }
     }
 });
-Ext.reg('vps.menu', Vps.Menu.Index);
+Ext.reg('kwf.menu', Kwf.Menu.Index);

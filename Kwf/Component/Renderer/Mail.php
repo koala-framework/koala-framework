@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Renderer_Mail extends Vps_Component_Renderer_Abstract implements Vps_View_MailInterface
+class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract implements Kwf_View_MailInterface
 {
     const RENDER_HTML = 'html';
     const RENDER_TXT = 'txt';
@@ -39,7 +39,7 @@ class Vps_Component_Renderer_Mail extends Vps_Component_Renderer_Abstract implem
         return $this->_recipient;
     }
 
-    public function setRecipient(Vpc_Mail_Recipient_Interface $recipient = null)
+    public function setRecipient(Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $this->_recipient = $recipient;
     }

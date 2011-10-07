@@ -1,9 +1,9 @@
-Vps.Form.DateField = Ext.extend(Ext.form.DateField,
+Kwf.Form.DateField = Ext.extend(Ext.form.DateField,
 {
-    format: trlVps('Y-m-d'),
+    format: trlKwf('Y-m-d'),
     width: 90,
     initComponent : function(){
-        Vps.Form.DateField.superclass.initComponent.call(this);
+        Kwf.Form.DateField.superclass.initComponent.call(this);
         this.addEvents('menuhidden');
         if (!this.menuListeners.oldHide) {
             this.menuListeners.oldHide = this.menuListeners.hide;
@@ -14,4 +14,4 @@ Vps.Form.DateField = Ext.extend(Ext.form.DateField,
         }
     }
 });
-Ext.reg('datefield', Vps.Form.DateField);
+Ext.reg('datefield', Kwf.Form.DateField);

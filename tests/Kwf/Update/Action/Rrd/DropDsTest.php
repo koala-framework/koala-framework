@@ -4,14 +4,14 @@
  * @group Update_Action_Rrd
  * @group Update_Action_Rrd_DropDs
  */
-class Vps_Update_Action_Rrd_DropDsTest extends Vps_Update_Action_Rrd_AbstractTest
+class Kwf_Update_Action_Rrd_DropDsTest extends Kwf_Update_Action_Rrd_AbstractTest
 {
 
     public function testRenameRrd()
     {
         $file = $this->_createTestFile();
 
-        $action = new Vps_Update_Action_Rrd_DropDs(array(
+        $action = new Kwf_Update_Action_Rrd_DropDs(array(
             'file' => $file,
             'name' => 'testx',
             'backup'=>false,

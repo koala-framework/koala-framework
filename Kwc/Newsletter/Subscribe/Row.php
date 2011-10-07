@@ -1,6 +1,6 @@
 <?php
-class Vpc_Newsletter_Subscribe_Row extends Vps_Model_Db_Row
-    implements Vpc_Mail_Recipient_TitleInterface, Vpc_Mail_Recipient_UnsubscribableInterface
+class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
+    implements Kwc_Mail_Recipient_TitleInterface, Kwc_Mail_Recipient_UnsubscribableInterface
 {
 
     public function getMailFirstname()
@@ -21,15 +21,15 @@ class Vpc_Newsletter_Subscribe_Row extends Vps_Model_Db_Row
     public function getMailFormat()
     {
         return ($this->format == 'text' ?
-            Vpc_Mail_Recipient_Interface::MAIL_FORMAT_TEXT :
-            Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML
+            Kwc_Mail_Recipient_Interface::MAIL_FORMAT_TEXT :
+            Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML
         );
     }
 
     public function getMailGender()
     {
-        if ($this->gender == 'male') return Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE;
-        if ($this->gender == 'female') return Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
+        if ($this->gender == 'male') return Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE;
+        if ($this->gender == 'female') return Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
         return null;
     }
 

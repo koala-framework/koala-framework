@@ -1,5 +1,5 @@
 *** Interner-Link einfügen nicht möglich ***
-- url aufrufen: http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_TextSessionModel_Root/Vpc_Basic_TextSessionModel_TestComponent/Index?componentId=root_text
+- url aufrufen: http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Basic_TextSessionModel_Root/Kwc_Basic_TextSessionModel_TestComponent/Index?componentId=root_text
 - foo markieren
 - auf link einfügen in toolbar klicken
 - einen internen link in seitenbaum auswählen

@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_FnF_SelectExpr_Model2 extends Vps_Model_FnF
+class Kwf_Model_FnF_SelectExpr_Model2 extends Kwf_Model_FnF
 {
     protected $_referenceMap = array(
         'Model1' => array(
             'column' => 'model1_id',
-            'refModelClass' => 'Vps_Model_FnF_SelectExpr_Model1'
+            'refModelClass' => 'Kwf_Model_FnF_SelectExpr_Model1'
         )
     );
     public function __construct($config = array())

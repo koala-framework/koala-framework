@@ -1,5 +1,5 @@
 <?php
-class Vps_Db_Profiler_Query extends Zend_Db_Profiler_Query
+class Kwf_Db_Profiler_Query extends Zend_Db_Profiler_Query
 {
     protected $_backtrace = null;
     public function __construct($query, $queryType)

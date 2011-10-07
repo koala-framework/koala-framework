@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_Password extends Vps_Form_Field_TextField
+class Kwf_Form_Field_Password extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_PseudoPage_Table
+class Kwc_Chained_Abstract_ChainedGenerator extends Kwf_Component_Generator_PseudoPage_Table
 {
     protected $_idColumn = 'id';
     protected $_hasNumericIds = false;
@@ -19,7 +19,7 @@ class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_Pseu
 
     protected function _getParentDataByRow($row, $select)
     {
-        return Vps_Component_Data_Root::getInstance()->getComponentsByClass($this->_class);
+        return Kwf_Component_Data_Root::getInstance()->getComponentsByClass($this->_class);
     }
 
     protected function _formatConfig($parentData, $row)
@@ -29,8 +29,8 @@ class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_Pseu
         $data['visible'] = isset($row->visible) ? $row->visible : true;
 
         //vielleicht flexibler machen?
-        $data['chained'] = Vps_Component_Data_Root::getInstance()
-                    ->getComponentByClass(Vpc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
+        $data['chained'] = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentByClass(Kwc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
         return $data;
     }
 

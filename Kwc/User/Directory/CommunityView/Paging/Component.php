@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Directory_CommunityView_Paging_Component extends Vpc_Paging_Component
+class Kwc_User_Directory_CommunityView_Paging_Component extends Kwc_Paging_Component
 {
     public static function getSettings()
     {

@@ -1,8 +1,8 @@
 <?php
-class Vpc_Composite_ParagraphsImage_Controller extends Vps_Controller_Action
+class Kwc_Composite_ParagraphsImage_Controller extends Kwf_Controller_Action
 {
     public function jsonIndexAction()
     {
-        $this->view->vpc(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
+        $this->view->kwc(Kwc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
     }
 }

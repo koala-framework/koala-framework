@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Table_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
+class Kwc_Basic_Table_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 {
     protected $_buttons = array('save');
     protected $_defaultOrder = 'pos';
@@ -12,17 +12,17 @@ class Vpc_Basic_Table_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('pos'));
-        $this->_columns->add(new Vps_Grid_Column_Visible());
+        $this->_columns->add(new Kwf_Grid_Column('pos'));
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
         for ($i = 1; $i <= $this->_getComponent()->chained->getComponent()->getColumnCount(); $i++) {
-            $this->_columns->add(new Vps_Grid_Column("column$i", $this->_getColumnLetterByIndex($i-1), 150))
-                ->setEditor(new Vps_Form_Field_TextField());
+            $this->_columns->add(new Kwf_Grid_Column("column$i", $this->_getColumnLetterByIndex($i-1), 150))
+                ->setEditor(new Kwf_Form_Field_TextField());
         }
     }
 
     private function _getComponent()
     {
-        return Vps_Component_Data_Root::getInstance()
+        return Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_getParam('componentId'), array('ignoreVisible' => true));
     }
 
@@ -35,7 +35,7 @@ class Vpc_Basic_Table_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $row = $this->_model->getRow($select);
         } else {
             if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
-                throw new Vps_Exception("Add is not allowed.");
+                throw new Kwf_Exception("Add is not allowed.");
             }
             $row = $this->_model->createRow();
         }

@@ -1,10 +1,10 @@
 <?php
-class Vpc_TextImage_Text_TestComponent_Form extends Vpc_Basic_Text_Form
+class Kwc_TextImage_Text_TestComponent_Form extends Kwc_Basic_Text_Form
 {
     public function __construct($name, $class)
     {
-        $this->_stylesModel = new Vpc_Basic_Text_StylesModel(array(
-            'proxyModel' => new Vps_Model_FnF()
+        $this->_stylesModel = new Kwc_Basic_Text_StylesModel(array(
+            'proxyModel' => new Kwf_Model_FnF()
         ));
         parent::__construct($name, $class);
     }

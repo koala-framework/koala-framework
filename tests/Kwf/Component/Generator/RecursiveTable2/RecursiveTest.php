@@ -3,11 +3,11 @@
  * @group Generator_RecursiveTable
  * Test der Nachbaut: Paragraphs wo Columns wo Paragraphs drin sind
  */
-class Vps_Component_Generator_RecursiveTable2_RecursiveTest extends Vpc_TestAbstract
+class Kwf_Component_Generator_RecursiveTable2_RecursiveTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_RecursiveTable2_Root');
+        parent::setUp('Kwf_Component_Generator_RecursiveTable2_Root');
     }
 
     public function testFlag2()

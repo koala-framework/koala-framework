@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_TimeField extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_TimeField extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -12,7 +12,7 @@ class Vps_Form_Field_TimeField extends Vps_Form_Field_SimpleAbstract
     protected function _addValidators()
     {
         parent::_addValidators();
-        $this->addValidator(new Vps_Validate_Time());
+        $this->addValidator(new Kwf_Validate_Time());
     }
 
     protected function _processLoaded($v)
@@ -26,7 +26,7 @@ class Vps_Form_Field_TimeField extends Vps_Form_Field_SimpleAbstract
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        if ($ret == trlVps('hh:mm')) $ret = null;
+        if ($ret == trlKwf('hh:mm')) $ret = null;
         if ($ret == '') $ret = null;
         if ($ret) $ret = str_replace('"', '', $ret);
         return $ret;
@@ -36,7 +36,7 @@ class Vps_Form_Field_TimeField extends Vps_Form_Field_SimpleAbstract
     {
         $name = $this->getFieldName();
         $value = $values[$name];
-        if (!$value) $value = trlVps('hh:mm');
+        if (!$value) $value = trlKwf('hh:mm');
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $value = htmlspecialchars($value);

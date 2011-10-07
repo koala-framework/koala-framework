@@ -1,6 +1,6 @@
 <?php
-abstract class Vps_Model_Select_Expr_Unary_Abstract
-    implements Vps_Model_Select_Expr_Interface, ArrayAccess
+abstract class Kwf_Model_Select_Expr_Unary_Abstract
+    implements Kwf_Model_Select_Expr_Interface, ArrayAccess
 {
     protected $_expressions;
     public function __construct(array $expressions)
@@ -19,29 +19,29 @@ abstract class Vps_Model_Select_Expr_Unary_Abstract
 
     public function offsetExists($offset)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
     public function offsetGet($offset)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
     public function offsetSet($offset, $value)
     {
         if (!$offset) {
             $this->_expressions[] = $value;
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
     public function offsetUnset($offset)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     public function validate ()
     {
         if (count($this->_expressions) == 0) {
-            throw new Vps_Exception("'".get_class($this)."' has to contain at least one Expression");
+            throw new Kwf_Exception("'".get_class($this)."' has to contain at least one Expression");
         }
         foreach ($this->_expressions as $expression) {
             $expression->validate();
@@ -50,6 +50,6 @@ abstract class Vps_Model_Select_Expr_Unary_Abstract
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_BOOLEAN;
+        return Kwf_Model_Interface::TYPE_BOOLEAN;
     }
 }

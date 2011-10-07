@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Dynamic_Abstract
+abstract class Kwf_Component_Dynamic_Abstract
 {
     protected $_info;
     protected $_componentInfo;

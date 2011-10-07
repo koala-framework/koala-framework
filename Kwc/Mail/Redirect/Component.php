@@ -1,12 +1,12 @@
 <?php
-class Vpc_Mail_Redirect_Component extends Vpc_Abstract
+class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 {
     protected $_params = array();
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childModel'] = 'Vpc_Mail_Redirect_Model';
+        $ret['childModel'] = 'Kwc_Mail_Redirect_Model';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
         return $ret;
@@ -15,12 +15,12 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     protected function _getRedirectRow()
     {
         if (!$this->_params || empty($this->_params['redirectId'])) {
-            throw new Vps_Exception("params in object must be set before _getRedirectRow is called");
+            throw new Kwf_Exception("params in object must be set before _getRedirectRow is called");
         }
 
         $r = $this->getChildModel()->getRow($this->_params['redirectId']);
         if (!$r) {
-            throw new Vps_Exception("The redirect row was not found");
+            throw new Kwf_Exception("The redirect row was not found");
         }
         return $r;
     }
@@ -28,12 +28,12 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     public function processInput($inputData)
     {
         if (empty($inputData['d'])) {
-            throw new Vps_Exception_NotFound();
+            throw new Kwf_Exception_NotFound();
         }
 
         $params = explode('_', $inputData['d']);
         if (count($params) < 4) {
-            throw new Vps_Exception("Too less parameters submitted");
+            throw new Kwf_Exception("Too less parameters submitted");
         }
 
         $params = array(
@@ -49,18 +49,18 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
         if ($params['hash'] != $this->_getHash(array(
             $params['redirectId'], $params['recipientId'], $params['recipientModelShortcut']
         ))) {
-            throw new Vps_Exception("The submitted hash is incorrect.");
+            throw new Kwf_Exception("The submitted hash is incorrect.");
         }
 
         // statistics
-        $statModel = Vps_Model_Abstract::getInstance('Vpc_Mail_Redirect_StatisticsModel');
+        $statModel = Kwf_Model_Abstract::getInstance('Kwc_Mail_Redirect_StatisticsModel');
         // avoid double insert (e.g. click on link in kmail)
         $statSel = $statModel->select()
             ->whereEquals('mail_component_id', $this->getData()->parent->componentId)
             ->whereEquals('redirect_id', $params['redirectId'])
             ->whereEquals('recipient_id', $params['recipientId'])
             ->whereEquals('recipient_model_shortcut', $params['recipientModelShortcut'])
-            ->where(new Vps_Model_Select_Expr_Higher('click_date', new Vps_DateTime(time() - 10)));
+            ->where(new Kwf_Model_Select_Expr_Higher('click_date', new Kwf_DateTime(time() - 10)));
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $statSel->whereEquals('ip', $_SERVER['REMOTE_ADDR']);
         }
@@ -82,9 +82,9 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
             header('Location: '.$r->value);
             exit;
         } else if ($r->type == 'showcomponent') {
-            $recipientRow = Vps_Model_Abstract::getInstance($params['recipientModelClass'])
+            $recipientRow = Kwf_Model_Abstract::getInstance($params['recipientModelClass'])
                 ->getRow($params['recipientId']);
-            $c = Vps_Component_Data_Root::getInstance()
+            $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($r->value)->getComponent();
             $c->processMailRedirectInput($recipientRow, $inputData);
         }
@@ -95,25 +95,25 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $r = $this->_getRedirectRow();
         if ($r->type == 'showcomponent') {
-            $ret['showcomponent'] = Vps_Component_Data_Root::getInstance()
+            $ret['showcomponent'] = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($r->value);
         }
         return $ret;
     }
 
 
-    public function replaceLinks($mailText, Vpc_Mail_Recipient_Interface $recipient = null)
+    public function replaceLinks($mailText, Kwc_Mail_Recipient_Interface $recipient = null)
     {
         if ($recipient) {
             if ($recipient instanceof Zend_Db_Table_Row_Abstract) {
                 $class = get_class($recipient->getTable());
                 $recipientPrimary = $recipient->getTable()->info(Zend_Db_Table_Abstract::PRIMARY);
                 $recipientPrimary = $recipientPrimary[1];
-            } else if ($recipient instanceof Vps_Model_Row_Abstract) {
+            } else if ($recipient instanceof Kwf_Model_Row_Abstract) {
                 $class = get_class($recipient->getModel());
                 $recipientPrimary = $recipient->getModel()->getPrimaryKey();
             } else {
-                throw new Vps_Exception('Only models or tables are supported.');
+                throw new Kwf_Exception('Only models or tables are supported.');
             }
             $recipientSource = self::getRecipientModelShortcut(
                 $this->getData()->parent->componentClass,
@@ -127,7 +127,7 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
             if (!$recipient) {
                 $mailText = str_replace(
                     $matches[0],
-                    'http://'.Vps_Registry::get('config')->server->domain.$matches[2],
+                    'http://'.Kwf_Registry::get('config')->server->domain.$matches[2],
                     $mailText
                 );
             } else {
@@ -145,7 +145,7 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
                 // Links nicht mehr
 
                 // linkId_userId_userSource_hash
-                $newLink = 'http://'.Vps_Registry::get('config')->server->domain
+                $newLink = 'http://'.Kwf_Registry::get('config')->server->domain
                     .$this->_getRedirectUrl(array($r->id, $recipient->$recipientPrimary, $recipientSource));
                 $mailText = str_replace($matches[0], $newLink, $mailText);
             }
@@ -162,14 +162,14 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
 
     public static function getRecipientModelShortcut($recipientSourcesComponentClass, $recipientModelClass)
     {
-        $recipientSources = Vpc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
+        $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
         if (!in_array($recipientModelClass, $recipientSources)) {
-            throw new Vps_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
+            throw new Kwf_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
         }
 
         $recipientSource = array_keys($recipientSources, $recipientModelClass);
         if (count($recipientSource) >= 2) {
-            throw new Vps_Exception("'$recipientModelClass' exists ".count($recipientSource)." times in setting 'recipientSources' in '$recipientSourcesComponentClass'. It may only have 1 shortcut.");
+            throw new Kwf_Exception("'$recipientModelClass' exists ".count($recipientSource)." times in setting 'recipientSources' in '$recipientSourcesComponentClass'. It may only have 1 shortcut.");
         }
 
         return $recipientSource[0];
@@ -177,9 +177,9 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
 
     public static function getRecipientModelClass($recipientSourcesComponentClass, $recipientShortcut)
     {
-        $recipientSources = Vpc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
+        $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
         if (!isset($recipientSources[$recipientShortcut])) {
-            throw new Vps_Exception("Source key '$recipientShortcut' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
+            throw new Kwf_Exception("Source key '$recipientShortcut' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
         }
         return $recipientSources[$recipientShortcut];
     }
@@ -194,6 +194,6 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     private function _getHash(array $hashData)
     {
         $hashData = implode('', $hashData);
-        return substr(Vps_Util_Hash::hash($hashData), 0, 6);
+        return substr(Kwf_Util_Hash::hash($hashData), 0, 6);
     }
 }

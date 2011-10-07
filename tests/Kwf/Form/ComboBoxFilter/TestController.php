@@ -1,21 +1,21 @@
 <?php
-// /vps/test/vps_form_combo-box-filter_test
-class Vps_Form_ComboBoxFilter_TestController extends Vps_Controller_Action_Auto_Form
+// /kwf/test/kwf_form_combo-box-filter_test
+class Kwf_Form_ComboBoxFilter_TestController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
 
     protected function _initFields()
     {
-        $this->_form->setModel(new Vps_Model_FnF(array(
+        $this->_form->setModel(new Kwf_Model_FnF(array(
             'data' => array(
                 array('id'=>1, 'foo'=>2)
             )
         )));
 
-//         $this->_form->add(new Vps_Form_Field_TextField('foo', 'Foo'));
+//         $this->_form->add(new Kwf_Form_Field_TextField('foo', 'Foo'));
 
-        $foo = new Vps_Form_Field_Select('foo', 'Foo');
+        $foo = new Kwf_Form_Field_Select('foo', 'Foo');
         $foo->setFields(array('id', 'name', 'filter_id'));
         $foo->setFilterField('filter_id');
         $foo->setValues(array(
@@ -28,7 +28,7 @@ class Vps_Form_ComboBoxFilter_TestController extends Vps_Controller_Action_Auto_
         ->setAllowBlank(false);
         //$this->_form->add($foo);
 
-        $this->_form->add(new Vps_Form_Field_ComboBoxFilter('filter', 'Filter'))
+        $this->_form->add(new Kwf_Form_Field_ComboBoxFilter('filter', 'Filter'))
             ->setValues(array(
                 1 => 'filter1',
                 2 => 'filter2',
@@ -39,15 +39,15 @@ class Vps_Form_ComboBoxFilter_TestController extends Vps_Controller_Action_Auto_
 
     protected function _getResourceName()
     {
-        return 'vps_test';
+        return 'kwf_test';
     }
     public function indexAction()
     {
         $config = array();
         $config['baseParams']['id'] = 1;
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Vps_Form_ComboBoxFilter:Test';
-        $this->view->ext('Vps.Auto.FormPanel', $config, 'Vps.Test.Viewport');
+        $config['assetsType'] = 'Kwf_Form_ComboBoxFilter:Test';
+        $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }
 

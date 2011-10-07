@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Auto_Filter_Button extends Vps_Controller_Action_Auto_Filter_Query
+class Kwf_Controller_Action_Auto_Filter_Button extends Kwf_Controller_Action_Auto_Filter_Query
 {
     protected $_type = 'Button';
 }

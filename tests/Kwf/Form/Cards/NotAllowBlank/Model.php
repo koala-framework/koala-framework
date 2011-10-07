@@ -1,11 +1,11 @@
 <?php
-class Vps_Form_Cards_NotAllowBlank_Model extends Vps_Model_Session
+class Kwf_Form_Cards_NotAllowBlank_Model extends Kwf_Model_Session
 {
-    protected $_namespace = 'Vps_Form_Cards_NotAllowBlank_Model';
+    protected $_namespace = 'Kwf_Form_Cards_NotAllowBlank_Model';
     protected $_columns = array('id', 'type', 'comment');
 
     protected $_dependentModels = array(
-        'ToRelation' => 'Vps_Form_Cards_NotAllowBlank_RelationModel'
+        'ToRelation' => 'Kwf_Form_Cards_NotAllowBlank_RelationModel'
     );
 
     protected $_defaultData = array(

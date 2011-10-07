@@ -1,8 +1,8 @@
 <?php
-class Vps_Uploads_Model extends Vps_Model_Db_Proxy
+class Kwf_Uploads_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vps_uploads';
-    protected $_rowClass = 'Vps_Uploads_Row';
+    protected $_table = 'kwf_uploads';
+    protected $_rowClass = 'Kwf_Uploads_Row';
     private $_uploadDir;
 
     public function setUploadDir($dir)
@@ -14,13 +14,13 @@ class Vps_Uploads_Model extends Vps_Model_Db_Proxy
     public function getUploadDir()
     {
         if (!isset($this->_uploadDir)) {
-            $this->_uploadDir = Vps_Config::getValue('uploads');
+            $this->_uploadDir = Kwf_Config::getValue('uploads');
 
             if (!$this->_uploadDir) {
-                throw new Vps_Exception(('Param "uploads" has to be set in the file config.ini.'));
+                throw new Kwf_Exception(('Param "uploads" has to be set in the file config.ini.'));
             }
             if (!is_dir($this->_uploadDir) || !is_writable($this->_uploadDir)) {
-                throw new Vps_Exception("Path for uploads is not writeable: {$this->_uploadDir}");
+                throw new Kwf_Exception("Path for uploads is not writeable: {$this->_uploadDir}");
             }
         }
         return $this->_uploadDir;

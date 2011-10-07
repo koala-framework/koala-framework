@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_View_Helper_ImageParam extends Vps_Component_View_Helper_Image
+class Kwf_Component_View_Helper_ImageParam extends Kwf_Component_View_Helper_Image
 {
     public function imageParam($image, $param)
     {
@@ -9,7 +9,7 @@ class Vps_Component_View_Helper_ImageParam extends Vps_Component_View_Helper_Ima
             $size = $this->_getImageSize($image);
             return $size[$param];
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
+class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 {
     public function getControllerClass(Zend_Controller_Request_Abstract $request)
     {
@@ -10,15 +10,15 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             if ($module == 'component_test') {
 
                 //FnF models setzen damit tests nicht in echte tabellen schreiben
-                Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
+                Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
 
-                Vps_Test_SeparateDb::setDbFromCookie(); // setzt es nur wenn es das cookie wirklich gibt
+                Kwf_Test_SeparateDb::setDbFromCookie(); // setzt es nur wenn es das cookie wirklich gibt
 
-                Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
+                Kwf_Component_Data_Root::setComponentClass($request->getParam('root'));
 
-                Vps_Registry::get('acl')->getComponentAcl()->allowComponent('guest', null);
+                Kwf_Registry::get('acl')->getComponentAcl()->allowComponent('guest', null);
 
-                //hick hack, für Vps_Component_Abstract_Admin::getControllerUrl
+                //hick hack, für Kwf_Component_Abstract_Admin::getControllerUrl
                 Zend_Registry::set('testRootComponentClass', $request->getParam('root'));
             }
 
@@ -30,9 +30,9 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $controller = substr($class, $pos + 1) . 'Controller';
                 $class = substr($class, 0, $pos);
             }
-            $className = Vpc_Admin::getComponentClass($class, $controller);
+            $className = Kwc_Admin::getComponentClass($class, $controller);
             if (!$className) {
-                throw new Vps_Exception("Controller '$controller' for component '$class' not found");
+                throw new Kwf_Exception("Controller '$controller' for component '$class' not found");
             }
             Zend_Loader::loadClass($className);
 
@@ -56,7 +56,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     public function loadClass($className)
     {
-        if (substr($className, 0, 4) == 'Vpc_' || substr($className, 0, 4) == 'Vps_' || $this->_curModule == 'web_test') {
+        if (substr($className, 0, 4) == 'Kwc_' || substr($className, 0, 4) == 'Kwf_' || $this->_curModule == 'web_test') {
             try {
                 Zend_Loader::loadClass($className);
             } catch (Zend_Exception $e) {

@@ -2,7 +2,7 @@
 /**
  * @deprecated
  */
-class Vps_View_Helper_ImageAsset extends Vps_Component_View_Helper_Image
+class Kwf_View_Helper_ImageAsset extends Kwf_Component_View_Helper_Image
 {
     public function imageAsset($image, $alt = '', $cssClass = null)
     {

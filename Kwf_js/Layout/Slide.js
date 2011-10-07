@@ -1,5 +1,5 @@
 //from http://extjs.com/forum/showthread.php?t=43120
-Vps.Layout.Slide = Ext.extend(Ext.layout.CardLayout, {
+Kwf.Layout.Slide = Ext.extend(Ext.layout.CardLayout, {
 
     easing: 'none',
     duration: .5,
@@ -26,4 +26,4 @@ Vps.Layout.Slide = Ext.extend(Ext.layout.CardLayout, {
         }
     }
 });
-Ext.Container.LAYOUTS['slide'] = Vps.Layout.Slide;
+Ext.Container.LAYOUTS['slide'] = Kwf.Layout.Slide;

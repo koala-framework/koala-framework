@@ -1,5 +1,5 @@
 <?php
-class Vps_AutoForm_TestModel extends Vps_Model_Session
+class Kwf_AutoForm_TestModel extends Kwf_Model_Session
 {
     protected $_namespace = 'testAutoFormModel';
     protected $_defaultData = array(

@@ -1,6 +1,6 @@
-Vps.Auto.Filter.Button = function(config)
+Kwf.Auto.Filter.Button = function(config)
 {
-    Vps.Auto.Filter.Button.superclass.constructor.call(this, config);
+    Kwf.Auto.Filter.Button.superclass.constructor.call(this, config);
 
     this.button = new Ext.Button({
         icon: config.icon,
@@ -16,7 +16,7 @@ Vps.Auto.Filter.Button = function(config)
     this.toolbarItems.add(this.button);
 };
 
-Ext.extend(Vps.Auto.Filter.Button, Vps.Auto.Filter.Abstract, {
+Ext.extend(Kwf.Auto.Filter.Button, Kwf.Auto.Filter.Abstract, {
     reset: function() {
         this.button.toggle(false);
     },

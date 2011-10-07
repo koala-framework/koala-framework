@@ -1,14 +1,14 @@
 <?php
-class Vpc_Root_LanguageRoot_Component extends Vpc_Root_Abstract
+class Kwc_Root_LanguageRoot_Component extends Kwc_Root_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['language'] = array(
-            'class' => 'Vpc_Root_LanguageRoot_Generator',
+            'class' => 'Kwc_Root_LanguageRoot_Generator',
             'component' => array(
-                'de'=>'Vpc_Root_LanguageRoot_Language_Component',
-                'en'=>'Vpc_Root_LanguageRoot_Language_Component'
+                'de'=>'Kwc_Root_LanguageRoot_Language_Component',
+                'en'=>'Kwc_Root_LanguageRoot_Language_Component'
             )
         );
         return $ret;

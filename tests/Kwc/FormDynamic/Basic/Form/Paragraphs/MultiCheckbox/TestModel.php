@@ -1,9 +1,9 @@
 <?php
-class Vpc_FormDynamic_Basic_Form_Paragraphs_MultiCheckbox_TestModel extends Vpc_Form_Field_MultiCheckbox_Model
+class Kwc_FormDynamic_Basic_Form_Paragraphs_MultiCheckbox_TestModel extends Kwc_Form_Field_MultiCheckbox_Model
 {
     public function __construct(array $config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'data' => array(
                 array('component_id'=>'root_form3-paragraphs-9', 'field_label'=>'Label', 'values'=>serialize(array(
                     'data' => array(

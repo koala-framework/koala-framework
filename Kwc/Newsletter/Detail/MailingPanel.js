@@ -1,12 +1,12 @@
-Ext.ns('Vpc.Newsletter.Detail');
-Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
+Ext.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.MailingPanel = Ext.extend(Kwf.Auto.GridPanel, {
     initComponent : function()
     {
         this.button = [];
         this.button['stop'] = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/control_stop.png',
             cls     : 'x-btn-text-icon',
-            text    : trlVps('Stop'),
+            text    : trlKwf('Stop'),
             enableToggle: true,
             toggleGroup: 'control',
             pressed : false,
@@ -18,7 +18,7 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         this.button['pause'] = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/control_pause.png',
             cls     : 'x-btn-text-icon',
-            text    : trlVps('Pause'),
+            text    : trlKwf('Pause'),
             enableToggle: true,
             toggleGroup: 'control',
             pressed : false,
@@ -30,7 +30,7 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         this.button['start'] = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/control_play.png',
             cls     : 'x-btn-text-icon',
-            text    : trlVps('Start'),
+            text    : trlKwf('Start'),
             enableToggle: true,
             toggleGroup: 'control',
             pressed : false,
@@ -45,20 +45,20 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
             scope   : this
         });
         this.actions.deleteAll = new Ext.Action({
-            text    : trlVps('Delete All'),
+            text    : trlKwf('Delete All'),
             icon    : '/assets/silkicons/bin_empty.png',
             cls     : 'x-btn-text-icon',
             handler : function(){
                 Ext.Msg.confirm(
-                    trlVps('Are you sure?'),
-                    trlVps('Do you really want to delete all receivers with status "queued"?.'),
+                    trlKwf('Are you sure?'),
+                    trlKwf('Do you really want to delete all receivers with status "queued"?.'),
                     function(result) {
                         if (result == 'yes') {
                             Ext.Ajax.request({
                                 url : this.controllerUrl + '/json-delete-all',
                                 params: this.getBaseParams(),
                                 success: function(response, options, r) {
-                                    Ext.MessageBox.alert(trlVps('Status'), r.message);
+                                    Ext.MessageBox.alert(trlKwf('Status'), r.message);
                                     this.reload();
                                 },
                                 scope: this
@@ -155,15 +155,15 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
             this.getGrid().topToolbar.add('|', this.button.stop, this.button.pause, this.button.start, '->', reload);
         }, this);
 
-        Vpc.Newsletter.Detail.MailingPanel.superclass.initComponent.call(this);
+        Kwc.Newsletter.Detail.MailingPanel.superclass.initComponent.call(this);
     },
 
     toggleButton : function(button, pressed)
     {
         if (this.askOnStart && button.name == 'start') {
             Ext.Msg.confirm(
-                trlVps('Start Newsletter sending'),
-                trlVps('The newsletter will be sent in the background. You can leave this page or close the browser window. Start sending?'),
+                trlKwf('Start Newsletter sending'),
+                trlKwf('The newsletter will be sent in the background. You can leave this page or close the browser window. Start sending?'),
                 function(result) {
                     if (result == 'no') {
                         this.button.start.toggle(false, true);
@@ -191,8 +191,8 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         if (!pressed) return;
         if (this.pressedButton && this.pressedButton != 'stop' && button.name == 'stop') {
             Ext.Msg.confirm(
-                trlVps('Are you sure?'),
-                trlVps('If you press yes, the mailing will be stopped an can\'t be restarted again.'),
+                trlKwf('Are you sure?'),
+                trlKwf('If you press yes, the mailing will be stopped an can\'t be restarted again.'),
                 function(result) {
                     if (result == 'no') {
                         this.button.pause.toggle(true);
@@ -212,12 +212,12 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         if (this.pressedButton == button.name) return;
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-change-status',
-            params : Ext.apply(Vps.clone(this.getBaseParams()), {
+            params : Ext.apply(Kwf.clone(this.getBaseParams()), {
                 status: button.name
             }),
             success: function(response, options, r) {
                 this.pressedButton = button.name;
-            	var text = button.name == 'start' ? trlVps('Sending') : trlVps('Start');
+            	var text = button.name == 'start' ? trlKwf('Sending') : trlKwf('Start');
                 this.button.start.setText(text);
                 if (r.info.state == 'sending') r.info.state = 'start';
                 if (r.info.state != this.pressedButton) this.button[r.info.state].toggle(true);
@@ -230,4 +230,4 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         });
     }
 });
-Ext.reg('vpc.newsletter.mailing', Vpc.Newsletter.Detail.MailingPanel);
+Ext.reg('kwc.newsletter.mailing', Kwc.Newsletter.Detail.MailingPanel);

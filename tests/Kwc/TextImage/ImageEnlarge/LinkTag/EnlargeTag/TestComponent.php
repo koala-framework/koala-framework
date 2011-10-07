@@ -1,10 +1,10 @@
 <?php
-class Vpc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_TestComponent extends Vpc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_Component
+class Kwc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_TestComponent extends Kwc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vpc_TextImage_ImageEnlarge_TestModel';
+        $ret['ownModel'] = 'Kwc_TextImage_ImageEnlarge_TestModel';
         
         return $ret;
     }

@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.Tidy = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.Tidy = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.on('initialize', this.onInit, this, {delay:100, single: true});
@@ -56,7 +56,7 @@ Vps.Form.HtmlEditor.Tidy = Ext.extend(Ext.util.Observable, {
 
     tidyHtml: function(tidyOptions)
     {
-        this.cmp.mask(trlVps('Cleaning...'));
+        this.cmp.mask(trlKwf('Cleaning...'));
 
         var params = {
             componentId: this.cmp.componentId,

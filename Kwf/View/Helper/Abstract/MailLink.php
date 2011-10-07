@@ -1,8 +1,8 @@
 <?php
-abstract class Vps_View_Helper_Abstract_MailLink
+abstract class Kwf_View_Helper_Abstract_MailLink
 {
     // wenn encoding geändert wird, auch bei decoding ändern !!
-    // decoding in Vps_js/MailDecode.js
+    // decoding in Kwf_js/MailDecode.js
     private $_atEncoding = '(vpsat)';
     private $_dotEncoding = '(vpsdot)';
 
@@ -20,7 +20,7 @@ abstract class Vps_View_Helper_Abstract_MailLink
     public function encodeText($text)
     {
         $text = preg_replace('/(^|[\s<>])([^@\s<>]+)@([^@\s]+)\.([^\.\s<>]+)($|[\s<>])/',
-            '$1<span class="vpsEncodedMail">$2'.$this->_atEncoding.'$3'.$this->_dotEncoding.'$4</span>$5',
+            '$1<span class="kwfEncodedMail">$2'.$this->_atEncoding.'$3'.$this->_dotEncoding.'$4</span>$5',
             $text
         );
         return $text;

@@ -1,4 +1,4 @@
 <?php
-class Vpc_Trl_Pages_TestComponent_Component extends Vpc_Abstract
+class Kwc_Trl_Pages_TestComponent_Component extends Kwc_Abstract
 {
 }

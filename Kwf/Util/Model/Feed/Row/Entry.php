@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
+class Kwf_Util_Model_Feed_Row_Entry extends Kwf_Model_Row_Data_Abstract
 {
     public function __construct($config)
     {
@@ -9,7 +9,7 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
         $data = array();
         $data['title'] = (string)$xml->title;
 
-        if ($feed->format == Vps_Util_Model_Feed_Row_Feed::FORMAT_RSS) {
+        if ($feed->format == Kwf_Util_Model_Feed_Row_Feed::FORMAT_RSS) {
             $data['link'] = (string)$xml->link;
             if (!$data['link']) {
                 $data['link'] = (string)$xml->guid;

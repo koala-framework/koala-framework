@@ -1,6 +1,6 @@
 <?php
-class Vps_Controller_Action_Auto_Filter_TextColumn
-    extends Vps_Controller_Action_Auto_Filter_Text
+class Kwf_Controller_Action_Auto_Filter_TextColumn
+    extends Kwf_Controller_Action_Auto_Filter_Text
 {
     protected $_type = 'TextColumn';
 

@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_Filter_Abstract
+class Kwf_Controller_Action_Auto_Filter_Text extends Kwf_Controller_Action_Auto_Filter_Abstract
 {
     protected $_type = 'Text';
 
@@ -40,9 +40,9 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
         list($field, $value) = explode(':', $query);
         if (in_array($field, $model->getColumns())) {
             if (is_numeric($value)) {
-                return new Vps_Model_Select_Expr_Equal($field, $value);
+                return new Kwf_Model_Select_Expr_Equal($field, $value);
             } else {
-                return new Vps_Model_Select_Expr_Contains($field, $value);
+                return new Kwf_Model_Select_Expr_Contains($field, $value);
             }
         } else {
             return null;
@@ -53,9 +53,9 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
     {
         $containsExpression = array();
         foreach ($this->getQueryFields() as $queryField) {
-            $containsExpression[] = new Vps_Model_Select_Expr_Contains($queryField, $query);
+            $containsExpression[] = new Kwf_Model_Select_Expr_Contains($queryField, $query);
         }
-        return new Vps_Model_Select_Expr_Or($containsExpression);
+        return new Kwf_Model_Select_Expr_Or($containsExpression);
     }
 
     public function getExtConfig()

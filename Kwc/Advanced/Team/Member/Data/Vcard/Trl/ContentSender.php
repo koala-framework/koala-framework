@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Team_Member_Data_Vcard_Trl_ContentSender extends Vpc_Advanced_Team_Member_Data_Vcard_ContentSender
+class Kwc_Advanced_Team_Member_Data_Vcard_Trl_ContentSender extends Kwc_Advanced_Team_Member_Data_Vcard_ContentSender
 {
     public function sendContent()
     {
@@ -15,14 +15,14 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Trl_ContentSender extends Vpc_Advanced
     protected function _getDefaultValues()
     {
         $teamComponent = $this->_data->chained->parent->parent->parent;
-        if (Vpc_Abstract::hasSetting($teamComponent->componentClass, 'defaultVcardValues')) {
-            $setting = Vpc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
+        if (Kwc_Abstract::hasSetting($teamComponent->componentClass, 'defaultVcardValues')) {
+            $setting = Kwc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
         }
 
         if (isset($setting)) {
             return $setting;
         } else {
-            return Vpc_Abstract::getSetting($this->_data->chained->componentClass, 'defaultVcardValues');
+            return Kwc_Abstract::getSetting($this->_data->chained->componentClass, 'defaultVcardValues');
         }
     }
 }

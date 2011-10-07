@@ -1,12 +1,12 @@
 <?php
-class Vps_Component_Generator_TablePageUnderTable_Page1_Component extends Vpc_Abstract
+class Kwf_Component_Generator_TablePageUnderTable_Page1_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['table'] = array(
-            'class' => 'Vps_Component_Generator_Table',
-            'model' => new Vps_Model_FnF(array(
+            'class' => 'Kwf_Component_Generator_Table',
+            'model' => new Kwf_Model_FnF(array(
                 'data' => array(
                     array('id'=>1),
                     array('id'=>2),
@@ -14,7 +14,7 @@ class Vps_Component_Generator_TablePageUnderTable_Page1_Component extends Vpc_Ab
                     array('id'=>4),
                 )
             )),
-            'component' => 'Vps_Component_Generator_TablePageUnderTable_Page1_Child_Component'
+            'component' => 'Kwf_Component_Generator_TablePageUnderTable_Page1_Child_Component'
         );
         return $ret;
     }

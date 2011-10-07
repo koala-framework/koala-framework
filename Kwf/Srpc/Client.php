@@ -2,7 +2,7 @@
 /**
  * Client for Serialized RPC
  */
-class Vps_Srpc_Client
+class Kwf_Srpc_Client
 {
     protected $_serverUrl;
     protected $_extraParams = array();
@@ -30,7 +30,7 @@ class Vps_Srpc_Client
             if (array_key_exists('method', $config['extraParams'])
                 || array_key_exists('arguments', $config['extraParams'])
             ) {
-                throw new Vps_Exception("'method' or 'argument' may not be a key of config value 'extraParams'");
+                throw new Kwf_Exception("'method' or 'argument' may not be a key of config value 'extraParams'");
             }
             $this->_extraParams = $config['extraParams'];
         }
@@ -53,7 +53,7 @@ class Vps_Srpc_Client
     public function getServerUrl()
     {
         if (!$this->_serverUrl) {
-            throw new Vps_Exception('serverUrl for Vps_Srpc_Client has not been set.');
+            throw new Kwf_Exception('serverUrl for Kwf_Srpc_Client has not been set.');
         }
         return $this->_serverUrl;
     }
@@ -84,7 +84,7 @@ class Vps_Srpc_Client
         $log = date('Y-m-d H:i:s')." (start) $this->_serverUrl $method ".(isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '?')."\n";
         file_put_contents('log/srpc-call', $log, FILE_APPEND);
         $start = microtime(true);
-        $b = Vps_Benchmark::start('srpc call', $this->_serverUrl.' '.$method);
+        $b = Kwf_Benchmark::start('srpc call', $this->_serverUrl.' '.$method);
 
         $params = array(
             'method' => $method,
@@ -110,14 +110,14 @@ class Vps_Srpc_Client
         try {
             $result = unserialize($response);
         } catch (Exception $e) {
-            throw new Vps_Exception('Srpc Server Response is not serialized: '.$response);
+            throw new Kwf_Exception('Srpc Server Response is not serialized: '.$response);
         }
         if ($result === false) {
-            throw new Vps_Exception('Srpc Server Response is not serialized: '.$response);
+            throw new Kwf_Exception('Srpc Server Response is not serialized: '.$response);
         }
 
         // result könnte eine Exception sein, wenn ja wird sie weitergeschmissen
-        if ($result instanceof Vps_Exception_Serializable) {
+        if ($result instanceof Kwf_Exception_Serializable) {
             throw $result->getException();
         } else if ($result instanceof Exception) {
             throw $result;

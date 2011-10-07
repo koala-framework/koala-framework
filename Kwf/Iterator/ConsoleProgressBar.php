@@ -1,5 +1,5 @@
 <?php
-class Vps_Iterator_ConsoleProgressBar extends IteratorIterator
+class Kwf_Iterator_ConsoleProgressBar extends IteratorIterator
 {
     private $_progress;
 

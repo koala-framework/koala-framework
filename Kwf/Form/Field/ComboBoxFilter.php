@@ -3,7 +3,7 @@
  * Für zwei (oder mehr) zusammengeschaltete ComboBoxen (Auswahl in der ersten
  * lädt Daten in der zweiten nach, gespeichert wird nur die zweite wenn nicht anders angegeben)
  **/
-class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
+class Kwf_Form_Field_ComboBoxFilter extends Kwf_Form_Field_Select
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -26,7 +26,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         $filterMetaData['xtype'] = 'combobox';
 
         if (!$saveCombo->getFilterField()) {
-            throw new Vps_Exception("setFilterField(str) must be called for the save-combo-box");
+            throw new Kwf_Exception("setFilterField(str) must be called for the save-combo-box");
         }
 
         $data = $saveCombo->getValues();
@@ -49,7 +49,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         return $ret;
     }
 /*
-    public function load(Vps_Model_Row_Interface $row, $postData)
+    public function load(Kwf_Model_Row_Interface $row, $postData)
     {
         $ret = parent::load($row, $postData);
         $filteredCombo = $this->getFilteredCombo();
@@ -59,7 +59,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         return $ret;
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
         parent::prepareSave($row, $postData);
         $filteredCombo = $this->getFilteredCombo();
@@ -84,7 +84,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
     {
         $postData = parent::processInput($row, $postData);
         if (!$this->getFilteredCombo()) {
-            throw new Vps_Exception("No filteredCombo set");
+            throw new Kwf_Exception("No filteredCombo set");
         }
         $value = $this->_getValueFromPostData($postData);
         if ($value) {
@@ -98,7 +98,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
     {
         $ret = parent::load($row, $postData);
         if (!$this->getFilteredCombo()) {
-            throw new Vps_Exception("No filteredCombo set");
+            throw new Kwf_Exception("No filteredCombo set");
         }
         $value = $ret[$this->getFieldName()];
         if ($value) {

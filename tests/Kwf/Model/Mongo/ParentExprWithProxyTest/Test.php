@@ -5,14 +5,14 @@
  * @group Mongo
  * @group slow
  */
-class Vps_Model_Mongo_ParentExprWithProxyTest_Test extends Vps_Test_TestCase
+class Kwf_Model_Mongo_ParentExprWithProxyTest_Test extends Kwf_Test_TestCase
 {
     private $_model;
     public function setUp()
     {
         parent::setUp();
 
-        $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ParentExprWithProxyTest_MongoModel');
+        $this->_model = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ParentExprWithProxyTest_MongoModel');
         $this->_model->getProxyModel()->getCollection()->insert(
             array('id'=>100, 'a'=>'a', 'parent_id'=>1, 'parent_name'=>'one') //TODO id sollte nicht nötig sein
         , array('safe'=>true));
@@ -34,7 +34,7 @@ class Vps_Model_Mongo_ParentExprWithProxyTest_Test extends Vps_Test_TestCase
 
     public function testChangedName()
     {
-        $parentModel = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ParentExprWithProxyTest_ParentModel');
+        $parentModel = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ParentExprWithProxyTest_ParentModel');
         $parentRow = $parentModel->getRow(1);
         $parentRow->name = 'onex';
         $parentRow->save();

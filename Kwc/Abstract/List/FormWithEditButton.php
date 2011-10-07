@@ -1,17 +1,17 @@
 <?php
-class Vpc_Abstract_List_FormWithEditButton_NoSaveData extends Vps_Data_Table
+class Kwc_Abstract_List_FormWithEditButton_NoSaveData extends Kwf_Data_Table
 {
-    public function save(Vps_Model_Row_Interface $row, $data)
+    public function save(Kwf_Model_Row_Interface $row, $data)
     {
     }
 }
 
-class Vpc_Abstract_List_FormWithEditButton extends Vpc_Abstract_Form
+class Kwc_Abstract_List_FormWithEditButton extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $mf = $this->add(new Vps_Form_Field_MultiFields('Children'));
+        $mf = $this->add(new Kwf_Form_Field_MultiFields('Children'));
         $mf->setWidth(400);
         $mf->setPosition(true);
         $mf->setMinEntries(0);
@@ -26,12 +26,12 @@ class Vpc_Abstract_List_FormWithEditButton extends Vpc_Abstract_Form
      */
     protected function _getMultiFieldsFieldset()
     {
-        $fs = new Vps_Form_Container_FieldSet(trlVps('Paragraph {0}'));
-        $fs->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
-        $fs->add(new Vps_Form_Field_SimpleAbstract('edit'))
-            ->setXtype('vpc.listeditbutton')
+        $fs = new Kwf_Form_Container_FieldSet(trlKwf('Paragraph {0}'));
+        $fs->add(new Kwf_Form_Field_Checkbox('visible', trlKwf('Visible')));
+        $fs->add(new Kwf_Form_Field_SimpleAbstract('edit'))
+            ->setXtype('kwc.listeditbutton')
             ->setLabelSeparator('')
-            ->setData(new Vpc_Abstract_List_FormWithEditButton_NoSaveData('id'));
+            ->setData(new Kwc_Abstract_List_FormWithEditButton_NoSaveData('id'));
         return $fs;
     }
 }

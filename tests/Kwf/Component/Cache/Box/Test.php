@@ -3,11 +3,11 @@
  * @group Component_Cache
  * @group Component_Cache_Box
  */
-class Vps_Component_Cache_Box_Test extends Vpc_TestAbstract
+class Kwf_Component_Cache_Box_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Cache_Box_Root_Component');
+        parent::setUp('Kwf_Component_Cache_Box_Root_Component');
     }
 
     public function testBox()
@@ -20,7 +20,7 @@ class Vps_Component_Cache_Box_Test extends Vpc_TestAbstract
         $render = $child->render(true, true);
         $this->assertEquals($render, 'root_child-box root-boxUnique');
 
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_Box_Root_Box_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_Box_Root_Box_Model');
         $row = $model->getRow('root-boxUnique');
         $row->content = 'foo';
         $row->save();
@@ -30,7 +30,7 @@ class Vps_Component_Cache_Box_Test extends Vpc_TestAbstract
         $render = $child->render(true, true);
         $this->assertEquals($render, 'root_child-box foo');
 
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_Box_Root_Box_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_Box_Root_Box_Model');
         $row = $model->getRow('root-box');
         $row->content = 'bar';
         $row->save();

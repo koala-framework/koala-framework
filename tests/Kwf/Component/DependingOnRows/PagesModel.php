@@ -1,9 +1,9 @@
 <?php
-class Vps_Component_DependingOnRows_PagesModel extends Vpc_Root_Category_GeneratorModel
+class Kwf_Component_DependingOnRows_PagesModel extends Kwc_Root_Category_GeneratorModel
 {
     public function __construct()
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'data' => array(
                 //10 linkt zu 2
                 array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Home', 'filename' => 'home',

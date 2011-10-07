@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_TestRunner extends PHPUnit_TextUI_TestRunner
+class Kwf_Test_TestRunner extends PHPUnit_TextUI_TestRunner
 {
     private $_retryOnError;
     protected function handleConfiguration(array &$arguments)
@@ -11,7 +11,7 @@ class Vps_Test_TestRunner extends PHPUnit_TextUI_TestRunner
 
     protected function createTestResult()
     {
-        $ret = new Vps_Test_TestResult;
+        $ret = new Kwf_Test_TestResult;
         $ret->setRetryOnError($this->_retryOnError);
         return $ret;
     }
@@ -31,10 +31,10 @@ class Vps_Test_TestRunner extends PHPUnit_TextUI_TestRunner
                             $handlesArguments['groups'],
                             $handlesArguments['excludeGroups']);
             foreach ($tests as $test) {
-                $app = Vps_Registry::get('config')->application->id;
+                $app = Kwf_Registry::get('config')->application->id;
                 $f = "/www/testtimes/$app/{$test->toString()}";
                 if (isset($expectedTimes[$test->toString()])) {
-                    throw new Vps_Exception("same test exists twice?!");
+                    throw new Kwf_Exception("same test exists twice?!");
                 }
                 if (file_exists($f)) {
                     $expectedTimes[$test->toString()] = (float)file_get_contents($f);
@@ -49,10 +49,10 @@ class Vps_Test_TestRunner extends PHPUnit_TextUI_TestRunner
             }
 
             if (!$expectedTimes || $unknownTimes/count($expectedTimes) > 0.2) $expectedTimes = array();
-            $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, $handlesArguments['verbose'], true);
+            $printer = new Kwf_Test_ProgressResultPrinter($expectedTimes, null, $handlesArguments['verbose'], true);
             $this->setPrinter($printer);
         } else if ($handlesArguments['verbose']) {
-            $printer = new Vps_Test_VerboseResultPrinter(null, true);
+            $printer = new Kwf_Test_VerboseResultPrinter(null, true);
             $this->setPrinter($printer);
         }
 

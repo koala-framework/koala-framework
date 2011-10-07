@@ -1,4 +1,4 @@
 <?php
-class Vps_Srpc_Exception extends Vps_Exception
+class Kwf_Srpc_Exception extends Kwf_Exception
 {
 }

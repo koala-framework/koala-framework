@@ -5,11 +5,11 @@
  * @group Model_MirrorCache_SlowMirror
  * @group slow
  */
-class Vps_Model_MirrorCache_SlowMirror_Test extends Vps_Test_TestCase
+class Kwf_Model_MirrorCache_SlowMirror_Test extends Kwf_Test_TestCase
 {
     public function testRequests()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_MirrorCache_SlowMirror_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_MirrorCache_SlowMirror_TestModel');
         $m->getProxyModel()->deleteRows(array());
         sleep(6); //damit sicher abgelaufen
 

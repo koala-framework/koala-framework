@@ -1,13 +1,13 @@
 <?php
-class Vps_Form_Field_LoadData extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_LoadData extends Kwf_Form_Field_SimpleAbstract
 {
     public function getMetaData($model)
     {
         return null;
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
-        Vps_Form_Field_Abstract::prepareSave($row, $postData);
+        Kwf_Form_Field_Abstract::prepareSave($row, $postData);
     }
 }

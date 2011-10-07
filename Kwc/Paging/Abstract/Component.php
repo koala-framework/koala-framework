@@ -1,6 +1,6 @@
 <?php
-class Vpc_Paging_Abstract_Component extends Vpc_Abstract
-    implements Vps_Component_Partial_Interface
+class Kwc_Paging_Abstract_Component extends Kwc_Abstract
+    implements Kwf_Component_Partial_Interface
 {
     private $_entries;
     public static function getSettings()
@@ -15,7 +15,7 @@ class Vpc_Paging_Abstract_Component extends Vpc_Abstract
             'previous' => '&#x8B;',
             'next'     => '&#x9B;',
             'last'     => '&raquo;',
-            'prefix'   => trlVpsStatic('Page').':'
+            'prefix'   => trlKwfStatic('Page').':'
         );
         $ret['cssClass'] = 'webPaging webStandard';
         return $ret;
@@ -23,15 +23,15 @@ class Vpc_Paging_Abstract_Component extends Vpc_Abstract
 
     public function getPartialClass()
     {
-        return 'Vps_Component_Partial_Pager';
+        return 'Kwf_Component_Partial_Pager';
     }
 
     public function getViewCacheSettings()
     {
         $ret = parent::getViewCacheSettings();
         $c = $this->getData()->parent;
-        if ($c->getComponent() instanceof Vpc_Directories_List_View_Component &&
-            $c->getComponent()->getPartialClass() == 'Vps_Component_Partial_Id')
+        if ($c->getComponent() instanceof Kwc_Directories_List_View_Component &&
+            $c->getComponent()->getPartialClass() == 'Kwf_Component_Partial_Id')
         {
             $ret['enabled'] = false;
         }
@@ -44,15 +44,15 @@ class Vpc_Paging_Abstract_Component extends Vpc_Abstract
             $this->_entries = $this->getData()->parent->getComponent()->getPagingCount();
             if (!$this->_entries) {
                 $this->_entries = 0;
-            } else if ($this->_entries instanceof Vps_Component_Select) {
+            } else if ($this->_entries instanceof Kwf_Component_Select) {
                 $this->_entries = $this->getData()->parent->countChildComponents($this->_entries);
-            } else if ($this->_entries instanceof Vps_Model_Select) {
-                throw new Vps_Exception("Not yet implemented, probably not really possible");
+            } else if ($this->_entries instanceof Kwf_Model_Select) {
+                throw new Kwf_Exception("Not yet implemented, probably not really possible");
             } else if ($this->_entries instanceof Zend_Db_Select) {
                 $select = $this->_entries;
                 $select->setIntegrityCheck(false);
                 $select->reset(Zend_Db_Select::COLUMNS);
-                if ($select instanceof Vps_Db_Table_Select) {
+                if ($select instanceof Kwf_Db_Table_Select) {
                     $table = $select->getTableName().'.';
                 } else {
                     $table = '';
@@ -176,12 +176,12 @@ class Vpc_Paging_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function limitSelect(Vps_Model_Select $select)
+    public function limitSelect(Kwf_Model_Select $select)
     {
         $limit = $this->getLimit();
-        if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
             //wenn schon ein limit gesetzt
-            $existingLimitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+            $existingLimitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
             if ($existingLimitCount < $limit['limit']) {
                 return;
             }
@@ -225,10 +225,10 @@ class Vpc_Paging_Abstract_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getChildComponentClasses($class) as $childClass) {
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwc_Abstract::getChildComponentClasses($class) as $childClass) {
                 if ($childClass == $componentClass) {
-                    $ret[] = new Vpc_Paging_Abstract_CacheMeta($class);
+                    $ret[] = new Kwc_Paging_Abstract_CacheMeta($class);
                 }
             }
         }

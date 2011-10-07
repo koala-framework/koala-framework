@@ -1,5 +1,5 @@
 <?
-class Vps_Form_CardsRealModels_Model_WrapperModelRow extends Vps_Model_Db_Row
+class Kwf_Form_CardsRealModels_Model_WrapperModelRow extends Kwf_Model_Db_Row
 {
     protected function _getSiblingRows()
     {

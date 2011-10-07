@@ -1,5 +1,5 @@
 <?php
-class Vps_Acl_Resource_MenuSeparator extends Vps_Acl_Resource_Abstract
+class Kwf_Acl_Resource_MenuSeparator extends Kwf_Acl_Resource_Abstract
 {
     public function __construct($resourceId)
     {

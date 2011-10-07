@@ -1,19 +1,19 @@
 <?php
-abstract class Vpc_Basic_LinkTag_Lightbox_Component extends Vpc_Basic_LinkTag_Abstract_Component
+abstract class Kwc_Basic_LinkTag_Lightbox_Component extends Kwc_Basic_LinkTag_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['child'] = array(
-            'class' => 'Vps_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Static',
             'component' => null
         );
-        $ret['assets']['files'][] = 'vps/Vpc/Basic/LinkTag/Lightbox/Component.js';
-        $ret['assets']['dep'][] = 'VpsLightbox';
+        $ret['assets']['files'][] = 'kwf/Kwc/Basic/LinkTag/Lightbox/Component.js';
+        $ret['assets']['dep'][] = 'KwfLightbox';
         $ret['assets']['dep'][] = 'ExtConnection';
         $ret['popupDefaultWidth'] = 400;
         $ret['popupDefaultHeight'] = 300;
-        $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigChildConfigs';
+        $ret['extConfig'] = 'Kwc_Abstract_Composite_ExtConfigChildConfigs';
         return $ret;
     }
 

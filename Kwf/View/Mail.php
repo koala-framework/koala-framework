@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Mail extends Vps_View implements Vps_View_MailInterface
+class Kwf_View_Mail extends Kwf_View implements Kwf_View_MailInterface
 {
     private $_images = array();
     protected $_attachImages = true;

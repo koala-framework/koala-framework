@@ -1,10 +1,10 @@
 <?php
-class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_HelpController extends Kwf_Controller_Action_Cli_Abstract
 {
 
     public static function getHelp()
     {
-        return "show help (use 'vps help <controller>' to get help for a specific controller)";
+        return "show help (use 'kwf help <controller>' to get help for a specific controller)";
     }
 
     public function __call($methodName, $args)
@@ -21,7 +21,7 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
 
     public function indexAction()
     {
-        echo "VPS CLI\n\n";
+        echo "KWF CLI\n\n";
         echo "avaliable commands:\n";
 
         $commands = $this->_getCommands();
@@ -32,25 +32,25 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
     private function _getCommands($controllerName = null)
     {
         $commands = $this->_processModule('cli');
-        foreach ($this->_processModule('vps_controller_action_cli', $controllerName) as $cmd=>$class) {
+        foreach ($this->_processModule('kwf_controller_action_cli', $controllerName) as $cmd=>$class) {
             if (!isset($commands[$cmd])) {
                 $commands[$cmd] = $class;
             }
         }
-        foreach ($this->_processModule('vps_e2_controller_cli', $controllerName) as $cmd=>$class) {
+        foreach ($this->_processModule('kwf_e2_controller_cli', $controllerName) as $cmd=>$class) {
             if (!isset($commands[$cmd])) {
                 $commands[$cmd] = $class;
             }
         }
-        if (Vps_Registry::get('config')->application->id != 'vps') {
-            foreach ($this->_processModule('vps_controller_action_cli_web', $controllerName) as $cmd=>$class) {
+        if (Kwf_Registry::get('config')->application->id != 'kwf') {
+            foreach ($this->_processModule('kwf_controller_action_cli_web', $controllerName) as $cmd=>$class) {
                 if (!isset($commands[$cmd])) {
                     $commands[$cmd] = $class;
                 }
             }
         }
         if (file_exists(getcwd() . '/.svn')) {
-            foreach ($this->_processModule('vps_controller_action_cli_svn', $controllerName) as $cmd=>$class) {
+            foreach ($this->_processModule('kwf_controller_action_cli_svn', $controllerName) as $cmd=>$class) {
                 if (!isset($commands[$cmd])) {
                     $commands[$cmd] = $class;
                 }

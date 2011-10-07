@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Advanced_SearchEngineReferer_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
@@ -8,9 +8,9 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
             'google', 'yahoo', 'msn', 'live', 'aol', 'altavista'
         );
         $ret['generators']['child']['component']['view'] =
-            'Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component';
-        $ret['componentName'] = trlVps('Search engine referer');
-        $ret['childModel'] = 'Vpc_Advanced_SearchEngineReferer_Model';
+            'Kwc_Advanced_SearchEngineReferer_ViewMyLatest_Component';
+        $ret['componentName'] = trlKwf('Search engine referer');
+        $ret['childModel'] = 'Kwc_Advanced_SearchEngineReferer_Model';
         $ret['saveReferer'] = true;
         $ret['flags']['processInput'] = true;
         return $ret;
@@ -53,7 +53,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
                 $row->save();
 
                 // alte löschen
-                $select = new Vps_Model_Select();
+                $select = new Kwf_Model_Select();
                 $select->whereEquals('component_id', $row->component_id)
                     ->order('id', 'DESC')
                     ->limit(20, 10);
@@ -61,7 +61,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
                 foreach ($deleteRows as $deleteRow) {
                     $deleteRow->delete();
                 }
-                Vps_Component_ModelObserver::getInstance()->process();
+                Kwf_Component_ModelObserver::getInstance()->process();
             }
         }
     }

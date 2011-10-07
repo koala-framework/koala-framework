@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Parser
+class Kwc_Basic_Text_Parser
 {
     //aktueller zustand von parser währen des parsens
     protected $_parser;
@@ -16,7 +16,7 @@ class Vpc_Basic_Text_Parser
     private $_masterStyles;
 
 
-    public function __construct(Vpc_Basic_Text_Row $row = null)
+    public function __construct(Kwc_Basic_Text_Row $row = null)
     {
         $this->_row = $row;
     }
@@ -29,7 +29,7 @@ class Vpc_Basic_Text_Parser
     protected function _getMasterStyles()
     {
         if (!isset($this->_masterStyles)) {
-            throw new Vps_Exception("you must call setMasterStyles");
+            throw new Kwf_Exception("you must call setMasterStyles");
         }
         return $this->_masterStyles;
     }
@@ -104,9 +104,9 @@ class Vpc_Basic_Text_Parser
                 $id = preg_quote($this->_row->component_id);
                 if (preg_match('#/media/([^/]+)/('.$id.'-i[0-9]+)#', $src, $m)) {
                     //"/media/$class/$id/$type/$checksum/$filename.$extension$random"
-                    $class = Vpc_Abstract::getChildComponentClass($this->_row->getModel()
+                    $class = Kwc_Abstract::getChildComponentClass($this->_row->getModel()
                                 ->getComponentClass(), 'child', 'image');
-                    $imageRow = Vpc_Abstract::createModel($class)->getRow($m[2]);
+                    $imageRow = Kwc_Abstract::createModel($class)->getRow($m[2]);
 
                     if (isset($attributes['WIDTH']) && $imageRow) {
                         $imageRow->width = $attributes['WIDTH'];

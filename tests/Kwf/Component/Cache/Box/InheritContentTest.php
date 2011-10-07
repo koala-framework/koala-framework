@@ -4,7 +4,7 @@
  * @group Component_Cache_Box
  * @group Component_Cache_Box_InheritContent
  */
-class Vps_Component_Cache_Box_InheritContentTest extends Vpc_TestAbstract
+class Kwf_Component_Cache_Box_InheritContentTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
@@ -21,7 +21,7 @@ class Vps_Component_Cache_Box_InheritContentTest extends Vpc_TestAbstract
           |-ic
             |-child
         */
-        parent::setUp('Vps_Component_Cache_Box_IcRoot_Component');
+        parent::setUp('Kwf_Component_Cache_Box_IcRoot_Component');
     }
 
     function testInheritContent()
@@ -29,7 +29,7 @@ class Vps_Component_Cache_Box_InheritContentTest extends Vpc_TestAbstract
         $root = $this->_root;
         $child = $root->getComponentById('1');
         $childchild = $root->getComponentById('2');
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_Box_IcRoot_InheritContent_Child_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Model');
 
         $render = $root->render(true, true);
         $this->assertEquals('root-ic-child', $render);
@@ -52,7 +52,7 @@ class Vps_Component_Cache_Box_InheritContentTest extends Vpc_TestAbstract
     {
         $c1 = $this->_root->getComponentById('1');
         $c2 = $this->_root->getComponentById('2');
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_Box_IcRoot_InheritContent_Child_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Model');
 
         $this->assertEquals('1-ic-child', $c1->render(true, true));
         $this->assertEquals('1-ic-child', $c2->render(true, true));

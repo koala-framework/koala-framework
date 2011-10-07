@@ -1,11 +1,11 @@
 <?php
-class Vpc_Directories_Item_Detail_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Directories_Item_Detail_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['hasModifyItemData'] = true;
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }
     public function getTemplateVars()
@@ -18,14 +18,14 @@ class Vpc_Directories_Item_Detail_Component extends Vpc_Abstract_Composite_Compo
     }
 
 
-    public static function modifyItemData(Vps_Component_Data $item)
+    public static function modifyItemData(Kwf_Component_Data $item)
     {
     }
 
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_GeneratorRow();
+        $ret[] = new Kwf_Component_Cache_Meta_Static_GeneratorRow();
         return $ret;
     }
 }

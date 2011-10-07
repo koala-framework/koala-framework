@@ -1,4 +1,4 @@
 <?php
-class Vps_Dao_Exception extends Vps_Exception
+class Kwf_Dao_Exception extends Kwf_Exception
 {
 }

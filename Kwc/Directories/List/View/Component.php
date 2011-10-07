@@ -1,13 +1,13 @@
 <?php
-class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Component
-    implements Vpc_Paging_ParentInterface, Vps_Component_Partial_Interface
+class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Component
+    implements Kwc_Paging_ParentInterface, Kwf_Component_Partial_Interface
 {
     protected $_items;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['paging'] = 'Vpc_Paging_Component';
+        $ret['generators']['child']['component']['paging'] = 'Kwc_Paging_Component';
         $ret['placeholder']['noEntriesFound'] = '';
         $ret['groupById'] = true;
         $ret['cssClass'] = 'webStandard';
@@ -21,9 +21,9 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
             return $this->_getSetting('partialClass');
         }
         if ($this->_getSearchForm()) {
-            return 'Vps_Component_Partial_Id';
+            return 'Kwf_Component_Partial_Id';
         } else {
-            return 'Vps_Component_Partial_Paging';
+            return 'Kwf_Component_Partial_Paging';
         }
     }
 
@@ -88,8 +88,8 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         if ($count) $select->limit($count, $offset);
         $itemDirectory = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($itemDirectory)) {
-            $c = Vpc_Abstract::getComponentClassByParentClass($itemDirectory);
-            $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
+            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
+            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
             $items = $generator->getChildIds(null, $select);
         } else {
             $items = $itemDirectory->getChildIds($select);
@@ -103,8 +103,8 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         if (!$select) return array();
         $itemDirectory = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($itemDirectory)) {
-            $c = Vpc_Abstract::getComponentClassByParentClass($itemDirectory);
-            $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
+            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
+            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
             $items = $generator->getChildData(null, $select);
         } else {
             $select->whereGenerator('detail');
@@ -150,18 +150,18 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     public function getPartialVars($partial, $nr, $info)
     {
         $ret = $info;
-        if ($partial instanceof Vps_Component_Partial_Random) {
+        if ($partial instanceof Kwf_Component_Partial_Random) {
             $select = $this->_getSelect()->limit(1, $nr);
             $ret['item'] = array_shift($this->_getItems($select));
-        } else if ($partial instanceof Vps_Component_Partial_Paging) {
-            if ($partial instanceof Vps_Component_Partial_Id) {
+        } else if ($partial instanceof Kwf_Component_Partial_Paging) {
+            if ($partial instanceof Kwf_Component_Partial_Id) {
                 $select = $this->_getSelect()->whereId($nr);
-            } else if ($partial instanceof Vps_Component_Partial_Paging) {
+            } else if ($partial instanceof Kwf_Component_Partial_Paging) {
                 $select = $this->_getSelect()->limit(1, $nr);
             }
             $ret['item'] = array_shift($this->_getItems($select));
         } else {
-            throw new Vps_Exception('Unsupported partial type '.get_class($partial));
+            throw new Kwf_Exception('Unsupported partial type '.get_class($partial));
         }
         return $ret;
     }
@@ -173,15 +173,15 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
 
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($dir)) {
-            $c = Vpc_Abstract::getComponentClassByParentClass($dir);
-            $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
+            $c = Kwc_Abstract::getComponentClassByParentClass($dir);
+            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
             $ret = $generator->countChildData(null, $select);
         } else {
             $ret = $dir->countChildComponents($select);
         }
 
-        if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
-            $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
+            $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
             if ($ret > $limitCount) $ret = $limitCount;
         }
         return $ret;
@@ -221,7 +221,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (!$dir) return array();
         $dirClass = $dir;
-        if ($dir instanceof Vps_Component_Data) $dirClass = $dir->componentClass;
+        if ($dir instanceof Kwf_Component_Data) $dirClass = $dir->componentClass;
         $callClass = $dirClass;
         if (strpos($dirClass, '.') !== false) {
             $callClass = substr($dirClass, 0, strpos($dirClass, '.'));
@@ -233,17 +233,17 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         // View ist bei Trl auch die Gleiche, deshalb hier Partial-Meta dazugeben
         // mit dem Generator-Model, weil das ist das Model mit den Daten für die View
         if (is_string($dir)) {
-            $dirs = Vps_Component_Data_Root::getInstance()->getComponentsByClass($dir);
+            $dirs = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($dir);
         } else {
             $dirs = array($dir);
         }
         foreach ($dirs as $dir) {
-            $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
+            $generators = Kwf_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
             if (isset($generators[0])) {
-                if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Id')) {
-                    $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartialId($generators[0]->getModel());
+                if (is_instance_of($this->getPartialClass(), 'Kwf_Component_Partial_Id')) {
+                    $ret[] = new Kwf_Component_Cache_Meta_Static_ModelPartialId($generators[0]->getModel());
                 } else {
-                    $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartial($generators[0]->getModel());
+                    $ret[] = new Kwf_Component_Cache_Meta_Static_ModelPartial($generators[0]->getModel());
                 }
             }
         }

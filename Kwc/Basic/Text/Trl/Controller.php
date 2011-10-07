@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Form
+class Kwc_Basic_Text_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
 {
-    protected $_formName = 'Vpc_Basic_Text_Trl_Form';
+    protected $_formName = 'Kwc_Basic_Text_Trl_Form';
 }

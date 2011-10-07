@@ -1,7 +1,7 @@
 <?php
-abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
+abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
 {
-    protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
+    protected $_rowClass = 'Kwf_Model_Row_Data_Abstract';
 
     protected $_data = null;
     protected $_autoId;
@@ -66,7 +66,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     private function _getDataKeys($where, $order, $limit, $start)
     {
-        if (!is_object($where) || $where instanceof Vps_Model_Select_Expr_Interface) {
+        if (!is_object($where) || $where instanceof Kwf_Model_Select_Expr_Interface) {
             $select = $this->select($where, $order, $limit, $start);
         } else {
             $select = $where;
@@ -74,7 +74,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return $this->_selectDataKeys($select, $this->getData());
     }
 
-    public function update(Vps_Model_Row_Interface $row, $rowData)
+    public function update(Kwf_Model_Row_Interface $row, $rowData)
     {
         $this->getData();
         foreach ($this->_rows as $k=>$i) {
@@ -85,14 +85,14 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 return $rowData[$this->getPrimaryKey()];
             }
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 
-    public function insert(Vps_Model_Row_Interface $row, $rowData)
+    public function insert(Kwf_Model_Row_Interface $row, $rowData)
     {
         if ($row->{$this->getPrimaryKey()}) {
             if ($this->getRow($row->{$this->getPrimaryKey()})) {
-                throw new Vps_Exception("Duplicate Entry for Row ".$row->{$this->getPrimaryKey()});
+                throw new Kwf_Exception("Duplicate Entry for Row ".$row->{$this->getPrimaryKey()});
             }
         }
         $this->getData();
@@ -117,7 +117,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return $rowData[$this->getPrimaryKey()];
     }
 
-    public function delete(Vps_Model_Row_Interface $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         $this->getData();
         foreach ($this->_rows as $k=>$i) {
@@ -129,7 +129,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 return;
             }
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 
     public function getRowByDataKey($key)
@@ -144,7 +144,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     }
 
                                                                      //& für performance
-    protected function _selectDataKeys(Vps_Model_Select $select, array &$inData)
+    protected function _selectDataKeys(Kwf_Model_Select $select, array &$inData)
     {
         $dataKeys = array();
         foreach ($inData as $key=>$d) {
@@ -153,7 +153,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
         }
 
-        if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
+        if ($order = $select->getPart(Kwf_Model_Select::ORDER)) {
             if (count($order) > 1) {
                 //TODO: implement Multiple Order fields
             }
@@ -163,7 +163,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 if ($order['field'] instanceof Zend_Db_Expr) {
                     //can't be done in FnF
                     $orderData[$inData[$key][$this->_primaryKey]] = 0;
-                } else if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
+                } else if ($order['field'] == Kwf_Model_Select::ORDER_RAND) {
                     $orderData[$inData[$key][$this->_primaryKey]] = rand();
                 } else {
                    $orderData[$inData[$key][$this->_primaryKey]] = strtolower($this->_rowValue($order['field'], $inData[$key]));
@@ -174,7 +174,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             } else if ($order['direction'] == 'DESC') {
                 arsort($orderData);
             } else {
-                throw new Vps_Exception("Invalid order direction: {$order['direction']}");
+                throw new Kwf_Exception("Invalid order direction: {$order['direction']}");
             }
             $sortedDataKeys = array();
             foreach (array_keys($orderData) as $id) {
@@ -187,12 +187,12 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $dataKeys = $sortedDataKeys;
         }
 
-        if ($select->hasPart(Vps_Model_Select::LIMIT_OFFSET)) {
-            $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_OFFSET)) {
+            $limitOffset = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
             $dataKeys = array_slice($dataKeys, $limitOffset);
         }
-        if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
-            $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
+            $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
             $dataKeys = array_slice($dataKeys, 0, $limitCount);
         }
         return $dataKeys;
@@ -203,10 +203,10 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         foreach ($data as &$d) {
             if (!is_object($d) && !is_null($d)) $d = (string)$d;
         }
-        if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
+        if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
             if ($data[$this->getPrimaryKey()] != (string)$id) return false;
         }
-        if ($where = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
+        if ($where = $select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
             foreach ($where as $f=>$v) {
                 if (!is_array($v)) $v = array($v);
                 foreach ($v as &$i) $i = (string)$i;
@@ -215,12 +215,12 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 if (!in_array($rv, $v)) return false;
             }
         }
-        if ($where = $select->getPart(Vps_Model_Select::WHERE_EXPRESSION)) {
+        if ($where = $select->getPart(Kwf_Model_Select::WHERE_EXPRESSION)) {
             foreach ($where as $expr) {
                 if (!$this->_checkExpressions($expr, $data)) return false;
             }
         }
-        if ($where = $select->getPart(Vps_Model_Select::WHERE_NOT_EQUALS)) {
+        if ($where = $select->getPart(Kwf_Model_Select::WHERE_NOT_EQUALS)) {
             $foundOneMatching = false;
             foreach ($where as $f=>$v) {
                 if (!is_array($v)) $v = array($v);
@@ -233,7 +233,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
             if ($foundOneMatching) return false;
         }
-        if ($where = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
+        if ($where = $select->getPart(Kwf_Model_Select::WHERE_NULL)) {
             foreach ($where as $f) {
                 $rv = $this->_rowValue($f, $data);
                 if (!is_null($rv)) return false;
@@ -261,68 +261,68 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return $ret;
     }
 
-    private function _checkExpressions(Vps_Model_Select_Expr_Interface $expr, $data)
+    private function _checkExpressions(Kwf_Model_Select_Expr_Interface $expr, $data)
     {
-        if ($expr instanceof Vps_Model_Select_Expr_Equal) {
+        if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
             $v = $this->_rowValue($expr->getField(), $data);
             $values = $expr->getValue();
             if (!is_array($values)) $values = array($values);
             if (!in_array($v, $values)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_NotEquals) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_NotEquals) {
             $v = $this->_rowValue($expr->getField(), $data);
             $values = $expr->getValue();
             if (!is_array($values)) $values = array($values);
             if (in_array($v, $values)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_IsNull) {
             $v = $this->_rowValue($expr->getField(), $data);
             if (!is_null($v)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Higher) {
             $v = $this->_rowValue($expr->getField(), $data);
             $exprValue = $expr->getValue();
-            if ($exprValue instanceof Vps_Date) {
+            if ($exprValue instanceof Kwf_Date) {
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
             if (!($v && $v > $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Lower) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Lower) {
             $v = $this->_rowValue($expr->getField(), $data);
             $exprValue = $expr->getValue();
-            if ($exprValue instanceof Vps_Date) {
+            if ($exprValue instanceof Kwf_Date) {
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
             if (!($v && $v < $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqual) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_HigherEqual) {
             $v = $this->_rowValue($expr->getField(), $data);
             $exprValue = $expr->getValue();
-            if ($exprValue instanceof Vps_Date) {
+            if ($exprValue instanceof Kwf_Date) {
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
             if (!($v && $v >= $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_LowerEqual) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_LowerEqual) {
             $v = $this->_rowValue($expr->getField(), $data);
             $exprValue = $expr->getValue();
-            if ($exprValue instanceof Vps_Date) {
+            if ($exprValue instanceof Kwf_Date) {
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
             if (!($v && $v <= $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqualDate) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_HigherEqualDate) {
             $v = $this->_rowValue($expr->getField(), $data);
             if ($v) {
                 $fieldTime = strtotime($v);
@@ -335,7 +335,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             } else {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerEqualDate) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_SmallerEqualDate) {
             $v = $this->_rowValue($expr->getField(), $data);
             if ($v) {
                 $fieldTime = strtotime($v);
@@ -348,12 +348,12 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             } else {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Contains) {
             $v = $this->_rowValue($expr->getField(), $data);
             if (!($v && strpos(strtolower($v), strtolower($expr->getValue())) !== false )) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Like) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Like) {
             $v = $this->_rowValue($expr->getField(), $data);
             if ($v) {
                 $reg = $expr->getValue();
@@ -366,39 +366,39 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 return preg_match($reg, $v);
             }
             return false;
-        } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_StartsWith) {
             $v = $this->_rowValue($expr->getField(), $data);
             if (!($v && substr($v, 0, strlen($expr->getValue()))==$expr->getValue())) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Area) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Area) {
             // TODO: Umkreissuche
-            throw new Vps_Exception_NotYetImplemented();
-        } else if ($expr instanceof Vps_Model_Select_Expr_Not) {
+            throw new Kwf_Exception_NotYetImplemented();
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Not) {
                 if ($this->_checkExpressions($expr->getExpression(), $data)) {
                     return false;
                 }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Or) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Or) {
             foreach ($expr->getExpressions() as $orExpr) {
                 if ($this->_checkExpressions($orExpr, $data)) {
                     return true;
                 }
             }
             return false;
-        } else if ($expr instanceof Vps_Model_Select_Expr_And) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_And) {
             foreach ($expr->getExpressions() as $andExpr) {
                 if (!$this->_checkExpressions($andExpr, $data)) {
                     return false;
                 }
             }
             return true;
-        } else if ($expr instanceof Vps_Model_Select_Expr_Add) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Add) {
             $ret = 0;
             foreach ($expr->getExpressions() as $andExpr) {
                 $ret += $this->_checkExpressions($andExpr, $data);
             }
             return $ret;
-        } else if ($expr instanceof Vps_Model_Select_Expr_Subtract) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Subtract) {
             $ret = 0;
             foreach ($expr->getExpressions() as $andExpr) {
                 $ret -= $this->_checkExpressions($andExpr, $data);
@@ -436,14 +436,14 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     public function import($format, $data, $options = array())
     {
         if ($format == self::FORMAT_ARRAY) {
             if (isset($options['replace']) && $options['replace'] && !isset($this->_uniqueColumns)) {
-                throw new Vps_Exception('You must set uniqueColumns for this model if you use replace');
+                throw new Kwf_Exception('You must set uniqueColumns for this model if you use replace');
             }
             foreach ($data as $k => $v) {
                 if (isset($options['replace']) && $options['replace']) {
@@ -469,7 +469,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
             $this->_afterImport($format, $data, $options);
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 

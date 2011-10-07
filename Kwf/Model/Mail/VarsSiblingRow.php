@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mail_VarsSiblingRow extends Vps_Model_Field_Row
+class Kwf_Model_Mail_VarsSiblingRow extends Kwf_Model_Field_Row
 {
     public function _afterInsert()
     {

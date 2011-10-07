@@ -4,11 +4,11 @@ Ext.util.Format['boolean'] = function(v, p, record) {
 };
 Ext.util.Format.booleanTickCross = function(v, p, record) {
     p.css += ' x-grid3-check-col-td';
-    return '<div class="x-grid3-check-col vps-check-tick-cross-col'+(v?'-on':'')+'">&#160;</div>';
+    return '<div class="x-grid3-check-col kwf-check-tick-cross-col'+(v?'-on':'')+'">&#160;</div>';
 };
 Ext.util.Format.booleanRtr = function(v, p, record) {
     p.css += ' x-grid3-check-col-td';
-    return '<div class="x-grid3-check-col vps-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
+    return '<div class="x-grid3-check-col kwf-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
 };
 
 Ext.util.Format.password = function(value)
@@ -25,9 +25,9 @@ Ext.util.Format.decimal = function(v, p)
 {
     if (p) {
         if (p.css) {
-            p.css += ' vps-renderer-decimal';
+            p.css += ' kwf-renderer-decimal';
         } else {
-            p.css = 'vps-renderer-decimal';
+            p.css = 'kwf-renderer-decimal';
         }
     }
     if (v === null || v == undefined) return "";
@@ -78,7 +78,7 @@ if (Ext.util.Format.nl2br) {
 
 Ext.util.Format.AutoNl2Br = function(v) {
     //span wird in v gesetzt, da er sonst wieder überschrieben wird
-    return "<span class=\'vps-renderer-linebreak\'>"+Ext.util.Format.nl2Br(v)+"</span>";
+    return "<span class=\'kwf-renderer-linebreak\'>"+Ext.util.Format.nl2Br(v)+"</span>";
 };
 
 Ext.util.Format.component = function(v, f) {
@@ -102,15 +102,15 @@ Ext.util.Format.date = function(v, format) {
     if(isNaN(v.getYear())){
         return '';
     }
-    return v.dateFormat(format || trlVps('Y-m-d'));
+    return v.dateFormat(format || trlKwf('Y-m-d'));
 };
 
 
-Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer(trlVps('Y-m-d'));
-Ext.util.Format.localizedDatetime = Ext.util.Format.dateRenderer(trlVps('Y-m-d H:i'));
+Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer(trlKwf('Y-m-d'));
+Ext.util.Format.localizedDatetime = Ext.util.Format.dateRenderer(trlKwf('Y-m-d H:i'));
 Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
-    p.css += 'vps-renderer-bright';
+    p.css += 'kwf-renderer-bright';
     return Ext.util.Format.date(value, 'd.m.');
 };
 Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
@@ -134,7 +134,7 @@ Ext.util.Format.secondsToTime = function(v, format) {
 
 Ext.util.Format.mouseoverPic = function(v, p, record){
     if (!v) return '';
-    p.css += 'vps-cell-button';
+    p.css += 'kwf-cell-button';
     p.attr += 'style="background-image:url('+v+');"';
     p.attr += ' ext:qtip="&lt;img src=\''+record.data.pic_large+'\' /&gt;"';
     return '';
@@ -144,7 +144,7 @@ Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, stor
     if (column && column.noIconWhenNew && !record.data.id) {
         p.attr += 'style="background-image:none;" ';
     } else {
-        p.css += 'vps-cell-button';
+        p.css += 'kwf-cell-button';
         if (column && column.buttonIcon) {
             p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
         }
@@ -156,7 +156,7 @@ Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, stor
 };
 
 Ext.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, store, column) {
-    p.css += 'vps-cell-button';
+    p.css += 'kwf-cell-button';
     if (value == 'male') {
         p.attr += 'style="background-image:url(/assets/silkicons/male.png); cursor: auto;"" ';
     } else if (value == 'female') {
@@ -187,13 +187,13 @@ Ext.util.Format.fileSize = function(size) {
 
 Ext.util.Format.notEditable = function(v, p)
 {
-    p.css += 'vps-renderer-noteditable';
+    p.css += 'kwf-renderer-noteditable';
     return v;
 };
 
 Ext.util.Format.image = function(v, p, record){
     if (!v) return '';
-    p.css += 'vps-cell-icon';
+    p.css += 'kwf-cell-icon';
     p.attr += 'style="background-image:url('+v+');"';
     return '';
 };

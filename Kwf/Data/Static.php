@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Static extends Vps_Data_Abstract
+class Kwf_Data_Static extends Kwf_Data_Abstract
 {
     private $_content;
     public function __construct($content)

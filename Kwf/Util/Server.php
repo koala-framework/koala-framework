@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Server
+class Kwf_Util_Server
 {
     public function export($config, $options)
     {
@@ -8,11 +8,11 @@ class Vps_Util_Server
 
         $params = '';
 
-        if (isset($config->server->useVpsForUpdate) && !$config->server->useVpsForUpdate) {
+        if (isset($config->server->useKwfForUpdate) && !$config->server->useKwfForUpdate) {
             echo "updating $sshHost:$sshDir\n";
             $cmd = "svn up{$params}";
             $cmd = "sshvps $sshHost $sshDir $cmd";
-            $cmd = "sudo -u vps $cmd";
+            $cmd = "sudo -u kwf $cmd";
             if (isset($options['debug']) && $options['debug']) {
                 echo $cmd."\n";
             }
@@ -26,7 +26,7 @@ class Vps_Util_Server
             }
             $cmd = "svn-up{$params}";
             $cmd = "sshvps $sshHost $sshDir $cmd";
-            $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." $cmd";
+            $cmd = "sudo -u kwf ".Kwf_Util_Git::getAuthorEnvVars()." $cmd";
             if (isset($options['debug']) && $options['debug']) {
                 echo $cmd."\n";
             }
@@ -38,6 +38,6 @@ class Vps_Util_Server
     {
         $ret = null;
         passthru($cmd, $ret);
-        if ($ret != 0) throw new Vps_ClientException("Command failed");
+        if ($ret != 0) throw new Kwf_ClientException("Command failed");
     }
 }

@@ -1,11 +1,11 @@
 <?php
-class Vps_Model_ProxyCache extends Vps_Model_Proxy
+class Kwf_Model_ProxyCache extends Kwf_Model_Proxy
 {
     protected $_cacheSettings;
     protected $_cacheData = array();
     private $_cache;
-    protected $_rowClass = 'Vps_Model_ProxyCache_Row';
-    protected $_rowsetClass = 'Vps_Model_ProxyCache_Rowset';
+    protected $_rowClass = 'Kwf_Model_ProxyCache_Row';
+    protected $_rowsetClass = 'Kwf_Model_ProxyCache_Rowset';
 
     public function __construct(array $config = array())
     {
@@ -33,7 +33,7 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
         } else {
             $select = $where;
         }
-        if ($select->getPart(Vps_Model_Select::WHERE_EQUALS) || $select->getPart(Vps_Model_Select::WHERE_NULL)) {
+        if ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) || $select->getPart(Kwf_Model_Select::WHERE_NULL)) {
             $cacheSetting = $this->_getCacheSetting($select);
             if ($cacheSetting) {
 
@@ -46,8 +46,8 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
                         $this->_getCache()->save($this->_cacheData[$cacheId], $cacheId);
                     }
                 }
-                $whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
-                $whereNull = $select->getPart(Vps_Model_Select::WHERE_NULL);
+                $whereEquals = $select->getPart(Kwf_Model_Select::WHERE_EQUALS);
+                $whereNull = $select->getPart(Kwf_Model_Select::WHERE_NULL);
                 $values = array();
                 foreach ($cacheSetting['index'] as $value) {
                     if ($whereEquals) {
@@ -84,8 +84,8 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
     private function _getCacheSetting ($where)
     {
         $necessary = array();
-        $whereEquals = $where->getPart(Vps_Model_Select::WHERE_EQUALS);
-        $whereNull = $where->getPart(Vps_Model_Select::WHERE_NULL);
+        $whereEquals = $where->getPart(Kwf_Model_Select::WHERE_EQUALS);
+        $whereNull = $where->getPart(Kwf_Model_Select::WHERE_NULL);
 
         foreach ($this->_cacheSettings as $cacheSetting) {
             $check = true;
@@ -136,7 +136,7 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
                 'cache_dir' => 'cache/model',
                 'file_name_prefix' => 'proxycache'
             );
-            $this->_cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+            $this->_cache = Kwf_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
         }
 
         return $this->_cache;
@@ -158,7 +158,7 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
             $parts = array();
             foreach ($colindexes as $key => $colindex) {
                 if (is_object($row->{$colindex})) {
-                    throw new Vps_Exception(get_class($row->{$colindex})." is a object");
+                    throw new Kwf_Exception(get_class($row->{$colindex})." is a object");
                 }
                 $parts['data'][$colindex] = $row->{$colindex};
             }

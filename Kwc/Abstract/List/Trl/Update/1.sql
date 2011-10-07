@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS vpc_composite_list_trl (
+CREATE TABLE IF NOT EXISTS kwc_composite_list_trl (
   `component_id` varchar(200) NOT NULL,
   `visible` tinyint(4) NOT NULL,
   PRIMARY KEY  (`component_id`)

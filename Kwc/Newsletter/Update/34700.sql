@@ -1,6 +1,6 @@
 
 
-CREATE TABLE IF NOT EXISTS `vpc_newsletter_subscribers` (
+CREATE TABLE IF NOT EXISTS `kwc_newsletter_subscribers` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `gender` enum('','female','male') NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `vpc_newsletter_subscribers` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `vpc_newsletter_subscribers_to_pool` (
+CREATE TABLE IF NOT EXISTS `kwc_newsletter_subscribers_to_pool` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `subscriber_id` int(10) unsigned NOT NULL,
   `pool_id` int(10) unsigned NOT NULL,

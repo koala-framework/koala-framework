@@ -1,7 +1,7 @@
-Vps.Form.Cards = Ext.extend(Ext.Panel,
+Kwf.Form.Cards = Ext.extend(Ext.Panel,
 {
     afterRender: function() {
-        Vps.Form.Cards.superclass.afterRender.call(this);
+        Kwf.Form.Cards.superclass.afterRender.call(this);
 
         var combobox = this.items.first();
 
@@ -34,4 +34,4 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
     }
 
 });
-Ext.reg('vps.cards', Vps.Form.Cards);
+Ext.reg('kwf.cards', Kwf.Form.Cards);

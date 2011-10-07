@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Model_Select_Expr_CompareField_Abstract implements Vps_Model_Select_Expr_Interface
+abstract class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_Select_Expr_Interface
 {
     protected $_field;
     protected $_value;
@@ -21,12 +21,12 @@ abstract class Vps_Model_Select_Expr_CompareField_Abstract implements Vps_Model_
 	public function validate()
 	{
 		if (!$this->_field) {
-			throw new Vps_Exception("No Field-Value set for '"+get_class($this)+"'");
+			throw new Kwf_Exception("No Field-Value set for '"+get_class($this)+"'");
 		}
 	}
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_BOOLEAN;
+        return Kwf_Model_Interface::TYPE_BOOLEAN;
     }
 }

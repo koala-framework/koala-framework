@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_TextSessionModel_TestStylesModel extends Vpc_Basic_Text_StylesModel
+class Kwc_Basic_TextSessionModel_TestStylesModel extends Kwc_Basic_Text_StylesModel
 {
     public function __construct($config = array())
     {
-        $config['proxyModel'] = new Vps_Model_Session(array(
+        $config['proxyModel'] = new Kwf_Model_Session(array(
                 'namespace' => 'TextSessionModel_TestStylesModel',
-                'uniqueIdentifier' => 'Vpc_Basic_Text_TestStylesModel_Proxy',
+                'uniqueIdentifier' => 'Kwc_Basic_Text_TestStylesModel_Proxy',
                 'columns' => array('id', 'pos', 'name', 'tag', 'ownStyles', 'styles'),
                 'defaultData'=> array(
                     array('id'=>1, 'pos'=>1, 'name'=>'Test1', 'tag'=>'h1', 'ownStyles'=>'', 'styles'=>serialize(array('font_weight'=>'bold', 'font_size'=>'10', 'text_align'=>'center'))),

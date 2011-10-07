@@ -1,4 +1,4 @@
 <?php
-class Vps_Acl_Resource_MenuDropdown extends Vps_Acl_Resource_Abstract
+class Kwf_Acl_Resource_MenuDropdown extends Kwf_Acl_Resource_Abstract
 {
 }

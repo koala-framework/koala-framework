@@ -1,12 +1,12 @@
 <?php
-class Vpc_Newsletter_Unsubscribe_RecipientData extends Vps_Data_Abstract
+class Kwc_Newsletter_Unsubscribe_RecipientData extends Kwf_Data_Abstract
 {
     protected $_method;
 
     public function __construct($method)
     {
         if (!is_string($method)) {
-            throw new Vps_Exception("method must be of type string");
+            throw new Kwf_Exception("method must be of type string");
         }
 
         $this->_method = $method;
@@ -17,7 +17,7 @@ class Vpc_Newsletter_Unsubscribe_RecipientData extends Vps_Data_Abstract
         $interfaces = class_implements($row);
         $methodAllowed = false;
         foreach ($interfaces as $k => $i) {
-            if (is_instance_of($i, 'Vpc_Mail_Recipient_Interface')) {
+            if (is_instance_of($i, 'Kwc_Mail_Recipient_Interface')) {
                 if (method_exists($i, $this->_method)) {
                     $methodAllowed = true;
                 }
@@ -25,7 +25,7 @@ class Vpc_Newsletter_Unsubscribe_RecipientData extends Vps_Data_Abstract
         }
 
         if (!$methodAllowed) {
-            throw new Vps_Exception("This method is not allowed");
+            throw new Kwf_Exception("This method is not allowed");
         }
 
         return $row->{$this->_method}();

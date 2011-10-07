@@ -1,12 +1,12 @@
 <?php
-class Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel extends Vps_Model_Proxy
+class Kwf_Model_DbWithConnection_SiblingRelationExpr_TestModel extends Kwf_Model_Proxy
 {
     protected $_dependentModels = array(
-        'Relation' => 'Vps_Model_DbWithConnection_SiblingRelationExpr_RelationModel'
+        'Relation' => 'Kwf_Model_DbWithConnection_SiblingRelationExpr_RelationModel'
     );
     public function __construct()
     {
-        $config['proxyModel'] = 'Vps_Model_DbWithConnection_SiblingRelationExpr_MasterDbModel';
+        $config['proxyModel'] = 'Kwf_Model_DbWithConnection_SiblingRelationExpr_MasterDbModel';
         parent::__construct($config);
     }
 
@@ -14,12 +14,12 @@ class Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel extends Vps_Model
     {
         parent::_init();
         $this->_exprs['sum_foo']
-            = new Vps_Model_Select_Expr_Child('Relation',
-                    new Vps_Model_Select_Expr_Sum('foo'));
+            = new Kwf_Model_Select_Expr_Child('Relation',
+                    new Kwf_Model_Select_Expr_Sum('foo'));
 
         $this->_exprs['sum_fooplusone']
-            = new Vps_Model_Select_Expr_Child('Relation',
-                    new Vps_Model_Select_Expr_Sum(new Vps_Model_Select_Expr_Sql('foo+1', array('foo'))));
+            = new Kwf_Model_Select_Expr_Child('Relation',
+                    new Kwf_Model_Select_Expr_Sum(new Kwf_Model_Select_Expr_Sql('foo+1', array('foo'))));
 
     }
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Generator extends Vps_Component_Generator_Page_Table
+class Kwc_Advanced_Amazon_Nodes_ProductsDirectory_Generator extends Kwf_Component_Generator_Page_Table
 {
     protected $_loadTableFromComponent = false;
     protected $_idColumn = 'asin';

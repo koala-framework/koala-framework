@@ -1,6 +1,6 @@
-Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
+Kwf.Component.ComponentPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     layout: 'card',
-    mainComponentClass: 'Vpc_Paragraphs_Component',
+    mainComponentClass: 'Kwc_Paragraphs_Component',
     mainType: 'content',
     mainComponentId: '{0}',
     mainComponentText: null,
@@ -25,7 +25,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         });
         this.componentsStack = [];
 
-        Vps.Component.ComponentPanel.superclass.initComponent.call(this);
+        Kwf.Component.ComponentPanel.superclass.initComponent.call(this);
     },
     doAutoLoad : function()
     {
@@ -166,7 +166,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     componentIdSuffix: ec.componentIdSuffix,
                     componentId: ec.componentId, //gesetzt wenn aus Pages - weil da gibts unterschiedliche
                     handler: function(o) {
-                        var data = Vps.clone(this.componentsStack[o.stackIndex]);
+                        var data = Kwf.clone(this.componentsStack[o.stackIndex]);
                         if (o.componentId) data.componentId = o.componentId;
                         data.componentClass = o.componentClass;
                         data.type = o.type;
@@ -246,4 +246,4 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     }
 });
 
-Ext.reg('vps.component', Vps.Component.ComponentPanel);
+Ext.reg('kwf.component', Kwf.Component.ComponentPanel);

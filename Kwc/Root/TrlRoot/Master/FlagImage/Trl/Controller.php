@@ -1,4 +1,4 @@
 <?php
-class Vpc_Root_TrlRoot_Master_FlagImage_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Form
+class Kwc_Root_TrlRoot_Master_FlagImage_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
 {
 }

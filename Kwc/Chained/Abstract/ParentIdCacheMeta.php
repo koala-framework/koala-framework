@@ -1,4 +1,4 @@
 <?php
-class Vpc_Chained_Abstract_ParentIdCacheMeta extends Vps_Component_Cache_Meta_Static_ModelParentComponent
+class Kwc_Chained_Abstract_ParentIdCacheMeta extends Kwf_Component_Cache_Meta_Static_ModelParentComponent
 {
 }

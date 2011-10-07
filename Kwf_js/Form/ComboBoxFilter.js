@@ -1,4 +1,4 @@
-Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
+Kwf.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
 
     layout: 'form',
     border: false,
@@ -6,7 +6,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
 
     initComponent : function()
     {
-        Vps.Form.ComboBoxFilter.superclass.initComponent.call(this);
+        Kwf.Form.ComboBoxFilter.superclass.initComponent.call(this);
 
         this.filterBox = this.items.items[0];
         this.saveBox   = this.items.items[1];
@@ -91,4 +91,4 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
 
 
 });
-Ext.reg('comboboxfilter', Vps.Form.ComboBoxFilter);
+Ext.reg('comboboxfilter', Kwf.Form.ComboBoxFilter);

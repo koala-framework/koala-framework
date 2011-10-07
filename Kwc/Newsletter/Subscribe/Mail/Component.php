@@ -1,20 +1,20 @@
 <?php
-class Vpc_Newsletter_Subscribe_Mail_Component extends Vpc_Mail_Component
+class Kwc_Newsletter_Subscribe_Mail_Component extends Kwc_Mail_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         unset($ret['generators']['content']);
         $ret['generators']['redirect'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Mail_Redirect_Component',
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Mail_Redirect_Component',
             'name' => 'r'
         );
 
-        $ret['default']['subject'] = trlVps('Newsletter subscription');
+        $ret['default']['subject'] = trlKwf('Newsletter subscription');
 
         $ret['recipientSources'] = array(
-            'sub' => 'Vpc_Newsletter_Subscribe_Model'
+            'sub' => 'Kwc_Newsletter_Subscribe_Model'
         );
 
         return $ret;
@@ -27,8 +27,8 @@ class Vpc_Newsletter_Subscribe_Mail_Component extends Vpc_Mail_Component
         return $ret;
     }
 
-    public function getSubject(Vpc_Mail_Recipient_Interface $recipient = null)
+    public function getSubject(Kwc_Mail_Recipient_Interface $recipient = null)
     {
-        return trlVps('Newsletter subscription');
+        return trlKwf('Newsletter subscription');
     }
 }

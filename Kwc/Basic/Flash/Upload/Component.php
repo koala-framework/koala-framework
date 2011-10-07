@@ -1,13 +1,13 @@
 <?php
-class Vpc_Basic_Flash_Upload_Component extends Vpc_Abstract_Flash_Upload_Component
+class Kwc_Basic_Flash_Upload_Component extends Kwc_Abstract_Flash_Upload_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Flash.Upload');
-        $ret['ownModel'] = 'Vpc_Basic_Flash_Upload_Model';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
-        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'vps_upload_id_media';
+        $ret['componentName'] = trlKwf('Flash.Upload');
+        $ret['ownModel'] = 'Kwc_Basic_Flash_Upload_Model';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id_media';
         return $ret;
     }
 

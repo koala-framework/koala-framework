@@ -1,7 +1,7 @@
 <?php
-class Vps_Util_Wirecard
+class Kwf_Util_Wirecard
 {
-    public function dispatch($logModel = 'Vps_Util_Wirecard_LogModel')
+    public function dispatch($logModel = 'Kwf_Util_Wirecard_LogModel')
     {
         $url = '';
         if (isset($_SERVER['REDIRECT_URL'])) {
@@ -12,7 +12,7 @@ class Vps_Util_Wirecard
         Zend_Registry::get('config')->debug->error->log = true; //log immer aktivieren, da dieser request von wirecard gemacht wird
         ignore_user_abort(true);
 
-        $secret = Vps_Registry::get('config')->wirecard->secret;
+        $secret = Kwf_Registry::get('config')->wirecard->secret;
 
         $paymentState = isset($_POST["paymentState"]) ? $_POST["paymentState"] : "";
 
@@ -26,7 +26,7 @@ class Vps_Util_Wirecard
             // there was something wrong with the initiation or an fatal error during the transaction processing occured
             $message = $_POST["message"];
 
-            $e = new Vps_Exception('Wirecard Transaction Failed: '.$message);
+            $e = new Kwf_Exception('Wirecard Transaction Failed: '.$message);
             $e->log();
 
             $message = "Fehler bei der Initiierung: " . $message;
@@ -83,7 +83,7 @@ class Vps_Util_Wirecard
                 // please store at least the paymentType and the orderNumber additional to the orderinformation,
                 // otherwise you will never find the transaction again.
 
-                $m = Vps_Model_Abstract::getInstance($logModel);
+                $m = Kwf_Model_Abstract::getInstance($logModel);
                 $row = $m->createRow();
                 foreach ($order as $i) {
                     if ($i != 'secret') {
@@ -102,7 +102,7 @@ class Vps_Util_Wirecard
             else
             {
                 // there is something strange. maybe an unauthorized call of this page or a wrong secret
-                $e = new Vps_Exception('Wirecard Transaction Failed: Can\'t verify');
+                $e = new Kwf_Exception('Wirecard Transaction Failed: Can\'t verify');
                 $e->log();
 
             }
@@ -110,7 +110,7 @@ class Vps_Util_Wirecard
         else
         {
             // unauthorized call of this page
-            $e = new Vps_Exception('Wirecard Transaction Failed: Invalid Payment Status: '.$paymentState);
+            $e = new Kwf_Exception('Wirecard Transaction Failed: Invalid Payment Status: '.$paymentState);
             $e->log();
         }
         echo 'Pfeift';

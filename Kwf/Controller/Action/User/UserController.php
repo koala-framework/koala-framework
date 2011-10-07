@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Auto_Form
+class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
 
@@ -7,7 +7,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
     public function preDispatch()
     {
-        $regUserForm = Vps_Registry::get('config')->user->form;
+        $regUserForm = Kwf_Registry::get('config')->user->form;
         if (is_string($regUserForm)) {
             $this->_formName = $regUserForm;
         } else {
@@ -20,37 +20,37 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
     {
         parent::_initFields();
 
-        $fs = $this->_form->prepend(new Vps_Form_Container_FieldSet(trlVps('Advice')));
+        $fs = $this->_form->prepend(new Kwf_Form_Container_FieldSet(trlKwf('Advice')));
         $fs->setLabelWidth(100);
 
-        $fs->add(new Vps_Form_Field_Panel())
-            ->setHtml(trlVps('After following actions emails are sent automatically to the respective user:').'<br />'
-                     .trlVps('Create, Delete and E-Mail change'));
-        $fs->add(new Vps_Form_Field_ShowField('password', trlVps('Activation link')))
-            ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());
-        $fs->add(new Vps_Form_Field_Checkbox('avoid_mailsend', trlVps('E-Mails')))
+        $fs->add(new Kwf_Form_Field_Panel())
+            ->setHtml(trlKwf('After following actions emails are sent automatically to the respective user:').'<br />'
+                     .trlKwf('Create, Delete and E-Mail change'));
+        $fs->add(new Kwf_Form_Field_ShowField('password', trlKwf('Activation link')))
+            ->setData(new Kwf_Controller_Action_User_Users_ActivationlinkData());
+        $fs->add(new Kwf_Form_Field_Checkbox('avoid_mailsend', trlKwf('E-Mails')))
             ->setSave(false)
-            ->setBoxLabel(trlVps("Don't send any E-Mail when saving."));
+            ->setBoxLabel(trlKwf("Don't send any E-Mail when saving."));
 
         if ($roleField = $this->_getRoleField()) {
             $this->_getPermissionFieldset()->add($roleField);
         }
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
-        if (Vps_Registry::get('acl')->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
-            $this->_getPermissionFieldset()->add(new Vps_Form_Field_Checkbox('webcode', trlVps('Only for this web')))
-                ->setData(new Vps_Controller_Action_User_Users_WebcodeData())
-                ->setHelpText(trlVps('If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.'));
+        if (Kwf_Registry::get('acl')->getRole($authedRole) instanceof Kwf_Acl_Role_Admin) {
+            $this->_getPermissionFieldset()->add(new Kwf_Form_Field_Checkbox('webcode', trlKwf('Only for this web')))
+                ->setData(new Kwf_Controller_Action_User_Users_WebcodeData())
+                ->setHelpText(trlKwf('If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.'));
         }
 
-        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Statistics')));
+        $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Statistics')));
         $fs->setLabelWidth(100);
-        $fs->add(new Vps_Form_Field_ShowField('logins', trlVps('Logins')));
-        $fs->add(new Vps_Form_Field_ShowField('last_login', trlVps('Last login')))
+        $fs->add(new Kwf_Form_Field_ShowField('logins', trlKwf('Logins')));
+        $fs->add(new Kwf_Form_Field_ShowField('last_login', trlKwf('Last login')))
             ->setTpl('{value:localizedDatetime}');
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeSave($row);
         if ($this->_getParam('avoid_mailsend')) {
@@ -61,7 +61,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
     private function _getPermissionFieldset()
     {
         if (!$this->_permissionFieldset) {
-            $this->_permissionFieldset = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Permissions')));
+            $this->_permissionFieldset = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Permissions')));
             $this->_permissionFieldset->setLabelWidth(100);
         }
         return $this->_permissionFieldset;
@@ -69,9 +69,9 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
     protected function _getRoleField()
     {
-        $acl = Vps_Registry::get('acl');
-        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
-        $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
+        $acl = Kwf_Registry::get('acl');
+        $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
+        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
 
         // alle erlaubten haupt-rollen in variable
         $roles = array();
@@ -89,7 +89,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
         // Wenns keine additionalRoles gibt, normales select verwenden
         if (!$addRoles) {
-            $ret = new Vps_Form_Field_Select('role', trlVps('Rights'));
+            $ret = new Kwf_Form_Field_Select('role', trlKwf('Rights'));
             $ret->setValues($roles)->setAllowBlank(false);
         } else {
             // eigene additionalRoles holen, nur die dürfen zugewiesen werden
@@ -99,7 +99,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             );
 
             // cards container erstellen und zu form hinzufügen
-            $ret = new Vps_Form_Container_Cards('role', trlVps('Rights'));
+            $ret = new Kwf_Form_Container_Cards('role', trlKwf('Rights'));
             $ret->getCombobox()->setAllowBlank(false);
             foreach ($roles as $roleId => $roleName) {
                 $card = $ret->add();
@@ -112,7 +112,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
                             unset($addRoles[$roleId][$addRoleId]);
                         }
                     }
-                    $editor = new Vps_Form_Field_MultiCheckboxLegacy('Vps_User_AdditionalRoles', trlVps('Additional rights'));
+                    $editor = new Kwf_Form_Field_MultiCheckboxLegacy('Kwf_User_AdditionalRoles', trlKwf('Additional rights'));
                     $editor->setColumnName('additional_role')
                         ->setValues($addRoles[$roleId])
                         ->setReferences(array(
@@ -132,8 +132,8 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             return true;
         }
 
-        $acl = Vps_Registry::get('acl');
-        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
+        $acl = Kwf_Registry::get('acl');
+        $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
 
         $roles = array();
         foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {

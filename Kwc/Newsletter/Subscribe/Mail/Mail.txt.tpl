@@ -1,25 +1,25 @@
-<?= trlVps('Hello {0}', trim($this->formRow->getMailFirstname().' '.$this->formRow->getMailLastname())); ?>!
+<?= trlKwf('Hello {0}', trim($this->formRow->getMailFirstname().' '.$this->formRow->getMailLastname())); ?>!
 
-<?= trlVps('You have just been subscribed to the newsletter at {0}.', $this->host); ?>
+<?= trlKwf('You have just been subscribed to the newsletter at {0}.', $this->host); ?>
 
 
 <? if ($this->doubleOptInComponentId) { ?>
-<?= trlVps('Please click the following link to confirm your E-Mail address and to receive our newsletters in future.'); ?>
+<?= trlKwf('Please click the following link to confirm your E-Mail address and to receive our newsletters in future.'); ?>
 
-<?= '-- '.trlVps('ACTIVATION LINK').' --'; ?>
+<?= '-- '.trlKwf('ACTIVATION LINK').' --'; ?>
 
 *showcomponent*<?= $this->doubleOptInComponentId; ?>*
 
 <? } else if ($this->unsubscribeComponentId) { ?>
-<?= trlVps('To unsubscribe anytime from our newsletter, click this link:'); ?>
+<?= trlKwf('To unsubscribe anytime from our newsletter, click this link:'); ?>
 
 *showcomponent*<?= $this->unsubscribeComponentId; ?>*
 
 <? } ?>
-<?= trlVps('To change you data or settings, click this link:'); ?>
+<?= trlKwf('To change you data or settings, click this link:'); ?>
 
 *showcomponent*<?= $this->editComponentId; ?>*
 
 
-<?= trlVps('Thanks for your subscription!'); ?>
+<?= trlKwf('Thanks for your subscription!'); ?>
 

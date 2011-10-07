@@ -1,5 +1,5 @@
 <?php
-class Vps_Srpc_TestClasses_Handler
+class Kwf_Srpc_TestClasses_Handler
 {
     public $testVar = 'test';
 

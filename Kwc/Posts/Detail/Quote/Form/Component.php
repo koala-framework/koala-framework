@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Detail_Quote_Form_Component extends Vpc_Posts_Write_Form_Component
+class Kwc_Posts_Detail_Quote_Form_Component extends Kwc_Posts_Write_Form_Component
 {
     protected function _getPostsComponent()
     {

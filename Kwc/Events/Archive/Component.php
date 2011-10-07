@@ -1,5 +1,5 @@
 <?php
-class Vpc_Events_Archive_Component extends Vpc_Directories_List_Component
+class Kwc_Events_Archive_Component extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {

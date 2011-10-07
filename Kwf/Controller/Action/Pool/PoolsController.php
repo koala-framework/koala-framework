@@ -1,23 +1,23 @@
 <?php
 /**
- * Der Poolcontroller benötigt Tabelle vps_pools, die Pools sind im ENUM-Feld
- * 'pool' der Tabelle, ist unter /vps/pool zu finden, benötigt das Asset
- * VpsPool und muss im jeweiligen Projekt mit der Ressource 'vps_pool_pools'
+ * Der Poolcontroller benötigt Tabelle kwf_pools, die Pools sind im ENUM-Feld
+ * 'pool' der Tabelle, ist unter /kwf/pool zu finden, benötigt das Asset
+ * KwfPool und muss im jeweiligen Projekt mit der Ressource 'kwf_pool_pools'
  * in der bootstrap hinzugefügt werden.
  */
-class Vps_Controller_Action_Pool_PoolsController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Controller_Action_Pool_PoolsController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_primaryKey = 'pool';
     protected $_buttons = array();
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('pool', 'Pool', 200));
+        $this->_columns->add(new Kwf_Grid_Column('pool', 'Pool', 200));
     }
 
     protected function _fetchData($order, $limit, $start)
     {
-        $table = new Vps_Dao_Pool();
+        $table = new Kwf_Dao_Pool();
         $info = $table->info();
         $datatype = $info['metadata']['pool']['DATA_TYPE'];
         $datatype = str_replace(array('enum', '(', "'", ')', ' '), '', $datatype);
@@ -30,6 +30,6 @@ class Vps_Controller_Action_Pool_PoolsController extends Vps_Controller_Action_A
 
     public function indexAction()
     {
-        $this->view->ext('Vps.Pool.Panel');
+        $this->view->ext('Kwf.Pool.Panel');
     }
 }

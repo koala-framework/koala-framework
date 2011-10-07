@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_Image
+class Kwf_Media_Image
 {
     const SCALE_BESTFIT = 'bestfit';
     const SCALE_CROP = 'crop';
@@ -24,7 +24,7 @@ class Vps_Media_Image
         if (isset($sourceSize[1])) $h = $sourceSize[1];
         $size = array($w, $h);
         $rotate = null;
-        if (Vps_Registry::get('config')->image->autoExifRotate &&
+        if (Kwf_Registry::get('config')->image->autoExifRotate &&
             $source &&
             function_exists('exif_read_data') &&
             isset($sourceSize['mime']) &&
@@ -80,9 +80,9 @@ class Vps_Media_Image
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
             if (!$width || !$height) {
-                throw new Vps_Exception("width and height must be set higher than 0 "
-                    ."if Vps_Media_Image::SCALE_CROP is used. Maybe "
-                    ."Vps_Media_Image::SCALE_BESTFIT would be better?");
+                throw new Kwf_Exception("width and height must be set higher than 0 "
+                    ."if Kwf_Media_Image::SCALE_CROP is used. Maybe "
+                    ."Kwf_Media_Image::SCALE_BESTFIT would be better?");
             }
 
             if (($width / $height) >= ($size[0] / $size[1])) {
@@ -178,7 +178,7 @@ class Vps_Media_Image
 
     public static function scale($source, $size)
     {
-        if ($source instanceof Vps_Uploads_Row) {
+        if ($source instanceof Kwf_Uploads_Row) {
             $source = $source->getFileSource();
         }
         if (!is_file($source)) {

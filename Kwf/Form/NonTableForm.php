@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
+class Kwf_Form_NonTableForm extends Kwf_Form_Container_Abstract
 {
     private $_id;
     private $_rows;
@@ -7,7 +7,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
     public function __construct($name = null)
     {
         if (!isset($this->fields)) {
-            $this->fields = new Vps_Collection_FormFields();
+            $this->fields = new Kwf_Collection_FormFields();
         }
         parent::__construct($name);
     }
@@ -16,7 +16,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
         $id = $this->getId();
         if ($this->getIdTemplate()) {
             if (!$parentRow) {
-                throw new Vps_Exception("Form has an idTemplate set - so getRow required a parentRow as first argument");
+                throw new Kwf_Exception("Form has an idTemplate set - so getRow required a parentRow as first argument");
             }
             $pk = $parentRow->getModel()->getPrimaryKey();
             $id = $parentRow->$pk;
@@ -27,7 +27,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
             if (preg_match_all('#{([a-z0-9_]+)}#', $id, $m)) {
                 foreach ($m[1] as $i) {
                     if (!isset($parentRow->$i)) {
-                        throw new Vps_Exception("Column '$i' as specified in idTemplate doesn't exist in parentRow");
+                        throw new Kwf_Exception("Column '$i' as specified in idTemplate doesn't exist in parentRow");
                     }
                     $id = str_replace('{'.$i.'}', $parentRow->$i, $id);
                 }
@@ -45,10 +45,10 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
                 return null;
             }
             $id = $this->_getIdByParentRow($parentRow);
-            $model = new Vps_Model_FnF();
+            $model = new Kwf_Model_FnF();
             $this->_rows[$key] = $model->createRow(array('id' => $id));
         }
-        if ($this->_rows[$key] instanceof Vps_Model_FnF_Row) {
+        if ($this->_rows[$key] instanceof Kwf_Model_FnF_Row) {
             $this->_rows[$key]->id = $this->_getIdByParentRow($parentRow);
         }
         return $this->_rows[$key];

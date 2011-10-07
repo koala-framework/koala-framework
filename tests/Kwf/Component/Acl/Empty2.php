@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_Acl_Empty2 extends Vpc_Basic_Empty_Component
+class Kwf_Component_Acl_Empty2 extends Kwc_Basic_Empty_Component
 {
 }

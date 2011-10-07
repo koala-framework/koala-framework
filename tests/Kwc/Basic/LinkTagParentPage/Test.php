@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Basic_LinkTagParentPage
+ * @group Kwc_Basic_LinkTagParentPage
  **/
-class Vpc_Basic_LinkTagParentPage_Test extends Vpc_TestAbstract
+class Kwc_Basic_LinkTagParentPage_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_LinkTagParentPage_Root');
+        parent::setUp('Kwc_Basic_LinkTagParentPage_Root');
         $this->_root->setFilename(null);
     }
 

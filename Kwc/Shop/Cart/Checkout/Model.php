@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Model extends Vps_Model_Field
+class Kwc_Shop_Cart_Checkout_Model extends Kwf_Model_Field
 {
     protected $_fieldName = 'data';
 }

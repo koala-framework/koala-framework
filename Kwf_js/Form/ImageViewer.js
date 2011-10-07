@@ -1,4 +1,4 @@
-Vps.Form.ImageViewer = Ext.extend(Vps.Form.ShowField,
+Kwf.Form.ImageViewer = Ext.extend(Kwf.Form.ShowField,
 {
     tpl: '<tpl if="previewUrl">'+
             '<tpl if="imageUrl">'+
@@ -10,4 +10,4 @@ Vps.Form.ImageViewer = Ext.extend(Vps.Form.ShowField,
             '</tpl>'+
          '</tpl>'
 });
-Ext.reg('imageviewer', Vps.Form.ImageViewer);
+Ext.reg('imageviewer', Kwf.Form.ImageViewer);

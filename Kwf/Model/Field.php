@@ -1,8 +1,8 @@
 <?php
-class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_Interface
+class Kwf_Model_Field extends Kwf_Model_Abstract implements Kwf_Model_SubModel_Interface
 {
-    protected $_rowClass = 'Vps_Model_Field_Row';
-    protected $_rowsetClass = 'Vps_Model_Field_Rowset';
+    protected $_rowClass = 'Kwf_Model_Field_Row';
+    protected $_rowsetClass = 'Kwf_Model_Field_Rowset';
     protected $_fieldName;
     protected $_columns = array();
 
@@ -17,22 +17,22 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
 
     public function getRow($select)
     {
-        throw new Vps_Exception('getRow');
+        throw new Kwf_Exception('getRow');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_Field');
     }
 
     public function countRows($select = array())
     {
-        throw new Vps_Exception('countRows is not possible for Vps_Model_Field');
+        throw new Kwf_Exception('countRows is not possible for Kwf_Model_Field');
     }
 
-    public function isEqual(Vps_Model_Interface $other)
+    public function isEqual(Kwf_Model_Interface $other)
     {
-        throw new Vps_Exception('isEqual is not possible for Vps_Model_Field');
+        throw new Kwf_Exception('isEqual is not possible for Kwf_Model_Field');
     }
 
     public function getPrimaryKey()
@@ -45,11 +45,11 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
         return $this->_columns;
     }
 
-    public function getRowBySiblingRow(Vps_Model_Row_Interface $siblingRow)
+    public function getRowBySiblingRow(Kwf_Model_Row_Interface $siblingRow)
     {
         $data = $siblingRow->{$this->_fieldName};
         if (is_string($data)) {
-            if (substr($data, 0, 13) == 'vpsSerialized') {
+            if (substr($data, 0, 13) == 'kwfSerialized') {
                 //früher wurde es mal so gespeichert
                 $data = substr($data, 13);
             }
@@ -59,7 +59,7 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
                 try {
                     $data = unserialize($data);
                 } catch (Exception $e) {
-                    $e = new Vps_Exception($e->getMessage(). " $data");
+                    $e = new Kwf_Exception($e->getMessage(). " $data");
                     $e->logOrThrow();
                     $data = false;
                 }
@@ -78,7 +78,7 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
                 } else {
                     $decodedData = json_decode($data);
                     if (is_null($decodedData)) { // json_encode hat nicht funktioniert, siehe mörder-kommentar paar zeilen vorher
-                        $e = new Vps_Exception("json_decode failed. Input data was: '$data'");
+                        $e = new Kwf_Exception("json_decode failed. Input data was: '$data'");
                         $e->logOrThrow();
                     }
                     $data = $decodedData;
@@ -103,6 +103,6 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
     }
 
     public function getUniqueIdentifier() {
-        throw new Vps_Exception("no unique identifier set");
+        throw new Kwf_Exception("no unique identifier set");
     }
 }

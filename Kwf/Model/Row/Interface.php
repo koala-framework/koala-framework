@@ -1,5 +1,5 @@
 <?php
-interface Vps_Model_Row_Interface
+interface Kwf_Model_Row_Interface
 {
     public function __isset($name);
     public function __unset($name);

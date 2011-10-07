@@ -1,7 +1,7 @@
 <?php
-class Vps_Model_MirrorCache extends Vps_Model_Proxy
+class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 {
-    protected $_rowClass = 'Vps_Model_MirrorCache_Row';
+    protected $_rowClass = 'Kwf_Model_MirrorCache_Row';
 
     protected $_sourceModel;
     protected $_syncTimeField = null;
@@ -37,7 +37,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     public function getSourceModel()
     {
         if (is_string($this->_sourceModel)) {
-            $this->_sourceModel = Vps_Model_Abstract::getInstance($this->_sourceModel);
+            $this->_sourceModel = Kwf_Model_Abstract::getInstance($this->_sourceModel);
         }
         return $this->_sourceModel;
     }
@@ -101,7 +101,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     private function _lockSync($write = false)
     {
         if ($this->_lockSync) {
-            throw new Vps_Exception('Already locked');
+            throw new Kwf_Exception('Already locked');
         }
         $filename = $this->_getLastSyncFile().'.lock';
         $this->_lockSync = fopen($filename, "w");
@@ -112,7 +112,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 break;
             }
             if (microtime(true)-$startTime > 120) {
-                throw new Vps_Exception("Lock Failed, locked by: " . $filename);
+                throw new Kwf_Exception("Lock Failed, locked by: " . $filename);
             }
             usleep(rand(0, 100)*100);
         }
@@ -122,15 +122,15 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     /**
      * Rückgabewert false: kein sync notwendig
      *              null: alles syncen
-     *              Vps_Model_Select: das was im select steht syncen
-     * Ab VPS 1.9: Darf nicht mehr überschrieben werden, das ist keine
+     *              Kwf_Model_Select: das was im select steht syncen
+     * Ab KWF 1.9: Darf nicht mehr überschrieben werden, das ist keine
      * verwendbare API mit diesen null / false Rückgabewerten.
-     * @deprecated VPS 1.9, 07.05.2010
+     * @deprecated KWF 1.9, 07.05.2010
      * @see _getSynchronizeVars
      */
     final protected function _getSynchronizeSelect($overrideMaxSyncDelay)
     {
-        throw new Vps_Exception("_getSynchronizeSelect does not exist anymore.");
+        throw new Kwf_Exception("_getSynchronizeSelect does not exist anymore.");
     }
 
     /**
@@ -172,7 +172,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
         $this->_synchronizeDone = true; //wegen endlosschleife schon hier
 
-        Vps_Benchmark::count('mirror sync');
+        Kwf_Benchmark::count('mirror sync');
 
         if (!$this->_syncTimeField) {
             // kein modified feld vorhanden, alle kopieren
@@ -187,7 +187,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             $cacheTimestamp = $pr ? $pr->$syncField : null;
 
             if ($cacheTimestamp && !preg_match('/^[0-9]{4,4}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/', $cacheTimestamp)) {
-                throw new Vps_Exception("syncTimeField must be of type datetime (yyyy-mm-dd hh:mm:ss) when using mirror cache");
+                throw new Kwf_Exception("syncTimeField must be of type datetime (yyyy-mm-dd hh:mm:ss) when using mirror cache");
             }
 
             $sourceModel = $this->getSourceModel();
@@ -199,30 +199,30 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 );
             } else {
                 $select = $sourceModel->select();
-                if ($sourceModel instanceof Vps_Model_Service) {
+                if ($sourceModel instanceof Kwf_Model_Service) {
                     if ($this->_syncTimeFieldIsUnique) {
                         $select->where(
-                            new Vps_Model_Select_Expr_Higher($this->_syncTimeField, $cacheTimestamp)
+                            new Kwf_Model_Select_Expr_Higher($this->_syncTimeField, $cacheTimestamp)
                         );
                     } else {
-                        $select->where(new Vps_Model_Select_Expr_Or(array(
-                            new Vps_Model_Select_Expr_Higher($this->_syncTimeField, $cacheTimestamp),
-                            new Vps_Model_Select_Expr_Equals($this->_syncTimeField, $cacheTimestamp)
+                        $select->where(new Kwf_Model_Select_Expr_Or(array(
+                            new Kwf_Model_Select_Expr_Higher($this->_syncTimeField, $cacheTimestamp),
+                            new Kwf_Model_Select_Expr_Equals($this->_syncTimeField, $cacheTimestamp)
                         )));
                     }
                 } else {
                     /**
-                     * TODO: Sobald Service Vps_DateTime versteht (>= VPS 1.11)
+                     * TODO: Sobald Service Kwf_DateTime versteht (>= KWF 1.11)
                      * oder höher ist, obige if-abfrage weg und nur das hier im else verwenden
                      */
                     if ($this->_syncTimeFieldIsUnique) {
                         $select->where(
-                            new Vps_Model_Select_Expr_Higher($this->_syncTimeField, new Vps_DateTime($cacheTimestamp))
+                            new Kwf_Model_Select_Expr_Higher($this->_syncTimeField, new Kwf_DateTime($cacheTimestamp))
                         );
                     } else {
-                        $select->where(new Vps_Model_Select_Expr_Or(array(
-                            new Vps_Model_Select_Expr_Higher($this->_syncTimeField, new Vps_DateTime($cacheTimestamp)),
-                            new Vps_Model_Select_Expr_Equal($this->_syncTimeField, new Vps_DateTime($cacheTimestamp))
+                        $select->where(new Kwf_Model_Select_Expr_Or(array(
+                            new Kwf_Model_Select_Expr_Higher($this->_syncTimeField, new Kwf_DateTime($cacheTimestamp)),
+                            new Kwf_Model_Select_Expr_Equal($this->_syncTimeField, new Kwf_DateTime($cacheTimestamp))
                         )));
                     }
                 }
@@ -297,7 +297,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             $importTime = microtime(true)-$start;
 
             $tableName = '';
-            if ($this->getProxyModel() instanceof Vps_Model_Db) $tableName = $this->getProxyModel()->getTableName();
+            if ($this->getProxyModel() instanceof Kwf_Model_Db) $tableName = $this->getProxyModel()->getTableName();
             $msg = date('Y-m-d H:i:s').' '.str_replace('cache_', '', $tableName).' '.$format;
             if (is_array($data)) {
                 $msg .= " ".count($data)." entries";
@@ -314,7 +314,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     private function _getMaxSyncDelay()
     {
         if (!is_int($this->_maxSyncDelay) || $this->_maxSyncDelay < 0) {
-            throw new Vps_Exception("Variable _maxSyncDelay must be of type integer and bigger or equal to 0");
+            throw new Kwf_Exception("Variable _maxSyncDelay must be of type integer and bigger or equal to 0");
         }
         return $this->_maxSyncDelay;
     }

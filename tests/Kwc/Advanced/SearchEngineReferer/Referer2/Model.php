@@ -1,4 +1,4 @@
 <?php
-class Vpc_Advanced_SearchEngineReferer_Referer2_Model extends Vpc_Advanced_SearchEngineReferer_Referer_Model
+class Kwc_Advanced_SearchEngineReferer_Referer2_Model extends Kwc_Advanced_SearchEngineReferer_Referer_Model
 {
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Assets_Cache extends Vps_Cache_Core
+class Kwf_Assets_Cache extends Kwf_Cache_Core
 {
     public function __construct(array $options = array())
     {

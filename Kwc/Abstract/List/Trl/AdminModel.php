@@ -1,12 +1,12 @@
 <?php
-class Vpc_Abstract_List_Trl_AdminModel extends Vps_Model_Data_Abstract
+class Kwc_Abstract_List_Trl_AdminModel extends Kwf_Model_Data_Abstract
 {
     protected $_translateFields = array('visible');
 
     public function setComponentId($componentId)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($componentId, array('ignoreVisible'=>true));
-        $s = new Vps_Component_Select();
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId, array('ignoreVisible'=>true));
+        $s = new Kwf_Component_Select();
         $s->ignoreVisible();
         $s->whereGenerator('child');
         foreach ($c->getChildComponents($s) as $c) {
@@ -22,7 +22,7 @@ class Vpc_Abstract_List_Trl_AdminModel extends Vps_Model_Data_Abstract
         }
     }
 
-    public function update(Vps_Model_Row_Interface $row, $rowData)
+    public function update(Kwf_Model_Row_Interface $row, $rowData)
     {
         parent::update($row, $rowData);
         foreach ($this->_translateFields as $tf) {

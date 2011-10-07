@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_CurrentIp extends Vps_Filter_Row_Abstract
+class Kwf_Filter_Row_CurrentIp extends Kwf_Filter_Row_Abstract
 {
     public function filter($row)
     {

@@ -1,18 +1,18 @@
 <?php
-class Vpc_User_Login_Form_FrontendForm extends Vps_Form
+class Kwc_User_Login_Form_FrontendForm extends Kwf_Form
 {
     protected function _init()
     {
         parent::_init();
-        $this->_model = new Vps_Model_FnF();
+        $this->_model = new Kwf_Model_FnF();
 
-        $this->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
+        $this->add(new Kwf_Form_Field_TextField('email', trlKwf('E-Mail')))
                     ->setVtype('email')
                     ->setAllowBlank(false);
 
-        $this->add(new Vps_Form_Field_Password('password', trlVps('Password')))
+        $this->add(new Kwf_Form_Field_Password('password', trlKwf('Password')))
                     ->setAllowBlank(false);
 
-        $this->add(new Vps_Form_Field_Checkbox('auto_login', trlVps('Auto Login')));
+        $this->add(new Kwf_Form_Field_Checkbox('auto_login', trlKwf('Auto Login')));
     }
 }

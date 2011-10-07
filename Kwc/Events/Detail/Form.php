@@ -1,15 +1,15 @@
 <?php
-class Vpc_Events_Detail_Form extends Vpc_News_Detail_Abstract_Form
+class Kwc_Events_Detail_Form extends Kwc_News_Detail_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
         unset($this->fields['publish_date']);
         if (isset($this->fields['expiry_date'])) unset($this->fields['expiry_date']);
-        $this->add(new Vps_Form_Field_DateTimeField('start_date', trlVps('From')))
+        $this->add(new Kwf_Form_Field_DateTimeField('start_date', trlKwf('From')))
             ->setAllowBlank(false);
-        $this->add(new Vps_Form_Field_DateTimeField('end_date', trlVps('To')));
-        $this->add(new Vps_Form_Field_TextField('place', trlVps('Place (City)')))
+        $this->add(new Kwf_Form_Field_DateTimeField('end_date', trlKwf('To')));
+        $this->add(new Kwf_Form_Field_TextField('place', trlKwf('Place (City)')))
             ->setWidth(300);
     }
 }

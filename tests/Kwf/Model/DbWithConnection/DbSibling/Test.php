@@ -5,11 +5,11 @@
  * @group Model_Db
  * @group Model_DbWithConnection
  */
-class Vps_Model_DbWithConnection_DbSibling_Test extends Vps_Test_TestCase
+class Kwf_Model_DbWithConnection_DbSibling_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        $this->_model = new Vps_Model_DbWithConnection_DbSibling_MasterModel();
+        $this->_model = new Kwf_Model_DbWithConnection_DbSibling_MasterModel();
     }
     public function tearDown()
     {

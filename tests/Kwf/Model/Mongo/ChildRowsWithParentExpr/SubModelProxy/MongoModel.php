@@ -1,23 +1,23 @@
 <?php
-class Vps_Model_Mongo_ChildRowsWithParentExpr_SubModelProxy_MongoModel extends Vps_Model_Mongo_TestModel
+class Kwf_Model_Mongo_ChildRowsWithParentExpr_SubModelProxy_MongoModel extends Kwf_Model_Mongo_TestModel
 {
     protected function _init()
     {
-        $this->_dependentModels['Foo'] = new Vps_Model_RowsSubModel_Proxy(array(
-            'proxyModel' => new Vps_Model_Mongo_RowsSubModel(array(
+        $this->_dependentModels['Foo'] = new Kwf_Model_RowsSubModel_Proxy(array(
+            'proxyModel' => new Kwf_Model_Mongo_RowsSubModel(array(
                 'fieldName' => 'foo',
             )),
             'parentModel' => $this,
             'referenceMap' => array(
                 'Parent' => array(
-                    'refModelClass' => 'Vps_Model_Mongo_ChildRowsWithParentExpr_SubModelProxy_ParentModel',
+                    'refModelClass' => 'Kwf_Model_Mongo_ChildRowsWithParentExpr_SubModelProxy_ParentModel',
                     'column' => 'parent_id'
                 ),
-                'Mongo' => Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT,
+                'Mongo' => Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT,
             ),
             'exprs' => array(
-                'parent_name' => new Vps_Model_Select_Expr_Parent('Parent', 'name'),
-                'mongo_name' => new Vps_Model_Select_Expr_Parent('Mongo', 'name'),
+                'parent_name' => new Kwf_Model_Select_Expr_Parent('Parent', 'name'),
+                'mongo_name' => new Kwf_Model_Select_Expr_Parent('Mongo', 'name'),
             )
         ));
         parent::_init();

@@ -1,9 +1,9 @@
-Vps.Binding.ProxyPanel = Ext.extend(Vps.Binding.AbstractPanel,
+Kwf.Binding.ProxyPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 {
     initComponent: function()
     {
         if (this.proxyItem) this.setProxyItem(this.proxyItem);
-        Vps.Binding.ProxyPanel.superclass.initComponent.call(this);
+        Kwf.Binding.ProxyPanel.superclass.initComponent.call(this);
     },
     setProxyItem: function(i) {
         this.proxyItem = i;

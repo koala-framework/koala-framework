@@ -3,13 +3,13 @@
  * @group Component_Cache_Directory
  * @group Component_Cache_Directory_DbIdShortcut
  */
-class Vps_Component_Cache_Directory_TestDbIdShortcut extends Vpc_TestAbstract
+class Kwf_Component_Cache_Directory_TestDbIdShortcut extends Kwc_TestAbstract
 {
     public function setUp()
     {
         $this->markTestIncomplete('eventscache');
 
-        parent::setUp('Vps_Component_Cache_Directory_DbIdShortcut_Component');
+        parent::setUp('Kwf_Component_Cache_Directory_DbIdShortcut_Component');
     }
 
     public function testDirectory()
@@ -19,7 +19,7 @@ class Vps_Component_Cache_Directory_TestDbIdShortcut extends Vpc_TestAbstract
 
         $this->assertEquals('1 d1', $dir->render());
 
-        $dirModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+        $dirModel->import(Kwf_Model_Abstract::FORMAT_ARRAY, array(
             array('id' => 2, 'content' => 'd2')
         ));
         $this->_process();

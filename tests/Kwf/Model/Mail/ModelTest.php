@@ -4,23 +4,23 @@
  * @group Model_Mail
  * @group Mail
  */
-class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
+class Kwf_Model_Mail_ModelTest extends Kwf_Test_TestCase
 {
     public function setUp()
     {
         parent::setUp();
-        Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
+        Kwf_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
     }
 
     public function tearDown()
     {
-        Vps_Test_SeparateDb::restoreTestDb();
+        Kwf_Test_SeparateDb::restoreTestDb();
         parent::tearDown();
     }
 
     public function testRow()
     {
-        $model = new Vps_Model_Mail(array(
+        $model = new Kwf_Model_Mail(array(
             'tpl' => 'UserActivation',
         ));
 
@@ -36,16 +36,16 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
 
     public function testAdditionalStore()
     {
-        $addStore = new Vps_Model_FnF();
+        $addStore = new Kwf_Model_FnF();
 
-        $model = new Vps_Model_Mail_Model_NoSend(array(
+        $model = new Kwf_Model_Mail_Model_NoSend(array(
             'tpl' => 'UserActivation',
             'spamFields' => array(),
             'additionalStore' => $addStore
         ));
         $row = $model->createRow();
-        $row->addTo('markus@vivid.vps');
-        $row->setFrom('from@vivid.vps', 'Vps');
+        $row->addTo('markus@vivid.kwf');
+        $row->setFrom('from@vivid.kwf', 'Kwf');
         $row->subject = 'foo sub';
         $row->foo = 'bar';
         $row->foo2 = 'bar2';
@@ -64,16 +64,16 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
 
     public function testMail()
     {
-        $model = new Vps_Model_Mail_Model_NoSend(array(
+        $model = new Kwf_Model_Mail_Model_NoSend(array(
             'tpl' => 'UserActivation',
             'spamFields' => array()
         ));
         $row = $model->createRow();
-        $row->addTo('markus@vivid.vps');
-        $row->addTo('markus2@vivid.vps', 'm2');
-        $row->setFrom('from@vivid.vps', 'Vps');
-        $row->addCc('cc@vivid.vps', 'cc');
-        $row->addBcc('bcc@vivid.vps', 'bcc');
+        $row->addTo('markus@vivid.kwf');
+        $row->addTo('markus2@vivid.kwf', 'm2');
+        $row->setFrom('from@vivid.kwf', 'Kwf');
+        $row->addCc('cc@vivid.kwf', 'cc');
+        $row->addBcc('bcc@vivid.kwf', 'bcc');
         $row->addHeader('X-MyHeader', '321');
         $row->subject = 'Test subject';
         $row->foo = 'bar';
@@ -84,22 +84,22 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
         $this->assertEquals('Test subject', $row->getSubject());
 
         $this->assertEquals(array(
-            array('email' => 'markus@vivid.vps', 'name' => ''),
-            array('email' => 'markus2@vivid.vps', 'name' => 'm2')
+            array('email' => 'markus@vivid.kwf', 'name' => ''),
+            array('email' => 'markus2@vivid.kwf', 'name' => 'm2')
         ), $row->getTo());
 
         $this->assertEquals(
-            array('email' => 'from@vivid.vps', 'name' => 'Vps'),
+            array('email' => 'from@vivid.kwf', 'name' => 'Kwf'),
             $row->getFrom()
         );
 
         $this->assertEquals(array(
-                array('email' => 'cc@vivid.vps', 'name' => 'cc')
+                array('email' => 'cc@vivid.kwf', 'name' => 'cc')
             ), $row->getCc()
         );
 
         $this->assertEquals(
-            array('bcc@vivid.vps'),
+            array('bcc@vivid.kwf'),
             $row->getBcc()
         );
 

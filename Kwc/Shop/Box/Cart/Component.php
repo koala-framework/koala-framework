@@ -1,13 +1,13 @@
 <?php
-class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
+class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
         $ret['cssClass'] = 'webStandard';
-        $ret['placeholder']['toCart'] = trlVps('To cart');
-        $ret['placeholder']['toCheckout'] = trlVps('To Checkout');
+        $ret['placeholder']['toCart'] = trlKwf('To cart');
+        $ret['placeholder']['toCheckout'] = trlKwf('To Checkout');
         return $ret;
     }
 
@@ -15,7 +15,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
 
-        $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+        $ret['order'] = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
         $ret['items'] = $ret['order']->getProductsDataWithProduct();
         $ret['sumRows'] = $this->_getCart()->getChildComponent('_checkout')
@@ -42,8 +42,8 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
 
     private function _getCart()
     {
-        return Vps_Component_Data_Root::getInstance()->getComponentByClass(
-            'Vpc_Shop_Cart_Component',
+        return Kwf_Component_Data_Root::getInstance()->getComponentByClass(
+            'Kwc_Shop_Cart_Component',
             array('subroot' => $this->getData())
         );
     }

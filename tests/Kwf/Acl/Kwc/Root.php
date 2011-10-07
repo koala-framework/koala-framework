@@ -1,16 +1,16 @@
 <?php
-class Vps_Acl_Vpc_Root extends Vps_Component_NoCategoriesRoot
+class Kwf_Acl_Kwc_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['page']['model'] = new Vps_Model_FnF();
+        $ret['generators']['page']['model'] = new Kwf_Model_FnF();
         $ret['generators']['page']['component'] = array(
-            'test' => 'Vps_Acl_Vpc_TestComponent'
+            'test' => 'Kwf_Acl_Kwc_TestComponent'
         );
         $ret['generators']['child'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Basic_Empty_Component'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Basic_Empty_Component'
         );
         $ret['generators']['box']['component'] = array();
         unset($ret['generators']['title']);

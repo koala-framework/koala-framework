@@ -1,5 +1,5 @@
 <?php
-class Vpc_Events_Category_ShowCategories_Archive_Component extends Vpc_Directories_Category_ShowCategories_Abstract_Component
+class Kwc_Events_Category_ShowCategories_Archive_Component extends Kwc_Directories_Category_ShowCategories_Abstract_Component
 {
     public static function getSettings()
     {

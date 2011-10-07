@@ -1,5 +1,5 @@
 <?php
-class Vpc_List_Gallery_SettingsController extends Vps_Controller_Action_Auto_Vpc_Form
+class Kwc_List_Gallery_SettingsController extends Kwf_Controller_Action_Auto_Kwc_Form
 {
-    protected $_formName = 'Vpc_List_Gallery_SettingsForm';
+    protected $_formName = 'Kwc_List_Gallery_SettingsForm';
 }

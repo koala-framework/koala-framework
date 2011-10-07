@@ -1,6 +1,6 @@
 <?php
-    class Vpc_List_ChildPages_Teaser_TeaserImage_Text_Model
-        extends Vpc_Basic_Text_Model
+    class Kwc_List_ChildPages_Teaser_TeaserImage_Text_Model
+        extends Kwc_Basic_Text_Model
 {
     protected function _init()
     {

@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Event_Page_RecursiveFilenameChanged extends Vps_Component_Event_Abstract
+class Kwf_Component_Event_Page_RecursiveFilenameChanged extends Kwf_Component_Event_Abstract
 {
     public $componentId;
 

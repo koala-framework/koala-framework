@@ -1,16 +1,16 @@
 
-Ext.namespace("Vpc.Box.Dogear");
+Ext.namespace("Kwc.Box.Dogear");
 
-Vpc.Box.Dogear.initDone = false;
+Kwc.Box.Dogear.initDone = false;
 
-Vpc.Box.Dogear.enlarge = function() {
+Kwc.Box.Dogear.enlarge = function() {
     var dogearSmall = document.getElementById('dogearSmall');
     var dogearBig = document.getElementById('dogearBig');
     dogearBig.style.top = '0';
     dogearSmall.style.top = '-500px';
 };
 
-Vpc.Box.Dogear.shrink = function() {
+Kwc.Box.Dogear.shrink = function() {
     var dogearSmall = document.getElementById('dogearSmall');
     var dogearBig = document.getElementById('dogearBig');
     dogearSmall.showLoop();
@@ -18,9 +18,9 @@ Vpc.Box.Dogear.shrink = function() {
     dogearBig.style.top = '-700px';
 };
 
-Vpc.Box.Dogear.init = function() {
-    Vpc.Box.Dogear.smallDiv.style.display = 'block';
-    Vpc.Box.Dogear.bigDiv.style.display = 'block';
+Kwc.Box.Dogear.init = function() {
+    Kwc.Box.Dogear.smallDiv.style.display = 'block';
+    Kwc.Box.Dogear.bigDiv.style.display = 'block';
 
     var optionsEl = Ext.query(".dogearOptions");
     if (!optionsEl) return;
@@ -29,7 +29,7 @@ Vpc.Box.Dogear.init = function() {
     if (options.urlSmall && options.urlBig) {
 
         var s1 = new swfobject.embedSWF(
-            "/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear.swf",
+            "/assets/kwf/Kwc/Box/DogearRandom/Dogear/dogear.swf",
             "dogearSmall",
             "180","180",
             "9",
@@ -54,7 +54,7 @@ Vpc.Box.Dogear.init = function() {
         tmp.src = options.urlBig;
 
         var s2 = new swfobject.embedSWF(
-            "/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear_large.swf",
+            "/assets/kwf/Kwc/Box/DogearRandom/Dogear/dogear_large.swf",
             "dogearBig",
             "680","680",
             "9",
@@ -74,32 +74,32 @@ Vpc.Box.Dogear.init = function() {
             }
         );
 
-        Vpc.Box.Dogear.initDone = true;
+        Kwc.Box.Dogear.initDone = true;
     }
 };
 
-Vps.onContentReady(function() {
-    Vpc.Box.Dogear.smallDiv = document.getElementById('dogearSmall');
-    Vpc.Box.Dogear.bigDiv = document.getElementById('dogearBig');
+Kwf.onContentReady(function() {
+    Kwc.Box.Dogear.smallDiv = document.getElementById('dogearSmall');
+    Kwc.Box.Dogear.bigDiv = document.getElementById('dogearBig');
 
-    if (Vpc.Box.Dogear.smallDiv && Vpc.Box.Dogear.bigDiv) {
+    if (Kwc.Box.Dogear.smallDiv && Kwc.Box.Dogear.bigDiv) {
         if (Ext.getBody().getWidth() >= 990) {
-            Vpc.Box.Dogear.init();
+            Kwc.Box.Dogear.init();
         } else {
-            Vpc.Box.Dogear.smallDiv.style.display = 'none';
-            Vpc.Box.Dogear.bigDiv.style.display = 'none';
+            Kwc.Box.Dogear.smallDiv.style.display = 'none';
+            Kwc.Box.Dogear.bigDiv.style.display = 'none';
         }
 
         Ext.EventManager.addListener(window, 'resize', function() {
             if (Ext.getBody().getWidth() >= 990) {
-                Vpc.Box.Dogear.smallDiv.style.display = 'block';
-                Vpc.Box.Dogear.bigDiv.style.display = 'block';
-                if (!Vpc.Box.Dogear.initDone) {
-                    Vpc.Box.Dogear.init();
+                Kwc.Box.Dogear.smallDiv.style.display = 'block';
+                Kwc.Box.Dogear.bigDiv.style.display = 'block';
+                if (!Kwc.Box.Dogear.initDone) {
+                    Kwc.Box.Dogear.init();
                 }
             } else {
-                Vpc.Box.Dogear.smallDiv.style.display = 'none';
-                Vpc.Box.Dogear.bigDiv.style.display = 'none';
+                Kwc.Box.Dogear.smallDiv.style.display = 'none';
+                Kwc.Box.Dogear.bigDiv.style.display = 'none';
             }
         });
     }

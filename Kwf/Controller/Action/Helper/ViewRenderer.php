@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_Helper_ViewRenderer
+class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_Helper_ViewRenderer
 {
     public function init()
     {
@@ -11,9 +11,9 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
     public function preDispatch() {
         $module = $this->getRequest()->getParam('module');
         if ($this->isJson()) {
-            $this->setView(new Vps_View_Json());
+            $this->setView(new Kwf_View_Json());
         } else {
-            $this->setView(new Vps_View_Ext());
+            $this->setView(new Kwf_View_Ext());
         }
 
         if ((null !== $this->_actionController) && (null === $this->_actionController->view)) {
@@ -39,7 +39,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                     echo "<pre>";
                     echo htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
                     echo "</pre>";
-                    Vps_Benchmark::output();
+                    Kwf_Benchmark::output();
                     $this->setNoRender();
                 }
             } else {

@@ -3,15 +3,15 @@
  * @group Model
  * @group SiblingModel
  */
-class Vps_Model_FnF_SiblingModelTest extends Vps_Test_TestCase
+class Kwf_Model_FnF_SiblingModelTest extends Kwf_Test_TestCase
 {
     private $_model;
 
     public function setUp()
     {
         parent::setUp();
-        $this->_model = new Vps_Model_FnF_SiblingMasterModel();
-        Vps_Model_Abstract::getInstance('Vps_Model_FnF_SiblingModel')->setData(
+        $this->_model = new Kwf_Model_FnF_SiblingMasterModel();
+        Kwf_Model_Abstract::getInstance('Kwf_Model_FnF_SiblingModel')->setData(
             array(
                 array('master_id'=>1, 'bar'=>'bar1'),
                 array('master_id'=>2, 'bar'=>'bar2'),
@@ -48,7 +48,7 @@ class Vps_Model_FnF_SiblingModelTest extends Vps_Test_TestCase
         $row->id = 11;
         $row->save();
         $this->assertEquals(11, $row->master_id);
-        $data = Vps_Model_Abstract::getInstance('Vps_Model_FnF_SiblingModel')->getData();
+        $data = Kwf_Model_Abstract::getInstance('Kwf_Model_FnF_SiblingModel')->getData();
         $this->assertEquals(11, $data[4]['master_id']);
     }
 
@@ -58,7 +58,7 @@ class Vps_Model_FnF_SiblingModelTest extends Vps_Test_TestCase
         $row->save();
         $this->assertEquals(4, $row->id);
         $this->assertEquals(4, $row->master_id);
-        $data = Vps_Model_Abstract::getInstance('Vps_Model_FnF_SiblingModel')->getData();
+        $data = Kwf_Model_Abstract::getInstance('Kwf_Model_FnF_SiblingModel')->getData();
         $this->assertEquals(4, $data[4]['master_id']);
     }
 

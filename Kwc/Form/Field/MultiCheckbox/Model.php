@@ -1,9 +1,9 @@
 <?php
-class Vpc_Form_Field_MultiCheckbox_Model extends Vps_Component_FieldModel
+class Kwc_Form_Field_MultiCheckbox_Model extends Kwf_Component_FieldModel
 {
     protected function _init()
     {
         parent::_init();
-        $this->_dependentModels['Values'] = 'Vpc_Form_Field_MultiCheckbox_ValuesModel';
+        $this->_dependentModels['Values'] = 'Kwc_Form_Field_MultiCheckbox_ValuesModel';
     }
 }

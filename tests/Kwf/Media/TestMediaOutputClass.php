@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_TestMediaOutputClass implements Vps_Media_Output_Interface
+class Kwf_Media_TestMediaOutputClass implements Kwf_Media_Output_Interface
 {
     public static $called = 0;
     public static $mtimeFiles = array();

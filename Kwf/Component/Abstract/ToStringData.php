@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Abstract_ToStringData extends Vps_Data_Abstract implements Vps_Data_Vpc_ListInterface
+class Kwf_Component_Abstract_ToStringData extends Kwf_Data_Abstract implements Kwf_Data_Kwc_ListInterface
 {
     private $_subComponent = null;
 
@@ -10,18 +10,18 @@ class Vps_Component_Abstract_ToStringData extends Vps_Data_Abstract implements V
         if ($this->_subComponent) {
             $componentId .= $this->_subComponent;
         }
-        $c = Vps_Component_Data_Root::getInstance()
+        $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
         if (!$c) {
             $componentId = $row->component_id . '_' . $row->id;
             if ($this->_subComponent) {
                 $componentId .= $this->_subComponent;
             }
-            $c = Vps_Component_Data_Root::getInstance()
+            $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
         }
         if (!$c) return '';
-        $admin = Vpc_Admin::getInstance($c->componentClass);
+        $admin = Kwc_Admin::getInstance($c->componentClass);
         return $admin->componentToString($c);
     }
 

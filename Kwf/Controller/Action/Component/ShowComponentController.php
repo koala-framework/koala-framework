@@ -1,20 +1,20 @@
 <?php
-class Vps_Controller_Action_Component_ShowComponentController extends Vps_Controller_Action
+class Kwf_Controller_Action_Component_ShowComponentController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
         $id = $this->_getParam('id');
         if (!$id) {
-            throw new Vps_ClientException("Missing Parameter: id");
+            throw new Kwf_ClientException("Missing Parameter: id");
         }
-        $c = Vps_Component_Data_Root::getInstance()
+        $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($id, array('ignoreVisible'=>true));
         if (!$c) {
-            $c = Vps_Component_Data_Root::getInstance()
+            $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($id, array('ignoreVisible'=>true));
         }
         if (!$c) {
-            throw new Vps_ClientException("Component with id '$id' not found");
+            throw new Kwf_ClientException("Component with id '$id' not found");
         }
 
         $process = $c
@@ -22,12 +22,12 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
                     'page' => false,
                     'flags' => array('processInput' => true)
                 ));
-        if (Vps_Component_Abstract::getFlag($c->componentClass, 'processInput')) {
+        if (Kwf_Component_Abstract::getFlag($c->componentClass, 'processInput')) {
             $process[] = $this->getData();
         }
         $postData = array();
         foreach ($process as $i) {
-            Vps_Benchmark::count('processInput', $i->componentId);
+            Kwf_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
                 $i->getComponent()->preProcessInput($postData);
             }
@@ -47,7 +47,7 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
         //(unschön: keine assets, kein html-header usw)
         echo $c->render();
 
-        Vps_Benchmark::output();
+        Kwf_Benchmark::output();
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }

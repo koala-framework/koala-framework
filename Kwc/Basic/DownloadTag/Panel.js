@@ -1,8 +1,8 @@
-Ext.ns('Vpc.Basic.DownloadTag');
-Vpc.Basic.DownloadTag.Panel = Ext.extend(Ext.Panel, {
+Ext.ns('Kwc.Basic.DownloadTag');
+Kwc.Basic.DownloadTag.Panel = Ext.extend(Ext.Panel, {
     initComponent: function() {
-        Vpc.Basic.DownloadTag.Panel.superclass.initComponent.call(this);
-        this.findByType('vps.file')[0].on('uploaded', function(field, value) {
+        Kwc.Basic.DownloadTag.Panel.superclass.initComponent.call(this);
+        this.findByType('kwf.file')[0].on('uploaded', function(field, value) {
             if (value) {
                 this.ownerCt.find('autoFillWithFilename', 'filename').forEach(function (f) {
                     var v = value.filename;
@@ -20,4 +20,4 @@ Vpc.Basic.DownloadTag.Panel = Ext.extend(Ext.Panel, {
         }, this);
     }
 });
-Ext.reg('Vpc.Basic.DownloadTag', Vpc.Basic.DownloadTag.Panel);
+Ext.reg('Kwc.Basic.DownloadTag', Kwc.Basic.DownloadTag.Panel);

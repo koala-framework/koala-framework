@@ -1,13 +1,13 @@
 <?php
-class Vpc_Guestbook_ActivatePost_Component extends Vpc_Form_Success_Component
+class Kwc_Guestbook_ActivatePost_Component extends Kwc_Form_Success_Component
 {
     protected $_newVisibleValue = 1;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlVpsStatic('The entry in your guestbook has been acitvated.');
-        $ret['placeholder']['toGuestbook'] = trlVpsStatic('Use this link to get to your guestbook:');
+        $ret['placeholder']['success'] = trlKwfStatic('The entry in your guestbook has been acitvated.');
+        $ret['placeholder']['toGuestbook'] = trlKwfStatic('Use this link to get to your guestbook:');
         return $ret;
     }
 
@@ -26,7 +26,7 @@ class Vpc_Guestbook_ActivatePost_Component extends Vpc_Form_Success_Component
             $postRow = $model->getRow($params['post_id']);
         }
         if (!isset($postRow)) {
-            throw new Vps_ClientException(trlVps("This post does not exist anymore."));
+            throw new Kwf_ClientException(trlKwf("This post does not exist anymore."));
         }
 
         $postRow->visible = $this->_newVisibleValue;

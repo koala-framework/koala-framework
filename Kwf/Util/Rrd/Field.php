@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Rrd_Field
+class Kwf_Util_Rrd_Field
 {
     private $_name;
     private $_text;
@@ -9,7 +9,7 @@ class Vps_Util_Rrd_Field
     private $_heartbeat = null;
 
     /**
-     * @var Vps_Util_Rrd_File
+     * @var Kwf_Util_Rrd_File
      */
     private $_file;
 
@@ -19,7 +19,7 @@ class Vps_Util_Rrd_Field
         $this->_name = $settings['name'];
         if (isset($settings['escapedName'])) {
             if ($settings['escapedName'] != $this->_escapeField($settings['escapedName'])) {
-                throw new Vps_Exception('invalid escapedName');
+                throw new Kwf_Exception('invalid escapedName');
             }
             $this->_escapedName = $settings['escapedName'];
         } else {
@@ -104,7 +104,7 @@ class Vps_Util_Rrd_Field
     /**
      * @internal wird autom gesetzt
      */
-    public function setFile(Vps_Util_Rrd_File $file)
+    public function setFile(Kwf_Util_Rrd_File $file)
     {
         $this->_file = $file;
     }

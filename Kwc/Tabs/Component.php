@@ -1,16 +1,16 @@
 <?php
-class Vpc_Tabs_Component extends Vpc_Abstract_List_Component
+class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
 {
     public static function getSettings($parentComponentClass)
     {
         $ret = parent::getSettings();
         $ret['needsParentComponentClass'] = true;
         $ret['generators']['child']['component'] = $parentComponentClass;
-        $ret['componentName'] = trlVps('Tabs');
-        $ret['componentIcon'] = new Vps_Asset('tab.png');
+        $ret['componentName'] = trlKwf('Tabs');
+        $ret['componentIcon'] = new Kwf_Asset('tab.png');
         $ret['cssClass'] = 'webStandard';
-        $ret['assets']['dep'][] = 'VpsTabs';
-        $ret['extConfig'] = 'Vpc_Tabs_ExtConfig';
+        $ret['assets']['dep'][] = 'KwfTabs';
+        $ret['extConfig'] = 'Kwc_Tabs_ExtConfig';
         $ret['contentWidthSubtract'] = 20;
         return $ret;
     }

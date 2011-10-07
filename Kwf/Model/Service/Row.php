@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Service_Row extends Vps_Model_Row_Data_Abstract
+class Kwf_Model_Service_Row extends Kwf_Model_Row_Data_Abstract
 {
     public function getCleanDataPrimary()
     {

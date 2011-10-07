@@ -4,7 +4,7 @@
  * @group slow
  * @group AutoForm
  */
-class Vps_Form_ShowField_ValueOverlapsTest extends Vps_Test_SeleniumTestCase
+class Kwf_Form_ShowField_ValueOverlapsTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
@@ -16,7 +16,7 @@ class Vps_Form_ShowField_ValueOverlapsTest extends Vps_Test_SeleniumTestCase
     {
         //test deaktiviert, hat nur probleme versacht und schlug eh nur im IE fehl
         /*
-        $this->open('/vps/test/vps_form_show-field_value-overlaps-error-form');
+        $this->open('/kwf/test/kwf_form_show-field_value-overlaps-error-form');
         $this->click("//button[text()='testA']");
         $this->waitForConnections();
         sleep(3);

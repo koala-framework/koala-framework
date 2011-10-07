@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_PubSubHubbub_TestFeedController extends Vps_Controller_Action
+class Kwf_Util_PubSubHubbub_TestFeedController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
@@ -11,7 +11,7 @@ class Vps_Util_PubSubHubbub_TestFeedController extends Vps_Controller_Action
         //file_put_contents('log/feedFetch'.date('H:i:s').uniqid(), print_r($_SERVER, true));
 
         if ($this->_getParam('etlm')) {
-            Vps_Media_Output::output(array(
+            Kwf_Media_Output::output(array(
                 'contents' => $c,
                 'mimeType' => 'application/atom+xml',
                 'etag' => md5($c),
@@ -19,7 +19,7 @@ class Vps_Util_PubSubHubbub_TestFeedController extends Vps_Controller_Action
                 'lifetime' => false
             ));
         } else {
-            Vps_Media_Output::output(array(
+            Kwf_Media_Output::output(array(
                 'contents' => $c,
                 'mimeType' => 'application/atom+xml',
                 'lifetime' => false

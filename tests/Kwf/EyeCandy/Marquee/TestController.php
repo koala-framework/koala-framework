@@ -1,12 +1,12 @@
 <?php
-class Vps_EyeCandy_Marquee_TestController extends Vps_Controller_Action
+class Kwf_EyeCandy_Marquee_TestController extends Kwf_Controller_Action
 {
     /**
      * ist kein unit test, muss per hand aufgerufen werden
      */
     public function indexAction()
     {
-        $view = new Vps_View();
+        $view = new Kwf_View();
         $view->settings = array(
             'selector' => '> div',
             'scrollDelay' => 50,

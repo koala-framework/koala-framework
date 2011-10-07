@@ -1,10 +1,10 @@
-Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
+Kwf.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     checkboxToggle: false,
     checkboxCollapse: true,
     initComponent: function() {
         this.monitorResize = true;
         if (this.checkboxToggle && this.checkboxName) {
-            this.hiddenCheckboxValue = new Vps.Form.Hidden({
+            this.hiddenCheckboxValue = new Kwf.Form.Hidden({
                 name: this.checkboxName
             });
             this.hiddenCheckboxValue.on('changevalue', function(value) {
@@ -37,7 +37,7 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
             this.add(this.hiddenCheckboxValue);
             delete this.checkboxName;
         }
-        Vps.Form.FieldSet.superclass.initComponent.call(this);
+        Kwf.Form.FieldSet.superclass.initComponent.call(this);
     },
     onCheckClick : function() {
         this.hiddenCheckboxValue.setValue(this.checkbox.dom.checked ? '1' : '0');
@@ -50,12 +50,12 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
             }, this);
             this.enable();
         } else {
-            Vps.Form.FieldSet.superclass.enableRecursive.call(this);
+            Kwf.Form.FieldSet.superclass.enableRecursive.call(this);
         }
     },
 
     afterRender: function() {
-        Vps.Form.FieldSet.superclass.afterRender.call(this);
+        Kwf.Form.FieldSet.superclass.afterRender.call(this);
         if (this.helpText) {
             this.helpEl = this.getEl().createChild({
                 tag: 'a',
@@ -71,7 +71,7 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
                     bodyStyle: 'padding: 10px; background-color: white;',
                     autoHeight: true,
                     bodyBorder : false,
-                    title: trlVps('Info'),
+                    title: trlKwf('Info'),
                     resize: false
                 });
                 helpWindow.show();
@@ -83,9 +83,9 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
         }
         if (this.hiddenCheckboxValue) {
             //damit init-value in hiddenCheckboxValue geschrieben wird
-            Vps.Form.Hidden.superclass.setValue.call(this.hiddenCheckboxValue, this.checkbox.dom.checked ? '1' : '0');
+            Kwf.Form.Hidden.superclass.setValue.call(this.hiddenCheckboxValue, this.checkbox.dom.checked ? '1' : '0');
         }
     }
 });
 
-Ext.reg('fieldset', Vps.Form.FieldSet);
+Ext.reg('fieldset', Kwf.Form.FieldSet);

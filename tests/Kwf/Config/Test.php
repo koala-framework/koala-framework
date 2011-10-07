@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @group Vps_Config
+ * @group Kwf_Config
  */
-class Vps_Config_Test extends Vps_Test_TestCase
+class Kwf_Config_Test extends Kwf_Test_TestCase
 {
     public function testStaticConfigMerge()
     {
@@ -31,7 +31,7 @@ class Vps_Config_Test extends Vps_Test_TestCase
         $merge = new Zend_Config($mergeContent, true);
 
         // do it
-        $merged = Vps_Config_Web::mergeConfigs($main, $merge);
+        $merged = Kwf_Config_Web::mergeConfigs($main, $merge);
         $mergedArray = $merged->toArray();
 
         $expectedResult = $mainContent;
@@ -49,7 +49,7 @@ class Vps_Config_Test extends Vps_Test_TestCase
         $merge = new Zend_Config($mergeContent, true);
 
         // do it
-        $merged = Vps_Config_Web::mergeConfigs($merged, $merge);
+        $merged = Kwf_Config_Web::mergeConfigs($merged, $merge);
         $mergedArray = $merged->toArray();
 
         $expectedResult['blubb']['firstname'] = 'Kurt';

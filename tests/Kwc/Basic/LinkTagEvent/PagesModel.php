@@ -1,9 +1,9 @@
 <?php
-class Vpc_Basic_LinkTagEvent_PagesModel extends Vpc_Root_Category_GeneratorModel
+class Kwc_Basic_LinkTagEvent_PagesModel extends Kwc_Root_Category_GeneratorModel
 {
     public function __construct()
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'data' => array(
 
                 // necessary events component

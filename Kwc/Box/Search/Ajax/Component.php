@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_Search_Ajax_Component extends Vpc_Abstract_Ajax_Component
+class Kwc_Box_Search_Ajax_Component extends Kwc_Abstract_Ajax_Component
 {
     public static function getSettings()
     {

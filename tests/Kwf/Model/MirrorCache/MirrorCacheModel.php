@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_MirrorCache_MirrorCacheModel extends Vps_Model_MirrorCache
+class Kwf_Model_MirrorCache_MirrorCacheModel extends Kwf_Model_MirrorCache
 {
     public $sourceModel;
     public $mirrorModel;
@@ -7,7 +7,7 @@ class Vps_Model_MirrorCache_MirrorCacheModel extends Vps_Model_MirrorCache
 
     public function __construct()
     {
-        $this->sourceModel = new Vps_Model_FnF(array(
+        $this->sourceModel = new Kwf_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'timefield'),
             'uniqueColumns' => array('id'),
@@ -17,7 +17,7 @@ class Vps_Model_MirrorCache_MirrorCacheModel extends Vps_Model_MirrorCache
                 array('id' => 3, 'firstname' => 'Kurt', 'timefield' => '2008-07-15 20:00:00')
             )
         ));
-        $this->mirrorModel = new Vps_Model_FnF(array(
+        $this->mirrorModel = new Kwf_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'timefield'),
             'uniqueColumns' => array('id'),
@@ -26,7 +26,7 @@ class Vps_Model_MirrorCache_MirrorCacheModel extends Vps_Model_MirrorCache
                 array('id' => 2, 'firstname' => 'Susi', 'timefield' => '2008-07-09 10:00:00')
             )
         ));
-        $this->siblingModel = new Vps_Model_MirrorCache_SiblingModel(array(
+        $this->siblingModel = new Kwf_Model_MirrorCache_SiblingModel(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'siblingcol'),
             'uniqueColumns' => array('id'),

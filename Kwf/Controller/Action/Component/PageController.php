@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_PageController extends Vps_Controller_Action_Auto_Form
+class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
 
@@ -7,10 +7,10 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
 
     protected function _hasPermissions($row, $action)
     {
-        if ($row->getModel() instanceof Vps_Component_Model) {
+        if ($row->getModel() instanceof Kwf_Component_Model) {
             $component = $row->getData();
         } else {
-            $component = Vps_Component_Data_Root::getInstance()
+            $component = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($row->parent_id, array('ignoreVisible' => true));
         }
         $ret = false;
@@ -26,7 +26,7 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
         }
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         $row->parent_id = $this->_getParam('parent_id');
     }
@@ -44,7 +44,7 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
     protected function _initFields()
     {
         //--- main generator form (if Category_Generator this contains Pagename and Pagetype)
-        $componentOrParent = Vps_Component_Data_Root::getInstance()
+        $componentOrParent = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_getComponentOrParentId(), array('ignoreVisible' => true));
         if ($this->_getParam('id')) {
             if ($componentOrParent->componentId == 'root') {
@@ -53,16 +53,16 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
                 $this->_form = $componentOrParent->generator->getPagePropertiesForm($componentOrParent);
             }
         } else {
-            $gens = Vps_Component_Generator_Abstract::getInstances($componentOrParent, array('pageGenerator'=>true));
-            if (count($gens)!=1) throw new Vps_Exception('pageGenerator not found');
+            $gens = Kwf_Component_Generator_Abstract::getInstances($componentOrParent, array('pageGenerator'=>true));
+            if (count($gens)!=1) throw new Kwf_Exception('pageGenerator not found');
             $gen = array_shift($gens);
             $this->_form = $gen->getPagePropertiesForm($componentOrParent);
         }
 
         if (!$this->_form) {
-            $this->_form = new Vps_Form();
-            $this->_form->setModel(Vps_Model_Abstract::getInstance('Vps_Component_Model'));
-            $this->_form->add(new Vps_Form_Field_ShowField('name', trlVps('Name')));
+            $this->_form = new Kwf_Form();
+            $this->_form->setModel(Kwf_Model_Abstract::getInstance('Kwf_Component_Model'));
+            $this->_form->add(new Kwf_Form_Field_ShowField('name', trlKwf('Name')));
         }
 
         //--- and now add the more complicated additional forms
@@ -72,23 +72,23 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
             $possibleComponentClasses = $fields['component']->getPossibleComponentClasses();
         } else {
             if (!$this->_getParam('id')) {
-                throw new Vps_Exception("not supported for adding");
+                throw new Kwf_Exception("not supported for adding");
             }
             $possibleComponentClasses = array($componentOrParent->componentClass);
         }
 
-        $component = Vps_Component_Data_Root::getInstance()
+        $component = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_getComponentOrParentId(), array('ignoreVisible' => true));
         if ($this->_getParam('id')) {
             //$component is the component, just get inheritClasses
             $inheritClasses = $component->inheritClasses;
         } else {
             //$component is the parent component (we are adding)
-            //this code is very similar to Vps_Component_Data::__get inheritClasses
+            //this code is very similar to Kwf_Component_Data::__get inheritClasses
             $inheritClasses = array();
             $page = $component;
             while ($page) {
-                foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
+                foreach (Kwc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                     if (isset($g['inherit']) && $g['inherit']) {
                         if (isset($g['unique']) && $g['unique']) continue; //ignore, not edited
                         if (!in_array($page->componentClass, $inheritClasses)) {
@@ -114,7 +114,7 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
                 'inheritClasses' => $inheritClasses
             );
             $formsForComponent[$key] = array();
-            foreach (Vps_Component_Generator_Abstract::getInstances($component) as $g) {
+            foreach (Kwf_Component_Generator_Abstract::getInstances($component) as $g) {
                 if ($g->getGeneratorFlag('page')) continue;
                 if (!array_key_exists($g->getClass().'.'.$g->getGeneratorKey(), $generatorForms)) {
                     $f = $g->getPagePropertiesForm();
@@ -133,12 +133,12 @@ class Vps_Controller_Action_Component_PageController extends Vps_Controller_Acti
                 }
 
                 $classesToCheckForPagePropertiesForm = array('__pageComponent' => $componentClass);
-                if ($g instanceof Vps_Component_Generator_Static) {
+                if ($g instanceof Kwf_Component_Generator_Static) {
                     $classesToCheckForPagePropertiesForm = array_merge($classesToCheckForPagePropertiesForm, $g->getChildComponentClasses());
                 }
                 foreach ($classesToCheckForPagePropertiesForm as $childComponentKey=>$childComponentClass) {
                     if (!array_key_exists($childComponentKey.'_'.$childComponentClass, $componentForms)) {
-                        $f = Vpc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
+                        $f = Kwc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
                         if ($f) {
                             $f->setName('cmp_'.$childComponentKey.'_'.$childComponentClass);
                             if ($childComponentKey=='__pageComponent') {

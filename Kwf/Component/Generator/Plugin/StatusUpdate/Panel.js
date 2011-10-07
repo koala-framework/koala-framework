@@ -1,14 +1,14 @@
-Ext.ns('Vps.Component.Generator.Plugin.StatusUpdate.Panel');
-Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.ProxyPanel, {
+Ext.ns('Kwf.Component.Generator.Plugin.StatusUpdate.Panel');
+Kwf.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Kwf.Binding.ProxyPanel, {
     layout: 'border',
     border: false,
     initComponent: function() {
-        this.proxyItem = new Vps.Auto.GridPanel({
+        this.proxyItem = new Kwf.Auto.GridPanel({
             controllerUrl: this.logControllerUrl,
             region: 'center'
         });
         this.actions.send = new Ext.Action({
-            text    : trlVps('Send'),
+            text    : trlKwf('Send'),
             icon    : '/assets/silkicons/comments.png',
             cls     : 'x-btn-text-icon',
             handler : this.send,
@@ -17,7 +17,7 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
         this.tbar = [ this.actions.send ];
 
         this.textArea = new Ext.form.TextArea({
-            fieldLabel: trlVps('Text'),
+            fieldLabel: trlKwf('Text'),
             width: 400,
             height: 100,
             maxLength: 140
@@ -44,11 +44,11 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
             items: items
         });
         this.items = [this.proxyItem, this.form];
-        Vps.Component.Generator.Plugin.StatusUpdate.Panel.superclass.initComponent.call(this);
+        Kwf.Component.Generator.Plugin.StatusUpdate.Panel.superclass.initComponent.call(this);
     },
 
     load : function(params, options) {
-        Vps.Component.Generator.Plugin.StatusUpdate.Panel.superclass.load.apply(this, arguments);
+        Kwf.Component.Generator.Plugin.StatusUpdate.Panel.superclass.load.apply(this, arguments);
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-default-text',
             params: this.getBaseParams(),
@@ -62,8 +62,8 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
 
     send: function() {
         if (!this.form.getForm().isValid()) {
-            Ext.Msg.alert(trlVps('Save'),
-                trlVps("Can't save, please fill all red underlined fields correctly."));
+            Ext.Msg.alert(trlKwf('Save'),
+                trlKwf("Can't save, please fill all red underlined fields correctly."));
             return;
         }
 
@@ -74,7 +74,7 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
             }
         }, this);
 
-        var params = Vps.clone(this.getBaseParams());
+        var params = Kwf.clone(this.getBaseParams());
         params.text = this.textArea.getValue();
         params.services = services.join(',');
 
@@ -87,8 +87,8 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
             success: function(response, options, result) {
                 if (result.requestAuthUrl) {
                     Ext.Msg.show({
-                        title: trlVps('Authenticate'),
-                        msg: trlVps('You are not yet authenticated to {0}. Do you want to authenticate now?', result.backendName),
+                        title: trlKwf('Authenticate'),
+                        msg: trlKwf('You are not yet authenticated to {0}. Do you want to authenticate now?', result.backendName),
                         buttons: Ext.Msg.OKCANCEL,
                         fn: function(button) {
                             if (button == 'ok') {
@@ -96,8 +96,8 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
                                 window.authCallbackScope = this;
                                 this.authWindow = window.open(result.requestAuthUrl);
                                 Ext.Msg.show({
-                                    title: trlVps('Authenticate'),
-                                    msg: trlVps('Please confirm the authentification in the opened popup'),
+                                    title: trlKwf('Authenticate'),
+                                    msg: trlKwf('Please confirm the authentification in the opened popup'),
                                     buttons: Ext.Msg.CANCEL,
                                     fn: function(button) {
                                         if (button == 'cancel') {
@@ -115,8 +115,8 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
                 } else {
                     this.proxyItem.reload();
                     Ext.Msg.show({
-                        title: trlVps('Success'),
-                        msg: trlVps('Status Update successfully posted.'),
+                        title: trlKwf('Success'),
+                        msg: trlKwf('Status Update successfully posted.'),
                         buttons: Ext.Msg.OK
                     });
                 }
@@ -125,4 +125,4 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
         });
     }
 });
-Ext.reg('vps.component.generator.plugin.statusUpdate', Vps.Component.Generator.Plugin.StatusUpdate.Panel);
+Ext.reg('kwf.component.generator.plugin.statusUpdate', Kwf.Component.Generator.Plugin.StatusUpdate.Panel);

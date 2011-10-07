@@ -3,7 +3,7 @@
  * @group Helper
  * @group Helper_HighlightTerms
  */
-class Vps_View_HighlightTermsTest extends Vps_Test_TestCase
+class Kwf_View_HighlightTermsTest extends Kwf_Test_TestCase
 {
     private $_text = '';
 
@@ -22,7 +22,7 @@ class Vps_View_HighlightTermsTest extends Vps_Test_TestCase
     public function testHighlighting()
     {
         $searchWord = 'für';
-        $h = new Vps_View_Helper_HighlightTerms();
+        $h = new Kwf_View_Helper_HighlightTerms();
         $res = $h->highlightTerms($searchWord, $this->_text, array('maxReturnLength' => 0));
 
         $highlights = mb_substr_count($res, '<span ');
@@ -41,7 +41,7 @@ class Vps_View_HighlightTermsTest extends Vps_Test_TestCase
     public function testShorting()
     {
         $searchWord = 'für';
-        $h = new Vps_View_Helper_HighlightTerms();
+        $h = new Kwf_View_Helper_HighlightTerms();
         $res = $h->highlightTerms($searchWord, $this->_text, array('maxReturnLength' => 200, 'maxReturnBlocks' => 4));
 
         $highlights = mb_substr_count($res, '<span ');
@@ -77,7 +77,7 @@ Der schnellste Weg zu mehr Freiheit.
 Im neuen Golf GTI können Sie sich die Freiheit nehmen, die Sie brauchen - egal, ob es sich um Ihre Wohlfühltemperatur, Ihre Lieblingsmusik oder eine spontane Erfrischung handelt. Das garantieren Ihnen die Klimaanlage "Climatronic" mit 2-Zonen-Temperaturregelung, das Radio "RCD 310" mit 8 Lautsprechern und Multimediabuchse AUX-IN und das Handschuhfach mit Kühlmöglichkeit. Damit Sie sich auch bei jeder Wetterlage frei fühlen können, ist der neue Golf GTI mit chromeingefassten Nebelscheinwerfern ausgerüstet.
 ';
         $searchWords = array('golf', 'gti');
-        $h = new Vps_View_Helper_HighlightTerms();
+        $h = new Kwf_View_Helper_HighlightTerms();
         $res = $h->highlightTerms($searchWords, $text);
         $resStripped = strip_tags($res);
 
@@ -94,7 +94,7 @@ Im neuen Golf GTI können Sie sich die Freiheit nehmen, die Sie brauchen - egal,
     public function testNoMatch()
     {
         $searchWord = 'blubbel';
-        $h = new Vps_View_Helper_HighlightTerms();
+        $h = new Kwf_View_Helper_HighlightTerms();
         $res = $h->highlightTerms($searchWord, $this->_text, array('maxReturnLength' => 50, 'maxReturnBlocks' => 4));
 
         $this->assertEquals(50, mb_strlen($res));

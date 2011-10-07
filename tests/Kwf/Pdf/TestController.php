@@ -1,9 +1,9 @@
 <?php
-class Vps_Pdf_TestController extends Vps_Controller_Action
+class Kwf_Pdf_TestController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
-        $pdf = new Vps_Pdf_TcPdf();
+        $pdf = new Kwf_Pdf_TcPdf();
         $pdf->addPage();
         $pdf->Ln(5);
         $pdf->SetFont('helvetica', '', 10);
@@ -26,7 +26,7 @@ class Vps_Pdf_TestController extends Vps_Controller_Action
         $data = array();
         $data['contents'] = $pdf->Output("text.php", "S");
         $data['mimeType'] = "application/pdf";
-        Vps_Media_Output::output($data);
+        Kwf_Media_Output::output($data);
         exit;
 
     }

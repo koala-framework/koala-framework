@@ -1,8 +1,8 @@
 <?php
 /**
- * @deprecated use Vps_Component_Plugin_Password_Component instead
+ * @deprecated use Kwf_Component_Plugin_Password_Component instead
  */
-class Vps_Component_Plugin_Password extends Vps_Component_Plugin_View_Abstract
+class Kwf_Component_Plugin_Password extends Kwf_Component_Plugin_View_Abstract
 {
     protected $_password = 'planet';
 
@@ -16,7 +16,7 @@ class Vps_Component_Plugin_Password extends Vps_Component_Plugin_View_Abstract
             if (in_array($_POST['password'], $this->_password)) {
                 $session->login = true;
             } else {
-                $msg = trlVps('Invalid Password');
+                $msg = trlKwf('Invalid Password');
             }
         }
         if ($session->login) return $output;

@@ -1,12 +1,12 @@
 <?php
-class Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
-    extends Vpc_Basic_LinkTag_Abstract_Component
+class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
+    extends Kwc_Basic_LinkTag_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Unsubscribe Newsletter')
+            'componentName' => trlKwf('Unsubscribe Newsletter')
         ));
         return $ret;
     }
@@ -16,7 +16,7 @@ class Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
         $nlData = null;
         $d = $this->getData()->parent;
         while ($d) {
-            if (is_instance_of($d->componentClass, 'Vpc_Newsletter_Component')) {
+            if (is_instance_of($d->componentClass, 'Kwc_Newsletter_Component')) {
                 $nlData = $d;
                 break;
             }
@@ -25,7 +25,7 @@ class Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
         }
 
         if (!$nlData) {
-            throw new Vps_Exception("Newsletter component can not be found");
+            throw new Kwf_Exception("Newsletter component can not be found");
         }
         return $nlData;
     }

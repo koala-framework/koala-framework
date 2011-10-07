@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Team_Member_Data_Model extends Vps_Component_FieldModel
+class Kwc_Advanced_Team_Member_Data_Model extends Kwf_Component_FieldModel
 {
-    protected $_rowClass = 'Vpc_Advanced_Team_Member_Data_Row';
+    protected $_rowClass = 'Kwc_Advanced_Team_Member_Data_Row';
 }

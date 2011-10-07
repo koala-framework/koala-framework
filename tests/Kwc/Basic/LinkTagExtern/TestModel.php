@@ -1,9 +1,9 @@
 <?php
-class Vpc_Basic_LinkTagExtern_TestModel extends Vpc_Basic_LinkTag_Model
+class Kwc_Basic_LinkTagExtern_TestModel extends Kwc_Basic_LinkTag_Model
 {
     public function __construct($config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'primaryKey' => 'component_id',
             'columns' => array(),
             'data'=> array(

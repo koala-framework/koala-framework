@@ -1,13 +1,13 @@
 <?php
-class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
+class Kwc_Form_FrontendFormController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
 
     public function preDispatch()
     {
         $componentClass = $this->_getParam('class');
-        $formClass = Vpc_Admin::getComponentClass($componentClass, 'FrontendForm');
-        if ($formClass && $formClass != 'Vpc_Abstract_Form') {
+        $formClass = Kwc_Admin::getComponentClass($componentClass, 'FrontendForm');
+        if ($formClass && $formClass != 'Kwc_Abstract_Form') {
             $this->_form = new $formClass($componentClass, $componentClass);
         }
         parent::preDispatch();
@@ -16,11 +16,11 @@ class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
     public function jsonSaveAction()
     {
         $postData = $this->getRequest()->getParams();
-        if (!isset($postData['componentId'])) throw new Vps_Exception_Client('component not found');
+        if (!isset($postData['componentId'])) throw new Kwf_Exception_Client('component not found');
 
-        $component = Vps_Component_Data_Root::getInstance()
+        $component = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($postData['componentId'], array('ignoreVisible' => true));
-        if (!$component) throw new Vps_Exception_Client('component not found');
+        if (!$component) throw new Kwf_Exception_Client('component not found');
         $component = $component->getComponent();
         $component->processInput($postData);
 
@@ -48,7 +48,7 @@ class Vpc_Form_FrontendFormController extends Vps_Controller_Action_Auto_Form
         if (!$this->view->errorMessages && !$this->view->errorFields) {
             $success = $component->getData()->getChildComponent('-success');
             if ($success) {
-                $renderer = new Vps_Component_Renderer();
+                $renderer = new Kwf_Component_Renderer();
                 $this->view->successContent = $renderer->renderComponent($success);
             }
         }

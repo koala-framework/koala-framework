@@ -1,27 +1,27 @@
 <?php
-class Vps_Util_Model_Amazon_ProductsToNodes extends Vps_Model_Abstract
-    implements Vps_Model_RowsSubModel_Interface
+class Kwf_Util_Model_Amazon_ProductsToNodes extends Kwf_Model_Abstract
+    implements Kwf_Model_RowsSubModel_Interface
 {
-    protected $_rowsetClass = 'Vps_Model_Rowset_ParentRow';
-    protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
+    protected $_rowsetClass = 'Kwf_Model_Rowset_ParentRow';
+    protected $_rowClass = 'Kwf_Model_Row_Data_Abstract';
 
     protected $_referenceMap = array(
         'Node' => array(
             'column' => 'node_id',
-            'refModelClass' => 'Vps_Util_Model_Amazon_Nodes'
+            'refModelClass' => 'Kwf_Util_Model_Amazon_Nodes'
         )
     );
 
-    public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
+    public function getRowsByParentRow(Kwf_Model_Row_Interface $parentRow, $select = array())
     {
         if (!is_object($select)) {
             $select = $this->select($select);
         }
         if ($select->getParts()) {
-            throw new Vps_Exception_NotYetImplemented('Custom select is not yet implemented');
+            throw new Kwf_Exception_NotYetImplemented('Custom select is not yet implemented');
         }
-        if (!($parentRow instanceof Vps_Util_Model_Amazon_Products_Row)) {
-            throw new Vps_Exception('Only possible with amazon product row');
+        if (!($parentRow instanceof Kwf_Util_Model_Amazon_Products_Row)) {
+            throw new Kwf_Exception('Only possible with amazon product row');
         }
         $pId = $parentRow->getInternalId();
         $item = $parentRow->getItem();
@@ -41,7 +41,7 @@ class Vps_Util_Model_Amazon_ProductsToNodes extends Vps_Model_Abstract
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('Not possible');
+        throw new Kwf_Exception('Not possible');
     }
 
     public function getRowByDataKey($key, $parentRow)
@@ -68,11 +68,11 @@ class Vps_Util_Model_Amazon_ProductsToNodes extends Vps_Model_Abstract
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
-    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    public function createRowByParentRow(Kwf_Model_Row_Interface $parentRow, array $data = array())
     {
-        throw new Vps_Exception("read only");
+        throw new Kwf_Exception("read only");
     }
 }

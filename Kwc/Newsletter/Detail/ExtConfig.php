@@ -1,12 +1,12 @@
 <?php
-class Vpc_Newsletter_Detail_ExtConfig extends Vps_Component_Abstract_ExtConfig_Form
+class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Form
 {
     protected function _getConfig()
     {
         $ret = parent::_getConfig();
-        $mailClass = Vpc_Abstract::getChildComponentClass($this->_class, 'mail');
-        $mailContentClass = Vpc_Abstract::getChildComponentClass($mailClass, 'content');
-        $cfg = Vpc_Admin::getInstance($mailContentClass)->getExtConfig();
+        $mailClass = Kwc_Abstract::getChildComponentClass($this->_class, 'mail');
+        $mailContentClass = Kwc_Abstract::getChildComponentClass($mailClass, 'content');
+        $cfg = Kwc_Admin::getInstance($mailContentClass)->getExtConfig();
         $configs = array();
         $editComponents = array();
         $mainType = null;
@@ -20,34 +20,34 @@ class Vpc_Newsletter_Detail_ExtConfig extends Vps_Component_Abstract_ExtConfig_F
         }
 
         $ret['form'] = array_merge($ret['form'], array(
-            'xtype' => 'vps.tabpanel',
+            'xtype' => 'kwf.tabpanel',
             'tabs' => array(
                 'mail' => array(
-                    'xtype'                 => 'vps.component',
+                    'xtype'                 => 'kwf.component',
                     'componentEditUrl'      => '/admin/component/edit',
                     'mainComponentClass'    => $mailContentClass,
                     'componentIdSuffix'     => '-mail-content',
                     'componentConfigs'      => $configs,
                     'mainEditComponents'    => $editComponents,
                     'mainType'              => $mainType,
-                    'title'                 => trlVps('Mail')
+                    'title'                 => trlKwf('Mail')
                 ),
                 'recipients' => array(
-                    'xtype'                 => 'vpc.newsletter.recipients',
+                    'xtype'                 => 'kwc.newsletter.recipients',
                     'controllerUrl'         => $this->getControllerUrl('Recipients'),
                     'formControllerUrl'     => $this->getControllerUrl('Recipient'),
-                    'title'                 => trlVps('Recipients')
+                    'title'                 => trlKwf('Recipients')
                 ),
                 'mailing' => array(
-                    'xtype'                 => 'vpc.newsletter.mailing',
+                    'xtype'                 => 'kwc.newsletter.mailing',
                     'controllerUrl'         => $this->getControllerUrl('Mailing'),
-                    'title'                 => trlVps('Mailing'),
+                    'title'                 => trlKwf('Mailing'),
                     'tbar'                  => array()
                 ),
                 'statistics' => array(
-                    'xtype'                 => 'vps.autogrid',
+                    'xtype'                 => 'kwf.autogrid',
                     'controllerUrl'         => $this->getControllerUrl('Statistics'),
-                    'title'                 => trlVps('Statistics')
+                    'title'                 => trlKwf('Statistics')
                 )
             )
         ));

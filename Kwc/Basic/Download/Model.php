@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Download_Model extends Vps_Model_Db_Proxy
+class Kwc_Basic_Download_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_basic_download';
+    protected $_table = 'kwc_basic_download';
 }

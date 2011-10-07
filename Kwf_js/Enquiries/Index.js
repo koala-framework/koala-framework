@@ -1,20 +1,20 @@
 
-Ext.namespace("Vps.Enquiries");
+Ext.namespace("Kwf.Enquiries");
 
-Vps.Enquiries.Index = Ext.extend(Vps.Auto.GridPanel,
+Kwf.Enquiries.Index = Ext.extend(Kwf.Auto.GridPanel,
 {
     initComponent: function() {
         // Edit form
-        var panel = new Vps.Enquiries.ViewPanel({
+        var panel = new Kwf.Enquiries.ViewPanel({
             controllerUrl: this.controllerUrl,
-            title: trlVps('Enquiry'),
+            title: trlKwf('Enquiry'),
             region: 'center'
         });
 
         // main grid
-        this.grid = new Vps.Auto.GridPanel({
+        this.grid = new Kwf.Auto.GridPanel({
             controllerUrl: this.controllerUrl,
-            title: trlVps('Enquiries'),
+            title: trlKwf('Enquiries'),
             region: 'west',
             width: 550,
             split: true,
@@ -24,8 +24,8 @@ Vps.Enquiries.Index = Ext.extend(Vps.Auto.GridPanel,
         this.layout = 'border';
         this.items = [ this.grid, panel ];
 
-        Vps.Enquiries.Index.superclass.initComponent.call(this);
+        Kwf.Enquiries.Index.superclass.initComponent.call(this);
     }
 });
 
-Ext.reg('vps.enquiries.index', Vps.Enquiries.Index);
+Ext.reg('kwf.enquiries.index', Kwf.Enquiries.Index);

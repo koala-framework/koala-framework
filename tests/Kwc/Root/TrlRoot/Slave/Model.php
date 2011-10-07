@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_TrlRoot_Slave_Model extends Vps_Model_FnF
+class Kwc_Root_TrlRoot_Slave_Model extends Kwf_Model_FnF
 {
     public function __construct()
     {

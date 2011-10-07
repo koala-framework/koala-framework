@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Table_RowData extends Vps_Model_Proxy_Row
+class Kwc_Basic_Table_RowData extends Kwf_Model_Proxy_Row
 {
     public function getReplacedContent($field)
     {
@@ -8,8 +8,8 @@ class Vpc_Basic_Table_RowData extends Vps_Model_Proxy_Row
 
     public static function replaceContent($str)
     {
-        $mailValidator = new Vps_Validate_EmailAddress();
-        $emailHelper = new Vps_View_Helper_MailLink();
+        $mailValidator = new Kwf_Validate_EmailAddress();
+        $emailHelper = new Kwf_View_Helper_MailLink();
 
         if (substr($str, 0, 7) == 'http://' || substr($str, 0, 4) == 'www.') {
             if (substr($str, 0, 7) != 'http://') {

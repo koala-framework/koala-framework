@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Generator_Plugin_StatusUpdate_Backend_Abstract
+abstract class Kwf_Component_Generator_Plugin_StatusUpdate_Backend_Abstract
 {
     protected $_type = null;
     private $_row = null;
@@ -16,9 +16,9 @@ abstract class Vps_Component_Generator_Plugin_StatusUpdate_Backend_Abstract
     protected final function _getAuthRow()
     {
         if (!$this->_row) {
-            $m = Vps_Model_Abstract::getInstance('Vps_Component_Generator_Plugin_StatusUpdate_AuthModel');
+            $m = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Plugin_StatusUpdate_AuthModel');
 
-            $s = new Vps_Model_Select();
+            $s = new Kwf_Model_Select();
             $s->whereEquals('type', $this->_type);
             $ret = $m->getRow($s);
             if (!$ret) {

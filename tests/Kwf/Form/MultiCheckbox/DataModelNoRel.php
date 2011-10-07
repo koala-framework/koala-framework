@@ -1,4 +1,4 @@
 <?php
-class Vps_Form_MultiCheckbox_DataModelNoRel extends Vps_Model_FnF
+class Kwf_Form_MultiCheckbox_DataModelNoRel extends Kwf_Model_FnF
 {
 }

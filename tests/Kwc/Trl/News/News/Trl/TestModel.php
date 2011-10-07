@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_News_News_Trl_TestModel extends Vps_Model_FnF
+class Kwc_Trl_News_News_Trl_TestModel extends Kwf_Model_FnF
 {
     public function __construct()
     {

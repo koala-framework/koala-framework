@@ -2,7 +2,7 @@
 /**
  * @group slow
  * @group selenium
- * @group Vps_Form_FieldsetInCards
+ * @group Kwf_Form_FieldsetInCards
  *
  * Testen den Bug der auftritt wenn in einem Cards ein fieldset ist das per checkbox
  * deaktiviert werden kann.
@@ -11,31 +11,31 @@
  * nicht angehakt ist.
  * Dadurch wird dann im deaktivierten fieldset validiert.
  *
- * genau das gleiche mit fieldset in fieldset (Vps_Form_CheckboxFieldsetInFieldset_Test)
+ * genau das gleiche mit fieldset in fieldset (Kwf_Form_CheckboxFieldsetInFieldset_Test)
  */
-class Vps_Form_CheckboxFieldsetInCards_Test extends Vps_Test_SeleniumTestCase
+class Kwf_Form_CheckboxFieldsetInCards_Test extends Kwf_Test_SeleniumTestCase
 {
     public function test()
     {
-        $this->open('/vps/test/vps_form_checkbox-fieldset-in-cards_test');
+        $this->open('/kwf/test/kwf_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
         $this->click("//div[@class='x-column-inner']/div[2]//img[@class='x-form-radio']");
         $this->click('//input[@type="checkbox"]');
         $this->click("//div[@class='x-column-inner']/div[1]//img[@class='x-form-radio']");
         $this->click("//div[@class='x-column-inner']/div[2]//img[@class='x-form-radio']");
-        $this->click("//button[text()='".trlVps('Save')."']");
+        $this->click("//button[text()='".trlKwf('Save')."']");
         $this->waitForConnections();
-        $this->assertTextNotPresent(trlVps("Can't save, please fill all red underlined fields correctly."));
+        $this->assertTextNotPresent(trlKwf("Can't save, please fill all red underlined fields correctly."));
 
-        $this->open('/vps/test/vps_form_checkbox-fieldset-in-cards_test');
+        $this->open('/kwf/test/kwf_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
         $this->click("//div[@class='x-column-inner']/div[3]//img[@class='x-form-radio']");
-        $this->assertElementNotPresent('.vps-test-subcards[disabled]');
+        $this->assertElementNotPresent('.kwf-test-subcards[disabled]');
 
-        $this->open('/vps/test/vps_form_checkbox-fieldset-in-cards_test');
+        $this->open('/kwf/test/kwf_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
         $this->click("//div[@class='x-column-inner']/div[4]//img[@class='x-form-radio']");
-        $this->assertElementNotPresent('.vps-test-text4[disabled]');
+        $this->assertElementNotPresent('.kwf-test-text4[disabled]');
     }
 
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_RowCache_Row extends Vps_Model_Proxy_Row
+class Kwf_Model_RowCache_Row extends Kwf_Model_Proxy_Row
 {
     private $_cacheData = array();
 
@@ -61,7 +61,7 @@ class Vps_Model_RowCache_Row extends Vps_Model_Proxy_Row
         if (!$this->_row) {
             $id = $this->_cacheData[$this->_model->getPrimaryKey()];
             $this->_row = $this->_model->getSourceRowByIdForRow($id);
-            if (!$this->_row) throw new Vps_Exception("can't get row '$id'");
+            if (!$this->_row) throw new Kwf_Exception("can't get row '$id'");
         }
         return $this->_row;
     }

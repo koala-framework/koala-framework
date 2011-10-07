@@ -1,57 +1,57 @@
 <?php
 /**
- * @group Vpc_UrlResolve
+ * @group Kwc_UrlResolve
  */
-class Vps_Component_Generator_Components_ComponentsTest extends Vpc_TestAbstract
+class Kwf_Component_Generator_Components_ComponentsTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_Components_Root');
+        parent::setUp('Kwf_Component_Generator_Components_Root');
     }
 
     public function testRoot()
     {
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root');
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_Root');
         $this->assertEquals(count($generators), 3);
-        $this->assertTrue($generators[1] instanceof Vpc_Root_Category_Generator);
-        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Box_Static);
+        $this->assertTrue($generators[1] instanceof Kwc_Root_Category_Generator);
+        $this->assertTrue($generators[0] instanceof Kwf_Component_Generator_Box_Static);
     }
 
     public function testRootConstraints()
     {
         $constraints = array('generator' => 'static');
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 1);
-        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Static);
+        $this->assertTrue($generators[0] instanceof Kwf_Component_Generator_Static);
 
         $constraints = array('page' => true);
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 1);
-        $this->assertTrue($generators[0] instanceof Vpc_Root_Category_Generator);
+        $this->assertTrue($generators[0] instanceof Kwc_Root_Category_Generator);
 
         $constraints = array('page' => false);
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 2);
-        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Box_Static);
+        $this->assertTrue($generators[0] instanceof Kwf_Component_Generator_Box_Static);
 
         $constraints = array('box' => true);
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 1);
-        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Box_Static);
+        $this->assertTrue($generators[0] instanceof Kwf_Component_Generator_Box_Static);
 
         $constraints = array('box' => true, 'page' => true);
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 0);
 
-        $constraints = array('generatorClass' => 'Vps_Component_Generator_Static');
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $constraints = array('generatorClass' => 'Kwf_Component_Generator_Static');
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 2);
     }
 
     public function testPlugin()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Components_PluginTest'); //ist eigentlich keine root, aber wegen settings cache trotzdem setzen
-        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_PluginTest');
+        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Generator_Components_PluginTest'); //ist eigentlich keine root, aber wegen settings cache trotzdem setzen
+        $generators = Kwf_Component_Generator_Abstract::getInstances('Kwf_Component_Generator_Components_PluginTest');
         $this->assertEquals(1, count($generators));
     }
 
@@ -73,21 +73,21 @@ class Vps_Component_Generator_Components_ComponentsTest extends Vpc_TestAbstract
         $this->_assertGeneratorsCount(array('generator' => 'page'), 0);
         $this->_assertGeneratorsCount(array('hasEditComponents' => true), 3);
         $this->_assertGeneratorsCount(array('componentClasses' => array(
-            'Vps_Component_Generator_Components_Multiple', 'Vpc_Basic_Html_Component'
+            'Kwf_Component_Generator_Components_Multiple', 'Kwc_Basic_Html_Component'
         )), 1);
         $this->_assertGeneratorsCount(array('componentClasses' => array(
-            'Vps_Component_Generator_Components_Multiple', 'Vpc_Basic_Html_Component'
-        )), 2, 'Vps_Component_Generator_Components_Root');
+            'Kwf_Component_Generator_Components_Multiple', 'Kwc_Basic_Html_Component'
+        )), 2, 'Kwf_Component_Generator_Components_Root');
         $this->_assertGeneratorsCount(array('componentClasses' => array(
-            'Vps_Component_Generator_Components_Multiple', 'Vpc_Basic_Empty_Component'
-        )), 3, 'Vps_Component_Generator_Components_Root');
+            'Kwf_Component_Generator_Components_Multiple', 'Kwc_Basic_Empty_Component'
+        )), 3, 'Kwf_Component_Generator_Components_Root');
     }
 
-    private function _assertGeneratorsCount($select, $count, $component = 'Vps_Component_Generator_Components_Multiple')
+    private function _assertGeneratorsCount($select, $count, $component = 'Kwf_Component_Generator_Components_Multiple')
     {
-        $select = new Vps_Component_Select($select);
+        $select = new Kwf_Component_Select($select);
         $initailSelect = clone $select;
-        $generators = Vps_Component_Generator_Abstract::getInstances($component, $select);
+        $generators = Kwf_Component_Generator_Abstract::getInstances($component, $select);
         $this->assertEquals($count, count($generators));
         $this->assertEquals($initailSelect, $select); //check if select was modified
     }
@@ -115,16 +115,16 @@ class Vps_Component_Generator_Components_ComponentsTest extends Vpc_TestAbstract
 
     private function _assertChildComponentClassesCount($select, $count)
     {
-        $select = new Vps_Component_Select($select);
+        $select = new Kwf_Component_Select($select);
         $initailSelect = clone $select;
-        $classes = Vpc_Abstract::getChildComponentClasses('Vps_Component_Generator_Components_Multiple', $select);
+        $classes = Kwc_Abstract::getChildComponentClasses('Kwf_Component_Generator_Components_Multiple', $select);
         $this->assertEquals($count, count($classes));
         $this->assertEquals($initailSelect, $select); //check if select was modified
     }
 
     public function testRecursiveComponentClasses()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Components_Recursive'); //ist eigentlich keine root, aber wegen settings cache trotzdem setzen
+        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Generator_Components_Recursive'); //ist eigentlich keine root, aber wegen settings cache trotzdem setzen
         $this->_assertRec(array(), 2);
         $this->_assertRec(array('page' => false), 2);
         $this->_assertRec(array('box' => true), 1);
@@ -132,8 +132,8 @@ class Vps_Component_Generator_Components_ComponentsTest extends Vpc_TestAbstract
 
     private function _assertRec($constraints, $count)
     {
-        $classes = Vpc_Abstract::getIndirectChildComponentClasses(
-            'Vps_Component_Generator_Components_Recursive', $constraints);
+        $classes = Kwc_Abstract::getIndirectChildComponentClasses(
+            'Kwf_Component_Generator_Components_Recursive', $constraints);
         $this->assertEquals($count, count($classes));
     }
 
@@ -164,7 +164,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends Vpc_TestAbstract
 
     public function _assertChildComponents($parent, $select, $componentIds)
     {
-        $select = new Vps_Component_Select($select);
+        $select = new Kwf_Component_Select($select);
         $initailSelect = clone $select;
         $ids = array();
         foreach($parent->getChildComponents($select) as $cc) {

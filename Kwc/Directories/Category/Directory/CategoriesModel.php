@@ -1,7 +1,7 @@
 <?php
-class Vpc_Directories_Category_Directory_CategoriesModel
-    extends Vps_Model_Db_Proxy
+class Kwc_Directories_Category_Directory_CategoriesModel
+    extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_directories_categories';
+    protected $_table = 'kwc_directories_categories';
     protected $_toStringField = 'name';
 }

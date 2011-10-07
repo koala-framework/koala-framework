@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -11,7 +11,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
     public function __call($n, $v)
     {
         if ($n == 'setVType') {
-            $e = new Vps_Exception('use setVtype instead of setVType');
+            $e = new Kwf_Exception('use setVtype instead of setVType');
             $e->logOrThrow();
             $n = 'setVtype';
         }
@@ -24,7 +24,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
 
         // Verwendet bis auf email die Regex von ext/from/VTypes.js
         if ($this->getVtype() === 'email') {
-            $this->addValidator(new Vps_Validate_EmailAddressSimple());
+            $this->addValidator(new Kwf_Validate_EmailAddressSimple());
         } else if ($this->getVtype() === 'url') {
             $this->addValidator(new Zend_Validate_Regex('/(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i'));
         } else if ($this->getVtype() === 'alpha') {
@@ -55,7 +55,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
-            $cls = trim($cls.' vpsClearOnFocus');
+            $cls = trim($cls.' kwfClearOnFocus');
         }
         $style = '';
         if ($this->getWidth()) {
@@ -72,7 +72,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Text Field'),
+            'componentName' => trlKwf('Text Field'),
             'default' => array(
                 'width' => 150,
                 'max_length' => 100

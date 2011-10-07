@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_FormController extends Vps_Controller_Action_Auto_Form
+class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_buttons = array();
     protected $_permissions = array('save', 'add');
@@ -14,15 +14,15 @@ class Vpc_Directories_Item_Directory_Trl_FormController extends Vps_Controller_A
 
     public function _initFields()
     {
-        $this->_form = Vpc_Abstract_Form::createChildComponentForm(
+        $this->_form = Kwc_Abstract_Form::createChildComponentForm(
                 $this->_getParam('class'), '-detail', $this->_getParam('class'));
         $this->_form->setIdTemplate(null);
 
-        $this->_form->setModel(Vpc_Abstract::createChildModel($this->_getParam('class')));
+        $this->_form->setModel(Kwc_Abstract::createChildModel($this->_getParam('class')));
 
-        $classes = Vpc_Abstract::getChildComponentClasses($this->_getParam('class'));
+        $classes = Kwc_Abstract::getChildComponentClasses($this->_getParam('class'));
         foreach ($classes as $class) {
-            $formName = Vpc_Admin::getComponentClass($class, 'ItemEditForm');
+            $formName = Kwc_Admin::getComponentClass($class, 'ItemEditForm');
             if ($formName) {
                 $this->_form->add(new $formName($class, $class));
             }

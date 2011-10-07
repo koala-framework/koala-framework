@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Renderer_Abstract
+abstract class Kwf_Component_Renderer_Abstract
 {
     protected $_enableCache = null;
     private $_renderComponent;
@@ -12,18 +12,18 @@ abstract class Vps_Component_Renderer_Abstract
     public function renderComponent($component)
     {
         if (is_null($this->_enableCache)) {
-            $this->_enableCache = !Vps_Config::getValue('debug.componentCache.disable');
+            $this->_enableCache = !Kwf_Config::getValue('debug.componentCache.disable');
         }
         $this->_renderComponent = $component;
         $content = $this->_renderComponentContent($component);
         $ret = $this->render($content);
-        Vps_Component_Cache::getInstance()->writeBuffer();
+        Kwf_Component_Cache::getInstance()->writeBuffer();
         return $ret;
     }
 
     protected function _renderComponentContent($component)
     {
-        $masterHelper = new Vps_Component_View_Helper_Component();
+        $masterHelper = new Kwf_Component_View_Helper_Component();
         $masterHelper->setRenderer($this);
         return $masterHelper->component($component);
     }
@@ -31,7 +31,7 @@ abstract class Vps_Component_Renderer_Abstract
     public function render($ret = null)
     {
         static $benchmarkEnabled;
-        if (!isset($benchmarkEnabled)) $benchmarkEnabled = Vps_Benchmark::isEnabled();
+        if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
         $pluginNr = 0;
         $helpers = array();
@@ -54,7 +54,7 @@ abstract class Vps_Component_Renderer_Abstract
             if ($type != 'component') $statId .= ': ' . $type;
 
             if (!isset($helpers[$type])) {
-                $class = 'Vps_Component_View_Helper_' . ucfirst($type);
+                $class = 'Kwf_Component_View_Helper_' . ucfirst($type);
                 $helper = new $class();
                 $helper->setRenderer($this);
                 $helpers[$type] = $helper;
@@ -67,12 +67,12 @@ abstract class Vps_Component_Renderer_Abstract
             $saveCache = false; //disable cache saving completely in preview
             if ($this->_enableCache) {
                 $saveCache = true;
-                $content = Vps_Component_Cache::NO_CACHE;
+                $content = Kwf_Component_Cache::NO_CACHE;
                 if ($helper->enableCache()) {
-                    $content = Vps_Component_Cache::getInstance()->load($componentId, $type, $value);
+                    $content = Kwf_Component_Cache::getInstance()->load($componentId, $type, $value);
                     $statType = 'cache';
                 }
-                if ($content == Vps_Component_Cache::NO_CACHE) {
+                if ($content == Kwf_Component_Cache::NO_CACHE) {
                     $content = null;
                     $saveCache = false;
                 }
@@ -89,20 +89,20 @@ abstract class Vps_Component_Renderer_Abstract
 
             foreach ($plugins as $pluginClass) {
                 $plugin = new $pluginClass($componentId);
-                if (!$plugin instanceof Vps_Component_Plugin_Abstract)
-                    throw Vps_Exception('Plugin must be Instanceof Vps_Component_Plugin_Abstract');
-                if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
+                if (!$plugin instanceof Kwf_Component_Plugin_Abstract)
+                    throw Kwf_Exception('Plugin must be Instanceof Kwf_Component_Plugin_Abstract');
+                if ($plugin->getExecutionPoint() == Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
                     $content = $plugin->processOutput($content);
-                } else if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_AFTER) {
+                } else if ($plugin->getExecutionPoint() == Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER) {
                     $pluginNr++;
                     $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
                 }
             }
 
-            if ($statType) Vps_Benchmark::count("rendered $statType", $statId);
+            if ($statType) Kwf_Benchmark::count("rendered $statType", $statId);
             $ret = str_replace($matches[0], $content, $ret);
 
-            if ($benchmarkEnabled) Vps_Benchmark::subCheckpoint($componentId.' '.$type, microtime(true)-$startTime);
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' '.$type, microtime(true)-$startTime);
         }
         while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/s', $ret, $matches)) {
             $pluginClass = $matches[2];

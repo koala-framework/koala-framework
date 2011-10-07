@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
+class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
 {
     private $_groupBy = array();
 
@@ -69,7 +69,7 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
 
     protected function _getSelect($row)
     {
-        $ret = new Vps_Model_Select();
+        $ret = new Kwf_Model_Select();
         foreach ($this->_groupBy as $k=>$field) {
             if (is_array($field)) {
                 $values = $field;
@@ -101,7 +101,7 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         $fieldname = $this->_field;
         $value = $row->$fieldname;
 
-        if ($row instanceof Vps_Model_Row_Interface) {
+        if ($row instanceof Kwf_Model_Row_Interface) {
             $select = $this->_getSelect($row);
             $pk = $row->getModel()->getPrimaryKey();
             if ($row->{$pk}) {
@@ -129,7 +129,7 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
 
         //ermittel ob eine andere row dirty ist
         $dirty = false;
-        if ($row instanceof Vps_Model_Row_Interface) {
+        if ($row instanceof Kwf_Model_Row_Interface) {
             $select->order($fieldname);
             $rows = $row->getModel()->getRows($select);
             foreach ($rows as $r) {
@@ -167,7 +167,7 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         $where = $this->_getWhere($row);
 
         $dirty = false;
-        if ($row instanceof Vps_Model_Row_Interface) {
+        if ($row instanceof Kwf_Model_Row_Interface) {
             $select = $this->_getSelect($row);
             $pk = $row->getModel()->getPrimaryKey();
             if ($row->{$pk}) {

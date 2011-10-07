@@ -1,5 +1,5 @@
 <?php
-interface Vps_Model_Interface
+interface Kwf_Model_Interface
 {
     const FORMAT_SQL = 'sql';
     const FORMAT_ARRAY = 'array';
@@ -12,13 +12,13 @@ interface Vps_Model_Interface
     const TYPE_DATE = 'date';
 
     /**
-     * @return Vps_Model_Row_Interface
+     * @return Kwf_Model_Row_Interface
      */
     public function createRow(array $data=array());
     public function getPrimaryKey();
-    public function isEqual(Vps_Model_Interface $other);
+    public function isEqual(Kwf_Model_Interface $other);
     /**
-     * @return Vps_Model_Select
+     * @return Kwf_Model_Select
      */
     public function select($where = array());
     public function getColumnType($col);
@@ -33,7 +33,7 @@ interface Vps_Model_Interface
     public function getExprValue($row, $name);
 
     /**
-     * @return Vps_Model_Row_Interface
+     * @return Kwf_Model_Row_Interface
      */
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);
@@ -41,7 +41,7 @@ interface Vps_Model_Interface
     public function countRows($where = array());
 
     public function getSupportedImportExportFormats();
-    public function copyDataFromModel(Vps_Model_Interface $sourceModel, Vps_Model_Select $select = null, array $importOptions = array());
+    public function copyDataFromModel(Kwf_Model_Interface $sourceModel, Kwf_Model_Select $select = null, array $importOptions = array());
     public function export($format, $select = array(), $options = array());
     public function import($format, $data, $options = array());
     public function writeBuffer();

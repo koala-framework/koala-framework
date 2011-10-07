@@ -1,5 +1,5 @@
 <?php
-class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
+class Kwf_Srpc_Handler_Model extends Kwf_Srpc_Handler_Abstract
 {
     protected $_model;
     protected $_columns;
@@ -18,10 +18,10 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
     public function getModel()
     {
         if (!$this->_model) {
-            throw new Vps_Srpc_Exception("'model' has not been set for '".get_class($this)."'. Either set it in _init() or use the config option 'model'.");
+            throw new Kwf_Srpc_Exception("'model' has not been set for '".get_class($this)."'. Either set it in _init() or use the config option 'model'.");
         }
         if (is_string($this->_model)) {
-            $this->_model = Vps_Model_Abstract::getInstance($this->_model);
+            $this->_model = Kwf_Model_Abstract::getInstance($this->_model);
         }
         return $this->_model;
     }
@@ -128,7 +128,7 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
         return $this->getModel()->getSupportedImportExportFormats();
     }
 
-    public function copyDataFromModel(Vps_Model_Interface $sourceModel, $select = null, $format = null)
+    public function copyDataFromModel(Kwf_Model_Interface $sourceModel, $select = null, $format = null)
     {
         return $this->getModel()->copyDataFromModel($sourceModel, $select, $format);
     }

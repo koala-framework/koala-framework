@@ -1,9 +1,9 @@
 <?php
 /**
- * @group Vpc_Basic_Text
+ * @group Kwc_Basic_Text
  * @group StylesModel
  */
-class Vpc_Basic_TextMasterStyles_Test extends Vps_Test_TestCase
+class Kwc_Basic_TextMasterStyles_Test extends Kwf_Test_TestCase
 {
     public function testIt()
     {
@@ -11,7 +11,7 @@ class Vpc_Basic_TextMasterStyles_Test extends Vps_Test_TestCase
         $c .= ".webStandard h1.red { color: red; } /* Headline Red */\n";
         $c .= ".webStandard h1 { font-size: 12px; }\n";
         $c .= ".webStandard span.red { color: red; } /* Red */\n";
-        $s = Vpc_Basic_Text_StylesModel::parseMasterStyles($c);
+        $s = Kwc_Basic_Text_StylesModel::parseMasterStyles($c);
         $this->assertEquals(array(
             array(
                 'id' => 'master0',

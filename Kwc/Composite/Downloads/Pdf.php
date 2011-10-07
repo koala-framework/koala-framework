@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_Downloads_Pdf extends Vpc_Abstract_Pdf
+class Kwc_Composite_Downloads_Pdf extends Kwc_Abstract_Pdf
 {
     public function writeContent()
     {

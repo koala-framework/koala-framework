@@ -1,5 +1,5 @@
 <?php
-class Vps_Service_Amazon extends Zend_Service_Amazon
+class Kwf_Service_Amazon extends Zend_Service_Amazon
 {
     public function __construct($appId = '0CJ03620WGKVWMR2F3R2', $countryCode = 'DE', $secretKey = 'NRwK5Caas29k4JopHLytMAxtA+WKn5fiFjnWGEhD')
     {
@@ -11,12 +11,12 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
      *
      * @param  array $options Options to use for the Search Query
      * @throws Zend_Service_Exception
-     * @return Vps_Service_Amazon_ResultSet
+     * @return Kwf_Service_Amazon_ResultSet
      * @see http://www.amazon.com/gp/aws/sdk/main.html/102-9041115-9057709?s=AWSEcommerceService&v=2005-10-05&p=ApiReference/ItemSearchOperation
      */
     public function itemSearch(array $options)
     {
-        Vps_Benchmark::countBt('Service Amazon request', 'itemSearch'.print_r($options, true));
+        Kwf_Benchmark::countBt('Service Amazon request', 'itemSearch'.print_r($options, true));
 
         $client = $this->getRestClient();
         $client->setUri($this->_baseUri);
@@ -39,7 +39,7 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
         $dom->loadXML($response->getBody());
         self::_checkErrors($dom);
 
-        return new Vps_Service_Amazon_ResultSet($dom);
+        return new Kwf_Service_Amazon_ResultSet($dom);
     }
 
 
@@ -50,11 +50,11 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
      * @param  array  $options Query Options
      * @see http://www.amazon.com/gp/aws/sdk/main.html/102-9041115-9057709?s=AWSEcommerceService&v=2005-10-05&p=ApiReference/ItemLookupOperation
      * @throws Zend_Service_Exception
-     * @return Vps_Service_Amazon_Item|Vps_Service_Amazon_ResultSet
+     * @return Kwf_Service_Amazon_Item|Kwf_Service_Amazon_ResultSet
      */
     public function itemLookup($asin, array $options = array())
     {
-        Vps_Benchmark::count('Service Amazon request', 'itemLookup '.$asin);
+        Kwf_Benchmark::count('Service Amazon request', 'itemLookup '.$asin);
 
         $client = $this->getRestClient();
         $client->setUri($this->_baseUri);
@@ -83,10 +83,10 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
         $items = $xpath->query('//az:Items/az:Item');
 
         if ($items->length == 1) {
-            return new Vps_Service_Amazon_Item($items->item(0));
+            return new Kwf_Service_Amazon_Item($items->item(0));
         }
 
-        return new Vps_Service_Amazon_ResultSet($dom);
+        return new Kwf_Service_Amazon_ResultSet($dom);
     }
 
     /**
@@ -96,11 +96,11 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
      * @param  array  $options Query Options
      * @see http://docs.amazonwebservices.com/AWSEcommerceService/2005-10-05/ApiReference/BrowseNodeLookupOperation.html
      * @throws Zend_Service_Exception
-     * @return Vps_Service_Amazon_BrowseNode
+     * @return Kwf_Service_Amazon_BrowseNode
      */
     public function browseNodeLookup($nodeId, array $options = array())
     {
-        Vps_Benchmark::count('Service Amazon request', 'browseNodeLookup');
+        Kwf_Benchmark::count('Service Amazon request', 'browseNodeLookup');
 
         $client = $this->getRestClient();
         $client->setUri($this->_baseUri);
@@ -123,6 +123,6 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
         $dom = new DOMDocument();
         $dom->loadXML($response->getBody());
         self::_checkErrors($dom);
-        return new Vps_Service_Amazon_BrowseNode($dom);
+        return new Kwf_Service_Amazon_BrowseNode($dom);
     }
 }

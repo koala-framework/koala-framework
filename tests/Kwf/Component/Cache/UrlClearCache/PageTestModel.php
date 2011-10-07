@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_UrlClearCache_PageTestModel extends Vps_Model_FnF
+class Kwf_Component_Cache_UrlClearCache_PageTestModel extends Kwf_Model_FnF
 {
     protected $_data = array(
             array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',

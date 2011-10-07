@@ -1,9 +1,9 @@
 <?php
-class Vps_Form_ComboBoxFilter_RemoteController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Form_ComboBoxFilter_RemoteController extends Kwf_Controller_Action_Auto_Grid
 {
     protected function _initColumns()
     {
-        $this->_model = new Vps_Model_FnF(array(
+        $this->_model = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id'=>1, 'name'=>'test1.1', 'filter_id'=>1),
                 array('id'=>2, 'name'=>'test1.2', 'filter_id'=>1),
@@ -12,8 +12,8 @@ class Vps_Form_ComboBoxFilter_RemoteController extends Vps_Controller_Action_Aut
                 array('id'=>5, 'name'=>'test2.5', 'filter_id'=>2),
             )
         ));
-        $this->_columns[] = new Vps_Grid_Column('name');
-        $this->_columns[] = new Vps_Grid_Column('filter_id');
+        $this->_columns[] = new Kwf_Grid_Column('name');
+        $this->_columns[] = new Kwf_Grid_Column('filter_id');
     }
 
     protected function _getSelect()
@@ -25,6 +25,6 @@ class Vps_Form_ComboBoxFilter_RemoteController extends Vps_Controller_Action_Aut
 
     protected function _getResourceName()
     {
-        return 'vps_test';
+        return 'kwf_test';
     }
 }

@@ -1,26 +1,26 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Editable_Component
+class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Kwc_Editable_Component
 {
     private $_order;
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['content']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Component';
+        $ret['generators']['content']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Component';
         $ret['flags']['processInput'] = true;
         $ret['cssClass'] = 'webStandard';
-        $ret['plugins']['placeholders'] = 'Vps_Component_Plugin_Placeholders';
+        $ret['plugins']['placeholders'] = 'Kwf_Component_Plugin_Placeholders';
         $ret['viewCache'] = false;
         return $ret;
     }
 
     public function getNameForEdit()
     {
-        return trlVps('Shop Confirmation Text') . ' ' . Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
+        return trlKwf('Shop Confirmation Text') . ' ' . Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
     }
 
     protected function _getOrder()
     {
-        $ret = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getCartOrder();
+        $ret = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getCartOrder();
         if (!$ret || !$ret->data) {
             return null;
         }

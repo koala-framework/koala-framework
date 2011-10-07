@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_PubSubHubbub
+class Kwf_Util_PubSubHubbub
 {
     public static function dispatch()
     {

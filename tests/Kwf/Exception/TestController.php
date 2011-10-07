@@ -1,5 +1,5 @@
 <?php
-class Vps_Exception_TestController extends Vps_Controller_Action
+class Kwf_Exception_TestController extends Kwf_Controller_Action
 {
     public function noExceptionAction()
     {
@@ -9,22 +9,22 @@ class Vps_Exception_TestController extends Vps_Controller_Action
 
     public function accessDeniedAction()
     {
-        throw new Vps_Exception_AccessDenied();
+        throw new Kwf_Exception_AccessDenied();
     }
 
     public function notFoundAction()
     {
-        throw new Vps_Exception_NotFound();
+        throw new Kwf_Exception_NotFound();
     }
 
     public function clientAction()
     {
-        throw new Vps_Exception_Client("client exception");
+        throw new Kwf_Exception_Client("client exception");
     }
 
     public function exceptionAction()
     {
-        throw new Vps_Exception("client exception");
+        throw new Kwf_Exception("client exception");
     }
 
     public function exceptionOtherAction()

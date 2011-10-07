@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_StrPad implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_StrPad implements Kwf_Model_Select_Expr_Interface
 {
     const LEFT = 'left';
     const RIGHT = 'right';
@@ -9,7 +9,7 @@ class Vps_Model_Select_Expr_StrPad implements Vps_Model_Select_Expr_Interface
     private $_padStr;
     private $_padType;
 
-    public function __construct($field, $padLength, $padStr = ' ', $padType = Vps_Model_Select_Expr_StrPad::RIGHT)
+    public function __construct($field, $padLength, $padStr = ' ', $padType = Kwf_Model_Select_Expr_StrPad::RIGHT)
     {
         $this->_field = $field;
         $this->_padLength = $padLength;
@@ -40,15 +40,15 @@ class Vps_Model_Select_Expr_StrPad implements Vps_Model_Select_Expr_Interface
     public function validate()
     {
         if (!$this->_field) {
-            throw new Vps_Exception("No Field set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No Field set for '"+get_class($this)+"'");
         }
         if (!$this->_padLength) {
-            throw new Vps_Exception("No padLength set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No padLength set for '"+get_class($this)+"'");
         }
     }
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_STRING;
+        return Kwf_Model_Interface::TYPE_STRING;
     }
 }

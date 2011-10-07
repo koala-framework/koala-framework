@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Feed_Root extends Vps_Component_NoCategoriesRoot
+class Kwc_Basic_Feed_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
@@ -9,8 +9,8 @@ class Vpc_Basic_Feed_Root extends Vps_Component_NoCategoriesRoot
         unset($ret['generators']['box']);
 
         $ret['generators']['feed'] = array(
-            'component' => 'Vpc_Basic_Feed_Feed',
-            'class' => 'Vps_Component_Generator_Page_Static'
+            'component' => 'Kwc_Basic_Feed_Feed',
+            'class' => 'Kwf_Component_Generator_Page_Static'
         );
         return $ret;
     }

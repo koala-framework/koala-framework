@@ -1,13 +1,13 @@
 <?php
 /**
  * @group Generator_Domain
- * @group Vpc_UrlResolve
+ * @group Kwc_UrlResolve
  */
-class Vps_Component_Generator_Domain_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_Domain_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_Domain_Root');
+        parent::setUp('Kwf_Component_Generator_Domain_Root');
     }
 
     public function testDomains()
@@ -45,7 +45,7 @@ class Vps_Component_Generator_Domain_Test extends Vpc_TestAbstract
         $this->assertEquals(2, count($main->getChildComponents()));
         $c = $main->getChildComponent();
         $this->assertEquals(1, $c->componentId);
-        $this->assertEquals('Vpc_Basic_Empty_Component', $c->componentClass);
+        $this->assertEquals('Kwc_Basic_Empty_Component', $c->componentClass);
         $this->assertEquals('root-at-main', $c->parent->componentId);
         $this->assertEquals(2, $c->getChildComponent()->componentId);
     }
@@ -58,7 +58,7 @@ class Vps_Component_Generator_Domain_Test extends Vpc_TestAbstract
         $this->assertEquals(1, $page->componentId);
         $this->assertEquals('root-at-main', $page->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('2'));
-        $this->assertEquals('Vpc_Basic_Link_Component', $this->_root->getComponentById('2')->componentClass);
+        $this->assertEquals('Kwc_Basic_Link_Component', $this->_root->getComponentById('2')->componentClass);
         $this->assertEquals('1', $this->_root->getComponentById('2')->parent->componentId);
         $this->assertEquals('root-at-main', $this->_root->getComponentById('2')->parent->parent->componentId);
 
@@ -68,7 +68,7 @@ class Vps_Component_Generator_Domain_Test extends Vpc_TestAbstract
         $this->assertEquals(5, $page->componentId);
         $this->assertEquals('root-ch-main', $page->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('6'));
-        $this->assertEquals('Vpc_Basic_Empty_Component', $this->_root->getComponentById('6')->componentClass);
+        $this->assertEquals('Kwc_Basic_Empty_Component', $this->_root->getComponentById('6')->componentClass);
         $this->assertEquals('5', $this->_root->getComponentById('6')->parent->componentId);
         $this->assertEquals('root-ch-main', $this->_root->getComponentById('6')->parent->parent->componentId);
     }
@@ -109,7 +109,7 @@ class Vps_Component_Generator_Domain_Test extends Vpc_TestAbstract
 
     public function testModel()
     {
-        $model = new Vps_Component_Model();
+        $model = new Kwf_Component_Model();
         $model->setRoot($this->_root);
 
         $select = $model->select()->whereNull('parent_id');
@@ -135,17 +135,17 @@ class Vps_Component_Generator_Domain_Test extends Vpc_TestAbstract
 
     public function testSubroot()
     {
-        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component');
+        $components = $this->_root->getComponentsByClass('Kwc_Basic_Image_Component');
         $this->assertEquals(2, count($components));
 
-        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component');
+        $components = $this->_root->getComponentsByClass('Kwc_Basic_Image_Component');
         $this->assertEquals(2, count($components));
 
         $c = $this->_root->getComponentById('6');
-        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
+        $components = $this->_root->getComponentsByClass('Kwc_Basic_Image_Component', array('subroot' => $c));
         $this->assertEquals(1, count($components));
 
-        $component = $this->_root->getComponentByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
+        $component = $this->_root->getComponentByClass('Kwc_Basic_Image_Component', array('subroot' => $c));
         $this->assertEquals(5, $component->componentId);
     }
 }

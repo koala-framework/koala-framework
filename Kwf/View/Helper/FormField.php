@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_FormField
+class Kwf_View_Helper_FormField
 {
     public function formField($vars)
     {
@@ -24,7 +24,7 @@ class Vps_View_Helper_FormField
                 $ret .= $this->returnFormField($i);
             }
         } elseif (isset($component)) {
-            $view = new Vps_Component_Renderer();
+            $view = new Kwf_Component_Renderer();
             $ret .= $view->renderComponent($component);
         }
         if (isset($postHtml)) { $ret .= $postHtml; }

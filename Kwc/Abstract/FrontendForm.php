@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_FrontendForm extends Vps_Form
+class Kwc_Abstract_FrontendForm extends Kwf_Form
 {
     public function __construct($name, $class)
     {

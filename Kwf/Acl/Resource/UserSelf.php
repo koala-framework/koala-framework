@@ -1,5 +1,5 @@
 <?php
-class Vps_Acl_Resource_UserSelf extends Zend_Acl_Resource
+class Kwf_Acl_Resource_UserSelf extends Zend_Acl_Resource
 {
     protected $_controllerUrl;
 

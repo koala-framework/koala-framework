@@ -2,7 +2,7 @@
 /**
  * @group Model_Db
  */
-class Vps_Model_Db_FetchTest extends Vps_Test_TestCase
+class Kwf_Model_Db_FetchTest extends Kwf_Test_TestCase
 {
     private $_table;
     private $_dbSelect;
@@ -11,18 +11,18 @@ class Vps_Model_Db_FetchTest extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_table = $this->getMock('Vps_Model_Db_Table',
+        $this->_table = $this->getMock('Kwf_Model_Db_Table',
             array('select', '_setupMetadata', '_setupPrimaryKey', '_fetch', 'insert'),
-            array('db' => new Vps_Model_Db_TestAdapter()), '', true);
+            array('db' => new Kwf_Model_Db_TestAdapter()), '', true);
 
-        $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array($this->_table));
+        $this->_dbSelect = $this->getMock('Kwf_Db_Table_Select', array(), array($this->_table));
 
         $this->_table->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->_dbSelect));
 
 
-        $this->_model = new Vps_Model_Db(array(
+        $this->_model = new Kwf_Model_Db(array(
             'table' => $this->_table
         ));
     }
@@ -120,7 +120,7 @@ class Vps_Model_Db_FetchTest extends Vps_Test_TestCase
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testValuesNotInModelException()
     {

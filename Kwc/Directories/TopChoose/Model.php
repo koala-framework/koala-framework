@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_TopChoose_Model extends Vps_Model_Db
+class Kwc_Directories_TopChoose_Model extends Kwf_Model_Db
 {
-    protected $_table = 'vpc_directories_top';
+    protected $_table = 'kwc_directories_top';
 }

@@ -1,4 +1,4 @@
 <?php
-class Vps_Uploads_TestModel extends Vps_Test_Uploads_Model
+class Kwf_Uploads_TestModel extends Kwf_Test_Uploads_Model
 {
 }

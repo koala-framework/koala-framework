@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -21,7 +21,7 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->_commands = Vps_Registry::get('config')->processControl->toArray();
+        $this->_commands = Kwf_Registry::get('config')->processControl->toArray();
         foreach ($this->_commands as &$c) {
             if (!isset($c['count'])) $c['count'] = 1;
         }
@@ -48,7 +48,7 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
 
     public function statusAction()
     {
-        $processes = Vps_Util_Process::getRunningWebProcesses();
+        $processes = Kwf_Util_Process::getRunningWebProcesses();
         foreach ($this->_commands as $requiredCmd) {
             $found = false;
             foreach ($processes as $p) {
@@ -124,7 +124,7 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
 
     private function _start()
     {
-        $processes = Vps_Util_Process::getRunningWebProcesses();
+        $processes = Kwf_Util_Process::getRunningWebProcesses();
         foreach ($this->_commands as $requiredCmd) {
             $runningCount = 0;
             foreach ($processes as $p) {
@@ -152,7 +152,7 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
     public function _stop()
     {
         $killed = array();
-        $processes = Vps_Util_Process::getRunningWebProcesses();
+        $processes = Kwf_Util_Process::getRunningWebProcesses();
         foreach ($this->_commands as $requiredCmd) {
             foreach ($processes as $p) {
                 if ($p['cmd'] == $requiredCmd['cmd']) {

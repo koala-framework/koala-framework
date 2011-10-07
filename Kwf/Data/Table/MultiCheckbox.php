@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Table_MultiCheckbox extends Vps_Data_Abstract
+class Kwf_Data_Table_MultiCheckbox extends Kwf_Data_Abstract
 {
     protected $_values;
     protected $_tableName;

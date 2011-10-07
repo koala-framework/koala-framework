@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_RtrList
+class Kwf_Util_RtrList
 {
     /**
      * Checks mail addresses against the rtr-ecg list
@@ -11,8 +11,8 @@ class Vps_Util_RtrList
      */
     static public function getBadKeys(array $emails)
     {
-        $cfg = Vps_Registry::get('config');
-        $client = new Vps_Srpc_Client(array(
+        $cfg = Kwf_Registry::get('config');
+        $client = new Kwf_Srpc_Client(array(
             'serverUrl' => $cfg->service->rtrlist->url
         ));
         return $client->getBadKeys($emails);

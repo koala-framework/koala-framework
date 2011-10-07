@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -8,8 +8,8 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
     public function termsAction()
     {
-        //d(Vps_Util_Fulltext::getInstance()->terms());
-        $i = Vps_Util_Fulltext::getInstance();
+        //d(Kwf_Util_Fulltext::getInstance()->terms());
+        $i = Kwf_Util_Fulltext::getInstance();
         $i->resetTermsStream();
         $i->skipTo(new Zend_Search_Lucene_Index_Term('w', 'title'));
         while ($i->currentTerm()) {
@@ -22,7 +22,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
     public function optimizeAction()
     {
-        Vps_Util_Fulltext::getInstance()->optimize();
+        Kwf_Util_Fulltext::getInstance()->optimize();
         exit;
     }
 
@@ -30,14 +30,14 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
     {
         $this->_checkForInvalid();
         echo "\noptimize index...\n";
-        Vps_Util_Fulltext::getInstance()->optimize();
+        Kwf_Util_Fulltext::getInstance()->optimize();
         echo "done.\n";
         exit;
     }
 
     private function _checkForInvalid()
     {
-        $index = Vps_Util_Fulltext::getInstance();
+        $index = Kwf_Util_Fulltext::getInstance();
         echo "numDocs: ".$index->numDocs()."\n";
         $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
         echo "checking: ".count($index->find($query))."\n";
@@ -48,10 +48,10 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
         $progress = new Zend_ProgressBar($c, 0, count($index->find($query)));
         foreach ($index->find($query) as $doc) {
             $progress->next();
-            if (!Vps_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
+            if (!Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
                 echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
                 $index->delete($doc->id);
-                $m = Vps_Model_Abstract::getInstance('Vpc_FulltextSearch_MetaModel');
+                $m = Kwf_Model_Abstract::getInstance('Kwc_FulltextSearch_MetaModel');
                 $row = $m->getRow($doc->componentId);
                 if ($row) {
                     $row->delete();
@@ -73,12 +73,12 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
         while(true) {
             $pid = pcntl_fork();
             if ($pid == -1) {
-                throw new Vps_Exception("fork failed");
+                throw new Kwf_Exception("fork failed");
             } else if ($pid) {
                 //parent process
                 pcntl_wait($status); //Schützt uns vor Zombie Kindern
                 if ($status != 0) {
-                    throw new Vps_Exception("child process failed");
+                    throw new Kwf_Exception("child process failed");
                 }
 
                 //echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
@@ -106,7 +106,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     file_put_contents($queueFile, implode("\n", $queue));
 
                     //echo "==> ".$componentId."\n";
-                    $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+                    $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
                     if (!$page) {
                         echo "$componentId not found!\n";
                         continue;
@@ -122,12 +122,12 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
                     //echo "checking for childComponents\n";
                     $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext'));
-                    if (Vpc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
+                    if (Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
                         $fulltextComponents[] = $page;
                     }
                     if ($fulltextComponents) {
                         echo " *** indexing $page->componentId $page->url...";
-                        $index = Vps_Util_Fulltext::getInstance();
+                        $index = Kwf_Util_Fulltext::getInstance();
 
                         $doc = new Zend_Search_Lucene_Document();
 
@@ -172,7 +172,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
                             $subRoot = $page;
                             while ($subRoot) {
-                                if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+                                if (Kwc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
                                 $subRoot = $subRoot->parent;
                             }
                             if ($subRoot) {
@@ -197,7 +197,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
                             $index->addDocument($doc);
 
-                            $m = Vps_Model_Abstract::getInstance('Vpc_FulltextSearch_MetaModel');
+                            $m = Kwf_Model_Abstract::getInstance('Kwc_FulltextSearch_MetaModel');
                             $row = $m->getRow($page->componentId);
                             if (!$row) {
                                 $row = $m->createRow();
@@ -213,13 +213,13 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
             }
         }
         echo "optimizing...\n";
-        Vps_Util_Fulltext::getInstance()->optimize();
+        Kwf_Util_Fulltext::getInstance()->optimize();
         exit;
     }
 
     public function searchAction()
     {
-        $index = Vps_Util_Fulltext::getInstance();
+        $index = Kwf_Util_Fulltext::getInstance();
 
         echo "indexSize ".$index->count()."\n";
         echo "numDocs ".$index->numDocs()."\n";
@@ -239,7 +239,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
             $query->addSubquery($pathQuery, true /* required */);
         }
         if ($this->_getParam('news')) {
-            $pathTerm  = new Zend_Search_Lucene_Index_Term('vpcNews', 'vpcNews');
+            $pathTerm  = new Zend_Search_Lucene_Index_Term('kwcNews', 'kwcNews');
             $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
             $query->addSubquery($pathQuery, true /* required */);
         }

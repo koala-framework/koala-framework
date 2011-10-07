@@ -1,10 +1,10 @@
 <?php
-class Vpc_User_Directory_Generator extends Vps_Component_Generator_Page_Table
+class Kwc_User_Directory_Generator extends Kwf_Component_Generator_Page_Table
 {
     protected function _getParentDataByRow($row)
     {
-        return Vps_Component_Data_Root::getInstance()->getComponentsByClass(
-            'Vpc_User_Directory_Component'
+        return Kwf_Component_Data_Root::getInstance()->getComponentsByClass(
+            'Kwc_User_Directory_Component'
         );
     }
 }

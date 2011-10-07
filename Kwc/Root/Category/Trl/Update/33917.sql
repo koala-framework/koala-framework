@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `vps_pages_trl` (
+CREATE TABLE IF NOT EXISTS `kwf_pages_trl` (
   `component_id` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `filename` varchar(255) NOT NULL,

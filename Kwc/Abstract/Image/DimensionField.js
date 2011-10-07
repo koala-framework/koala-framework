@@ -1,10 +1,10 @@
-Ext.namespace('Vpc.Abstract.Image');
-Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
+Ext.namespace('Kwc.Abstract.Image');
+Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
     triggerClass: 'x-form-search-trigger',
     width: 300,
     readOnly: true,
     initComponent: function() {
-        Vpc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
+        Kwc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
     },
     getValue: function() {
         return this.value || {};
@@ -21,7 +21,7 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
         }
     },
     afterRender: function() {
-        Vpc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
+        Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
         if (this.value) {
             this.setValue(this.value);
         }
@@ -35,10 +35,10 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
             ) {
                 if (this.widthField.getValue() < 1) {
-                    this.widthField.markInvalid(trlVps('Width or height must be higher than 0 when using crop or bestfit.'));
+                    this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
                 }
                 if (this.heightField.getValue() < 1) {
-                    this.heightField.markInvalid(trlVps('Width or height must be higher than 0 when using crop or bestfit.'));
+                    this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
                 }
                 return false;
             }
@@ -64,14 +64,14 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                     }
                 });
             }
-            this.dimensionField = new Vps.Form.RadioGroup({
+            this.dimensionField = new Kwf.Form.RadioGroup({
                 columns: 1,
                 hideLabel: true,
                 vertical: false,
                 items: radios
             });
             this.widthField = new Ext.form.NumberField({
-                fieldLabel: trlVps('Width'),
+                fieldLabel: trlKwf('Width'),
                 width: 50,
                 enableKeyEvents: true,
                 validateOnBlur: false,
@@ -79,7 +79,7 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 allowNegative: false
             });
             this.heightField = new Ext.form.NumberField({
-                fieldLabel: trlVps('Height'),
+                fieldLabel: trlKwf('Height'),
                 width: 50,
                 enableKeyEvents: true,
                 validateOnBlur: false,
@@ -94,7 +94,7 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
             this.dimensionField.on('change', this._validateSizes, this);
 
             this.sizeWindow = new Ext.Window({
-                title: trlVps('Image Size'),
+                title: trlKwf('Image Size'),
                 closeAction: 'hide',
                 modal: true,
                 width: 350,
@@ -107,7 +107,7 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                         {
                             xtype: 'fieldset',
                             autoHeight: true,
-                            title: trlVps('Size'),
+                            title: trlKwf('Size'),
                             items: [
                                 this.widthField,
                                 this.heightField
@@ -116,7 +116,7 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                     ]
                 }),
                 buttons: [{
-                    text: trlVps('OK'),
+                    text: trlKwf('OK'),
                     handler: function() {
                         if (this._validateSizes()) {
                             this.sizeWindow.hide();
@@ -126,12 +126,12 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                                 height: this.heightField.getValue()
                             });
                         } else {
-                            Ext.Msg.alert(trlVps('Error'), trlVps('Please fill the marked fields correctly.'));
+                            Ext.Msg.alert(trlKwf('Error'), trlKwf('Please fill the marked fields correctly.'));
                         }
                     },
                     scope: this
                 },{
-                    text: trlVps('Cancel'),
+                    text: trlKwf('Cancel'),
                     handler: function() {
                         this.sizeWindow.hide();
                     },
@@ -200,10 +200,10 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
             }
             ret += ' ';
             var scaleModes = {
-                bestfit: trlVps('Bestfit'),
-                crop: trlVps('Crop'),
-                deform: trlVps('Deform'),
-                original: trlVps('Original')
+                bestfit: trlKwf('Bestfit'),
+                crop: trlKwf('Crop'),
+                deform: trlKwf('Deform'),
+                original: trlKwf('Original')
             };
             if (d.scale && scaleModes[d.scale]) {
                 ret += scaleModes[d.scale];
@@ -215,4 +215,4 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
 });
 
 
-Ext.reg('vpc.image.dimensionfield', Vpc.Abstract.Image.DimensionField);
+Ext.reg('kwc.image.dimensionfield', Kwc.Abstract.Image.DimensionField);

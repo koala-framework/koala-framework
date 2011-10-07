@@ -3,11 +3,11 @@
  * @group Model
  * @group Model_FieldRows
  */
-class Vps_Model_FieldRows_Test extends Vps_Test_TestCase
+class Kwf_Model_FieldRows_Test extends Kwf_Test_TestCase
 {
     public function testFnFFieldRows()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array(),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(
             array(
@@ -17,7 +17,7 @@ class Vps_Model_FieldRows_Test extends Vps_Test_TestCase
                     array('id'=>2, 'blub'=>'blub2')
                 )
             )))),
-            'dependentModels' => array('Child'=>new Vps_Model_FieldRows(array('fieldName'=>'data')))
+            'dependentModels' => array('Child'=>new Kwf_Model_FieldRows(array('fieldName'=>'data')))
         ));
 
 
@@ -47,10 +47,10 @@ class Vps_Model_FieldRows_Test extends Vps_Test_TestCase
 
     public function testDataIsEmpty()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'')),
-            'dependentModels' => array('Child'=>new Vps_Model_FieldRows(array('fieldName'=>'data')))
+            'dependentModels' => array('Child'=>new Kwf_Model_FieldRows(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $rows = $row->getChildRows('Child');
@@ -59,10 +59,10 @@ class Vps_Model_FieldRows_Test extends Vps_Test_TestCase
 
     public function testDataIsLegacy()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'vpsSerialized'.serialize(array('autoId'=>1, 'data'=>array(array('id'=>1, 'blub'=>'blub')))))),
-            'dependentModels' => array('Child'=>new Vps_Model_FieldRows(array('fieldName'=>'data')))
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'kwfSerialized'.serialize(array('autoId'=>1, 'data'=>array(array('id'=>1, 'blub'=>'blub')))))),
+            'dependentModels' => array('Child'=>new Kwf_Model_FieldRows(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $rows = $row->getChildRows('Child');
@@ -71,10 +71,10 @@ class Vps_Model_FieldRows_Test extends Vps_Test_TestCase
 
     public function testCreateChildRow()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('autoId'=>1, 'data'=>array(array('id'=>1, 'blub'=>'blub')))))),
-            'dependentModels' => array('Child'=>new Vps_Model_FieldRows(array('fieldName'=>'data')))
+            'dependentModels' => array('Child'=>new Kwf_Model_FieldRows(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $rows = $row->getChildRows('Child');
@@ -99,10 +99,10 @@ class Vps_Model_FieldRows_Test extends Vps_Test_TestCase
     public function testCreateChildRowWithSavingIt()
     {
         // Einziger Unterschied zu vorher: ChildRow wird extra gespeichert, eigentlich unnötig, aber testen sollen wir das, damit die Row nicht 2x drinnen steht
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('autoId'=>1, 'data'=>array(array('id'=>1, 'blub'=>'blub')))))),
-            'dependentModels' => array('Child'=>new Vps_Model_FieldRows(array('fieldName'=>'data')))
+            'dependentModels' => array('Child'=>new Kwf_Model_FieldRows(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $rows = $row->getChildRows('Child');
@@ -126,11 +126,11 @@ class Vps_Model_FieldRows_Test extends Vps_Test_TestCase
 
     public function testDefaultValues()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'')),
             'dependentModels' => array('Child'=>
-                new Vps_Model_FieldRows(array(
+                new Kwf_Model_FieldRows(array(
                     'fieldName'=>'data',
                     'default' => array('foo' => 'defaultFoo')
                 ))

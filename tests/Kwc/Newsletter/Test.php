@@ -1,13 +1,13 @@
 <?php
 /**
  * @group slow
- * @group Vpc_Newsletter
+ * @group Kwc_Newsletter
  */
-class Vpc_Newsletter_Test extends Vps_Test_TestCase
+class Kwc_Newsletter_Test extends Kwf_Test_TestCase
 {
     public function testMailSending()
     {
-        $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_TestModel');
         $logModel = $model->getDependentModel('Log');
         $queueModel = $model->getDependentModel('Queue');
 

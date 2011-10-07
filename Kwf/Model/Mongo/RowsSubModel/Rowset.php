@@ -1,4 +1,4 @@
 <?php
-class Vps_Model_Mongo_RowsSubModel_Rowset extends Vps_Model_Rowset_ParentRow
+class Kwf_Model_Mongo_RowsSubModel_Rowset extends Kwf_Model_Rowset_ParentRow
 {
 }

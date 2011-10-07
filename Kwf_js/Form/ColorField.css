@@ -1,8 +1,8 @@
 .x-form-field-wrap .x-form-color-trigger {
-    background:transparent url(/assets/vps/images/colorTrigger.gif);
+    background:transparent url(/assets/kwf/images/colorTrigger.gif);
     cursor:pointer;
 }
-.vps-form-color-preview {
+.kwf-form-color-preview {
     border: 1px solid #B5B8C8;
     width: 20px; height: 20px;
     position: absolute;

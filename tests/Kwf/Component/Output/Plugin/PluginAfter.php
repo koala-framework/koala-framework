@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_Plugin_PluginAfter extends Vps_Component_Output_Plugin_Plugin
+class Kwf_Component_Output_Plugin_PluginAfter extends Kwf_Component_Output_Plugin_Plugin
 {
     public function processOutput($output)
     {
@@ -13,7 +13,7 @@ class Vps_Component_Output_Plugin_PluginAfter extends Vps_Component_Output_Plugi
     }
     public function getExecutionPoint()
     {
-        return Vps_Component_Plugin_Interface_View::EXECUTE_AFTER;
+        return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
     }
 }
 ?>

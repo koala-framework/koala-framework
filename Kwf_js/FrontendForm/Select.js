@@ -1,4 +1,4 @@
-Vps.FrontendForm.Select = Ext.extend(Vps.FrontendForm.Field, {
+Kwf.FrontendForm.Select = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('select').each(function(input) {
             input.on('click', function() {
@@ -14,4 +14,4 @@ Vps.FrontendForm.Select = Ext.extend(Vps.FrontendForm.Field, {
     }
 });
 
-Vps.FrontendForm.fields['vpsFormFieldSelect'] = Vps.FrontendForm.Select;
+Kwf.FrontendForm.fields['kwfFormFieldSelect'] = Kwf.FrontendForm.Select;

@@ -1,11 +1,11 @@
 <?php
-class Vpc_Abstract_Composite_Row extends Vpc_Row
+class Kwc_Abstract_Composite_Row extends Kwc_Row
 {
     protected function _delete()
     {
-        $classes = Vpc_Abstract::getChildComponentClasses($this->getTable()->getComponentClass(), 'child');
+        $classes = Kwc_Abstract::getChildComponentClasses($this->getTable()->getComponentClass(), 'child');
         foreach ($classes as $k=>$i) {
-            Vpc_Admin::getInstance($i)->delete($this->component_id.'-'.$k);
+            Kwc_Admin::getInstance($i)->delete($this->component_id.'-'.$k);
         }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_Parent implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Parent implements Kwf_Model_Select_Expr_Interface
 {
     private $_parent;
     private $_field;
@@ -23,13 +23,13 @@ class Vps_Model_Select_Expr_Parent implements Vps_Model_Select_Expr_Interface
     public function validate()
     {
         if (!$this->_field) {
-            throw new Vps_Exception("No Field set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No Field set for '"+get_class($this)+"'");
         }
         if (!is_string($this->_field)) {
-            throw new Vps_Exception("Field must be of type string in '"+get_class($this)+"'");
+            throw new Kwf_Exception("Field must be of type string in '"+get_class($this)+"'");
         }
         if (!$this->_parent) {
-            throw new Vps_Exception("No parent rule set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No parent rule set for '"+get_class($this)+"'");
         }
     }
 

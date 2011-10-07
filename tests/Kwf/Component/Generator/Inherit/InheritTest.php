@@ -1,9 +1,9 @@
 <?php
-class Vps_Component_Generator_Inherit_InheritTest extends Vpc_TestAbstract
+class Kwf_Component_Generator_Inherit_InheritTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_Inherit_Root');
+        parent::setUp('Kwf_Component_Generator_Inherit_Root');
     }
 
     public function testInherit()
@@ -16,10 +16,10 @@ class Vps_Component_Generator_Inherit_InheritTest extends Vpc_TestAbstract
         $this->assertEquals(1, count($c));
         $this->assertEquals('root_static-box', current($c)->componentId);
 
-        $cc = Vpc_Abstract::getIndirectChildComponentClasses('Vps_Component_Generator_Inherit_Root',
+        $cc = Kwc_Abstract::getIndirectChildComponentClasses('Kwf_Component_Generator_Inherit_Root',
                 array('flags'=>array('foo'=>true)));
         $this->assertEquals(1, count($cc));
-        $this->assertEquals('Vps_Component_Generator_Inherit_Box', current($cc));
+        $this->assertEquals('Kwf_Component_Generator_Inherit_Box', current($cc));
 
         $c = $this->_root->getChildComponent('_static');
         $cc = current($c->getChildComponents(array('hasEditComponents' => true)));
@@ -37,12 +37,12 @@ class Vps_Component_Generator_Inherit_InheritTest extends Vpc_TestAbstract
     {
         $page = $this->_root->getComponentById('1');
         $this->assertNotNull($page);
-        $gen = Vps_Component_Generator_Abstract::getInstances($page);
+        $gen = Kwf_Component_Generator_Abstract::getInstances($page);
         $this->assertEquals(count($gen), 2);
 
         $page = $this->_root->getChildComponent('_static');
         $this->assertNotNull($page);
-        $gen = Vps_Component_Generator_Abstract::getInstances($page);
+        $gen = Kwf_Component_Generator_Abstract::getInstances($page);
         $this->assertEquals(count($gen), 1); //aus performancegründen hier nur einer, page generator wird durch spezial-code in Generator::getInstances nicht zurückgegeben
     }
 

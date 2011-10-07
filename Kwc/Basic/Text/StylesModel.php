@@ -1,18 +1,18 @@
 <?php
-class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
+class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_basic_text_styles';
-    protected $_rowClass = 'Vpc_Basic_Text_StylesRow';
+    protected $_table = 'kwc_basic_text_styles';
+    protected $_rowClass = 'Kwc_Basic_Text_StylesRow';
 
     protected function _init()
     {
         parent::_init();
-        $this->_siblingModels['styles'] = new Vps_Model_Field(array('fieldName'=>'styles'));
+        $this->_siblingModels['styles'] = new Kwf_Model_Field(array('fieldName'=>'styles'));
     }
 
     protected function _setupFilters()
     {
-        $filter = new Vps_Filter_Row_Numberize();
+        $filter = new Kwf_Filter_Row_Numberize();
         $filter->setGroupBy(array('ownStyles', 'tag'=>array('span')));
         $this->_filters = array('pos' => $filter);
     }
@@ -47,13 +47,13 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         $styles = array();
         $styles[] = array(
             'id' => 'blockdefault',
-            'name' => trlVps('Default'),
+            'name' => trlKwf('Default'),
             'tagName' => 'p',
             'className' => false,
         );
         $styles[] = array(
             'id' => 'inlinedefault',
-            'name' => trlVps('Normal'),
+            'name' => trlKwf('Normal'),
             'tagName' => 'span',
             'className' => false,
         );
@@ -92,7 +92,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
 
     private static function _getCache()
     {
-        return new Vps_Assets_Cache();
+        return new Kwf_Assets_Cache();
     }
 
     public function removeCache()
@@ -107,17 +107,17 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         return $mtime;
     }
 
-    public static function getStylesContents($modelClass = 'Vpc_Basic_Text_StylesModel')
+    public static function getStylesContents($modelClass = 'Kwc_Basic_Text_StylesModel')
     {
         $ret = '';
-        $_styles = Vps_Model_Abstract::getInstance($modelClass)->_getStylesArray();
+        $_styles = Kwf_Model_Abstract::getInstance($modelClass)->_getStylesArray();
         foreach ($_styles as $tag => $classes) {
             foreach ($classes as $class => $style) {
                 $styles = '';
                 foreach ($style['styles'] as $k => $v) {
                     $styles .= "$k: $v; ";
                 }
-                $ret .= ".vpcText $tag.$class { {$styles}} /* {$style['name']} */\n";
+                $ret .= ".kwcText $tag.$class { {$styles}} /* {$style['name']} */\n";
             }
         }
         return $ret;
@@ -130,7 +130,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
 
     public static function getStylesArray()
     {
-        return Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel')->_getStylesArray();
+        return Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_StylesModel')->_getStylesArray();
     }
 
     protected function _getStylesArray()

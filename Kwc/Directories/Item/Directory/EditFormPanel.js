@@ -1,14 +1,14 @@
-Ext.namespace('Vpc.Directories.Item.Directory');
-Vpc.Directories.Item.Directory.EditFormPanel = Ext.extend(Vps.Auto.FormPanel,
+Ext.namespace('Kwc.Directories.Item.Directory');
+Kwc.Directories.Item.Directory.EditFormPanel = Ext.extend(Kwf.Auto.FormPanel,
 {
     lastComponentId: null,
     setBaseParams : function(baseParams) {
-        Vpc.Directories.Item.Directory.EditFormPanel.superclass.setBaseParams.apply(this, arguments);
+        Kwc.Directories.Item.Directory.EditFormPanel.superclass.setBaseParams.apply(this, arguments);
         this._baseParamsChanged();
 
     },
     applyBaseParams : function(baseParams) {
-        Vpc.Directories.Item.Directory.EditFormPanel.superclass.applyBaseParams.apply(this, arguments);
+        Kwc.Directories.Item.Directory.EditFormPanel.superclass.applyBaseParams.apply(this, arguments);
         this._baseParamsChanged();
     },
 

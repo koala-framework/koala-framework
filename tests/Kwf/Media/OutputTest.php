@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_OutputTest extends Vps_Test_TestCase
+class Kwf_Media_OutputTest extends Kwf_Test_TestCase
 {
     public function testOutput()
     {
@@ -9,14 +9,14 @@ class Vps_Media_OutputTest extends Vps_Test_TestCase
             'mtime' => time(),
             'etag' => 'asdf'
         );
-        $output = Vps_Media_Output::getOutputData($file, array());
+        $output = Kwf_Media_Output::getOutputData($file, array());
         $this->_assert200($output, $file);
         $this->_assertHeader($output, 'Content-Encoding', 'none');
 
         $headers = array(
             'If-Modified-Since' => $this->_date($file['mtime'])
         );
-        $output = Vps_Media_Output::getOutputData($file, $headers);
+        $output = Kwf_Media_Output::getOutputData($file, $headers);
         $this->_assertRepsonseCode($output, 304);
         $this->_assertHeader($output, 'Last-Modified', $this->_date($file['mtime']));
         $this->_assertNoHeader($output, 'ETag');
@@ -27,13 +27,13 @@ class Vps_Media_OutputTest extends Vps_Test_TestCase
         $headers = array(
             'If-Modified-Since' => $this->_date($file['mtime']-1)
         );
-        $output = Vps_Media_Output::getOutputData($file, $headers);
+        $output = Kwf_Media_Output::getOutputData($file, $headers);
         $this->_assert200($output, $file);
 
         $headers = array(
             'If-None-Match' => $file['etag']
         );
-        $output = Vps_Media_Output::getOutputData($file, $headers);
+        $output = Kwf_Media_Output::getOutputData($file, $headers);
         $this->_assertRepsonseCode($output, 304);
         $this->_assertNoHeader($output, 'Last-Modified');
         $this->_assertHeader($output, 'ETag', $file['etag']);
@@ -44,7 +44,7 @@ class Vps_Media_OutputTest extends Vps_Test_TestCase
         $headers = array(
             'If-None-Match' => 'blub'
         );
-        $output = Vps_Media_Output::getOutputData($file, $headers);
+        $output = Kwf_Media_Output::getOutputData($file, $headers);
         $this->_assert200($output, $file);
     }
 
@@ -103,13 +103,13 @@ class Vps_Media_OutputTest extends Vps_Test_TestCase
             'etag' => 'asdf',
             'encoding' => 'gzip'
         );
-        $output = Vps_Media_Output::getOutputData($file, array());
+        $output = Kwf_Media_Output::getOutputData($file, array());
         $this->_assert200($output, $file);
         $this->_assertHeader($output, 'Content-Encoding', 'gzip');
 
         unset($file['encoding']);
         $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip';
-        $output = Vps_Media_Output::getOutputData($file, array());
+        $output = Kwf_Media_Output::getOutputData($file, array());
         unset($_SERVER['HTTP_ACCEPT_ENCODING']);
         $this->_assertHeader($output, 'Content-Encoding', 'gzip');
         $this->assertEquals($file['contents'], gzinflate(substr($output['contents'], 10)));
@@ -117,7 +117,7 @@ class Vps_Media_OutputTest extends Vps_Test_TestCase
 
     public function testNothing()
     {
-        $this->setExpectedException('Vps_Exception_NotFound');
-        Vps_Media_Output::getOutputData(array(), array());
+        $this->setExpectedException('Kwf_Exception_NotFound');
+        Kwf_Media_Output::getOutputData(array(), array());
     }
 }

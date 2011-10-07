@@ -1,28 +1,28 @@
 <?php
-class Vpc_Posts_Detail_Actions_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Posts_Detail_Actions_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['edit'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Edit_Component',
-            'name' => trlVpsStatic('edit')
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Posts_Detail_Edit_Component',
+            'name' => trlKwfStatic('edit')
         );
         $ret['generators']['report'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Report_Component',
-            'name' => trlVpsStatic('report')
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Posts_Detail_Report_Component',
+            'name' => trlKwfStatic('report')
         );
         $ret['generators']['delete'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Delete_Component',
-            'name' => trlVpsStatic('delete')
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Posts_Detail_Delete_Component',
+            'name' => trlKwfStatic('delete')
         );
         $ret['generators']['quote'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Quote_Component',
-            'name' => trlVpsStatic('quote')
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Posts_Detail_Quote_Component',
+            'name' => trlKwfStatic('quote')
         );
         $ret['viewCache'] = false;
         return $ret;

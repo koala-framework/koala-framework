@@ -1,4 +1,4 @@
-Vps.EyeCandy.List.Plugins.Scroll = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
     createMoveElementSelectorWrapper: false,

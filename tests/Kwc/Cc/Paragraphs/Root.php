@@ -1,5 +1,5 @@
 <?php
-class Vpc_Cc_Paragraphs_Root extends Vpc_Root_Abstract
+class Kwc_Cc_Paragraphs_Root extends Kwc_Root_Abstract
 {
     public static function getSettings()
     {
@@ -7,17 +7,17 @@ class Vpc_Cc_Paragraphs_Root extends Vpc_Root_Abstract
         unset($ret['generators']['title']);
         unset($ret['generators']['box']);
         $ret['generators']['master'] = array(
-            'class' => 'Vpc_Chained_Abstract_MasterGenerator',
-            'component' => 'Vpc_Cc_Paragraphs_Master_Component',
+            'class' => 'Kwc_Chained_Abstract_MasterGenerator',
+            'component' => 'Kwc_Cc_Paragraphs_Master_Component',
         );
         $ret['generators']['slave'] = array(
-            'class' => 'Vpc_Chained_Trl_ChainedGenerator',
-            'component' => 'Vpc_Cc_Paragraphs_Slave_Component.Vpc_Cc_Paragraphs_Master_Component',
+            'class' => 'Kwc_Chained_Trl_ChainedGenerator',
+            'component' => 'Kwc_Cc_Paragraphs_Slave_Component.Kwc_Cc_Paragraphs_Master_Component',
             'filenameColumn' => 'filename',
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array(
+        $ret['childModel'] = new Kwc_Root_TrlRoot_Model(array(
             'master' => 'master',
             'slave' => 'slave'
         ));

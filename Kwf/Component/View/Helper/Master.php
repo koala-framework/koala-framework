@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
+class Kwf_Component_View_Helper_Master extends Kwf_Component_View_Renderer
 {
-    public function master(Vps_Component_Data $component)
+    public function master(Kwf_Component_Data $component)
     {
         return $this->_getRenderPlaceholder($component->componentId, array(), null, 'master', array());
     }
@@ -17,7 +17,7 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
         );
         $c = $component;
         while ($c) {
-            if (Vpc_Abstract::getTemplateFile($c->componentClass, 'Master')) {
+            if (Kwc_Abstract::getTemplateFile($c->componentClass, 'Master')) {
                 $componentWithMaster[] = array(
                     'type' => 'master',
                     'data' => $c
@@ -25,7 +25,7 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
             }
             $c = $c->parent;
         }
-        $helper = new Vps_Component_View_Helper_ComponentWithMaster();
+        $helper = new Kwf_Component_View_Helper_ComponentWithMaster();
         $helper->setRenderer($this->_getRenderer());
         return $helper->componentWithMaster($componentWithMaster);
     }

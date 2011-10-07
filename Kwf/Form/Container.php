@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Container extends Vps_Form_Container_Abstract
+class Kwf_Form_Container extends Kwf_Form_Container_Abstract
 {
     public function getMetaData($model)
     {

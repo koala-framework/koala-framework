@@ -1,17 +1,17 @@
 <?php
-class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_Component
+class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'vps/Vpc/Directories/List/ViewMap/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Directories/List/ViewMap/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
-        $ret['assets']['dep'][] = 'VpsGoogleMap';
+        $ret['assets']['dep'][] = 'KwfGoogleMap';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['generators']['child']['component']['paging'] = null;
         $ret['generators']['coordinates'] = array(
-            'class'     => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Directories_List_ViewMap_Coordinates_Component',
+            'class'     => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Directories_List_ViewMap_Coordinates_Component',
             'name'      => 'Coordinates'
         );
         $ret['mapOptions'] = array(
@@ -64,7 +64,7 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
                 $marker['latitude']  = $coords[0];
                 $marker['longitude'] = $coords[1];
             } else {
-                throw new Vps_Exception('Either longitude and latitude, or coordinates has to exist in model');
+                throw new Kwf_Exception('Either longitude and latitude, or coordinates has to exist in model');
             }
 
             $marker['infoHtml'] = call_user_func_array(
@@ -93,7 +93,7 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
     static public function getInfoWindowHtml($data)
     {
         $row = $data->getRow();
-        $link = new Vps_View_Helper_ComponentLink();
+        $link = new Kwf_View_Helper_ComponentLink();
         return $link->componentLinkRendered($data).'<br />'.$row->street.'<br />'.$row->zipcode.' '.$row->city;
     }
 }

@@ -2,7 +2,7 @@
 /**
  * Dieses Plugin zeigt falls der User eingeloggt ist die LoggedIn Unterkomponente an
  */
-class Vpc_User_BoxWithoutLogin_IsLoggedInPlugin_Component extends Vps_Component_Plugin_Login_Component
+class Kwc_User_BoxWithoutLogin_IsLoggedInPlugin_Component extends Kwf_Component_Plugin_Login_Component
 {
     public static function getSettings()
     {
@@ -17,7 +17,7 @@ class Vpc_User_BoxWithoutLogin_IsLoggedInPlugin_Component extends Vps_Component_
         if (!$this->isLoggedIn()) {
             return $output;
         }
-        $loggedIn = Vps_Component_Data_Root::getInstance()
+        $loggedIn = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_componentId, array('ignoreVisible' => true))
             ->getChildComponent('-loggedIn');
         return $loggedIn->render();

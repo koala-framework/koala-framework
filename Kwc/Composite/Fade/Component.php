@@ -1,11 +1,11 @@
 <?php
-class Vpc_Composite_Fade_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Composite_Fade_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Fade');
-        $ret['assets']['dep'][] = 'VpsFadeElements';
+        $ret['componentName'] = trlKwf('Fade');
+        $ret['assets']['dep'][] = 'KwfFadeElements';
 
         $ret['selector'] = '> div';
 

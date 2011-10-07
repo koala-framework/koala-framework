@@ -1,11 +1,11 @@
-Vps.Form.PageSelect = Ext.extend(Vps.Form.AbstractSelect, {
+Kwf.Form.PageSelect = Ext.extend(Kwf.Form.AbstractSelect, {
     initComponent: function() {
-        Vps.Form.PageSelect.superclass.initComponent.call(this);
+        Kwf.Form.PageSelect.superclass.initComponent.call(this);
     },
     _getWindowItem: function()
     {
         if (!this._windowItem) {
-            this._windowItem = new Vps.Auto.TreePanel({
+            this._windowItem = new Kwf.Auto.TreePanel({
                 controllerUrl: this.controllerUrl,
                 listeners: {
                     click: function(node) {
@@ -29,4 +29,4 @@ Vps.Form.PageSelect = Ext.extend(Vps.Form.AbstractSelect, {
     }
 });
 
-Ext.reg('pageselect', Vps.Form.PageSelect);
+Ext.reg('pageselect', Kwf.Form.PageSelect);

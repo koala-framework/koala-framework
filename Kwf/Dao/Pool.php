@@ -1,15 +1,15 @@
 <?php
 /**
- * @deprecated use Vps_Util_Model_Pool instead
+ * @deprecated use Kwf_Util_Model_Pool instead
  */
-class Vps_Dao_Pool extends Vps_Db_Table
+class Kwf_Dao_Pool extends Kwf_Db_Table
 {
-    protected $_name = 'vps_pools';
-    protected $_rowClass = 'Vps_Dao_Row_Pool';
+    protected $_name = 'kwf_pools';
+    protected $_rowClass = 'Kwf_Dao_Row_Pool';
 
     protected function _setupFilters()
     {
-        $filter = new Vps_Filter_Row_Numberize();
+        $filter = new Kwf_Filter_Row_Numberize();
         $filter->setGroupBy('pool');
         $this->_filters = array('pos' => $filter);
     }

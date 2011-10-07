@@ -1,5 +1,5 @@
 <?php
-class Vps_Service_Amazon_Item extends Zend_Service_Amazon_Item
+class Kwf_Service_Amazon_Item extends Zend_Service_Amazon_Item
 {
     public $BrowseNodes;
 

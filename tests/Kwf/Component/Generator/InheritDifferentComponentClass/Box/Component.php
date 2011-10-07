@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_InheritDifferentComponentClass_Box_Component extends Vpc_Abstract
+class Kwf_Component_Generator_InheritDifferentComponentClass_Box_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -11,7 +11,7 @@ class Vps_Component_Generator_InheritDifferentComponentClass_Box_Component exten
     public static function getAlternativeComponents()
     {
         return array(
-            'inherit'=>'Vps_Component_Generator_InheritDifferentComponentClass_Box_Inherit_Component'
+            'inherit'=>'Kwf_Component_Generator_InheritDifferentComponentClass_Box_Inherit_Component'
         );
     }
 
@@ -24,7 +24,7 @@ class Vps_Component_Generator_InheritDifferentComponentClass_Box_Component exten
         if (!$c) return false;
         while (!$c->inherits) $c = $c->parent;
 
-        $instances = Vps_Component_Generator_Abstract::getInstances($c, array(
+        $instances = Kwf_Component_Generator_Abstract::getInstances($c, array(
                 'inherit' => true
         ));
         if (in_array($generator, $instances, true)) {

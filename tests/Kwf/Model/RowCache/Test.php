@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_RowCache
  */
-class Vps_Model_RowCache_Test extends Vps_Test_TestCase
+class Kwf_Model_RowCache_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
@@ -13,9 +13,9 @@ class Vps_Model_RowCache_Test extends Vps_Test_TestCase
 
     private function _createModelInstance()
     {
-        Vps_Model_Abstract::clearInstances();
-        return new Vps_Model_RowCache(array(
-            'proxyModel' => Vps_Model_Abstract::getInstance('Vps_Model_RowCache_SourceModel'),
+        Kwf_Model_Abstract::clearInstances();
+        return new Kwf_Model_RowCache(array(
+            'proxyModel' => Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel'),
             'cacheColumns' => array('foo')
         ));
     }
@@ -23,7 +23,7 @@ class Vps_Model_RowCache_Test extends Vps_Test_TestCase
     public function testRead()
     {
         $m = $this->_createModelInstance();
-        $source = Vps_Model_Abstract::getInstance('Vps_Model_RowCache_SourceModel');
+        $source = Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel');
         $this->assertEquals(1, $m->getRow(1)->foo);
         $this->assertEquals(1, $source->called['getRows']);
         $this->assertEquals(1, $m->getRow(1)->foo);
@@ -32,7 +32,7 @@ class Vps_Model_RowCache_Test extends Vps_Test_TestCase
         $this->assertEquals(1, $source->called['getRows']);
 
         $m = $this->_createModelInstance();
-        $source = Vps_Model_Abstract::getInstance('Vps_Model_RowCache_SourceModel');
+        $source = Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel');
         $this->assertEquals(1, $m->getRow(1)->foo); //gecached, hier nicht laden
         $this->assertEquals(0, $source->called['getRows']);
         $this->assertEquals(1, $m->getRow(1)->foo);
@@ -44,13 +44,13 @@ class Vps_Model_RowCache_Test extends Vps_Test_TestCase
     public function testSave()
     {
         $m = $this->_createModelInstance();
-        $source = Vps_Model_Abstract::getInstance('Vps_Model_RowCache_SourceModel');
+        $source = Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel');
         $this->assertEquals(1, $m->getRow(1)->foo);
         $this->assertEquals(1, $source->called['getRows']);
 
 
         $m = $this->_createModelInstance();
-        $source = Vps_Model_Abstract::getInstance('Vps_Model_RowCache_SourceModel');
+        $source = Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel');
         $r = $m->getRow(1);
         $this->assertEquals(0, $source->called['getRows']);
         $r->foo = 'asdf';
@@ -60,7 +60,7 @@ class Vps_Model_RowCache_Test extends Vps_Test_TestCase
         /*
         //kann nicht gesetet werden, weil innerhalb eines requests der apc cache nicht gelöscht werden kann
         $m = $this->_createModelInstance();
-        $source = Vps_Model_Abstract::getInstance('Vps_Model_RowCache_SourceModel');
+        $source = Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel');
         $this->assertEquals(1, $source->called['getRows']);
         $this->assertEquals($m->getRow(1)->foo, 'asdf'); //nicht mehr gecached, da cache gelöscht wurde
         */

@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_FormDynamic
+ * @group Kwc_FormDynamic
  */
-class Vpc_FormDynamic_Basic_Test extends Vpc_TestAbstract
+class Kwc_FormDynamic_Basic_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_FormDynamic_Basic_Root');
+        parent::setUp('Kwc_FormDynamic_Basic_Root');
     }
 
     public function testIt()

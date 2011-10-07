@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Directory_Root_Directory_Model extends Vps_Model_FnF
+class Kwf_Component_Cache_Directory_Root_Directory_Model extends Kwf_Model_FnF
 {
     protected $_columns = array('id', 'component_id', 'content');
     protected $_data = array(

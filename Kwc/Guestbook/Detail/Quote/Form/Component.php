@@ -1,5 +1,5 @@
 <?php
-class Vpc_Guestbook_Detail_Quote_Form_Component extends Vpc_Guestbook_Write_Form_Component
+class Kwc_Guestbook_Detail_Quote_Form_Component extends Kwc_Guestbook_Write_Form_Component
 {
     protected function _getPostsComponent()
     {

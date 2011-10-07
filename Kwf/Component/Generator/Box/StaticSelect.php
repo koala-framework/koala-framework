@@ -1,13 +1,13 @@
 <?php
-class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_Static
+class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_Static
 {
     protected function _init()
     {
         if (!is_array($this->_settings['component']) || $this->_settings['component'] < 2) {
-            throw new Vps_Exception("You need at least two components for a Box_StaticSelect generator");
+            throw new Kwf_Exception("You need at least two components for a Box_StaticSelect generator");
         }
         if (!isset($this->_settings['model'])) {
-            $this->_settings['model'] = 'Vps_Component_Generator_Box_StaticSelect_Model';
+            $this->_settings['model'] = 'Kwf_Component_Generator_Box_StaticSelect_Model';
         }
         if (!isset($this->_settings['boxName'])) {
             $this->_settings['boxName'] = null;
@@ -40,10 +40,10 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
 
     public function getChildData($parentData, $select = array())
     {
-        Vps_Benchmark::count('GenStaticSelect::getChildData');
+        Kwf_Benchmark::count('GenStaticSelect::getChildData');
 
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
         $data = $this->_createData($parentData, $this->getGeneratorKey(), $select);
         return array($data);
@@ -63,7 +63,7 @@ class Vps_Component_Generator_Box_StaticSelect extends Vps_Component_Generator_S
 
     public function getPagePropertiesForm()
     {
-        return new Vps_Component_Generator_Box_StaticSelect_PagePropertiesForm($this);
+        return new Kwf_Component_Generator_Box_StaticSelect_PagePropertiesForm($this);
     }
 
     public function getStaticChildComponentIds()

@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Meta_ModelField extends Vps_Component_Cache_Meta_Abstract
+class Kwf_Component_Cache_Meta_ModelField extends Kwf_Component_Cache_Meta_Abstract
 {
     private $_model;
     private $_column;
@@ -9,7 +9,7 @@ class Vps_Component_Cache_Meta_ModelField extends Vps_Component_Cache_Meta_Abstr
     {
         $model = $this->_getModel($model);
         if (!$model->hasColumn($column)) {
-            throw new Vps_Exception('Model "' . get_class($model) . '" must have column "' . $column . '"');
+            throw new Kwf_Exception('Model "' . get_class($model) . '" must have column "' . $column . '"');
         }
         $this->_model = $model;
         $this->_column = $column;
@@ -21,7 +21,7 @@ class Vps_Component_Cache_Meta_ModelField extends Vps_Component_Cache_Meta_Abstr
         return $this->_column;
     }
 
-    public function getValue(Vps_Component_Data $component)
+    public function getValue(Kwf_Component_Data $component)
     {
         return $this->_value;
     }

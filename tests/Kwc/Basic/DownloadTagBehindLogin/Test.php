@@ -5,17 +5,17 @@
  * @group slow
  * @group selenium
  */
-class Vpc_Basic_DownloadTagBehindLogin_Test extends Vps_Test_SeleniumTestCase
+class Kwc_Basic_DownloadTagBehindLogin_Test extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_DownloadTagBehindLogin_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_Basic_DownloadTagBehindLogin_Root');
         parent::setUp();
     }
 
     public function testIt()
     {
-        $this->openVpc('/test');
+        $this->openKwc('/test');
 
         //nicht eingeloggt, link darf nicht da sein
         $this->assertElementNotPresent("link=test");
@@ -39,7 +39,7 @@ class Vpc_Basic_DownloadTagBehindLogin_Test extends Vps_Test_SeleniumTestCase
         $downloadLocation = $this->getLocation();
 
         //noch immer eingeloggt, link muss noch da sein
-        $this->openVpc('/test');
+        $this->openKwc('/test');
         $this->assertElementPresent("link=test");
 
         //ausloggen, link darf nicht mehr da sein

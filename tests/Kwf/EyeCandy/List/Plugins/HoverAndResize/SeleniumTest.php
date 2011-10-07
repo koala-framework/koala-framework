@@ -2,16 +2,16 @@
 /**
  * @group slow
  * @group selenium
- * @group Vps_Js
- * @group Vps_Js_EyeCandy_List
- * @group Vps_Js_EyeCandy_List_Plugins_HoverAndResize
+ * @group Kwf_Js
+ * @group Kwf_Js_EyeCandy_List
+ * @group Kwf_Js_EyeCandy_List_Plugins_HoverAndResize
  *
  */
-class Vps_EyeCandy_List_Plugins_HoverAndResize_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwf_EyeCandy_List_Plugins_HoverAndResize_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function testEyeCandyList()
     {
-        $this->open('/vps/test/vps_eye-candy_list_plugins_hover-and-resize_test');
+        $this->open('/kwf/test/kwf_eye-candy_list_plugins_hover-and-resize_test');
         $this->assertEquals($this->getElementWidth('css=#ti1'), 100); //initial size
 
         $this->mouseOver('css=#ti1');

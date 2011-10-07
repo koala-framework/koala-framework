@@ -1,11 +1,11 @@
 <?php
-class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('checkbox');
-        $this->setEmptyMessage(trlVpsStatic("Please mark the checkbox"));
+        $this->setEmptyMessage(trlKwfStatic("Please mark the checkbox"));
     }
 
     /**
@@ -13,7 +13,7 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
      */
     public function setErrorText()
     {
-        throw new Vps_Exception('setErrorText is deprecated, use setEmptyText');
+        throw new Kwf_Exception('setErrorText is deprecated, use setEmptyText');
     }
 
     protected function _getTrlProperties()
@@ -31,9 +31,9 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
             || $this->getAllowBlank() === 0
             || $this->getAllowBlank() === '0'
         ) {
-            $v = new Vps_Validate_NotEmptyNotZero();
+            $v = new Kwf_Validate_NotEmptyNotZero();
             if ($this->getEmptyMessage()) {
-                $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
+                $v->setMessage(Kwf_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
             }
             $this->addValidator($v, 'notEmpty');
         }
@@ -68,7 +68,7 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Checkbox')
+            'componentName' => trlKwf('Checkbox')
         ));
     }
 }

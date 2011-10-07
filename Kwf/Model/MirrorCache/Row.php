@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
+class Kwf_Model_MirrorCache_Row extends Kwf_Model_Proxy_Row
 {
     private $_doSyncOnUpdate = false;
 
@@ -21,7 +21,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         } else {
             $this->_afterUpdate();
         }
-        return Vps_Model_Row_Abstract::save(); //nicht parent, der würde wida _row->save machen
+        return Kwf_Model_Row_Abstract::save(); //nicht parent, der würde wida _row->save machen
     }
 
     protected function _beforeInsert()
@@ -65,7 +65,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
      */
     public function delete()
     {
-        throw new Vps_Exception_NotYetImplemented("MirrorCacheModel is not able to delete yet");
+        throw new Kwf_Exception_NotYetImplemented("MirrorCacheModel is not able to delete yet");
     }
 
     public function __set($name, $value)
@@ -73,7 +73,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         if ($name == $this->_getPrimaryKey()) {
             // wenn das implementiert wird vorsicht wegen user-model. bei dem
             // darf der primary key zB wirklich (!) nicht geändert werden
-            throw new Vps_Exception_NotYetImplemented("Primary key may not be changed when using a MirrorCache");
+            throw new Kwf_Exception_NotYetImplemented("Primary key may not be changed when using a MirrorCache");
         }
 
         if (in_array($name, $this->getModel()->getOwnColumns()) && $this->$name != $value) {

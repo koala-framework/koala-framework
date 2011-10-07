@@ -1,76 +1,76 @@
 <?php
-class Vps_Acl extends Zend_Acl
+class Kwf_Acl extends Zend_Acl
 {
-    protected $_componentAclClass = 'Vps_Component_Acl';
+    protected $_componentAclClass = 'Kwf_Component_Acl';
 
     /**
-     * @var Vps_Component_Acl
+     * @var Kwf_Component_Acl
      */
     protected $_componentAcl;
-    protected $_vpcResourcesLoaded = false;
+    protected $_kwcResourcesLoaded = false;
 
     public function __construct()
     {
         $this->addRole(new Zend_Acl_Role('guest'));
-        $this->addRole(new Vps_Acl_Role_Admin('admin', 'Administrator'));
+        $this->addRole(new Kwf_Acl_Role_Admin('admin', 'Administrator'));
         $this->addRole(new Zend_Acl_Role('cli'));
 
         $this->add(new Zend_Acl_Resource('default_index'));
-        $this->add(new Zend_Acl_Resource('vps_user_menu'));
-        $this->add(new Zend_Acl_Resource('vps_user_login'));
-        $this->add(new Zend_Acl_Resource('vps_user_changeuser'));
-        $this->add(new Zend_Acl_Resource('vps_error_error'));
-        $this->add(new Zend_Acl_Resource('vps_user_about'));
-        $this->add(new Zend_Acl_Resource('vps_welcome_index'));
-        $this->add(new Zend_Acl_Resource('vps_welcome_content'));
-        $this->add(new Zend_Acl_Resource('vps_debug'));
-        $this->add(new Zend_Acl_Resource('vps_debug_sql'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_assets'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_activate'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_session-restart'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_php-info'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_apc'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_assets-dependencies'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_benchmark'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_media_upload'));
-        $this->add(new Zend_Acl_Resource('vps_test'));
+        $this->add(new Zend_Acl_Resource('kwf_user_menu'));
+        $this->add(new Zend_Acl_Resource('kwf_user_login'));
+        $this->add(new Zend_Acl_Resource('kwf_user_changeuser'));
+        $this->add(new Zend_Acl_Resource('kwf_error_error'));
+        $this->add(new Zend_Acl_Resource('kwf_user_about'));
+        $this->add(new Zend_Acl_Resource('kwf_welcome_index'));
+        $this->add(new Zend_Acl_Resource('kwf_welcome_content'));
+        $this->add(new Zend_Acl_Resource('kwf_debug'));
+        $this->add(new Zend_Acl_Resource('kwf_debug_sql'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_assets'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_activate'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_session-restart'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_php-info'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_apc'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_assets-dependencies'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_benchmark'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_media_upload'));
+        $this->add(new Zend_Acl_Resource('kwf_test'));
         $this->add(new Zend_Acl_Resource('edit_role'));
-        $this->add(new Vps_Acl_Resource_EditRole('edit_role_admin', 'admin'), 'edit_role');
+        $this->add(new Kwf_Acl_Resource_EditRole('edit_role_admin', 'admin'), 'edit_role');
 
-        $this->add(new Vps_Acl_Resource_UserSelf('vps_user_self', '/vps/user/self'));
+        $this->add(new Kwf_Acl_Resource_UserSelf('kwf_user_self', '/kwf/user/self'));
 
-        $this->add(new Zend_Acl_Resource('vps_spam_set'));
+        $this->add(new Zend_Acl_Resource('kwf_spam_set'));
 
-        $this->add(new Zend_Acl_Resource('vps_cli'));
-        $this->add(new Zend_Acl_Resource('vps_cli_help'));
-        $this->add(new Zend_Acl_Resource('vps_cli_index'));
-        $this->add(new Zend_Acl_Resource('vps_cli_trlparse'));
-        $this->add(new Zend_Acl_Resource('vps_cli_hlpparse'));
-        $this->add(new Zend_Acl_Resource('vps_test_connectionerror'));
-        $this->allow('cli', 'vps_cli');
-        $this->allow('cli', 'vps_cli_help');
-        $this->allow('cli', 'vps_cli_index');
-        $this->allow('cli', 'vps_cli_trlparse');
-        $this->allow('cli', 'vps_cli_hlpparse');
+        $this->add(new Zend_Acl_Resource('kwf_cli'));
+        $this->add(new Zend_Acl_Resource('kwf_cli_help'));
+        $this->add(new Zend_Acl_Resource('kwf_cli_index'));
+        $this->add(new Zend_Acl_Resource('kwf_cli_trlparse'));
+        $this->add(new Zend_Acl_Resource('kwf_cli_hlpparse'));
+        $this->add(new Zend_Acl_Resource('kwf_test_connectionerror'));
+        $this->allow('cli', 'kwf_cli');
+        $this->allow('cli', 'kwf_cli_help');
+        $this->allow('cli', 'kwf_cli_index');
+        $this->allow('cli', 'kwf_cli_trlparse');
+        $this->allow('cli', 'kwf_cli_hlpparse');
 
         $this->allow(null, 'default_index');
-        $this->allow(null, 'vps_test_connectionerror');
+        $this->allow(null, 'kwf_test_connectionerror');
         $this->deny('guest', 'default_index');
-        $this->allow(null, 'vps_user_menu');
-        $this->allow(null, 'vps_user_login');
-        $this->allow(null, 'vps_error_error');
-        $this->allow(null, 'vps_user_about');
-        $this->allow(null, 'vps_welcome_index');
-        $this->allow(null, 'vps_welcome_content');
-        $this->deny('guest', 'vps_welcome_index');
-        $this->allow(null, 'vps_user_self');
-        $this->deny('guest', 'vps_user_self');
-        $this->allow('admin', 'vps_debug');
-        $this->allow(null, 'vps_media_upload');
+        $this->allow(null, 'kwf_user_menu');
+        $this->allow(null, 'kwf_user_login');
+        $this->allow(null, 'kwf_error_error');
+        $this->allow(null, 'kwf_user_about');
+        $this->allow(null, 'kwf_welcome_index');
+        $this->allow(null, 'kwf_welcome_content');
+        $this->deny('guest', 'kwf_welcome_index');
+        $this->allow(null, 'kwf_user_self');
+        $this->deny('guest', 'kwf_user_self');
+        $this->allow('admin', 'kwf_debug');
+        $this->allow(null, 'kwf_media_upload');
         $this->allow('admin', 'edit_role');
-        $this->allow(null, 'vps_spam_set');
-        $this->allow(null, 'vps_debug_session-restart');
-        $this->allow(null, 'vps_test');
+        $this->allow(null, 'kwf_spam_set');
+        $this->allow(null, 'kwf_debug_session-restart');
+        $this->allow(null, 'kwf_test');
     }
 
     public function isAllowed($role = null, $resource = null, $privilege = null)
@@ -82,9 +82,9 @@ class Vps_Acl extends Zend_Acl
                 $resource = $this->get($resource);
             }
 
-            if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {
+            if ($resource instanceof Kwf_Acl_Resource_MenuDropdown) {
                 foreach ($this->getResources($resource) as $r) {
-                    if ($r instanceof Vps_Acl_Resource_MenuUrl
+                    if ($r instanceof Kwf_Acl_Resource_MenuUrl
                         && parent::isAllowed($role, $r, $privilege)
                     ) {
                         $ret = true;
@@ -100,7 +100,7 @@ class Vps_Acl extends Zend_Acl
     public function isAllowedUser($user, $resource = null, $privilege = null)
     {
         if (is_numeric($user)) {
-            $userModel = Vps_Registry::get('userModel');
+            $userModel = Kwf_Registry::get('userModel');
             $user = $userModel->getRow($userModel->select()->whereEquals('id', $user));
         }
 
@@ -125,7 +125,7 @@ class Vps_Acl extends Zend_Acl
     {
         $ret = array();
         foreach ($this->getRoles() as $r) {
-            if ($r instanceof Vps_Acl_Role_Additional
+            if ($r instanceof Kwf_Acl_Role_Additional
                 && $r->getParentRoleId() == $role
             ) {
                 $ret[] = $r->getRoleId();
@@ -147,7 +147,7 @@ class Vps_Acl extends Zend_Acl
     {
         $ret = array();
         foreach ($this->getAllResources() as $r) {
-            if ($r instanceof Vps_Acl_Resource_EditRole
+            if ($r instanceof Kwf_Acl_Resource_EditRole
                 && $this->isAllowed($role, $r, 'view')
             ) {
                 $ret[] = $r;
@@ -161,7 +161,7 @@ class Vps_Acl extends Zend_Acl
         $ret = array();
         $editResourceRoleIds = $this->getAllowedEditResourceRoleIdsByRole($role);
         foreach ($this->getRoles() as $role) {
-            if ($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Additional)
+            if ($role instanceof Kwf_Acl_Role && !($role instanceof Kwf_Acl_Role_Additional)
                 && in_array($role->getRoleId(), $editResourceRoleIds)
             ) {
                 $ret[] = $role;
@@ -174,7 +174,7 @@ class Vps_Acl extends Zend_Acl
     {
         $ret = array();
         foreach ($this->getRoles() as $role) {
-            if ($role instanceof Vps_Acl_Role_Additional) {
+            if ($role instanceof Kwf_Acl_Role_Additional) {
                 $ret[] = $role;
             }
         }
@@ -216,7 +216,7 @@ class Vps_Acl extends Zend_Acl
 
     public function getAllResources()
     {
-        $this->loadVpcResources();
+        $this->loadKwcResources();
         $ret = array();
         foreach ($this->_resources as $resource) {
             $ret[] = $resource['instance'];
@@ -227,7 +227,7 @@ class Vps_Acl extends Zend_Acl
     protected function _getRoleRegistry()
     {
         if (null === $this->_roleRegistry) {
-            $this->_roleRegistry = new Vps_Acl_Role_Registry();
+            $this->_roleRegistry = new Kwf_Acl_Role_Registry();
         }
         return $this->_roleRegistry;
     }
@@ -242,20 +242,20 @@ class Vps_Acl extends Zend_Acl
      * Muss extra aufgerufen werden wenn diese Resourcen benötigt werden, aus
      * performance gründen
      */
-    public function loadVpcResources()
+    public function loadKwcResources()
     {
-        if ($this->_vpcResourcesLoaded) return;
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            if (Vpc_Abstract::getFlag($c, 'hasResources')) {
-                Vpc_Admin::getInstance($c)->addResources($this);
+        if ($this->_kwcResourcesLoaded) return;
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            if (Kwc_Abstract::getFlag($c, 'hasResources')) {
+                Kwc_Admin::getInstance($c)->addResources($this);
             }
         }
-        $this->_vpcResourcesLoaded = true;
+        $this->_kwcResourcesLoaded = true;
     }
 
     public function getMenuConfig($user)
     {
-        $this->loadVpcResources();
+        $this->loadKwcResources();
         return $this->_processResources($user, $this->getResources());
     }
 
@@ -263,18 +263,18 @@ class Vps_Acl extends Zend_Acl
     {
         $menus = array();
         foreach ($resources as $resource) {
-            if ($resource instanceof Vps_Acl_Resource_Component_Interface) {
+            if ($resource instanceof Kwf_Acl_Resource_Component_Interface) {
                 if (!$this->getComponentAcl()->isAllowed($user, $resource->getComponent())) continue;
             } else {
                 if (!$this->isAllowedUser($user, $resource, 'view')) continue;
             }
-            if ($resource instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+            if ($resource instanceof Kwf_Acl_Resource_ComponentClass_Interface) {
                 if (!$this->getComponentAcl()->isAllowed($user, $resource->getComponentClass())) continue;
             } else {
                 if (!$this->isAllowedUser($user, $resource, 'view')) continue;
             }
-            if (!$resource instanceof Vps_Acl_Resource_Abstract) {
-                //nur Vps-Resourcen im Menü anzeigen
+            if (!$resource instanceof Kwf_Acl_Resource_Abstract) {
+                //nur Kwf-Resourcen im Menü anzeigen
                 $menus = array_merge($menus, $this->_processResources($user, $this->getResources($resource)));
                 continue;
             }
@@ -286,33 +286,33 @@ class Vps_Acl extends Zend_Acl
 
             if (isset($menu['menuConfig']['icon'])) {
                 if (is_string($menu['menuConfig']['icon'])) {
-                    $menu['menuConfig']['icon'] = new Vps_Asset($menu['menuConfig']['icon']);
+                    $menu['menuConfig']['icon'] = new Kwf_Asset($menu['menuConfig']['icon']);
                 }
                 $menu['menuConfig']['icon'] = $menu['menuConfig']['icon']->__toString();
             }
 
-            if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {
+            if ($resource instanceof Kwf_Acl_Resource_MenuDropdown) {
                 $menu['type'] = 'dropdown';
                 $menu['children'] = $this->_processResources($user, $this->getResources($resource));
                 if (!$menu['children']) {
                     //wenn keine children dropdown ignorieren
                     continue;
                 }
-            } else if ($resource instanceof Vps_Acl_Resource_MenuEvent) {
+            } else if ($resource instanceof Kwf_Acl_Resource_MenuEvent) {
                 $menu['type'] = 'event';
                 $menu['eventConfig'] = $resource->getMenuEventConfig();
-            } else if ($resource instanceof Vps_Acl_Resource_MenuUrl) {
+            } else if ($resource instanceof Kwf_Acl_Resource_MenuUrl) {
                 $menu['type'] = 'url';
                 $menu['url'] = $resource->getMenuUrl();
-            } else if ($resource instanceof Vps_Acl_Resource_MenuCommandDialog) {
+            } else if ($resource instanceof Kwf_Acl_Resource_MenuCommandDialog) {
                 $menu['type'] = 'commandDialog';
                 $menu['commandClass'] = $resource->getMenuCommandClass();
                 $menu['commandConfig'] = $resource->getMenuCommandConfig();
-            } else if ($resource instanceof Vps_Acl_Resource_MenuCommand) {
+            } else if ($resource instanceof Kwf_Acl_Resource_MenuCommand) {
                 $menu['type'] = 'command';
                 $menu['commandClass'] = $resource->getMenuCommandClass();
                 $menu['commandConfig'] = $resource->getMenuCommandConfig();
-            } else if ($resource instanceof Vps_Acl_Resource_MenuSeparator) {
+            } else if ($resource instanceof Kwf_Acl_Resource_MenuSeparator) {
                 $menu['type'] = 'separator';
             } else {
                 $menu = $menu['menuConfig'];
@@ -324,14 +324,14 @@ class Vps_Acl extends Zend_Acl
 
     public function getComponentAcl()
     {
-        if (!Vps_Component_Data_Root::getComponentClass()) return null;
+        if (!Kwf_Component_Data_Root::getComponentClass()) return null;
         if (!isset($this->_componentAcl)) {
             $this->_componentAcl = new $this->_componentAclClass($this->_getRoleRegistry());
         }
         return $this->_componentAcl;
     }
 
-    public function setComponentAcl(Vps_Component_Acl $componentAcl)
+    public function setComponentAcl(Kwf_Component_Acl $componentAcl)
     {
         $this->_componentAcl = $componentAcl;
     }
@@ -339,7 +339,7 @@ class Vps_Acl extends Zend_Acl
     public function setComponentAclClass($class)
     {
         if (isset($this->_componentAcl)) {
-            throw new Vps_Exception("Can't modify componentAclClass when getComponentAcl was called already");
+            throw new Kwf_Exception("Can't modify componentAclClass when getComponentAcl was called already");
         }
         $this->_componentAclClass = $class;
     }
@@ -348,7 +348,7 @@ class Vps_Acl extends Zend_Acl
     {
         $allowed = false;
         foreach ($this->getAllResources() as $r) {
-            if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+            if ($r instanceof Kwf_Acl_Resource_ComponentClass_Interface) {
                 if ($class == $r->getComponentClass()) {
                     $allowed = $this->getComponentAcl()->isAllowed($authData, $class);
                     break;
@@ -360,10 +360,10 @@ class Vps_Acl extends Zend_Acl
 
     public function isAllowedComponentById($componentId, $class, $authData)
     {
-        $components = Vps_Component_Data_Root::getInstance()
+        $components = Kwf_Component_Data_Root::getInstance()
             ->getComponentsByDbId($componentId, array('ignoreVisible'=>true));
         if (!$components) {
-            throw new Vps_Exception("Can't find component to check permissions");
+            throw new Kwf_Exception("Can't find component to check permissions");
         }
 
         foreach ($components as $component) {
@@ -378,7 +378,7 @@ class Vps_Acl extends Zend_Acl
                 while (!$allowCheck && $c &&
                     (!$stopComponent || $c->componentId != $stopComponent->componentId)
                 ) {
-                    $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
+                    $allowedComponentClasses = Kwc_Abstract::getChildComponentClasses(
                         $c->componentClass, array('page' => false)
                     );
                     $allowCheck = in_array($class, $allowedComponentClasses);
@@ -389,7 +389,7 @@ class Vps_Acl extends Zend_Acl
             // SharedDataClass braucht Sonderbehandlung, weil class die Komponente ist
             // und componentId aber auf die Shared-Komponente zeigt
             if (!$allowCheck) {
-                $sharedDataClass = Vpc_Abstract::getFlag($class, 'sharedDataClass');
+                $sharedDataClass = Kwc_Abstract::getFlag($class, 'sharedDataClass');
                 $allowCheck = ($component->componentClass == $sharedDataClass);
             }
 
@@ -425,7 +425,7 @@ class Vps_Acl extends Zend_Acl
             return $cache[$componentClass.'-'.$lookForClass];
         }
         $cache[$componentClass.'-'.$lookForClass] = false;
-        $childComponentClasses = Vpc_Abstract::getChildComponentClasses(
+        $childComponentClasses = Kwc_Abstract::getChildComponentClasses(
             $componentClass, array('page' => false)
         );
         if (in_array($lookForClass, $childComponentClasses)) {

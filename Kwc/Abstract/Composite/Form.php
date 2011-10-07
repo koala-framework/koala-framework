@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
+class Kwc_Abstract_Composite_Form extends Kwc_Abstract_Form
 {
     protected $_createFieldsets = true;
 
@@ -7,7 +7,7 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
     {
         parent::__construct($name, $class);
         if (!$this->getModel()) {
-            $this->setModel(new Vps_Model_FnF());
+            $this->setModel(new Kwf_Model_FnF());
             $this->setCreateMissingRow(true);
         }
     }
@@ -23,21 +23,21 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
         $this->setCreateMissingRow(true);
 
         if (!$this->getClass()) return;
-        $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $generators['child']['component'];
         foreach ($classes as $key => $class) {
             if (!$class) continue;
-            $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key", $key);
+            $form = Kwc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key", $key);
             if ($form && count($form->fields)) {
                 if ($this->_getIdTemplateForChild($key)) {
                     $form->setIdTemplate($this->_getIdTemplateForChild($key));
                 }
-                if (!$this->_createFieldsets || !Vpc_Abstract::hasSetting($class, 'componentName')) {
+                if (!$this->_createFieldsets || !Kwc_Abstract::hasSetting($class, 'componentName')) {
                     $this->add($form);
                 } else {
-                    $name = Vpc_Abstract::getSetting($class, 'componentName');
+                    $name = Kwc_Abstract::getSetting($class, 'componentName');
                     $name = str_replace('.', ' ', $name);
-                    $this->add(new Vps_Form_Container_FieldSet($name))
+                    $this->add(new Kwf_Form_Container_FieldSet($name))
                         ->setName($key)
                         ->add($form);
                 }

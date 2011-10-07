@@ -1,4 +1,4 @@
 <?
-class Vps_Form_CardsRealModels_Model_WrapperTableRow extends Vps_Db_Table_Row
+class Kwf_Form_CardsRealModels_Model_WrapperTableRow extends Kwf_Db_Table_Row
 {
 }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_ImageEnlarge_PageTestModel extends Vps_Model_FnF
+class Kwc_Basic_ImageEnlarge_PageTestModel extends Kwf_Model_FnF
 {
     protected $_data = array(
             array('id'=>1800, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo1',

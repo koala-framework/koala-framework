@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Plugin_Login_Component extends Vps_Component_Plugin_Password_Component
+class Kwf_Component_Plugin_Login_Component extends Kwf_Component_Plugin_Password_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['loginForm']['component'] = 'Vpc_User_Login_Component';
+        $ret['generators']['loginForm']['component'] = 'Kwc_User_Login_Component';
         $ret['validUserRoles'] = null;
         return $ret;
     }
@@ -12,7 +12,7 @@ class Vps_Component_Plugin_Login_Component extends Vps_Component_Plugin_Password
     public function isLoggedIn()
     {
         
-        if (!Zend_Session::isStarted() && !Vps_Config::getValue('autologin')) return false;
+        if (!Zend_Session::isStarted() && !Kwf_Config::getValue('autologin')) return false;
         $user = Zend_Registry::get('userModel')->getAuthedUser();
         if (is_null($user)) return false;
         if (!$this->_getSetting('validUserRoles')) return true;

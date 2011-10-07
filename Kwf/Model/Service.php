@@ -1,7 +1,7 @@
 <?php
-class Vps_Model_Service extends Vps_Model_Abstract
+class Kwf_Model_Service extends Kwf_Model_Abstract
 {
-    protected $_rowClass = 'Vps_Model_Service_Row';
+    protected $_rowClass = 'Kwf_Model_Service_Row';
     protected $_client;
     protected $_serverUrl;
     protected $_serverConfig;
@@ -23,7 +23,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
         // wenn aus config verwendet, z.B.: service.xxx.url
         if ($this->_serverConfig && !$this->_serverUrl) {
-            $cfg = Vps_Registry::get('config');
+            $cfg = Kwf_Registry::get('config');
             $this->_serverUrl = $cfg->service->{$this->_serverConfig}->url;
             if ($cfg->service->{$this->_serverConfig}->proxy) {
                 if (!empty($cfg->service->{$this->_serverConfig}->proxy->host)) {
@@ -46,15 +46,15 @@ class Vps_Model_Service extends Vps_Model_Abstract
             if (!empty($config['proxyPort'])) $srpcClientConfig['proxyPort'] = $config['proxyPort'];
             if (!empty($config['proxyUser'])) $srpcClientConfig['proxyUser'] = $config['proxyUser'];
             if (!empty($config['proxyPassword'])) $srpcClientConfig['proxyPassword'] = $config['proxyPassword'];
-            $this->_client = new Vps_Srpc_Client($srpcClientConfig);
+            $this->_client = new Kwf_Srpc_Client($srpcClientConfig);
         }
 
         $this->_init();
 
         if (!$this->_client) {
-            throw new Vps_Exception("No client or serverUrl has been set in '".get_class($this)."'");
-        } else if (!($this->_client instanceof Vps_Srpc_Client)) {
-            throw new Vps_Exception("Client must be of type 'Vps_Srpc_Client' in '".get_class($this)."'");
+            throw new Kwf_Exception("No client or serverUrl has been set in '".get_class($this)."'");
+        } else if (!($this->_client instanceof Kwf_Srpc_Client)) {
+            throw new Kwf_Exception("Client must be of type 'Kwf_Srpc_Client' in '".get_class($this)."'");
         }
 
         if (!empty($config['timeout']) && is_integer($config['timeout'])) {
@@ -84,12 +84,12 @@ class Vps_Model_Service extends Vps_Model_Abstract
                 );
                 $backend = 'File';
             }
-            $ret = Vps_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
+            $ret = Kwf_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
         }
         return $ret;
     }
 
-    public function update(Vps_Model_Row_Interface $row, $rowData)
+    public function update(Kwf_Model_Row_Interface $row, $rowData)
     {
         $pk = $this->getPrimaryKey();
         if (isset($row->$pk)) {
@@ -100,10 +100,10 @@ class Vps_Model_Service extends Vps_Model_Abstract
             }
             return $rowData[$pk];
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 
-    public function insert(Vps_Model_Row_Interface $row, $rowData)
+    public function insert(Kwf_Model_Row_Interface $row, $rowData)
     {
         $savedRowData = $this->_client->rowSave(null, $rowData);
 
@@ -118,7 +118,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
         return $savedRowData[$pk];
     }
 
-    public function delete(Vps_Model_Row_Interface $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         $pk = $this->getPrimaryKey();
         if (isset($row->$pk)) {
@@ -126,7 +126,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
             unset($this->_data[$row->$pk], $this->_rows[$row->$pk]);
             return;
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 
     public function getRowByDataKey($key)
@@ -201,9 +201,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
         return $this->_primaryKey;
     }
 
-    public function isEqual(Vps_Model_Interface $other)
+    public function isEqual(Kwf_Model_Interface $other)
     {
-        if ($other instanceof Vps_Model_Service &&
+        if ($other instanceof Kwf_Model_Service &&
             $other->getClient() == $this->getClient()
         ) {
             return true;
@@ -217,7 +217,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
         if (!empty($url)) {
             return $url;
         } else {
-            throw new Vps_Exception("no uniqueIdentifier set in ".get_class($this));
+            throw new Kwf_Exception("no uniqueIdentifier set in ".get_class($this));
         }
     }
 

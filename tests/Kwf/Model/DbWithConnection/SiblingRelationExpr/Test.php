@@ -1,19 +1,19 @@
 <?php
 /**
- * @group Vps_Model_Db_SiblingRelationExpr
+ * @group Kwf_Model_Db_SiblingRelationExpr
  */
-class Vps_Model_DbWithConnection_SiblingRelationExpr_Test extends Vps_Test_TestCase
+class Kwf_Model_DbWithConnection_SiblingRelationExpr_Test extends Kwf_Test_TestCase
 {
     public function tearDown()
     {
-        Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel')->dropTable();
-        Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_RelationModel')->dropTable();
+        Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_SiblingRelationExpr_TestModel')->dropTable();
+        Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_SiblingRelationExpr_RelationModel')->dropTable();
         parent::tearDown();
     }
 
     public function testLoadLazy()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_SiblingRelationExpr_TestModel');
 
         $row = $m->getRow(1);
         $this->assertEquals($row->sum_foo, 444);
@@ -24,7 +24,7 @@ class Vps_Model_DbWithConnection_SiblingRelationExpr_Test extends Vps_Test_TestC
 
     public function testLoadExpr()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_SiblingRelationExpr_TestModel');
 
         $s = $m->select();
         $s->expr('sum_foo');
@@ -40,7 +40,7 @@ class Vps_Model_DbWithConnection_SiblingRelationExpr_Test extends Vps_Test_TestC
     //um sicherzustellen dass es nicht lazy nochmal ausgeführt wird (per php) - was dann bei der sql expr natürlich fehlschlägt
     public function testLoadExprWithSql()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_SiblingRelationExpr_TestModel');
 
         $s = $m->select();
         $s->expr('sum_fooplusone');

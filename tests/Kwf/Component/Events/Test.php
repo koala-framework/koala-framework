@@ -2,18 +2,18 @@
 /**
  * @group Component_Events
  */
-class Vps_Component_Events_Test extends Vpc_TestAbstract
+class Kwf_Component_Events_Test extends Kwc_TestAbstract
 {
     public function testTableEvents()
     {
-        $root = $this->_init('Vps_Component_Events_Table_Component');
+        $root = $this->_init('Kwf_Component_Events_Table_Component');
 
-        $events = Vps_Component_Events_Table_Events::getInstance(
-            'Vps_Component_Events_Table_Events',
-            array('componentClass' => 'Vps_Component_Events_Table_Component')
+        $events = Kwf_Component_Events_Table_Events::getInstance(
+            'Kwf_Component_Events_Table_Events',
+            array('componentClass' => 'Kwf_Component_Events_Table_Component')
         );
 
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Events_Table_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Events_Table_Model');
         $count = 0;
 
         $row = $model->getRow(3);
@@ -51,14 +51,14 @@ class Vps_Component_Events_Test extends Vpc_TestAbstract
 
     public function testPagesEvents()
     {
-        $root = $this->_init('Vps_Component_Events_Pages_Component');
+        $root = $this->_init('Kwf_Component_Events_Pages_Component');
 
-        $events = Vps_Component_Events_Pages_Events::getInstance(
-            'Vps_Component_Events_Pages_Events',
-            array('componentClass' => 'Vps_Component_Events_Pages_Component')
+        $events = Kwf_Component_Events_Pages_Events::getInstance(
+            'Kwf_Component_Events_Pages_Events',
+            array('componentClass' => 'Kwf_Component_Events_Pages_Component')
         );
 
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Events_Pages_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Events_Pages_Model');
         $count = 0;
 
         $row = $model->getRow(4);

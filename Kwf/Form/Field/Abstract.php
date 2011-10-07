@@ -1,6 +1,6 @@
 <?php
-abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
-    implements Vps_Collection_Item_Interface
+abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
+    implements Kwf_Collection_Item_Interface
 {
     private $_properties;
     private $_validatorsAdded = false;
@@ -33,7 +33,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     {
         if (substr($method, 0, 3) == 'set') {
             if (!isset($arguments[0]) && !is_null($arguments[0])) {
-                throw new Vps_Exception("Missing argument 1 (value)");
+                throw new Kwf_Exception("Missing argument 1 (value)");
             }
             $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
             return $this->setProperty($name, $arguments[0]);
@@ -41,14 +41,14 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
             $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
             return $this->getProperty($name);
         } else {
-            throw new Vps_Exception("Invalid method called: '$method'");
+            throw new Kwf_Exception("Invalid method called: '$method'");
         }
     }
 
     public function setName($name)
     {
         if ($name && !preg_match('#^[a-z0-9_\-\[\]]+$#i', $name)) {
-            throw new Vps_Exception("Invalid field name '$name'");
+            throw new Kwf_Exception("Invalid field name '$name'");
         }
         return $this->__call('setName', array($name));
     }
@@ -60,7 +60,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
 
     public function trlStaticExecute($language = null)
     {
-        $trl = Vps_Trl::getInstance();
+        $trl = Kwf_Trl::getInstance();
         foreach ($this->_getTrlProperties() as $property) {
             $trlStaticData = $this->getProperty($property);
             $this->setProperty(
@@ -70,7 +70,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         }
 
         foreach ($this->getValidators() as $v) {
-            $v->setTranslator(new Vps_Trl_ZendAdapter($language));
+            $v->setTranslator(new Kwf_Trl_ZendAdapter($language));
         }
 
         if ($this->hasChildren()) {
@@ -199,7 +199,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         }
     }
 
-    public function delete(Vps_Model_Row_Interface $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
@@ -258,7 +258,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     /**
      * @param Zend_Validate_Interface $v Der validator
      * @param string $key Um zB einen Validator zu finden und durch einen
-     *                    anderen zu ersetzen, zB bei {@link Vps_Form_Field_Checkbox}
+     *                    anderen zu ersetzen, zB bei {@link Kwf_Form_Field_Checkbox}
      */
     public function addValidator(Zend_Validate_Interface $v, $key = null)
     {
@@ -281,12 +281,12 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     public function getData()
     {
         if (!isset($this->_data)) {
-            $this->setData(new Vps_Data_Table());
+            $this->setData(new Kwf_Data_Table());
         }
         return $this->_data;
     }
 
-    public function setData(Vps_Data_Interface $data)
+    public function setData(Kwf_Data_Interface $data)
     {
         $this->_data = $data;
         $data->setFieldname($this->getName());
@@ -308,7 +308,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentIcon' => new Vps_Asset('textfield')
+            'componentIcon' => new Kwf_Asset('textfield')
         ));
     }
 

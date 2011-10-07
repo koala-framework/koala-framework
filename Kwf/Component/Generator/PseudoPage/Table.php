@@ -1,11 +1,11 @@
 <?php
-class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_Table
+class Kwf_Component_Generator_PseudoPage_Table extends Kwf_Component_Generator_Table
 {
     protected $_filenameColumn;
     protected $_uniqueFilename;
     protected $_nameColumn;
     protected $_maxFilenameLength;
-    protected $_eventsClass = 'Vps_Component_Generator_PseudoPage_Events_Table';
+    protected $_eventsClass = 'Kwf_Component_Generator_PseudoPage_Events_Table';
 
     protected function _init()
     {
@@ -31,10 +31,10 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         if (!isset($this->_settings['maxFilenameLength'])) $this->_settings['maxFilenameLength'] = 100;
     }
 
-    protected function _formatSelectFilename(Vps_Component_Select $select)
+    protected function _formatSelectFilename(Kwf_Component_Select $select)
     {
-        if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+        if ($select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Kwf_Component_Select::WHERE_FILENAME);
             if ($this->_settings['uniqueFilename']) {
                 $select->whereEquals($this->_settings['filenameColumn'], $filename);
             } else {
@@ -63,7 +63,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     {
         if ($this->_settings['filenameColumn']) {
             if (!isset($row->{$this->_settings['filenameColumn']})) {
-                throw new Vps_Exception("filenameColumn '".$this->_settings['filenameColumn']."' does not exist in row (Generator: ".get_class($this).")");
+                throw new Kwf_Exception("filenameColumn '".$this->_settings['filenameColumn']."' does not exist in row (Generator: ".get_class($this).")");
             }
             return $row->{$this->_settings['filenameColumn']};
         } else {
@@ -76,7 +76,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
 
         if (!$this->_settings['uniqueFilename']) {
             $data['filename'] = $this->_getIdFromRow($row).'_';
-            $data['filename'] .= Vps_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
+            $data['filename'] .= Kwf_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
             if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
                 $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
             }

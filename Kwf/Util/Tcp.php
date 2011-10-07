@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Tcp
+class Kwf_Util_Tcp
 {
     /**
      * Get a free port number

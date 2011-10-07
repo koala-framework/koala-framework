@@ -1,4 +1,4 @@
 <?php
-class Vpc_Composite_ParagraphsImage_Admin extends Vpc_Abstract_Composite_TabsAdmin
+class Kwc_Composite_ParagraphsImage_Admin extends Kwc_Abstract_Composite_TabsAdmin
 {
 }

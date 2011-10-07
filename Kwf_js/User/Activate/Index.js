@@ -1,9 +1,9 @@
-Ext.namespace('Vps.User.Activate');
+Ext.namespace('Kwf.User.Activate');
 
-Vps.User.Activate.Index = Ext.extend(Ext.Panel,
+Kwf.User.Activate.Index = Ext.extend(Ext.Panel,
 {
     initComponent: function() {
-        Vps.User.Activate.Index.superclass.initComponent.call(this);
+        Kwf.User.Activate.Index.superclass.initComponent.call(this);
         if (this.errorMsg != '') {
             Ext.Msg.show({
                 title: 'Error',
@@ -16,30 +16,30 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
                 modal: true,
                 labelWidth: 130,
                 bodyStyle:'padding: 8px;',
-                title: trlVps('Activate / Login'),
+                title: trlKwf('Activate / Login'),
                 width: 400,
 
                 items: [{
-                    html: trlVps('Please type in your password. After clicking the button below')+' '
-                         +trlVps('you are logged in automatically and may use the typed in password'+' ')
-                         +trlVps('for future logins.')+'<br />'+trlVps('Your email address:')+' <b>' + this.email + '</b>',
+                    html: trlKwf('Please type in your password. After clicking the button below')+' '
+                         +trlKwf('you are logged in automatically and may use the typed in password'+' ')
+                         +trlKwf('for future logins.')+'<br />'+trlKwf('Your email address:')+' <b>' + this.email + '</b>',
                     xtype: 'panel',
                     bodyStyle: 'background-color:transparent; padding:5px; margin-bottom:10px;'
                 }, {
-                    fieldLabel: trlVps('Password'),
+                    fieldLabel: trlKwf('Password'),
                     name: 'password1',
                     allowBlank: false,
                     inputType: 'password',
                     xtype: 'textfield'
                 }, {
-                    fieldLabel: trlVps('Repeat password'),
+                    fieldLabel: trlKwf('Repeat password'),
                     name: 'password2',
                     allowBlank: false,
                     inputType: 'password',
                     xtype: 'textfield'
                 }],
 
-                buttons: [{ text: trlVps('Activate and login account'), handler: this.activateAction, scope: this }]
+                buttons: [{ text: trlKwf('Activate and login account'), handler: this.activateAction, scope: this }]
             });
             dlg.show();
         }
@@ -50,16 +50,16 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
 
         if (password != document.getElementsByName('password2')[0].value) {
             Ext.Msg.show({
-                title: trlVps('Passwords not equal'),
-                msg: trlVps('The repeated password is different - please try again.'),
+                title: trlKwf('Passwords not equal'),
+                msg: trlKwf('The repeated password is different - please try again.'),
                 buttons: Ext.Msg.OK
             });
         } else {
             Ext.Ajax.request({
-                url: '/vps/user/login/json-activate',
+                url: '/kwf/user/login/json-activate',
                 params: { userId: this.userId, code: this.code, password: password },
                 success: function(response, options, result) {
-                    location.href = '/vps/welcome';
+                    location.href = '/kwf/welcome';
                 }
             });
         }

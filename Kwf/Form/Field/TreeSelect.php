@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_TreeSelect extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_TreeSelect extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -37,7 +37,7 @@ class Vps_Form_Field_TreeSelect extends Vps_Form_Field_SimpleAbstract
                         'id' => $id,
                         'name' => $parentRow->{$displayField}
                     );
-                } else if ($parentRow instanceof Vps_Model_Tree_Row_Interface) {
+                } else if ($parentRow instanceof Kwf_Model_Tree_Row_Interface) {
                     $ret[$this->getFieldName()] = array(
                         'id' => $id,
                         'name' => $parentRow->getTreePath()

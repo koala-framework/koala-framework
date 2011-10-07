@@ -1,17 +1,17 @@
 <?php
-class Vpc_Chained_Cc_Component extends Vpc_Chained_Abstract_Component
+class Kwc_Chained_Cc_Component extends Kwc_Chained_Abstract_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings();
         $copySettings = array('componentName', 'componentIcon', 'editComponents', 'viewCache', 'contentSender');
         $copyFlags = array('processInput', 'menuCategory', 'hasHome', 'chainedType', 'subroot', 'hasAlternativeComponent');
-        $ret = Vpc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Cc', $copySettings, $copyFlags);
+        $ret = Kwc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Cc', $copySettings, $copyFlags);
         return $ret;
     }
 
     public static function getChainedByMaster($masterData, $chainedData, $select = array())
     {
-        return Vpc_Chained_Abstract_Component::_getChainedByMaster($masterData, $chainedData, 'Cc', $select);
+        return Kwc_Chained_Abstract_Component::_getChainedByMaster($masterData, $chainedData, 'Cc', $select);
     }
 }

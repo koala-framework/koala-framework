@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Acl
+class Kwf_Component_Acl
 {
     private $_isAllowedComponentClassCache = array();
     private $_allowedRecursiveChildComponentsCache = array();
@@ -7,12 +7,12 @@ class Vps_Component_Acl
     protected $_rules = array(
         'allComponents' => array(
             'allRoles' => array(
-                'type' => Vps_Acl::TYPE_DENY
+                'type' => Kwf_Acl::TYPE_DENY
             )
         ),
         'allComponentsRecursive' => array(
             'allRoles' => array(
-                'type' => Vps_Acl::TYPE_DENY
+                'type' => Kwf_Acl::TYPE_DENY
             )
         ),
         'byComponentId' => array(),
@@ -48,7 +48,7 @@ class Vps_Component_Acl
 
     /**
      * @param User-Row / null für guest
-     * @param Vps_Component_Data/string
+     * @param Kwf_Component_Data/string
      * @param string
      * @return bool
      */
@@ -56,7 +56,7 @@ class Vps_Component_Acl
     {
         $role = $this->_getRole($userRow);
 
-        if ($component instanceof Vps_Component_Data) {
+        if ($component instanceof Kwf_Component_Data) {
             $componentClass = $component->componentClass;
             $allowed = $this->_isAllowedComponentData($userRow, $component);
             if (!$allowed) return false;
@@ -89,8 +89,8 @@ class Vps_Component_Acl
             return $this->_isAllowedComponentClassCache[$roleId][$componentClass];
         }
         $this->_isAllowedComponentClassCache[$roleId][$componentClass] = false;
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            foreach (Vpc_Abstract::getChildComponentClasses($c) as $cc) {
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            foreach (Kwc_Abstract::getChildComponentClasses($c) as $cc) {
                 if ($cc == $componentClass) {
                     if ($this->_isAllowedComponentClass($userRow, $c)) {
                         $this->_isAllowedComponentClassCache[$roleId][$componentClass] = true;
@@ -106,15 +106,15 @@ class Vps_Component_Acl
     private function _isAllowedComponentClassNonRek($type, $role, $componentClass)
     {
         $rules = $this->_getRules($type, $componentClass, $role);
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
+        if ($rules && $rules['type'] == Kwf_Acl::TYPE_ALLOW) return true;
+        if ($rules && $rules['type'] == Kwf_Acl::TYPE_DENY) return false;
 
         $rules = $this->_getRules($type, null, $role);
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
+        if ($rules && $rules['type'] == Kwf_Acl::TYPE_ALLOW) return true;
+        if ($rules && $rules['type'] == Kwf_Acl::TYPE_DENY) return false;
     }
 
-    protected function _isAllowedComponentData($userRow, Vps_Component_Data $component)
+    protected function _isAllowedComponentData($userRow, Kwf_Component_Data $component)
     {
         $role = $this->_getRole($userRow);
 
@@ -147,7 +147,7 @@ class Vps_Component_Acl
         if (!isset($this->_allowedRecursiveChildComponentsCache[$cacheId])) {
             $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
             $ret = array();
-            $cmps = Vps_Component_Data_Root::getInstance()->getRecursiveChildComponents(array(
+            $cmps = Kwf_Component_Data_Root::getInstance()->getRecursiveChildComponents(array(
                 'ignoreVisible'=>true,
                 'componentClasses' => $allowedComponentClasses,
             ), array(
@@ -198,8 +198,8 @@ class Vps_Component_Acl
 
         $ret = array();
         $r = $this->_getRules($type, null, $this->_getRole($userRow));
-        if (isset($r['type']) && $r['type'] == Vps_Acl::TYPE_ALLOW) {
-            throw new Vps_Exception("don't do that, it's slow");
+        if (isset($r['type']) && $r['type'] == Kwf_Acl::TYPE_ALLOW) {
+            throw new Kwf_Exception("don't do that, it's slow");
             //alles erlaubt
             return null;
         }
@@ -207,10 +207,10 @@ class Vps_Component_Acl
         foreach ($this->_rules['by'.$type.'Id'] as $componentClass => $rights) {
             if (isset($rights['byRoleId'][$role])) {
                 $r = $rights['byRoleId'][$role];
-                if ($r['type'] == Vps_Acl::TYPE_ALLOW) {
+                if ($r['type'] == Kwf_Acl::TYPE_ALLOW) {
                     $ret[] = $componentClass;
-                } else if ($r['type'] == Vps_Acl::TYPE_DENY) {
-                    throw new Vps_Exception_NotYetImplemented('Klasseneinschränkung wird noch nicht unterstützt.');
+                } else if ($r['type'] == Kwf_Acl::TYPE_DENY) {
+                    throw new Kwf_Exception_NotYetImplemented('Klasseneinschränkung wird noch nicht unterstützt.');
                 }
             }
         }
@@ -220,39 +220,39 @@ class Vps_Component_Acl
 
     public function allowComponent($role, $componentClass, $privilege = null)
     {
-        if ($privilege) throw new Vps_Exception("Not yet implemented");
+        if ($privilege) throw new Kwf_Exception("Not yet implemented");
         if (!is_null($role)) $role = $this->_roleRegistry->get($role);
         $rules =& $this->_getRules('Component', $componentClass, $role, true);
-        $rules['type'] = Vps_Acl::TYPE_ALLOW;
+        $rules['type'] = Kwf_Acl::TYPE_ALLOW;
         return $this;
     }
 
     public function denyComponent($role, $componentClass, $privilege = null)
     {
-        throw new Vps_Exception_NotYetImplemented("das gehört mit einem praktischen anwendungsbeispiel durchdacht");
-        if ($privilege) throw new Vps_Exception("Not yet implemented");
+        throw new Kwf_Exception_NotYetImplemented("das gehört mit einem praktischen anwendungsbeispiel durchdacht");
+        if ($privilege) throw new Kwf_Exception("Not yet implemented");
         if (!is_null($role)) $role = $this->_roleRegistry->get($role);
         $rules =& $this->_getRules('Component', $componentClass, $role, true);
-        $rules['type'] = Vps_Acl::TYPE_DENY;
+        $rules['type'] = Kwf_Acl::TYPE_DENY;
         return $this;
     }
 
     public function allowComponentRecursive($role, $componentClass, $privilege = null)
     {
-        if ($privilege) throw new Vps_Exception("Not yet implemented");
+        if ($privilege) throw new Kwf_Exception("Not yet implemented");
         if (!is_null($role)) $role = $this->_roleRegistry->get($role);
         $rules =& $this->_getRules('ComponentRecursive', $componentClass, $role, true);
-        $rules['type'] = Vps_Acl::TYPE_ALLOW;
+        $rules['type'] = Kwf_Acl::TYPE_ALLOW;
         return $this;
     }
 
     public function denyComponentRecursive($role, $componentClass, $privilege = null)
     {
-        throw new Vps_Exception_NotYetImplemented("das gehört mit einem praktischen anwendungsbeispiel durchdacht");
-        if ($privilege) throw new Vps_Exception("Not yet implemented");
+        throw new Kwf_Exception_NotYetImplemented("das gehört mit einem praktischen anwendungsbeispiel durchdacht");
+        if ($privilege) throw new Kwf_Exception("Not yet implemented");
         if (!is_null($role)) $role = $this->_roleRegistry->get($role);
         $rules =& $this->_getRules('ComponentRecursive', $componentClass, $role, true);
-        $rules['type'] = Vps_Acl::TYPE_DENY;
+        $rules['type'] = Kwf_Acl::TYPE_DENY;
         return $this;
     }
 

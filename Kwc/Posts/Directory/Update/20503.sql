@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `vpc_posts` (
+CREATE TABLE IF NOT EXISTS `kwc_posts` (
   `id` int(11) NOT NULL auto_increment,
   `component_id` varchar(255) NOT NULL,
   `visible` tinyint(1) NOT NULL default '1',

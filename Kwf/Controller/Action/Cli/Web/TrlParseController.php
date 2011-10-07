@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Action_Cli_Abstract
 {
 
     public static function getHelp()
@@ -11,13 +11,13 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         return array(
             array(
                 'param'=> 'type',
-                'value'=> array('all', 'web', 'vps'),
+                'value'=> array('all', 'web', 'kwf'),
                 'valueOptional' => true,
                 'help' => 'what to parse'
             ),
             array(
                 'param'=> 'cleanUp',
-                'value'=> array('none', 'all', 'web', 'vps'),
+                'value'=> array('none', 'all', 'web', 'kwf'),
                 'valueOptional' => true,
                 'help' => 'what to cleanup'
             ),
@@ -32,10 +32,10 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
     private $_languages = array();
     public function indexAction()
     {
-        $modelVps = new Vps_Trl_Model_Vps();
-        $modelWeb = new Vps_Trl_Model_Web();
+        $modelKwf = new Kwf_Trl_Model_Kwf();
+        $modelWeb = new Kwf_Trl_Model_Web();
         //festsetzen der sprachen
-        $parser = new Vps_Trl_Parser($modelVps, $modelWeb, $this->_getParam('type'), $this->_getParam('cleanUp'));
+        $parser = new Kwf_Trl_Parser($modelKwf, $modelWeb, $this->_getParam('type'), $this->_getParam('cleanUp'));
         $parser->setDebug($this->_getParam('debug'));
         set_time_limit(2000);
         $results = $parser->parse();
@@ -45,8 +45,8 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         echo $results['jsfiles']." JavaScript files\n";
         echo $results['tplfiles']." TPL files\n";
         echo "------------------------\n";
-        echo count($results['added'][get_class($modelVps)])." Added Vps\n";
-        foreach ($results['added'][get_class($modelVps)] as $key => $added) {
+        echo count($results['added'][get_class($modelKwf)])." Added Kwf\n";
+        foreach ($results['added'][get_class($modelKwf)] as $key => $added) {
             echo (($key+1).". \t".$added['before']."\n");
         }
         echo count($results['added'][get_class($modelWeb)])." Added Web\n";
@@ -55,8 +55,8 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         }
         echo "------------------------\n";
         if ($results['deleted']) {
-            echo count($results['deleted'][get_class($modelVps)])." Deleted Vps\n";
-            foreach ($results['deleted'][get_class($modelVps)] as $key => $deleted) {
+            echo count($results['deleted'][get_class($modelKwf)])." Deleted Kwf\n";
+            foreach ($results['deleted'][get_class($modelKwf)] as $key => $deleted) {
                 echo (($key+1).". \tExpression '".$deleted."' deleted\n");
             }
             echo count($results['deleted'][get_class($modelWeb)])." Deleted Web\n";
@@ -87,11 +87,11 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
     public function checkIdsAction()
     {
         $models = array(
-            Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps'),
-            Vps_Model_Abstract::getInstance('Vps_Trl_Model_Web')
+            Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Kwf'),
+            Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Web')
         );
         foreach ($models as $m) {
-            while ($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+            while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
             if (!file_exists($m->getFilePath())) continue;
             $ids = array();
             $duplicate = 0;
@@ -113,7 +113,7 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
             if (!$duplicate) {
                 echo $m->getFilePath().": alles ok\n";
             } else {
-                file_put_contents($m->getFilePath(), Vps_Model_Xml::asPrettyXML($xml->asXML()));
+                file_put_contents($m->getFilePath(), Kwf_Model_Xml::asPrettyXML($xml->asXML()));
             }
         }
         exit;
@@ -121,7 +121,7 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
 
     public function checkDoubleEntriesAction()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Kwf');
         $entries = array();
         foreach ($m->getRows() as $row) {
             $key = $row->context.$row->en;

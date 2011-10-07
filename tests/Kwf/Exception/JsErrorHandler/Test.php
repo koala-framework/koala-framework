@@ -4,11 +4,11 @@
  * @group slow
  * @group JsErrorHandler
  */
-class Vps_Exception_JsErrorHandler_Test extends Vps_Test_SeleniumTestCase
+class Kwf_Exception_JsErrorHandler_Test extends Kwf_Test_SeleniumTestCase
 {
     public function testIt()
     {
-        $this->open('/vps/test/vps_exception_js-error-handler_test');
+        $this->open('/kwf/test/kwf_exception_js-error-handler_test');
         $this->_testError(1, "test is null");
         $this->_testError(2, "Hello");
         $this->_testError(3, "Hello again");
@@ -21,10 +21,10 @@ class Vps_Exception_JsErrorHandler_Test extends Vps_Test_SeleniumTestCase
 
     private function _testError($num, $expectedMessage)
     {
-        $start = file_get_contents('http://'.Vps_Registry::get('testDomain').'/vps/test/vps_exception_js-error-handler_test/get-time');
+        $start = file_get_contents('http://'.Kwf_Registry::get('testDomain').'/kwf/test/kwf_exception_js-error-handler_test/get-time');
         $this->click('link=testError'.$num);
         sleep(1);
-        $error = file_get_contents('http://'.Vps_Registry::get('testDomain').'/vps/test/vps_exception_js-error-handler_test/get-error-log-entry?start='.$start);
+        $error = file_get_contents('http://'.Kwf_Registry::get('testDomain').'/kwf/test/kwf_exception_js-error-handler_test/get-error-log-entry?start='.$start);
         if (!$error) {
             $this->fail('error file not found');
         }

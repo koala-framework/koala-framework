@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_GoogleMapView_TestComponent extends Vpc_Advanced_GoogleMapView_Component
+class Kwc_Advanced_GoogleMapView_TestComponent extends Kwc_Advanced_GoogleMapView_Component
 {
     public static function getSettings()
     {

@@ -1,5 +1,5 @@
 <?php
-class Vps_Assets_Dependencies
+class Kwf_Assets_Dependencies
 {
     private $_files = array();
     private $_config;
@@ -12,14 +12,14 @@ class Vps_Assets_Dependencies
     /**
      * @param Zend_Config für tests
      **/
-    public function __construct(Vps_Assets_Loader $loader)
+    public function __construct(Kwf_Assets_Loader $loader)
     {
         $this->_loader = $loader;
         $this->_config = $loader->getConfig();
         if ($this->_config) {
             $this->_path = $this->_config->path->toArray();
         } else {
-            $this->_path = Vps_Config::getValueArray('path');
+            $this->_path = Kwf_Config::getValueArray('path');
         }
     }
 
@@ -28,20 +28,20 @@ class Vps_Assets_Dependencies
         if (isset($this->_cacheMaxFileMTime)) {
             return $this->_cacheMaxFileMTime;
         }
-        $cache = Vps_Assets_Cache::getInstance();
+        $cache = Kwf_Assets_Cache::getInstance();
         if (($ret = $cache->load('maxFileMTime')) === false) {
             $ret = 0;
             $assetsType = 'Admin';
             if ($this->_config) {
                 $assets = $this->_config->assets->toArray();
             } else {
-                $assets = Vps_Config::getValueArray('assets');
+                $assets = Kwf_Config::getValueArray('assets');
             }
             if (!isset($assets['Admin'])) {
                 //für tests wenn keine Admin da, erste aus config nehmen
                 $assetsType = key($assets);
             }
-            $files = $this->getAssetFiles($assetsType, null, 'web', Vps_Component_Data_Root::getComponentClass());
+            $files = $this->getAssetFiles($assetsType, null, 'web', Kwf_Component_Data_Root::getComponentClass());
             unset($files['mtime']);
             foreach ($files as $file) {
                 if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
@@ -59,13 +59,13 @@ class Vps_Assets_Dependencies
 
     public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
     {
-        Vps_Benchmark::count('getAssetUrls');
+        Kwf_Benchmark::count('getAssetUrls');
         if ($this->_config) {
             $menu = $this->_config->debug->menu;
             $assets = $this->_config->debug->assets->toArray();
         } else {
-            $menu = Vps_Config::getValue('debug.menu');
-            $assets = Vps_Config::getValueArray('debug.assets');
+            $menu = Kwf_Config::getValue('debug.menu');
+            $assets = Kwf_Config::getValueArray('debug.assets');
         }
         if ($menu) {
             $session = new Zend_Session_Namespace('debug');
@@ -77,7 +77,7 @@ class Vps_Assets_Dependencies
         $ret = array();
         if (!$assets[$fileType] || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->getMaxFileMTime();
-            if (!$language) $language = Vps_Trl::getInstance()->getTargetLanguage();
+            if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
             $ret[] = "/assets/all/$section/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType?v=$v";
@@ -117,15 +117,15 @@ class Vps_Assets_Dependencies
     {
         if (!isset($this->_files[$assetsType])) {
             $cacheId = 'dependencies'.str_replace(':', '_', $assetsType).$rootComponent;
-            $cache = Vps_Assets_Cache::getInstance();
+            $cache = Kwf_Assets_Cache::getInstance();
             $this->_files[$assetsType] = $cache->load($cacheId);
             if ($this->_files[$assetsType]===false) {
-                Vps_Benchmark::count('processing dependencies miss', $assetsType);
+                Kwf_Benchmark::count('processing dependencies miss', $assetsType);
                 $this->_files[$assetsType] = array();
                 if ($this->_config) {
                     $allAssets = $this->_config->assets->toArray();
                 } else {
-                    $allAssets = Vps_Config::getValueArray('assets');
+                    $allAssets = Kwf_Config::getValueArray('assets');
                 }
                 if (!isset($allAssets[$assetsType])) {
                     if (strpos($assetsType, ':')) {
@@ -134,20 +134,20 @@ class Vps_Assets_Dependencies
                             if (file_exists($dir.'/'.$configPath.'/config.ini')) {
                                 $sect = 'vivid';
                                 $configFull = new Zend_Config_Ini($dir.'/'.$configPath.'/config.ini', null);
-                                if (isset($configFull->{Vps_Setup::getConfigSection()})) {
-                                    $sect = Vps_Setup::getConfigSection();
+                                if (isset($configFull->{Kwf_Setup::getConfigSection()})) {
+                                    $sect = Kwf_Setup::getConfigSection();
                                 }
-                                $config = clone Vps_Registry::get('config');
+                                $config = clone Kwf_Registry::get('config');
                                 $config->merge(new Zend_Config_Ini($dir.'/'.$configPath.'/config.ini', $sect));
                                 break;
                             }
                         }
                         if (!isset($config)) {
-                            throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
+                            throw new Kwf_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                         }
                         $assets = $config->assets->{substr($assetsType, strpos($assetsType, ':')+1)};
                     } else {
-                        throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
+                        throw new Kwf_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                     }
                 } else {
                     $assets = $allAssets[$assetsType];
@@ -161,7 +161,7 @@ class Vps_Assets_Dependencies
                 //zur sicherheit überprüfen ob eh keine dynamischen assets cached werden
                 foreach ($this->_files[$assetsType] as $f) {
                     if (!is_string($f)) {
-                        throw new Vps_Exception("Invalid asset file");
+                        throw new Kwf_Exception("Invalid asset file");
                     }
                 }
                 $cache->save($this->_files[$assetsType], $cacheId);
@@ -194,7 +194,7 @@ class Vps_Assets_Dependencies
         }
         //hack: übersetzung immer zuletzt anhängen
         if ($fileType == 'js') {
-            $files[] = 'vps/Ext/ext-lang-en.js';
+            $files[] = 'kwf/Ext/ext-lang-en.js';
         }
 
         foreach ($files as &$f) {
@@ -208,11 +208,11 @@ class Vps_Assets_Dependencies
     private function _getDependenciesConfig($assetsType)
     {
         if (!isset($this->_dependenciesConfig[$assetsType])) {
-            $f = Vps_Registry::get('config')->assets->dependencies->vps;
+            $f = Kwf_Registry::get('config')->assets->dependencies->kwf;
             $ret = new Zend_Config_Ini($f, 'dependencies',
                                                 array('allowModifications'=>true));
-            foreach (Vps_Registry::get('config')->assets->dependencies as $k=>$d) {
-                if ($k != 'vps') {
+            foreach (Kwf_Registry::get('config')->assets->dependencies as $k=>$d) {
+                if ($k != 'kwf') {
                     $ret->merge(new Zend_Config_Ini($d, 'dependencies'));
                 }
             }
@@ -241,7 +241,7 @@ class Vps_Assets_Dependencies
             return;
         }
         if (!isset($this->_getDependenciesConfig($assetsType)->$dependency)) {
-            throw new Vps_Exception("Can't resolve dependency '$dependency'");
+            throw new Kwf_Exception("Can't resolve dependency '$dependency'");
         }
         $deps = $this->_getDependenciesConfig($assetsType)->$dependency;
 
@@ -277,10 +277,10 @@ class Vps_Assets_Dependencies
     {
         if (in_array($assetsType.$class.$includeAdminAssets, $this->_processedComponents)) return;
 
-        $assets = Vpc_Abstract::getSetting($class, 'assets');
+        $assets = Kwc_Abstract::getSetting($class, 'assets');
         $assetsAdmin = array();
         if ($includeAdminAssets) {
-            $assetsAdmin = Vpc_Abstract::getSetting($class, 'assetsAdmin');
+            $assetsAdmin = Kwc_Abstract::getSetting($class, 'assetsAdmin');
         }
         $this->_processedComponents[] = $assetsType.$class.$includeAdminAssets;
         if (isset($assets['dep'])) {
@@ -305,12 +305,12 @@ class Vps_Assets_Dependencies
         }
 
         //alle css-dateien der vererbungshierache includieren
-        $files = Vpc_Abstract::getSetting($class, 'componentFiles');
+        $files = Kwc_Abstract::getSetting($class, 'componentFiles');
         $componentCssFiles = array();
         foreach (array_merge($files['css'], $files['printcss']) as $f) {
-            if (substr($f, 0, strlen(VPS_PATH)) == VPS_PATH) { //zuerst, da vps in web liegen kann
-                //kann nur aus vps
-                $f = 'vps'.substr($f, strlen(VPS_PATH));
+            if (substr($f, 0, strlen(KWF_PATH)) == KWF_PATH) { //zuerst, da kwf in web liegen kann
+                //kann nur aus kwf
+                $f = 'kwf'.substr($f, strlen(KWF_PATH));
             } else {
                 //oder web kommen
                 $f = 'web'.substr($f, strlen(getcwd()));
@@ -323,9 +323,9 @@ class Vps_Assets_Dependencies
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
         $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));
 
-        $classes = Vpc_Abstract::getChildComponentClasses($class);
-        $classes = array_merge($classes, Vpc_Abstract::getSetting($class, 'plugins'));
-        foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
+        $classes = Kwc_Abstract::getChildComponentClasses($class);
+        $classes = array_merge($classes, Kwc_Abstract::getSetting($class, 'plugins'));
+        foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
             if (isset($g['plugins'])) {
                 $classes = array_merge($classes, $g['plugins']);
             }
@@ -343,13 +343,13 @@ class Vps_Assets_Dependencies
         if (is_string($file) && substr($file, -2)=="/*") {
             $pathType = substr($file, 0, strpos($file, '/'));
             if (!isset($this->_path[$pathType])) {
-                throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
+                throw new Kwf_Exception("Assets-Path-Type '$pathType' not found in config.");
             }
             $file = substr($file, strpos($file, '/')); //pathtype abschneiden
             $file = substr($file, 0, -1); //* abschneiden
             $path = $this->_path[$pathType].$file;
             if (!file_exists($path)) {
-                throw new Vps_Exception("Path '$path' does not exist.");
+                throw new Kwf_Exception("Path '$path' does not exist.");
             }
             $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
             foreach ($DirIterator as $file) {
@@ -384,11 +384,11 @@ class Vps_Assets_Dependencies
             $type = substr($type, strpos($type, '-')+1); //section abschneiden
         }
         if (!isset($this->_path[$type])) {
-            throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
+            throw new Kwf_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
         }
         $p = $this->_path[$type];
         if (!file_exists($p.'/'.$url)) {
-            throw new Vps_Assets_NotFoundException("Assets '$p/$url' not found");
+            throw new Kwf_Assets_NotFoundException("Assets '$p/$url' not found");
         }
         return $p.'/'.$url;
     }

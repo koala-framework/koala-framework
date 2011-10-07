@@ -1,5 +1,5 @@
 <?php
-class Vps_Grid_Column implements Vps_Collection_Item_Interface
+class Kwf_Grid_Column implements Kwf_Collection_Item_Interface
 {
     private $_properties;
     const ROLE_DISPLAY = 1;
@@ -26,7 +26,7 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
     {
         if (substr($method, 0, 3) == 'set') {
             if (!isset($arguments[0])) {
-                throw new Vps_Exception("Missing argument 1 (value)");
+                throw new Kwf_Exception("Missing argument 1 (value)");
             }
             $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
             return $this->setProperty($name, $arguments[0]);
@@ -34,14 +34,14 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
             $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
             return $this->getProperty($name);
         } else {
-            throw new Vps_Exception("Invalid method called: '$method'");
+            throw new Kwf_Exception("Invalid method called: '$method'");
         }
     }
 
     public function setEditor($ed)
     {
         if (is_string($ed)) {
-            $ed = 'Vps_Form_Field_'.$ed;
+            $ed = 'Kwf_Form_Field_'.$ed;
             $ed = new $ed();
         }
         $ret = $this->setProperty('editor', $ed);
@@ -75,7 +75,7 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
         foreach ($ret as $k=>$i) {
             if (is_object($i)) {
                 unset($ret[$k]);
-                if ($i instanceof Vps_Asset) {
+                if ($i instanceof Kwf_Asset) {
                     $ret[$k] = $i->__toString();
                 } else {
                     $ret[$k] = $i->getMetaData($model);
@@ -162,12 +162,12 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
     public function getData()
     {
         if (!isset($this->_data)) {
-            $this->setData(new Vps_Data_Table());
+            $this->setData(new Kwf_Data_Table());
         }
         return $this->_data;
     }
 
-    public function setData(Vps_Data_Interface $data)
+    public function setData(Kwf_Data_Interface $data)
     {
         $this->_data = $data;
         $data->setFieldname($this->getDataIndex());

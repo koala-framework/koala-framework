@@ -1,8 +1,8 @@
 <?php
-class Vps_User_MessagesModel extends Vps_Model_Db
+class Kwf_User_MessagesModel extends Kwf_Model_Db
 {
-    protected $_table = 'vps_user_messages';
-    protected $_rowClass = 'Vps_User_MessageRow';
+    protected $_table = 'kwf_user_messages';
+    protected $_rowClass = 'Kwf_User_MessageRow';
 
     protected $_referenceMap = array(
         'User' => array(
@@ -17,7 +17,7 @@ class Vps_User_MessagesModel extends Vps_Model_Db
 
     protected function _init()
     {
-        $userModelClass = get_class(Vps_Registry::get('userModel'));
+        $userModelClass = get_class(Kwf_Registry::get('userModel'));
         $this->_referenceMap['User']['refModelClass']  = $userModelClass;
         $this->_referenceMap['ByUser']['refModelClass']  = $userModelClass;
         parent::_init();
@@ -26,7 +26,7 @@ class Vps_User_MessagesModel extends Vps_Model_Db
     protected function _setupFilters()
     {
         parent::_setupFilters();
-        $this->_filters['message_date'] = new Vps_Filter_Row_CurrentDateTime();
-        $this->_filters['ip'] = new Vps_Filter_Row_CurrentIp();
+        $this->_filters['message_date'] = new Kwf_Filter_Row_CurrentDateTime();
+        $this->_filters['ip'] = new Kwf_Filter_Row_CurrentIp();
     }
 }

@@ -1,14 +1,14 @@
 <?php
-class Vpc_Newsletter_EditSubscriber_Component extends Vpc_Form_Component
+class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
 {
     protected $_recipient;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlVpsStatic('Save');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Save');
         $ret['generators']['child']['component']['success'] =
-            'Vpc_Newsletter_EditSubscriber_Success_Component';
+            'Kwc_Newsletter_EditSubscriber_Success_Component';
         return $ret;
     }
 

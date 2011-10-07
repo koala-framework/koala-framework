@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Filter_Row_Abstract implements Zend_Filter_Interface
+abstract class Kwf_Filter_Row_Abstract implements Zend_Filter_Interface
 {
     protected $_field = null;
 

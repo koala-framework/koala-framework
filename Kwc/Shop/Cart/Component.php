@@ -1,33 +1,33 @@
 <?php
-class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
+class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
 {
     private $_chartPlugins;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['form'] = 'Vpc_Shop_Cart_Form_Component';
-        $ret['generators']['child']['component']['view'] = 'Vpc_Shop_Cart_View_Component';
-        $ret['generators']['detail']['class'] = 'Vpc_Shop_Cart_Generator';
-        $ret['generators']['detail']['component'] = 'Vpc_Shop_Cart_Detail_Component';
-        $ret['childModel'] = 'Vpc_Shop_Cart_OrderProducts';
+        $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Form_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwc_Shop_Cart_View_Component';
+        $ret['generators']['detail']['class'] = 'Kwc_Shop_Cart_Generator';
+        $ret['generators']['detail']['component'] = 'Kwc_Shop_Cart_Detail_Component';
+        $ret['childModel'] = 'Kwc_Shop_Cart_OrderProducts';
         $ret['generators']['checkout'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Shop_Cart_Checkout_Component',
-            'name' => trlVps('Checkout')
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Shop_Cart_Checkout_Component',
+            'name' => trlKwf('Checkout')
         );
         $ret['viewCache'] = false;
         $ret['cssClass'] = 'webStandard webForm';
-        $ret['componentName'] = trlVps('Shop.Cart');
-        $ret['placeholder']['backToShop'] = trlVps('Back to shop');
-        $ret['placeholder']['checkout'] = trlVps('To checkout');
+        $ret['componentName'] = trlKwf('Shop.Cart');
+        $ret['placeholder']['backToShop'] = trlKwf('Back to shop');
+        $ret['placeholder']['checkout'] = trlKwf('To checkout');
 
-        $ret['assets']['files'][] = 'vps/Vpc/Shop/Cart/Keepalive.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Keepalive.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtConnection';
 
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
-        $ret['orderData'] = 'Vpc_Shop_Cart_OrderData';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['orderData'] = 'Kwc_Shop_Cart_OrderData';
         return $ret;
     }
 
@@ -41,7 +41,7 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
 
     public final function getShopCartPlugins()
     {
-        return Vpc_Shop_Cart_OrderData::getInstance($this->getData()->componentClass)
+        return Kwc_Shop_Cart_OrderData::getInstance($this->getData()->componentClass)
                     ->getShopCartPlugins();
     }
 }

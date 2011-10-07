@@ -1,21 +1,21 @@
 <?php
-class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_Abstract
-    implements Vps_Component_Plugin_Interface_Login
+class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_Abstract
+    implements Kwf_Component_Plugin_Interface_Login
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['password'] = 'planet';
         $ret['generators']['loginForm'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vps_Component_Plugin_Password_LoginForm_Component'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwf_Component_Plugin_Password_LoginForm_Component'
         );
         return $ret;
     }
 
     protected function _getPassword()
     {
-        return Vpc_Abstract::getSetting(get_class($this), 'password');
+        return Kwc_Abstract::getSetting(get_class($this), 'password');
     }
 
     protected function _getLoginPassword()
@@ -51,7 +51,7 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         $session = new Zend_Session_Namespace('login_password');
         if (in_array($this->_getLoginPassword(), $pw)) {
             $session->login = true;
-            $currentPageUrl = Vps_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
+            $currentPageUrl = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
             header('Location: '.$currentPageUrl);
             die();
         }
@@ -61,10 +61,10 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
     public function getTemplateVars()
     {
         $templateVars = array();
-        $templateVars['loginForm'] = Vps_Component_Data_Root::getInstance()
+        $templateVars['loginForm'] = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_componentId, array('ignoreVisible' => true))->getChildComponent('-loginForm');
         $templateVars['wrongLogin'] = isset($_POST['login_password']);
-        $templateVars['placeholder'] = Vpc_Abstract::getSetting(get_class($this), 'placeholder');
+        $templateVars['placeholder'] = Kwc_Abstract::getSetting(get_class($this), 'placeholder');
         return $templateVars;
     }
 
@@ -78,10 +78,10 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
             return $output;
         }
 
-        $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
+        $template = Kwc_Admin::getComponentFile($this, 'Component', 'tpl');
 
-        $renderer = new Vps_Component_Renderer();
-        $view = new Vps_Component_View($renderer);
+        $renderer = new Kwf_Component_Renderer();
+        $view = new Kwf_Component_View($renderer);
         $view->assign($this->getTemplateVars());
         return $renderer->render($view->render($template));
     }

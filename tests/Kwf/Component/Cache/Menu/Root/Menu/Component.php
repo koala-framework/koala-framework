@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Menu_Root_Menu_Component extends Vpc_Menu_Component
+class Kwf_Component_Cache_Menu_Root_Menu_Component extends Kwc_Menu_Component
 {
     public static function getSettings()
     {
@@ -11,7 +11,7 @@ class Vps_Component_Cache_Menu_Root_Menu_Component extends Vpc_Menu_Component
 
     public function getTemplateVars()
     {
-        $ret = Vpc_Menu_Abstract_Component::getTemplateVars();
+        $ret = Kwc_Menu_Abstract_Component::getTemplateVars();
         $ret['menu'] = $this->_getMenuData();
         return $ret;
     }

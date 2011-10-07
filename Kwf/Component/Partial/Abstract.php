@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Partial_Abstract
+class Kwf_Component_Partial_Abstract
 {
     protected $_params;
 
@@ -16,7 +16,7 @@ class Vps_Component_Partial_Abstract
     public function getParam($param, $necessary = true)
     {
         if ($necessary && !isset($this->_params[$param]))
-            throw new Vps_Exception('Param needed for Partial: ' . $param);
+            throw new Kwf_Exception('Param needed for Partial: ' . $param);
         if (!isset($this->_params[$param])) return null;
         return $this->_params[$param];
     }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Validate_Digits extends Zend_Validate_Digits
+class Kwf_Validate_Digits extends Zend_Validate_Digits
 {
     protected $_allowEmpty;
     public function __construct($allowEmpty = false)

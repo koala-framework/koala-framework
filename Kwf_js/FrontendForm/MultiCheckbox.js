@@ -1,10 +1,10 @@
-Vps.onContentReady(function() {
+Kwf.onContentReady(function() {
     // alle multicheckboxes holen
-    var multiCheckboxes = Ext.query('.vpsFormFieldMultiCheckbox');
+    var multiCheckboxes = Ext.query('.kwfFormFieldMultiCheckbox');
     Ext.each(multiCheckboxes, function(mc) {
         mc = Ext.get(mc);
-        var checkAll = mc.child('a.vpsMultiCheckboxCheckAll');
-        var checkNone = mc.child('a.vpsMultiCheckboxCheckNone');
+        var checkAll = mc.child('a.kwfMultiCheckboxCheckAll');
+        var checkNone = mc.child('a.kwfMultiCheckboxCheckNone');
 
         if (checkAll) {
             checkAll.on('click', function(ev) {

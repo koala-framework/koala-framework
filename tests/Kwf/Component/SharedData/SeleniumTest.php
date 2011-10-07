@@ -4,20 +4,20 @@
  * @group slow
  * @group selenium
  */
-// /vps/componentedittest/Vps_Component_SharedData_Component/Vps_Component_SharedData_Detail_SharedData_Component?componentId=root
-class Vps_Component_SharedData_SeleniumTest extends Vps_Test_SeleniumTestCase
+// /kwf/componentedittest/Kwf_Component_SharedData_Component/Kwf_Component_SharedData_Detail_SharedData_Component?componentId=root
+class Kwf_Component_SharedData_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_SharedData_Component');
+        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_SharedData_Component');
         parent::setUp();
     }
 
-    // Vps_Component_SharedData_Detail_SharedData_Component wird bearbeitet, hat aber id von
-    // Vps_Component_SharedData_Component -> muss also foo anzeigen
+    // Kwf_Component_SharedData_Detail_SharedData_Component wird bearbeitet, hat aber id von
+    // Kwf_Component_SharedData_Component -> muss also foo anzeigen
     public function testIt()
     {
-        $this->openVpcEdit('Vps_Component_SharedData_Detail_SharedData_Component', 'root');
+        $this->openKwcEdit('Kwf_Component_SharedData_Detail_SharedData_Component', 'root');
         $this->waitForConnections();
         $this->assertElementValueEquals("css=input.x-form-text", 'foo');
     }

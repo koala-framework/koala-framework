@@ -1,1 +1,1 @@
-<p><?=trlVps('Productlist');?></p>
+<p><?=trlKwf('Productlist');?></p>

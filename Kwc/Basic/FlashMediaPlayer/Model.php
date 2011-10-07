@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_FlashMediaPlayer_Model extends Vps_Model_Db
+class Kwc_Basic_FlashMediaPlayer_Model extends Kwf_Model_Db
 {
-    protected $_table = 'vpc_basic_flashmediaplayer';
+    protected $_table = 'kwc_basic_flashmediaplayer';
     protected $_referenceMap    = array(
         'FileMedia' => array(
-            'column'            => 'vps_upload_id_media',
-            'refModelClass'     => 'Vps_Uploads_Model'
+            'column'            => 'kwf_upload_id_media',
+            'refModelClass'     => 'Kwf_Uploads_Model'
         )
     );
     protected $_default = array(

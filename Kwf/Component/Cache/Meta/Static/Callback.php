@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Meta_Static_Callback extends Vps_Component_Cache_Meta_Static_Model
+class Kwf_Component_Cache_Meta_Static_Callback extends Kwf_Component_Cache_Meta_Static_Model
 {
     public static function getMetaType()
     {
@@ -9,7 +9,7 @@ class Vps_Component_Cache_Meta_Static_Callback extends Vps_Component_Cache_Meta_
     public function __construct($model, $pattern = '{component_id}')
     {
         if ($pattern && strpos($this->getPattern(), '%') !== false)
-            throw new Vps_Exception('Callback must not use wildcard in pattern');
+            throw new Kwf_Exception('Callback must not use wildcard in pattern');
         parent::__construct($model, $pattern);
     }
 }

@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_Cache_Directory_Root_List_View_Component extends Vps_Component_Cache_Directory_Root_Directory_View_Component
+class Kwf_Component_Cache_Directory_Root_List_View_Component extends Kwf_Component_Cache_Directory_Root_Directory_View_Component
 {
 }

@@ -1,4 +1,4 @@
 <?php
-class Vpc_Box_ImagesRandom_Controller extends Vpc_Abstract_List_Controller
+class Kwc_Box_ImagesRandom_Controller extends Kwc_Abstract_List_Controller
 {
 }

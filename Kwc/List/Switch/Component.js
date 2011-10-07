@@ -1,18 +1,18 @@
-Ext.namespace('Vpc.ListSwitch');
+Ext.namespace('Kwc.ListSwitch');
 
-Vpc.ListSwitch.Component = Ext.extend(Vps.EyeCandy.List,
+Kwc.ListSwitch.Component = Ext.extend(Kwf.EyeCandy.List,
 {
-    //settings for Vpc.ListSwitch.Component
+    //settings for Kwc.ListSwitch.Component
     //transition: {},
     hideArrowsAtEnds: false,
     showArrows: true,
 
-    //override from Vps.EyeCandy.List
+    //override from Kwf.EyeCandy.List
     init: function() {
         this.states = [
             'normal', 'active'
         ];
-        this.plugins.push(new Vps.EyeCandy.List.Plugins.StateListener.LargeContent({
+        this.plugins.push(new Kwf.EyeCandy.List.Plugins.StateListener.LargeContent({
             activatedState: 'active',
             largeContentSelector: '.largeContent',
             largeContainerSelector: '.listSwitchLargeContent',
@@ -20,16 +20,16 @@ Vpc.ListSwitch.Component = Ext.extend(Vps.EyeCandy.List,
             transitionConfig: this.transition
         }));
         if (this.showArrows) {
-            //this.plugins.push(new Vps.EyeCandy.List.Plugins.StateListener.NextPreviousLinks({
+            //this.plugins.push(new Kwf.EyeCandy.List.Plugins.StateListener.NextPreviousLinks({
             //    hideArrowsAtEnds: this.hideArrowsAtEnds,
             //}));
         }
-        Vpc.ListSwitch.Component.superclass.init.call(this);
+        Kwc.ListSwitch.Component.superclass.init.call(this);
     }
 });
 
 /*
-Vpc.ListSwitch.View = function(componentWrapper) {
+Kwc.ListSwitch.View = function(componentWrapper) {
     this.componentWrapper = Ext.get(componentWrapper);
     this.previewElements = [];
     this.activePreviewLink = null;
@@ -37,13 +37,13 @@ Vpc.ListSwitch.View = function(componentWrapper) {
     this.init();
 };
 
-Vpc.ListSwitch.View.prototype = {
+Kwc.ListSwitch.View.prototype = {
     init: function() {
         if (this.componentWrapper.initDone) return;
 
         var opts = this.componentWrapper.down(".options", true);
         if (!opts) {
-            throw 'Options nicht gefunden! Seit vps 1.10 gibt es bei listSwitch ein hidden-input ".options". Wahrscheinlich wurde das .tpl überschrieben und die Zeile muss reinkopiert werden.';
+            throw 'Options nicht gefunden! Seit kwf 1.10 gibt es bei listSwitch ein hidden-input ".options". Wahrscheinlich wurde das .tpl überschrieben und die Zeile muss reinkopiert werden.';
         }
         this.switchOptions = Ext.decode(opts.value);
 
@@ -173,11 +173,11 @@ Vpc.ListSwitch.View.prototype = {
     }
 };
 
-Vps.onContentReady(function() {
-    var switches = Ext.DomQuery.select('div.vpsListSwitch');
+Kwf.onContentReady(function() {
+    var switches = Ext.DomQuery.select('div.kwfListSwitch');
     Ext.each(switches, function(sw) {
         if (!sw.listSwitchInitDone) {
-            var list = new Vpc.ListSwitch.View(sw);
+            var list = new Kwc.ListSwitch.View(sw);
             sw.listSwitchInitDone = true;
         }
     });

@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Advanced_Referer
+ * @group Kwc_Advanced_Referer
  */
-class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
+class Kwc_Advanced_SearchEngineReferer_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Advanced_SearchEngineReferer_Root');
+        parent::setUp('Kwc_Advanced_SearchEngineReferer_Root');
     }
 
     public function tearDown()

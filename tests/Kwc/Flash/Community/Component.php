@@ -1,11 +1,11 @@
 <?php
-class Vpc_Flash_Community_Component extends Vpc_Advanced_CommunityVideo_Component
+class Kwc_Flash_Community_Component extends Kwc_Advanced_CommunityVideo_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = new Vpc_Advanced_CommunityVideo_Model(array(
-            'proxyModel' => new Vps_Model_FnF(array(
+        $ret['ownModel'] = new Kwc_Advanced_CommunityVideo_Model(array(
+            'proxyModel' => new Kwf_Model_FnF(array(
                 'columns' => array('component_id', 'data'),
                 'primaryKey' => 'component_id',
                 'data'=> array(

@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Detail_Abstract_Form extends Vps_Form
+class Kwc_News_Detail_Abstract_Form extends Kwf_Form
 {
     public function __construct($directoryClass = null)
     {
@@ -11,16 +11,16 @@ class Vpc_News_Detail_Abstract_Form extends Vps_Form
     {
         parent::_initFields();
 
-        $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
+        $this->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')))
             ->setAllowBlank(false)
             ->setWidth(300);
-        $this->add(new Vps_Form_Field_TextArea('teaser', trlVps('Teaser')))
+        $this->add(new Kwf_Form_Field_TextArea('teaser', trlKwf('Teaser')))
             ->setWidth(300)
             ->setHeight(100);
-        $this->add(new Vps_Form_Field_DateField('publish_date', trlVps('Publish Date')))
+        $this->add(new Kwf_Form_Field_DateField('publish_date', trlKwf('Publish Date')))
             ->setAllowBlank(false);
-        if (Vpc_Abstract::getSetting($this->getDirectoryClass(), 'enableExpireDate')) {
-            $this->add(new Vps_Form_Field_DateField('expiry_date', trlVps('Expiry Date')));
+        if (Kwc_Abstract::getSetting($this->getDirectoryClass(), 'enableExpireDate')) {
+            $this->add(new Kwf_Form_Field_DateField('expiry_date', trlKwf('Expiry Date')));
         }
     }
 }

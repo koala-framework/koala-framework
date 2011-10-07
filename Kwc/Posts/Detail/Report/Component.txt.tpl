@@ -1,6 +1,6 @@
-<?= trlVps("Hello")?>,
+<?= trlKwf("Hello")?>,
 
-<?=trlVps("a post has been reported for the following reason:") ?>
+<?=trlKwf("a post has been reported for the following reason:") ?>
 
 -------------------
 <?= $this->reason ?>
@@ -9,7 +9,7 @@
 
 <?= $this->url ?>
 
-<?= trlVps("Open this url to go to the post or read it here:") ?>
+<?= trlKwf("Open this url to go to the post or read it here:") ?>
 
 -------------------
 <?= $this->content ?>

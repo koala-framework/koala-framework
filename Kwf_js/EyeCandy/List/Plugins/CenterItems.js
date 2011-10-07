@@ -1,4 +1,4 @@
-Vps.EyeCandy.List.Plugins.CenterItems = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.CenterItems = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     render: function() {
         var listWidth = this.list.el.getWidth();
         var itemsWidth = 0;

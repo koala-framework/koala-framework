@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_MailEncodeText extends Vps_View_Helper_Abstract_MailLink
+class Kwf_View_Helper_MailEncodeText extends Kwf_View_Helper_Abstract_MailLink
 {
     public function mailEncodeText($text)
     {

@@ -2,22 +2,22 @@
 /**
  * @group slow
  * @group selenium
- * @group Vpc_FormStatic
+ * @group Kwc_FormStatic
  *
- * http://vps.markus.vivid/vps/vpctest/Vpc_FormStatic_Root/form
+ * http://kwf.markus.vivid/kwf/kwctest/Kwc_FormStatic_Root/form
  */
-class Vpc_FormStatic_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwc_FormStatic_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
         parent::setUp();
-        Vps_Component_Data_Root::setComponentClass('Vpc_FormStatic_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_FormStatic_Root');
     }
 
     public function testForm()
     {
         $this->initTestDb(dirname(__FILE__).'/bootstrap.sql');
-        $this->openVpc('/form');
+        $this->openKwc('/form');
 
         $this->type('css=#form_fullname', 'myname');
         $this->type('css=#form_content', 'lorem ipsum');
@@ -39,7 +39,7 @@ class Vpc_FormStatic_SeleniumTest extends Vps_Test_SeleniumTestCase
         sleep(1);
         $this->assertTextPresent('The form has been submitted successfully');
 
-        if (Vps_Util_Model_MailLog::isAvailable()) {
+        if (Kwf_Util_Model_MailLog::isAvailable()) {
             // geschickte mail checken
             $mail = $this->_getLatestMail();
             $this->assertContains('Das ist das Kontaktformular Template:', $mail->body_text);
@@ -49,7 +49,7 @@ class Vpc_FormStatic_SeleniumTest extends Vps_Test_SeleniumTestCase
         }
 
         // enquiries checken
-        $enquiries = Vps_Model_Abstract::getInstance('Vps_Model_Mail');
+        $enquiries = Kwf_Model_Abstract::getInstance('Kwf_Model_Mail');
         $row = $enquiries->getRow($enquiries->select()
             ->order('id', 'DESC')
             ->limit(1)

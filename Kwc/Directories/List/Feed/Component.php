@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
+class Kwc_Directories_List_Feed_Component extends Kwc_Abstract_Feed_Component
 {
     protected function _getSelect()
     {
@@ -17,8 +17,8 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
 
         $itemDirectory = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($itemDirectory)) {
-            $c = Vpc_Abstract::getComponentClassByParentClass($itemDirectory);
-            $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
+            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
+            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
             $items = $generator->getChildData(null, $select);
             //TODO: callModifyItemData aufrufen
         } else {
@@ -40,17 +40,17 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
     {
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($dir)) {
-            $c = Vpc_Abstract::getComponentClassByParentClass($dir);
-            $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
+            $c = Kwc_Abstract::getComponentClassByParentClass($dir);
+            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
         } else {
             $generator = $dir->getGenerator('detail');
         }
         $ret = parent::getCacheMeta();
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), "{component_id}-feed");
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel(), "{component_id}-feed");
         return $ret;
     }
 
-    protected function _getRssEntryByItem(Vps_Component_Data $item)
+    protected function _getRssEntryByItem(Kwf_Component_Data $item)
     {
         return array(
             'title' => $item->getTitle(),
@@ -61,6 +61,6 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
 
     protected function _getRssTitle()
     {
-        return parent::_getRssTitle().' - '.trlVps('Feed');
+        return parent::_getRssTitle().' - '.trlKwf('Feed');
     }
 }

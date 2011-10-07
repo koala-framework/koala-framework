@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Products_View_Component extends Vpc_Shop_Products_ViewWithoutAddToCart_Component
+class Kwc_Shop_Products_View_Component extends Kwc_Shop_Products_ViewWithoutAddToCart_Component
 {
     public static function getSettings()
     {

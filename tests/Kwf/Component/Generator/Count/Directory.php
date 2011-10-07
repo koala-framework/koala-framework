@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Generator_Count_Directory extends Vpc_Directories_ItemPage_Directory_Component
+class Kwf_Component_Generator_Count_Directory extends Kwc_Directories_ItemPage_Directory_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childModel'] = new Vps_Model_FnF(array(
+        $ret['childModel'] = new Kwf_Model_FnF(array(
             'columns' => array('id', 'name'),
             'data' => array(
                 array('id'=>1, 'name'=>'Foo'),

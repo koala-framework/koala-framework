@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Controller_Action extends Zend_Controller_Action
+abstract class Kwf_Controller_Action extends Zend_Controller_Action
 {
     public function jsonIndexAction()
     {
@@ -8,15 +8,15 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        Vps_Util_Https::ensureHttps();
+        Kwf_Util_Https::ensureHttps();
 
-        if (!$this instanceof Vps_Controller_Action_Error_ErrorController
+        if (!$this instanceof Kwf_Controller_Action_Error_ErrorController
                 && $this->_getParam('application_max_assets_mtime')
                 && $this->getHelper('ViewRenderer')->isJson()) {
-            $l = new Vps_Assets_Loader();
+            $l = new Kwf_Assets_Loader();
             if ($l->getDependencies()->getMaxFileMTime()!= $this->_getParam('application_max_assets_mtime')) {
                 $this->_forward('json-wrong-version', 'error',
-                                    'vps_controller_action_error');
+                                    'kwf_controller_action_error');
                 return;
             }
         }
@@ -24,17 +24,17 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         $allowed = false;
         $acl = $this->_getAcl();
         $resource = $this->getRequest()->getResourceName();
-        if ($resource == 'vps_user_changeuser') {
+        if ($resource == 'kwf_user_changeuser') {
             //spezielle berechtigungsabfrage für Benutzerwechsel
             $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
             $allowed = $acl->isAllowed($role, $resource, 'view');
         } else if ($this->_getUserRole() == 'cli') {
             $allowed = $acl->isAllowed('cli', $resource, 'view');
-        } else if ($resource == 'vps_component') {
+        } else if ($resource == 'kwf_component') {
             $allowed = $this->_isAllowedComponent(); // Bei Test ist niemand eingeloggt und deshalb keine Prüfung
         } else {
             if (!$acl->has($resource)) {
-                throw new Vps_Exception_NotFound();
+                throw new Kwf_Exception_NotFound();
             } else {
                 if ($this->_getAuthData()) {
                     $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
@@ -58,11 +58,11 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             );
             if ($this->getHelper('ViewRenderer')->isJson()) {
                 $this->_forward('json-login', 'login',
-                                    'vps_controller_action_user', $params);
+                                    'kwf_controller_action_user', $params);
             } else {
                 $params = array('location' => $this->getRequest()->getPathInfo());
                 $this->_forward('index', 'login',
-                                    'vps_controller_action_user', $params);
+                                    'kwf_controller_action_user', $params);
             }
         }
     }
@@ -80,9 +80,9 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             $class = $this->_getParam('class');
             $componentId = $this->_getParam('componentId');
             if (!$componentId) {
-                return Vps_Registry::get('acl')->isAllowedComponent($class, $authData);
+                return Kwf_Registry::get('acl')->isAllowedComponent($class, $authData);
             } else {
-                return Vps_Registry::get('acl')->isAllowedComponentById($componentId, $class, $authData);
+                return Kwf_Registry::get('acl')->isAllowedComponentById($componentId, $class, $authData);
             }
         }
         return true;
@@ -90,22 +90,22 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     public function postDispatch()
     {
-        Vps_Component_ModelObserver::getInstance()->process();
+        Kwf_Component_ModelObserver::getInstance()->process();
     }
 
     protected function _getUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
-        return Vps_Registry::get('userModel')->getAuthedUserRole();
+        return Kwf_Registry::get('userModel')->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
         if (php_sapi_name() == 'cli') return null;
-        return Vps_Registry::get('userModel')->getAuthedUser();
+        return Kwf_Registry::get('userModel')->getAuthedUser();
     }
     /**
-     * @return Vps_Acl
+     * @return Kwf_Acl
      */
     protected function _getAcl()
     {

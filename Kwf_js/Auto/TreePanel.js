@@ -1,4 +1,4 @@
-Vps.Auto.TreePanel = Ext.extend(Vps.Auto.SyncTreePanel, {
+Kwf.Auto.TreePanel = Ext.extend(Kwf.Auto.SyncTreePanel, {
 
     onSaved : function (response)
     {
@@ -41,4 +41,4 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.SyncTreePanel, {
 
 });
 
-Ext.reg('vps.autotree', Vps.Auto.TreePanel);
+Ext.reg('kwf.autotree', Kwf.Auto.TreePanel);

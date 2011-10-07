@@ -1,27 +1,27 @@
-Ext.ns('Vpc.Shop.Cart.Checkout');
-Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
+Ext.ns('Kwc.Shop.Cart.Checkout');
+Kwc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
     layout: 'border',
 
     createItems: function()
     {
-        this.order = new Vps.Auto.FormPanel({
+        this.order = new Kwf.Auto.FormPanel({
             region: 'center',
             controllerUrl:  this.orderControllerUrl,
-            baseParams: Vps.clone(this.baseParams)
+            baseParams: Kwf.clone(this.baseParams)
         });
-        this.orderProducts = new Vps.Auto.GridPanel({
-            xtype: 'vps.autogrid',
+        this.orderProducts = new Kwf.Auto.GridPanel({
+            xtype: 'kwf.autogrid',
             region: 'south',
             height: 180,
             split: true,
             controllerUrl: this.orderProductsControllerUrl,
-            baseParams: Vps.clone(this.baseParams)
+            baseParams: Kwf.clone(this.baseParams)
         });
-        this.orders = new Vps.Auto.GridPanel({
-            xtype: 'vps.autogrid',
+        this.orders = new Kwf.Auto.GridPanel({
+            xtype: 'kwf.autogrid',
             region: 'center',
             controllerUrl: this.ordersControllerUrl,
-            baseParams: Vps.clone(this.baseParams),
+            baseParams: Kwf.clone(this.baseParams),
             bindings: [ this.order, { item: this.orderProducts, queryParam: 'shop_order_id' } ],
             columnsConfig: {
                 invoice: {
@@ -33,7 +33,7 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                         }).defer(500, this);
                     },
                     renderer: function(value, p, record, rowIndex, colIndex, store, column) {
-                        p.css += 'vps-cell-button';
+                        p.css += 'kwf-cell-button';
                         var icon = '/assets/silkicons/page_white.png';
                         if (record.get('invoice_number')) {
                             icon = '/assets/silkicons/page_white_star.png';
@@ -51,7 +51,7 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                     clickHandler: function(grid, index, button, event) {
                         var row = grid.getStore().getAt(index);
                         if (row.get('shipped')) return;
-                        var p = Vps.clone(this.baseParams);
+                        var p = Kwf.clone(this.baseParams);
                         p.id = row.id;
                         Ext.Ajax.request({
                             url: this.ordersControllerUrl+'/json-shipped',
@@ -86,8 +86,8 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
             interval: 1000*60*5
         });
 
-        Vpc.Shop.Cart.Checkout.OrdersPanel.superclass.initComponent.call(this);
+        Kwc.Shop.Cart.Checkout.OrdersPanel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('vpc.shop.cart.checkout.orders', Vpc.Shop.Cart.Checkout.OrdersPanel);
+Ext.reg('kwc.shop.cart.checkout.orders', Kwc.Shop.Cart.Checkout.OrdersPanel);
 

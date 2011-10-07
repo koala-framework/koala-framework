@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_TextImageLink_Trl_Form_OriginalText extends Vps_Data_Abstract
+class Kwc_Composite_TextImageLink_Trl_Form_OriginalText extends Kwf_Data_Abstract
 {
     private $_field;
     public function __construct($field)
@@ -9,7 +9,7 @@ class Vpc_Composite_TextImageLink_Trl_Form_OriginalText extends Vps_Data_Abstrac
 
     public function load($row)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
         return $c->chained
             ->getComponent()
             ->getRow()
@@ -17,17 +17,17 @@ class Vpc_Composite_TextImageLink_Trl_Form_OriginalText extends Vps_Data_Abstrac
     }
 }
 
-class Vpc_Composite_TextImageLink_Trl_Form extends Vpc_Abstract_Composite_Trl_Form
+class Kwc_Composite_TextImageLink_Trl_Form extends Kwc_Abstract_Composite_Trl_Form
 {
     protected function _initFields()
     {
-        $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
-        $this->add(new Vps_Form_Field_ShowField('original_title', trlVps('Original')))
-            ->setData(new Vpc_Composite_TextImageLink_Trl_Form_OriginalText('title'));
+        $this->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')));
+        $this->add(new Kwf_Form_Field_ShowField('original_title', trlKwf('Original')))
+            ->setData(new Kwc_Composite_TextImageLink_Trl_Form_OriginalText('title'));
 
-        $this->add(new Vps_Form_Field_TextField('teaser', trlVps('Teaser')));
-        $this->add(new Vps_Form_Field_ShowField('original_teaser', trlVps('Original')))
-            ->setData(new Vpc_Composite_TextImageLink_Trl_Form_OriginalText('teaser'));
+        $this->add(new Kwf_Form_Field_TextField('teaser', trlKwf('Teaser')));
+        $this->add(new Kwf_Form_Field_ShowField('original_teaser', trlKwf('Original')))
+            ->setData(new Kwc_Composite_TextImageLink_Trl_Form_OriginalText('teaser'));
 
         parent::_initFields();
     }

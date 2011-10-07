@@ -1,11 +1,11 @@
 <?php
-abstract class Vpc_List_Fade_Component extends Vpc_Abstract_List_Component
+abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Fade images');
-        $ret['assets']['dep'][] = 'VpsFadeElements';
+        $ret['componentName'] = trlKwf('Fade images');
+        $ret['assets']['dep'][] = 'KwfFadeElements';
 
         // $ret['generators']['child']['component'] muss gesetzt werden
 

@@ -4,7 +4,7 @@
  * @group slow
  * @group Connection_Error
  */
-class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
+class Kwf_Connection_ErrorTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
@@ -28,53 +28,53 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
 
     private function _testError($errors)
     {
-        $this->open('/vps/test/vps_connection_test');
+        $this->open('/kwf/test/kwf_connection_test');
         $this->waitForConnections();
         sleep(2);
         $this->click("//button[text()='testA']");
         $this->waitForConnections();
-        if ($errors) $this->runScript('function foo() {Vps.Debug.displayErrors = false; Vps.log("selenium: "+Vps.Debug.displayErrors); }; foo();');
-        $this->click("//button[text()='".trlVps('Retry')."']");
+        if ($errors) $this->runScript('function foo() {Kwf.Debug.displayErrors = false; Kwf.log("selenium: "+Kwf.Debug.displayErrors); }; foo();');
+        $this->click("//button[text()='".trlKwf('Retry')."']");
         $this->waitForConnections();
-        $this->click("//button[text()='".trlVps('Abort')."']");
+        $this->click("//button[text()='".trlKwf('Abort')."']");
         $this->assertEquals("abort", $this->getText('id=abort'));
     }
 
     public function testConnectionMoreRequests()
     {
 
-        $this->open('/vps/test/vps_connection_test');
+        $this->open('/kwf/test/kwf_connection_test');
         $this->waitForConnections();
         sleep(2);
         $this->click("//button[text()='testC']");
         $this->waitForConnections();
-        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlKwf("Retry")."']");
         $this->waitForConnections();
-        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlKwf("Retry")."']");
         $this->waitForConnections();
-        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
-        $this->waitForConnections();
-
-        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
-        $this->waitForConnections();
-        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
-        $this->waitForConnections();
-        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
-        $this->waitForConnections();
-        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlKwf("Retry")."']");
         $this->waitForConnections();
 
-        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Abort")."']");
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlKwf("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlKwf("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlKwf("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlKwf("Retry")."']");
         $this->waitForConnections();
 
-        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Abort")."']");
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlKwf("Abort")."']");
         $this->waitForConnections();
 
-        $this->open('/vps/test/vps_connection_test/get-timeouts');
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlKwf("Abort")."']");
+        $this->waitForConnections();
+
+        $this->open('/kwf/test/kwf_connection_test/get-timeouts');
         $count = $this->getText('//body');
         $this->assertEquals(4, $count);
 
-        $this->open('/vps/test/vps_connection_test/get-exceptions');
+        $this->open('/kwf/test/kwf_connection_test/get-exceptions');
         $count = $this->getText('//body');
         $this->assertEquals(5, $count);
 
@@ -82,12 +82,12 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
 
     public function testConnectionRealException()
     {
-        $this->open('/vps/test/vps_connection_test');
+        $this->open('/kwf/test/kwf_connection_test');
         $this->waitForConnections();
         sleep(2);
         $this->click("//button[text()='testD']");
         $this->waitForConnections();
-        $text = $this->getText("//*[contains(text(), 'Vps_Exception')]");
+        $text = $this->getText("//*[contains(text(), 'Kwf_Exception')]");
         $this->assertTrue((bool)strpos($text, 'Connection/TestController.php:50'));
     }
 }

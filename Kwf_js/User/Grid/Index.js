@@ -1,17 +1,17 @@
 
-Ext.namespace("Vps.User.Grid");
+Ext.namespace("Kwf.User.Grid");
 
-Vps.User.Grid.Index = Ext.extend(Ext.Panel, {
+Kwf.User.Grid.Index = Ext.extend(Ext.Panel, {
 
     initComponent: function() {
         var bindings = [];
         var southPanelItems = [ ];
 
         if (this.commentsControllerUrl) {
-            var commentsGrid = new Vps.Auto.GridPanel({
+            var commentsGrid = new Kwf.Auto.GridPanel({
                 controllerUrl: this.commentsControllerUrl,
                 region: 'center',
-                title: trlVps('Comments')
+                title: trlKwf('Comments')
             });
             bindings.push({ item: commentsGrid, queryParam: 'user_id' });
             southPanelItems.push(commentsGrid);
@@ -22,13 +22,13 @@ Vps.User.Grid.Index = Ext.extend(Ext.Panel, {
                 controllerUrl: this.logControllerUrl ,
                 region: 'center',
                 split: true,
-                title: trlVps('Log')
+                title: trlKwf('Log')
             };
             if (this.commentsControllerUrl) {
                 logGridConfig.width = 550;
                 logGridConfig.region = 'east';
             }
-            var logGrid = new Vps.Auto.GridPanel(logGridConfig);
+            var logGrid = new Kwf.Auto.GridPanel(logGridConfig);
             bindings.push({ item: logGrid, queryParam: 'user_id' });
             southPanelItems.push(logGrid);
         }
@@ -43,7 +43,7 @@ Vps.User.Grid.Index = Ext.extend(Ext.Panel, {
             });
         }
 
-        var userGrid = new Vps.User.Grid.Grid({
+        var userGrid = new Kwf.User.Grid.Grid({
             controllerUrl: this.controllerUrl,
             region: 'center',
             bindings: bindings
@@ -56,6 +56,6 @@ Vps.User.Grid.Index = Ext.extend(Ext.Panel, {
             this.items.push(southPanel);
         }
 
-        Vps.User.Grid.Index.superclass.initComponent.call(this);
+        Kwf.User.Grid.Index.superclass.initComponent.call(this);
     }
 });

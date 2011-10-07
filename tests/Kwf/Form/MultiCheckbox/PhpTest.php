@@ -1,15 +1,15 @@
 <?php
 /**
- * @group Vps_Form_MultiCheckbox
+ * @group Kwf_Form_MultiCheckbox
  */
-class Vps_Form_MultiCheckbox_PhpTest extends Vps_Test_TestCase
+class Kwf_Form_MultiCheckbox_PhpTest extends Kwf_Test_TestCase
 {
     public function testRelation()
     {
-        $m1 = new Vps_Form_MultiCheckbox_DataModel();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Form_MultiCheckbox_DataModel();
+        $form = new Kwf_Form();
         $form->setModel($m1);
-        $mcb = $form->add(new Vps_Form_Field_MultiCheckbox(
+        $mcb = $form->add(new Kwf_Form_Field_MultiCheckbox(
             'Relation', 'Value', 'MultiCheck'
         ));
 
@@ -39,11 +39,11 @@ class Vps_Form_MultiCheckbox_PhpTest extends Vps_Test_TestCase
 
     public function testWithRelModel()
     {
-        $m1 = new Vps_Form_MultiCheckbox_DataModelNoRel();
-        $m2 = new Vps_Form_MultiCheckbox_RelationModelNoRel();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Form_MultiCheckbox_DataModelNoRel();
+        $m2 = new Kwf_Form_MultiCheckbox_RelationModelNoRel();
+        $form = new Kwf_Form();
         $form->setModel($m1);
-        $mcb = $form->add(new Vps_Form_Field_MultiCheckbox(
+        $mcb = $form->add(new Kwf_Form_Field_MultiCheckbox(
             $m2, 'Value', 'MultiCheck2'
         ));
 

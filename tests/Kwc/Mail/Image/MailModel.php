@@ -1,9 +1,9 @@
 <?php
-class Vpc_Mail_Image_MailModel extends Vpc_Mail_Model
+class Kwc_Mail_Image_MailModel extends Kwc_Mail_Model
 {
     public function __construct(array $config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'data' => array(
                 array('component_id' => 'root', 'subject' => 'ImageTest')
             ),

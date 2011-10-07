@@ -1,25 +1,25 @@
 <?php
-class Vpc_FormStatic_Form_FrontendForm extends Vps_Form
+class Kwc_FormStatic_Form_FrontendForm extends Kwf_Form
 {
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
-        $row->addTo('markus@vivid.vps');
+        $row->addTo('markus@vivid.kwf');
         $row->setFrom($row->email);
         $row->subject = 'Anfrage von FormStatic test';
     }
 
     protected function _init()
     {
-        $this->setModel(new Vps_Model_Mail(array('tpl' => 'Vpc_FormStatic_Form_Component')));
+        $this->setModel(new Kwf_Model_Mail(array('tpl' => 'Kwc_FormStatic_Form_Component')));
 
-        $this->add(new Vps_Form_Field_TextField('fullname', 'Name'))
+        $this->add(new Kwf_Form_Field_TextField('fullname', 'Name'))
             ->setAllowBlank(false);
-        $this->add(new Vps_Form_Field_TextField('email', 'E-Mail'))
+        $this->add(new Kwf_Form_Field_TextField('email', 'E-Mail'))
             ->setVtype('email')
             ->setAllowBlank(false);
-        $this->add(new Vps_Form_Field_TextField('phone', 'Telefon'))
+        $this->add(new Kwf_Form_Field_TextField('phone', 'Telefon'))
             ->setWidth(255);
-        $this->add(new Vps_Form_Field_TextArea('content', 'Nachricht'))
+        $this->add(new Kwf_Form_Field_TextArea('content', 'Nachricht'))
             ->setAllowBlank(false);
         parent::_init();
     }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_MultiBox_Static extends Vps_Component_Generator_Static
+class Kwf_Component_Generator_MultiBox_Static extends Kwf_Component_Generator_Static
 {
     protected function _formatConfig($parentData, $key)
     {

@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Vpc_Image extends Vps_Data_Abstract implements Vps_Data_Vpc_ListInterface
+class Kwf_Data_Kwc_Image extends Kwf_Data_Abstract implements Kwf_Data_Kwc_ListInterface
 {
     protected $_class;
     protected $_size;
@@ -13,15 +13,15 @@ class Vps_Data_Vpc_Image extends Vps_Data_Abstract implements Vps_Data_Vpc_ListI
 
     public function load($row)
     {
-        $model = Vpc_Abstract::createOwnModel($this->_class);
+        $model = Kwc_Abstract::createOwnModel($this->_class);
         $componentId = $row->component_id . '-' . $row->id;
         if ($this->_subComponent) {
             $componentId .= $this->_subComponent;
         }
         $row = $model->getRow($componentId);
-        if ($row && $row->vps_upload_id) {
-            $hashKey = Vps_Util_Hash::hash($row->vps_upload_id);
-            return '/vps/media/upload/preview?uploadId='.$row->vps_upload_id.
+        if ($row && $row->kwf_upload_id) {
+            $hashKey = Kwf_Util_Hash::hash($row->kwf_upload_id);
+            return '/kwf/media/upload/preview?uploadId='.$row->kwf_upload_id.
                    '&hashKey='.$hashKey.'&size='.$this->_size;
         } else {
             return '';

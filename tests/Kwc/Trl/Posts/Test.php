@@ -1,19 +1,19 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_Trl_Posts
+ * @group Kwc_Trl
+ * @group Kwc_Trl_Posts
  * @group slow
  *
 ansicht frontend:
-/vps/vpctest/Vpc_Trl_Posts_Root/de/test
-/vps/vpctest/Vpc_Trl_Posts_Root/en/test
+/kwf/kwctest/Kwc_Trl_Posts_Root/de/test
+/kwf/kwctest/Kwc_Trl_Posts_Root/en/test
  */
-class Vpc_Trl_Posts_Test extends Vpc_TestAbstract
+class Kwc_Trl_Posts_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_Posts_Root');
-        $model = Vps_Model_Abstract::getInstance('Vpc_Trl_Posts_Posts_Model')
+        parent::setUp('Kwc_Trl_Posts_Root');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_Posts_Posts_Model')
             ->getProxyModel();
         $model->setData(array(
             array('id' => '1', 'component_id'=>'root-master_test', 'visible' => '1', 'create_time' => '2010-04-16 13:00:00', 'user_id' => NULL, 'content' => 'Inhalt de 1', 'data' => ''),

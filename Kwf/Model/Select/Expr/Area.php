@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_Area implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Area implements Kwf_Model_Select_Expr_Interface
 {
     protected $_field;
     protected $_latitude;
@@ -30,12 +30,12 @@ class Vps_Model_Select_Expr_Area implements Vps_Model_Select_Expr_Interface
     public function validate()
     {
         if (!$this->_latitude || !$this->_longitude || !$this->_radius) {
-            throw new Vps_Exception("latitude, longitude und radius have to be set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("latitude, longitude und radius have to be set for '"+get_class($this)+"'");
         }
     }
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_BOOLEAN;
+        return Kwf_Model_Interface::TYPE_BOOLEAN;
     }
 }

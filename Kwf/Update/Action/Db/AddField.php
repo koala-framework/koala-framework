@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Action_Db_AddField extends Vps_Update_Action_Db_Abstract
+class Kwf_Update_Action_Db_AddField extends Kwf_Update_Action_Db_Abstract
 {
     public $field;
     public $type;
@@ -12,10 +12,10 @@ class Vps_Update_Action_Db_AddField extends Vps_Update_Action_Db_Abstract
     {
         parent::checkSettings();
         if (!$this->field) {
-            throw new Vps_ClientException("Required parameter: field");
+            throw new Kwf_ClientException("Required parameter: field");
         }
         if (!$this->type) {
-            throw new Vps_ClientException("Required parameter: type");
+            throw new Kwf_ClientException("Required parameter: type");
         }
     }
 
@@ -24,12 +24,12 @@ class Vps_Update_Action_Db_AddField extends Vps_Update_Action_Db_Abstract
         if (!$this->silent) echo "add field $this->field to $this->table\n";
         $table = $this->model->getRow($this->table);
         if (!$table) {
-            throw new Vps_ClientException("Table '$this->table' not found");
+            throw new Kwf_ClientException("Table '$this->table' not found");
         }
         $field = $table->getChildRows('Fields', $this->model->select()
                     ->whereId($this->field))->current();
         if ($field) {
-            throw new Vps_ClientException("Field $this->field does alredy exist");
+            throw new Kwf_ClientException("Field $this->field does alredy exist");
         }
         $field = $table->createChildRow('Fields');
         $field->field = $this->field;

@@ -3,14 +3,14 @@
  * @group Model
  * @group xmlModel
  */
-class Vps_Model_Xml_Columns_Test extends Vps_Test_TestCase
+class Kwf_Model_Xml_Columns_Test extends Kwf_Test_TestCase
 {
     private $_model;
 
     public function setUp()
     {
         parent::setUp();
-        $this->_model = new Vps_Model_Xml(array(
+        $this->_model = new Kwf_Model_Xml(array(
             'xpath' => '/trl',
         	'xpathRead' => '//text',
             'topNode' => 'text',
@@ -27,7 +27,7 @@ class Vps_Model_Xml_Columns_Test extends Vps_Test_TestCase
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      * @group xmlModel
      */
     public function testXmlException()
@@ -43,7 +43,7 @@ class Vps_Model_Xml_Columns_Test extends Vps_Test_TestCase
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testXmlCreateRowException()
     {

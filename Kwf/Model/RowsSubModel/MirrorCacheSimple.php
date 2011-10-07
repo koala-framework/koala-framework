@@ -1,7 +1,7 @@
 <?php
-class Vps_Model_RowsSubModel_MirrorCacheSimple extends Vps_Model_RowsSubModel_Proxy
+class Kwf_Model_RowsSubModel_MirrorCacheSimple extends Kwf_Model_RowsSubModel_Proxy
 {
-    protected $_rowClass = 'Vps_Model_RowsSubModel_MirrorCacheSimple_Row';
+    protected $_rowClass = 'Kwf_Model_RowsSubModel_MirrorCacheSimple_Row';
 
     protected $_sourceModel;
 
@@ -15,12 +15,12 @@ class Vps_Model_RowsSubModel_MirrorCacheSimple extends Vps_Model_RowsSubModel_Pr
     {
         parent::_init();
         if (is_string($this->_sourceModel)) {
-            $this->_sourceModel = Vps_Model_Abstract::getInstance($this->_sourceModel);
+            $this->_sourceModel = Kwf_Model_Abstract::getInstance($this->_sourceModel);
         }
         $this->_sourceModel->addProxyContainerModel($this);
 
-        if (!($this->getProxyModel() instanceof Vps_Model_RowsSubModel_Interface)) {
-            throw  new Vps_Exception("Proxy model doesn't implement Vps_Model_RowsSubModel_Interface");
+        if (!($this->getProxyModel() instanceof Kwf_Model_RowsSubModel_Interface)) {
+            throw  new Kwf_Exception("Proxy model doesn't implement Kwf_Model_RowsSubModel_Interface");
         }
     }
     //kann gesetzt werden von proxy (rekursiv bei proxys)
@@ -37,12 +37,12 @@ class Vps_Model_RowsSubModel_MirrorCacheSimple extends Vps_Model_RowsSubModel_Pr
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_RowsSubModel_MirrorCacheSimple');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_RowsSubModel_MirrorCacheSimple');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_RowsSubModel_MirrorCacheSimple');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_RowsSubModel_MirrorCacheSimple');
     }
 
     public function clearRows()

@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Generator_Abstract
+abstract class Kwf_Component_Generator_Abstract
 {
     protected $_class;
     protected $_settings;
@@ -24,7 +24,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function __sleep()
     {
-        throw new Vps_Exception("serializing generators is not possible because you could have multiple instances of the same generators");
+        throw new Kwf_Exception("serializing generators is not possible because you could have multiple instances of the same generators");
         $ret = array();
         foreach (array_keys(get_object_vars($this)) as $i) {
             if ($i != '_model' && $i != '_plugins') {
@@ -36,7 +36,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function __wakeup()
     {
-        throw new Vps_Exception("unserializing generators is not possible");
+        throw new Kwf_Exception("unserializing generators is not possible");
     }
 
     protected function __construct($class, $settings)
@@ -44,7 +44,7 @@ abstract class Vps_Component_Generator_Abstract
         $this->_class = $class;
         $this->_settings = $settings;
         $this->_init();
-        Vps_Benchmark::count('generators');
+        Kwf_Benchmark::count('generators');
     }
 
     protected function _init()
@@ -63,7 +63,7 @@ abstract class Vps_Component_Generator_Abstract
         if (!$this->_model) {
             if (isset($this->_settings['model'])) {
                 if (is_string($this->_settings['model'])) {
-                    $this->_model = Vps_Model_Abstract::getInstance($this->_settings['model']);
+                    $this->_model = Kwf_Model_Abstract::getInstance($this->_settings['model']);
                 } else {
                     $this->_model = $this->_settings['model'];
                 }
@@ -75,13 +75,13 @@ abstract class Vps_Component_Generator_Abstract
                         $table = $this->_settings['table'];
                     }
                     if (!$table instanceof Zend_Db_Table_Abstract) {
-                        throw new Vps_Exception("table setting for generator in $this->_class is not a Zend_Db_Table");
+                        throw new Kwf_Exception("table setting for generator in $this->_class is not a Zend_Db_Table");
                     }
-                    $this->_model = new Vps_Model_Db(array('table' => $table));
+                    $this->_model = new Kwf_Model_Db(array('table' => $table));
                 } else if ($this->_loadTableFromComponent) {
-                    $this->_model = Vpc_Abstract::createChildModel($this->_class);
+                    $this->_model = Kwc_Abstract::createChildModel($this->_class);
                 } else {
-                    throw new Vps_Exception("Can't create model for generator '{$this->getGeneratorKey()}' in '$this->_class'");
+                    throw new Kwf_Exception("Can't create model for generator '{$this->getGeneratorKey()}' in '$this->_class'");
                 }
             }
         }
@@ -101,27 +101,27 @@ abstract class Vps_Component_Generator_Abstract
     }
 
     /**
-     * @return Vps_Component_Generator_Abstract
+     * @return Kwf_Component_Generator_Abstract
      */
     public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false)
     {
         $instanceKey = $componentClass . '_' . $key . '_' . $pluginBaseComponentClass;
         if (!isset(self::$instances[$instanceKey])) {
             if (empty($settings)) {
-                $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
+                $settings = Kwc_Abstract::getSetting($componentClass, 'generators');
                 if (!isset($settings[$key])) {
-                    throw new Vps_Exception("Generator with key '$key' for '$componentClass' not found.");
+                    throw new Kwf_Exception("Generator with key '$key' for '$componentClass' not found.");
                 }
                 $settings = $settings[$key];
             }
             if (!isset($settings['class'])) {
-                throw new Vps_Exception("No Generator-Class set: key '$key' for '$componentClass'");
+                throw new Kwf_Exception("No Generator-Class set: key '$key' for '$componentClass'");
             }
             if (!class_exists($settings['class'])) {
-                throw new Vps_Exception("Generator-Class '{$settings['class']}' does not exist (used in '$componentClass')");
+                throw new Kwf_Exception("Generator-Class '{$settings['class']}' does not exist (used in '$componentClass')");
             }
-            if (!is_subclass_of($settings['class'], 'Vps_Component_Generator_Abstract')) {
-                throw new Vps_Exception("Generator-Class '{$settings['class']}' is not an Vps_Component_Generator_Abstract");
+            if (!is_subclass_of($settings['class'], 'Kwf_Component_Generator_Abstract')) {
+                throw new Kwf_Exception("Generator-Class '{$settings['class']}' is not an Kwf_Component_Generator_Abstract");
             }
             $settings['generator'] = $key;
             self::$instances[$instanceKey] = new $settings['class']($componentClass, $settings);
@@ -135,7 +135,7 @@ abstract class Vps_Component_Generator_Abstract
     private static function _getGeneratorsForComponent($componentClass, $pluginBaseComponentClass)
     {
         $ret = array();
-        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
+        $generators = Kwc_Abstract::getSetting($componentClass, 'generators');
         foreach ($generators as $key => $generator) {
             $ret[] = self::getInstance($componentClass, $key, $generator, $pluginBaseComponentClass);
         }
@@ -145,7 +145,7 @@ abstract class Vps_Component_Generator_Abstract
     public static function getInstances($component, $select = array())
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
         return array_merge(
             self::getOwnInstances($component, $select),
@@ -156,10 +156,10 @@ abstract class Vps_Component_Generator_Abstract
     public static function getOwnInstances($component, $select = array())
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
 
-        if ($component instanceof Vps_Component_Data) {
+        if ($component instanceof Kwf_Component_Data) {
             $componentClass = $component->componentClass;
         } else if (is_array($component)) {
             $componentClass = $component['componentClass'];
@@ -172,7 +172,7 @@ abstract class Vps_Component_Generator_Abstract
         $generatorKeys = self::_getGeneratorKeys(array(), $componentClass);
 
         //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
-        if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+        if (($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
             $filteredGeneratorKeys = array();
             foreach ($generatorKeys as $g) {
                 if ($g['childComponentIds']) {
@@ -187,7 +187,7 @@ abstract class Vps_Component_Generator_Abstract
         }
 
         //performance abkürzung: wenn direkt nach einem generator gesucht wird, effizienter heraussuchen
-        if (($genKey = $select->getPart(Vps_Component_Select::WHERE_GENERATOR))) {
+        if (($genKey = $select->getPart(Kwf_Component_Select::WHERE_GENERATOR))) {
             foreach ($generatorKeys as $g) {
                 if ($g['key'] == $genKey && $g['componentClass']==$componentClass) {
                     return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
@@ -208,15 +208,15 @@ abstract class Vps_Component_Generator_Abstract
     public static function getInheritedInstances($component, $select = array())
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
         //performance abkürzung: wenn direkt nach einem generator gesucht wird, ist das nie ein inherited
-        if (($genKey = $select->getPart(Vps_Component_Select::WHERE_GENERATOR))) {
+        if (($genKey = $select->getPart(Kwf_Component_Select::WHERE_GENERATOR))) {
             return array();
         }
 
 
-        if ($component instanceof Vps_Component_Data) {
+        if ($component instanceof Kwf_Component_Data) {
             $componentClass = $component->componentClass;
             $inheritClasses = $component->inheritClasses;
         } else if (is_array($component)) {
@@ -232,7 +232,7 @@ abstract class Vps_Component_Generator_Abstract
         $generatorKeys = self::_getGeneratorKeys($inheritClasses, $componentClass);
 
         //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
-        if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+        if (($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
             $filteredGeneratorKeys = array();
             foreach ($generatorKeys as $g) {
                 if ($g['childComponentIds']) {
@@ -265,33 +265,33 @@ abstract class Vps_Component_Generator_Abstract
         if (isset(self::$_cachedGeneratorKeys[$cacheId])) {
             return self::$_cachedGeneratorKeys[$cacheId];
         }
-        $ret = Vps_Cache_Simple::fetch('genInst-'.$cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch('genInst-'.$cacheId, $success);
         if ($success) {
             self::$_cachedGeneratorKeys[$cacheId] = $ret;
             return $ret;
         }
 
         $generators = self::_getGeneratorsForComponent($componentClass, false);
-        foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
+        foreach (Kwc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
             $generators = array_merge($generators, self::_getGeneratorsForComponent($pluginClass, $componentClass));
         }
         $inheritedGenerators = array();
         if ($inheritClasses) {
             foreach ($inheritClasses as $inheritClass) {
-                $gs = Vpc_Abstract::getSetting($inheritClass, 'generators');
+                $gs = Kwc_Abstract::getSetting($inheritClass, 'generators');
                 foreach ($gs as $key => $inheritedGenerator) {
                     if (!$inheritedGenerator['component']) {
                         unset($gs[$key]);
                         continue;
                     }
                     if (!isset($inheritedGenerator['inherit']) || !$inheritedGenerator['inherit']) continue;
-                    if (!is_instance_of($inheritedGenerator['class'], 'Vps_Component_Generator_Static')) continue;
+                    if (!is_instance_of($inheritedGenerator['class'], 'Kwf_Component_Generator_Static')) continue;
                     /* Auskommentiert wegen memcached-cache, möglicherweise brauchen wir da noch ein bessere lösung dafür
                     if (is_array($inheritedGenerator['component']) && count($inheritedGenerator['component']) > 1) {
                         unset($gs[$key]);
                         foreach ($inheritedGenerator['component'] as $k=>$c) {
                             if (isset($gs[$k])) {
-                                throw new Vps_Exception("Generator '$k' does already exist");
+                                throw new Kwf_Exception("Generator '$k' does already exist");
                             }
                             $gs[$k] = $inheritedGenerator;
                             $gs[$k]['component'] = $c;
@@ -339,27 +339,27 @@ abstract class Vps_Component_Generator_Abstract
                 'childComponentIds' => $g->getStaticChildComponentIds()
             );
         }
-        Vps_Cache_Simple::add('genInst-'.$cacheId, $ret);
+        Kwf_Cache_Simple::add('genInst-'.$cacheId, $ret);
 
         self::$_cachedGeneratorKeys[$cacheId] = $ret;
         return $ret;
     }
 
-    private static function _filterGenerators(array $generators, $component, $componentClass, Vps_Component_Select $select)
+    private static function _filterGenerators(array $generators, $component, $componentClass, Kwf_Component_Select $select)
     {
         $selectParts = $select->getParts();
 
         $ret = array();
         foreach ($generators as $g) {
             //performance: page generator nur zurückgeben wenn: component eine aus pages-tabelle ist oder eine category
-            if ($component && $g instanceof Vpc_Root_Category_Generator &&
+            if ($component && $g instanceof Kwc_Root_Category_Generator &&
                 !is_numeric($component->componentId)
             ) {
                 $hasPageGenerator = false;
-                foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $i) {
+                foreach (Kwc_Abstract::getSetting($component->componentClass, 'generators') as $i) {
                     static $isPageGenerator = array();
                     if (!isset($isPageGenerator[$i['class']])) {
-                        $isPageGenerator[$i['class']] = is_instance_of($i['class'], 'Vpc_Root_Category_Generator');
+                        $isPageGenerator[$i['class']] = is_instance_of($i['class'], 'Kwc_Root_Category_Generator');
                     }
                     if ($isPageGenerator[$i['class']]) {
                         $hasPageGenerator = true;
@@ -368,30 +368,30 @@ abstract class Vps_Component_Generator_Abstract
                 }
                 if (!$hasPageGenerator) continue;
             }
-            if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR_CLASS])) {
-                $value = $selectParts[Vps_Component_Select::WHERE_GENERATOR_CLASS];
+            if (isset($selectParts[Kwf_Component_Select::WHERE_GENERATOR_CLASS])) {
+                $value = $selectParts[Kwf_Component_Select::WHERE_GENERATOR_CLASS];
                 if (!$g instanceof $value) {
                     continue;
                 }
             }
-            if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR])) {
-                $value = $selectParts[Vps_Component_Select::WHERE_GENERATOR];
+            if (isset($selectParts[Kwf_Component_Select::WHERE_GENERATOR])) {
+                $value = $selectParts[Kwf_Component_Select::WHERE_GENERATOR];
                 if ($g->_class != $componentClass || $value != $g->_settings['generator']) {
                     continue;
                 }
             }
-            if (isset($selectParts[Vps_Component_Select::WHERE_FILENAME])) {
-                if (!isset($selectParts[Vps_Component_Select::WHERE_PSEUDO_PAGE])) {
-                    $selectParts[Vps_Component_Select::WHERE_PSEUDO_PAGE] = true;
+            if (isset($selectParts[Kwf_Component_Select::WHERE_FILENAME])) {
+                if (!isset($selectParts[Kwf_Component_Select::WHERE_PSEUDO_PAGE])) {
+                    $selectParts[Kwf_Component_Select::WHERE_PSEUDO_PAGE] = true;
                 }
             }
 
             $flags = array(
-                Vps_Component_Select::WHERE_PAGE_GENERATOR => 'pageGenerator',
-                Vps_Component_Select::WHERE_PAGE => 'page',
-                Vps_Component_Select::WHERE_PSEUDO_PAGE => 'pseudoPage',
-                Vps_Component_Select::WHERE_BOX => 'box',
-                Vps_Component_Select::WHERE_MULTI_BOX => 'multiBox'
+                Kwf_Component_Select::WHERE_PAGE_GENERATOR => 'pageGenerator',
+                Kwf_Component_Select::WHERE_PAGE => 'page',
+                Kwf_Component_Select::WHERE_PSEUDO_PAGE => 'pseudoPage',
+                Kwf_Component_Select::WHERE_BOX => 'box',
+                Kwf_Component_Select::WHERE_MULTI_BOX => 'multiBox'
             );
 
             foreach ($flags as $part=>$flag) {
@@ -406,16 +406,16 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
 
-            if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS])) {
+            if (isset($selectParts[Kwf_Component_Select::WHERE_GENERATOR_FLAGS])) {
                 $flags = $g->getGeneratorFlags();
-                foreach ($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS] as $flag=>$value) {
+                foreach ($selectParts[Kwf_Component_Select::WHERE_GENERATOR_FLAGS] as $flag=>$value) {
                     if (!isset($flags[$flag])) $flags[$flag] = null;
                     if ($flags[$flag] != $value) continue 2;
                 }
             }
 
-            if (isset($selectParts[Vps_Component_Select::WHERE_UNIQUE])) {
-                $value = $selectParts[Vps_Component_Select::WHERE_UNIQUE];
+            if (isset($selectParts[Kwf_Component_Select::WHERE_UNIQUE])) {
+                $value = $selectParts[Kwf_Component_Select::WHERE_UNIQUE];
                 if (isset($g->_settings['unique']) && $g->_settings['unique']) {
                     if (!$value) continue;
                 } else {
@@ -423,27 +423,27 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
 
-            if (isset($selectParts[Vps_Component_Select::WHERE_INHERIT])) {
-                $value = $selectParts[Vps_Component_Select::WHERE_INHERIT];
+            if (isset($selectParts[Kwf_Component_Select::WHERE_INHERIT])) {
+                $value = $selectParts[Kwf_Component_Select::WHERE_INHERIT];
                 if (isset($g->_settings['inherit']) && $g->_settings['inherit']) {
                     if (!$value) continue;
                 } else {
                     if ($value) continue;
                 }
             }
-            if (isset($selectParts[Vps_Component_Select::WHERE_SHOW_IN_MENU])) {
-                $value = $selectParts[Vps_Component_Select::WHERE_SHOW_IN_MENU];
+            if (isset($selectParts[Kwf_Component_Select::WHERE_SHOW_IN_MENU])) {
+                $value = $selectParts[Kwf_Component_Select::WHERE_SHOW_IN_MENU];
                 if (isset($g->_settings['showInMenu']) && $g->_settings['showInMenu']) {
                     if (!$value) continue;
                 } else {
                     if ($value) continue;
                 }
             }
-            if (isset($selectParts[Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS]) && $selectParts[Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS]) {
-                if (!Vpc_Abstract::hasSetting($g->_class, 'editComponents')) {
+            if (isset($selectParts[Kwf_Component_Select::WHERE_HAS_EDIT_COMPONENTS]) && $selectParts[Kwf_Component_Select::WHERE_HAS_EDIT_COMPONENTS]) {
+                if (!Kwc_Abstract::hasSetting($g->_class, 'editComponents')) {
                     continue;
                 }
-                $editComponents = Vpc_Abstract::getSetting($g->_class, 'editComponents');
+                $editComponents = Kwc_Abstract::getSetting($g->_class, 'editComponents');
                 if ($g->getGeneratorFlag('table')) {
                     //es kann entweder ein table generator angegeben werden
                     //da kommen dann alle unterkomponenten daher
@@ -451,7 +451,7 @@ abstract class Vps_Component_Generator_Abstract
                         continue;
                     }
                 } else {
-                    if ($g instanceof Vps_Component_Generator_Box_StaticSelect) {
+                    if ($g instanceof Kwf_Component_Generator_Box_StaticSelect) {
                         if (!in_array($g->getGeneratorKey(), $editComponents)) {
                             //oder ein static generator (wenn er nur eine unter komponente hat)
                             continue;
@@ -473,8 +473,8 @@ abstract class Vps_Component_Generator_Abstract
                     }
                 }
             }
-            if (isset($selectParts[Vps_Component_Select::WHERE_COMPONENT_CLASSES])) {
-                $componentClasses = $selectParts[Vps_Component_Select::WHERE_COMPONENT_CLASSES];
+            if (isset($selectParts[Kwf_Component_Select::WHERE_COMPONENT_CLASSES])) {
+                $componentClasses = $selectParts[Kwf_Component_Select::WHERE_COMPONENT_CLASSES];
                 $generatorComponentClasses = $g->_settings['component'];
                 if (!is_array($generatorComponentClasses)) {
                     $generatorComponentClasses = array($generatorComponentClasses);
@@ -488,7 +488,7 @@ abstract class Vps_Component_Generator_Abstract
                 }
                 if ($continue) { continue; }
             }
-            if (isset($selectParts[Vps_Component_Select::WHERE_HOME]) && $selectParts[Vps_Component_Select::WHERE_HOME]) {
+            if (isset($selectParts[Kwf_Component_Select::WHERE_HOME]) && $selectParts[Kwf_Component_Select::WHERE_HOME]) {
                 if (!$g->getGeneratorFlag('hasHome')) continue;
             }
             if (!$g->getChildComponentClasses($select)) continue;
@@ -502,9 +502,9 @@ abstract class Vps_Component_Generator_Abstract
     public function getChildComponentClasses($select = array())
     {
         if ($select === array() ||
-            ($select instanceof Vps_Model_Select &&
-                !($select->hasPart(Vps_Component_Select::WHERE_FLAGS) ||
-                    $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)
+            ($select instanceof Kwf_Model_Select &&
+                !($select->hasPart(Kwf_Component_Select::WHERE_FLAGS) ||
+                    $select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_KEY)
                  )
             )
         ) {
@@ -512,24 +512,24 @@ abstract class Vps_Component_Generator_Abstract
         }
 
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
 
         $ret = $this->_settings['component'];
 
-        if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
-            $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);
+        if ($select->hasPart(Kwf_Component_Select::WHERE_FLAGS)) {
+            $flags = $select->getPart(Kwf_Component_Select::WHERE_FLAGS);
             foreach ($ret as $k=>$c) {
                 foreach ($flags as $f=>$v) {
-                    if (Vpc_Abstract::getFlag($c, $f) != $v) {
+                    if (Kwc_Abstract::getFlag($c, $f) != $v) {
                         unset($ret[$k]);
                     }
                 }
             }
         }
 
-        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
-            $componentKey = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_KEY);
+        if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_KEY)) {
+            $componentKey = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_KEY);
             if (isset($ret[$componentKey])) {
                 $ret = array($ret[$componentKey]);
             } else {
@@ -544,7 +544,7 @@ abstract class Vps_Component_Generator_Abstract
      */
     final public function select($parentData, array $select = array())
     {
-        $select = new Vps_Component_Select($select);
+        $select = new Kwf_Component_Select($select);
         $select->whereGenerator($this->_settings['generator']);
         return $select;
     }
@@ -584,23 +584,23 @@ abstract class Vps_Component_Generator_Abstract
         $c = $this->_getChildComponentClasses($parentData);
         if ($key) {
             if (!isset($c[$key])) {
-                throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
+                throw new Kwf_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
             }
             $componentClass = $c[$key];
         } else {
             if (count($c) > 1) {
-                throw new Vps_Exception("For multiple components you have to submit a key in generator " . get_class($this) . " ($this->_class).");
+                throw new Kwf_Exception("For multiple components you have to submit a key in generator " . get_class($this) . " ($this->_class).");
             }
             reset($c);
             $componentClass = current($c);
         }
 
-        if (Vpc_Abstract::getFlag($componentClass, "hasAlternativeComponent")) {
+        if (Kwc_Abstract::getFlag($componentClass, "hasAlternativeComponent")) {
             $useAC = call_user_func(array($componentClass, 'useAlternativeComponent'), $componentClass, $parentData, $this);
             if ($useAC) {
                 $alternativeComponents = call_user_func(array($componentClass, 'getAlternativeComponents'), $componentClass);
                 if (!isset($alternativeComponents[$useAC])) {
-                    throw new Vps_Exception("Alternative component $useAC not set, returned by $componentClass::getAlternativeComponents");
+                    throw new Kwf_Exception("Alternative component $useAC not set, returned by $componentClass::getAlternativeComponents");
                 }
                 $componentClass = $alternativeComponents[$useAC];
             }
@@ -609,20 +609,20 @@ abstract class Vps_Component_Generator_Abstract
         return $componentClass;
     }
 
-    protected function _formatSelectFilename(Vps_Component_Select $select)
+    protected function _formatSelectFilename(Kwf_Component_Select $select)
     {
-        if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+        if ($select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
             return null;
         }
-        if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
+        if ($select->hasPart(Kwf_Component_Select::WHERE_SHOW_IN_MENU)) {
             return null;
         }
         return $select;
     }
 
-    protected function _formatSelectHome(Vps_Component_Select $select)
+    protected function _formatSelectHome(Kwf_Component_Select $select)
     {
-        if ($select->hasPart(Vps_Component_Select::WHERE_HOME)) {
+        if ($select->hasPart(Kwf_Component_Select::WHERE_HOME)) {
             return null;
         }
         return $select;
@@ -631,7 +631,7 @@ abstract class Vps_Component_Generator_Abstract
     protected function _formatSelect($parentData, $select)
     {
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         } else {
             $select = clone $select;
         }
@@ -641,10 +641,10 @@ abstract class Vps_Component_Generator_Abstract
         if (is_null($select)) return null;
         $select = $this->_formatSelectHome($select);
         if (is_null($select)) return null;
-        if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS) || $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
+        if ($select->hasPart(Kwf_Component_Select::WHERE_FLAGS) || $select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_KEY)) {
             $classes = $this->getChildComponentClasses($select);
             $select->whereComponentClasses($classes);
-            if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
+            if ($select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
                 return null;
             }
 
@@ -655,7 +655,7 @@ abstract class Vps_Component_Generator_Abstract
     protected function _createData($parentData, $row, $select)
     {
         $id = $this->_getIdFromRow($row);
-        if (is_array($select)) $select = new Vps_Component_Select($select);
+        if (is_array($select)) $select = new Kwf_Component_Select($select);
         if ($select && $select->hasPart('whereSubroot')) {
             foreach ($select->getPart('whereSubroot') as $subroot) {
                 $subrootLevel = 0;
@@ -684,15 +684,15 @@ abstract class Vps_Component_Generator_Abstract
         }
 
         $componentId = $this->_getComponentIdFromRow($parentData, $row);
-        $ret = Vps_Component_Data_Root::getInstance()->getFromDataCache($componentId);
+        $ret = Kwf_Component_Data_Root::getInstance()->getFromDataCache($componentId);
         if (!$ret) {
             $config = $this->_formatConfig($parentData, $row);
             if (!$config['componentClass'] || !is_string($config['componentClass'])) {
-                throw new Vps_Exception("no componentClass set (id $parentData->componentId $id)");
+                throw new Kwf_Exception("no componentClass set (id $parentData->componentId $id)");
             }
             $config['id'] = $id;
             if (isset($config['inherits'])) {
-                throw new Vps_Exception("You must set Generator::_inherits instead of magically modifying the config");
+                throw new Kwf_Exception("You must set Generator::_inherits instead of magically modifying the config");
             }
             if ($this->_inherits) {
                 $config['inherits'] = true;
@@ -700,30 +700,30 @@ abstract class Vps_Component_Generator_Abstract
             $config['generator'] = $this; //wird benötigt für duplizieren
             $pageDataClass = $this->_getDataClass($config, $row);
             $ret = new $pageDataClass($config);
-            Vps_Component_Data_Root::getInstance()->addToDataCache($ret, $select);
+            Kwf_Component_Data_Root::getInstance()->addToDataCache($ret, $select);
         }
         return $ret;
     }
 
     protected function _getDataClass($config, $row)
     {
-        if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
-            return Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
+        if (Kwc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
+            return Kwc_Abstract::getSetting($config['componentClass'], 'dataClass');
         } else {
-            return 'Vps_Component_Data';
+            return 'Kwf_Component_Data';
         }
     }
 
     protected function _getComponentIdFromRow($parentData, $row)
     {
-        throw new Vps_Exception('_getComponentIdFromRow has to be implemented for '.get_class($this));
+        throw new Kwf_Exception('_getComponentIdFromRow has to be implemented for '.get_class($this));
     }
 
     protected function _formatConfig($parentData, $row) {
-        throw new Vps_Exception('_formatConfig has to be implemented for '.get_class($this));
+        throw new Kwf_Exception('_formatConfig has to be implemented for '.get_class($this));
     }
     protected function _getIdFromRow($row) {
-        throw new Vps_Exception('_getIdFromRow has to be implemented for '.get_class($this));
+        throw new Kwf_Exception('_getIdFromRow has to be implemented for '.get_class($this));
     }
 
     public function toDebug()
@@ -762,7 +762,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
     {
-        throw new Vps_Exception_NotYetImplemented("duplicating is not yet implemented in '".get_class($this)."'");
+        throw new Kwf_Exception_NotYetImplemented("duplicating is not yet implemented in '".get_class($this)."'");
     }
 
     public function getDuplicateProgressSteps($source)
@@ -772,7 +772,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function makeChildrenVisible($source)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     public function getPagesControllerConfig($component, $generatorClass = null)

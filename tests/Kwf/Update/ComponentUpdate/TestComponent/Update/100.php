@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_ComponentUpdate_TestComponent_Update_100 extends Vps_Update
+class Kwf_Update_ComponentUpdate_TestComponent_Update_100 extends Kwf_Update
 {
     public function update() {}
 }

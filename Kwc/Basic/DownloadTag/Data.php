@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_DownloadTag_Data extends Vps_Component_Data
+class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
 {
     public function __get($var)
     {
         if ($var == 'url') {
-            $m = Vpc_Abstract::createModel($this->componentClass);
+            $m = Kwc_Abstract::createModel($this->componentClass);
             $row = $m->getRow($this->dbId);
             if (!$row) return null;
             $fRow = $row->getParentRow('File');
@@ -14,7 +14,7 @@ class Vpc_Basic_DownloadTag_Data extends Vps_Component_Data
                 $filename = $fRow->filename;
             }
             $filename .= '.'.$fRow->extension;
-            return Vps_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
+            return Kwf_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
         } else if ($var == 'rel') {
             $ret = 'popup_blank';
             return $ret;

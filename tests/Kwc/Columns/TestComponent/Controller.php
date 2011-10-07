@@ -1,10 +1,10 @@
 <?php
-class Vpc_Columns_TestComponent_Controller extends Vpc_Columns_Controller
+class Kwc_Columns_TestComponent_Controller extends Kwc_Columns_Controller
 {
     public function indexAction()
     {
-        $this->view->viewport = 'Vps.Test.Viewport';
-        $this->view->assetsType = 'Vpc_Columns:Test';
+        $this->view->viewport = 'Kwf.Test.Viewport';
+        $this->view->assetsType = 'Kwc_Columns:Test';
         parent::indexAction();
     }
 }

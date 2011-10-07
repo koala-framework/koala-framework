@@ -1,6 +1,6 @@
 <?php
-class Vps_Form_ShowField_Storage extends Vps_Form_AddForm
+class Kwf_Form_ShowField_Storage extends Kwf_Form_AddForm
 {
-    protected $_model = 'Vps_Form_ShowField_ValueOverlapsModel';
+    protected $_model = 'Kwf_Form_ShowField_ValueOverlapsModel';
 
 }

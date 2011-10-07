@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
+class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
@@ -12,32 +12,32 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
     protected function _initFieldsUpload()
     {
         // Dateiname
-        if (Vpc_Abstract::getSetting($this->getClass(), 'editFilename')) {
-            $this->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
+        if (Kwc_Abstract::getSetting($this->getClass(), 'editFilename')) {
+            $this->add(new Kwf_Form_Field_TextField('filename', trlKwf('Filename')))
                 ->setVtype('alphanum');
         }
 
         // Fileupload
-        $image = new Vps_Form_Field_File('Image', Vpc_Abstract::getSetting($this->getClass(), 'imageLabel'));
+        $image = new Kwf_Form_Field_File('Image', Kwc_Abstract::getSetting($this->getClass(), 'imageLabel'));
         $image
-            ->setAllowBlank(Vpc_Abstract::getSetting($this->getClass(), 'allowBlank'))
+            ->setAllowBlank(Kwc_Abstract::getSetting($this->getClass(), 'allowBlank'))
             ->setAllowOnlyImages(true);
-        if (Vpc_Abstract::getSetting($this->getClass(), 'maxResolution')) {
-            $image->setMaxResolution(Vpc_Abstract::getSetting($this->getClass(), 'maxResolution'));
+        if (Kwc_Abstract::getSetting($this->getClass(), 'maxResolution')) {
+            $image->setMaxResolution(Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'));
         }
         $this->add($image);
 
-        if (Vpc_Abstract::getSetting($this->getClass(), 'showHelpText')) {
-            $dimensions = Vpc_Abstract::getSetting($this->getClass(), 'dimensions');
-            $helptext = trlVps('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['height'] . 'px';
-            $helptext .= "<br />" . trlVps('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
+        if (Kwc_Abstract::getSetting($this->getClass(), 'showHelpText')) {
+            $dimensions = Kwc_Abstract::getSetting($this->getClass(), 'dimensions');
+            $helptext = trlKwf('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['height'] . 'px';
+            $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
             $this->getByName('Image')->setHelpText($helptext);
         }
 
         // Höhe, Breite
-        $dimensions = Vpc_Abstract::getSetting($this->getClass(), 'dimensions');
+        $dimensions = Kwc_Abstract::getSetting($this->getClass(), 'dimensions');
         if (count($dimensions) > 1) {
-            $this->add(new Vpc_Abstract_Image_DimensionField('dimension', trlVps('Dimension')))
+            $this->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
                 ->setAllowBlank(false)
                 ->setDimensions($dimensions);
         }
@@ -47,8 +47,8 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
     protected function _initFieldsCaption()
     {
         // Bildunterschrift
-        if (Vpc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
-            $this->add(new Vps_Form_Field_TextField('image_caption', trlVps('Image caption')))
+        if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
+            $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
                 ->setWidth(300);
         }
     }

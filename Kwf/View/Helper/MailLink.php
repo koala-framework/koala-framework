@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_MailLink extends Vps_View_Helper_Abstract_MailLink
+class Kwf_View_Helper_MailLink extends Kwf_View_Helper_Abstract_MailLink
 {
     public function mailLink($mailAddress, $linkText = null, $cssClass = null)
     {

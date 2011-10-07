@@ -1,4 +1,4 @@
 <?php
-class Vpc_NewsCategory_Detail_Component extends Vpc_News_Detail_Component
+class Kwc_NewsCategory_Detail_Component extends Kwc_News_Detail_Component
 {
 }

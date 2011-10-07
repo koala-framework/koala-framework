@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_NewsletterController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -29,7 +29,7 @@ class Vps_Controller_Action_Cli_Web_NewsletterController extends Vps_Controller_
 
     public function indexAction()
     {
-        $components = Vps_Component_Data_Root::getInstance()->getComponentsByClass('Vpc_Newsletter_Component');
+        $components = Kwf_Component_Data_Root::getInstance()->getComponentsByClass('Kwc_Newsletter_Component');
         if (empty($components)) return;
         $model = $components[0]->getComponent()->getChildModel();
         $model->send($this->_getParam('timeLimit'), $this->_getParam('mailsPerMinute'), $this->_getParam('debug'));

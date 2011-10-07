@@ -1,11 +1,11 @@
-Vps.Form.StaticField = Ext.extend(Ext.BoxComponent, {
-    autoEl: {tag: 'div', cls:'vps-form-static-field'},
+Kwf.Form.StaticField = Ext.extend(Ext.BoxComponent, {
+    autoEl: {tag: 'div', cls:'kwf-form-static-field'},
     isFormField : true,
     initComponent: function() {
-        Vps.Form.StaticField.superclass.initComponent.call(this);
+        Kwf.Form.StaticField.superclass.initComponent.call(this);
     },
     afterRender: function() {
-        Vps.Form.StaticField.superclass.afterRender.call(this);
+        Kwf.Form.StaticField.superclass.afterRender.call(this);
         this.el.update(this.text);
     },
     getName: function() {
@@ -24,4 +24,4 @@ Vps.Form.StaticField = Ext.extend(Ext.BoxComponent, {
     setFormBaseParams: function() { },
     setDefaultValue: function() { }
 });
-Ext.reg('staticfield', Vps.Form.StaticField);
+Ext.reg('staticfield', Kwf.Form.StaticField);

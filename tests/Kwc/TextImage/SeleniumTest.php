@@ -2,36 +2,36 @@
 /**
  * @group slow
  * @group selenium
- * @group Vpc_TextImage
+ * @group Kwc_TextImage
  */
-class Vpc_TextImage_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwc_TextImage_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
         parent::setUp();
-        Vps_Component_Data_Root::setComponentClass('Vpc_TextImage_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_TextImage_Root');
     }
 
     public function testLightbox()
     {
-        $this->openVpc('/textimage1');
+        $this->openKwc('/textimage1');
         sleep(5);
-        $this->assertContainsText('css=.vpcTextImageTestComponent .vpcText', 'foo');
+        $this->assertContainsText('css=.kwcTextImageTestComponent .kwcText', 'foo');
         sleep(5);
-        $this->assertElementNotPresent('css=.vpsLightbox');
-        $this->assertElementPresent('css=.vpcTextImageTestComponent a img');
-        $this->click('css=.vpcTextImageTestComponent a img');
+        $this->assertElementNotPresent('css=.kwfLightbox');
+        $this->assertElementPresent('css=.kwcTextImageTestComponent a img');
+        $this->click('css=.kwcTextImageTestComponent a img');
         $this->waitForConnections();
-        $this->assertVisible('css=.vpsLightbox');
-        $this->assertElementPresent('css=.vpsLightbox div.image img');
-        $this->click('css=.vpsLightbox a.closeButton');
+        $this->assertVisible('css=.kwfLightbox');
+        $this->assertElementPresent('css=.kwfLightbox div.image img');
+        $this->click('css=.kwfLightbox a.closeButton');
         sleep(1);
-        $this->assertNotVisible('css=.vpsLightbox');
+        $this->assertNotVisible('css=.kwfLightbox');
     }
 
     public function testAdmin()
     {
-        $this->openVpcEdit('Vpc_TextImage_TestComponent', 'root_textImage1');
+        $this->openKwcEdit('Kwc_TextImage_TestComponent', 'root_textImage1');
         sleep(5);
         $this->waitForConnections();
         //test könnte natürlich verbessert werden, aber zumindest testen ob kein fehler kommt

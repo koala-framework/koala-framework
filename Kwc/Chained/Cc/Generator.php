@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Cc_Generator extends Vpc_Chained_Abstract_Generator
+class Kwc_Chained_Cc_Generator extends Kwc_Chained_Abstract_Generator
 {
     public function getGeneratorFlags()
     {

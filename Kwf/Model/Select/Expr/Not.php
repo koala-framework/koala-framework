@@ -1,8 +1,8 @@
 <?php
-class Vps_Model_Select_Expr_Not implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Not implements Kwf_Model_Select_Expr_Interface
 {
     protected $_expression;
-    public function __construct(Vps_Model_Select_Expr_Interface $expression)
+    public function __construct(Kwf_Model_Select_Expr_Interface $expression)
     {
         $this->_expression = $expression;
     }
@@ -14,12 +14,12 @@ class Vps_Model_Select_Expr_Not implements Vps_Model_Select_Expr_Interface
     public function validate()
     {
         if (!$this->_expression) {
-            throw new Vps_Exception("No Expression set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No Expression set for '"+get_class($this)+"'");
         }
     }
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_BOOLEAN;
+        return Kwf_Model_Interface::TYPE_BOOLEAN;
     }
 }

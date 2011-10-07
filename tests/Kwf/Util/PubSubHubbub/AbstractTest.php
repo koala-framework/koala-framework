@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Util_PubSubHubbub_AbstractTest extends Vps_Test_TestCase
+abstract class Kwf_Util_PubSubHubbub_AbstractTest extends Kwf_Test_TestCase
 {
     protected $_hubApp;
     protected $_hubUrl;
@@ -35,9 +35,9 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends Vps_Test_TestCase
         touch('/tmp/lastCallback'.$this->_testId);
         file_put_contents('/tmp/feedRequested'.$this->_testId, 0);
 
-        $domain = Vps_Registry::get('config')->server->domain;
-        $urlPrefix = 'http://'.$domain.'/vps/test';
-        $this->_testFeedUrl = $urlPrefix.'/vps_util_pub-sub-hubbub_test-feed?id='.$this->_testId;
+        $domain = Kwf_Registry::get('config')->server->domain;
+        $urlPrefix = 'http://'.$domain.'/kwf/test';
+        $this->_testFeedUrl = $urlPrefix.'/kwf_util_pub-sub-hubbub_test-feed?id='.$this->_testId;
 
         $this->_writeTestFeedContent(1);
 
@@ -64,7 +64,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends Vps_Test_TestCase
         } else {
             $d = "/www/public/library/pshb/";
         }
-        $port = Vps_Util_Tcp::getFreePort(8000, $address);
+        $port = Kwf_Util_Tcp::getFreePort(8000, $address);
         $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
                "--port=$port --address=$address --clear_datastore ".
                "--datastore_path=$this->_storePath/dev_appserver.datastore ".
@@ -77,7 +77,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends Vps_Test_TestCase
         sleep(10);
         $status = proc_get_status($this->_hubApp);
         if (!$status['running']) {
-            throw new Vps_Exception('can\'t start pshb server');
+            throw new Kwf_Exception('can\'t start pshb server');
         }
     }
 
@@ -124,7 +124,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends Vps_Test_TestCase
 
     protected function _publishTestFeedUpdate()
     {
-        $p = new Vps_Util_PubSubHubbub_Publisher($this->_hubUrl.'/');
+        $p = new Kwf_Util_PubSubHubbub_Publisher($this->_hubUrl.'/');
         $p->publishUpdate($this->_testFeedUrl);
     }
 
@@ -178,7 +178,7 @@ return $ret;
                 }
                 $response = $client->request();
                 if ($response->getStatus() != 200) {
-                    throw new Vps_Exception("$mode failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
+                    throw new Kwf_Exception("$mode failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
                 }
 
                 $client = new Zend_Http_Client($this->_hubUrl.'/_ah/admin/tasks');
@@ -190,7 +190,7 @@ return $ret;
                 ));
                 $response = $client->request();
                 if ($response->getStatus() != 200) {
-                    throw new Vps_Exception("$mode failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
+                    throw new Kwf_Exception("$mode failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
                 }
             }
         }

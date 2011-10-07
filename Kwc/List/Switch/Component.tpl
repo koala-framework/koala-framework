@@ -1,4 +1,4 @@
-<div class="vpsEyeCandyList <?=$this->cssClass?>">
+<div class="kwfEyeCandyList <?=$this->cssClass?>">
     <?=$this->hiddenOptions($this->options)?>
     <div class="listSwitchLargeWrapper">
         <div class="listSwitchLargeContent">
@@ -19,8 +19,8 @@
         <? foreach ($this->children as $child) { ?>
             <?
                 $class = '';
-                if ($i == 0) $class .= 'vpcFirst ';
-                if ($i == count($this->children)-1) $class .= 'vpcLast ';
+                if ($i == 0) $class .= 'kwcFirst ';
+                if ($i == count($this->children)-1) $class .= 'kwcLast ';
                 $class = trim($class);
                 $i++;
             ?>

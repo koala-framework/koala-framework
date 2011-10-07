@@ -1,6 +1,6 @@
-Vps.Form.ShowField = Ext.extend(Ext.form.Field,
+Kwf.Form.ShowField = Ext.extend(Ext.form.Field,
 {
-    defaultAutoCreate : {tag: 'div', cls: 'vps-form-show-field'},
+    defaultAutoCreate : {tag: 'div', cls: 'kwf-form-show-field'},
     /**
      * {value} wenn kein objekt übergeben, sonst index aus objekt
      */
@@ -12,10 +12,10 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
         }
     },
     afterRender : function(){
-        Vps.Form.ShowField.superclass.afterRender.call(this);
+        Kwf.Form.ShowField.superclass.afterRender.call(this);
         if (typeof this.tpl == 'string') this.tpl = new Ext.XTemplate(this.tpl);
         this.tpl.compile();
-        this.setRawValue("&nbsp;"); //bugfix für IE 7 -> /vps/test/vps_form_show-field_value-overlaps-error
+        this.setRawValue("&nbsp;"); //bugfix für IE 7 -> /kwf/test/kwf_form_show-field_value-overlaps-error
     },
     getName: function(){
         return this.name;
@@ -46,4 +46,4 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
         }
     }
 });
-Ext.reg('showfield', Vps.Form.ShowField);
+Ext.reg('showfield', Kwf.Form.ShowField);

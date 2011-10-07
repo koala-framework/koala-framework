@@ -1,12 +1,12 @@
-CREATE TABLE IF NOT EXISTS `vpc_mail_redirect` (
+CREATE TABLE IF NOT EXISTS `kwc_mail_redirect` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `value` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB;
-ALTER TABLE `vpc_mail_redirect` ADD INDEX ( `value` );
+ALTER TABLE `kwc_mail_redirect` ADD INDEX ( `value` );
 
-CREATE TABLE IF NOT EXISTS `vpc_mail_redirect_statistics` (
+CREATE TABLE IF NOT EXISTS `kwc_mail_redirect_statistics` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `mail_component_id` varchar(255) NOT NULL,
   `redirect_id` int(10) unsigned default NULL,

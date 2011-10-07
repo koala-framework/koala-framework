@@ -1,22 +1,22 @@
 <?php
 /**
- * @group Vpc_Basic_Feed
+ * @group Kwc_Basic_Feed
  **/
-class Vpc_Basic_Feed_Test extends Vpc_TestAbstract
+class Kwc_Basic_Feed_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_Feed_Root');
+        parent::setUp('Kwc_Basic_Feed_Root');
     }
 
     public function testFeed()
     {
-        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
-        $feed = Vps_Component_Data_Root::getInstance()->getChildComponent('_feed');
+        Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
+        $feed = Kwf_Component_Data_Root::getInstance()->getChildComponent('_feed');
         $xml = $feed->getComponent()->getXml();
-        $rows = Vps_Component_Cache::getInstance()->getModel()->getRows();
+        $rows = Kwf_Component_Cache::getInstance()->getModel()->getRows();
         $row = $rows->current();
-        $feedRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Feed_Model')->getRows()->current();
+        $feedRow = Kwf_Model_Abstract::getInstance('Kwc_Basic_Feed_Model')->getRows()->current();
 
         // XML prüfen
         $this->assertEquals('<?xml', substr($xml, 0, 5));

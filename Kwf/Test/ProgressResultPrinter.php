@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
+class Kwf_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
 {
     private $_times = array();
     private $_progressBar;
@@ -56,7 +56,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
         if ($this->_verbose) echo date('Y-m-d H:i:s').': finished '.$test->toString()." in $time\n\n";
-        $app = Vps_Registry::get('config')->application->id;
+        $app = Kwf_Registry::get('config')->application->id;
         if (!file_exists("/www/testtimes/$app")) mkdir("/www/testtimes/$app");
         file_put_contents("/www/testtimes/$app/{$test->toString()}", $time);
         if ($this->_expectedTimes) {

@@ -1,22 +1,22 @@
 <?php
-class Vps_Model_DbWithConnection_ImportExport_TestController extends Vps_Controller_Action
+class Kwf_Model_DbWithConnection_ImportExport_TestController extends Kwf_Controller_Action
 {
     public function exportAction()
     {
-        Zend_Registry::set('db', Vps_Test::getTestDb());
+        Zend_Registry::set('db', Kwf_Test::getTestDb());
 
-        $server = new Vps_Srpc_Server();
-        $server->setClass('Vps_Model_DbWithConnection_ImportExport_Handler');
+        $server = new Kwf_Srpc_Server();
+        $server->setClass('Kwf_Model_DbWithConnection_ImportExport_Handler');
         $server->handle();
         exit();
     }
 
     public function importAction()
     {
-        Zend_Registry::set('db', Vps_Test::getTestDb());
+        Zend_Registry::set('db', Kwf_Test::getTestDb());
 
-        $server = new Vps_Srpc_Server();
-        $server->setClass('Vps_Model_DbWithConnection_ImportExport_Handler');
+        $server = new Kwf_Srpc_Server();
+        $server->setClass('Kwf_Model_DbWithConnection_ImportExport_Handler');
         $server->handle();
         exit();
     }

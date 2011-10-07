@@ -5,11 +5,11 @@
  * @group Model_DbWithConnection
  * @group Model_Expr_Date
  */
-class Vps_Model_DbWithConnection_ExprDate_Test extends Vps_Model_DbWithConnection_SelectExpr_AbstractTest
+class Kwf_Model_DbWithConnection_ExprDate_Test extends Kwf_Model_DbWithConnection_SelectExpr_AbstractTest
 {
     public function testExpr()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_ExprDate_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_ExprDate_Model');
         $m->setUp();
 
         $this->assertEquals(1983, $m->getRow(1)->date_year);
@@ -19,7 +19,7 @@ class Vps_Model_DbWithConnection_ExprDate_Test extends Vps_Model_DbWithConnectio
 
     public function testExprEfficient()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_ExprDate_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_ExprDate_Model');
         $m->setUp();
 
         $s = $m->select();

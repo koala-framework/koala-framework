@@ -1,8 +1,8 @@
 <?php
-class Vps_Model_Mongo_MapReduce extends Vps_Model_Mongo
+class Kwf_Model_Mongo_MapReduce extends Kwf_Model_Mongo
 {
     protected $_primaryKey = '_id';
-    protected $_rowClass = 'Vps_Model_Mongo_MapReduce_Row';
+    protected $_rowClass = 'Kwf_Model_Mongo_MapReduce_Row';
 
     public function update() {}
 

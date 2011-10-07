@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_ProxyCache_Row extends Vps_Model_Proxy_Row
+class Kwf_Model_ProxyCache_Row extends Kwf_Model_Proxy_Row
 {
     protected $_cacheData = array();
     private $_id;

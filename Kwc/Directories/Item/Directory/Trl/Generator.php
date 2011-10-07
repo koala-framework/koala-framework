@@ -1,18 +1,18 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Generator
+class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Generator
 {
-    protected function _getChainedChildComponents($parentData, Vps_Component_Select $select)
+    protected function _getChainedChildComponents($parentData, Kwf_Component_Select $select)
     {
         $limitCount = $limitOffset = null;
-        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT) || $select->hasPart(Vps_Component_Select::LIMIT_OFFSET)) {
-            $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
-            $limitOffset = $select->getPart(Vps_Component_Select::LIMIT_OFFSET);
-            $select->unsetPart(Vps_Component_Select::LIMIT_COUNT);
-            $select->unsetPart(Vps_Component_Select::LIMIT_OFFSET);
+        if ($select->hasPart(Kwf_Component_Select::LIMIT_COUNT) || $select->hasPart(Kwf_Component_Select::LIMIT_OFFSET)) {
+            $limitCount = $select->getPart(Kwf_Component_Select::LIMIT_COUNT);
+            $limitOffset = $select->getPart(Kwf_Component_Select::LIMIT_OFFSET);
+            $select->unsetPart(Kwf_Component_Select::LIMIT_COUNT);
+            $select->unsetPart(Kwf_Component_Select::LIMIT_OFFSET);
         }
         $m = $this->getModel();
         $ret = parent::_getChainedChildComponents($parentData, $select);
-        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
+        if ($m && $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
             //kann nur gemacht werden nur wenn parentData vorhanden
             $ids = array();
             foreach ($ret as $k=>$c) {
@@ -40,14 +40,14 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
 
     public function getModel()
     {
-        return Vpc_Abstract::createChildModel($this->_class);
+        return Kwc_Abstract::createChildModel($this->_class);
     }
 
     public function getChildIds($parentData, $select = array())
     {
         $ret = parent::getChildIds($parentData, $select);
         $m = $this->getModel();
-        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
+        if ($m && $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
             $ids = array();
             $prefix = $parentData->dbId . $this->getIdSeparator();
             foreach ($ret as $id) {
@@ -71,7 +71,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         //aber nur wenn parentData dort schon verfügbar ist
         //für fälle wo es das nicht war hier unten nochmal überprüfen
         $m = $this->getModel();
-        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
+        if ($m && $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true) {
             $r = $this->_getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
             if (!$r || !$r->visible) {
                 return null;
@@ -98,8 +98,8 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         }
 
         //TODO: nicht mit settings direkt arbeiten, besser das echte generator objekt holen
-        $masterCC = Vpc_Abstract::getSetting($this->_class, 'masterComponentClass');
-        $masterGen = Vpc_Abstract::getSetting($masterCC, 'generators');
+        $masterCC = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
+        $masterGen = Kwc_Abstract::getSetting($masterCC, 'generators');
         $detailGen = $masterGen['detail'];
         if (isset($ret['chained']->name)) {
             if (isset($detailGen['nameColumn'])) {
@@ -120,7 +120,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
             if (!isset($detailGen['filenameColumn']) || !$detailGen['filenameColumn']) {
                 $ret['filename'] = $row->id.'_';
             }
-            $ret['filename'] .= Vps_Filter::filterStatic($fn, 'Ascii');
+            $ret['filename'] .= Kwf_Filter::filterStatic($fn, 'Ascii');
         }
         return $ret;
     }

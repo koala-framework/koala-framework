@@ -1,7 +1,7 @@
 <?php
 require_once 'tcpdf.php';
 
-abstract class Vps_Grid_Pdf_Abstract extends Vps_Pdf_TcPdf
+abstract class Kwf_Grid_Pdf_Abstract extends Kwf_Pdf_TcPdf
 {
 
     protected $_fields = array();
@@ -19,8 +19,8 @@ abstract class Vps_Grid_Pdf_Abstract extends Vps_Pdf_TcPdf
 
     public function Header()
     {
-        $date = new Vps_Date();
-        $headStr = $date->get(Vps_Date::WEEKDAY).', '.date('d.m.Y, H:i');
+        $date = new Kwf_Date();
+        $headStr = $date->get(Kwf_Date::WEEKDAY).', '.date('d.m.Y, H:i');
 
         $yBefore = $this->GetY();
         $this->SetY(10);

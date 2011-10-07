@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_TablePageUnderTable_Root extends Vps_Component_NoCategoriesRoot
+class Kwf_Component_Generator_TablePageUnderTable_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
@@ -8,8 +8,8 @@ class Vps_Component_Generator_TablePageUnderTable_Root extends Vps_Component_NoC
         unset($ret['generators']['title']);
         unset($ret['generators']['box']);
         $ret['generators']['page1'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vps_Component_Generator_TablePageUnderTable_Page1_Component',
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwf_Component_Generator_TablePageUnderTable_Page1_Component',
             'name' => 'page1',
             'showInMenu' => true
         );

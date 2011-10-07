@@ -1,9 +1,9 @@
-Ext.namespace('Vpc.Directories.List.ViewMap');
-Vpc.Directories.List.ViewMap.renderedMaps = [];
+Ext.namespace('Kwc.Directories.List.ViewMap');
+Kwc.Directories.List.ViewMap.renderedMaps = [];
 
-Vpc.Directories.List.ViewMap.renderMap = function(map) {
-    if (Vpc.Directories.List.ViewMap.renderedMaps.indexOf(map) != -1) return;
-    Vpc.Directories.List.ViewMap.renderedMaps.push(map);
+Kwc.Directories.List.ViewMap.renderMap = function(map) {
+    if (Kwc.Directories.List.ViewMap.renderedMaps.indexOf(map) != -1) return;
+    Kwc.Directories.List.ViewMap.renderedMaps.push(map);
 
     var mapContainer = new Ext.Element(map);
     var cfg = mapContainer.down(".options", true);
@@ -51,25 +51,25 @@ Vpc.Directories.List.ViewMap.renderMap = function(map) {
     }
 
     cfg.mapContainer = mapContainer;
-    var myMap = new Vps.GoogleMap.Map(cfg);
+    var myMap = new Kwf.GoogleMap.Map(cfg);
 
-    Vps.GoogleMap.load(function() {
+    Kwf.GoogleMap.load(function() {
         this.show();
     }, myMap);
 };
 
-Vps.onContentReady(function() {
-    var maps = Ext.DomQuery.select('div.vpcDirectoriesListViewMap');
+Kwf.onContentReady(function() {
+    var maps = Ext.DomQuery.select('div.kwcDirectoriesListViewMap');
     Ext.each(maps, function(map) {
-        var up = Ext.get(map).up('div.vpsSwitchDisplay');
+        var up = Ext.get(map).up('div.kwfSwitchDisplay');
         if (up) {
             (function(up, map) {
                 Ext.get(up).switchDisplayObject.on('opened', function() {
-                    Vpc.Directories.List.ViewMap.renderMap(map);
+                    Kwc.Directories.List.ViewMap.renderMap(map);
                 });
             }).defer(1, this, [up, map]);
         } else {
-            Vpc.Directories.List.ViewMap.renderMap(map);
+            Kwc.Directories.List.ViewMap.renderMap(map);
         }
     });
 });

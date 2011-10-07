@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_UrlResolve
+ * @group Kwc_UrlResolve
  */
-class Vps_Component_Generator_Page_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_Page_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_Page_Root');
+        parent::setUp('Kwf_Component_Generator_Page_Root');
         $this->_root->setFilename(null);
     }
 
@@ -46,9 +46,9 @@ class Vps_Component_Generator_Page_Test extends Vpc_TestAbstract
 
     public function testFilename()
     {
-        $ccc = Vpc_Abstract::getChildComponentClasses('Vps_Component_Generator_Page_Root', array('filename' => 'home'));
+        $ccc = Kwc_Abstract::getChildComponentClasses('Kwf_Component_Generator_Page_Root', array('filename' => 'home'));
         $this->assertEquals(2, count($ccc));
-        $this->assertEquals('Vpc_Basic_Empty_Component', current($ccc));
+        $this->assertEquals('Kwc_Basic_Empty_Component', current($ccc));
         $children = $this->_root->getChildComponents(array('filename' => 'home'));
         $this->assertEquals(1, count($children));
         $child = $this->_root->getChildComponent(array('filename' => 'home'));
@@ -74,10 +74,10 @@ class Vps_Component_Generator_Page_Test extends Vpc_TestAbstract
 
     public function testIdAndComponentClassConstraints()
     {
-        $c = $this->_root->getComponentById(2, array('componentClass'=>'Vpc_Basic_Empty_Component'));
+        $c = $this->_root->getComponentById(2, array('componentClass'=>'Kwc_Basic_Empty_Component'));
         $this->assertNotNull($c);
 
-        $c = $this->_root->getComponentById(2, array('componentClass'=>'Vps_Component_Generator_Page_Child'));
+        $c = $this->_root->getComponentById(2, array('componentClass'=>'Kwf_Component_Generator_Page_Child'));
         $this->assertNull($c);
     }
 }

@@ -1,4 +1,4 @@
-Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
+Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 {
     layout: 'fit',
     initComponent : function()
@@ -25,7 +25,7 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
             // ersten verwendet werden, weil sie wegen dem applyIf nicht
             // nochmal kopiert werden, und dann bearbeitet man falsche
             // datensätze...
-            var tab = Vps.clone(this.tabs[i]);
+            var tab = Kwf.clone(this.tabs[i]);
             var item = Ext.ComponentMgr.create(Ext.applyIf(tab, {
                 autoScroll  : true,
                 closable    : false,
@@ -49,7 +49,7 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }, this);
 
         this.items = this.tabPanel;
-        Vps.Binding.TabPanel.superclass.initComponent.call(this);
+        Kwf.Binding.TabPanel.superclass.initComponent.call(this);
 
     },
 
@@ -144,4 +144,4 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
         return this.tabItems.first().getAutoLoad.apply(this.proxyItem, arguments);
     }
 });
-Ext.reg('vps.tabpanel', Vps.Binding.TabPanel);
+Ext.reg('kwf.tabpanel', Kwf.Binding.TabPanel);

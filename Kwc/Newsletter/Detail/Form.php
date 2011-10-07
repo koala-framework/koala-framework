@@ -1,23 +1,23 @@
 <?php
-class Vpc_Newsletter_Detail_Form extends Vpc_Abstract_Form
+class Kwc_Newsletter_Detail_Form extends Kwc_Abstract_Form
 {
-    protected $_modelName = 'Vpc_Newsletter_Model';
+    protected $_modelName = 'Kwc_Newsletter_Model';
 
     protected function _initFields()
     {
         parent::_initFields();
 
         $class = $this->getClass();
-        if (is_instance_of($class, 'Vpc_Newsletter_Component')) {
-            $class = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        if (is_instance_of($class, 'Kwc_Newsletter_Component')) {
+            $class = Kwc_Abstract::getSetting($this->getClass(), 'generators');
             $class = $class['detail']['component'];
         }
 
-        $form = Vpc_Abstract_Form::createChildComponentForm($class, '-mail');
+        $form = Kwc_Abstract_Form::createChildComponentForm($class, '-mail');
         $form->setIdTemplate('{component_id}_{id}-mail');
         $this->add($form);
 
-        $this->add(new Vps_Form_Field_ShowField('create_date', trlVps('Creation Date')))
+        $this->add(new Kwf_Form_Field_ShowField('create_date', trlKwf('Creation Date')))
             ->setWidth(300);
     }
 

@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Generator_Domain_Category extends Vpc_Root_Category_Component
+class Kwf_Component_Generator_Domain_Category extends Kwc_Root_Category_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['page']['model'] = new Vps_Model_FnF(array('data'=>array(
+        $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Home', 'filename' => 'home',
                   'parent_id'=>'root-at-main', 'component'=>'empty', 'is_home'=>true, 'hide'=>false),
             array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
@@ -19,9 +19,9 @@ class Vps_Component_Generator_Domain_Category extends Vpc_Root_Category_Componen
                   'parent_id'=>'root-ch-bottom', 'component'=>'empty_ch', 'is_home'=>false, 'hide'=>false),
             )));
         $ret['generators']['page']['component'] = array(
-            'image' => 'Vpc_Basic_Image_Component',
-            'empty' => 'Vpc_Basic_Empty_Component',
-            'empty_ch' => 'Vpc_Basic_Link_Component',
+            'image' => 'Kwc_Basic_Image_Component',
+            'empty' => 'Kwc_Basic_Empty_Component',
+            'empty_ch' => 'Kwc_Basic_Link_Component',
         );
         return $ret;
     }

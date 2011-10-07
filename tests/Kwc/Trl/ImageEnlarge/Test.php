@@ -1,38 +1,38 @@
 <?php
 /**
  * @group slow
- * @group Vpc_Trl
- * @group Vpc_Trl_ImageEnlarge
+ * @group Kwc_Trl
+ * @group Kwc_Trl_ImageEnlarge
  *
- * Was wo angezeigt werden soll siehe Vpc_Trl_ImageEnlarge_Master
+ * Was wo angezeigt werden soll siehe Kwc_Trl_ImageEnlarge_Master
  *
 ansicht frontend:
-http://fnprofile.markus.vivid/vps/vpctest/Vpc_Trl_ImageEnlarge_Root/de/test1 (...2,3,4,5,6)
-http://fnprofile.markus.vivid/vps/vpctest/Vpc_Trl_ImageEnlarge_Root/en/test1 (...2,3,4,5,6)
+http://fnprofile.markus.vivid/kwf/kwctest/Kwc_Trl_ImageEnlarge_Root/de/test1 (...2,3,4,5,6)
+http://fnprofile.markus.vivid/kwf/kwctest/Kwc_Trl_ImageEnlarge_Root/en/test1 (...2,3,4,5,6)
 
 backend
-http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Trl_ImageEnlarge_Root/Vpc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-master_test1
-http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Trl_ImageEnlarge_Root/Vpc_Trl_ImageEnlarge_ImageEnlarge_Trl_Component.Vpc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-en_test1
+http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_ImageEnlarge_Root/Kwc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-master_test1
+http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_ImageEnlarge_Root/Kwc_Trl_ImageEnlarge_ImageEnlarge_Trl_Component.Kwc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-en_test1
  */
-class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
+class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_ImageEnlarge_Root');
+        parent::setUp('Kwc_Trl_ImageEnlarge_Root');
 
         //master image
-        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-master_test1', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test2', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test3', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test4', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test5', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test6', 'vps_upload_id'=>'1'),
+                array('component_id'=>'root-master_test1', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test2', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test3', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test4', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test5', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test6', 'kwf_upload_id'=>'1'),
             ));
 
         //image trl
-        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_Trl_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_Trl_TestModel')
             ->getProxyModel()->setData(array(
                 array('component_id'=>'root-en_test1', 'own_image'=>0),
                 array('component_id'=>'root-en_test2', 'own_image'=>0),
@@ -43,30 +43,30 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
             ));
 
         //image trl own image
-        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_Trl_Image_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_Trl_Image_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-en_test1-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test2-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test3-image', 'vps_upload_id'=>'6'),
-                array('component_id'=>'root-en_test4-image', 'vps_upload_id'=>'6'),
-                array('component_id'=>'root-en_test5-image', 'vps_upload_id'=>'6'),
-                array('component_id'=>'root-en_test6-image', 'vps_upload_id'=>null),
+                array('component_id'=>'root-en_test1-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test2-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test3-image', 'kwf_upload_id'=>'6'),
+                array('component_id'=>'root-en_test4-image', 'kwf_upload_id'=>'6'),
+                array('component_id'=>'root-en_test5-image', 'kwf_upload_id'=>'6'),
+                array('component_id'=>'root-en_test6-image', 'kwf_upload_id'=>null),
             ));
 
 
         //master enlarge tag
-        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-master_test1-linkTag', 'vps_upload_id'=>null, 'preview_image' => 0),
-                array('component_id'=>'root-master_test2-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
-                array('component_id'=>'root-master_test3-linkTag', 'vps_upload_id'=>null, 'preview_image' => 0),
-                array('component_id'=>'root-master_test4-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
-                array('component_id'=>'root-master_test5-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
-                array('component_id'=>'root-master_test6-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test1-linkTag', 'kwf_upload_id'=>null, 'preview_image' => 0),
+                array('component_id'=>'root-master_test2-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test3-linkTag', 'kwf_upload_id'=>null, 'preview_image' => 0),
+                array('component_id'=>'root-master_test4-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test5-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test6-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
             ));
 
         //enlarge tag trl
-        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_TestModel')
             ->getProxyModel()->setData(array(
                 array('component_id'=>'root-en_test1-linkTag', 'own_image'=>0),
                 array('component_id'=>'root-en_test2-linkTag', 'own_image'=>0),
@@ -77,14 +77,14 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
             ));
 
         //enlarge tag trl own image
-        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-en_test1-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test2-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test3-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test4-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test5-linkTag-image', 'vps_upload_id'=>'5'),
-                array('component_id'=>'root-en_test6-linkTag-image', 'vps_upload_id'=>'5'),
+                array('component_id'=>'root-en_test1-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test2-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test3-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test4-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test5-linkTag-image', 'kwf_upload_id'=>'5'),
+                array('component_id'=>'root-en_test6-linkTag-image', 'kwf_upload_id'=>'5'),
             ));
     }
 
@@ -136,7 +136,7 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('root-master_test1');
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
         $row = $c->getComponent()->getRow();
-        $row->vps_upload_id = '6';
+        $row->kwf_upload_id = '6';
         $row->save();
         $this->_process();
         $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
@@ -151,7 +151,7 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
         $row->own_image = 1;
         $row->save();
         $row = $this->_root->getComponentById('root-en_test1-image')->getComponent()->getRow();
-        $row->vps_upload_id = '6';
+        $row->kwf_upload_id = '6';
         $row->save();
         $this->_process();
         $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
@@ -177,14 +177,14 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
 
         preg_match('#href="(.+?)".*?src="(.+?)"#ms', $html, $matches);
 
-        $smallSrcSize = getimagesize('http://'.Vps_Registry::get('testDomain').$matches[2]);
+        $smallSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[2]);
         $this->assertEquals($smallWidth, $smallSrcSize[0]);
         $this->assertEquals($smallHeight, $smallSrcSize[1]);
 
-        $largeHtml = file_get_contents('http://'.Vps_Registry::get('testDomain').$matches[1]);
-        preg_match('#class="vpsLightbox.*?<img .*?src="(.*?)"#s', $largeHtml, $matches);
+        $largeHtml = file_get_contents('http://'.Kwf_Registry::get('testDomain').$matches[1]);
+        preg_match('#class="kwfLightbox.*?<img .*?src="(.*?)"#s', $largeHtml, $matches);
         $this->assertRegExp('#'.$largeImageNum.'\.jpg#', $matches[1]);
-        $largeSrcSize = getimagesize('http://'.Vps_Registry::get('testDomain').$matches[1]);
+        $largeSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[1]);
         $this->assertEquals($largeWidth, $largeSrcSize[0]);
         $this->assertEquals($largeHeight, $largeSrcSize[1]);
 

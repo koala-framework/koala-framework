@@ -1,10 +1,10 @@
-Ext.namespace('Vps.User.Login');
+Ext.namespace('Kwf.User.Login');
 
-Vps.User.Login.Index = Ext.extend(Ext.Panel,
+Kwf.User.Login.Index = Ext.extend(Ext.Panel,
 {
     initComponent: function() {
-        Vps.User.Login.Index.superclass.initComponent.call(this);
-        dlg = new Vps.User.Login.Dialog({
+        Kwf.User.Login.Index.superclass.initComponent.call(this);
+        dlg = new Kwf.User.Login.Dialog({
             message: this.message,
             location: this.location
         });

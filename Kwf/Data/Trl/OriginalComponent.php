@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Trl_OriginalComponent extends Vps_Data_Abstract
+class Kwf_Data_Trl_OriginalComponent extends Kwf_Data_Abstract
 {
     protected $_overrideFieldname;
 
@@ -13,7 +13,7 @@ class Vps_Data_Trl_OriginalComponent extends Vps_Data_Abstract
     public function load($row)
     {
         $pk = $row->getModel()->getPrimaryKey();
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->$pk, array('ignoreVisible'=>true));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->$pk, array('ignoreVisible'=>true));
         if (!empty($this->_overrideFieldname)) {
             $fieldname = $this->_overrideFieldname;
         } else {

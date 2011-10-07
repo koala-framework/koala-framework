@@ -6,32 +6,32 @@
  * @group Model_MirrorCache_Delay
  * @group slow
  */
-class Vps_Model_MirrorCache_DelayWithHttpAndCliTest extends Vps_Test_TestCase
+class Kwf_Model_MirrorCache_DelayWithHttpAndCliTest extends Kwf_Test_TestCase
 {
     public function testSyncWithCli()
     {
-        Vps_Benchmark::enable();
-        Vps_Benchmark::reset();
+        Kwf_Benchmark::enable();
+        Kwf_Benchmark::reset();
 
-        Vps_Model_MirrorCache_TestController::setup();
-        Vps_Model_MirrorCache_TestController::$proxyModel->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
-        $this->assertEquals(1, (int)Vps_Benchmark::getCounterValue('mirror sync'));
+        Kwf_Model_MirrorCache_TestController::setup();
+        Kwf_Model_MirrorCache_TestController::$proxyModel->synchronize(Kwf_Model_MirrorCache::SYNC_ONCE);
+        $this->assertEquals(1, (int)Kwf_Benchmark::getCounterValue('mirror sync'));
 
-        $url = 'http://'.Vps_Registry::get('testDomain').'/vps/test/vps_model_mirror-cache_test';
+        $url = 'http://'.Kwf_Registry::get('testDomain').'/kwf/test/kwf_model_mirror-cache_test';
         $this->assertEquals(0, file_get_contents($url));
 
         sleep(6); //sync delay ist 5 sec
         $this->assertEquals(1, file_get_contents($url));
         $this->assertEquals(0, file_get_contents($url));
 
-        Vps_Benchmark::reset();
-        Vps_Model_MirrorCache_TestController::$proxyModel->countRows();
-        $this->assertEquals(0, (int)Vps_Benchmark::getCounterValue('mirror sync'));
+        Kwf_Benchmark::reset();
+        Kwf_Model_MirrorCache_TestController::$proxyModel->countRows();
+        $this->assertEquals(0, (int)Kwf_Benchmark::getCounterValue('mirror sync'));
 
         sleep(6); //sync delay ist 5 sec
-        Vps_Benchmark::reset();
-        Vps_Model_MirrorCache_TestController::$proxyModel->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
-        $this->assertEquals(1, (int)Vps_Benchmark::getCounterValue('mirror sync'));
+        Kwf_Benchmark::reset();
+        Kwf_Model_MirrorCache_TestController::$proxyModel->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
+        $this->assertEquals(1, (int)Kwf_Benchmark::getCounterValue('mirror sync'));
         $this->assertEquals(0, file_get_contents($url));
     }
 }

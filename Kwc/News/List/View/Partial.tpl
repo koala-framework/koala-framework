@@ -21,14 +21,14 @@
 	        	<?=nl2br($this->item->row->teaser);?>
 				<? if($this->hasContent($this->item)) { ?>
 				    <span class="readMoreLink">
-				        <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+				        <?=$this->componentLink($this->item, $this->item->trlKwf('Read more').' &raquo;');?>
 					</span>
 				<? } ?>
 			</p>
 	    </div>
     <? } else if($this->hasContent($this->item)) { ?>
         <div class="readMoreLink">
-            <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+            <?=$this->componentLink($this->item, $this->item->trlKwf('Read more').' &raquo;');?>
         </div>
     <? } ?>
     <div class="clear"></div>

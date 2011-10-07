@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_LinksImages_Model extends Vpc_Abstract_List_Model
+class Kwc_Composite_LinksImages_Model extends Kwc_Abstract_List_Model
 {
-    protected $_rowClass = 'Vpc_Composite_LinksImages_Row';
+    protected $_rowClass = 'Kwc_Composite_LinksImages_Row';
 }

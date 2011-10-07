@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_Trl_FilenameFilter extends Vpc_Root_Category_FilenameFilter
+class Kwc_Root_Category_Trl_FilenameFilter extends Kwc_Root_Category_FilenameFilter
 {
     protected function _getComponentId($row)
     {

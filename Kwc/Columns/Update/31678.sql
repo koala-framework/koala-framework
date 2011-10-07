@@ -1,4 +1,4 @@
-CREATE TABLE `vpc_columns` (
+CREATE TABLE `kwc_columns` (
 `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
  `component_id` VARCHAR( 200 ) NOT NULL ,
  `width` VARCHAR( 100 ) NOT NULL ,

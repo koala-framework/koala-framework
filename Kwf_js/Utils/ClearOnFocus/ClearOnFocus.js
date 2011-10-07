@@ -1,18 +1,18 @@
-Vps.onContentReady(function()
+Kwf.onContentReady(function()
 {
     var Event = Ext.EventManager;
 
-    var els = Ext.query('input.vpsClearOnFocus');
+    var els = Ext.query('input.kwfClearOnFocus');
     els.forEach(function(el) {
         if (!el || el.value == '') return;
         var xel = Ext.get(el);
 
         var initText = el.value;
-        xel.addClass('vpsClearOnFocusBlurred');
+        xel.addClass('kwfClearOnFocusBlurred');
 
         Event.on(el, 'focus', function() {
             if (el.value == '' || el.value == initText) {
-                xel.removeClass('vpsClearOnFocusBlurred');
+                xel.removeClass('kwfClearOnFocusBlurred');
                 el.value = '';
             }
         });
@@ -20,7 +20,7 @@ Vps.onContentReady(function()
         Event.on(el, 'blur', function() {
             if (el.value == '') {
                 el.value = initText;
-                xel.addClass('vpsClearOnFocusBlurred');
+                xel.addClass('kwfClearOnFocusBlurred');
             }
         });
 

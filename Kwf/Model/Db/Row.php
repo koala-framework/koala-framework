@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
+class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
 {
     protected $_row;
 
@@ -38,7 +38,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         $n = $this->_transformColumnName($name);
         if (isset($this->_row->$n)) {
             $value = $this->_row->$n;
-            if (is_string($value) && substr($value, 0, 13) =='vpsSerialized') {
+            if (is_string($value) && substr($value, 0, 13) =='kwfSerialized') {
                 $value = unserialize(substr($value, 13));
             }
             return $value;
@@ -52,7 +52,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         $n = $this->_transformColumnName($name);
         if (isset($this->_row->$n)) {
             if (is_array($value) || is_object($value)) {
-                $value = 'vpsSerialized'.serialize($value);
+                $value = 'kwfSerialized'.serialize($value);
             }
             // scheis php... bei $this->$name sucht er nur nach einem property
             // und vergisst, dass es __get() auch gibt
@@ -131,19 +131,19 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         return $ret;
     }
 
-    public function findDependentRowset($dependentTable, $ruleKey = null, Vps_Model_Select $select = null)
+    public function findDependentRowset($dependentTable, $ruleKey = null, Kwf_Model_Select $select = null)
     {
         $dbSelect = $this->_model->createDbSelect($select);
-        if ($dependentTable instanceof Vps_Model_Db) {
+        if ($dependentTable instanceof Kwf_Model_Db) {
             $dependentTable = $dependentTable->getTable();
         }
         return $this->_row->findDependentRowset($dependentTable, $ruleKey, $dbSelect);
     }
 
-    public function findParentRow($parentTable, $ruleKey = null, Vps_Model_Select $select = null)
+    public function findParentRow($parentTable, $ruleKey = null, Kwf_Model_Select $select = null)
     {
         $dbSelect = $this->_model->createDbSelect($select);
-        if ($parentTable instanceof Vps_Model_Db) {
+        if ($parentTable instanceof Kwf_Model_Db) {
             $parentTable = $parentTable->getTable();
         }
         $class = get_class($this);
@@ -151,13 +151,13 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
     }
 
     public function findManyToManyRowset($matchTable, $intersectionTable, $callerRefRule = null,
-                                         $matchRefRule = null, Vps_Model_Select $select = null)
+                                         $matchRefRule = null, Kwf_Model_Select $select = null)
     {
         $dbSelect = $this->_model->createDbSelect($select);
-        if ($matchTable instanceof Vps_Model_Db) {
+        if ($matchTable instanceof Kwf_Model_Db) {
             $matchTable = $matchTable->getTable();
         }
-        if ($intersectionTable instanceof Vps_Model_Db) {
+        if ($intersectionTable instanceof Kwf_Model_Db) {
             $intersectionTable = $intersectionTable->getTable();
         }
         return $this->_row->findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule, $matchRefRule, $dbSelect);

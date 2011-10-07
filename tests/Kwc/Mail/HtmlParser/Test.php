@@ -2,7 +2,7 @@
 /**
  * @group MailHtmlParser
  */
-class Vpc_Mail_HtmlParser_Test extends Vps_Test_TestCase
+class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
 {
     public function testIt()
     {
@@ -36,7 +36,7 @@ class Vpc_Mail_HtmlParser_Test extends Vps_Test_TestCase
                 'replaceTag' => 'b'
             ),
         );
-        $p = new Vpc_Mail_HtmlParser($styles);
+        $p = new Kwc_Mail_HtmlParser($styles);
         $html = '<p>Lorem Ipsum</p>';
         $html = $p->parse($html);
         $this->assertEquals('<p><font face="Verdana" size="3">Lorem Ipsum</font></p>', $html);
@@ -81,7 +81,7 @@ class Vpc_Mail_HtmlParser_Test extends Vps_Test_TestCase
         );
         $html = '<table><tr><td>Guten Tag, &NBSP; <strong>Frau Staterau!</strong></td><td>&nbsp;</td><td>Testtext</td></tr></table>';
         $expected= '<table><tr><td><font face="Verdana" size="2">Guten Tag, &NBSP; <strong>Frau Staterau!</strong></font></td><td><font face="Verdana" size="2">&nbsp;</font></td><td><font face="Verdana" size="2">Testtext</font></td></tr></table>';
-        $p = new Vpc_Mail_HtmlParser($styles);
+        $p = new Kwc_Mail_HtmlParser($styles);
         $html = $p->parse($html);
         $this->assertEquals($expected, $html);
 
@@ -107,7 +107,7 @@ class Vpc_Mail_HtmlParser_Test extends Vps_Test_TestCase
         $html .= '<table class="foo"><tr><td><p>Blu bla Bli</p></td></tr></table>';
         $expected  = '<table><tr><td><p><font size="3">Blu bla Bli</font></p></td></tr></table>';
         $expected .= '<table class="foo"><tr><td><p><font size="2">Blu bla Bli</font></p></td></tr></table>';
-        $p = new Vpc_Mail_HtmlParser($styles);
+        $p = new Kwc_Mail_HtmlParser($styles);
         $html = $p->parse($html);
         $this->assertEquals($expected, $html);
 

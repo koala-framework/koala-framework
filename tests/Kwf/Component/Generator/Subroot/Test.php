@@ -2,43 +2,43 @@
 /**
  * @group Generator_Subroot
  */
-class Vps_Component_Generator_Subroot_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_Subroot_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_Subroot_Root');
+        parent::setUp('Kwf_Component_Generator_Subroot_Root');
     }
 
 
     public function testComponentByClass()
     {
-        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component');
+        $components = $this->_root->getComponentsByClass('Kwc_Basic_Image_Component');
         $this->assertEquals(2, count($components));
 
-        $components = $this->_root->getComponentsByClass('Vps_Component_Generator_Subroot_Domain');
+        $components = $this->_root->getComponentsByClass('Kwf_Component_Generator_Subroot_Domain');
         $this->assertEquals(2, count($components));
 
-        $components = $this->_root->getComponentsByClass('Vps_Component_Generator_Subroot_Static');
+        $components = $this->_root->getComponentsByClass('Kwf_Component_Generator_Subroot_Static');
         $this->assertEquals(2, count($components));
 
         $c = $this->_root->getComponentById('6');
 
-        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
+        $components = $this->_root->getComponentsByClass('Kwc_Basic_Image_Component', array('subroot' => $c));
         $this->assertEquals(1, count($components));
 
-        $component = $this->_root->getComponentByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
+        $component = $this->_root->getComponentByClass('Kwc_Basic_Image_Component', array('subroot' => $c));
         $this->assertEquals(5, $component->componentId);
 
-        $component = $this->_root->getComponentByClass('Vpc_Basic_Image_Component', array('limit' => 1));
+        $component = $this->_root->getComponentByClass('Kwc_Basic_Image_Component', array('limit' => 1));
         $this->assertEquals(4, $component->componentId);
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testExceptionComponentByClass()
     {
-        $this->_root->getComponentByClass('Vpc_Basic_Image_Component');
+        $this->_root->getComponentByClass('Kwc_Basic_Image_Component');
     }
 
     public function testComponentByDbId()
@@ -69,7 +69,7 @@ class Vps_Component_Generator_Subroot_Test extends Vpc_TestAbstract
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testExceptionComponentByDbId()
     {

@@ -1,11 +1,11 @@
 <?php
-abstract class Vpc_Directories_Top_Component extends Vpc_Directories_List_Component
+abstract class Kwc_Directories_Top_Component extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['limit'] = 5;
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 

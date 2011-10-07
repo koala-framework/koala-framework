@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
+class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 {
     protected $_buttons = array(
         'save',
@@ -14,11 +14,11 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
     public function preDispatch()
     {
         parent::preDispatch();
-        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')
-            || is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
-            $url = Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
+        if (is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Kwc_Directories_Item_Directory_ExtConfigEditButtons')
+            || is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Kwc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $url = Kwc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
             $editDialog = array(
-                'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel',
+                'autoForm' => 'Kwc.Directories.Item.Directory.EditFormPanel',
                 'controllerUrl' => $url
             );
             if ($this->_editDialog['width']) $editDialog['width'] = $this->_editDialog['width'];
@@ -30,54 +30,54 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
     protected function _initColumns()
     {
         $extConfigType = false;
-        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+        if (is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Kwc_Directories_Item_Directory_ExtConfigEditButtons')) {
             $extConfigType = 'extConfig';
-        } else if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+        } else if (is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Kwc_Directories_Item_Directory_ExtConfigEditButtons')) {
             $extConfigType = 'extConfigControllerIndex';
         }
         if ($extConfigType) {
             //shows editDialog
-            $this->_columns->add(new Vps_Grid_Column_Button('properties', ' ', 20))
+            $this->_columns->add(new Kwf_Grid_Column_Button('properties', ' ', 20))
                 ->setButtonIcon('/assets/silkicons/newspaper.png')
-                ->setTooltip(trlVps('Properties'));
+                ->setTooltip(trlKwf('Properties'));
 
-            $extConfig = Vps_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
-                        ->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
+            $extConfig = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
+                        ->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
             $extConfig = $extConfig['items'];
             $i=0;
             foreach ($extConfig['contentEditComponents'] as $ec) {
-                $name = Vpc_Abstract::getSetting($ec['componentClass'], 'componentName');
-                $icon = Vpc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
-                $this->_columns->add(new Vps_Grid_Column_Button('edit_'.$i, ' ', 20))
+                $name = Kwc_Abstract::getSetting($ec['componentClass'], 'componentName');
+                $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
+                $this->_columns->add(new Kwf_Grid_Column_Button('edit_'.$i, ' ', 20))
                     ->setColumnType('editContent')
                     ->setEditComponentClass($ec['componentClass'])
                     ->setEditType($ec['type'])
                     ->setEditIdTemplate($ec['idTemplate'])
                     ->setEditComponentIdSuffix($ec['componentIdSuffix'])
                     ->setButtonIcon($icon->toString(array('arrow')))
-                    ->setTooltip(trlVps('Edit {0}', $name));
+                    ->setTooltip(trlKwf('Edit {0}', $name));
                 $i++;
             }
         }
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeSave($row);
         if ($row->getModel()->hasColumn('visible') && !$row->visible) {
-            $this->_checkRowIndependence($row, trlVps('hide'));
+            $this->_checkRowIndependence($row, trlKwf('hide'));
         }
     }
 
-    protected function _beforeDelete(Vps_Model_Row_Interface $row)
+    protected function _beforeDelete(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeDelete($row);
-        $this->_checkRowIndependence($row, trlVps('delete'));
+        $this->_checkRowIndependence($row, trlKwf('delete'));
     }
 
-    private function _checkRowIndependence(Vps_Model_Row_Interface $row, $msgMethod)
+    private function _checkRowIndependence(Kwf_Model_Row_Interface $row, $msgMethod)
     {
-        $c = Vps_Component_Data_Root::getInstance()
+        $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->_getParam('componentId'));
         // wenn zB Newsletter statisch in root erstellt wurde, gibts kein visible
         if (!$c) {
@@ -87,18 +87,18 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
             return;
         }
         $components = array();
-        foreach (Vpc_Admin::getDependsOnRowInstances() as $a) {
-            if ($a instanceof Vps_Component_Abstract_Admin_Interface_DependsOnRow) {
+        foreach (Kwc_Admin::getDependsOnRowInstances() as $a) {
+            if ($a instanceof Kwf_Component_Abstract_Admin_Interface_DependsOnRow) {
                 $components = array_merge($components, $a->getComponentsDependingOnRow($row));
             }
         }
 
-        $g = Vpc_Abstract::getSetting($this->_getParam('class'), 'generators');
+        $g = Kwc_Abstract::getSetting($this->_getParam('class'), 'generators');
         if (isset($g['detail']['dbIdShortcut'])) {
             //wenn auf sich selbst verlinkt ignorieren
             foreach ($components as $k=>&$c) {
                 $c = $c->getPage();
-                $news = Vps_Component_Data_Root::getInstance()
+                $news = Kwf_Component_Data_Root::getInstance()
                     ->getComponentsByDbId($g['detail']['dbIdShortcut'].$row->id);
                 foreach ($news as $n) {
                     if ($c->componentId == $n->getPage()->componentId) {
@@ -108,9 +108,9 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
             }
         }
         if ($components) {
-            $msg = trlVps("You can not {0} this entry as it is used on the following pages:", $msgMethod);
-            $msg .= Vps_Util_Component::getHtmlLocations($components);
-            throw new Vps_ClientException($msg);
+            $msg = trlKwf("You can not {0} this entry as it is used on the following pages:", $msgMethod);
+            $msg .= Kwf_Util_Component::getHtmlLocations($components);
+            throw new Kwf_ClientException($msg);
         }
     }
 }

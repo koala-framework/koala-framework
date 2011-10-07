@@ -1,22 +1,22 @@
 <?php
-class Vps_Model_Session_TestController extends Vps_Controller_Action
+class Kwf_Model_Session_TestController extends Kwf_Controller_Action
 {
     public function preDispatch()
     {
         //RowObserver brauchen wir hier nicht
-        Vps_Component_Data_Root::setComponentClass(false);
+        Kwf_Component_Data_Root::setComponentClass(false);
 
         parent::preDispatch();
     }
 
     public function testExceptionAction()
     {
-        throw new Vps_Model_Session_TestException('Test');
+        throw new Kwf_Model_Session_TestException('Test');
     }
 
     public function modelGetAction()
     {
-        $model = Vps_Model_Abstract::getInstance('Vps_Model_Session_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_Session_TestModel');
         $row = $model->getRow(1);
         echo $row->foo;
         $this->_helper->viewRenderer->setNoRender(true);
@@ -25,9 +25,9 @@ class Vps_Model_Session_TestController extends Vps_Controller_Action
 
     public function modelSetAction()
     {
-        $model = Vps_Model_Abstract::getInstance('Vps_Model_Session_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_Session_TestModel');
         $row = $model->getRow(1);
-        if (!$row) throw new Vps_Exception("no row found".print_r($model->getData(), true));
+        if (!$row) throw new Kwf_Exception("no row found".print_r($model->getData(), true));
         $row->foo = 'bum';
         $row->save();
         echo "OK";

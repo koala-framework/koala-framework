@@ -1,9 +1,9 @@
 <?php
-class Vpc_Advanced_Amazon_Product_Form extends Vpc_Abstract_Form
+class Kwc_Advanced_Amazon_Product_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
-        $this->add(new Vps_Form_Field_TextField('asin', trlVps('ASIN')));
+        $this->add(new Kwf_Form_Field_TextField('asin', trlKwf('ASIN')));
         parent::_initFields();
     }
 }

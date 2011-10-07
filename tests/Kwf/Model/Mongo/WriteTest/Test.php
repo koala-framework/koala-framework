@@ -4,16 +4,16 @@
  * @group Mongo
  * @group slow
  */
-class Vps_Model_Mongo_WriteTest_Test extends Vps_Test_TestCase
+class Kwf_Model_Mongo_WriteTest_Test extends Kwf_Test_TestCase
 {
     /**
-     * @var Vps_Model_Mongo
+     * @var Kwf_Model_Mongo
      */
     private $_model;
     public function setUp()
     {
         parent::setUp();
-        $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_WriteTest_MongoModel');
+        $this->_model = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_WriteTest_MongoModel');
     }
 
     public function tearDown()

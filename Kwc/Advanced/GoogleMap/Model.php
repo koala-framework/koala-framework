@@ -1,4 +1,4 @@
 <?php
-class Vpc_Advanced_GoogleMap_Model extends Vps_Component_FieldModel
+class Kwc_Advanced_GoogleMap_Model extends Kwf_Component_FieldModel
 {
 }

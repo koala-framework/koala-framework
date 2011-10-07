@@ -1,4 +1,4 @@
-Vps.FrontendForm.Static = Ext.extend(Vps.FrontendForm.Field, {
+Kwf.FrontendForm.Static = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
     },
     getValue: function() {
@@ -8,4 +8,4 @@ Vps.FrontendForm.Static = Ext.extend(Vps.FrontendForm.Field, {
         return null; //TODO?
     }
 });
-Vps.FrontendForm.fields['vpsFormFieldStatic'] = Vps.FrontendForm.Static;
+Kwf.FrontendForm.fields['kwfFormFieldStatic'] = Kwf.FrontendForm.Static;

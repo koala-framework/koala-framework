@@ -1,7 +1,7 @@
 <?php
 require_once 'Zend/Config/Ini.php';
 
-class Vps_Config_Ini extends Zend_Config_Ini
+class Kwf_Config_Ini extends Zend_Config_Ini
 {
     private function _fixValues(&$data)
     {

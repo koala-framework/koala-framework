@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.InsertDownload = function(config) {
+Kwf.Form.HtmlEditor.InsertDownload = function(config) {
     Ext.apply(this, config);
 
     var panel = Ext.ComponentMgr.create(Ext.applyIf(this.componentConfig, {
@@ -8,13 +8,13 @@ Vps.Form.HtmlEditor.InsertDownload = function(config) {
         },
         autoLoad: false
     }));
-    this.downloadDialog = new Vps.Auto.Form.Window({
+    this.downloadDialog = new Kwf.Auto.Form.Window({
         autoForm: panel,
         width: 450,
         height: 400
     });
 };
-Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
+Ext.extend(Kwf.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -30,8 +30,8 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: trlVps('Download'),
-                text: trlVps('Create new Download for the selected text or edit selected Download.')
+                title: trlKwf('Download'),
+                text: trlKwf('Create new Download for the selected text or edit selected Download.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',

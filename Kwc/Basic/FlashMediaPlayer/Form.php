@@ -1,19 +1,19 @@
 <?php
-class Vpc_Basic_FlashMediaPlayer_Form extends Vpc_Abstract_Form
+class Kwc_Basic_FlashMediaPlayer_Form extends Kwc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {
         parent::__construct($name, $class, $id);
-        $this->fields->add(new Vps_Form_Field_File('FileMedia', trlVps('Element')))
+        $this->fields->add(new Kwf_Form_Field_File('FileMedia', trlKwf('Element')))
             ->setDirectory('BasicFlashMediaPlayer');
 
-        $this->fields->add(new Vps_Form_Field_NumberField('width', trlVps('Width')))
+        $this->fields->add(new Kwf_Form_Field_NumberField('width', trlKwf('Width')))
                 ->setMinValue(1)
                 ->setMaxValue(9999);
-        $this->fields->add(new Vps_Form_Field_NumberField('height', trlVps('Height')))
+        $this->fields->add(new Kwf_Form_Field_NumberField('height', trlKwf('Height')))
                 ->setMinValue(1)
                 ->setMaxValue(9999);
-        $this->fields->add(new Vps_Form_Field_Checkbox('autostart', trlVps('Start automatically')));
-        $this->fields->add(new Vps_Form_Field_Checkbox('loop', trlVps('Loop')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('autostart', trlKwf('Start automatically')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('loop', trlKwf('Loop')));
     }
 }

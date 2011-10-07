@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Image_Form extends Vpc_Basic_Image_Form
+class Kwc_Basic_Text_Image_Form extends Kwc_Basic_Image_Form
 {
     public function __construct($class, $id = null)
     {

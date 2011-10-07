@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mongo_ChildExprWithProxyTest_ChildModel extends Vps_Model_FnF
+class Kwf_Model_Mongo_ChildExprWithProxyTest_ChildModel extends Kwf_Model_FnF
 {
     protected $_data = array(
         array('id'=>1, 'mongo_id'=>1, 'name'=>'one'),
@@ -9,7 +9,7 @@ class Vps_Model_Mongo_ChildExprWithProxyTest_ChildModel extends Vps_Model_FnF
 
     protected $_referenceMap = array(
         'Mongo' => array(
-            'refModelClass' => 'Vps_Model_Mongo_ChildExprWithProxyTest_MongoModel',
+            'refModelClass' => 'Kwf_Model_Mongo_ChildExprWithProxyTest_MongoModel',
             'column' => 'mongo_id'
         )
     );

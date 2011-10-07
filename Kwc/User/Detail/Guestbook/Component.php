@@ -1,11 +1,11 @@
 <?php
-class Vpc_User_Detail_Guestbook_Component extends Vpc_Posts_Directory_Component
+class Kwc_User_Detail_Guestbook_Component extends Kwc_Posts_Directory_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Guestbook');
-        $ret['placeholder']['writeText'] = trlVps('New Entry');
+        $ret['componentName'] = trlKwf('Guestbook');
+        $ret['placeholder']['writeText'] = trlKwf('New Entry');
         return $ret;
     }
 

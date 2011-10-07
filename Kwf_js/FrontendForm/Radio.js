@@ -1,4 +1,4 @@
-Vps.FrontendForm.Radio = Ext.extend(Vps.FrontendForm.Field, {
+Kwf.FrontendForm.Radio = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('input').each(function(input) {
             input.on('click', function() {
@@ -17,4 +17,4 @@ Vps.FrontendForm.Radio = Ext.extend(Vps.FrontendForm.Field, {
     }
 });
 
-Vps.FrontendForm.fields['vpsFormFieldRadio'] = Vps.FrontendForm.Radio;
+Kwf.FrontendForm.fields['kwfFormFieldRadio'] = Kwf.FrontendForm.Radio;

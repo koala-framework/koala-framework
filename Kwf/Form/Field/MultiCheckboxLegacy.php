@@ -1,6 +1,6 @@
 <?php
 //todo: validators
-class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
+class Kwf_Form_Field_MultiCheckboxLegacy extends Kwf_Form_Field_Abstract
 {
     protected $_fields;
     private $_references;
@@ -21,12 +21,12 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
         } else if (class_exists($tableName)) {
             $model = new $tableName();
         } else {
-            throw new Vps_Exception("'$tableName' does not exist");
+            throw new Kwf_Exception("'$tableName' does not exist");
         }
 
         parent::__construct(get_class($model));
         if ($model instanceof Zend_Db_Table_Abstract) {
-            $model = new Vps_Model_Db(array(
+            $model = new Kwf_Model_Db(array(
                 'table' => $model
             ));
         }
@@ -62,8 +62,8 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
     protected function _getFields()
     {
         if (!isset($this->_fields)) {
-            $this->_fields = new Vps_Collection_FormFields();
-            if ($this->getValues() instanceof Vps_Model_Rowset_Interface) {
+            $this->_fields = new Kwf_Collection_FormFields();
+            if ($this->getValues() instanceof Kwf_Model_Rowset_Interface) {
                 $pk = $this->getValues()->getModel()->getPrimaryKey();
             } else if ($this->getValues() instanceof Zend_Db_Table_Rowset_Abstract) {
                 $info = $this->getValues()->getTable()->info();
@@ -74,7 +74,7 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
                     $key = $i->$pk;
                 }
                 if (!is_string($i)) $i = $i->__toString();
-                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName()."[$key]"))
+                $this->_fields->add(new Kwf_Form_Field_Checkbox($this->getFieldName()."[$key]"))
                     ->setKey($key)
                     ->setBoxLabel($i);
             }
@@ -99,9 +99,9 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
         }
         return $name;
     }
-    protected function _getRowsByRow(Vps_Model_Row_Interface $row)
+    protected function _getRowsByRow(Kwf_Model_Row_Interface $row)
     {
-        if ($this->_model instanceof Vps_Model_FieldRows) {
+        if ($this->_model instanceof Kwf_Model_FieldRows) {
             $rows = $this->_model->fetchByParentRow($row);
         } else {
             $pk = $row->getModel()->getPrimaryKey();
@@ -123,11 +123,11 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
     {
         if ($this->_references) {
             return $this->_references;
-        } else if ($this->_model instanceof Vps_Model_Db && $row instanceof Vps_Model_Db_Row) {
+        } else if ($this->_model instanceof Kwf_Model_Db && $row instanceof Kwf_Model_Db_Row) {
             return $this->_model->getTable()
                         ->getReference(get_class($row->getRow()->getTable()));
         } else {
-            throw new Vps_Exception('Couldn\'t read references for Multifields. Either use Vps_Model_FieldRows/Vps_Model_Db or set the References by setReferences().');
+            throw new Kwf_Exception('Couldn\'t read references for Multifields. Either use Kwf_Model_FieldRows/Kwf_Model_Db or set the References by setReferences().');
         }
     }
     public function setReferences($references)
@@ -136,7 +136,7 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
         return $this;
     }
     
-    public function load(Vps_Model_Row_Interface $row)
+    public function load(Kwf_Model_Row_Interface $row)
     {
         if (!$row) return array();
 
@@ -159,21 +159,21 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
     {
         $ret = $this->getProperty('columnName');
         if (!$ret) {
-            if (get_class($this->_model) == 'Vps_Model_Db') {
-                if ($this->getValues()->getModel()  instanceof Vps_Util_Model_Pool) {
-                    $tableClass = 'Vps_Dao_Pool';
+            if (get_class($this->_model) == 'Kwf_Model_Db') {
+                if ($this->getValues()->getModel()  instanceof Kwf_Util_Model_Pool) {
+                    $tableClass = 'Kwf_Dao_Pool';
                 } else {
                     $tableClass = get_class($this->getValues()->getTable());
                 }
                 $ref = $this->_model->getTable()->getReference($tableClass);
                 $ret = $ref['columns'][0];
             } else {
-                throw new Vps_Exception_NotYetImplemented();
+                throw new Kwf_Exception_NotYetImplemented();
             }
         }
         return $ret;
     }
-    public function save(Vps_Model_Row_Interface $row, $postData)
+    public function save(Kwf_Model_Row_Interface $row, $postData)
     {
         $new = array();
         if ($postData[$this->getFieldName()]) {
@@ -182,7 +182,7 @@ class Vps_Form_Field_MultiCheckboxLegacy extends Vps_Form_Field_Abstract
             }
         }
         if ($this->getAllowBlank() === false && $new == array()) {
-            throw new Vps_ClientException("Please select at least one ".$this->getTitle().".");
+            throw new Kwf_ClientException("Please select at least one ".$this->getTitle().".");
         }
         $saved = $this->_getRowsByRow($row);
 

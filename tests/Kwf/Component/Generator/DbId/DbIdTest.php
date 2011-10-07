@@ -1,9 +1,9 @@
 <?php
-class Vps_Component_Generator_DbId_DbIdTest extends Vpc_TestAbstract
+class Kwf_Component_Generator_DbId_DbIdTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_DbId_Root');
+        parent::setUp('Kwf_Component_Generator_DbId_Root');
     }
 
     public function testDbId()

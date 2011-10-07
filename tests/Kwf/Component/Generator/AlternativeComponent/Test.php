@@ -3,11 +3,11 @@
  * @group Generator
  * @group Generator_AlternativeComponent
  */
-class Vps_Component_Generator_AlternativeComponent_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_AlternativeComponent_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_AlternativeComponent_Root');
+        parent::setUp('Kwf_Component_Generator_AlternativeComponent_Root');
         /*
         root
         _1 (composite)
@@ -20,10 +20,10 @@ class Vps_Component_Generator_AlternativeComponent_Test extends Vpc_TestAbstract
     public function testClasses()
     {
         $c = $this->_root->getComponentById('1-child');
-        $this->assertEquals('Vps_Component_Generator_AlternativeComponent_Default_Component', $c->componentClass);
+        $this->assertEquals('Kwf_Component_Generator_AlternativeComponent_Default_Component', $c->componentClass);
 
         $c = $this->_root->getComponentById('2-child');
-        $this->assertEquals('Vps_Component_Generator_AlternativeComponent_Alternative_Component', $c->componentClass);
+        $this->assertEquals('Kwf_Component_Generator_AlternativeComponent_Alternative_Component', $c->componentClass);
     }
 
     public function testRender()

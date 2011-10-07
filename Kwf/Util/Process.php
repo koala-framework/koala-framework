@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Process
+class Kwf_Util_Process
 {
     public static function getRunningWebProcesses()
     {
@@ -17,7 +17,7 @@ class Vps_Util_Process
                 $cmd = explode(' ', $cmd);
                 if (substr(trim($cmd[0]), -3) != 'php') continue;
                 unset($cmd[0]);
-                if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/vps') continue;
+                if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/kwf') continue;
                 unset($cmd[1]);
                 $cwd = explode(' ', trim(`pwdx $pid`));
                 if ($cwd[1] != getcwd()) continue;

@@ -1,21 +1,21 @@
 <?php
-class Vpc_Abstract_Composite_Component extends Vpc_Abstract
+class Kwc_Abstract_Composite_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
+        $ret['assetsAdmin']['dep'][] = 'KwfTabPanel';
         $ret['generators']['child'] = array(
-            'class' => 'Vps_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Static',
             'component' => array()
         );
-        $cc = Vps_Registry::get('config')->vpc->childComponents;
-        if (isset($cc->Vpc_Abstract_Composite_Component)) {
+        $cc = Kwf_Registry::get('config')->kwc->childComponents;
+        if (isset($cc->Kwc_Abstract_Composite_Component)) {
             $ret['generators']['child']['component'] =
-                $cc->Vpc_Abstract_Composite_Component->toArray();
+                $cc->Kwc_Abstract_Composite_Component->toArray();
         }
 
-        $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigForm';
+        $ret['extConfig'] = 'Kwc_Abstract_Composite_ExtConfigForm';
 
         return $ret;
     }

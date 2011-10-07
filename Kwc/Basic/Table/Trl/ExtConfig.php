@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Table_Trl_ExtConfig extends Vpc_Basic_Table_ExtConfig
+class Kwc_Basic_Table_Trl_ExtConfig extends Kwc_Basic_Table_ExtConfig
 {
     protected function _getConfig()
     {

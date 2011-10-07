@@ -1,20 +1,20 @@
 <?php
 /**
- * @group Vpc_Mail
+ * @group Kwc_Mail
  */
-class Vpc_Mail_Placeholder_Test extends Vpc_TestAbstract
+class Kwc_Mail_Placeholder_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Mail_Placeholder_Mail_Component');
-        Vps_Registry::get('config')->debug->componentCache->disable = true;
+        parent::setUp('Kwc_Mail_Placeholder_Mail_Component');
+        Kwf_Registry::get('config')->debug->componentCache->disable = true;
     }
 
     public function testMail()
     {
         $mail = $this->_root;
         $c = $mail->getComponent();
-        $recipients = Vps_Model_Abstract::getInstance('Vpc_Mail_Placeholder_Mail_Recipients');
+        $recipients = Kwf_Model_Abstract::getInstance('Kwc_Mail_Placeholder_Mail_Recipients');
 
         $this->assertEquals('htmlmail %firstname% noname', $c->getHtml());
         $this->assertEquals('textmail %firstname% noname', $c->getText());
@@ -25,13 +25,13 @@ class Vpc_Mail_Placeholder_Test extends Vpc_TestAbstract
         );
         $this->assertEquals('htmlmail Franz Unger', $c->getHtml($recipient));
         $this->assertEquals('textmail Franz Unger', $c->getText($recipient));
-        $this->assertEquals(trlVps('Dear Mr. {0} {1}', array('Mag.', 'Unger')), $c->getSubject($recipient));
+        $this->assertEquals(trlKwf('Dear Mr. {0} {1}', array('Mag.', 'Unger')), $c->getSubject($recipient));
 
         $recipient = $recipients->getRow(
             $recipients->select()->whereEquals('email', 'ar@vivid-planet.com')
         );
         $this->assertEquals('htmlmail Alexandra Rainer', $c->getHtml($recipient));
         $this->assertEquals('textmail Alexandra Rainer', $c->getText($recipient));
-        $this->assertEquals(trlVps('Dear Mrs. {0}', array('Rainer')), $c->getSubject($recipient));
+        $this->assertEquals(trlKwf('Dear Mrs. {0}', array('Rainer')), $c->getSubject($recipient));
     }
 }

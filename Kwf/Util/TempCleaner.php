@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_TempCleaner
+class Kwf_Util_TempCleaner
 {
     /**
      * @param integer $cleanOlderThan [optional] Clean files older than x seconds
@@ -7,7 +7,7 @@ class Vps_Util_TempCleaner
     public static function clean($cleanOlderThan = 3600)
     {
         if (!is_int($cleanOlderThan) || $cleanOlderThan < 1) {
-            throw new Vps_Exception("First parameter must be of type integer and may not be smaller than 1");
+            throw new Kwf_Exception("First parameter must be of type integer and may not be smaller than 1");
         }
 
         foreach (new DirectoryIterator('temp') as $f) {

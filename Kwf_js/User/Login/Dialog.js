@@ -1,5 +1,5 @@
-Ext.namespace('Vps.User.Login');
-Vps.User.Login.Dialog = Ext.extend(Ext.Window,
+Ext.namespace('Kwf.User.Login');
+Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
 {
     initComponent: function()
     {
@@ -15,15 +15,15 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             region: 'south',
             border: false,
             height: 125,
-            html: '<iframe scrolling="no" src="/vps/user/login/show-form" width="100%" '+
+            html: '<iframe scrolling="no" src="/kwf/user/login/show-form" width="100%" '+
                     'height="100%" style="border: 0px"></iframe>'
         });
         this.items = [{
             baseCls: 'x-plain',
-            cls: 'vps-login-header',
+            cls: 'kwf-login-header',
             region: 'north',
             height: 80,
-            autoLoad: '/vps/user/login/header',
+            autoLoad: '/kwf/user/login/header',
             border: false
         },{
             baseCls: 'x-plain',
@@ -35,7 +35,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
 
         this.buttons = [
             new Ext.Button({
-                text    : trlVps('Lost password?'),
+                text    : trlKwf('Lost password?'),
                 style   : 'position: absolute; z-index: 500000; margin-top: -40px; margin-left: -270px;',
                 handler : this.lostPassword,
                 scope   : this
@@ -51,7 +51,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             Ext.EventManager.on(frame, 'load', this.onLoginLoad, this);
         }, this, { delay: 1 });
 
-        Vps.User.Login.Dialog.superclass.initComponent.call(this);
+        Kwf.User.Login.Dialog.superclass.initComponent.call(this);
     },
 
     _getDoc: function() {
@@ -72,7 +72,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
                 if (this.location) {
                     location.href = this.location;
                 } else {
-                    if (Vps.menu) Vps.menu.reload();
+                    if (Kwf.menu) Kwf.menu.reload();
                     if (this.success) {
                         Ext.callback(this.success, this.scope);
                     }
@@ -84,7 +84,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
     },
 
     lostPassword: function() {
-        Ext.Msg.prompt(trlVps('Password lost'), trlVps('Please enter your email address'), function(btn, email) {
+        Ext.Msg.prompt(trlKwf('Password lost'), trlKwf('Please enter your email address'), function(btn, email) {
             if (btn == 'ok') {
                 var lostPasswordResultDialog = function(response, options, result) {
                     Ext.Msg.show({
@@ -96,7 +96,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
                 };
                 Ext.Ajax.request({
                     mask: true,
-                    url: '/vps/user/login/json-lost-password',
+                    url: '/kwf/user/login/json-lost-password',
                     params: { email: email },
                     success: lostPasswordResultDialog
                 });

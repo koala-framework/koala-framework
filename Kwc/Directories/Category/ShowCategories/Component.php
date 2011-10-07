@@ -1,12 +1,12 @@
 <?php
-class Vpc_Directories_Category_ShowCategories_Component extends Vpc_Directories_Category_ShowCategories_Abstract_Component
+class Kwc_Directories_Category_ShowCategories_Component extends Kwc_Directories_Category_ShowCategories_Abstract_Component
 {
     private $_categories;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['showDirectoryClass'] = 'Vpc_Directories_Item_Directory_Component'; // nur für form
+        $ret['showDirectoryClass'] = 'Kwc_Directories_Item_Directory_Component'; // nur für form
         $ret['hideDirectoryClasses'] = array();
         return $ret;
     }
@@ -14,7 +14,7 @@ class Vpc_Directories_Category_ShowCategories_Component extends Vpc_Directories_
     private function _getCategories()
     {
         if (!isset($this->_categories)) {
-            $m = Vps_Model_Abstract::getInstance('Vpc_Directories_Category_ShowCategories_Model');
+            $m = Kwf_Model_Abstract::getInstance('Kwc_Directories_Category_ShowCategories_Model');
             $this->_categories = $m->getRows($m->select()->whereEquals('component_id', $this->getDbId()));
         }
         return $this->_categories;
@@ -25,7 +25,7 @@ class Vpc_Directories_Category_ShowCategories_Component extends Vpc_Directories_
         $categories = $this->_getCategories();
         if (count($categories)) {
             $componentId = $categories->current()->getParentRow('Category')->component_id;
-            return Vps_Component_Data_Root::getInstance()->getComponentByDbId($componentId)->parent;
+            return Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId)->parent;
         }
         return null;
     }
@@ -34,7 +34,7 @@ class Vpc_Directories_Category_ShowCategories_Component extends Vpc_Directories_
     {
         $ids = array();
         foreach ($this->_getCategories() as $category) {
-            $ids[] = Vps_Registry::get('db')->quote($category->category_id);
+            $ids[] = Kwf_Registry::get('db')->quote($category->category_id);
         }
         return $ids;
     }

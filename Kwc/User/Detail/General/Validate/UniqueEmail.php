@@ -1,11 +1,11 @@
 <?php
-class Vpc_User_Detail_General_Validate_UniqueEmail extends Vps_Validate_Row_Abstract
+class Kwc_User_Detail_General_Validate_UniqueEmail extends Kwf_Validate_Row_Abstract
 {
     const NOT_UNIQUE_USER = 'notUniqueUser';
 
     public function __construct()
     {
-        $this->_messageTemplates[self::NOT_UNIQUE_USER] = trlVps("User '%value%' does already exist");
+        $this->_messageTemplates[self::NOT_UNIQUE_USER] = trlKwf("User '%value%' does already exist");
     }
 
     public function isValidRow($value, $row)

@@ -1,17 +1,17 @@
 // um flackern zu unterbinden
-document.write('<style type="text/css"> div.vpsSwitchDisplay div.switchContent { display: none; } </style>');
+document.write('<style type="text/css"> div.kwfSwitchDisplay div.switchContent { display: none; } </style>');
 
-Vps.onContentReady(function() {
-    var els = Ext.query('div.vpsSwitchDisplay');
+Kwf.onContentReady(function() {
+    var els = Ext.query('div.kwfSwitchDisplay');
     els.forEach(function(el) {
         if (!el.switchDisplayObject) {
             el = Ext.get(el);
-            el.switchDisplayObject = new Vps.Switch.Display(el);
+            el.switchDisplayObject = new Kwf.Switch.Display(el);
         }
     });
 });
 
-Vps.Switch.Display = function(el) {
+Kwf.Switch.Display = function(el) {
     this.addEvents({
         'beforeOpen': true,
         'beforeClose': true,
@@ -24,11 +24,11 @@ Vps.Switch.Display = function(el) {
     this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
     if (!this.switchLink) this.switchLink = Ext.get(Ext.query('.switchLinkHover', this.el.dom)[0]);
     this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
-    this.vpsSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
-    if (this.vpsSwitchCloseLink.length) {
-        this.vpsSwitchCloseLink = Ext.get(this.vpsSwitchCloseLink[0]);
+    this.kwfSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
+    if (this.kwfSwitchCloseLink.length) {
+        this.kwfSwitchCloseLink = Ext.get(this.kwfSwitchCloseLink[0]);
     } else {
-        this.vpsSwitchCloseLink = false;
+        this.kwfSwitchCloseLink = false;
     }
 
     // durch unterbinden von flackern (ganz oben) muss das auf block
@@ -40,7 +40,7 @@ Vps.Switch.Display = function(el) {
     this.switchContent.setStyle('display', 'none');
 
     // if it is important, show on startup
-    if (this.switchContent.child('.vpsImportant')) {
+    if (this.switchContent.child('.kwfImportant')) {
         this.switchContent.setStyle('display', 'block');
         this.switchContent.setStyle('height', 'auto');
         this.switchLink.addClass('switchLinkOpened');
@@ -51,10 +51,10 @@ Vps.Switch.Display = function(el) {
 
     if (this.switchLink && this.switchContent) {
         if (this.switchLink.hasClass('switchLinkHover')) {
-            Vps.Event.on(this.el.dom, 'mouseEnter', function() {
+            Kwf.Event.on(this.el.dom, 'mouseEnter', function() {
                 this.doOpen();
             }, this);
-            Vps.Event.on(this.el.dom, 'mouseLeave', function() {
+            Kwf.Event.on(this.el.dom, 'mouseLeave', function() {
                 this.doClose();
             }, this);
         } else {
@@ -68,14 +68,14 @@ Vps.Switch.Display = function(el) {
         }
     }
 
-    if (this.vpsSwitchCloseLink) {
-        Ext.EventManager.addListener(this.vpsSwitchCloseLink, 'click', function(e) {
+    if (this.kwfSwitchCloseLink) {
+        Ext.EventManager.addListener(this.kwfSwitchCloseLink, 'click', function(e) {
             this.doClose();
         }, this, { stopEvent: true });
     }
 };
 
-Ext.extend(Vps.Switch.Display, Ext.util.Observable, {
+Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
     doClose: function() {
         if (this._lockAnimation) return;
         this._lockAnimation = true;

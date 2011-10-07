@@ -1,4 +1,4 @@
-Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
+Kwf.Auto.ImageGridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 {
     layout: 'fit',
 
@@ -43,26 +43,26 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.actions.reload = new Ext.Action({
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x-btn-icon',
-            tooltip : trlVps('Reload'),
+            tooltip : trlKwf('Reload'),
             handler : this.reload,
             scope   : this
         });
         this.actions.add = new Ext.Action({
-            text    : trlVps('Add'),
+            text    : trlKwf('Add'),
             icon    : '/assets/silkicons/table_add.png',
             cls     : 'x-btn-text-icon',
             handler : this.onAdd,
             scope: this
         });
         this.actions['delete'] = new Ext.Action({
-            text    : trlVps('Delete'),
+            text    : trlKwf('Delete'),
             icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDelete,
             scope: this,
             needsSelection: true
         });
-        Vps.Auto.ImageGridPanel.superclass.initComponent.call(this);
+        Kwf.Auto.ImageGridPanel.superclass.initComponent.call(this);
     },
 
     doAutoLoad : function()
@@ -147,7 +147,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             cls: 'imageGrid',
             autoHeight: true,
             itemSelector: 'div.thumb-wrap',
-            emptyText: trlVps('No items to display'),
+            emptyText: trlKwf('No items to display'),
             plugins: [],
             prepareData: this.prepareViewData,
             singleSelect: true,
@@ -158,9 +158,9 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (meta.paging) {
             if (typeof meta.paging == 'object') {
                 var t;
-                if (meta.paging.type && Vps.PagingToolbar[meta.paging.type]) {
+                if (meta.paging.type && Kwf.PagingToolbar[meta.paging.type]) {
                     this.pagingType = meta.paging.type;
-                    t = Vps.PagingToolbar[meta.paging.type];
+                    t = Kwf.PagingToolbar[meta.paging.type];
                 } else if(meta.paging.type) {
                     try {
                         t = eval(meta.paging.type);
@@ -237,7 +237,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         }
 
-        this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
+        this.filters = new Kwf.Auto.FilterCollection(meta.filters, this);
         this.filters.each(function(filter) {
             filter.on('filter', function(f, params) {
                 this.applyBaseParams(params);
@@ -265,7 +265,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         bodyStyle: 'padding: 10px; background-color: white;',
                         autoHeight: true,
                         bodyBorder : false,
-                        title: trlVps('Info'),
+                        title: trlKwf('Info'),
                         resize: false
                     });
                     helpWindow.show();
@@ -282,7 +282,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.relayEvents(this.view, ['selectionchange', 'beforeselect']);
 
         this.store.on('beforeload', function() {
-            this.el.mask(trlVps('Loading...'));
+            this.el.mask(trlKwf('Loading...'));
         }, this);
         this.store.on('load', function(store, records, opts) {
             this.el.unmask();
@@ -387,7 +387,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!params) params = {};
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
-            if (!this.metaConn) this.metaConn = new Vps.Connection({ autoAbort: true });
+            if (!this.metaConn) this.metaConn = new Kwf.Connection({ autoAbort: true });
             this.metaConn.request({
                 mask: true,
                 url: this.controllerUrl+'/json-data',
@@ -451,7 +451,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     {
         //im ersten form-binding hinzufügen
         this.bindings.each(function(b) {
-            if (b.item instanceof Vps.Auto.FormPanel) {
+            if (b.item instanceof Kwf.Auto.FormPanel) {
                 b.item.onAdd();
                 return false;
             }
@@ -461,8 +461,8 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onDelete : function() {
         Ext.Msg.show({
-            title: trlVps('Delete'),
-            msg: trlVps('Do you really wish to remove this entry / these entries?'),
+            title: trlKwf('Delete'),
+            msg: trlKwf('Do you really wish to remove this entry / these entries?'),
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {
@@ -476,7 +476,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
                     params[this.store.reader.meta.id] = ids.join(';');
 
-                    this.el.mask(trlVps('Deleting...'));
+                    this.el.mask(trlKwf('Deleting...'));
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/json-delete',
                         params: params,
@@ -502,4 +502,4 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     }
 });
 
-Ext.reg('vps.imagegrid', Vps.Auto.ImageGridPanel);
+Ext.reg('kwf.imagegrid', Kwf.Auto.ImageGridPanel);

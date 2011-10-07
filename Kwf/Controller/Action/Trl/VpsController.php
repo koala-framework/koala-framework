@@ -1,12 +1,12 @@
 <?php
-class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto_Grid
 {
-    protected $_modelName = "Vps_Trl_Model_Vps";
+    protected $_modelName = "Kwf_Trl_Model_Kwf";
     protected $_buttons = array();
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 30;
-    protected $_editDialog = array('controllerUrl'=>'/vps/trl/vps-edit',
+    protected $_editDialog = array('controllerUrl'=>'/kwf/trl/kwf-edit',
                                    'width'=>600,
                                    'height'=>550);
 
@@ -21,18 +21,18 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
         );
 
 
-        $this->_columns->add(new Vps_Grid_Column_Button('edit'));
-        $this->_columns->add(new Vps_Grid_Column('id', 'Id', 50));
-        $this->_columns->add(new Vps_Grid_Column('context', trlVps('Context'), 100));
-        $this->_columns->add(new Vps_Grid_Column($lang, $lang.' '.trlVps('Singular'), 350));
-        $this->_columns->add(new Vps_Grid_Column($lang.'_plural', $lang.' '.trlVps('Plural'), 150));
+        $this->_columns->add(new Kwf_Grid_Column_Button('edit'));
+        $this->_columns->add(new Kwf_Grid_Column('id', 'Id', 50));
+        $this->_columns->add(new Kwf_Grid_Column('context', trlKwf('Context'), 100));
+        $this->_columns->add(new Kwf_Grid_Column($lang, $lang.' '.trlKwf('Singular'), 350));
+        $this->_columns->add(new Kwf_Grid_Column($lang.'_plural', $lang.' '.trlKwf('Plural'), 150));
 
         $langs = self::getLanguages();
         if ($langs) {
             foreach ($langs as $lang) {
                 if ($lang != $this->_getLanguage()) {
-                    $this->_columns->add(new Vps_Grid_Column($lang, $lang.' '.trlVps('Singular'), 350));
-                    $this->_columns->add(new Vps_Grid_Column($lang.'_plural', $lang.' '.trlVps('Plural'), 150));
+                    $this->_columns->add(new Kwf_Grid_Column($lang, $lang.' '.trlKwf('Singular'), 350));
+                    $this->_columns->add(new Kwf_Grid_Column($lang.'_plural', $lang.' '.trlKwf('Plural'), 150));
                 }
             }
         }
@@ -56,10 +56,10 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
             }
             $langs = array_values(array_unique($langs));
         }
-        if (Vps_Component_Data_Root::getComponentClass()) {
+        if (Kwf_Component_Data_Root::getComponentClass()) {
             //TODO besser wär getComponentByFlag('hasLanguage') aber das gibt snicht
-            $lngs = Vps_Component_Data_Root::getInstance()
-                ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); 
+            $lngs = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsByClass('Kwc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); 
             foreach ($lngs as $c) {
                 $langs[] = $c->getComponent()->getLanguage();
             }
@@ -73,6 +73,6 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
             'controllerUrl' => $this->getRequest()->getPathInfo(),
             'language' => 'en'
         );
-        $this->view->ext('Vps.Trl.Grid', $config);
+        $this->view->ext('Kwf.Trl.Grid', $config);
     }
 }

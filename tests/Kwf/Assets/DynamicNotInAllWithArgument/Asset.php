@@ -1,10 +1,10 @@
 <?php
-class Vps_Assets_DynamicNotInAllWithArgument_Asset implements Vps_Assets_Dynamic_Interface
+class Kwf_Assets_DynamicNotInAllWithArgument_Asset implements Kwf_Assets_Dynamic_Interface
 {
     public static $file;
 
     private $_arguments;
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
+    public function __construct(Kwf_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
     {
         $this->_arguments = $arguments;
     }

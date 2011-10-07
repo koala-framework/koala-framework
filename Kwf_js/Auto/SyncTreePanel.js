@@ -1,5 +1,5 @@
-Ext.namespace('Vps.Auto');
-Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
+Ext.namespace('Kwf.Auto');
+Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     layout: 'fit',
 
@@ -17,27 +17,27 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             'addaction'
         );
         this.actions['delete'] = new Ext.Action({
-            text    : trlVps('Delete'),
+            text    : trlKwf('Delete'),
             handler : this.onDelete,
             cls     : 'x-btn-text-icon',
             disabled: true,
             scope   : this
         });
         this.actions.add = new Ext.Action({
-            text    : trlVps('Add'),
+            text    : trlKwf('Add'),
             handler : this.onAdd,
             cls     : 'x-btn-text-icon',
             scope   : this
         });
         this.actions.edit = new Ext.Action({
-            text    : trlVps('Edit'),
+            text    : trlKwf('Edit'),
             handler : this.onEdit,
             cls     : 'x-btn-text-icon',
             disabled: true,
             scope   : this
         });
         this.actions.invisible = new Ext.Action({
-            text    : trlVps('Toggle Visibility'),
+            text    : trlKwf('Toggle Visibility'),
             handler : this.onVisible,
             cls     : 'x-btn-text-icon',
             disabled: true,
@@ -48,11 +48,11 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             handler : function () { this.reload(); },
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x-btn-icon',
-            tooltip : trlVps('Reload'),
+            tooltip : trlKwf('Reload'),
             scope   : this
         });
 
-        Vps.Auto.SyncTreePanel.superclass.initComponent.call(this);
+        Kwf.Auto.SyncTreePanel.superclass.initComponent.call(this);
     },
     
     doAutoLoad : function()
@@ -65,7 +65,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     loadMeta: function()
     {
-        if (!this.metaConn) this.metaConn = new Vps.Connection({ autoAbort: true });
+        if (!this.metaConn) this.metaConn = new Kwf.Connection({ autoAbort: true });
         this.metaConn.request({
             mask: this.el || Ext.getBody(),
             url: this.controllerUrl + '/json-meta',
@@ -110,7 +110,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             for (var button in meta.buttons) {
                 tbar.add(this.getAction(button));
             }
-            this.filters = new Vps.Auto.FilterCollection(meta.filters);
+            this.filters = new Kwf.Auto.FilterCollection(meta.filters);
             this.filters.each(function(filter) {
                 filter.on('filter', function(f, params) {
                     this.applyBaseParams(params);
@@ -123,7 +123,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         // Tree
         var baseParams = this.baseParams != undefined ? this.baseParams : {};
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
-        this.tree = new Vps.Auto.Tree.Panel({
+        this.tree = new Kwf.Auto.Tree.Panel({
             border      : false,
 //            animate     : true,
             loader      : new Ext.tree.TreeLoader({
@@ -177,8 +177,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         if (!this.editDialog && meta.editDialog) {
             this.editDialog = meta.editDialog;
         }
-        if (this.editDialog && !(this.editDialog instanceof Vps.Auto.Form.Window)) {
-            this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
+        if (this.editDialog && !(this.editDialog instanceof Kwf.Auto.Form.Window)) {
+            this.editDialog = new Kwf.Auto.Form.Window(meta.editDialog);
         }
         if (this.editDialog) {
             this.editDialog.on('datachange', function(o) {
@@ -247,7 +247,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onDelete: function (o, e) {
-        Ext.MessageBox.confirm(trlVps('Delete'), trlVps('Do you really want to delete this entry:\n\n"') + this.tree.getSelectionModel().getSelectedNode().text + '"',
+        Ext.MessageBox.confirm(trlKwf('Delete'), trlKwf('Do you really want to delete this entry:\n\n"') + this.tree.getSelectionModel().getSelectedNode().text + '"',
             function  (button) {
                 if (button == 'yes') {
                     Ext.Ajax.request({
@@ -371,17 +371,17 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     setBaseParams : function(baseParams) {
-        Vps.Auto.SyncTreePanel.superclass.setBaseParams.apply(this, arguments);
+        Kwf.Auto.SyncTreePanel.superclass.setBaseParams.apply(this, arguments);
         if (this.editDialog && this.editDialog.setBaseParams) {
             this.editDialog.setBaseParams(baseParams);
         }
     },
     applyBaseParams : function(baseParams) {
-        Vps.Auto.SyncTreePanel.superclass.applyBaseParams.apply(this, arguments);
+        Kwf.Auto.SyncTreePanel.superclass.applyBaseParams.apply(this, arguments);
         if (this.editDialog && this.editDialog.applyBaseParams) {
             this.editDialog.applyBaseParams(baseParams);
         }
     }
 
 });
-Ext.reg('vps.autotreesync', Vps.Auto.SyncTreePanel);
+Ext.reg('kwf.autotreesync', Kwf.Auto.SyncTreePanel);

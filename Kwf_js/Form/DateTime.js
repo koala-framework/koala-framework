@@ -1,7 +1,7 @@
 // vim: ts=4:sw=4:nu:fdc=4:nospell
 /*global Ext */
 /**
- * @class Vps.Form.DateTime
+ * @class Kwf.Form.DateTime
  * @extends Ext.form.Field
  *
  * DateTime field, combination of DateField and TimeField
@@ -9,9 +9,9 @@
  * @author      Ing. Jozef Sak�lo?
  * @copyright (c) 2008, Ing. Jozef Sak�lo?
  * @version   2.0
- * @revision  $Id: Vps.Form.DateTime.js 749 2009-09-15 19:18:44Z jozo $
+ * @revision  $Id: Kwf.Form.DateTime.js 749 2009-09-15 19:18:44Z jozo $
  *
- * @license Vps.Form.DateTime is licensed under the terms of
+ * @license Kwf.Form.DateTime is licensed under the terms of
  * the Open Source LGPL 3.0 license.  Commercial use is permitted to the extent
  * that the code/component(s) do NOT become part of another Open Source or Commercially
  * licensed development library or toolkit without explicit permission.
@@ -36,7 +36,7 @@
  * @constructor
  * @param {Object} config A config object
  */
-Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
+Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {Function} dateValidator A custom validation function to be called during date field
      * validation (defaults to null)
@@ -81,11 +81,11 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {String} dateFormat Format of DateField. Can be localized. (defaults to 'm/y/d')
      */
-    ,dateFormat:trlVps('Y-m-d')
+    ,dateFormat:trlKwf('Y-m-d')
     /**
      * @cfg {String} timeFormat Format of TimeField. Can be localized. (defaults to 'g:i A')
      */
-    ,timeFormat:trlVps('H:i')
+    ,timeFormat:trlKwf('H:i')
     /**
      * @cfg {Object} dateConfig Config for DateField constructor.
      */
@@ -110,7 +110,7 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
      */
     ,initComponent:function() {
         // call parent initComponent
-        Vps.Form.DateTime.superclass.initComponent.call(this);
+        Kwf.Form.DateTime.superclass.initComponent.call(this);
 
         // create DateField
         var dateConfig = Ext.apply({}, {
@@ -166,7 +166,7 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
         }
 
         // render underlying hidden field
-        Vps.Form.DateTime.superclass.onRender.call(this, ct, position);
+        Kwf.Form.DateTime.superclass.onRender.call(this, ct, position);
 
         // render DateField and TimeField
         // create bounding table
@@ -677,8 +677,8 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
      * @param {Object} Column model config
      */
     ,renderer: function(field) {
-        var format = field.editor.dateFormat || Vps.Form.DateTime.prototype.dateFormat;
-        format += ' ' + (field.editor.timeFormat || Vps.Form.DateTime.prototype.timeFormat);
+        var format = field.editor.dateFormat || Kwf.Form.DateTime.prototype.dateFormat;
+        format += ' ' + (field.editor.timeFormat || Kwf.Form.DateTime.prototype.timeFormat);
         var renderer = function(val) {
             var retval = Ext.util.Format.date(val, format);
             return retval;
@@ -690,6 +690,6 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
 }); // eo extend
 
 // register xtype
-Ext.reg('vps.datetime', Vps.Form.DateTime);
+Ext.reg('kwf.datetime', Kwf.Form.DateTime);
 
 // eof

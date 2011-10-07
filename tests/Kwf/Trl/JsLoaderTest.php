@@ -4,13 +4,13 @@
  * @group trl
  *
  */
-class Vps_Trl_JsLoaderTest extends Vps_Test_TestCase
+class Kwf_Trl_JsLoaderTest extends Kwf_Test_TestCase
 {
     private $_jsLoader;
     public function setUp()
     {
         parent::setUp();
-        $this->_jsLoader = new Vps_Trl_JsLoader();
+        $this->_jsLoader = new Kwf_Trl_JsLoader();
     }
 
     public function testTrl()
@@ -67,34 +67,34 @@ class Vps_Trl_JsLoaderTest extends Vps_Test_TestCase
 
     public function testRealTranslation()
     {
-        $input = "trlVps('Save')";
+        $input = "trlKwf('Save')";
         $expected = "trl('Speichern')";
         $result = $this->_jsLoader->trlLoad($input, 'de');
         $this->assertEquals($expected, $result);
 
-        $input = "trlpVps('reply', 'replies', 2)";
+        $input = "trlpKwf('reply', 'replies', 2)";
         $expected = "trlp('Antwort', 'Antworten', 2)";
         $result = $this->_jsLoader->trlLoad($input, 'de');
         $this->assertEquals($expected, $result);
 
-        $input = "trlVps('Save')";
+        $input = "trlKwf('Save')";
         $expected = "trl('Save')";
         $result = $this->_jsLoader->trlLoad($input, 'en');
         $this->assertEquals($expected, $result);
 
-        $input = "trlcVps('time', 'On')";
+        $input = "trlcKwf('time', 'On')";
         $expected = "trl('Am')";
         $result = $this->_jsLoader->trlLoad($input, 'de');
         $this->assertEquals($expected, $result);
 
-        $input = "trlcVps('forum', 'Location')";
+        $input = "trlcKwf('forum', 'Location')";
         $expected = "trl('Location')";
         $result = $this->_jsLoader->trlLoad($input, 'en');
         $this->assertEquals($expected, $result);
 
-        $input = str_repeat(' ', 10015)." trlVps('Info')";
+        $input = str_repeat(' ', 10015)." trlKwf('Info')";
         $result = $this->_jsLoader->trlLoad($input, 'de');
-        $this->assertNotContains('trlVps', $result);
+        $this->assertNotContains('trlKwf', $result);
     }
 
 }

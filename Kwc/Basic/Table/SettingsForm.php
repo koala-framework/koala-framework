@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Table_SettingsForm extends Vpc_Abstract_Form
+class Kwc_Basic_Table_SettingsForm extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
@@ -7,9 +7,9 @@ class Vpc_Basic_Table_SettingsForm extends Vpc_Abstract_Form
 
         $this->setCreateMissingRow(true);
 
-        $tableStyles = Vpc_Abstract::getSetting($this->getClass(), 'tableStyles');
+        $tableStyles = Kwc_Abstract::getSetting($this->getClass(), 'tableStyles');
         if (count($tableStyles)) {
-            $this->add(new Vps_Form_Field_Select('table_style', trlVps('Table style')))
+            $this->add(new Kwf_Form_Field_Select('table_style', trlKwf('Table style')))
                 ->setShowNoSelection(true)
                 ->setValues($tableStyles);
         }

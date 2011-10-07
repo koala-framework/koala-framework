@@ -1,11 +1,11 @@
 <?php
-class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['actions'] = 'Vpc_Posts_Detail_Actions_Component';
-        $ret['generators']['child']['component']['signature'] = 'Vpc_Posts_Detail_Signature_Component';
+        $ret['generators']['child']['component']['actions'] = 'Kwc_Posts_Detail_Actions_Component';
+        $ret['generators']['child']['component']['signature'] = 'Kwc_Posts_Detail_Signature_Component';
         return $ret;
     }
 
@@ -18,9 +18,9 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         $ret['user'] = null;
         $ret['avatar'] = null;
 
-        $userDir = Vps_Component_Data_Root::getInstance()
+        $userDir = Kwf_Component_Data_Root::getInstance()
             ->getComponentByClass(
-                'Vpc_User_Directory_Component',
+                'Kwc_User_Directory_Component',
                 array('subroot' => $this->getData())
             );
         if ($userDir) {
@@ -82,7 +82,7 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         }
 
         // automatische verlinkung
-        $truncate = new Vps_View_Helper_Truncate();
+        $truncate = new Kwf_View_Helper_Truncate();
         $pattern = '/((https?:\/\/www\.)|(https?:\/\/)|(www\.)){1,1}([a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i';
         $offset = 0;
         while (preg_match($pattern, $content, $matches, PREG_OFFSET_CAPTURE, $offset)) {
@@ -103,7 +103,7 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_GeneratorRow();
+        $ret[] = new Kwf_Component_Cache_Meta_Static_GeneratorRow();
         return $ret;
     }
 }

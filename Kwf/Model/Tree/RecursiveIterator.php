@@ -1,9 +1,9 @@
 <?php
-class Vps_Model_Tree_RecursiveIterator implements RecursiveIterator
+class Kwf_Model_Tree_RecursiveIterator implements RecursiveIterator
 {
     private $_rowset;
 
-    public function __construct(Vps_Model_Tree_Row $row)
+    public function __construct(Kwf_Model_Tree_Row $row)
     {
         $this->_rowset = $row->getChildNodes();
     }

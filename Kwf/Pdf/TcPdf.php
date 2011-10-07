@@ -1,6 +1,6 @@
 <?php
 require_once 'tcpdf.php';
-class Vps_Pdf_TcPdf extends TCPDF
+class Kwf_Pdf_TcPdf extends TCPDF
 {
 
     protected $_font = 'helvetica';
@@ -105,7 +105,7 @@ class Vps_Pdf_TcPdf extends TCPDF
             $html = $this->writeHTML($this->decodeText($text), false, 0, false, false, $align);
         } catch (Exception $e) {
             $html = $this->writeHTML(
-                '<strong style="color:red">' . trlVps('Error') . '</strong>' .
+                '<strong style="color:red">' . trlKwf('Error') . '</strong>' .
                 ': <br/>' .
                 $e->getMessage()
             );
@@ -197,7 +197,7 @@ class Vps_Pdf_TcPdf extends TCPDF
 
     public function Error($msg)
     {
-        throw new Vps_Exception($msg);
+        throw new Kwf_Exception($msg);
     }
 
 }

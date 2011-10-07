@@ -5,9 +5,9 @@ trlpTest2: <?= $this->placeholder['trlpTest2']; ?><br />
 trlcpTest1: <?= $this->placeholder['trlcpTest1']; ?><br />
 trlcpTest2: <?= $this->placeholder['trlcpTest2']; ?><br />
 
-trlVpsTest: <?= $this->placeholder['trlVpsTest']; ?><br />
-trlcVpsTest: <?= $this->placeholder['trlcVpsTest']; ?><br />
-trlpVpsTest1: <?= $this->placeholder['trlpVpsTest1']; ?><br />
-trlpVpsTest2: <?= $this->placeholder['trlpVpsTest2']; ?><br />
-trlcpVpsTest1: <?= $this->placeholder['trlcpVpsTest1']; ?><br />
-trlcpVpsTest2: <?= $this->placeholder['trlcpVpsTest2']; ?><br />
+trlKwfTest: <?= $this->placeholder['trlKwfTest']; ?><br />
+trlcKwfTest: <?= $this->placeholder['trlcKwfTest']; ?><br />
+trlpKwfTest1: <?= $this->placeholder['trlpKwfTest1']; ?><br />
+trlpKwfTest2: <?= $this->placeholder['trlpKwfTest2']; ?><br />
+trlcpKwfTest1: <?= $this->placeholder['trlcpKwfTest1']; ?><br />
+trlcpKwfTest2: <?= $this->placeholder['trlcpKwfTest2']; ?><br />

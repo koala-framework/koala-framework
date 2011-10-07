@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_Static extends Vps_Form_Field_Abstract
+class Kwf_Form_Field_Static extends Kwf_Form_Field_Abstract
 {
     //setText
 

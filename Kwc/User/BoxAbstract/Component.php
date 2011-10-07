@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
+class Kwc_User_BoxAbstract_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
@@ -11,7 +11,7 @@ class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
     public function preProcessInput($postData)
     {
         if (isset($postData['feAutologin'])
-            && !Vps_Registry::get('userModel')->getAuthedUser()
+            && !Kwf_Registry::get('userModel')->getAuthedUser()
         ) {
             $feAutologin = explode('.', $postData['feAutologin']);
             if (count($feAutologin) ==2 ) {
@@ -20,13 +20,13 @@ class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
         }
 
         if (isset($postData['logout'])) {
-            Vps_Auth::getInstance()->clearIdentity();
+            Kwf_Auth::getInstance()->clearIdentity();
             setcookie('feAutologin', '', time() - 3600);
 
             //damit 1. logout get parameter verschwindet 2. überprüft wird obs die seite eh noch gibt
             $url = $_SERVER['REDIRECT_URL'];
-            Vps_Component_Generator_Abstract::clearInstances(); //das ist notwendig da die generator ohne eingeloggten user was anderes zurück geben könnten und das aber im data->getChildComponents gecached ist
-            if (!Vps_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].$url, null)) {
+            Kwf_Component_Generator_Abstract::clearInstances(); //das ist notwendig da die generator ohne eingeloggten user was anderes zurück geben könnten und das aber im data->getChildComponents gecached ist
+            if (!Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].$url, null)) {
                 $url = '/';
             }
             header('Location: '.$url);
@@ -37,11 +37,11 @@ class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
 
     private function _getAuthenticateResult($identity, $credential)
     {
-        $adapter = new Vps_Auth_Adapter_Service();
+        $adapter = new Kwf_Auth_Adapter_Service();
         $adapter->setIdentity($identity);
         $adapter->setCredential($credential);
 
-        $auth = Vps_Auth::getInstance();
+        $auth = Kwf_Auth::getInstance();
         $auth->clearIdentity();
         $result = $auth->authenticate($adapter);
 

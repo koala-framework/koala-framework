@@ -1,13 +1,13 @@
 <?php
-class Vpc_Mail_Editable_ComponentsModel extends Vps_Model_Data_Abstract
+class Kwc_Mail_Editable_ComponentsModel extends Kwf_Model_Data_Abstract
 {
     public function __construct(array $config = array())
     {
         $data = array();
-        $components = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Mail_Editable_Component');
+        $components = Kwf_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Kwc_Mail_Editable_Component');
         foreach ($components as $c) {
-            $a = Vpc_Admin::getInstance($c->componentClass);
+            $a = Kwc_Admin::getInstance($c->componentClass);
             $data[] = array(
                 'id' => $c->dbId,
                 'name' => $c->getComponent()->getName(),

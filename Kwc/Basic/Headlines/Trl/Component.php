@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_Headlines_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Basic_Headlines_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 

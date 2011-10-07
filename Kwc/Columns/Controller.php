@@ -1,10 +1,10 @@
 <?php
-class Vpc_Columns_Controller extends Vpc_Abstract_List_ListEditButtonController
+class Kwc_Columns_Controller extends Kwc_Abstract_List_ListEditButtonController
 {
     protected function _initColumns()
     {
         parent::_initColumns();
-        $this->_columns->insertBefore('visible', new Vps_Grid_Column('width', trlVps('Width')))
-            ->setEditor(new Vps_Form_Field_TextField());
+        $this->_columns->insertBefore('visible', new Kwf_Grid_Column('width', trlKwf('Width')))
+            ->setEditor(new Kwf_Form_Field_TextField());
     }
 }

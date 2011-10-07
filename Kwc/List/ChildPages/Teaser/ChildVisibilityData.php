@@ -1,5 +1,5 @@
 <?php
-class Vpc_List_ChildPages_Teaser_ChildVisibilityData extends Vps_Data_Abstract
+class Kwc_List_ChildPages_Teaser_ChildVisibilityData extends Kwf_Data_Abstract
 {
     private $_childOwnModel = null;
     private $_componentId = null;
@@ -12,7 +12,7 @@ class Vpc_List_ChildPages_Teaser_ChildVisibilityData extends Vps_Data_Abstract
 
     public function load($row)
     {
-        $m = Vps_Model_Abstract::getInstance($this->_childOwnModel);
+        $m = Kwf_Model_Abstract::getInstance($this->_childOwnModel);
         $childRow = $m->getRow($this->_componentId.'-'.$row->id);
         if (!$childRow) return 0;
         return $childRow->visible;

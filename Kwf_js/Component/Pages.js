@@ -1,5 +1,5 @@
-Ext.namespace('Vps.Component');
-Vps.Component.Pages = Ext.extend(Ext.Panel, {
+Ext.namespace('Kwf.Component');
+Kwf.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
         this.actions = {};
@@ -20,15 +20,15 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         });
         this.pageButton = new Ext.Toolbar.Button({
             cls     : 'x-btn-text-icon bmenu',
-            text    : trlVps('Page'),
+            text    : trlKwf('Page'),
             menu    : this.pageButtonMenu,
             icon    : '/assets/silkicons/page.png',
             disabled: true
         });
 
-        this.treePanel = new Vps.Auto.TreePanel({
+        this.treePanel = new Kwf.Auto.TreePanel({
             controllerUrl: '/admin/component/pages',
-            title       : trlVps('Seitenbaum'),
+            title       : trlKwf('Seitenbaum'),
             region      : 'west',
             split       : true,
             width       : 300,
@@ -43,9 +43,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         tbar.add(this.pageButton);
 
         tbar.add('-');
-        tbar.add(trlVps('Search: '));
+        tbar.add(trlKwf('Search: '));
         
-        var filter = new Vps.Auto.Filter.Text({name: 'text', 'paramName': 'query'});
+        var filter = new Kwf.Auto.Filter.Text({name: 'text', 'paramName': 'query'});
         filter.on('filter', function(f, params) {
             this.applyBaseParams(params);
             this.reload();
@@ -71,7 +71,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         this.layout = 'border';
         this.items = [this.treePanel, this.contentTabPanel];
 
-        Vps.Component.Pages.superclass.initComponent.call(this);
+        Kwf.Component.Pages.superclass.initComponent.call(this);
 
         this.treePanel.on('loaded', this.onTreePanelLoaded, this);
         this.setupEditform();
@@ -80,7 +80,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     },
     setupEditform : function ()
     {
-       this.editDialog = new Vps.Auto.Form.Window({
+       this.editDialog = new Kwf.Auto.Form.Window({
             width: 620,
             height: 400,
             controllerUrl: '/admin/component/page'
@@ -243,7 +243,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     createComponentPanel: function(data)
     {
-        var panel = new Vps.Component.ComponentPanel({
+        var panel = new Kwf.Component.ComponentPanel({
             id          : 'page'+data.pageId,
             title       : data.text,
             closable    : true,
@@ -268,7 +268,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
         if (type == 'properties') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Page properties'),
+                text    : trlKwf('Page properties'),
                 handler : function () {
                     this._removeEditDialogForm();
                     var node = this.treePanel.tree.selModel.selNode;
@@ -283,7 +283,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'add') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Add new child page'),
+                text    : trlKwf('Add new child page'),
                 handler : function () {
                     this._removeEditDialogForm();
                     var node = this.treePanel.tree.selModel.selNode;
@@ -299,7 +299,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Delete page'),
+                text    : trlKwf('Delete page'),
                 handler : function() {
                     this.treePanel.onDelete();
                 },
@@ -309,7 +309,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'copy') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Copy page'),
+                text    : trlKwf('Copy page'),
                 handler : function() {
                     this.onCopy();
                 },
@@ -319,7 +319,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'paste') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Paste page'),
+                text    : trlKwf('Paste page'),
                 handler : function() {
                     this.onPaste();
                 },
@@ -329,7 +329,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'visible') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Show / hide page'),
+                text    : trlKwf('Show / hide page'),
                 handler : function() {
                     this.treePanel.onVisible();
                 },
@@ -339,11 +339,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'makeHome') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Use as homepage'),
+                text    : trlKwf('Use as homepage'),
                 handler : function (o, e) {
                     Ext.Msg.show({
-                        title: trlVps('Use as homepage'),
-                        msg: trlVps('Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?'),
+                        title: trlKwf('Use as homepage'),
+                        msg: trlKwf('Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?'),
                         buttons: Ext.Msg.YESNO,
                         icon: Ext.MessageBox.WARNING,
                         fn: function(btn, text) {
@@ -373,7 +373,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'expand') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Expand here'),
+                text    : trlKwf('Expand here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().expand(true); },
                 icon    : '/assets/silkicons/bullet_add.png',
                 cls     : 'x-btn-text-icon',
@@ -381,7 +381,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'collapse') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Collapse here'),
+                text    : trlKwf('Collapse here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().collapse(true); },
                 icon    : '/assets/silkicons/bullet_delete.png',
                 cls     : 'x-btn-text-icon',
@@ -389,7 +389,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'preview') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Open preview'),
+                text    : trlKwf('Open preview'),
                 handler : function () {
                     window.open('/admin/component/pages/open-preview?page_id='+
                                 this.treePanel.getSelectedId());
@@ -421,7 +421,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             params: Ext.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
             timeout: 5*60*1000,
             progress: true,
-            progressTitle : trlVps('Paste Page'),
+            progressTitle : trlKwf('Paste Page'),
             showCancel: false,
             success: function(response, options, result) {
                 this.treePanel.reload();
@@ -432,4 +432,4 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
 });
 
-Ext.reg('vps.component.pages', Vps.Component.Pages);
+Ext.reg('kwf.component.pages', Kwf.Component.Pages);

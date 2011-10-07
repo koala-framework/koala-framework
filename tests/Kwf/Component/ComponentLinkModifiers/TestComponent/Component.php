@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_ComponentLinkModifiers_TestComponent_Component extends Vpc_Abstract
+class Kwf_Component_ComponentLinkModifiers_TestComponent_Component extends Kwc_Abstract
 {
 }

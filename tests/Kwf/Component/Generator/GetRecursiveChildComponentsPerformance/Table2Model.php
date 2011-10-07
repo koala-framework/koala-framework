@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_GetRecursiveChildComponentsPerformance_Table2Model extends Vps_Model_FnF
+class Kwf_Component_Generator_GetRecursiveChildComponentsPerformance_Table2Model extends Kwf_Model_FnF
 {
     protected $_columns = array('id', 'name', 'component', 'component_id');
     protected $_data = array(

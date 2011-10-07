@@ -2,16 +2,16 @@
 /**
  * @group Benchmark
  */
-class Vps_Benchmark_CounterTest extends Vps_Test_TestCase
+class Kwf_Benchmark_CounterTest extends Kwf_Test_TestCase
 {
     public function testMemcache()
     {
-        $this->_test(new Vps_Benchmark_Counter_Memcache());
+        $this->_test(new Kwf_Benchmark_Counter_Memcache());
     }
 
     public function testFile()
     {
-        $this->_test(new Vps_Benchmark_Counter_File());
+        $this->_test(new Kwf_Benchmark_Counter_File());
     }
 
     private function _test($counter)

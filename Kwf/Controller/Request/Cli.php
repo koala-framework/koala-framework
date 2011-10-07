@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
+class Kwf_Controller_Request_Cli extends Zend_Controller_Request_Abstract
 {
     public function __construct()
     {
@@ -42,6 +42,6 @@ class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
     }
     public function getResourceName()
     {
-        return 'vps_cli';
+        return 'kwf_cli';
     }
 }

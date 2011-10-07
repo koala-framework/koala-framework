@@ -1,10 +1,10 @@
 <?php
-class Vpc_Columns_Trl_Component extends Vpc_Abstract_List_Trl_Component
+class Kwc_Columns_Trl_Component extends Kwc_Abstract_List_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['extConfig'] = 'Vpc_Abstract_List_Trl_ExtConfigFullSizeEdit';
+        $ret['extConfig'] = 'Kwc_Abstract_List_Trl_ExtConfigFullSizeEdit';
         return $ret;
     }
 

@@ -3,13 +3,13 @@
  * @group Update_Action
  * @group Update_Action_Rrd
  */
-class Vps_Update_Action_Rrd_RenameDsTest extends Vps_Update_Action_Rrd_AbstractTest
+class Kwf_Update_Action_Rrd_RenameDsTest extends Kwf_Update_Action_Rrd_AbstractTest
 {
     public function testRenameRrd()
     {
         $file = $this->_createTestFile();
 
-        $action = new Vps_Update_Action_Rrd_RenameDs(array(
+        $action = new Kwf_Update_Action_Rrd_RenameDs(array(
             'file' => $file,
             'name' => 'testx',
             'newName' => 'testxxx',

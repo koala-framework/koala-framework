@@ -1,5 +1,5 @@
 <?php
-interface Vpc_Mail_Recipient_Interface
+interface Kwc_Mail_Recipient_Interface
 {
     const MAIL_FORMAT_TEXT = 'text';
     const MAIL_FORMAT_HTML = 'html';

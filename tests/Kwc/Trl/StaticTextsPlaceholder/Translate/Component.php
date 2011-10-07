@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_StaticTextsPlaceholder_Translate_Component extends Vpc_Abstract
+class Kwc_Trl_StaticTextsPlaceholder_Translate_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -12,12 +12,12 @@ class Vpc_Trl_StaticTextsPlaceholder_Translate_Component extends Vpc_Abstract
         $ret['placeholder']['trlcpTest1'] = trlcpStatic('test', 'Antwort', 'Antworten', 1);
         $ret['placeholder']['trlcpTest2'] = trlcpStatic('test', 'Antwort', 'Antworten', 2);
 
-        $ret['placeholder']['trlVpsTest'] = trlVpsStatic('Visible');
-        $ret['placeholder']['trlcVpsTest'] = trlcVpsStatic('time', 'On');
-        $ret['placeholder']['trlpVpsTest1'] = trlpVpsStatic('reply', 'replies', 1);
-        $ret['placeholder']['trlpVpsTest2'] = trlpVpsStatic('reply', 'replies', 2);
-        $ret['placeholder']['trlcpVpsTest1'] = trlcpVpsStatic('test', 'reply', 'replies', 1);
-        $ret['placeholder']['trlcpVpsTest2'] = trlcpVpsStatic('test', 'reply', 'replies', 2);
+        $ret['placeholder']['trlKwfTest'] = trlKwfStatic('Visible');
+        $ret['placeholder']['trlcKwfTest'] = trlcKwfStatic('time', 'On');
+        $ret['placeholder']['trlpKwfTest1'] = trlpKwfStatic('reply', 'replies', 1);
+        $ret['placeholder']['trlpKwfTest2'] = trlpKwfStatic('reply', 'replies', 2);
+        $ret['placeholder']['trlcpKwfTest1'] = trlcpKwfStatic('test', 'reply', 'replies', 1);
+        $ret['placeholder']['trlcpKwfTest2'] = trlcpKwfStatic('test', 'reply', 'replies', 2);
 
         return $ret;
     }

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Abstract_Composite_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Abstract_Composite_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['extConfig'] = Vpc_Abstract::getSetting($masterComponentClass, 'extConfig');
+        $ret['extConfig'] = Kwc_Abstract::getSetting($masterComponentClass, 'extConfig');
         return $ret;
     }
 

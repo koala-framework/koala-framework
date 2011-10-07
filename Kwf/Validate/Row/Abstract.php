@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Validate_Row_Abstract extends Zend_Validate_Abstract
+abstract class Kwf_Validate_Row_Abstract extends Zend_Validate_Abstract
 {
     public function setField($field)
     {

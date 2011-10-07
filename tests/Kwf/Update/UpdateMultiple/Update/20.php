@@ -1,4 +1,4 @@
 <?php
-class Vps_Update_UpdateMultiple_Update_20 extends Vps_Update
+class Kwf_Update_UpdateMultiple_Update_20 extends Kwf_Update
 {
 }

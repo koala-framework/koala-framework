@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
+class Kwc_Root_Category_FilenameFilter extends Kwf_Filter_Row_Abstract
 {
     public function skipFilter($row, $column)
     {
@@ -9,14 +9,14 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
 
     public function filter($row)
     {
-        $value = Vps_Filter::filterStatic($row->name, 'Ascii');
+        $value = Kwf_Filter::filterStatic($row->name, 'Ascii');
 
         $componentId = $this->_getComponentId($row);
         if (!$componentId && isset($row->parent_id)) {
-            $parent = Vps_Component_Data_Root::getInstance()
+            $parent = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($row->parent_id, array('ignoreVisible' => true));
         } else {
-            $parent = Vps_Component_Data_Root::getInstance()
+            $parent = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($componentId, array('ignoreVisible' => true))
                 ->parent;
         }
@@ -27,9 +27,9 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
             if ($c->componentId == $componentId) continue;
             $values[] = $c->filename;
         }
-        if ($parent instanceof Vps_Component_Data_Root) {
+        if ($parent instanceof Kwf_Component_Data_Root) {
             $values[] = 'admin';
-            $values[] = 'vps';
+            $values[] = 'kwf';
             $values[] = 'media';
             $values[] = 'assets';
         }

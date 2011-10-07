@@ -1,8 +1,8 @@
-Vps.Debug.SqlExplain = Ext.extend(Ext.grid.GridPanel, {
+Kwf.Debug.SqlExplain = Ext.extend(Ext.grid.GridPanel, {
     initComponent: function()
     {
         Ext.Ajax.request({
-            url: '/vps/debug/sql/json-explain',
+            url: '/kwf/debug/sql/json-explain',
             params: { query: this.query },
             success: function(response, options, result) {
                 this.store.loadData(result.data);
@@ -38,6 +38,6 @@ Vps.Debug.SqlExplain = Ext.extend(Ext.grid.GridPanel, {
             {header: 'Other Info', dataIndex: 'Extra', width: 100}
         ];
 
-        Vps.Debug.SqlExplain.superclass.initComponent.call(this);
+        Kwf.Debug.SqlExplain.superclass.initComponent.call(this);
     }
 });

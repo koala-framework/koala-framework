@@ -1,6 +1,6 @@
 <?php
-class Vpc_Newsletter_Subscribe_Model extends Vps_Model_Db
+class Kwc_Newsletter_Subscribe_Model extends Kwf_Model_Db
 {
-    protected $_table = 'vpc_newsletter_subscribers';
-    protected $_rowClass = 'Vpc_Newsletter_Subscribe_Row';
+    protected $_table = 'kwc_newsletter_subscribers';
+    protected $_rowClass = 'Kwc_Newsletter_Subscribe_Row';
 }

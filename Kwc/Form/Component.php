@@ -1,5 +1,5 @@
 <?php
-class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 {
     protected $_form;
     private $_processed = false;
@@ -12,26 +12,26 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['success'] = 'Vpc_Form_Success_Component';
-        $ret['componentName'] = trlVps('Form');
-        $ret['placeholder']['submitButton'] = trlVpsStatic('Submit');
-        $ret['placeholder']['error'] = trlVpsStatic('An error has occurred');
-        $ret['decorator'] = 'Vpc_Form_Decorator_Label';
+        $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
+        $ret['componentName'] = trlKwf('Form');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
+        $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
+        $ret['decorator'] = 'Kwc_Form_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
 
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtElement';
         $ret['assets']['dep'][] = 'ExtConnection';
-        $ret['assets']['files'][] = 'vps/Vpc/Form/Component.js';
-        $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/Field.js';
-        $ret['assets']['files'][] = 'vps/Vps_js/FrontendForm/*';
+        $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
+        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
 
         $ret['flags']['processInput'] = true;
 
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
-        $ret['buttonClass'] = 'vpsButtonFlat'; //um standard styles aus dem Vps zu umgehen
+        $ret['buttonClass'] = 'kwfButtonFlat'; //um standard styles aus dem Kwf zu umgehen
 
         return $ret;
     }
@@ -43,21 +43,21 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         // wenn es eine Form.php gibt aber keine FrontendForm.php
         // sollte man aus irgendeinem grund doch eine Form benutzen ohne FrontendForm
         // dann einfach validateSettings überschreiben und parent nicht aufrufen
-        $frontendFormClass = Vpc_Admin::getComponentClass($componentClass, 'FrontendForm');
-        $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');
-        if ($formClass != 'Vpc_Abstract_Composite_Form' && !$frontendFormClass) {
-            throw new Vps_Exception("Form.php files for frontend have been renamed to FrontendForm.php");
+        $frontendFormClass = Kwc_Admin::getComponentClass($componentClass, 'FrontendForm');
+        $formClass = Kwc_Admin::getComponentClass($componentClass, 'Form');
+        if ($formClass != 'Kwc_Abstract_Composite_Form' && !$frontendFormClass) {
+            throw new Kwf_Exception("Form.php files for frontend have been renamed to FrontendForm.php");
         }
 
-        if ($frontendFormClass && is_instance_of($frontendFormClass, 'Vpc_Abstract_Form')) {
-            throw new Vps_Exception("A frontend form may never be an instance of Vpc_Abstract_Form");
+        if ($frontendFormClass && is_instance_of($frontendFormClass, 'Kwc_Abstract_Form')) {
+            throw new Kwf_Exception("A frontend form may never be an instance of Kwc_Abstract_Form");
         }
     }
 
     protected function _initForm()
     {
         if (!isset($this->_form)) {
-            $formClass = Vpc_Admin::getComponentClass($this, 'FrontendForm');
+            $formClass = Kwc_Admin::getComponentClass($this, 'FrontendForm');
             $this->_form = new $formClass('form', get_class($this));
         }
     }
@@ -81,7 +81,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (!$this->getForm()) return;
 
         $m = $this->getForm()->getModel();
-        while ($m instanceof Vps_Model_Proxy) {
+        while ($m instanceof Kwf_Model_Proxy) {
             $m = $m->getProxyModel();
         }
 
@@ -93,8 +93,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         } else {
             $this->_posted = true;
         }
-        if ($this->_posted && Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
-            Vps_Registry::get('db')->beginTransaction();
+        if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
+            Kwf_Registry::get('db')->beginTransaction();
         }
         $postData = $this->_form->processInput(null, $postData);
         $this->_postData = $postData;
@@ -119,15 +119,15 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
-        if ($this->_posted && Vps_Registry::get('db') && $m instanceof Vps_Model_Db) {
-            Vps_Registry::get('db')->commit();
+        if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
+            Kwf_Registry::get('db')->commit();
         }
     }
 
     public function getPostData()
     {
         if (!$this->_processed) {
-            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
         return $this->_postData;
     }
@@ -135,7 +135,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public function getErrors()
     {
         if (!$this->_processed) {
-            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
         return $this->_errors;
     }
@@ -143,7 +143,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public function getFormRow()
     {
         if (!$this->_processed) {
-            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
         return $this->getForm()->getRow();
     }
@@ -160,10 +160,10 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
-        $ret = Vpc_Abstract::getTemplateVars();
+        $ret = Kwc_Abstract::getTemplateVars();
 
         if (!$this->_processed) {
-            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
 
         $class = null;
@@ -173,7 +173,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;
-        $ret['errors'] = Vps_Form::formatValidationErrors($this->getErrors());
+        $ret['errors'] = Kwf_Form::formatValidationErrors($this->getErrors());
         if ($this->isSaved()) {
             if (!$ret['errors'] && $class) {
                 $ret['showSuccess'] = true;
@@ -198,7 +198,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['formName'] = $this->getData()->componentId;
         $ret['buttonClass'] = $this->_getSetting('buttonClass');
 
-        $cachedContent = Vps_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
+        $cachedContent = Kwf_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
         if ($cachedContent) {
             $targetPage = explode(';', $cachedContent);
             $ret['action'] = $targetPage[0];
@@ -209,20 +209,20 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $ret['isUpload'] = false;
         foreach (new RecursiveIteratorIterator(
-                new Vps_Collection_Iterator_RecursiveFormFields($this->getForm()->fields))
+                new Kwf_Collection_Iterator_RecursiveFormFields($this->getForm()->fields))
                 as $f) {
-            if ($f instanceof Vps_Form_Field_File) {
+            if ($f instanceof Kwf_Form_Field_File) {
                 $ret['isUpload'] = true;
                 break;
             }
         }
         $ret['message'] = null;
 
-        $cacheId = 'vpcFormCu-'.get_class($this);
-        $controllerUrl = Vps_Cache_Simple::fetch($cacheId);
+        $cacheId = 'kwcFormCu-'.get_class($this);
+        $controllerUrl = Kwf_Cache_Simple::fetch($cacheId);
         if (!$controllerUrl) {
-            $controllerUrl = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm');
-            Vps_Cache_Simple::add($cacheId, $controllerUrl);
+            $controllerUrl = Kwc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm');
+            Kwf_Cache_Simple::add($cacheId, $controllerUrl);
         }
         $hideForValue = array();
         foreach ($this->_form->getHideForValue() as $v) {
@@ -235,14 +235,14 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
-            'savingImage' => '/assets/vps/Vpc/Form/saving.gif',
+            'savingImage' => '/assets/kwf/Kwc/Form/saving.gif',
             'hideForValue' => $hideForValue
         );
 
         return $ret;
     }
 
-    // used by Vpc_Form_FrontendFormController
+    // used by Kwc_Form_FrontendFormController
     public function getPlaceholder($placeholder = null)
     {
         return $this->_getPlaceholder($placeholder);
@@ -264,19 +264,19 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         return $this->_isSaved;
     }
 
-    protected function _afterSave(Vps_Model_Row_Interface $row)
+    protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterInsert(Vps_Model_Row_Interface $row)
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
     }
 }

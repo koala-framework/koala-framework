@@ -1,25 +1,25 @@
 <?php
 /**
- * @group Vpc_Trl
+ * @group Kwc_Trl
  *
 ansicht frontend:
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_DownloadTag_Root/de/test1
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_DownloadTag_Root/de/test2
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_DownloadTag_Root/en/test1
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_DownloadTag_Root/en/test2
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_DownloadTag_Root/de/test1
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_DownloadTag_Root/de/test2
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_DownloadTag_Root/en/test1
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_DownloadTag_Root/en/test2
 
 DE bearbeiten:
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_DownloadTag_Root/Vpc_Trl_DownloadTag_DownloadTag_Component?componentId=root-master_test1
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_DownloadTag_Root/Vpc_Trl_DownloadTag_DownloadTag_Component?componentId=root-master_test2
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_DownloadTag_Root/Kwc_Trl_DownloadTag_DownloadTag_Component?componentId=root-master_test1
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_DownloadTag_Root/Kwc_Trl_DownloadTag_DownloadTag_Component?componentId=root-master_test2
 EN bearbeiten
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_DownloadTag_Root/Vpc_Trl_DownloadTag_DownloadTag_Trl_Component.Vpc_Trl_DownloadTag_DownloadTag_Component?componentId=root-en_test1
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_DownloadTag_Root/Vpc_Trl_DownloadTag_DownloadTag_Trl_Component.Vpc_Trl_DownloadTag_DownloadTag_Component?componentId=root-en_test2
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_DownloadTag_Root/Kwc_Trl_DownloadTag_DownloadTag_Trl_Component.Kwc_Trl_DownloadTag_DownloadTag_Component?componentId=root-en_test1
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_DownloadTag_Root/Kwc_Trl_DownloadTag_DownloadTag_Trl_Component.Kwc_Trl_DownloadTag_DownloadTag_Component?componentId=root-en_test2
  */
-class Vpc_Trl_DownloadTag_Test extends Vpc_TestAbstract
+class Kwc_Trl_DownloadTag_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_DownloadTag_Root');
+        parent::setUp('Kwc_Trl_DownloadTag_Root');
     }
 
     public function testDe()

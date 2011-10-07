@@ -3,40 +3,40 @@
  * @group Service
  * @group Srpc_Server
  */
-class Vps_Srpc_ServerTest extends Vps_Test_TestCase
+class Kwf_Srpc_ServerTest extends Kwf_Test_TestCase
 {
     private $_client;
 
     public function setUp()
     {
         parent::setUp();
-        $this->_client = $this->getMock('Vps_Srpc_Client', array('_performRequest'));
+        $this->_client = $this->getMock('Kwf_Srpc_Client', array('_performRequest'));
     }
 
     public function testNoClassSetted()
     {
-        $srv = new Vps_Srpc_Server(array('returnResponse' => true));
+        $srv = new Kwf_Srpc_Server(array('returnResponse' => true));
         $response = $srv->handle();
 
         $exception = unserialize($response);
-        if ($exception instanceof Vps_Exception_Serializable) {
+        if ($exception instanceof Kwf_Exception_Serializable) {
             $exception = $exception->getException();
         }
-        $this->assertTrue($exception instanceof Vps_Srpc_Exception);
+        $this->assertTrue($exception instanceof Kwf_Srpc_Exception);
     }
 
     public function testNoMethodTransmitted()
     {
-        $srv = new Vps_Srpc_Server(array(
-            'handler' => 'Vps_Srpc_TestClasses_Handler',
+        $srv = new Kwf_Srpc_Server(array(
+            'handler' => 'Kwf_Srpc_TestClasses_Handler',
             'returnResponse' => true
         ));
         $response = $srv->handle(null, array(3));
         $exception = unserialize($response);
-        if ($exception instanceof Vps_Exception_Serializable) {
+        if ($exception instanceof Kwf_Exception_Serializable) {
             $exception = $exception->getException();
         }
-        $this->assertTrue($exception instanceof Vps_Srpc_Exception);
+        $this->assertTrue($exception instanceof Kwf_Srpc_Exception);
     }
 
     // nötig weil der sonst den kompletten backtrace vom test ausgibt und da
@@ -51,8 +51,8 @@ class Vps_Srpc_ServerTest extends Vps_Test_TestCase
 
     public function testNoArgumentsTransmitted()
     {
-        $srv = new Vps_Srpc_Server(array(
-            'handler' => 'Vps_Srpc_TestClasses_Handler',
+        $srv = new Kwf_Srpc_Server(array(
+            'handler' => 'Kwf_Srpc_TestClasses_Handler',
             'returnResponse' => true
         ));
         $response = $srv->handle('getPrimaryKey');
@@ -61,23 +61,23 @@ class Vps_Srpc_ServerTest extends Vps_Test_TestCase
 
     public function testSetClass()
     {
-        $compare = new Vps_Srpc_TestClasses_Handler();
+        $compare = new Kwf_Srpc_TestClasses_Handler();
 
-        $srv = new Vps_Srpc_Server(array('handler' => new Vps_Srpc_TestClasses_Handler()));
+        $srv = new Kwf_Srpc_Server(array('handler' => new Kwf_Srpc_TestClasses_Handler()));
         $this->assertEquals($srv->getHandler(), $compare);
 
-        $srv = new Vps_Srpc_Server(array('handler' => 'Vps_Srpc_TestClasses_Handler'));
+        $srv = new Kwf_Srpc_Server(array('handler' => 'Kwf_Srpc_TestClasses_Handler'));
         $this->assertEquals($srv->getHandler(), $compare);
 
-        $srv = new Vps_Srpc_Server();
-        $srv->setHandler('Vps_Srpc_TestClasses_Handler');
+        $srv = new Kwf_Srpc_Server();
+        $srv->setHandler('Kwf_Srpc_TestClasses_Handler');
         $this->assertEquals($srv->getHandler(), $compare);
     }
 
     public function testHandle()
     {
-        $srv = new Vps_Srpc_Server(array(
-            'handler' => new Vps_Srpc_TestClasses_Handler(),
+        $srv = new Kwf_Srpc_Server(array(
+            'handler' => new Kwf_Srpc_TestClasses_Handler(),
             'returnResponse' => true
         ));
         $result = $srv->handle('getRow', array(3));

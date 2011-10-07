@@ -1,18 +1,18 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_Trl_Menu
+ * @group Kwc_Trl
+ * @group Kwc_Trl_Menu
  */
 /*
 Ansicht frontend (en wird getestet):
-/vps/vpctest/Vpc_Trl_Menu_Root_Component/de
-/vps/vpctest/Vpc_Trl_Menu_Root_Component/en
+/kwf/kwctest/Kwc_Trl_Menu_Root_Component/de
+/kwf/kwctest/Kwc_Trl_Menu_Root_Component/en
  */
-class Vpc_Trl_Menu_Test extends Vpc_TestAbstract
+class Kwc_Trl_Menu_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_Menu_Root_Component');
+        parent::setUp('Kwc_Trl_Menu_Root_Component');
     }
 
     public function testMenuForPage1()

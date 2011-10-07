@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mongo_ParentExprTest_ParentModel extends Vps_Model_FnF
+class Kwf_Model_Mongo_ParentExprTest_ParentModel extends Kwf_Model_FnF
 {
     protected $_data = array(
         array('id'=>1, 'name'=>'one'),
@@ -8,6 +8,6 @@ class Vps_Model_Mongo_ParentExprTest_ParentModel extends Vps_Model_FnF
     );
 
     protected $_dependentModels = array(
-        'Mongo' => 'Vps_Model_Mongo_ParentExprTest_MongoModel'
+        'Mongo' => 'Kwf_Model_Mongo_ParentExprTest_MongoModel'
     );
 }

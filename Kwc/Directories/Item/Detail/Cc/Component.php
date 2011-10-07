@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Detail_Cc_Component extends Vpc_Abstract_Composite_Cc_Component
+class Kwc_Directories_Item_Detail_Cc_Component extends Kwc_Abstract_Composite_Cc_Component
 {
     public static function getSettings($masterComponentClass)
     {
@@ -8,7 +8,7 @@ class Vpc_Directories_Item_Detail_Cc_Component extends Vpc_Abstract_Composite_Cc
         return $ret;
     }
 
-    public static function modifyItemData(Vps_Component_Data $item)
+    public static function modifyItemData(Kwf_Component_Data $item)
     {
     }
 }

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Newsletter_EditSubscriber_Success_Component extends Vpc_Form_Success_Component
+class Kwc_Newsletter_EditSubscriber_Success_Component extends Kwc_Form_Success_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlVps('Your data has been saved successfully.');
+        $ret['placeholder']['success'] = trlKwf('Your data has been saved successfully.');
         return $ret;
     }
 }

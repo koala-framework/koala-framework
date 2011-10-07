@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Action_Rrd_DropDs extends Vps_Update_Action_Rrd_Abstract
+class Kwf_Update_Action_Rrd_DropDs extends Kwf_Update_Action_Rrd_Abstract
 {
     public $name;
 
@@ -9,7 +9,7 @@ class Vps_Update_Action_Rrd_DropDs extends Vps_Update_Action_Rrd_Abstract
 
         if (is_string($this->name)) $this->name = array($this->name);
         foreach ($this->name as &$n) {
-            $n = Vps_Util_Rrd_Field::escapeField($n);
+            $n = Kwf_Util_Rrd_Field::escapeField($n);
         }
 
         if (!$this->silent) {

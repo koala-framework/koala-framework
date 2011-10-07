@@ -1,12 +1,12 @@
-Ext.namespace('Vps.FrontendForm');
-Vps.FrontendForm.Field = function(fieldEl) {
-    Vps.FrontendForm.Field.superclass.constructor.call(this);
+Ext.namespace('Kwf.FrontendForm');
+Kwf.FrontendForm.Field = function(fieldEl) {
+    Kwf.FrontendForm.Field.superclass.constructor.call(this);
     this.el = fieldEl;
     this.el.enableDisplayMode();
     this.initField();
     this.addEvents('change');
 };
-Ext.extend(Vps.FrontendForm.Field, Ext.util.Observable, {
+Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
     initField: function() {
         var inp = this.el.child('input');
         if (inp) {
@@ -36,10 +36,10 @@ Ext.extend(Vps.FrontendForm.Field, Ext.util.Observable, {
         if (this.errorEl) this.errorEl.hide();
     },
     showError: function(msg) {
-        this.el.addClass('vpsFieldError');
+        this.el.addClass('kwfFieldError');
         if (!this.errorEl) {
             this.errorEl = this.el.createChild({
-                cls: 'vpsFieldErrorMessage'
+                cls: 'kwfFieldErrorMessage'
             });
         }
         this.errorEl.show();
@@ -47,5 +47,5 @@ Ext.extend(Vps.FrontendForm.Field, Ext.util.Observable, {
     }
 });
 
-Vps.FrontendForm.fields = {};
-Vps.FrontendForm.fields['vpsField'] = Vps.FrontendForm.Field;
+Kwf.FrontendForm.fields = {};
+Kwf.FrontendForm.fields['kwfField'] = Kwf.FrontendForm.Field;

@@ -1,5 +1,5 @@
 <?php
-class Vps_AutoTree_Model extends Vps_Model_FnF {
+class Kwf_AutoTree_Model extends Kwf_Model_FnF {
 
     public function __construct($config = array())
     {

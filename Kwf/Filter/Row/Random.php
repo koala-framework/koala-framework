@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_Random extends Vps_Filter_Row_Abstract
+class Kwf_Filter_Row_Random extends Kwf_Filter_Row_Abstract
 {
     private $_length;
     public function __construct($length = 10)
@@ -9,7 +9,7 @@ class Vps_Filter_Row_Random extends Vps_Filter_Row_Abstract
     public function filter($row)
     {
         if (!$row->{$this->_field}) {
-            $filter = new Vps_Filter_Random($this->_length);
+            $filter = new Kwf_Filter_Random($this->_length);
             return $filter->filter('');
         } else {
             return $row->{$this->_field};

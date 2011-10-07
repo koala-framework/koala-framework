@@ -1,4 +1,4 @@
 <?php
-class Vpc_Abstract_FormEmpty
+class Kwc_Abstract_FormEmpty
 {
 }

@@ -2,19 +2,19 @@
 /**
  * @group slow
  * @group selenium
- * @group Vpc_Basic_Text
+ * @group Kwc_Basic_Text
  */
-class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_TextSessionModel_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_Basic_TextSessionModel_Root');
         parent::setUp();
     }
 
     public function testInsertEditLink()
     {
-        $this->openVpcEdit('Vpc_Basic_TextSessionModel_TestComponent', 'root_text');
+        $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
         //insert some text
@@ -26,7 +26,7 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
         //select some text
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Vps.Form.HtmlEditor) { editor = c; return false; } });
+            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             var rng = editor.tinymceEditor.selection.getRng();
             rng.setStart(rng.startContainer, 4);
             editor.tinymceEditor.selection.setRng(rng);
@@ -43,7 +43,7 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
         //select extern link
         $this->runScript("Ext.ComponentMgr.all.each(function(c) {
-            if (c instanceof Vps.Form.ComboBox && c.name == 'component_component') {
+            if (c instanceof Kwf.Form.ComboBox && c.name == 'component_component') {
                 c.setValue('extern');
                 c.fireEvent('select');
             }
@@ -63,17 +63,17 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
         $this->waitForConnections();
 
         //assert frontent content
-        $this->openVpc('/text');
-        $this->assertText('css=.vpcText', 'lalalulufoo');
+        $this->openKwc('/text');
+        $this->assertText('css=.kwcText', 'lalalulufoo');
         $this->assertAttribute('//div/p/a/@href', 'http://orf.at');
 
         //open backend again
-        $this->openVpcEdit('Vpc_Basic_TextSessionModel_TestComponent', 'root_text');
+        $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
         //select link
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Vps.Form.HtmlEditor) { editor = c; return false; } });
+            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             editor.onEditorEvent();
             var a = Ext.fly(editor.getDoc()).child("a").dom;
             editor.tinymceEditor.selection.select(a);
@@ -98,7 +98,7 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
     public function testInlineStyle()
     {
-        $this->openVpcEdit('Vpc_Basic_TextSessionModel_TestComponent', 'root_text');
+        $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
         //insert some text
@@ -106,7 +106,7 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
         //select some text
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Vps.Form.HtmlEditor) { editor = c; return false; } });
+            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             var rng = editor.tinymceEditor.selection.getRng();
             rng.setStart(rng.startContainer, 4);
             editor.tinymceEditor.selection.setRng(rng);
@@ -148,7 +148,7 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
     public function testBlockStyle()
     {
-        $this->openVpcEdit('Vpc_Basic_TextSessionModel_TestComponent', 'root_text');
+        $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
         //insert some text
@@ -191,7 +191,7 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
     public function testBlockStyleOnTwoParagraphs()
     {
-        $this->openVpcEdit('Vpc_Basic_TextSessionModel_TestComponent', 'root_text');
+        $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
         //insert some text
@@ -204,7 +204,7 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
         //select some text
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Vps.Form.HtmlEditor) { editor = c; return false; } });
+            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             var bookmark = {
                 start: [0,0,0],
                 end: [3,0,1]

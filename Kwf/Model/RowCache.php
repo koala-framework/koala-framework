@@ -1,7 +1,7 @@
 <?php
-class Vps_Model_RowCache extends Vps_Model_Proxy
+class Kwf_Model_RowCache extends Kwf_Model_Proxy
 {
-    protected $_rowClass = 'Vps_Model_RowCache_Row';
+    protected $_rowClass = 'Kwf_Model_RowCache_Row';
     protected $_cacheColumns = array();
 
     private $_cacheRows = array();
@@ -24,7 +24,7 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
     //aufgerufen von row beim speichern
     public function clearRowCache($id)
     {
-        Vps_Cache_Simple::delete($this->_getCacheId($id));
+        Kwf_Cache_Simple::delete($this->_getCacheId($id));
     }
 
     private function _getCacheId($id)
@@ -41,7 +41,7 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
             if (isset($this->_cacheRows[$select])) return $this->_cacheRows[$select];
             $cacheId = $this->_getCacheId($select);
             $success = false;
-            $cacheData = Vps_Cache_Simple::fetch($cacheId, $success);
+            $cacheData = Kwf_Cache_Simple::fetch($cacheId, $success);
             if (!$success) {
                 $cacheData = array();
                 $row = parent::getRow($select);
@@ -50,7 +50,7 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
                 foreach ($this->_cacheColumns as $c) {
                     $cacheData[$c] = $row->$c;
                 }
-                Vps_Cache_Simple::add($cacheId, $cacheData);
+                Kwf_Cache_Simple::add($cacheId, $cacheData);
                 $this->_cacheRows[$select] = $row;
                 return $row;
             }
@@ -94,7 +94,7 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
                 $this->clearRowCache($r[$this->getPrimaryKey()]);
             }
         } else {
-            Vps_Cache_Simple::clear($this->_getCacheId(''));
+            Kwf_Cache_Simple::clear($this->_getCacheId(''));
         }
         parent::_afterImport($format, $data, $options);
     }
@@ -102,6 +102,6 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
     protected function _afterDeleteRows($where)
     {
         parent::_afterDeleteRows($where);
-        Vps_Cache_Simple::clear($this->_getCacheId(''));
+        Kwf_Cache_Simple::clear($this->_getCacheId(''));
     }
 }

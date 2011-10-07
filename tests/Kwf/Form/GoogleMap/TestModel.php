@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_GoogleMap_TestModel extends Vps_Model_FnF
+class Kwf_Form_GoogleMap_TestModel extends Kwf_Model_FnF
 {
     protected $_namespace = 'testGoogleMapFnfModel';
     protected $_data = array(

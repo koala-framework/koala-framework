@@ -1,21 +1,21 @@
 <?php
-class Vpc_Newsletter_Subscribe_RecipientsController extends Vpc_Newsletter_Subscribe_AbstractRecipientsController
+class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subscribe_AbstractRecipientsController
 {
     protected $_buttons = array('add', 'delete');
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
     protected $_queryFields = array('id', 'email', 'firstname', 'lastname');
-    protected $_modelName = 'Vpc_Newsletter_Subscribe_Model';
+    protected $_modelName = 'Kwc_Newsletter_Subscribe_Model';
 
     public function indexAction()
     {
         parent::indexAction();
-        $formControllerUrl = Vpc_Admin::getInstance($this->_getParam('class'))
+        $formControllerUrl = Kwc_Admin::getInstance($this->_getParam('class'))
             ->getControllerUrl('Recipient');
 
         $this->view->formControllerUrl = $formControllerUrl;
-        $this->view->xtype = 'vpc.newsletter.recipients';
+        $this->view->xtype = 'kwc.newsletter.recipients';
         $this->view->model = get_class($this->_model);
     }
 
@@ -32,18 +32,18 @@ class Vpc_Newsletter_Subscribe_RecipientsController extends Vpc_Newsletter_Subsc
             'width' => 85
         );
 
-        $this->_columns->add(new Vps_Grid_Column_Button('edit', trlVps('Edit')));
-        $this->_columns->add(new Vps_Grid_Column('email', trlVps('Email'), 200));
-        $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 70))
+        $this->_columns->add(new Kwf_Grid_Column_Button('edit', trlKwf('Edit')));
+        $this->_columns->add(new Kwf_Grid_Column('email', trlKwf('Email'), 200));
+        $this->_columns->add(new Kwf_Grid_Column('gender', trlKwf('Gender'), 70))
             ->setRenderer('genderIcon');
 
-        $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 80));
-        $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('First name'), 110));
-        $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Last name'), 110));
+        $this->_columns->add(new Kwf_Grid_Column('title', trlKwf('Title'), 80));
+        $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('First name'), 110));
+        $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Last name'), 110));
 
-        $this->_columns->add(new Vps_Grid_Column('subscribe_date', trlVps('Subscribe date'), 110));
+        $this->_columns->add(new Kwf_Grid_Column('subscribe_date', trlKwf('Subscribe date'), 110));
 
-        $this->_columns->add(new Vps_Grid_Column('is_active', trlVps('Active?'), 80))
-            ->setData(new Vpc_Newsletter_Detail_IsActiveData());
+        $this->_columns->add(new Kwf_Grid_Column('is_active', trlKwf('Active?'), 80))
+            ->setData(new Kwc_Newsletter_Detail_IsActiveData());
     }
 }

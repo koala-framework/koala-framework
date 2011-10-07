@@ -1,8 +1,8 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Auto_Abstract
+abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Auto_Abstract
 {
     /**
-     * @var Vps_Collection
+     * @var Kwf_Collection
      **/
     protected $_columns = null;
     protected $_buttons = array('save', 'add', 'delete');
@@ -17,7 +17,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     protected $_primaryKey;
     /**
-     * @var Vps_Model_Interface
+     * @var Kwf_Model_Interface
      **/
     protected $_model;
     protected $_table;     // deprecated: use models!
@@ -44,7 +44,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 'componentId' => $this->_getParam('componentId')
             );
         }
-        $this->view->xtype = 'vps.autogrid';
+        $this->view->xtype = 'kwf.autogrid';
     }
 
     public function jsonIndexAction()
@@ -61,10 +61,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $addColumns = array();
         if (is_array($this->_columns)) $addColumns = $this->_columns;
-        $this->_columns = new Vps_Collection();
+        $this->_columns = new Kwf_Collection();
         foreach ($addColumns as $k=>$column) {
             if (is_array($column)) {
-                $columnObject = new Vps_Grid_Column();
+                $columnObject = new Kwf_Grid_Column();
                 foreach ($column as $propName => $propValue) {
                     $columnObject->setProperty($propName, $propValue);
                 }
@@ -81,12 +81,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->setTable($this->_table);
         }
         if (!isset($this->_model) && isset($this->_modelName)) {
-            $this->_model = Vps_Model_Abstract::getInstance($this->_modelName);
+            $this->_model = Kwf_Model_Abstract::getInstance($this->_modelName);
         } else if (isset($this->_model) && is_string($this->_model)) {
-            $this->_model = Vps_Model_Abstract::getInstance($this->_model);
+            $this->_model = Kwf_Model_Abstract::getInstance($this->_model);
         }
 
-        $filters = new Vps_Controller_Action_Auto_FilterCollection();
+        $filters = new Kwf_Controller_Action_Auto_FilterCollection();
 
         // Abwärtskompatibilität für Filterarray
         if (is_array($this->_filters)) {
@@ -100,7 +100,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         // Abwärtskompatibilität falls Filterarray in initColumns gesetzt wurden
         if (is_array($this->_filters)) {
-            $filters = new Vps_Controller_Action_Auto_FilterCollection();
+            $filters = new Kwf_Controller_Action_Auto_FilterCollection();
             foreach ($this->_filters as $field => $config) {
                 $filters->offsetSet($field, $config);
             }
@@ -116,7 +116,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if ($this->_model) $filter->setModel($this->_model);
 
             // Abwärtskompatibilität für Textfilter mit queryFields und querySeparator
-            if (!$filter instanceof Vps_Controller_Action_Auto_Filter_Text) continue;
+            if (!$filter instanceof Kwf_Controller_Action_Auto_Filter_Text) continue;
             if (!$filter->getProperty('queryFields', true)) {
                 $queryFields = $this->_queryFields;
                 if (!$queryFields) {
@@ -152,7 +152,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (isset($this->_model) && $this->_position && !isset($this->_columns[$this->_position])
             && in_array($this->_position, $this->_model->getColumns())
         ) {
-            $columnObject = new Vps_Grid_Column($this->_position);
+            $columnObject = new Kwf_Grid_Column($this->_position);
             $columnObject->setHeader(' ')
                          ->setWidth(30)
                          ->setType('int');
@@ -180,7 +180,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
             if (!$primaryFound) {
                 //primary key hinzufügen falls er noch nicht in gridColumns existiert
-                $columnObject = new Vps_Grid_Column($this->_primaryKey);
+                $columnObject = new Kwf_Grid_Column($this->_primaryKey);
                 if (isset($this->_model)) {
                     $columnObject->setType((string)$this->_model->getColumnType($this->_primaryKey));
                 } else {
@@ -204,14 +204,14 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
 
         if (method_exists($this, '_getWhereQuery')) {
-            throw new Vps_Exception("_getWhereQuery doesn't exist anymore");
+            throw new Kwf_Exception("_getWhereQuery doesn't exist anymore");
         }
 
         // Falls Filter einen Default-Wert hat:
         // - GET query-Parameter setzen,
         // - Im JavaScript nach rechts verschieben und Defaultwert setzen
         foreach ($this->_filters as $filter) {
-            if ($filter instanceof Vps_Controller_Action_Auto_Filter_Text) continue;
+            if ($filter instanceof Kwf_Controller_Action_Auto_Filter_Text) continue;
             $param = $filter->getParamName();
             if ($filter->getDefault() && !$this->_getParam($param)) {
                 $this->_setParam($param, $filter->getDefault());
@@ -221,7 +221,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     public function setTable($table)
     {
-        $this->_model = new Vps_Model_Db(array(
+        $this->_model = new Kwf_Model_Db(array(
             'table' => $table
         ));
     }
@@ -242,7 +242,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $exprColumns = $this->_model->getExprColumns();
         foreach ($this->_columns as $column) {
             $d = $column->getData();
-            if ($d instanceof Vps_Data_Table) {
+            if ($d instanceof Kwf_Data_Table) {
                 if (in_array($d->getField(), $exprColumns)) {
                     $ret->expr($d->getField());
                 }
@@ -257,7 +257,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
-            $ret->where(new Vps_Model_Select_Expr_Equal($this->_primaryKey, $queryId));
+            $ret->where(new Kwf_Model_Select_Expr_Equal($this->_primaryKey, $queryId));
         }
 
         $where = $this->_getWhere();
@@ -280,7 +280,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _fetchData($order, $limit, $start)
     {
         if (!isset($this->_model)) {
-            throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
+            throw new Kwf_Exception("Either _model has to be set or _fetchData has to be overwritten.");
         }
 
         $select = $this->_getSelect();
@@ -304,11 +304,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     private function _getTableInfo()
     {
         $m = $this->_model;
-        while ($m instanceof Vps_Model_Proxy) {
+        while ($m instanceof Kwf_Model_Proxy) {
             $m = $m->getProxyModel();
         }
 
-        if (!isset($this->_model) || !($m instanceof Vps_Model_Db)) {
+        if (!isset($this->_model) || !($m instanceof Kwf_Model_Db)) {
             return null;
         }
         return $m->getTable()->info();
@@ -367,12 +367,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $row = (object)$row;
                 }
                 if (!$this->_hasPermissions($row, 'load')) {
-                    throw new Vps_Exception("You don't have the permissions to load this row");
+                    throw new Kwf_Exception("You don't have the permissions to load this row");
                 }
                 foreach ($this->_columns as $column) {
-                    if ($column instanceof Vps_Grid_Column_RowNumberer) continue;
-                    if ($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID) {
-                        $data = $column->load($row, Vps_Grid_Column::ROLE_DISPLAY);
+                    if ($column instanceof Kwf_Grid_Column_RowNumberer) continue;
+                    if ($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_GRID) {
+                        $data = $column->load($row, Kwf_Grid_Column::ROLE_DISPLAY);
                         $r[$column->getDataIndex()] = $data;
                     }
                 }
@@ -423,11 +423,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['columns'] = array();
         $this->view->metaData['fields'] = array();
         foreach ($this->_columns as $column) {
-            if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
+            if (!($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_GRID)) continue;
             $data = $column->getMetaData($this->_getModel(), $this->_getTableInfo());
             if ($data) {
                 $this->view->metaData['columns'][] = $data;
-                if ($column instanceof Vps_Grid_Column_RowNumberer) continue;
+                if ($column instanceof Kwf_Grid_Column_RowNumberer) continue;
 
                 $d = array();
                 if (isset($data['dataIndex'])) {
@@ -468,23 +468,23 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         return true;
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row, $submitRow)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _afterSave(Vps_Model_Row_Interface $row, $submitRow)
+    protected function _afterSave(Kwf_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row, $submitRow)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _afterInsert(Vps_Model_Row_Interface $row, $submitRow)
+    protected function _afterInsert(Kwf_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _beforeDelete(Vps_Model_Row_Interface $row)
+    protected function _beforeDelete(Kwf_Model_Row_Interface $row)
     {
     }
 
@@ -498,7 +498,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $row = $this->_model->find($id)->current();
         } else {
             if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
-                throw new Vps_Exception("Add is not allowed.");
+                throw new Kwf_Exception("Add is not allowed.");
             }
             $row = $this->_model->createRow();
         }
@@ -508,7 +508,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function jsonSaveAction()
     {
         if (!isset($this->_permissions['save']) || !$this->_permissions['save']) {
-            throw new Vps_Exception("Save is not allowed.");
+            throw new Kwf_Exception("Save is not allowed.");
         }
         $success = false;
 
@@ -521,17 +521,17 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $id = $submitRow[$this->_primaryKey];
             $row = $this->_getRowById($id);
             if (!$row) {
-                throw new Vps_Exception("Can't find row with id '$id'.");
+                throw new Kwf_Exception("Can't find row with id '$id'.");
             }
             if (!$this->_hasPermissions($row, 'save')) {
-                throw new Vps_Exception("You don't have the permissions to save this row.");
+                throw new Kwf_Exception("You don't have the permissions to save this row.");
             }
             foreach ($this->_columns as $column) {
-                if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
+                if (!($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_GRID)) continue;
                 $invalid = $column->validate($row, $submitRow);
                 if ($invalid) {
-                    $invalid = Vps_Form::formatValidationErrors($invalid);
-                    throw new Vps_Exception_Client(implode("<br />", $invalid));
+                    $invalid = Kwf_Form::formatValidationErrors($invalid);
+                    throw new Kwf_Exception_Client(implode("<br />", $invalid));
                 }
                 $column->prepareSave($row, $submitRow);
             }
@@ -562,7 +562,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function jsonDeleteAction()
     {
         if (!isset($this->_permissions['delete']) || !$this->_permissions['delete']) {
-            throw new Vps_Exception("Delete is not allowed.");
+            throw new Kwf_Exception("Delete is not allowed.");
         }
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
@@ -572,10 +572,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         foreach ($ids as $id) {
             $row = $this->_model->find($id)->current();
             if (!$row) {
-                throw new Vps_Exception_Client("Can't find row with id '$id'.");
+                throw new Kwf_Exception_Client("Can't find row with id '$id'.");
             }
             if (!$this->_hasPermissions($row, 'delete')) {
-                throw new Vps_Exception("You don't have the permissions to delete this row.");
+                throw new Kwf_Exception("You don't have the permissions to delete this row.");
             }
             $this->_beforeDelete($row);
             $this->_deleteRow($row);
@@ -585,7 +585,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     }
 
     //kann ueberschrieben werden um zB deleted=1 zu setzen statt echt zu loeschen
-    protected function _deleteRow(Vps_Model_Row_Interface $row)
+    protected function _deleteRow(Kwf_Model_Row_Interface $row)
     {
         $row->delete();
     }
@@ -593,7 +593,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function jsonDuplicateAction()
     {
         if (!isset($this->_permissions['duplicate']) || !$this->_permissions['duplicate']) {
-            throw new Vps_Exception("Duplicate is not allowed.");
+            throw new Kwf_Exception("Duplicate is not allowed.");
         }
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
@@ -604,10 +604,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         foreach ($ids as $id) {
             $row = $this->_model->getRow($id);
             if (!$row) {
-                throw new Vps_Exception("Can't find row with id '$id'.");
+                throw new Kwf_Exception("Can't find row with id '$id'.");
             }
             if (!$this->_hasPermissions($row, 'duplicate')) {
-                throw new Vps_Exception("You don't have the permissions to duplicate this row.");
+                throw new Kwf_Exception("You don't have the permissions to duplicate this row.");
             }
             $new = $row->duplicate();
             $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
@@ -618,7 +618,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function pdfAction()
     {
         if (!isset($this->_permissions['pdf']) || !$this->_permissions['pdf']) {
-            throw new Vps_Exception("Pdf is not allowed.");
+            throw new Kwf_Exception("Pdf is not allowed.");
         }
 
         $pageMargin = 10;
@@ -632,7 +632,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!isset($this->_pdf['fields'])) {
             $this->_pdf['fields'] = array();
             foreach ($this->_columns as $column) {
-                if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_PDF)) continue;
+                if (!($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_PDF)) continue;
                 if ($column->getHeader()) {
                     $this->_pdf['fields'][] = $column->getName();
                 }
@@ -640,15 +640,15 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
 
         if (!is_array($this->_pdf['fields'])) {
-            throw new Vps_Exception("PDF export fields must be of type `array`");
+            throw new Kwf_Exception("PDF export fields must be of type `array`");
         }
         if (isset($this->_pdf['columns'])) {
-            throw new Vps_Exception("PDF export fields key is labeld `fields`, not `columns`");
+            throw new Kwf_Exception("PDF export fields key is labeld `fields`, not `columns`");
         }
         $tmpFields = array(); // Needed for correct sorting
         foreach ($this->_pdf['fields'] as $key => $mixed) {
             if (!is_array($mixed) && !is_string($mixed)) {
-                throw new Vps_Exception("PDF export field `$mixed` must not be of type "
+                throw new Kwf_Exception("PDF export field `$mixed` must not be of type "
                                         .'`'.gettype($mixed).'`, only `string` or `array` allowed.');
             }
             if (is_string($mixed) && $this->_columns[$mixed]) {
@@ -670,7 +670,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         // Generate two times for correct page braking
         $breakBeforeRow = array();
         for ($i = 1; $i <= 2; $i++) {
-            $pdf = new Vps_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']);
+            $pdf = new Kwf_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']);
             $pdf->SetFont('helvetica', '', 8);
             $pdf->SetMargins($pageMargin, 20, $pageMargin);
             $pdf->SetFooterMargin(5);
@@ -744,7 +744,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         if ($rowSet && $countRows) {
             $this->_progressBar = new Zend_ProgressBar(
-                new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+                new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
                 0, ($countRows * 1.05) * 3
             );
 
@@ -763,7 +763,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $row = (object)$row;
                 }
                 if (!$this->_hasPermissions($row, 'load')) {
-                    throw new Vps_Exception("You don't have the permissions to load this row");
+                    throw new Kwf_Exception("You don't have the permissions to load this row");
                 }
                 $columns = $columnsHeader = array();
                 foreach ($this->_columns as $column) {
@@ -772,7 +772,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
                     if (!is_null($currentColumnHeader)) {
                         $columnsHeader[] = (string)$currentColumnHeader;
-                        $colVal = $column->load($row, Vps_Grid_Column::ROLE_EXPORT);
+                        $colVal = $column->load($row, Kwf_Grid_Column::ROLE_EXPORT);
                         $setTypeTo = 'string';
                         if ($column->getType()) {
                             if ($column->getType() == 'boolean'
@@ -785,9 +785,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                         }
                         if ($setTypeTo == 'bool') {
                             if ($colVal) {
-                                $colVal = trlVps('Yes');
+                                $colVal = trlKwf('Yes');
                             } else {
-                                $colVal = trlVps('No');
+                                $colVal = trlKwf('No');
                             }
                         } else {
                             settype($colVal, $setTypeTo);
@@ -815,7 +815,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                          */
 
                         if (($estimatedMemoryUsage / 1024) / 1024 > $memoryLimitMb) {
-                            throw new Vps_Exception_Client(trlVps("Too many rows to export. Try exporting two times with fewer rows."));
+                            throw new Kwf_Exception_Client(trlKwf("Too many rows to export. Try exporting two times with fewer rows."));
                         }
                     }
                     if (count($rowLenghtes) < 41) {
@@ -824,13 +824,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     }
                 }
 
-                $this->_progressBar->next(2, trlVps('Collecting data'));
+                $this->_progressBar->next(2, trlKwf('Collecting data'));
             }
             $exportData[0] = $columnsHeader;
             return $exportData;
         } else {
             $this->_progressBar = new Zend_ProgressBar(
-                new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+                new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
                 0, 4
             );
         }
@@ -840,20 +840,20 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function jsonCsvAction()
     {
         if (!isset($this->_permissions['csv']) || !$this->_permissions['csv']) {
-            throw new Vps_Exception("CSV is not allowed.");
+            throw new Kwf_Exception("CSV is not allowed.");
         }
 
         ini_set('memory_limit', "384M");
         set_time_limit(600); // 10 minuten
 
-        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_CSV, 'csv', 0);
+        $data = $this->_getExportData(Kwf_Grid_Column::SHOW_IN_CSV, 'csv', 0);
 
         if (!is_null($data)) {
             $csvRows = array();
             foreach ($data as $row => $cols) {
                 $cols = str_replace('"', '""', $cols);
                 $csvRows[] = '"'. implode('";"', $cols) .'"';
-                $this->_progressBar->next(1, trlVps('Writing data'));
+                $this->_progressBar->next(1, trlKwf('Writing data'));
             }
 
             $csvReturn = implode("\r\n", $csvRows);
@@ -870,20 +870,20 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function downloadCsvExportFileAction()
     {
         if (!isset($this->_permissions['csv']) || !$this->_permissions['csv']) {
-            throw new Vps_Exception("CSV is not allowed.");
+            throw new Kwf_Exception("CSV is not allowed.");
         }
         if (!file_exists('temp/'.$this->_getParam('downloadkey').'.csv')) {
-            throw new Vps_Exception('Wrong downloadkey submitted');
+            throw new Kwf_Exception('Wrong downloadkey submitted');
         }
 
-        Vps_Util_TempCleaner::clean();
+        Kwf_Util_TempCleaner::clean();
 
         $file = array(
             'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.csv'),
             'mimeType' => 'application/octet-stream',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.csv'
         );
-        Vps_Media_Output::output($file);
+        Kwf_Media_Output::output($file);
         $this->_helper->viewRenderer->setNoRender();
     }
 
@@ -905,19 +905,19 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         ini_set('memory_limit', "768M");
         set_time_limit(600); // 10 minuten
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
-            throw new Vps_Exception("XLS is not allowed.");
+            throw new Kwf_Exception("XLS is not allowed.");
         }
 
-        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS, 'xls', 640);
+        $data = $this->_getExportData(Kwf_Grid_Column::SHOW_IN_XLS, 'xls', 640);
 
         $xls = new PHPExcel();
         $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
         $xls->getProperties()->setLastModifiedBy("Vivid Planet Software GmbH");
-        $xls->getProperties()->setTitle("VPS Excel Export");
-        $xls->getProperties()->setSubject("VPS Excel Export");
-        $xls->getProperties()->setDescription("VPS Excel Export");
-        $xls->getProperties()->setKeywords("VPS Excel Export");
-        $xls->getProperties()->setCategory("VPS Excel Export");
+        $xls->getProperties()->setTitle("KWF Excel Export");
+        $xls->getProperties()->setSubject("KWF Excel Export");
+        $xls->getProperties()->setDescription("KWF Excel Export");
+        $xls->getProperties()->setKeywords("KWF Excel Export");
+        $xls->getProperties()->setCategory("KWF Excel Export");
 
         $xls->setActiveSheetIndex(0);
         $sheet = $xls->getActiveSheet();
@@ -925,7 +925,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         // setting width for each column
         $colIndex = 0;
         foreach ($this->_columns as $column) {
-            if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_XLS)) continue;
+            if (!($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_XLS)) continue;
             if (is_null($column->getHeader())) continue;
 
             if ($column->getXlsWidth()) {
@@ -940,8 +940,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $colIndex++;
         }
 
-        $helperDate = new Vps_View_Helper_Date();
-        $helperDateTime = new Vps_View_Helper_DateTime();
+        $helperDate = new Kwf_View_Helper_Date();
+        $helperDateTime = new Kwf_View_Helper_DateTime();
         foreach ($data as $row => $cols) {
             // row ist index, das andre nicht, passt aber trotzdem so
             // da ja in der ersten Zeile der Header steht
@@ -970,7 +970,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $sheet->setCellValueExplicit($cell, $text, $cellType);
             }
 
-            $this->_progressBar->next(1, trlVps('Writing data. Please be patient.'));
+            $this->_progressBar->next(1, trlKwf('Writing data. Please be patient.'));
         }
         // write the file
         $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
@@ -985,19 +985,19 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function downloadExportFileAction()
     {
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
-            throw new Vps_Exception("XLS is not allowed.");
+            throw new Kwf_Exception("XLS is not allowed.");
         }
         if (!file_exists('temp/'.$this->_getParam('downloadkey').'.xls')) {
-            throw new Vps_Exception('Wrong downloadkey submitted');
+            throw new Kwf_Exception('Wrong downloadkey submitted');
         }
-        Vps_Util_TempCleaner::clean();
+        Kwf_Util_TempCleaner::clean();
 
         $file = array(
             'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xls'),
             'mimeType' => 'application/octet-stream',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
         );
-        Vps_Media_Output::output($file);
+        Kwf_Media_Output::output($file);
         $this->_helper->viewRenderer->setNoRender();
     }
 

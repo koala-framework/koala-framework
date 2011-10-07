@@ -1,9 +1,9 @@
-Vps.Form.GridSelect = Ext.extend(Vps.Form.AbstractSelect,
+Kwf.Form.GridSelect = Ext.extend(Kwf.Form.AbstractSelect,
 {
     _getWindowItem: function()
     {
         if (!this._windowItem) {
-            this._windowItem = new Vps.Auto.GridPanel({
+            this._windowItem = new Kwf.Auto.GridPanel({
                 controllerUrl: this.controllerUrl
             });
             this._windowItem.on('rowselect', function(selModel,idx,r) {
@@ -17,4 +17,4 @@ Vps.Form.GridSelect = Ext.extend(Vps.Form.AbstractSelect,
     }
 
 });
-Ext.reg('gridselect', Vps.Form.GridSelect);
+Ext.reg('gridselect', Kwf.Form.GridSelect);

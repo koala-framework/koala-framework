@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Box_StaticSelect_Model extends Vps_Model_Db
+class Kwf_Component_Generator_Box_StaticSelect_Model extends Kwf_Model_Db
 {
-    protected $_table = 'vpc_box_select';
+    protected $_table = 'kwc_box_select';
 }

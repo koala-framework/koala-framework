@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
+class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
 {
     private $_classes;
     private $_componentClass;
@@ -8,7 +8,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
     {
         parent::_init();
         $this->_componentClass = $this->getModel()->getComponentClass();
-        $this->_classes = Vpc_Abstract::getChildComponentClasses($this->_componentClass, 'child');
+        $this->_classes = Kwc_Abstract::getChildComponentClasses($this->_componentClass, 'child');
     }
 
     //für Component und Row
@@ -129,11 +129,11 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 
     protected function _beforeDelete()
     {
-        $table = new Vpc_Basic_Text_ChildComponentsModel();
+        $table = new Kwc_Basic_Text_ChildComponentsModel();
         $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
         foreach ($rows as $row) {
             $t = substr($row->component, 0, 1);
-            $admin = Vpc_Admin::getInstance($this->_classes[$row->component]);
+            $admin = Kwc_Admin::getInstance($this->_classes[$row->component]);
             $admin->delete($this->component_id . '-' . $t.$row->nr);
             $row->delete();
         }
@@ -158,7 +158,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         foreach ($rows as $row) {
             $t = substr($row->component, 0, 1);
             if (!in_array($row->component.$row->nr, $newPartStrings)) {
-                $admin = Vpc_Admin::getInstance($classes[$row->component]);
+                $admin = Kwc_Admin::getInstance($classes[$row->component]);
                 $admin->delete($this->component_id . '-' . $t.$row->nr);
                 $row->delete();
             } else {
@@ -181,7 +181,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         }
     }
 
-    public function tidy($html, Vpc_Basic_Text_Parser $parser = null)
+    public function tidy($html, Kwc_Basic_Text_Parser $parser = null)
     {
         $config = array(
                     'indent'         => true,
@@ -208,8 +208,8 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     'newline'        =>'LF',
                     'uppercase-tags' =>'false'
                     );
-        $enableTidy = Vpc_Abstract::getSetting($this->_componentClass, 'enableTidy');
-        $enableFontSize = Vpc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
+        $enableTidy = Kwc_Abstract::getSetting($this->_componentClass, 'enableTidy');
+        $enableFontSize = Kwc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
         if ($enableFontSize){
             $config['drop-font-tags'] = false;
         }
@@ -217,7 +217,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 
             //woraround für tidy bug wo er zwei class-attribute in einen
             //tag schreibt wenn eins davon leer ist
-            //siehe Vpc_Basic_Text_ModelContentTest::testTidyRemovesSomeText
+            //siehe Kwc_Basic_Text_ModelContentTest::testTidyRemovesSomeText
             //einfach leere klassen löschen
             $html = preg_replace('#<(.[a-z]+) ([^>]*)class=""([^>]*)>#', '<\1 \2 \3>', $html);
 
@@ -231,12 +231,12 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $tidy->cleanRepair();
             $html = $tidy->value;
             if (!$parser) {
-                $parser = new Vpc_Basic_Text_Parser($this);
-                $parser->setMasterStyles(Vpc_Basic_Text_StylesModel::getMasterStyles());
+                $parser = new Kwc_Basic_Text_Parser($this);
+                $parser->setMasterStyles(Kwc_Basic_Text_StylesModel::getMasterStyles());
             }
-            $parser->setEnableColor(Vpc_Abstract::getSetting($this->_componentClass, 'enableColors'));
-            $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
-            $parser->setEnableStyles(Vpc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
+            $parser->setEnableColor(Kwc_Abstract::getSetting($this->_componentClass, 'enableColors'));
+            $parser->setEnableTagsWhitelist(Kwc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
+            $parser->setEnableStyles(Kwc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
             $html = $parser->parse($html);
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
@@ -254,17 +254,17 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             } else if ($part['type'] == 'invalidImage') {
                 if (isset($part['componentId'])
                     && class_exists($part['componentClass'])
-                    && (strtolower($part['componentClass']) == 'vpc_basic_image_component'
-                        || is_subclass_of($part['componentClass'], 'Vpc_Basic_Image_Component'))) {
+                    && (strtolower($part['componentClass']) == 'kwc_basic_image_component'
+                        || is_subclass_of($part['componentClass'], 'Kwc_Basic_Image_Component'))) {
 
-                    $srcRow = Vpc_Abstract::createModel($part['componentClass'])
+                    $srcRow = Kwc_Abstract::createModel($part['componentClass'])
                                     ->getRow($part['componentId']);
                     if ($srcRow->imageExists()) {
-                        $destRow = Vpc_Abstract::createModel($classes['image'])
+                        $destRow = Kwc_Abstract::createModel($classes['image'])
                                                 ->createRow($srcRow->toArray());
                         $childComponentRow = $this->addChildComponentRow('image', $destRow);
                         $destRow->save();
-                        $imageComponent = Vps_Component_Data_Root::getInstance()
+                        $imageComponent = Kwf_Component_Data_Root::getInstance()
                             ->getComponentByDbId($this->component_id.'-i'.$childComponentRow->nr)
                             ->getComponent();
                         $dimension = $imageComponent->getImageDimensions();
@@ -301,7 +301,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     continue;
                 }
 
-                $destFileRow = Vpc_Abstract::createModel($classes['image'])
+                $destFileRow = Kwc_Abstract::createModel($classes['image'])
                             ->getReferencedModel('Image')
                             ->createRow();
 
@@ -315,8 +315,8 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 
                 $destFileRow->writeFile($response->getBody(), $srcFileName, $extension, $contentType);
 
-                $destRow = Vpc_Abstract::createModel($classes['image'])->createRow();
-                $destRow->vps_upload_id = $destFileRow->id;
+                $destRow = Kwc_Abstract::createModel($classes['image'])->createRow();
+                $destRow->kwf_upload_id = $destFileRow->id;
                 $size = getimagesize($destFileRow->getFileSource());
                 $destRow->width = $size[0];
                 $destRow->height = $size[1];
@@ -324,7 +324,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 $destRow->scale = '';
                 $childComponentRow = $this->addChildComponentRow('image', $destRow);
                 $destRow->save();
-                $imageComponent = Vps_Component_Data_Root::getInstance()
+                $imageComponent = Kwf_Component_Data_Root::getInstance()
                     ->getComponentByDbId($this->component_id.'-i'.$childComponentRow->nr)
                     ->getComponent();
                 $dimension = $imageComponent->getImageDimensions();
@@ -334,18 +334,18 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 
             } else if ($part['type'] == 'invalidLink') {
 
-                $model = Vpc_Abstract::createModel($classes['link']);
+                $model = Kwc_Abstract::createModel($classes['link']);
                 $destRow = $this->_getChildComponentRow('link', $model);
                 if (isset($part['componentId'])) {
                     try {
                         $srcRow = $model->getRow($part['componentId']);
-                    } catch (Vps_Exception $e) {
+                    } catch (Kwf_Exception $e) {
                         $srcRow = false;
                     }
-                    if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
-                        $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'child');
+                    if (is_instance_of($classes['link'], 'Kwc_Basic_LinkTag_Component')) {
+                        $linkClasses = Kwc_Abstract::getChildComponentClasses($classes['link'], 'child');
                         if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
-                            $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
+                            $linkModel = Kwc_Abstract::createModel($linkClasses[$srcRow->component]);
                             $srcLinkRow = $linkModel->getRow($part['componentId'].'-child');
                             if ($srcLinkRow) {
                                 $destRow->component = $srcRow->component;
@@ -365,7 +365,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                                 continue;
                             }
                         }
-                    } else if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Abstract_Component')) {
+                    } else if (is_instance_of($classes['link'], 'Kwc_Basic_LinkTag_Abstract_Component')) {
                         if ($srcRow) {
                             foreach ($srcRow->toArray() as $k=>$i) {
                                 if ($k != 'component_id') {
@@ -385,8 +385,8 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     $destRow = $model->createRow();
                     $this->addChildComponentRow('link', $destRow);
                 }
-                if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
-                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'child');
+                if (is_instance_of($classes['link'], 'Kwc_Basic_LinkTag_Component')) {
+                    $linkClasses = Kwc_Abstract::getChildComponentClasses($classes['link'], 'child');
 
                     $destRow->component = null;
                     if (preg_match('#^mailto:#', $part['href'], $m)) {
@@ -401,10 +401,10 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                                 if (isset($_SERVER['HTTP_HOST'])) {
                                     $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
                                 } else {
-                                    $url = 'http://'.Vps_Registry::get('config')->server->domain.$url;
+                                    $url = 'http://'.Kwf_Registry::get('config')->server->domain.$url;
                                 }
                             }
-                            $internLinkPage = Vps_Component_Data_Root::getInstance()
+                            $internLinkPage = Kwf_Component_Data_Root::getInstance()
                                 ->getPageByUrl($url, null);
                             if ($internLinkPage) {
                                 $destRow->component = 'intern';
@@ -417,11 +417,11 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     if (!$destRow->component) continue; //kein solcher-link möglich
                     $destRow->save();
 
-                    $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'child');
+                    $destClasses =  Kwc_Abstract::getChildComponentClasses($classes['link'], 'child');
 
-                    $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
+                    $row = Kwc_Abstract::createModel($destClasses[$destRow->component])
                                 ->getRow($destRow->component_id.'-child');
-                    if (!$row) $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
+                    if (!$row) $row = Kwc_Abstract::createModel($destClasses[$destRow->component])
                                                 ->createRow();
                     $row->component_id = $destRow->component_id.'-child';
                     if ($destRow->component == 'extern') {
@@ -436,7 +436,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         $row->text = isset($m['body']) ? $m['body'] : '';
                     }
                     $row->save();
-                } else if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Extern_Component')) {
+                } else if (is_instance_of($classes['link'], 'Kwc_Basic_LinkTag_Extern_Component')) {
                     $destRow->target = $part['href'];
                     $destRow->save();
                 } else {
@@ -448,10 +448,10 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 
             } else if ($part['type'] == 'invalidDownload') {
 
-                $srcRow = Vpc_Abstract::createModel($classes['download'])
+                $srcRow = Kwc_Abstract::createModel($classes['download'])
                                 ->getRow($part['componentId']);
                 if ($srcRow->fileExists()) {
-                    $destRow = Vpc_Abstract::createModel($classes['download'])
+                    $destRow = Kwc_Abstract::createModel($classes['download'])
                                                 ->createRow($srcRow->toArray());
                     $this->addChildComponentRow('download', $destRow);
                     $destRow->save();

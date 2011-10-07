@@ -1,13 +1,13 @@
 <?php
-class Vpc_Basic_LinkTag_Extern_Trl_Form_OriginalData extends Vps_Data_Abstract
+class Kwc_Basic_LinkTag_Extern_Trl_Form_OriginalData extends Kwf_Data_Abstract
 {
     public function load($row)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
         // das ist nötig weil bei der übersetzung bei den link-cards
         // natürlich gleich alle geladen werden und im chained dann zB ein
         // download-tag drin ist und kein externer / etc.
-        if (is_instance_of($c->chained->componentClass, 'Vpc_Basic_LinkTag_Extern_Component')) {
+        if (is_instance_of($c->chained->componentClass, 'Kwc_Basic_LinkTag_Extern_Component')) {
             return $c->chained
                 ->getComponent()
                 ->getRow()
@@ -18,16 +18,16 @@ class Vpc_Basic_LinkTag_Extern_Trl_Form_OriginalData extends Vps_Data_Abstract
     }
 }
 
-class Vpc_Basic_LinkTag_Extern_Trl_Form extends Vpc_Abstract_Form
+class Kwc_Basic_LinkTag_Extern_Trl_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Vps_Form_Field_TextField('target', trlVps('Url')))
+        $this->add(new Kwf_Form_Field_TextField('target', trlKwf('Url')))
             ->setWidth(450)
             ->setAllowBlank(false)
             ->setVtype('url');
-        $this->add(new Vps_Form_Field_ShowField('original', trlVps('Original')))
-            ->setData(new Vpc_Basic_LinkTag_Extern_Trl_Form_OriginalData());
+        $this->add(new Kwf_Form_Field_ShowField('original', trlKwf('Original')))
+            ->setData(new Kwc_Basic_LinkTag_Extern_Trl_Form_OriginalData());
     }
 }

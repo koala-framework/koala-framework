@@ -1,15 +1,15 @@
-Ext.namespace('Vps.Pool');
-Vps.Pool.Panel = Ext.extend(Ext.Panel,
+Ext.namespace('Kwf.Pool');
+Kwf.Pool.Panel = Ext.extend(Ext.Panel,
 {
     initComponent : function()
     {
-        var form = new Vps.Auto.GridPanel({
-            controllerUrl   : '/vps/pool/pool',
+        var form = new Kwf.Auto.GridPanel({
+            controllerUrl   : '/kwf/pool/pool',
             region          : 'center'
         });
 
-        var grid = new Vps.Auto.GridPanel({
-            controllerUrl   : '/vps/pool/pools',
+        var grid = new Kwf.Auto.GridPanel({
+            controllerUrl   : '/kwf/pool/pools',
             region          : 'west',
             width           : 200,
             split           : true,
@@ -23,6 +23,6 @@ Vps.Pool.Panel = Ext.extend(Ext.Panel,
 
         this.layout = 'border';
         this.items = [grid, form];
-        Vps.Pool.Panel.superclass.initComponent.call(this);
+        Kwf.Pool.Panel.superclass.initComponent.call(this);
     }
 });

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
+class Kwc_Directories_Item_Directory_Admin extends Kwc_Admin
 {
     /** entfernt, stattdessen editComponent setting in detail setzen **/
     //(final damit exception kommt)
@@ -11,12 +11,12 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
         $lookForPluginClasses = $this->_getPluginParentComponents();
         $classes = array();
         foreach ($lookForPluginClasses as $c) {
-            $classes = array_merge($classes, Vpc_Abstract::getChildComponentClasses($c));
+            $classes = array_merge($classes, Kwc_Abstract::getChildComponentClasses($c));
         }
         $ret = array();
         foreach ($classes as $class) {
-            $admin = Vpc_Admin::getInstance($class);
-            if ($admin instanceof Vpc_Directories_Item_Directory_PluginAdminInterface) {
+            $admin = Kwc_Admin::getInstance($class);
+            if ($admin instanceof Kwc_Directories_Item_Directory_PluginAdminInterface) {
                 $ret[] = $admin;
             }
         }
@@ -35,7 +35,7 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
 
     public function delete($componentId)
     {
-        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-        Vpc_Admin::getInstance($detail)->delete($componentId);
+        $detail = Kwc_Abstract::getChildComponentClass($this->_class, 'detail');
+        Kwc_Admin::getInstance($detail)->delete($componentId);
     }
 }

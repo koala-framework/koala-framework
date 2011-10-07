@@ -1,6 +1,6 @@
 <?php
-class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row
-    implements IteratorAggregate, Vps_Model_Tree_Row_Interface
+class Kwf_Model_Tree_Row extends Kwf_Model_Proxy_Row
+    implements IteratorAggregate, Kwf_Model_Tree_Row_Interface
 {
     public function getTreePath($separator = ' » ')
     {
@@ -42,7 +42,7 @@ class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row
 
     public function getIterator()
     {
-        return new Vps_Model_Tree_RecursiveIterator($this);
+        return new Kwf_Model_Tree_RecursiveIterator($this);
     }
 
     protected function _afterSave()

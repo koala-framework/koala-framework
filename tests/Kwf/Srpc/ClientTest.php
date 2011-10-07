@@ -2,14 +2,14 @@
 /**
  * @group Service
  */
-class Vps_Srpc_ClientTest extends Vps_Test_TestCase
+class Kwf_Srpc_ClientTest extends Kwf_Test_TestCase
 {
     private $_client;
 
     public function setUp()
     {
         parent::setUp();
-        $this->_client = $this->getMock('Vps_Srpc_Client', array('_performRequest'));
+        $this->_client = $this->getMock('Kwf_Srpc_Client', array('_performRequest'));
     }
 
     public function testRequestWithParams()

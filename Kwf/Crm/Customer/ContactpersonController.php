@@ -1,43 +1,43 @@
 <?php
-class Vps_Crm_Customer_ContactpersonController extends Vps_Controller_Action_Auto_Form
+class Kwf_Crm_Customer_ContactpersonController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add', 'delete');
-    protected $_modelName = 'Vps_Crm_Customer_Model_Contactpersons';
+    protected $_modelName = 'Kwf_Crm_Customer_Model_Contactpersons';
 
     protected function _initFields()
     {
         parent::_initFields();
-        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Contact person')))
+        $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Contact person')))
             ->setName('contactpersonfieldset');
 
-        $fs->add(new Vps_Form_Field_Select('gender', trlVps('Gender')))
+        $fs->add(new Kwf_Form_Field_Select('gender', trlKwf('Gender')))
             ->setWidth(250)
             ->setValues(array(
-                'male'   => trlVps('Mr.'),
-                'female' => trlVps('Ms.')
+                'male'   => trlKwf('Mr.'),
+                'female' => trlKwf('Ms.')
             ));
-        $fs->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
+        $fs->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
+        $fs->add(new Kwf_Form_Field_TextField('firstname', trlKwf('Firstname')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextField('lastname', trlVps('Lastname')))
+        $fs->add(new Kwf_Form_Field_TextField('lastname', trlKwf('Lastname')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_DateField('birthdate', trlVps('Date of birth')))
+        $fs->add(new Kwf_Form_Field_DateField('birthdate', trlKwf('Date of birth')))
                 ->setAllowBlank(true);
-        $fs->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')))
+        $fs->add(new Kwf_Form_Field_TextField('phone', trlKwf('Phone')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextField('mobile', trlVps('Mobile')))
+        $fs->add(new Kwf_Form_Field_TextField('mobile', trlKwf('Mobile')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
+        $fs->add(new Kwf_Form_Field_TextField('email', trlKwf('E-Mail')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextField('capacity', trlcVps('career', 'Capacity')))
+        $fs->add(new Kwf_Form_Field_TextField('capacity', trlcKwf('career', 'Capacity')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextArea('annotation', trlVps('Annotation')))
+        $fs->add(new Kwf_Form_Field_TextArea('annotation', trlKwf('Annotation')))
             ->setWidth(250)
             ->setHeight(70);
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
         $row->customer_id = $this->_getParam('customer_id');

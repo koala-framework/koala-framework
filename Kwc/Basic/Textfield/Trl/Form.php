@@ -1,13 +1,13 @@
 <?php
-class Vpc_Basic_Textfield_Trl_Form extends Vpc_Abstract_Form
+class Kwc_Basic_Textfield_Trl_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $this->fields->add(new Vps_Form_Field_TextField('content', trlVps('Content')))
+        $this->fields->add(new Kwf_Form_Field_TextField('content', trlKwf('Content')))
             ->setWidth(400);
-        $this->fields->add(new Vps_Form_Field_ShowField('original_content', trlVps('Original')))
-            ->setData(new Vps_Data_Trl_OriginalComponent())
+        $this->fields->add(new Kwf_Form_Field_ShowField('original_content', trlKwf('Original')))
+            ->setData(new Kwf_Data_Trl_OriginalComponent())
             ->getData()->setFieldname('content');
     }
 }

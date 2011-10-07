@@ -1,9 +1,9 @@
 <?php
 /**
  * @deprecated
- * @see Vps_View_Helper_Money
+ * @see Kwf_View_Helper_Money
  */
-class Vps_View_Helper_MoneyEuro extends Vps_View_Helper_Money
+class Kwf_View_Helper_MoneyEuro extends Kwf_View_Helper_Money
 {
     public function moneyEuro($amount)
     {

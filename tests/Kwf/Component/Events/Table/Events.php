@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Events_Table_Events extends Vps_Component_Abstract_Events
+class Kwf_Component_Events_Table_Events extends Kwf_Component_Abstract_Events
 {
     public $countCalled = 0;
 
@@ -7,19 +7,19 @@ class Vps_Component_Events_Table_Events extends Vps_Component_Abstract_Events
     {
         $ret = parent::getListeners();
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Component_Added',
+            'event' => 'Kwf_Component_Event_Component_Added',
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Component_Removed',
+            'event' => 'Kwf_Component_Event_Component_Removed',
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Component_PositionChanged',
+            'event' => 'Kwf_Component_Event_Component_PositionChanged',
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Component_ClassChanged',
+            'event' => 'Kwf_Component_Event_Component_ClassChanged',
             'callback' => 'onComponentChange'
         );
         return $ret;

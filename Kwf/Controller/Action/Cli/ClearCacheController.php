@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -9,30 +9,30 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
     public function indexAction()
     {
         if ($this->_getParam('server')) {
-            $config = Vps_Config_Web::getInstance($this->_getParam('server'));
+            $config = Kwf_Config_Web::getInstance($this->_getParam('server'));
 
-            if ($config->server->useVpsForUpdate) {
+            if ($config->server->useKwfForUpdate) {
                 $sshHost = $config->server->user.'@'.$config->server->host;
                 $sshDir = $config->server->dir;
                 $cmd = "sshvps $sshHost $sshDir clear-cache";
-                $cmd = "sudo -u vps $cmd";
+                $cmd = "sudo -u kwf $cmd";
                 $this->_systemCheckRet($cmd);
             } else {
-                Vps_Util_ClearCache::getInstance()->clearCache(
+                Kwf_Util_ClearCache::getInstance()->clearCache(
                     $this->_getParam('type'),
                     true,
                     true,
                     $config->server);
             }
         } else {
-            Vps_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true);
+            Kwf_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true);
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
     public static function getHelpOptions()
     {
-        $types = Vps_Util_ClearCache::getInstance()->getTypes();
+        $types = Kwf_Util_ClearCache::getInstance()->getTypes();
         return array(
             array(
                 'param'=> 'type',

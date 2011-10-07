@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_DownloadsTree_ViewProjectsController extends Vps_Controller_Action_Auto_Tree
+class Kwc_Advanced_DownloadsTree_ViewProjectsController extends Kwf_Controller_Action_Auto_Tree
 {
     protected $_rootVisible = false;
     protected $_textField = 'text';
@@ -9,7 +9,7 @@ class Vpc_Advanced_DownloadsTree_ViewProjectsController extends Vps_Controller_A
 
     public function preDispatch()
     {
-        $this->_modelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'projectsModel');
+        $this->_modelName = Kwc_Abstract::getSetting($this->_getParam('class'), 'projectsModel');
         parent::preDispatch();
     }
 
@@ -23,11 +23,11 @@ class Vpc_Advanced_DownloadsTree_ViewProjectsController extends Vps_Controller_A
 
     protected function _isAllowedComponent()
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'));
         if (!$c) return false;
         while($c) {
-            foreach (Vpc_Abstract::getSetting($c->componentClass, 'plugins') as $p) {
-                if (is_instance_of($p, 'Vps_Component_Plugin_Interface_Login')) {
+            foreach (Kwc_Abstract::getSetting($c->componentClass, 'plugins') as $p) {
+                if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_Login')) {
                     $p = new $p($c->componentId);
                     if (!$p->isLoggedIn()) {
                         return false;

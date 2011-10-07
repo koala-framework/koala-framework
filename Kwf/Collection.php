@@ -1,5 +1,5 @@
 <?php
-class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
+class Kwf_Collection implements ArrayAccess, IteratorAggregate, Countable
 {
     private $_array = array();
 
@@ -59,7 +59,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
         if (is_null($offset)) {
             $this->add($value);
         } else {
-            throw new Vps_Exception(("Not yet Implemented."));
+            throw new Kwf_Exception(("Not yet Implemented."));
         }
     }
 
@@ -81,7 +81,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
                 return;
             }
         }
-        throw new Vps_Exception("Offset '$offset' not found");
+        throw new Kwf_Exception("Offset '$offset' not found");
     }
 
     public function remove($item)
@@ -93,19 +93,19 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
                 return;
             }
         }
-        throw new Vps_Exception("Item not found");
+        throw new Kwf_Exception("Item not found");
     }
 
     //IteratorAggregate
     public function getIterator()
     {
-        return new Vps_Collection_Iterator($this);
+        return new Kwf_Collection_Iterator($this);
     }
 
     public function getRecursiveIterator()
     {
         return new RecursiveIteratorIterator(
-                        new Vps_Collection_Iterator_Recursive($this));
+                        new Kwf_Collection_Iterator_Recursive($this));
     }
 
     public function first()
@@ -130,7 +130,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
         return $this->add($value);
     }
 
-    public function insertBefore($where, Vps_Collection_Item_Interface $value = null)
+    public function insertBefore($where, Kwf_Collection_Item_Interface $value = null)
     {
         $added = false;
         $value = $this->_preInsertValue($value);
@@ -142,13 +142,13 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         if (!$added) {
-            throw new Vps_Exception("Can't insert item to collection, '$where' not found");
+            throw new Kwf_Exception("Can't insert item to collection, '$where' not found");
         }
         $this->_postInsertValue($value);
         return $value;
     }
 
-    public function insertAfter($where, Vps_Collection_Item_Interface $value = null)
+    public function insertAfter($where, Kwf_Collection_Item_Interface $value = null)
     {
         $added = false;
         $value = $this->_preInsertValue($value);
@@ -160,7 +160,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         if (!$added) {
-            throw new Vps_Exception("Can't insert item to collection, '$where' not found");
+            throw new Kwf_Exception("Can't insert item to collection, '$where' not found");
         }
         $this->_postInsertValue($value);
         return $value;
@@ -179,8 +179,8 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
         if ($this->_defaultClass && !is_object($value)) {
             $value = new $this->_defaultClass($value);
         }
-        if (!$value instanceof Vps_Collection_Item_Interface) {
-            throw new Vps_Exception(("Vps_Collection can hold only items with Vps_Collection_Item_Interface"));
+        if (!$value instanceof Kwf_Collection_Item_Interface) {
+            throw new Kwf_Exception(("Kwf_Collection can hold only items with Kwf_Collection_Item_Interface"));
         }
         return $value;
     }

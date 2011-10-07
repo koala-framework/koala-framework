@@ -1,16 +1,16 @@
-Vps.Form.InsertCharWindow = Ext.extend(Ext.Window,
+Kwf.Form.InsertCharWindow = Ext.extend(Ext.Window,
 {
     initComponent: function() {
         this.addEvents('insertchar');
-        Vps.Form.InsertCharWindow.superclass.initComponent.call(this);
+        Kwf.Form.InsertCharWindow.superclass.initComponent.call(this);
     },
 
     onRender : function(ct, position){
-        Vps.Form.InsertCharWindow.superclass.onRender.call(this, ct, position);
+        Kwf.Form.InsertCharWindow.superclass.onRender.call(this, ct, position);
         this.charmap.each(function(i) {
             if (i[2] == true) {
                 var el = this.body.createChild({
-                    cls: 'vps-insertchar-char',
+                    cls: 'kwf-insertchar-char',
                     html: i[0]
                 });
                 el.on('click', function(e, o) {

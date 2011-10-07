@@ -1,5 +1,5 @@
 <?php
-class Vpc_NewsletterCategory_Detail_RecipientsController extends Vpc_NewsletterCategory_Subscribe_RecipientsController
+class Kwc_NewsletterCategory_Detail_RecipientsController extends Kwc_NewsletterCategory_Subscribe_RecipientsController
 {
     protected $_buttons = array('add', 'delete', 'saveRecipients');
 }

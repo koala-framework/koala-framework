@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache_Core extends Zend_Cache_Core
+class Kwf_Cache_Core extends Zend_Cache_Core
 {
     protected $_checkComponentSettings = true;
     public function __construct(array $options = array())
@@ -24,7 +24,7 @@ class Vps_Cache_Core extends Zend_Cache_Core
             }
         }
 
-        if ($ret && Vps_Config::getValue('debug.componentCache.checkComponentModification'))
+        if ($ret && Kwf_Config::getValue('debug.componentCache.checkComponentModification'))
         {
             if (isset($ret['mtimeFiles'])) {
                 foreach ($ret['mtimeFiles'] as $f) {
@@ -36,11 +36,11 @@ class Vps_Cache_Core extends Zend_Cache_Core
             }
             if ($ret && $this->_checkComponentSettings)
             {
-                if ($ret['mtime'] < Vpc_Abstract::getSettingMtime()) {
+                if ($ret['mtime'] < Kwc_Abstract::getSettingMtime()) {
                     $ret = false;
                 }
             }
-            if ($ret && $ret['mtime'] < Vps_Registry::get('configMtime')) {
+            if ($ret && $ret['mtime'] < Kwf_Registry::get('configMtime')) {
                 $ret = false;
             }
         }
@@ -58,9 +58,9 @@ class Vps_Cache_Core extends Zend_Cache_Core
             }
         }
         if ($this->_checkComponentSettings) {
-            $mtime = max($mtime, Vpc_Abstract::getSettingMtime());
+            $mtime = max($mtime, Kwc_Abstract::getSettingMtime());
         }
-        $mtime = max($mtime, Vps_Registry::get('configMtime'));
+        $mtime = max($mtime, Kwf_Registry::get('configMtime'));
         if (!isset($cacheData['mtime'])) $cacheData['mtime'] = 0;
         $cacheData['mtime'] = max($mtime, $cacheData['mtime']);
         return parent::save($cacheData, $cacheId, $tags, $specificLifetime, $priority);

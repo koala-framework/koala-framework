@@ -3,15 +3,15 @@
  * @group Model_MirrorCache
  * @group Model_MirrorCache_Sibling
  */
-class Vps_Model_MirrorCache_ModelSiblingTest extends Vps_Test_TestCase
+class Kwf_Model_MirrorCache_ModelSiblingTest extends Kwf_Test_TestCase
 {
     public function testNoSyncWhenOnlySavedToSibling()
     {
         sleep(2);
-        Vps_Benchmark::enable();
-        Vps_Benchmark::reset();
+        Kwf_Benchmark::enable();
+        Kwf_Benchmark::reset();
 
-        $mirror = new Vps_Model_MirrorCache_MirrorCacheModel();
+        $mirror = new Kwf_Model_MirrorCache_MirrorCacheModel();
 
         $r = $mirror->getRow(1);
         $r->siblingcol = 'sib val 1';
@@ -21,10 +21,10 @@ class Vps_Model_MirrorCache_ModelSiblingTest extends Vps_Test_TestCase
         $r = $mirror->getRow(1);
         $r->firstname = 'Herbert';
         $r->save();
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('mirror sync'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('mirror sync'));
 
-        Vps_Benchmark::reset();
-        Vps_Benchmark::disable();
+        Kwf_Benchmark::reset();
+        Kwf_Benchmark::disable();
 
         $this->assertEquals('sib val 1', $mirror->getRow(1)->siblingcol);
     }

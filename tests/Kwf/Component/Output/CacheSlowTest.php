@@ -4,20 +4,20 @@
  * @group Component_Output_CacheSlow
  * @group slow
  */
-class Vps_Component_Output_CacheSlowTest extends Vps_Test_TestCase
+class Kwf_Component_Output_CacheSlowTest extends Kwf_Test_TestCase
 {
     private $_root;
 
     private function _setup($rootClass)
     {
-        Vps_Component_Data_Root::setComponentClass($rootClass);
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        Kwf_Component_Data_Root::setComponentClass($rootClass);
+        $this->_root = Kwf_Component_Data_Root::getInstance();
 
-        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
         apc_clear_cache('user');
 
-        Vps_Registry::get('config')->debug->componentCache->disable = false;
-        Vps_Config::deleteValueCache('debug.componentCache.disable');
+        Kwf_Registry::get('config')->debug->componentCache->disable = false;
+        Kwf_Config::deleteValueCache('debug.componentCache.disable');
     }
 
     /*
@@ -33,16 +33,16 @@ class Vps_Component_Output_CacheSlowTest extends Vps_Test_TestCase
 
     public function testC4()
     {
-        $this->_setup('Vps_Component_Output_C4_Component');
+        $this->_setup('Kwf_Component_Output_C4_Component');
         $this->_root->render();
 
-        $model = Vps_Component_Cache::getInstance()->getModel('cache');
+        $model = Kwf_Component_Cache::getInstance()->getModel('cache');
         $row = $model->getRows()->current();
         $content = $row->content;
         $this->_root->render();
         $this->assertEquals($content, $row->content);
         // muss hier gemacht werden, weil TTL nicht funktioniert
-        apc_delete(Vps_Cache::getUniquePrefix() . '-cc-root/component/');
+        apc_delete(Kwf_Cache::getUniquePrefix() . '-cc-root/component/');
         sleep(3);
         $this->_root->render();
         $this->assertNotEquals($content, $row->content);

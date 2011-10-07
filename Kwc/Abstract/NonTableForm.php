@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_NonTableForm extends Vps_Form_NonTableForm
+class Kwc_Abstract_NonTableForm extends Kwf_Form_NonTableForm
 {
     public function __construct($name, $class)
     {

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Columns_Trl_Controller extends Vpc_Abstract_List_Trl_Controller
+class Kwc_Columns_Trl_Controller extends Kwc_Abstract_List_Trl_Controller
 {
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('pos', trlVps('Column'), 60));
-        $this->_columns->add(new Vps_Grid_Column_Button('edit'));
-        $this->_columns->add(new Vps_Grid_Column_Visible());
+        $this->_columns->add(new Kwf_Grid_Column('pos', trlKwf('Column'), 60));
+        $this->_columns->add(new Kwf_Grid_Column_Button('edit'));
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 }

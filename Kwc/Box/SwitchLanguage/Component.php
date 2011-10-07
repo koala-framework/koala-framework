@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
+class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -12,12 +12,12 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
 
     protected function _getLanguages()
     {
-        $languages = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_LanguageRoot_Language_Component');
-        $languages = array_merge($languages, Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_TrlRoot_Master_Component'));
-        $languages = array_merge($languages, Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component'));
+        $languages = Kwf_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Kwc_Root_LanguageRoot_Language_Component');
+        $languages = array_merge($languages, Kwf_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Kwc_Root_TrlRoot_Master_Component'));
+        $languages = array_merge($languages, Kwf_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Kwc_Root_TrlRoot_Chained_Component'));
         return $languages;
     }
 
@@ -39,9 +39,9 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
             }
             $page = null;
             if ($masterPage) {
-                if (is_instance_of($l->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) {
-                    $page = Vpc_Chained_Trl_Component::getChainedByMaster($masterPage, $l);
-                } else if (is_instance_of($l->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) {
+                if (is_instance_of($l->componentClass, 'Kwc_Root_TrlRoot_Chained_Component')) {
+                    $page = Kwc_Chained_Trl_Component::getChainedByMaster($masterPage, $l);
+                } else if (is_instance_of($l->componentClass, 'Kwc_Root_TrlRoot_Master_Component')) {
                     $page = $masterPage;
                 }
                 $p = $page;
@@ -73,14 +73,14 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
 
     public static function getStaticCacheMeta($componentClass)
     {
-        $ret = Vpc_Menu_Abstract_Component::getStaticCacheMeta($componentClass);
-        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-            foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
-                if (is_instance_of($generator['class'], 'Vpc_Chained_Abstract_ChainedGenerator')) {
-                    $generator = current(Vps_Component_Generator_Abstract::getInstances(
+        $ret = Kwc_Menu_Abstract_Component::getStaticCacheMeta($componentClass);
+        foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
+            foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
+                if (is_instance_of($generator['class'], 'Kwc_Chained_Abstract_ChainedGenerator')) {
+                    $generator = current(Kwf_Component_Generator_Abstract::getInstances(
                         $componentClass, array('generator' => $key))
                     );
-                    $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
+                    $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel());
                 }
             }
         }

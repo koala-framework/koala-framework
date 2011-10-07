@@ -1,7 +1,7 @@
 <?php
-class Vpc_List_ChildPages_Teaser_Trl_Controller extends Vpc_List_ChildPages_Teaser_Controller
+class Kwc_List_ChildPages_Teaser_Trl_Controller extends Kwc_List_ChildPages_Teaser_Controller
 {
-    protected $_model = 'Vpc_List_ChildPages_Teaser_Trl_AdminModel';
+    protected $_model = 'Kwc_List_ChildPages_Teaser_Trl_AdminModel';
 
     public function preDispatch()
     {
@@ -11,7 +11,7 @@ class Vpc_List_ChildPages_Teaser_Trl_Controller extends Vpc_List_ChildPages_Teas
 
     protected function _getSelect()
     {
-        $ret = Vps_Controller_Action_Auto_Vpc_Grid::_getSelect();
+        $ret = Kwf_Controller_Action_Auto_Kwc_Grid::_getSelect();
         return $ret;
     }
 }

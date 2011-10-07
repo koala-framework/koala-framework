@@ -2,7 +2,7 @@
 /**
  * @group Model_Db
  */
-class Vps_Model_Db_ModelTest extends Vps_Test_TestCase
+class Kwf_Model_Db_ModelTest extends Kwf_Test_TestCase
 {
     private $_table;
     private $_dbSelect;
@@ -11,17 +11,17 @@ class Vps_Model_Db_ModelTest extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_table = $this->getMock('Vps_Model_Db_Table',
+        $this->_table = $this->getMock('Kwf_Model_Db_Table',
             array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll', 'delete', 'save'),
-            array('db' => new Vps_Model_Db_TestAdapter()), '', true);
+            array('db' => new Kwf_Model_Db_TestAdapter()), '', true);
 
-        $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array($this->_table));
+        $this->_dbSelect = $this->getMock('Kwf_Db_Table_Select', array(), array($this->_table));
 
         $this->_table->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->_dbSelect));
 
-        $this->_model = new Vps_Model_Db(array(
+        $this->_model = new Kwf_Model_Db(array(
             'table' => $this->_table,
             'default' => array('foo' => 'defaultFoo')
         ));
@@ -66,13 +66,13 @@ class Vps_Model_Db_ModelTest extends Vps_Test_TestCase
             ))
         );
         $select = $this->_model->select()->where(
-            new Vps_Model_Select_Expr_Higher('foo', 1)
+            new Kwf_Model_Select_Expr_Higher('foo', 1)
         );
         $this->_model->deleteRows($select);
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testDeleteException()
     {
@@ -203,7 +203,7 @@ class Vps_Model_Db_ModelTest extends Vps_Test_TestCase
             ->method('order')
             ->with($this->equalTo('RAND()'));
         $select = $this->_model->select()
-            ->order(Vps_Model_Select::ORDER_RAND);
+            ->order(Kwf_Model_Select::ORDER_RAND);
         $this->_model->fetchAll($select);
     }
 
@@ -218,7 +218,7 @@ class Vps_Model_Db_ModelTest extends Vps_Test_TestCase
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testNullWithoutSelect()
     {

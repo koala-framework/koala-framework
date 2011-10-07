@@ -1,22 +1,22 @@
 <?php
-class Vpc_Box_DogearRandom_Dogear_Form extends Vpc_Abstract_Composite_Form
+class Kwc_Box_DogearRandom_Dogear_Form extends Kwc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps('Colors')))
-            ->setHelpText(trlVps('Color values in Hex code without a leading # (e.g. fa5500)'));
+        $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Colors')))
+            ->setHelpText(trlKwf('Color values in Hex code without a leading # (e.g. fa5500)'));
 
-        $fs->add(new Vps_Form_Field_TextField('color_small_1', trlVps('Color small 1')))
+        $fs->add(new Kwf_Form_Field_TextField('color_small_1', trlKwf('Color small 1')))
             ->setWidth(80)
             ->setVtype('alphanum');
-        $fs->add(new Vps_Form_Field_TextField('color_small_2', trlVps('Color small 2')))
+        $fs->add(new Kwf_Form_Field_TextField('color_small_2', trlKwf('Color small 2')))
             ->setWidth(80)
             ->setVtype('alphanum');
-        $fs->add(new Vps_Form_Field_TextField('color_big_1', trlVps('Color big 1')))
+        $fs->add(new Kwf_Form_Field_TextField('color_big_1', trlKwf('Color big 1')))
             ->setWidth(80)
             ->setVtype('alphanum');
-        $fs->add(new Vps_Form_Field_TextField('color_big_2', trlVps('Color big 2')))
+        $fs->add(new Kwf_Form_Field_TextField('color_big_2', trlKwf('Color big 2')))
             ->setWidth(80)
             ->setVtype('alphanum');
     }
