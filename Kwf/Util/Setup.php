@@ -160,25 +160,20 @@ class Kwf_Util_Setup
             $ret .= "if (\$host) file_put_contents('cache/lastdomain', \$host);\n";
         }
 
-        $path = getcwd();
-        if (file_exists('application/config_section')) {
-            $configSection = trim(file_get_contents('config_section'));
-        } else {
-            $configSection = 'production';
-        }
-
+        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
         $ret .= "if (\$host) {\n";
             $ret .= "    //www abschneiden damit www.test und www.preview usw auch funktionieren\n";
-            $ret .= "    if (substr(\$host, 0, 4)== 'www.') \$host = substr(\$host, 4);\n";
-            $ret .= "    if (substr(\$host, 0, 9)=='dev.test.') {\n";
+            $ret .= "    \$h = \$host;\n";
+            $ret .= "    if (substr(\$h, 0, 4)== 'www.') \$h = substr(\$h, 4);\n";
+            $ret .= "    if (substr(\$h, 0, 9)=='dev.test.') {\n";
             $ret .= "        Kwf_Setup::\$configSection = 'devtest';\n";
-            $ret .= "    } else if (substr(\$host, 0, 4)=='dev.') {\n";
+            $ret .= "    } else if (substr(\$h, 0, 4)=='dev.') {\n";
             $ret .= "        Kwf_Setup::\$configSection = 'dev';\n";
-            $ret .= "    } else if (substr(\$host, 0, 5)=='test.' ||\n";
-            $ret .= "            substr(\$host, 0, 3)=='qa.') {\n";
+            $ret .= "    } else if (substr(\$h, 0, 5)=='test.' ||\n";
+            $ret .= "            substr(\$h, 0, 3)=='qa.') {\n";
             $ret .= "        Kwf_Setup::\$configSection = 'test';\n";
-            $ret .= "    } else if (substr(\$host, 0, 8)=='preview.') {\n";
+            $ret .= "    } else if (substr(\$h, 0, 8)=='preview.') {\n";
             $ret .= "        Kwf_Setup::\$configSection = 'preview';\n";
             $ret .= "    }\n";
         $ret .= "}\n";

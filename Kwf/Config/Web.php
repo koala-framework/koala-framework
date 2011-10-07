@@ -10,7 +10,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     {
         if (!$section) {
             require_once str_replace('_', '/', Kwf_Setup::$configClass).'.php';
-            $section = call_user_func(array(Kwf_Setup::$configClass, 'getConfigSection'));
+            $section = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         }
         if (!isset(self::$_instances[$section])) {
             $cacheId = 'config_'.str_replace('-', '_', $section);
@@ -78,29 +78,10 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         }
     }
 
-    public static function getConfigSection()
+    public static function getDefaultConfigSection()
     {
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-
-        //www abschneiden damit www.test und www.preview usw auch funktionieren
-        if (substr($host, 0, 4)== 'www.') $host = substr($host, 4);
-
-        if (php_sapi_name() == 'cli') {
-            //wenn über kommandozeile aufgerufen
-            $path = getcwd();
-        } else {
-            $path = $_SERVER['SCRIPT_FILENAME'];
-        }
-        if (file_exists('config_section')) {
+        if (file_exists('application/config_section')) {
             return trim(file_get_contents('config_section'));
-        } else if (substr($host, 0, 9)=='dev.test.') {
-            return 'devtest';
-        } else if (substr($host, 0, 4)=='dev.') {
-            return 'dev';
-        } else if (substr($host, 0, 5)=='test.') {
-            return 'test';
-        } else if (substr($host, 0, 8)=='preview.') {
-            return 'preview';
         } else {
             return 'production';
         }
