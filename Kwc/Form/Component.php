@@ -22,6 +22,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtElement';
+        $ret['assets']['dep'][] = 'ExtDomHelper';
         $ret['assets']['dep'][] = 'ExtConnection';
         $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
