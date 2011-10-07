@@ -15,7 +15,7 @@ class Kwf_Model_FnFFile_Test extends Kwf_Test_TestCase
         $row->test = 'foo';
         $row->save();
 
-        $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=vps_model_Fn-f-file_test --action=read";
+        $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=kwf_model_Fn-f-file_test --action=read";
         $this->assertEquals('foo', exec($cmd));
     }
 
@@ -28,7 +28,7 @@ class Kwf_Model_FnFFile_Test extends Kwf_Test_TestCase
         $row->test = 'foo';
         $row->save();
 
-        $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=vps_model_Fn-f-file_test --action=write";
+        $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=kwf_model_Fn-f-file_test --action=write";
         system($cmd);
         clearstatcache();
 
@@ -41,7 +41,7 @@ class Kwf_Model_FnFFile_Test extends Kwf_Test_TestCase
         $descriptorspec = array(
             1 => array("pipe", "w"),
         );
-        $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=vps_model_Fn-f-file_test --action=read-after-delay";
+        $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=kwf_model_Fn-f-file_test --action=read-after-delay";
         $process = proc_open($cmd, $descriptorspec, $pipes);
         $this->assertTrue(is_resource($process));
 
