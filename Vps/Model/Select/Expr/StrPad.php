@@ -51,4 +51,27 @@ class Vps_Model_Select_Expr_StrPad implements Vps_Model_Select_Expr_Interface
     {
         return Vps_Model_Interface::TYPE_STRING;
     }
+
+    public function toArray()
+    {
+        $field = $this->_field;
+        if ($field instanceof Vps_Model_Select_Expr_Interface) $field = $field->toArray();
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'field' => $field,
+            'padLength' => $this->_padLength,
+            'padStr' => $this->_padStr,
+            'padType' => $this->_padType,
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $field = $data['field'];
+        if (is_array($field)) {
+            $field = Vps_Model_Select_Expr::fromArray($field);
+        }
+        return new $cls($field, $data['padLength'], $data['padStr'], $data['padType']);
+    }
 }
