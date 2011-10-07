@@ -23,4 +23,19 @@ class Vps_Model_Select_Expr_String implements Vps_Model_Select_Expr_Interface
     {
         return Vps_Model_Interface::TYPE_STRING;
     }
+
+
+    public function toArray()
+    {
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'string' => $this->_string,
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        return new $cls($data['string']);
+    }
 }
