@@ -59,14 +59,16 @@ class Kwc_Shop_Cart_OrderData
     protected function _getAdditionalSumRows($order, $total)
     {
         $ret = array();
-        $payments = Kwc_Abstract::getChildComponentClasses(
-            Kwc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
-        if (isset($payments[$order->payment])) {
-            $rows = Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderData
-                ::getInstance($payments[$order->payment])
-                ->getAdditionalSumRows($order);
-            foreach ($rows as $r) $total += $r['amount'];
-            $ret = array_merge($ret, $rows);
+        if ($order instanceof Kwc_Shop_Cart_Order) {
+            $payments = Kwc_Abstract::getChildComponentClasses(
+                Kwc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
+            if (isset($payments[$order->payment])) {
+                $rows = Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderData
+                    ::getInstance($payments[$order->payment])
+                    ->getAdditionalSumRows($order);
+                foreach ($rows as $r) $total += $r['amount'];
+                $ret = array_merge($ret, $rows);
+            }
         }
         foreach ($this->getShopCartPlugins() as $p) {
             $rows = $p->getAdditionalSumRows($order, $total);

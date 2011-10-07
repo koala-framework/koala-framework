@@ -1,5 +1,5 @@
 <?php
-class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwf_Component_Plugin_Abstract
+class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwc_Component_Plugin_Abstract
     implements Kwc_Shop_Cart_Plugins_Interface
 {
     public static function getSettings()
@@ -9,8 +9,9 @@ class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwf_Component_Plugin_Abst
         return $ret;
     }
 
-    public function getAdditionalSumRows(Kwc_Shop_Cart_Order $order, $total)
+    public function getAdditionalSumRows($order, $total)
     {
+        if (!$order instanceof Kwc_Shop_Cart_Order) return array();
         if (!$order->discount_amount) return array();
 
         $amount = -(float)$order->discount_amount;
@@ -29,8 +30,9 @@ class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwf_Component_Plugin_Abst
         $fs->add(new Kwf_Form_Field_NumberField('discount_amount', trlcKwf('Amount of Money', 'Amount')))
             ->setComment('€')
             ->setWidth(50);
+        $fs->add(new Kwf_Form_Field_TextField('discount_comment', trlKwf('Comment')));
     }
 
-    public function getPlaceholders(Kwc_Shop_Cart_Order $order) {}
+    public function getPlaceholders(Kwc_Shop_Cart_Order $order) { return array(); }
     public function orderConfirmed(Kwc_Shop_Cart_Order $order) {}
 }

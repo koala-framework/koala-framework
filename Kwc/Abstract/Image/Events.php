@@ -9,8 +9,13 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
                 $event->row->component_id, array('componentClass' => $this->_class)
             );
             foreach ($components as $component) {
+<<<<<<< HEAD:Kwc/Abstract/Image/Events.php
                 $this->fireEvent(new Kwf_Component_Event_Media_Changed(
                     $this->_class, $event->row->component_id
+=======
+                $this->fireEvent(new Vps_Component_Event_Media_Changed(
+                    $this->_class, $component->componentId
+>>>>>>> 2.2:Vpc/Abstract/Image/Events.php
                 ));
             }
         }

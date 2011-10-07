@@ -35,4 +35,20 @@ class Kwf_Model_Select_Expr_Sql implements Kwf_Model_Select_Expr_Interface
     {
         return null;
     }
+
+    public function toArray()
+    {
+        $field = $this->_field;
+        if ($field instanceof Vps_Model_Select_Expr_Interface) $field = $field->toArray();
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'sql' => $this->_sql,
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        return new $cls($data['sql']);
+    }
 }
