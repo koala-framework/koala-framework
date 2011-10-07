@@ -33,7 +33,7 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
             $this->_class, $event->row->component_id
         ));
-        $this->fireEvent(new Kwf_Component_Event_HasComponent_ContentChanged(
+        $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
             $this->_class, $event->row->component_id
         ));
     }

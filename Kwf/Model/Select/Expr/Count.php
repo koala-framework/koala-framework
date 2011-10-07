@@ -28,4 +28,25 @@ class Kwf_Model_Select_Expr_Count implements Kwf_Model_Select_Expr_Interface
     {
         return Kwf_Model_Interface::TYPE_INTEGER;
     }
+
+    public function toArray()
+    {
+        $field = $this->_field;
+        if ($field instanceof Vps_Model_Select_Expr_Interface) $field = $field->toArray();
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'field' => $field,
+            'distinct' => $this->_disting,
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $field = $data['field'];
+        if (is_array($field)) {
+            $field = Vps_Model_Select_Expr::fromArray($field);
+        }
+        return new $cls($field, $data['distinct']);
+    }
 }

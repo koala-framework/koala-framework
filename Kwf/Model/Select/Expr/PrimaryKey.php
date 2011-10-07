@@ -9,4 +9,17 @@ class Kwf_Model_Select_Expr_PrimaryKey implements Kwf_Model_Select_Expr_Interfac
     {
         return null;
     }
+
+    public function toArray()
+    {
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        return new $cls();
+    }
 }
