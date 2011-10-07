@@ -1,7 +1,7 @@
 Kwf.onContentReady(function()
 {
-    var atDecoding = '(vpsat)';
-    var dotDecoding = '(vpsdot)';
+    var atDecoding = '(kwfat)';
+    var dotDecoding = '(kwfdot)';
 
     var els = Ext.query('a');
     els.forEach(function(el) {

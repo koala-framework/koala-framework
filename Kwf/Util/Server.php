@@ -12,7 +12,7 @@ class Kwf_Util_Server
             echo "updating $sshHost:$sshDir\n";
             $cmd = "svn up{$params}";
             $cmd = "sshvps $sshHost $sshDir $cmd";
-            $cmd = "sudo -u kwf $cmd";
+            $cmd = "sudo -u vps $cmd";
             if (isset($options['debug']) && $options['debug']) {
                 echo $cmd."\n";
             }
@@ -26,7 +26,7 @@ class Kwf_Util_Server
             }
             $cmd = "svn-up{$params}";
             $cmd = "sshvps $sshHost $sshDir $cmd";
-            $cmd = "sudo -u kwf ".Kwf_Util_Git::getAuthorEnvVars()." $cmd";
+            $cmd = "sudo -u vps ".Kwf_Util_Git::getAuthorEnvVars()." $cmd";
             if (isset($options['debug']) && $options['debug']) {
                 echo $cmd."\n";
             }

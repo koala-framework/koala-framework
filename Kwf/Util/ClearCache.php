@@ -264,7 +264,7 @@ class Kwf_Util_ClearCache
         if ($server) {
             $cmd = "clear-cache-dir --path=$path";
             $cmd = "sshvps $server->user@$server->host $server->dir $cmd";
-            $cmd = "sudo -u kwf $cmd";
+            $cmd = "sudo -u vps $cmd";
             passthru($cmd, $ret);
             if ($ret != 0) {
                 throw new Kwf_ClientException("Clearing remote cache '$path' failed");

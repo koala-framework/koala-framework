@@ -15,7 +15,7 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
                 $sshHost = $config->server->user.'@'.$config->server->host;
                 $sshDir = $config->server->dir;
                 $cmd = "sshvps $sshHost $sshDir clear-cache";
-                $cmd = "sudo -u kwf $cmd";
+                $cmd = "sudo -u vps $cmd";
                 $this->_systemCheckRet($cmd);
             } else {
                 Kwf_Util_ClearCache::getInstance()->clearCache(
