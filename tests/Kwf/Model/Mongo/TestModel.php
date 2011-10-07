@@ -15,7 +15,7 @@ class Kwf_Model_Mongo_TestModel extends Kwf_Model_Mongo
         static $m;
         if (!isset($m)) {
             $port = Kwf_Util_Tcp::getFreePort(rand(27020, 30000));
-            $cmd = "php bootstrap.php test forward --controller=vps_model_mongo_run-temp-mongo --port=$port";
+            $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=vps_model_mongo_run-temp-mongo --port=$port";
             if ($debugOutput) {
                 echo $cmd."\n";
                 $descriptorspec = array(
