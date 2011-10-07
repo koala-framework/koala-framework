@@ -43,7 +43,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             $this->view->image = false;
         }
         if (Kwf_Util_Git::web()->getActiveBranch() != 'production'
-            || Kwf_Util_Git::vps()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id
+            || Kwf_Util_Git::kwf()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id
         ) {
             $this->view->untagged = true;
         }

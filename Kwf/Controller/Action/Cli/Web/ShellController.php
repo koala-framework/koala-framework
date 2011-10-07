@@ -86,7 +86,7 @@ class Kwf_Controller_Action_Cli_Web_ShellController extends Kwf_Controller_Actio
                 $host = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
                 $dir = $config->server->dir;
 
-                $cmd = "sudo -u kwf ".Kwf_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
+                $cmd = "sudo -u vps ".Kwf_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
                 if ($this->_getParam('debug')) $cmd .= " --debug";
                 if ($this->_getParam('exec')) {
                     $exec = $this->_getParam('exec');

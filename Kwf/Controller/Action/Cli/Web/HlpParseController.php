@@ -28,8 +28,8 @@ class Kwf_Controller_Action_Cli_Web_HlpParseController extends Kwf_Controller_Ac
             $extension = end(explode('.', $file->getFileName()));
             if ($extension == 'php' || $extension == 'js' || $extension == 'tpl') {
                 $m = array();
-                $vps = $isKwf ? 'Kwf' : '';
-                preg_match_all("#hlp$vps\('(.*)'\)#", implode("", file($file)), $m);
+                $kwf = $isKwf ? 'Kwf' : '';
+                preg_match_all("#hlp$kwf\('(.*)'\)#", implode("", file($file)), $m);
                 foreach ($m[1] as $key) {
                     // Dateiname mit Pfad vernünftig formatieren
                     $results[$key][] = str_replace($directory . '/', '', $file->getPathName());

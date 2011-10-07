@@ -3,8 +3,8 @@ abstract class Kwf_View_Helper_Abstract_MailLink
 {
     // wenn encoding geändert wird, auch bei decoding ändern !!
     // decoding in Kwf_js/MailDecode.js
-    private $_atEncoding = '(vpsat)';
-    private $_dotEncoding = '(vpsdot)';
+    private $_atEncoding = '(kwfat)';
+    private $_dotEncoding = '(kwfdot)';
 
     // wird zB in LinkTag_Mail_Data.php verwendet, deshalb public
     public function encodeMail($address)

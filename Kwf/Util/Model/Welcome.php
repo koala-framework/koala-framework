@@ -9,7 +9,7 @@ class Kwf_Util_Model_Welcome extends Kwf_Model_Db
             'refModelClass'    => 'Kwf_Uploads_Model',
         ),
         'LoginImage' => array(
-            'column'           => 'login_vps_upload_id',
+            'column'           => 'login_kwf_upload_id',
             'refModelClass'    => 'Kwf_Uploads_Model',
         )
     );

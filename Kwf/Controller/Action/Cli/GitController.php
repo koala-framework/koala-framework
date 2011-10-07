@@ -32,11 +32,11 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
         }
         $this->_eventuallyConvertToGitAndRestart();
 
-        Kwf_Util_Git::vps()->fetch();
+        Kwf_Util_Git::kwf()->fetch();
         Kwf_Util_Git::web()->fetch();
 
         Kwf_Util_Git::web()->checkout($this->_getParam('revWeb'));
-        Kwf_Util_Git::vps()->checkout($this->_getParam('revKwf'));
+        Kwf_Util_Git::kwf()->checkout($this->_getParam('revKwf'));
         exit;
     }
 
@@ -44,10 +44,10 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
     {
         $this->_eventuallyConvertToGitAndRestart();
 
-        Kwf_Util_Git::vps()->fetch();
+        Kwf_Util_Git::kwf()->fetch();
         Kwf_Util_Git::web()->fetch();
 
-        Kwf_Util_Git::vps()->checkout(trim(file_get_contents('kwf_branch')));
+        Kwf_Util_Git::kwf()->checkout(trim(file_get_contents('kwf_branch')));
         $appId = Kwf_Registry::get('config')->application->id;
         Kwf_Util_Git::web()->checkout("master");
         exit;
@@ -57,20 +57,20 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
     {
         $this->_eventuallyConvertToGitAndRestart();
 
-        Kwf_Util_Git::vps()->fetch();
+        Kwf_Util_Git::kwf()->fetch();
         Kwf_Util_Git::web()->fetch();
 
         //die werden von go-online raufkopiert
-        Kwf_Util_Git::vps()->system("checkout ".escapeshellarg('Kwf/Util/Git.php'));
-        Kwf_Util_Git::vps()->system("checkout ".escapeshellarg('Kwf/Controller/Action/Cli/GitController.php'));
+        Kwf_Util_Git::kwf()->system("checkout ".escapeshellarg('Kwf/Util/Git.php'));
+        Kwf_Util_Git::kwf()->system("checkout ".escapeshellarg('Kwf/Controller/Action/Cli/GitController.php'));
         $appId = Kwf_Registry::get('config')->application->id;
-        if (!Kwf_Util_Git::vps()->revParse("production/$appId")) {
-            Kwf_Util_Git::vps()->checkoutBranch("production/$appId", "origin/production/$appId", '--track');
+        if (!Kwf_Util_Git::kwf()->revParse("production/$appId")) {
+            Kwf_Util_Git::kwf()->checkoutBranch("production/$appId", "origin/production/$appId", '--track');
         }
-        if (Kwf_Util_Git::vps()->getActiveBranch() != "production/$appId") {
-            Kwf_Util_Git::vps()->checkout("production/$appId");
+        if (Kwf_Util_Git::kwf()->getActiveBranch() != "production/$appId") {
+            Kwf_Util_Git::kwf()->checkout("production/$appId");
         }
-        Kwf_Util_Git::vps()->system("rebase origin/production/$appId");
+        Kwf_Util_Git::kwf()->system("rebase origin/production/$appId");
 
         if (!Kwf_Util_Git::web()->revParse("production")) {
             Kwf_Util_Git::web()->checkoutBranch("production", "origin/production", '--track');
@@ -344,6 +344,6 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
     private function _hasRevisionInHistory($revision)
     {
         return Kwf_Util_Git::web()->getActiveBranchContains($revision)
-                || Kwf_Util_Git::vps()->getActiveBranchContains($revision);
+                || Kwf_Util_Git::kwf()->getActiveBranchContains($revision);
     }
 }

@@ -109,7 +109,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 
         $html = $c->getData()->render();
         $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"mailto:foo(vpsat)example(vpsdot)com\">foo</a>\n</p>".
+                    "<p>\n  <a href=\"mailto:foo(kwfat)example(kwfdot)com\">foo</a>\n</p>".
                     "</div>", $html);
     }
 

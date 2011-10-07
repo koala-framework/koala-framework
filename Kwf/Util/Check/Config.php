@@ -63,7 +63,7 @@ class Kwf_Util_Check_Config
         );
 
         //ab hier wird die config geladen
-        $checks['setup_vps'] = array(
+        $checks['setup_kwf'] = array(
             'name' => 'loading kwf'
         );
         $checks['db_connection'] = array(
@@ -193,7 +193,7 @@ class Kwf_Util_Check_Config
         }
     }
 
-    private static function _setup_vps()
+    private static function _setup_kwf()
     {
         Kwf_Setup::setUpKwf();
     }
