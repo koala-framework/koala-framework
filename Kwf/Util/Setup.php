@@ -14,7 +14,7 @@ class Kwf_Util_Setup
         }
         set_include_path(get_include_path(). PATH_SEPARATOR . $zendPath);
 
-        $ip = KWF_PATH.PATH_SEPARATOR.$zendPath.PATH_SEPARATOR.getcwd();
+        $ip = get_include_path().KWF_PATH.PATH_SEPARATOR.$zendPath;
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
             $ip .= PATH_SEPARATOR . $p;
         }
