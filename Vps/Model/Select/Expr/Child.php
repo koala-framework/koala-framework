@@ -51,6 +51,6 @@ class Vps_Model_Select_Expr_Child implements Vps_Model_Select_Expr_Interface
     {
         $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
         $select = $data['select'] ? Vps_Model_Select::fromArray($data['select']) : null;
-        return new $cls($data['child'], Vps_Model_Select_Expr::fromArray($data['expr'], $select);
+        return new $cls($data['child'], Vps_Model_Select_Expr::fromArray($data['expr']), $select);
     }
 }
