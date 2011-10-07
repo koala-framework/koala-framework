@@ -192,6 +192,7 @@ class Kwf_Assets_Dependencies
                 }
             }
         }
+
         //hack: übersetzung immer zuletzt anhängen
         if ($fileType == 'js') {
             $files[] = 'kwf/Ext/ext-lang-en.js';
@@ -202,6 +203,7 @@ class Kwf_Assets_Dependencies
                 $f = $section . '-' . $f;
             }
         }
+
         return $files;
     }
 
@@ -311,6 +313,9 @@ class Kwf_Assets_Dependencies
             if (substr($f, 0, strlen(KWF_PATH)) == KWF_PATH) { //zuerst, da kwf in web liegen kann
                 //kann nur aus kwf
                 $f = 'kwf'.substr($f, strlen(KWF_PATH));
+            } else if (defined('VKWF_PATH') && substr($f, 0, strlen(VKWF_PATH)) == VKWF_PATH) {
+                //TODO: this should not be here
+                $f = 'vkwf'.substr($f, strlen(VKWF_PATH));
             } else {
                 //oder web kommen
                 $f = 'web'.substr($f, strlen(getcwd()));
