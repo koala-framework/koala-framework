@@ -155,6 +155,10 @@ class Kwf_Util_Setup
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
+        if (!Kwf_Config::getValue('server.domain')) {
+            //hack to make clear-cache just work
+            $ret .= "if (\$host) file_put_contents('cache/lastdomain', \$host);\n";
+        }
 
         $path = getcwd();
         if (file_exists('application/config_section')) {
