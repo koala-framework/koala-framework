@@ -16,7 +16,7 @@ class Kwf_Model_MirrorCache_SlowMirror_Test extends Kwf_Test_TestCase
         $numProcesses = 10;
         $debugOutput = false;
 
-        $cmd = "php bootstrap.php test forward --controller=vps_model_mirror-cache_slow-mirror_test";
+        $cmd = "php ".KWF_PATH."/bootstrap.php test forward --controller=kwf_model_mirror-cache_slow-mirror_test";
         $descriptorspec = array(
             1 => array("pipe", "w"),
         );
