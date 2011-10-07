@@ -1,9 +1,9 @@
-.vps-about h1, .vps-about p {
+.kwf-about h1, .kwf-about p {
     padding: 10px;
 }
-.vps-about h1 { margin-bottom: 5px; }
+.kwf-about h1 { margin-bottom: 5px; }
 
-.vps-about .footer {
+.kwf-about .footer {
     position: absolute;
     z-index: 0px;
     width: 314px; _width: 334px;
@@ -12,13 +12,13 @@
     border-top: 2px solid #a9bfd4;
     padding: 10px;
     font-size: 11px;
-    background: url(/assets/vps/images/welcome/footerBg.jpg) bottom left repeat-x;
+    background: url(/assets/kwf/images/welcome/footerBg.jpg) bottom left repeat-x;
 }
-.vps-about .footer img#enteWelcome {
+.kwf-about .footer img#enteWelcome {
     position: absolute;
     z-index: 10;
     bottom: 0px; right: 0px;
 }
 
-.vps-about {position:relative; width: 350px; }
-.vps-about .x-panel-body {background-color: #e2ebf5;}
+.kwf-about {position:relative; width: 350px; }
+.kwf-about .x-panel-body {background-color: #e2ebf5;}

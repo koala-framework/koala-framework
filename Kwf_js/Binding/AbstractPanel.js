@@ -1,14 +1,14 @@
-Vps.Binding.AbstractPanel = function(config) {
+Kwf.Binding.AbstractPanel = function(config) {
     if (!config || !config.actions) this.actions = {}; //muss hier sein
-    Vps.Binding.AbstractPanel.superclass.constructor.apply(this, arguments);
+    Kwf.Binding.AbstractPanel.superclass.constructor.apply(this, arguments);
 };
 
-Vps.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs, ec, config, grid)
+Kwf.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs, ec, config, grid)
 {
     var panel;
     var componentConfig = componentConfigs[ec.componentClass+'-'+ec.type];
     if (componentConfig.needsComponentPanel) {
-        panel = new Vps.Component.ComponentPanel(Ext.apply({
+        panel = new Kwf.Component.ComponentPanel(Ext.apply({
             title: componentConfig.title,
             mainComponentClass: ec.componentClass,
             mainType: ec.type,
@@ -30,7 +30,7 @@ Vps.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs
     return panel;
 };
 
-Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
+Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
 {
     checkDirty: true,
 
@@ -84,7 +84,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
             this.baseParams = {};
         }
 
-        Vps.Binding.AbstractPanel.superclass.initComponent.call(this);
+        Kwf.Binding.AbstractPanel.superclass.initComponent.call(this);
     },
 
     /**
@@ -139,7 +139,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
     addBinding: function() {
         for(var i = 0; i < arguments.length; i++){
             var b = arguments[i];
-            if (b instanceof Vps.Binding.AbstractPanel) {
+            if (b instanceof Kwf.Binding.AbstractPanel) {
                 b = {item: b};
             }
             if (!b.queryParam) b.queryParam = 'id';
@@ -179,7 +179,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                 }
             }, this);
 
-            if (Vps.Auto.FormPanel && b.item instanceof Vps.Auto.FormPanel) {
+            if (Kwf.Auto.FormPanel && b.item instanceof Kwf.Auto.FormPanel) {
                 b.item.on('addaction', function(form) {
                     this.activeId = 0;
                     this.selectId(0);
@@ -236,8 +236,8 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
     {
         if (this.checkDirty && !this.disabled && this.isDirty()) {
             Ext.Msg.show({
-            title:trlVps('Save'),
-            msg: trlVps('Do you want to save the changes?'),
+            title:trlKwf('Save'),
+            msg: trlKwf('Do you want to save the changes?'),
             buttons: Ext.Msg.YESNOCANCEL,
             scope: this,
             fn: function(button) {

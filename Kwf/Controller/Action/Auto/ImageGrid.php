@@ -1,7 +1,7 @@
 <?php
-abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Action_Auto_Abstract
+abstract class Kwf_Controller_Action_Auto_ImageGrid extends Kwf_Controller_Action_Auto_Abstract
 {
-    // the rule to the image. defaults to the first rule with model Vps_Uploads_Model
+    // the rule to the image. defaults to the first rule with model Kwf_Uploads_Model
     protected $_imageRule = null;
     protected $_labelField; // default is __toString()
     protected $_filters = null;
@@ -28,13 +28,13 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     public function indexAction()
     {
         $this->view->controllerUrl = $this->getRequest()->getPathInfo();
-        $this->view->xtype = 'vps.imagegrid';
+        $this->view->xtype = 'kwf.imagegrid';
     }
 
     public function init()
     {
         parent::init();
-        $this->_filters = new Vps_Controller_Action_Auto_FilterCollection();
+        $this->_filters = new Kwf_Controller_Action_Auto_FilterCollection();
     }
 
     public function preDispatch()
@@ -57,7 +57,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
             );
         }
         if (!$this->_imageRule) {
-            $this->_imageRule = $this->_model->getReferenceRuleByModelClass('Vps_Uploads_Model');
+            $this->_imageRule = $this->_model->getReferenceRuleByModelClass('Kwf_Uploads_Model');
         }
     }
 
@@ -92,7 +92,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
                     $row = (object)$row;
                 }
                 if (!$this->_hasPermissions($row, 'load')) {
-                    throw new Vps_Exception("You don't have the permissions to load this row");
+                    throw new Kwf_Exception("You don't have the permissions to load this row");
                 }
                 $rows[] = $this->_createItemByRow($row);
             }
@@ -115,7 +115,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
 
     protected function _createItemByRow($row)
     {
-        $truncateHelper = new Vps_View_Helper_Truncate();
+        $truncateHelper = new Kwf_View_Helper_Truncate();
         $primaryKey = $this->_primaryKey;
         $r = array();
 
@@ -123,12 +123,12 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
             $r[$primaryKey] = $row->$primaryKey;
         }
 
-        if (!$this->_labelField && $row instanceof Vps_Model_Row_Interface) {
+        if (!$this->_labelField && $row instanceof Kwf_Model_Row_Interface) {
             $r['label'] = $row->__toString();
         } else if ($this->_labelField) {
             $r['label'] = $row->{$this->_labelField};
         } else {
-            throw new Vps_Exception("You have to set _labelField in the ImageGrid Controller");
+            throw new Kwf_Exception("You have to set _labelField in the ImageGrid Controller");
         }
 
         if (!empty($r['label'])) $r['label_short'] = $r['label'];
@@ -138,13 +138,13 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
         }
 
         $imageRef = $this->_getImageReference();
-        $hashKey = Vps_Util_Hash::hash($row->{$imageRef['column']});
-        $r['src'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
+        $hashKey = Kwf_Util_Hash::hash($row->{$imageRef['column']});
+        $r['src'] = '/kwf/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
             '&hashKey='.$hashKey.'&size=imageGrid';
-        $r['src_large'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
+        $r['src_large'] = '/kwf/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
             '&hashKey='.$hashKey.'&size=imageGridLarge';
         if ($uploadRow = $row->getParentRow($this->_imageRule)) {
-            $dim = Vps_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), array(400, 400, Vps_Media_Image::SCALE_BESTFIT));
+            $dim = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), array(400, 400, Kwf_Media_Image::SCALE_BESTFIT));
             $r['src_large_width'] = $dim['width'];
             $r['src_large_height'] = $dim['height'];
         }
@@ -197,7 +197,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
 
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
-            $ret->where(new Vps_Model_Select_Expr_Equal($this->_primaryKey, $queryId));
+            $ret->where(new Kwf_Model_Select_Expr_Equal($this->_primaryKey, $queryId));
         }
 
         return $ret;
@@ -206,7 +206,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     protected function _fetchData($order, $limit, $start)
     {
         if (!isset($this->_model)) {
-            throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
+            throw new Kwf_Exception("Either _model has to be set or _fetchData has to be overwritten.");
         }
 
         $select = $this->_getSelect();
@@ -231,14 +231,14 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     {
         $id = $this->getRequest()->getParam('id');
         $row = $this->_model->getRow($id);
-        if (!$row) throw new Vps_Exception("No entry with id '$id' found");
+        if (!$row) throw new Kwf_Exception("No entry with id '$id' found");
         $this->_beforeDelete($row);
         $row->delete();
         $this->view->id = $id;
         $this->_afterDelete();
     }
 
-    protected function _beforeDelete(Vps_Model_Row_Interface $row)
+    protected function _beforeDelete(Kwf_Model_Row_Interface $row)
     {
     }
 

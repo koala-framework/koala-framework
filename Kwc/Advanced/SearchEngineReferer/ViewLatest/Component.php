@@ -1,6 +1,6 @@
 <?php
-class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
-    extends Vpc_Abstract
+class Kwc_Advanced_SearchEngineReferer_ViewLatest_Component
+    extends Kwc_Abstract
 {
     private $_referersCache = null;
     private $_parentModel;
@@ -9,7 +9,7 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
     {
         $ret = parent::getSettings();
         $ret['limit'] = 5;
-        $ret['placeholder']['header'] = trlVps('Latest referer');
+        $ret['placeholder']['header'] = trlKwf('Latest referer');
         return $ret;
     }
 
@@ -42,14 +42,14 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
             $this->_referersCache = array();
             foreach ($rowset as $row) {
                 $host = parse_url($row->referer_url, PHP_URL_HOST);
-                $component = Vps_Component_Data_Root::getInstance()->getComponentById(
+                $component = Kwf_Component_Data_Root::getInstance()->getComponentById(
                     $row->component_id
                 );
                 $this->_referersCache[] = array(
                     'component' => $component,
                     'row'       => $row,
                     'host'      => $host,
-                    'query'     => Vpc_Advanced_SearchEngineReferer_Component::getQueryVar($row->referer_url)
+                    'query'     => Kwc_Advanced_SearchEngineReferer_Component::getQueryVar($row->referer_url)
                 );
             }
         }

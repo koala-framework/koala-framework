@@ -2,7 +2,7 @@
 /**
  * @group Uploads
  */
-class Vps_Uploads_ModelTest extends Vps_Test_TestCase
+class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
 {
     private $_model;
     private $_uploadsModel;
@@ -10,11 +10,11 @@ class Vps_Uploads_ModelTest extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_uploadsModel = new Vps_Uploads_TestModel();
+        $this->_uploadsModel = new Kwf_Uploads_TestModel();
 
-        $this->_model = new Vps_Model_FnF(array(
+        $this->_model = new Kwf_Model_FnF(array(
             'dependentModels' => array('File' => array(
-                'refModelClass' => 'Vps_Uploads_TestModel',
+                'refModelClass' => 'Kwf_Uploads_TestModel',
                 'column' => 'upload_id'
             )),
             'data' => array(
@@ -106,15 +106,15 @@ class Vps_Uploads_ModelTest extends Vps_Test_TestCase
         $this->assertContains('text/html', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
-        $row->copyFile(VPS_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
+        $row->copyFile(KWF_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
         $this->assertContains('image/jpeg', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
-        $row->copyFile(VPS_PATH.'/images/links.png', 'foo', 'png');
+        $row->copyFile(KWF_PATH.'/images/links.png', 'foo', 'png');
         $this->assertContains('image/png', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
-        $row->copyFile(VPS_PATH.'/images/spacer.gif', 'foo', 'gif');
+        $row->copyFile(KWF_PATH.'/images/spacer.gif', 'foo', 'gif');
         $this->assertContains('image/gif', $row->mime_type);
     }
 
@@ -146,7 +146,7 @@ class Vps_Uploads_ModelTest extends Vps_Test_TestCase
         $this->assertEquals(false, $info['image']);
 
         $row = $this->_uploadsModel->createRow();
-        $row->copyFile(VPS_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
+        $row->copyFile(KWF_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
         $info = $row->getFileInfo();
         $this->assertEquals(2, $info['uploadId']);
         $this->assertContains('image/jpeg', $info['mimeType']);

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_Assets_Trl_Component extends Vpc_Box_Assets_Component
+class Kwc_Box_Assets_Trl_Component extends Kwc_Box_Assets_Component
 {
     public function getTemplateVars()
     {

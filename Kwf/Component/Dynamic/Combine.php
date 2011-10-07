@@ -4,17 +4,17 @@
  * Ähnlich wie NewColumn, nur dass dieses immer x partials zusammenfasst und
  * NewColumn egal wieviele partials in y columns aufteilt
  *
- * Das hier macht zwischendrin zB </div><div class="vpsDynamicCombine">
+ * Das hier macht zwischendrin zB </div><div class="kwfDynamicCombine">
  * Das aller erste und letzte div muss selbst außerhalb der partials im .tpl geschrieben werden
  */
-class Vps_Component_Dynamic_Combine
-    extends Vps_Component_Dynamic_Abstract
+class Kwf_Component_Dynamic_Combine
+    extends Kwf_Component_Dynamic_Abstract
 {
     protected $_amount;
     protected $_tag;
     protected $_cssClass;
 
-    public function setArguments($amount, $tag = 'div', $cssClass = 'vpsDynamicCombine')
+    public function setArguments($amount, $tag = 'div', $cssClass = 'kwfDynamicCombine')
     {
         $this->_amount = $amount;
         $this->_tag = $tag;

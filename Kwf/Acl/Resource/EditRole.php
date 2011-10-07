@@ -2,7 +2,7 @@
 /**
  * Resource ob ein Benutzer mit der Rolle in der Admin bearbeitet werden darf.
  */
-class Vps_Acl_Resource_EditRole extends Zend_Acl_Resource
+class Kwf_Acl_Resource_EditRole extends Zend_Acl_Resource
 {
     protected $_roleId;
 

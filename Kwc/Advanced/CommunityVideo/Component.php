@@ -2,14 +2,14 @@
 /**
  * For playing videos from community video services like YouTube or Vimeo
  */
-class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
+class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract_Flash_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Flash.Community Video'),
-            'ownModel'     => 'Vpc_Advanced_CommunityVideo_Model',
-            'extConfig' => 'Vps_Component_Abstract_ExtConfig_Form'
+            'componentName' => trlKwf('Flash.Community Video'),
+            'ownModel'     => 'Kwc_Advanced_CommunityVideo_Model',
+            'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
         return $ret;

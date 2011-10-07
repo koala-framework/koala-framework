@@ -1,4 +1,4 @@
 <?php
-class Vpc_Basic_ImageEnlarge_Admin extends Vpc_Abstract_Image_Admin
+class Kwc_Basic_ImageEnlarge_Admin extends Kwc_Abstract_Image_Admin
 {
 }

@@ -1,14 +1,14 @@
 <?php
-class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
-    implements Vps_Model_RowsSubModel_Interface
+class Kwf_Model_Mongo_RowsSubModel extends Kwf_Model_Data_Abstract
+    implements Kwf_Model_RowsSubModel_Interface
 {
-    protected $_rowClass = 'Vps_Model_Mongo_RowsSubModel_Row';
-    protected $_rowsetClass = 'Vps_Model_Mongo_RowsSubModel_Rowset';
+    protected $_rowClass = 'Kwf_Model_Mongo_RowsSubModel_Row';
+    protected $_rowsetClass = 'Kwf_Model_Mongo_RowsSubModel_Rowset';
     protected $_primaryKey = 'intern_id';
     protected $_fieldName;
 
     /**
-     * @var Vps_Model_Mongo
+     * @var Kwf_Model_Mongo
      */
     protected $_parentModel;
 
@@ -27,7 +27,7 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
     {
         parent::_init();
         if (isset($this->_parentModel) && is_string($this->_parentModel)) {
-            $this->_parentModel = Vps_Model_Abstract::getInstance($this->_parentModel);
+            $this->_parentModel = Kwf_Model_Abstract::getInstance($this->_parentModel);
         }
         if (isset($this->_parentModel)) {
             $this->setParentModel($this->_parentModel);
@@ -36,40 +36,40 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
 
     public function setParentModel($m)
     {
-        $m = Vps_Model_Abstract::getInstance($m);
+        $m = Kwf_Model_Abstract::getInstance($m);
         $this->_parentModel = $m;
-        while (is_instance_of($m, 'Vps_Model_Proxy')) {
+        while (is_instance_of($m, 'Kwf_Model_Proxy')) {
             $m = $m->getProxyModel();
         }
-        if (!$m instanceof Vps_Model_Mongo) {
-            throw new Vps_Exception("parentModel is not a Mongo");
+        if (!$m instanceof Kwf_Model_Mongo) {
+            throw new Kwf_Exception("parentModel is not a Mongo");
         }
     }
 
     private function _getParentMongoModel()
     {
         $m = $this->_parentModel;
-        while ($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+        while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
         return $m;
     }
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_RowsSubModel');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_Mongo_RowsSubModel');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_RowsSubModel');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_Mongo_RowsSubModel');
     }
 
-    public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
+    public function getRowsByParentRow(Kwf_Model_Row_Interface $parentRow, $select = array())
     {
         $this->_data[$parentRow->getInternalId()] = array();
 
         $v = $parentRow->{$this->_fieldName};
         if ($v) {
-            if (!is_array($v)) throw new Vps_Exception("value is not an array but a ".gettype($v));
+            if (!is_array($v)) throw new Kwf_Exception("value is not an array but a ".gettype($v));
             //TODO: _data nicht duplizieren, sondern in getRowByDataKey erst machen (performance)
             $i = 0;
             foreach (array_keys($v) as $k) {
@@ -91,7 +91,7 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
         ));
     }
 
-    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    public function createRowByParentRow(Kwf_Model_Row_Interface $parentRow, array $data = array())
     {
         return $this->_createRow($data, array('parentRow' => $parentRow));
     }
@@ -117,7 +117,7 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
         $parentRow->{$this->_fieldName} = $v;
     }
 
-    public function update(Vps_Model_Mongo_RowsSubModel_Row $row, $rowData)
+    public function update(Kwf_Model_Mongo_RowsSubModel_Row $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         foreach ($this->_rows[$iId] as $k=>$i) {
@@ -128,10 +128,10 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
                 return;
             }
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 
-    public function insert(Vps_Model_Mongo_RowsSubModel_Row $row, $rowData)
+    public function insert(Kwf_Model_Mongo_RowsSubModel_Row $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         if (!isset($this->_data[$iId])) {
@@ -144,7 +144,7 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
         //return $rowData[$this->getPrimaryKey()];
     }
 
-    public function delete(Vps_Model_Mongo_RowsSubModel_Row $row)
+    public function delete(Kwf_Model_Mongo_RowsSubModel_Row $row)
     {
         foreach ($this->_rows[$row->getSubModelParentRow()->getInternalId()] as $k=>$i) {
             if ($row === $i) {
@@ -154,32 +154,32 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
                 return;
             }
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 
 
     public function getUniqueIdentifier() {
-        throw new Vps_Exception("no unique identifier set");
+        throw new Kwf_Exception("no unique identifier set");
     }
 
 
 
 
-    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    public function dependentModelRowUpdated(Kwf_Model_Row_Abstract $row, $action)
     {
         parent::dependentModelRowUpdated($row, $action);
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
         foreach ($models as $model) {
             foreach ($model->_exprs as $column=>$expr) {
-                if ($expr instanceof Vps_Model_Select_Expr_Parent) {
-                    if ($model->getReference($expr->getParent()) === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                if ($expr instanceof Kwf_Model_Select_Expr_Parent) {
+                    if ($model->getReference($expr->getParent()) === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                         //nothing to do in that case
                     } else if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
 
                         $ref = $model->getReference($expr->getParent());
                         foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
-                            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+                            if (!$m instanceof Kwf_Model_Abstract) $m = Kwf_Model_Abstract::getInstance($m);
                             if ($m === $model) {
                                 $res = $this->_getParentMongoModel()->getCollection()->update(
                                     array($this->_fieldName.'.'.$ref['column'] => $row->{$row->getModel()->getPrimaryKey()}),
@@ -187,7 +187,7 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
                                     array('multiple' => true, 'safe' => true)
                                 );
                                 if (!$res || !$res['ok']) {
-                                    throw new Vps_Exception("update failed");
+                                    throw new Kwf_Exception("update failed");
                                 }
                             }
                         }
@@ -197,14 +197,14 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
         }
     }
 
-    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    public function childModelRowUpdated(Kwf_Model_Row_Abstract $row, $action)
     {
         parent::childModelRowUpdated($row, $action);
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
         foreach ($models as $model) {
             foreach ($model->_exprs as $column=>$expr) {
-                if ($expr instanceof Vps_Model_Select_Expr_Child) {
+                if ($expr instanceof Kwf_Model_Select_Expr_Child) {
                     if ($model->getDependentModel($expr->getChild()) === $row->getModel()) {
                         $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($model));
                         $parentRow = $row->getParentRow($rule);

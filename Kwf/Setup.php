@@ -20,42 +20,42 @@ function is_instance_of($sub, $super)
     }
 }
 
-class Vps_Setup
+class Kwf_Setup
 {
     public static $configClass;
     public static $configSection;
 
-    public static function setUp($configClass = 'Vps_Config_Web')
+    public static function setUp($configClass = 'Kwf_Config_Web')
     {
         error_reporting(E_ALL);
         if (!include('./cache/setup.php')) {
             if (!file_exists('cache/setup.php')) {
-                define('VPS_PATH', realpath(dirname(__FILE__).'/..'));
-                if (file_exists(VPS_PATH.'/include_path')) {
-                    $zendPath = trim(file_get_contents(VPS_PATH.'/include_path'));
+                define('KWF_PATH', realpath(dirname(__FILE__).'/..'));
+                if (file_exists(KWF_PATH.'/include_path')) {
+                    $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
                     $zendPath = str_replace(
                         '%version%',
-                        file_get_contents(VPS_PATH.'/include_path_version'),
+                        file_get_contents(KWF_PATH.'/include_path_version'),
                         $zendPath);
 
                 } else {
                     die ('zend not found');
                 }
-                set_include_path(get_include_path(). PATH_SEPARATOR . VPS_PATH . PATH_SEPARATOR . $zendPath);
+                set_include_path(get_include_path(). PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
 
-                require_once 'Vps/Loader.php';
-                Vps_Loader::registerAutoload();
+                require_once 'Kwf/Loader.php';
+                Kwf_Loader::registerAutoload();
 
-                Vps_Setup::$configClass = $configClass;
-                require_once 'Vps/Registry.php';
-                Zend_Registry::setClassName('Vps_Registry');
+                Kwf_Setup::$configClass = $configClass;
+                require_once 'Kwf/Registry.php';
+                Zend_Registry::setClassName('Kwf_Registry');
 
-                require_once 'Vps/Trl.php';
+                require_once 'Kwf/Trl.php';
 
-                umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
+                umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen
 
-                require_once 'Vps/Util/Setup.php';
-                file_put_contents('cache/setup.php', Vps_Util_Setup::generateCode($configClass));
+                require_once 'Kwf/Util/Setup.php';
+                file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode($configClass));
                 die('created cache/setup.php');
             }
             include('cache/setup.php');
@@ -64,10 +64,10 @@ class Vps_Setup
 
     public static function shutDown()
     {
-        if (Vps_Config::getValue('debug.querylog') && php_sapi_name() != 'cli') {
-            header('X-Vps-DbQueries: '.Vps_Db_Profiler::getCount());
+        if (Kwf_Config::getValue('debug.querylog') && php_sapi_name() != 'cli') {
+            header('X-Kwf-DbQueries: '.Kwf_Db_Profiler::getCount());
         }
-        Vps_Benchmark::shutDown();
+        Kwf_Benchmark::shutDown();
     }
 
     public static function createDb()
@@ -83,10 +83,10 @@ class Vps_Setup
         if (isset($ret)) return $ret;
 
         $cacheId = 'hasDb';
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if (!$success) {
             $ret = file_exists('config.db.ini');
-            Vps_Cache_Simple::add($cacheId, $ret);
+            Kwf_Cache_Simple::add($cacheId, $ret);
         }
         return $ret;
     }
@@ -96,7 +96,7 @@ class Vps_Setup
         if (!self::hasDb()) {
             return null;
         }
-        return new Vps_Dao();
+        return new Kwf_Dao();
     }
 
     public static function getConfigSection()
@@ -104,7 +104,7 @@ class Vps_Setup
         return self::$configSection;
     }
 
-    public static function dispatchVpc()
+    public static function dispatchKwc()
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
 
@@ -112,65 +112,65 @@ class Vps_Setup
         $uri = substr($_SERVER['REDIRECT_URL'], 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
-        $urlPrefix = Vps_Config::getValue('vpc.UrlPrefix');
+        $urlPrefix = Kwf_Config::getValue('kwc.UrlPrefix');
 
         if ($uri == 'robots.txt') {
-            Vps_Media_Output::output(array(
+            Kwf_Media_Output::output(array(
                 'contents' => "User-agent: *\nDisallow: /admin/",
                 'mimeType' => 'text/plain'
             ));
         }
 
         if ($uri == 'sitemap.xml') {
-            $sitemap = new Vps_Component_Sitemap();
-            $sitemap->outputSitemap(Vps_Component_Data_Root::getInstance());
+            $sitemap = new Kwf_Component_Sitemap();
+            $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
         }
 
-        if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))
+        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets'))
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
         ) {
             if (!isset($_SERVER['HTTP_HOST'])) {
-                throw new Vps_Exception_NotFound();
+                throw new Kwf_Exception_NotFound();
             }
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Trl::getInstance()->setUseUserLanguage(false);
+            Kwf_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
-            $root = Vps_Component_Data_Root::getInstance();
+            $root = Kwf_Component_Data_Root::getInstance();
             $exactMatch = true;
             $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
-            Vps_Benchmark::checkpoint('getPageByUrl');
+            Kwf_Benchmark::checkpoint('getPageByUrl');
             if (!$data) {
-                throw new Vps_Exception_NotFound();
+                throw new Kwf_Exception_NotFound();
             }
             if (!$exactMatch) {
                 if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
-                    throw new Vps_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
+                    throw new Kwf_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
                 }
                 header('Location: '.$data->url);
                 exit;
             }
             $root->setCurrentPage($data);
-            $contentSender = Vpc_Abstract::getSetting($data->componentClass, 'contentSender');
+            $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
             $contentSender = new $contentSender($data);
             $contentSender->sendContent();
-            Vps_Benchmark::shutDown();
+            Kwf_Benchmark::shutDown();
 
             //TODO: ein flag oder sowas ähnliches stattdessen verwenden
-            if ($data instanceof Vpc_Abstract_Feed_Component || $data instanceof Vpc_Export_Xml_Component || $data instanceof Vpc_Export_Xml_Trl_Component) {
+            if ($data instanceof Kwc_Abstract_Feed_Component || $data instanceof Kwc_Export_Xml_Component || $data instanceof Kwc_Export_Xml_Trl_Component) {
                 echo "<!--";
             }
-            Vps_Benchmark::output();
-            if ($data instanceof Vpc_Abstract_Feed_Component || $data instanceof Vpc_Export_Xml_Component || $data instanceof Vpc_Export_Xml_Trl_Component) {
+            Kwf_Benchmark::output();
+            if ($data instanceof Kwc_Abstract_Feed_Component || $data instanceof Kwc_Export_Xml_Component || $data instanceof Kwc_Export_Xml_Trl_Component) {
                 echo "-->";
             }
             exit;
 
-        } else if ($_SERVER['REDIRECT_URL'] == '/vps/util/vpc/render') {
-            Vps_Util_Component::dispatchRender();
+        } else if ($_SERVER['REDIRECT_URL'] == '/kwf/util/kwc/render') {
+            Kwf_Util_Component::dispatchRender();
         }
     }
 
@@ -182,10 +182,10 @@ class Vps_Setup
         if (is_array($urlParts) && count($urlParts) == 2 && $urlParts[0] == 'media'
             && $urlParts[1] == 'headline'
         ) {
-            Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
+            Kwf_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 7) {
-                throw new Vps_Exception_NotFound();
+                throw new Kwf_Exception_NotFound();
             }
             $class = $urlParts[1];
             $id = $urlParts[2];
@@ -194,10 +194,10 @@ class Vps_Setup
             // time() wäre der 5er, wird aber nur wegen browsercache benötigt
             $filename = $urlParts[6];
 
-            if ($checksum != Vps_Media::getChecksum($class, $id, $type, $filename)) {
-                throw new Vps_Exception_AccessDenied('Access to file not allowed.');
+            if ($checksum != Kwf_Media::getChecksum($class, $id, $type, $filename)) {
+                throw new Kwf_Exception_AccessDenied('Access to file not allowed.');
             }
-            Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
+            Kwf_Media_Output::output(Kwf_Media::getOutput($class, $id, $type));
         }
     }
 
@@ -206,7 +206,7 @@ class Vps_Setup
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
-            $host = Vps_Config::getValue('server.domain');
+            $host = Kwf_Config::getValue('server.domain');
         }
         if ($includeProtocol) $host = 'http://' . $host;
         return $host;
@@ -234,7 +234,7 @@ class Vps_Setup
                 echo $b; // gibt 2,3 aus
                 echo $b * 2; // gibt 4 aus -> der teil hinterm , wird einfach ignoriert
         */
-        setlocale(LC_ALL, explode(', ', trlcVps('locale', 'C')));
+        setlocale(LC_ALL, explode(', ', trlcKwf('locale', 'C')));
         setlocale(LC_NUMERIC, 'C');
     }
 }

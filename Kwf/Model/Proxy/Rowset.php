@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Proxy_Rowset implements Vps_Model_Rowset_Interface
+class Kwf_Model_Proxy_Rowset implements Kwf_Model_Rowset_Interface
 {
     protected $_rowClass;
     protected $_rowset;

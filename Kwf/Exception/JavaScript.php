@@ -1,5 +1,5 @@
 <?php
-class Vps_Exception_JavaScript extends Vps_Exception
+class Kwf_Exception_JavaScript extends Kwf_Exception
 {
     private $_url;
     private $_lineNumber;

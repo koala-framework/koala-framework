@@ -1,14 +1,14 @@
 <?php
 // zum manuell testen
-// /vps/test/vps_form_multi-checkbox_test
-class Vps_Form_MultiCheckbox_TestController extends Vps_Controller_Action_Auto_Form
+// /kwf/test/kwf_form_multi-checkbox_test
+class Kwf_Form_MultiCheckbox_TestController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
 
     public function preDispatch()
     {
-        $model = Vps_Model_Abstract::getInstance('Vps_Form_MultiCheckbox_DataModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Form_MultiCheckbox_DataModel');
         $model->setData(
             array(array('id' => 1))
         );
@@ -20,29 +20,29 @@ class Vps_Form_MultiCheckbox_TestController extends Vps_Controller_Action_Auto_F
     {
         $fs = $this->_form;
 
-        $sel = new Vps_Model_Select();
-        $sel->where(new Vps_Model_Select_Expr_Or(array(
-            new Vps_Model_Select_Expr_Equal('id', 1),
-            new Vps_Model_Select_Expr_Equal('id', 2)
+        $sel = new Kwf_Model_Select();
+        $sel->where(new Kwf_Model_Select_Expr_Or(array(
+            new Kwf_Model_Select_Expr_Equal('id', 1),
+            new Kwf_Model_Select_Expr_Equal('id', 2)
         )));
-        $fs->add(new Vps_Form_Field_MultiCheckbox('Relation', 'Value', 'Relations only'))
+        $fs->add(new Kwf_Form_Field_MultiCheckbox('Relation', 'Value', 'Relations only'))
             ->setValuesSelect($sel);
 
-        $sel = new Vps_Model_Select();
+        $sel = new Kwf_Model_Select();
         $sel->whereEquals('id', 3);
-        $fs->add(new Vps_Form_Field_MultiCheckbox(
-            Vps_Model_Abstract::getInstance('Vps_Form_MultiCheckbox_RelationModel'),
+        $fs->add(new Kwf_Form_Field_MultiCheckbox(
+            Kwf_Model_Abstract::getInstance('Kwf_Form_MultiCheckbox_RelationModel'),
             'Value',
             'Model and relation'
         ))->setValuesSelect($sel);
 
-        $fs->add(new Vps_Form_Field_MultiCheckbox(
-            Vps_Model_Abstract::getInstance('Vps_Form_MultiCheckbox_RelationModelNoRel'),
+        $fs->add(new Kwf_Form_Field_MultiCheckbox(
+            Kwf_Model_Abstract::getInstance('Kwf_Form_MultiCheckbox_RelationModelNoRel'),
             'Value',
             'Model and relation (no dataToRelation)'
         ));
 
-        $fs->add(new Vps_Form_Field_MultiCheckbox('Relation', 'Value', 'setShowCheckAllLinks(false)'))
+        $fs->add(new Kwf_Form_Field_MultiCheckbox('Relation', 'Value', 'setShowCheckAllLinks(false)'))
             ->setShowCheckAllLinks(false);
     }
 
@@ -55,10 +55,10 @@ class Vps_Form_MultiCheckbox_TestController extends Vps_Controller_Action_Auto_F
             $config,
             array(
                 'controllerUrl' => $this->getRequest()->getPathInfo(),
-                'assetsType' => 'Vps_Form_MultiCheckbox:Test',
+                'assetsType' => 'Kwf_Form_MultiCheckbox:Test',
             )
         );
-        $this->view->ext('Vps.Auto.FormPanel', $config, 'Vps.Test.Viewport');
+        $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }
 

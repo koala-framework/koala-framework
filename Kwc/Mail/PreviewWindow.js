@@ -1,12 +1,12 @@
-Ext.ns('Vpc.Mail');
-Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
+Ext.ns('Kwc.Mail');
+Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
     initComponent : function()
     {
         this.button = [];
         this.button['html'] = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/html.png',
             cls     : 'x-btn-text-icon',
-            text	: trlVps('HTML'),
+            text	: trlKwf('HTML'),
             enableToggle: true,
             toggleGroup: 'format',
             pressed : false,
@@ -17,7 +17,7 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         this.button['text'] = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/page_white_text.png',
             cls     : 'x-btn-text-icon',
-            text	: trlVps('Text'),
+            text	: trlKwf('Text'),
             enableToggle: true,
             toggleGroup: 'format',
             pressed : false,
@@ -26,9 +26,9 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
             name: 'text'
         });
 
-        this.title = trlVps('Newsletter Preview');
+        this.title = trlKwf('Newsletter Preview');
         this.buttons = [new Ext.Action({
-            text    : trlVps('Close'),
+            text    : trlKwf('Close'),
             handler : function() {
                 this.hide();
             },
@@ -39,7 +39,7 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         var send = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/email_go.png',
             cls     : 'x-btn-text-icon',
-            text	: trlVps('Send'),
+            text	: trlKwf('Send'),
             handler : function(a, b, c) {
                 Ext.Ajax.request({
                     url : this.controllerUrl + '/json-send-mail',
@@ -48,7 +48,7 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
                         format: this.button['html'].pressed ? 'html' : 'text'
                     }) ,
                     success: function(response, options, r) {
-                        Ext.MessageBox.alert(trlVps('Status'), r.message);
+                        Ext.MessageBox.alert(trlKwf('Status'), r.message);
                     },
                     scope: this
                 });
@@ -73,12 +73,12 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
 
         this.tbar.add(this.button['html'], this.button['text'], '|', this.address, send);
         this.baseParams = {};
-        Vpc.Mail.PreviewWindow.superclass.initComponent.call(this);
+        Kwc.Mail.PreviewWindow.superclass.initComponent.call(this);
     },
 
     showEdit : function(id, record)
     {
-        this.show(trlVps('Loading...'));
+        this.show(trlKwf('Loading...'));
         this.mailPanel.body.dom.style.backgroundColor = '#FFFFFF';
         this.mailPanel.body.dom.innerHTML = '';
         this.subject.showBusy();
@@ -115,4 +115,4 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         }
     }
 });
-Ext.reg('vpc.mail.preview', Vpc.Mail.PreviewWindow);
+Ext.reg('kwc.mail.preview', Kwc.Mail.PreviewWindow);

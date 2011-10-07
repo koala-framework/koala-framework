@@ -1,19 +1,19 @@
 <?php
-class Vpc_Directories_Category_Directory_Component extends Vpc_Directories_ItemPage_Directory_Component
+class Kwc_Directories_Category_Directory_Component extends Kwc_Directories_ItemPage_Directory_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childModel'] = 'Vpc_Directories_Category_Directory_CategoriesModel';
-        $ret['generators']['detail']['class'] = 'Vpc_Directories_Category_Directory_Generator';
-        $ret['generators']['detail']['component'] = 'Vpc_Directories_Category_Detail_Component';
+        $ret['childModel'] = 'Kwc_Directories_Category_Directory_CategoriesModel';
+        $ret['generators']['detail']['class'] = 'Kwc_Directories_Category_Directory_Generator';
+        $ret['generators']['detail']['component'] = 'Kwc_Directories_Category_Detail_Component';
         $ret['generators']['detail']['showInMenu'] = true;
         $ret['generators']['detail']['nameColumn'] = 'name';
 
         // zB für Kategorien Box
-        $ret['categoryName'] = trlVps('Categories');
+        $ret['categoryName'] = trlKwf('Categories');
 
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Category/Directory/Plugin.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Category/Directory/Plugin.js';
 
         $ret['hasModifyItemData'] = true;
         $ret['categoryToItemModelName'] = null;
@@ -25,25 +25,25 @@ class Vpc_Directories_Category_Directory_Component extends Vpc_Directories_ItemP
     {
         parent::validateSettings($settings, $componentClass);
         if (isset($settings['pool'])) {
-            throw new Vps_Exception("Directories_Category doesn't use pools anymore");
+            throw new Kwf_Exception("Directories_Category doesn't use pools anymore");
         }
     }
 
-    public static function modifyItemData(Vps_Component_Data $item, $componentClass)
+    public static function modifyItemData(Kwf_Component_Data $item, $componentClass)
     {
-        if (!Vpc_Abstract::hasSetting($componentClass, 'categoryToItemModelName')
-            && Vpc_Abstract::hasSetting($componentClass, 'categoryToItemTableName')
+        if (!Kwc_Abstract::hasSetting($componentClass, 'categoryToItemModelName')
+            && Kwc_Abstract::hasSetting($componentClass, 'categoryToItemTableName')
         ) {
             // setting has changed
-            throw new Vps_Exception("Setting 'categoryToItemTableName' has been renamed to 'categoryToItemModelName' and must be a Vps_Model");
+            throw new Kwf_Exception("Setting 'categoryToItemTableName' has been renamed to 'categoryToItemModelName' and must be a Kwf_Model");
         }
 
-        if (!$model = Vpc_Abstract::getSetting($componentClass, 'categoryToItemModelName')) {
-            throw new Vps_Exception("Setting 'categoryToItemModelName' must be set in component '$componentClass'");
+        if (!$model = Kwc_Abstract::getSetting($componentClass, 'categoryToItemModelName')) {
+            throw new Kwf_Exception("Setting 'categoryToItemModelName' must be set in component '$componentClass'");
         }
 
         // getting the intersection rows
-        $model = Vps_Model_Abstract::getInstance($model);
+        $model = Kwf_Model_Abstract::getInstance($model);
         $itemRef = $model->getReference('Item');
         $catRef = $model->getReference('Category');
         $rows = $model->getRows($model->select()->whereEquals($itemRef['column'], $item->row->id));

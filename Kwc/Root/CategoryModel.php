@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_CategoryModel extends Vps_Model_Data_Abstract
+class Kwc_Root_CategoryModel extends Kwf_Model_Data_Abstract
 {
     private $_pageCategories;
     protected $_columns = array('id', 'name', 'component');
@@ -9,7 +9,7 @@ class Vpc_Root_CategoryModel extends Vps_Model_Data_Abstract
         if (isset($config['pageCategories'])) {
             $this->_pageCategories = $config['pageCategories'];
         } else {
-            $this->_pageCategories = Vps_Config::getValueArray('vpc.pageCategories');
+            $this->_pageCategories = Kwf_Config::getValueArray('kwc.pageCategories');
         }
         parent::__construct($config);
     }

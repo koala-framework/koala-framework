@@ -1,8 +1,8 @@
-Ext.namespace('Vpc.PostsWritePreview');
+Ext.namespace('Kwc.PostsWritePreview');
 
 Ext.onReady(function()
 {
-    var previews = Ext.query('div.vpcPostsWritePreview');
+    var previews = Ext.query('div.kwcPostsWritePreview');
     Ext.each(previews, function(preview)
     {
         var previewTarget = Ext.query('div.previewBox', preview)[0];
@@ -17,20 +17,20 @@ Ext.onReady(function()
         }
 
         if (previewSource) {
-            previewTarget.innerHTML = Vpc.PostsWritePreview.replaceText(previewSource.value);
-            Vpc.PostsWritePreview.scrollToBottom(previewTarget, 140);
+            previewTarget.innerHTML = Kwc.PostsWritePreview.replaceText(previewSource.value);
+            Kwc.PostsWritePreview.scrollToBottom(previewTarget, 140);
 
             previewSource = Ext.get(previewSource);
 
             previewSource.on('keyup', function(event, el) {
-                previewTarget.innerHTML = Vpc.PostsWritePreview.replaceText(el.value);
-                Vpc.PostsWritePreview.scrollToBottom(previewTarget, 140);
+                previewTarget.innerHTML = Kwc.PostsWritePreview.replaceText(el.value);
+                Kwc.PostsWritePreview.scrollToBottom(previewTarget, 140);
             }, previewSource, { buffer: 120 });
         }
     });
 });
 
-Vpc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
+Kwc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
     var extEl = Ext.get(el);
     if (extEl.getHeight() > maxHeight) {
         extEl.setHeight(maxHeight);
@@ -40,7 +40,7 @@ Vpc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
     }
 };
 
-Vpc.PostsWritePreview.replaceText = function(v)
+Kwc.PostsWritePreview.replaceText = function(v)
 {
     // htmlspecialchars
     v = v.replace(/&/g, '&amp;');

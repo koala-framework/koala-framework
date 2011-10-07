@@ -1,10 +1,10 @@
 <?php
-require_once 'Vps/Loader.php';
-class Vps_Loader_Benchmark extends Vps_Loader
+require_once 'Kwf/Loader.php';
+class Kwf_Loader_Benchmark extends Kwf_Loader
 {
     public static function loadClass($class)
     {
         parent::loadClass($class);
-        Vps_Benchmark::count('classes included', $class);
+        Kwf_Benchmark::count('classes included', $class);
     }
 }

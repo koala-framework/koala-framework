@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Debug_SqlController extends Vps_Controller_Action
+class Kwf_Controller_Action_Debug_SqlController extends Kwf_Controller_Action
 {
     public function jsonDataAction()
     {
@@ -8,7 +8,7 @@ class Vps_Controller_Action_Debug_SqlController extends Vps_Controller_Action
         $n = $this->_getParam('requestNum');
         $file = '/tmp/querylog.'.$n;
         if (!file_exists($file)) {
-            throw new Vps_ClientException("No Querylog found for this requestNum");
+            throw new Kwf_ClientException("No Querylog found for this requestNum");
         }
         $c = explode("\nquerylog\n", file_get_contents($file));
         $j = 0;

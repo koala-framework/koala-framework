@@ -1,7 +1,7 @@
 <?php
-class Vps_Util_PayPal_Ipn
+class Kwf_Util_PayPal_Ipn
 {
-    public function dispatch($logModel = 'Vps_Util_PayPal_Ipn_LogModel')
+    public function dispatch($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
     {
         $url = '';
         if (isset($_SERVER['REDIRECT_URL'])) {
@@ -9,7 +9,7 @@ class Vps_Util_PayPal_Ipn
         }
         if ($url != '/paypal_ipn') return;
 
-        if (Vps_Setup::getConfigSection()=='production' || !isset($_GET['dontValidate'])) {
+        if (Kwf_Setup::getConfigSection()=='production' || !isset($_GET['dontValidate'])) {
 
             $req = 'cmd=_notify-validate';
 
@@ -32,7 +32,7 @@ class Vps_Util_PayPal_Ipn
             }
             $fp = fsockopen($domain, 80);
             if (!$fp) {
-                throw new Vps_Exception("Http error in Ipn validation");
+                throw new Kwf_Exception("Http error in Ipn validation");
             }
             fputs($fp, $header . $req);
             while (!feof($fp)) {
@@ -51,7 +51,7 @@ class Vps_Util_PayPal_Ipn
             // Process payment
             //mail('ns@vivid-planet.com', "Live-VERIFIED IPN", print_r($_POST, true));
 
-            $m = Vps_Model_Abstract::getInstance($logModel);
+            $m = Kwf_Model_Abstract::getInstance($logModel);
             $row = $m->createRow();
             foreach ($_REQUEST as $key => $value) {
                 $row->$key = utf8_encode($value);
@@ -59,9 +59,9 @@ class Vps_Util_PayPal_Ipn
             $row->save();
 
         } else if (strcmp ($res, "INVALID") == 0) {
-            throw new Vps_Exception("Ipn validation received INVALID $domain");
+            throw new Kwf_Exception("Ipn validation received INVALID $domain");
         } else {
-            throw new Vps_Exception("Ipn validation received something strange: $res");
+            throw new Kwf_Exception("Ipn validation received something strange: $res");
         }
 
         echo 'OK';

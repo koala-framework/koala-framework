@@ -1,8 +1,8 @@
 <?php
-class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
+class Kwf_View_Helper_ComponentLink extends Kwf_Component_View_Helper_Abstract
 {
     /**
-     * @param Vps_Component_Data target page
+     * @param Kwf_Component_Data target page
      * @param string custom text, if empty component name will be used
      * @param config array: cssClass, get, anchor, skipComponentLinkModifiers
      */
@@ -10,7 +10,7 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
     {
         if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
 
-        if ($target instanceof Vps_Component_Data) {
+        if ($target instanceof Kwf_Component_Data) {
             $target = $this->getTargetPage($target);
             if (!$text) $text = $target->name;
             return $this->getLink($target->url, $target->rel, $text, $config);
@@ -34,7 +34,7 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
             $url .= '?';
             foreach ($config['get'] as $key => $val) $url .= "&$key=$val";
         }
-        if ($this->_getRenderer() instanceof Vps_View_MailInterface) {
+        if ($this->_getRenderer() instanceof Kwf_View_MailInterface) {
             $url = '*redirect*' . $url . '*';
         }
 
@@ -51,7 +51,7 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
     public function getTargetPage($component)
     {
         $ret = $component->getPage();
-        if (is_instance_of($ret->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
+        if (is_instance_of($ret->componentClass, 'Kwc_Basic_LinkTag_Abstract_Component')) {
             if (!$ret->getComponent()->hasContent()) {
                 return null;
             }

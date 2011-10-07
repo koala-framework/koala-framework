@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_YearMonth_Month_Detail_Component extends Vpc_Directories_Month_Detail_Component
+class Kwc_Directories_YearMonth_Month_Detail_Component extends Kwc_Directories_Month_Detail_Component
 {
     public static function getSettings()
     {

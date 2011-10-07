@@ -1,12 +1,12 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_OrderData extends Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData
+class Kwc_Shop_Cart_Checkout_Payment_CashOnDelivery_OrderData extends Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderData
 {
-    public function getAdditionalSumRows(Vpc_Shop_Cart_Order $order)
+    public function getAdditionalSumRows(Kwc_Shop_Cart_Order $order)
     {
         $ret = parent::getAdditionalSumRows($order);
         $ret[] = array(
             'class' => 'cashOnDelivery',
-            'text' => trlVps('Cash on Delivery Charge').':',
+            'text' => trlKwf('Cash on Delivery Charge').':',
             'amount' => $this->_getCashOnDeliveryCharge($order)
         );
         return $ret;
@@ -14,6 +14,6 @@ class Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_OrderData extends Vpc_Shop_C
 
     protected function _getCashOnDeliveryCharge($order)
     {
-        return Vpc_Abstract::getSetting($this->_class, 'cashOnDeliveryCharge');
+        return Kwc_Abstract::getSetting($this->_class, 'cashOnDeliveryCharge');
     }
 }

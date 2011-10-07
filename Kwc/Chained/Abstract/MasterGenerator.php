@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Abstract_MasterGenerator extends Vps_Component_Generator_PseudoPage_Static
+class Kwc_Chained_Abstract_MasterGenerator extends Kwf_Component_Generator_PseudoPage_Static
 {
     protected $_inherits = true;
     protected $_loadTableFromComponent = true;

@@ -1,6 +1,6 @@
 if (Ext.isIE6) {
-Vps.onContentReady(function() {
-    var images = Ext.DomQuery.select('img.vpsIe6Png');
+Kwf.onContentReady(function() {
+    var images = Ext.DomQuery.select('img.kwfIe6Png');
     Ext.each(images, function(image) {
         var image = new Ext.Element(image);
         image.parent().createChild({

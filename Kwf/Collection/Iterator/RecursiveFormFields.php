@@ -1,9 +1,9 @@
 <?php
-class Vps_Collection_Iterator_RecursiveFormFields extends Vps_Collection_Iterator_Recursive
+class Kwf_Collection_Iterator_RecursiveFormFields extends Kwf_Collection_Iterator_Recursive
 {
     public function hasChildren()
     {
-        if ($this->current() instanceof Vps_Form_Field_Abstract) {
+        if ($this->current() instanceof Kwf_Form_Field_Abstract) {
             return $this->current()->hasChildren();
         } else {
             return false;
@@ -12,6 +12,6 @@ class Vps_Collection_Iterator_RecursiveFormFields extends Vps_Collection_Iterato
 
     public function getChildren()
     {
-        return new Vps_Collection_Iterator_RecursiveFormFields($this->current()->getChildren());
+        return new Kwf_Collection_Iterator_RecursiveFormFields($this->current()->getChildren());
     }
 }

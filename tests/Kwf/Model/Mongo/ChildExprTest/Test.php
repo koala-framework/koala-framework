@@ -5,7 +5,7 @@
  * @group Mongo_ChildExpr
  * @group slow
  */
-class Vps_Model_Mongo_ChildExprTest_Test extends Vps_Test_TestCase
+class Kwf_Model_Mongo_ChildExprTest_Test extends Kwf_Test_TestCase
 {
     public function testNoop() {}
 /*
@@ -15,7 +15,7 @@ class Vps_Model_Mongo_ChildExprTest_Test extends Vps_Test_TestCase
         $this->markTestIncomplete(); // TODO: deaktiviert, waren Fehler drinnen
         parent::setUp();
 
-        $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildExprTest_MongoModel');
+        $this->_model = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ChildExprTest_MongoModel');
         $this->_model->getCollection()->insert(
             array('id'=>1, 'a'=>'a', 'child_count'=>2) //TODO id sollte nicht nötig sein
         , array('safe'=>true));
@@ -37,7 +37,7 @@ class Vps_Model_Mongo_ChildExprTest_Test extends Vps_Test_TestCase
     public function testAddedChild()
     {
         $this->markTestIncomplete(); // TODO: deaktiviert, führte zu Endlosschleife, gehört eigentlich hergerichtet
-        $childModel = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildExprTest_ChildModel');
+        $childModel = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ChildExprTest_ChildModel');
         $childRow = $childModel->createRow();
         $childRow->mongo_id = 1;
         $childRow->name = 'four';

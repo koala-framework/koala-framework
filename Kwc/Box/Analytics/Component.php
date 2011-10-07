@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_Analytics_Component extends Vpc_Abstract
+class Kwc_Box_Analytics_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -9,7 +9,7 @@ class Vpc_Box_Analytics_Component extends Vpc_Abstract
 
     protected function _getAnalyticsCode()
     {
-        return Vps_Registry::get('config')->statistic->analyticsCode;
+        return Kwf_Registry::get('config')->statistic->analyticsCode;
     }
 
     public function getTemplateVars()
@@ -17,7 +17,7 @@ class Vpc_Box_Analytics_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['analyticsCode'] = $this->_getAnalyticsCode();
         if ($ret['analyticsCode'] && !is_string($ret['analyticsCode'])) {
-            throw new Vps_Exception("AnalyticsCode must be a string, '".gettype($ret['analyticsCode'])."' given");
+            throw new Kwf_Exception("AnalyticsCode must be a string, '".gettype($ret['analyticsCode'])."' given");
         }
         return $ret;
     }

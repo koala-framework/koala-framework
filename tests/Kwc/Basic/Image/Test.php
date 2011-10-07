@@ -3,11 +3,11 @@
  * @group Basic_Image
  * @group Image
  */
-class Vpc_Basic_Image_Test extends Vpc_TestAbstract
+class Kwc_Basic_Image_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_Image_Root');
+        parent::setUp('Kwc_Basic_Image_Root');
         $this->_root->setFilename(null);
     }
 
@@ -16,7 +16,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('1600');
         $url = $c->getComponent()->getImageUrl();
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('Vpc_Basic_Image_FixDimensionComponent', $url[1]);
+        $this->assertEquals('Kwc_Basic_Image_FixDimensionComponent', $url[1]);
         $this->assertEquals('1600', $url[2]);
         $this->assertEquals('default', $url[3]);
         $this->assertEquals('foo.png', $url[6]);
@@ -35,32 +35,32 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('1600');
         $this->assertTrue($c->hasContent());
 
-        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate' => null),
+        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate' => null),
         $c->getComponent()->getImageDimensions());
     }
 
     public function testGetMediaOutput()
     {
-        $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
-        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = true;
-        $o = Vpc_Basic_Image_Component::getMediaOutput('1600', 'default', 'Vpc_Basic_Image_FixDimensionComponent');
+        $checkCmpMod = Kwf_Registry::get('config')->debug->componentCache->checkComponentModification;
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = true;
+        $o = Kwc_Basic_Image_Component::getMediaOutput('1600', 'default', 'Kwc_Basic_Image_FixDimensionComponent');
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
         $this->assertEquals(100, $im->getImageWidth());
         $this->assertEquals(100, $im->getImageHeight());
-        $this->assertContains(Vps_Model_Abstract::getInstance('Vpc_Basic_Image_UploadsModel')->getUploadDir().'/1', $o['mtimeFiles']);
-        $this->assertContains(VPS_PATH.'/Vpc/Basic/Image/Component.php', $o['mtimeFiles']);
-        $this->assertContains(VPS_PATH.'/tests/Vpc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
-        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
+        $this->assertContains(Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_UploadsModel')->getUploadDir().'/1', $o['mtimeFiles']);
+        $this->assertContains(KWF_PATH.'/Kwc/Basic/Image/Component.php', $o['mtimeFiles']);
+        $this->assertContains(KWF_PATH.'/tests/Kwc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1600)->render();
 
-        $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">'.
-            '\s*<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
+        $this->assertRegExp('#^\s*<div class="kwcBasicImageFixDimensionComponent">'.
+            '\s*<img src="/media/Kwc_Basic_Image_FixDimensionComponent/1600/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
             '\s*</div>\s*$#ms', $html);
     }
 
@@ -70,14 +70,14 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $this->assertFalse($c->hasContent());
 
         $html = $c->render();
-        $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">\s*</div>\s*$#ms', $html);
+        $this->assertRegExp('#^\s*<div class="kwcBasicImageFixDimensionComponent">\s*</div>\s*$#ms', $html);
     }
 
     public function testDimensionSetByRow()
     {
         $c = $this->_root->getComponentById('1603');
 
-        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate' => null),
+        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate' => null),
         $c->getComponent()->getImageDimensions());
     }
 
@@ -88,10 +88,10 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
 
-        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate'=>null),
+        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate'=>null),
         $c->getComponent()->getImageDimensions());
 
-        $o = Vpc_Basic_Image_Component::getMediaOutput($c->componentId, 'default', $c->componentClass);
+        $o = Kwc_Basic_Image_Component::getMediaOutput($c->componentId, 'default', $c->componentClass);
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -112,7 +112,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $id = $url[2];
         $type = $url[3];
 
-        $o = Vpc_Basic_Image_Component::getMediaOutput($id, $type, $class);
+        $o = Kwc_Basic_Image_Component::getMediaOutput($id, $type, $class);
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -120,40 +120,40 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
 
-        Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
         $c = $this->_root->getComponentById('1605');
-        $row = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel')->getRow('1605');
-        $row->vps_upload_id = 2;
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel')->getRow('1605');
+        $row->kwf_upload_id = 2;
         $row->save();
-        Vps_Component_ModelObserver::getInstance()->process();
-        Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
-        $this->assertEquals(2, Vpc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
+        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        $this->assertEquals(2, Kwc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
     }
 
     public function testClearOutputCache()
     {
-        Vps_Registry::get('config')->debug->mediaCache = true;
-        Vps_Media::getOutputCache()->clean();
+        Kwf_Registry::get('config')->debug->mediaCache = true;
+        Kwf_Media::getOutputCache()->clean();
 
-        Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
+        Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
 
-        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
-        $this->assertEquals(1, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(1, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
-        $this->assertEquals(1, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(1, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        Vps_Media::getOutputCache()->clean();
-        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
-        $this->assertEquals(2, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+        Kwf_Media::getOutputCache()->clean();
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(2, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
         $c = $this->_root->getComponentById('1600');
-        $row = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel')->getRow('1600');
-        $row->vps_upload_id = 2;
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel')->getRow('1600');
+        $row->kwf_upload_id = 2;
         $row->save();
-        Vps_Component_ModelObserver::getInstance()->process();
-        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
-        $this->assertEquals(3, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(3, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
     }
 
     public function testBestFitWithZeroHeight()

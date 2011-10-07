@@ -1,4 +1,4 @@
-div.vps-insertchar-char {
+div.kwf-insertchar-char {
     float: left;
     background-color: white;
     width: 18px;
@@ -9,6 +9,6 @@ div.vps-insertchar-char {
     text-align: center;
     cursor: pointer;
 }
-div.vps-insertchar-char:hover {
+div.kwf-insertchar-char:hover {
     background-color: gray;
 }

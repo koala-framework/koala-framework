@@ -1,6 +1,6 @@
 <?php
 
-class Vps_Validate_Time extends Zend_Validate_Abstract
+class Kwf_Validate_Time extends Zend_Validate_Abstract
 {
     /**
      * Validation failure message key for when the value does not follow the YYYY-MM-DD format

@@ -1,5 +1,5 @@
 <?php
-class Vps_Iterator_Filter_FileExtension extends FilterIterator
+class Kwf_Iterator_Filter_FileExtension extends FilterIterator
 {
     protected $it;
     private $_extension;

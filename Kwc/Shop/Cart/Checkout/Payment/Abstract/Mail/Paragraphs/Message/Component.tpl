@@ -1,1 +1,1 @@
-<p><?=trlVps('Message');?></p>
+<p><?=trlKwf('Message');?></p>

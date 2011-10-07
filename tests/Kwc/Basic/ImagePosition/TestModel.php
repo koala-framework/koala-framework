@@ -1,9 +1,9 @@
 <?php
-class Vpc_Basic_ImagePosition_TestModel extends Vps_Component_FieldModel
+class Kwc_Basic_ImagePosition_TestModel extends Kwf_Component_FieldModel
 {
     public function __construct($config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
                 'columns' => array('component_id', 'data'),
                 'primaryKey' => 'component_id',
                 'data'=> array(

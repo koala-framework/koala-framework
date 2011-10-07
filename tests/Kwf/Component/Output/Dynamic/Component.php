@@ -1,6 +1,6 @@
 <?php
-class Vps_Component_Output_Dynamic_Component extends Vpc_Abstract
-    implements Vps_Component_Partial_Interface
+class Kwf_Component_Output_Dynamic_Component extends Kwc_Abstract
+    implements Kwf_Component_Partial_Interface
 {
     public static function getSettings()
     {
@@ -10,7 +10,7 @@ class Vps_Component_Output_Dynamic_Component extends Vpc_Abstract
 
     public function getPartialClass()
     {
-        return 'Vps_Component_Partial_Paging';
+        return 'Kwf_Component_Partial_Paging';
     }
 
     public function getPartialVars($partial, $nr, $info)

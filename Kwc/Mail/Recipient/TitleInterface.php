@@ -1,5 +1,5 @@
 <?php
-interface Vpc_Mail_Recipient_TitleInterface extends Vpc_Mail_Recipient_GenderInterface
+interface Kwc_Mail_Recipient_TitleInterface extends Kwc_Mail_Recipient_GenderInterface
 {
     public function getMailTitle();
 }

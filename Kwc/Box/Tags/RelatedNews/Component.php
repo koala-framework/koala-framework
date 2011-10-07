@@ -1,17 +1,17 @@
 <?php
-class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
+class Kwc_Box_Tags_RelatedNews_Component extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['view'] = 'Vpc_Box_Tags_RelatedNews_View_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwc_Box_Tags_RelatedNews_View_Component';
         $ret['useDirectorySelect'] = false;
         return $ret;
     }
 
     protected function _getItemDirectory()
     {
-        return 'Vpc_News_Directory_Component';
+        return 'Kwc_News_Directory_Component';
     }
 
     public function getSelect()
@@ -20,12 +20,12 @@ class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
         $tagIds = $this->_getTagIds();
         if (!$tagIds) return null;
 
-        $ret->join('vpc_components_to_tags', "vpc_components_to_tags.component_id = CONCAT('news_', vpc_news.id)", array());
-        $ret->where('vpc_components_to_tags.tag_id IN ('.implode(',', $tagIds).')');
-        $ret->group('vpc_news.id');
+        $ret->join('kwc_components_to_tags', "kwc_components_to_tags.component_id = CONCAT('news_', kwc_news.id)", array());
+        $ret->where('kwc_components_to_tags.tag_id IN ('.implode(',', $tagIds).')');
+        $ret->group('kwc_news.id');
 
         //eigene seite nicht anzeigen
-        $ret->where('vpc_components_to_tags.component_id != ?', $this->getData()->getPage()->dbId);
+        $ret->where('kwc_components_to_tags.component_id != ?', $this->getData()->getPage()->dbId);
 
         return $ret;
     }

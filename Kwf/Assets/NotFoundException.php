@@ -1,4 +1,4 @@
 <?php
-class Vps_Assets_NotFoundException extends Vps_Exception
+class Kwf_Assets_NotFoundException extends Kwf_Exception
 {
 }

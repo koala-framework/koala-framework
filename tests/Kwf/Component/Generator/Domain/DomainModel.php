@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Domain_DomainModel extends Vpc_Root_DomainRoot_Model
+class Kwf_Component_Generator_Domain_DomainModel extends Kwc_Root_DomainRoot_Model
 {
     public function __construct($config = array())
     {

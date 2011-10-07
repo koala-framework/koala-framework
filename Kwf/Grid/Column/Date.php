@@ -1,9 +1,9 @@
 <?php
-class Vps_Grid_Column_Date extends Vps_Grid_Column
+class Kwf_Grid_Column_Date extends Kwf_Grid_Column
 {
     public function __construct($dataIndex = null, $header = null, $width = 70)
     {
-        if (is_null($header)) $header = trlVps('Date');
+        if (is_null($header)) $header = trlKwf('Date');
         parent::__construct($dataIndex, $header, $width);
         $this->setType('date');
         $this->setRenderer('localizedDate');

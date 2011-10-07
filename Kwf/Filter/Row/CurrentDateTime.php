@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_CurrentDateTime extends Vps_Filter_Row_Abstract
+class Kwf_Filter_Row_CurrentDateTime extends Kwf_Filter_Row_Abstract
 {
     protected $_dateFormat;
 

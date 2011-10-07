@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_Sum implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Sum implements Kwf_Model_Select_Expr_Interface
 {
     private $_field;
     public function __construct($field)
@@ -18,6 +18,6 @@ class Vps_Model_Select_Expr_Sum implements Vps_Model_Select_Expr_Interface
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_INTEGER;
+        return Kwf_Model_Interface::TYPE_INTEGER;
     }
 }

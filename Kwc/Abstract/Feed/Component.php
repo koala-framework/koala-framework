@@ -1,10 +1,10 @@
 <?php
-abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
+abstract class Kwc_Abstract_Feed_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['contentSender'] = 'Vpc_Abstract_Feed_ContentSender';
+        $ret['contentSender'] = 'Kwc_Abstract_Feed_ContentSender';
         return $ret;
     }
 
@@ -17,7 +17,7 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
 
     public function getXml()
     {
-        $cache = Vps_Component_Cache::getInstance();
+        $cache = Kwf_Component_Cache::getInstance();
         if (!$xml = $cache->load($this->getData())) {
             $xml = $this->_getFeedXml();
             $cache->save($this->getData(), $xml);

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_LinkTag_Empty_Component extends Vpc_Abstract
+class Kwc_Basic_LinkTag_Empty_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('None');
+        $ret['componentName'] = trlKwf('None');
         return $ret;
     }
 

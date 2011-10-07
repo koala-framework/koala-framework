@@ -1,20 +1,20 @@
-Vps.onContentReady(function()
+Kwf.onContentReady(function()
 {
-    var els = Ext.query('.vpsRoundBoderBox');
+    var els = Ext.query('.kwfRoundBoderBox');
     if (els.length) {
-        throw 'Please correct the name "vpsRoundBoderBox" - there is a "R" missing in "Border"';
+        throw 'Please correct the name "kwfRoundBoderBox" - there is a "R" missing in "Border"';
     }
 
-    var els = Ext.query('.vpsRoundBorderBox');
+    var els = Ext.query('.kwfRoundBorderBox');
     Ext.each(els, function(el) {
         var extEl = Ext.get(el);
-        if (extEl.child('.vpsMiddleCenterContent')) return;
+        if (extEl.child('.kwfMiddleCenterContent')) return;
         var children = el.childNodes;
 
         // mit elementen direkt arbeiten, sonst gehen zB events die auf den
         // children drauf sind verloren
         var contentEl = document.createElement('div');
-        contentEl.className = 'vpsMiddleCenterContent';
+        contentEl.className = 'kwfMiddleCenterContent';
         while (children.length) {
             contentEl.appendChild(children[0]);
         };
@@ -23,46 +23,46 @@ Vps.onContentReady(function()
         // Knoten verschoben und "el" hat keinen inhalt mehr. deshalb können
         // wir direkt anfangen, ein element nach dem andren wieder einzufügen
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsTopLeft';
+        tmpEl.className = 'kwfRoundBorder kwfTopLeft';
         el.appendChild(tmpEl);
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsTopCenter';
+        tmpEl.className = 'kwfRoundBorder kwfTopCenter';
         el.appendChild(tmpEl);
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsTopRight';
+        tmpEl.className = 'kwfRoundBorder kwfTopRight';
         el.appendChild(tmpEl);
 
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsMiddleLeft';
+        tmpEl.className = 'kwfRoundBorder kwfMiddleLeft';
         el.appendChild(tmpEl);
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsMiddleCenter';
+        tmpEl.className = 'kwfMiddleCenter';
         tmpEl.appendChild(contentEl);
         el.appendChild(tmpEl);
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsMiddleRight';
+        tmpEl.className = 'kwfRoundBorder kwfMiddleRight';
         el.appendChild(tmpEl);
 
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsBottomLeft';
+        tmpEl.className = 'kwfRoundBorder kwfBottomLeft';
         el.appendChild(tmpEl);
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsBottomCenter';
+        tmpEl.className = 'kwfRoundBorder kwfBottomCenter';
         el.appendChild(tmpEl);
         var tmpEl = document.createElement('div');
-        tmpEl.className = 'vpsRoundBorder vpsBottomRight';
+        tmpEl.className = 'kwfRoundBorder kwfBottomRight';
         el.appendChild(tmpEl);
 
 
-        var wd = extEl.getWidth() - extEl.down('.vpsTopLeft').getWidth() - extEl.down('.vpsTopRight').getWidth();
-        extEl.down('.vpsTopCenter').setWidth(wd);
+        var wd = extEl.getWidth() - extEl.down('.kwfTopLeft').getWidth() - extEl.down('.kwfTopRight').getWidth();
+        extEl.down('.kwfTopCenter').setWidth(wd);
 
-        var wd = extEl.getWidth() - extEl.down('.vpsBottomLeft').getWidth() - extEl.down('.vpsBottomRight').getWidth();
-        extEl.down('.vpsBottomCenter').setWidth(wd);
+        var wd = extEl.getWidth() - extEl.down('.kwfBottomLeft').getWidth() - extEl.down('.kwfBottomRight').getWidth();
+        extEl.down('.kwfBottomCenter').setWidth(wd);
 
-        var ht = extEl.getHeight() - extEl.down('.vpsTopLeft').getHeight() - extEl.down('.vpsBottomLeft').getHeight();
-        extEl.down('.vpsMiddleLeft').setHeight(ht);
-        extEl.down('.vpsMiddleRight').setHeight(ht);
+        var ht = extEl.getHeight() - extEl.down('.kwfTopLeft').getHeight() - extEl.down('.kwfBottomLeft').getHeight();
+        extEl.down('.kwfMiddleLeft').setHeight(ht);
+        extEl.down('.kwfMiddleRight').setHeight(ht);
 
     });
 });

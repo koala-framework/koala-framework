@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_LinkTag_CommunityVideo_Component extends Vpc_Basic_LinkTag_Lightbox_Component
+class Kwc_Basic_LinkTag_CommunityVideo_Component extends Kwc_Basic_LinkTag_Lightbox_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Link.to CommunityVideo');
-        $ret['generators']['video']['component'] = 'Vpc_Advanced_CommunityVideo_Component';
+        $ret['componentName'] = trlKwf('Link.to CommunityVideo');
+        $ret['generators']['video']['component'] = 'Kwc_Advanced_CommunityVideo_Component';
         return $ret;
     }
 

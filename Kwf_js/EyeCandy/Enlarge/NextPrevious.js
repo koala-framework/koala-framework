@@ -1,5 +1,5 @@
-Vps.onContentReady(function() {
-    var galleries = Ext.query('.vpsEnlargeNextPrevious');
+Kwf.onContentReady(function() {
+    var galleries = Ext.query('.kwfEnlargeNextPrevious');
     Ext.each(galleries, function(gallery) {
         var galleryEls = [ ];
 

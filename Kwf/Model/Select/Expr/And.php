@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_And extends Vps_Model_Select_Expr_Unary_Abstract
+class Kwf_Model_Select_Expr_And extends Kwf_Model_Select_Expr_Unary_Abstract
 {
 
 }

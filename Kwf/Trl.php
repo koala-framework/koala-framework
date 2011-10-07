@@ -3,40 +3,40 @@ function hlp($string) {
     return Zend_Registry::get('hlp')->hlp($string);
 }
 
-function hlpVps($string) {
-    return Zend_Registry::get('hlp')->hlpVps($string);
+function hlpKwf($string) {
+    return Zend_Registry::get('hlp')->hlpKwf($string);
 }
 
 function trl($string, $text = array()) {
-    return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_WEB);
 }
 
 function trlc($context, $string, $text = array()) {
-    return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_WEB);
 }
 
 function trlp($single, $plural, $text =  array()) {
-    return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_WEB);
 }
 
 function trlcp($context, $single, $plural, $text = array()) {
-    return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_WEB);
 }
 
-function trlVps($string, $text = array()) {
-    return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_VPS);
+function trlKwf($string, $text = array()) {
+    return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_KWF);
 }
 
-function trlcVps($context, $string, $text = array()) {
-    return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
+function trlcKwf($context, $string, $text = array()) {
+    return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_KWF);
 }
 
-function trlpVps($single, $plural, $text =  array()) {
-    return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
+function trlpKwf($single, $plural, $text =  array()) {
+    return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_KWF);
 }
 
-function trlcpVps($context, $single, $plural, $text = array()) {
-    return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
+function trlcpKwf($context, $single, $plural, $text = array()) {
+    return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_KWF);
 }
 
 // trl functions for e.g. placeholders
@@ -56,34 +56,34 @@ function trlcpStatic($context, $single, $plural, $text = array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
 }
 
-function trlVpsStatic($string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlVps', 'args' => array($string, $text))).'-trlserialized*';
+function trlKwfStatic($string, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlKwf', 'args' => array($string, $text))).'-trlserialized*';
 }
 
-function trlcVpsStatic($context, $string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcVps', 'args' => array($context, $string, $text))).'-trlserialized*';
+function trlcKwfStatic($context, $string, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlcKwf', 'args' => array($context, $string, $text))).'-trlserialized*';
 }
 
-function trlpVpsStatic($single, $plural, $text =  array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlpVps', 'args' => array($single, $plural, $text))).'-trlserialized*';
+function trlpKwfStatic($single, $plural, $text =  array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlpKwf', 'args' => array($single, $plural, $text))).'-trlserialized*';
 }
 
-function trlcpVpsStatic($context, $single, $plural, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcpVps', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
+function trlcpKwfStatic($context, $single, $plural, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlcpKwf', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
 }
 
 
-class Vps_Trl
+class Kwf_Trl
 {
     private $_cache = array();
 
     private $_modelWeb;
-    private $_modelVps;
+    private $_modelKwf;
     private $_languages; //cache
     private $_useUserLanguage = true;
     private $_webCodeLanguage;
 
-    const SOURCE_VPS = 'vps';
+    const SOURCE_KWF = 'kwf';
     const SOURCE_WEB = 'web';
     const TRLCP = 'trlcp';
     const TRLP = 'trlp';
@@ -103,7 +103,7 @@ class Vps_Trl
     private static $_instance = null;
 
     /**
-     * @return Vps_Trl
+     * @return Kwf_Trl
      */
     public static function getInstance()
     {
@@ -115,8 +115,8 @@ class Vps_Trl
 
     public function __construct($config = array())
     {
-        if (isset($config['modelVps'])) $this->_modelVps = $config['modelVps'];
-        if (isset($config['modelWeb'])) $this->_modelVps = $config['modelWeb'];
+        if (isset($config['modelKwf'])) $this->_modelKwf = $config['modelKwf'];
+        if (isset($config['modelWeb'])) $this->_modelKwf = $config['modelWeb'];
     }
 
     public function setUseUserLanguage($useUserLanguage)
@@ -127,8 +127,8 @@ class Vps_Trl
     public function setModel($model, $type)
     {
         $this->_cache = array();
-        if ($type == self::SOURCE_VPS) {
-            $this->_modelVps = $model;
+        if ($type == self::SOURCE_KWF) {
+            $this->_modelKwf = $model;
         } else {
             $this->_modelWeb = $model;
         }
@@ -138,7 +138,7 @@ class Vps_Trl
     {
 
         if (!isset($this->_languages)) {
-            $langauges = Vps_Config::getValueArray('languages');
+            $langauges = Kwf_Config::getValueArray('languages');
             if ($langauges) {
                 $this->_languages = array_values($langauges);
             } else {
@@ -165,7 +165,7 @@ class Vps_Trl
         }
 
         //TODO: das benötigt IMMER eine datenbankverbindung, sollte in session gespeichert werden
-        $userModel = Vps_Registry::get('userModel');
+        $userModel = Kwf_Registry::get('userModel');
         if (!$userModel || !$userModel->getAuthedUser() ||
             !isset($userModel->getAuthedUser()->language) ||
             !$userModel->getAuthedUser()->language ||
@@ -180,7 +180,7 @@ class Vps_Trl
     public function getWebCodeLanguage()
     {
         if (!$this->_webCodeLanguage) {
-            $this->_webCodeLanguage = Vps_Config::getValue('webCodeLanguage');
+            $this->_webCodeLanguage = Kwf_Config::getValue('webCodeLanguage');
         }
         return $this->_webCodeLanguage;
     }
@@ -193,11 +193,11 @@ class Vps_Trl
     private function _getModel($type)
     {
         if ($type == self::SOURCE_WEB) {
-            if (!isset($this->_modelWeb)) return Vps_Model_Abstract::getInstance('Vps_Trl_Model_Web');
+            if (!isset($this->_modelWeb)) return Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Web');
             return $this->_modelWeb;
         } else {
-            if (!isset($this->_modelVps)) return Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps');
-            return $this->_modelVps;
+            if (!isset($this->_modelKwf)) return Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Kwf');
+            return $this->_modelKwf;
         }
     }
 
@@ -208,11 +208,11 @@ class Vps_Trl
         if (preg_match_all('/\*trlserialized-(.+?)-trlserialized\*/m', $trlStaticData, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $k => $match) {
                 $trlStaticData = unserialize($match[1]);
-                if (strtolower(substr($trlStaticData['type'], -3)) == 'vps') {
+                if (strtolower(substr($trlStaticData['type'], -3)) == 'kwf') {
                     $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
-                    $source = Vps_Trl::SOURCE_VPS;
+                    $source = Kwf_Trl::SOURCE_KWF;
                 } else {
-                    $source = Vps_Trl::SOURCE_WEB;
+                    $source = Kwf_Trl::SOURCE_WEB;
                 }
 
                 $args = $trlStaticData['args'];
@@ -279,10 +279,10 @@ class Vps_Trl
         }
 
         if ($plural) $target = $target.'_plural';
-        $cache = Vps_Cache::factory('Core', 'File',
+        $cache = Kwf_Cache::factory('Core', 'File',
             array(
                 'automatic_serialization'=>true,
-                'caching' => !isset($this->_modelVps) && !isset($this->_modelWeb)
+                'caching' => !isset($this->_modelKwf) && !isset($this->_modelWeb)
             ),
             array(
                 'cache_dir' => 'cache/model'
@@ -293,7 +293,7 @@ class Vps_Trl
         if (($c = $cache->load($cacheId)) === false) {
             $c = array();
             $m = $this->_getModel($source);
-            if ($m instanceof Vps_Model_Xml) {
+            if ($m instanceof Kwf_Model_Xml) {
                 $rows = array();
                 if (file_exists($m->getFilePath())) {
                     $xml = simplexml_load_file($m->getFilePath());
@@ -319,7 +319,7 @@ class Vps_Trl
         else $target = $this->getTargetLanguage();
 
         $cacheId = 'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -332,7 +332,7 @@ class Vps_Trl
         } else {
             $ret = $needle;
         }
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -343,7 +343,7 @@ class Vps_Trl
         else $target = $this->getTargetLanguage();
 
         $cacheId = 'trlp-'.$source.'-'.$target.'-'.$plural.'-'.$context;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -356,7 +356,7 @@ class Vps_Trl
         } else {
             $ret = $plural;
         }
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -419,7 +419,7 @@ class Vps_Trl
         $linenumber = 0;
         $parts = array();
         while (true) {
-            $pattern = "#(.*?)((trlc?p?(Vps)?(Static)?) *\(['|\"].*)#s";
+            $pattern = "#(.*?)((trlc?p?(Kwf)?(Static)?) *\(['|\"].*)#s";
             preg_match($pattern, $content, $m);
             if (!$m) break;
             $text = $m[2];
@@ -591,8 +591,8 @@ class Vps_Trl
     }
 
     private function _getSource($expression) {
-        if (strpos($expression, 'Vps')) {
-            return 'vps';
+        if (strpos($expression, 'Kwf')) {
+            return 'kwf';
         } else {
             return 'web';
         }

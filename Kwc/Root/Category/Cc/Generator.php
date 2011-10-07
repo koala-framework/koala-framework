@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_Cc_Generator extends Vpc_Chained_Cc_Generator
+class Kwc_Root_Category_Cc_Generator extends Kwc_Chained_Cc_Generator
 {
     public function getPagesControllerConfig($component)
     {
@@ -11,7 +11,7 @@ class Vpc_Root_Category_Cc_Generator extends Vpc_Chained_Cc_Generator
     protected function _getDataClass($config, $id)
     {
         if (isset($config['isHome']) && $config['isHome']) {
-            return 'Vps_Component_Data_Home';
+            return 'Kwf_Component_Data_Home';
         } else {
             return parent::_getDataClass($config, $id);
         }
@@ -24,7 +24,7 @@ class Vpc_Root_Category_Cc_Generator extends Vpc_Chained_Cc_Generator
 
         //im pages generator fangen die ids immer von vorne an
         $id = $this->_getIdFromRow($row);
-        if (!is_numeric($id)) throw new Vps_Exception("Id must be numeric");
+        if (!is_numeric($id)) throw new Kwf_Exception("Id must be numeric");
         $idParent = $parentData;
         while ($idParent->componentClass != $this->_class) {
             $idParent = $idParent->parent;
@@ -35,7 +35,7 @@ class Vpc_Root_Category_Cc_Generator extends Vpc_Chained_Cc_Generator
 
         //parent geradebiegen
         if (!$parentData || ($parentData->componentClass == $this->_class && is_numeric($ret['chained']->parent->componentId))) {
-            $c = new Vps_Component_Select();
+            $c = new Kwf_Component_Select();
             $c->ignoreVisible(true);
             $c->whereId('_'.$ret['chained']->parent->componentId);
             $parentData = $parentData->getChildComponent($c);

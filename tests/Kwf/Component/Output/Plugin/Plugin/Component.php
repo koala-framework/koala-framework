@@ -1,12 +1,12 @@
 <?php
-class Vps_Component_Output_Plugin_Plugin_Component extends Vps_Component_Plugin_View_Abstract
+class Kwf_Component_Output_Plugin_Plugin_Component extends Kwf_Component_Plugin_View_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['pluginChild'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vps_Component_Output_Plugin_Plugin_Child_Component'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwf_Component_Output_Plugin_Plugin_Child_Component'
         );
         return $ret;
     }
@@ -18,10 +18,10 @@ class Vps_Component_Output_Plugin_Plugin_Component extends Vps_Component_Plugin_
         if ($output != 'root plugin(plugin(c1_child c1_childchild))') {
             return 'not ok from plugin. output was: ' . $output;
         } else {
-            $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
-            $renderer = new Vps_Component_Renderer();
-            $view = new Vps_Component_View($renderer);
-            $view->child = Vps_Component_Data_Root::getInstance()
+            $template = Kwc_Admin::getComponentFile($this, 'Component', 'tpl');
+            $renderer = new Kwf_Component_Renderer();
+            $view = new Kwf_Component_View($renderer);
+            $view->child = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($this->_componentId)
                 ->getChildComponent('-pluginChild');
             return $renderer->render($view->render($template));
@@ -30,7 +30,7 @@ class Vps_Component_Output_Plugin_Plugin_Component extends Vps_Component_Plugin_
 
     public function getExecutionPoint()
     {
-        return Vps_Component_Plugin_Interface_View::EXECUTE_AFTER;
+        return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
     }
 }
 ?>

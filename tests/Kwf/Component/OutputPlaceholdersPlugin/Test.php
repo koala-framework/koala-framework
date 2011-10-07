@@ -2,11 +2,11 @@
 /**
  * @group Component_OutputPlaceholder
  */
-class Vps_Component_OutputPlaceholdersPlugin_Test extends Vpc_TestAbstract
+class Kwf_Component_OutputPlaceholdersPlugin_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_OutputPlaceholdersPlugin_Root_Component');
+        parent::setUp('Kwf_Component_OutputPlaceholdersPlugin_Root_Component');
     }
 
     public function testCached()

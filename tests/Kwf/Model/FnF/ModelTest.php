@@ -3,11 +3,11 @@
  * @group Model
  * @group Model_FnF
  */
-class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
+class Kwf_Model_FnF_ModelTest extends Kwf_Test_TestCase
 {
     public function testRowUnset()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id' => 4, 'names' => 'foo')
             ),
@@ -20,7 +20,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testData()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -34,7 +34,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testDeleteRows()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -49,7 +49,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -80,7 +80,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testWhereId()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -103,7 +103,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testLimit()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -121,14 +121,14 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testOrderRand()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $data = array();
         for ($i=0;$i<100;$i++) {
             $data[] = array('id'=>$i+1);
         }
         $model->setData($data);
         $select = $model->select()
-            ->order(Vps_Model_Select::ORDER_RAND);
+            ->order(Kwf_Model_Select::ORDER_RAND);
         $ids1 = array();
         foreach ($model->fetchAll($select) as $row) {
             $ids1[] = $row->id;
@@ -142,7 +142,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testSave()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'foo'=>'')
         )));
         $row = $model->getRow(1);
@@ -157,8 +157,8 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testDoubleCreateRow()
     {
-        $this->setExpectedException('Vps_Exception');
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $this->setExpectedException('Kwf_Exception');
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=> 1, 'foo'=>'')
         )));
         $row = $model->createRow(array('foo' => 'hallo'));
@@ -170,7 +170,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testDelete()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'foo'=>'')
         )));
         $row = $model->getRow(1);
@@ -181,7 +181,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testInsertAutoId()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'foo'=>'')
         )));
         $row = $model->createRow();
@@ -195,7 +195,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
     }
     public function testChangeId()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'foo'=>'')
         )));
         $row = $model->getRow(1);
@@ -208,7 +208,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
     }
     public function testInsertManualId()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'foo'=>'')
         )));
         $row = $model->createRow();
@@ -224,8 +224,8 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testIsEqual()
     {
-        $fnf1 = new Vps_Model_FnF();
-        $fnf2 = new Vps_Model_FnF();
+        $fnf1 = new Kwf_Model_FnF();
+        $fnf2 = new Kwf_Model_FnF();
         $this->assertTrue($fnf1->isEqual($fnf1));
         $this->assertFalse($fnf1->isEqual($fnf2));
         $this->assertFalse($fnf2->isEqual($fnf1));
@@ -233,7 +233,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObject()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'foo'=>'')
         )));
         $r1 = $model->getRow(1);
@@ -248,7 +248,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
     }
     public function testUniqueRowObjectCreateRow()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'name' => 'foo'),
         ));
@@ -263,7 +263,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObjectDelete()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'name' => 'foo1'),
             array('id' => 2, 'name' => 'foo2'),
@@ -279,7 +279,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObjectDeleteCreateRow()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'name' => 'foo1'),
             array('id' => 2, 'name' => 'foo2'),
@@ -301,7 +301,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testDefaultValues()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'default' => array('foo'=>'defaultFoo')
         ));
         $row = $model->createRow();
@@ -310,7 +310,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testNonNumericIds()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id'=>'1'),
                 array('id'=>'3-foo'),
@@ -337,7 +337,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testImportReplace()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id'=>'1', 'xy' => 'blub'),
                 array('id'=>'3-foo', 'xy' => 'blab'),
@@ -346,14 +346,14 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
             'uniqueColumns' => array('id')
         ));
         $data = array(array('id'=>'1', 'xy'=>'blub'), array('id'=>'2'), array('id'=>'4', 'xy'=>'NEW'));
-        $model->import(Vps_Model_Interface::FORMAT_ARRAY, $data, array('replace'=>true));
+        $model->import(Kwf_Model_Interface::FORMAT_ARRAY, $data, array('replace'=>true));
         $this->assertEquals(4, count($model->getRows()));
         $this->assertEquals('NEW', $model->getRow(4)->xy);
     }
 
     public function testDuplicateRow()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -383,7 +383,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testDontSaveNotDirtyRow()
     {
-        $model = $this->getMock('Vps_Model_FnF', array('update'));
+        $model = $this->getMock('Kwf_Model_FnF', array('update'));
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -398,7 +398,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testSaveNewRowNotDirty()
     {
-        $model = $this->getMock('Vps_Model_FnF', array('insert'));
+        $model = $this->getMock('Kwf_Model_FnF', array('insert'));
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -413,7 +413,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testSaveDirtyRow()
     {
-        $model = $this->getMock('Vps_Model_FnF', array('update', 'insert'));
+        $model = $this->getMock('Kwf_Model_FnF', array('update', 'insert'));
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -436,7 +436,7 @@ class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 
     public function testDirtyColumns()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),

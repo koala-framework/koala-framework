@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
+class Kwc_Abstract_Image_Pdf extends Kwc_Abstract_Pdf
 {
     private $_size;
 
@@ -12,12 +12,12 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
             $size = $this->getSize();
 
             $imageSize = array(
-                'scale' => Vps_Media_Image::SCALE_BESTFIT,
+                'scale' => Kwf_Media_Image::SCALE_BESTFIT,
                 'width' => $this->_calculateMm($size['width']),
                 'height' => $this->_calculateMm($size['height'])
             );
-            $content = Vps_Media_Image::scale($source, $imageSize);
-            $filter = new Vps_Filter_Ascii();
+            $content = Kwf_Media_Image::scale($source, $imageSize);
+            $filter = new Kwf_Filter_Ascii();
             $tempFilename = tempnam('application/temp', 'pdfimage');
             file_put_contents($tempFilename, $content);
             $data = getimagesize($tempFilename);
@@ -63,7 +63,7 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
             $dimension = $this->_component->getImageDimensions();
             if (!$dimension) return null;
 
-            $maxWidth = Vpc_Abstract::getSetting(get_class($this->_component), 'pdfMaxWidth');
+            $maxWidth = Kwc_Abstract::getSetting(get_class($this->_component), 'pdfMaxWidth');
             $area = $this->getMaxTextWidth();
             if ($maxWidth > $area || $maxWidth == 0) {
                 $height = $dimension["height"] / $dimension["width"] * $area;
@@ -79,13 +79,13 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
 
     private function _calculateMm($px)
     {
-        $dpi = Vpc_Abstract::getSetting(get_class($this->_component), 'pdfMaxDpi');
+        $dpi = Kwc_Abstract::getSetting(get_class($this->_component), 'pdfMaxDpi');
         return $px * $dpi / 25.4;
     }
 
     private function _calculatePx($mm)
     {
-        $dpi = Vpc_Abstract::getSetting(get_class($this->_component), 'pdfMaxDpi');
+        $dpi = Kwc_Abstract::getSetting(get_class($this->_component), 'pdfMaxDpi');
         return 25.4 * $mm / $dpi;
     }
 }

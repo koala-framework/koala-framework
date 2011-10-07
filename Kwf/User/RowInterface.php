@@ -1,5 +1,5 @@
 <?php
-interface Vps_User_RowInterface
+interface Kwf_User_RowInterface
 {
     public function encodePassword($password);
 }

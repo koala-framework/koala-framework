@@ -1,8 +1,8 @@
 <?php
-class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Renderer
+class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Renderer
 {
     /**
-     * @param Vps_Component_Data target page
+     * @param Kwf_Component_Data target page
      * @param string custom text, if empty component name will be used
      * @param config array: cssClass, get, anchor, skipComponentLinkModifiers
      */
@@ -10,7 +10,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
     {
         if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
 
-        if ($target instanceof Vps_Component_Data) {
+        if ($target instanceof Kwf_Component_Data) {
             $config = $this->_getConfig($target, $text, $config);
             return $this->_getRenderPlaceholder($target->componentId, $config);
         } else {
@@ -33,7 +33,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         if (!$targetPage) return '';
 
         $componentLinkModifiers = array();
-        if (Vpc_Abstract::getFlag($targetPage->componentClass, 'hasComponentLinkModifiers')) {
+        if (Kwc_Abstract::getFlag($targetPage->componentClass, 'hasComponentLinkModifiers')) {
             $componentLinkModifiers = $targetPage->getComponent()->getComponentLinkModifiers();
         }
         return serialize(array($targetPage->url, $targetPage->rel, $targetPage->name, $componentLinkModifiers));
@@ -69,7 +69,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
 
     private function _getHelper()
     {
-        $helper = new Vps_View_Helper_ComponentLink();
+        $helper = new Kwf_View_Helper_ComponentLink();
         $helper->setRenderer($this->_getRenderer());
         return $helper;
     }

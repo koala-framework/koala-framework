@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_Menu_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
+abstract class Kwc_Menu_Abstract_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public function getTemplateVars()
     {
@@ -11,18 +11,18 @@ abstract class Vpc_Menu_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwc_Abstract::getSetting($class, 'generators') as $key => $generator) {
                 if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
-                $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                $generator = current(Kwf_Component_Generator_Abstract::getInstances(
                     $class, array('generator' => $key))
                 );
                 if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
+                $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
 
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Model');
 
         return $ret;
     }

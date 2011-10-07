@@ -1,22 +1,22 @@
 <?php
 /**
- * @group Vps_Form_DateField
+ * @group Kwf_Form_DateField
  */
-class Vps_Form_DateField_Test extends Vps_Test_TestCase
+class Kwf_Form_DateField_Test extends Kwf_Test_TestCase
 {
     public function testDate()
     {
-        $m1 = new Vps_Model_FnF();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Model_FnF();
+        $form = new Kwf_Form();
         $form->setModel($m1);
-        $field1 = $form->add(new Vps_Form_Field_DateField('test1'));
-        $field2 = $form->add(new Vps_Form_Field_DateField('test2'));
-        $field3 = $form->add(new Vps_Form_Field_DateField('test3'));
+        $field1 = $form->add(new Kwf_Form_Field_DateField('test1'));
+        $field2 = $form->add(new Kwf_Form_Field_DateField('test2'));
+        $field3 = $form->add(new Kwf_Form_Field_DateField('test3'));
 
         $post = array(
             $field1->getFieldName() => '"2009-12-01T00:00:00"', //format von ext
-            $field2->getFieldName() => trlVps('yyyy-mm-dd'), //frontend standard wert (=null)
-            $field3->getFieldName() => date(trlVps('Y-m-d'), strtotime('2010-01-10')), //frontend wert
+            $field2->getFieldName() => trlKwf('yyyy-mm-dd'), //frontend standard wert (=null)
+            $field3->getFieldName() => date(trlKwf('Y-m-d'), strtotime('2010-01-10')), //frontend wert
         );
         $post = $form->processInput($form->getRow(), $post);
         $form->validate($form->getRow(), $post);

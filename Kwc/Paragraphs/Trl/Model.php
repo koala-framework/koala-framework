@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs_Trl_Model extends Vps_Model_Db_Proxy
+class Kwc_Paragraphs_Trl_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_paragraphs_trl';
+    protected $_table = 'kwc_paragraphs_trl';
 }

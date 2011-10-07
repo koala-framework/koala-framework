@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Detail_Signature_Component extends Vpc_Abstract
+class Kwc_Posts_Detail_Signature_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -11,9 +11,9 @@ class Vpc_Posts_Detail_Signature_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $userDir = Vps_Component_Data_Root::getInstance()
+        $userDir = Kwf_Component_Data_Root::getInstance()
             ->getComponentByClass(
-                'Vpc_User_Directory_Component',
+                'Kwc_User_Directory_Component',
                 array('subroot' => $this->getData())
             );
         if ($userDir) {

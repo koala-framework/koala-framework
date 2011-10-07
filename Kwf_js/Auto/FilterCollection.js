@@ -1,21 +1,21 @@
-Ext.namespace('Vps.Auto');
-Vps.Auto.FilterCollection = function(filters, scope)
+Ext.namespace('Kwf.Auto');
+Kwf.Auto.FilterCollection = function(filters, scope)
 {
-    Vps.Auto.FilterCollection.superclass.constructor.call(this);
+    Kwf.Auto.FilterCollection.superclass.constructor.call(this);
 
     for (var i = 0; i < filters.length; i++) {
         var f = filters[i];
-        if (!Vps.Auto.Filter[f.type]) {
+        if (!Kwf.Auto.Filter[f.type]) {
             throw "Unknown filter.type: "+f.type;
         }
-        var type = Vps.Auto.Filter[f.type];
+        var type = Kwf.Auto.Filter[f.type];
         delete f.type;
         var filterField = new type(f);
         this.add(filterField);
     }
 };
 
-Ext.extend(Vps.Auto.FilterCollection, Ext.util.MixedCollection, {
+Ext.extend(Kwf.Auto.FilterCollection, Ext.util.MixedCollection, {
     applyToTbar : function(tbar, limit, offset)
     {
         var limitCount = 0;
@@ -35,7 +35,7 @@ Ext.extend(Vps.Auto.FilterCollection, Ext.util.MixedCollection, {
             } else if(first && tbar.length > 0) {
                 tbar.add('-');
             }
-            if (first && !f.label) f.label = trlVps('Filter')+':';
+            if (first && !f.label) f.label = trlKwf('Filter')+':';
             if (f.label) {
                 if (!first) {
                     f.label = ' '+f.label;

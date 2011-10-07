@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_Panel extends Vps_Form_Container_Abstract
+class Kwf_Form_Field_Panel extends Kwf_Form_Container_Abstract
 {
     public function __construct($field_name = null, $field_label = null)
     {

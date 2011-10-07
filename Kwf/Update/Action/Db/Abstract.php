@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Update_Action_Db_Abstract extends Vps_Update_Action_Abstract
+abstract class Kwf_Update_Action_Db_Abstract extends Kwf_Update_Action_Abstract
 {
     public $model;
     public $table;
@@ -8,10 +8,10 @@ abstract class Vps_Update_Action_Db_Abstract extends Vps_Update_Action_Abstract
     {
         parent::checkSettings();
         if (!isset($this->model)) {
-            $this->model = new Vps_Db_TablesModel;
+            $this->model = new Kwf_Db_TablesModel;
         }
         if (!$this->table) {
-            throw new Vps_ClientException("Required parameter: table");
+            throw new Kwf_ClientException("Required parameter: table");
         }
     }
 }

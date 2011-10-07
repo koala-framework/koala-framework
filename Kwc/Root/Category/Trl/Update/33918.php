@@ -1,12 +1,12 @@
 <?php
-class Vpc_Root_Category_Trl_Update_33918 extends Vps_Update
+class Kwc_Root_Category_Trl_Update_33918 extends Kwf_Update
 {
     public function update()
     {
         
         $db = Zend_Registry::get('db');
         $pages = array();
-        foreach ($db->query("SELECT id, parent_id FROM vps_pages")->fetchAll() as $p) {
+        foreach ($db->query("SELECT id, parent_id FROM kwf_pages")->fetchAll() as $p) {
             $pages[$p['id']] = $p['parent_id'];
         }
 
@@ -21,7 +21,7 @@ class Vpc_Root_Category_Trl_Update_33918 extends Vps_Update
                 if ($field['Field'] == 'component_id') $hasComponentId = true;
             }
             if (!$primary) {
-                throw new Vps_Exception('primary key not found');
+                throw new Kwf_Exception('primary key not found');
             }
             if ($hasComponentId) {
                 $tables[] = array(
@@ -30,7 +30,7 @@ class Vpc_Root_Category_Trl_Update_33918 extends Vps_Update
                     'primary' => $primary
                 );
             }
-            if ($table == 'vpc_basic_link_intern') {
+            if ($table == 'kwc_basic_link_intern') {
                 $tables[] = array(
                     'table' => $table,
                     'field' => 'target',
@@ -65,7 +65,7 @@ class Vpc_Root_Category_Trl_Update_33918 extends Vps_Update
             }
         }
 
-        foreach ($db->query("SELECT component_id, content FROM vpc_basic_text")->fetchAll() as $row) {
+        foreach ($db->query("SELECT component_id, content FROM kwc_basic_text")->fetchAll() as $row) {
             $changed = false;
             preg_match_all('#href="(root-[^-_]+-[^-_]+)_([\d_]*_\d+)#', $row['content'], $m);
             foreach (array_keys($m[0]) as $k) {
@@ -81,7 +81,7 @@ class Vpc_Root_Category_Trl_Update_33918 extends Vps_Update
                 }
             }
             if ($changed) {
-                $sql = "UPDATE vpc_basic_text SET content=".$db->quote($row['content'])." WHERE component_id='$row[component_id]'";
+                $sql = "UPDATE kwc_basic_text SET content=".$db->quote($row['content'])." WHERE component_id='$row[component_id]'";
                 echo "$sql\n";
                 $db->query($sql);
             }

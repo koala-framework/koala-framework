@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_View_Helper_ComponentLinkAjax extends Vps_Component_View_Helper_ComponentLink
+class Kwf_Component_View_Helper_ComponentLinkAjax extends Kwf_Component_View_Helper_ComponentLink
 {
-    public function componentLinkAjax(Vps_Component_Data $target, $switchConfig = array(), $text = null, $cssClass = null, $get = array(), $anchor = null)
+    public function componentLinkAjax(Kwf_Component_Data $target, $switchConfig = array(), $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
         $config = $this->_getConfig($target, $text, $cssClass, $get, $anchor);
         $switchConfig['sel'] = $target->componentClass . '-ComponentAjax';
@@ -11,7 +11,7 @@ class Vps_Component_View_Helper_ComponentLinkAjax extends Vps_Component_View_Hel
 
     public function renderCached($cachedContent, $componentId, $config)
     {
-        $ret = '<div class="' . $config['switch']['sel'] . ' vpsComponentAjax">';
+        $ret = '<div class="' . $config['switch']['sel'] . ' kwfComponentAjax">';
         $settings = str_replace("\"", "'", Zend_Json::encode($config['switch']));
         $ret .= '<input type="hidden" class="settings" value="' . $settings . '" />';
         $config['cssClass'][] = $config['switch']['sel'];

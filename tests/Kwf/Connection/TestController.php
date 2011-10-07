@@ -1,11 +1,11 @@
 <?php
-class Vps_Connection_TestController extends Vps_Controller_Action
+class Kwf_Connection_TestController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
-        $this->view->ext('Vps.Test.ConnectionsError', array(
-            'assetsType' => 'Vps_Connection:Test'
-        ), 'Vps.Test.Viewport');
+        $this->view->ext('Kwf.Test.ConnectionsError', array(
+            'assetsType' => 'Kwf_Connection:Test'
+        ), 'Kwf.Test.Viewport');
         $connections_counts = new Zend_Session_Namespace('test_connection_count');
         $connections_counts->timeouts = 0;
         $connections_counts->exceptions = 0;
@@ -47,6 +47,6 @@ class Vps_Connection_TestController extends Vps_Controller_Action
     public function jsonRealExceptionAction()
     {
         Zend_Registry::get('config')->debug->error->log = false;
-        throw new Vps_Exception("Exception");
+        throw new Kwf_Exception("Exception");
     }
 }

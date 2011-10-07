@@ -1,5 +1,5 @@
 <?php
-class Vpc_Events_Directory_Trl_Model extends Vps_Model_Db_Proxy
+class Kwc_Events_Directory_Trl_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_events_trl';
+    protected $_table = 'kwc_events_trl';
 }

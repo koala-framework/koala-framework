@@ -61,7 +61,7 @@
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['vcardLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->componentLink($this->vcard, '<img src="/assets/vps/images/fileicons/vcard.png" height="11" width="16" /> vCard Download'); ?>
+                <?= $this->componentLink($this->vcard, '<img src="/assets/kwf/images/fileicons/vcard.png" height="11" width="16" /> vCard Download'); ?>
             </li>
         <? } ?>
 

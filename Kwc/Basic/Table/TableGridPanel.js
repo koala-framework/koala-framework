@@ -1,9 +1,9 @@
-Vpc.TableGridPanel = Ext.extend(Vps.Auto.GridPanel,
+Kwc.TableGridPanel = Ext.extend(Kwf.Auto.GridPanel,
 {
     initComponent : function()
     {
         this.gridConfig = { selModel: new Ext.grid.CheckboxSelectionModel() };
-        Vpc.TableGridPanel.superclass.initComponent.call(this);
+        Kwc.TableGridPanel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('vpc.tablegridpanel', Vpc.TableGridPanel);
+Ext.reg('kwc.tablegridpanel', Kwc.TableGridPanel);

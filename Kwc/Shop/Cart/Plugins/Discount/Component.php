@@ -1,15 +1,15 @@
 <?php
-class Vpc_Shop_Cart_Plugins_Discount_Component extends Vps_Component_Plugin_Abstract
-    implements Vpc_Shop_Cart_Plugins_Interface
+class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwf_Component_Plugin_Abstract
+    implements Kwc_Shop_Cart_Plugins_Interface
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Discount');
+        $ret['componentName'] = trlKwf('Discount');
         return $ret;
     }
 
-    public function getAdditionalSumRows(Vpc_Shop_Cart_Order $order, $total)
+    public function getAdditionalSumRows(Kwc_Shop_Cart_Order $order, $total)
     {
         if (!$order->discount_amount) return array();
 
@@ -22,15 +22,15 @@ class Vpc_Shop_Cart_Plugins_Discount_Component extends Vps_Component_Plugin_Abst
         ));
     }
 
-    public function alterBackendOrderForm(Vps_Form $form)
+    public function alterBackendOrderForm(Kwf_Form $form)
     {
-        $fs = $form->add(new Vps_Form_Container_FieldSet(trlVps('Discount')));
-        $fs->add(new Vps_Form_Field_TextField('discount_text', trlVps('Text')));
-        $fs->add(new Vps_Form_Field_NumberField('discount_amount', trlcVps('Amount of Money', 'Amount')))
+        $fs = $form->add(new Kwf_Form_Container_FieldSet(trlKwf('Discount')));
+        $fs->add(new Kwf_Form_Field_TextField('discount_text', trlKwf('Text')));
+        $fs->add(new Kwf_Form_Field_NumberField('discount_amount', trlcKwf('Amount of Money', 'Amount')))
             ->setComment('€')
             ->setWidth(50);
     }
 
-    public function getPlaceholders(Vpc_Shop_Cart_Order $order) {}
-    public function orderConfirmed(Vpc_Shop_Cart_Order $order) {}
+    public function getPlaceholders(Kwc_Shop_Cart_Order $order) {}
+    public function orderConfirmed(Kwc_Shop_Cart_Order $order) {}
 }

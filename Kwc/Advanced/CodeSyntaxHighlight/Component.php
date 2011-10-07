@@ -1,12 +1,12 @@
 <?php
-class Vpc_Advanced_CodeSyntaxHighlight_Component extends Vpc_Abstract
+class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Code Syntax Highlighted');
-        $ret['componentIcon'] = new Vps_Asset('page_code');
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['componentName'] = trlKwf('Code Syntax Highlighted');
+        $ret['componentIcon'] = new Kwf_Asset('page_code');
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
 

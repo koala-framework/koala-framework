@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Auto_FilterCollection extends Vps_Collection
+class Kwf_Controller_Action_Auto_FilterCollection extends Kwf_Collection
 {
     public function offsetSet($offset, $value)
     {
@@ -18,11 +18,11 @@ class Vps_Controller_Action_Auto_FilterCollection extends Vps_Collection
             $type = $config['type'];
             unset($config['type']);
         } else {
-            throw new Vps_Exception('No filter-type defined');
+            throw new Kwf_Exception('No filter-type defined');
         }
         if (strtolower($type) == 'textfield') $type = 'text';
-        $class = 'Vps_Controller_Action_Auto_Filter_' . ucfirst($type);
-        if (!class_exists($class)) throw new Vps_Exception('Unknown Filter: ' . $type);
+        $class = 'Kwf_Controller_Action_Auto_Filter_' . ucfirst($type);
+        if (!class_exists($class)) throw new Kwf_Exception('Unknown Filter: ' . $type);
         $filter = new $class();
         if (!is_array($config)) $config = array();
         $config['fieldName'] = $field;

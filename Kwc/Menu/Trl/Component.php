@@ -1,5 +1,5 @@
 <?php
-class Vpc_Menu_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
+class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
 {
     public function getTemplateVars()
     {
@@ -7,7 +7,7 @@ class Vpc_Menu_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
         $menu = array();
         $masterMenu = $this->getData()->chained->getComponent()->getMenuData(null, array('ignoreVisible'=>true));
         foreach ($masterMenu as $m) {
-            $component = Vpc_Chained_Trl_Component::getChainedByMaster($m['data'], $this->getData());
+            $component = Kwc_Chained_Trl_Component::getChainedByMaster($m['data'], $this->getData());
             if ($component) {
                 $m['data'] = $component;
                 $m['text'] = $component->name;
@@ -23,7 +23,7 @@ class Vpc_Menu_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
     {
         $tvars = $this->getTemplateVars();
         $c = count($tvars['menu']);
-        if (Vpc_Abstract::getSetting($this->getData()->chained->componentClass, 'emptyIfSingleEntry')) {
+        if (Kwc_Abstract::getSetting($this->getData()->chained->componentClass, 'emptyIfSingleEntry')) {
             if ($c > 1) return true;
         } else if ($c > 0) {
             return true;

@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail_Template
+class Kwf_Mail_Template
 {
     protected $_mail;
     protected $_view;
@@ -9,8 +9,8 @@ class Vps_Mail_Template
 
     public function __construct($template, $masterTemplate = 'Master')
     {
-        $this->_view = new Vps_Mail_Template_View($template, $masterTemplate);
-        $this->_mail = new Vps_Mail();
+        $this->_view = new Kwf_Mail_Template_View($template, $masterTemplate);
+        $this->_mail = new Kwf_Mail();
     }
 
     public function __set($key, $val)
@@ -137,26 +137,26 @@ class Vps_Mail_Template
 
     public function setBodyText($text)
     {
-        throw new Vps_Exception("Text body may not be set manual when using 'Vps_Mail_Template', "
+        throw new Kwf_Exception("Text body may not be set manual when using 'Kwf_Mail_Template', "
             ."because it is automatically build by a template.");
     }
 
     public function setBodyHtml($html)
     {
-        throw new Vps_Exception("Html body may not be set manual when using 'Vps_Mail_Template', "
+        throw new Kwf_Exception("Html body may not be set manual when using 'Kwf_Mail_Template', "
             ."because it is automatically build by a template.");
     }
 
-    // constants for type defined in Vps_Model_Mail_Row
-    public function getMailContent($type = Vps_Model_Mail_Row::MAIL_CONTENT_AUTO)
+    // constants for type defined in Kwf_Model_Mail_Row
+    public function getMailContent($type = Kwf_Model_Mail_Row::MAIL_CONTENT_AUTO)
     {
-        if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_AUTO) {
+        if ($type == Kwf_Model_Mail_Row::MAIL_CONTENT_AUTO) {
             $ret = $this->_getHtmlMailContent();
             if (is_null($ret)) $ret = $this->_getTextMailContent();
             return $ret;
-        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_HTML) {
+        } else if ($type == Kwf_Model_Mail_Row::MAIL_CONTENT_HTML) {
             return $this->_getHtmlMailContent();
-        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_TEXT) {
+        } else if ($type == Kwf_Model_Mail_Row::MAIL_CONTENT_TEXT) {
             return $this->_getTextMailContent();
         }
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs_Paragraph extends Vpc_Component
+class Kwc_Paragraphs_Paragraph extends Kwc_Component
 {
     public static function getSettings()
     {

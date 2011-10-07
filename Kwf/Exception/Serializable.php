@@ -4,7 +4,7 @@
  * (PDOException ist tlw. im trace und die lässt sich nicht serialisieren).
  * Wird z.B. benötigt im Service.
  */
-class Vps_Exception_Serializable extends Vps_Exception implements Serializable
+class Kwf_Exception_Serializable extends Kwf_Exception implements Serializable
 {
     private $_exception;
 

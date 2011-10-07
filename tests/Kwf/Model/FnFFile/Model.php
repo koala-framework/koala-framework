@@ -1,4 +1,4 @@
 <?php
-class Vps_Model_FnFFile_Model extends Vps_Model_FnFFile
+class Kwf_Model_FnFFile_Model extends Kwf_Model_FnFFile
 {
 }

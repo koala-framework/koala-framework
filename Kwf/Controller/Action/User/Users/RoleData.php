@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_User_Users_RoleData extends Vps_Data_Abstract
+class Kwf_Controller_Action_User_Users_RoleData extends Kwf_Data_Abstract
 {
     private $_roles;
 
@@ -8,7 +8,7 @@ class Vps_Controller_Action_User_Users_RoleData extends Vps_Data_Abstract
         $acl = Zend_Registry::get('acl');
         $this->_roles = array();
         foreach($acl->getRoles() as $role) {
-            if($role instanceof Vps_Acl_Role) {
+            if($role instanceof Kwf_Acl_Role) {
                 $this->_roles[$role->getRoleId()] = $role->getRoleName();
             }
         }

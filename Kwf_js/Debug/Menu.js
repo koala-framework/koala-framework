@@ -1,6 +1,6 @@
 Ext.onReady(function() {
-    if (Vps.Debug.showMenu) {
-        Vps.Debug.requestsStore = new Ext.data.SimpleStore({
+    if (Kwf.Debug.showMenu) {
+        Kwf.Debug.requestsStore = new Ext.data.SimpleStore({
             fields: [
                 {name: 'time'},
                 {name: 'url', type: 'string'},
@@ -11,36 +11,36 @@ Ext.onReady(function() {
                 {name: 'explainRows', type: 'int'}
             ]
         });
-        var data = [[new Date(), location.pathname, '', Vps.Debug.requestNum]];
-        Vps.Debug.requestsStore.loadData(data);
+        var data = [[new Date(), location.pathname, '', Kwf.Debug.requestNum]];
+        Kwf.Debug.requestsStore.loadData(data);
     }
-    if (!Vps.isApp && Vps.Debug.showMenu) {
+    if (!Kwf.isApp && Kwf.Debug.showMenu) {
         new Ext.Button({
             icon: '/assets/silkicons/bug.png',
             cls: 'x-btn-icon',
             tooltip: 'Debug-Menü',
             style: 'position: absolute; right: 0; top: 0',
-            menu: new Vps.Debug.Menu(),
+            menu: new Kwf.Debug.Menu(),
             renderTo: Ext.getBody()
         });
     }
 });
 
-Vps.Debug.Menu = function(config) {
-    Vps.Debug.Menu.superclass.constructor.call(this, config);
-    if (Vps.Debug.querylog) {
+Kwf.Debug.Menu = function(config) {
+    Kwf.Debug.Menu.superclass.constructor.call(this, config);
+    if (Kwf.Debug.querylog) {
         this.add({
             icon: '/assets/silkicons/database.png',
             cls: 'x-btn-text-icon',
             text: 'SQL-Debug',
             handler: function() {
-                var requests = new Vps.Debug.Requests({
+                var requests = new Kwf.Debug.Requests({
                     region: 'north',
                     height: 200,
-                    store: Vps.Debug.requestsStore,
+                    store: Kwf.Debug.requestsStore,
                     split: true
                 });
-                var queries = new Vps.Debug.SqlQueries({
+                var queries = new Kwf.Debug.SqlQueries({
                     region: 'center'
                 });
                 requests.getSelectionModel().on('rowselect', function(model, rowIndex, r) {
@@ -65,44 +65,44 @@ Vps.Debug.Menu = function(config) {
         scope: this,
         handler: function() {
             Ext.Ajax.request({
-                url: '/vps/debug/assets/json-clear-assets-cache',
+                url: '/kwf/debug/assets/json-clear-assets-cache',
                 success: function() {
                     Ext.Msg.alert('Assets Cache', 'Successfully cleared');
                 }
             });
         }
     });
-    var chk = Vps.Debug.autoClearCache;
+    var chk = Kwf.Debug.autoClearCache;
     this.add(new Ext.menu.CheckItem({
         text: 'Auto-Clear Assets Cache',
         scope: this,
         handler: function(menu) {
             Ext.Ajax.request({
-                url: '/vps/debug/assets/json-set-debug-assets',
+                url: '/kwf/debug/assets/json-set-debug-assets',
                 params: { 'autoClearCache' : !menu.checked+0 }
             });
         },
         checked: chk
     }));
-    chk = Vps.Debug.js;
+    chk = Kwf.Debug.js;
     this.add(new Ext.menu.CheckItem({
         text: '.js - Debug Assets',
         scope: this,
         handler: function(menu) {
             Ext.Ajax.request({
-                url: '/vps/debug/assets/json-set-debug-assets',
+                url: '/kwf/debug/assets/json-set-debug-assets',
                 params: { 'js' : !menu.checked+0 }
             });
         },
         checked: chk
     }));
-    chk = Vps.Debug.css;
+    chk = Kwf.Debug.css;
     this.add(new Ext.menu.CheckItem({
         text: '.css - Debug Assets',
         scope: this,
         handler: function(menu) {
             Ext.Ajax.request({
-                url: '/vps/debug/assets/json-set-debug-assets',
+                url: '/kwf/debug/assets/json-set-debug-assets',
                 params: { 'css' : !menu.checked+0 }
             });
         },
@@ -117,8 +117,8 @@ Vps.Debug.Menu = function(config) {
             var win = new Ext.Window({
                 title: 'Components Tree',
                 layout: 'fit',
-                items: [new Vps.Auto.TreePanel({
-                    controllerUrl: '/vps/debug/tree-cache'
+                items: [new Kwf.Auto.TreePanel({
+                    controllerUrl: '/kwf/debug/tree-cache'
                 })],
                 width: 800,
                 height: 600
@@ -142,7 +142,7 @@ Vps.Debug.Menu = function(config) {
         scope: this,
         handler: function() {
             Ext.Ajax.request({
-                url: '/vps/debug/activate/json-deactivate',
+                url: '/kwf/debug/activate/json-deactivate',
                 success: function() {
                     location.href = location.href;
                 }
@@ -152,6 +152,6 @@ Vps.Debug.Menu = function(config) {
 };
 
 
-Ext.extend(Vps.Debug.Menu, Ext.menu.Menu, {
+Ext.extend(Kwf.Debug.Menu, Ext.menu.Menu, {
 });
 

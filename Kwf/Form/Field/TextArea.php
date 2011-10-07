@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
+class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -12,7 +12,7 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
     {
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
-        $ret = Vps_Form_Field_SimpleAbstract::getTemplateVars($values);
+        $ret = Kwf_Form_Field_SimpleAbstract::getTemplateVars($values);
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<textarea id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
@@ -28,7 +28,7 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Text Area')
+            'componentName' => trlKwf('Text Area')
         ));
     }
 }

@@ -1,11 +1,11 @@
 <?php
-class Vpc_Directories_CategoryTree_Detail_CategoryList_Component
-    extends Vpc_Directories_List_Component
+class Kwc_Directories_CategoryTree_Detail_CategoryList_Component
+    extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['view'] = 'Vpc_Directories_CategoryTree_View_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwc_Directories_CategoryTree_View_Component';
         $ret['useDirectorySelect'] = false;
         return $ret;
     }

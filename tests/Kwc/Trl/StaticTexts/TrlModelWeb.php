@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_StaticTexts_TrlModelWeb extends Vps_Model_FnF
+class Kwc_Trl_StaticTexts_TrlModelWeb extends Kwf_Model_FnF
 {
     public function __construct()
     {
@@ -10,7 +10,7 @@ class Vpc_Trl_StaticTexts_TrlModelWeb extends Vps_Model_FnF
                 array('id'=>'3', 'en' => 'reply', 'en_plural' => 'replies', 'de' => 'Antwort', 'de_plural' => 'Antworten'),
                 array('id'=>'4', 'context' => 'test', 'en' => 'reply', 'en_plural' => 'replies', 'de' => 'Antwort', 'de_plural' => 'Antworten'),
             ),
-            'uniqueIdentifier' => 'Vpc_Trl_StaticTexts_TrlModelWeb',
+            'uniqueIdentifier' => 'Kwc_Trl_StaticTexts_TrlModelWeb',
             'columns' => array('id', 'en', 'de', 'en_plural', 'de_plural', 'context')
         );
         parent::__construct($config);

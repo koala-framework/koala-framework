@@ -1,13 +1,13 @@
 <?php
-class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['form'] = 'Vpc_Shop_Cart_Detail_Form_Component';
+        $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Detail_Form_Component';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
-        $ret['placeholder']['product'] = trlVps('Product').': ';
+        $ret['placeholder']['product'] = trlKwf('Product').': ';
         $ret['placeholder']['unitPrice'] = '';
         return $ret;
     }
@@ -22,7 +22,7 @@ class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $addCmp = Vps_Component_Data_Root::getInstance()
+        $addCmp = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->getData()->row->add_component_id);
         $ret['product'] = $addCmp->parent;
         $ret['row'] = $this->getData()->row;

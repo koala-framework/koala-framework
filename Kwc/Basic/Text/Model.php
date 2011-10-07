@@ -1,23 +1,23 @@
 <?php
-class Vpc_Basic_Text_Model extends Vps_Model_Db_Proxy
+class Kwc_Basic_Text_Model extends Kwf_Model_Db_Proxy
 {
     protected $_componentClass;
     private $_childComponentsModel;
 
-    protected $_table = 'vpc_basic_text';
-    protected $_rowClass = 'Vpc_Basic_Text_Row';
+    protected $_table = 'kwc_basic_text';
+    protected $_rowClass = 'Kwc_Basic_Text_Row';
     protected $_dependentModels = array(
-        'ChildComponents' => 'Vpc_Basic_Text_ChildComponentsModel'
+        'ChildComponents' => 'Kwc_Basic_Text_ChildComponentsModel'
     );
 
     public function __construct($config = array())
     {
         if (!isset($config['componentClass'])) {
-            throw new Vps_Exception("componentClass is required for text-model");
+            throw new Kwf_Exception("componentClass is required for text-model");
         }
 
         if (!isset($this->_default['content'])) {
-            $default = Vpc_Abstract::getSetting($config['componentClass'], 'defaultText');
+            $default = Kwc_Abstract::getSetting($config['componentClass'], 'defaultText');
             $config['default']['content'] = "<p>$default</p>";
         }
         $this->_componentClass = $config['componentClass'];
@@ -27,7 +27,7 @@ class Vpc_Basic_Text_Model extends Vps_Model_Db_Proxy
     protected function _init()
     {
         $this->_siblingModels = array(
-            new Vps_Model_Field(array(
+            new Kwf_Model_Field(array(
                 'fieldName' => 'data'
             ))
         );

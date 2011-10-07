@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
+class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
 {
     public function load($row, $postData = array())
     {
@@ -40,9 +40,9 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
             || $this->getAllowBlank() === 0
             || $this->getAllowBlank() === '0'
         ) {
-            $v = new Vps_Validate_NotEmpty();
+            $v = new Kwf_Validate_NotEmpty();
             if ($this->getEmptyMessage()) {
-                $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
+                $v->setMessage(Kwf_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
             }
             $this->addValidator($v, 'notEmpty');
         }
@@ -62,7 +62,7 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
                 continue;
             }
 
-            if ($v instanceof Vps_Validate_Row_Abstract) {
+            if ($v instanceof Kwf_Validate_Row_Abstract) {
                 $v->setField($this->getName());
                 $isValid = $v->isValidRow($data, $row);
             } else {
@@ -79,7 +79,7 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
         return $ret;
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
         parent::prepareSave($row, $postData);
         if ($this->getSave() !== false) {

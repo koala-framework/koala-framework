@@ -1,12 +1,12 @@
 <?php
-class Vps_Component_FieldModel extends Vps_Model_Db_Proxy
+class Kwf_Component_FieldModel extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_data';
+    protected $_table = 'kwc_data';
 
     protected function _init()
     {
         parent::_init();
-        $this->_siblingModels[] = new Vps_Model_Field(array(
+        $this->_siblingModels[] = new Kwf_Model_Field(array(
             'fieldName' => 'data'
         ));
     }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Abstract
+class Kwf_Component_Abstract
 {
     private static $_settings = null;
     private static $_rebuildingSettings = false;
@@ -26,10 +26,10 @@ class Vps_Component_Abstract
     public static function hasSettings($class)
     {
         static $prefix;
-        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        if (!isset($prefix)) $prefix = Kwf_Cache::getUniquePrefix();
 
         $cacheId = 'hasSettings-'.$class;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -37,7 +37,7 @@ class Vps_Component_Abstract
         //& für performance
         $s =& self::_getSettingsCached();
         $ret = isset($s[$class]);
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -52,7 +52,7 @@ class Vps_Component_Abstract
         }
 
         $cacheId = 'has-'.$class.'-'.$setting;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -60,10 +60,10 @@ class Vps_Component_Abstract
         //& für performance
         $s =& self::_getSettingsCached();
         if (!isset($s[$class])) {
-            throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses. Requested setting: $setting");
+            throw new Kwf_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses. Requested setting: $setting");
         }
         $ret = array_key_exists($setting, $s[$class]);
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -78,13 +78,13 @@ class Vps_Component_Abstract
                 try {
                     $settings = $yaml->parse($input);
                 } catch (Exception $e) {
-                    throw new Vps_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
+                    throw new Kwf_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
                 }
                 if (!isset($settings['base'])) {
-                    throw new Vps_Exception("'base' setting is required in '$file'");
+                    throw new Kwf_Exception("'base' setting is required in '$file'");
                 }
                 if (!class_exists($settings['base'])) {
-                    throw new Vps_Exception("'$file' base class '$settings[base]' does not exist");
+                    throw new Kwf_Exception("'$file' base class '$settings[base]' does not exist");
                 }
                 $code = "<?php\nclass $c extends $settings[base]\n{\n";
                 $code .= "    public static _getYamlConfigFile() { return '$file'; }\n";
@@ -93,10 +93,10 @@ class Vps_Component_Abstract
                 mkdir(substr($classFile, 0, strrpos($classFile, '/')), 0777, true);
                 file_put_contents($classFile, $code);
                 if (!class_exists($c)) {
-                    throw new Vps_Exception("just generated class still does not exist");
+                    throw new Kwf_Exception("just generated class still does not exist");
                 }
             } else {
-                throw new Vps_Exception("Invalid component '$class'");
+                throw new Kwf_Exception("Invalid component '$class'");
             }
         }
     }
@@ -104,8 +104,8 @@ class Vps_Component_Abstract
     private static function _processYamlSettings(&$settings)
     {
         foreach ($settings as $k=>$i) {
-            if (is_string($i) && preg_match('#^\\s*(trl|trlVps)\\(\'(.*)\'\\)\s*$#', $i, $m)) {
-                $settings[$k] = Vps_Trl::getInstance()->trl($m[2], array(), $m[1]=='trlVps' ? Vps_Trl::SOURCE_VPS : Vps_Trl::SOURCE_WEB);
+            if (is_string($i) && preg_match('#^\\s*(trl|trlKwf)\\(\'(.*)\'\\)\s*$#', $i, $m)) {
+                $settings[$k] = Kwf_Trl::getInstance()->trl($m[2], array(), $m[1]=='trlKwf' ? Kwf_Trl::SOURCE_KWF : Kwf_Trl::SOURCE_WEB);
             } else if (is_string($i) && preg_match('#^\\.\'(.*)\'$#', $i, $m)) {
                 if (isset($settings[$k])) {
                     $settings[$k] = $settings[$k] . $m[1];
@@ -166,7 +166,7 @@ class Vps_Component_Abstract
                 try {
                     $mergeSettings = $yaml->parse($input);
                 } catch (Exception $e) {
-                    throw new Vps_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
+                    throw new Kwf_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
                 }
                 if (isset($mergeSettings['settings'])) {
                     self::_processYamlSettings($mergeSettings['settings']);
@@ -191,7 +191,7 @@ class Vps_Component_Abstract
                 }
             }
             if (isset($settings['componentIcon']) && is_string($settings['componentIcon'])) {
-                $settings['componentIcon'] = new Vps_Asset($settings['componentIcon']);
+                $settings['componentIcon'] = new Kwf_Asset($settings['componentIcon']);
             }
             self::$_cacheSettings[$c][$param] = $settings;
         }
@@ -202,7 +202,7 @@ class Vps_Component_Abstract
     {
         if (substr($componentClass, -strlen($csParam)-3) == '.cs'.$csParam) return $componentClass;
         if (preg_match('#^[a-z0-9_]+.cs[a-z0-9_]+>#i', $componentClass)) {
-            throw new Vps_Exception("can't add another childSettings parameter '$csParam' to '$componentClass'");
+            throw new Kwf_Exception("can't add another childSettings parameter '$csParam' to '$componentClass'");
         }
         return $componentClass . '.cs' . $csParam;
     }
@@ -239,7 +239,7 @@ class Vps_Component_Abstract
                     }
                 }
             } else if ($setting == 'componentFiles') {
-                $ret = Vps_Component_Abstract_Admin::getComponentFiles($class, array(
+                $ret = Kwf_Component_Abstract_Admin::getComponentFiles($class, array(
                     'Master.tpl' => array('filename'=>'Master', 'ext'=>'tpl', 'returnClass'=>false),
                     'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
                     'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
@@ -255,7 +255,7 @@ class Vps_Component_Abstract
             } else {
                 $settings = self::_loadCacheSettings($class);
                 if (!array_key_exists($setting, $settings)) {
-                    throw new Vps_Exception("Couldn't find required setting '$setting' for $class.");
+                    throw new Kwf_Exception("Couldn't find required setting '$setting' for $class.");
                 }
                 $ret = $settings[$setting];
                 if ($setting == 'generators') {
@@ -265,14 +265,14 @@ class Vps_Component_Abstract
                             $csKeys = explode('.', $csKeys);
                             $csKey = explode('_', $csKeys[0]); //just the first
                             if (!isset($ret[$csKey[0]])) {
-                                throw new Vps_Exception("invalid childSetting; generator '$csKey[0]' does not exist");
+                                throw new Kwf_Exception("invalid childSetting; generator '$csKey[0]' does not exist");
                             }
                             if (is_array($ret[$csKey[0]]['component'])) {
                                 if (!isset($csKey[1])) {
-                                    throw new Vps_Exception("invalid childSetting; component key required");
+                                    throw new Kwf_Exception("invalid childSetting; component key required");
                                 }
                                 if (!isset($ret[$csKey[0]]['component'][$csKey[1]])) {
-                                    throw new Vps_Exception("invalid childSetting; component '$csKey[1]' does not exist for generator '$csKey[0]'");
+                                    throw new Kwf_Exception("invalid childSetting; component '$csKey[1]' does not exist for generator '$csKey[0]'");
                                 }
                                 $ret[$csKey[0]]['component'][$csKey[1]] = self::_addChildSettingsParam($ret[$csKey[0]]['component'][$csKey[1]], $class.'>'.$csKey[0].'_'.$csKey[1]);
                             } else {
@@ -285,21 +285,21 @@ class Vps_Component_Abstract
                     if ($param && substr($param, 0, 2)=='cs') {
                         $childSettingsComponentClass = substr($param, 2, strpos($param, '>')-2);
                         $childSettingsKey = str_replace('>', '.', substr($param, strpos($param, '>')+1));
-                        $allChildSettings = Vpc_Abstract::getSetting($childSettingsComponentClass, 'childSettings');
+                        $allChildSettings = Kwc_Abstract::getSetting($childSettingsComponentClass, 'childSettings');
                         foreach ($allChildSettings as $csKeys=>$childSettings) {
                             if (substr($csKeys, 0, strlen($childSettingsKey)) != $childSettingsKey) continue;
                             if ($csKeys == $childSettingsKey) continue;
                             $csKeys = explode('.', substr($csKeys, strlen($childSettingsKey)+1));
                             $csKey = explode('_', $csKeys[0]); //just the first
                             if (!isset($ret[$csKey[0]])) {
-                                throw new Vps_Exception("invalid childSetting; generator '$csKey[0]' does not exist");
+                                throw new Kwf_Exception("invalid childSetting; generator '$csKey[0]' does not exist");
                             }
                             if (is_array($ret[$csKey[0]]['component'])) {
                                 if (!isset($csKey[1])) {
-                                    throw new Vps_Exception("invalid childSetting; component key required");
+                                    throw new Kwf_Exception("invalid childSetting; component key required");
                                 }
                                 if (!isset($ret[$csKey[0]]['component'][$csKey[1]])) {
-                                    throw new Vps_Exception("invalid childSetting; component '$csKey[1]' does not exist for generator '$csKey[0]'");
+                                    throw new Kwf_Exception("invalid childSetting; component '$csKey[1]' does not exist for generator '$csKey[0]'");
                                 }
                                 $ret[$csKey[0]]['component'][$csKey[1]] = self::_addChildSettingsParam($ret[$csKey[0]]['component'][$csKey[1]], substr($param, 2).'>'.$csKey[0].'_'.$csKey[1]);
                             } else {
@@ -313,16 +313,16 @@ class Vps_Component_Abstract
                         if (is_array($g['component'])) {
                             foreach ($g['component'] as $l=>$cc) {
                                 if (!$cc) continue;
-                                if (Vpc_Abstract::hasSetting($cc, 'needsParentComponentClass')
-                                    && Vpc_Abstract::getSetting($cc, 'needsParentComponentClass')
+                                if (Kwc_Abstract::hasSetting($cc, 'needsParentComponentClass')
+                                    && Kwc_Abstract::getSetting($cc, 'needsParentComponentClass')
                                 ) {
                                     $g['component'][$l] .= '.'.$class;
                                 }
                             }
                         } else {
                             if (!$g['component']) continue;
-                            if (Vpc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
-                                && Vpc_Abstract::getSetting($g['component'], 'needsParentComponentClass')
+                            if (Kwc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
+                                && Kwc_Abstract::getSetting($g['component'], 'needsParentComponentClass')
                             ) {
                                 $g['component'] .= '.'.$class;
                             }
@@ -336,7 +336,7 @@ class Vps_Component_Abstract
         }
 
         $cacheId = $class.'-'.$setting;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -348,33 +348,33 @@ class Vps_Component_Abstract
             //diese checks im nachhinein machen damit sie nicht immer gemacht werden (diese fkt wird am meisten von allen aufgerufen)
             //und hier dann versuchen eine bessere exception msg zu erstellen
             if (!is_string($class)) {
-                throw new Vps_Exception("Invalid component '$class'");
+                throw new Kwf_Exception("Invalid component '$class'");
             } else if (!isset(self::$_settings[$class])) {
-                throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
+                throw new Kwf_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
             } else if (!array_key_exists($setting, self::$_settings[$class])) {
                 // man könnte hier isset() machen, nur wenn das setting NULL ist, gibt es false zurück... scheis PHP :)
-                throw new Vps_Exception("Setting '$setting' does not exist for Component '$class'");
+                throw new Kwf_Exception("Setting '$setting' does not exist for Component '$class'");
             } else {
                 throw $e;
             }
         }
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
     public static function getSettingMtime()
     {
-        if (!Vps_Config::getValue('vpc.rootComponent')) return 0;
+        if (!Kwf_Config::getValue('kwc.rootComponent')) return 0;
 
         $cacheId = 'settingsMtime';
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
 
         $s =& self::_getSettingsCached();
         $ret = $s['mtime'];
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
@@ -390,9 +390,9 @@ class Vps_Component_Abstract
     {
         self::$_cacheSettings = array();
         if (!self::$_settings) {
-            $cache = new Vps_Assets_Cache(array('checkComponentSettings' => false));
-            $cacheId = 'componentSettings'.Vps_Trl::getInstance()->getTargetLanguage()
-                                .'_'.Vps_Component_Data_Root::getComponentClass();
+            $cache = new Kwf_Assets_Cache(array('checkComponentSettings' => false));
+            $cacheId = 'componentSettings'.Kwf_Trl::getInstance()->getTargetLanguage()
+                                .'_'.Kwf_Component_Data_Root::getComponentClass();
             self::$_settings = $cache->load($cacheId);
             if (!self::$_settings) {
                 self::$_rebuildingSettings = true;
@@ -406,7 +406,7 @@ class Vps_Component_Abstract
                     self::$_settings[$c]['generators'] = self::getSetting($c, 'generators', false/*don't use settings cache*/);
 
                     //*** load templates + componentFiles
-                    //vorladen fuer Vps_Component_Abstract_Admin::getComponentFile
+                    //vorladen fuer Kwf_Component_Abstract_Admin::getComponentFile
                     self::$_settings[$c]['componentFiles'] = self::getSetting($c, 'componentFiles');
 
                     //*** parentClasses
@@ -449,7 +449,7 @@ class Vps_Component_Abstract
                                 break;
                             }
                         }
-                        if (!$f) { throw new Vps_Exception("File $file not found"); }
+                        if (!$f) { throw new Kwf_Exception("File $file not found"); }
                         self::$_settings['mtimeFiles'][] = $f;
                         self::$_settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
                     } while ($p = get_parent_class($p));
@@ -463,8 +463,8 @@ class Vps_Component_Abstract
                     $realCls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
                     try {
                         call_user_func(array($realCls, 'validateSettings'), self::$_settings[$c], $c);
-                    } catch (Vps_Exception $e) {
-                        throw new Vps_Exception("$c: ".$e->getMessage());
+                    } catch (Kwf_Exception $e) {
+                        throw new Kwf_Exception("$c: ".$e->getMessage());
                     }
                 }
 
@@ -498,12 +498,12 @@ class Vps_Component_Abstract
         return array(
             'assets'        => array('files'=>array(), 'dep'=>array()),
             'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
-            'componentIcon' => new Vps_Asset('paragraph_page'),
+            'componentIcon' => new Kwf_Asset('paragraph_page'),
             'placeholder'   => array(),
             'plugins'       => array(),
             'generators'    => array(),
             'flags'         => array(),
-            'extConfig'     => 'Vps_Component_Abstract_ExtConfig_None'
+            'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_None'
         );
     }
 
@@ -511,21 +511,21 @@ class Vps_Component_Abstract
     {
         if (isset($settings['ownModel']) && $settings['ownModel']) {
             try {
-                $m = Vps_Model_Abstract::getInstance($settings['ownModel']);
+                $m = Kwf_Model_Abstract::getInstance($settings['ownModel']);
                 $pk = $m->getPrimaryKey();
             } catch (Exception $e) {}
             if (isset($pk) && $pk != 'component_id') {
-                throw new Vps_Exception("ownModel for '$componentClass' must have 'component_id' as primary key");
+                throw new Kwf_Exception("ownModel for '$componentClass' must have 'component_id' as primary key");
             }
         }
         if (isset($settings['modelname'])) {
-            throw new Vps_Exception("modelname for '$componentClass' is set - please rename into ownModel or childModel");
+            throw new Kwf_Exception("modelname for '$componentClass' is set - please rename into ownModel or childModel");
         }
         if (isset($settings['model'])) {
-            throw new Vps_Exception("model for '$componentClass' is set - please rename into ownModel or childModel");
+            throw new Kwf_Exception("model for '$componentClass' is set - please rename into ownModel or childModel");
         }
         if (isset($settings['formModel'])) {
-            throw new Vps_Exception("formModel is no longer supported. Set the model in the FrontendForm.php. Component: '$componentClass'");
+            throw new Kwf_Exception("formModel is no longer supported. Set the model in the FrontendForm.php. Component: '$componentClass'");
         }
     }
 
@@ -539,17 +539,17 @@ class Vps_Component_Abstract
         $tables = self::$_modelsCache['table'];
         if (!isset($tables[$class.'-'.$tablename])) {
             if (!$tablename) {
-                $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+                $tablename = Kwc_Abstract::getSetting($class, 'tablename');
                 if (!$tablename) {
-                    throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+                    throw new Kwc_Exception('No tablename in Setting defined: ' . $class);
                 }
             }
             if (!is_instance_of($tablename, 'Zend_Db_Table_Abstract')) {
-                throw new Vps_Exception("table setting '$tablename' for generator in $class is not a Zend_Db_Table");
+                throw new Kwf_Exception("table setting '$tablename' for generator in $class is not a Zend_Db_Table");
             }
             $tables[$class.'-'.$tablename] = new $tablename(array('componentClass'=>$class));
             if (!$tables[$class.'-'.$tablename] instanceof Zend_Db_Table_Abstract) {
-                throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+                throw new Kwf_Exception("table setting for generator in $class is not a Zend_Db_Table");
             }
         }
         return $tables[$class.'-'.$tablename];
@@ -564,22 +564,22 @@ class Vps_Component_Abstract
     }
 
     /**
-     * @return Vps_Model_Abstract
+     * @return Kwf_Model_Abstract
      */
     public static function createOwnModel($class)
     {
         if (!array_key_exists($class, self::$_modelsCache['own'])) {
-            if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+            if (Kwc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
-                    throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+                    throw new Kwf_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $model = new Vps_Model_Db(array(
+                $model = new Kwf_Model_Db(array(
                     'table' => $t
                 ));
-            } else if (Vpc_Abstract::hasSetting($class, 'ownModel')) {
-                $modelName = Vpc_Abstract::getSetting($class, 'ownModel');
-                $model = Vps_Model_Abstract::getInstance($modelName);
+            } else if (Kwc_Abstract::hasSetting($class, 'ownModel')) {
+                $modelName = Kwc_Abstract::getSetting($class, 'ownModel');
+                $model = Kwf_Model_Abstract::getInstance($modelName);
             } else {
                 $model = null;
             }
@@ -589,22 +589,22 @@ class Vps_Component_Abstract
     }
 
     /**
-     * @return Vps_Model_Abstract
+     * @return Kwf_Model_Abstract
      */
     public static function createChildModel($class)
     {
         if (!array_key_exists($class, self::$_modelsCache['child'])) {
-            if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+            if (Kwc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
-                    throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+                    throw new Kwf_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $model = new Vps_Model_Db(array(
+                $model = new Kwf_Model_Db(array(
                     'table' => $t
                 ));
-            } else if (Vpc_Abstract::hasSetting($class, 'childModel')) {
-                $modelName = Vpc_Abstract::getSetting($class, 'childModel');
-                $model = Vps_Model_Abstract::getInstance($modelName);
+            } else if (Kwc_Abstract::hasSetting($class, 'childModel')) {
+                $modelName = Kwc_Abstract::getSetting($class, 'childModel');
+                $model = Kwf_Model_Abstract::getInstance($modelName);
             } else {
                 $model = null;
             }
@@ -614,14 +614,14 @@ class Vps_Component_Abstract
     }
 
     /**
-     * @return Vps_Model_Abstract
+     * @return Kwf_Model_Abstract
      */
     public static function createFormModel($class)
     {
         if (!array_key_exists($class, self::$_modelsCache['form'])) {
-            if (Vpc_Abstract::hasSetting($class, 'formModel')) {
-                $modelName = Vpc_Abstract::getSetting($class, 'formModel');
-                self::$_modelsCache['form'][$class] = Vps_Model_Abstract::getInstance($modelName);
+            if (Kwc_Abstract::hasSetting($class, 'formModel')) {
+                $modelName = Kwc_Abstract::getSetting($class, 'formModel');
+                self::$_modelsCache['form'][$class] = Kwf_Model_Abstract::getInstance($modelName);
             } else {
                 self::$_modelsCache['form'][$class] = null;
             }
@@ -675,7 +675,7 @@ class Vps_Component_Abstract
     static public function getFlag($class, $flag)
     {
         $cacheId = 'flag-'.$class.'-'.$flag;
-        $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -686,17 +686,17 @@ class Vps_Component_Abstract
         } else {
             $ret = $flags[$flag];
         }
-        Vps_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
 
     public static function getComponentClasses()
     {
-        $root = Vps_Component_Data_Root::getComponentClass();
+        $root = Kwf_Component_Data_Root::getComponentClass();
         if (!$root) return array();
         if (!self::$_rebuildingSettings) {
-            $cacheId = 'componentClasses-'.Vps_Component_Data_Root::getComponentClass();
-            $ret = Vps_Cache_Simple::fetch($cacheId, $success);
+            $cacheId = 'componentClasses-'.Kwf_Component_Data_Root::getComponentClass();
+            $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
             if ($success) {
                 return $ret;
             }
@@ -705,7 +705,7 @@ class Vps_Component_Abstract
             unset($ret[array_search('mtime', $ret)]);
             unset($ret[array_search('mtimeFiles', $ret)]);
             $ret = array_values($ret);
-            Vps_Cache_Simple::add($cacheId, $ret);
+            Kwf_Cache_Simple::add($cacheId, $ret);
             return $ret;
         }
         $componentClasses = array($root);
@@ -716,7 +716,7 @@ class Vps_Component_Abstract
     private static function _getChildComponentClasses(&$componentClasses, $class)
     {
         $classes = array();
-        foreach (Vpc_Abstract::getSetting($class, 'generators') as $generator) {
+        foreach (Kwc_Abstract::getSetting($class, 'generators') as $generator) {
             if (is_array($generator['component'])) {
                 $classes = array_merge($classes, $generator['component']);
             } else {
@@ -726,11 +726,11 @@ class Vps_Component_Abstract
                 $classes = array_merge($classes, $generator['plugins']);
             }
         }
-        $plugins = Vpc_Abstract::getSetting($class, 'plugins');
+        $plugins = Kwc_Abstract::getSetting($class, 'plugins');
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
-        if (Vpc_Abstract::getFlag($class, 'hasAlternativeComponent')) {
+        if (Kwc_Abstract::getFlag($class, 'hasAlternativeComponent')) {
             $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             $alternativeComponents = call_user_func(array($c, 'getAlternativeComponents'), $class);
             $classes = array_merge($classes, $alternativeComponents);
@@ -738,7 +738,7 @@ class Vps_Component_Abstract
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {
                 if (!class_exists(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c)) {
-                    throw new Vps_Exception("Component Class '$c' does not exist, used in '$class'");
+                    throw new Kwf_Exception("Component Class '$c' does not exist, used in '$class'");
                 }
                 $componentClasses[] = $c;
                 self::_getChildComponentClasses($componentClasses, $c);

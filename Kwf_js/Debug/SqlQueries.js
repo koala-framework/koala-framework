@@ -1,4 +1,4 @@
-Vps.Debug.SqlQueries = Ext.extend(Ext.grid.GridPanel, {
+Kwf.Debug.SqlQueries = Ext.extend(Ext.grid.GridPanel, {
     initComponent: function()
     {
         this.store = new Ext.data.SimpleStore({
@@ -35,21 +35,21 @@ Vps.Debug.SqlQueries = Ext.extend(Ext.grid.GridPanel, {
             },
             {header: '', width: 25,
                 renderer: function(value, p, record, rowIndex, colIndex, store, column) {
-                    p.css += 'vps-cell-button';
+                    p.css += 'kwf-cell-button';
                     p.attr += 'style="background-image:url(/assets/silkicons/information.png);" ';
                     return '';
                 }
             },
             {header: '', width: 25,
                 renderer: function(value, p, record, rowIndex, colIndex, store, column) {
-                    p.css += 'vps-cell-button';
+                    p.css += 'kwf-cell-button';
                     p.attr += 'style="background-image:url(/assets/silkicons/script.png);" ';
                     return '';
                 }
             },
             {header: '', width: 25,
                 renderer: function(value, p, record, rowIndex, colIndex, store, column) {
-                    p.css += 'vps-cell-button';
+                    p.css += 'kwf-cell-button';
                     p.attr += 'style="background-image:url(/assets/silkicons/database_gear.png);" ';
                     return '';
                 }
@@ -84,7 +84,7 @@ Vps.Debug.SqlQueries = Ext.extend(Ext.grid.GridPanel, {
                     width: 650,
                     height: 300,
                     layout: 'fit',
-                    items: new Vps.Debug.SqlExplain({
+                    items: new Kwf.Debug.SqlExplain({
                         query: record.get('query')
                     }),
                     modal: true
@@ -92,11 +92,11 @@ Vps.Debug.SqlQueries = Ext.extend(Ext.grid.GridPanel, {
                 win.show();
             }
         }, this);
-        Vps.Debug.SqlQueries.superclass.initComponent.call(this);
+        Kwf.Debug.SqlQueries.superclass.initComponent.call(this);
     },
     load: function(requestNum) {
         Ext.Ajax.request({
-            url: '/vps/debug/sql/json-data',
+            url: '/kwf/debug/sql/json-data',
             params: { requestNum: requestNum },
             success: function(response, options, result) {
                 this.store.loadData(result.data);

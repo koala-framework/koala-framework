@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_GeneratorForm extends Vps_Form
+class Kwc_Root_Category_GeneratorForm extends Kwf_Form
 {
     private $_componentOrParent;
     public function __construct($componentOrParent)
@@ -17,10 +17,10 @@ class Vpc_Root_Category_GeneratorForm extends Vps_Form
         $componentNames = array();
         $component = $this->_componentOrParent;
         while (empty($componentClasses) && $component) {
-            foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $key => $generator) {
-                if (is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
+            foreach (Kwc_Abstract::getSetting($component->componentClass, 'generators') as $key => $generator) {
+                if (is_instance_of($generator['class'], 'Kwc_Root_Category_Generator')) {
                     foreach ($generator['component'] as $k => $class) {
-                        $name = Vpc_Abstract::getSetting($class, 'componentName');
+                        $name = Kwc_Abstract::getSetting($class, 'componentName');
                         if ($name) {
                             $name = str_replace('.', ' ', $name);
                             $componentNames[$k] = $name;
@@ -33,22 +33,22 @@ class Vpc_Root_Category_GeneratorForm extends Vps_Form
         }
 
         $fields = $this->fields;
-        $fields->add(new Vps_Form_Field_TextField('name', trlVps('Name of Page')))
+        $fields->add(new Kwf_Form_Field_TextField('name', trlKwf('Name of Page')))
             ->setAllowBlank(false);
 
-        $fs = $fields->add(new Vps_Form_Container_FieldSet('name', trlVps('Name of Page')))
-            ->setTitle(trlVps('Custom Filename'))
+        $fs = $fields->add(new Kwf_Form_Container_FieldSet('name', trlKwf('Name of Page')))
+            ->setTitle(trlKwf('Custom Filename'))
             ->setCheckboxName('custom_filename')
             ->setCheckboxToggle(true);
-        $fs->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
+        $fs->add(new Kwf_Form_Field_TextField('filename', trlKwf('Filename')))
             ->setAllowBlank(false)
             ->setVtype('alphanum');
 
-        $fields->add(new Vps_Form_Field_Select('component',  trlVps('Pagetype')))
+        $fields->add(new Kwf_Form_Field_Select('component',  trlKwf('Pagetype')))
             ->setValues($componentNames)
             ->setPossibleComponentClasses($componentClasses) //just for PageController
             ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
             ->setAllowBlank(false);
-        $fields->add(new Vps_Form_Field_Checkbox('hide',  trlVps('Hide in Menu')));
+        $fields->add(new Kwf_Form_Field_Checkbox('hide',  trlKwf('Hide in Menu')));
     }
 }

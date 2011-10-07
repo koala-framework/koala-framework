@@ -1,15 +1,15 @@
 <?php
-class Vpc_Box_AssetsSelect_Form extends Vpc_Abstract_Form
+class Kwc_Box_AssetsSelect_Form extends Kwc_Abstract_Form
 {
     public function __construct($name, $class)
     {
         parent::__construct($name, $class);
         $sections = array();
-        $vars = new Zend_Config_Ini('application/assetVariables.ini');
+        $vars = new Zend_Config_Ini('assetVariables.ini');
         foreach ($vars as $i=>$j) {
-            $sections[$i] = $i == 'web' ? trlVps('Standard') : $i;
+            $sections[$i] = $i == 'web' ? trlKwf('Standard') : $i;
         }
-        $this->fields->add(new Vps_Form_Field_Select('section', trlVps('Section')))
+        $this->fields->add(new Kwf_Form_Field_Select('section', trlKwf('Section')))
             ->setAllowBlank(false)
             ->setValues($sections)
             ->setDefaultValue('web')

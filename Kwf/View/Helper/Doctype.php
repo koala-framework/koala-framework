@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_Doctype extends Zend_View_Helper_Doctype
+class Kwf_View_Helper_Doctype extends Zend_View_Helper_Doctype
 {
     public function doctype($doctype = 'XHTML1_STRICT')
     {

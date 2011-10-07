@@ -1,13 +1,13 @@
 <?php
-class Vps_Form_CardsRealModels_Form_Abstract extends Vps_Form
+class Kwf_Form_CardsRealModels_Form_Abstract extends Kwf_Form
 {
-    protected $_modelName = 'Vps_Form_CardsRealModels_Model_WrapperModel';
+    protected $_modelName = 'Kwf_Form_CardsRealModels_Model_WrapperModel';
     protected $_rowType = null;
 
     public function getRow($parentRow = null)
     {
         if (!$this->_rowType) {
-            throw new Vps_Exception('_rowType must be set when using '.get_class($this));
+            throw new Kwf_Exception('_rowType must be set when using '.get_class($this));
         }
         $row = parent::getRow($parentRow);
         $row->type = $this->_rowType;

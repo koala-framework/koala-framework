@@ -1,19 +1,19 @@
 <?php
-class Vps_Trl_JsLoader
+class Kwf_Trl_JsLoader
 {
     public function trlLoad($contents, $language)
     {
-        $elements = Vps_Trl::getInstance()->parse($contents, 'js');
-        $trl = Vps_Trl::getInstance();
+        $elements = Kwf_Trl::getInstance()->parse($contents, 'js');
+        $trl = Kwf_Trl::getInstance();
         foreach ($elements as $i=>$trlelement) {
             $values = array();
             if (!isset($trlelement['error'])) {
-                if ($trlelement['source'] == Vps_Trl::SOURCE_VPS) {
-                    $mode = "Vps";
-                    $source = Vps_Trl::SOURCE_VPS;
+                if ($trlelement['source'] == Kwf_Trl::SOURCE_KWF) {
+                    $mode = "Kwf";
+                    $source = Kwf_Trl::SOURCE_KWF;
                 } else  {
                     $mode = '';
-                    $source = Vps_Trl::SOURCE_WEB;
+                    $source = Kwf_Trl::SOURCE_WEB;
                 }
 
                 //TODO: vereinfachen
@@ -41,7 +41,7 @@ class Vps_Trl_JsLoader
                     $values['single'] = $trlelement['text'];
                     $values['plural'] = $trlelement['plural'];
 
-                    $newValues = Vps_Trl::getInstance()->getTrlpValues(null, $values['single'],
+                    $newValues = Kwf_Trl::getInstance()->getTrlpValues(null, $values['single'],
                                                 $values['plural'], $trlelement['source'], $language);
 
                     $method = $trlelement['type'];
@@ -57,7 +57,7 @@ class Vps_Trl_JsLoader
                     $values['single'] = $trlelement['text'];
                     $values['plural'] = $trlelement['plural'];
 
-                    $newValues = Vps_Trl::getInstance()->getTrlpValues($values['context'],
+                    $newValues = Kwf_Trl::getInstance()->getTrlpValues($values['context'],
                                 $values['single'], $values['plural'], $trlelement['source'], $language );
 
                     $method = 'trlcp'.$mode;

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_NewsCategories_News_Category_NewsToCategoriesTestModel extends Vpc_NewsCategory_Category_Directory_NewsToCategoriesModel
+class Kwc_Trl_NewsCategories_News_Category_NewsToCategoriesTestModel extends Kwc_NewsCategory_Category_Directory_NewsToCategoriesModel
 {
     public function __construct()
     {
@@ -9,7 +9,7 @@ class Vpc_Trl_NewsCategories_News_Category_NewsToCategoriesTestModel extends Vpc
             array('id'=>'3', 'news_id'=>2, 'category_id'=>1),
         );
         $config = array(
-            'proxyModel'=>new Vps_Model_FnF(array(
+            'proxyModel'=>new Kwf_Model_FnF(array(
                 'data' => $data
             ))
         );
@@ -19,7 +19,7 @@ class Vpc_Trl_NewsCategories_News_Category_NewsToCategoriesTestModel extends Vpc
     protected function _init()
     {
         parent::_init();
-        $this->_referenceMap['Item']['refModelClass'] = 'Vpc_Trl_NewsCategories_News_TestModel';
-        $this->_referenceMap['Category']['refModelClass'] = 'Vpc_Trl_NewsCategories_News_Category_CategoriesTestModel';
+        $this->_referenceMap['Item']['refModelClass'] = 'Kwc_Trl_NewsCategories_News_TestModel';
+        $this->_referenceMap['Category']['refModelClass'] = 'Kwc_Trl_NewsCategories_News_Category_CategoriesTestModel';
     }
 }

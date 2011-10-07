@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_ParentContent_CacheMeta extends Vps_Component_Cache_Meta_Static_Model
+class Kwc_Basic_ParentContent_CacheMeta extends Kwf_Component_Cache_Meta_Static_Model
 {
     public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
     {

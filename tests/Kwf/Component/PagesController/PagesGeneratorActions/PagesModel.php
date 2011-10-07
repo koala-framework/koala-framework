@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_PagesController_PagesGeneratorActions_PagesModel extends Vps_Model_FnF
+class Kwf_Component_PagesController_PagesGeneratorActions_PagesModel extends Kwf_Model_FnF
 {
     protected $_data = array(
             array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Home de', 'filename' => 'home',

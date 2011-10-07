@@ -1,58 +1,58 @@
 <?php
-abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
+abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 {
     public static function getChainedSettings($settings, $masterComponentClass, $prefix = 'Cc', $copySettings = array(), $copyFlags = array())
     {
         $ret = $settings;
         if (!$masterComponentClass) {
-            throw new Vps_Exception("This component requires a parameter");
+            throw new Kwf_Exception("This component requires a parameter");
         }
         $ret['masterComponentClass'] = $masterComponentClass;
 
         $ret['alternativeComponents'] = array();
-        if (Vpc_Abstract::getFlag($masterComponentClass, 'hasAlternativeComponent')) {
+        if (Kwc_Abstract::getFlag($masterComponentClass, 'hasAlternativeComponent')) {
             $alternativeComponents = call_user_func(array($masterComponentClass, 'getAlternativeComponents'), $masterComponentClass);
             foreach ($alternativeComponents as $acKey => $alternativeComponent) {
                 $cmp = $alternativeComponent;
-                $cmp = Vpc_Admin::getComponentClass($cmp, "{$prefix}_Component");
-                if (!$cmp) $cmp = "Vpc_Chained_{$prefix}_Component";
+                $cmp = Kwc_Admin::getComponentClass($cmp, "{$prefix}_Component");
+                if (!$cmp) $cmp = "Kwc_Chained_{$prefix}_Component";
                 $cmp .= '.'.$alternativeComponent;
                 $ret['alternativeComponents'][$acKey] = $cmp;
             }
         }
 
-        $ret['generators'] = Vpc_Abstract::getSetting($masterComponentClass, 'generators');
+        $ret['generators'] = Kwc_Abstract::getSetting($masterComponentClass, 'generators');
         foreach ($ret['generators'] as $k=>&$g) {
             if (!is_array($g['component'])) $g['component'] = array($k=>$g['component']);
             foreach ($g['component'] as $key=>&$c) {
                 if (!$c) continue;
                 $masterC = $c;
-                $c = Vpc_Admin::getComponentClass($c, "{$prefix}_Component");
-                if (!$c) $c = "Vpc_Chained_{$prefix}_Component";
+                $c = Kwc_Admin::getComponentClass($c, "{$prefix}_Component");
+                if (!$c) $c = "Kwc_Chained_{$prefix}_Component";
                 $c .= '.'.$masterC;
                 $g['masterComponentsMap'][$masterC] = $c;
 
                 // Für jede Unterkomponente mit einer AlternativeComponent muss es auch einen Eintrag in der masterComponentsMap geben
-                if (Vpc_Abstract::getFlag($masterC, 'hasAlternativeComponent')) {
+                if (Kwc_Abstract::getFlag($masterC, 'hasAlternativeComponent')) {
                     $alternativeComponents = call_user_func(array($masterC, 'getAlternativeComponents'), $masterC);
                     foreach ($alternativeComponents as $alternativeComponent) {
                         $cmp = $alternativeComponent;
-                        $cmp = Vpc_Admin::getComponentClass($cmp, "{$prefix}_Component");
-                        if (!$cmp) $cmp = "Vpc_Chained_{$prefix}_Component";
+                        $cmp = Kwc_Admin::getComponentClass($cmp, "{$prefix}_Component");
+                        if (!$cmp) $cmp = "Kwc_Chained_{$prefix}_Component";
                         $cmp .= '.'.$alternativeComponent;
                         $g['masterComponentsMap'][$alternativeComponent] = $cmp;
                     }
                 }
             }
             if (!isset($g['class'])) {
-                throw new Vps_Exception("generator class is not set: '$k' in '$masterComponentClass'");
+                throw new Kwf_Exception("generator class is not set: '$k' in '$masterComponentClass'");
             }
             $g['chainedGenerator'] = $g['class'];
-            $g['class'] = "Vpc_Chained_{$prefix}_Generator";
+            $g['class'] = "Kwc_Chained_{$prefix}_Generator";
             if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
             if (isset($g['plugins'])) {
                 foreach ($g['plugins'] as $pKey => $plugin) {
-                    $pc = Vpc_Admin::getComponentClass($plugin, "{$prefix}_Component");
+                    $pc = Kwc_Admin::getComponentClass($plugin, "{$prefix}_Component");
                     if ($pc != $plugin) {
                         $g['plugins'][$pKey] = $pc;
                     } else {
@@ -63,12 +63,12 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
             if (isset($g['model'])) unset($g['model']);
         }
         foreach ($copySettings as $i) {
-            if (Vpc_Abstract::hasSetting($masterComponentClass, $i)) {
-                $ret[$i] = Vpc_Abstract::getSetting($masterComponentClass, $i);
+            if (Kwc_Abstract::hasSetting($masterComponentClass, $i)) {
+                $ret[$i] = Kwc_Abstract::getSetting($masterComponentClass, $i);
             }
         }
         foreach ($copyFlags as $f) {
-            $flags = Vpc_Abstract::getSetting($masterComponentClass, 'flags', false);
+            $flags = Kwc_Abstract::getSetting($masterComponentClass, 'flags', false);
             if (isset($flags[$f])) {
                 $ret['flags'][$f] = $flags[$f];
             }
@@ -78,7 +78,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
 
     public static function getAlternativeComponents($componentClass)
     {
-        return Vpc_Abstract::getSetting($componentClass, 'alternativeComponents');
+        return Kwc_Abstract::getSetting($componentClass, 'alternativeComponents');
     }
 
     public function preProcessInput($postData)
@@ -103,13 +103,13 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
         $ret = $data->chained->getComponent()->getTemplateVars();
         $ret['data'] = $data;
         $ret['chained'] = $data->chained;
-        if (!is_instance_of($data->chained->componentClass, 'Vpc_Chained_Abstract_Component')) {
+        if (!is_instance_of($data->chained->componentClass, 'Kwc_Chained_Abstract_Component')) {
             $ret['linkTemplate'] = self::getTemplateFile($data->chained->componentClass);
         }
 
         $ret['componentClass'] = get_class($this);
 
-        $ret['placeholder'] = Vpc_Abstract::getSetting($data->chained->componentClass, 'placeholder');
+        $ret['placeholder'] = Kwc_Abstract::getSetting($data->chained->componentClass, 'placeholder');
         foreach ($ret['placeholder'] as $k => $v) {
             $ret['placeholder'][$k] = $this->getData()->trlStaticExecute($v);
         }
@@ -142,7 +142,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
     {
         $sourceComponentClass = substr($componentClass, strpos($componentClass, '.')+1);
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Chained($sourceComponentClass);
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Chained($sourceComponentClass);
         return $ret;
     }
 
@@ -156,7 +156,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
         if (!$masterData) return null;
 
         while ($chainedData) {
-            if (Vpc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
+            if (Kwc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
                 break;
             }
             $chainedData = $chainedData->parent;
@@ -170,7 +170,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
                 strrpos($c->componentId, '_')
             );
             $id = substr($c->componentId, $pos);
-            if (Vpc_Abstract::getFlag($c->componentClass, 'chainedType') == $chainedType) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'chainedType') == $chainedType) {
                 $subrootReached = true;
                 break;
             }
@@ -193,7 +193,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
         if (!$subrootReached) return $masterData;
         $ret = $chainedData;
         if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+            $select = new Kwf_Component_Select($select);
         }
         foreach (array_reverse($ids) as $id) {
             $select->whereId($id);

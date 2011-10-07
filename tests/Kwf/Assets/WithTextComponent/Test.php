@@ -5,25 +5,25 @@
  * @group slow
  * slow weil sie den assets cache löschen
  */
- class Vps_Assets_WithTextComponent_Test extends Vps_Test_TestCase
+ class Kwf_Assets_WithTextComponent_Test extends Kwf_Test_TestCase
 {
     public function testDebug()
     {
-        $rootComponent = 'Vps_Assets_WithTextComponent_Root_Component';
-        Vps_Component_Data_Root::setComponentClass($rootComponent);
+        $rootComponent = 'Kwf_Assets_WithTextComponent_Root_Component';
+        Kwf_Component_Data_Root::setComponentClass($rootComponent);
 
         $config = clone Zend_Registry::get('config');
         $config->debug->menu = false;
         $config->debug->assets->js = true;
         $config->debug->assets->css = true;
         $config->debug->assets->printcss = true;
-        $loader = new Vps_Assets_Loader($config);
+        $loader = new Kwf_Assets_Loader($config);
         $dep = $loader->getDependencies();
 
-        $type = 'Vps_Assets_WithTextComponent:Test';
+        $type = 'Kwf_Assets_WithTextComponent:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', $rootComponent);
-        $this->assertContains('/assets/web-vps/Vps_js/Form/HtmlEditor.js', $files);
+        $this->assertContains('/assets/web-kwf/Kwf_js/Form/HtmlEditor.js', $files);
 
-        Vps_Component_Data_Root::setComponentClass(null);
+        Kwf_Component_Data_Root::setComponentClass(null);
     }
 }

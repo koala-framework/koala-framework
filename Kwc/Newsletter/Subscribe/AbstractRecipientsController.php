@@ -1,12 +1,12 @@
 <?php
-abstract class Vpc_Newsletter_Subscribe_AbstractRecipientsController extends Vps_Controller_Action_Auto_Grid
+abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf_Controller_Action_Auto_Grid
 {
     public function jsonSaveRecipientsAction()
     {
         set_time_limit(60*10);
         ini_set('memory_limit', '384M');
 
-        $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
             $this->_getParam('componentId'), array('ignoreVisible'=>true)
         );
 
@@ -23,7 +23,7 @@ abstract class Vpc_Newsletter_Subscribe_AbstractRecipientsController extends Vps
 
         $count = $this->_model->countRows($select);
         $progressBar = new Zend_ProgressBar(
-            new Vps_Util_ProgressBar_Adapter_Cache(
+            new Kwf_Util_ProgressBar_Adapter_Cache(
                 $this->_getParam('progressNum')
             ), 0, $count * 1.1
         );
@@ -44,7 +44,7 @@ abstract class Vpc_Newsletter_Subscribe_AbstractRecipientsController extends Vps
         } while (count($rowset));
         unset($rowset);
 
-        $progressBar->next(1, trlVps('RTR-ECG-Check and saving data: please wait...'));
+        $progressBar->next(1, trlKwf('RTR-ECG-Check and saving data: please wait...'));
         $this->view->assign($component->getComponent()->saveQueue());
         $progressBar->finish();
     }

@@ -1,12 +1,12 @@
 <?php
-class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
+class Kwc_Shop_Products_Directory_AddToCart_Component extends Kwc_Form_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['flags']['processInput'] = false;
-        $ret['placeholder']['submitButton'] = trlVps('add to cart');
-        $ret['generators']['child']['component']['success'] = 'Vpc_Shop_AddToCartAbstract_Success_Component';
+        $ret['placeholder']['submitButton'] = trlKwf('add to cart');
+        $ret['generators']['child']['component']['success'] = 'Kwc_Shop_AddToCartAbstract_Success_Component';
         return $ret;
     }
 
@@ -33,7 +33,7 @@ class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
         return $ret;
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
         $id = $this->getData()->row->id;

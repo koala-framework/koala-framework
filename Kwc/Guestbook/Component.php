@@ -1,5 +1,5 @@
 <?php
-class Vpc_Guestbook_Component extends Vpc_Posts_Directory_Component
+class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
 {
     /**
      * Der Post ist erst inaktiv und muss erst freigeschaltet werden
@@ -13,14 +13,14 @@ class Vpc_Guestbook_Component extends Vpc_Posts_Directory_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Guestbook');
-        $ret['generators']['detail']['component'] = 'Vpc_Guestbook_Detail_Component';
-        $ret['generators']['write']['component'] = 'Vpc_Guestbook_Write_Component';
-        $ret['generators']['child']['component']['mail'] = 'Vpc_Guestbook_Mail_Component';
-        $ret['generators']['child']['component']['activate'] = 'Vpc_Guestbook_ActivatePost_Component';
-        $ret['generators']['child']['component']['deactivate'] = 'Vpc_Guestbook_DeactivatePost_Component';
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['extConfig'] = 'Vpc_Guestbook_ExtConfig';
+        $ret['componentName'] = trlKwf('Guestbook');
+        $ret['generators']['detail']['component'] = 'Kwc_Guestbook_Detail_Component';
+        $ret['generators']['write']['component'] = 'Kwc_Guestbook_Write_Component';
+        $ret['generators']['child']['component']['mail'] = 'Kwc_Guestbook_Mail_Component';
+        $ret['generators']['child']['component']['activate'] = 'Kwc_Guestbook_ActivatePost_Component';
+        $ret['generators']['child']['component']['deactivate'] = 'Kwc_Guestbook_DeactivatePost_Component';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['extConfig'] = 'Kwc_Guestbook_ExtConfig';
         $ret['flags']['hasResources'] = true;
         return $ret;
     }

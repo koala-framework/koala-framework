@@ -1,11 +1,11 @@
 <?php
-class Vpc_Composite_Marquee_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Composite_Marquee_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Marquee');
-        $ret['assets']['dep'][] = 'VpsMarqueeElements';
+        $ret['componentName'] = trlKwf('Marquee');
+        $ret['assets']['dep'][] = 'KwfMarqueeElements';
 
         $ret['selector'] = '> div';
 

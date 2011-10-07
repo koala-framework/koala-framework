@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Basic_LinkTagEvent
+ * @group Kwc_Basic_LinkTagEvent
  **/
-class Vpc_Basic_LinkTagEvent_Test extends Vpc_TestAbstract
+class Kwc_Basic_LinkTagEvent_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_LinkTagEvent_Root');
+        parent::setUp('Kwc_Basic_LinkTagEvent_Root');
     }
 
     public function testDependsOnRow()
@@ -15,7 +15,7 @@ class Vpc_Basic_LinkTagEvent_Test extends Vpc_TestAbstract
         $eventsModel = $eventsComponent->getGenerator('detail')->getModel();
         $delRow = $eventsModel->getRow(601);
 
-        $a = Vpc_Admin::getInstance('Vpc_Basic_LinkTagEvent_TestComponent');
+        $a = Kwc_Admin::getInstance('Kwc_Basic_LinkTagEvent_TestComponent');
         $depends = $a->getComponentsDependingOnRow($delRow);
 
         $this->assertEquals(1, count($depends));

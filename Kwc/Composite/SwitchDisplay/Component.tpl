@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?> vpsSwitchDisplay">
+<div class="<?=$this->cssClass?> kwfSwitchDisplay">
     <a class="linktext switchLink" href="#"><?=$this->component($this->linktext)?></a>
     <div class="content switchContent">
         <?=$this->component($this->content)?>

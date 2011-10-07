@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Indirect_Flag3 extends Vpc_Abstract
+class Kwf_Component_Generator_Indirect_Flag3 extends Kwc_Abstract
 {
     public static function getSettings()
     {

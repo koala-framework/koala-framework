@@ -1,12 +1,12 @@
 <?php
-class Vpc_Directories_Category_ShowCategories_Model extends Vps_Model_Db
+class Kwc_Directories_Category_ShowCategories_Model extends Kwf_Model_Db
 {
-    protected $_table = 'vpc_directories_category_showcategories';
+    protected $_table = 'kwc_directories_category_showcategories';
 
     protected $_referenceMap = array(
         'Category' => array(
             'column'        => 'category_id',
-            'refModelClass' => 'Vpc_Directories_Category_Directory_CategoriesModel'
+            'refModelClass' => 'Kwc_Directories_Category_Directory_CategoriesModel'
         )
     );
 }

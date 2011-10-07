@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_HiddenOptions
+class Kwf_View_Helper_HiddenOptions
 {
     public function hiddenOptions($options, $class = 'options')
     {

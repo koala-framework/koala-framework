@@ -1,12 +1,12 @@
 <?php
-class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
-    implements Vpc_Mail_Recipient_TitleInterface
+class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
+    implements Kwc_Mail_Recipient_TitleInterface
 {
     protected function _afterSave()
     {
         parent::_afterSave();
-        if (Vpc_Shop_Cart_Orders::getCartOrderId() == $this->id && $this->status != 'cart') {
-            Vpc_Shop_Cart_Orders::resetCartOrderId();
+        if (Kwc_Shop_Cart_Orders::getCartOrderId() == $this->id && $this->status != 'cart') {
+            Kwc_Shop_Cart_Orders::resetCartOrderId();
         }
     }
 
@@ -46,14 +46,14 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     }
     public function getMailFormat()
     {
-        return Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
+        return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 
     public function getSubTotal()
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
+            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
             $ret += $data->getPrice($op);
         }
         return $ret;
@@ -63,7 +63,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
+            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
             $ret += $data->getAmount($op);
         }
         return $ret;
@@ -71,16 +71,16 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
 
     public function getTotal()
     {
-        return Vpc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getTotal($this);
+        return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getTotal($this);
     }
 
     public function getSalutation()
     {
         $ret = '';
         if ($this->sex == 'male') {
-            $ret .= trlVps('Mr.');
+            $ret .= trlKwf('Mr.');
         } else {
-            $ret .= trlVps('Ms.');
+            $ret .= trlKwf('Ms.');
         }
         $ret .= ' '.trim($this->title.' '.$this->lastname);
         return $ret;
@@ -108,7 +108,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         $items = $this->getChildRows('Products');
         $ret = array();
         foreach ($items as $i) {
-            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
+            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
             $r = array(
                 'additionalOrderData' => $data->getAdditionalOrderData($i),
                 'price' => $data->getPrice($i),
@@ -116,7 +116,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
                 'text' => $data->getProductText($i),
             );
             if ($includeProduct) {
-                $addComponent = Vps_Component_Data_Root::getInstance()
+                $addComponent = Kwf_Component_Data_Root::getInstance()
                                 ->getComponentByDbId($i->add_component_id);
                 $r['product'] = $addComponent->parent;
             }
@@ -128,11 +128,11 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     public function getPlaceholders()
     {
         $ret = array();
-        $m = new Vps_View_Helper_Money();
+        $m = new Kwf_View_Helper_Money();
         $ret['total'] = $m->money($this->getTotal());
         $ret['orderNumber'] = $this->order_number;
 
-        $plugins = Vpc_Shop_Cart_OrderData::getInstance($this->cart_component_class)
+        $plugins = Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)
                     ->getShopCartPlugins();
         foreach ($plugins as $plugin) {
             $ret = array_merge($ret, $plugin->getPlaceholders($this));

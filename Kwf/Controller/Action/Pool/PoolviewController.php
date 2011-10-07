@@ -1,11 +1,11 @@
 <?php
-class Vps_Controller_Action_Pool_PoolviewController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Controller_Action_Pool_PoolviewController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array();
     protected $_position = false;
     protected $_sortable = false;
     protected $_defaultOrder = 'pos';
-    protected $_tableName = 'Vps_Dao_Pool';
+    protected $_tableName = 'Kwf_Dao_Pool';
 
     protected function _getPool()
     {
@@ -22,7 +22,7 @@ class Vps_Controller_Action_Pool_PoolviewController extends Vps_Controller_Actio
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('pos'));
-        $this->_columns->add(new Vps_Grid_Column('value', 'Wert', 300));
+        $this->_columns->add(new Kwf_Grid_Column('pos'));
+        $this->_columns->add(new Kwf_Grid_Column('value', 'Wert', 300));
     }
 }

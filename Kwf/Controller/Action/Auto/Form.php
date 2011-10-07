@@ -1,8 +1,8 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Auto_Abstract
+abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Auto_Abstract
 {
     /**
-     * @var Vps_Form
+     * @var Kwf_Form
      */
     protected $_form;
     protected $_fields = array(); //deprecated
@@ -16,7 +16,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             $this->view->assign($this->_form->getProperties());
         }
         $this->view->controllerUrl = $this->getRequest()->getPathInfo();
-        $this->view->xtype = 'vps.autoform';
+        $this->view->xtype = 'kwf.autoform';
     }
 
     protected function _initFields()
@@ -31,14 +31,14 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             if (isset($this->_formName)) {
                 $this->_form = new $this->_formName();
             } else {
-                $this->_form = new Vps_Form();
+                $this->_form = new Kwf_Form();
             }
         }
 
         foreach ($this->_fields as $k=>$field) {
-            if (!isset($field['type'])) throw new Vps_Exception("no type for field no $k specified");
-            $cls = 'Vps_Form_Field_'.$field['type'];
-            if (!class_exists($cls)) throw new Vps_Exception("Invalid type: Form-Field-Class $cls does not exist.");
+            if (!isset($field['type'])) throw new Kwf_Exception("no type for field no $k specified");
+            $cls = 'Kwf_Form_Field_'.$field['type'];
+            if (!class_exists($cls)) throw new Kwf_Exception("Invalid type: Form-Field-Class $cls does not exist.");
             $fieldObject = new $cls();
             unset($field['type']);
             foreach ($field as $propName => $propValue) {
@@ -84,7 +84,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             $row = $this->_form->getRow();
 
             if (!$this->_hasPermissions($row, 'load')) {
-                throw new Vps_Exception('You don\'t have the permission for this entry.');
+                throw new Kwf_Exception('You don\'t have the permission for this entry.');
             }
             $this->_beforeLoad($row);
             $this->view->data = $this->_form->load(null);
@@ -113,7 +113,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         // zuvor war statt diesem kommentar das $row = $this->_form->getRow();
         // drin und wurde bei processInput und validate übergeben, aber die form
         // weiß selbst das model, deshalb passt NULL
-        // Runtergeschoben wurde das $this->_form->getRow() weil bei der Vps_User_Form
+        // Runtergeschoben wurde das $this->_form->getRow() weil bei der Kwf_User_Form
         // die row im processInput gefaket wird, da hier ->createUserRow() aufgerufen
         // wird anstatt ->createRow() und diese dann im _form->getRow() zurück kommt
 
@@ -121,8 +121,8 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         $this->_beforeValidate($postData);
         $invalid = $this->_form->validate(null, $postData);
         if ($invalid) {
-            $invalid = Vps_Form::formatValidationErrors($invalid);
-            throw new Vps_ClientException(implode("<br />", $invalid));
+            $invalid = Kwf_Form::formatValidationErrors($invalid);
+            throw new Kwf_ClientException(implode("<br />", $invalid));
         }
 
         $data = $this->_form->prepareSave(null, $postData);
@@ -149,12 +149,12 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
                     $skip = true;
                 }
                 if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
-                    throw new Vps_Exception('Add is not allowed.');
+                    throw new Kwf_Exception('Add is not allowed.');
                 }
                 if (!$skip) $this->_beforeInsert($row);
             } else {
                 if (!isset($this->_permissions['save']) || !$this->_permissions['save']) {
-                    throw new Vps_Exception('Save is not allowed.');
+                    throw new Kwf_Exception('Save is not allowed.');
                 }
             }
 
@@ -164,7 +164,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             //erst hier unten Berechtigungen überprüfen, damit beforeInsert usw vorher noch ausgeführt
             //wird und eventuelle Daten gesetzt werden
             if (!$this->_hasPermissions($row, 'save')) {
-                throw new Vps_Exception("Save is not allowed for this row.");
+                throw new Kwf_Exception("Save is not allowed for this row.");
             }
             $data = $this->_form->save(null, $postData);
 
@@ -196,11 +196,11 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     public function jsonDeleteAction()
     {
         if (!isset($this->_permissions['delete']) || !$this->_permissions['delete']) {
-            throw new Vps_Exception('Delete is not allowed.');
+            throw new Kwf_Exception('Delete is not allowed.');
         }
         $row = $this->_form->getRow();
         if (!$this->_hasPermissions($row, 'delete')) {
-            throw new Vps_Exception("Delete is not allowed for this row.");
+            throw new Kwf_Exception("Delete is not allowed for this row.");
         }
         $db = Zend_Registry::get('db');
         if ($db) $db->beginTransaction();
@@ -208,23 +208,23 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         if ($db) $db->commit();
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterSave(Vps_Model_Row_Interface $row)
+    protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterInsert(Vps_Model_Row_Interface $row)
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeLoad(Vps_Model_Row_Interface $row)
+    protected function _beforeLoad(Kwf_Model_Row_Interface $row)
     {
     }
 

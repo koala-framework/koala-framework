@@ -1,4 +1,4 @@
-Vps.About = Ext.extend(Ext.Window, {
+Kwf.About = Ext.extend(Ext.Window, {
     initComponent: function() {
         this.title = 'About';
         this.width = 350;
@@ -7,9 +7,9 @@ Vps.About = Ext.extend(Ext.Window, {
         this.layout = 'fit';
         this.modal = true;
         this.items = [new Ext.Panel({
-            cls: 'vps-about',
-            autoLoad: '/vps/user/about/content'
+            cls: 'kwf-about',
+            autoLoad: '/kwf/user/about/content'
         })];
-        Vps.About.superclass.initComponent.call(this);
+        Kwf.About.superclass.initComponent.call(this);
     }
 });

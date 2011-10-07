@@ -56,7 +56,7 @@
  * @copyright 2004-2010 phlyLabs Berlin, http://phlylabs.de
  * @version 0.6.9 2010-11-04
  */
-class Vps_Util_Punycode
+class Kwf_Util_Punycode
 {
     // NP See below
 

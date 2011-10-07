@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_VoucherProduct_Admin extends Vpc_Abstract_Composite_Admin
+class Kwc_Shop_VoucherProduct_Admin extends Kwc_Abstract_Composite_Admin
 {
     public function getExtConfig()
     {

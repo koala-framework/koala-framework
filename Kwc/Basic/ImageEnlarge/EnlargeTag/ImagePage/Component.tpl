@@ -31,7 +31,7 @@
         <? if(isset($this->options->title) && $this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>
         <? if(isset($this->options->fullSizeUrl)) { ?>
             <p class="fullSizeLink">
-                <a href="<?=$this->options->fullSizeUrl?>" class="fullSizeLink"><?=$this->data->trlVps('Download original image')?></a>
+                <a href="<?=$this->options->fullSizeUrl?>" class="fullSizeLink"><?=$this->data->trlKwf('Download original image')?></a>
             </p>
         <? } ?>
     </div>

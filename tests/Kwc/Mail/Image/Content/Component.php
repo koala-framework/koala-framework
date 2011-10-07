@@ -1,4 +1,4 @@
 <?php
-class Vpc_Mail_Image_Content_Component extends Vpc_Abstract
+class Kwc_Mail_Image_Content_Component extends Kwc_Abstract
 {
 }

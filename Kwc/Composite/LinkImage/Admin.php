@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_LinkImage_Admin extends Vpc_Abstract_Composite_Admin
+class Kwc_Composite_LinkImage_Admin extends Kwc_Abstract_Composite_Admin
 {
     public function gridColumns()
     {

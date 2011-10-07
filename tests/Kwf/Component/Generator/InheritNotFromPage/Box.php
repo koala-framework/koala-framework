@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_Generator_InheritNotFromPage_Box extends Vpc_Abstract
+class Kwf_Component_Generator_InheritNotFromPage_Box extends Kwc_Abstract
 {
 }

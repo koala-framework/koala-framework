@@ -1,5 +1,5 @@
 <?php
-class Vps_Grid_Column_RowNumberer extends Vps_Grid_Column
+class Kwf_Grid_Column_RowNumberer extends Kwf_Grid_Column
 {
     public function __construct($width = 30)
     {

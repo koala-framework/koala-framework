@@ -1,13 +1,13 @@
 <?php
 /**
- * @group Vps_Trl
- * @group Vps_Trl_ChainedByMaster
+ * @group Kwf_Trl
+ * @group Kwf_Trl_ChainedByMaster
  */
-class Vps_Trl_ChainedByMaster_Test extends Vpc_TestAbstract
+class Kwf_Trl_ChainedByMaster_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Trl_ChainedByMaster_Root');
+        parent::setUp('Kwf_Trl_ChainedByMaster_Root');
     }
 
     public function testMenuForPage1()
@@ -23,10 +23,10 @@ class Vps_Trl_ChainedByMaster_Test extends Vpc_TestAbstract
 
     private function _getChainedId($masterId, $select = array())
     {
-        $root = Vps_Component_Data_Root::getInstance();
+        $root = Kwf_Component_Data_Root::getInstance();
         $masterData = $root->getComponentById($masterId);
         $chainedData = $root->getComponentById('root-en');
-        $component = Vpc_Chained_Trl_Component::getChainedByMaster($masterData, $chainedData, $select);
+        $component = Kwc_Chained_Trl_Component::getChainedByMaster($masterData, $chainedData, $select);
         if ($component) return $component->componentId;
         return null;
     }

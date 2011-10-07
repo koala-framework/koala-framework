@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_StaticTextsForm_Translate_Component extends Vpc_Form_Component
+class Kwc_Trl_StaticTextsForm_Translate_Component extends Kwc_Form_Component
 {
     public static function getSettings()
     {

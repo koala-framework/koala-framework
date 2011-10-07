@@ -1,6 +1,6 @@
-Vps.Auto.Filter.Text = function(config)
+Kwf.Auto.Filter.Text = function(config)
 {
-    Vps.Auto.Filter.Text.superclass.constructor.call(this, config);
+    Kwf.Auto.Filter.Text.superclass.constructor.call(this, config);
 
     this.textField = new Ext.form.TriggerField({
         width:config.width,
@@ -26,7 +26,7 @@ Vps.Auto.Filter.Text = function(config)
     this.toolbarItems.add(this.textField);
 };
 
-Ext.extend(Vps.Auto.Filter.Text, Vps.Auto.Filter.Abstract, {
+Ext.extend(Kwf.Auto.Filter.Text, Kwf.Auto.Filter.Abstract, {
     clear: function()
     {
         if (this.textField.getValue()) {

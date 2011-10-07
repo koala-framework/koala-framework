@@ -63,7 +63,7 @@
  */
 
 
-class Vps_Assets_JavaScriptPacker
+class Kwf_Assets_JavaScriptPacker
 {
     // constants
     const IGNORE = '$1';
@@ -118,7 +118,7 @@ class Vps_Assets_JavaScriptPacker
     
     // zero encoding - just removal of white space and comments
     private function _basicCompression($script) {
-        $parser = new Vps_Assets_ParseMaster();
+        $parser = new Kwf_Assets_ParseMaster();
         // make safe
         $parser->escapeChar = '\\';
         // protect strings
@@ -147,7 +147,7 @@ class Vps_Assets_JavaScriptPacker
     }
     
     private function _encodeSpecialChars($script) {
-        $parser = new Vps_Assets_ParseMaster();
+        $parser = new Kwf_Assets_ParseMaster();
         // replace: $name -> n, $$name -> na
         $parser->add('/((\\x24+)([a-zA-Z$_]+))(\\d*)/',
                     array('fn' => '_replace_name'));
@@ -171,7 +171,7 @@ class Vps_Assets_JavaScriptPacker
         if ($this->_encoding > 62)
             $script = $this->_escape95($script);
         // create the parser
-        $parser = new Vps_Assets_ParseMaster();
+        $parser = new Kwf_Assets_ParseMaster();
         $encode = $this->_getEncoder($this->_encoding);
         // for high-ascii, don't encode single character low-ascii
         $regexp = ($this->_encoding > 62) ? '/\\w\\w+/' : '/\\w+/';
@@ -336,7 +336,7 @@ class Vps_Assets_JavaScriptPacker
             $unpack = preg_replace($ENCODE, $inline, $unpack);
         }
         // pack the boot function too
-        $unpackPacker = new Vps_Assets_JavaScriptPacker($unpack, 0, false, true);
+        $unpackPacker = new Kwf_Assets_JavaScriptPacker($unpack, 0, false, true);
         $unpack = $unpackPacker->pack();
         
         // arguments
@@ -530,7 +530,7 @@ class Vps_Assets_JavaScriptPacker
 }
 
 
-class Vps_Assets_ParseMaster
+class Kwf_Assets_ParseMaster
 {
     public $ignoreCase = false;
     public $escapeChar = '';

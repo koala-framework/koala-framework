@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_RowsSubModel_Proxy extends Vps_Model_Proxy
-    implements Vps_Model_RowsSubModel_Interface
+class Kwf_Model_RowsSubModel_Proxy extends Kwf_Model_Proxy
+    implements Kwf_Model_RowsSubModel_Interface
 {
-    protected $_rowClass = 'Vps_Model_RowsSubModel_Proxy_Row';
+    protected $_rowClass = 'Kwf_Model_RowsSubModel_Proxy_Row';
     /**
-     * @var Vps_Model_Interface
+     * @var Kwf_Model_Interface
      */
     protected $_parentModel;
 
@@ -19,13 +19,13 @@ class Vps_Model_RowsSubModel_Proxy extends Vps_Model_Proxy
     protected function _init()
     {
         parent::_init();
-        if (!$this->getProxyModel() instanceof Vps_Model_RowsSubModel_Interface) {
-            throw new Vps_Exception("proxyModel doesn't implement Vps_Model_RowsSubModel_Interface");
+        if (!$this->getProxyModel() instanceof Kwf_Model_RowsSubModel_Interface) {
+            throw new Kwf_Exception("proxyModel doesn't implement Kwf_Model_RowsSubModel_Interface");
         }
         if ($this->_parentModel) $this->getProxyModel()->setParentModel($this->_parentModel);
     }
 
-    public function setParentModel(Vps_Model_Interface $m)
+    public function setParentModel(Kwf_Model_Interface $m)
     {
         $this->_parentModel = $m;
         $this->getProxyModel()->setParentModel($m);
@@ -36,9 +36,9 @@ class Vps_Model_RowsSubModel_Proxy extends Vps_Model_Proxy
         return $this->_parentModel;
     }
 
-    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    public function createRowByParentRow(Kwf_Model_Row_Interface $parentRow, array $data = array())
     {
-        while ($parentRow instanceof Vps_Model_Proxy_Row) $parentRow = $parentRow->getProxiedRow();
+        while ($parentRow instanceof Kwf_Model_Proxy_Row) $parentRow = $parentRow->getProxiedRow();
         $proxyRow = $this->getProxyModel()->createRowByParentRow($parentRow);
         $ret = new $this->_rowClass(array(
             'row' => $proxyRow,
@@ -52,9 +52,9 @@ class Vps_Model_RowsSubModel_Proxy extends Vps_Model_Proxy
         return $ret;
     }
 
-    public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
+    public function getRowsByParentRow(Kwf_Model_Row_Interface $parentRow, $select = array())
     {
-        while ($parentRow instanceof Vps_Model_Proxy_Row) $parentRow = $parentRow->getProxiedRow();
+        while ($parentRow instanceof Kwf_Model_Proxy_Row) $parentRow = $parentRow->getProxiedRow();
         $proxyRowset = $this->getProxyModel()->getRowsByParentRow($parentRow, $select);
         return new $this->_rowsetClass(array(
             'rowset' => $proxyRowset,
@@ -65,11 +65,11 @@ class Vps_Model_RowsSubModel_Proxy extends Vps_Model_Proxy
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_RowsSubModel');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_Mongo_RowsSubModel');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_RowsSubModel');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_Mongo_RowsSubModel');
     }
 }

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
+class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 {
     protected function _getRow($componentId)
     {
-        if (!Vpc_Abstract::hasSetting($this->_class, 'tablename')) return null;
-        $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
+        if (!Kwc_Abstract::hasSetting($this->_class, 'tablename')) return null;
+        $tablename = Kwc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
             $table = new $tablename(array('componentClass'=>$this->_class));
             return $table->find($componentId)->current();
@@ -14,7 +14,7 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
 
     protected function _getRows($componentId)
     {
-        $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
+        $tablename = Kwc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
             $table = new $tablename(array('componentClass' => $this->_class));
             $where = array(
@@ -70,10 +70,10 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
     public function getCardForms()
     {
         $ret = array();
-        $title = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        $title = Kwc_Abstract::getSetting($this->_class, 'componentName');
         $title = str_replace('.', ' ', $title);
         $ret[] = array(
-            'form' => Vpc_Abstract_Form::createComponentForm($this->_class, 'child'),
+            'form' => Kwc_Abstract_Form::createComponentForm($this->_class, 'child'),
             'title' => $title,
         );
         return $ret;

@@ -1,20 +1,20 @@
 <?php
-class Vps_Crm_Customer_CommentsController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Crm_Customer_CommentsController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_defaultOrder = array('field'=>'id', 'direction'=>'DESC');
-    protected $_modelName = 'Vps_Crm_Customer_Model_Comments';
+    protected $_modelName = 'Kwf_Crm_Customer_Model_Comments';
     protected $_paging = 10;
     protected $_buttons = array('add', 'delete');
 
     public function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column_Button('edit'));
+        $this->_columns->add(new Kwf_Grid_Column_Button('edit'));
 
-        $this->_columns->add(new Vps_Grid_Column('insert_date', trlVps('Date'), 120));
-        $this->_columns->add(new Vps_Form_Field_ShowField('insert_uid', trlVps('User')))
-            ->setData(new Vps_Data_Table_Parent('InsertUser'))
+        $this->_columns->add(new Kwf_Grid_Column('insert_date', trlKwf('Date'), 120));
+        $this->_columns->add(new Kwf_Form_Field_ShowField('insert_uid', trlKwf('User')))
+            ->setData(new Kwf_Data_Table_Parent('InsertUser'))
             ->setHidden(true);
-        $this->_columns->add(new Vps_Grid_Column('value', trlVps('Text'), 260));
+        $this->_columns->add(new Kwf_Grid_Column('value', trlKwf('Text'), 260));
     }
 
     protected function _getWhere()

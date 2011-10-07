@@ -1,19 +1,19 @@
 <?php
-class Vpc_Composite_TextImages_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Composite_TextImages_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName'     => 'TextImages',
-            'componentIcon'     => new Vps_Asset('textImages'),
-            'ownModel'         => 'Vpc_Composite_TextImages_Model',
+            'componentIcon'     => new Kwf_Asset('textImages'),
+            'ownModel'         => 'Kwc_Composite_TextImages_Model',
             'default'           => array(
                 'image_position'    => 'left' // 'left', 'right', 'alternate'
             )
         ));
-        $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
-        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
-        $ret['generators']['child']['component']['images'] = 'Vpc_Composite_Images_Component';
+        $ret['assetsAdmin']['dep'][] = 'KwfTabPanel';
+        $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
+        $ret['generators']['child']['component']['images'] = 'Kwc_Composite_Images_Component';
         return $ret;
     }
 

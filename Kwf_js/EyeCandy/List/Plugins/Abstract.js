@@ -1,12 +1,12 @@
-Ext.namespace("Vps.EyeCandy.List.Plugins.StateChanger",
-              "Vps.EyeCandy.List.Plugins.StateListener",
-              "Vps.EyeCandy.List.Plugins.ActiveChanger",
-              "Vps.EyeCandy.List.Plugins.ActiveListener");
+Ext.namespace("Kwf.EyeCandy.List.Plugins.StateChanger",
+              "Kwf.EyeCandy.List.Plugins.StateListener",
+              "Kwf.EyeCandy.List.Plugins.ActiveChanger",
+              "Kwf.EyeCandy.List.Plugins.ActiveListener");
 
-Vps.EyeCandy.List.Plugins.Abstract = function(cfg) {
+Kwf.EyeCandy.List.Plugins.Abstract = function(cfg) {
     Ext.apply(this, cfg);
 };
-Vps.EyeCandy.List.Plugins.Abstract.prototype = {
+Kwf.EyeCandy.List.Plugins.Abstract.prototype = {
     //list
     init: function()
     {

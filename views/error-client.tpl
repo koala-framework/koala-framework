@@ -1,9 +1,9 @@
 <html>
     <head>
-        <title><?= trlVps('Error'); ?></title>
+        <title><?= trlKwf('Error'); ?></title>
     </head>
     <body>
-        <h1><?= trlVps('Error') ?></h1>
+        <h1><?= trlKwf('Error') ?></h1>
         <p><?= $this->exception->getMessage() ?></p>
     </body>
 </html>

@@ -1,4 +1,4 @@
-Vps.onContentReady(function()
+Kwf.onContentReady(function()
 {
     var tooltipWrappers = Ext.query('.tooltipWrapper');
     Ext.each(tooltipWrappers, function(tooltipWrapper) {

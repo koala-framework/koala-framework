@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Form_Success_Component extends Vpc_Abstract
+class Kwc_Shop_Cart_Checkout_Form_Success_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {

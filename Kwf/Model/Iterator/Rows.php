@@ -4,24 +4,24 @@
  *
  * könnte womöglich in normales rowset integiert werden
  */
-class Vps_Model_Iterator_Rows implements Vps_Model_Iterator_ModelIterator_Interface
+class Kwf_Model_Iterator_Rows implements Kwf_Model_Iterator_ModelIterator_Interface
 {
     /**
-     * @var Vps_Model_Interface
+     * @var Kwf_Model_Interface
      **/
     private $_model;
 
     /**
-     * @var Vps_Model_Select
+     * @var Kwf_Model_Select
      **/
     private $_select;
 
     /**
-     * @var Vps_Model_Rowset_Interface
+     * @var Kwf_Model_Rowset_Interface
      **/
     private $_rowset;
 
-    public function __construct(Vps_Model_Interface $model, Vps_Model_Select $select)
+    public function __construct(Kwf_Model_Interface $model, Kwf_Model_Select $select)
     {
         $this->_model = $model;
         $this->_select = $select;

@@ -1,7 +1,7 @@
 <?php
-class Vpc_Menu_EditableItems_Model extends Vps_Model_Abstract
+class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
 {
-    protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
+    protected $_rowClass = 'Kwf_Model_Row_Data_Abstract';
     private $_data = array();
 
     public function getPrimaryKey()
@@ -16,13 +16,13 @@ class Vpc_Menu_EditableItems_Model extends Vps_Model_Abstract
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        if (!is_object($where) || $where instanceof Vps_Model_Select_Expr_Interface) {
+        if (!is_object($where) || $where instanceof Kwf_Model_Select_Expr_Interface) {
             $select = $this->select($where, $order, $limit, $start);
         } else {
             $select = $where;
         }
         $dataKeys = array();
-        $whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
+        $whereEquals = $select->getPart(Kwf_Model_Select::WHERE_EQUALS);
         if (isset($whereEquals['parent_component_id'])) {
             $whereId = null;
             if (isset($whereEquals['id'])) {
@@ -34,11 +34,11 @@ class Vpc_Menu_EditableItems_Model extends Vps_Model_Abstract
             if ($whereId ||
                 (isset($whereEquals['ignore_visible']) && $whereEquals['ignore_visible'])
             ) {
-                $childPagesComponentSelect[Vps_Component_Select::IGNORE_VISIBLE] = true;
+                $childPagesComponentSelect[Kwf_Component_Select::IGNORE_VISIBLE] = true;
             }
-            $childPages = Vps_Component_Data_Root::getInstance()
+            $childPages = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($whereEquals['parent_component_id'], array(
-                    Vps_Component_Select::IGNORE_VISIBLE => true
+                    Kwf_Component_Select::IGNORE_VISIBLE => true
                 ))
                 ->parent->parent
                 ->getChildPages($childPagesComponentSelect);
@@ -60,7 +60,7 @@ class Vpc_Menu_EditableItems_Model extends Vps_Model_Abstract
                 }
             }
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
         return new $this->_rowsetClass(array(
             'dataKeys' => $dataKeys,

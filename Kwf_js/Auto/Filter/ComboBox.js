@@ -1,6 +1,6 @@
-Vps.Auto.Filter.ComboBox = function(config)
+Kwf.Auto.Filter.ComboBox = function(config)
 {
-    Vps.Auto.Filter.ComboBox.superclass.constructor.call(this, config);
+    Kwf.Auto.Filter.ComboBox.superclass.constructor.call(this, config);
 
     if (config.field) {
         this.combo = Ext.ComponentMgr.create(config.field);
@@ -11,7 +11,7 @@ Vps.Auto.Filter.ComboBox = function(config)
             data: config.data
         });
         if (!config['default'] && filterStore.find('id', 0) == -1) {
-            filterStore.insert(0, [new record({id: 0, name: config['defaultText'] ? config['defaultText'] : trlVps('all')})]);
+            filterStore.insert(0, [new record({id: 0, name: config['defaultText'] ? config['defaultText'] : trlKwf('all')})]);
             config['default'] = 0;
         }
         this.combo = new Ext.form.ComboBox({
@@ -32,7 +32,7 @@ Vps.Auto.Filter.ComboBox = function(config)
     this.toolbarItems.add(this.combo);
 };
 
-Ext.extend(Vps.Auto.Filter.ComboBox, Vps.Auto.Filter.Abstract, {
+Ext.extend(Kwf.Auto.Filter.ComboBox, Kwf.Auto.Filter.Abstract, {
     reset: function() {
         this.combo.setValue(0);
     },

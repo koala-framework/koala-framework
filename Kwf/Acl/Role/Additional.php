@@ -1,5 +1,5 @@
 <?php
-class Vps_Acl_Role_Additional extends Vps_Acl_Role
+class Kwf_Acl_Role_Additional extends Kwf_Acl_Role
 {
     protected $_parentRoleId;
 

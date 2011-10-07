@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_DownloadsTree_ProjectsController extends Vps_Controller_Action_Auto_Tree
+class Kwc_Advanced_DownloadsTree_ProjectsController extends Kwf_Controller_Action_Auto_Tree
 {
     protected $_rootVisible = true;
     protected $_textField = 'text';
@@ -9,7 +9,7 @@ class Vpc_Advanced_DownloadsTree_ProjectsController extends Vps_Controller_Actio
 
     public function preDispatch()
     {
-        $this->_modelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'projectsModel');
+        $this->_modelName = Kwc_Abstract::getSetting($this->_getParam('class'), 'projectsModel');
         parent::preDispatch();
     }
 

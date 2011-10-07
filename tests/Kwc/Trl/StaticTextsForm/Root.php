@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_StaticTextsForm_Root extends Vpc_Root_TrlRoot_Component
+class Kwc_Trl_StaticTextsForm_Root extends Kwc_Root_TrlRoot_Component
 {
     public static function getSettings()
     {
@@ -8,11 +8,11 @@ class Vpc_Trl_StaticTextsForm_Root extends Vpc_Root_TrlRoot_Component
         unset($ret['generators']['title']);
 
         $ret['generators']['master']['component'] =
-            'Vpc_Trl_StaticTextsForm_GermanMaster';
+            'Kwc_Trl_StaticTextsForm_GermanMaster';
         $ret['generators']['chained']['component'] =
-            'Vpc_Root_TrlRoot_Chained_Component.Vpc_Trl_StaticTextsForm_GermanMaster';
+            'Kwc_Root_TrlRoot_Chained_Component.Kwc_Trl_StaticTextsForm_GermanMaster';
 
-        $ret['childModel'] = new Vpc_Trl_RootModel(array(
+        $ret['childModel'] = new Kwc_Trl_RootModel(array(
             'de' => 'Deutsch',
             'en' => 'English'
         ));

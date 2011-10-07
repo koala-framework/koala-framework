@@ -32,7 +32,7 @@ function _pArray($src, $indent = '')
 
 function p($src, $Type = 'LOG')
 {
-    if (!Vps_Debug::isEnabled()) return;
+    if (!Kwf_Debug::isEnabled()) return;
     $isToDebug = false;
     if ($Type != 'ECHO' && /*Zend_Registry::get('config')->debug->firephp && */class_exists('FirePHP') && FirePHP::getInstance()) {
         if (is_object($src) && method_exists($src, 'toArray')) {
@@ -82,7 +82,7 @@ function p($src, $Type = 'LOG')
 
 function d($src)
 {
-    if (!Vps_Debug::isEnabled()) return;
+    if (!Kwf_Debug::isEnabled()) return;
     p($src, 'ECHO');
     exit;
 }
@@ -140,14 +140,14 @@ function _btArgsString($args)
 function _btArgString($arg)
 {
     $ret = array();
-    if ($arg instanceof Vps_Model_Select) {
+    if ($arg instanceof Kwf_Model_Select) {
         $r = array();
         foreach ($arg->getParts() as $key =>$val) {
             $val = _btArgString($val);
             $r[] = "$key => $val";
         }
         $ret[] = 'select(' . implode(', ', $r) . ')';
-    } else if ($arg instanceof Vps_Component_Data) {
+    } else if ($arg instanceof Kwf_Component_Data) {
         $ret[] = get_class($arg).'('.$arg->componentId.')';
     } else if (is_object($arg)) {
         $ret[] = get_class($arg);
@@ -186,7 +186,7 @@ function btString()
         $ret .=
             (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
             (isset($i['line']) ? $i['line'] : '?') . ' - ' .
-            ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
+            ((isset($i['object']) && $i['object'] instanceof Kwf_Component_Data) ? $i['object']->componentId . '->' : '') .
             (isset($i['function']) ? $i['function'] : '') . '(' .
             _btArgsString($i['args']) . ')' . "\n";
     }
@@ -196,7 +196,7 @@ function btString()
 
 function bt($file = false)
 {
-    if (!Vps_Debug::isEnabled()) return;
+    if (!Kwf_Debug::isEnabled()) return;
     if (php_sapi_name() == 'cli' || $file) {
         $ret = btString();
         if ($file) {
@@ -223,7 +223,7 @@ function bt($file = false)
     }
 }
 
-class Vps_Debug
+class Kwf_Debug
 {
     static $_enabled = 1;
     static $_view;
@@ -240,20 +240,20 @@ class Vps_Debug
 
     public static function handleException($exception, $ignoreCli = false)
     {
-        if (!$exception instanceof Vps_Exception_Abstract) {
-            $exception = new Vps_Exception_Other($exception);
+        if (!$exception instanceof Kwf_Exception_Abstract) {
+            $exception = new Kwf_Exception_Other($exception);
         }
         $exception->render($ignoreCli);
     }
 
-    public static function setView(Vps_View $view)
+    public static function setView(Kwf_View $view)
     {
         self::$_view = $view;
     }
 
     public static function getView()
     {
-        if (!self::$_view) self::$_view = new Vps_View();
+        if (!self::$_view) self::$_view = new Kwf_View();
         return self::$_view;
     }
 

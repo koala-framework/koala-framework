@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache_Backend_TwoLevels extends Zend_Cache_Backend_TwoLevels
+class Kwf_Cache_Backend_TwoLevels extends Zend_Cache_Backend_TwoLevels
 {
     public function __construct(array $options = array())
     {
@@ -7,7 +7,7 @@ class Vps_Cache_Backend_TwoLevels extends Zend_Cache_Backend_TwoLevels
             $options['slow_backend_autoload'] = true;
         }
         if (!isset($options['slow_backend'])) {
-            $options['slow_backend'] = 'Vps_Cache_Backend_File';
+            $options['slow_backend'] = 'Kwf_Cache_Backend_File';
             $options['slow_backend_custom_naming'] = true;
             if (isset($options['cache_dir'])) {
                 $options['slow_backend_options']['cache_dir'] = $options['cache_dir'];
@@ -20,9 +20,9 @@ class Vps_Cache_Backend_TwoLevels extends Zend_Cache_Backend_TwoLevels
         }
         if (!isset($options['fast_backend'])) {
             if (extension_loaded('apc')) {
-                $options['fast_backend'] = 'Vps_Cache_Backend_Apc';
+                $options['fast_backend'] = 'Kwf_Cache_Backend_Apc';
             } else {
-                $options['fast_backend'] = 'Vps_Cache_Backend_Memcached';
+                $options['fast_backend'] = 'Kwf_Cache_Backend_Memcached';
             }
             $options['fast_backend_custom_naming'] = true;
         }

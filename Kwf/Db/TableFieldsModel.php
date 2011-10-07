@@ -1,15 +1,15 @@
 <?php
-class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
-    implements Vps_Model_RowsSubModel_Interface
+class Kwf_Db_TableFieldsModel extends Kwf_Model_Data_Abstract
+    implements Kwf_Model_RowsSubModel_Interface
 {
     protected $_dependentModels = array(
-        'Fields' => 'Vps_Db_TableFieldsModel'
+        'Fields' => 'Kwf_Db_TableFieldsModel'
     );
     private $_db;
     protected $_primaryKey = 'field';
     protected $_columns = array('field', 'type', 'null', 'key', 'default', 'extra');
-    protected $_rowClass = 'Vps_Db_TableFieldsModel_Row';
-    protected $_rowsetClass = 'Vps_Db_TableFieldsModel_Rowset';
+    protected $_rowClass = 'Kwf_Db_TableFieldsModel_Row';
+    protected $_rowsetClass = 'Kwf_Db_TableFieldsModel_Rowset';
 
     public function __construct(array $options = array())
     {
@@ -20,26 +20,26 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
     protected function _getDb()
     {
         if (isset($this->_db)) return $this->_db;
-        return Vps_Registry::get('db');
+        return Kwf_Registry::get('db');
     }
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_Field');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
+        throw new Kwf_Exception('getRows is not possible for Kwf_Model_Field');
     }
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception("no unique identifier set");
+        throw new Kwf_Exception("no unique identifier set");
     }
 
 
-    public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
+    public function getRowsByParentRow(Kwf_Model_Row_Interface $parentRow, $select = array())
     {
         if (!isset($this->_data[$parentRow->getInternalId()])) {
             $this->_data[$parentRow->getInternalId()] = array();
@@ -67,7 +67,7 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         ));
     }
 
-    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    public function createRowByParentRow(Kwf_Model_Row_Interface $parentRow, array $data = array())
     {
         return $this->_createRow($data, array('parentRow' => $parentRow));
     }
@@ -84,7 +84,7 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         return $this->_rows[$parentRow->getInternalId()][$key];
     }
 
-    public function update(Vps_Model_Row_Interface $row, $rowData)
+    public function update(Kwf_Model_Row_Interface $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         foreach ($this->_rows[$iId] as $k=>$i) {
@@ -94,19 +94,19 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
                 return $rowData[$this->getPrimaryKey()];
             }
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 
     private function _alterTableField($row, $changeName = null)
     {
         if (!$row->field) {
-            throw new Vps_ClientException("field is required");
+            throw new Kwf_ClientException("field is required");
         }
         if (!$row->type) {
-            throw new Vps_ClientException("type is required");
+            throw new Kwf_ClientException("type is required");
         }
         if (!$row->null && is_null($row->default) && $row->extra != 'auto_increment') {
-            throw new Vps_ClientException("invalid default value, null is not allowed");
+            throw new Kwf_ClientException("invalid default value, null is not allowed");
         }
         $iId = $row->getSubModelParentRow()->getInternalId();
         $sql = "ALTER TABLE ";
@@ -128,7 +128,7 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         $row->getSubModelParentRow()->getModel()->getDb()->query(trim($sql));
     }
 
-    public function insert(Vps_Model_Row_Interface $row, $rowData)
+    public function insert(Kwf_Model_Row_Interface $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         $this->_alterTableField($row);
@@ -137,12 +137,12 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         return $rowData[$this->getPrimaryKey()];
     }
 
-    public function delete(Vps_Model_Row_Interface $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
 
         if (!$row->field) {
-            throw new Vps_ClientException("field is required");
+            throw new Kwf_ClientException("field is required");
         }
         $sql = "ALTER TABLE ";
         $sql .= $row->getSubModelParentRow()->table." ";
@@ -156,6 +156,6 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
                 return;
             }
         }
-        throw new Vps_Exception("Can't find entry");
+        throw new Kwf_Exception("Can't find entry");
     }
 }

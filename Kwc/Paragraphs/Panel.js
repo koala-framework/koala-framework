@@ -1,10 +1,10 @@
-Ext.namespace('Vpc.Paragraphs');
+Ext.namespace('Kwc.Paragraphs');
 
 
-Vpc.Paragraphs.PanelJsonReader = Ext.extend(Ext.data.JsonReader,
+Kwc.Paragraphs.PanelJsonReader = Ext.extend(Ext.data.JsonReader,
 {
     readRecords: function(o) {
-        var ret = Vpc.Paragraphs.PanelJsonReader.superclass.readRecords.apply(this, arguments);
+        var ret = Kwc.Paragraphs.PanelJsonReader.superclass.readRecords.apply(this, arguments);
         if (o.componentConfigs) {
             this.paragraphsPanel.fireEvent('gotComponentConfigs', o.componentConfigs);
             Ext.applyIf(this.paragraphsPanel.dataView.componentConfigs, o.componentConfigs);
@@ -16,10 +16,10 @@ Vpc.Paragraphs.PanelJsonReader = Ext.extend(Ext.data.JsonReader,
     }
 });
 
-Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
+Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
 {
     layout:'auto',
-    cls: 'vpc-paragraphs',
+    cls: 'kwc-paragraphs',
     showDelete: true,
     showPosition: true,
     showCopyPaste: true,
@@ -33,7 +33,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             delete this.autoLoad;
         }
 
-        this.dataView = new Vpc.Paragraphs.DataView({
+        this.dataView = new Kwc.Paragraphs.DataView({
             components: this.components,
             componentIcons: this.componentIcons,
             showDelete: this.showDelete,
@@ -56,7 +56,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         this.items = [ this.dataView ];
 
         this.actions.showPreview = new Ext.Action({
-            text : trlVps('Preview'),
+            text : trlKwf('Preview'),
             icon : '/assets/silkicons/zoom.png',
             cls  : 'x-btn-text-icon',
             enableToggle: true,
@@ -77,7 +77,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         });
 
         this.actions.showPreviewWeb = new Ext.Action({
-            text : trlVps('Preview in web'),
+            text : trlKwf('Preview in web'),
             icon : '/assets/silkicons/zoom_in.png',
             cls  : 'x-btn-text-icon',
             handler: function(b) {
@@ -88,20 +88,20 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         });
 
         this.actions.makeAllVisible = new Ext.Action({
-            text : trlVps('All Visible'),
+            text : trlKwf('All Visible'),
             icon : '/assets/silkicons/tick.png',
             cls  : 'x-btn-text-icon',
             handler: function(b) {
                 Ext.Msg.show({
-                    title: trlVps('All Visible'),
-                    msg: trlVps('Do you really wish to set everything to visible?'),
+                    title: trlKwf('All Visible'),
+                    msg: trlKwf('Do you really wish to set everything to visible?'),
                     buttons: Ext.Msg.YESNO,
                     scope: this,
                     fn: function(button) {
                         if (button == 'yes') {
                             Ext.Ajax.request({
                                 mask: this.el,
-                                maskText: trlVps('Setting visible...'),
+                                maskText: trlKwf('Setting visible...'),
                                 url: this.controllerUrl+'/json-make-all-visible',
                                 params: this.getBaseParams(),
                                 success: function() {
@@ -117,7 +117,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         });
 
         if (this.components) {
-            this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
+            this.actions.addparagraph = new Kwc.Paragraphs.AddParagraphButton({
                 components: this.components,
                 componentIcons: this.componentIcons,
                 listeners: {
@@ -131,16 +131,16 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                 }
             });
             this.actions.copyPaste = {
-                text: trlVps('copy/paste'),
+                text: trlKwf('copy/paste'),
                 menu: [{
-                    text: trlVps('Copy all Paragraphs'),
+                    text: trlKwf('Copy all Paragraphs'),
                     icon: '/assets/silkicons/page_white_copy.png',
                     scope: this,
                     handler: function() {
                         this.onCopyAllParagraphs();
                     }
                 },{
-                    text: trlVps('Paste Paragraph'),
+                    text: trlKwf('Paste Paragraph'),
                     icon: '/assets/silkicons/page_white_copy.png',
                     scope: this,
                     handler: function() {
@@ -169,7 +169,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         this.tbar.push('->');
         this.tbar.push(this.actions.makeAllVisible);
 
-        Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
+        Kwc.Paragraphs.Panel.superclass.initComponent.call(this);
     },
 
     doAutoLoad : function()
@@ -212,7 +212,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         var meta = result.metaData;
         this.metaData = meta;
 
-        var reader = new Vpc.Paragraphs.PanelJsonReader({
+        var reader = new Kwc.Paragraphs.PanelJsonReader({
             totalProperty: meta.totalProperty,
             root: meta.root,
             id: meta.id,
@@ -293,7 +293,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         }
         if (empty) return;
 
-        this.el.mask(trlVps('Saving...'));
+        this.el.mask(trlKwf('Saving...'));
 
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-save',
@@ -323,13 +323,13 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onDelete : function(record) {
         Ext.Msg.show({
-            title: trlVps('Delete'),
-            msg: trlVps('Do you really wish to remove this paragraph?'),
+            title: trlKwf('Delete'),
+            msg: trlKwf('Do you really wish to remove this paragraph?'),
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
-                    this.el.mask(trlVps('Deleting...'));
+                    this.el.mask(trlKwf('Deleting...'));
                     var params = this.getBaseParams();
                     params.id = record.get('id');
                     Ext.Ajax.request({
@@ -372,7 +372,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                 var opened = false;
                 result.editComponents.forEach(function(ec) {
                     if (result.openConfigKey == ec.type) {
-                        var data = Vps.clone(ec);
+                        var data = Kwf.clone(ec);
                         data.componentId = this.getBaseParams().componentId + '-' + result.id;
                         data.editComponents = result.editComponents;
                         this.fireEvent('editcomponent', data);
@@ -389,7 +389,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     },
 
     onCopyParagraph: function(record) {
-        var params = Vps.clone(this.getBaseParams());
+        var params = Kwf.clone(this.getBaseParams());
         params.id = record.get('id');
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-copy',
@@ -399,7 +399,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     },
 
     onPasteParagraph: function() {
-        var params = Vps.clone(this.getBaseParams());
+        var params = Kwf.clone(this.getBaseParams());
         params.pos = this.copyPasteParagraphPos;
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-paste',
@@ -407,7 +407,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             mask: this.el,
             scope: this,
             progress: true,
-            progressTitle : trlVps('Paste Paragraph'),
+            progressTitle : trlKwf('Paste Paragraph'),
             success: function() {
                 this.reload();
                 this.fireEvent('datachange');
@@ -429,4 +429,4 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 
 });
 
-Ext.reg('vpc.paragraphs', Vpc.Paragraphs.Panel);
+Ext.reg('kwc.paragraphs', Kwc.Paragraphs.Panel);

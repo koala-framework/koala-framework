@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
+class Kwf_Model_Mongo_TestModel extends Kwf_Model_Mongo
 {
     protected $_collection = 'foo';
     static private $_proc;
@@ -14,7 +14,7 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
         }
         static $m;
         if (!isset($m)) {
-            $port = Vps_Util_Tcp::getFreePort(rand(27020, 30000));
+            $port = Kwf_Util_Tcp::getFreePort(rand(27020, 30000));
             $cmd = "php bootstrap.php test forward --controller=vps_model_mongo_run-temp-mongo --port=$port";
             if ($debugOutput) {
                 echo $cmd."\n";
@@ -29,11 +29,11 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
                     2 => STDOUT //should be empty
                 );
             }
-            self::$_proc = new Vps_Util_Proc($cmd, $descriptorspec);
+            self::$_proc = new Kwf_Util_Proc($cmd, $descriptorspec);
             sleep(3);
             $m = new Mongo("mongodb://localhost:$port");
 
-            register_shutdown_function(array('Vps_Model_Mongo_TestModel', 'shutDown'));
+            register_shutdown_function(array('Kwf_Model_Mongo_TestModel', 'shutDown'));
         }
         $db = $m->selectDB("modeltest");
         $db->selectCollection($this->_collection)->drop();

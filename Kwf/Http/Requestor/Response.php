@@ -1,5 +1,5 @@
 <?php
-class Vps_Http_Requestor_Response implements Vps_Http_Requestor_Response_Interface
+class Kwf_Http_Requestor_Response implements Kwf_Http_Requestor_Response_Interface
 {
     private $_response;
 

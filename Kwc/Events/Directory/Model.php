@@ -1,5 +1,5 @@
 <?php
-class Vpc_Events_Directory_Model extends Vpc_News_Directory_Model
+class Kwc_Events_Directory_Model extends Kwc_News_Directory_Model
 {
-    protected $_table = 'vpc_events';
+    protected $_table = 'kwc_events';
 }

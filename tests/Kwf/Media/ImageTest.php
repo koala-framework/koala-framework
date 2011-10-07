@@ -2,7 +2,7 @@
 /**
  * @group MediaImage
  */
-class Vps_Media_ImageTest extends Vps_Test_TestCase
+class Kwf_Media_ImageTest extends Kwf_Test_TestCase
 {
     public function testImageScaleDimensions()
     {
@@ -46,49 +46,49 @@ class Vps_Media_ImageTest extends Vps_Test_TestCase
 
     public function testAvoidDivideByZero()
     {
-        $dimension = array('width' => 300, 'height' => 400, 'scale' => Vps_Media_Image::SCALE_BESTFIT);
-        $ret = Vps_Media_Image::calculateScaleDimensions(false, $dimension);
+        $dimension = array('width' => 300, 'height' => 400, 'scale' => Kwf_Media_Image::SCALE_BESTFIT);
+        $ret = Kwf_Media_Image::calculateScaleDimensions(false, $dimension);
         $this->assertEquals($ret, false);
-        $ret = Vps_Media_Image::calculateScaleDimensions(array(0, 300), $dimension);
+        $ret = Kwf_Media_Image::calculateScaleDimensions(array(0, 300), $dimension);
         $this->assertEquals($ret, false);
-        $ret = Vps_Media_Image::calculateScaleDimensions(array(300, 0), $dimension);
+        $ret = Kwf_Media_Image::calculateScaleDimensions(array(300, 0), $dimension);
         $this->assertEquals($ret, false);
     }
 
     private function _testBestFit($imageSize, $dimension, $expectedSize)
     {
-        $dimension = array('width' => $dimension[0], 'height' => $dimension[1], 'scale' => Vps_Media_Image::SCALE_BESTFIT);
-        $ret = Vps_Media_Image::calculateScaleDimensions($imageSize, $dimension);
+        $dimension = array('width' => $dimension[0], 'height' => $dimension[1], 'scale' => Kwf_Media_Image::SCALE_BESTFIT);
+        $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => $expectedSize[0],
             'height' => $expectedSize[1],
-            'scale' => Vps_Media_Image::SCALE_BESTFIT,
+            'scale' => Kwf_Media_Image::SCALE_BESTFIT,
             'rotate' => null
         ));
     }
 
     public function testImageScaleDeform()
     {
-        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_DEFORM));
-        $this->_testScale(array(16, 10, Vps_Media_Image::SCALE_DEFORM));
-        $this->_testScale(array(10, 16, Vps_Media_Image::SCALE_DEFORM));
+        $this->_testScale(array(10, 10, Kwf_Media_Image::SCALE_DEFORM));
+        $this->_testScale(array(16, 10, Kwf_Media_Image::SCALE_DEFORM));
+        $this->_testScale(array(10, 16, Kwf_Media_Image::SCALE_DEFORM));
 
-        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_CROP));
-        $this->_testScale(array(10, 16, Vps_Media_Image::SCALE_CROP));
-        $this->_testScale(array(16, 10, Vps_Media_Image::SCALE_CROP));
+        $this->_testScale(array(10, 10, Kwf_Media_Image::SCALE_CROP));
+        $this->_testScale(array(10, 16, Kwf_Media_Image::SCALE_CROP));
+        $this->_testScale(array(16, 10, Kwf_Media_Image::SCALE_CROP));
 
-        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_BESTFIT));
-        $this->_testScale(array(16, 10, Vps_Media_Image::SCALE_BESTFIT), array(10, 10));
-        $this->_testScale(array(10, 16, Vps_Media_Image::SCALE_BESTFIT), array(10, 10));
+        $this->_testScale(array(10, 10, Kwf_Media_Image::SCALE_BESTFIT));
+        $this->_testScale(array(16, 10, Kwf_Media_Image::SCALE_BESTFIT), array(10, 10));
+        $this->_testScale(array(10, 16, Kwf_Media_Image::SCALE_BESTFIT), array(10, 10));
 
-        $this->_testScale(array(16, 16, Vps_Media_Image::SCALE_ORIGINAL));
-        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_ORIGINAL), array(16, 16));
+        $this->_testScale(array(16, 16, Kwf_Media_Image::SCALE_ORIGINAL));
+        $this->_testScale(array(10, 10, Kwf_Media_Image::SCALE_ORIGINAL), array(16, 16));
     }
 
     private function _testScale($size, $expectedSize = null)
     {
         if (!$expectedSize) $expectedSize = $size;
-        $i = Vps_Media_Image::scale(VPS_PATH.'/images/information.png', $size);
+        $i = Kwf_Media_Image::scale(KWF_PATH.'/images/information.png', $size);
         $im = new Imagick();
         $im->readImageBlob($i);
         $this->assertEquals($expectedSize[0], $im->getImageWidth());

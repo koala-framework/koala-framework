@@ -1,15 +1,15 @@
 <?php
-class Vpc_Newsletter_Month_Directory_Component extends Vpc_Directories_Month_Directory_Component
+class Kwc_Newsletter_Month_Directory_Component extends Kwc_Directories_Month_Directory_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
 
-        $ret['generators']['detail']['model'] = 'Vpc_Newsletter_Model';
+        $ret['generators']['detail']['model'] = 'Kwc_Newsletter_Model';
 
         //für News-Kategorien Box
         $ret['categoryChildId'] = 'month';
-        $ret['categoryName'] = trlVps('Months');
+        $ret['categoryName'] = trlKwf('Months');
 
         $ret['dateColumn'] = 'create_date';
 

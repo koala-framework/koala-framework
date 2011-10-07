@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
+class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
 {
     private $_rows = array();
 
@@ -19,12 +19,12 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
         }
         if ($idsToLoad) {
             //nicht $this->getModel, das ist das master model
-            $m = Vpc_Abstract::createChildModel($this->_class);
-            if (!$m) throw new Vps_Exception("No child model set for '$this->_class'");
+            $m = Kwc_Abstract::createChildModel($this->_class);
+            if (!$m) throw new Kwf_Exception("No child model set for '$this->_class'");
             $s = $m->select();
             $s->whereEquals('component_id', $idsToLoad);
             $visible = array();
-            Vps_Benchmark::count('DirectoryChainedGenerator getRows', count($idsToLoad));
+            Kwf_Benchmark::count('DirectoryChainedGenerator getRows', count($idsToLoad));
             foreach ($m->getRows($s) as $r) {
                 $this->_rows[$r->component_id] = $r;
             }
@@ -83,18 +83,18 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
     protected function _getChainedSelect($select)
     {
         $select = clone $select;
-        if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+        if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
             $cd = $this->_getChainedData($p);
             if (!$cd) $cd = $p; // Falls Data ein parent von Komponente mit chainedType ist
             $select->whereChildOfSamePage($cd);
         }
-        if ($cls = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+        if ($cls = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
             foreach ($cls as &$c) {
                 $c = substr($c, strpos($c, '.')+1);
             }
             $select->whereComponentClasses($cls);
         }
-        if ($sr = $select->getPart(Vps_Component_Select::WHERE_SUBROOT)) {
+        if ($sr = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT)) {
             $newSr = array();
             foreach ($sr as $i) {
                 if (isset($i->chained)) {
@@ -103,33 +103,33 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
                     $newSr[] = $i;
                 }
             }
-            $select->setPart(Vps_Component_Select::WHERE_SUBROOT, $newSr);
+            $select->setPart(Kwf_Component_Select::WHERE_SUBROOT, $newSr);
         }
         return $select;
     }
 
     public function getChildData($parentDatas, $select = array())
     {
-        Vps_Benchmark::count('GenChained::getChildData');
+        Kwf_Benchmark::count('GenChained::getChildData');
         $ret = array();
-        if (is_array($select)) $select = new Vps_Component_Select($select);
-        if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
-            if ($this->_getChainedGenerator() instanceof Vpc_Root_Category_Generator) {
+        if (is_array($select)) $select = new Kwf_Component_Select($select);
+        if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+            if ($this->_getChainedGenerator() instanceof Kwc_Root_Category_Generator) {
                 $select->whereId(substr($id, 1));
             }
         }
 
         $chainedType = $this->getGeneratorFlag('chainedType');
 
-        $slaveData = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
+        $slaveData = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
         while ($slaveData) {
-            if (Vpc_Abstract::getFlag($slaveData->componentClass, 'chainedType') == $chainedType) {
+            if (Kwc_Abstract::getFlag($slaveData->componentClass, 'chainedType') == $chainedType) {
                 break;
             }
             $slaveData = $slaveData->parent;
         }
 
-        $parentDataSelect = new Vps_Component_Select();
+        $parentDataSelect = new Kwf_Component_Select();
         $parentDataSelect->copyParts(array('ignoreVisible'), $select);
 
         $parentDatas = is_array($parentDatas) ? $parentDatas : array($parentDatas);
@@ -137,24 +137,24 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
             foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
                 $pData = array();
                 if (!$parentData) {
-                    $class = "Vpc_Chained_{$chainedType}_Component";
+                    $class = "Kwc_Chained_{$chainedType}_Component";
                     if (!$slaveData) {
                         $chainedData = $component;
                         while ($chainedData) {
-                            if (Vpc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
+                            if (Kwc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
                                 break;
                             }
                             $chainedData = $chainedData->parent;
                         }
                         $slaveDataClass = null;
-                        foreach (Vpc_Abstract::getChildComponentClasses($chainedData->parent->componentClass) as $chainedClass) {
+                        foreach (Kwc_Abstract::getChildComponentClasses($chainedData->parent->componentClass) as $chainedClass) {
                             if ($chainedClass != $chainedData->componentClass &&
-                                Vpc_Abstract::getFlag($chainedClass, 'chainedType') == $chainedType
+                                Kwc_Abstract::getFlag($chainedClass, 'chainedType') == $chainedType
                             ) {
                                 $slaveDataClass = substr($chainedClass, 0, strpos($chainedClass, '.'));
                             }
                         }
-                        foreach (Vps_Component_Data_Root::getInstance()->getComponentsByClass($slaveDataClass) as $d) {
+                        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($slaveDataClass) as $d) {
                             $chainedComponent = call_user_func(array($class, 'getChainedByMaster'), $component->parent, $d, $parentDataSelect);
                             if ($chainedComponent) $pData[] = $chainedComponent;
                         }
@@ -228,9 +228,9 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedGenerator()
     {
-        $class = Vpc_Abstract::getSetting($this->_class, 'masterComponentClass');
+        $class = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
         $generatorKey = $this->_settings['generator'];
-        return Vps_Component_Generator_Abstract::getInstance($class, $generatorKey);;
+        return Kwf_Component_Generator_Abstract::getInstance($class, $generatorKey);;
     }
 
     public function getIdSeparator()
@@ -275,10 +275,10 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
     public function makeChildrenVisible($source)
     {
         if ($source->generator !== $this) {
-            throw new Vps_Exception("you must call this only with the correct source");
+            throw new Kwf_Exception("you must call this only with the correct source");
         }
 
-        $m = Vpc_Abstract::createChildModel($this->_class);
+        $m = Kwc_Abstract::createChildModel($this->_class);
         if ($m && $m->hasColumn('visible')) {
             $row = $this->_getRow($source->dbId);
             if (!$row) {
@@ -290,13 +290,13 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
                 $row->save();
             }
         }
-        Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
+        Kwc_Admin::getInstance($source->componentClass)->makeVisible($source);
     }
 
     public function duplicateChild($source, $parentTarget)
     {
         if ($source->generator !== $this) {
-            throw new Vps_Exception("you must call this only with the correct source");
+            throw new Kwf_Exception("you must call this only with the correct source");
         }
 
         //Annahme: sourceChildren und targetChildren müssen in der gleichen Reinhenfolge daherkommen
@@ -309,7 +309,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
                 $target = $targetChildren[$i];
             }
         }
-        if ($m = Vpc_Abstract::createChildModel($this->_class)) {
+        if ($m = Kwc_Abstract::createChildModel($this->_class)) {
             $targetRow = $this->_getRow($target->dbId);
             if (!$targetRow) {
                 $targetRow = $m->createRow();
@@ -325,7 +325,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
             }
             $targetRow->save();
         }
-        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
     }
 }

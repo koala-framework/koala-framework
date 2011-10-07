@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
+class Kwf_Util_Model_Feed_Row_Feed extends Kwf_Model_Row_Data_Abstract
 {
     private $_xml;
     const FORMAT_RSS = 'rss';
@@ -14,12 +14,12 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         } else {
             $response = $config['model']->getHttpRequestor()->request($data['url']);
             if ($response->getStatusCode() != 200) {
-                throw new Vps_Exception("invalid status response from server: ".$response->getStatusCode()." for '$data[url]'");
+                throw new Kwf_Exception("invalid status response from server: ".$response->getStatusCode()." for '$data[url]'");
             }
             $str = $response->getBody();
         }
         if (!$str) {
-            throw new Vps_Exception("Can't load feed '$data[url]', response is empty");
+            throw new Kwf_Exception("Can't load feed '$data[url]', response is empty");
         }
         $originalContent = $str;
         $str = trim($str);
@@ -81,14 +81,14 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         }
 
         if (!$this->_xml) {
-            throw new Vps_Exception("Can't load feed: '$data[url]' ".$originalContent);
+            throw new Kwf_Exception("Can't load feed: '$data[url]' ".$originalContent);
         }
         if ($this->_xml->channel) {
             $data['format'] = self::FORMAT_RSS;
         } else if ($this->_xml->getName() == 'feed') {
             $data['format'] = self::FORMAT_ATOM;
         } else {
-            throw new Vps_Exception("Can't load feed '$data[url]', unknown format: ".$originalContent);
+            throw new Kwf_Exception("Can't load feed '$data[url]', unknown format: ".$originalContent);
         }
         $data['encoding'] = $encoding;
         $data['hub'] = null;
@@ -125,7 +125,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             }
         }
         $config['data'] = $data;
-        Vps_Benchmark::count('loaded feed');
+        Kwf_Benchmark::count('loaded feed');
 
         parent::__construct($config);
     }

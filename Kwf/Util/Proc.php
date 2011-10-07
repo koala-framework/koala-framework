@@ -2,7 +2,7 @@
 /**
  * Wrapper around proc_open
  */
-class Vps_Util_Proc
+class Kwf_Util_Proc
 {
     private $_process;
     private $_pipes;
@@ -11,7 +11,7 @@ class Vps_Util_Proc
     {
         $this->_process = proc_open($cmd, $descriptorspec, $this->_pipes, $cwd, $env);
         if (!is_resource($this->_process)) {
-            throw new Vps_Exception("Command failed: $cmd");
+            throw new Kwf_Exception("Command failed: $cmd");
         }
     }
 
@@ -24,7 +24,7 @@ class Vps_Util_Proc
     {
         $ret = proc_terminate($this->_process, $signal);
         if (!$ret) {
-            throw new Vps_Exception("terminate failed");
+            throw new Kwf_Exception("terminate failed");
         }
     }
 
@@ -32,7 +32,7 @@ class Vps_Util_Proc
     {
         $ret = proc_close($this->_process);
         if ($checkExitValue && $ret) {
-            throw new Vps_Exception("Command failed");
+            throw new Kwf_Exception("Command failed");
         }
         return $ret;
     }

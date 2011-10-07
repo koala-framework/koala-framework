@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS `vpc_basic_flashmediaplayer` (
+CREATE TABLE IF NOT EXISTS `kwc_basic_flashmediaplayer` (
   `component_id` varchar(255) NOT NULL,
-  `vps_upload_id_media` int(11) default NULL,
+  `kwf_upload_id_media` int(11) default NULL,
   `width` smallint(6) NOT NULL,
   `height` smallint(6) NOT NULL,
   `autostart` tinyint(1) NOT NULL default '0',

@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_Partial_Paging_Paging extends Vpc_Paging_Component
+class Kwf_Component_Output_Partial_Paging_Paging extends Kwc_Paging_Component
 {
     public static function getSettings()
     {

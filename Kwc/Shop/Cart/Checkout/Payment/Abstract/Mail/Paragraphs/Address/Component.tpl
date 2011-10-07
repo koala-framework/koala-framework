@@ -1,1 +1,1 @@
-<p><?=trlVps('Max Mustermann...');?></p>
+<p><?=trlKwf('Max Mustermann...');?></p>

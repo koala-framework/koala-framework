@@ -2,15 +2,15 @@
 /**
  * @group slow
  * @group selenium
- * @group Vps_Js
+ * @group Kwf_Js
  *
- * http://vps.markus.vivid/vps/test/vps_js_event_test
+ * http://kwf.markus.vivid/kwf/test/kwf_js_event_test
  */
-class Vps_Js_Event_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwf_Js_Event_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function testJsEvent()
     {
-        $this->open('/vps/test/vps_js_event_test');
+        $this->open('/kwf/test/kwf_js_event_test');
 
         $this->mouseOver('css=#eventTest');
         $this->assertEquals($this->getText('css=#result'), 'mouseEnter: enter ---');

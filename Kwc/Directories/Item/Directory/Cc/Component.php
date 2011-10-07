@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Cc_Component extends Vpc_Directories_List_Cc_Component
+class Kwc_Directories_Item_Directory_Cc_Component extends Kwc_Directories_List_Cc_Component
 {
     public static function getCacheMetaForView($view)
     {
@@ -9,14 +9,14 @@ class Vpc_Directories_Item_Directory_Cc_Component extends Vpc_Directories_List_C
 
         $dir = $view->parent->getComponent()->getItemDirectory();
         $dirClass = $dir;
-        if ($dir instanceof Vps_Component_Data) $dirClass = $dir->componentClass;
+        if ($dir instanceof Kwf_Component_Data) $dirClass = $dir->componentClass;
 
         $ret = array();
-        if (Vpc_Abstract::hasSetting($dirClass, 'childModel')) {
-            $model = Vps_Model_Abstract::getInstance(
-                Vpc_Abstract::getSetting($dirClass, 'childModel')
+        if (Kwc_Abstract::hasSetting($dirClass, 'childModel')) {
+            $model = Kwf_Model_Abstract::getInstance(
+                Kwc_Abstract::getSetting($dirClass, 'childModel')
             );
-            $ret[] = new Vpc_Directories_Item_Directory_Cc_CacheMeta($model);
+            $ret[] = new Kwc_Directories_Item_Directory_Cc_CacheMeta($model);
         }
         return $ret;
     }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Exception_NotFound extends Vps_Exception_Abstract
+class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
 {
     public function getHeader()
     {
@@ -36,8 +36,8 @@ class Vps_Exception_NotFound extends Vps_Exception_Abstract
 
     public function render($ignoreCli = false)
     {
-        if (isset($_SERVER['REQUEST_URI']) && Vps_Registry::get('db')) {
-            $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+        if (isset($_SERVER['REQUEST_URI']) && Kwf_Registry::get('db')) {
+            $target = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')
                 ->findRedirectUrl('path', $_SERVER['REQUEST_URI']);
             if ($target) {
                 header('Location: '.$target, true, 301);

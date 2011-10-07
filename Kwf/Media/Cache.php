@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_Cache extends Vps_Cache_Core
+class Kwf_Media_Cache extends Kwf_Cache_Core
 {
     public function __construct(array $options = array())
     {
@@ -18,7 +18,7 @@ class Vps_Media_Cache extends Vps_Cache_Core
 
     public function remove($id)
     {
-        Vps_Benchmark::cacheInfo("Media-Cache '$id' gelöscht.");
+        Kwf_Benchmark::cacheInfo("Media-Cache '$id' gelöscht.");
         return parent::remove($id);
     }
 }

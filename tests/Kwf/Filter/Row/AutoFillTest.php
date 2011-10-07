@@ -1,10 +1,10 @@
 <?php
-class Vps_Filter_Row_AutoFillTest extends Vps_Test_TestCase
+class Kwf_Filter_Row_AutoFillTest extends Kwf_Test_TestCase
 {
     public function testAutoFill()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
-        ), 'filters'=>array('test'=>new Vps_Filter_Row_AutoFill('x{foo}'))));
+        $model = new Kwf_Model_FnF(array('data'=>array(
+        ), 'filters'=>array('test'=>new Kwf_Filter_Row_AutoFill('x{foo}'))));
         $row = $model->createRow();
         $row->foo = 'foo4';
         $row->save();
@@ -13,8 +13,8 @@ class Vps_Filter_Row_AutoFillTest extends Vps_Test_TestCase
     }
     public function testAutoFillId()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
-        ), 'filters'=>array('test'=>new Vps_Filter_Row_AutoFill('x{id}'))));
+        $model = new Kwf_Model_FnF(array('data'=>array(
+        ), 'filters'=>array('test'=>new Kwf_Filter_Row_AutoFill('x{id}'))));
         $row = $model->createRow();
         $row->foo = 'foo4';
         $row->save();

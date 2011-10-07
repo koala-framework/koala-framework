@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_HighlightTerms
+class Kwf_View_Helper_HighlightTerms
 {
     /**
      * Highlights a term in a text and shorts it. The output then may look like

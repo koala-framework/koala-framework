@@ -1,4 +1,4 @@
-Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
+Kwf.Auto.AssignGridPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
 
     gridAssignedControllerUrl: '',
     gridDataControllerUrl: '',
@@ -16,7 +16,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
         });
 
         this.actions.assign = new Ext.Action({
-            text    : trlVps('Assign'),
+            text    : trlKwf('Assign'),
             icon    : '/assets/silkicons/table_relationship.png',
             cls     : 'x-btn-text-icon',
             disabled: true,
@@ -28,7 +28,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
             this.assignActionUrl = this.gridAssignedControllerUrl + '/json-assign';
         }
 
-        this.gridAssigned = new Vps.Auto.AssignedGridPanel({
+        this.gridAssigned = new Kwf.Auto.AssignedGridPanel({
             controllerUrl: this.gridAssignedControllerUrl,
             textAssignActionUrl: this.textAssignActionUrl,
             region: 'center',
@@ -38,7 +38,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
         });
         this.proxyItem = this.gridAssigned;
 
-        this.gridData = new Vps.Auto.GridPanel({
+        this.gridData = new Kwf.Auto.GridPanel({
             region: 'south',
             split: true,
             height: this.gridDataHeight,
@@ -77,7 +77,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
 
         this.items = [this.gridAssigned, this.gridData];
 
-        Vps.Auto.AssignGridPanel.superclass.initComponent.call(this);
+        Kwf.Auto.AssignGridPanel.superclass.initComponent.call(this);
     },
 
     onAssign : function()
@@ -111,11 +111,11 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
     },
 
     setAutoLoad: function(v) {
-        Vps.Auto.AssignGridPanel.superclass.setAutoLoad.apply(this, arguments);
+        Kwf.Auto.AssignGridPanel.superclass.setAutoLoad.apply(this, arguments);
         this.gridData.setAutoLoad(v);
     },
     load: function() {
-        Vps.Auto.AssignGridPanel.superclass.load.apply(this, arguments);
+        Kwf.Auto.AssignGridPanel.superclass.load.apply(this, arguments);
 
         //wenn autoLoad=false
         if (!this.gridData.getStore()) {
@@ -126,15 +126,15 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
     setBaseParams: function(bp) {
         this.gridAssigned.setBaseParams(bp);
         this.gridData.setBaseParams(bp);
-        return Vps.Auto.AssignGridPanel.superclass.setBaseParams.call(this, bp);
+        return Kwf.Auto.AssignGridPanel.superclass.setBaseParams.call(this, bp);
     },
 
     applyBaseParams: function(bp) {
         this.gridAssigned.applyBaseParams(bp);
         this.gridData.applyBaseParams(bp);
-        return Vps.Auto.AssignGridPanel.superclass.applyBaseParams.call(this, bp);
+        return Kwf.Auto.AssignGridPanel.superclass.applyBaseParams.call(this, bp);
     }
 
 });
 
-Ext.reg('vps.assigngrid', Vps.Auto.AssignGridPanel);
+Ext.reg('kwf.assigngrid', Kwf.Auto.AssignGridPanel);

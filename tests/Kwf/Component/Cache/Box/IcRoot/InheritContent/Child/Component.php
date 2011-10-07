@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Cache_Box_IcRoot_InheritContent_Child_Component extends Vpc_Abstract
+class Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vps_Component_Cache_Box_IcRoot_InheritContent_Child_Model';
+        $ret['ownModel'] = 'Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Model';
         return $ret;
     }
 

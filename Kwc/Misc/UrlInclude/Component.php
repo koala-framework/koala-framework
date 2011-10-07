@@ -1,11 +1,11 @@
 <?php
-class Vpc_Misc_UrlInclude_Component extends Vpc_Abstract
+class Kwc_Misc_UrlInclude_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Url include');
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['componentName'] = trlKwf('Url include');
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
 

@@ -3,11 +3,11 @@
  * @group Mail
  * @group Mail_Template
  */
-class Vps_Mail_Template_Test extends Vpc_TestAbstract
+class Kwf_Mail_Template_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Mail_Template_Root');
+        parent::setUp('Kwf_Mail_Template_Root');
     }
 
     public function testMailComponent()
@@ -15,41 +15,41 @@ class Vps_Mail_Template_Test extends Vpc_TestAbstract
         $path = realpath(dirname(__FILE__));
 
         $c = $this->_root->getChildComponent('-both');
-        $m = new Vps_Mail_Template($c);
+        $m = new Kwf_Mail_Template($c);
         $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
 
         $c = $this->_root->getChildComponent('-both');
-        $m = new Vps_Mail_Template($c->getComponent());
+        $m = new Kwf_Mail_Template($c->getComponent());
         $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
 
         $c = $this->_root->getChildComponent('-both');
         $classname = get_class($c->getComponent());
-        $m = new Vps_Mail_Template($classname);
+        $m = new Kwf_Mail_Template($classname);
         $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
 
 
         $c = $this->_root->getChildComponent('-txtonly');
-        $m = new Vps_Mail_Template($c);
+        $m = new Kwf_Mail_Template($c);
         $this->assertEquals($path.'/TxtOnly/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals(null, $m->getHtmlTemplate());
     }
 
     public function testMailString()
     {
-        $m = new Vps_Mail_Template('UserActivation');
+        $m = new Kwf_Mail_Template('UserActivation');
         $this->assertEquals('mails/UserActivation.txt.tpl', $m->getTxtTemplate());
         $this->assertEquals('mails/UserActivation.html.tpl', $m->getHtmlTemplate());
     }
 
     public function testMailSending()
     {
-        $mockMail = $this->getMock('Vps_Mail', array('send'));
+        $mockMail = $this->getMock('Kwf_Mail', array('send'));
 
         $c = $this->_root->getChildComponent('-both');
-        $m = new Vps_Mail_Template($c);
+        $m = new Kwf_Mail_Template($c);
         $m->getView()->addScriptPath('.');
         $m->setMail($mockMail);
         $m->subject = 'a special subject';
@@ -62,36 +62,36 @@ class Vps_Mail_Template_Test extends Vpc_TestAbstract
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testNoAbsolutePath()
     {
-        $m = new Vps_Mail_Template(dirname(__FILE__));
+        $m = new Kwf_Mail_Template(dirname(__FILE__));
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testNotExistingFileComponentData()
     {
         $c = $this->_root->getChildComponent('-notpl');
-        $m = new Vps_Mail_Template($c);
+        $m = new Kwf_Mail_Template($c);
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testNotExistingTxt()
     {
         $c = $this->_root->getChildComponent('-htmlonly');
-        $m = new Vps_Mail_Template($c);
+        $m = new Kwf_Mail_Template($c);
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testNotExistingFile()
     {
-        new Vps_Mail_Template('DoesNotExist');
+        new Kwf_Mail_Template('DoesNotExist');
     }
 }

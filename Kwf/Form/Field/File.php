@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
 {
     private $_fields;
 
@@ -12,11 +12,11 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function __construct($fieldname = null, $fieldLabel = null)
     {
         parent::__construct($fieldname, $fieldLabel);
-        $this->setFrontendButtonText(trlVpsStatic('Browse').'...');
+        $this->setFrontendButtonText(trlKwfStatic('Browse').'...');
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
         $this->setMaxResolution(false);
-        $this->setXtype('vps.file');
+        $this->setXtype('kwf.file');
         $maxSize = ini_get('upload_max_filesize');
         if (strtolower(substr($maxSize, -1))=='k') {
             $maxSize = substr($maxSize, 0, -1)*1024;
@@ -26,7 +26,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $maxSize = substr($maxSize, 0, -1)*1024*1024*1024;
         }
         $this->setFileSizeLimit($maxSize.' B');
-        $this->setEmptyMessage(trlVpsStatic("Please choose a file"));
+        $this->setEmptyMessage(trlKwfStatic("Please choose a file"));
     }
 
     protected function _getTrlProperties()
@@ -87,7 +87,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                 $row = $fileModel->getRow($data);
                 if ($this->getAllowOnlyImages() && substr($row->mime_type, 0, 6) !=  'image/') {
                     $ret[] = array(
-                        'message' => trlVps('This is not an image.'),
+                        'message' => trlKwf('This is not an image.'),
                         'field' => $this
                     );
                 }
@@ -145,7 +145,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         return $postData;
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
         if ($this->getSave() === false) return;
 
@@ -163,32 +163,32 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
         $name = htmlspecialchars($name);
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
-        $ret['html']  = "<div class=\"vpsFormFieldFileInnerImg\">\n";
+        $ret['html']  = "<div class=\"kwfFormFieldFileInnerImg\">\n";
         if ($value) {
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
                         " value=\"$value[uploadId]\" />";
             if ($value['image']) {
                 //todo: width und height von image
-                $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]&hashKey=$value[hashKey]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
+                $ret['html'] .= " <img src=\"/kwf/media/upload/preview?uploadId=$value[uploadId]&hashKey=$value[hashKey]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
             }
         }
         $ret['html'] .= '</div>';
-        $ret['html'] .= "<div class=\"vpsFormFieldFileInnerContent\">\n";
-        $ret['html'] .= "<div class=\"imagePath vpsFormFieldFileUploadWrapper\">\n";
+        $ret['html'] .= "<div class=\"kwfFormFieldFileInnerContent\">\n";
+        $ret['html'] .= "<div class=\"imagePath kwfFormFieldFileUploadWrapper\">\n";
             $ret['html'] .= "<input class=\"fileSelector\" type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
                             " style=\"width: {$this->getWidth()}px\" onchange=\"document.getElementById(this.id+'_underlayText').value = this.value;\" />";
             $ret['html'] .= '<div class="underlayFileSelector">';
             $ret['html'] .= '<input type="text" id="'.$ret['id'].'_underlayText" style="width: '.$this->getWidth().'px;" />';
-            $ret['html'] .= ' <a href="#" class="vpsFormFieldFileUploadButton" onclick="return false;">'.$this->getFrontendButtonText().'</a>';
+            $ret['html'] .= ' <a href="#" class="kwfFormFieldFileUploadButton" onclick="return false;">'.$this->getFrontendButtonText().'</a>';
             $ret['html'] .= '</div>';
         $ret['html'] .= '</div>';
         if ($value) {
             $ret['html'] .= "<div class=\"imageTitle\">\n";
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
-            $helper = new Vps_View_Helper_FileSize();
+            $helper = new Kwf_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
             $ret['html'] .= '</div>';
-            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete").'</button></div>';
+            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlKwf("Delete").'</button></div>';
             $uploadId = $value['uploadId'];
         } else {
             $uploadId = '0';

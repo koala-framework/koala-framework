@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Cache_Directory_Root_List_Component extends Vpc_Directories_List_Component
+class Kwf_Component_Cache_Directory_Root_List_Component extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['view'] = 'Vps_Component_Cache_Directory_Root_List_View_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwf_Component_Cache_Directory_Root_List_View_Component';
         return $ret;
     }
 

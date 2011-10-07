@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Plugin_StatusUpdate_Backend_Twitter extends Vps_Component_Generator_Plugin_StatusUpdate_Backend_Abstract
+class Kwf_Component_Generator_Plugin_StatusUpdate_Backend_Twitter extends Kwf_Component_Generator_Plugin_StatusUpdate_Backend_Abstract
 {
     protected $_type = 'twitter';
 
@@ -24,7 +24,7 @@ class Vps_Component_Generator_Plugin_StatusUpdate_Backend_Twitter extends Vps_Co
 
     public function getAuthUrl()
     {
-        if ($this->isAuthed()) throw new Vps_Exception("already authed");
+        if ($this->isAuthed()) throw new Kwf_Exception("already authed");
 
         $consumer = $this->_getOauthConsumer();
         $requestToken = $consumer->getRequestToken();
@@ -37,14 +37,14 @@ class Vps_Component_Generator_Plugin_StatusUpdate_Backend_Twitter extends Vps_Co
     {
         $session = new Zend_Session_Namespace('statusUpdate_OAuth');
         if (!isset($session->requestToken)) {
-            throw new Vps_Exception("requestToken not in session");
+            throw new Kwf_Exception("requestToken not in session");
         }
         $requestToken = $session->requestToken;
 
         $consumer = $this->_getOauthConsumer();
         $accessToken = $consumer->getAccessToken($queryData, $requestToken);
         if (!$accessToken) {
-            throw new Vps_Exception("getting access token failed");
+            throw new Kwf_Exception("getting access token failed");
         }
         $this->_getAuthRow()->auth_token = serialize($accessToken);
         $this->_getAuthRow()->save();
@@ -53,7 +53,7 @@ class Vps_Component_Generator_Plugin_StatusUpdate_Backend_Twitter extends Vps_Co
     public function send($message, $logRow)
     {
         if (!$this->_getAuthRow()->auth_token) {
-            throw new Vps_Exception('no auth token saved');
+            throw new Kwf_Exception('no auth token saved');
         }
 
         $accessToken = unserialize($this->_getAuthRow()->auth_token);
@@ -62,11 +62,11 @@ class Vps_Component_Generator_Plugin_StatusUpdate_Backend_Twitter extends Vps_Co
         $twitter = new Zend_Service_Twitter(null, null);
         $response = $twitter->account->verifyCredentials();
         if (!$response->isSuccess()) {
-            throw new Vps_Exception('verifyCredentials failed: '.$response->__toString());
+            throw new Kwf_Exception('verifyCredentials failed: '.$response->__toString());
         }
         $response = $twitter->statusUpdate($message);
         if (!$response->isSuccess()) {
-            throw new Vps_Exception('statusUpdate failed: '.$response->__toString());
+            throw new Kwf_Exception('statusUpdate failed: '.$response->__toString());
         }
 
         $logRow->status_id = (string)$response->id;

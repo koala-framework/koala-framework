@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_SimpleHttpProxy
+class Kwf_Util_SimpleHttpProxy
 {
     /**
      * Proxy, der zB für cross-domain ajax requests verwendet werden kann
@@ -10,7 +10,7 @@ class Vps_Util_SimpleHttpProxy
     {
         if (empty($_SERVER['REDIRECT_URL'])) return;
 
-        if (!preg_match('#^/vps/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
+        if (!preg_match('#^/kwf/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
 
         if (is_string($hostnames)) {
             $hostnames = array($hostnames);

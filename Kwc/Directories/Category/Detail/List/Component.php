@@ -1,18 +1,18 @@
 <?php
-class Vpc_Directories_Category_Detail_List_Component extends Vpc_Directories_List_Component
+class Kwc_Directories_Category_Detail_List_Component extends Kwc_Directories_List_Component
 {
     public function getSelect()
     {
         $class = $this->getData()->parent->parent->componentClass;
         $childReference =
-            Vpc_Abstract::hasSetting($class, 'childReferenceName') ?
-            Vpc_Abstract::getSetting($class, 'childReferenceName') :
+            Kwc_Abstract::hasSetting($class, 'childReferenceName') ?
+            Kwc_Abstract::getSetting($class, 'childReferenceName') :
             'Categories';
 
         $select = parent::getSelect();
-        $s = new Vps_Model_Select();
+        $s = new Kwf_Model_Select();
         $s->whereEquals('category_id', $this->getData()->parent->id);
-        $select->where(new Vps_Model_Select_Expr_Child_Contains($childReference, $s));
+        $select->where(new Kwf_Model_Select_Expr_Child_Contains($childReference, $s));
 
         return $select;
     }
@@ -26,12 +26,12 @@ class Vpc_Directories_Category_Detail_List_Component extends Vpc_Directories_Lis
     static public function getTableReferenceData($relationModel, $rule/* = 'Item'*/)
     {
         if (is_string($relationModel)) {
-            $relationModel = Vps_Model_Abstract::getInstance($relationModel);
+            $relationModel = Kwf_Model_Abstract::getInstance($relationModel);
         }
 
         $reference = $relationModel->getReference($rule);
-        $dataModel = Vps_Model_Abstract::getInstance($reference['refModelClass']);
-        while ($dataModel instanceof Vps_Model_Proxy) {
+        $dataModel = Kwf_Model_Abstract::getInstance($reference['refModelClass']);
+        while ($dataModel instanceof Kwf_Model_Proxy) {
             $dataModel = $dataModel->getProxyModel();
         }
 

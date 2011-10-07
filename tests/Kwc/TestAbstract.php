@@ -1,8 +1,8 @@
 <?php
-abstract class Vpc_TestAbstract extends Vps_Test_TestCase
+abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
 {
     /**
-     * @var Vps_Component_Data_Root
+     * @var Kwf_Component_Data_Root
      */
     protected $_root;
 
@@ -14,22 +14,22 @@ abstract class Vpc_TestAbstract extends Vps_Test_TestCase
 
     protected function _init($componentClass)
     {
-        Vps_Component_Data_Root::setComponentClass($componentClass);
-        $this->_root = Vps_Component_Data_Root::getInstance();
-        $this->_root->setFilename('vps/vpctest/'.$componentClass);
+        Kwf_Component_Data_Root::setComponentClass($componentClass);
+        $this->_root = Kwf_Component_Data_Root::getInstance();
+        $this->_root->setFilename('kwf/kwctest/'.$componentClass);
         apc_clear_cache('user');
-        Vps_Registry::get('config')->debug->componentCache->disable = false;
-        Vps_Config::deleteValueCache('debug.componentCache.disable');
+        Kwf_Registry::get('config')->debug->componentCache->disable = false;
+        Kwf_Config::deleteValueCache('debug.componentCache.disable');
         return $this->_root;
     }
 
     protected final function _process()
     {
-        Vps_Component_ModelObserver::getInstance()->process();
-        Vps_Component_Data_Root::reset();
-        Vps_Component_Generator_Abstract::clearInstances();
-        $this->_root = Vps_Component_Data_Root::getInstance();
-        $this->_root->setFilename('vps/vpctest/'.Vps_Component_Data_Root::getComponentClass());
+        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Component_Data_Root::reset();
+        Kwf_Component_Generator_Abstract::clearInstances();
+        $this->_root = Kwf_Component_Data_Root::getInstance();
+        $this->_root->setFilename('kwf/kwctest/'.Kwf_Component_Data_Root::getComponentClass());
         apc_clear_cache('user');
     }
 }

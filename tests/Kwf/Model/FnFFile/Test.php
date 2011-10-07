@@ -4,11 +4,11 @@
  * @group Model_FnFFile
  * @group slow
  */
-class Vps_Model_FnFFile_Test extends Vps_Test_TestCase
+class Kwf_Model_FnFFile_Test extends Kwf_Test_TestCase
 {
     public function testSimple()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_FnFFile_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_FnFFile_Model');
         $m->setData(array());
         $row = $m->createRow();
         $row->id = 1;
@@ -21,7 +21,7 @@ class Vps_Model_FnFFile_Test extends Vps_Test_TestCase
 
     public function testReload()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_FnFFile_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_FnFFile_Model');
         $m->setData(array());
         $row = $m->createRow();
         $row->id = 1;
@@ -45,7 +45,7 @@ class Vps_Model_FnFFile_Test extends Vps_Test_TestCase
         $process = proc_open($cmd, $descriptorspec, $pipes);
         $this->assertTrue(is_resource($process));
 
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_FnFFile_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_FnFFile_Model');
         $m->setData(array());
         $row = $m->createRow();
         $row->test = 'bar';

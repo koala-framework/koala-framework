@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
+class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
     protected $backupStaticAttributes = false;
     protected $autoStop = false;
@@ -8,17 +8,17 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function initTestDb($bootstrapFile)
     {
-        Vps_Test_SeparateDb::createSeparateTestDb($bootstrapFile);
-        $dbName = Vps_Test_SeparateDb::getDbName();
+        Kwf_Test_SeparateDb::createSeparateTestDb($bootstrapFile);
+        $dbName = Kwf_Test_SeparateDb::getDbName();
         $this->createCookie('test_special_db='.$dbName, 'path=/, max_age=60*5');
-        Vps_Registry::set('db', Vps_Test::getTestDb($dbName));
-        Vps_Model_Abstract::clearInstances();
+        Kwf_Registry::set('db', Kwf_Test::getTestDb($dbName));
+        Kwf_Model_Abstract::clearInstances();
     }
 
     public static function suite($className)
     {
         self::$browsers = array();
-        foreach (Vps_Registry::get('config')->server->testBrowser as $b) {
+        foreach (Kwf_Registry::get('config')->server->testBrowser as $b) {
             if (!$b->browser) continue; //deaktiviert
             $b = $b->toArray();
             if (isset($b['port'])) $b['port'] = (int)$b['port'];
@@ -26,36 +26,36 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             self::$browsers[] = $b;
         }
         if (!self::$browsers) {
-            throw new Vps_Exception("No test-Browser avaliable");
+            throw new Kwf_Exception("No test-Browser avaliable");
         }
         return parent::suite($className);
     }
 
     public function tearDown()
     {
-        Vps_Test_SeparateDb::restoreTestDb(); // macht das nur wenns eine gibt
+        Kwf_Test_SeparateDb::restoreTestDb(); // macht das nur wenns eine gibt
         parent::tearDown();
     }
 
     protected function setUp()
     {
-        if (!$cfg = Vps_Registry::get('testServerConfig')) {
-            throw new Vps_Exception("testServerConfig not set");
+        if (!$cfg = Kwf_Registry::get('testServerConfig')) {
+            throw new Kwf_Exception("testServerConfig not set");
         }
         $d = $this->_domain;
         if (!$d) {
             $domain = $cfg->server->domain;
         } else {
-            if (!isset($cfg->vpc->domains->$d)) {
-                throw new Vps_Exception("Domain '$d' not found in config");
+            if (!isset($cfg->kwc->domains->$d)) {
+                throw new Kwf_Exception("Domain '$d' not found in config");
             }
-            $domain = $cfg->vpc->domains->$d->domain;
+            $domain = $cfg->kwc->domains->$d->domain;
         }
         $this->setBrowserUrl('http://'.$domain.'/');
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-        $this->captureScreenshotOnFailure = Vps_Setup::getConfigSection()=='vivid-test-server';
+        $this->captureScreenshotOnFailure = Kwf_Setup::getConfigSection()=='vivid-test-server';
         $this->screenshotPath = '/mnt/screenshots';
         $this->screenshotUrl = 'http://screenshots.vivid';
         parent::setUp();
@@ -87,7 +87,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     }
     public function sessionRestart()
     {
-        $this->open("/vps/debug/session-restart");
+        $this->open("/kwf/debug/session-restart");
     }
     public function assertContainsText($locator, $text)
     {
@@ -103,7 +103,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     public function start()
     {
         parent::start();
-        $this->open('/vps/test/vps_start');
+        $this->open('/kwf/test/kwf_start');
         $this->deleteAllVisibleCookies();
         $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
     }
@@ -124,7 +124,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
                 if ($exception instanceof Exception) {
                     throw $exception;
                 } else {
-                    throw new Vps_Exception($exception);
+                    throw new Kwf_Exception($exception);
                 }
             }
             $this->assertTextNotPresent('regexp:File not found|Seite wurde nicht gefunden|konnte nicht gefunden werden|was not found on this server|Exception|Fatal error|Parse error');
@@ -132,15 +132,15 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         }
     }
 
-    public function openVpc($url)
+    public function openKwc($url)
     {
-        return $this->open('/vps/vpctest/'.Vps_Component_Data_Root::getComponentClass().$url);
+        return $this->open('/kwf/kwctest/'.Kwf_Component_Data_Root::getComponentClass().$url);
     }
 
-    public function openVpcEdit($componentClass, $componentId)
+    public function openKwcEdit($componentClass, $componentId)
     {
-        $url = '/vps/componentedittest/'.
-                Vps_Component_Data_Root::getComponentClass().'/'.
+        $url = '/kwf/componentedittest/'.
+                Kwf_Component_Data_Root::getComponentClass().'/'.
                 $componentClass.'/Index'.
                 '?componentId='.$componentId;
         return $this->open($url);
@@ -148,7 +148,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function waitForConnections()
     {
-        $this->waitForCondition('selenium.browserbot.getCurrentWindow().Vps.Connection.runningRequests==0');
+        $this->waitForCondition('selenium.browserbot.getCurrentWindow().Kwf.Connection.runningRequests==0');
         $this->defaultAssertions('waitForConnections');
     }
 
@@ -195,7 +195,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $browser['timeout'] = 30;
         }
 
-        $driver = new Vps_Test_SeleniumTestCase_Driver;
+        $driver = new Kwf_Test_SeleniumTestCase_Driver;
         $driver->setName($browser['name']);
         $driver->setBrowser($browser['browser']);
         $driver->setHost($browser['host']);
@@ -211,7 +211,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function _getLatestMail($select = null)
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_MailLog');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_MailLog');
         if (!$select) $select = $m->select();
         $select->order('id', 'DESC');
         $select->limit(1);
@@ -220,7 +220,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function _getMails($select = null)
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_MailLog');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_MailLog');
         if (!$select) $select = $m->select();
         return $m->getRows($select
                     ->whereEquals('identifier', $this->_unitTestCookie));
@@ -246,6 +246,6 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         if (is_null($uri)) {
             $uri = $this->getLocation();
         }
-        Vps_Test_TestCase::assertValidHtml($uri);
+        Kwf_Test_TestCase::assertValidHtml($uri);
     }
 }

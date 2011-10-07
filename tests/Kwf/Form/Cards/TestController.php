@@ -1,17 +1,17 @@
 <?php
-class Vps_Form_Cards_TestController extends Vps_Controller_Action_Auto_Form
+class Kwf_Form_Cards_TestController extends Kwf_Controller_Action_Auto_Form
 {
-    protected $_modelName = 'Vps_Form_Cards_TopModel';
+    protected $_modelName = 'Kwf_Form_Cards_TopModel';
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
     protected $_temp = "";
 
     protected function _initFields()
     {
-        $cards = $this->_form->add(new Vps_Form_Container_Cards('type', trlVps('Type')))
+        $cards = $this->_form->add(new Kwf_Form_Container_Cards('type', trlKwf('Type')))
             ->setValues(array('foo', 'bar'));
 
-        $form = new Vps_Form_Cards_Foo();
+        $form = new Kwf_Form_Cards_Foo();
         $card = $cards->add();
         $title = "foo";
         $title = str_replace('.', ' ', $title);
@@ -19,7 +19,7 @@ class Vps_Form_Cards_TestController extends Vps_Controller_Action_Auto_Form
         $card->setName("foo");
         if ($form) $card->add($form)->setServiceType('foo');
 
-        $form = new Vps_Form_Cards_Bar();
+        $form = new Kwf_Form_Cards_Bar();
         $card = $cards->add();
         $title = "bar";
         $title = str_replace('.', ' ', $title);
@@ -33,13 +33,13 @@ class Vps_Form_Cards_TestController extends Vps_Controller_Action_Auto_Form
         $config = array();
         $config['baseParams']['id'] = $this->_getParam('id');
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Vps_Form_Cards:Test';
-        $this->view->ext('Vps.Auto.FormPanel', $config, 'Vps.Test.Viewport');
+        $config['assetsType'] = 'Kwf_Form_Cards:Test';
+        $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 
     public function getModelDataAction()
     {
-        $model = Vps_Model_Abstract::getInstance('Vps_Form_Cards_TopModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Form_Cards_TopModel');
         $row = $model->getRow(1);
         echo $row->firstname;
         exit;

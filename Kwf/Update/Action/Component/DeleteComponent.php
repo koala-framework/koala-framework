@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Action_Component_DeleteComponent extends Vps_Update_Action_Abstract
+class Kwf_Update_Action_Component_DeleteComponent extends Kwf_Update_Action_Abstract
 {
     public $id;
 
@@ -7,7 +7,7 @@ class Vps_Update_Action_Component_DeleteComponent extends Vps_Update_Action_Abst
     {
         parent::checkSettings();
         if (!$this->id) {
-            throw new Vps_ClientException("Required parameters: id");
+            throw new Kwf_ClientException("Required parameters: id");
         }
     }
 

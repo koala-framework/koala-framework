@@ -1,25 +1,25 @@
 <?php
-class Vpc_Directories_Year_Directory_Generator extends Vpc_Directories_Month_Directory_Generator
+class Kwc_Directories_Year_Directory_Generator extends Kwc_Directories_Month_Directory_Generator
 {
-    protected function _formatSelectFilename(Vps_Component_Select $select)
+    protected function _formatSelectFilename(Kwf_Component_Select $select)
     {
-        if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+        if ($select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Kwf_Component_Select::WHERE_FILENAME);
             if (!preg_match('#^([0-9]{4})$#', $filename, $m)) return null;
-            $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+            $dateColumn = Kwc_Abstract::getSetting($this->_class, 'dateColumn');
             $select->where("YEAR($dateColumn) = ?", $m[1]);
         }
         return $select;
     }
 
-    protected function _formatSelectId(Vps_Component_Select $select)
+    protected function _formatSelectId(Kwf_Component_Select $select)
     {
-        if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
-            $id = $select->getPart(Vps_Model_Select::WHERE_ID);
+        if ($select->hasPart(Kwf_Model_Select::WHERE_ID)) {
+            $id = $select->getPart(Kwf_Model_Select::WHERE_ID);
             if (!preg_match('#^_([0-9]{4})$#', $id, $m)) return null;
-            $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+            $dateColumn = Kwc_Abstract::getSetting($this->_class, 'dateColumn');
             $select->where("YEAR($dateColumn) = ?", $m[1]);
-            $select->unsetPart(Vps_Model_Select::WHERE_ID);
+            $select->unsetPart(Kwf_Model_Select::WHERE_ID);
         }
         return $select;
     }

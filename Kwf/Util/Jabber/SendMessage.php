@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Jabber_SendMessage
+class Kwf_Util_Jabber_SendMessage
 {
     public static function send($sendMessageTo, $message)
     {
@@ -10,7 +10,7 @@ class Vps_Util_Jabber_SendMessage
         new self($jab, $sendMessageTo, $message);
 
         if (!$jab->connect("vivid")) {
-            throw new Vps_Exception("Could not connect to the Jabber server");
+            throw new Kwf_Exception("Could not connect to the Jabber server");
         }
         $jab->execute(1, 3);
         $jab->disconnect();
@@ -44,7 +44,7 @@ class Vps_Util_Jabber_SendMessage
 
     function handleAuthFailure($code, $error)
     {
-        throw new Vps_Exception("Authentication failure: $error ($code)");
+        throw new Kwf_Exception("Authentication failure: $error ($code)");
         $this->jab->terminated = true;
     }
 
@@ -65,7 +65,7 @@ class Vps_Util_Jabber_SendMessage
 
     function handleError($code,$error,$xmlns)
     {
-        throw new Vps_Exception("Error: $error ($code)".($xmlns?" in $xmlns":""));
+        throw new Kwf_Exception("Error: $error ($code)".($xmlns?" in $xmlns":""));
     }
 
     function handleRosterUpdate($jid)

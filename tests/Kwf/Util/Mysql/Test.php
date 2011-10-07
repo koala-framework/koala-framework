@@ -2,19 +2,19 @@
 /**
  * @group Util
  */
-class Vps_Util_Mysql_Test extends Vps_Test_TestCase
+class Kwf_Util_Mysql_Test extends Kwf_Test_TestCase
 {
     public function testGrantFileRight()
     {
         // einen test user erstellen
-        $dbConfig = Vps_Registry::get('db')->getConfig();
+        $dbConfig = Kwf_Registry::get('db')->getConfig();
         $dbUser = 'test'.time();
 
         $sql = "GRANT ALL PRIVILEGES ON `".$dbConfig["dbname"]."` . * TO '$dbUser'@'localhost'; ";
         $cmd = "mysql -e ".escapeshellarg($sql);
         system($cmd, $ret);
         if ($ret) {
-            throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
+            throw new Kwf_ClientException("Konnte berechtigungen nicht setzen");
         }
 
         // checken, ob das recht FILE auf false gesetzt ist
@@ -22,7 +22,7 @@ class Vps_Util_Mysql_Test extends Vps_Test_TestCase
         $cmd = "mysql mysql -e ".escapeshellarg($sql);
         exec($cmd, $output, $ret);
         if ($ret) {
-            throw new Vps_Exception("MySQL User konnte nicht gefunden werden.");
+            throw new Kwf_Exception("MySQL User konnte nicht gefunden werden.");
         }
 
         foreach ($output as $outputRow) {
@@ -33,7 +33,7 @@ class Vps_Util_Mysql_Test extends Vps_Test_TestCase
             $this->assertEquals('N', $sqlArray[2]);
         }
 
-        Vps_Util_Mysql::grantFileRight($dbUser);
+        Kwf_Util_Mysql::grantFileRight($dbUser);
 
         // checken, ob das recht FILE auf true gesetzt ist
         unset($output);
@@ -41,7 +41,7 @@ class Vps_Util_Mysql_Test extends Vps_Test_TestCase
         $cmd = "mysql mysql -e ".escapeshellarg($sql);
         exec($cmd, $output, $ret);
         if ($ret) {
-            throw new Vps_Exception("MySQL User konnte nicht gefunden werden.");
+            throw new Kwf_Exception("MySQL User konnte nicht gefunden werden.");
         }
 
         foreach ($output as $outputRow) {
@@ -57,7 +57,7 @@ class Vps_Util_Mysql_Test extends Vps_Test_TestCase
         $cmd = "mysql -e ".escapeshellarg($sql);
         system($cmd, $ret);
         if ($ret) {
-            throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
+            throw new Kwf_ClientException("Konnte berechtigungen nicht setzen");
         }
     }
 }

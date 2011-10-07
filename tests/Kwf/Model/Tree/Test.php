@@ -3,13 +3,13 @@
  * @group Model
  * @group Model_Tree
  */
-class Vps_Model_Tree_Test extends Vps_Test_TestCase
+class Kwf_Model_Tree_Test extends Kwf_Test_TestCase
 {
     private $_model;
     public function setUp()
     {
         parent::setUp();
-        $this->_model = new Vps_Model_Tree_TestModel();
+        $this->_model = new Kwf_Model_Tree_TestModel();
     }
 
     public function testPath()

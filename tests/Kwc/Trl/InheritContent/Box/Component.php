@@ -1,10 +1,10 @@
 <?php
-class Vpc_Trl_InheritContent_Box_Component extends Vpc_Box_InheritContent_Component
+class Kwc_Trl_InheritContent_Box_Component extends Kwc_Box_InheritContent_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component'] = 'Vpc_Trl_InheritContent_Box_Child_Component';
+        $ret['generators']['child']['component'] = 'Kwc_Trl_InheritContent_Box_Child_Component';
         return $ret;
     }
 }

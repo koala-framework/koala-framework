@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mongo_MapReduce_Row extends Vps_Model_Mongo_Row
+class Kwf_Model_Mongo_MapReduce_Row extends Kwf_Model_Mongo_Row
 {
     public function __construct(array $config)
     {

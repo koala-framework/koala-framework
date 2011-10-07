@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_Mail extends Vps_Model_Db_Proxy
+class Kwf_Model_Mail extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vps_enquiries';
-    protected $_rowClass = 'Vps_Model_Mail_Row';
+    protected $_table = 'kwf_enquiries';
+    protected $_rowClass = 'Kwf_Model_Mail_Row';
 
-    protected $_mailerClass = 'Vps_Mail'; // muss instanceof Vps_Mail sein
+    protected $_mailerClass = 'Kwf_Mail'; // muss instanceof Kwf_Mail sein
     protected $_mailTemplate;
     protected $_mailMasterTemplate;
     protected $_additionalStore = null;
@@ -13,9 +13,9 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
 
     protected function _init()
     {
-        $this->_siblingModels['vars'] = new Vps_Model_Mail_VarsSibling(array('fieldName' => 'serialized_mail_vars'));
-        $this->_siblingModels['essentials'] = new Vps_Model_Field(array('fieldName' => 'serialized_mail_essentials'));
-        $this->_dependentModels['Attachments'] = new Vps_Model_FieldRows(array('fieldName'=>'mail_attachments'));
+        $this->_siblingModels['vars'] = new Kwf_Model_Mail_VarsSibling(array('fieldName' => 'serialized_mail_vars'));
+        $this->_siblingModels['essentials'] = new Kwf_Model_Field(array('fieldName' => 'serialized_mail_essentials'));
+        $this->_dependentModels['Attachments'] = new Kwf_Model_FieldRows(array('fieldName'=>'mail_attachments'));
         parent::_init();
     }
 
@@ -34,8 +34,8 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
         }
 
         if (!empty($config['mailerClass'])) {
-            if (!is_instance_of($config['mailerClass'], 'Vps_Mail')) {
-                throw new Vps_Exception("mailerClass must be instance of Vps_Mail. '".$config['mailerClass']."' given.");
+            if (!is_instance_of($config['mailerClass'], 'Kwf_Mail')) {
+                throw new Kwf_Exception("mailerClass must be instance of Kwf_Mail. '".$config['mailerClass']."' given.");
             }
             $this->_mailerClass = $config['mailerClass'];
         }
@@ -47,7 +47,7 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
 
         if (isset($config['spamFields'])) {
             if (!is_array($config['spamFields'])) {
-                throw new Vps_Exception("config 'spamFields' for '".get_class($this)."' must be of type 'array', you've given type '".gettype($config['spamFields'])."'");
+                throw new Kwf_Exception("config 'spamFields' for '".get_class($this)."' must be of type 'array', you've given type '".gettype($config['spamFields'])."'");
             }
             $this->_spamFields = $config['spamFields'];
         }
@@ -62,7 +62,7 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
     {
         if (!is_null($this->_attachmentSaveFolder)) return $this->_attachmentSaveFolder;
 
-        $ret = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')->getUploadDir();
+        $ret = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getUploadDir();
         if (substr($ret, -1) != '/') $ret .= '/';
         $ret .= 'mailattachments';
         if (!file_exists($ret) || !is_dir($ret)) {
@@ -81,15 +81,15 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
     {
         $row = parent::createRow($data);
 
-        if (!is_instance_of($this->_mailerClass, 'Vps_Mail')) {
-            throw new Vps_Exception("mailerClass must be instance of 'Vps_Mail'. '".$this->_mailerClass."' given.");
+        if (!is_instance_of($this->_mailerClass, 'Kwf_Mail')) {
+            throw new Kwf_Exception("mailerClass must be instance of 'Kwf_Mail'. '".$this->_mailerClass."' given.");
         }
 
         if (empty($this->_mailTemplate)) {
-            throw new Vps_Exception("mail template not set for class '".get_class($this)."' in construct-config");
+            throw new Kwf_Exception("mail template not set for class '".get_class($this)."' in construct-config");
         }
         if (!is_string($this->_mailTemplate)) {
-            throw new Vps_Exception("mail template must be of type 'string' but type '".gettype($this->_mailTemplate)."' has been set");
+            throw new Kwf_Exception("mail template must be of type 'string' but type '".gettype($this->_mailTemplate)."' has been set");
         }
 
         $row->setTemplate($this->_mailTemplate);

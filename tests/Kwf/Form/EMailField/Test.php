@@ -1,15 +1,15 @@
 <?php
 /**
- * @group Vps_Form_EMailField
+ * @group Kwf_Form_EMailField
  */
-class Vps_Form_EMailField_Test extends Vps_Test_TestCase
+class Kwf_Form_EMailField_Test extends Kwf_Test_TestCase
 {
     public function testEMail()
     {
-        $m1 = new Vps_Model_FnF();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Model_FnF();
+        $form = new Kwf_Form();
         $form->setModel($m1);
-        $field1 = $form->add(new Vps_Form_Field_EMailField('test'));
+        $field1 = $form->add(new Kwf_Form_Field_EMailField('test'));
 
         $post = array(
             $field1->getFieldName() => 'ufx@vüvüd-planet.com'

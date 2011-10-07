@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -17,8 +17,8 @@ Vps.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: trlVps('Character'),
-                text: trlVps('Insert a custom character.')
+                title: trlKwf('Character'),
+                text: trlKwf('Insert a custom character.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',
@@ -28,16 +28,16 @@ Vps.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
     },
 
     onInsertChar: function() {
-        var win = Vps.Form.HtmlEditor.InsertChar.insertCharWindow; //statische var, nur ein window erstellen
+        var win = Kwf.Form.HtmlEditor.InsertChar.insertCharWindow; //statische var, nur ein window erstellen
         if (!win) {
-            win = new Vps.Form.InsertCharWindow({
+            win = new Kwf.Form.InsertCharWindow({
                 modal: true,
-                title: trlVps('Insert Custom Character'),
+                title: trlKwf('Insert Custom Character'),
                 width: 500,
                 closeAction: 'hide',
                 autoScroll: true
             });
-            Vps.Form.HtmlEditor.insertCharWindow = win;
+            Kwf.Form.HtmlEditor.insertCharWindow = win;
         }
 
         var bookmark = this.cmp.tinymceEditor.selection.getBookmark();

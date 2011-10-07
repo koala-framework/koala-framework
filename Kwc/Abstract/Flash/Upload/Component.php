@@ -1,6 +1,6 @@
 <?php
-abstract class Vpc_Abstract_Flash_Upload_Component extends Vpc_Abstract_Flash_Component
-    implements Vps_Media_Output_Interface
+abstract class Kwc_Abstract_Flash_Upload_Component extends Kwc_Abstract_Flash_Component
+    implements Kwf_Media_Output_Interface
 {
     public static function getSettings()
     {
@@ -18,17 +18,17 @@ abstract class Vpc_Abstract_Flash_Upload_Component extends Vpc_Abstract_Flash_Co
         }
         $filename = $fRow->filename.'.'.$fRow->extension;
         $id = $this->getData()->componentId;
-        return Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
+        return Kwf_Media::getUrl(get_class($this), $id, 'default', $filename);
     }
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
         if (!$c) return null;
         $row = $c->getComponent()->getRow();
         $fileRow = false;
         if ($row) {
-            $fileRow = $row->getParentRow(Vpc_Abstract::getSetting($className, 'uploadModelRule'));
+            $fileRow = $row->getParentRow(Kwc_Abstract::getSetting($className, 'uploadModelRule'));
         }
         if (!$fileRow) {
             return null;

@@ -1,17 +1,17 @@
 <?php
-class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Cards_Form
+class Kwc_Basic_LinkTag_Form extends Kwc_Abstract_Cards_Form
 {
     protected function _init()
     {
         parent::_init();
         $cards = $this->fields->first();
         $cards->getCombobox()
-            ->setData(new Vpc_Basic_LinkTag_Form_Data());
+            ->setData(new Kwc_Basic_LinkTag_Form_Data());
         $cards->getCombobox()->getData()->cards = $cards->fields;
     }
 }
 
-class Vpc_Basic_LinkTag_Form_Data extends Vps_Data_Abstract
+class Kwc_Basic_LinkTag_Form_Data extends Kwf_Data_Abstract
 {
     public $cards;
     public function load($row)
@@ -27,7 +27,7 @@ class Vpc_Basic_LinkTag_Form_Data extends Vps_Data_Abstract
         return $row->component;
     }
 
-    public function save(Vps_Model_Row_Interface $row, $data)
+    public function save(Kwf_Model_Row_Interface $row, $data)
     {
         if (strpos($data, '_')!==false) {
             $data = substr($data, 0, strpos($data, '_'));

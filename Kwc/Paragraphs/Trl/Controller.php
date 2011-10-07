@@ -1,26 +1,26 @@
 <?php
-class Vpc_Paragraphs_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
+class Kwc_Paragraphs_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 {
     protected $_permissions = array(
         'save',
         );
-    protected $_model = 'Vpc_Paragraphs_Trl_AdminModel';
+    protected $_model = 'Kwc_Paragraphs_Trl_AdminModel';
     protected $_sortable = false;
     protected $_defaultOrder = 'pos';
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('component_class'));
-        $this->_columns->add(new Vps_Grid_Column('component_name'));
-        $this->_columns->add(new Vps_Grid_Column('component_icon'));
-        $this->_columns->add(new Vps_Grid_Column('pos'));
+        $this->_columns->add(new Kwf_Grid_Column('component_class'));
+        $this->_columns->add(new Kwf_Grid_Column('component_name'));
+        $this->_columns->add(new Kwf_Grid_Column('component_icon'));
+        $this->_columns->add(new Kwf_Grid_Column('pos'));
 
-        $this->_columns->add(new Vps_Grid_Column('preview'))
-            ->setData(new Vps_Data_Vpc_Frontend($this->_getParam('class')))
+        $this->_columns->add(new Kwf_Grid_Column('preview'))
+            ->setData(new Kwf_Data_Kwc_Frontend($this->_getParam('class')))
             ->setRenderer('component');
-        $this->_columns->add(new Vps_Grid_Column_Visible());
-        $this->_columns->add(new Vps_Grid_Column('edit_components'))
-            ->setData(new Vpc_Paragraphs_Trl_EditComponentsData($this->_getParam('class')));
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
+        $this->_columns->add(new Kwf_Grid_Column('edit_components'))
+            ->setData(new Kwc_Paragraphs_Trl_EditComponentsData($this->_getParam('class')));
     }
 
     public function preDispatch()
@@ -48,7 +48,7 @@ class Vpc_Paragraphs_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     public function jsonMakeAllVisibleAction()
     {
         $id = $this->_getParam('componentId');
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
-        Vpc_Admin::getInstance($c->componentClass)->makeVisible($c);
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+        Kwc_Admin::getInstance($c->componentClass)->makeVisible($c);
     }
 }

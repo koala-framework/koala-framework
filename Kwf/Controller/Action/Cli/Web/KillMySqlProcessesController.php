@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_KillMySqlProcessesController extends Vps_Controller_Action
+class Kwf_Controller_Action_Cli_Web_KillMySqlProcessesController extends Kwf_Controller_Action
 {
     public static function getHelp()
     {

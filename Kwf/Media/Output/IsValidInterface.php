@@ -1,5 +1,5 @@
 <?php
-interface Vps_Media_Output_IsValidInterface extends Vps_Media_Output_Interface
+interface Kwf_Media_Output_IsValidInterface extends Kwf_Media_Output_Interface
 {
     const VALID = 'valid';
     const VALID_DONT_CACHE = 'validDontCache';

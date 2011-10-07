@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Hash
+class Kwf_Util_Hash
 {
     public function hash($str)
     {

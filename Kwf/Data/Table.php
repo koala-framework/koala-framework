@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Table extends Vps_Data_Abstract
+class Kwf_Data_Table extends Kwf_Data_Abstract
 {
     protected $_dataIndex;
 
@@ -24,7 +24,7 @@ class Vps_Data_Table extends Vps_Data_Abstract
         return $name;
     }
 
-    public function save(Vps_Model_Row_Interface $row, $data)
+    public function save(Kwf_Model_Row_Interface $row, $data)
     {
         $name = $this->getField();
         $row->$name = $data;

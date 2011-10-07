@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_UpdateDir_Update_100 extends Vps_Update
+class Kwf_Update_UpdateDir_Update_100 extends Kwf_Update
 {
     public function update() {}
 }

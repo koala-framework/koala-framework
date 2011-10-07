@@ -1,5 +1,5 @@
 <?php
-class Vps_Log_Formatter_Html implements Zend_Log_Formatter_Interface
+class Kwf_Log_Formatter_Html implements Zend_Log_Formatter_Interface
 {
     public function format($event)
     {

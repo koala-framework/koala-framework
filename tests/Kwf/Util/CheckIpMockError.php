@@ -1,6 +1,6 @@
 <?php
 
-class Vps_Util_CheckIpMockError extends Vps_Util_Check_Ip
+class Kwf_Util_CheckIpMockError extends Kwf_Util_Check_Ip
 {
     // müsste eigentlich ein array zurückgeben
     protected function _getAllowedAddresses()

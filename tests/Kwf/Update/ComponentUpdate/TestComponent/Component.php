@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_ComponentUpdate_TestComponent_Component extends Vpc_Abstract
+class Kwf_Update_ComponentUpdate_TestComponent_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {

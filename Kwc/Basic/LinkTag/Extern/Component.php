@@ -1,20 +1,20 @@
 <?php
 /**
- * @package Vpc
+ * @package Kwc
  * @subpackage Basic
  */
-class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Component
+class Kwc_Basic_LinkTag_Extern_Component extends Kwc_Basic_LinkTag_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'dataClass' => 'Vpc_Basic_LinkTag_Extern_Data',
-            'ownModel'     => 'Vpc_Basic_LinkTag_Extern_Model',
-            'componentName' => trlVps('Link.Extern'),
+            'dataClass' => 'Kwc_Basic_LinkTag_Extern_Data',
+            'ownModel'     => 'Kwc_Basic_LinkTag_Extern_Model',
+            'componentName' => trlKwf('Link.Extern'),
             'hasPopup'      => true, //TODO: bezeichnung von diesem setting ist scheiße
             'openType'      => null, //wenn hasPopup auf false
         ));
-        $ret['assets']['files'][] = 'vps/Vpc/Basic/LinkTag/Extern/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Basic/LinkTag/Extern/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
         return $ret;
     }

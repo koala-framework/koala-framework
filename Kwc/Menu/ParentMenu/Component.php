@@ -1,10 +1,10 @@
 <?php
-class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
+class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
 {
     public static function getSettings($menuComponentClass)
     {
         $ret = parent::getSettings();
-        $generators = Vpc_Abstract::getSetting($menuComponentClass, 'generators');
+        $generators = Kwc_Abstract::getSetting($menuComponentClass, 'generators');
         if (isset($generators['subMenu'])) {
             $ret['generators']['subMenu'] = $generators['subMenu'];
         }
@@ -56,8 +56,8 @@ class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $menu = $this->_getParentContentData();
-        if (!is_instance_of($menu->componentClass, 'Vpc_Menu_Abstract_Component')) {
-            throw new Vps_Exception("got invalid menu component '$menu->componentClass'");
+        if (!is_instance_of($menu->componentClass, 'Kwc_Menu_Abstract_Component')) {
+            throw new Kwf_Exception("got invalid menu component '$menu->componentClass'");
         }
 
         $ret = $menu->getComponent()->getTemplateVars();
@@ -70,7 +70,7 @@ class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
 
         $currentPageIds = array();
         foreach ($currentPages as $page) {
-            if (!$page instanceof Vps_Component_Data_Root) {
+            if (!$page instanceof Kwf_Component_Data_Root) {
                 $currentPageIds[] = $page->getComponentId();
             }
         }
@@ -86,7 +86,7 @@ class Vpc_Menu_ParentMenu_Component extends Vpc_Abstract
 
     public static function getStaticCacheMeta($componentClass)
     {
-        $c = Vpc_Abstract::getSetting($componentClass, 'menuComponentClass');
+        $c = Kwc_Abstract::getSetting($componentClass, 'menuComponentClass');
         return call_user_func(array($c, 'getStaticCacheMeta'), $c);
         return $ret;
     }

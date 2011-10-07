@@ -3,13 +3,13 @@
  * @group Update_Action
  * @group Update_Action_Rrd
  */
-class Vps_Update_Action_Rrd_AddDsTest extends Vps_Update_Action_Rrd_AbstractTest
+class Kwf_Update_Action_Rrd_AddDsTest extends Kwf_Update_Action_Rrd_AbstractTest
 {
     public function testAddRrd()
     {
         $file = $this->_createTestFile();
 
-        $action = new Vps_Update_Action_Rrd_AddDs(array(
+        $action = new Kwf_Update_Action_Rrd_AddDs(array(
             'file' => $file,
             'name' => 'testxxx',
             'type' => 'ABSOLUTE',

@@ -1,18 +1,18 @@
 <?php
-class Vpc_Directories_Category_ShowCategories_Form extends Vpc_Abstract_Composite_Form
+class Kwc_Directories_Category_ShowCategories_Form extends Kwc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
 
-        $showDirectoryClass = Vpc_Abstract::getSetting($this->getClass(), 'showDirectoryClass');
-        $hideDirectoryClasses = Vpc_Abstract::getSetting($this->getClass(), 'hideDirectoryClasses');
+        $showDirectoryClass = Kwc_Abstract::getSetting($this->getClass(), 'showDirectoryClass');
+        $hideDirectoryClasses = Kwc_Abstract::getSetting($this->getClass(), 'hideDirectoryClasses');
 
-        $cards = $this->add(new Vps_Form_Container_Cards('source_component_id', trlVps('Directory')));
+        $cards = $this->add(new Kwf_Form_Container_Cards('source_component_id', trlKwf('Directory')));
 
         $defaultCard = null;
-        $categories = Vps_Component_Data_Root::getInstance()
-                ->getComponentsByClass('Vpc_Directories_Category_Directory_Component');
+        $categories = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsByClass('Kwc_Directories_Category_Directory_Component');
         foreach ($categories as $category) {
             $itemDirectory = $category->parent;
             if (is_instance_of($itemDirectory->componentClass, $showDirectoryClass)) {
@@ -33,8 +33,8 @@ class Vpc_Directories_Category_ShowCategories_Form extends Vpc_Abstract_Composit
                 $card->setTitle($category->parent->getTitle());
                 $card->setName($category->componentId);
                 if (!$defaultCard) $defaultCard = $category->componentId;
-                $model = Vps_Model_Abstract::getInstance('Vpc_Directories_Category_ShowCategories_Model');
-                $card->add(new Vps_Form_Field_MultiCheckboxLegacy($model, trlVps('Categories')))
+                $model = Kwf_Model_Abstract::getInstance('Kwc_Directories_Category_ShowCategories_Model');
+                $card->add(new Kwf_Form_Field_MultiCheckboxLegacy($model, trlKwf('Categories')))
                     ->setValues($values)
                     ->setReferences(array(
                         'columns' => array('component_id'),

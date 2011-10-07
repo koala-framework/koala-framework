@@ -1,5 +1,5 @@
 <?php
-class Vpc_Menu_OtherCategory_Component extends Vpc_Abstract
+class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
 {
     public static function getSettings($menuComponentClass)
     {
@@ -10,11 +10,11 @@ class Vpc_Menu_OtherCategory_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        $category = Vpc_Abstract::getSetting($this->_getSetting('menuComponentClass'), 'level');
+        $category = Kwc_Abstract::getSetting($this->_getSetting('menuComponentClass'), 'level');
         $categoryData = $this->getData()->parent->parent->getChildComponent('-'.$category);
         $menu = $categoryData->getChildComponent('-'.$this->getData()->id);
-        if (!is_instance_of($menu->componentClass, 'Vpc_Menu_Abstract_Component')) {
-            throw new Vps_Exception("got invalid menu component");
+        if (!is_instance_of($menu->componentClass, 'Kwc_Menu_Abstract_Component')) {
+            throw new Kwf_Exception("got invalid menu component");
         }
 
         $ret = $menu->getComponent()->getTemplateVars();
@@ -26,7 +26,7 @@ class Vpc_Menu_OtherCategory_Component extends Vpc_Abstract
 
     public static function getStaticCacheMeta($componentClass)
     {
-        $c = Vpc_Abstract::getSetting($componentClass, 'menuComponentClass');
+        $c = Kwc_Abstract::getSetting($componentClass, 'menuComponentClass');
         return call_user_func(array($c, 'getStaticCacheMeta'), $c);
         return $ret;
     }

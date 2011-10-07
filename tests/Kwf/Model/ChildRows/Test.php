@@ -3,23 +3,23 @@
  * @group Model
  * @group ChildRows
  */
-class Vps_Model_ChildRows_Test extends Vps_Test_TestCase
+class Kwf_Model_ChildRows_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel')->setData(array(
+        Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_ChildModel')->setData(array(
             array('id'=>1, 'test_id'=>1, 'bar'=>'bar1'),
             array('id'=>2, 'test_id'=>1, 'bar'=>'bar2')
         ));
-        Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model')->setData(array(
+        Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_Model')->setData(array(
             array('id'=>1, 'foo'=>'foo1'),
             array('id'=>2, 'foo'=>'foo2')
         ));
     }
     public function testChildRows()
     {
-        $cModel = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel');
-        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $cModel = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_ChildModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_Model');
         $row = $model->getRow(1);
         $rows = $row->getChildRows('Child');
         $this->assertEquals(count($rows), 2);
@@ -59,8 +59,8 @@ class Vps_Model_ChildRows_Test extends Vps_Test_TestCase
 
     public function testParentRow()
     {
-        $cModel = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel');
-        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $cModel = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_ChildModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_Model');
         $row = $cModel->getRow(1);
         $this->assertEquals($row->getParentRow('Parent')->id, 1);
         $this->assertEquals($row->getParentRow('Parent')->foo, 'foo1');
@@ -68,14 +68,14 @@ class Vps_Model_ChildRows_Test extends Vps_Test_TestCase
 
     public function testToString()
     {
-        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_Model');
         $this->assertEquals('foo1', $model->getRow('1')->__toString());
     }
 
     public function testCreateChildRowForNewUnsavedRow()
     {
-        $cModel = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel');
-        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $cModel = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_ChildModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_Model');
         $row = $model->createRow();
         $cRow = $row->createChildRow('Child');
         $row->save();
@@ -89,8 +89,8 @@ class Vps_Model_ChildRows_Test extends Vps_Test_TestCase
 
     public function testChildRowsAreAutomagicallySavedWithParentRow()
     {
-        $cModel = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel');
-        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $cModel = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_ChildModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_ChildRows_Model');
         $row = $model->getRow(1);
         $cRow = $row->getChildRows('Child')->current();
         $this->assertEquals(1, $cRow->id);

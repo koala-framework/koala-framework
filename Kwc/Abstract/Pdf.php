@@ -1,10 +1,10 @@
 <?php
-class Vpc_Abstract_Pdf
+class Kwc_Abstract_Pdf
 {
     protected $_component;
     protected $_pdf;
     protected $_indentLeft;
-    public function __construct(Vpc_Abstract $component, TCPDF $pdf)
+    public function __construct(Kwc_Abstract $component, TCPDF $pdf)
     {
         $this->_component = $component;
         $this->_pdf = $pdf;
@@ -22,7 +22,7 @@ class Vpc_Abstract_Pdf
         if (method_exists($this->_pdf, $method)) {
             return call_user_func_array(array($this->_pdf, $method), $arguments);
         } else {
-            throw new Vps_Exception("Invalid method called: '$method'");
+            throw new Kwf_Exception("Invalid method called: '$method'");
         }
     }
 

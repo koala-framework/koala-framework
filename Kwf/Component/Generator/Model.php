@@ -1,8 +1,8 @@
 <?php
-class Vps_Component_Generator_Model extends Vps_Model_Abstract
+class Kwf_Component_Generator_Model extends Kwf_Model_Abstract
 {
-    protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
-    protected $_rowsetClass = 'Vps_Component_Generator_Model_Rowset';
+    protected $_rowClass = 'Kwf_Model_Row_Data_Abstract';
+    protected $_rowsetClass = 'Kwf_Component_Generator_Model_Rowset';
     
     protected $_constraints = array(
         'pageGenerator' => true,
@@ -22,14 +22,14 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
         $rowset = array();
         if ($where->getPart('whereNull') && in_array('parent_id', $where->getPart('whereNull'))) {
             $rowset[] = array(
-                'component' => Vps_Component_Data_Root::getComponentClass(),
+                'component' => Kwf_Component_Data_Root::getComponentClass(),
                 'class' => 'root',
                 'name' => 'root'
             );
         } else {
             $equals = $where->getPart('whereEquals');
             $parent = $equals['parent_id'];
-            foreach (Vpc_Abstract::getSetting($parent, 'generators', false) as $key => $generator) {
+            foreach (Kwc_Abstract::getSetting($parent, 'generators', false) as $key => $generator) {
                 if (is_array($generator['component'])) {
                     foreach ($generator['component'] as $component => $class) {
                         if ($class) {
@@ -73,7 +73,7 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
      **/
     public static function output()
     {
-        $componentClass = Vps_Component_Data_Root::getComponentClass();
+        $componentClass = Kwf_Component_Data_Root::getComponentClass();
         $model = new self();
 
         $maxComponentLength = self::_maxComponentLength($componentClass, $model);
@@ -118,7 +118,7 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception("no unique identifier set");
+        throw new Kwf_Exception("no unique identifier set");
     }
     
 }

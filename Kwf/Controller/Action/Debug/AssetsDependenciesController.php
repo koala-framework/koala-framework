@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Controller_Action
+class Kwf_Controller_Action_Debug_AssetsDependenciesController extends Kwf_Controller_Action
 {
     private $_config;
     private $_processedDependencies = array();
@@ -8,9 +8,9 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
 
     public function indexAction()
     {
-        $this->_config = Vps_Registry::get('config');
+        $this->_config = Kwf_Registry::get('config');
         $assetsType = 'Frontend';
-        $rootComponent = Vps_Component_Data_Root::getComponentClass();
+        $rootComponent = Kwf_Component_Data_Root::getComponentClass();
         foreach ($this->_config->assets->$assetsType as $d=>$v) {
             if ($v) {
                 $this->_processDependency($assetsType, $d, $rootComponent);
@@ -21,7 +21,7 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
 
     private function _getDependenciesConfig($assetsType)
     {
-        $ret = new Zend_Config_Ini(VPS_PATH.'/config.ini', 'dependencies',
+        $ret = new Zend_Config_Ini(KWF_PATH.'/config.ini', 'dependencies',
                                             array('allowModifications'=>true));
         $ret->merge(new Zend_Config_Ini('config.ini', 'dependencies'));
         return $ret;
@@ -38,7 +38,7 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
             return;
         }
         if (!isset($this->_getDependenciesConfig($assetsType)->$dependency)) {
-            throw new Vps_Exception("Can't resolve dependency '$dependency'");
+            throw new Kwf_Exception("Can't resolve dependency '$dependency'");
         }
         $deps = $this->_getDependenciesConfig($assetsType)->$dependency;
 
@@ -62,10 +62,10 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
         if (in_array($assetsType.$class.$includeAdminAssets, $this->_processedComponents)) return;
 
         array_push($this->_stack, $class);
-        $assets = Vpc_Abstract::getSetting($class, 'assets');
+        $assets = Kwc_Abstract::getSetting($class, 'assets');
         $assetsAdmin = array();
         if ($includeAdminAssets) {
-            $assetsAdmin = Vpc_Abstract::getSetting($class, 'assetsAdmin');
+            $assetsAdmin = Kwc_Abstract::getSetting($class, 'assetsAdmin');
         }
         $this->_processedComponents[] = $assetsType.$class.$includeAdminAssets;
         if (isset($assets['dep'])) {
@@ -92,7 +92,7 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
         //alle css-dateien der vererbungshierache includieren
         $componentCssFiles = array();
 
-        foreach (Vpc_Abstract::getParentClasses($class) as $c) {
+        foreach (Kwc_Abstract::getParentClasses($class) as $c) {
             $curClass = $c;
             if (substr($curClass, -10) == '_Component') {
                 $curClass = substr($curClass, 0, -10);
@@ -112,8 +112,8 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
             }
         }
 
-        $classes = Vpc_Abstract::getChildComponentClasses($class);
-        $classes = array_merge($classes, Vpc_Abstract::getSetting($class, 'plugins'));
+        $classes = Kwc_Abstract::getChildComponentClasses($class);
+        $classes = array_merge($classes, Kwc_Abstract::getSetting($class, 'plugins'));
         foreach ($classes as $class) {
             if ($class) {
                 $this->_processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets);
@@ -126,7 +126,7 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
     {
         if (substr($file, -3) == '.js') {
             echo "<h1>$file</h1>\n";
-            $l = new Vps_Assets_Loader();
+            $l = new Kwf_Assets_Loader();
             $c = $l->getFileContents("web-".$file);
             echo round(strlen($l->pack($c['contents'], 'js'))/1024)."kB";
             echo "<ul>";

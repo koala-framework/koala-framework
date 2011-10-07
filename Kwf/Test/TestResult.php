@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
+class Kwf_Test_TestResult extends PHPUnit_Framework_TestResult
 {
     private $_retryOnError;
     public function setRetryOnError($f)
@@ -12,7 +12,7 @@ class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
         if ($e instanceof PHPUnit_Framework_SkippedTest) return false;
 
         if (file_exists("/www/testtimes")) {
-            $app = Vps_Registry::get('config')->application->id;
+            $app = Kwf_Registry::get('config')->application->id;
             file_put_contents("/www/testtimes/failure_$app/".get_class($test), time());
         }
 
@@ -34,7 +34,7 @@ class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
 
         echo "\nTest failed. Try again? [Y/n]";
         if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
-            $msg = Vps_Registry::get('config')->application->name.' Test failed. Try again?';
+            $msg = Kwf_Registry::get('config')->application->name.' Test failed. Try again?';
             $msg = str_replace(" ", "\ ", utf8_decode($msg));
             system("ssh niko \"export DISPLAY=:0 && /usr/bin/kdialog --passivepopup $msg 2\"");
         }

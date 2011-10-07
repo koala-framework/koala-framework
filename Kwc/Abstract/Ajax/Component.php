@@ -1,10 +1,10 @@
 <?php
-abstract class Vpc_Abstract_Ajax_Component extends Vpc_Abstract
+abstract class Kwc_Abstract_Ajax_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['contentSender'] = 'Vpc_Abstract_Ajax_ContentSender';
+        $ret['contentSender'] = 'Kwc_Abstract_Ajax_ContentSender';
         return $ret;
     }
 }

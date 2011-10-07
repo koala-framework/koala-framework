@@ -2,7 +2,7 @@
 /**
  * Borrowed from smarty and extended
  */
-class Vps_View_Helper_Truncate
+class Kwf_View_Helper_Truncate
 {
     /**
      * The truncate method itself.
@@ -33,7 +33,7 @@ class Vps_View_Helper_Truncate
 
         if (is_array($string)) {
             if ($middle !== false) {
-                throw new Vps_Exception("Using the 'middle' parameter is not possible when using an array as input");
+                throw new Kwf_Exception("Using the 'middle' parameter is not possible when using an array as input");
             }
             return $this->_truncateArray($string, $length, $etc, $break_words);
         }
@@ -63,7 +63,7 @@ class Vps_View_Helper_Truncate
             if (empty($part['cssClass'])) $part['cssClass'] = '';
 
             if ($part['cssClass'] && !$part['tag']) {
-                throw new Vps_Exception("A tag must be set when using cssClass with array truncating");
+                throw new Kwf_Exception("A tag must be set when using cssClass with array truncating");
             }
             $retItem = $part;
 

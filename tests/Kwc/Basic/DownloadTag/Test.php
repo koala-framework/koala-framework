@@ -2,11 +2,11 @@
 /**
  * @group Basic_DownloadTag
  */
-class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
+class Kwc_Basic_DownloadTag_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_DownloadTag_Root');
+        parent::setUp('Kwc_Basic_DownloadTag_Root');
     }
 
     public function testUrl()
@@ -16,7 +16,7 @@ class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
 
         $url = $c->getComponent()->getDownloadUrl();
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('Vpc_Basic_DownloadTag_TestComponent', $url[1+3]);
+        $this->assertEquals('Kwc_Basic_DownloadTag_TestComponent', $url[1+3]);
         $this->assertEquals('1700', $url[2+3]);
         $this->assertEquals('default', $url[3+3]);
         $this->assertEquals('foo.png', $url[6+3]);
@@ -32,15 +32,15 @@ class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
 
     public function testGetMediaOutput()
     {
-        $o = Vpc_Basic_DownloadTag_Component::getMediaOutput('1700', 'default', 'Vpc_Basic_DownloadTag_TestComponent');
+        $o = Kwc_Basic_DownloadTag_Component::getMediaOutput('1700', 'default', 'Kwc_Basic_DownloadTag_TestComponent');
         $this->assertEquals('image/png', $o['mimeType']);
-        $this->assertEquals(Vps_Model_Abstract::getInstance('Vpc_Basic_DownloadTag_UploadsModel')->getUploadDir().'/1', $o['file']);
+        $this->assertEquals(Kwf_Model_Abstract::getInstance('Kwc_Basic_DownloadTag_UploadsModel')->getUploadDir().'/1', $o['file']);
     }
 
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1700)->render();
-        $this->assertRegExp('#^<a href="/vps/vpctest/Vpc_Basic_DownloadTag_Root/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/[^/]+/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
+        $this->assertRegExp('#^<a href="/kwf/kwctest/Kwc_Basic_DownloadTag_Root/media/Kwc_Basic_DownloadTag_TestComponent/1700/default/[^/]+/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
     }
 
     public function testEmpty()

@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_ViewCacheController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelpOptions()
     {
@@ -30,11 +30,11 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
     private function _generate($componentId)
     {
         $domain = $this->_getParam('domain');
-        if (!$domain) $domain = Vps_Registry::get('config')->server->domain;
-        $login = Vps_Registry::get('config')->preLogin ? 'vivid:planet@' : '';
-        $url = 'http://' . $login . $domain . '/vps/util/render/render?componentId=' . $componentId;
+        if (!$domain) $domain = Kwf_Registry::get('config')->server->domain;
+        $login = Kwf_Registry::get('config')->preLogin ? 'vivid:planet@' : '';
+        $url = 'http://' . $login . $domain . '/kwf/util/render/render?componentId=' . $componentId;
         echo "$url: ";
-        //$b = Vps_Benchmark::start('render');
+        //$b = Kwf_Benchmark::start('render');
         $content = file_get_contents($url);
         //$b->stop();
         echo round(strlen($content) / 1000, 2) . 'KB';
@@ -44,11 +44,11 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
     private function _generate($componentId)
     {
         echo $componentId.' ';
-        $renderer = new Vps_Component_Renderer();
+        $renderer = new Kwf_Component_Renderer();
         $renderer->setEnableCache(true);
         try {
-            $content = $renderer->renderComponent(Vps_Component_Data_Root::getInstance()->getComponentById($componentId));
-        } catch (Vps_Exception $e) {
+            $content = $renderer->renderComponent(Kwf_Component_Data_Root::getInstance()->getComponentById($componentId));
+        } catch (Kwf_Exception $e) {
             echo $e->getMessage().' ';
             $content = '';
         }
@@ -69,12 +69,12 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
         while(true) {
             $pid = pcntl_fork();
             if ($pid == -1) {
-                throw new Vps_Exception("fork failed");
+                throw new Kwf_Exception("fork failed");
             } else if ($pid) {
                 //parent process
                 pcntl_wait($status); //Schützt uns vor Zombie Kindern
                 if ($status != 0) {
-                    throw new Vps_Exception("child process failed");
+                    throw new Kwf_Exception("child process failed");
                 }
 
                 //echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
@@ -103,7 +103,7 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
                     file_put_contents($queueFile, implode("\n", $queue));
 
                     //echo "==> ".$componentId.' ';
-                    $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+                    $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
                     if (!$page) continue;
                     //echo "$page->url\n";
                     foreach ($page->getChildPseudoPages(array(), array('pseudoPage'=>false)) as $c) {
@@ -116,7 +116,7 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
                     }
 
                     if (!$page->isPage) continue;
-                    if (is_instance_of($page->componentClass, 'Vpc_Abstract_Feed_Component')) continue;
+                    if (is_instance_of($page->componentClass, 'Kwc_Abstract_Feed_Component')) continue;
 
                     $this->_generate($page->componentId);
                 }

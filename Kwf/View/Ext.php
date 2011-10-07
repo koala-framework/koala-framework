@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Ext extends Vps_View
+class Kwf_View_Ext extends Kwf_View
 {
     public function render($name)
     {
@@ -9,7 +9,7 @@ class Vps_View_Ext extends Vps_View
         return parent::render($name);
     }
 
-    public function vpc($config)
+    public function kwc($config)
     {
         $this->ext(null, $config);
     }
@@ -28,7 +28,7 @@ class Vps_View_Ext extends Vps_View
         }
 
         // View einrichten
-        $loader = new Vps_Assets_Loader();
+        $loader = new Kwf_Assets_Loader();
         $dep = $loader->getDependencies();
         $ext['class'] = $class;
         if (!isset($config->id)) $config->id = 'mainPanel';

@@ -1,11 +1,11 @@
 <?php
-class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('combobox');
-        $this->setEmptyText(trlVpsStatic('no selection'));
+        $this->setEmptyText(trlKwfStatic('no selection'));
     }
 
     protected function _addValidators()
@@ -61,7 +61,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     public function trlStaticExecute($language = null)
     {
         parent::trlStaticExecute($language);
-        $trl = Vps_Trl::getInstance();
+        $trl = Kwf_Trl::getInstance();
 
         $values = $this->getProperty('values');
         if (is_array($values)) {
@@ -103,8 +103,8 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
             $store['url'] = $data;
         } else if ($this->getFilterField() && !$this->getFilterValue()) {
             $store['data'] = array();
-        } else if ($data instanceof Zend_Db_Table_Abstract || $data instanceof Vps_Db_Table_Rowset_Abstract
-            || $data instanceof Vps_Model_Rowset_Interface
+        } else if ($data instanceof Zend_Db_Table_Abstract || $data instanceof Kwf_Db_Table_Rowset_Abstract
+            || $data instanceof Kwf_Model_Rowset_Interface
         ) {
             if ($data instanceof Zend_Db_Table_Abstract) {
                 $select = $this->getSelect();
@@ -144,10 +144,10 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
                 } else {
                     if (array_key_exists('id', $i)) $id = $i['id'];
                     elseif (array_key_exists(0, $i)) $id = $i[0];
-                    else throw new Vps_Exception("id not found");
+                    else throw new Kwf_Exception("id not found");
                     if (array_key_exists('value', $i)) $value = $i['value'];
                     else if (array_key_exists(1, $i)) $value = $i[1];
-                    else throw new Vps_Exception("value not found");
+                    else throw new Kwf_Exception("value not found");
                     $store['data'][] = array($id, $value);
                 }
             }

@@ -1,6 +1,6 @@
 <?php
-class Vps_Acl_Resource_ComponentClass_MenuUrl extends Vps_Acl_Resource_MenuUrl
-    implements Vps_Acl_Resource_ComponentClass_Interface
+class Kwf_Acl_Resource_ComponentClass_MenuUrl extends Kwf_Acl_Resource_MenuUrl
+    implements Kwf_Acl_Resource_ComponentClass_Interface
 {
     protected $_componentClass;
 
@@ -8,7 +8,7 @@ class Vps_Acl_Resource_ComponentClass_MenuUrl extends Vps_Acl_Resource_MenuUrl
     {
         if (!$componentClass) $componentClass = $resourceId;
         $this->_componentClass = $componentClass;
-        parent::__construct('vpc_'.$resourceId, $menuConfig, $menuUrl);
+        parent::__construct('kwc_'.$resourceId, $menuConfig, $menuUrl);
     }
 
     public function getComponentClass()

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Pdf extends Vpc_Abstract_Pdf
+class Kwc_Basic_Text_Pdf extends Kwc_Abstract_Pdf
 {
     private $_wholeHTMLText = "";
     public function writeContent()

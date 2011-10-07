@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_Trl_GeneratorRow extends Vps_Model_Proxy_Row
+class Kwc_Root_Category_Trl_GeneratorRow extends Kwf_Model_Proxy_Row
 {
     protected function _beforeInsert()
     {
@@ -9,15 +9,15 @@ class Vpc_Root_Category_Trl_GeneratorRow extends Vps_Model_Proxy_Row
 
     protected function _beforeDelete()
     {
-        throw new Vps_ClientException(trlVps("Can't delete translated pages."));
+        throw new Kwf_ClientException(trlKwf("Can't delete translated pages."));
     }
 
     protected function _beforeUpdate()
     {
         parent::_beforeUpdate();
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->component_id, array('ignoreVisible'=>true, 'limit'=>1));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->component_id, array('ignoreVisible'=>true, 'limit'=>1));
         if ($c->isHome && !$this->visible) {
-            throw new Vps_ClientException(trlVps('Cannot set Home Page invisible'));
+            throw new Kwf_ClientException(trlKwf('Cannot set Home Page invisible'));
         }
     }
 }

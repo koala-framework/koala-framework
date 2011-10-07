@@ -1,5 +1,5 @@
 <?php
-class Vps_Db_Profiler_Count extends Zend_Db_Profiler
+class Kwf_Db_Profiler_Count extends Zend_Db_Profiler
 {
     protected $_count = 0;
     public function queryStart($queryText, $queryType = null)

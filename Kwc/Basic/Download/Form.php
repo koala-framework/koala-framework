@@ -1,20 +1,20 @@
 <?php
-class Vpc_Basic_Download_Form extends Vpc_Abstract_Form
+class Kwc_Basic_Download_Form extends Kwc_Abstract_Form
 {
     public function __construct($name, $class)
     {
         parent::__construct($name, $class);
-        $form = Vpc_Abstract_Form::createChildComponentForm($class, '-downloadTag');
+        $form = Kwc_Abstract_Form::createChildComponentForm($class, '-downloadTag');
         $this->add($form);
 
-        $this->add(new Vps_Form_Field_TextField('infotext', trlVps('Descriptiontext')))
+        $this->add(new Kwf_Form_Field_TextField('infotext', trlKwf('Descriptiontext')))
             ->setWidth(300)
             ->setAutoFillWithFilename('filenameWithExt') //um es beim MultiFileUpload zu finde
-            ->setHelpText(hlpVps('vpc_download_linktext'))
+            ->setHelpText(hlpKwf('kwc_download_linktext'))
             ->setAllowBlank(false);
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeSave($row);
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Detail_GeneralCommunity_LastPosts_Component extends Vpc_Posts_Latest_Component
+class Kwc_User_Detail_GeneralCommunity_LastPosts_Component extends Kwc_Posts_Latest_Component
 {
     protected function _getSelect()
     {

@@ -1,6 +1,6 @@
 <?php
-class Vpc_Directories_Category_View_Component
-    extends Vpc_Directories_List_ViewPage_Component
+class Kwc_Directories_Category_View_Component
+    extends Kwc_Directories_List_ViewPage_Component
 {
     public static function getSettings()
     {
@@ -29,7 +29,7 @@ class Vpc_Directories_Category_View_Component
         $highestSubRoot = false;
         $c = $this->getData();
         while ($c) {
-            $isSubroot = Vps_Component_Abstract::getFlag($c->componentClass, 'subroot');
+            $isSubroot = Kwf_Component_Abstract::getFlag($c->componentClass, 'subroot');
             if ($isSubroot) {
                 $highestSubRoot = $c;
             }
@@ -41,10 +41,10 @@ class Vpc_Directories_Category_View_Component
             $cacheClassId = $highestSubRoot->componentId;
         }
 
-        if (!$row instanceof Vps_Model_Row_Interface) {
-            throw new Vps_Exception('Tables are not allowed anymore when using directories');
+        if (!$row instanceof Kwf_Model_Row_Interface) {
+            throw new Kwf_Exception('Tables are not allowed anymore when using directories');
         }
-        return preg_replace('/[^a-zA-Z0-9_]/', '_', $cacheClassId).'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getModel()).$row->id.'_itemCount';
+        return preg_replace('/[^a-zA-Z0-9_]/', '_', $cacheClassId).'KwcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getModel()).$row->id.'_itemCount';
     }
 
     public function getPagingCount($select = null)
@@ -58,8 +58,8 @@ class Vpc_Directories_Category_View_Component
             foreach ($items as $item) {
                 if ($item->listCount) $ret++;
             }
-            if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
-                $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+            if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
+                $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
                 if ($ret > $limitCount) $ret = $limitCount;
             }
             return $ret;
@@ -89,7 +89,7 @@ class Vpc_Directories_Category_View_Component
     {
         $frontendOptions = array('lifetime' => 3600, 'automatic_serialization' => true);
         $backendOptions = array('cache_dir' => 'cache/component/');
-        return Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        return Kwf_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }
 
     protected function _getCountCategoryIds($item)
@@ -111,10 +111,10 @@ class Vpc_Directories_Category_View_Component
                     $itemDirectory = $this->getData()->parent->getComponent()->getItemDirectory();
                 }
                 if (!isset($connectData)) {
-                    $tableName = Vpc_Abstract::getSetting(
+                    $tableName = Kwc_Abstract::getSetting(
                         $itemDirectory->componentClass, 'categoryToItemModelName'
                     );
-                    $connectData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
+                    $connectData = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData(
                         $tableName, 'Item'
                     );
                 }
@@ -126,7 +126,7 @@ class Vpc_Directories_Category_View_Component
                 $categoryIds = $this->_getCountCategoryIds($item);
 
                 $select = $directoryComponent->getSelect();
-                if (!Vpc_Abstract::getSetting(get_class($directoryComponent), 'generatorJoins')) {
+                if (!Kwc_Abstract::getSetting(get_class($directoryComponent), 'generatorJoins')) {
                     $select->join(
                         $connectData['tableName'],
                         "$connectData[refTableName].$connectData[refItemColumn] = $connectData[tableName].$connectData[itemColumn]",

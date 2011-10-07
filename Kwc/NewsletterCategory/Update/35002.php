@@ -1,11 +1,11 @@
 <?php
-class Vpc_NewsletterCategory_Update_35002 extends Vps_Update {
+class Kwc_NewsletterCategory_Update_35002 extends Kwf_Update {
     public function update()
     {
         $db = Zend_Registry::get('db');
-        if ($db->fetchOne("SHOW TABLES LIKE 'vps_pools'")) {
-            $db->query("INSERT INTO `vpc_newsletter_categories` (SELECT id, pos, value FROM vps_pools WHERE pool='Newsletterkategorien')");
-            $db->query("DELETE FROM vps_pools WHERE pool='Newsletterkategorien'");
+        if ($db->fetchOne("SHOW TABLES LIKE 'kwf_pools'")) {
+            $db->query("INSERT INTO `kwc_newsletter_categories` (SELECT id, pos, value FROM kwf_pools WHERE pool='Newsletterkategorien')");
+            $db->query("DELETE FROM kwf_pools WHERE pool='Newsletterkategorien'");
         }
     }
 }

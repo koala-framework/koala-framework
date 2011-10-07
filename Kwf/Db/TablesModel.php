@@ -1,12 +1,12 @@
 <?php
-class Vps_Db_TablesModel extends Vps_Model_Data_Abstract
+class Kwf_Db_TablesModel extends Kwf_Model_Data_Abstract
 {
     protected $_dependentModels = array(
-        'Fields' => 'Vps_Db_TableFieldsModel'
+        'Fields' => 'Kwf_Db_TableFieldsModel'
     );
     private $_db;
     protected $_primaryKey = 'table';
-    protected $_rowClass = 'Vps_Db_TablesModel_Row';
+    protected $_rowClass = 'Kwf_Db_TablesModel_Row';
 
     public function __construct(array $options = array())
     {
@@ -17,7 +17,7 @@ class Vps_Db_TablesModel extends Vps_Model_Data_Abstract
     public function getDb()
     {
         if (isset($this->_db)) return $this->_db;
-        return Vps_Registry::get('db');
+        return Kwf_Registry::get('db');
     }
 
     protected function _init()
@@ -45,10 +45,10 @@ class Vps_Db_TablesModel extends Vps_Model_Data_Abstract
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception("no unique identifier set");
+        throw new Kwf_Exception("no unique identifier set");
     }
 
-    public function delete(Vps_Model_Row_Interface $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         parent::delete($row);
         $this->getDb()->query("DROP TABLE $row->table");

@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Random implements Zend_Filter_Interface
+class Kwf_Filter_Random implements Zend_Filter_Interface
 {
     private $_length;
     public function __construct($length = 10)

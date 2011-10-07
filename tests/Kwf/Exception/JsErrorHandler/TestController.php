@@ -1,10 +1,10 @@
 <?php
-class Vps_Exception_JsErrorHandler_TestController extends Vps_Controller_Action
+class Kwf_Exception_JsErrorHandler_TestController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
-        $this->view->viewport = 'Vps.Test.Viewport';
-        $this->view->assetsType = 'Vps_Exception_JsErrorHandler:Test';
+        $this->view->viewport = 'Kwf.Test.Viewport';
+        $this->view->assetsType = 'Kwf_Exception_JsErrorHandler:Test';
         $this->view->xtype = 'panel';
         $this->view->html = '';
         for($i=1;$i<=8;$i++) {
@@ -20,7 +20,7 @@ class Vps_Exception_JsErrorHandler_TestController extends Vps_Controller_Action
             $t = strtotime(date('Y-m-d').' '.$m[1].':'.$m[2].':'.$m[3]);
             if ($t >= $this->_getParam('start')) {
                 $error = file_get_contents($f);
-                if (strpos($error, 'Vps_Exception_JavaScript')!==false) {
+                if (strpos($error, 'Kwf_Exception_JavaScript')!==false) {
                     unlink($f);
                 }
             }

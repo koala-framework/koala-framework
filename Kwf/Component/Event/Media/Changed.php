@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Event_Media_Changed extends Vps_Component_Event_Abstract
+class Kwf_Component_Event_Media_Changed extends Kwf_Component_Event_Abstract
 {
     public $componentId;
     public $type;

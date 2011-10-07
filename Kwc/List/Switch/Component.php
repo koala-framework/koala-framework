@@ -1,12 +1,12 @@
 <?php
-class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
+class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'vps/Vpc/List/Switch/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/List/Switch/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
-        $ret['generators']['child']['component'] = 'Vpc_List_Switch_Preview_Component';
+        $ret['generators']['child']['component'] = 'Kwc_List_Switch_Preview_Component';
         $ret['previewCssClass'] = '';
 
         // transition kann auch auf false gesetzt werden um "direkt" umzuschalten
@@ -16,7 +16,7 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
         );
         $ret['showArrows'] = true; // whether to show arrows at all or not
         $ret['hideArrowsAtEnds'] = false; // false = wenn man beim letzten element ankommt und auf "weiter" klickt, kommt man wieder zum ersten
-        $ret['eyeCandyListClass'] = 'Vpc.List.Switch.Component';
+        $ret['eyeCandyListClass'] = 'Kwc.List.Switch.Component';
         return $ret;
     }
 

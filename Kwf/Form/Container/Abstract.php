@@ -3,11 +3,11 @@
  * Basisklasse für Fields die andere Fields beinhalten
  *
  **/
-abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
+abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
     implements IteratorAggregate
 {
     /**
-     * @var Vps_Collection_FormFields
+     * @var Kwf_Collection_FormFields
      */
     public $fields;
 
@@ -15,7 +15,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
     {
         parent::__construct($name);
         if (!isset($this->fields)) {
-            $this->fields = new Vps_Collection_FormFields();
+            $this->fields = new Kwf_Collection_FormFields();
         }
         $this->setLayout('form');
         $this->setBorder(false);
@@ -38,7 +38,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
 
     public function getMetaData($model)
     {
-        $iterator = new RecursiveIteratorIterator(new Vps_Collection_Iterator_Recursive($this->fields));
+        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_Recursive($this->fields));
         foreach ($iterator as $field) {
             if ($field->getLoadAfterSave()) {
                 $ret['loadAfterSave'] = true;

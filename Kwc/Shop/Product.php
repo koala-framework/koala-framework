@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Product extends Vps_Model_Db_Row
+class Kwc_Shop_Product extends Kwf_Model_Db_Row
 {
     public function __toString()
     {
@@ -10,7 +10,7 @@ class Vpc_Shop_Product extends Vps_Model_Db_Row
     {
         foreach ($this->getChildRows('Prices') as $price) {
             if (count($price->getChildRows('OrderProducts')) > 0) {
-                throw new Vps_Exception_Client("Es sind Bestellungen für dieses Produkt vorhanden, Produkt kann nicht gelöscht werden");
+                throw new Kwf_Exception_Client("Es sind Bestellungen für dieses Produkt vorhanden, Produkt kann nicht gelöscht werden");
             }
         }
         parent::delete();

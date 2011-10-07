@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
+class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
 {
     public function jsonDataAction()
     {
@@ -11,13 +11,13 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
             $menu = array();
             $menu['type'] = 'commandDialog';
             $menu['menuConfig']['text'] = 'Login';
-            $menu['commandClass'] = 'Vps.User.Login.Dialog';
+            $menu['commandClass'] = 'Kwf.User.Login.Dialog';
             $menus[] = $menu;
             $showLogout = false;
         }
 
         foreach ($acl->getAllResources() as $resource) {
-            if ($resource instanceof Vps_Acl_Resource_UserSelf
+            if ($resource instanceof Kwf_Acl_Resource_UserSelf
                 && $acl->isAllowedUser($this->_getAuthData(), $resource, 'view')
             ) {
 
@@ -34,9 +34,9 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
         $this->view->fullname = $authData ? $authData->__toString() : '';
 
         $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
-        $this->view->changeUser = $acl->isAllowed($role, 'vps_user_changeuser', 'view');
+        $this->view->changeUser = $acl->isAllowed($role, 'kwf_user_changeuser', 'view');
 
-        if (Vps_Registry::get('acl')->has('vps_component_pages')) {
+        if (Kwf_Registry::get('acl')->has('kwf_component_pages')) {
             $this->view->hasFrontend = true;
         } else {
             $this->view->hasFrontend = false;

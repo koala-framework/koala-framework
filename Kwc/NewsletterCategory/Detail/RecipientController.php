@@ -1,5 +1,5 @@
 <?php
-class Vpc_NewsletterCategory_Detail_RecipientController extends Vpc_Newsletter_Detail_RecipientController
+class Kwc_NewsletterCategory_Detail_RecipientController extends Kwc_Newsletter_Detail_RecipientController
 {
-    protected $_formName = 'Vpc_NewsletterCategory_EditSubscriber_Form';
+    protected $_formName = 'Kwc_NewsletterCategory_EditSubscriber_Form';
 }

@@ -1,22 +1,22 @@
 <?php
-class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
+class Kwc_Root_TrlRoot_Component extends Kwc_Root_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         unset($ret['generators']['box']);
         $ret['generators']['master'] = array(
-            'class' => 'Vpc_Chained_Trl_MasterGenerator',
-            'component' => 'Vpc_Root_TrlRoot_Master_Component',
+            'class' => 'Kwc_Chained_Trl_MasterGenerator',
+            'component' => 'Kwc_Root_TrlRoot_Master_Component',
         );
         $ret['generators']['chained'] = array(
-            'class' => 'Vpc_Chained_Trl_ChainedGenerator',
-            'component' => 'Vpc_Root_TrlRoot_Chained_Component.Vpc_Root_TrlRoot_Master_Component',
+            'class' => 'Kwc_Chained_Trl_ChainedGenerator',
+            'component' => 'Kwc_Root_TrlRoot_Chained_Component.Kwc_Root_TrlRoot_Master_Component',
             'filenameColumn' => 'filename',
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array('de' => 'Deutsch'));
+        $ret['childModel'] = new Kwc_Root_TrlRoot_Model(array('de' => 'Deutsch'));
         return $ret;
     }
 

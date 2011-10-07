@@ -1,10 +1,10 @@
-Ext.namespace('Vps.Component.FrontendEditing');
-Vps.Component.FrontendEditing.Index = function(renderTo, config)
+Ext.namespace('Kwf.Component.FrontendEditing');
+Kwf.Component.FrontendEditing.Index = function(renderTo, config)
 {
     this.init();    
 };
 
-Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
+Ext.extend(Kwf.Component.FrontendEditing.Index, Ext.util.Observable,
 {
     init : function()
     {

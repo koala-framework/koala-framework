@@ -1,11 +1,11 @@
-Ext.namespace('Vps.Tree');
-Vps.Tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
+Ext.namespace('Kwf.Tree');
+Kwf.Tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
     lines:false,
     borderWidth: Ext.isBorderBox ? 0 : 2, // the combined left/right border for each cell
     cls:'x-column-tree',
     
     onRender : function(){
-        Vps.Tree.ColumnTree.superclass.onRender.apply(this, arguments);
+        Kwf.Tree.ColumnTree.superclass.onRender.apply(this, arguments);
         this.headers = this.body.createChild(
             {cls:'x-tree-headers'},this.innerCt.dom);
 

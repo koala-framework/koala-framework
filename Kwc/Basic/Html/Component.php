@@ -1,16 +1,16 @@
 <?php
 /**
- * @package Vpc
+ * @package Kwc
  * @subpackage Basic
  */
-class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Basic_Html_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Html'),
-            'componentIcon' => new Vps_Asset('tag'),
-            'ownModel'     => 'Vpc_Basic_Html_Model'
+            'componentName' => trlKwf('Html'),
+            'componentIcon' => new Kwf_Asset('tag'),
+            'ownModel'     => 'Kwc_Basic_Html_Model'
         ));
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
@@ -28,9 +28,9 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
         $c = $this->_getRow()->content;
         preg_match_all('#{([a-z0-9]+)}#', $c, $m);
         if ($m[0]) {
-            $helper = new Vps_Component_View_Helper_Component;
+            $helper = new Kwf_Component_View_Helper_Component;
             foreach ($m[1] as $i) {
-                if (isset($childComponents[$i]) && $childComponents[$i] instanceof Vps_Component_Data) {
+                if (isset($childComponents[$i]) && $childComponents[$i] instanceof Kwf_Component_Data) {
                     $c = str_replace('{'.$i.'}', $helper->component($childComponents[$i]), $c);
                 }
             }
@@ -47,8 +47,8 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
-        if (Vpc_Abstract::hasSetting(get_class($this), 'default')) {
-            throw new Vps_Exception("Setting 'default' doesn't exist anymore for ".get_class($this).", you need to overwrite the Model.");
+        if (Kwc_Abstract::hasSetting(get_class($this), 'default')) {
+            throw new Kwf_Exception("Setting 'default' doesn't exist anymore for ".get_class($this).", you need to overwrite the Model.");
         }
         $ret = parent::getTemplateVars();
         $ret['content'] = $this->_getContent();

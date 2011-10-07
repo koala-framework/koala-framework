@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_OrdersController_Payment extends Vps_Data_Abstract
+class Kwc_Shop_Cart_Checkout_OrdersController_Payment extends Kwf_Data_Abstract
 {
     private $_payments;
     public function __construct($payments)
@@ -12,29 +12,29 @@ class Vpc_Shop_Cart_Checkout_OrdersController_Payment extends Vps_Data_Abstract
         return $this->_payments[$row->payment];
     }
 }
-class Vpc_Shop_Cart_Checkout_OrdersController_SumAmount extends Vps_Data_Abstract
+class Kwc_Shop_Cart_Checkout_OrdersController_SumAmount extends Kwf_Data_Abstract
 {
     public function load($row)
     {
         $ret = 0;
         foreach ($row->getChildRows('Products') as $p) {
-            $data = Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($p->add_component_class);
+            $data = Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($p->add_component_class);
             $ret += $data->getAmount($p);
         }
         return $ret;
     }
 }
-class Vpc_Shop_Cart_Checkout_OrdersController_SumPrice extends Vps_Data_Abstract
+class Kwc_Shop_Cart_Checkout_OrdersController_SumPrice extends Kwf_Data_Abstract
 {
     public function load($row)
     {
         return $row->getTotal();
     }
 }
-class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto_Grid
+class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('add');
-    protected $_modelName = 'Vpc_Shop_Cart_Orders';
+    protected $_modelName = 'Kwc_Shop_Cart_Orders';
     protected $_paging = 30;
     protected $_defaultOrder = array('field'=>'order_number', 'direction'=>'DESC');
     protected $_queryFields = array(
@@ -50,11 +50,11 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
 
     protected function _initColumns()
     {
-        $cc = Vpc_Abstract::getChildComponentClasses($this->_getParam('class'), 'payment');
+        $cc = Kwc_Abstract::getChildComponentClasses($this->_getParam('class'), 'payment');
         $paymentsFilterData = array();
         $payments = array();
         foreach ($cc as $k=>$c) {
-            $payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
+            $payments[$k] = Kwc_Abstract::getSetting($c, 'componentName');
             $paymentsFilterData[] = array($k, $payments[$k]);
         }
 
@@ -62,7 +62,7 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
             'text' => true,
             'payment' => array(
                 'type'   => 'ComboBox',
-                'text'   => trlVps('Payment'),
+                'text'   => trlKwf('Payment'),
                 'data'   => $paymentsFilterData,
                 'width'  => 100
             ),
@@ -71,42 +71,42 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
                 'skipWhere' => true,
                 'cls'       => 'x-btn-text-icon',
                 'icon'      => '/assets/silkicons/stop.png',
-                'text'      => trlVps('canceled'),
-                'tooltip'   => trlVps('Show canceled orders')
+                'text'      => trlKwf('canceled'),
+                'tooltip'   => trlKwf('Show canceled orders')
             ),
             'shipped' => array(
                 'type'      => 'Button',
                 'skipWhere' => true,
                 'cls'       => 'x-btn-text-icon',
                 'icon'      => '/assets/silkicons/package.png',
-                'text'      => trlVps('shipped'),
-                'tooltip'   => trlVps('Show shipped orders')
+                'text'      => trlKwf('shipped'),
+                'tooltip'   => trlKwf('Show shipped orders')
             ),
         );
 
-        $this->_columns->add(new Vps_Grid_Column('order_number', trlVps('Order Nr'), 50));
-        $this->_columns->add(new Vps_Grid_Column('invoice_number', trlVps('Invoice Nr'), 50))
+        $this->_columns->add(new Kwf_Grid_Column('order_number', trlKwf('Order Nr'), 50));
+        $this->_columns->add(new Kwf_Grid_Column('invoice_number', trlKwf('Invoice Nr'), 50))
             ->setHidden(true);
-        $this->_columns->add(new Vps_Grid_Column_Datetime('date', trlVps('Date')));
-        $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 90));
-        $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 90));
-        $this->_columns->add(new Vps_Grid_Column('country', trlVps('Land'), 15)); // TODO: Pfusch
-        $this->_columns->add(new Vps_Grid_Column('sum_amount', trlVps('Amt'), 30))
-            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_SumAmount())
+        $this->_columns->add(new Kwf_Grid_Column_Datetime('date', trlKwf('Date')));
+        $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('Firstname'), 90));
+        $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Lastname'), 90));
+        $this->_columns->add(new Kwf_Grid_Column('country', trlKwf('Land'), 15)); // TODO: Pfusch
+        $this->_columns->add(new Kwf_Grid_Column('sum_amount', trlKwf('Amt'), 30))
+            ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_SumAmount())
             ->setSortable(false);
-        $this->_columns->add(new Vps_Grid_Column('sum_price', trlVps('Sum'), 50))
-            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_SumPrice())
+        $this->_columns->add(new Kwf_Grid_Column('sum_price', trlKwf('Sum'), 50))
+            ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_SumPrice())
             ->setSortable(false)
             ->setRenderer('euroMoney');
-        $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 80))
-            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($payments))
+        $this->_columns->add(new Kwf_Grid_Column('payment', trlKwf('Payment'), 80))
+            ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_Payment($payments))
             ->setSortable(false);
-        $this->_columns->add(new Vps_Grid_Column_Date('payed', trlVps('Payed')));
-        $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlcVps('Invoice', 'IN')));
-        $this->_columns->add(new Vps_Grid_Column_Button('shipped', trlcVps('Shipped', 'SH')))
+        $this->_columns->add(new Kwf_Grid_Column_Date('payed', trlKwf('Payed')));
+        $this->_columns->add(new Kwf_Grid_Column_Button('invoice', trlcKwf('Invoice', 'IN')));
+        $this->_columns->add(new Kwf_Grid_Column_Button('shipped', trlcKwf('Shipped', 'SH')))
             ->setButtonIcon('/assets/silkicons/package_go.png');
 
-        $this->_columns->add(new Vps_Grid_Column('shipped'));
+        $this->_columns->add(new Kwf_Grid_Column('shipped'));
     }
 
     protected function _getSelect()
@@ -119,16 +119,16 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
             $ret->whereEquals('canceled', 0);
         }
         if (!$this->_getParam('query_shipped')) {
-            $ret->where(new Vps_Model_Select_Expr_IsNull('shipped'));
+            $ret->where(new Kwf_Model_Select_Expr_IsNull('shipped'));
         } else {
-            $ret->where(new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_IsNull('shipped')));
+            $ret->where(new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_IsNull('shipped')));
         }
         return $ret;
     }
 
     public function indexAction()
     {
-        $a = Vpc_Admin::getInstance($this->_getParam('class'));
+        $a = Kwc_Admin::getInstance($this->_getParam('class'));
 
         $this->view->ordersControllerUrl = $a->getControllerUrl('Orders');
         $this->view->orderControllerUrl = $a->getControllerUrl('Order');
@@ -137,31 +137,31 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
             'componentId' => $this->_getParam('componentId')
         );
 
-        $this->view->xtype = 'vpc.shop.cart.checkout.orders';
+        $this->view->xtype = 'kwc.shop.cart.checkout.orders';
     }
 
     public function pdfAction()
     {
         $id = $this->_getParam('id');
-        if (!$id) throw new Vps_Exception("No id given");
-        $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getRow($id);
+        if (!$id) throw new Kwf_Exception("No id given");
+        $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($id);
         if (!$order->invoice_date) {
             $order->invoice_date = date('Y-m-d');
         }
         if (!$order->invoice_number) {
-            $s = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->select();
+            $s = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->select();
             $s->limit(1);
             $s->order('invoice_number', 'DESC');
-            $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getRow($s);
+            $row = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($s);
             $maxNumber = 0;
             if ($row) $maxNumber = $row->invoice_number;
             $order->invoice_number = $maxNumber + 1;
         }
         $order->save();
 
-        $cls = Vpc_Admin::getComponentClass($this->_getParam('class'), 'InvoicePdf');
+        $cls = Kwc_Admin::getComponentClass($this->_getParam('class'), 'InvoicePdf');
         $pdf = new $cls($order);
-        Vps_Media_Output::output(array(
+        Kwf_Media_Output::output(array(
             'contents' => $pdf->output('', 'S'),
             'mimeType' => 'application/pdf',
             'downloadFilename' => $order->order_number.'.pdf'
@@ -171,16 +171,16 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
     public function jsonShippedAction()
     {
         $id = $this->_getParam('id');
-        if (!$id) throw new Vps_Exception("No id given");
+        if (!$id) throw new Kwf_Exception("No id given");
 
-        $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getRow($id);
+        $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($id);
         $order->shipped = date('Y-m-d');
         $order->save();
 
         if ($order->getMailEmail()) {
-            $checkout = Vps_Component_Data_Root::getInstance()
+            $checkout = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($order->checkout_component_id);
-            if (!$checkout) throw new Vps_Exception("Can't find checkout component");
+            if (!$checkout) throw new Kwf_Exception("Can't find checkout component");
             $mail = $checkout->getChildComponent('-'.$order->payment)
                 ->getChildComponent('-shippedMail')
                 ->getComponent();

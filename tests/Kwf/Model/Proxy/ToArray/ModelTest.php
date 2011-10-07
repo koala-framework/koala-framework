@@ -3,11 +3,11 @@
  * @group Model
  * @group Model_Proxy
  */
-class Vps_Model_Proxy_ToArray_ModelTest extends Vps_Test_TestCase
+class Kwf_Model_Proxy_ToArray_ModelTest extends Kwf_Test_TestCase
 {
     public function testToArrayProxy()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'timefield'),
             'uniqueColumns' => array('id'),
@@ -15,7 +15,7 @@ class Vps_Model_Proxy_ToArray_ModelTest extends Vps_Test_TestCase
                 array('id' => 1, 'firstname' => 'Max', 'timefield' => '2008-06-09 00:00:00')
             )
         ));
-        $proxy = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+        $proxy = new Kwf_Model_Proxy(array('proxyModel' => $fnf));
         $result = $proxy->getRow(1)->toArray();
         $this->assertEquals(1, $result['id']);
         $this->assertEquals('Max', $result['firstname']);
@@ -24,7 +24,7 @@ class Vps_Model_Proxy_ToArray_ModelTest extends Vps_Test_TestCase
 
     public function testToArrayProxyWithSibling()
     {
-        $proxy = new Vps_Model_Proxy_ToArray_ProxyModel();
+        $proxy = new Kwf_Model_Proxy_ToArray_ProxyModel();
         $result = $proxy->getRow(1)->toArray();
         $this->assertEquals(1, $result['id']);
         $this->assertEquals('herbertsen', $result['sib_lastname']);

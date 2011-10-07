@@ -2,15 +2,15 @@
 /**
  * @group slow
  * @group selenium
- * @group Vps_Js
- * @group Vps_Js_EyeCandy_List_Plugins_HoverOthers
+ * @group Kwf_Js
+ * @group Kwf_Js_EyeCandy_List_Plugins_HoverOthers
  *
  */
-class Vps_EyeCandy_List_Plugins_HoverOthers_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwf_EyeCandy_List_Plugins_HoverOthers_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function testEyeCandyList()
     {
-        $this->open('/vps/test/vps_eye-candy_list_plugins_hover-others_test');
+        $this->open('/kwf/test/kwf_eye-candy_list_plugins_hover-others_test');
         $checkStr = '';
 
         $this->mouseOver('css=#ti1');

@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Relations_MultipleReferencesToSameModel_User extends Vps_Model_FnF
+class Kwf_Model_Relations_MultipleReferencesToSameModel_User extends Kwf_Model_FnF
 {
     protected $_data = array(
         array('id'=>100, 'name'=>'sepp'),
@@ -7,11 +7,11 @@ class Vps_Model_Relations_MultipleReferencesToSameModel_User extends Vps_Model_F
     );
     protected $_dependentModels = array(
         'TodoCreator' => array(
-            'model' => 'Vps_Model_Relations_MultipleReferencesToSameModel_Todo',
+            'model' => 'Kwf_Model_Relations_MultipleReferencesToSameModel_Todo',
             'rule' => 'Creator'
         ),
         'TodoAssignee' => array(
-            'model' => 'Vps_Model_Relations_MultipleReferencesToSameModel_Todo',
+            'model' => 'Kwf_Model_Relations_MultipleReferencesToSameModel_Todo',
             'rule' => 'Assignee'
         ),
     );

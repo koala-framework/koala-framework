@@ -1,4 +1,4 @@
 <?php
-class Vpc_FulltextSearch_Search_Trl_Component extends Vpc_Chained_Trl_MasterAsChild_Component
+class Kwc_FulltextSearch_Search_Trl_Component extends Kwc_Chained_Trl_MasterAsChild_Component
 {
 }

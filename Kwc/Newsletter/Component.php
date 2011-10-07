@@ -1,30 +1,30 @@
 <?php
-class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Component
+class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['detail']['component'] = 'Vpc_Newsletter_Detail_Component';
+        $ret['generators']['detail']['component'] = 'Kwc_Newsletter_Detail_Component';
 
         // wird von der Mail_Redirect gerendered
         $ret['generators']['unsubscribe'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Newsletter_Unsubscribe_Component',
-            'name' => trlVps('Unsubscribe')
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Newsletter_Unsubscribe_Component',
+            'name' => trlKwf('Unsubscribe')
         );
         // wird von der Mail_Redirect gerendered
         $ret['generators']['editSubscriber'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Newsletter_EditSubscriber_Component',
-            'name' => trlVps('Edit subscriber')
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Newsletter_EditSubscriber_Component',
+            'name' => trlKwf('Edit subscriber')
         );
 
-        $ret['childModel'] = 'Vpc_Newsletter_Model';
+        $ret['childModel'] = 'Kwc_Newsletter_Model';
         $ret['flags']['hasResources'] = true;
-        $ret['componentName'] = trlVps('Newsletter');
-        $ret['componentIcon'] = new Vps_Asset('email');
+        $ret['componentName'] = trlKwf('Newsletter');
+        $ret['componentIcon'] = new Kwf_Asset('email');
 
-        $ret['extConfig'] = 'Vpc_Newsletter_ExtConfig';
+        $ret['extConfig'] = 'Kwc_Newsletter_ExtConfig';
 
         return $ret;
     }

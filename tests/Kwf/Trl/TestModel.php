@@ -1,4 +1,4 @@
 <?php
-class Vps_Trl_TestModel extends Vps_Model_FnF
+class Kwf_Trl_TestModel extends Kwf_Model_FnF
 {
 }

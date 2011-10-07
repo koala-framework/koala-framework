@@ -1,17 +1,17 @@
-Vps.onContentReady(function()
+Kwf.onContentReady(function()
 {
-    var els = Ext.query('div.vpsSwitchHoverFade');
+    var els = Ext.query('div.kwfSwitchHoverFade');
     els.each(function(el) {
-        var hoverFade = new Vps.Switch.HoverFade({
+        var hoverFade = new Kwf.Switch.HoverFade({
             wrapper: el
         });
     });
 });
 
 
-Ext.namespace("Vps.Switch.HoverFade");
+Ext.namespace("Kwf.Switch.HoverFade");
 
-Vps.Switch.HoverFade = function(cfg) {
+Kwf.Switch.HoverFade = function(cfg) {
     this.duration = 0.6;
     this.easingFadeOut = 'easeOut';
     this.easingFadeIn = 'easeOut';
@@ -54,7 +54,7 @@ Vps.Switch.HoverFade = function(cfg) {
     }
 };
 
-Vps.Switch.HoverFade.prototype = {
+Kwf.Switch.HoverFade.prototype = {
 
     contentOver: false,
     linkOver: false,

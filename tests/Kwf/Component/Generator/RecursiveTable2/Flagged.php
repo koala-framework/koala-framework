@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_RecursiveTable2_Flagged extends Vpc_Abstract
+class Kwf_Component_Generator_RecursiveTable2_Flagged extends Kwc_Abstract
 {
     public static function getSettings()
     {

@@ -1,24 +1,24 @@
 <?php
-abstract class Vpc_Box_Search_Component extends Vpc_Abstract_Composite_Component
+abstract class Kwc_Box_Search_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
 
         $ret['generators']['ajax'] = array(
-            'class'     => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Box_Search_Ajax_Component',
+            'class'     => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Box_Search_Ajax_Component',
             'name'      => 'Ajax'
         );
 
         $ret['assets']['dep'][] = 'ExtUpdateManager';
-        $ret['assets']['dep'][] = 'VpsClearOnFocus';
+        $ret['assets']['dep'][] = 'KwfClearOnFocus';
         $ret['assets']['dep'][] = 'ExtDelayedTask';
-        $ret['assets']['files'][] = 'vps/Vpc/Box/Search/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Box/Search/Component.js';
 
-        $ret['placeholder']['searchButton'] = trlVps('Search');
-        $ret['placeholder']['clearOnFocus'] = trlVps('Search term');
-        $ret['placeholder']['initialResultText'] = trlVps('Please type at least two characters.');
+        $ret['placeholder']['searchButton'] = trlKwf('Search');
+        $ret['placeholder']['clearOnFocus'] = trlKwf('Search term');
+        $ret['placeholder']['initialResultText'] = trlKwf('Please type at least two characters.');
 
         $ret['searchResultBoxAlign'] = 'tl-bl';
         $ret['searchResultBoxFade'] = true;
@@ -44,12 +44,12 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract_Composite_Component
     public function getSearchFormData()
     {
         $fc = $this->_getSearchForm();
-        if (!$fc->getComponent() instanceof Vpc_Form_Component) {
-            throw new Vps_Exception("The Component returned by _getSearchForm needs to be a Vpc_Form_Component");
+        if (!$fc->getComponent() instanceof Kwc_Form_Component) {
+            throw new Kwf_Exception("The Component returned by _getSearchForm needs to be a Kwc_Form_Component");
         }
         $form = $fc->getComponent()->getForm();
         if (!isset($form->fields['query'])) {
-            throw new Vps_Exception("The Form returned by _getSearchForm must have a field named 'query'");
+            throw new Kwf_Exception("The Form returned by _getSearchForm must have a field named 'query'");
         }
         $ret = array(
             'queryParam' => $form->fields['query']->getFieldName(),

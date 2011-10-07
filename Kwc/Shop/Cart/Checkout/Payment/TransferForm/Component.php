@@ -1,10 +1,10 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_TransferForm_Component extends Vpc_Shop_Cart_Checkout_Payment_Abstract_Component
+class Kwc_Shop_Cart_Checkout_Payment_TransferForm_Component extends Kwc_Shop_Cart_Checkout_Payment_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Transfer Form');
+        $ret['componentName'] = trlKwf('Transfer Form');
         return $ret;
     }
 }

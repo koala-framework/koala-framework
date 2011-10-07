@@ -1,10 +1,10 @@
-Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
+Kwf.Form.MultiFields = Ext.extend(Ext.Panel, {
     minEntries: 1,
     position: true,
     initComponent : function() {
-        Vps.Form.MultiFields.superclass.initComponent.call(this);
+        Kwf.Form.MultiFields.superclass.initComponent.call(this);
 
-        this.hiddenCountValue = new Vps.Form.MultiFieldsHidden({
+        this.hiddenCountValue = new Kwf.Form.MultiFieldsHidden({
             name: this.name,
             multiFieldsPanel: this
         });
@@ -14,14 +14,14 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     },
 
     enableRecursive: function() {
-        Vps.Form.MultiFields.superclass.enableRecursive.call(this);
+        Kwf.Form.MultiFields.superclass.enableRecursive.call(this);
         this.groups.each(function(g) {
             g.item.enableRecursive();
         });
     },
 
     disableRecursive: function() {
-        Vps.Form.MultiFields.superclass.disableRecursive.call(this);
+        Kwf.Form.MultiFields.superclass.disableRecursive.call(this);
         this.groups.each(function(g) {
             g.item.disableRecursive();
         });
@@ -29,10 +29,10 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
 
     // private
     onRender : function(ct, position){
-        Vps.Form.MultiFields.superclass.onRender.call(this, ct, position);
+        Kwf.Form.MultiFields.superclass.onRender.call(this, ct, position);
 
         if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
-            this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
+            this.addGroupButton = new Kwf.Form.MultiFieldsAddButton({
                 multiFieldsPanel: this,
                 renderTo: this.body
             }, position);
@@ -48,16 +48,16 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     {
         var items = [];
         if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
-            var deleteButton = new Vps.Form.MultiFieldsDeleteButton({
+            var deleteButton = new Kwf.Form.MultiFieldsDeleteButton({
                 multiFieldsPanel: this
             });
             items.push(deleteButton);
             if (this.position) {
-                var upButton = new Vps.Form.MultiFieldsUpButton({
+                var upButton = new Kwf.Form.MultiFieldsUpButton({
                     multiFieldsPanel: this
                 });
                 items.push(upButton);
-                var downButton = new Vps.Form.MultiFieldsDownButton({
+                var downButton = new Kwf.Form.MultiFieldsDownButton({
                     multiFieldsPanel: this
                 });
                 items.push(downButton);
@@ -167,7 +167,7 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
                             title = title.replace(exp, values[i][item.replaceTitleField]);
                         } else {
                             title = item.title;
-                            if (exp.test(title)) title = trlVps('New Entry');
+                            if (exp.test(title)) title = trlKwf('New Entry');
                         }
                     }
                     item.setTitle(title);
@@ -176,9 +176,9 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
         }
     }
 });
-Ext.reg('multifields', Vps.Form.MultiFields);
+Ext.reg('multifields', Kwf.Form.MultiFields);
 
-Vps.Form.MultiFieldsDeleteButton = Ext.extend(Ext.BoxComponent,  {
+Kwf.Form.MultiFieldsDeleteButton = Ext.extend(Ext.BoxComponent,  {
     // private
     onRender : function(ct, position){
         this.el = ct.createChild({
@@ -207,7 +207,7 @@ Vps.Form.MultiFieldsDeleteButton = Ext.extend(Ext.BoxComponent,  {
         }, this);
     }
 });
-Vps.Form.MultiFieldsUpButton = Ext.extend(Ext.BoxComponent,  {
+Kwf.Form.MultiFieldsUpButton = Ext.extend(Ext.BoxComponent,  {
     // private
     onRender : function(ct, position){
         this.el = ct.createChild({
@@ -235,7 +235,7 @@ Vps.Form.MultiFieldsUpButton = Ext.extend(Ext.BoxComponent,  {
         }, this);
     }
 });
-Vps.Form.MultiFieldsDownButton = Ext.extend(Ext.BoxComponent,  {
+Kwf.Form.MultiFieldsDownButton = Ext.extend(Ext.BoxComponent,  {
     // private
     onRender : function(ct, position){
         this.el = ct.createChild({
@@ -267,7 +267,7 @@ Vps.Form.MultiFieldsDownButton = Ext.extend(Ext.BoxComponent,  {
         }, this);
     }
 });
-Vps.Form.MultiFieldsAddButton = Ext.extend(Ext.BoxComponent,  {
+Kwf.Form.MultiFieldsAddButton = Ext.extend(Ext.BoxComponent,  {
     // private
     onRender : function(ct, position){
         this.el = ct.createChild({
@@ -292,7 +292,7 @@ Vps.Form.MultiFieldsAddButton = Ext.extend(Ext.BoxComponent,  {
     }
 });
 
-Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
+Kwf.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
     _initFields: function(cnt) {
         var gp = this.multiFieldsPanel;
         if (cnt < gp.minEntries) cnt = gp.minEntries;
@@ -381,7 +381,7 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         this.originalValue = this.value;
     },
     clearValue: function() {
-        Vps.Form.MultiFieldsHidden.superclass.resetDirty.call(this);
+        Kwf.Form.MultiFieldsHidden.superclass.resetDirty.call(this);
         var gp = this.multiFieldsPanel;
         this._initFields(gp.minEntries);
         gp.groups.each(function(g) {

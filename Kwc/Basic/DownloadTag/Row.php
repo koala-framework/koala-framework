@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_DownloadTag_Row extends Vps_Model_Proxy_Row
+class Kwc_Basic_DownloadTag_Row extends Kwf_Model_Proxy_Row
 {
     public function fileExists()
     {
@@ -15,7 +15,7 @@ class Vpc_Basic_DownloadTag_Row extends Vps_Model_Proxy_Row
         if (is_null($this->filename)) {
             $fRow = $this->getParentRow('File');
             if ($fRow) {
-                $filter = new Vps_Filter_Ascii();
+                $filter = new Kwf_Filter_Ascii();
                 $this->filename = $filter->filter($fRow->filename);
             }
         }

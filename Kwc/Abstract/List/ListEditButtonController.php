@@ -1,12 +1,12 @@
 <?php
-class Vpc_Abstract_List_ListEditButtonController extends Vpc_Abstract_List_Controller
+class Kwc_Abstract_List_ListEditButtonController extends Kwc_Abstract_List_Controller
 {
     protected $_position = 'pos';
     protected function _initColumns()
     {
         parent::_initColumns();
 
-        $extConfig = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
+        $extConfig = Kwc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
         $extConfig = $extConfig['list'];
         $i=0;
         foreach ($extConfig['contentEditComponents'] as $ec) {
@@ -14,11 +14,11 @@ class Vpc_Abstract_List_ListEditButtonController extends Vpc_Abstract_List_Contr
                 $name = $ec['title'];
                 $icon = $ec['icon'];
             } else {
-                $name = Vpc_Abstract::getSetting($ec['componentClass'], 'componentName');
-                $icon = Vpc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
+                $name = Kwc_Abstract::getSetting($ec['componentClass'], 'componentName');
+                $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
                 $icon = $icon->toString(array('arrow'));
             }
-            $this->_columns->add(new Vps_Grid_Column_Button('edit_'.$i, ' ', 20))
+            $this->_columns->add(new Kwf_Grid_Column_Button('edit_'.$i, ' ', 20))
                 ->setNoIconWhenNew(true)
                 ->setColumnType('editContent')
                 ->setEditComponentClass($ec['componentClass'])
@@ -26,7 +26,7 @@ class Vpc_Abstract_List_ListEditButtonController extends Vpc_Abstract_List_Contr
                 ->setEditIdTemplate($ec['idTemplate'])
                 ->setEditComponentIdSuffix($ec['componentIdSuffix'])
                 ->setButtonIcon($icon)
-                ->setTooltip(trlVps('Edit {0}', $name));
+                ->setTooltip(trlKwf('Edit {0}', $name));
             $i++;
         }
 

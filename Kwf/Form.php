@@ -1,5 +1,5 @@
 <?php
-class Vps_Form extends Vps_Form_NonTableForm
+class Kwf_Form extends Kwf_Form_NonTableForm
 {
     protected $_tableName;
     protected $_modelName;
@@ -15,10 +15,10 @@ class Vps_Form extends Vps_Form_NonTableForm
             $this->setTable(new $this->_tableName());
         }
         if (isset($this->_modelName) && !isset($this->_model)) {
-            $this->_model = Vps_Model_Abstract::getInstance($this->_modelName);
+            $this->_model = Kwf_Model_Abstract::getInstance($this->_modelName);
         }
         if (is_string($this->_model)) {
-            $this->_model = Vps_Model_Abstract::getInstance($this->_model);
+            $this->_model = Kwf_Model_Abstract::getInstance($this->_model);
         }
     }
 
@@ -27,7 +27,7 @@ class Vps_Form extends Vps_Form_NonTableForm
      *
      * ATM only implemented in Frontend Form
      */
-    public function hideForValue(Vps_Form_Field_Abstract $field, $value, Vps_Form_Field_Abstract $hideField)
+    public function hideForValue(Kwf_Form_Field_Abstract $field, $value, Kwf_Form_Field_Abstract $hideField)
     {
         $this->_hideForValue[] = array('field' => $field, 'value' => $value, 'hide' => $hideField);
         return $this;
@@ -70,7 +70,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     //aber besser getRow überschreiben!!!
     protected function _getRowByParentRow($parentRow)
     {
-        if ($parentRow && $this->_model instanceof Vps_Model_Field) {
+        if ($parentRow && $this->_model instanceof Kwf_Model_Field) {
             $ret = $this->_model->getRowByParentRow($parentRow);
         } else {
             $ret = $this->getRow($parentRow);
@@ -83,9 +83,9 @@ class Vps_Form extends Vps_Form_NonTableForm
     {
         $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
-            throw new Vps_Exception('Can\'t find row.');
-        } else if (!$row instanceof Vps_Model_Row_Interface) {
-            throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
+            throw new Kwf_Exception('Can\'t find row.');
+        } else if (!$row instanceof Kwf_Model_Row_Interface) {
+            throw new Kwf_Exception('Row must be a Kwf_Model_Row_Interface.');
         }
         parent::prepareSave($parentRow, $postData);
     }
@@ -96,9 +96,9 @@ class Vps_Form extends Vps_Form_NonTableForm
 
         $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
-            throw new Vps_Exception('Can\'t find row.');
-        } else if (!$row instanceof Vps_Model_Row_Interface) {
-            throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
+            throw new Kwf_Exception('Can\'t find row.');
+        } else if (!$row instanceof Kwf_Model_Row_Interface) {
+            throw new Kwf_Exception('Row must be a Kwf_Model_Row_Interface.');
         }
 
         if ($this->getIdTemplate()) {
@@ -146,9 +146,9 @@ class Vps_Form extends Vps_Form_NonTableForm
     {
         $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
-            throw new Vps_Exception('Can\'t find row.');
-        } else if (!$row instanceof Vps_Model_Row_Interface) {
-            throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
+            throw new Kwf_Exception('Can\'t find row.');
+        } else if (!$row instanceof Kwf_Model_Row_Interface) {
+            throw new Kwf_Exception('Row must be a Kwf_Model_Row_Interface.');
         }
         parent::delete($parentRow);
         $row->delete();
@@ -160,7 +160,7 @@ class Vps_Form extends Vps_Form_NonTableForm
             $this->_primaryKey = $this->_model->getPrimaryKey();
         }
         if (!isset($this->_primaryKey)) {
-            throw new Vps_Exception("You have to set either the primaryKey or the model.");
+            throw new Kwf_Exception("You have to set either the primaryKey or the model.");
         }
         return $this->_primaryKey;
     }
@@ -168,7 +168,7 @@ class Vps_Form extends Vps_Form_NonTableForm
 
     public function setTable(Zend_Db_Table_Abstract $table)
     {
-        $this->_model = new Vps_Model_Db(array(
+        $this->_model = new Kwf_Model_Db(array(
             'table' => $table
         ));
         return $this;
@@ -177,7 +177,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     {
         return $this->_model;
     }
-    public function setModel(Vps_Model_Interface $model)
+    public function setModel(Kwf_Model_Interface $model)
     {
         $this->_model = $model;
         return $this;
@@ -187,12 +187,12 @@ class Vps_Form extends Vps_Form_NonTableForm
      * Damit bei verschachtelten Forms die das selben Model verwenden
      * nicht zwei unterschiedliche rows verwendet werden, was beim hinzufügen ein problem ist.
      *
-     * Wird aufgerufen von getRow, in Vpc_User_Edit_Form_Form wirds auch verwendet
+     * Wird aufgerufen von getRow, in Kwc_User_Edit_Form_Form wirds auch verwendet
      */
     protected final function _rowIsParentRow($parentRow)
     {
         $id = $this->_getIdByParentRow($parentRow);
-        if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row
+        if ($parentRow && !$parentRow instanceof Kwf_Model_FnF_Row
             && $parentRow->getModel()->isEqual($this->_model)
             && $parentRow->{$parentRow->getModel()->getPrimaryKey()} == $id
         ) {
@@ -215,7 +215,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         if (isset($this->_rows[$key])) return $this->_rows[$key];
 
         if (!isset($this->_model)) {
-            throw new Vps_Exception("_model has to be set for form '".get_class($this)."'");
+            throw new Kwf_Exception("_model has to be set for form '".get_class($this)."'");
         }
         $rowset = null;
 
@@ -246,13 +246,13 @@ class Vps_Form extends Vps_Form_NonTableForm
             return null;
         } else {
             if (count($rowset)== 0) {
-                if ($this->getCreateMissingRow()) { //für Vps_Form_AddForm
+                if ($this->getCreateMissingRow()) { //für Kwf_Form_AddForm
                     $this->_rows[$key] = $this->_createMissingRow($id);
                 } else {
-                    throw new Vps_Exception('No database-entry found.');
+                    throw new Kwf_Exception('No database-entry found.');
                 }
             } else if (count($rowset) > 1) {
-                throw new Vps_Exception('More than one database-entry found.');
+                throw new Kwf_Exception('More than one database-entry found.');
             } else {
                 $this->_rows[$key] = $rowset->current();
             }
@@ -267,19 +267,19 @@ class Vps_Form extends Vps_Form_NonTableForm
         return $ret;
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterSave(Vps_Model_Row_Interface $row)
+    protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterInsert(Vps_Model_Row_Interface $row)
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
     {
     }
 
@@ -288,7 +288,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         $msg = array();
         foreach ($errors as $i) {
             if (!is_array($i)) {
-                throw new Vps_Exception('Form errors must be of type array');
+                throw new Kwf_Exception('Form errors must be of type array');
             }
             $name = '';
             if (isset($i['field'])) {

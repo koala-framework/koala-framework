@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_Images_Pdf extends Vpc_Abstract_Pdf
+class Kwc_Composite_Images_Pdf extends Kwc_Abstract_Pdf
 {
     public function writeContent()
     {
@@ -7,7 +7,7 @@ class Vpc_Composite_Images_Pdf extends Vpc_Abstract_Pdf
         $nr = 0;
         $components = $this->_component->getData()->getChildComponents(array('generator' => 'child'));
         $count = sizeof($components);
-        $columns = Vpc_Abstract::getSetting(get_class($this->_component), 'pdfColumns');
+        $columns = Kwc_Abstract::getSetting(get_class($this->_component), 'pdfColumns');
         foreach ($components as $component) {
             // immer y vor x setzen, weil sety setzt x auf leftmargin"
             $image = $component->getComponent()->getPdfWriter($this->_pdf);

@@ -1,14 +1,14 @@
 <?php
-class Vpc_Basic_Headlines_Component extends Vpc_Abstract
+class Kwc_Basic_Headlines_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Headlines'),
-            'componentIcon' => new Vps_Asset('text_padding_top'),
-            'ownModel'      => 'Vps_Component_FieldModel',
+            'componentName' => trlKwf('Headlines'),
+            'componentIcon' => new Kwf_Asset('text_padding_top'),
+            'ownModel'      => 'Kwf_Component_FieldModel',
             'cssClass'      => 'webStandard',
-            'extConfig'     => 'Vps_Component_Abstract_ExtConfig_Form'
+            'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = array('headline1', 'headline2');
         return $ret;

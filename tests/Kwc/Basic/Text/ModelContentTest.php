@@ -3,13 +3,13 @@
  * Einfachere Tests die nicht mit Unterkomponenten arbeiten.
  * Vorallem Html nach Links/Downloads/Images durchsuchen.
  *
- * @group Vpc_Basic_Text
+ * @group Kwc_Basic_Text
  **/
-class Vpc_Basic_Text_ModelContentTest extends Vpc_TestAbstract
+class Kwc_Basic_Text_ModelContentTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_Text_Root');
+        parent::setUp('Kwc_Basic_Text_Root');
     }
 
     public function testOnlyText()
@@ -161,18 +161,18 @@ class Vpc_Basic_Text_ModelContentTest extends Vpc_TestAbstract
         $c = $this->_root->getComponentById(1003)->getComponent();
         $row = $c->getRow();
                         //"/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random"
-        $parts = $row->getContentParts('<p><img src="/media/Vpc_Basic_Text_TestComponent/1003-i1" />foo</p>');
+        $parts = $row->getContentParts('<p><img src="/media/Kwc_Basic_Text_TestComponent/1003-i1" />foo</p>');
         $this->assertEquals(array('<p>', array(
                             'type' => 'image',
                             'nr' => '1',
-                            'html' => '<img src="/media/Vpc_Basic_Text_TestComponent/1003-i1" />',
+                            'html' => '<img src="/media/Kwc_Basic_Text_TestComponent/1003-i1" />',
                         ), 'foo</p>'), $parts);
 
-        $parts = $row->getContentParts('<p><img src="http://vivid.com/media/Vpc_Basic_Text_TestComponent/1003-i1/default/asdfsadf/test.jpg?garbage" />foo</p>');
+        $parts = $row->getContentParts('<p><img src="http://vivid.com/media/Kwc_Basic_Text_TestComponent/1003-i1/default/asdfsadf/test.jpg?garbage" />foo</p>');
         $this->assertEquals(array('<p>', array(
                             'type' => 'image',
                             'nr' => '1',
-                            'html' => '<img src="http://vivid.com/media/Vpc_Basic_Text_TestComponent/1003-i1/default/asdfsadf/test.jpg?garbage" />',
+                            'html' => '<img src="http://vivid.com/media/Kwc_Basic_Text_TestComponent/1003-i1/default/asdfsadf/test.jpg?garbage" />',
                         ), 'foo</p>'), $parts);
     }
 
@@ -199,13 +199,13 @@ class Vpc_Basic_Text_ModelContentTest extends Vpc_TestAbstract
     {
         $c = $this->_root->getComponentById(1003)->getComponent();
         $row = $c->getRow();
-        $parts = $row->getContentParts('<p><img src="/media/Vpc_Basic_Text_TestComponent/1000-i1" />foo</p>');
+        $parts = $row->getContentParts('<p><img src="/media/Kwc_Basic_Text_TestComponent/1000-i1" />foo</p>');
         $this->assertEquals(array('<p>', array(
                             'type' => 'invalidImage',
-                            'src' => '/media/Vpc_Basic_Text_TestComponent/1000-i1',
-                            'componentClass' => 'Vpc_Basic_Text_TestComponent',
+                            'src' => '/media/Kwc_Basic_Text_TestComponent/1000-i1',
+                            'componentClass' => 'Kwc_Basic_Text_TestComponent',
                             'componentId' => '1000-i1',
-                            'html' => '<img src="/media/Vpc_Basic_Text_TestComponent/1000-i1" />',
+                            'html' => '<img src="/media/Kwc_Basic_Text_TestComponent/1000-i1" />',
                         ), 'foo</p>'), $parts);
     }
 }

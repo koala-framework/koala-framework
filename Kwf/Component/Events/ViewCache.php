@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Events_ViewCache extends Vps_Component_Events
+class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 {
     private $_updates = array();
 
@@ -7,68 +7,68 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
     {
         $ret = array();
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Row_UpdatesFinished',
+            'event' => 'Kwf_Component_Event_Row_UpdatesFinished',
             'callback' => 'onRowUpdatesFinished'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Component_ContentChanged',
+            'event' => 'Kwf_Component_Event_Component_ContentChanged',
             'callback' => 'onContentChange'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Page_NameChanged',
+            'event' => 'Kwf_Component_Event_Page_NameChanged',
             'callback' => 'onPageChanged'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Page_FilenameChanged',
+            'event' => 'Kwf_Component_Event_Page_FilenameChanged',
             'callback' => 'onPageChanged'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Page_RecursiveFilenameChanged',
+            'event' => 'Kwf_Component_Event_Page_RecursiveFilenameChanged',
             'callback' => 'onPageRecursiveFilenameChanged'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Page_ParentChanged',
+            'event' => 'Kwf_Component_Event_Page_ParentChanged',
             'callback' => 'onPageParentChanged'
         );
         $ret[] = array(
-            'event' => 'Vps_Component_Event_Media_Changed',
+            'event' => 'Kwf_Component_Event_Media_Changed',
             'callback' => 'onMediaChanged'
         );
         return $ret;
     }
 
-    public function onRowUpdatesFinished(Vps_Component_Event_Row_UpdatesFinished $event)
+    public function onRowUpdatesFinished(Kwf_Component_Event_Row_UpdatesFinished $event)
     {
         if ($this->_updates) {
-            $select = new Vps_Model_Select();
+            $select = new Kwf_Model_Select();
             $or = array();
             foreach ($this->_updates as $key => $values) {
                 if (is_string($key)) {
-                    $or[] = new Vps_Model_Select_Expr_Equal($key, array_unique($values));
+                    $or[] = new Kwf_Model_Select_Expr_Equal($key, array_unique($values));
                 } else {
                     $and = array();
                     foreach ($values as $k => $v) {
                         if (strpos($v, '%') !== false) {
-                            $and[] = new Vps_Model_Select_Expr_Like($k, $v);
+                            $and[] = new Kwf_Model_Select_Expr_Like($k, $v);
                         } else {
-                            $and[] = new Vps_Model_Select_Expr_Equal($k, $v);
+                            $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
                         }
                     }
-                    $or[] = new Vps_Model_Select_Expr_And($and);
+                    $or[] = new Kwf_Model_Select_Expr_And($and);
                 }
             }
-            $select->where(new Vps_Model_Select_Expr_Or($or));
-            Vps_Component_Cache::getInstance()->deleteViewCache($select);
+            $select->where(new Kwf_Model_Select_Expr_Or($or));
+            Kwf_Component_Cache::getInstance()->deleteViewCache($select);
             $this->_updates = array();
         }
     }
 
-    public function onContentChange(Vps_Component_Event_Component_ContentChanged $event)
+    public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
         $this->_updates['db_id'][] = $event->dbId;
     }
 
-    public function onPageChanged(Vps_Component_Event_Page_ContentChanged $event)
+    public function onPageChanged(Kwf_Component_Event_Page_ContentChanged $event)
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
@@ -76,7 +76,7 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
         );
     }
 
-    public function onPageRecursiveFilenameChanged(Vps_Component_Event_Page_RecursiveFilenameChanged $event)
+    public function onPageRecursiveFilenameChanged(Kwf_Component_Event_Page_RecursiveFilenameChanged $event)
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
@@ -84,7 +84,7 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
         );
     }
 
-    public function onPageParentChanged(Vps_Component_Event_Page_ParentChanged $event)
+    public function onPageParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
@@ -92,9 +92,9 @@ class Vps_Component_Events_ViewCache extends Vps_Component_Events
         );
     }
 
-    public function onMediaChanged(Vps_Component_Event_Media_Changed $event)
+    public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
     {
-        Vps_Media::getOutputCache()->remove(Vps_Media::createCacheId(
+        Kwf_Media::getOutputCache()->remove(Kwf_Media::createCacheId(
             $event->class, $event->componentId, $event->type
         ));
     }

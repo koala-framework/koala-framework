@@ -1,33 +1,33 @@
 <?php
-class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Action_Auto_Tree
+class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Action_Auto_Tree
 {
     protected $_textField = 'name';
     protected $_rootVisible = false;
     protected $_buttons = array();
     protected $_hasPosition = true;
-    protected $_modelName = 'Vps_Component_Model';
+    protected $_modelName = 'Kwf_Component_Model';
 
     private $_componentConfigs = array();
 
     protected function _init()
     {
-        $this->_filters->add(new Vps_Controller_Action_Auto_Filter_Text())
+        $this->_filters->add(new Kwf_Controller_Action_Auto_Filter_Text())
             ->setQueryFields(array('name'));
     }
 
     public function indexAction()
     {
-        $this->view->xtype = 'vps.component.pages';
+        $this->view->xtype = 'kwf.component.pages';
     }
 
     protected function _formatNode($row)
     {
         $component = $row->getData();
         $data = parent::_formatNode($row);
-        $data['uiProvider'] = 'Vps.Component.PagesNode';
+        $data['uiProvider'] = 'Kwf.Component.PagesNode';
 
         $user = Zend_Registry::get('userModel')->getAuthedUser();
-        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        $acl = Kwf_Registry::get('acl')->getComponentAcl();
 
         $nodeConfig = self::getNodeConfig($component, $user, $acl, $this->_componentConfigs);
         if (is_null($nodeConfig)) return null;
@@ -52,7 +52,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     {
         $data = array();
         $enabled = $acl->isAllowed($user, $component);
-        if (!$enabled && !$component instanceof Vps_Component_Data_Root/*root nicht überprüfen, die wird immar angezeigt*/) {
+        if (!$enabled && !$component instanceof Kwf_Component_Data_Root/*root nicht überprüfen, die wird immar angezeigt*/) {
             $allowedComponents = $acl->getAllowedRecursiveChildComponents($user);
             $allowed = false;
             foreach ($allowedComponents as $allowedComponent) {
@@ -95,7 +95,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['disabled'] = !$enabled;
 
         if ($component->componentId == 'root') { // Root hat keinen Generator
-            $data['bIcon'] = new Vps_Asset('world');
+            $data['bIcon'] = new Kwf_Asset('world');
             $data['bIcon'] = $data['bIcon']->__toString();
             $data['expanded'] = true;
             $data['loadChildren'] = true;
@@ -106,7 +106,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             if (!$enabled) $data['iconEffects'][] = 'forbidden';
             $icon = $data['icon'];
             if (is_string($icon)) {
-                $icon = new Vps_Asset($icon);
+                $icon = new Kwf_Asset($icon);
             }
             $data['bIcon'] = $icon->toString($data['iconEffects']);
             if (isset($data['icon'])) unset($data['icon']);
@@ -129,7 +129,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         //hinzufügen + drop erlauben
         //das kann nicht im Generator ermittelt werden, der macht nur sich selbst
         if ($acl->isAllowed($user, $component)) {
-            $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
+            $pageGenerator = Kwf_Component_Generator_Abstract::getInstances($component, array(
                 'pageGenerator' => true
             ));
             if ($pageGenerator) {
@@ -167,11 +167,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         foreach ($editComponents as $editComponent) {
             foreach (self::getEditComponents($editComponent) as $c) {
                 if (!$acl->isAllowed($user, $c)) continue;
-                $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
+                $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
             }
             foreach (self::getSharedComponents($editComponent) as $componentClass => $c) {
                 if (!$acl->isAllowed($user, $c)) continue;
-                $ec = array_merge($ec, self::_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED, $componentConfigs));
+                $ec = array_merge($ec, self::_formatEditComponents($componentClass, $c, Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED, $componentConfigs));
             }
         }
         return $ec;
@@ -184,12 +184,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         return $parent->componentId;
     }
 
-    private static function _formatEditComponents($componentClass, Vps_Component_Data $component, $configType, &$componentConfigs)
+    private static function _formatEditComponents($componentClass, Kwf_Component_Data $component, $configType, &$componentConfigs)
     {
         $ret = array();
-        $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig($configType);
+        $cfg = Kwc_Admin::getInstance($componentClass)->getExtConfig($configType);
         if (isset($cfg['xtype'])) { //test for legacy
-            throw new Vps_Exception("getExtConfig for $componentClass doesn't return an array of configs");
+            throw new Kwf_Exception("getExtConfig for $componentClass doesn't return an array of configs");
         }
         foreach ($cfg as $type=>$c) {
             $k = $componentClass.'-'.$type;
@@ -204,7 +204,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
         if (isset($component->generator)) { //nicht gesetzt bei root
             foreach ($component->generator->getGeneratorPlugins() as $generatorPlugin) {
-                $admin = Vpc_Admin::getInstance(get_class($generatorPlugin));
+                $admin = Kwc_Admin::getInstance(get_class($generatorPlugin));
                 $cfg = $admin->getExtConfig($configType);
                 foreach ($cfg as $type=>$c) {
                     $k = get_class($generatorPlugin).'-'.$type;
@@ -250,16 +250,16 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     public static function getSharedComponents($component)
     {
         static $sharedClasses = array();
-        if (!isset($sharedClasses[Vps_Component_Data_Root::getComponentClass()])) { //pro root klasse cachen weil die sich ja bei den tests ändern kann
-            $componentClasses = Vpc_Abstract::getComponentClasses();
-            $sharedClasses[Vps_Component_Data_Root::getComponentClass()] = array();
+        if (!isset($sharedClasses[Kwf_Component_Data_Root::getComponentClass()])) { //pro root klasse cachen weil die sich ja bei den tests ändern kann
+            $componentClasses = Kwc_Abstract::getComponentClasses();
+            $sharedClasses[Kwf_Component_Data_Root::getComponentClass()] = array();
             foreach ($componentClasses as $componentClass) {
-                $class = Vpc_Abstract::getFlag($componentClass, 'sharedDataClass');
-                if ($class) $sharedClasses[Vps_Component_Data_Root::getComponentClass()][$componentClass] = $class;
+                $class = Kwc_Abstract::getFlag($componentClass, 'sharedDataClass');
+                if ($class) $sharedClasses[Kwf_Component_Data_Root::getComponentClass()][$componentClass] = $class;
             }
         }
         $ret = array();
-        foreach ($sharedClasses[Vps_Component_Data_Root::getComponentClass()] as $componentClass => $sharedClass) {
+        foreach ($sharedClasses[Kwf_Component_Data_Root::getComponentClass()] as $componentClass => $sharedClass) {
             $targetComponent = null;
             if (is_instance_of($component->componentClass, $sharedClass)) {
                 $targetComponent = $component;
@@ -287,20 +287,20 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $table = $this->_model->getTable();
         $row = $table->find($id)->current();
         if (!$this->_hasPermissions($row, 'makeHome')) {
-            throw new Vps_Exception("Making home this row is not allowed.");
+            throw new Kwf_Exception("Making home this row is not allowed.");
         }
-        $root = Vps_Component_Data_Root::getInstance();
+        $root = Kwf_Component_Data_Root::getInstance();
         $component = $root->getComponentById($id, array('ignoreVisible' => true));
 
-        if (get_class($component) != 'Vps_Component_Data') {
-            //da die data klasse auf Vps_Component_Data_Home angepasst geändert muss kann das nicht
+        if (get_class($component) != 'Kwf_Component_Data') {
+            //da die data klasse auf Kwf_Component_Data_Home angepasst geändert muss kann das nicht
             //gleichzeitig FirstChildPage oder LinkIntern sein. Daher verbieten.
-            $name = Vpc_Abstract::getSetting($component->componentClass, 'componentName');
-            throw new Vps_Exception_Client(trlVps("You can't set {0} as Home", $name));
+            $name = Kwc_Abstract::getSetting($component->componentClass, 'componentName');
+            throw new Kwf_Exception_Client(trlKwf("You can't set {0} as Home", $name));
         }
 
         while ($component) {
-            if (Vpc_Abstract::getFlag($component->componentClass, 'hasHome')) {
+            if (Kwc_Abstract::getFlag($component->componentClass, 'hasHome')) {
                 $homeComponent = $component;
                 $component = null;
             } else {
@@ -315,12 +315,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             foreach ($oldRows as $oldRow) {
                 $component = $root->getComponentById($oldRow->id, array('ignoreVisible' => true));
                 while ($component) {
-                    if (Vpc_Abstract::getFlag($component->componentClass, 'hasHome')) {
+                    if (Kwc_Abstract::getFlag($component->componentClass, 'hasHome')) {
                         if ($component == $homeComponent) {
                             $oldId = $oldRow->id;
                             $oldVisible = $oldRow->visible;
                             if (!$this->_hasPermissions($row, 'makeHome')) {
-                                throw new Vps_Exception("Making home this row is not allowed.");
+                                throw new Kwf_Exception("Making home this row is not allowed.");
                             }
                             $oldRow->is_home = 0;
                             $oldRow->save();
@@ -345,7 +345,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     public function jsonMoveAction()
     {
         $target = $this->getRequest()->getParam('target');
-        $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId($target, array('ignoreVisible' => true));
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($target, array('ignoreVisible' => true));
         if ($component) {
             while ($component && !$this->_rootParentValue) {
                 if (!$component->isPage) $this->_rootParentValue = $component->dbId;
@@ -367,37 +367,37 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     public function openPreviewAction()
     {
-        $page = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('page_id'), array('ignoreVisible' => true));
+        $page = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('page_id'), array('ignoreVisible' => true));
         if (!$page) {
-            throw new Vps_Exception_Client(trlVps('Page not found'));
+            throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
-        $previewDomain = Vps_Config_Web::getInstance('preview')->server->domain;
+        $previewDomain = Kwf_Config_Web::getInstance('preview')->server->domain;
         $href = 'http://' . $previewDomain . $page->url;
         header('Location: '.$href);
         exit;
     }
 
-    protected function _changeVisibility(Vps_Model_Row_Interface $row)
+    protected function _changeVisibility(Kwf_Model_Row_Interface $row)
     {
         parent::_changeVisibility($row);
         $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
-        $icon = new Vps_Asset($config['icon']);
+        $icon = new Kwf_Asset($config['icon']);
         $this->view->icon = $icon->toString($config['iconEffects']);
         if (!$row->visible) {
-            $this->_checkRowIndependence($row, trlVps('hide'));
+            $this->_checkRowIndependence($row, trlKwf('hide'));
         }
     }
 
-    protected function _beforeDelete(Vps_Model_Row_Interface $row)
+    protected function _beforeDelete(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeDelete($row);
-        $this->_checkRowIndependence($row, trlVps('delete'));
+        $this->_checkRowIndependence($row, trlKwf('delete'));
     }
 
-    private function _checkRowIndependence(Vps_Model_Row_Interface $row, $msgMethod)
+    private function _checkRowIndependence(Kwf_Model_Row_Interface $row, $msgMethod)
     {
-        if (!$row instanceof Vpc_Root_Category_GeneratorRow) return;
-        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        if (!$row instanceof Kwc_Root_Category_GeneratorRow) return;
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel');
         $pageRow = $m->getRow($row->getData()->row->id);
         $r = $pageRow;
         while ($r) {
@@ -411,19 +411,19 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
         $components = $pageRow->getComponentsDependingOnRow();
         if ($components) {
-            $msg = trlVps("You can not {0} this entry as it is used on the following pages:", $msgMethod);
-            $msg .= Vps_Util_Component::getHtmlLocations($components);
-            throw new Vps_ClientException($msg);
+            $msg = trlKwf("You can not {0} this entry as it is used on the following pages:", $msgMethod);
+            $msg .= Kwf_Util_Component::getHtmlLocations($components);
+            throw new Kwf_ClientException($msg);
         }
     }
 
     protected function _hasPermissions($row, $action)
     {
         $user = Zend_Registry::get('userModel')->getAuthedUser();
-        if ($row instanceof Vps_Component_Model_Row) {
+        if ($row instanceof Kwf_Component_Model_Row) {
             $component = $row->getData();
         } else {
-            $component = Vps_Component_Data_Root::getInstance()
+            $component = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($row->id, array('ignoreVisible' => true));
         }
 
@@ -431,21 +431,21 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $config = $component->generator->getPagesControllerConfig($component);
         $actions = $config['actions'];
         $actions['move'] = $config['allowDrag'];
-        $data['moveTo'] = !!Vps_Component_Generator_Abstract::getInstances($component, array(
+        $data['moveTo'] = !!Kwf_Component_Generator_Abstract::getInstances($component, array(
             'pageGenerator' => true
         ));
         if (in_array($action, array_keys($actions)) && !$actions[$action]) return false;
 
         // wenn ja, darf man die Komponente bearbeiten?
-        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        $acl = Kwf_Registry::get('acl')->getComponentAcl();
         return $acl->isAllowed($user, $component);
     }
 
     public function jsonCopyAction()
     {
         $id = $this->_getParam('id');
-        if (!Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
-            throw new Vps_Exception("Component with id '$id' not found");
+        if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Kwf_Exception("Component with id '$id' not found");
         }
         $session = new Zend_Session_Namespace('PagesController:copy');
         $session->id = $id;
@@ -455,31 +455,31 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     {
         $session = new Zend_Session_Namespace('PagesController:copy');
         $id = $session->id;
-        if (!$id || !Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
-            throw new Vps_Exception_Client(trlVps('Clipboard is empty'));
+        if (!$id || !Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Kwf_Exception_Client(trlKwf('Clipboard is empty'));
         }
-        $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
-        $target = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('id'), array('ignoreVisible'=>true));
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+        $target = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('id'), array('ignoreVisible'=>true));
 
         $user = Zend_Registry::get('userModel')->getAuthedUser();
-        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        $acl = Kwf_Registry::get('acl')->getComponentAcl();
         if (!$acl->isAllowed($user, $source) || !$acl->isAllowed($user, $target)) {
-            throw new Vps_Exception_AccessDenied();
+            throw new Kwf_Exception_AccessDenied();
         }
 
-        Vps_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         $progressBar = new Zend_ProgressBar(
-            new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
-            0, Vps_Util_Component::getDuplicateProgressSteps($source)
+            new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+            0, Kwf_Util_Component::getDuplicateProgressSteps($source)
         );
 
-        $newPage = Vps_Util_Component::duplicate($source, $target, $progressBar);
+        $newPage = Kwf_Util_Component::duplicate($source, $target, $progressBar);
 
         $progressBar->finish();
 
 
-        $s = new Vps_Model_Select();
+        $s = new Kwf_Model_Select();
         $s->whereEquals('parent_id', $newPage->row->parent_id);
         $s->order('pos', 'DESC');
         $s->limit(1);
@@ -489,6 +489,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $row->visible = false;
         $row->save();
 
-        Vps_Component_ModelObserver::getInstance()->enable();
+        Kwf_Component_ModelObserver::getInstance()->enable();
     }
 }

@@ -1,11 +1,11 @@
 <?php
-abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
+abstract class Kwc_Basic_LinkTag_Abstract_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentIcon'] = new Vps_Asset('page_link');
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['componentIcon'] = new Kwf_Asset('page_link');
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
         return $ret;
     }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
+class Kwc_Basic_Text_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
 {
     public function jsonTidyHtmlAction()
     {
@@ -7,8 +7,8 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $html = preg_replace('#(<span\s+class\s*=\s*"?cursor"?\s*>)\s*(</span>)#is', '<span class="cursor">cursor</span>', $html);
 
         $row = $this->_form->getRow();
-        $parser = new Vpc_Basic_Text_Parser();
-        $m = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
+        $parser = new Kwc_Basic_Text_Parser();
+        $m = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
         $parser->setMasterStyles($m->getMasterStyles());
         if ($this->_getParam('allowCursorSpan')) {
             $parser->setEnableCursorSpan(true);
@@ -42,7 +42,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     public function jsonStylesAction()
     {
         $ownStyles = false;
-        $pattern = Vpc_Abstract::getSetting($this->_getParam('class'), 'stylesIdPattern');
+        $pattern = Kwc_Abstract::getSetting($this->_getParam('class'), 'stylesIdPattern');
 
         if ($pattern) {
             if (preg_match('#'.$pattern.'#', $this->_getParam('componentId'), $m)) {
@@ -50,7 +50,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
             }
         }
 
-        $m = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
+        $m = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
         $this->view->styles = $m->getStyles($ownStyles);
     }
 }

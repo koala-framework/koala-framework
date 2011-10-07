@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Table_FileUrl extends Vps_Data_Abstract
+class Kwf_Data_Table_FileUrl extends Kwf_Data_Abstract
 {
     protected $_type;
     protected $_rule;
@@ -12,6 +12,6 @@ class Vps_Data_Table_FileUrl extends Vps_Data_Abstract
 
     public function load($row)
     {
-        return Vps_Media::getUrl(get_class($row->getModel()), $row->id, $this->_type, $row->getParentRow($this->_rule));
+        return Kwf_Media::getUrl(get_class($row->getModel()), $row->id, $this->_type, $row->getParentRow($this->_rule));
     }
 }

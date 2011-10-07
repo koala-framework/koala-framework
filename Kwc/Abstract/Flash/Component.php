@@ -1,18 +1,18 @@
 <?php
-abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
+abstract class Kwc_Abstract_Flash_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Flash');
-        $ret['componentIcon'] = new Vps_Asset('film');
+        $ret['componentName'] = trlKwf('Flash');
+        $ret['componentIcon'] = new Kwf_Asset('film');
 
         $ret['generators']['placeholder'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Abstract_Flash_Placeholder_Component'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Abstract_Flash_Placeholder_Component'
         );
 
-        $ret['assets']['files'][] = 'vps/Vpc/Abstract/Flash/Component.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Flash/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'SwfObject';
@@ -34,7 +34,7 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
             || !array_key_exists('width', $ret['flash']['data'])
             || !array_key_exists('height', $ret['flash']['data'])
         ) {
-            throw new Vps_Exception("_getFlashData() must return an array with keys 'url', 'width' and 'height'");
+            throw new Kwf_Exception("_getFlashData() must return an array with keys 'url', 'width' and 'height'");
         }
         if (!isset($ret['flash']['data']['params'])) {
             $ret['flash']['data']['params'] = array();

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Component
+class Kwc_Posts_Detail_Delete_Confirmed_Component extends Kwc_Posts_Success_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlVpsStatic('Comment was successfully deleted.');
+        $ret['placeholder']['success'] = trlKwfStatic('Comment was successfully deleted.');
         $ret['flags']['processInput'] = true;
         return $ret;
     }
@@ -18,7 +18,7 @@ class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Comp
     {
         $actions = $this->getData()->parent->parent;
         if (!$actions->getComponent()->mayEditPost()) {
-            throw new Vps_Exception_AccessDenied();
+            throw new Kwf_Exception_AccessDenied();
         }
     }
 

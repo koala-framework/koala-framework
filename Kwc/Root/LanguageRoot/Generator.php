@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_LanguageRoot_Generator extends Vps_Component_Generator_PseudoPage_Static
+class Kwc_Root_LanguageRoot_Generator extends Kwf_Component_Generator_PseudoPage_Static
 {
     public function getGeneratorFlags()
     {

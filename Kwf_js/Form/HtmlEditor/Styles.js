@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.Styles = function(config) {
+Kwf.Form.HtmlEditor.Styles = function(config) {
     Ext.apply(this, config);
 
     this.editStyles = new Ext.Action({
@@ -10,8 +10,8 @@ Vps.Form.HtmlEditor.Styles = function(config) {
         scope: this,
         tooltip: {
             cls: 'x-html-editor-tip',
-            title: trlVps('Edit Styles'),
-            text: trlVps('Modify and Create Styles.')
+            title: trlKwf('Edit Styles'),
+            text: trlKwf('Modify and Create Styles.')
         },
         cls: 'x-btn-icon',
         clickEvent: 'mousedown',
@@ -24,7 +24,7 @@ Vps.Form.HtmlEditor.Styles = function(config) {
     }
 };
 
-Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
+Ext.extend(Kwf.Form.HtmlEditor.Styles, Ext.util.Observable, {
     stylesIdPattern: null,
     init: function(cmp){
         this.cmp = cmp;
@@ -175,12 +175,12 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         }
         var select = this.select[type];
         if (!select.select) {
-            select.select = new Vps.Form.ComboBox({
+            select.select = new Kwf.Form.ComboBox({
                 testId: type+'StyleSelect',
                 editable: false,
                 triggerAction: 'all',
                 forceSelection: true,
-                tpl: '<tpl for="."><div class="x-combo-list-item webStandard vpcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
+                tpl: '<tpl for="."><div class="x-combo-list-item webStandard kwcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
                 mode: 'local',
                 width: 130,
                 store: new Ext.data.JsonStore({
@@ -215,7 +215,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             }, this);
             var tb = this.cmp.getToolbar();
             tb.tr = tb.stylesTr;
-            var text = (type == 'block' ? trlVps('Block') : trlVps('Inline'));
+            var text = (type == 'block' ? trlKwf('Block') : trlKwf('Inline'));
             var offset = (type == 'block' ? 0 : 3);
             select.toolbarText = tb.insert(offset+0, text+':');
             select.toolbarItem = tb.insert(offset+1, select.select);

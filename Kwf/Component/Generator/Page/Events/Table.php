@@ -1,55 +1,55 @@
 <?php
-class Vps_Component_Generator_Page_Events_Table extends Vps_Component_Generator_Events_Table
+class Kwf_Component_Generator_Page_Events_Table extends Kwf_Component_Generator_Events_Table
 {
     public function getListeners()
     {
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => $this->_config['componentClass'],
-            'event' => 'Vps_Component_Event_Component_Added',
+            'event' => 'Kwf_Component_Event_Component_Added',
             'callback' => 'onComponentEvent'
         );
         $ret[] = array(
             'class' => $this->_config['componentClass'],
-            'event' => 'Vps_Component_Event_Component_Removed',
+            'event' => 'Kwf_Component_Event_Component_Removed',
             'callback' => 'onComponentEvent'
         );
         $ret[] = array(
             'class' => $this->_config['componentClass'],
-            'event' => 'Vps_Component_Event_Component_ClassChanged',
+            'event' => 'Kwf_Component_Event_Component_ClassChanged',
             'callback' => 'onComponentEvent'
         );
         $ret[] = array(
             'class' => $this->_config['componentClass'],
-            'event' => 'Vps_Component_Event_Component_PositionChanged',
+            'event' => 'Kwf_Component_Event_Component_PositionChanged',
             'callback' => 'onComponentEvent'
         );
         $ret[] = array(
             'class' => $this->_config['componentClass'],
-            'event' => 'Vps_Component_Event_Page_FilenameChanged',
+            'event' => 'Kwf_Component_Event_Page_FilenameChanged',
             'callback' => 'onPageFilenameChanged'
         );
         return $ret;
     }
 
-    public function onComponentEvent(Vps_Component_Event_Component_Abstract $event)
+    public function onComponentEvent(Kwf_Component_Event_Component_Abstract $event)
     {
         $eventsClass = null;
-        if ($event instanceof Vps_Component_Event_Component_Added) {
-            $eventsClass = 'Vps_Component_Event_Page_Added';
-        } else if ($event instanceof Vps_Component_Event_Component_Removed) {
-            $eventsClass = 'Vps_Component_Event_Page_Removed';
-        } else if ($event instanceof Vps_Component_Event_Component_ClassChanged) {
-            $eventsClass = 'Vps_Component_Event_Page_ClassChanged';
-        } else if ($event instanceof Vps_Component_Event_Component_PositionChanged) {
-            $eventsClass = 'Vps_Component_Event_Page_PositionChanged';
+        if ($event instanceof Kwf_Component_Event_Component_Added) {
+            $eventsClass = 'Kwf_Component_Event_Page_Added';
+        } else if ($event instanceof Kwf_Component_Event_Component_Removed) {
+            $eventsClass = 'Kwf_Component_Event_Page_Removed';
+        } else if ($event instanceof Kwf_Component_Event_Component_ClassChanged) {
+            $eventsClass = 'Kwf_Component_Event_Page_ClassChanged';
+        } else if ($event instanceof Kwf_Component_Event_Component_PositionChanged) {
+            $eventsClass = 'Kwf_Component_Event_Page_PositionChanged';
         }
         if ($eventsClass) {
             $this->fireEvent(new $eventsClass($this->_class, $event->dbId));
         }
     }
 
-    public function onRowUpdate(Vps_Component_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
         parent::onRowUpdate($event);
         $dc = array_flip($event->row->getDirtyColumns());
@@ -78,23 +78,23 @@ class Vps_Component_Generator_Page_Events_Table extends Vps_Component_Generator_
             $filenameChanged = isset($dc[$filenameColumn]);
         }
         if ($nameChanged) {
-            $this->fireEvent(new Vps_Component_Event_Page_NameChanged(
+            $this->fireEvent(new Kwf_Component_Event_Page_NameChanged(
                 $this->_class, $this->_getDbId($event->row)
             ));
         }
         if ($filenameChanged) {
-            $this->fireEvent(new Vps_Component_Event_Page_FilenameChanged(
+            $this->fireEvent(new Kwf_Component_Event_Page_FilenameChanged(
                 $this->_class, $this->_getDbId($event->row)
             ));
         }
     }
 
-    public function onPageFilenameChanged(Vps_Component_Event_Page_FilenameChanged $event)
+    public function onPageFilenameChanged(Kwf_Component_Event_Page_FilenameChanged $event)
     {
-        $components = Vps_Component_Data_Root::getInstance()
+        $components = Kwf_Component_Data_Root::getInstance()
             ->getComponentsByDbId($event->dbId);
         foreach ($components as $component) {
-            $this->fireEvent(new Vps_Component_Event_Page_RecursiveFilenameChanged(
+            $this->fireEvent(new Kwf_Component_Event_Page_RecursiveFilenameChanged(
                 $this->_class, $component->componentId
             ));
         }

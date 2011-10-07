@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_User_AboutController extends Vps_Controller_Action
+class Kwf_Controller_Action_User_AboutController extends Kwf_Controller_Action
 {
     public function contentAction()
     {

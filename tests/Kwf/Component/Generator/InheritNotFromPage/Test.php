@@ -3,11 +3,11 @@
  * @group Generator
  * @group GeneratorInherit
  */
-class Vps_Component_Generator_InheritNotFromPage_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_InheritNotFromPage_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_InheritNotFromPage_Root');
+        parent::setUp('Kwf_Component_Generator_InheritNotFromPage_Root');
     }
 
     public function testTitleBox()
@@ -24,6 +24,6 @@ class Vps_Component_Generator_InheritNotFromPage_Test extends Vpc_TestAbstract
         $ids = array_keys($c);
         sort($ids);
         $this->assertEquals(array('root_page-child_page2-box', 'root_page-child_page2-title'), $ids);
-        $this->assertEquals($c['root_page-child_page2-box']->componentClass, 'Vps_Component_Generator_Inherit_Box');
+        $this->assertEquals($c['root_page-child_page2-box']->componentClass, 'Kwf_Component_Generator_Inherit_Box');
     }
 }

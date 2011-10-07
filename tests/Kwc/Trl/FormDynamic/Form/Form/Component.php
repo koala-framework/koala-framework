@@ -1,4 +1,4 @@
 <?php
-class Vpc_Trl_FormDynamic_Form_Form_Component extends Vpc_FormDynamic_Basic_Form_Form_Component
+class Kwc_Trl_FormDynamic_Form_Form_Component extends Kwc_FormDynamic_Basic_Form_Form_Component
 {
 }

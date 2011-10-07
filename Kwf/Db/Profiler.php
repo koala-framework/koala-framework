@@ -1,5 +1,5 @@
 <?php
-class Vps_Db_Profiler extends Zend_Db_Profiler
+class Kwf_Db_Profiler extends Zend_Db_Profiler
 {
     private static $_staticCount = 0;
     private $_count = 0;
@@ -58,7 +58,7 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
             }
         }
 
-        $this->_lastQuery = new Vps_Db_Profiler_Query($queryText, $queryType);
+        $this->_lastQuery = new Kwf_Db_Profiler_Query($queryText, $queryType);
     
 
         $this->_count++;
@@ -119,7 +119,7 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
             fclose($f);
 
         } else {
-            throw new Vps_Exception('Query not found');
+            throw new Kwf_Exception('Query not found');
         }
     }
 

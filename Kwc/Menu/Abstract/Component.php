@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
+abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
 {
     private $_currentPages;
     private $_config;
@@ -7,8 +7,8 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Menu');
-        $ret['componentIcon'] = new Vps_Asset('layout');
+        $ret['componentName'] = trlKwf('Menu');
+        $ret['componentIcon'] = new Kwf_Asset('layout');
         $ret['cssClass'] = 'webStandard';
         $ret['showParentPage'] = false;
         $ret['showParentPageLink'] = false;
@@ -20,38 +20,38 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     public static function validateSettings($settings, $componentClass)
     {
         if (isset($settings['showAsEditComponent'])) {
-            throw new Vps_Exception("showAsEditComponent setting doesn't exist anymore");
+            throw new Kwf_Exception("showAsEditComponent setting doesn't exist anymore");
         }
         if ($settings['showParentPage'] || $settings['showParentPageLink']) {
             if (is_string($settings['level'])) {
-                throw new Vps_Exception("You can't use showParentPage for MainMenus (what should that do?)");
+                throw new Kwf_Exception("You can't use showParentPage for MainMenus (what should that do?)");
             }
         }
     }
 
     public static function getAlternativeComponents($componentClass)
     {
-        if (!$componentClass) throw new Vps_Exception("componentClass required");
+        if (!$componentClass) throw new Kwf_Exception("componentClass required");
 
         return array(
 
             //content is fetch from parent and slightly modified (current added etc)
-            'parentMenu' => 'Vpc_Menu_ParentMenu_Component.'.$componentClass,
+            'parentMenu' => 'Kwc_Menu_ParentMenu_Component.'.$componentClass,
 
             //a category is shown but the current page is in another one. gets templateVars from the right component
-            'otherCategory' => 'Vpc_Menu_OtherCategory_Component.'.$componentClass,
+            'otherCategory' => 'Kwc_Menu_OtherCategory_Component.'.$componentClass,
 
             //if deep enough so no difference in menu content (depth is defined by _requiredLevels)
-            'parentContent' => 'Vpc_Basic_ParentContent_Component',
+            'parentContent' => 'Kwc_Basic_ParentContent_Component',
 
             //if above categories
-            'empty' => 'Vpc_Basic_Empty_Component',
+            'empty' => 'Kwc_Basic_Empty_Component',
         );
     }
 
     protected static function _requiredLevels($componentClass)
     {
-        $shownLevel = Vpc_Abstract::getSetting($componentClass, 'level');
+        $shownLevel = Kwc_Abstract::getSetting($componentClass, 'level');
         if (!is_numeric($shownLevel)) $shownLevel = 1;
         return $shownLevel;
     }
@@ -61,7 +61,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $foundPageOrCategory = false;
         $data = $parentData;
         do {
-            if ($data->isPage || Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
+            if ($data->isPage || Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
                 $foundPageOrCategory = true;
                 break;
             }
@@ -70,12 +70,12 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
         $data = $parentData;
         $menuLevel = 0;
-        while ($data && !Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
+        while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
             if ($data->isPage) $menuLevel++;
             $data = $data->parent;
         }
 
-        $shownLevel = Vpc_Abstract::getSetting($componentClass, 'level');
+        $shownLevel = Kwc_Abstract::getSetting($componentClass, 'level');
         if (!is_numeric($shownLevel)) $shownLevel = 1;
         $requiredLevels = call_user_func(array($componentClass, '_requiredLevels'), $componentClass);
 
@@ -84,15 +84,15 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
             $ret = 'parentContent';
         } else if ($shownLevel <= $menuLevel) {
             $ret = 'parentMenu';
-            if (!is_numeric(Vpc_Abstract::getSetting($componentClass, 'level'))) {
+            if (!is_numeric(Kwc_Abstract::getSetting($componentClass, 'level'))) {
                 $data = $parentData;
                 do {
-                    if (Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) break;
+                    if (Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) break;
                 } while ($data = $data->parent);
-                $cat = Vpc_Abstract::getFlag($data->componentClass, 'menuCategory');
+                $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
                 if ($cat) {
                     if ($cat === true) $cat = $data->id;
-                    if ($cat != Vpc_Abstract::getSetting($componentClass, 'level')) {
+                    if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
                         //there are categories and we are in a different category than the menu is
                         //(so none is active and we can just show the parentContent (=efficient))
                         $ret = 'parentContent';
@@ -104,11 +104,11 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         }
 
         if ($ret == false) {
-            if (!is_numeric(Vpc_Abstract::getSetting($componentClass, 'level'))) {
-                $cat = Vpc_Abstract::getFlag($parentData->componentClass, 'menuCategory');
+            if (!is_numeric(Kwc_Abstract::getSetting($componentClass, 'level'))) {
+                $cat = Kwc_Abstract::getFlag($parentData->componentClass, 'menuCategory');
                 if ($cat) {
                     if ($cat === true) $cat = $parentData->id;
-                    if ($cat != Vpc_Abstract::getSetting($componentClass, 'level')) {
+                    if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
                         $ret = 'otherCategory';
                     }
                 } else {
@@ -117,7 +117,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
             }
         }
 
-        //echo "$ret:: $parentData->componentId: menuLevel=$menuLevel requiredLevels=$requiredLevels shownLevel=$shownLevel level=".Vpc_Abstract::getSetting($componentClass, 'level')."\n";
+        //echo "$ret:: $parentData->componentId: menuLevel=$menuLevel requiredLevels=$requiredLevels shownLevel=$shownLevel level=".Kwc_Abstract::getSetting($componentClass, 'level')."\n";
         return $ret;
     }
 
@@ -143,7 +143,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     protected function _getMenuPages($parentData, $select)
     {
-        if (is_array($select)) $select = new Vps_Component_Select($select);
+        if (is_array($select)) $select = new Kwf_Component_Select($select);
         $select->whereShowInMenu(true);
         $ret = array();
         if ($parentData) {
@@ -152,7 +152,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
             $pageComponent = $this->getData();
             while ($pageComponent = $pageComponent->parent) {
                 if ($pageComponent->isPage) break;
-                if (Vpc_Abstract::getFlag($pageComponent->componentClass, 'menuCategory')) break;
+                if (Kwc_Abstract::getFlag($pageComponent->componentClass, 'menuCategory')) break;
             }
         }
         if ($pageComponent) $ret = $pageComponent->getChildPages($select);
@@ -182,18 +182,18 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwc_Abstract::getSetting($class, 'generators') as $key => $generator) {
                 if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
-                $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                $generator = current(Kwf_Component_Generator_Abstract::getInstances(
                     $class, array('generator' => $key))
                 );
                 if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
+                $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
 
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Model');
 
         return $ret;
     }

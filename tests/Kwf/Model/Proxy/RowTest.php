@@ -3,20 +3,20 @@
  * @group Model
  * @group Model_Proxy
  */
-class Vps_Model_Proxy_RowTest extends Vps_Test_TestCase
+class Kwf_Model_Proxy_RowTest extends Kwf_Test_TestCase
 {
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testUnsetFalse()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id' => 4, 'names' => 'foo')
             ),
             'columns' => array('id', 'names')
         ));
-        $model = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+        $model = new Kwf_Model_Proxy(array('proxyModel' => $fnf));
 
         $row = $model->getRow(4);
         unset($row->namesFOO);
@@ -24,13 +24,13 @@ class Vps_Model_Proxy_RowTest extends Vps_Test_TestCase
 
     public function testToArray()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id' => 4, 'names' => 'foo')
             ),
             'columns' => array('id', 'names')
         ));
-        $model = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+        $model = new Kwf_Model_Proxy(array('proxyModel' => $fnf));
 
         $row = $model->getRow(4);
         $this->assertEquals(array('id' => 4, 'names' => 'foo'), $row->toArray());
@@ -38,19 +38,19 @@ class Vps_Model_Proxy_RowTest extends Vps_Test_TestCase
 
     public function testIssetWithSiblings()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'columns' => array('id', 'name', 'data'),
             'data' => array(
                 array('id' => 4, 'name' => 'foo', 'data' => json_encode(array('name1'=>'foo1'))),
             ),
             'siblingModels' => array(
-                new Vps_Model_Field(array(
+                new Kwf_Model_Field(array(
                     'columns' => array('name1'),
                     'fieldName' => 'data'
                 ))
             )
         ));
-        $model = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+        $model = new Kwf_Model_Proxy(array('proxyModel' => $fnf));
 
         $this->assertEquals(array('id', 'name', 'data'), $fnf->getOwnColumns());
         $this->assertEquals(array('id', 'name', 'data', 'name1'), $fnf->getColumns());
@@ -83,16 +83,16 @@ class Vps_Model_Proxy_RowTest extends Vps_Test_TestCase
 
     public function testIssetWithProxySiblings()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'columns' => array('id', 'name', 'data'),
             'data' => array(
                 array('id' => 4, 'name' => 'foo', 'data' => json_encode(array('name1'=>'foo1'))),
             )
         ));
-        $model = new Vps_Model_Proxy(array(
+        $model = new Kwf_Model_Proxy(array(
             'proxyModel' => $fnf,
             'siblingModels' => array(
-                new Vps_Model_Field(array(
+                new Kwf_Model_Field(array(
                     'fieldName' => 'data',
                     'columns' => array('name1')
                 ))

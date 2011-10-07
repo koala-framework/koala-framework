@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -8,13 +8,13 @@ Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
         tb.insert(10, {
-            icon: '/assets/vps/images/pastePlain.gif',
+            icon: '/assets/kwf/images/pastePlain.gif',
             handler: this.onPastePlain,
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: trlVps('Insert Plain Text'),
-                text: trlVps('Insert text without formating.')
+                title: trlKwf('Insert Plain Text'),
+                text: trlKwf('Insert text without formating.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',
@@ -27,7 +27,7 @@ Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
     onPastePlain: function() {
         var bookmark = this.cmp.tinymceEditor.selection.getBookmark();
         Ext.Msg.show({
-            title : trlVps('Insert Plain Text'),
+            title : trlKwf('Insert Plain Text'),
             msg : '',
             buttons: Ext.Msg.OKCANCEL,
             fn: function(btn, text) {

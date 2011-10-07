@@ -1,12 +1,12 @@
 <?php
-class Vps_Util_Model_Pool extends Vps_Model_Db_Proxy
+class Kwf_Util_Model_Pool extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vps_pools';
-    protected $_rowClass = 'Vps_Util_Model_Row_Pool';
+    protected $_table = 'kwf_pools';
+    protected $_rowClass = 'Kwf_Util_Model_Row_Pool';
 
     protected function _setupFilters()
     {
-        $filter = new Vps_Filter_Row_Numberize();
+        $filter = new Kwf_Filter_Row_Numberize();
         $filter->setGroupBy('pool');
         $this->_filters = array('pos' => $filter);
     }

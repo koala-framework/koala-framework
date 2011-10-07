@@ -2,15 +2,15 @@
 /**
  * @group slow
  * @group selenium
- * @group Vps_Js
- * @group Vps_Js_EyeCandy_List
- * @group Vps_Js_EyeCandy_List_Plugins_Carousel
+ * @group Kwf_Js
+ * @group Kwf_Js_EyeCandy_List
+ * @group Kwf_Js_EyeCandy_List_Plugins_Carousel
  */
-class Vps_EyeCandy_List_Plugins_Carousel_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwf_EyeCandy_List_Plugins_Carousel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function testPrevious()
     {
-        $this->open('/vps/test/vps_eye-candy_list_plugins_carousel_test');
+        $this->open('/kwf/test/kwf_eye-candy_list_plugins_carousel_test');
         $checkStr = '';
         $this->assertEquals($this->getText('css=.testItem'), 'Item 1');
 
@@ -25,7 +25,7 @@ class Vps_EyeCandy_List_Plugins_Carousel_SeleniumTest extends Vps_Test_SeleniumT
 
     public function testNext()
     {
-        $this->open('/vps/test/vps_eye-candy_list_plugins_carousel_test');
+        $this->open('/kwf/test/kwf_eye-candy_list_plugins_carousel_test');
         $checkStr = '';
         $this->assertEquals($this->getText('css=.testItem'), 'Item 1');
 

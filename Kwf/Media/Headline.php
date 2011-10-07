@@ -1,18 +1,18 @@
 <?php
-class Vps_Media_Headline
+class Kwf_Media_Headline
 {
     public static function getHeadlineStyles($contents)
     {
         $ret = array();
         $contents = preg_replace('#/\\*.*?\\*/#', '', $contents);
-        preg_match_all('#\s*([^{}]*)\s*{([^}]*)\s*-vps-headline\s*:\s*graphic\s*;([^}]*)}#', $contents, $m);
+        preg_match_all('#\s*([^{}]*)\s*{([^}]*)\s*-kwf-headline\s*:\s*graphic\s*;([^}]*)}#', $contents, $m);
         foreach (array_keys($m[0]) as $i) {
             $selector = trim($m[1][$i]);
             $style[$selector] = array();
             preg_match_all('#([^:;]+):([^;]+);#', $m[2][$i].' '.$m[3][$i], $ms);
             foreach (array_keys($ms[0]) as $j) {
                 $s = trim($ms[1][$j]);
-                if (substr($s, 0, 5) == '-vps-') {
+                if (substr($s, 0, 5) == '-kwf-') {
                     $s = substr($s, 5);
                 }
                 $value = trim($ms[2][$j]);
@@ -29,11 +29,11 @@ class Vps_Media_Headline
     {
         if(strlen($text)>200) $text = substr($text, 0, 200)."...";
 
-        $loader = new Vps_Assets_Loader();
+        $loader = new Kwf_Assets_Loader();
         $dep = $loader->getDependencies();
-        $language = Vps_Trl::getInstance()->getTargetLanguage();
+        $language = Kwf_Trl::getInstance()->getTargetLanguage();
         $cacheId = 'headline'.md5($selector.$text);
-        $cache = new Vps_Assets_Cache();
+        $cache = new Kwf_Assets_Cache();
         $cacheData = $cache->load($cacheId);
         if ($cacheData && filemtime($cacheData['file']) > $cacheData['mtime']) {
             $cacheData = false;
@@ -42,7 +42,7 @@ class Vps_Media_Headline
         if (!$cacheData) {
             $s = false;
             $styles = false;
-            foreach ($dep->getAssetFiles($assetsType, 'css', 'web', Vps_Component_Data_Root::getComponentClass()) as $file) {
+            foreach ($dep->getAssetFiles($assetsType, 'css', 'web', Kwf_Component_Data_Root::getComponentClass()) as $file) {
                 if (!(substr($file, 0, 8) == 'dynamic/' || substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
                     $c = $loader->getFileContents($file, $language);
                     foreach (self::getHeadlineStyles($c['contents']) as $s => $styles) {
@@ -54,7 +54,7 @@ class Vps_Media_Headline
                 if ($s == $selector) break;
             }
             if ($s != $selector) {
-                throw new Vps_Exception("Unknown selector: '$selector'");
+                throw new Kwf_Exception("Unknown selector: '$selector'");
             }
             $contents = self::_generateHeadline($styles, $text);
             $file = $dep->getAssetPath($file);
@@ -68,7 +68,7 @@ class Vps_Media_Headline
             $cache->save($cacheData, $cacheId);
         }
         unset($cacheData['file']);
-        Vps_Media_Output::output($cacheData);
+        Kwf_Media_Output::output($cacheData);
     }
 
     /**
@@ -82,24 +82,24 @@ class Vps_Media_Headline
         $text = str_replace(array("\r", "\n", "<br>", "<br/>"), array("", "", "<br />", "<br />"), $text);
         $text = explode("<br />", $text);
         if (!isset($styles['font-file'])) {
-            throw new Vps_Exception("missing style font-file");
+            throw new Kwf_Exception("missing style font-file");
         }
         $fontFile = $styles['font-file'];
         if (file_exists($fontFile)) {
         } else if (file_exists('fonts/'.$fontFile)) {
             $fontFile = 'fonts/'.$fontFile;
-        } else if (file_exists(VPS_PATH.'/'.$fontFile)) {
-            $fontFile = VPS_PATH.'/'.$fontFile;
+        } else if (file_exists(KWF_PATH.'/'.$fontFile)) {
+            $fontFile = KWF_PATH.'/'.$fontFile;
         } else {
-            throw new Vps_Exception("invalid font: '$fontFile'");
+            throw new Kwf_Exception("invalid font: '$fontFile'");
         }
 
         $width = isset($styles['width']) ? $styles['width'] : false;
-        if ($width && !preg_match('/^[0-9]+px$/', $width)) throw new Vps_Exception("Invalid width: '$width'");
+        if ($width && !preg_match('/^[0-9]+px$/', $width)) throw new Kwf_Exception("Invalid width: '$width'");
         if ($width) $width = (int)substr($width, 0, -2);
 
         $height = isset($styles['height']) ? $styles['height'] : false;
-        if ($height && !preg_match('/^[0-9]+px$/', $height)) throw new Vps_Exception("Invalid height: '$height'");
+        if ($height && !preg_match('/^[0-9]+px$/', $height)) throw new Kwf_Exception("Invalid height: '$height'");
         if ($height) $height = (int)substr($height, 0, -2);
 
         $fontSize = isset($styles['font-size']) ? $styles['font-size'] : 12;
@@ -111,10 +111,10 @@ class Vps_Media_Headline
         
 
         $backgroundColor = isset($styles['background-color']) ? $styles['background-color'] : false;
-        if ($backgroundColor && !preg_match('/^#[0-9a-fA-F]{6}$/', $backgroundColor)) throw new Vps_Exception("Invalid background-color: '$backgroundColor'");
+        if ($backgroundColor && !preg_match('/^#[0-9a-fA-F]{6}$/', $backgroundColor)) throw new Kwf_Exception("Invalid background-color: '$backgroundColor'");
 
         $color = isset($styles['color']) ? $styles['color'] : '#000000';
-        if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) throw new Vps_Exception("Invalid color: '$color'");
+        if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) throw new Kwf_Exception("Invalid color: '$color'");
 
         $factor = 1;
         $steps = false;
@@ -139,7 +139,7 @@ class Vps_Media_Headline
         }
         $width += $paddingRight;
         $width += $paddingLeft;
-        if (!$width) throw new Vps_Exception("Width can't be 0");
+        if (!$width) throw new Kwf_Exception("Width can't be 0");
         $fontX = $paddingLeft*$factor - $bbox[0];
         //für die berechnung der höhe immer 'gÜ' verwenden - das gibt und die maximale höhe die zu erwarten ist
         //TODO: funktioniert nicht für mehrzeilige texte!
@@ -149,7 +149,7 @@ class Vps_Media_Headline
         }
         $height += $paddingTop;
         $height += $paddingBottom;
-        if (!$height) throw new Vps_Exception("Height can't be 0");
+        if (!$height) throw new Kwf_Exception("Height can't be 0");
         $fontY = $paddingTop*$factor - $bbox[5] /*- $bbox[1]*/;
 
         $im1 = imagecreatetruecolor ($width*$factor, $height*$factor) or die ("Error");

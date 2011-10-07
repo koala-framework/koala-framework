@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Vpc_ComponentName extends Vps_Data_Abstract
+class Kwf_Data_Kwc_ComponentName extends Kwf_Data_Abstract
 {
     private $_componentClass;
 
@@ -10,13 +10,13 @@ class Vps_Data_Vpc_ComponentName extends Vps_Data_Abstract
 
     public function load($row)
     {
-        $generators = Vpc_Abstract::getSetting($this->_componentClass, 'generators');
+        $generators = Kwc_Abstract::getSetting($this->_componentClass, 'generators');
         $classes = $generators['paragraphs']['component']; 
         if (!isset($classes[$row->component])) {
             return '';
         }        $class = $classes[$row->component];
-        $name = Vpc_Abstract::getSetting($class, 'componentName');
-        $name = Vps_Registry::get('trl')->trlStaticExecute($name);
+        $name = Kwc_Abstract::getSetting($class, 'componentName');
+        $name = Kwf_Registry::get('trl')->trlStaticExecute($name);
         return str_replace('.', ' -> ', $name);
     }
 }

@@ -1,11 +1,11 @@
-Ext.namespace('Vpc.Directories.Item.Directory');
-Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
+Ext.namespace('Kwc.Directories.Item.Directory');
+Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
 {
     initComponent: function()
     {
         this.layout = 'border';
         
-        this.grid = new Vps.Auto.GridPanel({
+        this.grid = new Kwf.Auto.GridPanel({
             controllerUrl: this.controllerUrl,
             region: 'west',
             width: this.width,
@@ -21,15 +21,15 @@ Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
             }, this);
         }
 
-        this.detailsForm = new Vpc.Directories.Item.Directory.EditFormPanel({
+        this.detailsForm = new Kwc.Directories.Item.Directory.EditFormPanel({
             controllerUrl: this.detailsControllerUrl,
-            title: trlVps('Details')
+            title: trlKwf('Details')
         });
         this.grid.addBinding(this.detailsForm);
 
         var editPanels = [this.detailsForm];
         this.contentEditComponents.each(function(ec) {
-            editPanels.push(Vps.Binding.AbstractPanel.createFormOrComponentPanel(
+            editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
                 this.componentConfigs, ec, {}, this.grid
             ));
         }, this);
@@ -42,19 +42,19 @@ Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
         this.proxyItem = this.grid;
         this.items = [this.grid, tabs];
 
-        Vpc.Directories.Item.Directory.TabsPanel.superclass.initComponent.call(this);
+        Kwc.Directories.Item.Directory.TabsPanel.superclass.initComponent.call(this);
     },
     applyBaseParams: function(baseParams) {
         if (baseParams.id) delete baseParams.id;
         this.detailsForm.setBaseParams(baseParams);
-        return Vpc.Directories.Item.Directory.TabsPanel.superclass.applyBaseParams.apply(this, arguments);
+        return Kwc.Directories.Item.Directory.TabsPanel.superclass.applyBaseParams.apply(this, arguments);
     },
     setBaseParams : function(baseParams) {
         if (baseParams.id) delete baseParams.id;
         this.detailsForm.setBaseParams(baseParams);
-        return Vpc.Directories.Item.Directory.TabsPanel.superclass.setBaseParams.apply(this, arguments);
+        return Kwc.Directories.Item.Directory.TabsPanel.superclass.setBaseParams.apply(this, arguments);
     }
 
 });
 
-Ext.reg('vpc.directories.item.directory.tabs', Vpc.Directories.Item.Directory.TabsPanel);
+Ext.reg('kwc.directories.item.directory.tabs', Kwc.Directories.Item.Directory.TabsPanel);

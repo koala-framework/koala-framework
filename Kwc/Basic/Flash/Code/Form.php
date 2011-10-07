@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Flash_Code_Form extends Vpc_Abstract_Form
+class Kwc_Basic_Flash_Code_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Vps_Form_Field_TextArea('code', trlVps('Code')))
+        $this->add(new Kwf_Form_Field_TextArea('code', trlKwf('Code')))
             ->setWidth(400)
             ->setHeight(300);
     }

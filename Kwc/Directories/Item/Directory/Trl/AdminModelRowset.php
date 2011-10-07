@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_AdminModelRowset extends Vps_Model_Proxy_Rowset
+class Kwc_Directories_Item_Directory_Trl_AdminModelRowset extends Kwf_Model_Proxy_Rowset
 {
     public function __construct(array $config)
     {

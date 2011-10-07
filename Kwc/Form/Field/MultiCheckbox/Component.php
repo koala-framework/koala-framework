@@ -1,18 +1,18 @@
 <?php
-class Vpc_Form_Field_MultiCheckbox_Component extends Vpc_Form_Field_Abstract_Component
+class Kwc_Form_Field_MultiCheckbox_Component extends Kwc_Form_Field_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Form.Multi Checkbox');
-        $ret['ownModel'] = 'Vpc_Form_Field_MultiCheckbox_Model';
+        $ret['componentName'] = trlKwf('Form.Multi Checkbox');
+        $ret['ownModel'] = 'Kwc_Form_Field_MultiCheckbox_Model';
         return $ret;
     }
 
     protected function _getFormField()
     {
-        $ret = new Vps_Form_Field_MultiCheckbox(
-            Vps_Model_Abstract::getInstance('Vpc_Form_Field_MultiCheckbox_DataToValuesModel'),
+        $ret = new Kwf_Form_Field_MultiCheckbox(
+            Kwf_Model_Abstract::getInstance('Kwc_Form_Field_MultiCheckbox_DataToValuesModel'),
             'Value'
         );
         $ret->setName($this->getData()->componentId);

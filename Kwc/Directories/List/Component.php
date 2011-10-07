@@ -1,12 +1,12 @@
 <?php
-abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Component
+abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Component
 {
     private $_itemDirectory = false;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['view'] = 'Vpc_Directories_List_ViewPage_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwc_Directories_List_ViewPage_Component';
         $ret['useDirectorySelect'] = true;
         $ret['generatorJoins'] = false;
         return $ret;
@@ -22,8 +22,8 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
             } else {
                 $c = $this->_itemDirectory->componentClass;
             }
-            if (!is_instance_of($c, 'Vpc_Directories_Item_Directory_Component')) {
-                throw new Vps_Exception("_getItemDirectory must return an Vpc_Directories_Item_Directory_Component data object or class-name, '{$c}' given; componentClass is ".get_class($this));
+            if (!is_instance_of($c, 'Kwc_Directories_Item_Directory_Component')) {
+                throw new Kwf_Exception("_getItemDirectory must return an Kwc_Directories_Item_Directory_Component data object or class-name, '{$c}' given; componentClass is ".get_class($this));
             }
         }
         return $this->_itemDirectory;
@@ -37,7 +37,7 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
     }
     final protected function _getItemDirectorySetting($setting)
     {
-        return Vpc_Abstract::getSetting($this->_getItemDirectoryClass(), $setting);
+        return Kwc_Abstract::getSetting($this->_getItemDirectoryClass(), $setting);
     }
 
     abstract protected function _getItemDirectory();
@@ -48,10 +48,10 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
         if (!$itemDirectory) return null;
         if (is_string($itemDirectory)) {
             if ($this->_getSetting('useDirectorySelect')) {
-                throw new Vps_Exception("If itemDirectory is a ComponentClass you can't use 'useDirectorySelect' setting");
+                throw new Kwf_Exception("If itemDirectory is a ComponentClass you can't use 'useDirectorySelect' setting");
             }
-            $c = Vpc_Abstract::getComponentClassByParentClass($itemDirectory);
-            $ret = Vps_Component_Generator_Abstract::getInstance($c, 'detail')
+            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
+            $ret = Kwf_Component_Generator_Abstract::getInstance($c, 'detail')
                 ->select(null);
         } else {
             if ($this->_getSetting('useDirectorySelect')) {
@@ -61,17 +61,17 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
                     ->select($this->getItemDirectory());
             }
         }
-        if (Vpc_Abstract::hasSetting($this->getData()->componentClass, 'order')) {
-            throw new Vps_Exception("Setting 'order' (".get_class($this).") doesn't exist anymore - overwrite getSelect for a custom order");
+        if (Kwc_Abstract::hasSetting($this->getData()->componentClass, 'order')) {
+            throw new Kwf_Exception("Setting 'order' (".get_class($this).") doesn't exist anymore - overwrite getSelect for a custom order");
         }
         return $ret;
     }
 
-    public final function callModifyItemData(Vps_Component_Data $item)
+    public final function callModifyItemData(Kwf_Component_Data $item)
     {
-        foreach (Vpc_Abstract::getChildComponentClasses($this->getData()->componentClass) as $c) {
-            if (Vpc_Abstract::hasSetting($c, 'hasModifyItemData')
-                && Vpc_Abstract::getSetting($c, 'hasModifyItemData')) {
+        foreach (Kwc_Abstract::getChildComponentClasses($this->getData()->componentClass) as $c) {
+            if (Kwc_Abstract::hasSetting($c, 'hasModifyItemData')
+                && Kwc_Abstract::getSetting($c, 'hasModifyItemData')) {
                 call_user_func(array(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c, 'modifyItemData'), $item, $c);
             }
         }

@@ -1,8 +1,8 @@
 <?php
-class Vpc_Abstract_Field_MultiFields extends Vps_Form_Field_MultiFields
+class Kwc_Abstract_Field_MultiFields extends Kwf_Form_Field_MultiFields
 {
     public function __construct($class)
     {
-        parent::__construct(Vpc_Abstract::createChildModel($class));
+        parent::__construct(Kwc_Abstract::createChildModel($class));
     }
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Field_FieldModelRow extends Vps_Model_Field_Row
+class Kwf_Model_Field_FieldModelRow extends Kwf_Model_Field_Row
 {
     static public $counts = array(
         'beforeUpdate' => 0,

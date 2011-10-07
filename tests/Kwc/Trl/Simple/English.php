@@ -1,4 +1,4 @@
 <?php
-class Vpc_Trl_Simple_English extends Vpc_Root_TrlRoot_Chained_Component
+class Kwc_Trl_Simple_English extends Kwc_Root_TrlRoot_Chained_Component
 {
 }

@@ -1,4 +1,4 @@
-Vps.Utils.SwfUpload = function(config) {
+Kwf.Utils.SwfUpload = function(config) {
     Ext.apply(this, config);
     this.addEvents(
         'fileQueued',
@@ -7,15 +7,15 @@ Vps.Utils.SwfUpload = function(config) {
         'uploadError',
         'flashLoadError'
     );
-    Vps.Utils.SwfUpload.superclass.constructor.call(this);
+    Kwf.Utils.SwfUpload.superclass.constructor.call(this);
     this.initSwf();
 };
-Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
+Ext.extend(Kwf.Utils.SwfUpload, Ext.util.Observable, {
     //buttonPlaceholderId,
     //fileSizeLimit,
     //postParams,
     allowOnlyImages: false,
-    buttonText: trlVps('Upload File'),
+    buttonText: trlKwf('Upload File'),
     selectMultiple: false,
 
     autoEl: 'div',
@@ -37,14 +37,14 @@ Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
     {
         if (this.allowOnlyImages) {
             fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
-            fileTypesDescription = trlVps('Web Image Files');
+            fileTypesDescription = trlKwf('Web Image Files');
         } else {
             fileTypes = '*.*';
-            fileTypesDescription = trlVps('All Files');
+            fileTypesDescription = trlKwf('All Files');
         }
 
         //cookie als post mitschicken
-        var params = Vps.clone(this.postParams);
+        var params = Kwf.clone(this.postParams);
         var cookies = document.cookie.split(';');
         Ext.each(cookies, function(c) {
             c = c.split('=');
@@ -58,13 +58,13 @@ Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
         this.swfu = new SWFUpload({
             minimum_flash_version : '9.0.28',
             custom_settings: {component: this},
-            upload_url: location.protocol+'/'+'/'+location.host+'/vps/media/upload/json-upload',
+            upload_url: location.protocol+'/'+'/'+location.host+'/kwf/media/upload/json-upload',
             flash_url: '/assets/swfupload/Flash/swfupload.swf',
             file_size_limit: this.fileSizeLimit,
             file_types: fileTypes,
             file_types_description: fileTypesDescription,
             post_params: params,
-            button_image_url: '/assets/vps/Vps_js/Form/File/button.jpg',
+            button_image_url: '/assets/kwf/Kwf_js/Form/File/button.jpg',
             button_width: '120',
             button_height: '21',
             button_placeholder_id: this.buttonPlaceholderId,
@@ -86,22 +86,22 @@ Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
                 try {
                     var r = Ext.util.JSON.decode(response);
                 } catch(e) {
-                    Vps.handleError(response, 'Upload Error');
+                    Kwf.handleError(response, 'Upload Error');
                     return;
                 }
                 if (r.success) {
                     this.customSettings.component.fireEvent('uploadSuccess', file, r);
                 } else {
                     if (r.wrongversion) {
-                        Ext.Msg.alert(trlVps('Error - wrong version'),
-                        trlVps('Because of an application update the application has to be reloaded.'),
+                        Ext.Msg.alert(trlKwf('Error - wrong version'),
+                        trlKwf('Because of an application update the application has to be reloaded.'),
                         function(){
                             location.reload();
                         });
                         return;
                     }
                     if (r.login) {
-                        var dlg = new Vps.User.Login.Dialog({
+                        var dlg = new Kwf.User.Login.Dialog({
                             message: r.message,
                             success: function() {
                                 //redo action...
@@ -114,9 +114,9 @@ Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
                         return;
                     }
                     if (r.error) {
-                        Ext.Msg.alert(trlVps('Error'), r.error);
+                        Ext.Msg.alert(trlKwf('Error'), r.error);
                     } else {
-                        Vps.handleError(r.exception, 'Error', !r.exception);
+                        Kwf.handleError(r.exception, 'Error', !r.exception);
                     }
                 }
             },
@@ -125,15 +125,15 @@ Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
                 // Upload Errors
                 var message = errorMessage;
                  if (errorCode == SWFUpload.UPLOAD_ERROR.HTTP_ERROR) {
-                    message = trlVps("A http Error occured.");
+                    message = trlKwf("A http Error occured.");
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.MISSING_UPLOAD_URL) {
-                    message = trlVps("Upload URL string is empty.");
+                    message = trlKwf("Upload URL string is empty.");
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.IO_ERROR) {
-                    message = trlVps("IO Error.");
+                    message = trlKwf("IO Error.");
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.SECURITY_ERROR) {
-                    message = trlVps("Security Error.");
+                    message = trlKwf("Security Error.");
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED) {
-                    message = trlVps("The upload limit has been reached.");
+                    message = trlKwf("The upload limit has been reached.");
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED) {
                     message = errorMessage;
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.SPECIFIED_FILE_ID_NOT_FOUND) {
@@ -141,28 +141,28 @@ Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED) {
                     message = "Call to uploadStart return false. Not uploading file.";
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) {
-                    message = trlVps("File Upload Cancelled.");
+                    message = trlKwf("File Upload Cancelled.");
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED) {
-                    message = trlVps("Upload Stopped");
+                    message = trlKwf("Upload Stopped");
                 }
                 if (errorCode != SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) {
-                    //Vps.handleError(errorMessage, 'Upload Error');
-                    Ext.Msg.alert(trlVps("Upload Error"), message);
+                    //Kwf.handleError(errorMessage, 'Upload Error');
+                    Ext.Msg.alert(trlKwf("Upload Error"), message);
                 }
                 this.customSettings.component.fireEvent('uploadError', file, errorCode, errorMessage);
             },
             file_queue_error_handler: function(file, errorCode, errorMessage) {
-                var message = trlVps("File is zero bytes or cannot be accessed and cannot be uploaded.");
+                var message = trlKwf("File is zero bytes or cannot be accessed and cannot be uploaded.");
                 if (errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
-                    message = trlVps("File size exceeds allowed limit.");
+                    message = trlKwf("File size exceeds allowed limit.");
                 } else if (errorCode == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
-                    message = trlVps("File size exceeds allowed limit.");
+                    message = trlKwf("File size exceeds allowed limit.");
                 } else if (errorCode == SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE) {
-                    message = trlVps("File is zero bytes and cannot be uploaded.");
+                    message = trlKwf("File is zero bytes and cannot be uploaded.");
                 } else if (errorCode == SWFUpload.QUEUE_ERROR.INVALID_FILETYPE) {
-                    message = trlVps("File is not an allowed file type.");
+                    message = trlKwf("File is not an allowed file type.");
                 }
-                Ext.Msg.alert(trlVps("Upload Error"), message);
+                Ext.Msg.alert(trlKwf("Upload Error"), message);
             },
             swfupload_loaded_handler: function() {
                 //wenn CallFunction nicht vorhanden funktioniert der uploader nicht.

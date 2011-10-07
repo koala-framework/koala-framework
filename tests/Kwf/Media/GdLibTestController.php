@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_GdLibTestController extends Vps_Controller_Action
+class Kwf_Media_GdLibTestController extends Kwf_Controller_Action
 {
     public function indexAction()
     {

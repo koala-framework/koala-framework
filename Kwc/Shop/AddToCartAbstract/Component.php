@@ -1,12 +1,12 @@
 <?php
-abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
+abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlVps('add to cart');
-        $ret['generators']['child']['component']['success'] = 'Vpc_Shop_AddToCartAbstract_Success_Component';
-        $ret['orderProductData'] = 'Vpc_Shop_AddToCartAbstract_OrderProductData';
+        $ret['placeholder']['submitButton'] = trlKwf('add to cart');
+        $ret['generators']['child']['component']['success'] = 'Kwc_Shop_AddToCartAbstract_Success_Component';
+        $ret['orderProductData'] = 'Kwc_Shop_AddToCartAbstract_OrderProductData';
         $ret['productTypeText'] = null;
         return $ret;
     }
@@ -14,8 +14,8 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $cart = Vps_Component_Data_Root::getInstance()->getComponentByClass('Vpc_Shop_Cart_Component', array('ignoreVisible' => true));
-        if (!$cart) throw new Vps_Exception_Client(trl('Need cart for shop but could not find it. Please add in Admin.'));
+        $cart = Kwf_Component_Data_Root::getInstance()->getComponentByClass('Kwc_Shop_Cart_Component', array('ignoreVisible' => true));
+        if (!$cart) throw new Kwf_Exception_Client(trl('Need cart for shop but could not find it. Please add in Admin.'));
         $m = $cart->getComponent()->getChildModel();
         $this->_form->setModel($m);
     }
@@ -24,47 +24,47 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
     {
         $ret = parent::getTemplateVars();
         if ($this->_form->getId()) {
-            $ret['placeholder']['submitButton'] = trlVps('Update');
+            $ret['placeholder']['submitButton'] = trlKwf('Update');
         }
         return $ret;
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
-        $orders = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders');
+        $orders = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders');
         $row->shop_order_id = $orders->getCartOrderAndSave()->id;
         $row->add_component_id = $this->getData()->dbId;
         $row->add_component_class = $this->getData()->componentClass;
     }
 
-    public final function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public final function getAdditionalOrderData(Kwc_Shop_Cart_OrderProduct $orderProduct)
     {
-        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+        return Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->getAdditionalOrderData($orderProduct);
     }
 
-    public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getPrice(Kwc_Shop_Cart_OrderProduct $orderProduct)
     {
-        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+        return Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->getPrice($orderProduct);
     }
 
-    public final function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public final function getAmount(Kwc_Shop_Cart_OrderProduct $orderProduct)
     {
-        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+        return Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->getAmount($orderProduct);
     }
 
-    public final function orderConfirmed(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public final function orderConfirmed(Kwc_Shop_Cart_OrderProduct $orderProduct)
     {
-        Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+        Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->orderConfirmed($orderProduct);
     }
 
-    public final function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public final function getProductText(Kwc_Shop_Cart_OrderProduct $orderProduct)
     {
-        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+        return Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->getProductText($orderProduct);
     }
 }

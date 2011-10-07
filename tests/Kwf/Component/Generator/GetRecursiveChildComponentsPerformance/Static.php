@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_Generator_GetRecursiveChildComponentsPerformance_Static extends Vpc_Abstract
+class Kwf_Component_Generator_GetRecursiveChildComponentsPerformance_Static extends Kwc_Abstract
 {
 }

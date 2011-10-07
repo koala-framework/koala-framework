@@ -1,14 +1,14 @@
 <?php
-class Vps_Component_View_Helper_Dynamic extends Vps_Component_View_Renderer
+class Kwf_Component_View_Helper_Dynamic extends Kwf_Component_View_Renderer
 {
     public function dynamic($class)
     {
         $component = $this->_getView()->data;
-        $dynamicClass = Vps_Component_Abstract_Admin::getComponentClass($component->componentClass, $class);
+        $dynamicClass = Kwf_Component_Abstract_Admin::getComponentClass($component->componentClass, $class);
         if (!class_exists($dynamicClass))
-            $dynamicClass = 'Vps_Component_Dynamic_' . $class;
+            $dynamicClass = 'Kwf_Component_Dynamic_' . $class;
         if (!class_exists($dynamicClass))
-            throw new Vps_Exception("Dynamic Class not found: $dynamicClass");
+            throw new Kwf_Exception("Dynamic Class not found: $dynamicClass");
         $config = array(
             'class' => $dynamicClass,
             'arguments' => array_slice(func_get_args(), 1),

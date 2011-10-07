@@ -1,4 +1,4 @@
-Vps.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
+Kwf.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
     initComponent: function()
     {
         this.columns = [
@@ -13,7 +13,7 @@ Vps.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
             {header: 'Explain', sortable: true, dataIndex: 'explainRows', width: 50},
             {header: '', width: 25,
                 renderer: function(value, p, record, rowIndex, colIndex, store, column) {
-                    p.css += 'vps-cell-button';
+                    p.css += 'kwf-cell-button';
                     p.attr += 'style="background-image:url(/assets/silkicons/application_link.png);" ';
                     return '';
                 }
@@ -49,7 +49,7 @@ Vps.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
         });
         this.tbar = [this.actions.reload, this.actions.clear];
 
-        Vps.Debug.Requests.superclass.initComponent.call(this);
+        Kwf.Debug.Requests.superclass.initComponent.call(this);
     },
     loadQueryCount: function()
     {
@@ -58,7 +58,7 @@ Vps.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
             requestNums.push(r.get('requestNum'));
         }, this);
         Ext.Ajax.request({
-            url: '/vps/debug/sql/json-querycount',
+            url: '/kwf/debug/sql/json-querycount',
             params: { requestNums: requestNums.join(';') },
             success: function(resonse, options, result) {
                 this.store.each(function(r) {

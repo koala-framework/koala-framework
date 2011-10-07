@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Dynamic_FirstLast extends Vps_Component_Dynamic_Abstract
+class Kwf_Component_Dynamic_FirstLast extends Kwf_Component_Dynamic_Abstract
 {
     public function setArguments()
     {

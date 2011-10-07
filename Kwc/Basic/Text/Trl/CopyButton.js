@@ -1,13 +1,13 @@
-Ext.namespace('Vpc.Basic.Text.Trl');
-Vpc.Basic.Text.Trl.CopyButton = Ext.extend(Ext.form.Field, {
+Ext.namespace('Kwc.Basic.Text.Trl');
+Kwc.Basic.Text.Trl.CopyButton = Ext.extend(Ext.form.Field, {
     defaultAutoCreate : {tag: "input", type: "hidden"},
     initComponent: function() {
-        Vpc.Basic.Text.Trl.CopyButton.superclass.initComponent.call(this);
+        Kwc.Basic.Text.Trl.CopyButton.superclass.initComponent.call(this);
     },
     afterRender: function() {
-        Vpc.Basic.Text.Trl.CopyButton.superclass.afterRender.apply(this, arguments);
+        Kwc.Basic.Text.Trl.CopyButton.superclass.afterRender.apply(this, arguments);
         this.button = new Ext.Button({
-            text: trlVps('Adopt'),
+            text: trlKwf('Adopt'),
             renderTo: this.el.parent(),
             icon: '/assets/silkicons/page_white_copy.png',
             cls: 'x-btn-text-icon',
@@ -21,4 +21,4 @@ Vpc.Basic.Text.Trl.CopyButton = Ext.extend(Ext.form.Field, {
         });
     }
 });
-Ext.reg('vpc.basic.text.trl.copybutton', Vpc.Basic.Text.Trl.CopyButton);
+Ext.reg('kwc.basic.text.trl.copybutton', Kwc.Basic.Text.Trl.CopyButton);

@@ -1,5 +1,5 @@
 <?php
-class Vps_Db_Table_Select extends Zend_Db_Table_Select
+class Kwf_Db_Table_Select extends Zend_Db_Table_Select
 {
     public function where($cond, $value = null, $type = null)
     {
@@ -70,9 +70,9 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
 
                 if ($column == 'query') {
                     if (!$searchFields) {
-                        throw new Vps_Exception("Search field 'query' was found, "
+                        throw new Kwf_Exception("Search field 'query' was found, "
                         ."but no 'searchFields' were given as second argument in "
-                        ."'searchLike' method of Vps_Db_Table_Select object");
+                        ."'searchLike' method of Kwf_Db_Table_Select object");
                     }
                     if (in_array('*', $searchFields)) {
                         $searchFields = array_merge($searchFields, $selectInfo['cols']);
@@ -90,7 +90,7 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
                         if (strpos($field, '.') === false) {
                             $field = $selectInfo['name'].'.'.$field;
                         }
-                        $wheres[] = Vps_Registry::get('db')->quoteInto(
+                        $wheres[] = Kwf_Registry::get('db')->quoteInto(
                             $field.' LIKE ?', "%$searchWord%"
                         );
                     }

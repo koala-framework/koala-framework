@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_AddToCartAbstract_FrontendForm extends Vps_Form
+class Kwc_Shop_AddToCartAbstract_FrontendForm extends Kwf_Form
 {
     protected function _beforeInsert(&$row)
     {

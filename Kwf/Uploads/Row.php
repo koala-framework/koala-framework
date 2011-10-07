@@ -1,5 +1,5 @@
 <?php
-class Vps_Uploads_Row extends Vps_Model_Proxy_Row
+class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
 {
     protected function _deleteFile()
     {
@@ -33,7 +33,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
     public function copyFile($file, $filename, $extension, $mimeType = null)
     {
         if (!file_exists($file)) {
-            throw new Vps_Exception("File '$file' does not exist");
+            throw new Kwf_Exception("File '$file' does not exist");
         }
         $this->writeFile(file_get_contents($file), $filename, $extension, $mimeType);
         return $this;
@@ -52,19 +52,19 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
     public function verifyUpload($filedata)
     {
         if ($filedata['error'] == UPLOAD_ERR_NO_FILE || !$filedata['tmp_name'] || !file_exists($filedata['tmp_name'])) {
-            throw new Vps_Exception('No File was uploaded.');
+            throw new Kwf_Exception('No File was uploaded.');
         }
 
         if ($filedata['error'] == UPLOAD_ERR_INI_SIZE || $filedata['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new Vps_ClientException(trlVps('The file is larger than the maximum upload amount.'));
+            throw new Kwf_ClientException(trlKwf('The file is larger than the maximum upload amount.'));
         }
 
         if ($filedata['error'] == UPLOAD_ERR_PARTIAL) {
-            throw new Vps_ClientException(trlVps('The file was not uploaded completely.'));
+            throw new Kwf_ClientException(trlKwf('The file was not uploaded completely.'));
         }
 
         if ($filedata['error'] != UPLOAD_ERR_OK) {
-            throw new Vps_Exception('An Error when processing file upload happend: '.$filedata['error']);
+            throw new Kwf_Exception('An Error when processing file upload happend: '.$filedata['error']);
         }
     }
 
@@ -85,7 +85,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
                 $finfo = new finfo(FILEINFO_MIME, $path);
                 $ret = $finfo->buffer($contents);
             } else {
-                throw new Vps_Exception("Can't autodetect mimetype, install FileInfo extension");
+                throw new Kwf_Exception("Can't autodetect mimetype, install FileInfo extension");
             }
         }
 
@@ -113,7 +113,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
 
     public function getHashKey()
     {
-        return Vps_Util_Hash::hash($this->id);
+        return Kwf_Util_Hash::hash($this->id);
     }
 
     //wird von upload-feld verwendet

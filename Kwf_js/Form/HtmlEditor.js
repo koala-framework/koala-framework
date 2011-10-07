@@ -1,4 +1,4 @@
-Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
+Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     enableUndoRedo: true,
     enableInsertChar: true,
     enablePastePlain: true,
@@ -8,52 +8,52 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     {
         this.plugins = [];
         if (this.enableFormat) {
-            this.plugins.push(new Vps.Form.HtmlEditor.Formats());
+            this.plugins.push(new Kwf.Form.HtmlEditor.Formats());
             this.enableFormat = false; //ext implementation deaktivieren, unsere ist besser
         }
         if (this.enableUndoRedo) {
-            this.plugins.push(new Vps.Form.HtmlEditor.UndoRedo());
+            this.plugins.push(new Kwf.Form.HtmlEditor.UndoRedo());
         }
         if (this.enableInsertChar) {
-            this.plugins.push(new Vps.Form.HtmlEditor.InsertChar());
+            this.plugins.push(new Kwf.Form.HtmlEditor.InsertChar());
         }
         if (this.enablePastePlain) {
-            this.plugins.push(new Vps.Form.HtmlEditor.PastePlain());
+            this.plugins.push(new Kwf.Form.HtmlEditor.PastePlain());
         }
         if (this.linkComponentConfig) {
-            this.plugins.push(new Vps.Form.HtmlEditor.InsertLink({
+            this.plugins.push(new Kwf.Form.HtmlEditor.InsertLink({
                 componentConfig: this.linkComponentConfig
             }));
         }
         if (this.downloadComponentConfig) {
-            this.plugins.push(new Vps.Form.HtmlEditor.InsertDownload({
+            this.plugins.push(new Kwf.Form.HtmlEditor.InsertDownload({
                 componentConfig: this.downloadComponentConfig
             }));
         }
         if (this.linkComponentConfig || this.downloadComponentConfig) {
-            this.plugins.push(new Vps.Form.HtmlEditor.RemoveLink());
+            this.plugins.push(new Kwf.Form.HtmlEditor.RemoveLink());
         }
         if (this.imageComponentConfig) {
-            this.plugins.push(new Vps.Form.HtmlEditor.InsertImage({
+            this.plugins.push(new Kwf.Form.HtmlEditor.InsertImage({
                 componentConfig: this.imageComponentConfig
             }));
         }
         if (this.controllerUrl && this.enableTidy) {
-            this.plugins.push(new Vps.Form.HtmlEditor.Tidy());
+            this.plugins.push(new Kwf.Form.HtmlEditor.Tidy());
         }
         if (this.enableStyles) {
-            this.plugins.push(new Vps.Form.HtmlEditor.Styles({
+            this.plugins.push(new Kwf.Form.HtmlEditor.Styles({
                 styles: this.styles,
                 stylesEditorConfig: this.stylesEditorConfig,
                 stylesIdPattern: this.stylesIdPattern
             }));
         }
-        this.plugins.push(new Vps.Form.HtmlEditor.BreadCrumbs());
+        this.plugins.push(new Kwf.Form.HtmlEditor.BreadCrumbs());
 
-        Vps.Form.HtmlEditor.superclass.initComponent.call(this);
+        Kwf.Form.HtmlEditor.superclass.initComponent.call(this);
     },
     initEditor : function() {
-        Vps.Form.HtmlEditor.superclass.initEditor.call(this);
+        Kwf.Form.HtmlEditor.superclass.initEditor.call(this);
         if (this.cssFiles) {
             this.cssFiles.forEach(function(f) {
                 var s = this.doc.createElement('link');
@@ -177,7 +177,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
     getDocMarkup : function(){
         var ret = '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>\n';
-        ret += '</head><body class="webStandard vpcText"></body></html>';
+        ret += '</head><body class="webStandard kwcText"></body></html>';
         return ret;
     },
     setValue : function(v) {
@@ -185,7 +185,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             this.componentId = v.componentId;
         }
         if (v && (typeof v.content) != 'undefined') v = v.content;
-        Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
+        Kwf.Form.HtmlEditor.superclass.setValue.call(this, v);
     },
 
     mask: function(txt) {
@@ -238,8 +238,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     //behebt also einen bug von ext
     syncValue : function(){
         if (!this.sourceEditMode) {
-            Vps.Form.HtmlEditor.superclass.syncValue.call(this);
+            Kwf.Form.HtmlEditor.superclass.syncValue.call(this);
         }
     }
 });
-Ext.reg('htmleditor', Vps.Form.HtmlEditor);
+Ext.reg('htmleditor', Kwf.Form.HtmlEditor);

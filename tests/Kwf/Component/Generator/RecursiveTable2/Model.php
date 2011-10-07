@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_RecursiveTable2_Model extends Vps_Model_FnF
+class Kwf_Component_Generator_RecursiveTable2_Model extends Kwf_Model_FnF
 {
     public function __construct()
     {

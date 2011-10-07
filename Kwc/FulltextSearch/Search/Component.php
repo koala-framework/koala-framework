@@ -1,5 +1,5 @@
 <?php
-class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Component implements Vpc_Paging_ParentInterface
+class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Component implements Kwc_Paging_ParentInterface
 {
     private $_hits;
     private $_time;
@@ -8,21 +8,21 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Fulltext Search');
+        $ret['componentName'] = trlKwf('Fulltext Search');
         $ret['cssClass'] = 'webStandard';
         $ret['viewCache'] = false;
-        $ret['generators']['child']['component']['paging'] = 'Vpc_FulltextSearch_Search_Paging_Component';
+        $ret['generators']['child']['component']['paging'] = 'Kwc_FulltextSearch_Search_Paging_Component';
         $ret['flags']['processInput'] = true;
 
-        $ret['placeholder']['helpFooter'] = trlVpsStatic('Search results can be extended using wildcards.').'<br />'.
-                                            trlVpsStatic('Examples: "Hallo Welt" , ? , * , AND , OR');
+        $ret['placeholder']['helpFooter'] = trlKwfStatic('Search results can be extended using wildcards.').'<br />'.
+                                            trlKwfStatic('Examples: "Hallo Welt" , ? , * , AND , OR');
         return $ret;
     }
 
 
     public function processInput($postData)
     {
-        $index = Vps_Util_Fulltext::getInstance();
+        $index = Kwf_Util_Fulltext::getInstance();
 
         if (isset($postData['query'])) {
             $queryString = $postData['query'];
@@ -36,7 +36,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
 
             $subRoot = $this->getData();
             while ($subRoot) {
-                if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+                if (Kwc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
                 $subRoot = $subRoot->parent;
             }
             if ($subRoot) {
@@ -50,7 +50,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
                 $this->_hits = $index->find($query);
             } catch (Zend_Search_Lucene_Exception $e) {
                 $this->_hits = array();
-                $this->_error = $this->getData()->trlVps('Invalid search terms');
+                $this->_error = $this->getData()->trlKwf('Invalid search terms');
             }
             $this->_time = microtime(true)-$time;
         } else {
@@ -81,7 +81,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
         if (count($this->_hits)) {
             for($i=$numStart; $i < $numEnd; $i++) {
                 $h = $this->_hits[$i];
-                $c = Vps_Component_Data_Root::getInstance()->getComponentById($h->componentId);
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentById($h->componentId);
                 if ($c) {
                     $ret['hits'][] = array(
                         'data' => $c,

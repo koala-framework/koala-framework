@@ -1,4 +1,4 @@
-Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
+Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     autoHeight: true,
     multiSelect: true,
     overClass: 'x-view-over',
@@ -17,35 +17,35 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             'pasteParagraph', 'copyPasteMenuShow');
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">',
-                '<div class="paragraph-wrap<tpl if="!visible"> vpc-paragraph-invisible</tpl>" id="vpc-paragraphs-{id}" style="width:'+this.width+'px">',
-                    '<div class="vpc-paragraphs-toolbar"></div>',
-                    '<div class="webStandard vpc-paragraphs-preview">{preview}</div>',
+                '<div class="paragraph-wrap<tpl if="!visible"> kwc-paragraph-invisible</tpl>" id="kwc-paragraphs-{id}" style="width:'+this.width+'px">',
+                    '<div class="kwc-paragraphs-toolbar"></div>',
+                    '<div class="webStandard kwc-paragraphs-preview">{preview}</div>',
                 '</div>',
             '</tpl>',
             '<div class="x-clear"></div>'
         );
 
-        Vpc.Paragraphs.DataView.superclass.initComponent.call(this);
+        Kwc.Paragraphs.DataView.superclass.initComponent.call(this);
     },
 
     onUpdate: function() {
-        var ret = Vpc.Paragraphs.DataView.superclass.onUpdate.apply(this, arguments);
+        var ret = Kwc.Paragraphs.DataView.superclass.onUpdate.apply(this, arguments);
         this.updateToolbars();
         return ret;
     },
     onAdd: function() {
-        var ret = Vpc.Paragraphs.DataView.superclass.onAdd.apply(this, arguments);
+        var ret = Kwc.Paragraphs.DataView.superclass.onAdd.apply(this, arguments);
         this.updateToolbars();
         return ret;
     },
     refresh: function() {
-        var ret = Vpc.Paragraphs.DataView.superclass.refresh.apply(this, arguments);
+        var ret = Kwc.Paragraphs.DataView.superclass.refresh.apply(this, arguments);
         this.updateToolbars();
         return ret;
     },
     updateToolbars: function()
     {
-        Ext.each(Vps.contentReadyHandlers, function(i) {
+        Ext.each(Kwf.contentReadyHandlers, function(i) {
             i.fn.call(i.scope | window);
         }, this);
 
@@ -54,7 +54,7 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
         var nodes = this.getNodes();
         for (var i=0; i< nodes.length; i++) {
             var node = nodes[i];
-            var tbCt = Ext.get(node).down('.vpc-paragraphs-toolbar');
+            var tbCt = Ext.get(node).down('.kwc-paragraphs-toolbar');
             if (tbCt.down('.x-toolbar')) {
                 continue;
             }
@@ -64,8 +64,8 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             var record = this.getRecord(node);
 
             tb.add({
-                //text: record.get('visible') ? trlVps('visible') : trlVps('invisible'),
-                tooltip: trlVps('visibility'),
+                //text: record.get('visible') ? trlKwf('visible') : trlKwf('invisible'),
+                tooltip: trlKwf('visibility'),
                 scope: this,
                 record: record,
                 handler: function(btn) {
@@ -76,8 +76,8 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             });
 
             if (this.showPosition) {
-                var posCombo = new Vps.Form.ComboBox({
-                    listClass: 'vpc-paragraphs-pos-list',
+                var posCombo = new Kwf.Form.ComboBox({
+                    listClass: 'kwc-paragraphs-pos-list',
                     tpl: '<tpl for=".">' +
                         '<div class="x-combo-list-item<tpl if="visible"> visible</tpl><tpl if="!visible"> invisible</tpl>">'+
                             '{pos} - {component_name}'+
@@ -110,7 +110,7 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             }
             if (this.showDelete) {
                 tb.add({
-                    tooltip: trlVps('delete'),
+                    tooltip: trlKwf('delete'),
                     scope: this,
                     record: record,
                     handler: function(btn) {
@@ -123,11 +123,11 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             if (record.get('edit_components').length == 1) {
                 tb.add('-');
                 tb.add({
-                    text: trlVps('edit'),
+                    text: trlKwf('edit'),
                     scope: this,
                     record: record,
                     handler: function(btn) {
-                        this.fireEvent('edit', btn.record, Vps.clone(btn.record.get('edit_components')[0]));
+                        this.fireEvent('edit', btn.record, Kwf.clone(btn.record.get('edit_components')[0]));
                     },
                     icon : '/assets/silkicons/application_edit.png',
                     cls  : 'x-btn-text-icon'
@@ -144,12 +144,12 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                         record: record,
                         editComponent: ec,
                         handler: function(menu) {
-                            this.fireEvent('edit', menu.record, Vps.clone(menu.editComponent));
+                            this.fireEvent('edit', menu.record, Kwf.clone(menu.editComponent));
                         }
                     });
                 }, this);
                 tb.add({
-                    text: trlVps('edit'),
+                    text: trlKwf('edit'),
                     menu: menu,
                     icon : '/assets/silkicons/application_edit.png',
                     cls  : 'x-btn-text-icon'
@@ -157,7 +157,7 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             }
             if (this.components) {
                 tb.add('-');
-                tb.add(new Vpc.Paragraphs.AddParagraphButton({
+                tb.add(new Kwc.Paragraphs.AddParagraphButton({
                     record: record,
                     components: this.components,
                     componentIcons: this.componentIcons,
@@ -173,9 +173,9 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 }));
                 if (this.showCopyPaste) {
                     tb.add({
-                        text: trlVps('copy/paste'),
+                        text: trlKwf('copy/paste'),
                         menu: [{
-                            text: trlVps('Copy Paragraph'),
+                            text: trlKwf('Copy Paragraph'),
                             icon: '/assets/silkicons/page_white_copy.png',
                             scope: this,
                             record: record,
@@ -183,7 +183,7 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                                 this.fireEvent('copyParagraph', btn.record);
                             }
                         },{
-                            text: trlVps('Paste Paragraph'),
+                            text: trlKwf('Paste Paragraph'),
                             icon: '/assets/silkicons/page_white_copy.png',
                             scope: this,
                             handler: function() {

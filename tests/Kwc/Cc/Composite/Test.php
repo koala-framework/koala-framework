@@ -2,14 +2,14 @@
 /**
  * @group Cc
  * @group Composite_Cc
- * http://vps.vps.niko.vivid/vps/vpctest/Vpc_Cc_Paragraphs_Root/master/paragraphs
- * http://vps.vps.niko.vivid/vps/vpctest/Vpc_Cc_Paragraphs_Root/slave/paragraphs
+ * http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Cc_Paragraphs_Root/master/paragraphs
+ * http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Cc_Paragraphs_Root/slave/paragraphs
  */
-class Vpc_Cc_Composite_Test extends Vpc_TestAbstract
+class Kwc_Cc_Composite_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Cc_Composite_Root');
+        parent::setUp('Kwc_Cc_Composite_Root');
     }
 
     public function testContents()

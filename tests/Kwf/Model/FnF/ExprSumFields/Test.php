@@ -3,13 +3,13 @@
  * @group Model_FnF
  * @group Model_Expr_SumFields
  */
-class Vps_Model_FnF_ExprSumFields_Test extends Vps_Test_TestCase
+class Kwf_Model_FnF_ExprSumFields_Test extends Kwf_Test_TestCase
 {
     private $_model;
     public function setUp()
     {
         parent::setUp();
-        $this->_model = new Vps_Model_FnF(array(
+        $this->_model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'value1', 'value2'),
             'data' => array(
                 array('id' => 1, 'value1' => 'foo', 'value2'=>100),
@@ -19,9 +19,9 @@ class Vps_Model_FnF_ExprSumFields_Test extends Vps_Test_TestCase
                 array('id' => 5, 'value1' => 'foo', 'value2'=>500),
             ),
             'exprs' => array(
-                'sum_field_int' => new Vps_Model_Select_Expr_SumFields(array('value2', 10)),
-                'sum_int_int' => new Vps_Model_Select_Expr_SumFields(array(100, 10, 99)),
-                'sum_field_field' => new Vps_Model_Select_Expr_SumFields(array('value2', 'id')),
+                'sum_field_int' => new Kwf_Model_Select_Expr_SumFields(array('value2', 10)),
+                'sum_int_int' => new Kwf_Model_Select_Expr_SumFields(array(100, 10, 99)),
+                'sum_field_field' => new Kwf_Model_Select_Expr_SumFields(array('value2', 'id')),
             )
         ));
     }

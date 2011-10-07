@@ -2,7 +2,7 @@
 
 require_once 'Zend/Auth/Adapter/Interface.php';
 
-class Vps_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
+class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 {
     protected $_identity = null;
     protected $_credential = null;
@@ -29,9 +29,9 @@ class Vps_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
     public function authenticate()
     {
         if (empty($this->_identity)) {
-            throw new Vps_Exception('A value for the identity was not provided prior to authentication with Vps_Auth_Adapter_Service.');
+            throw new Kwf_Exception('A value for the identity was not provided prior to authentication with Kwf_Auth_Adapter_Service.');
         } else if ($this->_credential === null) {
-            throw new Vps_Exception('A credential value was not provided prior to authentication with Vps_Auth_Adapter_Service.');
+            throw new Kwf_Exception('A credential value was not provided prior to authentication with Kwf_Auth_Adapter_Service.');
         }
 
         $cache = $this->_getCache();
@@ -40,8 +40,8 @@ class Vps_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_identity,
                 array(
-                    trlVps('Too many wrong logins.'),
-                    trlVps('There were too many wrong logins from your connection. Please try again in 5 minutes.')
+                    trlKwf('Too many wrong logins.'),
+                    trlKwf('There were too many wrong logins from your connection. Please try again in 5 minutes.')
                 )
             );
         }
@@ -73,7 +73,7 @@ class Vps_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 
     private function _sendWrongLoginMail(array $vars)
     {
-        $to = Vps_Registry::get('config')->debug->sendWrongLoginsTo;
+        $to = Kwf_Registry::get('config')->debug->sendWrongLoginsTo;
         if (!$to) return;
 
         $body = "\n";
@@ -122,7 +122,7 @@ class Vps_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 
     private function _getCache()
     {
-        return Vps_Cache::factory('Core', 'File',
+        return Kwf_Cache::factory('Core', 'File',
             array(
                 'lifetime' => 280,
                 'automatic_serialization'=>true

@@ -2,11 +2,11 @@
 /**
  * @group Component_Cache_ComponentLink
  */
-class Vps_Component_Cache_ComponentLink_Test extends Vpc_TestAbstract
+class Kwf_Component_Cache_ComponentLink_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Cache_ComponentLink_Root_Component');
+        parent::setUp('Kwf_Component_Cache_ComponentLink_Root_Component');
     }
 
     public function testRename()
@@ -15,9 +15,9 @@ class Vps_Component_Cache_ComponentLink_Test extends Vpc_TestAbstract
 
         $this->assertEquals(1, substr_count($root->render(), 'F1'));
 
-        $cache = Vps_Component_Cache::getInstance();
+        $cache = Kwf_Component_Cache::getInstance();
 
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_ComponentLink_Root_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_ComponentLink_Root_Model');
         $row = $model->getRow(1);
         $row->name = 'G1';
         $row->save();
@@ -37,9 +37,9 @@ class Vps_Component_Cache_ComponentLink_Test extends Vpc_TestAbstract
         $this->assertEquals(1, substr_count($root->render(), 'f1/f2/f3'));
         $this->assertEquals(1, substr_count($root->render(), 'f4'));
 
-        $cache = Vps_Component_Cache::getInstance();
+        $cache = Kwf_Component_Cache::getInstance();
 
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_ComponentLink_Root_Model');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_ComponentLink_Root_Model');
         $row = $model->getRow(2);
         $row->parent_id = 4;
         $row->save();

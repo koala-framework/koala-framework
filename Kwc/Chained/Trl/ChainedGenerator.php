@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Trl_ChainedGenerator extends Vpc_Chained_Abstract_ChainedGenerator
+class Kwc_Chained_Trl_ChainedGenerator extends Kwc_Chained_Abstract_ChainedGenerator
 {
     public function getPagesControllerConfig($component, $generatorClass = null)
     {

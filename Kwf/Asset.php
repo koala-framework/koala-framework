@@ -1,5 +1,5 @@
 <?php
-class Vps_Asset
+class Kwf_Asset
 {
     private $_icon;
     private $_type;
@@ -23,25 +23,25 @@ class Vps_Asset
                 $filename = $paths['silkicons'].'/'.$icon.'.png';
                 $type = 'silkicons';
                 $icon .= '.png';
-            } else if (file_exists($paths['vps'].'/images/'.$icon.'.png')) {
-                $filename = $paths['vps'].'/images/'.$icon.'.png';
-                $type = 'vps/images';
+            } else if (file_exists($paths['kwf'].'/images/'.$icon.'.png')) {
+                $filename = $paths['kwf'].'/images/'.$icon.'.png';
+                $type = 'kwf/images';
                 $icon .= '.png';
-            } else if (file_exists($paths['vps'].'/images/'.$icon.'.gif')) {
-                $filename = $paths['vps'].'/images/'.$icon.'.gif';
-                $type = 'vps/images';
+            } else if (file_exists($paths['kwf'].'/images/'.$icon.'.gif')) {
+                $filename = $paths['kwf'].'/images/'.$icon.'.gif';
+                $type = 'kwf/images';
                 $icon .= '.gif';
-            } else if (file_exists($paths['vps'].'/images/'.$icon.'.jpg')) {
-                $filename = $paths['vps'].'/images/'.$icon.'.jpg';
-                $type = 'vps/images';
+            } else if (file_exists($paths['kwf'].'/images/'.$icon.'.jpg')) {
+                $filename = $paths['kwf'].'/images/'.$icon.'.jpg';
+                $type = 'kwf/images';
                 $icon .= '.jpg';
-            } else if (file_exists($paths['vps'].'/images/fileicons/'.$icon.'.png')) {
-                $filename = $paths['vps'].'/images/fileicons/'.$icon.'.png';
-                $type = 'vps/images/fileicons';
+            } else if (file_exists($paths['kwf'].'/images/fileicons/'.$icon.'.png')) {
+                $filename = $paths['kwf'].'/images/fileicons/'.$icon.'.png';
+                $type = 'kwf/images/fileicons';
                 $icon .= '.png';
-            } else if (file_exists($paths['vps'].'/images/fileicons/'.$icon.'.jpg')) {
-                $filename = $paths['vps'].'/images/fileicons/'.$icon.'.jpg';
-                $type = 'vps/images/fileicons';
+            } else if (file_exists($paths['kwf'].'/images/fileicons/'.$icon.'.jpg')) {
+                $filename = $paths['kwf'].'/images/fileicons/'.$icon.'.jpg';
+                $type = 'kwf/images/fileicons';
                 $icon .= '.jpg';
             } else if (file_exists($paths['web'].'/images/icons/'.$icon)) {
                 $filename = $paths['web'].'/images/icons/'.$icon;
@@ -51,7 +51,7 @@ class Vps_Asset
                 $type = 'web/images/icons/';
                 $icon .= '.png';
             } else {
-                throw new Vps_Exception("Asset '$icon' not found");
+                throw new Kwf_Exception("Asset '$icon' not found");
             }
         }
         return array(

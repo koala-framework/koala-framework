@@ -1,4 +1,4 @@
 <?php
-class Vpc_User_Detail_Guestbook_Form extends Vpc_Abstract_FormEmpty
+class Kwc_User_Detail_Guestbook_Form extends Kwc_Abstract_FormEmpty
 {
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_ImageViewer extends Vps_Form_Field_Abstract
+class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
 {
     private $_ruleKey;
 

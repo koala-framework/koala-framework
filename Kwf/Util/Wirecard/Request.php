@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Wirecard_Request
+class Kwf_Util_Wirecard_Request
 {
     public static function getCheckoutButton(array $params)
     {
@@ -21,9 +21,9 @@ class Vps_Util_Wirecard_Request
 
         $qpayURL = "https://www.qenta.com/qpay/init.php";
 
-        $params['secret'] = Vps_Registry::get('config')->wirecard->secret;
-        $params['customerId'] = Vps_Registry::get('config')->wirecard->customerId;
-        if (Vps_Registry::get('config')->wirecard->shopId) $params['shopId'] = Vps_Registry::get('config')->wirecard->shopId;
+        $params['secret'] = Kwf_Registry::get('config')->wirecard->secret;
+        $params['customerId'] = Kwf_Registry::get('config')->wirecard->customerId;
+        if (Kwf_Registry::get('config')->wirecard->shopId) $params['shopId'] = Kwf_Registry::get('config')->wirecard->shopId;
         $params['paymenttype'] = 'CCARD';
 
         $params['requestFingerprintOrder'] = "";

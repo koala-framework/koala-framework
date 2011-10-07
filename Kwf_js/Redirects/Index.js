@@ -1,12 +1,12 @@
-Ext.namespace("Vps.Redirects");
-Vps.Redirects.Index = Ext.extend(Ext.Panel, {
+Ext.namespace("Kwf.Redirects");
+Kwf.Redirects.Index = Ext.extend(Ext.Panel, {
     initComponent: function() {
-        var form = new Vps.Auto.FormPanel({
-            controllerUrl: '/vps/redirects/redirect',
+        var form = new Kwf.Auto.FormPanel({
+            controllerUrl: '/kwf/redirects/redirect',
             region: 'center'
         });
-        var grid = new Vps.Auto.GridPanel({
-            controllerUrl: '/vps/redirects/redirects',
+        var grid = new Kwf.Auto.GridPanel({
+            controllerUrl: '/kwf/redirects/redirects',
             region: 'west',
             split: true,
             width: 500,
@@ -18,6 +18,6 @@ Vps.Redirects.Index = Ext.extend(Ext.Panel, {
         this.layout = 'border';
         this.items = [ grid, form ];
 
-        Vps.Redirects.Index.superclass.initComponent.call(this);
+        Kwf.Redirects.Index.superclass.initComponent.call(this);
     }
 });

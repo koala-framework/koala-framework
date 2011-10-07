@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Text_TestStylesModel extends Vpc_Basic_Text_StylesModel
+class Kwc_Basic_Text_TestStylesModel extends Kwc_Basic_Text_StylesModel
 {
     public function __construct($config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
-                'uniqueIdentifier' => 'Vpc_Basic_Text_TestStylesModel_Proxy',
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
+                'uniqueIdentifier' => 'Kwc_Basic_Text_TestStylesModel_Proxy',
                 'columns' => array('id', 'pos', 'name', 'tag', 'ownStyles', 'styles'),
                 'data'=> array(
                     array('id'=>1, 'pos'=>1, 'name'=>'Test1', 'tag'=>'h1', 'ownStyles'=>'', 'styles'=>json_encode(array('font_weight'=>'bold', 'font_size'=>'10', 'text_align'=>'center'))),

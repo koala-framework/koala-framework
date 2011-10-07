@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_Generator_Model_Rowset extends Vps_Model_Rowset_Abstract 
+class Kwf_Component_Generator_Model_Rowset extends Kwf_Model_Rowset_Abstract 
 {
 }

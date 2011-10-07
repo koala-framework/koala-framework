@@ -1,15 +1,15 @@
 <?php
-class Vpc_Columns_Component extends Vpc_Abstract_List_Component
+class Kwc_Columns_Component extends Kwc_Abstract_List_Component
 {
     public static function getSettings($parentComponentClass)
     {
         $ret = parent::getSettings();
         $ret['needsParentComponentClass'] = true;
         $ret['generators']['child']['component'] = $parentComponentClass;
-        $ret['componentName'] = trlVps('Columns');
-        $ret['componentIcon'] = new Vps_Asset('application_tile_horizontal');
+        $ret['componentName'] = trlKwf('Columns');
+        $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
 
-        $ret['extConfig'] = 'Vpc_Columns_ExtConfig';
+        $ret['extConfig'] = 'Kwc_Columns_ExtConfig';
 
         $ret['contentMargin'] = 20;
 
@@ -48,7 +48,7 @@ class Vpc_Columns_Component extends Vpc_Abstract_List_Component
     // - breitenangaben in px oder ohne einheit (ist eh klar)
     // - breitenangaben in % (wird in px umgerechnet, margin wird berücksichtigt)
     // - keine breitenangabe (restliche breite wird aufgezeilt)
-    protected function _getChildContentWidth(Vps_Component_Data $child)
+    protected function _getChildContentWidth(Kwf_Component_Data $child)
     {
         $ownWidth = parent::_getChildContentWidth($child);
 

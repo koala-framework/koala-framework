@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select
+class Kwf_Model_Select
 {
     const WHERE = 'where';
     const WHERE_EQUALS = 'whereEquals';
@@ -42,7 +42,7 @@ class Vps_Model_Select
         }
     }
 
-    public function copyParts(array $parts, Vps_Model_Select $sourceSelect)
+    public function copyParts(array $parts, Kwf_Model_Select $sourceSelect)
     {
         foreach ($parts as $p) {
             if (isset($sourceSelect->_parts[$p])) {
@@ -53,38 +53,38 @@ class Vps_Model_Select
 
     //vielleicht mal umstellen auf:
     /*
-interface Vps_Model_Select_Expr_Interface {}
-class Vps_Model_Select_Expr_CompareField_Abstract implements Vps_Model_Select_Expr_Interface
+interface Kwf_Model_Select_Expr_Interface {}
+class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_Select_Expr_Interface
 {
     __construct($field, $value)
     getField
     getValue
 }
-class Vps_Model_Select_Expr_Not implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Not implements Kwf_Model_Select_Expr_Interface
 {
-    __construct(Vps_Model_Select_Expr_Interface $expr);
+    __construct(Kwf_Model_Select_Expr_Interface $expr);
 }
-class Vps_Model_Select_Expr_Equal extends Vps_Model_Select_Expr_CompareField_Abstract {}
-class Vps_Model_Select_Expr_Lower extends Vps_Model_Select_Expr_CompareField_Abstract {}
-class Vps_Model_Select_Expr_Higher extends Vps_Model_Select_Expr_CompareField_Abstract {}
-class Vps_Model_Select_Expr_NotEquals implements Vps_Model_Select_Expr_Not
-{
-    __construct($field, $value)
-    {
-        parent::__construct(new Vps_Model_Select_Expr_Equal($field, $value);
-    }
-}
-class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
+class Kwf_Model_Select_Expr_Equal extends Kwf_Model_Select_Expr_CompareField_Abstract {}
+class Kwf_Model_Select_Expr_Lower extends Kwf_Model_Select_Expr_CompareField_Abstract {}
+class Kwf_Model_Select_Expr_Higher extends Kwf_Model_Select_Expr_CompareField_Abstract {}
+class Kwf_Model_Select_Expr_NotEquals implements Kwf_Model_Select_Expr_Not
 {
     __construct($field, $value)
     {
-        parent::__construct(array(new Vps_Model_Select_Expr_Lower($field, $value), new Vps_Model_Select_Expr_Equal($field, $value));
+        parent::__construct(new Kwf_Model_Select_Expr_Equal($field, $value);
     }
 }
-    return $this->where(new Vps_Model_Select_Expr_Equal($field, $value));
-    return $this->where(new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Equal($field, $value)));
-    return $this->where(new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Equal($field, $value),
-                                                        new Vps_Model_Select_Expr_Higher($field, $value)));
+class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
+{
+    __construct($field, $value)
+    {
+        parent::__construct(array(new Kwf_Model_Select_Expr_Lower($field, $value), new Kwf_Model_Select_Expr_Equal($field, $value));
+    }
+}
+    return $this->where(new Kwf_Model_Select_Expr_Equal($field, $value));
+    return $this->where(new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_Equal($field, $value)));
+    return $this->where(new Kwf_Model_Select_Expr_Or(array(new Kwf_Model_Select_Expr_Equal($field, $value),
+                                                        new Kwf_Model_Select_Expr_Higher($field, $value)));
     */
     public function whereEquals($field, $value = null)
     {
@@ -95,7 +95,7 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
             return $this;
         }
         if (is_null($value)) {
-            throw new Vps_Exception("value is required");
+            throw new Kwf_Exception("value is required");
         }
         $this->_parts[self::WHERE_EQUALS][$field] = $value;
         return $this;
@@ -110,7 +110,7 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
             return $this;
         }
         if (is_null($value)) {
-            throw new Vps_Exception("value is required");
+            throw new Kwf_Exception("value is required");
         }
         $this->_parts[self::WHERE_NOT_EQUALS][$field] = $value;
         return $this;
@@ -119,7 +119,7 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
     public function whereNull($field)
     {
         if (strpos($field, '?') !==false) {
-            throw new Vps_Exception("You don't want '?' in the field '$field'");
+            throw new Kwf_Exception("You don't want '?' in the field '$field'");
         }
         $this->_parts[self::WHERE_NULL][] = $field;
         return $this;
@@ -127,12 +127,12 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
 
     public function where($cond, $value = null, $type = null)
     {
-        if ($cond instanceof  Vps_Model_Select_Expr_Interface ) {
+        if ($cond instanceof  Kwf_Model_Select_Expr_Interface ) {
             $this->_parts[self::WHERE_EXPRESSION][] = $cond;
             return $this;
         }
         if (strpos($cond, '?') !==false && is_null($value)) {
-            throw new Vps_Exception("Can't use '$cond' with value 'null'");
+            throw new Kwf_Exception("Can't use '$cond' with value 'null'");
         }
 
         $this->_parts[self::WHERE][] = array($cond, $value, $type);
@@ -154,7 +154,7 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
                 }
             } else {
                 if (isset($field['dir'])) {
-                    throw new Vps_Exception("'dir' key doesn't exist anymore, it was renamed to 'direction'");
+                    throw new Kwf_Exception("'dir' key doesn't exist anymore, it was renamed to 'direction'");
                 }
                 if (!isset($field['direction'])) $field['direction'] = 'ASC';
                 $this->_parts[self::ORDER][] = $field;
@@ -182,7 +182,7 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
         return $this;
     }
 
-    public function merge(Vps_Model_Select $other)
+    public function merge(Kwf_Model_Select $other)
     {
         $mergeArrayParts = array(self::WHERE, self::WHERE_EXPRESSION, self::WHERE_NULL,
             self::WHERE_EQUALS, self::WHERE_NOT_EQUALS, self::OTHER);

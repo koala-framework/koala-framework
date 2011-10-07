@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_Date
+class Kwf_View_Helper_Date
 {
     protected $_view = null;
     public function setView($view)
@@ -10,18 +10,18 @@ class Vps_View_Helper_Date
     public function date($date, $format = null)
     {
         if (!$format) {
-            if ($this->_view && $this->_view->item && $this->_view->item instanceof Vps_Component_Data) {
-                $format = $this->_view->item->trlVps('Y-m-d');
-            } else if ($this->_view && $this->_view->data && $this->_view->data instanceof Vps_Component_Data) {
-                $format = $this->_view->data->trlVps('Y-m-d');
+            if ($this->_view && $this->_view->item && $this->_view->item instanceof Kwf_Component_Data) {
+                $format = $this->_view->item->trlKwf('Y-m-d');
+            } else if ($this->_view && $this->_view->data && $this->_view->data instanceof Kwf_Component_Data) {
+                $format = $this->_view->data->trlKwf('Y-m-d');
             } else {
-                $format = trlVps('Y-m-d');
+                $format = trlKwf('Y-m-d');
             }
         }
 
         if (!$date || substr($date, 0, 10) == '0000-00-00') return '';
 
-        $d = new Vps_Date($date);
+        $d = new Kwf_Date($date);
         return $d->format($format);
 
         /*

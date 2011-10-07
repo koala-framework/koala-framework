@@ -1,11 +1,11 @@
 <?php
-class Vps_Component_SharedData_Detail_SharedData_Component extends Vpc_Abstract
+class Kwf_Component_SharedData_Detail_SharedData_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['flags']['sharedDataClass'] = 'Vps_Component_SharedData_Component';
-        $ret['ownModel'] = new Vps_Model_FnF(array(
+        $ret['flags']['sharedDataClass'] = 'Kwf_Component_SharedData_Component';
+        $ret['ownModel'] = new Kwf_Model_FnF(array(
             'data' => array(array('component_id' => 'root', 'text' => 'foo')),
             'primaryKey' => 'component_id'
         ));

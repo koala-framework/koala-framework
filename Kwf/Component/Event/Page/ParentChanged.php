@@ -1,4 +1,4 @@
 <?php
-class Vps_Component_Event_Page_ParentChanged extends Vps_Component_Event_Page_Abstract
+class Kwf_Component_Event_Page_ParentChanged extends Kwf_Component_Event_Page_Abstract
 {
 }

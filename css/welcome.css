@@ -1,51 +1,51 @@
-.vps-welcome {
+.kwf-welcome {
     font-family: tahoma,arial,helvetica,sans-serif;
     font-size: 12px;
 }
-.vps-welcome div#welcomeImg {
+.kwf-welcome div#welcomeImg {
     border: 2px solid #a9bfd4;
     border-bottom: none;
 }
-.vps-welcome .welcomeBox {
+.kwf-welcome .welcomeBox {
     border: 2px solid #a9bfd4;
     background-color: #e2ebf5;
 }
 
-.vps-welcome .welcomeBox p {
+.kwf-welcome .welcomeBox p {
     padding: 10px; padding-top: 0px;
 }
 
-.vps-welcome .welcomeContent {
+.kwf-welcome .welcomeContent {
     padding: 10px;
 }
-.vps-welcome .welcomeContent h1 {
+.kwf-welcome .welcomeContent h1 {
     color: #5378aa;
     font-size: 14px; font-weight: bold;
     margin-bottom: 10px;
 }
-.vps-welcome .welcomeContent p {
+.kwf-welcome .welcomeContent p {
     margin-bottom: 10px;
 }
-.vps-welcome .welcomeContent strong { font-weight: bold; }
+.kwf-welcome .welcomeContent strong { font-weight: bold; }
 
-.vps-welcome .footer {
+.kwf-welcome .footer {
     position: relative;
     border-top: 2px solid #a9bfd4;
     padding: 10px;
     margin-top: 10px;
     font-size: 11px;
-    background: url(/assets/vps/images/welcome/footerBg.jpg) bottom left repeat-x;
+    background: url(/assets/kwf/images/welcome/footerBg.jpg) bottom left repeat-x;
 }
-.vps-welcome .footer p {
+.kwf-welcome .footer p {
     margin-bottom: 5px;
     padding: 0px;
 }
-.vps-welcome .footer h2 {
+.kwf-welcome .footer h2 {
     font-family: Lucida Sans,tahoma,arial,helvetica,sans-serif;
     letter-spacing: 0.01em;
     color: #7e7e7e;
 }
-.vps-welcome .footer img#enteWelcome {
+.kwf-welcome .footer img#enteWelcome {
     position: absolute;
     bottom: 0px; right: 0px;
 }

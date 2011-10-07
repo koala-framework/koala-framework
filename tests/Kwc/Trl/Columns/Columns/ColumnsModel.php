@@ -1,11 +1,11 @@
 <?php
-class Vpc_Trl_Columns_Columns_ColumnsModel extends Vpc_Abstract_List_Model
+class Kwc_Trl_Columns_Columns_ColumnsModel extends Kwc_Abstract_List_Model
 {
     public function __construct($config = array())
     {
-        $this->_referenceMap['Component']['refModelClass'] = 'Vpc_Trl_Columns_Columns_Model';
+        $this->_referenceMap['Component']['refModelClass'] = 'Kwc_Trl_Columns_Columns_Model';
 
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'columns' => array('id', 'component_id', 'pos', 'visible', 'data'),
             'primaryKey' => 'id',
             'data'=> array(
@@ -14,7 +14,7 @@ class Vpc_Trl_Columns_Columns_ColumnsModel extends Vpc_Abstract_List_Model
                 array('id'=>3, 'component_id'=>'root-master_test', 'pos' => 3, 'visible' => 1, 'width'=>'50'),
             ),
             'siblingModels' => array(
-                new Vps_Model_Field(array('fieldName'=>'data'))
+                new Kwf_Model_Field(array('fieldName'=>'data'))
             )
         ));
         parent::__construct($config);

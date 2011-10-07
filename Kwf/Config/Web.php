@@ -1,7 +1,7 @@
 <?php
-require_once 'Vps/Config/Ini.php';
+require_once 'Kwf/Config/Ini.php';
 
-class Vps_Config_Web extends Vps_Config_Ini
+class Kwf_Config_Web extends Kwf_Config_Ini
 {
     private $_section;
 
@@ -9,22 +9,22 @@ class Vps_Config_Web extends Vps_Config_Ini
     public static function getInstance($section = null)
     {
         if (!$section) {
-            require_once str_replace('_', '/', Vps_Setup::$configClass).'.php';
-            $section = call_user_func(array(Vps_Setup::$configClass, 'getConfigSection'));
+            require_once str_replace('_', '/', Kwf_Setup::$configClass).'.php';
+            $section = call_user_func(array(Kwf_Setup::$configClass, 'getConfigSection'));
         }
         if (!isset(self::$_instances[$section])) {
             $cacheId = 'config_'.str_replace('-', '_', $section);
-            $configClass = Vps_Setup::$configClass;
+            $configClass = Kwf_Setup::$configClass;
             require_once str_replace('_', '/', $configClass).'.php';
             if (extension_loaded('apc')) {
                 $apcCacheId = $cacheId.getcwd();
                 $ret = apc_fetch($apcCacheId);
                 if ($ret && $ret->debug->componentCache->checkComponentModification) {
                     $masterFiles = array(
-                        VPS_PATH . '/config.ini'
+                        KWF_PATH . '/config.ini'
                     );
                     if (file_exists('config.ini')) $masterFiles[] = 'config.ini';
-                    if (file_exists('vps_branch')) $masterFiles[] = 'vps_branch';
+                    if (file_exists('kwf_branch')) $masterFiles[] = 'kwf_branch';
                     if (file_exists('config.local.ini')) $files[] = 'config.local.ini';
                     $mtime = apc_fetch($apcCacheId.'mtime');
                     foreach ($masterFiles as $f) {
@@ -38,8 +38,8 @@ class Vps_Config_Web extends Vps_Config_Ini
                 }
                 if (!$ret) {
                     //two level cache
-                    require_once 'Vps/Config/Cache.php';
-                    $cache = Vps_Config_Cache::getInstance();
+                    require_once 'Kwf/Config/Cache.php';
+                    $cache = Kwf_Config_Cache::getInstance();
                     if(!$ret = $cache->load($cacheId)) {
                         $ret = new $configClass($section);
                         $cache->save($ret, $cacheId);
@@ -48,8 +48,8 @@ class Vps_Config_Web extends Vps_Config_Ini
                     apc_add($apcCacheId.'mtime', time());
                 }
             } else {
-                require_once 'Vps/Config/Cache.php';
-                $cache = Vps_Config_Cache::getInstance();
+                require_once 'Kwf/Config/Cache.php';
+                $cache = Kwf_Config_Cache::getInstance();
                 if(!$ret = $cache->load($cacheId)) {
                     $ret = new $configClass($section);
                     $cache->save($ret, $cacheId);
@@ -72,8 +72,8 @@ class Vps_Config_Web extends Vps_Config_Ini
             $cacheId .= getcwd();
             return apc_fetch($cacheId.'mtime');
         } else {
-            require_once 'Vps/Config/Cache.php';
-            $cache = Vps_Config_Cache::getInstance();
+            require_once 'Kwf/Config/Cache.php';
+            $cache = Kwf_Config_Cache::getInstance();
             return $cache->test('config_'.str_replace('-', '_', $section));
         }
     }
@@ -110,10 +110,10 @@ class Vps_Config_Web extends Vps_Config_Ini
     {
         $this->_section = $section;
 
-        if (isset($options['vpsPath'])) {
-            $vpsPath = $options['vpsPath'];
+        if (isset($options['kwfPath'])) {
+            $kwfPath = $options['kwfPath'];
         } else {
-            $vpsPath = VPS_PATH;
+            $kwfPath = KWF_PATH;
         }
         if (isset($options['webPath'])) {
             $webPath = $options['webPath'];
@@ -122,40 +122,40 @@ class Vps_Config_Web extends Vps_Config_Ini
         }
 
         $webSection = $this->_getWebSection($section, $webPath);
-        $vpsSection = $this->_getVpsSection($section, $webPath, $vpsPath);
-        if (!$vpsSection) {
-            require_once 'Vps/Exception.php';
-            throw new Vps_Exception("Add either '$section' to vps/config.ini or set vpsConfigSection in web config.ini");
+        $kwfSection = $this->_getKwfSection($section, $webPath, $kwfPath);
+        if (!$kwfSection) {
+            require_once 'Kwf/Exception.php';
+            throw new Kwf_Exception("Add either '$section' to kwf/config.ini or set kwfConfigSection in web config.ini");
         }
 
-        parent::__construct($vpsPath.'/config.ini', $vpsSection,
+        parent::__construct($kwfPath.'/config.ini', $kwfSection,
                         array('allowModifications'=>true));
 
         $this->_mergeWebConfig($section, $webPath);
 
         if (!$this->libraryPath) {
-            $p = trim(file_get_contents(VPS_PATH.'/include_path'));
+            $p = trim(file_get_contents(KWF_PATH.'/include_path'));
             if (preg_match('#(.*)/zend/%version%$#', $p, $m)) {
                 $this->libraryPath = $m[1];
             } else {
-                require_once 'Vps/Exception.php';
-                throw new Vps_Exception("Can't detect libraryPath");
+                require_once 'Kwf/Exception.php';
+                throw new Kwf_Exception("Can't detect libraryPath");
             }
         }
 
         foreach ($this->path as $k=>$i) {
-            $this->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($this->libraryPath, $vpsPath),
+            $this->path->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
+                                            array($this->libraryPath, $kwfPath),
                                             $i);
         }
         foreach ($this->includepath as $k=>$i) {
-            $this->includepath->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($this->libraryPath, $vpsPath),
+            $this->includepath->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
+                                            array($this->libraryPath, $kwfPath),
                                             $i);
         }
         foreach ($this->assets->dependencies as $k=>$i) {
-            $this->assets->dependencies->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($this->libraryPath, $vpsPath),
+            $this->assets->dependencies->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
+                                            array($this->libraryPath, $kwfPath),
                                             $i);
         }
     }
@@ -179,9 +179,9 @@ class Vps_Config_Web extends Vps_Config_Ini
         return 'production';
     }
 
-    protected function _getVpsSection($section, $webPath, $vpsPath)
+    protected function _getKwfSection($section, $webPath, $kwfPath)
     {
-        $vpsSection = false;
+        $kwfSection = false;
         $webSection = $this->_getWebSection($section, $webPath);
         $webConfig = parse_ini_file($webPath.'/config.ini', true);
         foreach ($webConfig as $i=>$cfg) {
@@ -189,33 +189,33 @@ class Vps_Config_Web extends Vps_Config_Ini
                 || substr($i, 0, strlen($webSection)+1)==$webSection.' '
                 || substr($i, 0, strlen($webSection)+1)==$webSection.':'
             ) {
-                if (isset($cfg['vpsConfigSection'])) {
-                    $vpsSection = $cfg['vpsConfigSection'];
+                if (isset($cfg['kwfConfigSection'])) {
+                    $kwfSection = $cfg['kwfConfigSection'];
                 }
                 break;
             }
         }
-        if (!$vpsSection) {
-            $vpsConfigFull = array_keys(parse_ini_file($vpsPath.'/config.ini', true));
-            foreach ($vpsConfigFull as $i) {
+        if (!$kwfSection) {
+            $kwfConfigFull = array_keys(parse_ini_file($kwfPath.'/config.ini', true));
+            foreach ($kwfConfigFull as $i) {
                 if ($i == $section
                     || substr($i, 0, strlen($section)+1)==$section.' '
                     || substr($i, 0, strlen($section)+1)==$section.':'
                 ) {
-                    $vpsSection = $section;
+                    $kwfSection = $section;
                     break;
                 }
             }
         }
-        return $vpsSection;
+        return $kwfSection;
     }
 
     protected function _mergeWebConfig($section, $webPath)
     {
         $webSection = $this->_getWebSection($section, $webPath);
-        self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/config.ini', $webSection));
+        self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));
         if (file_exists($webPath.'/config.local.ini')) {
-            self::mergeConfigs($this, new Vps_Config_Ini($webPath.'/config.local.ini', $webSection));
+            self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.local.ini', $webSection));
         }
     }
 
@@ -254,7 +254,7 @@ class Vps_Config_Web extends Vps_Config_Ini
         foreach($merge as $key => $item) {
             if(isset($main->$key)) {
                 if($item instanceof Zend_Config && $main->$key instanceof Zend_Config) {
-                    $main->$key = Vps_Config_Web::mergeConfigs(
+                    $main->$key = Kwf_Config_Web::mergeConfigs(
                         $main->$key,
                         new Zend_Config($item->toArray(), !$main->readOnly())
                     );

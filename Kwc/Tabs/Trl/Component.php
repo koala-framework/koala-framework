@@ -1,5 +1,5 @@
 <?php
-class Vpc_Tabs_Trl_Component extends Vpc_Abstract_List_Trl_Component
+class Kwc_Tabs_Trl_Component extends Kwc_Abstract_List_Trl_Component
 {
     public function getTemplateVars()
     {
@@ -7,7 +7,7 @@ class Vpc_Tabs_Trl_Component extends Vpc_Abstract_List_Trl_Component
         foreach($ret['listItems'] as $k => $v) {
             $ret['listItems'][$k]['title'] = $v['data']->row->title;
         }
-        $ret['extConfig'] = 'Vpc_Abstract_List_Trl_ExtConfigFullSizeEdit';
+        $ret['extConfig'] = 'Kwc_Abstract_List_Trl_ExtConfigFullSizeEdit';
         return $ret;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_SeleniumTestCase_Driver extends PHPUnit_Extensions_SeleniumTestCase_Driver
+class Kwf_Test_SeleniumTestCase_Driver extends PHPUnit_Extensions_SeleniumTestCase_Driver
 {
     private $_stopping = false;
     public function __call($command, $arguments)

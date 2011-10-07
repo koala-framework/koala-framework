@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_Count implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Count implements Kwf_Model_Select_Expr_Interface
 {
     private $_field;
     private $_distinct;
@@ -26,6 +26,6 @@ class Vps_Model_Select_Expr_Count implements Vps_Model_Select_Expr_Interface
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_INTEGER;
+        return Kwf_Model_Interface::TYPE_INTEGER;
     }
 }

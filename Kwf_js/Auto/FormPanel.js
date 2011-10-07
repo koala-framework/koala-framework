@@ -1,4 +1,4 @@
-Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
+Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
     maskDisabled: true,
@@ -23,14 +23,14 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             'renderform'
         );
         this.actions.save = new Ext.Action({
-            text    : trlVps('Save'),
+            text    : trlKwf('Save'),
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
             handler : this.onSave,
             scope   : this
         });
         this.actions.saveBack = new Ext.Action({
-            text    : trlVps('Save and Back'),
+            text    : trlKwf('Save and Back'),
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
             handler : this.onSaveBack,
@@ -38,21 +38,21 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             hidden  : true //standardmäßig versteckt, ComponentPanel ruft show() auf
         });
         this.actions['delete'] = new Ext.Action({
-            text    : trlVps('Delete'),
+            text    : trlKwf('Delete'),
             icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDelete,
             scope   : this
         });
         this.actions.add = new Ext.Action({
-            text    : trlVps('New Entry'),
+            text    : trlKwf('New Entry'),
             icon    : '/assets/silkicons/table_add.png',
             cls     : 'x-btn-text-icon',
             handler : this.onAdd,
             scope   : this
         });
 
-        Vps.Auto.FormPanel.superclass.initComponent.call(this);
+        Kwf.Auto.FormPanel.superclass.initComponent.call(this);
 
         if (!this.formConfig) this.formConfig = {};
         Ext.applyIf(this.formConfig, {
@@ -106,7 +106,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                             bodyStyle: 'padding: 10px; background-color: white;',
                             autoHeight: true,
                             bodyBorder : false,
-                            title: trlVps('Info'),
+                            title: trlKwf('Info'),
                             resize: false
                         });
                         helpWindow.show();
@@ -141,7 +141,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     load : function(params, options) {
 
-        if (this.el) this.el.mask(trlVps('Loading...'));
+        if (this.el) this.el.mask(trlKwf('Loading...'));
 
         if (!params) params = {};
 
@@ -161,7 +161,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().resetDirty();
         }
 
-        if (!this.loadConn) this.loadConn = new Vps.Connection({ autoAbort: true });
+        if (!this.loadConn) this.loadConn = new Kwf.Connection({ autoAbort: true });
         this.loadConn.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
             loadOptions: options,
@@ -246,8 +246,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     submit: function(options)
     {
         if (!this.getForm().isValid()) {
-            Ext.Msg.alert(trlVps('Save'),
-                trlVps("Can't save, please fill all red underlined fields correctly."));
+            Ext.Msg.alert(trlKwf('Save'),
+                trlKwf("Can't save, please fill all red underlined fields correctly."));
             return;
         }
 
@@ -263,7 +263,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             scope: options.scope || this
         };
 
-        if ((!options.hideMaskText || options.hideMaskText != true) && this.el) this.el.mask(trlVps('Saving...'));
+        if ((!options.hideMaskText || options.hideMaskText != true) && this.el) this.el.mask(trlKwf('Saving...'));
 
         var params = Ext.apply({}, this.getBaseParams());
         params = Ext.apply(params, this.getForm().getValues());
@@ -305,8 +305,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     onSubmitFailure: function(form, action) {
         if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
-            Ext.Msg.alert(trlVps('Save'),
-                trlVps("Can't save, please fill all red underlined fields correctly."));
+            Ext.Msg.alert(trlKwf('Save'),
+                trlKwf("Can't save, please fill all red underlined fields correctly."));
         }
         this.getAction('save').enable();
     },
@@ -332,8 +332,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     onDelete : function() {
         Ext.Msg.show({
-        title:trlVps('delete?'),
-        msg: trlVps('Do you really want to delete this entry?'),
+        title:trlKwf('delete?'),
+        msg: trlKwf('Do you really want to delete this entry?'),
         buttons: Ext.Msg.YESNO,
         scope: this,
         fn: function(button) {
@@ -442,4 +442,4 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     }
 });
 
-Ext.reg('vps.autoform', Vps.Auto.FormPanel);
+Ext.reg('kwf.autoform', Kwf.Auto.FormPanel);

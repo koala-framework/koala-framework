@@ -1,5 +1,5 @@
 <?php
-class Vpc_List_ChildPages_PageNameOnly_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_List_ChildPages_PageNameOnly_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public function getTemplateVars()
     {

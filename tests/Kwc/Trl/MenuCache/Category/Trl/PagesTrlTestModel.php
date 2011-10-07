@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_MenuCache_Category_Trl_PagesTrlTestModel extends Vps_Model_FnF
+class Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel extends Kwf_Model_FnF
 {
     protected $_primaryKey = 'component_id';
     protected $_data = array(

@@ -3,7 +3,7 @@
  * @group Service
  * @group Model_Service
  */
-class Vps_Model_Service_RowTest extends Vps_Test_TestCase
+class Kwf_Model_Service_RowTest extends Kwf_Test_TestCase
 {
     private $_client;
     private $_multisaveRow;
@@ -11,7 +11,7 @@ class Vps_Model_Service_RowTest extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_client = $this->getMock('Vps_Srpc_Client',
+        $this->_client = $this->getMock('Kwf_Srpc_Client',
             array('rowSave', 'rowDelete', 'getPrimaryKey', 'getColumns'),
             array(array('serverUrl' => 'invalid'.uniqid())), '', true
         );
@@ -30,7 +30,7 @@ class Vps_Model_Service_RowTest extends Vps_Test_TestCase
             ->with(null, $this->equalTo(array('id' => null, 'firstname' => 'Herbert', 'lastname' => 'Huber')))
             ->will($this->returnValue(array('id' => 34, 'firstname' => 'Herbert', 'lastname' => 'Huber')));
 
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
         $row = $model->createRow();
         $row->firstname = 'Herbert';
         $row->lastname = 'Huber';
@@ -48,7 +48,7 @@ class Vps_Model_Service_RowTest extends Vps_Test_TestCase
             ->with(null, $this->equalTo(array('id' => 29, 'firstname' => 'Herbert', 'lastname' => 'Huber')))
             ->will($this->returnValue(array('id' => 29, 'firstname' => 'Herbert', 'lastname' => 'Huber')));
 
-        $model = new Vps_Model_Service(array('client' => $this->_client));
+        $model = new Kwf_Model_Service(array('client' => $this->_client));
         $row = $model->createRow();
         $row->id = 29;
         $row->firstname = 'Herbert';
@@ -67,8 +67,8 @@ class Vps_Model_Service_RowTest extends Vps_Test_TestCase
             ->with($this->equalTo(4), $this->equalTo(array('id' => 432, 'firstname' => 'moo', 'lastname' => 'Mayer')))
             ->will($this->returnValue(array('id' => 432, 'firstname' => 'moo', 'lastname' => 'Mayer')));
 
-        $row = new Vps_Model_Service_Row(array(
-            'model' => new Vps_Model_Service(array('client' => $this->_client)),
+        $row = new Kwf_Model_Service_Row(array(
+            'model' => new Kwf_Model_Service(array('client' => $this->_client)),
             'data' => array(
                 'id' => 4,
                 'firstname' => 'moo',
@@ -94,8 +94,8 @@ class Vps_Model_Service_RowTest extends Vps_Test_TestCase
             ->with($this->equalTo(4), $this->equalTo(array('id' => 4, 'firstname' => 'moo', 'lastname' => 'Mayer')))
             ->will($this->returnValue(array('id' => 4, 'firstname' => 'moo', 'lastname' => 'Mayer')));
 
-        $row = new Vps_Model_Service_Row(array(
-            'model' => new Vps_Model_Service(array('client' => $this->_client)),
+        $row = new Kwf_Model_Service_Row(array(
+            'model' => new Kwf_Model_Service(array('client' => $this->_client)),
             'data' => array(
                 'id' => 4,
                 'firstname' => 'moo',
@@ -117,8 +117,8 @@ class Vps_Model_Service_RowTest extends Vps_Test_TestCase
             ->method('rowDelete')
             ->with($this->equalTo(123));
 
-        $row = new Vps_Model_Service_Row(array(
-            'model' => new Vps_Model_Service(array('client' => $this->_client)),
+        $row = new Kwf_Model_Service_Row(array(
+            'model' => new Kwf_Model_Service(array('client' => $this->_client)),
             'data' => array(
                 'id' => 123,
                 'firstname' => 'moo',

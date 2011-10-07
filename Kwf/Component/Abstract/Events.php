@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Abstract_Events extends Vps_Component_Events
+class Kwf_Component_Abstract_Events extends Kwf_Component_Events
 {
     protected $_class;
 

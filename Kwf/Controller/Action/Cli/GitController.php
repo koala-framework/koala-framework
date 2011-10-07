@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -8,7 +8,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
     public function preDispatch()
     {
-        if ($this->_getParam('debug')) Vps_Util_Git::setDebugOutput(true);
+        if ($this->_getParam('debug')) Kwf_Util_Git::setDebugOutput(true);
         parent::preDispatch();
     }
 
@@ -17,7 +17,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         if (!file_exists('.git')) {
             $this->_convertToGit();
 
-            //nach git konvertierung script nochmal neu starten, da der VPS_PATH sich geändert haben kann
+            //nach git konvertierung script nochmal neu starten, da der KWF_PATH sich geändert haben kann
             $argv = $_SERVER['argv'];
             unset($argv[0]);
             passthru('php bootstrap.php '.implode(' ', $argv));
@@ -27,16 +27,16 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
     public function checkoutStagingAction()
     {
-        if (!$this->_getParam('revWeb') || !$this->_getParam('revVps')) {
-            throw new Vps_ClientException("revWeb and revVps parameters required");
+        if (!$this->_getParam('revWeb') || !$this->_getParam('revKwf')) {
+            throw new Kwf_ClientException("revWeb and revKwf parameters required");
         }
         $this->_eventuallyConvertToGitAndRestart();
 
-        Vps_Util_Git::vps()->fetch();
-        Vps_Util_Git::web()->fetch();
+        Kwf_Util_Git::vps()->fetch();
+        Kwf_Util_Git::web()->fetch();
 
-        Vps_Util_Git::web()->checkout($this->_getParam('revWeb'));
-        Vps_Util_Git::vps()->checkout($this->_getParam('revVps'));
+        Kwf_Util_Git::web()->checkout($this->_getParam('revWeb'));
+        Kwf_Util_Git::vps()->checkout($this->_getParam('revKwf'));
         exit;
     }
 
@@ -44,12 +44,12 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
     {
         $this->_eventuallyConvertToGitAndRestart();
 
-        Vps_Util_Git::vps()->fetch();
-        Vps_Util_Git::web()->fetch();
+        Kwf_Util_Git::vps()->fetch();
+        Kwf_Util_Git::web()->fetch();
 
-        Vps_Util_Git::vps()->checkout(trim(file_get_contents('vps_branch')));
-        $appId = Vps_Registry::get('config')->application->id;
-        Vps_Util_Git::web()->checkout("master");
+        Kwf_Util_Git::vps()->checkout(trim(file_get_contents('kwf_branch')));
+        $appId = Kwf_Registry::get('config')->application->id;
+        Kwf_Util_Git::web()->checkout("master");
         exit;
     }
 
@@ -57,28 +57,28 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
     {
         $this->_eventuallyConvertToGitAndRestart();
 
-        Vps_Util_Git::vps()->fetch();
-        Vps_Util_Git::web()->fetch();
+        Kwf_Util_Git::vps()->fetch();
+        Kwf_Util_Git::web()->fetch();
 
         //die werden von go-online raufkopiert
-        Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Util/Git.php'));
-        Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'));
-        $appId = Vps_Registry::get('config')->application->id;
-        if (!Vps_Util_Git::vps()->revParse("production/$appId")) {
-            Vps_Util_Git::vps()->checkoutBranch("production/$appId", "origin/production/$appId", '--track');
+        Kwf_Util_Git::vps()->system("checkout ".escapeshellarg('Kwf/Util/Git.php'));
+        Kwf_Util_Git::vps()->system("checkout ".escapeshellarg('Kwf/Controller/Action/Cli/GitController.php'));
+        $appId = Kwf_Registry::get('config')->application->id;
+        if (!Kwf_Util_Git::vps()->revParse("production/$appId")) {
+            Kwf_Util_Git::vps()->checkoutBranch("production/$appId", "origin/production/$appId", '--track');
         }
-        if (Vps_Util_Git::vps()->getActiveBranch() != "production/$appId") {
-            Vps_Util_Git::vps()->checkout("production/$appId");
+        if (Kwf_Util_Git::vps()->getActiveBranch() != "production/$appId") {
+            Kwf_Util_Git::vps()->checkout("production/$appId");
         }
-        Vps_Util_Git::vps()->system("rebase origin/production/$appId");
+        Kwf_Util_Git::vps()->system("rebase origin/production/$appId");
 
-        if (!Vps_Util_Git::web()->revParse("production")) {
-            Vps_Util_Git::web()->checkoutBranch("production", "origin/production", '--track');
+        if (!Kwf_Util_Git::web()->revParse("production")) {
+            Kwf_Util_Git::web()->checkoutBranch("production", "origin/production", '--track');
         }
-        if (Vps_Util_Git::web()->getActiveBranch() != "production") {
-            Vps_Util_Git::web()->checkout("production");
+        if (Kwf_Util_Git::web()->getActiveBranch() != "production") {
+            Kwf_Util_Git::web()->checkout("production");
         }
-        Vps_Util_Git::web()->system("rebase origin/production");
+        Kwf_Util_Git::web()->system("rebase origin/production");
 
         system("php bootstrap.php update", $ret);
         exit($ret);
@@ -93,28 +93,28 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
     private function _convertToGit()
     {
         echo "Converting ".getcwd()." to git\n";
-        $this->_convertWcToGit(Vps_Registry::get('config')->application->id);
+        $this->_convertWcToGit(Kwf_Registry::get('config')->application->id);
 
-        $host = Vps_Registry::get('config')->server->host;
-        if ($host == 'vivid' && Vps_Setup::getConfigSection()!='vivid') {
-            echo "Converting ".VPS_PATH."\n";
-            $branch = file_get_contents('vps_branch');
-            chdir(VPS_PATH);
-            $this->_convertWcToGit('vps', $branch);
+        $host = Kwf_Registry::get('config')->server->host;
+        if ($host == 'vivid' && Kwf_Setup::getConfigSection()!='vivid') {
+            echo "Converting ".KWF_PATH."\n";
+            $branch = file_get_contents('kwf_branch');
+            chdir(KWF_PATH);
+            $this->_convertWcToGit('kwf', $branch);
         } else {
-            if (!file_exists('vps-lib')) {
+            if (!file_exists('kwf-lib')) {
                 if (trim(`hostname`) == 'vivid') {
-                    $gitUrl = "ssh://git.vivid-planet.com/git/vps";
+                    $gitUrl = "ssh://git.vivid-planet.com/git/kwf";
                 } else {
-                    $gitUrl = "ssh://vivid@git.vivid-planet.com/git/vps";
+                    $gitUrl = "ssh://vivid@git.vivid-planet.com/git/kwf";
                 }
-                $cmd = "git clone $gitUrl vps-lib";
+                $cmd = "git clone $gitUrl kwf-lib";
                 echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
 
-                $branch = file_get_contents('vps_branch');
+                $branch = file_get_contents('kwf_branch');
 
-                chdir('vps-lib');
+                chdir('kwf-lib');
 
                 $cmd = "git branch --track $branch origin/$branch";
                 echo "$cmd\n";
@@ -126,7 +126,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
                 chdir('..');
 
-                copy(VPS_PATH.'/include_path', 'vps-lib/include_path');
+                copy(KWF_PATH.'/include_path', 'kwf-lib/include_path');
 
                 unlink('include_path');
             }
@@ -199,9 +199,9 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
-        if ($id == 'vps') {
+        if ($id == 'kwf') {
             //die zwei wurden im svn im nachinhein geaendert
-            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/Web/SvnUpController.php";
+            $cmd = "git checkout Kwf/Controller/Action/Cli/GitController.php Kwf/Controller/Action/Cli/Web/SvnUpController.php";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }
@@ -228,84 +228,84 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
     {
         $doUpdate = true;
 
-        $previousVpsBranch = trim(file_get_contents('vps_branch'));
+        $previousKwfBranch = trim(file_get_contents('kwf_branch'));
 
-        Vps_Util_Git::web()->fetch();
-        if (Vps_Util_Git::web()->getActiveBranch() == 'master') {
+        Kwf_Util_Git::web()->fetch();
+        if (Kwf_Util_Git::web()->getActiveBranch() == 'master') {
             try {
-                Vps_Util_Git::web()->system("rebase origin/master");
-            } catch (Vps_Exception $e) {
+                Kwf_Util_Git::web()->system("rebase origin/master");
+            } catch (Kwf_Exception $e) {
                 exit(1);
             }
-        } else if (Vps_Util_Git::web()->getActiveBranch() == 'production') {
+        } else if (Kwf_Util_Git::web()->getActiveBranch() == 'production') {
             try {
-                Vps_Util_Git::web()->system("rebase origin/production");
-            } catch (Vps_Exception $e) {
+                Kwf_Util_Git::web()->system("rebase origin/production");
+            } catch (Kwf_Exception $e) {
                 exit(1);
             }
         } else {
-            echo "web: ".Vps_Util_Git::web()->getActiveBranch()." != master, daher wird kein autom. rebase ausgefuehrt.\n";
+            echo "web: ".Kwf_Util_Git::web()->getActiveBranch()." != master, daher wird kein autom. rebase ausgefuehrt.\n";
             $doUpdate = false;
         }
 
         //neu laden, da er sich geaendert haben kann
         if (file_exists('include_path')) {
-            $vp = str_replace('%vps_branch%', trim(file_get_contents('vps_branch')), trim(file_get_contents('include_path')));
+            $vp = str_replace('%kwf_branch%', trim(file_get_contents('kwf_branch')), trim(file_get_contents('include_path')));
         } else {
-            $vp = getcwd().'/vps-lib';
+            $vp = getcwd().'/kwf-lib';
         }
-        $g = new Vps_Util_Git($vp);
+        $g = new Kwf_Util_Git($vp);
         $g->fetch();
-        $vpsBranch = trim(file_get_contents('vps_branch'));
-        if ($previousVpsBranch != $vpsBranch) {
-            echo "vps: web hat vps_branch von $previousVpsBranch auf $vpsBranch geaendert;\n";
-            if ($g->getActiveBranch() == $previousVpsBranch) {
-                if (in_array($vpsBranch, $g->getBranches())) {
+        $kwfBranch = trim(file_get_contents('kwf_branch'));
+        if ($previousKwfBranch != $kwfBranch) {
+            echo "kwf: web hat kwf_branch von $previousKwfBranch auf $kwfBranch geaendert;\n";
+            if ($g->getActiveBranch() == $previousKwfBranch) {
+                if (in_array($kwfBranch, $g->getBranches())) {
                     try {
-                        $g->checkout($vpsBranch);
-                    } catch (Vps_Exception $e) {
+                        $g->checkout($kwfBranch);
+                    } catch (Kwf_Exception $e) {
                         exit(1);
                     }
                 } else {
                     try {
-                        $g->checkoutBranch($vpsBranch, 'origin/'.$vpsBranch);
-                    } catch (Vps_Exception $e) {
+                        $g->checkoutBranch($kwfBranch, 'origin/'.$kwfBranch);
+                    } catch (Kwf_Exception $e) {
                         exit(1);
                     }
                 }
             } else {
-                echo "vps: ".$g->getActiveBranch()." != $previousVpsBranch, daher wird kein autom. checkout ausgefuehrt.\n";
+                echo "kwf: ".$g->getActiveBranch()." != $previousKwfBranch, daher wird kein autom. checkout ausgefuehrt.\n";
             }
-        } else if ($g->getActiveBranch() == $vpsBranch) {
+        } else if ($g->getActiveBranch() == $kwfBranch) {
             try {
-                $g->system("rebase origin/$vpsBranch");
-            } catch (Vps_Exception $e) {
+                $g->system("rebase origin/$kwfBranch");
+            } catch (Kwf_Exception $e) {
                 exit(1);
             }
-        } else if ($g->getActiveBranch() == 'production/'.Vps_Registry::get('config')->application->id) {
+        } else if ($g->getActiveBranch() == 'production/'.Kwf_Registry::get('config')->application->id) {
             try {
-                $g->system("rebase origin/production/".Vps_Registry::get('config')->application->id);
-            } catch (Vps_Exception $e) {
+                $g->system("rebase origin/production/".Kwf_Registry::get('config')->application->id);
+            } catch (Kwf_Exception $e) {
                 exit(1);
             }
         } else {
-            echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
+            echo "kwf: ".$g->getActiveBranch()." != $kwfBranch, daher wird kein autom. rebase ausgefuehrt.\n";
         }
 
         if ($this->_getParam('with-library')) {
             echo "\nupdating library\n";
-            $git = new Vps_Util_Git(Vps_Registry::get('config')->libraryPath);
+            $git = new Kwf_Util_Git(Kwf_Registry::get('config')->libraryPath);
             $git->system("pull --rebase");
         } else {
             echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
         }
 
         echo "\nMark completed Todos when on Test (switch on in config with \"todo.markAsOnTestOnUpdate = false\"): ";
-        if (Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {
-            $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')
+        if (Kwf_Registry::get('config')->todo->markAsOnTestOnUpdate) {
+            $projectIds = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Projects')
                 ->getApplicationProjectIds();
             if ($projectIds) {
-                $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
+                $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Todo');
                 $s = $m->select()
                         ->whereEquals('project_id', $projectIds)
                         ->whereEquals('status', 'committed');
@@ -343,7 +343,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
     private function _hasRevisionInHistory($revision)
     {
-        return Vps_Util_Git::web()->getActiveBranchContains($revision)
-                || Vps_Util_Git::vps()->getActiveBranchContains($revision);
+        return Kwf_Util_Git::web()->getActiveBranchContains($revision)
+                || Kwf_Util_Git::vps()->getActiveBranchContains($revision);
     }
 }

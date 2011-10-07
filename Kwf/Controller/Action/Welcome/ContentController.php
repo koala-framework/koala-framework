@@ -1,11 +1,11 @@
 <?php
-class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Action
+class Kwf_Controller_Action_Welcome_ContentController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
         $this->view->content = '';
         try {
-            $t = new Vps_Util_Model_Welcome();
+            $t = new Kwf_Util_Model_Welcome();
             $row = $t->getRow(1);
             if ($row) {
                 $this->view->content = $row->content;
@@ -15,10 +15,10 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
             $row = null;
         }
         if ($row) {
-            $this->view->image = Vps_Media::getUrlByRow(
+            $this->view->image = Kwf_Media::getUrlByRow(
                 $row, 'WelcomeImage'
             );
-            $this->view->imageSize = Vps_Media::getDimensionsByRow($row, 'WelcomeImage');
+            $this->view->imageSize = Kwf_Media::getDimensionsByRow($row, 'WelcomeImage');
         } else {
             $this->view->image = false;
         }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mongo_ChildRowsWithParentExpr_BothProxy_ParentModel extends Vps_Model_FnF
+class Kwf_Model_Mongo_ChildRowsWithParentExpr_BothProxy_ParentModel extends Kwf_Model_FnF
 {
     protected $_data = array(
         array('id'=>1, 'name'=>'one'),
@@ -8,6 +8,6 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_BothProxy_ParentModel extends Vps_
     );
 
     protected $_dependentModels = array(
-        'MongoChild' => 'Vps_Model_Mongo_ChildRowsWithParentExpr_BothProxy_MongoModel->Foo',
+        'MongoChild' => 'Kwf_Model_Mongo_ChildRowsWithParentExpr_BothProxy_MongoModel->Foo',
     );
 }

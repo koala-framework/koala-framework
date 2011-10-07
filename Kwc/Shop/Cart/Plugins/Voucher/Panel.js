@@ -1,16 +1,16 @@
-Ext.namespace('Vpc.Shop.Cart.Plugins.Voucher');
-Vpc.Shop.Cart.Plugins.Voucher.Panel = Ext.extend(Ext.Panel, {
+Ext.namespace('Kwc.Shop.Cart.Plugins.Voucher');
+Kwc.Shop.Cart.Plugins.Voucher.Panel = Ext.extend(Ext.Panel, {
     layout: 'border',
     initComponent: function() {
-        var history = new Vps.Auto.GridPanel({
+        var history = new Kwf.Auto.GridPanel({
             controllerUrl: this.voucherHistoryControllerUrl,
             region: 'center'
         });
-        var vouchers = new Vps.Auto.GridPanel({
+        var vouchers = new Kwf.Auto.GridPanel({
             controllerUrl: this.vouchersControllerUrl,
             region: 'west',
             width: 400,
-            editDialog: new Vps.Auto.Form.Window({
+            editDialog: new Kwf.Auto.Form.Window({
                 controllerUrl: this.voucherControllerUrl
             }),
             bindings: [{
@@ -21,7 +21,7 @@ Vpc.Shop.Cart.Plugins.Voucher.Panel = Ext.extend(Ext.Panel, {
 
         this.items = [ history, vouchers ];
 
-        Vpc.Shop.Cart.Plugins.Voucher.Panel.superclass.initComponent.call(this);
+        Kwc.Shop.Cart.Plugins.Voucher.Panel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('vpc.shop.cart.plugins.voucher', Vpc.Shop.Cart.Plugins.Voucher.Panel);
+Ext.reg('kwc.shop.cart.plugins.voucher', Kwc.Shop.Cart.Plugins.Voucher.Panel);

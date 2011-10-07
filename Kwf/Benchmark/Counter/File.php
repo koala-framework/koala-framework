@@ -1,12 +1,12 @@
 <?php
-class Vps_Benchmark_Counter_File implements Vps_Benchmark_Counter_Interface
+class Kwf_Benchmark_Counter_File implements Kwf_Benchmark_Counter_Interface
 {
     private $_lock = null;
 
     private function _lock($name)
     {
         if ($this->_lock) {
-            throw new Vps_Exception("Already locked");
+            throw new Kwf_Exception("Already locked");
         }
         if (!file_exists('temp/counter')) {
             mkdir('temp/counter');

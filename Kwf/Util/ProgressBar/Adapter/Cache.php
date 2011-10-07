@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_ProgressBar_Adapter_Cache extends Zend_ProgressBar_Adapter
+class Kwf_Util_ProgressBar_Adapter_Cache extends Zend_ProgressBar_Adapter
 {
     private $_progressNum = null;
 
@@ -23,14 +23,14 @@ class Vps_Util_ProgressBar_Adapter_Cache extends Zend_ProgressBar_Adapter
     public function getProgressNum()
     {
         if (is_null($this->_progressNum)) {
-            throw new Vps_Exception("this progressbar adapter cannot be used without a progressNum");
+            throw new Kwf_Exception("this progressbar adapter cannot be used without a progressNum");
         }
         return $this->_progressNum;
     }
 
     private function _getCache()
     {
-        return Vps_Cache::factory('Core', 'File',
+        return Kwf_Cache::factory('Core', 'File',
             array(
                 'lifetime' => 3600,
                 'automatic_serialization' => true

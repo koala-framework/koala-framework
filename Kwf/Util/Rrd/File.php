@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Util_Rrd_File
+abstract class Kwf_Util_Rrd_File
 {
     private $_fields = array();
     private $_fileName;
@@ -32,8 +32,8 @@ abstract class Vps_Util_Rrd_File
 
     public function addField($f)
     {
-        if (!($f instanceof Vps_Util_Rrd_Field)) {
-            $f = new Vps_Util_Rrd_Field($f);
+        if (!($f instanceof Kwf_Util_Rrd_Field)) {
+            $f = new Kwf_Util_Rrd_Field($f);
         }
         $f->setFile($this);
         $this->_fields[] = $f;
@@ -100,7 +100,7 @@ abstract class Vps_Util_Rrd_File
     public function createFile($start = null)
     {
         if (file_exists($this->_fileName)) {
-            throw new Vps_Exception("$this->_fileName already exists");
+            throw new Kwf_Exception("$this->_fileName already exists");
         }
 
         $initialValueDates = array();
@@ -132,7 +132,7 @@ abstract class Vps_Util_Rrd_File
         }
         //echo "$cmd<br>\n";
         system($cmd, $ret);
-        if ($ret != 0) throw new Vps_Exception("Command failed");
+        if ($ret != 0) throw new Kwf_Exception("Command failed");
 
         foreach ($initialValueDates as $date) {
             $this->record($date, $this->getRecordValuesForDate($date));
@@ -141,7 +141,7 @@ abstract class Vps_Util_Rrd_File
 
     protected function _getMemcacheValue($field)
     {
-        $value = Vps_Benchmark_Counter::getInstance()->getValue($field);
+        $value = Kwf_Benchmark_Counter::getInstance()->getValue($field);
         if ($value===false) $value = 'U';
         return $value;
     }
@@ -164,7 +164,7 @@ abstract class Vps_Util_Rrd_File
 
     public function getRecordValuesForDate($date)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     /**
@@ -196,7 +196,7 @@ abstract class Vps_Util_Rrd_File
         $ret = null;
         //echo "$cmd<br>\n";
         system($cmd, $ret);
-        if ($ret != 0) throw new Vps_Exception("Command failed");
+        if ($ret != 0) throw new Kwf_Exception("Command failed");
     }
 
     public function getAverageValues($fields, $start, $end)
@@ -224,12 +224,12 @@ abstract class Vps_Util_Rrd_File
                 //leerzeile
             } else {
                 if (count($fileFields)+1 != count($r)) {
-                    throw new Vps_Exception("invalid row?!");
+                    throw new Kwf_Exception("invalid row?!");
                 }
                 $time = array_shift($r);
                 $time = (int)substr($time, 0, -1);
                 foreach ($fields as $f) {
-                    $v = $r[array_search(Vps_Util_Rrd_Field::escapeField($f), $fileFields)];
+                    $v = $r[array_search(Kwf_Util_Rrd_Field::escapeField($f), $fileFields)];
                     if (preg_match('#^([0-9]\\.[0-9]+)e([+-])([0-9]{2})$#', $v, $m)) {
                         $v = (float)$m[1] * ($m[2]=='-' ? -1 : 1) * pow(10, (int)$m[3]);
                         $sum[$f] += $v;

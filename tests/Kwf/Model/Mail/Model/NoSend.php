@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mail_Model_NoSend extends Vps_Model_Mail
+class Kwf_Model_Mail_Model_NoSend extends Kwf_Model_Mail
 {
-    protected $_rowClass = 'Vps_Model_Mail_Model_Row_NoSend';
+    protected $_rowClass = 'Kwf_Model_Mail_Model_Row_NoSend';
 }

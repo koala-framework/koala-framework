@@ -1,20 +1,20 @@
 <?php
  /**
-  * @group Vps_Form
+  * @group Kwf_Form
   */
-class Vps_Form_FormInFormTest extends Vps_Test_TestCase
+class Kwf_Form_FormInFormTest extends Kwf_Test_TestCase
 {
     public function testForm()
     {
-        $form = new Vps_Form('form1');
-        $form->setModel(new Vps_Model_FnF(array('data'=>array(
+        $form = new Kwf_Form('form1');
+        $form->setModel(new Kwf_Model_FnF(array('data'=>array(
             array('id'=>10, 'test1'=>'foo')
         ))));
-        $form->add(new Vps_Form_Field_TextField('test1'));
+        $form->add(new Kwf_Form_Field_TextField('test1'));
 
-        $textField2 = new Vps_Form_Field_TextField('test2');
-        $form->add(new Vps_Form('form2'))
-            ->setModel(new Vps_Model_FnF(array('data'=>array(
+        $textField2 = new Kwf_Form_Field_TextField('test2');
+        $form->add(new Kwf_Form('form2'))
+            ->setModel(new Kwf_Model_FnF(array('data'=>array(
                 array('id'=>10, 'test2'=>'bar')
             ))))
             ->setIdTemplate('{0}')
@@ -40,16 +40,16 @@ class Vps_Form_FormInFormTest extends Vps_Test_TestCase
 
     public function testCreateOnFind()
     {
-        $form = new Vps_Form('form1');
-        $form->setModel(new Vps_Model_FnF(array('data'=>array(
+        $form = new Kwf_Form('form1');
+        $form->setModel(new Kwf_Model_FnF(array('data'=>array(
             array('id'=>10, 'test1'=>'foo')
         ))));
-        $form->add(new Vps_Form_Field_TextField('test1'));
-        $form->add(new Vps_Form('form2'))
-            ->setModel(new Vps_Model_FnF())
+        $form->add(new Kwf_Form_Field_TextField('test1'));
+        $form->add(new Kwf_Form('form2'))
+            ->setModel(new Kwf_Model_FnF())
             ->setCreateMissingRow(true)
             ->setIdTemplate('{0}')
-            ->add(new Vps_Form_Field_TextField('test2'));
+            ->add(new Kwf_Form_Field_TextField('test2'));
 
         $form->setId(10);
         $data = $form->load(null);
@@ -64,16 +64,16 @@ class Vps_Form_FormInFormTest extends Vps_Test_TestCase
 
     public function testFormDuplicateEntry()
     {
-        $form = new Vps_Form('form1');
-        $model = new Vps_Model_FnF();
+        $form = new Kwf_Form('form1');
+        $model = new Kwf_Model_FnF();
         $form->setModel($model);
 
-        $form2 = new Vps_Form('form2');
+        $form2 = new Kwf_Form('form2');
         $form2  ->setModel($model)
                 ->setIdTemplate('{0}')
-                ->add(new Vps_Form_Field_TextField('test2'));
+                ->add(new Kwf_Form_Field_TextField('test2'));
 
-        $form->add(new Vps_Form_Field_TextField('test1'));
+        $form->add(new Kwf_Form_Field_TextField('test1'));
         $form->add($form2);
 
         $this->assertNotNull($form->fields['test1']);

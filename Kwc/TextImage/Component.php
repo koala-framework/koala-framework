@@ -1,13 +1,13 @@
 <?php
-class Vpc_TextImage_Component extends Vpc_Abstract_Composite_Component
+class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Text-Image');
-        $ret['ownModel'] = 'Vpc_TextImage_Model';
-        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
-        $ret['generators']['child']['component']['image'] = 'Vpc_TextImage_ImageEnlarge_Component';
+        $ret['componentName'] = trlKwf('Text-Image');
+        $ret['ownModel'] = 'Kwc_TextImage_Model';
+        $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
+        $ret['generators']['child']['component']['image'] = 'Kwc_TextImage_ImageEnlarge_Component';
         $ret['mailImageVAlign'] = 'center'; // valign von Image
         return $ret;
     }

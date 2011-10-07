@@ -2,7 +2,7 @@
 /**
  * Validierer Einfachere Validierungs-Meldungen
  */
-class Vps_Validate_EmailAddressSimple extends Vps_Validate_EmailAddress
+class Kwf_Validate_EmailAddressSimple extends Kwf_Validate_EmailAddress
 {
     protected function _error($messageKey = null, $value = null)
     {

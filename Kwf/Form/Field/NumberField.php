@@ -1,11 +1,11 @@
 <?php
-class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
+class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('numberfield');
-        $this->setDecimalSeparator(trlcVps('decimal separator', '.'));
+        $this->setDecimalSeparator(trlcKwf('decimal separator', '.'));
         $this->setDecimalPrecision(2);
     }
     protected function _addValidators()
@@ -19,14 +19,14 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
             $this->addValidator(new Zend_Validate_GreaterThan($this->getMinValue()-0.000001));
         }
         if ($this->getAllowNegative() === false) {
-            $this->addValidator(new Vps_Validate_NotNegative());
+            $this->addValidator(new Kwf_Validate_NotNegative());
         }
         if ($this->getAllowDecimals() === false) {
-            $this->addValidator(new Vps_Validate_Digits(true));
+            $this->addValidator(new Kwf_Validate_Digits(true));
         } else {
             $l = null;
-            if (trlcVps('locale', 'C') != 'C') {
-                $l = Zend_Locale::findLocale(trlcVps('locale', 'C'));
+            if (trlcKwf('locale', 'C') != 'C') {
+                $l = Zend_Locale::findLocale(trlcKwf('locale', 'C'));
             }
             $this->addValidator(new Zend_Validate_Float($l));
         }
@@ -62,7 +62,7 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Number Field')
+            'componentName' => trlKwf('Number Field')
         ));
     }
 }

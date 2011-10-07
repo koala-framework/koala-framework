@@ -1,9 +1,9 @@
 <?php
-class Vpc_Shop_Products_Detail_AddToCartGenerator extends Vps_Component_Generator_Static
+class Kwc_Shop_Products_Detail_AddToCartGenerator extends Kwf_Component_Generator_Static
 {
     protected function _getChildComponentClasses($parentData = null)
     {
-        $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         if ($parentData) {
             foreach ($generators['addToCart']['component'] as $component => $class) {
                 if ($component == $parentData->row->component) {

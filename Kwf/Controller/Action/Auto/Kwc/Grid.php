@@ -1,12 +1,12 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action_Auto_Grid
+abstract class Kwf_Controller_Action_Auto_Kwc_Grid extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_hasComponentId = true;
 
     public function preDispatch()
     {
         if (!isset($this->_model) && !isset($this->_tableName) && !isset($this->_modelName)) {
-            $this->setModel(Vpc_Abstract::createChildModel($this->_getParam('class')));
+            $this->setModel(Kwc_Abstract::createChildModel($this->_getParam('class')));
         }
         parent::preDispatch();
     }
@@ -30,21 +30,21 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
     public function indexAction()
     {
         //nicht: parent::indexAction();
-        if (Vpc_Abstract::hasSetting($this->_getParam('class'), 'extConfigControllerIndex')) {
+        if (Kwc_Abstract::hasSetting($this->_getParam('class'), 'extConfigControllerIndex')) {
             $type = 'extConfigControllerIndex';
         } else {
             //für Abwärtskompatibilität
             $type = 'extConfig';
         }
-        $config = Vps_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $type)
-                    ->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
+        $config = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $type)
+                    ->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
         if (!$config) {
-            throw new Vps_Exception("Not ExtConfig avaliable for this component");
+            throw new Kwf_Exception("Not ExtConfig avaliable for this component");
         }
         reset($config);
         $firstConfig = current($config);
         if (count($config) > 1 || (isset($firstConfig['needsComponentPanel']) && $firstConfig['needsComponentPanel'])) {
-            $this->view->xtype = 'vps.component';
+            $this->view->xtype = 'kwf.component';
             $this->view->mainComponentClass = $this->_getParam('class');
             $this->view->baseParams = array('id' => $this->_getParam('componentId'));
 

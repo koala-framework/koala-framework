@@ -1,12 +1,12 @@
 <?php
-class Vpc_Basic_Flash_Code_Component extends Vpc_Abstract_Flash_Component
+class Kwc_Basic_Flash_Code_Component extends Kwc_Abstract_Flash_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Flash.Code');
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['componentName'] = trlKwf('Flash.Code');
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'code';
         return $ret;
     }

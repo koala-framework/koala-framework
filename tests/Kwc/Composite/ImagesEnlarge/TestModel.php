@@ -1,9 +1,9 @@
 <?php
-class Vpc_Composite_ImagesEnlarge_TestModel extends Vpc_Abstract_List_Model
+class Kwc_Composite_ImagesEnlarge_TestModel extends Kwc_Abstract_List_Model
 {
     public function __construct($config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
                 'columns' => array('id', 'component_id', 'visible', 'pos'),
                 'data'=> array(
                     array('id'=>1, 'component_id'=>2200, 'visible'=>1, 'pos'=>1),

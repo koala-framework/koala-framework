@@ -1,13 +1,13 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_InheritContentWithVisible
+ * @group Kwc_Trl
+ * @group Kwc_InheritContentWithVisible
  */
-class Vpc_Trl_InheritContentWithVisible_Test extends Vpc_TestAbstract
+class Kwc_Trl_InheritContentWithVisible_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_InheritContentWithVisible_Root');
+        parent::setUp('Kwc_Trl_InheritContentWithVisible_Root');
     }
 
     public function testContentEn3()

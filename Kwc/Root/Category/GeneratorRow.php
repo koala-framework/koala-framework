@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_Category_GeneratorRow extends Vps_Model_Tree_Row
+class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
 {
     protected function _beforeInsert()
     {
@@ -13,7 +13,7 @@ class Vpc_Root_Category_GeneratorRow extends Vps_Model_Tree_Row
     {
         parent::_beforeUpdate();
         if ($this->is_home && !$this->visible) {
-            throw new Vps_ClientException(trlVps('Cannot set Home Page invisible'));
+            throw new Kwf_ClientException(trlKwf('Cannot set Home Page invisible'));
         }
     }
 
@@ -21,14 +21,14 @@ class Vpc_Root_Category_GeneratorRow extends Vps_Model_Tree_Row
     {
         parent::_beforeDelete();
         if (count($this->getChildNodes())) {
-            throw new Vps_ClientException(trlVps("Can't delete page as there are child pages."));
+            throw new Kwf_ClientException(trlKwf("Can't delete page as there are child pages."));
         }
 
         // Dranhängende Komponente löschen
-        $generators = Vps_Component_Data_Root::getInstance()->getPageGenerators();
+        $generators = Kwf_Component_Data_Root::getInstance()->getPageGenerators();
         foreach ($generators as $generator) {
-            $class = Vpc_Abstract::getChildComponentClass($generator->getClass(), null, $this->component);
-            Vpc_Admin::getInstance($class)->delete($this->id);
+            $class = Kwc_Abstract::getChildComponentClass($generator->getClass(), null, $this->component);
+            Kwc_Admin::getInstance($class)->delete($this->id);
         }
     }
 
@@ -36,7 +36,7 @@ class Vpc_Root_Category_GeneratorRow extends Vps_Model_Tree_Row
     {
         $ret = array();
 
-        foreach (Vpc_Admin::getDependsOnRowInstances() as $a) {
+        foreach (Kwc_Admin::getDependsOnRowInstances() as $a) {
             foreach ($a->getComponentsDependingOnRow($this) as $i) {
                 if ($i) {
                     $ret[] = $i;

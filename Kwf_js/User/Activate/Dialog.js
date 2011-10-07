@@ -1,5 +1,5 @@
-Ext.namespace('Vps.User.Activate');
-Vps.User.Activate.Dialog = Ext.extend(Ext.Window,
+Ext.namespace('Kwf.User.Activate');
+Kwf.User.Activate.Dialog = Ext.extend(Ext.Window,
 {
     initComponent: function()
     {
@@ -9,12 +9,12 @@ Vps.User.Activate.Dialog = Ext.extend(Ext.Window,
         this.title = 'Account activation';
         this.resizable = false;
         this.closable = true;
-        Vps.User.Activate.Dialog.superclass.initComponent.call(this);
+        Kwf.User.Activate.Dialog.superclass.initComponent.call(this);
     },
     afterRender : function()
     {
         // Form & Login
-        Vps.User.Login.Dialog.superclass.afterRender.call(this);
+        Kwf.User.Login.Dialog.superclass.afterRender.call(this);
         var frameHtml = '<iframe scrolling="no" src="/login/show-form" width="100%" '+
                         'height="100%" style="border: 0px"></iframe>';
         var frame = Ext.DomHelper.append(this.body, frameHtml, true);
@@ -31,7 +31,7 @@ Vps.User.Activate.Dialog = Ext.extend(Ext.Window,
                     if (this.location) {
                         location.href = this.location;
                     } else {
-                        if(Vps.menu) Vps.menu.reload();
+                        if(Kwf.menu) Kwf.menu.reload();
                         if(this.success) {
                             Ext.callback(this.success, this.scope);
                         }
@@ -41,7 +41,7 @@ Vps.User.Activate.Dialog = Ext.extend(Ext.Window,
                 }
 
                 Ext.EventManager.on(doc.getElementById('lostPassword'), 'click', function() {
-                    Ext.Msg.prompt(trlVps('Password lost'), trlVps('Please enter your email address'), function(btn, email) {
+                    Ext.Msg.prompt(trlKwf('Password lost'), trlKwf('Please enter your email address'), function(btn, email) {
                         if (btn == 'ok') {
                             var lostPasswordResultDialog = function(response, options, result) {
                                 Ext.Msg.show({

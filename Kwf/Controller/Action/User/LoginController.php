@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
+class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
@@ -8,15 +8,15 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         if ($location == '') { $location = '/'; }
         $config = array('location' => $location);
         if ($this->_getUserRole() != 'guest') {
-            $config['message'] = trlVps("You don't have enough permissions for this Action");
+            $config['message'] = trlKwf("You don't have enough permissions for this Action");
         }
-        $this->view->ext('Vps.User.Login.Index', $config);
+        $this->view->ext('Kwf.User.Login.Index', $config);
     }
 
     public function jsonLoginAction()
     {
         if ($this->_getUserRole() != 'guest') {
-            $this->view->message = trlVps("You don't have enough permissions for this Action");
+            $this->view->message = trlKwf("You don't have enough permissions for this Action");
         }
         $this->view->resource = $this->_getParam('resource');
         $this->view->role = $this->_getParam('role');
@@ -28,22 +28,22 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     public function headerAction()
     {
         try {
-            $t = new Vps_Util_Model_Welcome();
+            $t = new Kwf_Util_Model_Welcome();
             $row = $t->getRow(1);
         } catch (Zend_Db_Statement_Exception $e) {
             //wenn tabelle nicht existiert fehler abfangen
             $row = null;
         }
         if ($row && $row->getParentRow('LoginImage')) {
-            $this->view->image = Vps_Media::getUrlByRow(
+            $this->view->image = Kwf_Media::getUrlByRow(
                 $row, 'LoginImage'
             );
-            $this->view->imageSize = Vps_Media::getDimensionsByRow($row, 'LoginImage');
+            $this->view->imageSize = Kwf_Media::getDimensionsByRow($row, 'LoginImage');
         } else {
             $this->view->image = false;
         }
-        if (Vps_Util_Git::web()->getActiveBranch() != 'production'
-            || Vps_Util_Git::vps()->getActiveBranch() != 'production/'.Vps_Registry::get('config')->application->id
+        if (Kwf_Util_Git::web()->getActiveBranch() != 'production'
+            || Kwf_Util_Git::vps()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id
         ) {
             $this->view->untagged = true;
         }
@@ -60,20 +60,20 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             $result = $this->_login();
             $this->view->username = $this->_getParam('username');
             if ($result->isValid()) {
-                $this->view->text = trlVps('Login successful').'<!--successful-->';
-                $this->view->cssClass = 'vpsLoginResultSuccess';
+                $this->view->text = trlKwf('Login successful').'<!--successful-->';
+                $this->view->cssClass = 'kwfLoginResultSuccess';
             } else {
                 if ($result->getCode() == Zend_Auth_Result::FAILURE_UNCATEGORIZED) {
                     $msgs = $result->getMessages();
                     $this->view->text = $msgs[0];
                     if (isset($msgs[1])) {
-                        $asset = new Vps_Asset('help.png');
+                        $asset = new Kwf_Asset('help.png');
                         $this->view->text .= ' <img src="'.$asset.'" width="16" height="16" ext:qwidth="140" ext:qtitel="Hilfe" ext:qtip="'.$msgs[1].'" />';
                     }
                 } else {
-                    $this->view->text = trlVps('Login failed');
+                    $this->view->text = trlKwf('Login failed');
                 }
-                $this->view->cssClass = 'vpsLoginResultFailure';
+                $this->view->cssClass = 'kwfLoginResultFailure';
 
                 $msgs = $result->getMessages();
                 if ($msgs && isset($msgs[0]) && $msgs[0] == 'IP address not allowed') {
@@ -103,9 +103,9 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             $config['errorMsg'] = 'User not found in Web.';
         } else if ($row->getActivationCode() != $code) {
             if ($row->password) {
-                $config['errorMsg'] = trlVps('Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.', array('<a href="/vps/welcome">', '</a>', '<br />'));
+                $config['errorMsg'] = trlKwf('Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.', array('<a href="/kwf/welcome">', '</a>', '<br />'));
             } else {
-                $config['errorMsg'] = trlVps('Activation code is invalid. Maybe the URL wasn\'t copied completely?');
+                $config['errorMsg'] = trlKwf('Activation code is invalid. Maybe the URL wasn\'t copied completely?');
             }
         }
 
@@ -113,7 +113,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             $config['email'] = $row->email;
         }
 
-        $this->view->ext('Vps.User.Activate.Index', $config);
+        $this->view->ext('Kwf.User.Activate.Index', $config);
     }
 
     public function jsonActivateAction()
@@ -123,16 +123,16 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         $code = $this->getRequest()->getParam('code');
 
         if (empty($userId) || empty($password) || empty($code)) {
-            throw new Vps_ClientException(trlVps('Data not submitted completely.'));
+            throw new Kwf_ClientException(trlKwf('Data not submitted completely.'));
         }
 
         $users = Zend_Registry::get('userModel');
         $row = $users->getRow($userId);
 
         if (!$row) {
-            throw new Vps_ClientException('User not found in Web.');
+            throw new Kwf_ClientException('User not found in Web.');
         } else if ($row->getActivationCode() != $code) {
-            throw new Vps_ClientException(trlVps('Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?'));
+            throw new Kwf_ClientException(trlKwf('Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?'));
         }
 
         $row->setPassword($password);
@@ -143,7 +143,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
 
     public function logoutAction()
     {
-        Vps_Auth::getInstance()->clearIdentity();
+        Kwf_Auth::getInstance()->clearIdentity();
         $this->_onLogout();
     }
 
@@ -162,7 +162,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
 
     protected function _createAuthAdapter()
     {
-        $adapter = new Vps_Auth_Adapter_Service();
+        $adapter = new Kwf_Auth_Adapter_Service();
         return $adapter;
     }
 
@@ -174,11 +174,11 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
 
         $adapter = $this->_createAuthAdapter();
 
-        if (!$adapter instanceof Vps_Auth_Adapter_Service) {
-            throw new Vps_Controller_Exception(('_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service'));
+        if (!$adapter instanceof Kwf_Auth_Adapter_Service) {
+            throw new Kwf_Controller_Exception(('_createAuthAdapter didn\'t return instance of Kwf_Auth_Adapter_Service'));
         }
 
-        $auth = Vps_Auth::getInstance();
+        $auth = Kwf_Auth::getInstance();
         $adapter->setIdentity($username);
         $adapter->setCredential($password);
         $result = $auth->authenticate($adapter);
@@ -196,7 +196,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     {
         $email = $this->getRequest()->getParam('email');
         if (!$email) {
-            throw new Vps_Exception_Client(trlVps("Please enter your E-Mail-Address"));
+            throw new Kwf_Exception_Client(trlKwf("Please enter your E-Mail-Address"));
         }
 
         $users = Zend_Registry::get('userModel');

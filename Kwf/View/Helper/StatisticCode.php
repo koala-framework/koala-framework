@@ -1,10 +1,10 @@
 <?php
-class Vps_View_Helper_StatisticCode
+class Kwf_View_Helper_StatisticCode
 {
     public function statisticCode($analyticsCode = null)
     {
         $ret  = '';
-        $cfg = Vps_Config::getValueArray('statistic');
+        $cfg = Kwf_Config::getValueArray('statistic');
         if (!$analyticsCode) {
             $analyticsCode = isset($cfg['analyticsCode']) ? $cfg['analyticsCode'] : false;
         }

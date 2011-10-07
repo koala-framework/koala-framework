@@ -1,11 +1,11 @@
 <?php
-class Vps_Controller_Action_User_SelfController extends Vps_Controller_Action_Auto_Form
+class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
 
     public function preDispatch()
     {
-        $regUserForm = Vps_Registry::get('config')->user->form;
+        $regUserForm = Kwf_Registry::get('config')->user->form;
         if (is_string($regUserForm)) {
             $this->_formName = $regUserForm;
         } else {
@@ -18,11 +18,11 @@ class Vps_Controller_Action_User_SelfController extends Vps_Controller_Action_Au
     {
         parent::_initFields();
 
-        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Change password')));
+        $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Change password')));
         $fs->setLabelWidth(130);
 
-        $fs->add(new Vps_Form_Field_Password('password1', trlVps('Change password')));
-        $fs->add(new Vps_Form_Field_Password('password2', trlVps('Repeat password')));
+        $fs->add(new Kwf_Form_Field_Password('password1', trlKwf('Change password')));
+        $fs->add(new Kwf_Form_Field_Password('password2', trlKwf('Repeat password')));
     }
 
     protected function _hasPermissions($row, $action)
@@ -32,7 +32,7 @@ class Vps_Controller_Action_User_SelfController extends Vps_Controller_Action_Au
             return false;
         }
 
-        $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
+        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
         if ($authedUser->id != $userId || $authedUser->id != $row->id) {
             return false;
         }

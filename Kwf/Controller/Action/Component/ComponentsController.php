@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_ComponentsController extends Vps_Controller_Action_Auto_Tree
+class Kwf_Controller_Action_Component_ComponentsController extends Kwf_Controller_Action_Auto_Tree
 {
     protected $_primaryKey = 'component';
     protected $_textField = 'component';
@@ -15,7 +15,7 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         'default'   => 'page_error',
         'invisible'   => 'page_error'
     );
-    protected $_modelName = 'Vps_Component_Generator_Model';
+    protected $_modelName = 'Kwf_Component_Generator_Model';
     
     protected function _formatNode($row)
     {
@@ -23,9 +23,9 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         if ($row->class == 'root') {
             $icon = 'root';
         /*NOT PORTED to flags
-        } else if (is_instance_of($row->class, 'Vps_Component_Generator_Box_Interface')) {
+        } else if (is_instance_of($row->class, 'Kwf_Component_Generator_Box_Interface')) {
             $icon = 'box';
-        } else if (is_instance_of($row->class, 'Vps_Component_Generator_Page_Interface')) {
+        } else if (is_instance_of($row->class, 'Kwf_Component_Generator_Page_Interface')) {
             $icon = 'page';
         */
         } else {
@@ -59,10 +59,10 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         $this->_y += 40;
 
         $classes = array();
-        foreach (Vpc_Abstract::getSetting($class, 'generators') as $generator) {
-            if (is_instance_of($generator['class'], 'Vps_Component_Generator_Box_Interface')) {
+        foreach (Kwc_Abstract::getSetting($class, 'generators') as $generator) {
+            if (is_instance_of($generator['class'], 'Kwf_Component_Generator_Box_Interface')) {
                 $type = 'box';
-            } else if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface')) {
+            } else if (is_instance_of($generator['class'], 'Kwf_Component_Generator_Page_Interface')) {
                 $type = 'page';
             } else {
                 $type = 'component';
@@ -75,7 +75,7 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
                 );
             }
         }
-        $plugins = Vpc_Abstract::getSetting($class, 'plugins');
+        $plugins = Kwc_Abstract::getSetting($class, 'plugins');
         if (is_array($plugins)) {
             foreach ($plugins as $c) {
                 $classes[] = array(
@@ -99,7 +99,7 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
     }
     public function graphAction()
     {
-        $svg = $this->_process(Vps_Component_Data_Root::getComponentClass(), 'root');
+        $svg = $this->_process(Kwf_Component_Data_Root::getComponentClass(), 'root');
 
 $svg = '<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"

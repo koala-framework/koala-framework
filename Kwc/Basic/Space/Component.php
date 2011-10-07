@@ -1,16 +1,16 @@
 <?php
 /**
- * @package Vpc
+ * @package Kwc
  * @subpackage Basic
  */
-class Vpc_Basic_Space_Component extends Vpc_Abstract
+class Kwc_Basic_Space_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Space');
-        $ret['ownModel'] = 'Vpc_Basic_Space_Model';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['componentName'] = trlKwf('Space');
+        $ret['ownModel'] = 'Kwc_Basic_Space_Model';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 

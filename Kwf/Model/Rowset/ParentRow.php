@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Rowset_ParentRow extends Vps_Model_Rowset_Abstract
+class Kwf_Model_Rowset_ParentRow extends Kwf_Model_Rowset_Abstract
 {
     protected $_parentRow;
     public function __construct($config)

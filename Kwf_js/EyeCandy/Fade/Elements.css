@@ -1,5 +1,5 @@
-.vpsFadeElements { position: relative; }
-.vpsFadeElement { position: absolute; top: 0px; left: 0px; }
+.kwfFadeElements { position: relative; }
+.kwfFadeElement { position: absolute; top: 0px; left: 0px; }
 
 .elementAccessLinks { position: relative; z-index: 2; }
 .elementAccessLinks li { float: left; }
@@ -14,10 +14,10 @@
     background-repeat: no-repeat;
 }
 .elementAccessLinks .elementAccessPause {
-    background-image: url(/assets/vps/images/pause.png);
+    background-image: url(/assets/kwf/images/pause.png);
 }
 .elementAccessLinks .elementAccessPlay {
-    background-image: url(/assets/vps/images/play.png);
+    background-image: url(/assets/kwf/images/play.png);
 }
 .elementAccessNext,
 .elementAccessPrevious { position: relative; z-index: 2; }

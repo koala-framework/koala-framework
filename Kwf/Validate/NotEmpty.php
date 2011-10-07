@@ -1,10 +1,10 @@
 <?php
 //empty, aber 0 ist erlaubt
-class Vps_Validate_NotEmpty extends Zend_Validate_NotEmpty
+class Kwf_Validate_NotEmpty extends Zend_Validate_NotEmpty
 {
     public function __construct()
     {
-        $this->_messageTemplates[self::IS_EMPTY] = trlVpsStatic("Please fill out the field");
+        $this->_messageTemplates[self::IS_EMPTY] = trlKwfStatic("Please fill out the field");
     }
 
     public function setMessage($type, $msg)

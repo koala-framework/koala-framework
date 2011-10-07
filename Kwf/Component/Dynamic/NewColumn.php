@@ -2,8 +2,8 @@
 /**
  * macht nach $columns einen neuen $tag auf
  */
-class Vps_Component_Dynamic_NewColumn
-    extends Vps_Component_Dynamic_Abstract
+class Kwf_Component_Dynamic_NewColumn
+    extends Kwf_Component_Dynamic_Abstract
 {
     protected $_columns;
     protected $_tag;

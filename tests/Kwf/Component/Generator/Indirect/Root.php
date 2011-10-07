@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Indirect_Root extends Vps_Component_NoCategoriesRoot
+class Kwf_Component_Generator_Indirect_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
@@ -7,8 +7,8 @@ class Vps_Component_Generator_Indirect_Root extends Vps_Component_NoCategoriesRo
         unset($ret['generators']['page']);
         unset($ret['generators']['box']);
         $ret['generators']['static'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vps_Component_Generator_Indirect_Flag'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwf_Component_Generator_Indirect_Flag'
         );
         return $ret;
     }

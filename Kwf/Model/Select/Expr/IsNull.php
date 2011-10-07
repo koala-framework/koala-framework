@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_IsNull implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_IsNull implements Kwf_Model_Select_Expr_Interface
 {
     protected $_field;
 
@@ -15,12 +15,12 @@ class Vps_Model_Select_Expr_IsNull implements Vps_Model_Select_Expr_Interface
     public function validate()
     {
         if (!$this->_field) {
-            throw new Vps_Exception("No Field-Value set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No Field-Value set for '"+get_class($this)+"'");
         }
     }
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_BOOLEAN;
+        return Kwf_Model_Interface::TYPE_BOOLEAN;
     }
 }

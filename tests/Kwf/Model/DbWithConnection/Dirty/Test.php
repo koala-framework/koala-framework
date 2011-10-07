@@ -5,7 +5,7 @@
  * @group Model_DbWithConnection
  * @group Model_Db_Dirty
  */
-class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
+class Kwf_Model_DbWithConnection_Dirty_Test extends Kwf_Test_TestCase
 {
     private $_tableName;
     public function setUp()
@@ -18,8 +18,8 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
             `test2` VARCHAR( 200 ) character set utf8 NOT NULL,
             `test3` INT(10) UNSIGNED NULL
         ) ENGINE = INNODB DEFAULT CHARSET=utf8";
-        Vps_Registry::get('db')->query($sql);
-        $m = new Vps_Model_Db(array(
+        Kwf_Registry::get('db')->query($sql);
+        $m = new Kwf_Model_Db(array(
             'table' => $this->_tableName
         ));
         $r = $m->createRow();
@@ -31,84 +31,84 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
 
     public function tearDown()
     {
-        Vps_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
+        Kwf_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
         parent::tearDown();
     }
 
     public function testDontSaveNotDirtyRow()
     {
-        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+        Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Vps_Db_Table(array(
+        $table = new Kwf_Db_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
+            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $table
         ));
 
         $row = $model->getRow(1);
         $row->save();
 
-        $this->assertEquals(0, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(0, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
 
         $row = $model->getRow(1);
         $row->test1 = 'foo';
         $row->save();
 
-        $this->assertEquals(0, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(0, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
     public function testNotDirtyForceSave()
     {
-        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+        Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Vps_Db_Table(array(
+        $table = new Kwf_Db_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
+            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $table
         ));
 
         $row = $model->getRow(1);
         $row->forceSave();
 
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(1, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
 
         $row = $model->getRow(1);
         $row->test1 = 'foo';
         $row->forceSave();
 
-        $this->assertEquals(2, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(2, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
     public function testSaveNewRowNotDirty()
     {
-        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+        Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Vps_Db_Table(array(
+        $table = new Kwf_Db_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
+            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $table
         ));
 
         $row = $model->createRow();
         $row->save();
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(1, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
     public function testSaveDirtyRow()
     {
-        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+        Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Vps_Db_Table(array(
+        $table = new Kwf_Db_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
+            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $table
         ));
 
@@ -116,27 +116,27 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
         $row->test1 = 'blubb';
         $row->save();
 
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(1, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
 
-        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+        Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
         $row = $model->getRow(1);
         $row->test3 = '77';
         $row->save();
 
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(1, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
 
-        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+        Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
         $row = $model->createRow();
         $row->test1 = 'xx';
         $row->test2 = 'yy';
         $row->save();
 
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+        $this->assertEquals(1, Kwf_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
     public function testDirtyColumns()
     {
-        $model = new Vps_Model_Db(array(
+        $model = new Kwf_Model_Db(array(
             'table' => $this->_tableName
         ));
 
@@ -152,8 +152,8 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
 
     public function testDirtyColumnsWithProxy()
     {
-        $model = new Vps_Model_Proxy(array(
-            'proxyModel' => new Vps_Model_Db(array(
+        $model = new Kwf_Model_Proxy(array(
+            'proxyModel' => new Kwf_Model_Db(array(
                 'table' => $this->_tableName
             )
         )));

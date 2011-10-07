@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_EMailField extends Vps_Form_Field_TextField
+class Kwf_Form_Field_EMailField extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -10,7 +10,7 @@ class Vps_Form_Field_EMailField extends Vps_Form_Field_TextField
     protected function _processLoaded($value)
     {
         $value = parent::_processLoaded($value);
-        $punycode = new Vps_Util_Punycode();
+        $punycode = new Kwf_Util_Punycode();
         $value = $punycode->decode($value);
         return $value;
     }
@@ -18,7 +18,7 @@ class Vps_Form_Field_EMailField extends Vps_Form_Field_TextField
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        $punycode = new Vps_Util_Punycode();
+        $punycode = new Kwf_Util_Punycode();
         $ret = $punycode->encode($ret);
         return $ret;
     }

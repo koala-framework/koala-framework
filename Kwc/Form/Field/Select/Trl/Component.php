@@ -1,10 +1,10 @@
 <?php
-class Vpc_Form_Field_Select_Trl_Component extends Vpc_Form_Field_Abstract_Trl_Component
+class Kwc_Form_Field_Select_Trl_Component extends Kwc_Form_Field_Abstract_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['ownModel'] = 'Vpc_Form_Field_Select_Trl_Model';
+        $ret['ownModel'] = 'Kwc_Form_Field_Select_Trl_Model';
         return $ret;
     }
 

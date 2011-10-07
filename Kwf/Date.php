@@ -1,5 +1,5 @@
 <?php
-class Vps_Date
+class Kwf_Date
 {
     //TODO: DateTime verwenden, das unterstützt datum vor 1970 und nach 2038
     protected $_timestamp;
@@ -12,7 +12,7 @@ class Vps_Date
             $this->_timestamp = strtotime($date);
         }
         if (!$this->_timestamp) {
-            throw new Vps_Exception('Invalid date');
+            throw new Kwf_Exception('Invalid date');
         }
     }
 

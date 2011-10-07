@@ -1,5 +1,5 @@
 <?php
-class Vps_Test
+class Kwf_Test
 {
     public static function getTestDb($dbName = 'test')
     {
@@ -11,10 +11,10 @@ class Vps_Test
         ));
         $db->query('SET names UTF8');
         if (Zend_Registry::get('config')->debug->querylog) {
-            $profiler = new Vps_Db_Profiler(true);
+            $profiler = new Kwf_Db_Profiler(true);
             $db->setProfiler($profiler);
         } else if (Zend_Registry::get('config')->debug->benchmark || Zend_Registry::get('config')->debug->benchmarkLog) {
-            $profiler = new Vps_Db_Profiler_Count(true);
+            $profiler = new Kwf_Db_Profiler_Count(true);
             $db->setProfiler($profiler);
         }
 
@@ -24,20 +24,20 @@ class Vps_Test
     public static function setup()
     {
         $include_path  = get_include_path();
-        $include_path .= PATH_SEPARATOR . VPS_PATH;
+        $include_path .= PATH_SEPARATOR . KWF_PATH;
         set_include_path($include_path);
 
-        require_once 'Vps/Loader.php';
-        require_once 'Vps/Setup.php';
-        Vps_Loader::registerAutoload();
+        require_once 'Kwf/Loader.php';
+        require_once 'Kwf/Setup.php';
+        Kwf_Loader::registerAutoload();
 
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
 
-        Zend_Registry::setClassName('Vps_Registry');
+        Zend_Registry::setClassName('Kwf_Registry');
 
         // auskommentiert, da main() sowieso nicht aufgerufen wird
-//         require_once VPS_PATH.'/tests/TestConfiguration.php';
+//         require_once KWF_PATH.'/tests/TestConfiguration.php';
 
         require_once 'PHPUnit/Framework/TestSuite.php';
         require_once 'PHPUnit/TextUI/TestRunner.php';
@@ -57,9 +57,9 @@ class Vps_Test
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Vps Framework');
+        $suite = new PHPUnit_Framework_TestSuite('Kwf Framework');
 
-        $dir = new Vps_Iterator_Filter_Php(
+        $dir = new Kwf_Iterator_Filter_Php(
             new RecursiveIteratorIterator(new RecursiveDirectoryIterator('.'), true)
         );
 

@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Error_CliController extends Vps_Controller_Action
+class Kwf_Controller_Action_Error_CliController extends Kwf_Controller_Action
 {
     public function errorAction()
     {
@@ -12,10 +12,10 @@ class Vps_Controller_Action_Error_CliController extends Vps_Controller_Action
             } else if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION) {
                 file_put_contents('php://stderr', "ERROR: Action not found\n");
             }
-        } else if ($errors->exception instanceof Vps_Exception_Client) {
+        } else if ($errors->exception instanceof Kwf_Exception_Client) {
             file_put_contents('php://stderr', $errors->exception->getMessage()."\n");
         } else {
-            throw $errors->exception; // wird von Vps_Debug::handleException behandelt
+            throw $errors->exception; // wird von Kwf_Debug::handleException behandelt
         }
         exit(1);
     }

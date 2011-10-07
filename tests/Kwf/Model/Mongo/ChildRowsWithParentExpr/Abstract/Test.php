@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends Vps_Test_TestCase
+abstract class Kwf_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends Kwf_Test_TestCase
 {
     public function testNoop() {}
 /*
@@ -12,9 +12,9 @@ abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends Vps
         $this->markTestIncomplete(); // TODO: deaktiviert, waren Fehler drinnen
         parent::setUp();
 
-        $this->_model = Vps_Model_Abstract::getInstance($this->_modelClass);
+        $this->_model = Kwf_Model_Abstract::getInstance($this->_modelClass);
         $m = $this->_model;
-        while($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+        while($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
         $m->getCollection()->insert(
             array('id'=>1, 'name'=>'a', 'foo'=>array(array('x'=>1, 'parent_id'=>1, 'parent_name' => 'one'), array('x'=>2))) //TODO id sollte nicht nötig sein
         , array('safe'=>true));
@@ -61,7 +61,7 @@ abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends Vps
 
     public function testParentExprParentChanged()
     {
-        $pRow = Vps_Model_Abstract::getInstance($this->_parentModelClass)->getRow(1);
+        $pRow = Kwf_Model_Abstract::getInstance($this->_parentModelClass)->getRow(1);
         $pRow->name = 'onex';
         $pRow->save();
 

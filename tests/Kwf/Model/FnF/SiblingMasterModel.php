@@ -1,7 +1,7 @@
 <?php
-class Vps_Model_FnF_SiblingMasterModel extends Vps_Model_FnF
+class Kwf_Model_FnF_SiblingMasterModel extends Kwf_Model_FnF
 {
-    protected $_siblingModels = array('Vps_Model_FnF_SiblingModel');
+    protected $_siblingModels = array('Kwf_Model_FnF_SiblingModel');
     protected $_columns = array('id', 'foo');
     protected $_data = array(
         array('id'=>1, 'foo'=>'foo1'),

@@ -1,15 +1,15 @@
 <?php
-class Vps_Util_Gearman_Client extends GearmanClient
+class Kwf_Util_Gearman_Client extends GearmanClient
 {
     public static function getInstance()
     {
         static $i;
         if (!isset($i)) {
             $i = new self();
-            $c = Vps_Registry::get('config')->server->gearman;
+            $c = Kwf_Registry::get('config')->server->gearman;
             foreach ($c->jobServers as $k=>$server) {
                 if ($server) {
-                    Vps_Util_Gearman_AdminClient::checkConnection($server);
+                    Kwf_Util_Gearman_AdminClient::checkConnection($server);
                     if ($server->tunnelUser) {
                         $i->addServer('localhost', 4730);
                     } else {
@@ -25,7 +25,7 @@ class Vps_Util_Gearman_Client extends GearmanClient
     {
         static $prefix;
         if (!isset($prefix)) {
-            $prefix = Vps_Registry::get('config')->server->gearman->functionPrefix;
+            $prefix = Kwf_Registry::get('config')->server->gearman->functionPrefix;
         }
         return $prefix.'_'.$fn;
     }
@@ -67,8 +67,8 @@ class Vps_Util_Gearman_Client extends GearmanClient
         return parent::addTaskLowBackground($function_name, $workload, $context, $unique);
     }
 
-    //ACHTUNG immer doVps statt do verwenden! (do kann leider nicht überschrieben werden)
-    public function doVps($function_name, $workload, $unique=null)
+    //ACHTUNG immer doKwf statt do verwenden! (do kann leider nicht überschrieben werden)
+    public function doKwf($function_name, $workload, $unique=null)
     {
         $function_name = self::_processFunctionName($function_name);
         return $this->do($function_name, $workload, $unique);

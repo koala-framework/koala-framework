@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Session extends Vps_Model_Data_Abstract
+class Kwf_Model_Session extends Kwf_Model_Data_Abstract
 {
     protected $_namespace;
     protected $_defaultData = array();
@@ -15,7 +15,7 @@ class Vps_Model_Session extends Vps_Model_Data_Abstract
     {
         if (!isset($this->_data)) {
             if (!isset($this->_namespace)) {
-                throw new Vps_Exception("namespace is required for Model_Session");
+                throw new Kwf_Exception("namespace is required for Model_Session");
             }
             $ns = new Zend_Session_Namespace($this->_namespace);
             if (!isset($ns->data)) {
@@ -44,9 +44,9 @@ class Vps_Model_Session extends Vps_Model_Data_Abstract
         $ns->data = $this->_data;
     }
 
-    public function isEqual(Vps_Model_Interface $other)
+    public function isEqual(Kwf_Model_Interface $other)
     {
-        if ($other instanceof Vps_Model_Session && $other->_namespace == $this->_namespace) {
+        if ($other instanceof Kwf_Model_Session && $other->_namespace == $this->_namespace) {
             return true;
         }
         return false;

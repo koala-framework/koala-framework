@@ -5,11 +5,11 @@
  * @group Model_DbWithConnection
  * @group Model_Expr_SumFields
  */
-class Vps_Model_DbWithConnection_ExprSumFields_Test extends Vps_Model_DbWithConnection_SelectExpr_AbstractTest
+class Kwf_Model_DbWithConnection_ExprSumFields_Test extends Kwf_Model_DbWithConnection_SelectExpr_AbstractTest
 {
     public function testExprSumFields()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_ExprSumFields_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_ExprSumFields_Model');
         $m->setUp();
 
         $this->assertEquals(110, $m->getRow(1)->sum_field_int);
@@ -29,7 +29,7 @@ class Vps_Model_DbWithConnection_ExprSumFields_Test extends Vps_Model_DbWithConn
 
     public function testExprSumFieldsEfficient()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_ExprSumFields_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_ExprSumFields_Model');
         $m->setUp();
 
         $s = $m->select();
@@ -56,7 +56,7 @@ class Vps_Model_DbWithConnection_ExprSumFields_Test extends Vps_Model_DbWithConn
 
     public function testExprSumFieldsWhereEquals()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_ExprSumFields_Model');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_ExprSumFields_Model');
         $m->setUp();
 
         $s = $m->select();

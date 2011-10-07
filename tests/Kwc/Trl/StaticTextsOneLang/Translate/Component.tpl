@@ -7,12 +7,12 @@ trlcpTest2: <?= $this->trlcpTest2; ?><br />
 
 <br />
 
-trlVpsTest: <?= $this->trlVpsTest; ?><br />
-trlcVpsTest: <?= $this->trlcVpsTest; ?><br />
-trlpVpsTest1: <?= $this->trlpVpsTest1; ?><br />
-trlpVpsTest2: <?= $this->trlpVpsTest2; ?><br />
-trlcpVpsTest1: <?= $this->trlcpVpsTest1; ?><br />
-trlcpVpsTest2: <?= $this->trlcpVpsTest2; ?><br />
+trlKwfTest: <?= $this->trlKwfTest; ?><br />
+trlcKwfTest: <?= $this->trlcKwfTest; ?><br />
+trlpKwfTest1: <?= $this->trlpKwfTest1; ?><br />
+trlpKwfTest2: <?= $this->trlpKwfTest2; ?><br />
+trlcpKwfTest1: <?= $this->trlcpKwfTest1; ?><br />
+trlcpKwfTest2: <?= $this->trlcpKwfTest2; ?><br />
 
 <br />
 <br />
@@ -26,9 +26,9 @@ trlcpTest2Tpl: <?= $this->data->trlcp('test', 'Antwort', 'Antworten', 2); ?><br 
 
 <br />
 
-trlVpsTestTpl: <?= $this->data->trlVps('Visible'); ?><br />
-trlcVpsTestTpl: <?= $this->data->trlcVps('time', 'On'); ?><br />
-trlpVpsTest1Tpl: <?= $this->data->trlpVps('reply', 'replies', 1); ?><br />
-trlpVpsTest2Tpl: <?= $this->data->trlpVps('reply', 'replies', 2); ?><br />
-trlcpVpsTest1Tpl: <?= $this->data->trlcpVps('test', 'reply', 'replies', 1); ?><br />
-trlcpVpsTest2Tpl: <?= $this->data->trlcpVps('test', 'reply', 'replies', 2); ?><br />
+trlKwfTestTpl: <?= $this->data->trlKwf('Visible'); ?><br />
+trlcKwfTestTpl: <?= $this->data->trlcKwf('time', 'On'); ?><br />
+trlpKwfTest1Tpl: <?= $this->data->trlpKwf('reply', 'replies', 1); ?><br />
+trlpKwfTest2Tpl: <?= $this->data->trlpKwf('reply', 'replies', 2); ?><br />
+trlcpKwfTest1Tpl: <?= $this->data->trlcpKwf('test', 'reply', 'replies', 1); ?><br />
+trlcpKwfTest2Tpl: <?= $this->data->trlcpKwf('test', 'reply', 'replies', 2); ?><br />

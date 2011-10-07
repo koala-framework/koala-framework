@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Abstract_ContentSender_Default extends Vps_Component_Abstract_ContentSender_Abstract
+class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstract_ContentSender_Abstract
 {
     private function _getRequestWithFiles()
     {
@@ -22,12 +22,12 @@ class Vps_Component_Abstract_ContentSender_Default extends Vps_Component_Abstrac
 
     protected function _callProcessInput()
     {
-        $showInvisible = Vps_Config::getValue('showInvisible');
+        $showInvisible = Kwf_Config::getValue('showInvisible');
 
         $cacheId = 'procI-'.$this->_data->getPageOrRoot()->componentId;
         $success = false;
         if (!$showInvisible) { //don't cache in preview
-            $processCached = Vps_Cache_Simple::fetch($cacheId, $success);
+            $processCached = Kwf_Cache_Simple::fetch($cacheId, $success);
         }
         if (!$success) {
             $process = $this->_data
@@ -35,38 +35,38 @@ class Vps_Component_Abstract_ContentSender_Default extends Vps_Component_Abstrac
                         'page' => false,
                         'flags' => array('processInput' => true)
                     ));
-            if (Vps_Component_Abstract::getFlag($this->_data->componentClass, 'processInput')) {
+            if (Kwf_Component_Abstract::getFlag($this->_data->componentClass, 'processInput')) {
                 $process[] = $this->_data;
             }
 
             // TODO: Äußerst suboptimal
-            if (is_instance_of($this->_data->componentClass, 'Vpc_Show_Component')) {
+            if (is_instance_of($this->_data->componentClass, 'Kwc_Show_Component')) {
                 $process += $this->_data->getComponent()->getShowComponent()
                     ->getRecursiveChildComponents(array(
                         'page' => false,
                         'flags' => array('processInput' => true)
                     ));
-                if (Vps_Component_Abstract::getFlag(get_class($this->_data->getComponent()->getShowComponent()->getComponent()), 'processInput')) {
+                if (Kwf_Component_Abstract::getFlag(get_class($this->_data->getComponent()->getShowComponent()->getComponent()), 'processInput')) {
                     $process[] = $this->_data;
                 }
             }
             if (!$showInvisible) {
                 $datas = array();
                 foreach ($process as $p) {
-                    $datas[] = $p->vpsSerialize();
+                    $datas[] = $p->kwfSerialize();
                 }
-                Vps_Cache_Simple::add($cacheId, $datas);
+                Kwf_Cache_Simple::add($cacheId, $datas);
             }
         } else {
             $process = array();
             foreach ($processCached as $d) {
-                $process[] = Vps_Component_Data::vpsUnserialize($d);
+                $process[] = Kwf_Component_Data::kwfUnserialize($d);
             }
         }
 
         $postData = $this->_getRequestWithFiles();
         foreach ($process as $i) {
-            Vps_Benchmark::count('processInput', $i->componentId);
+            Kwf_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
                 $i->getComponent()->preProcessInput($postData);
             }
@@ -76,8 +76,8 @@ class Vps_Component_Abstract_ContentSender_Default extends Vps_Component_Abstrac
                 $i->getComponent()->processInput($postData);
             }
         }
-        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_ModelObserver::getInstance()->process(false);
+        if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Kwf_Component_ModelObserver::getInstance()->process(false);
         }
         return $process;
     }
@@ -90,8 +90,8 @@ class Vps_Component_Abstract_ContentSender_Default extends Vps_Component_Abstrac
                 $i->getComponent()->postProcessInput($postData);
             }
         }
-        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_ModelObserver::getInstance()->process();
+        if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Kwf_Component_ModelObserver::getInstance()->process();
         }
     }
 
@@ -99,11 +99,11 @@ class Vps_Component_Abstract_ContentSender_Default extends Vps_Component_Abstrac
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
-        Vps_Benchmark::checkpoint('processInput');
+        Kwf_Benchmark::checkpoint('processInput');
         echo $this->_data->render(null, $includeMaster);
-        Vps_Benchmark::checkpoint('render');
+        Kwf_Benchmark::checkpoint('render');
         $this->_callPostProcessInput($process);
-        Vps_Benchmark::checkpoint('postProcessInput');
+        Kwf_Benchmark::checkpoint('postProcessInput');
 
     }
 

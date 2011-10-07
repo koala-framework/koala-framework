@@ -2,14 +2,14 @@
 /**
  * Auswahl wo man nicht reinschreiben kann, so wie eine HTML-Select-Box
  **/
-class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
+class Kwf_Form_Field_Radio extends Kwf_Form_Field_ComboBox
 {
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('radiogroup');
         $this->setOutputType('horizontal');
-        $this->setEmptyMessage(trlVpsStatic('Please choose an option'));
+        $this->setEmptyMessage(trlKwfStatic('Please choose an option'));
     }
 
     // $this->setOutputType($type)
@@ -31,7 +31,7 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         }
         $store = $this->_getStoreData();
         if (!isset($store['data'])) {
-            throw new Vps_Exception("No data set for radio field '{$this->getName()}'");
+            throw new Kwf_Exception("No data set for radio field '{$this->getName()}'");
         }
         foreach ($store['data'] as $d) {
             $id = $d[0];
@@ -55,9 +55,9 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
-            array_unshift($store['data'], array('', '('.trlVps('no selection').')'));
+            array_unshift($store['data'], array('', '('.trlKwf('no selection').')'));
         }
-        $ret['html'] = '<div class="vpsFormFieldRadio vpsFormFieldRadio'.ucfirst($this->getOutputType()).'">';
+        $ret['html'] = '<div class="kwfFormFieldRadio kwfFormFieldRadio'.ucfirst($this->getOutputType()).'">';
         $k = 0;
         foreach ($store['data'] as $i) {
             $ret['html'] .= '<span class="value'.htmlspecialchars(ucfirst($i[0])).'">';
@@ -75,7 +75,7 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Radio Buttons'),
+            'componentName' => trlKwf('Radio Buttons'),
             'default' => array(
                 'width' => 100
             )

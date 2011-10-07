@@ -1,9 +1,9 @@
 <?php
-class Vps_Component_Generator_ShowInMenu_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_ShowInMenu_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_ShowInMenu_Root');
+        parent::setUp('Kwf_Component_Generator_ShowInMenu_Root');
     }
 
     public function testShowInMenu()

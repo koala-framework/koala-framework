@@ -3,16 +3,16 @@
  * @group Cc
  * @group Cc_RootWithTrl
  */
-class Vpc_Cc_RootWithTrl_Test extends Vpc_TestAbstract
+class Kwc_Cc_RootWithTrl_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Cc_RootWithTrl_Root');
+        parent::setUp('Kwc_Cc_RootWithTrl_Root');
     }
 
     public function testPages()
     {
-        $root = Vps_Component_Data_Root::getInstance();
+        $root = Kwf_Component_Data_Root::getInstance();
         $this->assertEquals(2, count($root->getChildComponents()));
         $this->assertNotNull($root->getComponentById('root-master-master'));
         $this->assertNotNull($root->getComponentById('root-master-slave'));
@@ -26,20 +26,20 @@ class Vpc_Cc_RootWithTrl_Test extends Vpc_TestAbstract
 
     public function testHome()
     {
-        $root = Vps_Component_Data_Root::getInstance();
-        $this->assertEquals('Vps_Component_Data_Home', get_class($root->getComponentById('1')));
-        $this->assertEquals('Vps_Component_Data_Home', get_class($root->getComponentById('root-master-slave-main_1')));
-        $this->assertEquals('Vps_Component_Data_Home', get_class($root->getComponentById('root-slave-master-main_1')));
-        $this->assertEquals('Vps_Component_Data_Home', get_class($root->getComponentById('root-slave-slave-main_1')));
-        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/master/master', $root->getComponentById('1')->url);
-        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/master/slave', $root->getComponentById('root-master-slave-main_1')->url);
-        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/slave/master', $root->getComponentById('root-slave-master-main_1')->url);
-        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/slave/slave', $root->getComponentById('root-slave-slave-main_1')->url);
+        $root = Kwf_Component_Data_Root::getInstance();
+        $this->assertEquals('Kwf_Component_Data_Home', get_class($root->getComponentById('1')));
+        $this->assertEquals('Kwf_Component_Data_Home', get_class($root->getComponentById('root-master-slave-main_1')));
+        $this->assertEquals('Kwf_Component_Data_Home', get_class($root->getComponentById('root-slave-master-main_1')));
+        $this->assertEquals('Kwf_Component_Data_Home', get_class($root->getComponentById('root-slave-slave-main_1')));
+        $this->assertEquals('/kwf/kwctest/Kwc_Cc_RootWithTrl_Root/master/master', $root->getComponentById('1')->url);
+        $this->assertEquals('/kwf/kwctest/Kwc_Cc_RootWithTrl_Root/master/slave', $root->getComponentById('root-master-slave-main_1')->url);
+        $this->assertEquals('/kwf/kwctest/Kwc_Cc_RootWithTrl_Root/slave/master', $root->getComponentById('root-slave-master-main_1')->url);
+        $this->assertEquals('/kwf/kwctest/Kwc_Cc_RootWithTrl_Root/slave/slave', $root->getComponentById('root-slave-slave-main_1')->url);
     }
 
     public function testChildPages()
     {
-        $root = Vps_Component_Data_Root::getInstance();
+        $root = Kwf_Component_Data_Root::getInstance();
         $this->assertEquals(3, count($root->getComponentById('root-master-master-main')->getChildPages()));
         $this->assertEquals(2, count($root->getComponentById('root-master-slave-main')->getChildPages()));
         $this->assertEquals(3, count($root->getComponentById('root-slave-master-main')->getChildPages()));

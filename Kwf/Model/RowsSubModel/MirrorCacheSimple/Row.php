@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_RowsSubModel_MirrorCacheSimple_Row extends Vps_Model_RowsSubModel_Proxy_Row
+class Kwf_Model_RowsSubModel_MirrorCacheSimple_Row extends Kwf_Model_RowsSubModel_Proxy_Row
 {
     protected function _beforeSave()
     {

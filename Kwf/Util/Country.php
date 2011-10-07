@@ -1,6 +1,6 @@
 <?php
-//TODO zusammenführen mit Vps_Util_Model_Countries
-class Vps_Util_Country {
+//TODO zusammenführen mit Kwf_Util_Model_Countries
+class Kwf_Util_Country {
     
     const NAME = 'name';
     const CONTINENT = 'continent';
@@ -8,11 +8,11 @@ class Vps_Util_Country {
     
     public static function getValue($key, $what = self::NAME)
     {
-        $language = Vps_Trl::getInstance()->getTargetLanguage();
-        $masterFile = VPS_PATH . '/Vps/Form/Field/SelectCountry/countries.xml';
+        $language = Kwf_Trl::getInstance()->getTargetLanguage();
+        $masterFile = KWF_PATH . '/Kwf/Form/Field/SelectCountry/countries.xml';
         $cacheId = "countries_{$language}_{$what}";
         
-        $cache = Vps_Cache::factory(
+        $cache = Kwf_Cache::factory(
             'File',
             'File',
             array(

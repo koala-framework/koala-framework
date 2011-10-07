@@ -1,13 +1,13 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Checkout_Payment_Abstract_Component
+class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Checkout_Payment_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('PayPal');
-        $ret['generators']['child']['component']['confirmLink'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component';
-        $ret['generators']['confirm']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';
-        $ret['generators']['confirm']['name'] = trlVps('done');
+        $ret['componentName'] = trlKwf('PayPal');
+        $ret['generators']['child']['component']['confirmLink'] = 'Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component';
+        $ret['generators']['confirm']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';
+        $ret['generators']['confirm']['name'] = trlKwf('done');
 
         $ret['business'] = '';
         return $ret;
@@ -15,21 +15,21 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
 
     public function confirmOrder($order)
     {
-        throw new Vps_Exception("Not valid for PayPal");
+        throw new Kwf_Exception("Not valid for PayPal");
     }
 
     public function getItemName($order)
     {
-        return trlVps('Order at {0}', Vps_Registry::get('config')->application->name);
+        return trlKwf('Order at {0}', Kwf_Registry::get('config')->application->name);
     }
 
-    public function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
+    public function processIpn(Kwf_Util_PayPal_Ipn_LogModel_Row $row, $param)
     {
         if ($row->txn_type == 'web_accept') {
-            $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+            $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                 ->getRow($param['orderId']);
             if (!$order) {
-                throw new Vps_Exception("Order not found!");
+                throw new Kwf_Exception("Order not found!");
             }
 
             $order->payment_component_id = $this->getData()->componentId;
@@ -45,7 +45,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
                 $p->orderConfirmed($order);
             }
             foreach ($order->getChildRows('Products') as $p) {
-                $addComponent = Vps_Component_Data_Root::getInstance()
+                $addComponent = Kwf_Component_Data_Root::getInstance()
                     ->getComponentByDbId($p->add_component_id);
                 $addComponent->getComponent()->orderConfirmed($p);
             }

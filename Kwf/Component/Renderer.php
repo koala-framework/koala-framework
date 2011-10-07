@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
+class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
 {
     private $_renderMaster;
     public function renderMaster($component)
@@ -18,18 +18,18 @@ class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
     {
         if ($this->_renderMaster) {
             if (!$this->_enableCache ||
-                ($content = Vps_Component_Cache::getInstance()->load($component, 'page')) === null) {
-                $masterHelper = new Vps_Component_View_Helper_Master();
+                ($content = Kwf_Component_Cache::getInstance()->load($component, 'page')) === null) {
+                $masterHelper = new Kwf_Component_View_Helper_Master();
                 $masterHelper->setRenderer($this);
                 $content = $masterHelper->master($component);
                 if ($this->_enableCache) {
-                    Vps_Component_Cache::getInstance()
+                    Kwf_Component_Cache::getInstance()
                         ->save($component, $content, 'page', '', true);
                 }
             }
-            if ($content == Vps_Component_Cache::NO_CACHE) {
+            if ($content == Kwf_Component_Cache::NO_CACHE) {
                 //TODO: entfernen wenn nie auftritt
-                throw new Vps_Exception("something is very wrong");
+                throw new Kwf_Exception("something is very wrong");
             }
             return $content;
         } else {

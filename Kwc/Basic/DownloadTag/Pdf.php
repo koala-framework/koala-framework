@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_DownloadTag_Pdf extends Vpc_Abstract_Pdf
+class Kwc_Basic_DownloadTag_Pdf extends Kwc_Abstract_Pdf
 {
     public function writeContent()
     {

@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_AlternativeComponent_Default_Component extends Vpc_Abstract
+class Kwf_Component_Generator_AlternativeComponent_Default_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -10,7 +10,7 @@ class Vps_Component_Generator_AlternativeComponent_Default_Component extends Vpc
     public static function getAlternativeComponents()
     {
         return array(
-            'alternative'=>'Vps_Component_Generator_AlternativeComponent_Alternative_Component'
+            'alternative'=>'Kwf_Component_Generator_AlternativeComponent_Alternative_Component'
         );
     }
 

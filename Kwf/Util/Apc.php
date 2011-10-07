@@ -1,7 +1,7 @@
 <?php
 //das ist notwendig damit cli scripte was mit dem apc cache machen können
 //direkt in der cli ist das leider nicht möglich, da der speicher im webserver liegt
-class Vps_Util_Apc
+class Kwf_Util_Apc
 {
     public static function getHttpPassword()
     {
@@ -20,15 +20,15 @@ class Vps_Util_Apc
             $_SERVER['PHP_AUTH_PW']!=self::getHttpPassword())
         {
             header('WWW-Authenticate: Basic realm="APC Utils"');
-            throw new Vps_Exception_AccessDenied();
+            throw new Kwf_Exception_AccessDenied();
         }
 
-        if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/util/apc/clear-cache') {
+        if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/kwf/util/apc/clear-cache') {
             $s = microtime(true);
             if ($_GET['type'] == 'user') {
                 /*
                 if (class_exists('APCIterator')) {
-                    $prefix = Vps_Cache::getUniquePrefix();
+                    $prefix = Kwf_Cache::getUniquePrefix();
                     apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix, '#').'#'));
                     apc_delete_file(new APCIterator('user', '#^config_[^/]+'.preg_quote(getcwd(), '#').'#'));
                 } else {
@@ -36,7 +36,7 @@ class Vps_Util_Apc
                 }
                 */
                 $cacheInfo = apc_cache_info('user');
-                $prefix = Vps_Cache::getUniquePrefix();
+                $prefix = Kwf_Cache::getUniquePrefix();
                 foreach ($cacheInfo['cache_list'] as $i) {
                     if (substr($i['info'], 0, strlen($prefix))==$prefix) {
                         apc_delete($i['info']);
@@ -57,16 +57,16 @@ class Vps_Util_Apc
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
             exit;
-        } else if ($_SERVER['REQUEST_URI'] == '/vps/util/apc/get-counter-value') {
-            $prefix = Vps_Cache::getUniquePrefix().'bench-';
+        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/get-counter-value') {
+            $prefix = Kwf_Cache::getUniquePrefix().'bench-';
             echo apc_fetch($prefix.$this->_getParam('name'));
             exit;
-        } else if ($_SERVER['REQUEST_URI'] == '/vps/util/apc/stats') {
+        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/stats') {
             self::stats();
-        } else if ($_SERVER['REQUEST_URI'] == '/vps/util/apc/iterate') {
+        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/iterate') {
             self::iterate();
         }
-        throw new Vps_Exception_NotFound();
+        throw new Kwf_Exception_NotFound();
     }
 
     public static function stats()
@@ -79,7 +79,7 @@ class Vps_Util_Apc
 
         echo "size: ".round($memSize/(1024*1024))." MB\n";
         echo "avail: ".round($memAvailable/(1024*1024))." MB\n\n";
-        $prefix = Vps_Cache::getUniquePrefix();
+        $prefix = Kwf_Cache::getUniquePrefix();
 
         $it = new APCIterator('user', '#^'.preg_quote($prefix).'#', APC_ITER_KEY);
         echo $it->getTotalCount()." entries\n";

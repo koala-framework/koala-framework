@@ -1,9 +1,9 @@
 <?php
-class Vpc_Form_Dynamic_Form_MailRow extends Vps_Model_Mail_Row
+class Kwc_Form_Dynamic_Form_MailRow extends Kwf_Model_Mail_Row
 {
     protected function _afterInsert()
     {
-        Vps_Model_Proxy_Row::_afterInsert(); //nicht parent!!
+        Kwf_Model_Proxy_Row::_afterInsert(); //nicht parent!!
 
         //_buildContentAndSetToRow() hier nicht aufrufen, weil wir den contents selbst setzen (in der Component.php)
         $this->is_spam = $this->_checkIsSpam();

@@ -1,14 +1,14 @@
 <?php
-class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
+class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['image'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Abstract_Image_Trl_Image_Component.'.$masterComponentClass
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Abstract_Image_Trl_Image_Component.'.$masterComponentClass
         );
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
 
@@ -19,7 +19,7 @@ class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
         if ($this->getRow()->own_image) {
             $ret['image'] = $this->getData()->getChildComponent('-image');
         }
-        $imageCaptionSetting = Vpc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'imageCaption');
+        $imageCaptionSetting = Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'imageCaption');
         if ($imageCaptionSetting) {
             $ret['image_caption'] = $this->getRow()->image_caption;
         }

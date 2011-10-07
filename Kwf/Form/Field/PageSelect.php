@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_PageSelect extends Vps_Form_Field_SimpleAbstract
+class Kwf_Form_Field_PageSelect extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -15,7 +15,7 @@ class Vps_Form_Field_PageSelect extends Vps_Form_Field_SimpleAbstract
             $id = $ret[$this->getFieldName()];
             $ret[$this->getFieldName()] = array('id'=>$id);
 
-            $cmp = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+            $cmp = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
                 $id, array('ignoreVisible'=>true)
             );
             if ($cmp) {

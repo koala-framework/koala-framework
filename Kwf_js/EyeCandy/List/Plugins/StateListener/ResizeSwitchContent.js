@@ -1,4 +1,4 @@
-Vps.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     //animationConfig = {}
     //sizes = { state: {width:123, height:123}}
     init: function() {

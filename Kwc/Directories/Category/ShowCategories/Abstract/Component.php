@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_Directories_Category_ShowCategories_Abstract_Component extends Vpc_Directories_List_Component
+abstract class Kwc_Directories_Category_ShowCategories_Abstract_Component extends Kwc_Directories_List_Component
 {
     abstract public function getCategoryIds();
 
@@ -8,11 +8,11 @@ abstract class Vpc_Directories_Category_ShowCategories_Abstract_Component extend
         $select = parent::getSelect();
         if (!$select) return null;
 
-        $tableName = Vpc_Abstract::getSetting(
+        $tableName = Kwc_Abstract::getSetting(
             $this->getItemDirectory()->getChildComponent('_categories')->componentClass,
             'categoryToItemModelName'
         );
-        $refData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData($tableName, 'Item');
+        $refData = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData($tableName, 'Item');
 
         $select->join($refData['tableName'],
                       $refData['tableName'].'.'.$refData['itemColumn'].'='

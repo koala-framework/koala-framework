@@ -24,7 +24,7 @@
     OTHER DEALINGS IN THE SOFTWARE.
 */
 
-Ext.namespace("Vps.ColorPicker.color");
+Ext.namespace("Kwf.ColorPicker.color");
 
 /*
     todo:
@@ -47,12 +47,12 @@ Ext.namespace("Vps.ColorPicker.color");
  * @param {Object} config The config object
  */
 
-Vps.ColorPicker.color.Color = function(config) {
+Kwf.ColorPicker.color.Color = function(config) {
     Ext.apply(this, this.defaultValues);
     Ext.apply(this, config);
 };
 
-Vps.ColorPicker.color.Color.prototype = {
+Kwf.ColorPicker.color.Color.prototype = {
 
     /**
      * Sets red, green or blue values to your liking. After this method completes,

@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Fulltext
+class Kwf_Util_Fulltext
 {
     public static function getInstance()
     {

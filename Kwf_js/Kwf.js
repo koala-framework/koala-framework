@@ -1,18 +1,18 @@
 Ext.BLANK_IMAGE_URL = '/assets/ext/resources/images/default/s.gif';
 
 Ext.namespace(
-'Vps', 'Vpc',
-'Vps.Component',
-'Vps.User.Login',
-'Vps.Auto',
-'Vps.Form',
-'Vps.Binding',
-'Vpc.Advanced',
-'Vps.Debug',
-'Vps.Switch',
-'Vps.Basic.LinkTag.Extern',
-'Vps.Layout',
-'Vps.Utils'
+'Kwf', 'Kwc',
+'Kwf.Component',
+'Kwf.User.Login',
+'Kwf.Auto',
+'Kwf.Form',
+'Kwf.Binding',
+'Kwc.Advanced',
+'Kwf.Debug',
+'Kwf.Switch',
+'Kwf.Basic.LinkTag.Extern',
+'Kwf.Layout',
+'Kwf.Utils'
 );
 
 Ext.applyIf(Array.prototype, {
@@ -64,7 +64,7 @@ Ext.applyIf(Function.prototype, {
 });
 
 //http://extjs.com/forum/showthread.php?t=26644
-Vps.clone = function(o) {
+Kwf.clone = function(o) {
     if('object' !== typeof o || o === null) {
         return o;
     }
@@ -74,7 +74,7 @@ Vps.clone = function(o) {
         if(o.hasOwnProperty(p)) {
             v = o[p];
             if('object' === typeof v && v !== null) {
-                c[p] = Vps.clone(v);
+                c[p] = Kwf.clone(v);
             }
             else {
                 c[p] = v;
@@ -104,71 +104,71 @@ Ext.onReady(function()
     }
 });
 
-Vps.application = { maxAssetsMTime: '{$application.maxAssetsMTime}' };
+Kwf.application = { maxAssetsMTime: '{$application.maxAssetsMTime}' };
 
 //log das auch ohne irgendwelche abh�nigkeiten funktioniert (zB im Selenium)
-Vps.log = function(msg) {
-    if (!Vps.debugDiv) {
-        Vps.debugDiv = document.createElement('div');
-        document.body.appendChild(Vps.debugDiv);
-        Vps.debugDiv.style.position = 'absolute';
-        Vps.debugDiv.style.zIndex = '300';
-        Vps.debugDiv.style.top = 0;
-        Vps.debugDiv.style.right = 0;
-        Vps.debugDiv.style.backgroundColor = 'white';
-        Vps.debugDiv.style.fontSize = '10px';
+Kwf.log = function(msg) {
+    if (!Kwf.debugDiv) {
+        Kwf.debugDiv = document.createElement('div');
+        document.body.appendChild(Kwf.debugDiv);
+        Kwf.debugDiv.style.position = 'absolute';
+        Kwf.debugDiv.style.zIndex = '300';
+        Kwf.debugDiv.style.top = 0;
+        Kwf.debugDiv.style.right = 0;
+        Kwf.debugDiv.style.backgroundColor = 'white';
+        Kwf.debugDiv.style.fontSize = '10px';
     }
-    Vps.debugDiv.innerHTML += msg+'<br />';
+    Kwf.debugDiv.innerHTML += msg+'<br />';
 };
 
-//wird gesetzt in Vps.Connection
-Vps.requestSentSinceLastKeepAlive = false;
-Vps.keepAlive = function() {
-    if (!Vps.requestSentSinceLastKeepAlive) {
+//wird gesetzt in Kwf.Connection
+Kwf.requestSentSinceLastKeepAlive = false;
+Kwf.keepAlive = function() {
+    if (!Kwf.requestSentSinceLastKeepAlive) {
         Ext.Ajax.request({
-            url: '/vps/user/login/json-keep-alive',
+            url: '/kwf/user/login/json-keep-alive',
             ignoreErrors: true
         });
     } else {
-        Vps.requestSentSinceLastKeepAlive = false;
+        Kwf.requestSentSinceLastKeepAlive = false;
     }
-    Vps.keepAlive.defer(1000 * 60 * 5);
+    Kwf.keepAlive.defer(1000 * 60 * 5);
 };
 
-Vps.keepAliveActivated = false;
-Vps.activateKeepAlive = function() {
-    if (Vps.keepAliveActivated) return;
-    Vps.keepAliveActivated = true;
-    Vps.keepAlive.defer(1000 * 60 * 5);
+Kwf.keepAliveActivated = false;
+Kwf.activateKeepAlive = function() {
+    if (Kwf.keepAliveActivated) return;
+    Kwf.keepAliveActivated = true;
+    Kwf.keepAlive.defer(1000 * 60 * 5);
 };
 
-if (Vps.isApp) {
-    Vps.activateKeepAlive();
+if (Kwf.isApp) {
+    Kwf.activateKeepAlive();
 }
 
-Vps.contentReadyHandlers = [];
-Vps.onContentReady = function(fn, scope) {
+Kwf.contentReadyHandlers = [];
+Kwf.onContentReady = function(fn, scope) {
     // Handler merken, damit zB in ComponentSwitch das Ganz nochmal ausgeführt
     // werden kann
-    Vps.contentReadyHandlers.push({
+    Kwf.contentReadyHandlers.push({
         fn: fn,
         scope: scope
     });
-    //in einer Ext-Anwendung mit Vps.main den contentReadHandler
+    //in einer Ext-Anwendung mit Kwf.main den contentReadHandler
     //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
-    if (!Vps.isApp) {
+    if (!Kwf.isApp) {
         //normales Frontend
         Ext.onReady(fn, scope);
     }
 };
 
-Vps.callOnContentReady = function() {
-    Ext.each(Vps.contentReadyHandlers, function(i) {
+Kwf.callOnContentReady = function() {
+    Ext.each(Kwf.contentReadyHandlers, function(i) {
         i.fn.call(i.scope | window);
     }, this);
 };
 
-Vps.include =  function(url, restart)
+Kwf.include =  function(url, restart)
 {
     if (url.substr(-4) == '.css') {
         var s = document.createElement('link');
@@ -181,20 +181,20 @@ Vps.include =  function(url, restart)
         s.setAttribute('src', url+'?'+Math.random());
     }
     s.onload = function () {
-        if (restart) Vps.restart();
+        if (restart) Kwf.restart();
     };
     document.getElementsByTagName("head")[0].appendChild(s);
 };
 
-Vps.restart = function()
+Kwf.restart = function()
 {
     Ext.getBody().unmask();
-    if (Vps.currentViewport) {
-        Vps.currentViewport.onDestroy();
-        delete Vps.currentViewport;
+    if (Kwf.currentViewport) {
+        Kwf.currentViewport.onDestroy();
+        delete Kwf.currentViewport;
     }
-    Vps.main();
+    Kwf.main();
 };
 
-var restart = Vps.restart;
-var include = Vps.include;
+var restart = Kwf.restart;
+var include = Kwf.include;

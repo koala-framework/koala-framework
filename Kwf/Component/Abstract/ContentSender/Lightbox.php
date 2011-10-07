@@ -1,11 +1,11 @@
 <?php
-class Vps_Component_Abstract_ContentSender_Lightbox extends Vps_Component_Abstract_ContentSender_Default
+class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstract_ContentSender_Default
 {
     protected function _getOptions()
     {
         $ret = array();
-        if (Vpc_Abstract::hasSetting($this->_data->componentClass, 'lightboxOptions')) {
-            $ret =  Vpc_Abstract::getSetting($this->_data->componentClass, 'lightboxOptions');
+        if (Kwc_Abstract::hasSetting($this->_data->componentClass, 'lightboxOptions')) {
+            $ret =  Kwc_Abstract::getSetting($this->_data->componentClass, 'lightboxOptions');
         }
         return $ret;
     }
@@ -17,7 +17,7 @@ class Vps_Component_Abstract_ContentSender_Lightbox extends Vps_Component_Abstra
 
         //processInput parent *and* ourself
         if ($includeMaster) {
-            $parentContentSender = Vpc_Abstract::getSetting($parent->componentClass, 'contentSender');
+            $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
             $parentProcess = $parentContentSender->_callProcessInput();
         }
@@ -32,8 +32,8 @@ class Vps_Component_Abstract_ContentSender_Lightbox extends Vps_Component_Abstra
             $style = '';
             if (isset($options['width'])) $style .= "width: $options[width]px;";
             if (isset($options['height'])) $style .= "height: $options[height]px";
-            $class = 'vpsLightbox';
-            if (isset($options['style'])) $class .= " vpsLightbox$options[style]";
+            $class = 'kwfLightbox';
+            if (isset($options['style'])) $class .= " kwfLightbox$options[style]";
             $options = htmlspecialchars(json_encode($options));
             $lightboxContent = "<div class=\"$class\" style=\"$style\">\n".
                 "<input type=\"hidden\" class=\"options\" value=\"$options\" />".

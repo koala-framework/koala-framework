@@ -1,5 +1,5 @@
-Vps.Form.FileUploadWindow = Ext.extend(Ext.Window, {
-    title: trlVps('File upload'),
+Kwf.Form.FileUploadWindow = Ext.extend(Ext.Window, {
+    title: trlKwf('File upload'),
     closeAction: 'close',
     modal: true,
     width: 350,
@@ -12,7 +12,7 @@ Vps.Form.FileUploadWindow = Ext.extend(Ext.Window, {
         this.form = new Ext.FormPanel({
             baseCls: 'x-plain',
             style: 'padding: 10px;',
-            url: '/vps/media/upload/json-upload'+'?maxResolution='+this.maxResolution,
+            url: '/kwf/media/upload/json-upload'+'?maxResolution='+this.maxResolution,
             fileUpload: true,
             items: [{
                 name: 'Filedata',
@@ -23,7 +23,7 @@ Vps.Form.FileUploadWindow = Ext.extend(Ext.Window, {
         });
         this.items = this.form;
         this.buttons = [{
-            text: trlVps('OK'),
+            text: trlKwf('OK'),
             handler: function() {
                 this.form.getForm().submit({
                     success: function(form, action) {
@@ -35,12 +35,12 @@ Vps.Form.FileUploadWindow = Ext.extend(Ext.Window, {
             },
             scope: this
         },{
-            text: trlVps('Cancel'),
+            text: trlKwf('Cancel'),
             handler: function() {
                 this.close();
             },
             scope: this
         }];
-        Vps.Form.FileUploadWindow.superclass.initComponent.call(this);
+        Kwf.Form.FileUploadWindow.superclass.initComponent.call(this);
     }
 });

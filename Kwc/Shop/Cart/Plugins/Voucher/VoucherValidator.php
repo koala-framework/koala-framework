@@ -1,13 +1,13 @@
 <?php
-class Vpc_Shop_Cart_Plugins_Voucher_VoucherValidator extends Zend_Validate_Abstract
+class Kwc_Shop_Cart_Plugins_Voucher_VoucherValidator extends Zend_Validate_Abstract
 {
     const NOAMOUNT = 'noAmount';
     const INVALID  = 'invalid';
 
     public function __construct()
     {
-        $this->_messageTemplates[self::NOAMOUNT] = trlVps("'%value%' code was already used");
-        $this->_messageTemplates[self::INVALID] = trlVps("'%value%' is not a valid voucher code");
+        $this->_messageTemplates[self::NOAMOUNT] = trlKwf("'%value%' code was already used");
+        $this->_messageTemplates[self::INVALID] = trlKwf("'%value%' is not a valid voucher code");
     }
 
     public function isValid($value)
@@ -16,9 +16,9 @@ class Vpc_Shop_Cart_Plugins_Voucher_VoucherValidator extends Zend_Validate_Abstr
 
         $this->_setValue($valueString);
 
-        $s = new Vps_Model_Select();
+        $s = new Kwf_Model_Select();
         $s->whereEquals('code', $valueString);
-        $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Plugins_Voucher_Vouchers')->getRow($s);
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Plugins_Voucher_Vouchers')->getRow($s);
         if (!$row) {
             $this->_error(self::INVALID);
             return false;

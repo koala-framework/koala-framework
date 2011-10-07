@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Vpc_Table extends Vps_Data_Table_Parent
+class Kwf_Data_Kwc_Table extends Kwf_Data_Table_Parent
 {
     private $_componentClass;
     private $_tagSuffix;
@@ -39,7 +39,7 @@ class Vps_Data_Vpc_Table extends Vps_Data_Table_Parent
         return $row->$name;
     }
 
-    public function save(Vps_Model_Row_Interface $row, $data)
+    public function save(Kwf_Model_Row_Interface $row, $data)
     {
         $row = $this->_getParentRow($row);
         $name = $this->_dataIndex;

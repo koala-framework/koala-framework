@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Update
+abstract class Kwf_Update
 {
     protected $_tags = array();
 
@@ -94,39 +94,39 @@ abstract class Vps_Update
 
     public static function getUpdates($from, $to)
     {
-        $ret = self::getVpcUpdates($from, $to);
+        $ret = self::getKwcUpdates($from, $to);
 
-        //web/Vps/ * /Update nach updates durchsuchen
-        if (is_dir('./Vps')) {
-            foreach (new DirectoryIterator('./Vps') as $d) {
+        //web/Kwf/ * /Update nach updates durchsuchen
+        if (is_dir('./Kwf')) {
+            foreach (new DirectoryIterator('./Kwf') as $d) {
                 if ($d->isDir() && substr($d->__toString(), 0, 1) != '.'
-                    && is_dir('./Vps/'.$d->__toString().'/Update')
+                    && is_dir('./Kwf/'.$d->__toString().'/Update')
                 ) {
-                    $u = self::getUpdatesForDir('Vps/'.$d->__toString(), $from, $to);
+                    $u = self::getUpdatesForDir('Kwf/'.$d->__toString(), $from, $to);
                     foreach ($u as $i) $i->_tags[] = 'web';
                     $ret = array_merge($ret, $u);
                 }
             }
         }
 
-        $u = self::getUpdatesForDir(VPS_PATH.'/Vps', $from, $to);
+        $u = self::getUpdatesForDir(KWF_PATH.'/Kwf', $from, $to);
         $ret = array_merge($ret, $u);
         $u = self::getUpdatesForDir('./update', $from, $to);
         foreach ($u as $i) $i->_tags[] = 'web';
         $ret = array_merge($ret, $u);
         if (defined('DOC_CMS')) { //HACK
-            $u = self::getUpdatesForDir(DOC_CMS.'/Vps', $from, $to);
+            $u = self::getUpdatesForDir(DOC_CMS.'/Kwf', $from, $to);
             $ret = array_merge($ret, $u);
         }
         $ret = self::_sortByRevision($ret);
         return $ret;
     }
 
-    public static function getVpcUpdates($from, $to)
+    public static function getKwcUpdates($from, $to)
     {
         $ret = array();
         $processed = array();
-        foreach (Vps_Component_Abstract::getComponentClasses() as $class) {
+        foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
             while ($class != '') {
                 $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
                 if (!in_array($class, $processed)) {
@@ -184,7 +184,7 @@ abstract class Vps_Update
                             if ($file != './update') {
                                 $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
                             }
-                            if (substr($n, 0, 8) == 'vps-lib_') continue;
+                            if (substr($n, 0, 8) == 'kwf-lib_') continue;
                             if (substr($n, 0, 8) == 'library_') continue;
                             $n .= 'Update_'.$nr;
                             $update = self::createUpdate($n, $i->getPathname());
@@ -201,7 +201,7 @@ abstract class Vps_Update
                         if ($fileType != '.php') continue;
                         $f = substr($f, 0, -4);
                         $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_Always_'.$f;
-                        if (is_instance_of($n, 'Vps_Update')) {
+                        if (is_instance_of($n, 'Kwf_Update')) {
                             $ret[] = new $n(null);
                         }
                     }
@@ -220,8 +220,8 @@ abstract class Vps_Update
             if (is_file($file . '.sql')) {
                 $filename = $file . '.sql';
                 $isSql = true;
-            } else if (is_file(VPS_PATH . '/' . $file . '.sql')) {
-                $filename = VPS_PATH . '/' . $file . '.sql';
+            } else if (is_file(KWF_PATH . '/' . $file . '.sql')) {
+                $filename = KWF_PATH . '/' . $file . '.sql';
                 $isSql = true;
             }
         } else {
@@ -230,14 +230,14 @@ abstract class Vps_Update
         $nr = (int)substr(strrchr($class, '_'), 1);
         $update = null;
         if ($isSql) {
-            $update = new Vps_Update_Sql($nr, $class);
+            $update = new Kwf_Update_Sql($nr, $class);
             $update->sql = file_get_contents($filename);
             if (preg_match("#\\#\\s*tags:(.*)#", $update->sql, $m)) {
                 $update->_tags = explode(' ', trim($m[1]));
             }
             $update->_tags[] = 'db';
         } else {
-            if (is_instance_of($class, 'Vps_Update')) {
+            if (is_instance_of($class, 'Kwf_Update')) {
                 $update = new $class($nr, $class);
             }
         }

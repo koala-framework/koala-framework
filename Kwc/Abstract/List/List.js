@@ -1,5 +1,5 @@
-Ext.namespace('Vpc.Abstract.List');
-Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
+Ext.namespace('Kwc.Abstract.List');
+Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
 {
     initComponent: function()
     {
@@ -15,20 +15,20 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
         if (this.useInsertAdd) {
             gridConfig.onAdd = this.onAdd.createDelegate(this); // wg. Scope
         }
-        this.grid = new Vps.Auto.GridPanel(gridConfig);
+        this.grid = new Kwf.Auto.GridPanel(gridConfig);
         this.proxyItem = this.grid;
 
         // Wenn ein Panel direkt, sonst Tabs
         this.editPanels = [];
         if (this.contentEditComponents.length == 1) {
-            this.editPanels.push(Vps.Binding.AbstractPanel.createFormOrComponentPanel(
+            this.editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
                 this.componentConfigs, this.contentEditComponents[0],
                 {region: 'center', title: null}, this.grid
             ));
             this.childPanel = this.editPanels[0];
         } else {
             this.contentEditComponents.each(function(ec) {
-                this.editPanels.push(Vps.Binding.AbstractPanel.createFormOrComponentPanel(
+                this.editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
                     this.componentConfigs, ec, {}, this.grid
                 ));
             }, this);
@@ -42,7 +42,7 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
         // MultiFileUpload hinzufügen falls konfiguriert
         var westItems = [this.grid];
         if (this.multiFileUpload) {
-            this.multiFileUploadPanel = new Vps.Utils.MultiFileUploadPanel(Ext.applyIf({
+            this.multiFileUploadPanel = new Kwf.Utils.MultiFileUploadPanel(Ext.applyIf({
                 border: false,
                 region: 'south',
                 height: 50,
@@ -67,7 +67,7 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
         });
 
         this.items = [this.westPanel, this.childPanel];
-        Vpc.Abstract.List.List.superclass.initComponent.call(this);
+        Kwc.Abstract.List.List.superclass.initComponent.call(this);
     },
 
     load: function()
@@ -111,4 +111,4 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
         });
     }
 });
-Ext.reg('vpc.list.list', Vpc.Abstract.List.List);
+Ext.reg('kwc.list.list', Kwc.Abstract.List.List);

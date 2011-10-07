@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Login_Form_Success_Component extends Vpc_Form_Success_Component
+class Kwc_User_Login_Form_Success_Component extends Kwc_Form_Success_Component
 {
     public static function getSettings()
     {
@@ -16,17 +16,17 @@ class Vpc_User_Login_Form_Success_Component extends Vpc_Form_Success_Component
 
     protected function _getRedirectToPage()
     {
-        if (is_instance_of($this->getData()->getPage()->componentClass, 'Vpc_User_Login_Component')) {
-            $user = Vps_Registry::get('userModel')->getAuthedUser();
-            $userDir = Vps_Component_Data_Root::getInstance()
+        if (is_instance_of($this->getData()->getPage()->componentClass, 'Kwc_User_Login_Component')) {
+            $user = Kwf_Registry::get('userModel')->getAuthedUser();
+            $userDir = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByClass(
-                    'Vpc_User_Directory_Component',
+                    'Kwc_User_Directory_Component',
                     array('subroot' => $this->getData())
                 );
             if ($userDir) {
                 return $userDir->getChildComponent('_' . $user->id);
             } else {
-                return Vps_Component_Data_Root::getInstance()
+                return Kwf_Component_Data_Root::getInstance()
                     ->getChildPage(array('home' => true, 'subroot'=>$this->getData()));
             }
         } else {

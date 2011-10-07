@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
+class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 {
     protected $_options = array(
         'cache_id_prefix' => '' //diese option ist normalerweise im frontend, aber hier auch nochmals im backend implenetiert
@@ -47,7 +47,7 @@ class Vps_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
         switch ($mode) {
             case Zend_Cache::CLEANING_MODE_ALL:
                 if (class_exists('APCIterator')) {
-                    $prefix = Vps_Cache::getUniquePrefix().$this->_options['cache_id_prefix'];
+                    $prefix = Kwf_Cache::getUniquePrefix().$this->_options['cache_id_prefix'];
                     apc_delete_file(new APCIterator('user', '#^'.$prefix.'#'));
                     return true;
                 } else {
@@ -71,7 +71,7 @@ class Vps_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     private function _processId($id)
     {
         static $cacheIdPrefix;
-        if (!isset($cacheIdPrefix)) $cacheIdPrefix = Vps_Cache::getUniquePrefix();
+        if (!isset($cacheIdPrefix)) $cacheIdPrefix = Kwf_Cache::getUniquePrefix();
         return $cacheIdPrefix.$this->_options['cache_id_prefix'].$id;
     }
 }

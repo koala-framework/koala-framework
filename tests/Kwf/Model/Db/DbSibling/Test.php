@@ -2,25 +2,25 @@
 /**
  * @group Model_Db_Sibling
  */
-class Vps_Model_Db_DbSibling_Test extends Vps_Test_TestCase
+class Kwf_Model_Db_DbSibling_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->_db = $this->getMock('Vps_Model_Db_TestAdapter',
+        $this->_db = $this->getMock('Kwf_Model_Db_TestAdapter',
             array('query'));
-        $this->_table = $this->getMock('Vps_Model_Db_DbSibling_MasterTable',
+        $this->_table = $this->getMock('Kwf_Model_Db_DbSibling_MasterTable',
             array('select', '_setupMetadata', '_setupPrimaryKey'),
             array('db' => $this->_db), '', true);
 
-        $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array($this->_table));
+        $this->_dbSelect = $this->getMock('Kwf_Db_Table_Select', array(), array($this->_table));
 
         $this->_table->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->_dbSelect));
 
 
-        $this->_model = new Vps_Model_Db_DbSibling_MasterModel(array(
+        $this->_model = new Kwf_Model_Db_DbSibling_MasterModel(array(
             'table' => $this->_table
         ));
 

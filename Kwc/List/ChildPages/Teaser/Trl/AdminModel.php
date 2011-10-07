@@ -1,11 +1,11 @@
 <?php
-class Vpc_List_ChildPages_Teaser_Trl_AdminModel extends Vps_Model_Data_Abstract
+class Kwc_List_ChildPages_Teaser_Trl_AdminModel extends Kwf_Model_Data_Abstract
 {
     public function setComponentId($componentId)
     {
-        $c = Vps_Component_Data_Root::getInstance()
+        $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
-        $s = new Vps_Component_Select();
+        $s = new Kwf_Component_Select();
         $s->ignoreVisible();
         $s->whereGenerator('child');
         $i = 0;

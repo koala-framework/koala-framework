@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Check_Ip
+class Kwf_Util_Check_Ip
 {
     private static $_instances = array();
 
@@ -60,12 +60,12 @@ class Vps_Util_Check_Ip
         }
 
         if (!preg_match('/^(\d|\*){1,3}\.(\d|\*){1,3}\.(\d|\*){1,3}\.(\d|\*){1,3}$/', $ip)) {
-            throw new Vps_Exception("The set IP address '$ip' is not an Ip address");
+            throw new Kwf_Exception("The set IP address '$ip' is not an Ip address");
         }
 
         $allowedIps = $this->_getAllowedAddresses();
         if (!is_array($allowedIps)) {
-            throw new Vps_Exception("_getAllowedAddresses() must return type 'array', '".gettype($allowedIps)."' given.");
+            throw new Kwf_Exception("_getAllowedAddresses() must return type 'array', '".gettype($allowedIps)."' given.");
         }
 
         // wenn domains, dann durch ips ersetzen
@@ -96,7 +96,7 @@ class Vps_Util_Check_Ip
             if ($preventException) {
                 return false;
             } else {
-                throw new Vps_Util_Check_Ip_Exception("IP address '$ip' is not allowed.");
+                throw new Kwf_Util_Check_Ip_Exception("IP address '$ip' is not allowed.");
             }
         }
         return true;

@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Basic_Html
+ * @group Kwc_Basic_Html
  **/
-class Vpc_Basic_Html_Test extends Vpc_TestAbstract
+class Kwc_Basic_Html_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_Html_Root');
+        parent::setUp('Kwc_Basic_Html_Root');
     }
 
     public function testTemplateVars()
@@ -32,13 +32,13 @@ class Vpc_Basic_Html_Test extends Vpc_TestAbstract
     {
         $c = $this->_root->getComponentById(2001)->getComponent();
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"vpcBasicHtmlTestComponent\">\n    <p>foochildbar</p></div>",
+        $this->assertEquals("<div class=\"kwcBasicHtmlTestComponent\">\n    <p>foochildbar</p></div>",
                             $html);
     }
 
     public function testDefaultValue()
     {
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Html_TestModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Html_TestModel');
         $r = $m->createRow();
         $this->assertEquals('ShouldGetOverwritten', $r->content);
 

@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_Flash_Update_35824 extends Vps_Update
+class Kwc_Basic_Flash_Update_35824 extends Kwf_Update
 {
     public function update()
     {
-        $model = new Vps_Component_FieldModel();
-        $db = Vps_Registry::get('db');
-        foreach ($db->query("SELECT * FROM vpc_basic_flash")->fetchAll() as $row) {
+        $model = new Kwf_Component_FieldModel();
+        $db = Kwf_Registry::get('db');
+        foreach ($db->query("SELECT * FROM kwc_basic_flash")->fetchAll() as $row) {
             if ($row['flash_source_type'] != 'external_flash_url') {
                 echo "\n\nACHTUNG FLASH mit upload konnte nicht konvertiert werden ($row[component_id])\n\n";
                 continue;
@@ -18,7 +18,7 @@ class Vpc_Basic_Flash_Update_35824 extends Vps_Update
             $code  = "<object width=\"$row[width]\" height=\"$row[height]\">\n";
             $url = $row['external_flash_url'];
             $vars = array();
-            foreach ($db->query("SELECT * FROM vpc_basic_flash_vars WHERE parent_id='$row[component_id]'") as $v) {
+            foreach ($db->query("SELECT * FROM kwc_basic_flash_vars WHERE parent_id='$row[component_id]'") as $v) {
                 $vars[] = urlencode($v['key']).'='.urlencode($v['value']);
             }
             if ($vars) $url .= "?".implode('&', $vars);
@@ -31,7 +31,7 @@ class Vpc_Basic_Flash_Update_35824 extends Vps_Update
         }
 
         //und tschüss
-        $db->query("DROP TABLE vpc_basic_flash");
-        $db->query("DROP TABLE vpc_basic_flash_vars");
+        $db->query("DROP TABLE kwc_basic_flash");
+        $db->query("DROP TABLE kwc_basic_flash_vars");
     }
 }

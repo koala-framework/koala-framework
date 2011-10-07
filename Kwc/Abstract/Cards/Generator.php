@@ -1,12 +1,12 @@
 <?php
-class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
+class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
 {
     private $_model;
 
     protected function _getModel()
     {
         if (!$this->_model) {
-            $this->_model = Vpc_Abstract::createModel($this->_class);
+            $this->_model = Kwc_Abstract::createModel($this->_class);
         }
         return $this->_model;
     }
@@ -14,15 +14,15 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
     protected function _formatSelect($parentData, $select = array())
     {
         //es gibt exakt eine unterkomponente mit der id 'child'
-        if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
-            $select->processed(Vps_Component_Select::WHERE_ID);
-            if ($select->getPart(Vps_Component_Select::WHERE_ID) != '-child') {
+        if ($select->hasPart(Kwf_Component_Select::WHERE_ID)) {
+            $select->processed(Kwf_Component_Select::WHERE_ID);
+            if ($select->getPart(Kwf_Component_Select::WHERE_ID) != '-child') {
                 return null;
             }
         }
 
-        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            $cc = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+        if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $cc = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
             if (is_array($parentData)) {
             } else {
                 $row = $this->_getModel()->getRow($parentData->dbId);

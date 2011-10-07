@@ -3,11 +3,11 @@
  * @group Feed
  * @group slow
  */
-class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
+class Kwf_Util_Model_Feed_Test extends Kwf_Test_TestCase
 {
     public function testRss20()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/rss2.0.xml');
         $this->assertNotNull($feed);
         $this->assertEquals('file://'.dirname(__FILE__).'/rss2.0.xml', $feed->url);
@@ -25,7 +25,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testRss10()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/rss1.0.xml');
         $this->assertNotNull($feed);
         $this->assertEquals('file://'.dirname(__FILE__).'/rss1.0.xml', $feed->url);
@@ -43,7 +43,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testAtom()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/atom.xml');
         $this->assertNotNull($feed);
         $this->assertEquals('file://'.dirname(__FILE__).'/atom.xml', $feed->url);
@@ -61,7 +61,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testBug1()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/bug1.xml');
         $this->assertNotNull($feed);
         $this->assertEquals('file://'.dirname(__FILE__).'/bug1.xml', $feed->url);
@@ -79,7 +79,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testBug2()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/bug2.xml');
         $this->assertNotNull($feed);
         $this->assertEquals('file://'.dirname(__FILE__).'/bug2.xml', $feed->url);
@@ -92,7 +92,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
     }
     public function testBug3()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/bug3.xml');
 
         $entries = $feed->getChildRows('Entries');
@@ -112,7 +112,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default?alt=rss';
         foreach ($urls as $u) {
             //echo "\n".$u."\n";
-            $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
                 ->getRow($u);
             $this->assertNotEquals('', $feed->title);
             $this->assertNotEquals('', $feed->url);
@@ -133,8 +133,8 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
      */
     public function testFindFeeds()
     {
-        Vps_Model_Abstract::clearInstances();
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds');
+        Kwf_Model_Abstract::clearInstances();
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds');
 
         /*
         $feeds = $m->findFeeds('http://www.prosalzburg.at');
@@ -160,7 +160,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
         foreach ($urls as $u) {
             $u = trim($u);
             echo "\n".$u."\n";
-            $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
                 ->getRow($u);
             echo $feed->encoding.' ';
             if ($u != 'http://www.ds-girls.com/forum/syndication.php?type=rss.php?count=3&fid=4'
@@ -205,7 +205,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
     public function testLarge()
     {
         $this->assertEquals(120, substr_count(file_get_contents(dirname(__FILE__).'/large.xml'), '<item>'));
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/large.xml');
         $this->assertNotNull($feed);
 
@@ -215,11 +215,11 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testLargeWithLimit()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/large.xml');
         $this->assertNotNull($feed);
 
-        $s = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')->select();
+        $s = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')->select();
         $s->limit(50);
         $entries = $feed->getChildRows('Entries', $s);
         $this->assertEquals(50, count($entries));
@@ -227,21 +227,21 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testHub()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://aseigo.blogspot.com/feeds/posts/default');
         $this->assertNotEquals('', $feed->hub);
     }
 
     public function testRss20Hub()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/rss2.0-with-hub.xml');
         $this->assertEquals('http://pubsubhubbub.appspot.com', $feed->hub);
     }
 
     public function testRss20WithoutLinkButGuid()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/rss20-without-link-but-guid.xml');
         $this->assertEquals('http://click.linksynergy.com/fs-bin/click?id=u3By/Cu91nQ$offerid=57302.10000557$type=3&subid=0', $feed->link);
 
@@ -252,21 +252,21 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testAuthorBloggerRss()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://nikosams.blogspot.com/feeds/posts/default?alt=rss');
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->author_name);
     }
     public function testAuthorBloggerAtom()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://nikosams.blogspot.com/feeds/posts/default');
         $entries = $feed->getChildRows('Entries');
         $this->assertEquals('Niko Sams', $entries->current()->author_name);
     }
     public function testAuthorTwitterSearch()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://search.twitter.com/search.atom?q=vivid');
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->author_name);
@@ -275,7 +275,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
     public function testContentEncoded()
     {
         /* deaktiviert weil feed nicht mehr funktioniert
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://www.swgemu.com/forums/external.php?type=RSS2&forumids=107');
         $entries = $feed->getChildRows('Entries');
         if (!count($entries)) {
@@ -290,7 +290,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
     deaktiviert weil feed nicht mehr funktioniert
     public function testContentEncoded2()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://www.jmg-galleries.com/blog/feed/');
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->description);
@@ -300,7 +300,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testFlickrImageRss20()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://api.flickr.com/services/feeds/photos_public.gne?id=72526577@N00&tags=ghana&lang=de-de&format=rss_200');
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->media_image);
@@ -313,7 +313,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testFlickrImageAtom()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://api.flickr.com/services/feeds/photos_public.gne?id=72526577@N00&tags=ghana&lang=de-de&format=atom');
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->media_image);
@@ -322,7 +322,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
     test deaktiviert weil der feed kaputt ist
     public function testImageAtomEnclosure()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://www.lsusports.net/rss.dbml?db_oem_id=5200&RSS_SPORT_ID=2164&media=news');
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->media_image);
@@ -331,7 +331,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testAtomXhmlContent()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('http://perpetuitygroup.typepad.com/perpetuity_research/atom.xml');
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->description);
@@ -339,7 +339,7 @@ class Vps_Util_Model_Feed_Test extends Vps_Test_TestCase
 
     public function testBug4()
     {
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
             ->getRow('file://'.dirname(__FILE__).'/bug4.xml');
 
         $entries = $feed->getChildRows('Entries');

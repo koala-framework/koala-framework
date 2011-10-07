@@ -1,13 +1,13 @@
 <?php
-class Vps_Form_Cards_Bar extends Vps_Form_AddForm
+class Kwf_Form_Cards_Bar extends Kwf_Form_AddForm
 {
-    protected $_modelName = 'Vps_Form_Cards_BarModel';
+    protected $_modelName = 'Kwf_Form_Cards_BarModel';
 
     protected function _init()
     {
         parent::_init();
 
-        $this->add(new Vps_Form_Field_TextField('firstname', 'Vorname'));
+        $this->add(new Kwf_Form_Field_TextField('firstname', 'Vorname'));
 
     }
 

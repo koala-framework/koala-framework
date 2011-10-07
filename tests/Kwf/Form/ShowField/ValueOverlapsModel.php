@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_ShowField_ValueOverlapsModel extends Vps_Model_FnF
+class Kwf_Form_ShowField_ValueOverlapsModel extends Kwf_Model_FnF
 {
     protected $_namespace = 'testShowFieldValueOverlabs';
     protected $_data = array(

@@ -1,7 +1,7 @@
-Vps.Auto.Filter.Date = function(config)
+Kwf.Auto.Filter.Date = function(config)
 {
-    Vps.Auto.Filter.Date.superclass.constructor.call(this, config);
-    this.field = new Vps.Form.DateField({
+    Kwf.Auto.Filter.Date.superclass.constructor.call(this, config);
+    this.field = new Kwf.Form.DateField({
         width: 80,
         value: config.value || ''
     });
@@ -17,7 +17,7 @@ Vps.Auto.Filter.Date = function(config)
 
 };
 
-Ext.extend(Vps.Auto.Filter.Date, Vps.Auto.Filter.Abstract, {
+Ext.extend(Kwf.Auto.Filter.Date, Kwf.Auto.Filter.Abstract, {
     reset: function() {
         this.field.reset();
     },

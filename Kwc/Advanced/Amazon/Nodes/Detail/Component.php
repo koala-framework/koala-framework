@@ -1,10 +1,10 @@
 <?php
-class Vpc_Advanced_Amazon_Nodes_Detail_Component extends Vpc_Directories_List_Component
+class Kwc_Advanced_Amazon_Nodes_Detail_Component extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['view'] = 'Vpc_Advanced_Amazon_Nodes_ProductsDirectory_View_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwc_Advanced_Amazon_Nodes_ProductsDirectory_View_Component';
         return $ret;
     }
     protected function _getItemDirectory()

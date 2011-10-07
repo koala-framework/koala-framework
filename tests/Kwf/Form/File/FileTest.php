@@ -2,7 +2,7 @@
 /**
  * @group Form_File
  */
-class Vps_Form_File_FileTest extends Vps_Test_TestCase
+class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
 {
     private $_model;
     private $_uploadsModel;
@@ -12,11 +12,11 @@ class Vps_Form_File_FileTest extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_uploadsModel = Vps_Model_Abstract::getInstance('Vps_Form_File_UploadsTestModel');
+        $this->_uploadsModel = Kwf_Model_Abstract::getInstance('Kwf_Form_File_UploadsTestModel');
 
-        $this->_model = new Vps_Model_FnF(array(
+        $this->_model = new Kwf_Model_FnF(array(
             'referenceMap' => array('File' => array(
-                'refModelClass' => 'Vps_Form_File_UploadsTestModel',
+                'refModelClass' => 'Kwf_Form_File_UploadsTestModel',
                 'column' => 'upload_id'
             )),
             'data' => array(
@@ -28,7 +28,7 @@ class Vps_Form_File_FileTest extends Vps_Test_TestCase
         $this->_row = $this->_model->createRow();
         $this->_row->upload_id = $fRow->id;
         $this->_row->save();
-        $this->_field = new Vps_Form_Field_File('File');
+        $this->_field = new Kwf_Form_Field_File('File');
     }
 
     public function testProcessInputNothingUploaded()

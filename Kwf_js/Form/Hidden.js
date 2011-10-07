@@ -1,12 +1,12 @@
 
-Vps.Form.Hidden = Ext.extend(Ext.form.Hidden, {
+Kwf.Form.Hidden = Ext.extend(Ext.form.Hidden, {
     initComponent: function() {
         this.addEvents('changevalue');
-        Vps.Form.Hidden.superclass.initComponent.call(this);
+        Kwf.Form.Hidden.superclass.initComponent.call(this);
     },
     setValue: function(v) {
-        Vps.Form.Hidden.superclass.setValue.apply(this, arguments);
+        Kwf.Form.Hidden.superclass.setValue.apply(this, arguments);
         this.fireEvent('changevalue', v);
     }
 });
-Ext.reg('hidden', Vps.Form.Hidden);
+Ext.reg('hidden', Kwf.Form.Hidden);

@@ -1,5 +1,5 @@
 <?php
-class Vps_Acl_Resource_MenuEvent extends Vps_Acl_Resource_MenuUrl
+class Kwf_Acl_Resource_MenuEvent extends Kwf_Acl_Resource_MenuUrl
 {
     protected $_menuEventConfig;
 

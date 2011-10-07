@@ -1,18 +1,18 @@
 <?php
-class Vps_Component_Cache_Menu_Root_Component extends Vps_Component_NoCategoriesRoot
+class Kwf_Component_Cache_Menu_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['page']['model'] = 'Vps_Component_Cache_Menu_Root_Model';
+        $ret['generators']['page']['model'] = 'Kwf_Component_Cache_Menu_Root_Model';
         $ret['generators']['page']['component'] = array(
-            'empty' => 'Vpc_Basic_Empty_Component',
+            'empty' => 'Kwc_Basic_Empty_Component',
         );
         $ret['flags']['menuCategory'] = 'root';
         $ret['generators']['box'] = array(
-            'class' => 'Vps_Component_Generator_Box_Static',
+            'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => array(
-                'menu' => 'Vps_Component_Cache_Menu_Root_Menu_Component'
+                'menu' => 'Kwf_Component_Cache_Menu_Root_Menu_Component'
             ),
             'inherit' => true,
             'priority' => 0

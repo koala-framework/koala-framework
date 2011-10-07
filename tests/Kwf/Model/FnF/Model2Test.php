@@ -3,11 +3,11 @@
  * @group Model
  * @group Model_FnF
  */
-class Vps_Model_FnF_Model2Test extends Vps_Test_TestCase
+class Kwf_Model_FnF_Model2Test extends Kwf_Test_TestCase
 {
     public function testData()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -21,7 +21,7 @@ class Vps_Model_FnF_Model2Test extends Vps_Test_TestCase
 
     public function testSelect()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),
@@ -42,7 +42,7 @@ class Vps_Model_FnF_Model2Test extends Vps_Test_TestCase
 
     public function testWhereNotEquals()
     {
-        $model = new Vps_Model_FnF();
+        $model = new Kwf_Model_FnF();
         $model->setData(array(
             array('id' => 1, 'value' => 'foo'),
             array('id' => 2, 'value' => 'bar'),

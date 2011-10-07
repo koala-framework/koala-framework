@@ -1,20 +1,20 @@
 <?php
-class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
 {
     protected $_fileRow;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vpc_Basic_Download_Model';
-        $ret['componentName'] = trlVps('Download');
-        $ret['componentIcon'] = new Vps_Asset('folder_link');
+        $ret['ownModel'] = 'Kwc_Basic_Download_Model';
+        $ret['componentName'] = trlKwf('Download');
+        $ret['componentIcon'] = new Kwf_Asset('folder_link');
         $ret['showFilesize'] = true;
         $ret['showIcon'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
-        $ret['generators']['child']['component']['downloadTag'] = 'Vpc_Basic_DownloadTag_Component';
+        $ret['generators']['child']['component']['downloadTag'] = 'Kwc_Basic_DownloadTag_Component';
         return $ret;
     }
 
@@ -55,7 +55,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     {
         $fileRow = $this->_getFileRow()->getParentRow('File');
         if (!$fileRow) return 'page_white_get';
-        return Vps_Util_FileIcon::getFileIcon($fileRow->extension);
+        return Kwf_Util_FileIcon::getFileIcon($fileRow->extension);
     }
 
     public function getSearchContent()

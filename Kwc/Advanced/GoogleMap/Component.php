@@ -1,19 +1,19 @@
 <?php
-class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Component
+class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Google Maps'),
-            'ownModel' => 'Vpc_Advanced_GoogleMap_Model',
+            'componentName' => trlKwf('Google Maps'),
+            'ownModel' => 'Kwc_Advanced_GoogleMap_Model',
             'default' => array(
                 'zoom' => 8,
                 'height' => 300
             ),
         ));
-        $ret['assetsAdmin']['dep'][] = 'VpsGoogleMapField';
-        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
-        $ret['placeholder']['noCoordinates'] = trlVps('coordinates not entered');
+        $ret['assetsAdmin']['dep'][] = 'KwfGoogleMapField';
+        $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
+        $ret['placeholder']['noCoordinates'] = trlKwf('coordinates not entered');
         return $ret;
     }
 

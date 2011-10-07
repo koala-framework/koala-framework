@@ -2,21 +2,21 @@
 /**
  * @group Update_Action
  */
-class Vps_Update_Action_Db_AddFieldTest extends Vps_Test_TestCase
+class Kwf_Update_Action_Db_AddFieldTest extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass(false);
+        Kwf_Component_Data_Root::setComponentClass(false);
     }
 
     public function testAddField()
     {
-        $model = new Vps_Update_Action_Db_TestModel();
+        $model = new Kwf_Update_Action_Db_TestModel();
 
         $rows = $model->getRow('foo')->getChildRows('Fields');
         $this->assertEquals(2, count($rows));
 
-        $a = new Vps_Update_Action_Db_AddField();
+        $a = new Kwf_Update_Action_Db_AddField();
         $a->model = $model;
         $a->table = 'foo';
         $a->field = 'new_field';

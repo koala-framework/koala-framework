@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_AdminModelRow extends Vps_Model_Proxy_Row
+class Kwc_Directories_Item_Directory_Trl_AdminModelRow extends Kwf_Model_Proxy_Row
 {
     protected $_trlRow;
     public function __construct(array $config)
@@ -32,6 +32,6 @@ class Vpc_Directories_Item_Directory_Trl_AdminModelRow extends Vps_Model_Proxy_R
 
     public function delete()
     {
-        throw new Vps_Exception("Not possible");
+        throw new Kwf_Exception("Not possible");
     }
 }

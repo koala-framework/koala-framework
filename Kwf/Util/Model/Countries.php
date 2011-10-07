@@ -1,10 +1,10 @@
 <?php
-//TODO zusammenführen mit Vps_Util_Country
+//TODO zusammenführen mit Kwf_Util_Country
 //TODO cachen wo sinnvoll
 //TODO xml datei zum model schieben
-class Vps_Util_Model_Countries extends Vps_Model_Data_Abstract
+class Kwf_Util_Model_Countries extends Kwf_Model_Data_Abstract
 {
-    protected $_rowClass = 'Vps_Util_Model_Row_Country';
+    protected $_rowClass = 'Kwf_Util_Model_Row_Country';
     protected $_toStringField = 'name';
 
     public function getData()
@@ -13,7 +13,7 @@ class Vps_Util_Model_Countries extends Vps_Model_Data_Abstract
             $this->_data = array();
             $terr = Zend_Locale::getTranslationList(
                 'Territory',
-                Vps_Trl::getInstance()->getTargetLanguage(),
+                Kwf_Trl::getInstance()->getTargetLanguage(),
                 '2'/*nur laender, ged aber ned korrekt mit zend 1.9*/);
             foreach ($terr as $iso2=>$terr) {
                 if (is_numeric($iso2)) continue;

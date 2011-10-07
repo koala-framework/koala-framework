@@ -1,12 +1,12 @@
 <?php
-class Vpc_Abstract_Form extends Vps_Form
+class Kwc_Abstract_Form extends Kwf_Form
 {
     public function __construct($name, $class)
     {
         $this->setClass($class);
         if ($class) {
             if (!$this->getModel()) {
-                $model = Vpc_Abstract::createOwnModel($class);
+                $model = Kwc_Abstract::createOwnModel($class);
                 if ($model) $this->setModel($model);
             }
             $this->setCreateMissingRow(true);
@@ -15,7 +15,7 @@ class Vpc_Abstract_Form extends Vps_Form
     }
 
     /**
-     * @return Vpc_Abstract_Form
+     * @return Kwc_Abstract_Form
      **/
     public static function createComponentFormByDbIdTemplate($dbIdTemplate, $name = null)
     {
@@ -27,8 +27,8 @@ class Vpc_Abstract_Form extends Vps_Form
             $id = substr($dbIdTemplate, strpos($dbIdTemplate, '{0}') + 4);
         }
 
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
                 if (isset($g['dbIdShortcut']) && $g['dbIdShortcut'] == $dbIdShortcut) {
                     $componentClass = $g['component'];
                 }
@@ -36,11 +36,11 @@ class Vpc_Abstract_Form extends Vps_Form
         }
 
         if (!$componentClass) {
-            throw new Vps_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
+            throw new Kwf_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
         }
         if (is_array($componentClass)) {
             if (sizeof($componentClass) > 1) {
-                throw new Vps_Exception("Can't have multiple component classes");
+                throw new Kwf_Exception("Can't have multiple component classes");
             }
             reset($componentClass);
             $componentClass = current($componentClass);
@@ -56,26 +56,26 @@ class Vpc_Abstract_Form extends Vps_Form
         return $form;
     }
     /**
-     * @return Vpc_Abstract_Form
+     * @return Kwc_Abstract_Form
      **/
     public static function createComponentForm($componentClass, $name = null)
     {
         // Es wurde ein dbIdTemplate angegeben
-        if (!in_array($componentClass, Vpc_Abstract::getComponentClasses())) {
+        if (!in_array($componentClass, Kwc_Abstract::getComponentClasses())) {
             return self::createComponentFormByDbIdTemplate($componentClass);
         }
 
-        $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');
-        if (!$formClass || $formClass == 'Vpc_Abstract_Form') return null;
+        $formClass = Kwc_Admin::getComponentClass($componentClass, 'Form');
+        if (!$formClass || $formClass == 'Kwc_Abstract_Form') return null;
 
         if (!$name) $name = $componentClass;
         $form = new $formClass($name, $componentClass);
-        if ($form instanceof Vpc_Abstract_FormEmpty) { return null; }
+        if ($form instanceof Kwc_Abstract_FormEmpty) { return null; }
         return $form;
     }
 
     /**
-     * @return Vpc_Abstract_Form
+     * @return Kwc_Abstract_Form
      **/
     public static function createChildComponentForm($componentClass, $id, $name = null)
     {
@@ -88,15 +88,15 @@ class Vpc_Abstract_Form extends Vps_Form
 
         //TODO: wenns mal benötigt wird recursiv die id weiter nach unten gehen und komponenten suchen
 
-        foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $generatorData) {
-            $generator = Vps_Component_Generator_Abstract::getInstance($componentClass, $generatorKey);
+        foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $generatorData) {
+            $generator = Kwf_Component_Generator_Abstract::getInstance($componentClass, $generatorKey);
             if ($childComponentClass = $generator->getComponentByKey($id)) {
                 $idTemplate .= $generator->getIdSeparator() . $id;
                 break;
             }
         }
         if (!$childComponentClass) {
-            throw new Vps_Exception("No child component with id '$id' for '$componentClass' found.");
+            throw new Kwf_Exception("No child component with id '$id' for '$componentClass' found.");
         }
         $form = self::createComponentForm($childComponentClass, $name);
         if ($form) {

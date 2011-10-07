@@ -1,12 +1,12 @@
 <?php
-class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
+class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {
-        $this->setModel(Vpc_Basic_Text_Component::getTextModel($class));
+        $this->setModel(Kwc_Basic_Text_Component::getTextModel($class));
         parent::__construct($name, $class, $id);
-        $field = new Vps_Form_Field_HtmlEditor('content', trlVps('Text'));
-        $field->setData(new Vps_Data_Vpc_ComponentIds('content'));
+        $field = new Kwf_Form_Field_HtmlEditor('content', trlKwf('Text'));
+        $field->setData(new Kwf_Data_Kwc_ComponentIds('content'));
         $field->setHideLabel(true);
 
         $ignoreSettings = array('tablename', 'componentName',
@@ -18,36 +18,36 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
                 $field->$method($val);
             }
         }
-        $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $generators['child']['component'];
         if ($classes['link']) {
-            $cfg = new Vps_Component_Abstract_ExtConfig_Form($classes['link']);
-            $c = $cfg->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
+            $cfg = new Kwf_Component_Abstract_ExtConfig_Form($classes['link']);
+            $c = $cfg->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
             $field->setLinkComponentConfig($c['form']);
         }
         if ($classes['image']) {
-            $c = Vpc_Admin::getInstance($classes['image'])->getExtConfig();
+            $c = Kwc_Admin::getInstance($classes['image'])->getExtConfig();
             $field->setImageComponentConfig($c['form']);
         }
         if ($classes['download']) {
-            $c = Vpc_Admin::getInstance($classes['download'])->getExtConfig();
+            $c = Kwc_Admin::getInstance($classes['download'])->getExtConfig();
             $field->setDownloadComponentConfig($c['form']);
         }
-        if (Vpc_Abstract::getSetting($this->getClass(), 'enableStylesEditor')) {
-            $admin = Vpc_Admin::getInstance($class);
+        if (Kwc_Abstract::getSetting($this->getClass(), 'enableStylesEditor')) {
+            $admin = Kwc_Admin::getInstance($class);
             $field->setStylesEditorConfig(array(
-                'xtype' => 'vpc.basic.text.styleseditor',
+                'xtype' => 'kwc.basic.text.styleseditor',
                 'blockStyleUrl' => $admin->getControllerUrl('BlockStyle'),
                 'inlineStyleUrl' => $admin->getControllerUrl('InlineStyle'),
                 'masterStyleUrl' => $admin->getControllerUrl('MasterStyle')
             ));
         }
 
-        $t = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($class, 'stylesModel'));
+        $t = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($class, 'stylesModel'));
         $field->setStyles($t->getStyles());
         $field->setComponentClass($class);
 
-        $field->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl());
+        $field->setControllerUrl(Kwc_Admin::getInstance($class)->getControllerUrl());
         $this->fields->add($field);
 
         $this->setAssetsType('Frontend');
@@ -56,14 +56,14 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
     //für tests
     public function setAssetsType($type)
     {
-        $loader = new Vps_Assets_Loader();
+        $loader = new Kwf_Assets_Loader();
         $dep = $loader->getDependencies();
-        $urls = $dep->getAssetUrls($type, 'css', 'web', Vps_Component_Data_Root::getComponentClass());
+        $urls = $dep->getAssetUrls($type, 'css', 'web', Kwf_Component_Data_Root::getComponentClass());
 
         $this->fields['content']->setCssFiles($urls);
 
         foreach ($urls as $url) {
-            if (strpos($url, 'Vpc_Basic_Text_StylesAsset')!==false) {
+            if (strpos($url, 'Kwc_Basic_Text_StylesAsset')!==false) {
                 $this->fields['content']->setStylesCssFile($url);
                 break;
             }

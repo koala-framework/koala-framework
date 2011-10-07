@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_UrlField extends Vps_Form_Field_TextField
+class Kwf_Form_Field_UrlField extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -11,7 +11,7 @@ class Vps_Form_Field_UrlField extends Vps_Form_Field_TextField
     {
         $value = parent::_processLoaded($value);
         if ($value != 'http://') {
-            $punycode = new Vps_Util_Punycode();
+            $punycode = new Kwf_Util_Punycode();
             $value = $punycode->decode($value);
         }
         return $value;
@@ -20,7 +20,7 @@ class Vps_Form_Field_UrlField extends Vps_Form_Field_TextField
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        $punycode = new Vps_Util_Punycode();
+        $punycode = new Kwf_Util_Punycode();
         $ret = $punycode->encode($ret);
         return $ret;
     }

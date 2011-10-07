@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_User_Users_WebcodeData extends Vps_Data_Abstract
+class Kwf_Controller_Action_User_Users_WebcodeData extends Kwf_Data_Abstract
 {
 
     public function load($row)
@@ -11,11 +11,11 @@ class Vps_Controller_Action_User_Users_WebcodeData extends Vps_Data_Abstract
         }
     }
 
-    public function save(Vps_Model_Row_Interface $row, $data)
+    public function save(Kwf_Model_Row_Interface $row, $data)
     {
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
-        if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
+        if ($acl->getRole($authedRole) instanceof Kwf_Acl_Role_Admin) {
             if (!$data) {
                 $row->webcode = '';
             } else if ($data && $row->webcode !== '') {

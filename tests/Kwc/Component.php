@@ -1,5 +1,5 @@
 <?php
-class Vpc_Component extends Vpc_Abstract
+class Kwc_Component extends Kwc_Abstract
 {
     public function getTemplateVars()
     {

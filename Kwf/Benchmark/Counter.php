@@ -1,5 +1,5 @@
 <?php
-class Vps_Benchmark_Counter
+class Kwf_Benchmark_Counter
 {
     public static function getInstance()
     {
@@ -7,15 +7,15 @@ class Vps_Benchmark_Counter
         if (!isset($i)) {
             if (extension_loaded('apc')) {
                 if (function_exists('apc_inc')) { //apc >= 3.1.1
-                    $i = new Vps_Benchmark_Counter_Apc();
+                    $i = new Kwf_Benchmark_Counter_Apc();
                 } else {
                     //kein memcache-fallback, da der dann *nur* für den counter verwendet werden würde
-                    $i = new Vps_Benchmark_Counter_File();
+                    $i = new Kwf_Benchmark_Counter_File();
                 }
             } else if (class_exists('Memcache')) {
-                $i = new Vps_Benchmark_Counter_Memcache();
+                $i = new Kwf_Benchmark_Counter_Memcache();
             } else {
-                $i = new Vps_Benchmark_Counter_File();
+                $i = new Kwf_Benchmark_Counter_File();
             }
         }
         return $i;

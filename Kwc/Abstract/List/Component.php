@@ -1,25 +1,25 @@
 <?php
-abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
+abstract class Kwc_Abstract_List_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'List',
-            'childModel'     => 'Vpc_Abstract_List_Model',
-            'ownModel'     => 'Vpc_Abstract_List_OwnModel',
+            'childModel'     => 'Kwc_Abstract_List_Model',
+            'ownModel'     => 'Kwc_Abstract_List_OwnModel',
         ));
         $ret['generators']['child'] = array(
-            'class' => 'Vps_Component_Generator_Table',
+            'class' => 'Kwf_Component_Generator_Table',
             'component' => null
         );
-        $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
-        $ret['assetsAdmin']['dep'][] = 'VpsMultiFileUploadPanel';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/EditButton.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/PanelWithEditButton.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/List.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/ListEditButton.js';
-        $ret['extConfig'] = 'Vpc_Abstract_List_ExtConfigListUpload';
+        $ret['assetsAdmin']['dep'][] = 'KwfProxyPanel';
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'KwfMultiFileUploadPanel';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/EditButton.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/PanelWithEditButton.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/List.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/ListEditButton.js';
+        $ret['extConfig'] = 'Kwc_Abstract_List_ExtConfigListUpload';
         $ret['hasVisible'] = true;
         return $ret;
     }
@@ -27,14 +27,14 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public static function validateSettings($settings)
     {
         if (isset($settings['default'])) {
-            throw new Vps_Exception("Setting default doesn't exist anymore");
+            throw new Kwf_Exception("Setting default doesn't exist anymore");
         }
     }
 
     //kann überschrieben werden um zB ein limit einzubauen
     protected function _getSelect()
     {
-        $select = new Vps_Component_Select();
+        $select = new Kwf_Component_Select();
         $select->whereGenerator('child');
         return $select;
     }
@@ -54,12 +54,12 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $i = 0;
         foreach ($children as $child) {
             $class = 'listItem ';
-            if ($i == 0) $class .= 'vpcFirst ';
-            if ($i == count($children)-1) $class .= 'vpcLast ';
+            if ($i == 0) $class .= 'kwcFirst ';
+            if ($i == count($children)-1) $class .= 'kwcLast ';
             if ($i % 2 == 0) {
-                $class .= 'vpcEven ';
+                $class .= 'kwcEven ';
             } else {
-                $class .= 'vpcOdd ';
+                $class .= 'kwcOdd ';
             }
             $class = trim($class);
             $i++;

@@ -1,8 +1,8 @@
 <?php
-class Vps_Component_ModelObserver
+class Kwf_Component_ModelObserver
 {
     /**
-     * @var Vps_Component_ModelObserver
+     * @var Kwf_Component_ModelObserver
      */
     static private $_instance;
     private $_process = array(
@@ -54,7 +54,7 @@ class Vps_Component_ModelObserver
     {
         if ($this->_disabled) return;
 
-        if ($source instanceof Vps_Model_Interface) {
+        if ($source instanceof Kwf_Model_Interface) {
             $model = $source;
             $row = null;
         } else {
@@ -65,41 +65,41 @@ class Vps_Component_ModelObserver
             } else {
                 $model = $row->getModel();
                 $primary = $model->getPrimaryKey();
-                if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+                if (get_class($model) == 'Kwf_Model_Db') $model = $model->getTable();
             }
         }
-        if ($model instanceof Vps_Component_Cache_MetaModel ||
-            $model instanceof Vps_Component_Cache_Model ||
-            ($model instanceof  Vps_Model_Field && !$primary)
+        if ($model instanceof Kwf_Component_Cache_MetaModel ||
+            $model instanceof Kwf_Component_Cache_Model ||
+            ($model instanceof  Kwf_Model_Field && !$primary)
         ) {
             return;
         }
-        if (get_class($model) == 'Vps_Db_Table') return;
+        if (get_class($model) == 'Kwf_Db_Table') return;
         if ($this->_skipFnF) {
             $m = $model;
-            while ($m instanceof Vps_Model_Proxy) { $m = $m->getProxyModel(); }
-            if ($m instanceof Vps_Model_FnF) return;
+            while ($m instanceof Kwf_Model_Proxy) { $m = $m->getProxyModel(); }
+            if ($m instanceof Kwf_Model_FnF) return;
         }
 
         $event = null;
         $data = null;
         if ($row) {
             if ($function == 'delete') {
-                $event = 'Vps_Component_Event_Row_Deleted';
+                $event = 'Kwf_Component_Event_Row_Deleted';
             } else if ($function == 'update') {
-                $event = 'Vps_Component_Event_Row_Updated';
+                $event = 'Kwf_Component_Event_Row_Updated';
             } else if ($function == 'insert') {
-                $event = 'Vps_Component_Event_Row_Inserted';
+                $event = 'Kwf_Component_Event_Row_Inserted';
             }
-            if ($event) Vps_Component_Events::fireEvent(new $event($row));
+            if ($event) Kwf_Component_Events::fireEvent(new $event($row));
         } else {
-            Vps_Component_Events::fireEvent(new Vps_Component_Event_Model_Updated($model));
+            Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Model_Updated($model));
         }
     }
 /*
     protected function _processCache($source)
     {
-        if ($source['source'] instanceof Vps_Model_Interface) {
+        if ($source['source'] instanceof Kwf_Model_Interface) {
             $model = $source['source'];
             $id = null;
             $row = null;
@@ -111,22 +111,22 @@ class Vps_Component_ModelObserver
             } else {
                 $model = $row->getModel();
                 $primary = $model->getPrimaryKey();
-                if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+                if (get_class($model) == 'Kwf_Model_Db') $model = $model->getTable();
             }
             $id = is_array($primary) ? null : $row->$primary;
             $componentId = isset($row->component_id) ? $row->component_id : null;
         }
-        if ($model instanceof Vps_Component_Cache_MetaModel ||
-            $model instanceof Vps_Component_Cache_Model ||
-            ($model instanceof  Vps_Model_Field && !$primary)
+        if ($model instanceof Kwf_Component_Cache_MetaModel ||
+            $model instanceof Kwf_Component_Cache_Model ||
+            ($model instanceof  Kwf_Model_Field && !$primary)
         ) {
             return array();
         }
-        if (get_class($model) == 'Vps_Db_Table') return array();
+        if (get_class($model) == 'Kwf_Db_Table') return array();
         if ($this->_skipFnF) {
             $m = $model;
-            while ($m instanceof Vps_Model_Proxy) { $m = $m->getProxyModel(); }
-            if ($m instanceof Vps_Model_FnF) return array();
+            while ($m instanceof Kwf_Model_Proxy) { $m = $m->getProxyModel(); }
+            if ($m instanceof Kwf_Model_FnF) return array();
         }
         $modelname = get_class($model);
         if (!isset($this->_processed[$modelname]) || !in_array($id, $this->_processed[$modelname])) {
@@ -135,10 +135,10 @@ class Vps_Component_ModelObserver
             if ($this->_enableProcess) {
                 if ($row) {
                     $dirtyColumns = isset($source['dirtyColumns']) ? $source['dirtyColumns'] : null;
-                    Vps_Component_Cache::getInstance()->cleanByRow($row, $dirtyColumns);
+                    Kwf_Component_Cache::getInstance()->cleanByRow($row, $dirtyColumns);
                 } else {
                     // Bei Import kommt ein Model daher
-                    Vps_Component_Cache::getInstance()->cleanByModel($model);
+                    Kwf_Component_Cache::getInstance()->cleanByModel($model);
                 }
             }
             return array($modelname => $id);
@@ -148,11 +148,11 @@ class Vps_Component_ModelObserver
 */
     public function process()
     {
-        Vps_Component_Events::fireEvent(new Vps_Component_Event_Row_UpdatesFinished());
+        Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Row_UpdatesFinished());
 
         // Suchindex
-        if (class_exists('Vps_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Dao_Index::process();
+        if (class_exists('Kwf_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Kwf_Dao_Index::process();
         }
     }
 

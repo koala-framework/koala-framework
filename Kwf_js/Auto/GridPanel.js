@@ -1,4 +1,4 @@
-Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
+Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 {
     layout: 'fit',
 
@@ -26,12 +26,12 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.actions.reload = new Ext.Action({
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x-btn-icon',
-            tooltip : trlVps('Reload'),
+            tooltip : trlKwf('Reload'),
             handler : this.reload,
             scope   : this
         });
         this.actions.save = new Ext.Action({
-            text    : trlVps('Save'),
+            text    : trlKwf('Save'),
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
             disabled: true,
@@ -39,14 +39,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             scope   : this
         });
         this.actions.add = new Ext.Action({
-            text    : trlVps('Add'),
+            text    : trlKwf('Add'),
             icon    : '/assets/silkicons/table_add.png',
             cls     : 'x-btn-text-icon',
             handler : this.onAdd,
             scope: this
         });
         this.actions['delete'] = new Ext.Action({
-            text    : trlVps('Delete'),
+            text    : trlKwf('Delete'),
             icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDelete,
@@ -54,7 +54,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             needsSelection: true
         });
         this.actions.edit = new Ext.Action({
-            text    : trlVps('Edit'),
+            text    : trlKwf('Edit'),
             icon    : '/assets/silkicons/table_edit.png',
             cls     : 'x-btn-text-icon',
             handler : this.onEdit,
@@ -62,7 +62,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             needsSelection: true
         });
         this.actions.duplicate = new Ext.Action({
-            text    : trlVps('Duplicate'),
+            text    : trlKwf('Duplicate'),
             icon    : '/assets/silkicons/table_go.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDuplicate,
@@ -70,27 +70,27 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             needsSelection: true
         });
         this.actions.pdf = new Ext.Action({
-            text    : trlVps('Print'),
+            text    : trlKwf('Print'),
             icon    : '/assets/silkicons/printer.png',
             cls     : 'x-btn-text-icon',
             handler : this.onPdf,
             scope: this
         });
         this.actions.csv = new Ext.Action({
-            text    : trlVps('CSV Export'),
+            text    : trlKwf('CSV Export'),
             icon    : '/assets/silkicons/page_code.png',
             cls     : 'x-btn-text-icon',
             handler : this.onCsv,
             scope: this
         });
         this.actions.xls = new Ext.Action({
-            text    : trlVps('Excel Export'),
+            text    : trlKwf('Excel Export'),
             icon    : '/assets/silkicons/page_excel.png',
             cls     : 'x-btn-text-icon',
             handler : this.onXls,
             scope: this
         });
-        Vps.Auto.GridPanel.superclass.initComponent.call(this);
+        Kwf.Auto.GridPanel.superclass.initComponent.call(this);
     },
 
     doAutoLoad : function()
@@ -286,7 +286,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         field: editorField,
                         column: column
                     });
-                } else if (Vps.Form.AbstractSelect && editorField instanceof Vps.Form.AbstractSelect) {
+                } else if (Kwf.Form.AbstractSelect && editorField instanceof Kwf.Form.AbstractSelect) {
                     editorConfig.allowBlur = true;
                 }
                 column.editor = new Ext.grid.GridEditor(editorField, editorConfig);
@@ -363,9 +363,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (meta.paging) {
             if (typeof meta.paging == 'object') {
                 var t;
-                if (meta.paging.type && Vps.PagingToolbar[meta.paging.type]) {
+                if (meta.paging.type && Kwf.PagingToolbar[meta.paging.type]) {
                     this.pagingType = meta.paging.type;
-                    t = Vps.PagingToolbar[meta.paging.type];
+                    t = Kwf.PagingToolbar[meta.paging.type];
                 } else if(meta.paging.type) {
                     try {
                         t = eval(meta.paging.type);
@@ -462,7 +462,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         }
 
-        this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
+        this.filters = new Kwf.Auto.FilterCollection(meta.filters, this);
         this.filters.each(function(filter) {
             filter.on('filter', function(f, params) {
                 this.applyBaseParams(params);
@@ -508,7 +508,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         bodyStyle: 'padding: 10px; background-color: white;',
                         autoHeight: true,
                         bodyBorder : false,
-                        title: trlVps('Info'),
+                        title: trlKwf('Info'),
                         resize: false
                     });
                     helpWindow.show();
@@ -589,11 +589,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
             editDialog = new d({});
         }
-        if (editDialog instanceof Vps.Auto.FormPanel) {
-            editDialog = new Vps.Auto.Form.Window({ autoForm: editDialog });
+        if (editDialog instanceof Kwf.Auto.FormPanel) {
+            editDialog = new Kwf.Auto.Form.Window({ autoForm: editDialog });
         }
         if (editDialog && !(editDialog instanceof Ext.Window)) {
-            var d = Vps.Auto.Form.Window;
+            var d = Kwf.Auto.Form.Window;
             if (editDialog.type) {
                 try {
                     d = eval(editDialog.type);
@@ -641,7 +641,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             data.push(r.data);
         }, this);
 
-        this.el.mask(trlVps('Saving...'));
+        this.el.mask(trlKwf('Saving...'));
 
         var params = this.getBaseParams() || {};
         params.data = Ext.util.JSON.encode(data);
@@ -731,7 +731,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             //im ersten form-binding hinzufügen
             var foundForm = false;
             this.bindings.each(function(b) {
-                if (b.item instanceof Vps.Auto.FormPanel) {
+                if (b.item instanceof Kwf.Auto.FormPanel) {
                     b.item.onAdd();
                     foundForm = true;
                     return false;
@@ -772,8 +772,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onDelete : function() {
         Ext.Msg.show({
-            title: trlVps('Delete'),
-            msg: trlVps('Do you really wish to remove this entry / these entries?'),
+            title: trlKwf('Delete'),
+            msg: trlKwf('Do you really wish to remove this entry / these entries?'),
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {
@@ -802,7 +802,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
                     params[this.store.reader.meta.id] = ids.join(';');
 
-                    this.el.mask(trlVps('Deleting...'));
+                    this.el.mask(trlKwf('Deleting...'));
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/json-delete',
                         params: params,
@@ -840,14 +840,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }, this);
         if (!ids.length) {
             Ext.Msg.show({
-                title: trlVps('Duplicate'),
-                msg: trlVps('No entries are selected')
+                title: trlKwf('Duplicate'),
+                msg: trlKwf('No entries are selected')
             });
             return;
         }
         params[this.store.reader.meta.id] = ids.join(';');
 
-        this.el.mask(trlVps('Duplicating...'));
+        this.el.mask(trlKwf('Duplicating...'));
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-duplicate',
             params: params,
@@ -885,17 +885,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             params  : this.getStore().baseParams,
             timeout: 600000, // 10 minuten
             progress: true,
-            progressTitle : trlVps('CSV export'),
+            progressTitle : trlKwf('CSV export'),
             success: function(response, opt, r) {
                 if (Ext.isIE) {
                     Ext.Msg.show({
-                        title: trlVps('Your download is ready'),
-                        msg: trlVps('Please click on the following link to download your CSV file.')
+                        title: trlKwf('Your download is ready'),
+                        msg: trlKwf('Please click on the following link to download your CSV file.')
                             +'<br /><br />'
                             +'<a class="xlsExportLink" href="'+this.controllerUrl+'/download-csv-export-file?downloadkey='+r.downloadkey+'" target="_blank">'
-                            +trlVps('CSV export file')+'</a>',
+                            +trlKwf('CSV export file')+'</a>',
                         icon: Ext.Msg.INFO,
-                        buttons: { ok: trlVps('Close') }
+                        buttons: { ok: trlKwf('Close') }
                     });
                 } else {
                     Ext.getBody().createChild({
@@ -908,7 +908,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     onXls : function()
     {
-        var params = Vps.clone(this.getStore().baseParams);
+        var params = Kwf.clone(this.getStore().baseParams);
         if(this.getStore().sortInfo){
             var pn = this.getStore().paramNames;
             params[pn["sort"]] = this.getStore().sortInfo.field;
@@ -920,7 +920,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             params  : params,
             timeout: 600000, // 10 minuten
             progress: true,
-            progressTitle : trlVps('Excel export'),
+            progressTitle : trlKwf('Excel export'),
             success: function(response, opt, r) {
                 var downloadUrl = this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey;
                 for (var i in params) {
@@ -928,13 +928,13 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 }
                 if (Ext.isIE) {
                     Ext.Msg.show({
-                        title: trlVps('Your download is ready'),
-                        msg: trlVps('Please click on the following link to download your Excel file.')
+                        title: trlKwf('Your download is ready'),
+                        msg: trlKwf('Please click on the following link to download your Excel file.')
                             +'<br /><br />'
                             +'<a class="xlsExportLink" href="'+downloadUrl+'" target="_blank">'
-                            +trlVps('Excel export file')+'</a>',
+                            +trlKwf('Excel export file')+'</a>',
                         icon: Ext.Msg.INFO,
-                        buttons: { ok: trlVps('Close') }
+                        buttons: { ok: trlKwf('Close') }
                     });
                 } else {
                     Ext.getBody().createChild({
@@ -1002,7 +1002,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!params) params = {};
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
-            if (!this.metaConn) this.metaConn = new Vps.Connection({ autoAbort: true });
+            if (!this.metaConn) this.metaConn = new Kwf.Connection({ autoAbort: true });
             this.metaConn.request({
                 mask: this.el,
                 url: this.controllerUrl+'/json-data',
@@ -1084,4 +1084,4 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     }
 });
 
-Ext.reg('vps.autogrid', Vps.Auto.GridPanel);
+Ext.reg('kwf.autogrid', Kwf.Auto.GridPanel);

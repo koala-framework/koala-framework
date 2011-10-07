@@ -1,7 +1,7 @@
 <?php
-class Vps_Trl_Parser
+class Kwf_Trl_Parser
 {
-    private $_modelVps;
+    private $_modelKwf;
     private $_modelWeb;
     private $_mode;
     private $_usedIds = array();
@@ -12,25 +12,25 @@ class Vps_Trl_Parser
     private $_cleanUp;
     private $_warnings = array();
 
-    public function __construct($modelVps, $modelWeb, $mode = 'all', $cleanUp = 'none')
+    public function __construct($modelKwf, $modelWeb, $mode = 'all', $cleanUp = 'none')
     {
-        $this->_modelVps = $modelVps;
+        $this->_modelKwf = $modelKwf;
         $this->_modelWeb = $modelWeb;
 
         $this->_cleanUp = $cleanUp;
 
-        $this->_added[get_class($modelVps)] = array();
+        $this->_added[get_class($modelKwf)] = array();
         $this->_added[get_class($modelWeb)] = array();
 
-        $this->_deletedRows[get_class($modelVps)] = array();
+        $this->_deletedRows[get_class($modelKwf)] = array();
         $this->_deletedRows[get_class($modelWeb)] = array();
 
-        $this->_usedIds[get_class($modelVps)] = array();
+        $this->_usedIds[get_class($modelKwf)] = array();
         $this->_usedIds[get_class($modelWeb)] = array();
 
         $this->_mode = $mode;
-        $this->_languages = Vps_Trl::getInstance()->getLanguages();
-        $this->_codeLanguage = Vps_Trl::getInstance()->getWebCodeLanguage();
+        $this->_languages = Kwf_Trl::getInstance()->getLanguages();
+        $this->_codeLanguage = Kwf_Trl::getInstance()->getWebCodeLanguage();
     }
 
     public function setDebug($debug)
@@ -53,8 +53,8 @@ class Vps_Trl_Parser
         //das Project
         if (!$directories) {
             $directoryWeb = ".";
-            $directoryVps = VPS_PATH;
-            $directories = array('web' => $directoryWeb, 'vps' => $directoryVps);
+            $directoryKwf = KWF_PATH;
+            $directories = array('web' => $directoryWeb, 'kwf' => $directoryKwf);
         }
 
         $errors = array();
@@ -63,7 +63,7 @@ class Vps_Trl_Parser
         $jsfiles = 0;
         $tplfiles = 0;
         $this->_usedIds = array();
-        $this->_usedIds[get_class($this->_modelVps)] = array();
+        $this->_usedIds[get_class($this->_modelKwf)] = array();
         $this->_usedIds[get_class($this->_modelWeb)] = array();
         foreach ($directories as $dirKey => $directory){
             $iterator = new RecursiveDirectoryIterator($directory);
@@ -73,8 +73,8 @@ class Vps_Trl_Parser
                     if (stripos($file->getPathname(), ".svn")) continue;
                     if (stripos($file->getPathname(), ".git")) continue;
                     if ((
-                            stripos($file->getPathname(), VPS_PATH . "/tests/Vps/Trl/") === false &&
-                            stripos($file->getPathname(), VPS_PATH . "/Vps/Trl.php") === false
+                            stripos($file->getPathname(), KWF_PATH . "/tests/Kwf/Trl/") === false &&
+                            stripos($file->getPathname(), KWF_PATH . "/Kwf/Trl.php") === false
                         ) ||
                         stripos($file->getPathname(), "testparse")) { //tests werden ausgeschlossen
                         $extension = end(explode('.', $file->getFileName()));
@@ -94,7 +94,7 @@ class Vps_Trl_Parser
                                   echo '.';
                               }
                           }
-                          $ret = Vps_Trl::getInstance()->parse(file_get_contents($file), $extension);
+                          $ret = Kwf_Trl::getInstance()->parse(file_get_contents($file), $extension);
                           if ($ret){
                               $errors = array_merge($errors, $this->insertToXml($ret, $file->getPathname(), $dirKey));
                           }
@@ -176,7 +176,7 @@ class Vps_Trl_Parser
         if ($xmlSource == 'web') {
             return $this->_modelWeb;
         } else {
-            return $this->_modelVps;
+            return $this->_modelKwf;
         }
     }
 
@@ -203,21 +203,21 @@ class Vps_Trl_Parser
 
     private function _getDefaultLanguage($type)
     {
-        if ($type == Vps_Trl::SOURCE_VPS) {
+        if ($type == Kwf_Trl::SOURCE_KWF) {
             return 'en';
         } else {
-            return Vps_Trl::getInstance()->getWebCodeLanguage();
+            return Kwf_Trl::getInstance()->getWebCodeLanguage();
         }
     }
 
     private function _cleanUp ($quiet)
     {
         $toDeleteRows = array();
-        if ($this->_cleanUp == "all" || $this->_cleanUp == "vps") {
-            $rows = $this->_modelVps->getRows();
+        if ($this->_cleanUp == "all" || $this->_cleanUp == "kwf") {
+            $rows = $this->_modelKwf->getRows();
             foreach ($rows as $row) {
-                if (!array_key_exists($row->id, $this->_usedIds[get_class($this->_modelVps)])) {
-                    $this->_deletedRows[get_class($this->_modelVps)][] = $row->en;
+                if (!array_key_exists($row->id, $this->_usedIds[get_class($this->_modelKwf)])) {
+                    $this->_deletedRows[get_class($this->_modelKwf)][] = $row->en;
                     $toDeleteRows[] = $row;
                 }
             }

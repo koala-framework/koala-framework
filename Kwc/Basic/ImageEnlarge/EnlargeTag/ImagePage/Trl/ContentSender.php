@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_ContentSender extends Vps_Component_Abstract_ContentSender_Lightbox
+class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_ContentSender extends Kwf_Component_Abstract_ContentSender_Lightbox
 {
     protected function _getOptions()
     {

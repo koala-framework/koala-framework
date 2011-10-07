@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Events_Log extends Zend_Log
+class Kwf_Component_Events_Log extends Zend_Log
 {
     public static function getInstance()
     {
         static $instance;
-        if (!$instance) $instance = new Vps_Component_Events_Log();
+        if (!$instance) $instance = new Kwf_Component_Events_Log();
         return $instance;
     }
 
@@ -15,7 +15,7 @@ class Vps_Component_Events_Log extends Zend_Log
         parent::__construct($writer);
     }
 
-    public function logEvent($indent, $callback, Vps_Component_Event_Abstract $event)
+    public function logEvent($indent, $callback, Kwf_Component_Event_Abstract $event)
     {
         $message =
             str_repeat(' ', ($indent - 1) * 2) .

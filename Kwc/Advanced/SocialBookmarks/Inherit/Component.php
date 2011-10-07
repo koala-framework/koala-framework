@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SocialBookmarks_Inherit_Component extends Vpc_Abstract
+class Kwc_Advanced_SocialBookmarks_Inherit_Component extends Kwc_Abstract
 {
     public function getTemplateVars()
     {
@@ -17,7 +17,7 @@ class Vpc_Advanced_SocialBookmarks_Inherit_Component extends Vpc_Abstract
         $d = $this->getData()->getParentPseudoPageOrRoot();
         while ($d) {
             if (($c = $d->getChildComponent('-'.$this->getData()->id))
-                && is_instance_of($c->componentClass, 'Vpc_Advanced_SocialBookmarks_Component')
+                && is_instance_of($c->componentClass, 'Kwc_Advanced_SocialBookmarks_Component')
             ) {
                 return $c;
             }

@@ -1,12 +1,12 @@
 <?php
-class Vpc_Box_MetaTagsContent_Component extends Vpc_Box_MetaTags_Component
+class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Meta Tags');
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
+        $ret['componentName'] = trlKwf('Meta Tags');
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }
     protected function _getMetaTags()

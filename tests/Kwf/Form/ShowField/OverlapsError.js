@@ -1,16 +1,16 @@
-Ext.namespace('Vps.Test');
+Ext.namespace('Kwf.Test');
 
-Vps.Test.OverlapsError = Ext.extend(Ext.Panel, {
+Kwf.Test.OverlapsError = Ext.extend(Ext.Panel, {
     initComponent: function()
     {
-        Vps.Debug.displayErrors = true;
+        Kwf.Debug.displayErrors = true;
         this.buttons = [];
         this.buttons.push(
             new Ext.Button({
             text:'testA',
             handler : function(){
-                var win = new Vps.Auto.Form.Window({
-                    controllerUrl: '/vps/test/vps_form_show-field_value-overlaps-error-form'
+                var win = new Kwf.Auto.Form.Window({
+                    controllerUrl: '/kwf/test/kwf_form_show-field_value-overlaps-error-form'
                 });
                 win.showAdd();
                 win.on('addaction', function(form, data) {
@@ -24,7 +24,7 @@ Vps.Test.OverlapsError = Ext.extend(Ext.Panel, {
             },
             scope: this
         }));
-        Vps.Test.OverlapsError.superclass.initComponent.call(this);
+        Kwf.Test.OverlapsError.superclass.initComponent.call(this);
     }
 });
 

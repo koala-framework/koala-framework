@@ -1,11 +1,11 @@
 <?php
-class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static
+class Kwf_Component_Generator_Box_Static extends Kwf_Component_Generator_Static
 {
     protected function _init()
     {
         if (is_array($this->_settings['component'])) {
             if (isset($this->_settings['box'])) {
-                throw new Vps_Exception("How would you put multiple components into one box?");
+                throw new Kwf_Exception("How would you put multiple components into one box?");
             }
         } else {
             $this->_settings['component'] = array($this->_settings['generator'] => $this->_settings['component']);

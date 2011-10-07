@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Feed_Model extends Vps_Model_FnF
+class Kwc_Basic_Feed_Model extends Kwf_Model_FnF
 {
     public function __construct()
     {

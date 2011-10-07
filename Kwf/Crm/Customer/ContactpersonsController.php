@@ -1,19 +1,19 @@
 <?php
-class Vps_Crm_Customer_ContactpersonsController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Crm_Customer_ContactpersonsController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_defaultOrder = array('field'=>'lastname', 'direction'=>'ASC');
-    protected $_modelName = 'Vps_Crm_Customer_Model_Contactpersons';
+    protected $_modelName = 'Kwf_Crm_Customer_Model_Contactpersons';
     protected $_buttons = array('add', 'delete');
     protected $_permissions = array('add', 'delete');
 
     public function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column_Button('edit'));
+        $this->_columns->add(new Kwf_Grid_Column_Button('edit'));
 
-        $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 100));
-        $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 100));
-        $this->_columns->add(new Vps_Grid_Column('phone', trlVps('Phone'), 100));
-        $this->_columns->add(new Vps_Grid_Column('email', trlVps('E-Mail'), 100));
+        $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('Firstname'), 100));
+        $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Lastname'), 100));
+        $this->_columns->add(new Kwf_Grid_Column('phone', trlKwf('Phone'), 100));
+        $this->_columns->add(new Kwf_Grid_Column('email', trlKwf('E-Mail'), 100));
     }
 
     protected function _getWhere()

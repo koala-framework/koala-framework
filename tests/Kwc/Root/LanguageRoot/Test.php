@@ -1,13 +1,13 @@
 <?php
 /**
- * @group Vpc_LanguageRoot
- * @group Vpc_UrlResolve
+ * @group Kwc_LanguageRoot
+ * @group Kwc_UrlResolve
  */
-class Vpc_Root_LanguageRoot_Test extends Vpc_TestAbstract
+class Kwc_Root_LanguageRoot_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Root_LanguageRoot_TestComponent');
+        parent::setUp('Kwc_Root_LanguageRoot_TestComponent');
         $this->_root->setFilename(null);
     }
 

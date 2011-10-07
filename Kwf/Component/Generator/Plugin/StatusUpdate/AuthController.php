@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Plugin_StatusUpdate_AuthController extends Vps_Controller_Action
+class Kwf_Component_Generator_Plugin_StatusUpdate_AuthController extends Kwf_Controller_Action
 {
     private function _getBackend()
     {
@@ -7,13 +7,13 @@ class Vps_Component_Generator_Plugin_StatusUpdate_AuthController extends Vps_Con
         if (isset($_SERVER['HTTP_HOST'])) {
             $callbackUrl .= $_SERVER['HTTP_HOST'];
         } else {
-            $callbackUrl .= Vps_Registry::get('config')->server->domain;
+            $callbackUrl .= Kwf_Registry::get('config')->server->domain;
         }
-        $callbackUrl .= Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Auth');
+        $callbackUrl .= Kwc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Auth');
         $callbackUrl .= '/callback?componentId='.$this->_getParam('componentId');
         $callbackUrl .= '&backend='.$this->_getParam('backend');
 
-        $backends = Vpc_Abstract::getSetting($this->_getParam('class'), 'backends');
+        $backends = Kwc_Abstract::getSetting($this->_getParam('class'), 'backends');
         $backend = $backends[$this->_getParam('backend')];
         return new $backend($callbackUrl);
     }
@@ -21,7 +21,7 @@ class Vps_Component_Generator_Plugin_StatusUpdate_AuthController extends Vps_Con
     public function requestAction()
     {
         $backend = $this->_getBackend();
-        if ($backend->isAuthed()) throw new Vps_Exception("Already Authenticated");
+        if ($backend->isAuthed()) throw new Kwf_Exception("Already Authenticated");
         header('Location: '.$backend->getAuthUrl());
         exit;
     }

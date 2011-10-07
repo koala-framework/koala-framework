@@ -1,14 +1,14 @@
 <?php
-class Vps_View_Json extends Zend_View_Abstract
+class Kwf_View_Json extends Zend_View_Abstract
 {
-    private $_outputFormat = 'vpsConnection';
+    private $_outputFormat = 'kwfConnection';
 
     public function setPlainOutputFormat()
     {
         $this->_outputFormat = '';
     }
 
-    public function vpc($config)
+    public function kwc($config)
     {
         $this->config = $config;
     }
@@ -33,7 +33,7 @@ class Vps_View_Json extends Zend_View_Abstract
             }
         }
 
-        if ($this->_outputFormat == 'vpsConnection' && !isset($out['success'])) {
+        if ($this->_outputFormat == 'kwfConnection' && !isset($out['success'])) {
             $out['success'] = !isset($out['exception']) && !isset($out['error']);
         }
         if (!isset($out['requestNum'])) {

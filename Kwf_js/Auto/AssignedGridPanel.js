@@ -1,14 +1,14 @@
-Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
+Kwf.Auto.AssignedGridPanel = Ext.extend(Kwf.Auto.GridPanel,
 {
     initComponent: function() {
         this.actions.textAssign = new Ext.Action({
-            text    : trlVps('Assign by text input'),
+            text    : trlKwf('Assign by text input'),
             icon    : '/assets/silkicons/table_multiple.png',
             cls     : 'x-btn-text-icon',
             handler : this.onTextAssign,
             scope   : this
         });
-        Vps.Auto.AssignedGridPanel.superclass.initComponent.call(this);
+        Kwf.Auto.AssignedGridPanel.superclass.initComponent.call(this);
     },
 
     onTextAssign : function()
@@ -16,9 +16,9 @@ Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
         var params = this.getBaseParams();
 
         Ext.MessageBox.show({
-            title    : trlVps('Assign by text input'),
-            msg      : trlVps('Please enter the text you wish to assign.')+'<br />'
-                      +trlVps('Seperate items by a new line.'),
+            title    : trlKwf('Assign by text input'),
+            msg      : trlKwf('Please enter the text you wish to assign.')+'<br />'
+                      +trlKwf('Seperate items by a new line.'),
             width    : 400,
             buttons  : Ext.MessageBox.OKCANCEL,
             multiline: true,

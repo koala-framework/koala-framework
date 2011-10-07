@@ -1,15 +1,15 @@
 <?php
-class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
+class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
 {
     private $_formField;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['flags']['formField'] = true;
         $ret['viewCache'] = false;
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
@@ -25,7 +25,7 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
             $errors = $this->_getForm()->getComponent()->getErrors();
         }
         $fieldVars = $this->getFormField()->getTemplateVars($postData);
-        $dec = Vpc_Abstract::getSetting($form->componentClass, 'decorator');
+        $dec = Kwc_Abstract::getSetting($form->componentClass, 'decorator');
         if ($dec && is_string($dec)) {
             $dec = new $dec();
             $fieldVars = $dec->processItem($fieldVars, $errors);
@@ -37,7 +37,7 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
     private function _getForm()
     {
         $ret = $this->getData();
-        while ($ret && !is_instance_of($ret->componentClass, 'Vpc_Form_Dynamic_Component')) {
+        while ($ret && !is_instance_of($ret->componentClass, 'Kwc_Form_Dynamic_Component')) {
             $ret = $ret->parent;
         }
         $ret = $ret->getChildComponent('-form');
@@ -45,7 +45,7 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
     }
 
     /**
-     * @return Vps_Form_Field_Abstract
+     * @return Kwf_Form_Field_Abstract
     */
     protected function _getFormField()
     {
@@ -53,7 +53,7 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
     }
 
     /**
-     * @return Vps_Form_Field_Abstract
+     * @return Kwf_Form_Field_Abstract
     */
     public final function getFormField()
     {

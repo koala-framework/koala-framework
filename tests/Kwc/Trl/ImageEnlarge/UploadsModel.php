@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_ImageEnlarge_UploadsModel extends Vps_Test_Uploads_Model
+class Kwc_Trl_ImageEnlarge_UploadsModel extends Kwf_Test_Uploads_Model
 {
     public function __construct($config = array())
     {

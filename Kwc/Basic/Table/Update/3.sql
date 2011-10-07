@@ -1,1 +1,1 @@
-ALTER TABLE `vpc_basic_table` DROP `columns` ;
+ALTER TABLE `kwc_basic_table` DROP `columns` ;

@@ -1,2 +1,2 @@
 Main <?=$this->data->componentId?><br />
-<? include('Vpc/Menu/Component.tpl'); ?>
+<? include('Kwc/Menu/Component.tpl'); ?>

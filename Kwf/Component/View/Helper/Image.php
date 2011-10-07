@@ -1,9 +1,9 @@
 <?php
-class Vps_Component_View_Helper_Image extends Vps_View_Helper_Image
+class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
 {
     public function image($image, $alt = '', $cssClass = null)
     {
-        if ($image instanceof Vpc_Abstract_Image_Component)
+        if ($image instanceof Kwc_Abstract_Image_Component)
             $image = $image->getData();
         return parent::image($image, $alt, $cssClass);
     }
@@ -12,9 +12,9 @@ class Vps_Component_View_Helper_Image extends Vps_View_Helper_Image
     {
         if (is_string($image)) return parent::_getImageUrl($image);
 
-        if (!$image instanceof Vps_Component_Data ||
-            !is_instance_of($image->componentClass, 'Vpc_Abstract_Image_Component')
-        ) throw new Vps_Exception("No Vpc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
+        if (!$image instanceof Kwf_Component_Data ||
+            !is_instance_of($image->componentClass, 'Kwc_Abstract_Image_Component')
+        ) throw new Kwf_Exception("No Kwc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
 
         return $image->getComponent()->getImageUrl();
     }

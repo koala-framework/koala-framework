@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_ContentWidthBox_Box_Component extends Vpc_Abstract
+class Kwf_Component_ContentWidthBox_Box_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {

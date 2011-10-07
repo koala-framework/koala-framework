@@ -1,9 +1,9 @@
-Ext.namespace('Vpc.Advanced.GoogleMap');
-Vpc.Advanced.GoogleMap.renderedMaps = [];
+Ext.namespace('Kwc.Advanced.GoogleMap');
+Kwc.Advanced.GoogleMap.renderedMaps = [];
 
-Vpc.Advanced.GoogleMap.renderMap = function(map) {
-    if (Vpc.Advanced.GoogleMap.renderedMaps.indexOf(map) != -1) return;
-    Vpc.Advanced.GoogleMap.renderedMaps.push(map);
+Kwc.Advanced.GoogleMap.renderMap = function(map) {
+    if (Kwc.Advanced.GoogleMap.renderedMaps.indexOf(map) != -1) return;
+    Kwc.Advanced.GoogleMap.renderedMaps.push(map);
 
     var mapContainer = new Ext.Element(map);
     var cfg = mapContainer.down(".options", true);
@@ -21,42 +21,42 @@ Vpc.Advanced.GoogleMap.renderMap = function(map) {
         if (text) cfg.markers.infoHtml = text.dom.innerHTML;
     }
 
-    var myMap = new Vps.GoogleMap.Map(cfg);
+    var myMap = new Kwf.GoogleMap.Map(cfg);
 
-    Vps.GoogleMap.load(function() {
+    Kwf.GoogleMap.load(function() {
         this.show();
     }, myMap);
 
     return myMap;
 };
 
-Vps.onContentReady(function() {
-    var maps = Ext.DomQuery.select('div.vpcAdvancedGoogleMapView');
+Kwf.onContentReady(function() {
+    var maps = Ext.DomQuery.select('div.kwcAdvancedGoogleMapView');
     Ext.each(maps, function(map) {
-        // wenn in vpsSwitchDisplay (Klappbox)
-        var switchDisplayUp = Ext.get(map).up('div.vpsSwitchDisplay');
-        // wenn in vpsTabs
-        var tabsContentUp = Ext.get(map).up('div.vpsTabsContent');
+        // wenn in kwfSwitchDisplay (Klappbox)
+        var switchDisplayUp = Ext.get(map).up('div.kwfSwitchDisplay');
+        // wenn in kwfTabs
+        var tabsContentUp = Ext.get(map).up('div.kwfTabsContent');
 
         // TODO: wenn da noch mehr so ausnahmen kommen, könnte man sich eine generelle
-        // lösung mit einer 'vpsGmapDelayedRender' cssClass o.Ä. überlegen
+        // lösung mit einer 'kwfGmapDelayedRender' cssClass o.Ä. überlegen
         if (switchDisplayUp) {
             (function(switchDisplayUp, map) {
                 Ext.get(switchDisplayUp).switchDisplayObject.on('opened', function() {
-                    map.gmapObject = Vpc.Advanced.GoogleMap.renderMap(map);
+                    map.gmapObject = Kwc.Advanced.GoogleMap.renderMap(map);
                 });
             }).defer(1, this, [switchDisplayUp, map]);
-        } else if (tabsContentUp && !tabsContentUp.hasClass('vpsTabsContentActive')) {
+        } else if (tabsContentUp && !tabsContentUp.hasClass('kwfTabsContentActive')) {
             (function(tabsContentUp, map) {
-                var tabsUp = Ext.get(tabsContentUp).up('div.vpsTabs');
+                var tabsUp = Ext.get(tabsContentUp).up('div.kwfTabs');
                 Ext.get(tabsUp).tabsObject.on('tabActivate', function(tabs, newIdx, oldIdx) {
                     if (tabsContentUp.dom === tabs.getContentElByIdx(newIdx)) {
-                        map.gmapObject = Vpc.Advanced.GoogleMap.renderMap(map);
+                        map.gmapObject = Kwc.Advanced.GoogleMap.renderMap(map);
                     }
                 }, Ext.get(tabsUp).tabsObject);
             }).defer(1, this, [tabsContentUp, map]);
         } else {
-            map.gmapObject = Vpc.Advanced.GoogleMap.renderMap(map);
+            map.gmapObject = Kwc.Advanced.GoogleMap.renderMap(map);
         }
     });
 });

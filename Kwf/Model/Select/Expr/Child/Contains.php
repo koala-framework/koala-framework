@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_Select_Expr_Child_Contains implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Child_Contains implements Kwf_Model_Select_Expr_Interface
 {
     private $_child;
     private $_select;
 
-    public function __construct($child, Vps_Model_Select $select=null)
+    public function __construct($child, Kwf_Model_Select $select=null)
     {
         $this->_child = $child;
         $this->_select = $select;
@@ -26,6 +26,6 @@ class Vps_Model_Select_Expr_Child_Contains implements Vps_Model_Select_Expr_Inte
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_BOOLEAN;
+        return Kwf_Model_Interface::TYPE_BOOLEAN;
     }
 }

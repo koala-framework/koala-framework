@@ -1,5 +1,5 @@
 <?php
-class Vps_AutoGrid_TestDateRangeController extends Vps_AutoGrid_BasicController
+class Kwf_AutoGrid_TestDateRangeController extends Kwf_AutoGrid_BasicController
 {
     protected function _initColumns()
     {

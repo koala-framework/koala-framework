@@ -1,9 +1,9 @@
-Vps.Utils.ImagePreloader = function () {
+Kwf.Utils.ImagePreloader = function () {
     this._toLoadImages = [];
     this._loadingImages = [];
 };
 
-Vps.Utils.ImagePreloader.prototype =
+Kwf.Utils.ImagePreloader.prototype =
 {
     addImage: function(url) {
         this._toLoadImages.push(url);

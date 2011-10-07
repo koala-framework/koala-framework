@@ -1,17 +1,17 @@
 <?php
-class Vps_Filter_Row_SkipFilterTestFilter extends Vps_Filter_Row_AutoFill
+class Kwf_Filter_Row_SkipFilterTestFilter extends Kwf_Filter_Row_AutoFill
 {
     public function skipFilter($row, $column)
     {
         return !!$row->skip;
     }
 }
-class Vps_Filter_Row_SkipFilterTest extends Vps_Test_TestCase
+class Kwf_Filter_Row_SkipFilterTest extends Kwf_Test_TestCase
 {
     public function testSkipFilter()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
-        ), 'filters'=>array('test'=>new Vps_Filter_Row_AutoFill('abc'))));
+        $model = new Kwf_Model_FnF(array('data'=>array(
+        ), 'filters'=>array('test'=>new Kwf_Filter_Row_AutoFill('abc'))));
 
         $row = $model->createRow();
         $row->foo = 'foo4';

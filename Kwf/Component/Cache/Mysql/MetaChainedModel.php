@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Mysql_MetaChainedModel extends Vps_Model_Db_Proxy
+class Kwf_Component_Cache_Mysql_MetaChainedModel extends Kwf_Model_Db_Proxy
 {
     protected $_table = 'cache_component_meta_chained';
 }

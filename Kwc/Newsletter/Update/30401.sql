@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `vpc_newsletter` (
+CREATE TABLE IF NOT EXISTS `kwc_newsletter` (
     `id` smallint(6) NOT NULL auto_increment,
     `component_id` varchar(255) default NULL,
     `create_date` datetime NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `vpc_newsletter` (
     PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
-CREATE TABLE IF NOT EXISTS `vpc_newsletter_log` (
+CREATE TABLE IF NOT EXISTS `kwc_newsletter_log` (
     `id` int(11) NOT NULL auto_increment,
     `newsletter_id` smallint(6) NOT NULL,
     `start` datetime NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `vpc_newsletter_log` (
     KEY `newsletter_id` (`newsletter_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
-CREATE TABLE IF NOT EXISTS `vpc_newsletter_queue` (
+CREATE TABLE IF NOT EXISTS `kwc_newsletter_queue` (
     `id` int(11) NOT NULL auto_increment,
     `newsletter_id` smallint(6) NOT NULL,
     `recipient_model` varchar(255) NOT NULL,
@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS `vpc_newsletter_queue` (
     KEY `newsletter_id` (`newsletter_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
-ALTER TABLE `vpc_newsletter_queue`
-    ADD CONSTRAINT `vpc_newsletter_queue_ibfk_1` FOREIGN KEY (`newsletter_id`) REFERENCES `vpc_newsletter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `kwc_newsletter_queue`
+    ADD CONSTRAINT `kwc_newsletter_queue_ibfk_1` FOREIGN KEY (`newsletter_id`) REFERENCES `kwc_newsletter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE TABLE IF NOT EXISTS `vpc_newsletter_subscribers` (
+CREATE TABLE IF NOT EXISTS `kwc_newsletter_subscribers` (
 `id` int(10) unsigned NOT NULL auto_increment,
 `gender` enum('','female','male') NOT NULL,
 `title` varchar(255) NOT NULL,
@@ -49,6 +49,6 @@ PRIMARY KEY  (`id`)
 
 
 
-UPDATE `vpc_newsletter_queue` SET `recipient_model` = 'Vpc_Newsletter_Subscribe_Model'
-	WHERE recipient_model='Vpc_Berlot_Newsletter_Subscribe_Model';
+UPDATE `kwc_newsletter_queue` SET `recipient_model` = 'Kwc_Newsletter_Subscribe_Model'
+	WHERE recipient_model='Kwc_Berlot_Newsletter_Subscribe_Model';
 	

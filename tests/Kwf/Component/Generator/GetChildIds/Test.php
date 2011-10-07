@@ -2,11 +2,11 @@
 /**
  * @group Generator_GetChildIds
  */
-class Vps_Component_Generator_GetChildIds_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_GetChildIds_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_GetChildIds_Root');
+        parent::setUp('Kwf_Component_Generator_GetChildIds_Root');
     }
 
     public function testByClass()

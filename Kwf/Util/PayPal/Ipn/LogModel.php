@@ -1,12 +1,12 @@
 <?php
-class Vps_Util_PayPal_Ipn_LogModel extends Vps_Model_Db
+class Kwf_Util_PayPal_Ipn_LogModel extends Kwf_Model_Db
 {
     protected $_table = 'paypal_ipn_log';
-    protected $_rowClass = 'Vps_Util_PayPal_Ipn_LogModel_Row';
+    protected $_rowClass = 'Kwf_Util_PayPal_Ipn_LogModel_Row';
     protected function _init()
     {
         parent::_init();
-        $this->_siblingModels[] = new Vps_Model_Field(array(
+        $this->_siblingModels[] = new Kwf_Model_Field(array(
             'fieldName' => 'data'
         ));
     }
@@ -16,13 +16,13 @@ class Vps_Util_PayPal_Ipn_LogModel extends Vps_Model_Db
      */
     public static function getEncodedCallback($ipnCallback, $data = array())
     {
-        $ret = 'vps:';
+        $ret = 'kwf:';
         $data = array(
             'data' => $data,
             'cb' => $ipnCallback
         );
         $data = serialize($data);
-        $ret .= substr(Vps_Util_Hash::hash($data), 0, 10);
+        $ret .= substr(Kwf_Util_Hash::hash($data), 0, 10);
         $data = base64_encode($data);
         $ret .= $data;
         return $ret;
@@ -30,20 +30,20 @@ class Vps_Util_PayPal_Ipn_LogModel extends Vps_Model_Db
 
     public static function decodeCallback($c)
     {
-        if ($c && substr($c, 0, 4) == 'vps:') {
+        if ($c && substr($c, 0, 4) == 'kwf:') {
             $c = substr($c, 4);
             $hash = substr($c, 0, 10);
             $c = substr($c, 10);
             $c = base64_decode($c);
             if (!$c) {
-                throw new Vps_Exception("Invalid vpsProcessIpnEntry: can't base64_decode");
+                throw new Kwf_Exception("Invalid kwfProcessIpnEntry: can't base64_decode");
             }
-            if (substr(Vps_Util_Hash::hash($c), 0, 10) != $hash) {
-                throw new Vps_Exception("Invalid vpsProcessIpnEntry: hash not correct");
+            if (substr(Kwf_Util_Hash::hash($c), 0, 10) != $hash) {
+                throw new Kwf_Exception("Invalid kwfProcessIpnEntry: hash not correct");
             }
             $c = @unserialize($c);
             if (!$c) {
-                throw new Vps_Exception("Invalid vpsProcessIpnEntry: can't unserialize");
+                throw new Kwf_Exception("Invalid kwfProcessIpnEntry: can't unserialize");
             }
             return $c;
         }

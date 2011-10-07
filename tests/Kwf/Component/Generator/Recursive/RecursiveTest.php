@@ -1,14 +1,14 @@
 <?php
-class Vps_Component_Generator_Recursive_RecursiveTest extends Vpc_TestAbstract
+class Kwf_Component_Generator_Recursive_RecursiveTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_Recursive_Root');
+        parent::setUp('Kwf_Component_Generator_Recursive_Root');
     }
 
     public function testFlag()
     {
-        $this->assertEquals(count(Vpc_Abstract::getIndirectChildComponentClasses('Vps_Component_Generator_Recursive_Static',
+        $this->assertEquals(count(Kwc_Abstract::getIndirectChildComponentClasses('Kwf_Component_Generator_Recursive_Static',
             array('flags'=>array('foo'=>true)))), 1);
 
         $this->_assertRecursiveIds($this->_root->getChildComponent('_static'),
@@ -19,7 +19,7 @@ class Vps_Component_Generator_Recursive_RecursiveTest extends Vpc_TestAbstract
 
     private function _assertRecursiveIds($component, $select, $ids)
     {
-        $select = new Vps_Component_Select($select);
+        $select = new Kwf_Component_Select($select);
         $initailSelect = clone $select;
 
         $c = $component->getRecursiveChildComponents($select);
@@ -44,15 +44,15 @@ class Vps_Component_Generator_Recursive_RecursiveTest extends Vpc_TestAbstract
 
     public function testGetComponentByClass()
     {
-        $components = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vps_Component_Generator_Recursive_Root');
+        $components = Kwf_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Kwf_Component_Generator_Recursive_Root');
         $this->assertEquals(1, count($components));
-        $components = Vps_Component_Data_Root::getInstance()
-            ->getComponentsBySameClass('Vps_Component_Generator_Recursive_Root');
+        $components = Kwf_Component_Data_Root::getInstance()
+            ->getComponentsBySameClass('Kwf_Component_Generator_Recursive_Root');
         $this->assertEquals(1, count($components));
-        $generator = Vps_Component_Generator_Abstract::getInstance('Vps_Component_Generator_Recursive_Root', 'static');
-        $this->assertEquals(1, count($generator->getChildData(null, array('componentClass'=>'Vps_Component_Generator_Recursive_Static'))));
-        $this->assertNotNull($this->_root->getComponentByClass('Vps_Component_Generator_Recursive_Static'));
+        $generator = Kwf_Component_Generator_Abstract::getInstance('Kwf_Component_Generator_Recursive_Root', 'static');
+        $this->assertEquals(1, count($generator->getChildData(null, array('componentClass'=>'Kwf_Component_Generator_Recursive_Static'))));
+        $this->assertNotNull($this->_root->getComponentByClass('Kwf_Component_Generator_Recursive_Static'));
     }
 
 }

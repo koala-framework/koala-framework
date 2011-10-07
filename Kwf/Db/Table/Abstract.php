@@ -1,17 +1,17 @@
 <?php
-abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
+abstract class Kwf_Db_Table_Abstract extends Zend_Db_Table_Abstract
 {
     private $_dao;
-    protected $_rowClass = 'Vps_Db_Table_Row';
-    protected $_rowsetClass = 'Vps_Db_Table_Rowset';
+    protected $_rowClass = 'Kwf_Db_Table_Row';
+    protected $_rowsetClass = 'Kwf_Db_Table_Rowset';
 
     /**
      * Row-Filters für automatisch befüllte Spalten
      *
      * Anwendungsbeispiele:
-     * _filters = 'filename' //verwendet autom. Vps_Filter_Ascii
-     * _filters = array('filename') //verwendet autom. Vps_Filter_Ascii
-     * _filters = array('pos')      //Vps_Filter_Row_Numberize
+     * _filters = 'filename' //verwendet autom. Kwf_Filter_Ascii
+     * _filters = array('filename') //verwendet autom. Kwf_Filter_Ascii
+     * _filters = array('pos')      //Kwf_Filter_Row_Numberize
      * _filters = array('pos' => 'MyFilter')
      * _filters = array('pos' => new MyFilter($settings))
      */
@@ -34,9 +34,9 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
     {
         //instead of setDefaultAdapter - this one lazy loads
         if (! $this->_db) {
-            $this->_db = Vps_Registry::get('db');
+            $this->_db = Kwf_Registry::get('db');
         } else if (is_string($this->_db)) {
-            $this->_db = Vps_Registry::get('dao')->getDb($this->_db);
+            $this->_db = Kwf_Registry::get('dao')->getDb($this->_db);
         }
     }
 
@@ -58,7 +58,7 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
                 );
                 $backend = 'File';
             }
-            $cache = Vps_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
+            $cache = Kwf_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
             self::setDefaultMetadataCache($cache);
         }
 
@@ -77,15 +77,15 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
                 unset($this->_filters[$k]);
                 $k = $f;
                 if ($k == 'pos') {
-                    $f = 'Vps_Filter_Row_Numberize';
+                    $f = 'Kwf_Filter_Row_Numberize';
                 } else {
-                    $f = 'Vps_Filter_Ascii';
+                    $f = 'Kwf_Filter_Ascii';
                 }
             }
             if (is_string($f)) {
                 $f = new $f();
             }
-            if ($f instanceof Vps_Filter_Row_Abstract) {
+            if ($f instanceof Kwf_Filter_Row_Abstract) {
                 $f->setField($k);
             }
             $this->_filters[$k] = $f;
@@ -105,6 +105,6 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
 
     public function select()
     {
-        return new Vps_Db_Table_Select($this);
+        return new Kwf_Db_Table_Select($this);
     }
 }

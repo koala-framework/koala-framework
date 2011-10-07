@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_FileIcon
+class Kwf_Util_FileIcon
 {
     public static function getFileIcon($extension)
     {
@@ -44,6 +44,6 @@ class Vps_Util_FileIcon
                 $icon = 'page_white_get';
                 break;
         }
-        return new Vps_Asset($icon);
+        return new Kwf_Asset($icon);
     }
 }

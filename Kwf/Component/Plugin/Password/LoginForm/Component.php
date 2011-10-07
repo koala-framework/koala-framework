@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Plugin_Password_LoginForm_Component extends Vpc_Form_Component
+class Kwf_Component_Plugin_Password_LoginForm_Component extends Kwc_Form_Component
 {
     public static function getSettings()
     {
@@ -10,8 +10,8 @@ class Vps_Component_Plugin_Password_LoginForm_Component extends Vpc_Form_Compone
 
     protected function _initForm()
     {
-        $this->_form = new Vps_Form();
-        $this->_form->setModel(new Vps_Model_FnF());
-        $this->_form->add(new Vps_Form_Field_Password('login_password', trlVps('Password')));
+        $this->_form = new Kwf_Form();
+        $this->_form->setModel(new Kwf_Model_FnF());
+        $this->_form->add(new Kwf_Form_Field_Password('login_password', trlKwf('Password')));
     }
 }

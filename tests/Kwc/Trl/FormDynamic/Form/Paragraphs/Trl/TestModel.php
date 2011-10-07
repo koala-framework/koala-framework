@@ -1,9 +1,9 @@
 <?php
-class Vpc_Trl_FormDynamic_Form_Paragraphs_Trl_TestModel extends Vpc_Paragraphs_Trl_Model
+class Kwc_Trl_FormDynamic_Form_Paragraphs_Trl_TestModel extends Kwc_Paragraphs_Trl_Model
 {
     public function __construct($config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'columns' => array('component_id', 'visible'),
             'primaryKey' => 'component_id',
             'data'=> array(

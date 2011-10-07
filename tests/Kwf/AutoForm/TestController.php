@@ -1,26 +1,26 @@
 <?php
-class Vps_AutoForm_TestController extends Vps_Controller_Action_Auto_Form
+class Kwf_AutoForm_TestController extends Kwf_Controller_Action_Auto_Form
 {
-    protected $_modelName = 'Vps_AutoForm_TestModel';
+    protected $_modelName = 'Kwf_AutoForm_TestModel';
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
 
     public function indexAction()
     {
-        $this->view->assetsType = 'Vps_AutoForm:Test';
-        $this->view->viewport = 'Vps.Test.Viewport';
+        $this->view->assetsType = 'Kwf_AutoForm:Test';
+        $this->view->viewport = 'Kwf.Test.Viewport';
         parent::indexAction();
     }
 
     protected function _initFields()
     {
-        $this->_form->add(new Vps_Form_Field_TextField('foo', 'Foo'));
+        $this->_form->add(new Kwf_Form_Field_TextField('foo', 'Foo'));
     }
 
     public function jsonSaveAction()
     {
         parent::jsonSaveAction();
-        $session = new Zend_Session_Namespace('Vps_AutoForm_Test');
+        $session = new Zend_Session_Namespace('Kwf_AutoForm_Test');
         if ($session->count == 0) {
             $session->count++;
             $this->view->exception = "error";
@@ -30,7 +30,7 @@ class Vps_AutoForm_TestController extends Vps_Controller_Action_Auto_Form
 
     public function resetAction()
     {
-        $session = new Zend_Session_Namespace('Vps_AutoForm_Test');
+        $session = new Zend_Session_Namespace('Kwf_AutoForm_Test');
         $session->count = 0;
 
         $this->_form->getModel()->resetData();

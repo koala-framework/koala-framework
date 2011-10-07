@@ -1,21 +1,21 @@
 <?php
-abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_List_Component
+abstract class Kwc_Directories_Item_Directory_Component extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['detail'] = array(
-            'class' => 'Vps_Component_Generator_Table',
-            'component' => 'Vpc_Directories_Item_Detail_Component'
+            'class' => 'Kwf_Component_Generator_Table',
+            'component' => 'Kwc_Directories_Item_Detail_Component'
         );
-        $ret['generators']['child']['component']['view'] = 'Vpc_Directories_List_View_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwc_Directories_List_View_Component';
         $ret['useDirectorySelect'] = false;
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoForm';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/Panel.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/TabsPanel.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/EditFormPanel.js';
-        $ret['extConfig'] = 'Vpc_Directories_Item_Directory_ExtConfigEditButtons';
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoForm';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Item/Directory/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Item/Directory/TabsPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Item/Directory/EditFormPanel.js';
+        $ret['extConfig'] = 'Kwc_Directories_Item_Directory_ExtConfigEditButtons';
         return $ret;
     }
 
@@ -30,14 +30,14 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
 
         $dir = $view->parent->getComponent()->getItemDirectory();
         if (is_string($dir)) {
-            $dirs = Vps_Component_Data_Root::getInstance()->getComponentsByClass($dir);
+            $dirs = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($dir);
         } else {
             $dirs = array($dir);
         }
         foreach ($dirs as $dir) {
-            $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
+            $generators = Kwf_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
             if (!isset($generators[0])) {
-                throw new Vps_Exception("can't find detail generator"); //oder darf das auftreten?
+                throw new Kwf_Exception("can't find detail generator"); //oder darf das auftreten?
                 continue;
             }
             $generator = $generators[0];
@@ -54,7 +54,7 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
                     }
                 }
             }
-            $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
+            $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
         }
         return $ret;
     }

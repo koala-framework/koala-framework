@@ -1,22 +1,22 @@
 <?php
-class Vpc_Root_Abstract extends Vpc_Abstract
+class Kwc_Root_Abstract extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['box'] = array(
-            'class' => 'Vps_Component_Generator_Box_Static',
+            'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => array(),
             'inherit' => true,
             'priority' => 0
         );
         $ret['generators']['title'] = array(
-            'class' => 'Vps_Component_Generator_Box_Static',
-            'component' => 'Vpc_Box_Title_Component',
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Kwc_Box_Title_Component',
             'inherit' => true,
             'priority' => 0
         );
-        $ret['componentName'] = trlVps('Root');
+        $ret['componentName'] = trlKwf('Root');
         $ret['contentWidth'] = 600;
         $ret['contentWidthBoxSubtract'] = array();
         return $ret;
@@ -24,17 +24,17 @@ class Vpc_Root_Abstract extends Vpc_Abstract
 
     public function formatPath($parsedUrl)
     {
-        if (!Vps_Config::getValue('server.domain')) {
+        if (!Kwf_Config::getValue('server.domain')) {
             //domain is optional (but recommended)
             //for easy setup of examples just ignore the domain (as we don't have anything to compare to anyway)
             return $parsedUrl['path'];
         }
-        $b = Vps_Config::getValue('server.domain') == $parsedUrl['host'];
+        $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'];
         if (!$b && isset($parsedUrl['port'])) {
-            $b = Vps_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port'];
+            $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port'];
         }
         if (!$b) {
-            $p =  Vps_Config::getValue('server.noRedirectPattern');
+            $p =  Kwf_Config::getValue('server.noRedirectPattern');
             if (!$p) return null;
             if (!preg_match('/'.$p.'/', $parsedUrl['host'])) {
                 return null;
@@ -48,8 +48,8 @@ class Vpc_Root_Abstract extends Vpc_Abstract
         if ($path == '') {
             $ret = $this->getData()->getChildPage(array('home' => true), array());
         } else {
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                if (Vpc_Abstract::getFlag($c, 'shortcutUrl')) {
+            foreach (Kwc_Abstract::getComponentClasses() as $c) {
+                if (Kwc_Abstract::getFlag($c, 'shortcutUrl')) {
                     $ret = call_user_func(array($c, 'getDataByShortcutUrl'), $c, $path);
                     if ($ret) return $ret;
                 }
@@ -57,13 +57,13 @@ class Vpc_Root_Abstract extends Vpc_Abstract
             $ret = $this->getData()->getChildPageByPath($path);
         }
 
-        if ($ret && !$ret->isPage && Vps_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
+        if ($ret && !$ret->isPage && Kwf_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
             $ret = $ret->getChildPage(array('home' => true), array());
         }
         return $ret;
     }
 
-    protected function _getMasterChildContentWidth(Vps_Component_Data $sourcePage)
+    protected function _getMasterChildContentWidth(Kwf_Component_Data $sourcePage)
     {
         $ret = $this->_getSetting('contentWidth');
         foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {

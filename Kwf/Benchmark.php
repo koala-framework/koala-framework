@@ -1,5 +1,5 @@
 <?php
-class Vps_Benchmark
+class Kwf_Benchmark
 {
     private static $_enabled = false;
     private static $_logEnabled = false;
@@ -7,15 +7,15 @@ class Vps_Benchmark
     public static $benchmarks = array();
     private static $_checkpoints = array();
     private static $_subCheckpoints = array();
-    public static $startTime; //wird von Vps_Setup::setUp gesetzt
+    public static $startTime; //wird von Kwf_Setup::setUp gesetzt
 
     private static function _getInstance()
     {
         static $i;
         if (!isset($i)) {
-            $c = Vps_Config::getValue('benchmarkClass');
+            $c = Kwf_Config::getValue('benchmarkClass');
             if (!class_exists($c)) {
-                $c = 'Vps_Benchmark';
+                $c = 'Kwf_Benchmark';
             }
             $i = new $c();
         }
@@ -30,7 +30,7 @@ class Vps_Benchmark
     public static function start($identifier = null, $addInfo = null)
     {
         if (!self::$_enabled) return null;
-        return new Vps_Benchmark_Profile($identifier, $addInfo);
+        return new Kwf_Benchmark_Profile($identifier, $addInfo);
     }
 
     public static function enable()
@@ -101,7 +101,7 @@ class Vps_Benchmark
         }
         if (!is_null($value)) {
             if (!is_array($counter[$name])) {
-                throw new Vps_Exception("Missing value for counter '$name'");
+                throw new Kwf_Exception("Missing value for counter '$name'");
             }
             $bt = false;
             if ($backtrace) {
@@ -113,7 +113,7 @@ class Vps_Benchmark
                     $bt .=
                         (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
                         (isset($i['line']) ? $i['line'] : '?') . ' - ' .
-                        ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
+                        ((isset($i['object']) && $i['object'] instanceof Kwf_Component_Data) ? $i['object']->componentId . '->' : '') .
                         (isset($i['function']) ? $i['function'] : '') . '(' .
                         _btArgsString($i['args']) . ')' . "<br />";
                 }
@@ -124,7 +124,7 @@ class Vps_Benchmark
             );
         } else {
             if (is_array($counter[$name])) {
-                throw new Vps_Exception("no value possible for counter '$name'");
+                throw new Kwf_Exception("no value possible for counter '$name'");
             }
             $counter[$name]++;
         }
@@ -132,7 +132,7 @@ class Vps_Benchmark
 
     public static function output()
     {
-        Vps_Benchmark::checkpoint('shutDown');
+        Kwf_Benchmark::checkpoint('shutDown');
 
         if (isset($_COOKIE['unitTest'])) return;
         if (!self::$_enabled) return;
@@ -249,22 +249,22 @@ class Vps_Benchmark
     public static function info($msg)
     {
         if (!self::$_enabled) return;
-        if (Vps_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+        if (Kwf_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
             p($msg, 'INFO');
         }
     }
 
     public static function cacheInfo($msg)
     {
-        if (!Vps_Config::getValue('debug.componentCache.info')) return;
-        if (Vps_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+        if (!Kwf_Config::getValue('debug.componentCache.info')) return;
+        if (Kwf_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
             p($msg, 'INFO');
         }
     }
 
     final public static function shutDown()
     {
-        Vps_Benchmark::checkpoint('shutDown');
+        Kwf_Benchmark::checkpoint('shutDown');
 
         if (function_exists('xhprof_disable') && file_exists('/www/public/niko/xhprof')) {
             //TODO irgendwie intelligenter aktivieren/deaktivieren
@@ -304,7 +304,7 @@ class Vps_Benchmark
             $urlType = 'media';
         } else if (substr($_SERVER['REQUEST_URI'], 0, 7) == '/admin/') {
             $urlType = 'admin';
-        } else if (substr($_SERVER['REQUEST_URI'], 0, 5) == '/vps/') {
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 5) == '/kwf/') {
             $urlType = 'admin';
         } else {
             $urlType = 'content';
@@ -327,7 +327,7 @@ class Vps_Benchmark
 
     private function _memcacheCount($name, $value)
     {
-        Vps_Benchmark_Counter::getInstance()->increment($name, $value);
+        Kwf_Benchmark_Counter::getInstance()->increment($name, $value);
     }
 
     public static function memcacheCount($name, $value = 1)

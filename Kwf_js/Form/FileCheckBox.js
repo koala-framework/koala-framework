@@ -1,4 +1,4 @@
-Vps.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
+Kwf.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
 {
     setValue : function(value)
     {
@@ -10,7 +10,7 @@ Vps.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
                 var text = '<span id="' + this.name + '_show' + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 text += '<a href="' + value.url + '" target="#blank">';
                 text += '<img src="/assets/silkicons/eye.png" />';
-                text += '</a>&nbsp;'+trlVps('Show Original');
+                text += '</a>&nbsp;'+trlKwf('Show Original');
                 text += '</span>';
                 if (this.node) {
                     Ext.DomHelper.overwrite(this.node, text);
@@ -21,8 +21,8 @@ Vps.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
                 Ext.DomHelper.overwrite(el, '');
             }
         } else {
-            Vps.Form.FileCheckBox.superclass.setValue.call(this, value);
+            Kwf.Form.FileCheckBox.superclass.setValue.call(this, value);
         }
     }
 });
-Ext.reg('filecheckbox', Vps.Form.FileCheckBox);
+Ext.reg('filecheckbox', Kwf.Form.FileCheckBox);

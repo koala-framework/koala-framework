@@ -4,11 +4,11 @@
  * @group ImageCache
  * @group Image
  */
-class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
+class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_Image_Cache_Root_ImagesEnlargeComponent');
+        parent::setUp('Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent');
     }
 
     public function testCacheClearing()
@@ -17,11 +17,11 @@ class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
 
         // check empty
         $html = $this->_root->render();
-        $this->assertContains('vpcBasicImageCacheRootImagesEnlargeComponent', $html);
-        $this->assertNotContains('vpcBasicImageCacheRootImageEnlargeComponent', $html);
+        $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
+        $this->assertNotContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
 
         // check testModel row with no upload_id
-        $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_Cache_Root_ListModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_Cache_Root_ListModel');
         $row = $model->createRow(array(
             'id' => 1,
             'component_id'=>'root',
@@ -30,7 +30,7 @@ class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
         ));
         $row->save();
 
-        $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel');
         $row = $model->createRow(array(
             'component_id'=>'root-1',
             'filename' => null,
@@ -38,7 +38,7 @@ class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
             'width' => null,
             'height' => null,
             'enlarge' => 0,
-            'vps_upload_id'=>null,
+            'kwf_upload_id'=>null,
             'dimension' => 'default'
         ));
         $row->save();
@@ -49,7 +49,7 @@ class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
             'width' => null,
             'height' => null,
             'enlarge' => 0,
-            'vps_upload_id'=>null,
+            'kwf_upload_id'=>null,
             'dimension' => null,
             'preview_image' => '',
             'title' => ''
@@ -58,20 +58,20 @@ class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
 
         $this->_process();
         $html = $this->_root->render();
-        $this->assertContains('vpcBasicImageCacheRootImagesEnlargeComponent', $html);
-        $this->assertContains('vpcBasicImageCacheRootImageEnlargeComponent', $html);
-        $this->assertNotContains('/media/Vpc_Basic_Image_Cache_Root_ImageEnlargeComponent', $html);
+        $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
+        $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
+        $this->assertNotContains('/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent', $html);
 
         // check uploaded
-        $row->vps_upload_id = 1;
+        $row->kwf_upload_id = 1;
         $row->dimension = 'original';
         $row->save();
 
         $this->_process();
         $html = $this->_root->render();
 
-        $this->assertContains('vpcBasicImageCacheRootImagesEnlargeComponent', $html);
-        $this->assertContains('vpcBasicImageCacheRootImageEnlargeComponent', $html);
-        $this->assertRegExp("#/media/Vpc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/[^/]+/[0-9]+/foo.png#ms", $html);
+        $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
+        $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
+        $this->assertRegExp("#/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/[^/]+/[0-9]+/foo.png#ms", $html);
     }
 }

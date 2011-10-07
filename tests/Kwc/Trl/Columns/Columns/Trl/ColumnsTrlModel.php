@@ -1,13 +1,13 @@
 <?php
-class Vpc_Trl_Columns_Columns_Trl_ColumnsTrlModel extends Vpc_Abstract_List_Trl_Model
+class Kwc_Trl_Columns_Columns_Trl_ColumnsTrlModel extends Kwc_Abstract_List_Trl_Model
 {
     public function __construct($config = array())
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
             'columns' => array('component_id', 'visible', 'data'),
             'primaryKey' => 'component_id',
             'siblingModels' => array(
-                new Vps_Model_Field(array('fieldName'=>'data'))
+                new Kwf_Model_Field(array('fieldName'=>'data'))
             )
         ));
         $config['proxyModel']

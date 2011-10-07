@@ -1,5 +1,5 @@
-Ext.namespace('Vpc.Directories.Item.Directory');
-Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
+Ext.namespace('Kwc.Directories.Item.Directory');
+Kwc.Directories.Item.Directory.Panel = Ext.extend(Kwf.Auto.GridPanel,
 {
     initComponent: function() {
         if (this.componentPlugins) {
@@ -24,15 +24,15 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
                 componentIdSuffix: col.editComponentIdSuffix,
                 editComponents: this.contentEditComponents,
                 componentId: componentId,
-                text: trlVps('Details') //TODO stimmt des?
+                text: trlKwf('Details') //TODO stimmt des?
             });
 
         }, this);
 
         this.fireEvent('gotComponentConfigs', this.componentConfigs);
 
-        Vpc.Directories.Item.Directory.Panel.superclass.initComponent.call(this);
+        Kwc.Directories.Item.Directory.Panel.superclass.initComponent.call(this);
     }
 });
 
-Ext.reg('vpc.directories.item.directory', Vpc.Directories.Item.Directory.Panel);
+Ext.reg('kwc.directories.item.directory', Kwc.Directories.Item.Directory.Panel);

@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_Link
+class Kwf_View_Helper_Link
 {
     public function link($url)
     {

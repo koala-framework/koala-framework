@@ -1,16 +1,16 @@
 <?php
-class Vps_User_Model extends Vps_Model_RowCache
+class Kwf_User_Model extends Kwf_Model_RowCache
 {
-    protected $_rowClass = 'Vps_User_Row';
+    protected $_rowClass = 'Kwf_User_Row';
     protected $_authedUser;
     protected $_passwordColumn = 'password';
     protected $_maxLockTime = 10; // in seconds
     protected $_logActions = true;
 
-    protected $_mailClass = 'Vps_Mail_Template';
+    protected $_mailClass = 'Kwf_Mail_Template';
 
     protected $_dependentModels = array(
-        'Messages' => 'Vps_User_MessagesModel'
+        'Messages' => 'Kwf_User_MessagesModel'
     );
     protected $_cacheColumns = array('email', 'role');
 
@@ -26,9 +26,9 @@ class Vps_User_Model extends Vps_Model_RowCache
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
-            $config['proxyModel'] = new Vps_Model_Db(array('table'=>'vps_users'));
+            $config['proxyModel'] = new Kwf_Model_Db(array('table'=>'kwf_users'));
         }
-        $this->_siblingModels['webuser'] = 'Vps_User_Web_Model';
+        $this->_siblingModels['webuser'] = 'Kwf_User_Web_Model';
         if (isset($config['mailClass'])) {
             $this->_mailClass = $config['mailClass'];
         }
@@ -49,11 +49,11 @@ class Vps_User_Model extends Vps_Model_RowCache
     }
 
     // wenn createRow benötigt wird weil man ein anderes userModel (db?) hat,
-    // dann kann man diese hier überschreiben und return Vps_Model_Proxy::createRow($data);
+    // dann kann man diese hier überschreiben und return Kwf_Model_Proxy::createRow($data);
     // zurückgeben
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception("createRow is not allowed in Vps_User_Model. Use createUserRow() instead.");
+        throw new Kwf_Exception("createRow is not allowed in Kwf_User_Model. Use createUserRow() instead.");
     }
 
     public static function isLockedCreateUser()
@@ -72,7 +72,7 @@ class Vps_User_Model extends Vps_Model_RowCache
     public function lockCreateUser()
     {
         if ($this->_lock) {
-            throw new Vps_Exception('Already locked');
+            throw new Kwf_Exception('Already locked');
         }
         $this->_lock = fopen("temp/create-user.lock", "w");
 
@@ -82,7 +82,7 @@ class Vps_User_Model extends Vps_Model_RowCache
                 break;
             }
             if (microtime(true)-$startTime > $this->_maxLockTime) {
-                throw new Vps_Exception("Lock Failed, locked by");
+                throw new Kwf_Exception("Lock Failed, locked by");
             }
             usleep(rand(0, 100)*100);
         }
@@ -116,7 +116,7 @@ class Vps_User_Model extends Vps_Model_RowCache
     public function getRowByIdentity($identd)
     {
         if (is_null($identd)) {
-            throw new Vps_Exception("identity must not be null");
+            throw new Kwf_Exception("identity must not be null");
         }
         $identdType = 'email';
         if (is_numeric($identd)) {
@@ -139,7 +139,7 @@ class Vps_User_Model extends Vps_Model_RowCache
 
     public function login($identity, $credential)
     {
-        if ($credential == 'test' && Vps_Registry::get('config')->debug->testPasswordAllowed) {
+        if ($credential == 'test' && Kwf_Registry::get('config')->debug->testPasswordAllowed) {
             $row = $this->getRowByIdentity($identity);
 
             if ($row) {
@@ -151,14 +151,14 @@ class Vps_User_Model extends Vps_Model_RowCache
                     return array(
                         'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
                         'identity'           => $identity,
-                        'messages'           => array(trlVps('Account is locked'))
+                        'messages'           => array(trlKwf('Account is locked'))
                     );
                 }
 
                 return array(
                     'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
                     'identity'           => $identity,
-                    'messages'           => array(trlVps('Authentication successful')),
+                    'messages'           => array(trlKwf('Authentication successful')),
                     'userId'             => $row->id
                 );
             }
@@ -170,7 +170,7 @@ class Vps_User_Model extends Vps_Model_RowCache
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
                 'identity'           => $identity,
-                'messages'           => array(trlVps('User not existent in this web'))
+                'messages'           => array(trlKwf('User not existent in this web'))
             );
         }
 
@@ -183,7 +183,7 @@ class Vps_User_Model extends Vps_Model_RowCache
                 return array(
                     'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
                     'identity'           => $identity,
-                    'messages'           => array(trlVps('Account is locked'))
+                    'messages'           => array(trlKwf('Account is locked'))
                 );
             }
 
@@ -198,7 +198,7 @@ class Vps_User_Model extends Vps_Model_RowCache
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
                 'identity'           => $identity,
-                'messages'           => array(trlVps('Authentication successful')),
+                'messages'           => array(trlKwf('Authentication successful')),
                 'userId'             => $row->id
             );
         } else {
@@ -209,7 +209,7 @@ class Vps_User_Model extends Vps_Model_RowCache
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
                 'identity'           => $identity,
-                'messages'           => array(trlVps('Supplied password is invalid'))
+                'messages'           => array(trlKwf('Supplied password is invalid'))
             );
         }
     }
@@ -233,27 +233,27 @@ class Vps_User_Model extends Vps_Model_RowCache
             ->whereEquals('deleted', 0)
         );
         if (!$row) {
-            throw new Vps_Exception_Client(trlVps('User not existent in this web.'));
+            throw new Kwf_Exception_Client(trlKwf('User not existent in this web.'));
         }
         if ($row->locked) {
-            throw new Vps_Exception_Client(trlVps('User is currently locked.'));
+            throw new Kwf_Exception_Client(trlKwf('User is currently locked.'));
         }
 
         if ($row->sendLostPasswordMail()) {
-            return trlVps('Activation link sent to email address.');
+            return trlKwf('Activation link sent to email address.');
         } else {
-            return trlVps('Error sending the mail.');
+            return trlKwf('Error sending the mail.');
         }
     }
 
     public function getAuthedUser()
     {
-        if (!Vps_Setup::hasDb()) return null;
+        if (!Kwf_Setup::hasDb()) return null;
 
         if (php_sapi_name() == 'cli') return null;
 
         if (!$this->_authedUser) {
-            $loginData = Vps_Auth::getInstance()->getStorage()->read();
+            $loginData = Kwf_Auth::getInstance()->getStorage()->read();
             if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
                 return null;
             }
@@ -270,9 +270,9 @@ class Vps_User_Model extends Vps_Model_RowCache
     public function getAuthedUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
-        if (!Vps_Setup::hasDb()) return 'guest';
+        if (!Kwf_Setup::hasDb()) return 'guest';
 
-        $loginData = Vps_Auth::getInstance()->getStorage()->read();
+        $loginData = Kwf_Auth::getInstance()->getStorage()->read();
         if (isset($loginData['userRole'])) {
             return $loginData['userRole'];
         }
@@ -283,7 +283,7 @@ class Vps_User_Model extends Vps_Model_RowCache
 
     public function getAuthedChangedUserRole()
     {
-        $storage = Vps_Auth::getInstance()->getStorage();
+        $storage = Kwf_Auth::getInstance()->getStorage();
         $loginData = $storage->read();
         $userId = false;
         if (isset($loginData['changeUserId'])) {
@@ -299,7 +299,7 @@ class Vps_User_Model extends Vps_Model_RowCache
         return $role;
     }
 
-    public function synchronize($overrideMaxSyncDelay = Vps_Model_MirrorCache::SYNC_AFTER_DELAY)
+    public function synchronize($overrideMaxSyncDelay = Kwf_Model_MirrorCache::SYNC_AFTER_DELAY)
     {
         //NOOP, implemented in Service_Model
     }

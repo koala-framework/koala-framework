@@ -2,7 +2,7 @@
 /**
  * Server for Serialized RPC
  */
-class Vps_Srpc_Server
+class Kwf_Srpc_Server
 {
     protected $_handler;
 
@@ -57,16 +57,16 @@ class Vps_Srpc_Server
 
             // throw some exceptions
             if (!$this->_handler) {
-                throw new Vps_Srpc_Exception("A handler has to be set when using 'Vpc_Srpc_Server'");
+                throw new Kwf_Srpc_Exception("A handler has to be set when using 'Kwc_Srpc_Server'");
             }
             if (is_null($method)) {
-                throw new Vps_Srpc_Exception("'method' must be set as first argument, or exists as key in ".'$_REQUEST');
+                throw new Kwf_Srpc_Exception("'method' must be set as first argument, or exists as key in ".'$_REQUEST');
             }
             if (!is_null($method) && !is_string($method)) {
-                throw new Vps_Srpc_Exception("'method' is expected to be a string");
+                throw new Kwf_Srpc_Exception("'method' is expected to be a string");
             }
             if (!is_null($arguments) && !is_array($arguments)) {
-                throw new Vps_Srpc_Exception("'arguments' is expected to be an array");
+                throw new Kwf_Srpc_Exception("'arguments' is expected to be an array");
             }
 
             $handler = $this->getHandler();
@@ -84,7 +84,7 @@ class Vps_Srpc_Server
                 $result = false;
             }
             if (!$result) {
-                $result = new Vps_Exception_Serializable($e);
+                $result = new Kwf_Exception_Serializable($e);
                 $result = serialize($result);
             }
         }

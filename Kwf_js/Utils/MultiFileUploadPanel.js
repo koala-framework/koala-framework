@@ -1,5 +1,5 @@
-Ext.namespace('Vps.Utils');
-Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
+Ext.namespace('Kwf.Utils');
+Kwf.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
 {
     fileSizeLimit: null,
     allowOnlyImages: false,
@@ -8,19 +8,19 @@ Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
     controllerUrl: '',
     
     afterRender: function() {
-        Vps.Utils.MultiFileUploadPanel.superclass.afterRender.call(this);
+        Kwf.Utils.MultiFileUploadPanel.superclass.afterRender.call(this);
 
         var container = this.body.createChild();
 
-        if (!Vps.Utils.Upload.supportsHtml5Upload()) {
-            this.swfu = new Vps.Utils.SwfUpload({
+        if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
+            this.swfu = new Kwf.Utils.SwfUpload({
                 fileSizeLimit: this.fileSizeLimit,
                 allowOnlyImages: this.allowOnlyImages,
                 buttonPlaceholderId: container.id,
                 postParams: {
                     maxResolution: this.maxResolution
                 },
-                buttonText: trlVps('Upload Files'),
+                buttonText: trlKwf('Upload Files'),
                 selectMultiple: true
             });
             this.swfu.on('fileQueued', function(file) {
@@ -35,8 +35,8 @@ Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 this.running = true;
                 this.startFileIndex = this.numFiles-1;
                 this.progress = Ext.MessageBox.show({
-                    title : trlVps('Upload'),
-                    msg : trlVps('Uploading files'),
+                    title : trlKwf('Upload'),
+                    msg : trlKwf('Uploading files'),
                     buttons: false,
                     progress:true,
                     closable:false,
@@ -99,7 +99,7 @@ Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
         } else {
             container.setStyle('position', 'relative');
             this.uploadButton = new Ext.Button({
-                text: trlVps('Upload Files'),
+                text: trlKwf('Upload Files'),
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/add.png',
                 renderTo: container
@@ -144,8 +144,8 @@ Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
         if (!files.length) return;
 
         this.progress = Ext.MessageBox.show({
-            title : trlVps('Upload'),
-            msg : trlVps('Uploading files'),
+            title : trlKwf('Upload'),
+            msg : trlKwf('Uploading files'),
             buttons: false,
             progress:true,
             closable:false,
@@ -186,7 +186,7 @@ Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
     html5UploadFile: function()
     {
         var file = this.fileQueue.shift();
-        this.currentXhr = Vps.Utils.Upload.uploadFile({
+        this.currentXhr = Kwf.Utils.Upload.uploadFile({
             maxResolution: this.maxResolution,
             file: file,
             success: function(r, options) {

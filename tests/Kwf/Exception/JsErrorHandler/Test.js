@@ -1,6 +1,6 @@
-if (Vps.Debug.displayErrors) { //für lokal extra initialisieren
+if (Kwf.Debug.displayErrors) { //für lokal extra initialisieren
     Ext.ux.ErrorHandler.init();
-    Vps.Debug.displayErrors = false;
+    Kwf.Debug.displayErrors = false;
 }
 
 function testError1() {

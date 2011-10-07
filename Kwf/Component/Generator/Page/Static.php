@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_PseudoPage_Static
+class Kwf_Component_Generator_Page_Static extends Kwf_Component_Generator_PseudoPage_Static
 {
     protected $_idSeparator = '_';
     protected $_inherits = true;

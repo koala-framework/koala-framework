@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_Basic_LinkTag_Intern_Trl_DataAbstract extends Vps_Component_Data
+abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwf_Component_Data
 {
     private $_data;
     protected $_type = null; // 'cc' oder 'trl'
@@ -11,12 +11,12 @@ abstract class Vpc_Basic_LinkTag_Intern_Trl_DataAbstract extends Vps_Component_D
             if (!$masterLinkData) $this->_data = false;
 
             if ($masterLinkData) {
-                if (is_null($this->_type)) throw new Vps_Exception("_type may not be null");
+                if (is_null($this->_type)) throw new Kwf_Exception("_type may not be null");
 
                 if ($this->_type == 'Trl') {
-                    $linkComponent = Vpc_Chained_Trl_Component::getChainedByMaster($masterLinkData, $this);
+                    $linkComponent = Kwc_Chained_Trl_Component::getChainedByMaster($masterLinkData, $this);
                 } else if ($this->_type == 'Cc') {
-                    $linkComponent = Vpc_Chained_Cc_Component::getChainedByMaster($masterLinkData, $this);
+                    $linkComponent = Kwc_Chained_Cc_Component::getChainedByMaster($masterLinkData, $this);
                 }
                 if (!$linkComponent) {
                     $this->_data = false; //kann offline sein

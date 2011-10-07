@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `vpc_events` (
+CREATE TABLE IF NOT EXISTS `kwc_events` (
   `id` int(11) NOT NULL auto_increment,
   `start_date` datetime NOT NULL,
   `end_date` datetime default NULL,

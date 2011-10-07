@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
+class Kwf_Component_Model_Row extends Kwf_Model_Row_Abstract
 {
     protected $_data;
     private $_tableLoaded = false;
@@ -56,7 +56,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function save()
     {
         $this->_beforeSave();
-        if ($this->_data->generator instanceof Vpc_Root_Category_Generator) {
+        if ($this->_data->generator instanceof Kwc_Root_Category_Generator) {
             $id = $this->_data->dbId;
             $row = $this->_data->generator->getModel()->getRow($id);
         } else {
@@ -87,8 +87,8 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     protected function _afterSave()
     {
         parent::_afterSave();
-        Vps_Component_Data_Root::reset();
-        Vps_Component_Generator_Abstract::clearInstances();
+        Kwf_Component_Data_Root::reset();
+        Kwf_Component_Generator_Abstract::clearInstances();
     }
 
     public function delete()

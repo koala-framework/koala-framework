@@ -1,22 +1,22 @@
-Ext.namespace('Vpc.Directories.Category.Directory');
-Vpc.Directories.Category.Directory.Plugin = function(config) {
+Ext.namespace('Kwc.Directories.Category.Directory');
+Kwc.Directories.Category.Directory.Plugin = function(config) {
     Ext.apply(this, config);
 };
-Ext.extend(Vpc.Directories.Category.Directory.Plugin, Ext.util.Observable,
+Ext.extend(Kwc.Directories.Category.Directory.Plugin, Ext.util.Observable,
 {
     init: function(newsPanel)
     {
         newsPanel.on('beforerendergrid', function(grid) {
             grid.getTopToolbar().add({
-                text    : trlVps('Categories'),
+                text    : trlKwf('Categories'),
                 handler : function(o, p) {
                     var dlg = new Ext.Window({
                         width:  450,
                         height: 370,
                         layout: 'fit',
-                        title:  trlVps('Categories'),
+                        title:  trlKwf('Categories'),
                         modal:  true,
-                        items:  new Vps.Auto.GridPanel({
+                        items:  new Kwf.Auto.GridPanel({
                             controllerUrl: this.controllerUrl,
                             baseParams: newsPanel.getBaseParams()
                         })

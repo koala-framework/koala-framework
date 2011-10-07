@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_ProxyCache_Rowset extends Vps_Model_Proxy_Rowset
+class Kwf_Model_ProxyCache_Rowset extends Kwf_Model_Proxy_Rowset
 {
     protected $_cacheData = null;
     protected $_pointer = 0;
@@ -11,7 +11,7 @@ class Vps_Model_ProxyCache_Rowset extends Vps_Model_Proxy_Rowset
             $this->_cacheData = array_values($config['cacheData']);
         }
         if (!isset($config['rowset']) && !isset($config['cacheData'])) {
-            throw new Vps_Exception("kein rowset&cacheData vorhanden");
+            throw new Kwf_Exception("kein rowset&cacheData vorhanden");
         }
         parent::__construct($config);
     }

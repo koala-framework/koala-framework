@@ -1,6 +1,6 @@
-Vps.Auto.Filter.ButtonGroup = function(config)
+Kwf.Auto.Filter.ButtonGroup = function(config)
 {
-    Vps.Auto.Filter.ButtonGroup.superclass.constructor.call(this, config);
+    Kwf.Auto.Filter.ButtonGroup.superclass.constructor.call(this, config);
 	this.toggleButtons = new Array();
 	for (var i in config.buttons) {
 		var cfg = config.buttons[i];
@@ -26,7 +26,7 @@ Vps.Auto.Filter.ButtonGroup = function(config)
     }
 };
 
-Ext.extend(Vps.Auto.Filter.ButtonGroup, Vps.Auto.Filter.Abstract, {
+Ext.extend(Kwf.Auto.Filter.ButtonGroup, Kwf.Auto.Filter.Abstract, {
     getParams: function() {
         var params = {};
         var value = '';

@@ -1,18 +1,18 @@
 <?php
-class Vpc_Newsletter_Detail_Mail_Paragraphs_Component extends Vpc_Paragraphs_Component
+class Kwc_Newsletter_Detail_Mail_Paragraphs_Component extends Kwc_Paragraphs_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['paragraphs']['component'] = array();
         $ret['generators']['paragraphs']['component']['textImage'] =
-            'Vpc_Newsletter_Detail_Mail_Paragraphs_TextImage_Component';
+            'Kwc_Newsletter_Detail_Mail_Paragraphs_TextImage_Component';
 
-        $cc = Vps_Registry::get('config')->vpc->childComponents;
-        if (isset($cc->Vpc_Newsletter_Detail_Mail_Paragraphs_Component)) {
+        $cc = Kwf_Registry::get('config')->kwc->childComponents;
+        if (isset($cc->Kwc_Newsletter_Detail_Mail_Paragraphs_Component)) {
             $ret['generators']['paragraphs']['component'] = array_merge(
                 $ret['generators']['paragraphs']['component'],
-                $cc->Vpc_Newsletter_Detail_Mail_Paragraphs_Component->toArray()
+                $cc->Kwc_Newsletter_Detail_Mail_Paragraphs_Component->toArray()
             );
         }
 

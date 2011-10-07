@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_FormDynamic_Form_Paragraphs_TestModel extends Vps_Model_FnF
+class Kwc_Trl_FormDynamic_Form_Paragraphs_TestModel extends Kwf_Model_FnF
 {
     protected $_data = array(
         array('id'=>1, 'component_id'=>'root-master_test1-paragraphs', 'component'=>'textField', 'pos'=>1, 'visible'=>1),

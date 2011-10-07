@@ -1,20 +1,20 @@
 <?php
-class Vpc_Shop_ProductList_Component extends Vpc_Directories_List_Component
+class Kwc_Shop_ProductList_Component extends Kwc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['view'] = 'Vpc_Shop_Products_View_Component';
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['componentName'] = trlVps('Shop.ProductList');
-        $ret['componentIcon'] = new Vps_Asset('basket');
+        $ret['generators']['child']['component']['view'] = 'Kwc_Shop_Products_View_Component';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['componentName'] = trlKwf('Shop.ProductList');
+        $ret['componentIcon'] = new Kwf_Asset('basket');
         return $ret;
     }
 
     protected function _getItemDirectory()
     {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Shop_Products_Directory_Component');
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_Shop_Products_Directory_Component');
     }
 
     public function getSelect($overrideValues = array())

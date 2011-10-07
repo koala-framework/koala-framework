@@ -1,10 +1,10 @@
 <?php
-class Vps_Test_SeleniumTestCase_TestController extends Vps_Controller_Action
+class Kwf_Test_SeleniumTestCase_TestController extends Kwf_Controller_Action
 {
     public function preDispatch()
     {
         //RowObserver brauchen wir hier nicht
-        Vps_Component_Data_Root::setComponentClass(false);
+        Kwf_Component_Data_Root::setComponentClass(false);
 
         parent::preDispatch();
     }
@@ -25,6 +25,6 @@ class Vps_Test_SeleniumTestCase_TestController extends Vps_Controller_Action
     public function exceptionAction()
     {
         Zend_Registry::get('config')->debug->error->log = false;
-        throw new Vps_Exception('my exception');
+        throw new Kwf_Exception('my exception');
     }
 }

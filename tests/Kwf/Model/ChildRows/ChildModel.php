@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_ChildRows_ChildModel extends Vps_Model_FnF
+class Kwf_Model_ChildRows_ChildModel extends Kwf_Model_FnF
 {
     protected $_referenceMap = array(
         'Parent'=>array(
             'column' => 'test_id',
-            'refModelClass' => 'Vps_Model_ChildRows_Model'
+            'refModelClass' => 'Kwf_Model_ChildRows_Model'
         )
     );
 }

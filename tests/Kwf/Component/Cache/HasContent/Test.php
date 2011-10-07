@@ -2,11 +2,11 @@
 /**
  * @group Component_Cache_HasContent
  */
-class Vps_Component_Cache_HasContent_Test extends Vpc_TestAbstract
+class Kwf_Component_Cache_HasContent_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Cache_HasContent_Root_Component');
+        parent::setUp('Kwf_Component_Cache_HasContent_Root_Component');
     }
 
     public function testHasContent()

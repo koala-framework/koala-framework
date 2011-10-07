@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Mysql
+class Kwf_Util_Mysql
 {
     /**
      * Versucht über den MySQL User aus der .my.cnf MySQL Rechte für
@@ -15,7 +15,7 @@ class Vps_Util_Mysql
         $cmd = "mysql mysql -e ".escapeshellarg($sql);
         exec($cmd, $output, $ret);
         if ($ret) {
-            throw new Vps_Exception("MySQL User konnte nicht gefunden werden.");
+            throw new Kwf_Exception("MySQL User konnte nicht gefunden werden.");
         }
         $usersWithHost = array();
         foreach ($output as $outputRow) {
@@ -34,7 +34,7 @@ class Vps_Util_Mysql
             $cmd = "mysql -e ".escapeshellarg($sql);
             exec($cmd, $output, $ret);
             if ($ret) {
-                throw new Vps_Exception("FILE Berechtigungen in MySQL für $userWithHost konnten nicht gesetzt werden. CSV Import wird nicht funktionieren.");
+                throw new Kwf_Exception("FILE Berechtigungen in MySQL für $userWithHost konnten nicht gesetzt werden. CSV Import wird nicht funktionieren.");
             }
         }
     }
@@ -51,9 +51,9 @@ class Vps_Util_Mysql
 
     public static function hasPrivilege($privilege)
     {
-        $data = Vps_Registry::get('db')->query("SHOW GRANTS FOR CURRENT_USER()")->fetchAll();
+        $data = Kwf_Registry::get('db')->query("SHOW GRANTS FOR CURRENT_USER()")->fetchAll();
         if (!count($data)) {
-            throw new Vps_Exception("MySQL rights not found");
+            throw new Kwf_Exception("MySQL rights not found");
         }
 
         foreach ($data as $k => $v) {

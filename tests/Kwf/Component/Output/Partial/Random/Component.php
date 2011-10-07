@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Output_Partial_Random_Component extends Vpc_Abstract
-    implements Vps_Component_Partial_Interface
+class Kwf_Component_Output_Partial_Random_Component extends Kwc_Abstract
+    implements Kwf_Component_Partial_Interface
 {
     public function getPartialClass()
     {
-        return 'Vps_Component_Partial_Random';
+        return 'Kwf_Component_Partial_Random';
     }
 
     public function getPartialVars($partial, $nr, $info)

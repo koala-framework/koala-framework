@@ -1,4 +1,4 @@
-Vps.FrontendForm.TextArea = Ext.extend(Vps.FrontendForm.Field, {
+Kwf.FrontendForm.TextArea = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('textarea').each(function(input) {
             input.on('keypress', function() {
@@ -14,4 +14,4 @@ Vps.FrontendForm.TextArea = Ext.extend(Vps.FrontendForm.Field, {
     }
 });
 
-Vps.FrontendForm.fields['vpsFormFieldTextArea'] = Vps.FrontendForm.TextArea;
+Kwf.FrontendForm.fields['kwfFormFieldTextArea'] = Kwf.FrontendForm.TextArea;

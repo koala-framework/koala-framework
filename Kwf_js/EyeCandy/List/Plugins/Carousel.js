@@ -1,4 +1,4 @@
-Vps.EyeCandy.List.Plugins.Carousel = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
     //animationConfig: { concurrent: true, duration: 0.25 },
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)

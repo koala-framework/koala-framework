@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->assets('Vps_Form_FieldSet_Frontend:TestFrontend')?>
+        <?=$this->assets('Kwf_Form_FieldSet_Frontend:TestFrontend')?>
     </head>
     <body>
         <?

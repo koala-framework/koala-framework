@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Paragraphs
+ * @group Kwc_Paragraphs
  */
-class Vpc_Paragraphs_Test extends Vpc_TestAbstract
+class Kwc_Paragraphs_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Paragraphs_Paragraphs');
+        parent::setUp('Kwc_Paragraphs_Paragraphs');
     }
 
     public function testCache()
@@ -41,7 +41,7 @@ class Vpc_Paragraphs_Test extends Vpc_TestAbstract
     {
         $p = $this->_root;
 
-        $cache = Vps_Component_Cache::getInstance();
+        $cache = Kwf_Component_Cache::getInstance();
         $cacheModel = $cache->getModel();
         $select = $cacheModel->select()->whereEquals('deleted', false);
 

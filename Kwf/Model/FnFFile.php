@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_FnFFile extends Vps_Model_FnF
+class Kwf_Model_FnFFile extends Kwf_Model_FnF
 {
     protected $_fileName;
 
@@ -15,8 +15,8 @@ class Vps_Model_FnFFile extends Vps_Model_FnF
             $this->_fileName = 'temp/fnf-file-'.$config['uniqueIdentifier'];
         }
         if (!$this->_fileName) {
-            if (get_class($this) == 'Vps_Model_FnFFile') {
-                throw new Vps_Exception("Inhert from Vps_Model_FnFFile or set an filename/uniqueIdentifier");
+            if (get_class($this) == 'Kwf_Model_FnFFile') {
+                throw new Kwf_Exception("Inhert from Kwf_Model_FnFFile or set an filename/uniqueIdentifier");
             }
             $this->_fileName = 'temp/fnf-file-'.get_class($this);
         }

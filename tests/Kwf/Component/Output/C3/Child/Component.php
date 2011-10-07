@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Output_C3_Child_Component extends Vpc_Abstract_Composite_Component
+class Kwf_Component_Output_C3_Child_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['plugins'] = array('Vps_Component_Output_Plugin_Plugin');
+        $ret['plugins'] = array('Kwf_Component_Output_Plugin_Plugin');
         return $ret;
     }
 

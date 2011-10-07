@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Register_Form_FrontendForm extends Vpc_User_Edit_Form_FrontendForm
+class Kwc_User_Register_Form_FrontendForm extends Kwc_User_Edit_Form_FrontendForm
 {
     public function initFields()
     {
@@ -7,7 +7,7 @@ class Vpc_User_Register_Form_FrontendForm extends Vpc_User_Edit_Form_FrontendFor
         $this->_setHidden($this);
     }
 
-    //TODO: sollte mit Vps_Collection_Iterator_Recursive einfacher funktionieren
+    //TODO: sollte mit Kwf_Collection_Iterator_Recursive einfacher funktionieren
     private function _setHidden($f)
     {
         if ($f->getHideInRegister()) {

@@ -1,12 +1,12 @@
 <?php
-class Vpc_Basic_Text_Component extends Vpc_Abstract
+class Kwc_Basic_Text_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'ownModel'          => 'Vpc_Basic_Text_Model',
-            'componentName'     => trlVps('Text'),
-            'componentIcon'     => new Vps_Asset('paragraph_page'),
+            'ownModel'          => 'Kwc_Basic_Text_Model',
+            'componentName'     => trlKwf('Text'),
+            'componentIcon'     => new Kwf_Asset('paragraph_page'),
             'width'             => 550,
             'height'            => 400,
             'enableAlignments'  => false,
@@ -26,42 +26,42 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enableStyles'      => true,
             'enableStylesEditor'=> true,
             'enableTagsWhitelist'=> true,
-            'defaultText'       => Vpc_Abstract::LOREM_IPSUM,
+            'defaultText'       => Kwc_Abstract::LOREM_IPSUM,
 
-            //veraltert NICHT VERWENDEN!! (in der Vpc_Mail komponente ist ein besserer ersatz)
+            //veraltert NICHT VERWENDEN!! (in der Kwc_Mail komponente ist ein besserer ersatz)
             'emailStyles'       => array()
         ));
 
-        $ret['stylesModel'] = 'Vpc_Basic_Text_StylesModel';
+        $ret['stylesModel'] = 'Kwc_Basic_Text_StylesModel';
 
         $ret['generators']['child'] = array(
-            'class' => 'Vpc_Basic_Text_Generator',
+            'class' => 'Kwc_Basic_Text_Generator',
             'component' => array(
                 //auf false setzen um buttons zu deaktivieren
                 'image'         => false,
-                'link'          => 'Vpc_Basic_LinkTag_Component',
-                'download'      => 'Vpc_Basic_DownloadTag_Component'
+                'link'          => 'Kwc_Basic_LinkTag_Component',
+                'download'      => 'Kwc_Basic_DownloadTag_Component'
             ),
-            'model' => 'Vpc_Basic_Text_ChildComponentsModel'
+            'model' => 'Kwc_Basic_Text_ChildComponentsModel'
         );
 
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditor.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditorTab.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Text/StylesEditor.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Text/StylesEditorTab.js';
         $ret['assetsAdmin']['dep'][] = 'ExtHtmlEdit';
         $ret['assetsAdmin']['dep'][] = 'ExtWindow';
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoForm';
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoForm';
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
         $ret['assetsAdmin']['dep'][] = 'ExtSimpleStore';
-        $ret['assetsAdmin']['dep'][] = 'VpsColorField';
+        $ret['assetsAdmin']['dep'][] = 'KwfColorField';
 
-        $ret['assets']['dep'][] = 'VpsMailDecode';
+        $ret['assets']['dep'][] = 'KwfMailDecode';
 
-        $ret['cssClass'] = 'webStandard vpcText';
+        $ret['cssClass'] = 'webStandard kwcText';
 
-        $ret['assets']['files']['styles'] = 'dynamic/Vpc_Basic_Text_StylesAsset:Vpc_Basic_Text_StylesModel';
+        $ret['assets']['files']['styles'] = 'dynamic/Kwc_Basic_Text_StylesAsset:Kwc_Basic_Text_StylesModel';
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
         return $ret;
     }
@@ -80,7 +80,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
     {
         static $models = array();
         if (!isset($models[$componentClass])) {
-            $m = Vpc_Abstract::getSetting($componentClass, 'ownModel');
+            $m = Kwc_Abstract::getSetting($componentClass, 'ownModel');
             $models[$componentClass] = new $m(array('componentClass' => $componentClass));
         }
         return $models[$componentClass];

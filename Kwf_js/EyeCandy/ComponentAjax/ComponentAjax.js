@@ -1,5 +1,5 @@
-Ext.namespace("Vps.ComponentAjax");
-Vps.ComponentAjax.ComponentAjax = (function(link, config) {
+Ext.namespace("Kwf.ComponentAjax");
+Kwf.ComponentAjax.ComponentAjax = (function(link, config) {
     return {
         version: '1.0',
         opts: {},
@@ -20,9 +20,9 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
         // ************* open *****************
         open: function(link, options) {
 
-            // Zwischen content-div und Kindknoten ein div "vpsComponentAjax" 
+            // Zwischen content-div und Kindknoten ein div "kwfComponentAjax" 
             // einziehen, das wird das gefadet, ansonsten geht sowas wie float:left verloren
-            var content = Ext.get('vpsComponentAjax');
+            var content = Ext.get('kwfComponentAjax');
             if (!content) {
                 if (options.contentClass) {
                     var f = Ext.query('div.' + options.contentClass);
@@ -31,13 +31,13 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
                     var outerContent = Ext.get('innerContent').dom;
                 }
                 var content = document.createElement('div');
-                content.id = 'vpsComponentAjax';
+                content.id = 'kwfComponentAjax';
                 while (outerContent.hasChildNodes()){
                     content.appendChild(outerContent.firstChild);
                 }
                 outerContent.appendChild(content);
                 
-                content = Ext.get('vpsComponentAjax');
+                content = Ext.get('kwfComponentAjax');
             }
             
             Ext.applyIf(options, this.defaults);
@@ -54,7 +54,7 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
 
             Ext.Ajax.request({
                 params: params,
-                url: '/vps/util/render/render',
+                url: '/kwf/util/render/render',
                 success: function(response) {
                     content.hide();
                     content.update(response.responseText);
@@ -63,7 +63,7 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
                     } else {
                         content.fadeIn(options.showFxConfig);
                     }
-                    Vps.callOnContentReady();
+                    Kwf.callOnContentReady();
                 },
                 scope: this
             });
@@ -71,18 +71,18 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
         
         check: function()
         {
-            var components = Ext.query('div.vpsComponentAjax');
+            var components = Ext.query('div.kwfComponentAjax');
             Ext.each(components, function(c) {
                 var div = Ext.get(c);
                 var settings = Ext.decode(div.child('.settings').getValue());
                 var link = div.child('.' + settings.sel);
                 link.on('click', function (ev) {
                     ev.preventDefault();
-                    Vps.ComponentAjax.ComponentAjax.open(link, settings);
+                    Kwf.ComponentAjax.ComponentAjax.open(link, settings);
                 });
             });
         }
     };
 })();
 
-Vps.onContentReady(Vps.ComponentAjax.ComponentAjax.check);
+Kwf.onContentReady(Kwf.ComponentAjax.ComponentAjax.check);

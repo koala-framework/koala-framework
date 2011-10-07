@@ -1,8 +1,8 @@
 <?php
-class Vps_Controller_Action_Trl_WebController extends Vps_Controller_Action_Trl_VpsController
+class Kwf_Controller_Action_Trl_WebController extends Kwf_Controller_Action_Trl_KwfController
 {
-    protected $_modelName = "Vps_Trl_Model_Web";
-    protected $_editDialog = array('controllerUrl'=>'/vps/trl/web-edit',
+    protected $_modelName = "Kwf_Trl_Model_Web";
+    protected $_editDialog = array('controllerUrl'=>'/kwf/trl/web-edit',
                                    'width'=>600,
                                    'height'=>550);
 
@@ -11,7 +11,7 @@ class Vps_Controller_Action_Trl_WebController extends Vps_Controller_Action_Trl_
         $config = array(
             'controllerUrl' => $this->getRequest()->getPathInfo()
         );
-        $this->view->ext('Vps.Trl.Grid', $config);
+        $this->view->ext('Kwf.Trl.Grid', $config);
     }
 
     protected function _getLanguage()

@@ -168,7 +168,7 @@ EOB;
     }
 }
     
-class Vps_Controller_Action_Debug_ApcController extends Vps_Controller_Action
+class Kwf_Controller_Action_Debug_ApcController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
@@ -230,7 +230,7 @@ defaults('GRAPH_SIZE',200);                 // Image size
 
 // rewrite $PHP_SELF to block XSS attacks
 //
-$PHP_SELF= '/vps/debug/apc';
+$PHP_SELF= '/kwf/debug/apc';
 $time = time();
 $host = getenv('HOSTNAME');
 if($host) { $host = '('.$host.')'; }

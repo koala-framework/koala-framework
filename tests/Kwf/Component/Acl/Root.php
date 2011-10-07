@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Acl_Root extends Vps_Component_NoCategoriesRoot
+class Kwf_Component_Acl_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['page']['model'] = new Vps_Model_FnF(array('data'=>array(
+        $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Home', 'filename' => 'home',
                   'tags' => 'test', 'parent_id'=>'root', 'component'=>'empty', 'is_home'=>true, 'category' =>'main', 'hide'=>false),
             array('id'=>2, 'pos'=>2, 'visible'=>true, 'name'=>'Test2', 'filename' => 'test2',
@@ -14,9 +14,9 @@ class Vps_Component_Acl_Root extends Vps_Component_NoCategoriesRoot
             array('id'=>4, 'pos'=>1, 'visible'=>true, 'name'=>'Test4', 'filename' => 'test4',
                   'tags' => '', 'parent_id'=>3, 'component'=>'empty', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
-        $ret['generators']['page']['component'] = array('empty' => 'Vpc_Basic_Empty_Component',
-                                                        'empty2' => 'Vps_Component_Acl_Empty2',
-                                                        'testComponent' => 'Vps_Component_Acl_TestComponent');
+        $ret['generators']['page']['component'] = array('empty' => 'Kwc_Basic_Empty_Component',
+                                                        'empty2' => 'Kwf_Component_Acl_Empty2',
+                                                        'testComponent' => 'Kwf_Component_Acl_TestComponent');
         return $ret;
     }
 }

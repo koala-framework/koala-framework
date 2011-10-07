@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_MultiCheckbox_ValueModel extends Vps_Model_FnF
+class Kwf_Form_MultiCheckbox_ValueModel extends Kwf_Model_FnF
 {
     public $_data = array(
         array('id' => 1, 'value' => 'Value 1'),
@@ -8,6 +8,6 @@ class Vps_Form_MultiCheckbox_ValueModel extends Vps_Model_FnF
     );
     protected $_toStringField = 'value';
     protected $_dependentModels = array(
-        'Relation' => 'Vps_Form_MultiCheckbox_RelationModel'
+        'Relation' => 'Kwf_Form_MultiCheckbox_RelationModel'
     );
 }

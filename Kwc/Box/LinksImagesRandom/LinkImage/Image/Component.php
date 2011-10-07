@@ -1,10 +1,10 @@
 <?php
-class Vpc_Box_LinksImagesRandom_LinkImage_Image_Component extends Vpc_Basic_Image_Component
+class Kwc_Box_LinksImagesRandom_LinkImage_Image_Component extends Kwc_Basic_Image_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['dimensions'] = array(0, 0, Vps_Media_Image::SCALE_ORIGINAL);
+        $ret['dimensions'] = array(0, 0, Kwf_Media_Image::SCALE_ORIGINAL);
         return $ret;
     }
 }

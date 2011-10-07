@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -68,19 +68,19 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Zend_Session::start();
         ini_set('memory_limit', '512M');
 
-        Vps_Component_Data_Root::setComponentClass(false);
-        Zend_Registry::set('db', Vps_Test::getTestDb());
+        Kwf_Component_Data_Root::setComponentClass(false);
+        Zend_Registry::set('db', Kwf_Test::getTestDb());
 
         set_time_limit(0);
-        Vps_Benchmark::disable();
+        Kwf_Benchmark::disable();
     }
 
     public function indexAction()
     {
         self::initForTests();
 
-        if (!Vps_Registry::get('config')->server->domain) {
-            throw new Vps_Exception_Client("Can't run tests; server.domain is not set. Please set in tests/config.local.ini");
+        if (!Kwf_Registry::get('config')->server->domain) {
+            throw new Kwf_Exception_Client("Can't run tests; server.domain is not set. Please set in tests/config.local.ini");
         }
         $arguments = array();
         $arguments['colors'] = true;
@@ -121,7 +121,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
         if ($this->_getParam('coverage')) {
             if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
-                throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
+                throw new Kwf_ClientException('tokenizer and xdebug extensions must be loaded');
             }
             if (!is_string($this->_getParam('coverage'))) {
                 $arguments['reportDirectory'] = './report';
@@ -130,29 +130,29 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             }
         }
 
-        Vps_Registry::set('testDomain', Vps_Registry::get('config')->server->domain);
-        Vps_Registry::set('testServerConfig', Vps_Registry::get('config'));
+        Kwf_Registry::set('testDomain', Kwf_Registry::get('config')->server->domain);
+        Kwf_Registry::set('testServerConfig', Kwf_Registry::get('config'));
 
         if ($this->_getParam('report')) {
-            $resultLogger = new Vps_Test_ResultLogger(true/*verbose*/);
+            $resultLogger = new Kwf_Test_ResultLogger(true/*verbose*/);
             $arguments['listeners'][] = $resultLogger;
         }
         if ($this->_getParam('no-progress')) {
             $arguments['noProgress'] = true;
         }
         if ($this->_getParam('disable-debug')) {
-            Vps_Debug::disable();
+            Kwf_Debug::disable();
         }
 
         //nur temporär deaktiviert, damit ich selenium-verbindungs-probleme besser debuggen kann
         PHPUnit_Util_Filter::setFilter(false);
 
-        $runner = new Vps_Test_TestRunner();
-        $suite = new Vps_Test_TestSuite();
+        $runner = new Kwf_Test_TestRunner();
+        $suite = new Kwf_Test_TestSuite();
 
-        Vps_Model_Abstract::clearInstances();
-        Vps_Trl::getInstance()->setModel(null, 'web');
-        Vps_Trl::getInstance()->setModel(null, 'vps');
+        Kwf_Model_Abstract::clearInstances();
+        Kwf_Trl::getInstance()->setModel(null, 'web');
+        Kwf_Trl::getInstance()->setModel(null, 'kwf');
 
         try {
             $result = $runner->doRun(
@@ -162,7 +162,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         }
 
         catch (Exception $e) {
-            throw new Vps_ClientException(
+            throw new Kwf_ClientException(
               'Could not create and run test suite: ' . $e->getMessage()
             );
         }
@@ -175,15 +175,15 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 'skipped' => $result->skippedCount(),
                 'not_implemented' => $result->notImplementedCount(),
                 //'log' => $resultLogger->getContent(),
-                'web_version' => Vps_Util_Git::web()->getActiveBranch().' ('.Vps_Util_Git::web()->revParse('HEAD').')',
-                'vps_version' => Vps_Util_Git::vps()->getActiveBranch().' ('.Vps_Util_Git::vps()->revParse('HEAD').')'
+                'web_version' => Kwf_Util_Git::web()->getActiveBranch().' ('.Kwf_Util_Git::web()->revParse('HEAD').')',
+                'kwf_version' => Kwf_Util_Git::vps()->getActiveBranch().' ('.Kwf_Util_Git::vps()->revParse('HEAD').')'
             );
             echo "===REPORT===";
             echo serialize($reportData);
             echo "===/REPORT===";
         }
         if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
-            $msg = Vps_Registry::get('config')->application->name.' Tests ';
+            $msg = Kwf_Registry::get('config')->application->name.' Tests ';
             if ($result->wasSuccessful()) {
                 $msg .= 'erfolgreich ausgeführt';
             } else {
@@ -193,7 +193,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             system("ssh niko \"export DISPLAY=:0 && /usr/bin/kdialog --passivepopup $msg 2\"");
         }
 
-        Vps_Benchmark::shutDown();
+        Kwf_Benchmark::shutDown();
 
         if ($result->wasSuccessful()) {
             exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
@@ -212,6 +212,6 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
     public function forwardAction()
     {
-        $this->_forward($this->_getParam('action'), $this->_getParam('controller'), 'vps_test');
+        $this->_forward($this->_getParam('action'), $this->_getParam('controller'), 'kwf_test');
     }
 }

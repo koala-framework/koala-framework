@@ -1,27 +1,27 @@
 <?php
-class Vps_Component_Model extends Vps_Model_Abstract
+class Kwf_Component_Model extends Kwf_Model_Abstract
 {
-    protected $_rowClass = 'Vps_Component_Model_Row';
+    protected $_rowClass = 'Kwf_Component_Model_Row';
     protected $_primaryKey = 'componentId';
     private $_root;
 
-    public function setRoot(Vps_Component_Data $root)
+    public function setRoot(Kwf_Component_Data $root)
     {
         $this->_root = $root;
     }
 
     public function getRoot()
     {
-        if (!$this->_root) $this->_root = Vps_Component_Data_Root::getInstance();
+        if (!$this->_root) $this->_root = Kwf_Component_Data_Root::getInstance();
         return $this->_root;
     }
 
     public function createRow(array $data=array()) {
-        throw new Vps_Exception('Not implemented yet.');
+        throw new Kwf_Exception('Not implemented yet.');
     }
 
-    public function isEqual(Vps_Model_Interface $other) {
-        if ($other instanceof Vps_Component_Model &&
+    public function isEqual(Kwf_Model_Interface $other) {
+        if ($other instanceof Kwf_Component_Model &&
             $this->getTable()->info(Zend_Db_Table_Abstract::NAME) ==
             $other->getTable()->info(Zend_Db_Table_Abstract::NAME)
         ) {
@@ -43,11 +43,11 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
         $root = $this->getRoot();
 
-        $where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
-        $parts = $select->getPart(Vps_Model_Select::WHERE_NULL);
+        $where = $select->getPart(Kwf_Model_Select::WHERE_EQUALS);
+        $parts = $select->getPart(Kwf_Model_Select::WHERE_NULL);
 
-        if ($select->hasPart(Vps_Model_Select::WHERE_EXPRESSION)) { // Suchfeld
-            $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        if ($select->hasPart(Kwf_Model_Select::WHERE_EXPRESSION)) { // Suchfeld
+            $model = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel');
             $rowset = array();
             $languages = null;
             $searchSelect = array('ignoreVisible' => true);
@@ -56,7 +56,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
                 if (!$component) continue;
                 if (is_null($languages)) {
                     $c = $component;
-                    while ($c && !Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
+                    while ($c && !Kwc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
                         $c = $c->parent;
                     }
                     if ($c) {
@@ -73,11 +73,11 @@ class Vps_Component_Model extends Vps_Model_Abstract
                 }
                 $rowset[] = $component;
                 foreach ($languages as $language) {
-                    $rowset[] = Vpc_Chained_Trl_Component::getChainedByMaster($component, $language, $searchSelect);
+                    $rowset[] = Kwc_Chained_Trl_Component::getChainedByMaster($component, $language, $searchSelect);
                 }
             }
             if ($languages) {
-                $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_Trl_GeneratorModel');
+                $model = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_Trl_GeneratorModel');
                 $s = clone $select;
                 $s->unsetPart('order');
                 foreach ($model->getRows($s) as $row) {
@@ -89,7 +89,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
         } else if (isset($where['parent_id'])) {
             $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));
             if (!$page) {
-                throw new Vps_Exception("Can't find page with id '{$where['parent_id']}'");
+                throw new Kwf_Exception("Can't find page with id '{$where['parent_id']}'");
             }
             $rowset = $page->getChildComponents(array(
                 'ignoreVisible' => true,
@@ -97,9 +97,9 @@ class Vps_Component_Model extends Vps_Model_Abstract
             ));
             $rowset = array_values($rowset);
         } else if (isset($where['componentId'])) {
-            $rowset = array(Vps_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));
+            $rowset = array(Kwf_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));
         } else {
-            throw new Vps_Exception('Cannot return all pages');
+            throw new Kwf_Exception('Cannot return all pages');
         }
         return new $this->_rowsetClass(array(
             'dataKeys' => $rowset,
@@ -132,7 +132,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
     public function getTable()
     {
-        return Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel')->getTable();
+        return Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel')->getTable();
     }
 
     protected function _getOwnColumns()
@@ -142,6 +142,6 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
     public function getUniqueIdentifier()
     {
-        throw new Vps_Exception("no unique identifier set");
+        throw new Kwf_Exception("no unique identifier set");
     }
 }

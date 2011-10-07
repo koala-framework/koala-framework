@@ -1,9 +1,9 @@
 <?php
-class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller_Action
+class Kwf_Controller_Action_Component_BenchmarkController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
-        header('Location: /vps/debug/benchmark');
+        header('Location: /kwf/debug/benchmark');
         exit;
     }
 }

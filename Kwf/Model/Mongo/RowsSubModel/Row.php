@@ -1,6 +1,6 @@
 <?php
-class Vps_Model_Mongo_RowsSubModel_Row extends Vps_Model_Row_Data_Abstract
-    implements Vps_Model_RowsSubModel_Row_Interface
+class Kwf_Model_Mongo_RowsSubModel_Row extends Kwf_Model_Row_Data_Abstract
+    implements Kwf_Model_RowsSubModel_Row_Interface
 {
     protected $_parentRow;
     public function __construct(array $config)
@@ -34,9 +34,9 @@ class Vps_Model_Mongo_RowsSubModel_Row extends Vps_Model_Row_Data_Abstract
         parent::_beforeSave();
         foreach ($this->getModel()->getExprColumns() as $name) {
             $expr = $this->getModel()->getExpr($name);
-            if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+            if ($expr instanceof Kwf_Model_Select_Expr_Parent) {
                 $ref = $this->getModel()->getReference($expr->getParent());
-                if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                     continue;
                 }
             }
@@ -47,9 +47,9 @@ class Vps_Model_Mongo_RowsSubModel_Row extends Vps_Model_Row_Data_Abstract
                 if ($proxyRow->getProxiedRow() === $this) {
                     foreach ($model->getExprColumns() as $name) {
                         $expr = $model->getExpr($name);
-                        if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+                        if ($expr instanceof Kwf_Model_Select_Expr_Parent) {
                             $ref = $model->getReference($expr->getParent());
-                            if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                            if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                                 continue;
                             }
                         }

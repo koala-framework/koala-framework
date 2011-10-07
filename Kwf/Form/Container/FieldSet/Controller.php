@@ -1,12 +1,12 @@
 <?php
-class Vps_Form_Field_Abstract_Controller extends Vpc_Formular_Dynamic_Controller
+class Kwf_Form_Field_Abstract_Controller extends Kwc_Formular_Dynamic_Controller
 {
     private $_formularId;
     private $_parentComponentId;
     public function preDispatch()
     {
-        $this->_model = new Vps_Model_Db(array(
-            'table' => new Vpc_Formular_Dynamic_Model()
+        $this->_model = new Kwf_Model_Db(array(
+            'table' => new Kwc_Formular_Dynamic_Model()
         ));
         //TODO: recht unschön :D
         if (preg_match('#^(.*)-([0-9]*)$#', $this->componentId, $m)) {

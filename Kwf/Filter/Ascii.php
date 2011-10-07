@@ -2,7 +2,7 @@
 /**
  * Ersetzt alles außer a-z, 0-9 - durch _. So wie alphanum VType vom Ext.
  */
-class Vps_Filter_Ascii implements Zend_Filter_Interface
+class Kwf_Filter_Ascii implements Zend_Filter_Interface
 {
     public function filter($value)
     {

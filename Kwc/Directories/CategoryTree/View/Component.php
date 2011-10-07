@@ -1,6 +1,6 @@
 <?php
-class Vpc_Directories_CategoryTree_View_Component
-    extends Vpc_Directories_Category_View_Component
+class Kwc_Directories_CategoryTree_View_Component
+    extends Kwc_Directories_Category_View_Component
 {
     private $_viewComponents = array();
 
@@ -13,12 +13,12 @@ class Vpc_Directories_CategoryTree_View_Component
     {
         // TODO: Cache löschen komplett neu
         $ret[] = array(
-            'model' => 'Vpc_Directories_CategoryTree_Directory_ItemsToCategoriesModel',
+            'model' => 'Kwc_Directories_CategoryTree_Directory_ItemsToCategoriesModel',
             'id' => null,
             'callback' => true
         );
         $ret[] = array(
-            'model' => 'Vpc_Directories_CategoryTree_Directory_Model',
+            'model' => 'Kwc_Directories_CategoryTree_Directory_Model',
             'id' => null,
             'callback' => true
         );
@@ -27,8 +27,8 @@ class Vpc_Directories_CategoryTree_View_Component
 
     public function onCacheCallback($row)
     {
-        if ($row instanceof Vps_Db_Table_Row && $row->getTable() instanceof Vpc_Directories_CategoryTree_Directory_ItemsToCategoriesModel) {
-            $info = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
+        if ($row instanceof Kwf_Db_Table_Row && $row->getTable() instanceof Kwc_Directories_CategoryTree_Directory_ItemsToCategoriesModel) {
+            $info = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData(
                 get_class($row->getTable()), $schema = 'Category'
             );
             $table = new $info['refTableName']();
@@ -38,17 +38,17 @@ class Vpc_Directories_CategoryTree_View_Component
             do {
                 foreach ($this->_getRemoveCacheViewComponents() as $c) {
                     $cacheId = $c->getItemCountCacheId($parentRow);
-                    Vpc_Directories_CategoryTree_View_Component::getItemCountCache()->remove($cacheId);
+                    Kwc_Directories_CategoryTree_View_Component::getItemCountCache()->remove($cacheId);
                 }
 
                 $parentRow = $parentRow->findParentRow($info['refTableName']);
             } while ($parentRow);
-        } else if ($row instanceof Vps_Db_Table_Row && $row->getTable() instanceof Vpc_Directories_CategoryTree_Directory_Model) {
+        } else if ($row instanceof Kwf_Db_Table_Row && $row->getTable() instanceof Kwc_Directories_CategoryTree_Directory_Model) {
             $parentRow = $row;
             do {
                 foreach ($this->_getRemoveCacheViewComponents() as $c) {
                     $cacheId = $c->getItemCountCacheId($parentRow);
-                    Vpc_Directories_CategoryTree_View_Component::getItemCountCache()->remove($cacheId);
+                    Kwc_Directories_CategoryTree_View_Component::getItemCountCache()->remove($cacheId);
                 }
 
                 $parentRow = $parentRow->findParentRow($row->getTable()->info(Zend_Db_Table_Abstract::NAME));
@@ -62,8 +62,8 @@ class Vpc_Directories_CategoryTree_View_Component
     protected function _getRemoveCacheViewComponents()
     {
         if (!$this->_viewComponents) {
-            $components = Vps_Component_Data_Root::getInstance()->getComponentsByClass(
-                'Vpc_Directories_Category_View_Component'
+            $components = Kwf_Component_Data_Root::getInstance()->getComponentsByClass(
+                'Kwc_Directories_Category_View_Component'
             );
             foreach ($components as $c) {
                 $this->_viewComponents[] = $c->getComponent();

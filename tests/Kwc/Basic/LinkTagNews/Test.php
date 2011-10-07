@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Basic_LinkTagNews
+ * @group Kwc_Basic_LinkTagNews
  **/
-class Vpc_Basic_LinkTagNews_Test extends Vpc_TestAbstract
+class Kwc_Basic_LinkTagNews_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_LinkTagNews_Root');
+        parent::setUp('Kwc_Basic_LinkTagNews_Root');
     }
 
     public function testDependsOnRow()
@@ -15,7 +15,7 @@ class Vpc_Basic_LinkTagNews_Test extends Vpc_TestAbstract
         $newsModel = $newsComponent->getGenerator('detail')->getModel();
         $delRow = $newsModel->getRow(501);
 
-        $a = Vpc_Admin::getInstance('Vpc_Basic_LinkTagNews_TestComponent');
+        $a = Kwc_Admin::getInstance('Kwc_Basic_LinkTagNews_TestComponent');
         $depends = $a->getComponentsDependingOnRow($delRow);
 
         $this->assertEquals(1, count($depends));

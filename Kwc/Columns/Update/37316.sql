@@ -1,1 +1,1 @@
-DROP TABLE `vpc_columns`;
+DROP TABLE `kwc_columns`;

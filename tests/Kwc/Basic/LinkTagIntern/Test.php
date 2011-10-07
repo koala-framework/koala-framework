@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Basic_LinkTagIntern
+ * @group Kwc_Basic_LinkTagIntern
  **/
-class Vpc_Basic_LinkTagIntern_Test extends Vpc_TestAbstract
+class Kwc_Basic_LinkTagIntern_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_LinkTagIntern_Root');
+        parent::setUp('Kwc_Basic_LinkTagIntern_Root');
         $this->_root->setFilename(null);
     }
 
@@ -14,7 +14,7 @@ class Vpc_Basic_LinkTagIntern_Test extends Vpc_TestAbstract
     {
         $delRow = $this->_root->getGenerator('page')->getModel()->getRow(1310);
 
-        $a = Vpc_Admin::getInstance('Vpc_Basic_LinkTagIntern_TestComponent');
+        $a = Kwc_Admin::getInstance('Kwc_Basic_LinkTagIntern_TestComponent');
         $depends = $a->getComponentsDependingOnRow($delRow);
 
         $this->assertEquals(1, count($depends));

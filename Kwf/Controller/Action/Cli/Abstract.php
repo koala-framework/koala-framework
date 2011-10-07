@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
+class Kwf_Controller_Action_Cli_Abstract extends Kwf_Controller_Action
 {
     public function preDispatch()
     {
@@ -10,7 +10,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         Zend_Registry::get('config')->debug->error->log = false;
 
         $help = call_user_func(array(get_class($this), 'getHelp'));
-        if (!$help) throw new Vps_ClientException("This command is not avaliable");
+        if (!$help) throw new Kwf_ClientException("This command is not avaliable");
 
         //php sux
         $options = call_user_func(array(get_class($this), 'getHelpOptions'));
@@ -20,7 +20,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
             if (isset($opt['value']) && ($p===true || !$p) &&
                     !(isset($opt['valueOptional']) && $opt['valueOptional']) &&
                     !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
-                throw new Vps_ClientException("Parameter '$opt[param]' is missing");
+                throw new Kwf_ClientException("Parameter '$opt[param]' is missing");
             }
             if (is_null($p) && isset($opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
                 if (is_array($opt['value'])) {
@@ -32,7 +32,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
                 $p = $v;
             }
             if (isset($opt['value']) && is_array($opt['value']) && !in_array($p, $opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
-//                 throw new Vps_ClientException("Invalid value for parameter '$opt[param]'");
+//                 throw new Kwf_ClientException("Invalid value for parameter '$opt[param]'");
             }
         }
     }
@@ -51,18 +51,18 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
     {
         $ret = null;
         passthru($cmd, $ret);
-        if ($ret != 0) throw new Vps_ClientException("Command failed");
+        if ($ret != 0) throw new Kwf_ClientException("Command failed");
     }
 
     protected static function _getConfigSections()
     {
-        $configClass = get_class(Vps_Registry::get('config'));
+        $configClass = get_class(Kwf_Registry::get('config'));
         $configFull = new Zend_Config_Ini('config.ini', null);
         $sections = array();
         $processedServers = array();
         foreach ($configFull as $k=>$i) {
             if ($k == 'dependencies') continue;
-            $config = Vps_Config_Web::getInstance($k);
+            $config = Kwf_Config_Web::getInstance($k);
             if ($config->server && $config->server->host) {
                 $s = $config->server->host.':'.$config->server->dir;
                 if (/*$i->server->host != 'vivid' &&*/ !in_array($s, $processedServers)) {
@@ -80,7 +80,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         $processedDomains = array();
         foreach ($webConfigFull as $k=>$i) {
             if ($k == 'dependencies') continue;
-            $config = Vps_Config_Web::getInstance($k);
+            $config = Kwf_Config_Web::getInstance($k);
             if ($config->server && $config->server->domain) {
                 if ( !in_array($config->server->domain, $processedDomains)) {
                     $sections[] = $k;
@@ -89,7 +89,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
             }
         }
         $sections = array_reverse($sections);
-        $currentSection = Vps_Setup::getConfigSection();
+        $currentSection = Kwf_Setup::getConfigSection();
         $ret = array();
         foreach ($sections as $i) {
             if ($i == $currentSection) {
@@ -108,7 +108,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         $processedDomains = array();
         foreach ($webConfigFull as $k=>$i) {
             if ($k == 'dependencies') continue;
-            $config = Vps_Config_Web::getInstance($k);
+            $config = Kwf_Config_Web::getInstance($k);
             if ($config->server && $config->server->host) {
                 $sections[] = $k;
             }

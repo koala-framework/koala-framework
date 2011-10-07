@@ -1,5 +1,5 @@
 <?php
-class Vps_Crm_Customer_Model_Row_Comment extends Vps_Model_Proxy_Row
+class Kwf_Crm_Customer_Model_Row_Comment extends Kwf_Model_Proxy_Row
 {
     protected function _beforeInsert()
     {

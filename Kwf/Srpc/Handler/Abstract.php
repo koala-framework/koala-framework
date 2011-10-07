@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Srpc_Handler_Abstract
+abstract class Kwf_Srpc_Handler_Abstract
 {
     protected $_extraParams;
 

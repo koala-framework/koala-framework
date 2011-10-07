@@ -1,13 +1,13 @@
 <?php
-class Vps_Component_Generator_GetComponentByClass_Table extends Vpc_Abstract
+class Kwf_Component_Generator_GetComponentByClass_Table extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['child'] = array(
-            'class' => 'Vps_Component_Generator_GetComponentByClass_Generator',
-            'component' => 'Vpc_Basic_Empty_Component',
-            'model' => new Vps_Model_FnF(array(
+            'class' => 'Kwf_Component_Generator_GetComponentByClass_Generator',
+            'component' => 'Kwc_Basic_Empty_Component',
+            'model' => new Kwf_Model_FnF(array(
                 'columns' => array('id', 'name'),
                 'data'=>array(
                     array('id'=>1, 'name'=>'foo1'),

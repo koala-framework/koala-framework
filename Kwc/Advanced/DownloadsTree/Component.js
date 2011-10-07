@@ -1,14 +1,14 @@
-Vps.onContentReady(function() {
-    Ext.query('.vpcAdvancedDownloadsTree .content').each(function(i) {
+Kwf.onContentReady(function() {
+    Ext.query('.kwcAdvancedDownloadsTree .content').each(function(i) {
         var options = Ext.decode(Ext.get(i).down('.options').dom.value);
-        this.downloads = new Vps.Auto.GridPanel({
+        this.downloads = new Kwf.Auto.GridPanel({
             controllerUrl: options.downloadsUrl,
             baseParams: {
                 componentId: options.componentId
             },
             region: 'center'
         });
-        this.projects = new Vps.Auto.TreePanel({
+        this.projects = new Kwf.Auto.TreePanel({
             controllerUrl: options.projectsUrl,
             region: 'north',
             height: 220,

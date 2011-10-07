@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Git
+class Kwf_Util_Git
 {
     private static $_debug = false;
     private $_path;
@@ -9,7 +9,7 @@ class Vps_Util_Git
         $this->_path = (string)$path;
         if ($this->_path == '.') $this->_path = getcwd();
         if (!file_exists($path.'/.git')) {
-            throw new Vps_Exception("Invalid path '$path', no git wc");
+            throw new Kwf_Exception("Invalid path '$path', no git wc");
         }
     }
 
@@ -25,10 +25,10 @@ class Vps_Util_Git
         return $i;
     }
 
-    public static function vps()
+    public static function kwf()
     {
         static $i;
-        if (!isset($i)) $i = new self(VPS_PATH);
+        if (!isset($i)) $i = new self(KWF_PATH);
         return $i;
     }
 
@@ -66,10 +66,10 @@ class Vps_Util_Git
 
     public static function getAuthorEnvVars()
     {
-        return "GIT_AUTHOR_NAME=".escapeshellarg(Vps_Util_Git::getAuthorName()).
-               " GIT_AUTHOR_EMAIL=".escapeshellarg(Vps_Util_Git::getAuthorEMail()).
-               " GIT_COMMITTER_NAME=".escapeshellarg(Vps_Util_Git::getCommitterName()).
-               " GIT_COMMITTER_EMAIL=".escapeshellarg(Vps_Util_Git::getCommitterEMail());
+        return "GIT_AUTHOR_NAME=".escapeshellarg(Kwf_Util_Git::getAuthorName()).
+               " GIT_AUTHOR_EMAIL=".escapeshellarg(Kwf_Util_Git::getAuthorEMail()).
+               " GIT_COMMITTER_NAME=".escapeshellarg(Kwf_Util_Git::getCommitterName()).
+               " GIT_COMMITTER_EMAIL=".escapeshellarg(Kwf_Util_Git::getCommitterEMail());
     }
 
     public static function getGitVersion()
@@ -77,7 +77,7 @@ class Vps_Util_Git
         $cmd = "git --version";
         $gitVersion = trim(exec($cmd));
         if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
-            throw new Vps_Exception("can't detect git version");
+            throw new Kwf_Exception("can't detect git version");
         }
         return $m[1];
     }
@@ -149,7 +149,7 @@ class Vps_Util_Git
         chdir($d);
         if (self::$_debug) echo "return $ret\n";
         if ($ret) {
-            throw new Vps_ClientException("You must not have modified files in '$this->_path'");
+            throw new Kwf_ClientException("You must not have modified files in '$this->_path'");
         }
     }
 
@@ -175,7 +175,7 @@ class Vps_Util_Git
         $ret = system($cmd, $retVal);
         chdir($d);
         if ($retVal) {
-            throw new Vps_Exception("Command failed: $cmd");
+            throw new Kwf_Exception("Command failed: $cmd");
         }
         return $ret;
     }
@@ -189,7 +189,7 @@ class Vps_Util_Git
         $ret = exec($cmd, $output, $retVal);
         chdir($d);
         if ($retVal) {
-            throw new Vps_Exception("Command failed: $cmd");
+            throw new Kwf_Exception("Command failed: $cmd");
         }
         return $ret;
     }
@@ -208,7 +208,7 @@ class Vps_Util_Git
         exec($cmd, $ret, $retVal);
         chdir($d);
         if ($retVal) {
-            throw new Vps_Exception("Command failed: $cmd");
+            throw new Kwf_Exception("Command failed: $cmd");
         }
         foreach ($ret as &$i) {
             $i = trim(trim(trim($i), '*'));
@@ -226,7 +226,7 @@ class Vps_Util_Git
     {
         try {
             return $this->_getBranches($args.' --contains '.$commit);
-        } catch (Vps_Exception $e) {
+        } catch (Kwf_Exception $e) {
             return array();
         }
     }
@@ -268,7 +268,7 @@ class Vps_Util_Git
         exec($cmd, $ret, $retVal);
         chdir($d);
         if ($retVal) {
-            throw new Vps_Exception("Command failed: $cmd");
+            throw new Kwf_Exception("Command failed: $cmd");
         }
         $ret = trim(implode("\n", $ret));
         return empty($ret);

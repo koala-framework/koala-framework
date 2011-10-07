@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
+class Kwf_Model_Mongo_RunTempMongoController extends Kwf_Controller_Action
 {
     private $_dir;
     private $_proc;
@@ -48,7 +48,7 @@ class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
                 2 => STDOUT //should be empty
             );
         }
-        $this->_proc = new Vps_Util_Proc($cmd, $descriptorspec);
+        $this->_proc = new Kwf_Util_Proc($cmd, $descriptorspec);
         sleep(60*15);
 
         $this->_proc->terminate();

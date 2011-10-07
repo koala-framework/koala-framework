@@ -1,22 +1,22 @@
-Ext.namespace('Vpc.Mail.Editable');
-Vpc.Mail.Editable.Panel = Ext.extend(Ext.Panel, {
+Ext.namespace('Kwc.Mail.Editable');
+Kwc.Mail.Editable.Panel = Ext.extend(Ext.Panel, {
     layout: 'border',
     initComponent: function() {
         var settings = new Ext.Panel({
             layout: 'card',
-            title: trlVps('Settings')
+            title: trlKwf('Settings')
         });
-        var componentsGrid = new Vps.Auto.GridPanel({
+        var componentsGrid = new Kwf.Auto.GridPanel({
             controllerUrl: this.componentsControllerUrl,
             region: 'west',
             width: 200
         });
 
-        var content = new Vps.Component.ComponentPanel({
-            title: trlVps('Content'),
+        var content = new Kwf.Component.ComponentPanel({
+            title: trlKwf('Content'),
             componentConfigs: this.componentConfigs,
             autoLoad: false,
-            mainComponentText: trlVps('Content'),
+            mainComponentText: trlKwf('Content'),
             mainComponentIcon: '/assets/silkicons/email_open.png'
         });
 
@@ -34,7 +34,7 @@ Vpc.Mail.Editable.Panel = Ext.extend(Ext.Panel, {
                 }
             }, this);
             if (!i) {
-                i = new Vps.Auto.FormPanel({
+                i = new Kwf.Auto.FormPanel({
                     controllerUrl: record.get('settings_controller_url'),
                     autoLoad: false
                 });
@@ -67,7 +67,7 @@ Vpc.Mail.Editable.Panel = Ext.extend(Ext.Panel, {
                 content
             ]
         }, componentsGrid];
-        Vpc.Mail.Editable.Panel.superclass.initComponent.call(this);
+        Kwc.Mail.Editable.Panel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('vpc.mail.editable', Vpc.Mail.Editable.Panel);
+Ext.reg('kwc.mail.editable', Kwc.Mail.Editable.Panel);

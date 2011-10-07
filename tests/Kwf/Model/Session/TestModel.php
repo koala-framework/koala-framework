@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Session_TestModel extends Vps_Model_Session
+class Kwf_Model_Session_TestModel extends Kwf_Model_Session
 {
     protected $_namespace = 'testModel';
     protected $_defaultData = array(

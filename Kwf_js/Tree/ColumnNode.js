@@ -1,4 +1,4 @@
-Vps.Tree.ColumnNode = Ext.extend(Vps.Tree.Node, {
+Kwf.Tree.ColumnNode = Ext.extend(Kwf.Tree.Node, {
     focus: Ext.emptyFn, // prevent odd scrolling behavior
 
     renderElements : function(n, a, targetNode, bulkRender){

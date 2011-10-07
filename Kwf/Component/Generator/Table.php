@@ -1,12 +1,12 @@
 <?php
-class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
+class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 {
     protected $_loadTableFromComponent = true;
 
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn = 'id';
     protected $_hasNumericIds = true;
-    protected $_eventsClass = 'Vps_Component_Generator_Events_Table';
+    protected $_eventsClass = 'Kwf_Component_Generator_Events_Table';
 
     final public function getFormattedSelect($parentData)
     {
@@ -33,14 +33,14 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if ($grandParentData) {
             $parentSelect = $parentGenerator->select($grandParentData);
             $parentSelect = $parentGenerator->_formatSelect($grandParentData, $parentSelect);
-            $where = $parentSelect->getPart(Vps_Component_Select::WHERE_EQUALS);
+            $where = $parentSelect->getPart(Kwf_Component_Select::WHERE_EQUALS);
             if ($where) {
-                foreach ($parentSelect->getPart(Vps_Component_Select::WHERE_EQUALS) as $key => $value) {
+                foreach ($parentSelect->getPart(Kwf_Component_Select::WHERE_EQUALS) as $key => $value) {
                     if (!strpos($key, '.')) { $key = $parentTable . '.' . $key; }
                     $select->where("$key=?", $value);
                 }
             }
-            $where = $parentSelect->getPart(Vps_Component_Select::WHERE);
+            $where = $parentSelect->getPart(Kwf_Component_Select::WHERE);
             if ($where) {
                 foreach ($where as $key => $value) {
                     if (!strpos($key, '.')) { $key = $parentTable . '.' . $key; }
@@ -78,10 +78,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     public function getChildData($parentData, $select = array())
     {
-        Vps_Benchmark::count('GenTable::getChildData');
-        if (is_array($select)) $select = new Vps_Component_Select($select);
+        Kwf_Benchmark::count('GenTable::getChildData');
+        if (is_array($select)) $select = new Kwf_Component_Select($select);
         $ret = array();
-        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE))
+        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE))
                 && !$this->_getModel()->hasColumn('component_id')) {
             $parentDatas = $p->getRecursiveChildComponents(array(
                 'componentClass' => $this->_class
@@ -132,18 +132,18 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         if (isset($row->component_id) && $row->component_id) {
             $constraints = array('componentClass'=>$this->_class);
-            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
-                $constraints['subroot'] = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+            if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
+                $constraints['subroot'] = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
             }
-            if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-                $constraints['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+            if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
+                $constraints['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
             }
-            $ret = Vps_Component_Data_Root::getInstance()
+            $ret = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsByDbId($row->component_id, $constraints);
 
             //streng genommen nicht on same page sondern children of und auf same page
-            //siehe Vps_Component_Generator_RecursiveTable2_RecursiveTest
-            if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+            //siehe Kwf_Component_Generator_RecursiveTable2_RecursiveTest
+            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
                 foreach ($ret as $k=>$i) {
                     $found = false;
                     while ($i) {
@@ -159,21 +159,21 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 }
             }
         } else {
-            $components = Vps_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class, array('ignoreVisible' => true));
+            $components = Kwf_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class, array('ignoreVisible' => true));
             if (count($components) == 1) {
                 return $components[0];
             } else if (count($components) == 0) {
                 return null;
             }
-            throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
+            throw new Kwf_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
         }
         return $ret;
     }
 
-    protected function _formatSelectId(Vps_Component_Select $select)
+    protected function _formatSelectId(Kwf_Component_Select $select)
     {
-        if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
-            $id = $select->getPart(Vps_Model_Select::WHERE_ID);
+        if ($select->hasPart(Kwf_Model_Select::WHERE_ID)) {
+            $id = $select->getPart(Kwf_Model_Select::WHERE_ID);
             $separator = substr($id, 0, 1);
             if (in_array($separator, array('_', '-'))) {
                 $id = substr($id, 1);
@@ -181,7 +181,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     return null;
                 }
                 $select->whereEquals($this->_idColumn, $id);
-                $select->unsetPart(Vps_Model_Select::WHERE_ID);
+                $select->unsetPart(Kwf_Model_Select::WHERE_ID);
             }
         }
         return $select;
@@ -195,11 +195,11 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if ($this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
-            } else if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+            } else if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
                 $p = $p->getPageOrRoot();
-                $select->where(new Vps_Model_Select_Expr_Or(array(
-                    new Vps_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
-                    new Vps_Model_Select_Expr_Equal('component_id', $p->dbId),
+                $select->where(new Kwf_Model_Select_Expr_Or(array(
+                    new Kwf_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
+                    new Kwf_Model_Select_Expr_Equal('component_id', $p->dbId),
                 )));
             }
         }
@@ -207,21 +207,21 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $select = $this->_formatSelectId($select);
         if (is_null($select)) return null;
 
-        if (in_array('pos', $this->_getModel()->getOwnColumns()) && !$select->hasPart(Vps_Component_Select::ORDER)) {
+        if (in_array('pos', $this->_getModel()->getOwnColumns()) && !$select->hasPart(Kwf_Component_Select::ORDER)) {
             $select->order("pos");
         }
 
         static $showInvisible;
         if (is_null($showInvisible)) {
-            $showInvisible = Vps_Config::getValue('showInvisible');
+            $showInvisible = Kwf_Config::getValue('showInvisible');
         }
-        if (!$select->getPart(Vps_Component_Select::IGNORE_VISIBLE)
+        if (!$select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)
             && $this->_getModel()->hasColumn('visible') && !$showInvisible) {
             $select->whereEquals("visible", 1);
         }
 
-        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+        if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
             if (!$selectClasses) return null;
             $childClasses = $this->_settings['component'];
             $keys = array();
@@ -237,7 +237,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 }
             } else {
                 if (!$this->_getModel()->hasColumn('component')) {
-                    throw new Vps_Exception("Column component does not exist for a generator in '$this->_class'");
+                    throw new Kwf_Exception("Column component does not exist for a generator in '$this->_class'");
                 }
                 $select->whereEquals('component', $keys);
             }
@@ -306,7 +306,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $progressBar = null; //stop here, as getDuplicateProgressSteps doesn't go any deeper
 
         if ($source->generator !== $this) {
-            throw new Vps_Exception("you must call this only with the correct source");
+            throw new Kwf_Exception("you must call this only with the correct source");
         }
 
         $data = array();
@@ -322,14 +322,14 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (!$target) {
             return null;
         }
-        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
+        Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
         return $target;
     }
 
     public function makeChildrenVisible($source)
     {
         if ($source->generator !== $this) {
-            throw new Vps_Exception("you must call this only with the correct source");
+            throw new Kwf_Exception("you must call this only with the correct source");
         }
 
         $data = array();
@@ -339,7 +339,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 $source->row->save();
             }
         }
-        Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
+        Kwc_Admin::getInstance($source->componentClass)->makeVisible($source);
     }
 
     public function getGeneratorFlags()

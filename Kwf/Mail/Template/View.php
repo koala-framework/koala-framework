@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail_Template_View extends Vps_View_Mail
+class Kwf_Mail_Template_View extends Kwf_View_Mail
 {
     protected $_mailTplViewMasterTemplate = null;
     protected $_txtTemplate;
@@ -9,34 +9,34 @@ class Vps_Mail_Template_View extends Vps_View_Mail
     {
         parent::__construct();
 
-        // das substr mit Vpc_ muss sein weil auf prosalzburg test server sonst nur eine weiße seite kommt
-        if (is_object($template) || ((substr($template, 0, 4) == 'Vpc_' || substr($template, 0, 4) == 'Vps_')
-            && class_exists($template) && is_instance_of($template, 'Vpc_Abstract'))
+        // das substr mit Kwc_ muss sein weil auf prosalzburg test server sonst nur eine weiße seite kommt
+        if (is_object($template) || ((substr($template, 0, 4) == 'Kwc_' || substr($template, 0, 4) == 'Kwf_')
+            && class_exists($template) && is_instance_of($template, 'Kwc_Abstract'))
         ) {
             if (is_object($template)) {
-                if ($template instanceof Vpc_Abstract) {
+                if ($template instanceof Kwc_Abstract) {
                     $template = $template->getData();
                 }
-                if (!$template instanceof Vps_Component_Data) {
-                    throw new Vps_Exception("template must be instance of 'Vpc_Abstract' or 'Vps_Component_Data'");
+                if (!$template instanceof Kwf_Component_Data) {
+                    throw new Kwf_Exception("template must be instance of 'Kwc_Abstract' or 'Kwf_Component_Data'");
                 }
                 $template = $template->componentClass;
             }
 
-            $this->_txtTemplate = Vpc_Admin::getComponentFile($template, 'Component', 'txt.tpl');
+            $this->_txtTemplate = Kwc_Admin::getComponentFile($template, 'Component', 'txt.tpl');
             if (!$this->_txtTemplate) {
-                throw new Vps_Exception("Component class '$template' needs at least a .txt.tpl mail template.");
+                throw new Kwf_Exception("Component class '$template' needs at least a .txt.tpl mail template.");
             }
-            $this->_htmlTemplate = Vpc_Admin::getComponentFile($template, 'Component', 'html.tpl');
+            $this->_htmlTemplate = Kwc_Admin::getComponentFile($template, 'Component', 'html.tpl');
         } else {
             if (substr($template, 0, 1) == '/') {
-                throw new Vps_Exception("Absolute mail template paths are not allowed. You called '$template'.");
+                throw new Kwf_Exception("Absolute mail template paths are not allowed. You called '$template'.");
             }
 
             if (false === $this->getScriptPath("$template.txt.tpl")) {
                 $template = "mails/$template";
                 if (false === $this->getScriptPath("$template.txt.tpl")) {
-                    throw new Vps_Exception("There has to exist at least a .txt.tpl mail template for '$template'.");
+                    throw new Kwf_Exception("There has to exist at least a .txt.tpl mail template for '$template'.");
                 }
             }
             $this->_txtTemplate = "$template.txt.tpl";
@@ -51,12 +51,12 @@ class Vps_Mail_Template_View extends Vps_View_Mail
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
-            $host = Vps_Registry::get('config')->server->domain;
+            $host = Kwf_Registry::get('config')->server->domain;
         }
         $this->webUrl = 'http://'.$host;
         $this->host = $host;
 
-        $this->applicationName = Vps_Registry::get('config')->application->name;
+        $this->applicationName = Kwf_Registry::get('config')->application->name;
     }
 
     public function getTxtTemplate()

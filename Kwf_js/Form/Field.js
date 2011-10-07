@@ -38,7 +38,7 @@ Ext.form.Field.override({
                         bodyStyle: 'padding: 10px; background-color: white;',
                         autoHeight: true,
                         bodyBorder : false,
-                        title: trlVps('Info'),
+                        title: trlKwf('Info'),
                         resize: false
                     });
                     helpWindow.show();

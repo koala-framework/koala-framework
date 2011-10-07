@@ -1,9 +1,9 @@
 <?php
-class Vps_Controller_Action_Pool_PoolController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Controller_Action_Pool_PoolController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('save', 'add', 'delete');
     protected $_position = 'pos';
-    protected $_tableName = 'Vps_Dao_Pool';
+    protected $_tableName = 'Kwf_Dao_Pool';
 
     protected function _getPool()
     {
@@ -19,12 +19,12 @@ class Vps_Controller_Action_Pool_PoolController extends Vps_Controller_Action_Au
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('value', trlVps('Value'), 300))
-            ->setEditor(new Vps_Form_Field_TextField());
-        $this->_columns->add(new Vps_Grid_Column_Visible());
+        $this->_columns->add(new Kwf_Grid_Column('value', trlKwf('Value'), 300))
+            ->setEditor(new Kwf_Form_Field_TextField());
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 
-    protected function _beforeInsert(Vps_Model_Row_Interface $row, $submitRow)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row, $submitRow)
     {
         parent::_beforeInsert($row, $submitRow);
         $row->pool = $this->_getPool();

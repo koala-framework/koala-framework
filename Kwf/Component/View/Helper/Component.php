@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
+class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
 {
-    public function component(Vps_Component_Data $component = null)
+    public function component(Kwf_Component_Data $component = null)
     {
         if (!$component) return '';
 
@@ -9,7 +9,7 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         $config = array();
         $type = 'component';
 
-        if ($renderer instanceof Vps_Component_Renderer_Mail) {
+        if ($renderer instanceof Kwf_Component_Renderer_Mail) {
             $type = 'mail';
             $config = array(
                 'type' => $renderer->getRenderFormat()
@@ -26,13 +26,13 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
     public function render($componentId, $config)
     {
         $component = $this->_getComponentById($componentId);
-        $template = Vpc_Abstract::getTemplateFile($component->componentClass);
-        if (!$template) throw new Vps_Exception("No Component-Template found for '{$component->componentClass}'");
+        $template = Kwc_Abstract::getTemplateFile($component->componentClass);
+        if (!$template) throw new Kwf_Exception("No Component-Template found for '{$component->componentClass}'");
 
         $vars = $component->getComponent()->getTemplateVars();
-        if (is_null($vars)) throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
+        if (is_null($vars)) throw new Kwf_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
 
-        $view = new Vps_Component_View($this->_getRenderer());
+        $view = new Kwf_Component_View($this->_getRenderer());
         $view->assign($vars);
         return $view->render($template);
     }

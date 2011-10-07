@@ -1,7 +1,7 @@
 <?php
-class Vps_Form_Cards_FooModel extends Vps_Model_Session
+class Kwf_Form_Cards_FooModel extends Kwf_Model_Session
 {
-    protected $_namespace = 'Vps_Form_Cards_FooModel';
+    protected $_namespace = 'Kwf_Form_Cards_FooModel';
     protected $_primaryKey = 'test_id';
     protected $_defaultData = array(
         array('test_id' => 3, 'firstname' => 'Max', 'lastname' =>  'foo', 'job' => 'Tischler'),
@@ -9,9 +9,9 @@ class Vps_Form_Cards_FooModel extends Vps_Model_Session
     );
 
     protected $_referenceMap = array(
-        'Vps_Form_Cards_TopModel' => array(
+        'Kwf_Form_Cards_TopModel' => array(
             'column' => 'test_id',
-            'refModelClass' => 'Vps_Form_Cards_TopModel'
+            'refModelClass' => 'Kwf_Form_Cards_TopModel'
         )
     );
 }

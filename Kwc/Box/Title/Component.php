@@ -1,10 +1,10 @@
 <?php
-class Vpc_Box_Title_Component extends Vpc_Abstract
+class Kwc_Box_Title_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Title');
+        $ret['componentName'] = trlKwf('Title');
         return $ret;
     }
 
@@ -18,7 +18,7 @@ class Vpc_Box_Title_Component extends Vpc_Abstract
 
     protected function _getApplicationTitle()
     {
-        return Vps_Config::getValue('application.name');
+        return Kwf_Config::getValue('application.name');
     }
 
     public function getTemplateVars()
@@ -30,6 +30,6 @@ class Vpc_Box_Title_Component extends Vpc_Abstract
 
     public static function getStaticCacheMeta($componentClass)
     {
-        return Vpc_Menu_Component::getStaticCacheMeta($componentClass);
+        return Kwc_Menu_Component::getStaticCacheMeta($componentClass);
     }
 }

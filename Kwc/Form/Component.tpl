@@ -1,15 +1,15 @@
-<div class="<?=$this->cssClass?><?if($this->isPosted){?> vpsImportant<?}?>">
+<div class="<?=$this->cssClass?><?if($this->isPosted){?> kwfImportant<?}?>">
     <input type="hidden" class="config" value="<?= htmlspecialchars(Zend_Json::encode($this->config)) ?>" />
 <?php
 if ($this->showSuccess) {
     echo $this->component($this->success);
 } else if ($this->message) {
-    echo '<div class="webStandard webForm vpcForm">';
+    echo '<div class="webStandard webForm kwcForm">';
     echo $this->message;
     echo '</div>';
 } else {
     if ($this->errors) {
-        echo '<div class="webStandard vpcFormError webFormError">';
+        echo '<div class="webStandard kwcFormError webFormError">';
         echo '<p class="error">'.$this->placeholder['error'].':</p>';
         echo '<ul>';
         foreach ($this->errors as $error) {
@@ -20,7 +20,7 @@ if ($this->showSuccess) {
     }
     ?>
     <? if ($this->form) { ?>
-    <div class="webStandard webForm vpcForm">
+    <div class="webStandard webForm kwcForm">
     <form action="<?= $this->action ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
         <?php $this->formField($this->form) ?>
         <div class="submitWrapper <?=$this->buttonClass?>">

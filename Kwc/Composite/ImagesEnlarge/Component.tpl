@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?> vpsEnlargeNextPrevious">
+<div class="<?=$this->cssClass?> kwfEnlargeNextPrevious">
     <?php foreach ($this->children as $child) { ?>
         <div class="thumbOuter">
             <div class="thumb" style="width:<?= $this->smallMaxWidth; ?>px; height:<?= $this->smallMaxHeight; ?>px;">

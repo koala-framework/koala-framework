@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_Generator_PseudoPage_Static extends Vps_Component_Generator_Static
+class Kwf_Component_Generator_PseudoPage_Static extends Kwf_Component_Generator_Static
 {
-    protected function _formatSelectFilename(Vps_Component_Select $select)
+    protected function _formatSelectFilename(Kwf_Component_Select $select)
     {
         return $select;
     }
@@ -9,8 +9,8 @@ class Vps_Component_Generator_PseudoPage_Static extends Vps_Component_Generator_
     protected function _acceptKey($key, $select, $parentData)
     {
         $ret = parent::_acceptKey($key, $select, $parentData);
-        if ($ret && $select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+        if ($ret && $select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Kwf_Component_Select::WHERE_FILENAME);
             if ($filename != $this->_getFilenameFromRow($key, $parentData)) return false;
         }
         return $ret;
@@ -34,7 +34,7 @@ class Vps_Component_Generator_PseudoPage_Static extends Vps_Component_Generator_
         if (!$ret) {
             $ret = $componentKey;
         }
-        return Vps_Filter::filterStatic($ret, 'Ascii');
+        return Kwf_Filter::filterStatic($ret, 'Ascii');
     }
 
     protected function _formatConfig($parentData, $componentKey)

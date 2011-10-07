@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Acl_Resource_Abstract extends Zend_Acl_Resource
+abstract class Kwf_Acl_Resource_Abstract extends Zend_Acl_Resource
 {
     protected $_menuConfig;
 

@@ -1,12 +1,12 @@
 <?php
-class Vpc_Box_Favicon_Component extends Vpc_Basic_Image_Component
+class Kwc_Box_Favicon_Component extends Kwc_Basic_Image_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Favicon');
+        $ret['componentName'] = trlKwf('Favicon');
         $ret['dimensions'] = array(
-            array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_ORIGINAL)
+            array('width'=>16, 'height'=>16, 'scale'=>Kwf_Media_Image::SCALE_ORIGINAL)
         );
         return $ret;
     }

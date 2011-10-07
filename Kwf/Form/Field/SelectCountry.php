@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
+class Kwf_Form_Field_SelectCountry extends Kwf_Form_Field_Select
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -14,9 +14,9 @@ class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
         parent::trlStaticExecute($language);
 
         $values = array();
-        if (!$language) $language = Vps_Trl::getInstance()->getTargetLanguage();
+        if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
         $nameColumn = 'name_'.$language;
-        foreach (Vps_Model_Abstract::getInstance('Vps_Util_Model_Countries')->getRows() as $row) {
+        foreach (Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Countries')->getRows() as $row) {
             $values[$row->id] = $row->$nameColumn;
         }
         asort($values, SORT_LOCALE_STRING);

@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_BoxWithoutLogin_LoggedIn_Component extends Vpc_Abstract
+class Kwc_User_BoxWithoutLogin_LoggedIn_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -13,12 +13,12 @@ class Vpc_User_BoxWithoutLogin_LoggedIn_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['authedUser'] = Vps_Registry::get('userModel')->getAuthedUser();
+        $ret['authedUser'] = Kwf_Registry::get('userModel')->getAuthedUser();
 
         /*
-        $userDir = Vps_Component_Data_Root::getInstance()
+        $userDir = Kwf_Component_Data_Root::getInstance()
             ->getComponentByClass(
-                'Vpc_User_Directory_Component',
+                'Kwc_User_Directory_Component',
                 array('subroot' => $this->getData())
             );
         if ($userDir) {
@@ -34,8 +34,8 @@ class Vpc_User_BoxWithoutLogin_LoggedIn_Component extends Vpc_Abstract
 
     protected function _getLinks()
     {
-        $ret = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_User_Edit_Component');
+        $ret = Kwf_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Kwc_User_Edit_Component');
         return $ret;
     }
 }

@@ -1,10 +1,10 @@
 <?php
-class Vpc_Export_Xml_Trl_Component extends Vpc_Chained_Trl_MasterAsChild_Component
+class Kwc_Export_Xml_Trl_Component extends Kwc_Chained_Trl_MasterAsChild_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['contentSender'] = 'Vpc_Export_Xml_Trl_ContentSender';
+        $ret['contentSender'] = 'Kwc_Export_Xml_Trl_ContentSender';
         return $ret;
     }
 

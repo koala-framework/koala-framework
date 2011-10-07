@@ -1,14 +1,14 @@
 <?php
-class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
 {
 
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['componentIcon'] = new Vps_Asset('page');
-        $ret['generators']['paragraphs']['class'] = 'Vpc_Paragraphs_Trl_Generator';
-        $ret['childModel'] = 'Vpc_Paragraphs_Trl_Model';
-        $ret['extConfig'] = 'Vpc_Paragraphs_Trl_ExtConfig';
+        $ret['componentIcon'] = new Kwf_Asset('page');
+        $ret['generators']['paragraphs']['class'] = 'Kwc_Paragraphs_Trl_Generator';
+        $ret['childModel'] = 'Kwc_Paragraphs_Trl_Model';
+        $ret['extConfig'] = 'Kwc_Paragraphs_Trl_ExtConfig';
         return $ret;
     }
 
@@ -32,7 +32,7 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vpc_Chained_Abstract_ParentIdCacheMeta(Vpc_Abstract::getSetting($componentClass, 'childModel'));
+        $ret[] = new Kwc_Chained_Abstract_ParentIdCacheMeta(Kwc_Abstract::getSetting($componentClass, 'childModel'));
         return $ret;
     }
 }

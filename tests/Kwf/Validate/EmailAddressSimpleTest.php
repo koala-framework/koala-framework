@@ -2,13 +2,13 @@
 /**
  * @group Validate
  */
-class Vps_Validate_EmailAddressSimpleTest extends Vps_Test_TestCase
+class Kwf_Validate_EmailAddressSimpleTest extends Kwf_Test_TestCase
 {
     private $_v;
     public function setUp()
     {
         parent::setUp();
-        $this->_v = new Vps_Validate_EmailAddressSimple();
+        $this->_v = new Kwf_Validate_EmailAddressSimple();
     }
 
     public function testValid()

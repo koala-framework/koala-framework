@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?>">
 <? if($this->data->hasContent()) { ?>
 
-    <? if ($this->text && ($this->text instanceof Vps_Component_Data)) { ?>
+    <? if ($this->text && ($this->text instanceof Kwf_Component_Data)) { ?>
         <?if ($this->hasContent($this->text)) {?>
             <div class="text">
                 <?= $this->component($this->text); ?>
@@ -20,14 +20,14 @@
 
     <? if ($this->options['routing']) { ?>
         <form action="#" class="fromAddress printHidden">
-            <input type="text" class="textBefore vpsClearOnFocus" value="<?= $this->data->trlVps('Place of departure: zip code, Town, Street'); ?>" />
-            <button class="submitOn"><?= $this->data->trlVps('Show Route') ?></button>
+            <input type="text" class="textBefore kwfClearOnFocus" value="<?= $this->data->trlKwf('Place of departure: zip code, Town, Street'); ?>" />
+            <button class="submitOn"><?= $this->data->trlKwf('Show Route') ?></button>
             <div class="clear"></div>
         </form>
     <? } ?>
 
     <div class="mapDirSuggestParent">
-        <b><?= $this->data->trlVps('Suggestions') ?></b>
+        <b><?= $this->data->trlKwf('Suggestions') ?></b>
         <ul class="mapDirSuggest"></ul>
     </div>
 

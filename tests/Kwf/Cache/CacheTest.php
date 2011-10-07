@@ -1,11 +1,11 @@
 <?php
-class Vps_Cache_CacheTest extends Vps_Test_TestCase
+class Kwf_Cache_CacheTest extends Kwf_Test_TestCase
 {
     public function testCacheMtimeFiles()
     {
-        $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
-        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = false;
-        Vps_Config::deleteValueCache('debug.componentCache.checkComponentModification');
+        $checkCmpMod = Kwf_Registry::get('config')->debug->componentCache->checkComponentModification;
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = false;
+        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
 
         $f = tempnam('/tmp', 'cacheMtimeTest');
         $filemtime = filemtime($f);
@@ -19,7 +19,7 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
         );
         $cacheData = $cacheDataOrig;
 
-        $cache = new Vps_Cache_CacheClass();
+        $cache = new Kwf_Cache_CacheClass();
         $cache->save($cacheData, $cacheId);
         $this->assertEquals($cacheDataOrig, $cacheData);
 
@@ -31,23 +31,23 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
 
         $this->assertEquals($cacheData, $cache->load($cacheId));
 
-        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = true;
-        Vps_Config::deleteValueCache('debug.componentCache.checkComponentModification');
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = true;
+        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
 
         $this->assertFalse($cache->load($cacheId));
 
         unlink($f);
         $cache->cleanUp();
 
-        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
-        Vps_Config::deleteValueCache('debug.componentCache.checkComponentModification');
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
+        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 
     public function testCacheMtimeFilesCheckAlways()
     {
-        $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
-        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = false;
-        Vps_Config::deleteValueCache('debug.componentCache.checkComponentModification');
+        $checkCmpMod = Kwf_Registry::get('config')->debug->componentCache->checkComponentModification;
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = false;
+        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
 
         $f = tempnam('/tmp', 'cacheMtimeTestCheckAlways');
         $filemtime = filemtime($f);
@@ -61,7 +61,7 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
         );
         $cacheData = $cacheDataOrig;
 
-        $cache = new Vps_Cache_CacheClass();
+        $cache = new Kwf_Cache_CacheClass();
         $cache->save($cacheData, $cacheId);
         $this->assertEquals($cacheDataOrig, $cacheData);
 
@@ -76,7 +76,7 @@ class Vps_Cache_CacheTest extends Vps_Test_TestCase
         unlink($f);
         $cache->cleanUp();
 
-        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
-        Vps_Config::deleteValueCache('debug.componentCache.checkComponentModification');
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
+        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 }

@@ -1,4 +1,4 @@
-Vps.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     largeContentSelector: '.largeContent',
     largeContainerSelector: '.listSwitchLargeContent',
     transition: 'fade',

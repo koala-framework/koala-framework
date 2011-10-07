@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Image_Root extends Vps_Component_NoCategoriesRoot
+class Kwc_Basic_Image_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['page']['model'] = new Vps_Model_FnF(array('data'=>array(
+        $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1600, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
                   'parent_id'=>'root', 'component'=>'imageFix', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
             array('id'=>1601, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
@@ -42,12 +42,12 @@ class Vpc_Basic_Image_Root extends Vps_Component_NoCategoriesRoot
 
         )));
         $ret['generators']['page']['component'] = array(
-            'image' => 'Vpc_Basic_Image_TestComponent',
-            'imageFix' => 'Vpc_Basic_Image_FixDimensionComponent',
-            'emptyImage' => 'Vpc_Basic_Image_EmptyImageComponent',
-            'parentImage' => 'Vpc_Basic_Image_ParentImageComponent_Component',
-            'bestFitWithZeroHeight' => 'Vpc_Basic_Image_BestFitWithZeroHeightComponent',
-            'multipleDimensions' => 'Vpc_Basic_Image_MultipleDimensionsComponent'
+            'image' => 'Kwc_Basic_Image_TestComponent',
+            'imageFix' => 'Kwc_Basic_Image_FixDimensionComponent',
+            'emptyImage' => 'Kwc_Basic_Image_EmptyImageComponent',
+            'parentImage' => 'Kwc_Basic_Image_ParentImageComponent_Component',
+            'bestFitWithZeroHeight' => 'Kwc_Basic_Image_BestFitWithZeroHeightComponent',
+            'multipleDimensions' => 'Kwc_Basic_Image_MultipleDimensionsComponent'
         );
 
         unset($ret['generators']['title']);

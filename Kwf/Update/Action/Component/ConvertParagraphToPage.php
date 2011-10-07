@@ -1,18 +1,18 @@
 <?php
-class Vps_Update_Action_Component_ConvertParagraphToPage extends Vps_Update_Action_Abstract
+class Kwf_Update_Action_Component_ConvertParagraphToPage extends Kwf_Update_Action_Abstract
 {
     public function checkSettings()
     {
         parent::checkSettings();
         if (!$this->key || !$this->class) {
-            throw new Vps_Exception_Client("Required parameters: key, class");
+            throw new Kwf_Exception_Client("Required parameters: key, class");
         }
     }
 
     public function update()
     {
-        $paragraphs = Vps_Model_Abstract::getInstance('Vpc_Paragraphs_Model');
-        $pages = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        $paragraphs = Kwf_Model_Abstract::getInstance('Kwc_Paragraphs_Model');
+        $pages = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel');
         $select = $paragraphs->select()->whereEquals('component', $this->key);
         foreach ($paragraphs->getRows($select) as $row) {
             if ((int)$row->component_id != $row->component_id) {
@@ -27,7 +27,7 @@ class Vps_Update_Action_Component_ConvertParagraphToPage extends Vps_Update_Acti
             $page->component = $this->key;
             $page->save();
 
-            $update = new Vps_Update_Action_Component_ConvertComponentIds(array(
+            $update = new Kwf_Update_Action_Component_ConvertComponentIds(array(
                 'search' => $row->component_id . '-' . $row->id,
                 'replace' => $row->component_id,
                 'pattern' => $row->component_id . '-' . $row->id . '%'

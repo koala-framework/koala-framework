@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_List_Feed_Trl_Component extends Vpc_Chained_Trl_MasterAsChild_Component
+class Kwc_Directories_List_Feed_Trl_Component extends Kwc_Chained_Trl_MasterAsChild_Component
 {
     public function getItemDirectory()
     {
@@ -13,6 +13,6 @@ class Vpc_Directories_List_Feed_Trl_Component extends Vpc_Chained_Trl_MasterAsCh
 
     public function getCacheMeta()
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Kwf_Exception_NotYetImplemented();
     }
 }

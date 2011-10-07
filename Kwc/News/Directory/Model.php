@@ -1,6 +1,6 @@
 <?php
-class Vpc_News_Directory_Model extends Vps_Model_Db_Proxy
+class Kwc_News_Directory_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_news';
-    protected $_rowClass = 'Vpc_News_Directory_Row';
+    protected $_table = 'kwc_news';
+    protected $_rowClass = 'Kwc_News_Directory_Row';
 }

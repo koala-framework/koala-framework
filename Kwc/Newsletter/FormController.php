@@ -1,9 +1,9 @@
 <?php
-class Vpc_Newsletter_FormController extends Vps_Controller_Action_Auto_Vpc_Form
+class Kwc_Newsletter_FormController extends Kwf_Controller_Action_Auto_Kwc_Form
 {
     protected $_buttons = array();
     protected $_permissions = array('save', 'add');
-    protected $_formName = 'Vpc_Newsletter_Detail_Form';
+    protected $_formName = 'Kwc_Newsletter_Detail_Form';
 
     public function preDispatch()
     {

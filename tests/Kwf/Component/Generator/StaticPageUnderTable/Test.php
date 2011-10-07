@@ -2,11 +2,11 @@
 /**
  * @group Generator_StaticPageUnderTable
  */
-class Vps_Component_Generator_StaticPageUnderTable_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_StaticPageUnderTable_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_StaticPageUnderTable_Root');
+        parent::setUp('Kwf_Component_Generator_StaticPageUnderTable_Root');
 /*
 root
   page1 (page)

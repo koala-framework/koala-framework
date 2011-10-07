@@ -1,6 +1,6 @@
 <?php
-require_once 'Vps/Exception/NoLog.php';
-class Vps_Exception extends Vps_Exception_NoLog
+require_once 'Kwf/Exception/NoLog.php';
+class Kwf_Exception extends Kwf_Exception_NoLog
 {
     /**
      * Informiert den Entwickler über diese Exception

@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_UniqueAscii extends Vps_Filter_Row_Abstract
+class Kwf_Filter_Row_UniqueAscii extends Kwf_Filter_Row_Abstract
 {
     private $_sourceField;
     private $_groupBy = array();
@@ -35,10 +35,10 @@ class Vps_Filter_Row_UniqueAscii extends Vps_Filter_Row_Abstract
             $f = $this->_sourceField;
             $value = $row->$f;
         }
-        $value = Vps_Filter::filterStatic($value, 'Ascii');
+        $value = Kwf_Filter::filterStatic($value, 'Ascii');
 
-        if ($row instanceof Vps_Model_Row_Interface) {
-            $select = new Vps_Model_Select();
+        if ($row instanceof Kwf_Model_Row_Interface) {
+            $select = new Kwf_Model_Select();
             foreach ($this->_groupBy as $f) {
                 $select->whereEquals($f, $row->$f);
             }

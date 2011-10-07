@@ -1,19 +1,19 @@
 <?php
 /**
- * @group Vps_Form_DateTimeField
+ * @group Kwf_Form_DateTimeField
  */
-class Vps_Form_DateTimeField_Test extends Vps_Test_TestCase
+class Kwf_Form_DateTimeField_Test extends Kwf_Test_TestCase
 {
     public function testDateTime()
     {
-        $m1 = new Vps_Model_FnF();
-        $form = new Vps_Form();
+        $m1 = new Kwf_Model_FnF();
+        $form = new Kwf_Form();
         $form->setModel($m1);
-        $field1 = $form->add(new Vps_Form_Field_DateTimeField('dtftest1', 'dtf label'))
+        $field1 = $form->add(new Kwf_Form_Field_DateTimeField('dtftest1', 'dtf label'))
             ->setAllowBlank(false);
-        $field2 = $form->add(new Vps_Form_Field_DateTimeField('dtftest2', 'dtf label2'))
+        $field2 = $form->add(new Kwf_Form_Field_DateTimeField('dtftest2', 'dtf label2'))
             ->setAllowBlank(false);
-        $field3 = $form->add(new Vps_Form_Field_DateTimeField('dtftest3', 'dtf label2'))
+        $field3 = $form->add(new Kwf_Form_Field_DateTimeField('dtftest3', 'dtf label2'))
             ->setAllowBlank(false);
 
         $post = array(

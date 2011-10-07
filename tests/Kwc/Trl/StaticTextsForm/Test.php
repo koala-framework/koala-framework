@@ -1,23 +1,23 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_Trl_StaticTexts
- * @group Vpc_Trl_StaticTexts_Form
+ * @group Kwc_Trl
+ * @group Kwc_Trl_StaticTexts
+ * @group Kwc_Trl_StaticTexts_Form
  */
-class Vpc_Trl_StaticTextsForm_Test extends Vpc_TestAbstract
+class Kwc_Trl_StaticTextsForm_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        Vps_Registry::get('config')->languages = array('de', 'en');
-        Vps_Trl::getInstance()->setWebCodeLanguage('de');
-        Vps_Trl::getInstance()->setModel(new Vpc_Trl_StaticTextsForm_TrlModelWeb(), Vps_Trl::SOURCE_WEB);
-        parent::setUp('Vpc_Trl_StaticTextsForm_Root');
+        Kwf_Registry::get('config')->languages = array('de', 'en');
+        Kwf_Trl::getInstance()->setWebCodeLanguage('de');
+        Kwf_Trl::getInstance()->setModel(new Kwc_Trl_StaticTextsForm_TrlModelWeb(), Kwf_Trl::SOURCE_WEB);
+        parent::setUp('Kwc_Trl_StaticTextsForm_Root');
     }
 
     public function tearDown()
     {
-        Vps_Trl::getInstance()->setWebCodeLanguage(null);
-        Vps_Trl::getInstance()->setModel(null, Vps_Trl::SOURCE_WEB);
+        Kwf_Trl::getInstance()->setWebCodeLanguage(null);
+        Kwf_Trl::getInstance()->setModel(null, Kwf_Trl::SOURCE_WEB);
         parent::tearDown();
     }
 
@@ -25,7 +25,7 @@ class Vpc_Trl_StaticTextsForm_Test extends Vpc_TestAbstract
     {
         // web code language is 'de', tested language is 'en'
 
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/en/testtrl', 'en');
+        $c = $this->_root->getPageByUrl('http://'.Kwf_Registry::get('config')->server->domain.'/en/testtrl', 'en');
         $this->assertEquals('en', $c->getLanguage());
         $c->getChildComponent('-child')->getComponent()->processInput(array());
 

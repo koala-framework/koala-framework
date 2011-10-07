@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
+class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
 {
     protected $_mail;
     private $_mailData = array();
@@ -19,7 +19,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         } else if ($type == self::MAIL_CONTENT_TEXT) {
             return $this->sent_mail_content_text;
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 
@@ -31,11 +31,11 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     public function sendMail()
     {
         if ($this->mail_sent) {
-            throw new Vps_Exception("'sendMail' may only be called once");
+            throw new Kwf_Exception("'sendMail' may only be called once");
         }
 
         if (!$this->sent_mail_content_text) {
-            throw new Vps_Exception("text content must be set when sending a mail");
+            throw new Kwf_Exception("text content must be set when sending a mail");
         }
 
         if ($this->is_spam) {
@@ -106,9 +106,9 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $varsRow = $siblingRows['vars'];
 
         if (!empty($essentialsRow->masterTemplate)) {
-            $view = new Vps_Mail_Template_View($essentialsRow->template, $essentialsRow->masterTemplate);
+            $view = new Kwf_Mail_Template_View($essentialsRow->template, $essentialsRow->masterTemplate);
         } else {
-            $view = new Vps_Mail_Template_View($essentialsRow->template);
+            $view = new Kwf_Mail_Template_View($essentialsRow->template);
         }
 
         $view->vars = $varsRow;
@@ -145,7 +145,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
 
     protected function _checkIsSpam()
     {
-        if (!$this->id) throw new Vps_Exception("row wurde noch nie gespeichert, daher spam check nicht möglich da keine id vorhanden");
+        if (!$this->id) throw new Kwf_Exception("row wurde noch nie gespeichert, daher spam check nicht möglich da keine id vorhanden");
 
         $siblingRows = $this->_getSiblingRows();
         $essentialsRow = $siblingRows['essentials'];
@@ -163,7 +163,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         }
         $text = implode("\n", $text);
 
-        return Vps_Util_Check_Spam::checkIsSpam($text, $this);
+        return Kwf_Util_Check_Spam::checkIsSpam($text, $this);
     }
 
     // sets for mail essentails
@@ -222,7 +222,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             if ($file->encoding == Zend_Mime::ENCODING_BASE64) {
                 $fileContent = base64_decode($fileContent);
             } else {
-                throw new Vps_Exception_NotYetImplemented("File encoding type '".$file->encoding."' not supported yet");
+                throw new Kwf_Exception_NotYetImplemented("File encoding type '".$file->encoding."' not supported yet");
             }
             $fileMd5 = md5($file->getContent());
             $newFilepath = $copyDir.'/'.$fileMd5;
@@ -241,7 +241,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             }
 
             $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : basename($file));
-            $attachRow->mime_type = (!is_null($mimeType) ? $mimeType : Vps_Uploads_Row::detectMimeType(false, file_get_contents($newFilepath)));
+            $attachRow->mime_type = (!is_null($mimeType) ? $mimeType : Kwf_Uploads_Row::detectMimeType(false, file_get_contents($newFilepath)));
         }
 
         $attachRow->filename = $fileMd5;
@@ -250,7 +250,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
 
     public function addAttachment($file, $mailFilename = null)
     {
-        if (is_object($file) && is_instance_of($file, 'Vps_Uploads_Row')) {
+        if (is_object($file) && is_instance_of($file, 'Kwf_Uploads_Row')) {
             // sollten uploads mal gelöscht werden, müssen diese auch in den
             // unterordner kopiert werden
             $attachRow = $this->createChildRow('Attachments');
@@ -364,10 +364,10 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $attachmentRows = $this->getChildRows('Attachments');
         foreach ($attachmentRows as $attachmentRow) {
             if ($attachmentRow->is_upload) {
-                $uploadRow = Vps_Model_Abstract::getInstance($attachmentRow->upload_model)
+                $uploadRow = Kwf_Model_Abstract::getInstance($attachmentRow->upload_model)
                     ->getRow($attachmentRow->filename);
                 if (!$uploadRow) {
-                    throw new Vps_Exception("UploadRow '".$attachmentRow->filename."' konnte in Upload Model '".$attachmentRow->upload_model."' nicht gefunden werden");
+                    throw new Kwf_Exception("UploadRow '".$attachmentRow->filename."' konnte in Upload Model '".$attachmentRow->upload_model."' nicht gefunden werden");
                 }
                 $mime = new Zend_Mime_Part(file_get_contents($uploadRow->getFileSource()));
                 $mime->filename = $attachmentRow->mail_filename;

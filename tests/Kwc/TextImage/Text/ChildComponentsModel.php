@@ -1,4 +1,4 @@
 <?php
-class Vpc_TextImage_Text_ChildComponentsModel extends Vps_Model_FnF
+class Kwc_TextImage_Text_ChildComponentsModel extends Kwf_Model_FnF
 {
 }

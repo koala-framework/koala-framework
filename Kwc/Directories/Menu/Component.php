@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
+class Kwc_Directories_Menu_Component extends Kwc_Menu_Abstract_Component
 {
     public function getTemplateVars()
     {
@@ -8,10 +8,10 @@ class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
         $itemDirectory = $this->_getItemDirectory();
 
         if ($itemDirectory) {
-            $classes = Vpc_Abstract::getChildComponentClasses($itemDirectory->componentClass);
+            $classes = Kwc_Abstract::getChildComponentClasses($itemDirectory->componentClass);
             foreach ($classes as $c) {
-                if (Vpc_Abstract::hasSetting($c, 'categoryName')) {
-                    $name = Vpc_Abstract::getSetting($c, 'categoryName');
+                if (Kwc_Abstract::hasSetting($c, 'categoryName')) {
+                    $name = Kwc_Abstract::getSetting($c, 'categoryName');
                     $parent = $itemDirectory->getChildComponent(array('componentClass'=>$c));
                     if ($parent) {
                         $ret['categories'][$name] = $this->_getMenuData($parent);
@@ -31,7 +31,7 @@ class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
     {
         $data = $this->getData();
         while ($data = $data->parent) {
-            if (is_instance_of($data->componentClass, 'Vpc_Directories_List_Component')) {
+            if (is_instance_of($data->componentClass, 'Kwc_Directories_List_Component')) {
                 return $data->getComponent()->getItemDirectory();
             }
         }

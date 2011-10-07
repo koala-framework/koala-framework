@@ -1,5 +1,5 @@
 <?php
-class Vps_Collection_Iterator_Recursive extends Vps_Collection_Iterator
+class Kwf_Collection_Iterator_Recursive extends Kwf_Collection_Iterator
     implements RecursiveIterator
 {
     public function hasChildren()
@@ -9,6 +9,6 @@ class Vps_Collection_Iterator_Recursive extends Vps_Collection_Iterator
 
     public function getChildren()
     {
-        return new Vps_Collection_Iterator_Recursive($this->current()->getChildren());
+        return new Kwf_Collection_Iterator_Recursive($this->current()->getChildren());
     }
 }

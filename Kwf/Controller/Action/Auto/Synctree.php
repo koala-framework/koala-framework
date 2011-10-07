@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action_Auto_Abstract
+abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action_Auto_Abstract
 {
     const ADD_LAST = 0;
     const ADD_FIRST = 1;
@@ -41,12 +41,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     public function indexAction()
     {
         $this->view->controllerUrl = $this->getRequest()->getPathInfo();
-        $this->view->xtype = 'vps.autotreesync';
+        $this->view->xtype = 'kwf.autotreesync';
     }
 
     public function setTable($table)
     {
-        $this->_model = new Vps_Model_Db(array(
+        $this->_model = new Kwf_Model_Db(array(
             'table' => $table
         ));
     }
@@ -63,13 +63,13 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $this->_model = new $this->_modelName();
         }
         if (isset($this->_table)) {
-            $this->_model = new Vps_Model_Db(array('table' => $this->_table));
+            $this->_model = new Kwf_Model_Db(array('table' => $this->_table));
         }
         if (!isset($this->_model)) {
-            throw new Vps_Exception('$_model oder $_modelName not set');
+            throw new Kwf_Exception('$_model oder $_modelName not set');
         }
 
-        $this->_filters = new Vps_Collection();
+        $this->_filters = new Kwf_Collection();
 
         $this->_init();
 
@@ -97,12 +97,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $this->_hasPosition = in_array('pos', $cols);
         }
         if ($this->_hasPosition && !in_array('pos', $cols)) {
-            throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
+            throw new Kwf_Exception("_hasPosition is true, but 'pos' does not exist in database");
         }
 
         foreach ($this->_icons as $k=>$i) {
             if (is_string($i)) {
-                $this->_icons[$k] = new Vps_Asset($i);
+                $this->_icons[$k] = new Kwf_Asset($i);
             }
         }
 
@@ -117,7 +117,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         // - GET query-Parameter setzen,
         // - Im JavaScript nach rechts verschieben und Defaultwert setzen
         foreach ($this->_filters as $filter) {
-            if ($filter instanceof Vps_Controller_Action_Auto_Filter_Text) continue;
+            if ($filter instanceof Kwf_Controller_Action_Auto_Filter_Text) continue;
             $param = $filter->getParamName();
             if ($filter->getConfig('default') && !$this->_getParam($param)) {
                 $this->_setParam($param, $filter->getConfig('default'));
@@ -171,7 +171,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         if ($row) {
             $this->view->data = $this->_formatNode($row);
         } else {
-            throw new Vps_ClientException('Couldn\'t find row with id ' . $id);
+            throw new Kwf_ClientException('Couldn\'t find row with id ' . $id);
         }
     }
 
@@ -209,9 +209,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $containsExpression = array();
         foreach ($this->_queryFields as $queryField) {
-            $containsExpression[] = new Vps_Model_Select_Expr_Contains($queryField, $query);
+            $containsExpression[] = new Kwf_Model_Select_Expr_Contains($queryField, $query);
         }
-        return new Vps_Model_Select_Expr_Or($containsExpression);
+        return new Kwf_Model_Select_Expr_Or($containsExpression);
     }
 
     protected function _filterNodes()
@@ -281,7 +281,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
         $fieldname = $node['sort'][0]['field'];
         if ($node && isset($node['data'][$fieldname])) {
-            usort($ret, array("Vps_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
+            usort($ret, array("Kwf_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
         }
         foreach ($ret as &$r) unset($r['sort']);
         return $ret;
@@ -308,7 +308,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected function _fetchData($parentRow)
     {
         $select = $this->_getSelect();
-        if ($this->_model instanceof Vps_Model_Tree_Interface) {
+        if ($this->_model instanceof Kwf_Model_Tree_Interface) {
             if (!$parentRow) {
                 return $this->_model->getRootNodes($select);
             } else {
@@ -352,13 +352,13 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $primaryKey = $this->_primaryKey;
         $data['id'] = $row->$primaryKey;
         if (!$row->hasColumn($this->_textField)) {
-            throw new Vps_Exception("Column '{$this->_textField}' not found, please overwrite \$_textField");
+            throw new Kwf_Exception("Column '{$this->_textField}' not found, please overwrite \$_textField");
         }
         $data['text'] = $row->{$this->_textField};
         $data['data'] = $row->toArray();
         $data['leaf'] = false;
         $data['visible'] = true;
-        $data['uiProvider'] = 'Vps.Tree.Node';
+        $data['uiProvider'] = 'Kwf.Tree.Node';
         if (isset($row->visible) && $row->visible == '0') { //TODO visible nicht hardcodieren
             $data['visible'] = false;
             $data['bIcon'] = $this->_icons['invisible']->__toString();
@@ -367,7 +367,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $data['bIcon'] = $this->_icons['default']->__toString();
         }
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
-        $data['uiProvider'] = 'Vps.Tree.Node';
+        $data['uiProvider'] = 'Kwf.Tree.Node';
         $id = $row->$primaryKey;
         if ($openedNodes == 'all' ||
             (isset($openedNodes[$id]) && $openedNodes[$id]) ||
@@ -413,7 +413,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $row = $this->_model->find($id)->current();
         if (!$this->_hasPermissions($row, 'visible')) {
-            throw new Vps_Exception("Making visible/unvisible is not allowed for this row.");
+            throw new Kwf_Exception("Making visible/unvisible is not allowed for this row.");
         }
         $this->_changeVisibility($row);
         $this->view->id = $row->save();
@@ -425,7 +425,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
     }
 
-    protected function _changeVisibility(Vps_Model_Row_Interface $row)
+    protected function _changeVisibility(Kwf_Model_Row_Interface $row)
     {
         $row->visible = $row->visible == '0' ? '1' : '0';
     }
@@ -439,12 +439,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
         $row = $this->_model->createRow($insert);
         if (!$this->_hasPermissions($row, 'add')) {
-            throw new Vps_Exception("Save is not allowed for this row.");
+            throw new Kwf_Exception("Save is not allowed for this row.");
         }
         $row->save();
         $data = $this->_formatNode($row);
         foreach ($data as $k=>$i) {
-            if ($i instanceof Vps_Asset) {
+            if ($i instanceof Kwf_Asset) {
                 $data[$k] = $i->__toString();
             }
         }
@@ -455,9 +455,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         $row = $this->_model->find($id)->current();
-        if (!$row) throw new Vps_Exception("No entry with id '$id' found");
+        if (!$row) throw new Kwf_Exception("No entry with id '$id' found");
         if (!$this->_hasPermissions($row, 'delete')) {
-            throw new Vps_Exception("Delete is not allowed for this row.");
+            throw new Kwf_Exception("Delete is not allowed for this row.");
         }
         $this->_beforeDelete($row);
         $row->delete();
@@ -473,11 +473,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $parentField = $this->_parentField;
         $row = $this->_model->getRow($source);
         if (!$this->_hasPermissions($row, 'move')) {
-            throw new Vps_Exception("Moving this node is not allowed.");
+            throw new Kwf_Exception("Moving this node is not allowed.");
         }
         $targetRow = $this->_model->getRow($target);
         if (!$this->_hasPermissions($targetRow, 'moveTo')) {
-            throw new Vps_Exception("Moving here is not allowed.");
+            throw new Kwf_Exception("Moving here is not allowed.");
         }
         $this->_beforeSaveMove($row);
 
@@ -493,7 +493,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                     $row->pos = '1';
                 }
             } else {
-                $this->view->error = trlVps('Cannot move here. View has been reloaded, please try again.');
+                $this->view->error = trlKwf('Cannot move here. View has been reloaded, please try again.');
             }
         } else {
             if ($targetRow) {
@@ -511,7 +511,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 }
                 $row->$parentField = $targetRow->$parentField;
             } else {
-                $this->view->error = trlVps('Cannot move here.');
+                $this->view->error = trlKwf('Cannot move here.');
             }
         }
         $row->save();
@@ -545,7 +545,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     }
 
     protected function _beforeSaveMove($row) {}
-    protected function _beforeDelete(Vps_Model_Row_Interface $row) {}
+    protected function _beforeDelete(Kwf_Model_Row_Interface $row) {}
 
     public function jsonCollapseAction()
     {

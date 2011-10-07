@@ -1,6 +1,6 @@
 <?php
 // TODO: validators
-class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
+class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
 {
     protected $_fields;
     private $_relationToValuesRule;
@@ -30,16 +30,16 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     /**
      * Zeigt mehrere Checkboxes an und speichert diese in einer Relationstabelle
      *
-     * @param string|Vps_Model_Abstract $dependetModelRule Kann folgendes sein:
+     * @param string|Kwf_Model_Abstract $dependetModelRule Kann folgendes sein:
      *               - Die rule vom Datenmodel zur Relationstabelle (string)
-     *               - oder das RelationsModel selbst (Vps_Model_Abstract)
+     *               - oder das RelationsModel selbst (Kwf_Model_Abstract)
      * @param string $relationToValuesRule Die rule vom Relationsmodel zum Values-model
      */
     public function __construct($dependetModelRule, $relationToValuesRule, $title = null)
     {
         if (!is_string($dependetModelRule)) {
-            if (is_object($dependetModelRule) && !($dependetModelRule instanceof Vps_Model_Abstract)) {
-                throw new Vps_Exception("dependetModelRule must be of type string (Rule) or Vps_Model_Abstract (RelationModel)");
+            if (is_object($dependetModelRule) && !($dependetModelRule instanceof Kwf_Model_Abstract)) {
+                throw new Kwf_Exception("dependetModelRule must be of type string (Rule) or Kwf_Model_Abstract (RelationModel)");
             }
         }
         $this->setRelModel($dependetModelRule);
@@ -60,11 +60,11 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
         $this->setAutoHeight(true);
         $this->setShowCheckAllLinks(true);
-        $this->setCheckAllText(trlVpsStatic('All'));
-        $this->setCheckNoneText(trlVpsStatic('None'));
+        $this->setCheckAllText(trlKwfStatic('All'));
+        $this->setCheckNoneText(trlKwfStatic('None'));
         $this->setLayout('form');
         $this->setXtype('multicheckbox');
-        $this->setEmptyMessage(trlVpsStatic('Please choose an option'));
+        $this->setEmptyMessage(trlKwfStatic('Please choose an option'));
         $this->setOutputType('horizontal');
     }
 
@@ -89,7 +89,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     public function getDataModel()
     {
         if (is_string($this->_dataModel)) {
-            $this->_dataModel = Vps_Model_Abstract::getInstance($this->_dataModel);
+            $this->_dataModel = Kwf_Model_Abstract::getInstance($this->_dataModel);
         }
         return $this->_dataModel;
     }
@@ -99,15 +99,15 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         if (is_string($this->_valuesModel)) {
             $relModel = $this->getRelModel();
             if (!$relModel) {
-                throw new Vps_Exception("RelationModel must be set first");
+                throw new Kwf_Exception("RelationModel must be set first");
             }
             $ref = $relModel->getReference($this->_valuesModel);
             if ($ref && isset($ref['refModel'])) {
                 $this->_valuesModel = $ref['refModel'];
             } else if ($ref && isset($ref['refModelClass'])) {
-                $this->_valuesModel = Vps_Model_Abstract::getInstance($ref['refModelClass']);
+                $this->_valuesModel = Kwf_Model_Abstract::getInstance($ref['refModelClass']);
             } else {
-                throw new Vps_Exception("Values model cannot be found by reference '{$this->_valuesModel}'");
+                throw new Kwf_Exception("Values model cannot be found by reference '{$this->_valuesModel}'");
             }
         }
         return $this->_valuesModel;
@@ -151,7 +151,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
     }
 
-    public function setValuesSelect(Vps_Model_Select $select)
+    public function setValuesSelect(Kwf_Model_Select $select)
     {
         $this->_valuesSelect = $select;
         return $this;
@@ -163,16 +163,16 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $this->_valuesSelect = $this->getValuesModel()->select();
         }
         if ($this->getPool()) {
-            if ($this->getValuesModel() instanceof Vps_Util_Model_Pool) {
+            if ($this->getValuesModel() instanceof Kwf_Util_Model_Pool) {
                 $this->_valuesSelect
                     ->whereEquals('pool', $this->getPool())
                     ->whereEquals('visible', 1)
                     ->order('pos', 'ASC');
             } else {
-                throw new Vps_Exception("setPool with MultiCheckbox only works if relationToValues references to an instance of Vps_Util_Model_Pool");
+                throw new Kwf_Exception("setPool with MultiCheckbox only works if relationToValues references to an instance of Kwf_Util_Model_Pool");
             }
         }
-        if ($this->getValuesModel()->hasColumn('pos') && !$this->_valuesSelect->getPart(Vps_Model_Select::ORDER)) {
+        if ($this->getValuesModel()->hasColumn('pos') && !$this->_valuesSelect->getPart(Kwf_Model_Select::ORDER)) {
             $this->_valuesSelect->order('pos', 'ASC');
         }
         return $this->_valuesSelect;
@@ -181,8 +181,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     protected function _getFields()
     {
         if (!isset($this->_fields)) {
-            $this->_fields = new Vps_Collection_FormFields();
-            if ($this->_getValues() instanceof Vps_Model_Rowset_Interface) {
+            $this->_fields = new Kwf_Collection_FormFields();
+            if ($this->_getValues() instanceof Kwf_Model_Rowset_Interface) {
                 $pk = $this->_getValues()->getModel()->getPrimaryKey();
             }
             foreach ($this->_getValues() as $key => $i) {
@@ -197,7 +197,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                         $i = $i->__toString();
                     }
                 }
-                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName().'_'.$key))
+                $this->_fields->add(new Kwf_Form_Field_Checkbox($this->getFieldName().'_'.$key))
                     ->setKey($key)
                     ->setBoxLabel($i)
                     ->setHideLabel(true);
@@ -226,7 +226,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         return $this->_pool;
     }
 
-    public function load(Vps_Model_Row_Interface $row, $postData = array())
+    public function load(Kwf_Model_Row_Interface $row, $postData = array())
     {
         if (!$row) return array();
 
@@ -280,7 +280,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         return $ret;
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
         $dataModel = $row->getModel();
         if ($dataModel) $this->setDataModel($dataModel);
@@ -328,8 +328,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
-        $helper = new Vps_View_Helper_FormField();
-        $ret['html'] = '<div class="vpsFormFieldMultiCheckbox vpsFormFieldMultiCheckbox'.ucfirst($this->getOutputType()).'">';
+        $helper = new Kwf_View_Helper_FormField();
+        $ret['html'] = '<div class="kwfFormFieldMultiCheckbox kwfFormFieldMultiCheckbox'.ucfirst($this->getOutputType()).'">';
         $fields = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix);
         $i = 0;
         foreach ($fields as $field) {
@@ -340,9 +340,9 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         if ($this->getShowCheckAllLinks()) {
             $ret['html'] .=
                 '<div class="checkAllLinksWrapper">'
-                    .'<a href="#" class="vpsMultiCheckboxCheckAll">'.$this->getCheckAllText().'</a>'
+                    .'<a href="#" class="kwfMultiCheckboxCheckAll">'.$this->getCheckAllText().'</a>'
                     .' / '
-                    .'<a href="#" class="vpsMultiCheckboxCheckNone">'.$this->getCheckNoneText().'</a>'
+                    .'<a href="#" class="kwfMultiCheckboxCheckNone">'.$this->getCheckNoneText().'</a>'
                 .'</div>';
         }
         $ret['html'] .= '</div>';

@@ -1,7 +1,7 @@
-Vps.Auto.Filter.DateRange = function(config)
+Kwf.Auto.Filter.DateRange = function(config)
 {
-    Vps.Auto.Filter.DateRange.superclass.constructor.call(this, config);
-    this.fieldFrom = new Vps.Form.DateField({
+    Kwf.Auto.Filter.DateRange.superclass.constructor.call(this, config);
+    this.fieldFrom = new Kwf.Form.DateField({
         width: 80,
         value: config.from
     });
@@ -9,7 +9,7 @@ Vps.Auto.Filter.DateRange = function(config)
 
     this.toolbarItems.add(this.fieldFrom);
     this.toolbarItems.add(' - ');
-    this.fieldTo = new Vps.Form.DateField({
+    this.fieldTo = new Kwf.Form.DateField({
         width: 80,
         value: config.to
     });
@@ -19,7 +19,7 @@ Vps.Auto.Filter.DateRange = function(config)
 
     if (config.button) {
 	    this.toolbarItems.add(new Ext.Button({
-	        text: trlVps('Search'),
+	        text: trlKwf('Search'),
 	        handler: function() {
 	            this.fireEvent('filter', this, this.getParams());
 	        },
@@ -51,7 +51,7 @@ Vps.Auto.Filter.DateRange = function(config)
 
 
 
-Ext.extend(Vps.Auto.Filter.DateRange, Vps.Auto.Filter.Abstract, {
+Ext.extend(Kwf.Auto.Filter.DateRange, Kwf.Auto.Filter.Abstract, {
     reset: function() {
         this.fieldFrom.reset();
         this.fieldTo.reset();

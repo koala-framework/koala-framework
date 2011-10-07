@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_Abstract
+class Kwf_Component_Cache_Meta_Static_Chained extends Kwf_Component_Cache_Meta_Abstract
 {
     private $_sourceComponentClass;
 
@@ -16,9 +16,9 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
     public static function getDeleteWheres($componentIds)
     {
         $chainedTypes = array();
-        foreach (Vps_Component_Abstract::getComponentClasses() as $cc) {
-            if (!Vpc_Abstract::hasSetting($cc, 'masterComponentClass')) continue;
-            $chainedType = Vpc_Abstract::getFlag($cc, 'chainedType');
+        foreach (Kwf_Component_Abstract::getComponentClasses() as $cc) {
+            if (!Kwc_Abstract::hasSetting($cc, 'masterComponentClass')) continue;
+            $chainedType = Kwc_Abstract::getFlag($cc, 'chainedType');
             if ($chainedType) $chainedTypes[$chainedType] = $cc;
         }
 
@@ -28,7 +28,7 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
             if (strpos($componentId, '%') !== false) continue;
 
             // Komponente von Master bei der der Cache gelöscht wird
-            $component = Vps_Component_Data_Root::getInstance()
+            $component = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible' => true));
             if (!$component) continue;
 
@@ -41,7 +41,7 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
             $c = $component;
             $idPart = '';
             while ($c) {
-                $chainedType = Vpc_Abstract::getFlag($c->componentClass, 'chainedType');
+                $chainedType = Kwc_Abstract::getFlag($c->componentClass, 'chainedType');
                 if ($chainedType && isset($chainedTypes[$chainedType])) {
                     $chainedFound = true;
                     $chainedComponents = $c->parent->getChildComponents(array(
@@ -49,7 +49,7 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
                         'ignoreVisible' => true
                     ));
                     foreach ($chainedComponents as $chainedComponent) {
-                        $cc = Vpc_Chained_Abstract_Component::getChainedByMaster(
+                        $cc = Kwc_Chained_Abstract_Component::getChainedByMaster(
                             $component, $chainedComponent, $chainedType, array('ignoreVisible' => true)
                         );
                         if ($cc) {
@@ -59,7 +59,7 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
                 }
                 $c = $c->parent;
             }
-            //if (!$chainedFound) throw new Vps_Exception("No Flag chainedType set for {$component->componentClass} or parent");
+            //if (!$chainedFound) throw new Kwf_Exception("No Flag chainedType set for {$component->componentClass} or parent");
 
         }
         return $ret;

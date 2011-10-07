@@ -1,19 +1,19 @@
 <?php
-class Vpc_Guestbook_SettingsForm extends Vps_Form
+class Kwc_Guestbook_SettingsForm extends Kwf_Form
 {
     protected function _initFields()
     {
         $this->setCreateMissingRow(true);
         $this->setLabelWidth(130);
 
-        $this->add(new Vps_Form_Field_ComboBox('new_post_mail', trlVps('Remind mail receiver')))
-            ->setValues('/vps/user/changeUser/json-data')
+        $this->add(new Kwf_Form_Field_ComboBox('new_post_mail', trlKwf('Remind mail receiver')))
+            ->setValues('/kwf/user/changeUser/json-data')
             ->setDisplayField('email')
             ->setWidth(300)
             ->setTriggerAction('all')
             ->setEditable(true)
             ->setForceSelection(true)
-            ->setEmptyText('- '.trlVps('Send no mail').' -')
+            ->setEmptyText('- '.trlKwf('Send no mail').' -')
             ->setShowNoSelection(true)
             ->setPageSize(10)
             ->setTpl('<tpl for=".">'.
@@ -22,11 +22,11 @@ class Vpc_Guestbook_SettingsForm extends Vps_Form
                             '{email} <tpl if="role"><span class="changeuser-role">({role})</span></tpl>'.
                         '</div>'.
                       '</tpl>');
-        $this->add(new Vps_Form_Field_Select('post_activation_type', trlVps('Post save type')))
+        $this->add(new Kwf_Form_Field_Select('post_activation_type', trlKwf('Post save type')))
             ->setWidth(300)
             ->setValues(array(
-                Vpc_Guestbook_Component::ACTIVE_ON_SAVE => trlVps('Active, may be deactivated'),
-                Vpc_Guestbook_Component::INACTIVE_ON_SAVE => trlVps('Inactive, must be activated')
+                Kwc_Guestbook_Component::ACTIVE_ON_SAVE => trlKwf('Active, may be deactivated'),
+                Kwc_Guestbook_Component::INACTIVE_ON_SAVE => trlKwf('Inactive, must be activated')
             ))
             ->setAllowBlank(false);
     }

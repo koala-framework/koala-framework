@@ -1,37 +1,37 @@
 <?php
-class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
 
         $ret['assetsAdmin']['dep'][] = 'ExtGridCheckboxSelectionModel';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Table/TableGridPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Table/TableGridPanel.js';
 
-        $ret['componentName'] = trlVps('Table');
-        $ret['ownModel'] = 'Vpc_Basic_Table_Model';
-        $ret['childModel'] = 'Vpc_Basic_Table_ModelData';
+        $ret['componentName'] = trlKwf('Table');
+        $ret['ownModel'] = 'Kwc_Basic_Table_Model';
+        $ret['childModel'] = 'Kwc_Basic_Table_ModelData';
 
         $ret['maxColumns'] = 26;
 
         // row styles: the key is put in the proper <tr> tag
         // if no tag is set in the sub-array, td is used
-        // simple string example: 'bold' => trlVps('Bold')
-        // complex arrayexample: 'headline' => array('name' => trlVps('Headline'), 'tag'  => 'th')
+        // simple string example: 'bold' => trlKwf('Bold')
+        // complex arrayexample: 'headline' => array('name' => trlKwf('Headline'), 'tag'  => 'th')
         $ret['rowStyles'] = array(
             'headline' => array(
-                'name' => trlVps('Headline'),
+                'name' => trlKwf('Headline'),
                 'tag'  => 'th'
             )
         );
 
         // tableStyles: the key is the table-css-class, the value the name for
         // settings page in backend
-        // e.g.: 'green' => trlVps('Green')
-        $ret['tableStyles'] = array('green' => trlVps('Green'));
+        // e.g.: 'green' => trlKwf('Green')
+        $ret['tableStyles'] = array('green' => trlKwf('Green'));
         $ret['cssClass'] = 'webStandard';
 
-        $ret['extConfig'] = 'Vpc_Basic_Table_ExtConfig';
+        $ret['extConfig'] = 'Kwc_Basic_Table_ExtConfig';
         return $ret;
     }
 
@@ -41,7 +41,7 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         $ret['settingsRow'] = $this->_getRow();
         $ret['columnCount'] = $this->getColumnCount();
 
-        $dataSelect = new Vps_Model_Select();
+        $dataSelect = new Kwf_Model_Select();
         $dataSelect->whereEquals('visible', 1);
         $dataSelect->order('pos', 'ASC');
         $ret['dataRows'] = $this->_getRow()->getChildRows('tableData', $dataSelect);
@@ -53,7 +53,7 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     public function getColumnCount($isAdmin = false)
     {
         if ($isAdmin) {
-            $dataSelect = new Vps_Model_Select();
+            $dataSelect = new Kwf_Model_Select();
             $dataSelect->whereEquals('visible', 1);
             $rows = $this->_getRow()->getChildRows('tableData', $dataSelect);
         } else {
@@ -71,7 +71,7 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getCacheMeta();
-        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
+        $ret[] = new Kwf_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

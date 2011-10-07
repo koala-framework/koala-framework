@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Data_Abstract implements Vps_Data_Interface
+abstract class Kwf_Data_Abstract implements Kwf_Data_Interface
 {
     private $_fieldname;
 
@@ -14,13 +14,13 @@ abstract class Vps_Data_Abstract implements Vps_Data_Interface
         return $this->_fieldname;
     }
 
-    public function save(Vps_Model_Row_Interface $row, $data)
+    public function save(Kwf_Model_Row_Interface $row, $data)
     {
-        throw new Vps_Exception("Save is not possible for '".get_class($this)."'");
+        throw new Kwf_Exception("Save is not possible for '".get_class($this)."'");
     }
 
     public function delete()
     {
-        throw new Vps_Exception("Delete is not possible for '".get_class($this)."'");
+        throw new Kwf_Exception("Delete is not possible for '".get_class($this)."'");
     }
 }

@@ -1,9 +1,9 @@
 <?php
-class Vps_Trl_Model_Vps extends Vps_Trl_Model_Abstract
+class Kwf_Trl_Model_Kwf extends Kwf_Trl_Model_Abstract
 {
     public function __construct()
     {
-        $config['filepath'] = VPS_PATH.'/trl.xml';
+        $config['filepath'] = KWF_PATH.'/trl.xml';
         parent::__construct($config);
     }
 }

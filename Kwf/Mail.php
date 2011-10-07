@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail extends Zend_Mail
+class Kwf_Mail extends Zend_Mail
 {
     // die folgenden 5 sind für maillog
     protected $_ownFrom = '';
@@ -11,20 +11,20 @@ class Vps_Mail extends Zend_Mail
     public function __construct($mustNotBeSet = null)
     {
         if ($mustNotBeSet) {
-            throw new Vps_Exception("Vps_Mail got replaced with Vps_Mail_Template");
+            throw new Kwf_Exception("Kwf_Mail got replaced with Kwf_Mail_Template");
         }
         parent::__construct('utf-8');
     }
 
-    public function getMailContent($type = Vps_Model_Mail_Row::MAIL_CONTENT_AUTO)
+    public function getMailContent($type = Kwf_Model_Mail_Row::MAIL_CONTENT_AUTO)
     {
-        if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_AUTO) {
+        if ($type == Kwf_Model_Mail_Row::MAIL_CONTENT_AUTO) {
             $ret = $this->getBodyHtml(true);
             if (!$ret) $ret = $this->getBodyText(true);
             return $ret;
-        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_HTML) {
+        } else if ($type == Kwf_Model_Mail_Row::MAIL_CONTENT_HTML) {
             return $this->getBodyHtml(true);
-        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_TEXT) {
+        } else if ($type == Kwf_Model_Mail_Row::MAIL_CONTENT_TEXT) {
             return $this->getBodyText(true);
         }
         return null;
@@ -33,7 +33,7 @@ class Vps_Mail extends Zend_Mail
     public function addCc($email, $name='')
     {
         $this->_ownCc[] = trim("$name <$email>");
-        if (Vps_Registry::get('config')->debug->sendAllMailsTo) {
+        if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
             if ($name) {
                 $this->addHeader('X-Real-Cc', $name ." <".$email.">");
             } else {
@@ -48,7 +48,7 @@ class Vps_Mail extends Zend_Mail
     public function addBcc($email)
     {
         $this->_ownBcc[] = $email;
-        if (Vps_Registry::get('config')->debug->sendAllMailsTo) {
+        if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
             $this->addHeader('X-Real-Bcc', $email);
         } else {
             parent::addBcc($email);
@@ -59,7 +59,7 @@ class Vps_Mail extends Zend_Mail
     public function addTo($email, $name='')
     {
         $this->_ownTo[] = trim("$name <$email>");
-        if (Vps_Registry::get('config')->debug->sendAllMailsTo) {
+        if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
             if ($name) {
                 $this->addHeader('X-Real-Recipient', $name ." <".$email.">");
             } else {
@@ -80,7 +80,7 @@ class Vps_Mail extends Zend_Mail
     public function setFrom($email, $name='')
     {
         if (empty($email)) {
-            throw new Vps_Exception("Email address '$email' cannot be set as from part in a mail. Empty or invalid address.");
+            throw new Kwf_Exception("Email address '$email' cannot be set as from part in a mail. Empty or invalid address.");
         }
         $this->_ownFrom = trim("$name <$email>");
         parent::setFrom($email, $name);
@@ -89,12 +89,12 @@ class Vps_Mail extends Zend_Mail
 
     public function send($transport = null)
     {
-        $mailSendAll = Vps_Registry::get('config')->debug->sendAllMailsTo;
+        $mailSendAll = Kwf_Registry::get('config')->debug->sendAllMailsTo;
         if ($mailSendAll) {
             parent::addTo($mailSendAll);
         }
 
-        $mailSendAllBcc = Vps_Registry::get('config')->debug->sendAllMailsBcc;
+        $mailSendAllBcc = Kwf_Registry::get('config')->debug->sendAllMailsBcc;
         if ($mailSendAllBcc) {
             parent::addBcc($mailSendAllBcc);
         }
@@ -105,8 +105,8 @@ class Vps_Mail extends Zend_Mail
         }
 
         // in service mitloggen wenn url vorhanden
-        if (Vps_Util_Model_MailLog::isAvailable()) {
-            $r = Vps_Model_Abstract::getInstance('Vps_Util_Model_MailLog')->createRow();
+        if (Kwf_Util_Model_MailLog::isAvailable()) {
+            $r = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_MailLog')->createRow();
             if (isset($_COOKIE['unitTest']) && $_COOKIE['unitTest']) {
                 $r->identifier = $_COOKIE['unitTest'];
             }
@@ -134,12 +134,12 @@ class Vps_Mail extends Zend_Mail
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
-            $host = Vps_Registry::get('config')->server->domain;
+            $host = Kwf_Registry::get('config')->server->domain;
         }
         $hostNonWww = preg_replace('#^www\\.#', '', $host);
         return array(
-            'address' => str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->address),
-            'name' => str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->name)
+            'address' => str_replace('%host%', $hostNonWww, Kwf_Registry::get('config')->email->from->address),
+            'name' => str_replace('%host%', $hostNonWww, Kwf_Registry::get('config')->email->from->name)
         );
     }
 }

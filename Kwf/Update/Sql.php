@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_Sql extends Vps_Update
+class Kwf_Update_Sql extends Kwf_Update
 {
     public $sql;
     public function update()
@@ -18,7 +18,7 @@ class Vps_Update_Sql extends Vps_Update
             );
             $process = proc_open($mysqlBinary.' '.$mysqlOptions, $descriptorspec, $pipes);
             if (!is_resource($process)) {
-                throw new Vps_Exception("Can't execute mysql");
+                throw new Kwf_Exception("Can't execute mysql");
             }
             fwrite($pipes[0], $this->sql);
             fclose($pipes[0]);
@@ -30,7 +30,7 @@ class Vps_Update_Sql extends Vps_Update
             fclose($pipes[2]);
 
             if (proc_close($process) != 0) {
-                throw new Vps_Exception("Executing sql statement failed: ".$output);
+                throw new Kwf_Exception("Executing sql statement failed: ".$output);
             }
         } else {
 
@@ -39,7 +39,7 @@ class Vps_Update_Sql extends Vps_Update
             $queries = preg_split("/;+(?=([^'|^\\\']*['|\\\'][^'|^\\\']*['|\\\'])*[^'|^\\\']*[^'|^\\\']$)/", $this->sql); 
             foreach ($queries as $query){ 
                 if (trim($query)) {
-                    Vps_Registry::get('db')->getConnection()->query($query);
+                    Kwf_Registry::get('db')->getConnection()->query($query);
                 }
             }
 

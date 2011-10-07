@@ -1,17 +1,17 @@
 // um flackern zu unterbinden
-document.write('<style type="text/css"> div.vpsSwitchOverlay div.switchContent { display: none; } </style>');
+document.write('<style type="text/css"> div.kwfSwitchOverlay div.switchContent { display: none; } </style>');
 
-Vps.onContentReady(function() {
-    var els = Ext.query('div.vpsSwitchOverlay');
+Kwf.onContentReady(function() {
+    var els = Ext.query('div.kwfSwitchOverlay');
     els.forEach(function(el) {
         if (!el.switchOverlayObject) {
             el = Ext.get(el);
-            el.switchOverlayObject = new Vps.Switch.Overlay(el);
+            el.switchOverlayObject = new Kwf.Switch.Overlay(el);
         }
     });
 });
 
-Vps.Switch.Overlay = function(el) {
+Kwf.Switch.Overlay = function(el) {
     this.addEvents({
         'beforeOpen': true,
         'beforeClose': true,
@@ -25,7 +25,7 @@ Vps.Switch.Overlay = function(el) {
     this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
 
     // if it is important, show on startup
-    if (this.switchContent.child('.vpsImportant')) {
+    if (this.switchContent.child('.kwfImportant')) {
         this.switchContent.setStyle('display', 'block');
         this.switchLinks.each(function(sl) {
         	Ext.get(sl).addClass('switchLinkOpened');	
@@ -47,7 +47,7 @@ Vps.Switch.Overlay = function(el) {
     }
 };
 
-Ext.extend(Vps.Switch.Overlay, Ext.util.Observable, {
+Ext.extend(Kwf.Switch.Overlay, Ext.util.Observable, {
     doClose: function() {
         if (this._lockAnimation) return;
         this._lockAnimation = true;

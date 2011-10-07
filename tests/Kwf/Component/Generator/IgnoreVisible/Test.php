@@ -1,9 +1,9 @@
 <?php
-class Vps_Component_Generator_IgnoreVisible_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_IgnoreVisible_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_IgnoreVisible_Root');
+        parent::setUp('Kwf_Component_Generator_IgnoreVisible_Root');
     }
 
     public function testStatic()
@@ -12,14 +12,14 @@ class Vps_Component_Generator_IgnoreVisible_Test extends Vpc_TestAbstract
         $this->assertNotNull($c);
         $this->assertEquals('root-child', $c->componentId);
 
-        $generators = Vps_Component_Generator_Abstract::getInstances($this->_root->componentClass);
+        $generators = Kwf_Component_Generator_Abstract::getInstances($this->_root->componentClass);
         $this->assertEquals(count($generators), 1);
 
-        $generators = Vps_Component_Generator_Abstract::getInstances($this->_root->componentClass,
+        $generators = Kwf_Component_Generator_Abstract::getInstances($this->_root->componentClass,
                 array('ignoreVisible' => false));
         $this->assertEquals(count($generators), 1);
 
-        $generators = Vps_Component_Generator_Abstract::getInstances($this->_root->componentClass,
+        $generators = Kwf_Component_Generator_Abstract::getInstances($this->_root->componentClass,
                 array('ignoreVisible' => true));
         $this->assertEquals(count($generators), 1);
 

@@ -1,11 +1,11 @@
 <?php
-class Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Vpc_Abstract
+class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['contentSender'] = 'Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender';
-        $ret['assets']['dep'][] = 'VpsLightbox';
+        $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender';
+        $ret['assets']['dep'][] = 'KwfLightbox';
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }
@@ -26,7 +26,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Vpc_Abstract
 
         $enlargeTag = $this->getData()->parent;
         $imageEnlarge = $enlargeTag->parent;
-        if (is_instance_of($imageEnlarge->componentClass, 'Vpc_Basic_LinkTag_Component')) {
+        if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_LinkTag_Component')) {
             $imageEnlarge = $imageEnlarge->parent;
         }
         $parent = $imageEnlarge->parent;
@@ -51,7 +51,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Vpc_Abstract
     {
         if (!$data) return null;
         $ret = $data->getChildComponent('-linkTag');
-        if (is_instance_of($ret->componentClass, 'Vpc_Basic_LinkTag_Component')) {
+        if (is_instance_of($ret->componentClass, 'Kwc_Basic_LinkTag_Component')) {
             $ret = $ret->getChildComponent('-child');
         }
         $ret = $ret->getChildComponent('_imagePage');

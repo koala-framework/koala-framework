@@ -2,12 +2,12 @@
 .cssClass .form_city {
     clear: none;
 }
-.cssClass form .vpsField label,
-.cssClass form .vpsField span.fieldContent {
+.cssClass form .kwfField label,
+.cssClass form .kwfField span.fieldContent {
     line-height: 20px;
     clear: both;
 }
-.cssClass .vpsButtonFlat button {
+.cssClass .kwfButtonFlat button {
     font-weight: bold;
     border: 1px solid #000;
     background-color: #fff;
@@ -27,7 +27,7 @@
     float: left;
 }
 .cssClass .submitWrapper .saving {
-	background-image: url(/assets/vps/Vpc/Form/saving.gif);
+	background-image: url(/assets/kwf/Kwc/Form/saving.gif);
 	width: 30px;
 	height: 16px;
 	visibility: hidden
@@ -43,17 +43,17 @@
     border: none;
     background: none;
 }
-.cssClass form .vpsFormFieldCheckbox input {
+.cssClass form .kwfFormFieldCheckbox input {
     width: auto;
     border: none;
     background: none;
     margin-left: 5px;
     margin-top: 3px;
 }
-.ext-ie6 .cssClass form .vpsFormFieldCheckbox label {
+.ext-ie6 .cssClass form .kwfFormFieldCheckbox label {
     margin-right: 0px;
 }
-.cssClass form .vpsFormFieldCheckbox label {
+.cssClass form .kwfFormFieldCheckbox label {
     margin-right: 15px;
 }
 .cssClass label {
@@ -62,14 +62,14 @@
     margin-right: 20px;
     text-align: right;
 }
-.cssClass .vpsFieldRequired label { font-weight: bold; }
-.cssClass .vpsFieldRequired span label { font-weight: normal; }
-.cssClass .vpsFieldLabelAlignTop label {
+.cssClass .kwfFieldRequired label { font-weight: bold; }
+.cssClass .kwfFieldRequired span label { font-weight: normal; }
+.cssClass .kwfFieldLabelAlignTop label {
     width: auto;
     margin: 0px;
     text-align: left;
 }
-.cssClass .vpsFieldLabelAlignLeft label {
+.cssClass .kwfFieldLabelAlignLeft label {
     text-align: left;
 }
 .cssClass .showField {
@@ -85,27 +85,27 @@
     margin-left: 20px;
     padding: 5px;
 }
-.cssClass .vpsFormFieldRadio {
+.cssClass .kwfFormFieldRadio {
     margin-left: -10px;
 }
-.cssClass form .vpsFormFieldRadio label {
+.cssClass form .kwfFormFieldRadio label {
     margin-left: 10px;
     margin-right: 20px;
     clear: none;
 }
-.cssClass form .vpsFormFieldRadio input { margin: 0px; padding: 0px; }
-.cssClass form .vpsFormFieldRadioHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
-.cssClass form .vpsFormFieldRadioHorizontal span { white-space: nowrap; }
-.cssClass form .vpsFormFieldRadioVertical span { display: block; }
-.cssClass form .vpsFormFieldRadioVertical span label { margin-left: 0px; }
-.cssClass form .vpsFormFieldRadioVertical label { float: none; }
+.cssClass form .kwfFormFieldRadio input { margin: 0px; padding: 0px; }
+.cssClass form .kwfFormFieldRadioHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
+.cssClass form .kwfFormFieldRadioHorizontal span { white-space: nowrap; }
+.cssClass form .kwfFormFieldRadioVertical span { display: block; }
+.cssClass form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
+.cssClass form .kwfFormFieldRadioVertical label { float: none; }
 
-.cssClass form .vpsFormFieldMultiCheckboxHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
-.cssClass form .vpsFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; }
-.cssClass form .vpsFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 
-.cssClass form .vpsFormContainerColumns .vpsFormContainerColumn { float: left; clear: none; }
-.cssClass form .vpsFormContainerColumns .vpsFormContainerColumn .vpsField { clear: none; }
+.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; }
+.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; }
 
 .ext-ie .cssClass .form_title {
     margin-top: -5px;
@@ -117,16 +117,16 @@
 .ext-ie .cssClass .form_title input {
     margin-bottom: 0px;
 }
-.cssClass .vpcFormError {
+.cssClass .kwcFormError {
     border: 1px dashed $mainColor;
     margin-bottom: 20px;
     padding: 10px 10px 0px 10px !important;
 }
-.cssClass .vpcFormError p.error {
+.cssClass .kwcFormError p.error {
     font-weight: bold;
     color: $mainColor;
 }
 .cssClass span.comment { margin-left: 10px; color: #999; }
-.cssClass .vpsField { clear: both; }
+.cssClass .kwfField { clear: both; }
 
-.cssClass .vpsFieldError label { color: red; } /* TODO beserer standard-wert */
+.cssClass .kwfFieldError label { color: red; } /* TODO beserer standard-wert */

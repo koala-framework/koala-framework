@@ -1,17 +1,17 @@
 <?php
-class Vps_Component_Output_Partial_Paging_Component extends Vpc_Abstract_Composite_Component
-    implements Vps_Component_Partial_Interface, Vpc_Paging_ParentInterface
+class Kwf_Component_Output_Partial_Paging_Component extends Kwc_Abstract_Composite_Component
+    implements Kwf_Component_Partial_Interface, Kwc_Paging_ParentInterface
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['paging'] = 'Vps_Component_Output_Partial_Paging_Paging';
+        $ret['generators']['child']['component']['paging'] = 'Kwf_Component_Output_Partial_Paging_Paging';
         return $ret;
     }
 
     public function getPartialClass()
     {
-        return 'Vps_Component_Partial_Paging';
+        return 'Kwf_Component_Partial_Paging';
     }
 
     public function getPartialVars($partial, $nr, $info)

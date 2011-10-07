@@ -1,44 +1,44 @@
 <?php
-class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
+class Kwc_Advanced_GoogleMap_Form extends Kwc_Abstract_Form
 {
     public function __construct($name, $class)
     {
         parent::__construct($name, $class);
 
         $this->setLabelWidth(120);
-        $this->fields->add(new Vps_Form_Field_GoogleMapsField('coordinates', trlVps('Coordinates')));
-        $this->fields->add(new Vps_Form_Field_Select('zoom', trlVps('Zoomlevel')))
+        $this->fields->add(new Kwf_Form_Field_GoogleMapsField('coordinates', trlKwf('Coordinates')));
+        $this->fields->add(new Kwf_Form_Field_Select('zoom', trlKwf('Zoomlevel')))
             ->setAllowBlank(false)
             ->setValues($this->_getZoomLevels())
             ->setWidth(120);
 
-        $this->fields->add(new Vps_Form_Field_NumberField('width', trlVps('Width')))
+        $this->fields->add(new Kwf_Form_Field_NumberField('width', trlKwf('Width')))
             ->setAllowNegative(false)
             ->setAllowDecimals(false)
             ->setAllowBlank(false)
             ->setWidth(120);
 
-        $this->fields->add(new Vps_Form_Field_NumberField('height', trlVps('Height')))
+        $this->fields->add(new Kwf_Form_Field_NumberField('height', trlKwf('Height')))
             ->setAllowNegative(false)
             ->setAllowDecimals(false)
             ->setAllowBlank(false)
             ->setWidth(120);
 
-        $this->fields->add(new Vps_Form_Field_Select('zoom_properties', trlVps('Zoom properties')))
+        $this->fields->add(new Kwf_Form_Field_Select('zoom_properties', trlKwf('Zoom properties')))
             ->setValues(array(
-                '0' => trlVpsStatic('Move + Zoom'),
-                '1' => trlVpsStatic('Move + Zoom (without zoombar)'),
-                '2' => trlVpsStatic('None')
+                '0' => trlKwfStatic('Move + Zoom'),
+                '1' => trlKwfStatic('Move + Zoom (without zoombar)'),
+                '2' => trlKwfStatic('None')
             ))
             ->setWidth(300)
             ->setAllowBlank(false);
 
-        $this->fields->add(new Vps_Form_Field_Checkbox('scale', trlVps('Scale')));
-        $this->fields->add(new Vps_Form_Field_Checkbox('satelite', trlVps('Satelitemap')));
-        $this->fields->add(new Vps_Form_Field_Checkbox('overview', trlVps('Overviewmap')));
-        $this->fields->add(new Vps_Form_Field_Checkbox('routing', trlVps('Routing')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('scale', trlKwf('Scale')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('satelite', trlKwf('Satelitemap')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('overview', trlKwf('Overviewmap')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('routing', trlKwf('Routing')));
 
-        $form = Vpc_Abstract_Form::createChildComponentForm($class, '-text');
+        $form = Kwc_Abstract_Form::createChildComponentForm($class, '-text');
         $form->fields->getByName('content')->setHeight(170);
         $this->fields->add($form);
     }
@@ -48,9 +48,9 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
         $zoomLevels = array();
         for ($i = 0; $i <= 20; $i++) {
             if ($i == 0) {
-                $zommText = ' ('.trlVps('Worldview').')';
+                $zommText = ' ('.trlKwf('Worldview').')';
             } else if ($i == 20) {
-                $zommText = ' ('.trlVps('Detailview').')';
+                $zommText = ' ('.trlKwf('Detailview').')';
             } else {
                 $zommText = '';
             }

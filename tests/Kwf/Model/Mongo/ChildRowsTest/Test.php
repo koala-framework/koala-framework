@@ -5,7 +5,7 @@
  * @group Mongo_ChildRows
  * @group slow
  */
-class Vps_Model_Mongo_ChildRowsTest_Test extends Vps_Test_TestCase
+class Kwf_Model_Mongo_ChildRowsTest_Test extends Kwf_Test_TestCase
 {
     public function testNoop() {}
 /*
@@ -15,7 +15,7 @@ class Vps_Model_Mongo_ChildRowsTest_Test extends Vps_Test_TestCase
         $this->markTestIncomplete(); // TODO: deaktiviert, waren Fehler drinnen
         parent::setUp();
 
-        $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsTest_MongoModel');
+        $this->_model = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ChildRowsTest_MongoModel');
         $this->_model->getCollection()->insert(
             array('id'=>1, 'a'=>'a', 'foo'=>array(array('x'=>1), array('x'=>2))) //TODO id sollte nicht nötig sein
         , array('safe'=>true));

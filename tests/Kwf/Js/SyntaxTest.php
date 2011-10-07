@@ -1,24 +1,24 @@
 <?php
 /**
- * Wird in der Vps_Test_TestSuite automatisch hinzugefügt, damit er auch im web ausgeführt wird
+ * Wird in der Kwf_Test_TestSuite automatisch hinzugefügt, damit er auch im web ausgeführt wird
  *
  * @group javascript
  * @group slow
  */
-class Vps_Js_SyntaxTest extends Vps_Test_TestCase
+class Kwf_Js_SyntaxTest extends Kwf_Test_TestCase
 {
-    // in den leeren arrays müssen die pfade ausgehend vom vps / web hauptverzeichnis sein
+    // in den leeren arrays müssen die pfade ausgehend vom kwf / web hauptverzeichnis sein
     // ohne führendem slash
     protected $_whitelist = array(
         'console.log' => array(
-            'Vps_js/Debug/Activator.js'
+            'Kwf_js/Debug/Activator.js'
         ),
         'debugger' => array(),
         ',}' => array()
     );
 
     // absoluter pfad zum scannen, ohne abschließenden slash
-    // wenn im vps getestet wird, gibts den vps pfad zurück
+    // wenn im kwf getestet wird, gibts den kwf pfad zurück
     // wenn im web getestet wird, den web pfad
     private function _getScanPath() {
         return getcwd();
@@ -70,7 +70,7 @@ class Vps_Js_SyntaxTest extends Vps_Test_TestCase
 
     private function _isWhitelist($list, $path) {
         if (in_array(str_replace($this->_getScanPath().'/', '', $path), $this->_whitelist[$list])
-            || in_array(str_replace($this->_getScanPath().'/vps-lib/', '', $path), $this->_whitelist[$list])
+            || in_array(str_replace($this->_getScanPath().'/kwf-lib/', '', $path), $this->_whitelist[$list])
         ) {
             return true;
         }

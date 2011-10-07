@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Abstract
+class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -17,16 +17,16 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Ab
 
     private function _getPaypalButton()
     {
-        $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getCartOrder();
+        $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getCartOrder();
         $total = $this->getData()->parent->parent->getComponent()->getTotal($order);
-        $domain = 'http://'.Vps_Registry::get('config')->server->domain;
+        $domain = 'http://'.Kwf_Registry::get('config')->server->domain;
         $params = array(
             'charset' => 'utf-8',
             'cmd' => '_xclick',
-            'business' => Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'business'),
+            'business' => Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'business'),
             'lc' => 'AT',
             'item_name' => $this->getData()->parent->getComponent()->getItemName($order),
-            //'cbt' => trlVps('back to ...'), //eigener zurück zu Text könnte so gesetzt werden
+            //'cbt' => trlKwf('back to ...'), //eigener zurück zu Text könnte so gesetzt werden
             'amount' => $total,
             'currency_code' => 'EUR',
             'button_subtype' => 'products',
@@ -37,14 +37,14 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Ab
             'cancel_return' => $domain.$this->getData()->parent->parent->parent->url,
             'notify_url' => $domain.'/paypal_ipn',
             'bn' => 'PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted',
-            'custom' => Vps_Util_PayPal_Ipn_LogModel::getEncodedCallback(
+            'custom' => Kwf_Util_PayPal_Ipn_LogModel::getEncodedCallback(
                             $this->getData()->parent->componentId,
                             array(
                                 'orderId' => $order->id
                             )),
         );
 
-        $paypalDomain = Vps_Registry::get('config')->paypalDomain;
+        $paypalDomain = Kwf_Registry::get('config')->paypalDomain;
         $ret = "<form action=\"https://$paypalDomain/cgi-bin/webscr\" method=\"post\">\n";
         foreach ($params as $k=>$i) {
             $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".htmlspecialchars($i)."\">\n";

@@ -1,17 +1,17 @@
 <?php
-class Vpc_Abstract_List_Trl_ExtConfigFullSizeEdit extends Vpc_Abstract_List_Trl_ExtConfigList
+class Kwc_Abstract_List_Trl_ExtConfigFullSizeEdit extends Kwc_Abstract_List_Trl_ExtConfigList
 {
     protected function _getConfig()
     {
         $ret = parent::_getConfig();
-        $ret['list']['xtype'] = 'vpc.listfullsizeeditpanel';
+        $ret['list']['xtype'] = 'kwc.listfullsizeeditpanel';
         $ret['list']['childConfig'] = array();
 
-        $generators = Vpc_Abstract::getSetting($this->_class, 'generators');
+        $generators = Kwc_Abstract::getSetting($this->_class, 'generators');
         $cls = $generators['child']['component'];
         if (is_array($cls)) $cls = current($cls);
 
-        $admin = Vpc_Admin::getInstance($cls);
+        $admin = Kwc_Admin::getInstance($cls);
         $ret['list']['componentConfigs'] = array();
         foreach ($admin->getExtConfig() as $k=>$cfg) {
             $ret['list']['componentConfigs'][$cls.'-'.$k] = $cfg;

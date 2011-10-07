@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_TestUpdate extends Vps_Update
+class Kwf_Update_TestUpdate extends Kwf_Update
 {
     public function setActions($actions)
     {

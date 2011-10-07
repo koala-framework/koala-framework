@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Update_Action_Abstract
+abstract class Kwf_Update_Action_Abstract
 {
     public $silent = false;
     public function __construct(array $options = array())

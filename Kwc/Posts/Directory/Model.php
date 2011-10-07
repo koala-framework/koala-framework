@@ -1,8 +1,8 @@
 <?php
-class Vpc_Posts_Directory_Model extends Vps_Model_Db_Proxy
+class Kwc_Posts_Directory_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_posts';
-    protected $_rowClass = 'Vpc_Posts_Directory_Row';
+    protected $_table = 'kwc_posts';
+    protected $_rowClass = 'Kwc_Posts_Directory_Row';
     protected $_toStringField = 'id';
 
     protected $_referenceMap = array(
@@ -14,11 +14,11 @@ class Vpc_Posts_Directory_Model extends Vps_Model_Db_Proxy
 
     protected function _init()
     {
-        $userModelClass = get_class(Vps_Registry::get('userModel'));
+        $userModelClass = get_class(Kwf_Registry::get('userModel'));
         $this->_referenceMap['User']['refModelClass']  = $userModelClass;
 
         $this->_siblingModels = array(
-            new Vps_Model_Field(array(
+            new Kwf_Model_Field(array(
                 'fieldName' => 'data'
             ))
         );

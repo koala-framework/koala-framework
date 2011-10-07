@@ -1,10 +1,10 @@
 <?php
-class Vps_Component_Cache_OwnModel_Root_Component extends Vpc_Abstract
+class Kwf_Component_Cache_OwnModel_Root_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vps_Component_Cache_OwnModel_Root_Model';
+        $ret['ownModel'] = 'Kwf_Component_Cache_OwnModel_Root_Model';
         return $ret;
     }
 

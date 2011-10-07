@@ -1,4 +1,4 @@
-Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
+Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 {
     displayField: 'name',
     valueField: 'id',
@@ -92,7 +92,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
 
         if (this.addDialog) {
-            var d = Vps.Auto.Form.Window;
+            var d = Kwf.Auto.Form.Window;
             if (this.addDialog.type) {
                 try {
                     d = eval(this.addDialog.type);
@@ -111,7 +111,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 
         if (this.showNoSelection) {
             if (!this.emptyText) {
-                this.emptyText = '('+trlVps('no selection')+')';
+                this.emptyText = '('+trlKwf('no selection')+')';
             }
         }
         this.store.on('load', function() {
@@ -121,7 +121,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             this.addNoSelection();
         }
 
-        Vps.Form.ComboBox.superclass.initComponent.call(this);
+        Kwf.Form.ComboBox.superclass.initComponent.call(this);
     },
 
     initList : function(){
@@ -131,7 +131,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             //das funktioniert aber im FF da nicht
             this.listWidth = this.el.getWidth()+this.trigger.getWidth();
         }
-        Vps.Form.ComboBox.superclass.initList.call(this);
+        Kwf.Form.ComboBox.superclass.initList.call(this);
     },
 
     addNoSelection : function() {
@@ -161,7 +161,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         } else {
             this.valueNotFoundText = '';
         }
-        Vps.Form.ComboBox.superclass.setValue.apply(this, arguments);
+        Kwf.Form.ComboBox.superclass.setValue.apply(this, arguments);
         if (v && this.valueField
                 && !this.findRecord(this.valueField, v) //record nicht gefunden
                 && this.mode == 'remote'
@@ -183,12 +183,12 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 
     onRender : function(ct, position)
     {
-        Vps.Form.ComboBox.superclass.onRender.call(this, ct, position);
+        Kwf.Form.ComboBox.superclass.onRender.call(this, ct, position);
         if (this.addDialog) {
             var c = this.el.up('div.x-form-field-wrap').insertSibling({style: 'float: right'}, 'before');
             var button = new Ext.Button({
                 renderTo: c,
-                text: this.addDialog.text || trlVps('add new entry'),
+                text: this.addDialog.text || trlKwf('add new entry'),
                 handler: function() {
                     this.addDialog.showAdd();
                 },
@@ -212,7 +212,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
      */
     onBeforeLoad: function()
     {
-        Vps.Form.ComboBox.superclass.onBeforeLoad.call(this);
+        Kwf.Form.ComboBox.superclass.onBeforeLoad.call(this);
         if(!this.hasFocus){
             return;
         }
@@ -221,4 +221,4 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 
 
 });
-Ext.reg('combobox', Vps.Form.ComboBox);
+Ext.reg('combobox', Kwf.Form.ComboBox);

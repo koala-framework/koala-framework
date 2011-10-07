@@ -2,11 +2,11 @@
 /**
  * @group Model_Iterator_PackagesTest
  */
-class Vps_Model_Iterator_PackagesTest extends Vps_Test_TestCase
+class Kwf_Model_Iterator_PackagesTest extends Kwf_Test_TestCase
 {
     public function testIt()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id'=>1, 'foo'=>'bar'),
                 array('id'=>2, 'foo'=>'bar'),
@@ -17,7 +17,7 @@ class Vps_Model_Iterator_PackagesTest extends Vps_Test_TestCase
         ));
 
         $ids = array();
-        $it = new Vps_Model_Iterator_Packages(new Vps_Model_Iterator_Rows($model, new Vps_Model_Select()), 2);
+        $it = new Kwf_Model_Iterator_Packages(new Kwf_Model_Iterator_Rows($model, new Kwf_Model_Select()), 2);
         foreach ($it as $row) {
             $ids[] = $row->id;
         }

@@ -5,12 +5,12 @@
  * @group Model_DbWithConnection
  * @group Model_Db_SelectExpr_Proxy2
  */
-class Vps_Model_DbWithConnection_SelectExpr_WithModel2AsProxy_Test extends Vps_Model_DbWithConnection_SelectExpr_AbstractTest
+class Kwf_Model_DbWithConnection_SelectExpr_WithModel2AsProxy_Test extends Kwf_Model_DbWithConnection_SelectExpr_AbstractTest
 {
     public function testIt()
     {
-        $m1 = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_WithModel2AsProxy_Model1');
-        $m2 = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_WithModel2AsProxy_Proxy2');
+        $m1 = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_SelectExpr_WithModel2AsProxy_Model1');
+        $m2 = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_SelectExpr_WithModel2AsProxy_Proxy2');
 
         $s = $m1->select();
         $s->order('id');

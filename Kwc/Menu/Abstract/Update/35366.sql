@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS `vpc_menu`;
+DROP TABLE IF EXISTS `kwc_menu`;

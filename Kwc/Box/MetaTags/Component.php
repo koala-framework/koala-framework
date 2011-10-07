@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_MetaTags_Component extends Vpc_Abstract
+class Kwc_Box_MetaTags_Component extends Kwc_Abstract
 {
     protected function _getMetaTagComponents()
     {
@@ -10,7 +10,7 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
                 'page' => false,
                 'flags' => array('metaTags' => true)
             ));*/
-            if (Vpc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
+            if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
                 $components[] = $this->getData()->getPage();
             }
         }
@@ -36,7 +36,7 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
                 'limit' => 1,
                 'flags' => array('noIndex' => true)
             ));*/
-            if (/*$components || */Vpc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
+            if (/*$components || */Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
                 if (isset($ret['robots'])) {
                     $ret['robots'] .= ',';
                 } else {
@@ -50,17 +50,17 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
-            $host = Vps_Config::getValue('server.domain');
+            $host = Kwf_Config::getValue('server.domain');
         }
         $hostParts = explode('.', $host);
         $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
                         .$hostParts[count($hostParts)-1]; // zB 'com'
-        $configVerify = Vps_Config::getValueArray('verifyV1');
+        $configVerify = Kwf_Config::getValueArray('verifyV1');
         if ($configVerify && isset($configVerify[$configDomain])) {
             $ret['verify-v1'] = $configVerify[$configDomain];
         }
 
-        $configVerify = Vps_Config::getValueArray('googleSiteVerification');
+        $configVerify = Kwf_Config::getValueArray('googleSiteVerification');
         if ($configVerify && isset($configVerify[$configDomain])) {
             $ret['google-site-verification'] = $configVerify[$configDomain];
         }
@@ -78,7 +78,7 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
     {
         $ret = parent::getCacheMeta();
         foreach ($this->_getMetaTagComponents() as $component) {
-            $ret[] = new Vps_Component_Cache_Meta_Component($component);
+            $ret[] = new Kwf_Component_Cache_Meta_Component($component);
         }
         return $ret;
     }

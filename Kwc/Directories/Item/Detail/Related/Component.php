@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
+class Kwc_Directories_Item_Detail_Related_Component extends Kwc_Abstract
 {
     protected $_relatedCache = null;
 
@@ -19,8 +19,8 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
 
     protected function _getCategoryDirectory()
     {
-        return Vps_Component_Data_Root::getInstance()->getComponentByClass(
-            'Vpc_Directories_Category_Directory_Component',
+        return Kwf_Component_Data_Root::getInstance()->getComponentByClass(
+            'Kwc_Directories_Category_Directory_Component',
             array('subroot' => $this->getData())
         );
     }
@@ -41,13 +41,13 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
         $itemRow = $this->getData()->parent->row;
 
         $categoryDirectory = $this->_getCategoryDirectory();
-        $connectTableName = Vpc_Abstract::getSetting(
+        $connectTableName = Kwc_Abstract::getSetting(
             $categoryDirectory->componentClass, 'categoryToItemModelName'
         );
 
         $linkLimit = $this->_getSetting('linkLimit');
 
-        $categoryReference = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
+        $categoryReference = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData(
             $connectTableName, 'Category'
         );
 
@@ -58,12 +58,12 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
         }
 
         if ($categoryIds) {
-            $itemReference = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
+            $itemReference = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData(
                 $connectTableName, 'Item'
             );
 
             // anzahl holen
-            $s = new Zend_Db_Select(Vps_Registry::get('db'));
+            $s = new Zend_Db_Select(Kwf_Registry::get('db'));
             $s->from($itemReference['tableName'], $itemReference['itemColumn']);
             $s->where($categoryReference['itemColumn'].' IN('.implode(',', $categoryIds).')');
             $s->order($itemReference['tableName'].'.id ASC');

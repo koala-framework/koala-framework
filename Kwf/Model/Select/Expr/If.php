@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_Select_Expr_If implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_If implements Kwf_Model_Select_Expr_Interface
 {
     private $_if;
     private $_then;
     private $_else;
-    public function __construct(Vps_Model_Select_Expr_Interface $if, Vps_Model_Select_Expr_Interface $then, Vps_Model_Select_Expr_Interface $else)
+    public function __construct(Kwf_Model_Select_Expr_Interface $if, Kwf_Model_Select_Expr_Interface $then, Kwf_Model_Select_Expr_Interface $else)
     {
         $this->_if = $if;
         $this->_then = $then;

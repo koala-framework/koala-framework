@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Flash_Upload_Model extends Vps_Component_FieldModel
+class Kwc_Basic_Flash_Upload_Model extends Kwf_Component_FieldModel
 {
     protected $_referenceMap = array(
         'FileMedia' => array(
-            'column'            => 'vps_upload_id_media',
-            'refModelClass'     => 'Vps_Uploads_Model'
+            'column'            => 'kwf_upload_id_media',
+            'refModelClass'     => 'Kwf_Uploads_Model'
         )
     );
     protected $_default = array(
@@ -14,12 +14,12 @@ class Vpc_Basic_Flash_Upload_Model extends Vps_Component_FieldModel
         'menu' => 1
     );
 
-    protected $_rowClass = 'Vpc_Basic_Flash_Upload_Row';
+    protected $_rowClass = 'Kwc_Basic_Flash_Upload_Row';
 
     protected function _init()
     {
         parent::_init();
-        $this->_dependentModels['FlashVars'] = new Vps_Model_FieldRows(array(
+        $this->_dependentModels['FlashVars'] = new Kwf_Model_FieldRows(array(
             'fieldName' => 'flash_vars'
         ));
     }

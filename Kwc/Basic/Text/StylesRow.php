@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_StylesRow extends Vps_Model_Proxy_Row
+class Kwc_Basic_Text_StylesRow extends Kwf_Model_Proxy_Row
 {
     public function __toString()
     {

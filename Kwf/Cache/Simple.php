@@ -5,20 +5,20 @@
  * If available it uses apc user cache direclty (highly recommended!!), else it falls
  * back to Zend_Cache using a memcache backend.
  */
-class Vps_Cache_Simple
+class Kwf_Cache_Simple
 {
     private static function _getCache()
     {
         static $cache;
         if (!isset($cache)) {
             $cache = new Zend_Cache_Core(array(
-                //'backend' => new Vps_Cache_Backend_Memcached(),
+                //'backend' => new Kwf_Cache_Backend_Memcached(),
                 'lifetime' => null,
                 'write_control' => false,
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true
             ));
-            $cache->setBackend(new Vps_Cache_Backend_Memcached());
+            $cache->setBackend(new Kwf_Cache_Backend_Memcached());
         }
         return $cache;
     }
@@ -83,7 +83,7 @@ class Vps_Cache_Simple
     {
         static $ret;
         if (!isset($ret)) {
-            $ret = getcwd().'-'.Vps_Setup::getConfigSection().'-';
+            $ret = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
         }
         return $ret;
     }

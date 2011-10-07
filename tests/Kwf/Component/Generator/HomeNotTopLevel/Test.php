@@ -2,11 +2,11 @@
 /**
  * @group HomeNotTopLevel
  */
-class Vps_Component_Generator_HomeNotTopLevel_Test extends Vpc_TestAbstract
+class Kwf_Component_Generator_HomeNotTopLevel_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Generator_HomeNotTopLevel_Root');
+        parent::setUp('Kwf_Component_Generator_HomeNotTopLevel_Root');
         $this->_root->setFilename(null);
     }
 
@@ -28,7 +28,7 @@ class Vps_Component_Generator_HomeNotTopLevel_Test extends Vpc_TestAbstract
         $this->assertEquals(current($c)->componentId, 3);
 
 
-// Eigentlich dürfte nichts zurückkommen, dz. ist es im Vpc_Root_Category_Generator
+// Eigentlich dürfte nichts zurückkommen, dz. ist es im Kwc_Root_Category_Generator
 // so implementiert, dass es schon zurückkommt. Da es nur die Home betrifft nicht weiter
 // schlimm, sollte es mal ganz korrekt implementiert werden, müsste dieser test funzen
 

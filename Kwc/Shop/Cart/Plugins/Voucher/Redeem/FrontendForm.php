@@ -1,13 +1,13 @@
 <?php
-class Vpc_Shop_Cart_Plugins_Voucher_Redeem_FrontendForm extends Vps_Form
+class Kwc_Shop_Cart_Plugins_Voucher_Redeem_FrontendForm extends Kwf_Form
 {
-    protected $_modelName = 'Vpc_Shop_Cart_Orders';
+    protected $_modelName = 'Kwc_Shop_Cart_Orders';
 
     protected function _initFields()
     {
         parent::_initFields();
-        $this->fields->add(new Vps_Form_Field_TextField('voucher_code', trlVps('Voucher Code')))
-            ->addValidator(new Vpc_Shop_Cart_Plugins_Voucher_VoucherValidator())
+        $this->fields->add(new Kwf_Form_Field_TextField('voucher_code', trlKwf('Voucher Code')))
+            ->addValidator(new Kwc_Shop_Cart_Plugins_Voucher_VoucherValidator())
             ->setAllowBlank(false);
     }
 }

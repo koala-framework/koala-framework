@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_MenuCache_MainMenu_Component extends Vpc_Menu_Component
+class Kwc_Trl_MenuCache_MainMenu_Component extends Kwc_Menu_Component
 {
     public static function getSettings()
     {
@@ -8,8 +8,8 @@ class Vpc_Trl_MenuCache_MainMenu_Component extends Vpc_Menu_Component
         $ret['cssClass'] .= ' webListNone';
 
         $ret['generators']['subMenu'] = array(
-            'class' => 'Vpc_Menu_Generator',
-            'component' => 'Vpc_Trl_MenuCache_MainMenu_SubMenu_Component'
+            'class' => 'Kwc_Menu_Generator',
+            'component' => 'Kwc_Trl_MenuCache_MainMenu_SubMenu_Component'
         );
 
         return $ret;

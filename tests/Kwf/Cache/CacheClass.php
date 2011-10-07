@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache_CacheClass extends Vps_Cache_Core
+class Kwf_Cache_CacheClass extends Kwf_Cache_Core
 {
     private $_cacheDir = null;
 

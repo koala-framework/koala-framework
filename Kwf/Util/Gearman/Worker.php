@@ -1,13 +1,13 @@
 <?php
-class Vps_Util_Gearman_Worker extends GearmanWorker
+class Kwf_Util_Gearman_Worker extends GearmanWorker
 {
     public static function createInstance()
     {
         $i = new self();
-        $c = Vps_Registry::get('config')->server->gearman;
+        $c = Kwf_Registry::get('config')->server->gearman;
         foreach ($c->jobServers as $server) {
             if ($server) {
-                Vps_Util_Gearman_AdminClient::checkConnection($server);
+                Kwf_Util_Gearman_AdminClient::checkConnection($server);
                 $i->addServer($server->host, $server->port);
             }
         }
@@ -18,7 +18,7 @@ class Vps_Util_Gearman_Worker extends GearmanWorker
     {
         static $prefix;
         if (!isset($prefix)) {
-            $prefix = Vps_Registry::get('config')->server->gearman->functionPrefix;
+            $prefix = Kwf_Registry::get('config')->server->gearman->functionPrefix;
         }
         return $prefix.'_'.$fn;
     }

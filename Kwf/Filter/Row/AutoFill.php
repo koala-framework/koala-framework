@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_AutoFill extends Vps_Filter_Row_Abstract
+class Kwf_Filter_Row_AutoFill extends Kwf_Filter_Row_Abstract
 {
     protected $_template;
 

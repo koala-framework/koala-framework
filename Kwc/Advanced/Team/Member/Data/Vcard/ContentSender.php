@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Team_Member_Data_Vcard_ContentSender extends Vps_Component_Abstract_ContentSender_Default
+class Kwc_Advanced_Team_Member_Data_Vcard_ContentSender extends Kwf_Component_Abstract_ContentSender_Default
 {
     public function sendContent()
     {
@@ -14,14 +14,14 @@ class Vpc_Advanced_Team_Member_Data_Vcard_ContentSender extends Vps_Component_Ab
     protected function _getDefaultValues()
     {
         $teamComponent = $this->_data->parent->parent->parent;
-        if (Vpc_Abstract::hasSetting($teamComponent->componentClass, 'defaultVcardValues')) {
-            $setting = Vpc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
+        if (Kwc_Abstract::hasSetting($teamComponent->componentClass, 'defaultVcardValues')) {
+            $setting = Kwc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
         }
 
         if (isset($setting)) {
             return $setting;
         } else {
-            return Vpc_Abstract::getSetting($this->_data->componentClass, 'defaultVcardValues');
+            return Kwc_Abstract::getSetting($this->_data->componentClass, 'defaultVcardValues');
         }
     }
 
@@ -41,7 +41,7 @@ class Vpc_Advanced_Team_Member_Data_Vcard_ContentSender extends Vps_Component_Ab
     {
         if ($dataRow && (!empty($dataRow->firstname) || !empty($dataRow->lastname))) {
             $filename = $dataRow->lastname.'_'.$dataRow->firstname;
-            $filter = new Vps_Filter_Ascii();
+            $filter = new Kwf_Filter_Ascii();
             return $filter->filter($filename);
         }
         return null;

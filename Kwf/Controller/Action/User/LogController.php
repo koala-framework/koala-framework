@@ -1,19 +1,19 @@
 <?php
-class Vps_Controller_Action_User_LogController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Controller_Action_User_LogController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array();
     protected $_defaultOrder = array('field' => 'id', 'direction' => 'DESC');
-    protected $_model = 'Vps_User_MessagesModel';
+    protected $_model = 'Kwf_User_MessagesModel';
     protected $_paging = 7;
 
     protected function _initColumns()
     {
         parent::_initColumns();
 
-        $this->_columns->add(new Vps_Grid_Column('message_date', trlVps('Date'), 110))
+        $this->_columns->add(new Kwf_Grid_Column('message_date', trlKwf('Date'), 110))
             ->setRenderer('localizedDatetime');
-        $this->_columns->add(new Vps_Grid_Column('message', trlVps('Message'), 400))
-            ->setData(new Vps_Controller_Action_User_Users_LogMessageData());
+        $this->_columns->add(new Kwf_Grid_Column('message', trlKwf('Message'), 400))
+            ->setData(new Kwf_Controller_Action_User_Users_LogMessageData());
     }
 
     protected function _getSelect()
@@ -31,8 +31,8 @@ class Vps_Controller_Action_User_LogController extends Vps_Controller_Action_Aut
             return false;
         }
 
-        $acl = Vps_Registry::get('acl');
-        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
+        $acl = Kwf_Registry::get('acl');
+        $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
 
         $roles = array();
         foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
@@ -40,7 +40,7 @@ class Vps_Controller_Action_User_LogController extends Vps_Controller_Action_Aut
         }
         if (!$roles) return false;
 
-        $userModel = Vps_Registry::get('userModel');
+        $userModel = Kwf_Registry::get('userModel');
         $userRow = $userModel->getRow($userId);
 
         if (!$userRow || !array_key_exists($userRow->role, $roles)) {

@@ -1,12 +1,12 @@
 <?php
-class Vps_Controller_Action_Cli_Web_BenchmarkController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_BenchmarkController extends Kwf_Controller_Action_Cli_Abstract
 {
     private $_rrds;
     public function preDispatch()
     {
         parent::preDispatch();
         $this->_rrds = array();
-        foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
+        foreach (Kwf_Registry::get('config')->rrd as $k=>$n) {
             if ($n) {
                 $this->_rrds[$k] = new $n;
             }

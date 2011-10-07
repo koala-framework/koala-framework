@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_Tree extends Vps_Model_Db_Proxy
-                        implements Vps_Model_Tree_Interface
+class Kwf_Model_Tree extends Kwf_Model_Db_Proxy
+                        implements Kwf_Model_Tree_Interface
 {
     private $_parentIdsCache;
     private $_recursiveIdsCache;
-    protected $_rowClass = 'Vps_Model_Tree_Row';
+    protected $_rowClass = 'Kwf_Model_Tree_Row';
     protected $_useRecursiveIdsCache = false;
 
     protected function _init()
@@ -22,7 +22,7 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
         if (!$this->useRecursiveIdsCache()) return false;
 
         if (!isset($this->_recursiveIdsCache)) {
-            $this->_recursiveIdsCache = Vps_Cache::factory('Core', 'Apc', array(
+            $this->_recursiveIdsCache = Kwf_Cache::factory('Core', 'Apc', array(
                 'automatic_serialization' => true
             ), array(
                 'cache_id_prefix' => $this->getUniqueIdentifier().'_recid_',
@@ -47,7 +47,7 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
         }
         if ($ret === false) {
             if (!isset($this->_parentIdsCache)) {
-                foreach ($this->export(Vps_Model_Interface::FORMAT_ARRAY, array()) as $row) {
+                foreach ($this->export(Kwf_Model_Interface::FORMAT_ARRAY, array()) as $row) {
                     $this->_parentIdsCache[$row[$this->getPrimaryKey()]]
                                 = $row[$this->_referenceMap['Parent']['column']];
                 }

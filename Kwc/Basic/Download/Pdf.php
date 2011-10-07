@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Download_Pdf extends Vpc_Abstract_Pdf
+class Kwc_Basic_Download_Pdf extends Kwc_Abstract_Pdf
 {
     public function writeContent()
     {
-        $fileSizeHelper = new Vps_View_Helper_FileSize();
-        $encodeTextHelper = new Vps_View_Helper_MailEncodeText();
+        $fileSizeHelper = new Kwf_View_Helper_FileSize();
+        $encodeTextHelper = new Kwf_View_Helper_MailEncodeText();
         $vars = $this->_component->getTemplateVars();
         if ($vars['icon']) {
             $this->_pdf->Image($vars['icon']->getFilename(), $this->_pdf->getX(), $this->_pdf->getY(), 3, 3, 'PNG');

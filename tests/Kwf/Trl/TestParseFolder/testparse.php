@@ -1,3 +1,3 @@
 <?php
-trlVps("test");
-trlVps("foobar");
+trlKwf("test");
+trlKwf("foobar");

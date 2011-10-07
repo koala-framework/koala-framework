@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Feed_ContentSender extends Vps_Component_Abstract_ContentSender_Default
+class Kwc_Abstract_Feed_ContentSender extends Kwf_Component_Abstract_ContentSender_Default
 {
     public function sendContent()
     {

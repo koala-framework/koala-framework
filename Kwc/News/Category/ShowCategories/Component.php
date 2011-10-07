@@ -1,13 +1,13 @@
 <?php
-class Vpc_News_Category_ShowCategories_Component extends Vpc_Directories_Category_ShowCategories_Component
+class Kwc_News_Category_ShowCategories_Component extends Kwc_Directories_Category_ShowCategories_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('News.Show categories');
-        $ret['componentIcon'] = new Vps_Asset('newspaper');
-        $ret['showDirectoryClass'] = 'Vpc_News_Directory_Component';
-        $ret['hideDirectoryClasses'] = array('Vpc_Events_Directory_Component');
+        $ret['componentName'] = trlKwf('News.Show categories');
+        $ret['componentIcon'] = new Kwf_Asset('newspaper');
+        $ret['showDirectoryClass'] = 'Kwc_News_Directory_Component';
+        $ret['hideDirectoryClasses'] = array('Kwc_Events_Directory_Component');
         return $ret;
     }
 }

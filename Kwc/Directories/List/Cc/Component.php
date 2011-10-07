@@ -1,12 +1,12 @@
 <?php
-class Vpc_Directories_List_Cc_Component extends Vpc_Abstract_Composite_Cc_Component
+class Kwc_Directories_List_Cc_Component extends Kwc_Abstract_Composite_Cc_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
 
         //child generator 1:1 übernehmen um die gleiche view zu haben (keine uebersetzte)
-        $masterGen = Vpc_Abstract::getSetting($masterComponentClass, 'generators');
+        $masterGen = Kwc_Abstract::getSetting($masterComponentClass, 'generators');
         $ret['generators']['child'] = $masterGen['child'];
         return $ret;
     }
@@ -30,9 +30,9 @@ class Vpc_Directories_List_Cc_Component extends Vpc_Abstract_Composite_Cc_Compon
         $itemDirectory = $this->getItemDirectory();
         if (!$itemDirectory) return null;
         if (is_string($itemDirectory)) {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         } else {
-            if (Vpc_Abstract::getSetting($this->_getChainedComponent()->componentClass, 'useDirectorySelect')) {
+            if (Kwc_Abstract::getSetting($this->_getChainedComponent()->componentClass, 'useDirectorySelect')) {
                 $ret = $itemDirectory->getComponent()->getSelect();
             } else {
                 $ret = $itemDirectory->getGenerator('detail')
@@ -42,11 +42,11 @@ class Vpc_Directories_List_Cc_Component extends Vpc_Abstract_Composite_Cc_Compon
         return $ret;
     }
 
-    public final function callModifyItemData(Vps_Component_Data $item)
+    public final function callModifyItemData(Kwf_Component_Data $item)
     {
-        foreach (Vpc_Abstract::getChildComponentClasses($this->getData()->componentClass) as $c) {
-            if (Vpc_Abstract::hasSetting($c, 'hasModifyItemData')
-                && Vpc_Abstract::getSetting($c, 'hasModifyItemData')
+        foreach (Kwc_Abstract::getChildComponentClasses($this->getData()->componentClass) as $c) {
+            if (Kwc_Abstract::hasSetting($c, 'hasModifyItemData')
+                && Kwc_Abstract::getSetting($c, 'hasModifyItemData')
             ) {
                 call_user_func(array(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c, 'modifyItemData'), $item, $c);
             }

@@ -1,4 +1,4 @@
 <?php
-class Vpc_Menu_EditableItems_ExtConfig extends Vpc_Abstract_List_ExtConfigList
+class Kwc_Menu_EditableItems_ExtConfig extends Kwc_Abstract_List_ExtConfigList
 {
 }

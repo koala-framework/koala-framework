@@ -1,4 +1,4 @@
-Vps.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Vps.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
 
         this.previousLink = this.list.el.createChild({

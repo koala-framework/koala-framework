@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_PoolMulticheckbox extends Vps_Form_Field_MultiCheckbox
+class Kwf_Form_Field_PoolMulticheckbox extends Kwf_Form_Field_MultiCheckbox
 {
     public function __construct($tableName = null, $title = null)
     {
@@ -8,7 +8,7 @@ class Vps_Form_Field_PoolMulticheckbox extends Vps_Form_Field_MultiCheckbox
 
     public function setPool($pool)
     {
-        $model = Vps_Model_Abstract::getInstance('Vps_Util_Model_Pool');
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Pool');
         $select = $model->select()
             ->whereEquals('pool', $pool)
             ->whereEquals('visible', 1)

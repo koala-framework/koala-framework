@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Select extends Vps_Model_Select
+class Kwf_Component_Select extends Kwf_Model_Select
 {
     const WHERE_PAGE = 'wherePage';
     const WHERE_PSEUDO_PAGE = 'wherePseudoPage';
@@ -173,12 +173,12 @@ class Vps_Component_Select extends Vps_Model_Select
     public function whereSubroot($component)
     {
         if (!is_array($component)) {;
-            if (!$component instanceof Vps_Component_Data) {
-                throw new Vps_Exception("Subroot has to be a component");
+            if (!$component instanceof Kwf_Component_Data) {
+                throw new Kwf_Exception("Subroot has to be a component");
             }
             $where = array();
             while ($component) {
-                if (Vpc_Abstract::getFlag($component->componentClass, 'subroot')) {
+                if (Kwc_Abstract::getFlag($component->componentClass, 'subroot')) {
                     $where[] = $component;
                 }
                 $component = $component->parent;
@@ -195,7 +195,7 @@ class Vps_Component_Select extends Vps_Model_Select
     /**
      * Intern fuer effizientes getRecursiveChildComponents ohne parentData
      **/
-    public function whereChildOfSamePage(Vps_Component_Data $page)
+    public function whereChildOfSamePage(Kwf_Component_Data $page)
     {
         $this->_parts[self::WHERE_CHILD_OF_SAME_PAGE] = $page;
         return $this;

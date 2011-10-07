@@ -1,5 +1,5 @@
 <?php
-class Vpc_Columns_TestComponent_Column_Model extends Vps_Model_FnF
+class Kwc_Columns_TestComponent_Column_Model extends Kwf_Model_FnF
 {
     protected $_toStringField = 'foo';
 

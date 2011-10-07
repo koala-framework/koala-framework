@@ -1,15 +1,15 @@
 <?php
-class Vpc_Root_LanguageRoot_Language_Component extends Vpc_Abstract
+class Kwc_Root_LanguageRoot_Language_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['category'] = array(
-            'class' => 'Vpc_Root_CategoryGenerator',
-            'component' => 'Vpc_Root_Category_Component',
-            'model' => 'Vpc_Root_CategoryModel'
+            'class' => 'Kwc_Root_CategoryGenerator',
+            'component' => 'Kwc_Root_Category_Component',
+            'model' => 'Kwc_Root_CategoryModel'
         );
-        $ret['componentName'] = trlVps('Language');
+        $ret['componentName'] = trlKwf('Language');
         $ret['flags']['subroot'] = 'language';
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;

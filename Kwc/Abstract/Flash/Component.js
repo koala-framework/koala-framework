@@ -1,6 +1,6 @@
 
-Vps.onContentReady(function() {
-    var flashComponents = Ext.DomQuery.select('div.vpcAbstractFlash');
+Kwf.onContentReady(function() {
+    var flashComponents = Ext.DomQuery.select('div.kwcAbstractFlash');
     Ext.each(flashComponents, function(flashComponent) {
         var inputEl = Ext.get(flashComponent).down('input');
         if (inputEl) {

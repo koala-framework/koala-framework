@@ -4,7 +4,7 @@
 // written by Josh Fraser | joshfraser.com | josh@eventvue.com
 // Released under Apache License 2.0
 
-class Vps_Util_PubSubHubbub_Publisher
+class Kwf_Util_PubSubHubbub_Publisher
 {
     protected $_hubUrl;
 
@@ -22,7 +22,7 @@ class Vps_Util_PubSubHubbub_Publisher
     public function publishUpdate($topicUrls)
     {
         if (!isset($topicUrls))
-            throw new Vps_Exception('Please specify a topic url');
+            throw new Kwf_Exception('Please specify a topic url');
 
         if (!is_array($topicUrls)) $topicUrls = array($topicUrls);
 
@@ -39,12 +39,12 @@ class Vps_Util_PubSubHubbub_Publisher
         $client->setParameterPost($data);
         foreach ($topicUrls as $u) {
             if (!preg_match("|^https?://|i",$u))
-                throw new Vps_Exception('The specified topic url does not appear to be valid: '.$topicUrl);
+                throw new Kwf_Exception('The specified topic url does not appear to be valid: '.$topicUrl);
             $client->setParameterPost('hub.url', $u);
         }
         $response = $client->request();
         if ($response->isError()) {
-            throw new Vps_Exception("publishUpdate failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
+            throw new Kwf_Exception("publishUpdate failed, response status '{$response->getStatus()}' '{$response->getBody()}'");
         }
         return $response;
     }

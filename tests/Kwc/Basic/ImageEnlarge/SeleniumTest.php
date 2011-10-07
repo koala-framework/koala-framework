@@ -5,41 +5,41 @@
  * @group Basic_ImageEnlarge
  * @group Image
  */
-class Vpc_Basic_ImageEnlarge_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwc_Basic_ImageEnlarge_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
         parent::setUp();
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_ImageEnlarge_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_Basic_ImageEnlarge_Root');
     }
 
     public function testLightbox()
     {
-        $this->openVpc('/foo1');
-        $this->assertElementNotPresent('css=.vpsLightbox');
-        $this->assertElementPresent('css=.vpcBasicImageEnlargeWithoutSmallImageComponent a img');
+        $this->openKwc('/foo1');
+        $this->assertElementNotPresent('css=.kwfLightbox');
+        $this->assertElementPresent('css=.kwcBasicImageEnlargeWithoutSmallImageComponent a img');
         $this->click('//a');
         $this->waitForConnections();
-        $this->assertVisible('css=.vpsLightbox');
-        $this->assertElementPresent('css=.vpsLightbox div.image');
-        $this->assertElementPresent('css=.vpsLightbox div.image img');
-        $this->click('css=.vpsLightbox a.closeButton');
+        $this->assertVisible('css=.kwfLightbox');
+        $this->assertElementPresent('css=.kwfLightbox div.image');
+        $this->assertElementPresent('css=.kwfLightbox div.image img');
+        $this->click('css=.kwfLightbox a.closeButton');
         sleep(1);
-        $this->assertNotVisible('css=.vpsLightbox');
+        $this->assertNotVisible('css=.kwfLightbox');
     }
 
     public function testOriginal()
     {
-        $this->openVpc('/foo4');
+        $this->openKwc('/foo4');
         $this->click('//a');
         $this->waitForConnections();
-        $this->assertVisible('css=.vpsLightbox');
-        $this->assertElementPresent('css=.vpsLightbox a.fullSizeLink');
+        $this->assertVisible('css=.kwfLightbox');
+        $this->assertElementPresent('css=.kwfLightbox a.fullSizeLink');
     }
 
     public function testAdmin()
     {
-        $this->openVpcEdit('Vpc_Basic_ImageEnlarge_TestComponent', 1);
+        $this->openKwcEdit('Kwc_Basic_ImageEnlarge_TestComponent', 1);
         $this->waitForConnections();
         //test k�nnte nat�rlich verbessert werden, aber zumindest testen ob kein fehler kommt
     }

@@ -2,13 +2,13 @@
 /**
  * @group Composite_Images
  *
- * http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Composite_Images_Root/Vpc_Composite_Images_TestComponent/Index?componentId=2100
+ * http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Composite_Images_Root/Kwc_Composite_Images_TestComponent/Index?componentId=2100
  */
-class Vpc_Composite_Images_Test extends Vpc_TestAbstract
+class Kwc_Composite_Images_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Composite_Images_Root');
+        parent::setUp('Kwc_Composite_Images_Root');
     }
 
     public function testHtml()
@@ -32,8 +32,8 @@ class Vpc_Composite_Images_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(100, $im->getImageWidth());
         $this->assertEquals(100, $im->getImageHeight());
-        $this->assertEquals(Vps_Media_Image::scale(Vps_Model_Abstract::getInstance('Vpc_Composite_Images_Image_UploadsModel')->getUploadDir().'/1',
-                                    array(100, 100, Vps_Media_Image::SCALE_CROP)), $o['contents']);
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Composite_Images_Image_UploadsModel')->getUploadDir().'/1',
+                                    array(100, 100, Kwf_Media_Image::SCALE_CROP)), $o['contents']);
     }
 
 }

@@ -1,4 +1,4 @@
-Vps.Form.TreeSelect = Ext.extend(Vps.Form.AbstractSelect,
+Kwf.Form.TreeSelect = Ext.extend(Kwf.Form.AbstractSelect,
 {
     // mandatory parameters
     // controllerUrl (for the tree)
@@ -10,7 +10,7 @@ Vps.Form.TreeSelect = Ext.extend(Vps.Form.AbstractSelect,
     _getWindowItem: function()
     {
         if (!this._windowItem) {
-            this._windowItem = new Vps.Auto.TreePanel({
+            this._windowItem = new Kwf.Auto.TreePanel({
                 controllerUrl: this.controllerUrl,
                 listeners: {
                     click: function(node) {
@@ -41,4 +41,4 @@ Vps.Form.TreeSelect = Ext.extend(Vps.Form.AbstractSelect,
         return this._windowItem;
     }
 });
-Ext.reg('treeselect', Vps.Form.TreeSelect);
+Ext.reg('treeselect', Kwf.Form.TreeSelect);

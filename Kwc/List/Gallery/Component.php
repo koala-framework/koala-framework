@@ -1,18 +1,18 @@
 <?php
-abstract class Vpc_List_Gallery_Component extends Vpc_Abstract_List_Component
+abstract class Kwc_List_Gallery_Component extends Kwc_Abstract_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['dep'][] = 'VpsEnlargeNextPrevious';
-        $ret['componentName'] = trlVps('Gallery');
-        $ret['componentIcon'] = new Vps_Asset('images.png');
-        $ret['generators']['child']['component'] = 'Vpc_List_Gallery_Image_Component';
+        $ret['assets']['dep'][] = 'KwfEnlargeNextPrevious';
+        $ret['componentName'] = trlKwf('Gallery');
+        $ret['componentIcon'] = new Kwf_Asset('images.png');
+        $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
         $ret['cssClass'] = 'webStandard';
 
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
 
-        $ret['extConfig'] = 'Vpc_List_Gallery_ExtConfig';
+        $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';
 
         $ret['contentMargin'] = 10;
 
@@ -22,8 +22,8 @@ abstract class Vpc_List_Gallery_Component extends Vpc_Abstract_List_Component
     public static function validateSettings($settings, $componentClass)
     {
         parent::validateSettings($settings, $componentClass);
-        if (Vpc_Abstract::hasSetting($componentClass, 'dimensions')) {
-            throw new Vps_Exception("Setting 'dimensions' must NOT exist");
+        if (Kwc_Abstract::hasSetting($componentClass, 'dimensions')) {
+            throw new Kwf_Exception("Setting 'dimensions' must NOT exist");
         }
     }
 
@@ -35,7 +35,7 @@ abstract class Vpc_List_Gallery_Component extends Vpc_Abstract_List_Component
         return $ret;
     }
 
-    protected function _getChildContentWidth(Vps_Component_Data $child)
+    protected function _getChildContentWidth(Kwf_Component_Data $child)
     {
         $ownWidth = parent::_getChildContentWidth($child);
         $columns = (int)$this->_getRow()->columns;

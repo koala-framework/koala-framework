@@ -1,8 +1,8 @@
 <?php
-class Vps_Form_Cards_TopModel extends Vps_Model_Session
+class Kwf_Form_Cards_TopModel extends Kwf_Model_Session
 {
-    protected $_namespace = 'Vps_Form_Cards_TopModel';
-    protected $_rowClass = 'Vps_Form_Cards_TopModelRow';
+    protected $_namespace = 'Kwf_Form_Cards_TopModel';
+    protected $_rowClass = 'Kwf_Form_Cards_TopModelRow';
     protected $_columns = array('id', 'type', 'comment');
 
     protected $_defaultData = array(
@@ -15,8 +15,8 @@ class Vps_Form_Cards_TopModel extends Vps_Model_Session
     public function __construct($config = array())
     {
         $this->_siblingModels = array(
-            'foo' => 'Vps_Form_Cards_FooModel',
-            'bar' => 'Vps_Form_Cards_BarModel'
+            'foo' => 'Kwf_Form_Cards_FooModel',
+            'bar' => 'Kwf_Form_Cards_BarModel'
         );
 
         parent::__construct($config);

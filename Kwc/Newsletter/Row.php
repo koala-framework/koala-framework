@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_Row extends Vps_Model_Proxy_Row
+class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 {
     public function __toString()
     {
@@ -154,28 +154,28 @@ class Vpc_Newsletter_Row extends Vps_Model_Proxy_Row
 
         $text = '';
         switch ($this->status) {
-            case 'stop': $text = trlVps('Newsletter stopped, cannot start again.'); break;
-            case 'pause': $text = trlVps('Newsletter paused.'); break;
-            case 'start': case 'sending': $text = trlVps('Newsletter sending.'); break;
-            case 'finished': $text = trlVps('Newsletter finished.'); break;
-            default: $text = trlVps('Newsletter waiting for start.'); break;
+            case 'stop': $text = trlKwf('Newsletter stopped, cannot start again.'); break;
+            case 'pause': $text = trlKwf('Newsletter paused.'); break;
+            case 'start': case 'sending': $text = trlKwf('Newsletter sending.'); break;
+            case 'finished': $text = trlKwf('Newsletter finished.'); break;
+            default: $text = trlKwf('Newsletter waiting for start.'); break;
         }
         $ret['shortText'] = $text;
         $text .= ' ';
 
-        $text .= trlVps(
+        $text .= trlKwf(
             '{0} total, {1} sent, {2} waiting to send.',
             array($ret['total'], $ret['sent'], $ret['queued'])
         );
         if ($ret['notFound'] > 0) {
-            $text .= ' ' . trlpVps('{0} receiver not found.', '{0} receivers not found.', $ret['notFound']);
+            $text .= ' ' . trlpKwf('{0} receiver not found.', '{0} receivers not found.', $ret['notFound']);
         }
         if ($ret['errors'] > 0) {
-            $text .= ' ' . trlVps('{0} errors while sending mail.', $ret['error']);
+            $text .= ' ' . trlKwf('{0} errors while sending mail.', $ret['error']);
         }
         if ($ret['lastSentDate']) {
-            $time = date(trlVps('Y-m-d H:i'), $ret['lastSentDate']);
-            $t = ' ' . trlVps('Last mail sent: {0}', $time);;
+            $time = date(trlKwf('Y-m-d H:i'), $ret['lastSentDate']);
+            $t = ' ' . trlKwf('Last mail sent: {0}', $time);;
             $text .= $t;
             $ret['shortText'] .= $t;
         }
@@ -187,7 +187,7 @@ class Vpc_Newsletter_Row extends Vps_Model_Proxy_Row
     public function getMailComponent()
     {
         $componentId = $this->component_id . '_' . $this->id . '-mail';
-        return Vps_Component_Data_Root::getInstance()
+        return Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($componentId, array('ignoreVisible' => true))
             ->getComponent();
     }

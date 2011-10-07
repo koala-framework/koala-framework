@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `vpc_mail` (
+CREATE TABLE IF NOT EXISTS `kwc_mail` (
   `component_id` varchar(255) character set utf8 NOT NULL,
   `subject` varchar(255) character set utf8 NOT NULL,
   `from_email` varchar(255) character set utf8 NOT NULL,

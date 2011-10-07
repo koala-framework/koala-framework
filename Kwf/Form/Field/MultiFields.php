@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
+class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
 {
     public $fields;
     private $_model;
@@ -17,14 +17,14 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         parent::__construct(is_object($reference) ? get_class($reference) : $reference);
         if (isset($model)) {
-            if (!($model instanceof Vps_Model_Interface)) {
-                $model = new Vps_Model_Db(array(
+            if (!($model instanceof Kwf_Model_Interface)) {
+                $model = new Kwf_Model_Db(array(
                     'table' => $model
                 ));
             }
             $this->setModel($model);
         }
-        $this->fields = new Vps_Collection_FormFields();
+        $this->fields = new Kwf_Collection_FormFields();
         $this->setBorder(false);
         $this->setBaseCls('x-plain');
         $this->setXtype('multifields');
@@ -82,7 +82,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         return $this->fields;
     }
 
-    protected function _getRowsByRow(Vps_Model_Row_Interface $row)
+    protected function _getRowsByRow(Kwf_Model_Row_Interface $row)
     {
         $pk = $row->getModel()->getPrimaryKey();
         if (!$row->$pk) {
@@ -90,7 +90,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             return array();
         }
         if (isset($this->_referenceName)) {
-            $select = new Vps_Model_Select();
+            $select = new Kwf_Model_Select();
             if ($row->getModel()->getDependentModel($this->_referenceName)->hasColumn('pos')) {
                 $select->order('pos');
             }
@@ -244,10 +244,10 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         return $postData;
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
         if (!isset($postData[$this->getFieldName()])) {
-            throw new Vps_Exception("No postData found '".$this->getFieldName()."'");
+            throw new Kwf_Exception("No postData found '".$this->getFieldName()."'");
         }
         $postData = $postData[$this->getFieldName()];
         foreach ($postData['save'] as $d) {
@@ -299,15 +299,15 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     {
         if ($this->_references) {
             return $this->_references;
-        } else if ($this->_model instanceof Vps_Model_Db && $row instanceof Vps_Model_Db_Row) {
+        } else if ($this->_model instanceof Kwf_Model_Db && $row instanceof Kwf_Model_Db_Row) {
             return $this->_model->getTable()
                         ->getReference(get_class($row->getRow()->getTable()));
         } else {
-            throw new Vps_Exception('Couldn\'t read references for Multifields. Either use Vps_Model_FieldRows/Vps_Model_Db or set the References by setReferences().');
+            throw new Kwf_Exception('Couldn\'t read references for Multifields. Either use Kwf_Model_FieldRows/Kwf_Model_Db or set the References by setReferences().');
         }
     }
 
-    public function save(Vps_Model_Row_Interface $row, $postData)
+    public function save(Kwf_Model_Row_Interface $row, $postData)
     {
         $postData = $postData[$this->getFieldName()];
 
@@ -321,7 +321,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             if ($i['insert']
                 && !isset($this->_referenceName) //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
             ) {
-                if ($this->_model instanceof Vps_Model_FieldRows) {
+                if ($this->_model instanceof Kwf_Model_FieldRows) {
                     //nichts zu tun, keine parent_id muss gesetzt werden
                 } else {
                     $ref = $this->_getReferences($row);
@@ -343,13 +343,13 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
         $ret = parent::getTemplateVars($values);
         $ret['preHtml'] = '<input type="hidden" name="'.$name.'_num'.$namePostfix.'" value="'.count($value).'" />';
-        $ret['postHtml'] = '<div class="addLayer"><div class="submitWrapper"><span class="beforeButton"></span><span class="button"><button class="submit add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">'.trlVps("New Entry").'</button></span><span class="afterButton"></span></div></div>';
+        $ret['postHtml'] = '<div class="addLayer"><div class="submitWrapper"><span class="beforeButton"></span><span class="button"><button class="submit add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">'.trlKwf("New Entry").'</button></span><span class="afterButton"></span></div></div>';
 
         $ret['items'] = array();
         foreach ($value as $i=>$rowValues) {
-            $ret['items'][] = array('preHtml' => "<div class=\"vpsFormFieldMultiFieldsRow\">\n", 'item' => null);
+            $ret['items'][] = array('preHtml' => "<div class=\"kwfFormFieldMultiFieldsRow\">\n", 'item' => null);
             $ret['items'] = array_merge($ret['items'], $this->fields->getTemplateVars($rowValues, $namePostfix."[$i]"));
-            $ret['items'][] = array('postHtml' => "</div>\n", 'html' => '<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">'.trlVps("Delete Entry").'</button>', 'item' => null);
+            $ret['items'][] = array('postHtml' => "</div>\n", 'html' => '<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">'.trlKwf("Delete Entry").'</button>', 'item' => null);
         }
         return $ret;
     }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Benchmark_Profile
+class Kwf_Benchmark_Profile
 {
     private $_start;
     private $_stop;
@@ -13,7 +13,7 @@ class Vps_Benchmark_Profile
     public $queries;
     public $stopped = false;
 
-    //sollte über Vps_Benchmark::start aufgerufen werden
+    //sollte über Kwf_Benchmark::start aufgerufen werden
     public function __construct($identifier, $addInfo)
     {
         if (!$identifier && function_exists('debug_backtrace')) {
@@ -50,11 +50,11 @@ class Vps_Benchmark_Profile
         $this->identifier = $identifier;
         $this->addInfo = $addInfo;
         $this->_start = microtime(true);
-        if (Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+        if (Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() instanceof Kwf_Db_Profiler) {
             $this->_queriesStart =
                 Zend_Registry::get('db')->getProfiler()->getQueryCount();
         }
-        Vps_Benchmark::$benchmarks[] = $this;
+        Kwf_Benchmark::$benchmarks[] = $this;
     }
 
     public function getOutput()
@@ -95,7 +95,7 @@ class Vps_Benchmark_Profile
             $this->_memoryStop = memory_get_usage();
             $this->memory = $this->_memoryStop - $this->_memoryStart;
         }
-        if (Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+        if (Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() instanceof Kwf_Db_Profiler) {
             $this->_queriesStop =  Zend_Registry::get('db')->getProfiler()->getQueryCount();
             $this->queries = $this->_queriesStop - $this->_queriesStart;
         }

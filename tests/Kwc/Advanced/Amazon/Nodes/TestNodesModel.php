@@ -1,10 +1,10 @@
 <?php
-class Vpc_Advanced_Amazon_Nodes_TestNodesModel extends Vpc_Advanced_Amazon_Nodes_NodesModel
+class Kwc_Advanced_Amazon_Nodes_TestNodesModel extends Kwc_Advanced_Amazon_Nodes_NodesModel
 {
     public function __construct($config = array())
     {
         $this->_default = array('content'=>'ShouldGetOverwritten');
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
                 'columns' => array('id', 'component_id', 'name', 'node_id', 'visible'),
                 'primaryKey' => 'id',
                 'data'=> array(

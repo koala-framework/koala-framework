@@ -1,14 +1,14 @@
 <?php
-class Vpc_Columns_Update_37315 extends Vps_Update
+class Kwc_Columns_Update_37315 extends Kwf_Update
 {
     public function update()
     {
-        // daten von vpc_columns in vpc_composite_list kopieren
+        // daten von kwc_columns in kwc_composite_list kopieren
 
-        $columnsModel = new Vps_Model_Db_Proxy(array('table' => 'vpc_columns'));
-        $listModel = new Vps_Model_Db_Proxy(array(
-            'table' => 'vpc_composite_list',
-            'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
+        $columnsModel = new Kwf_Model_Db_Proxy(array('table' => 'kwc_columns'));
+        $listModel = new Kwf_Model_Db_Proxy(array(
+            'table' => 'kwc_composite_list',
+            'siblingModels' => array(new Kwf_Model_Field(array('fieldName'=>'data')))
         ));
 
         foreach ($columnsModel->getRows() as $colRow) {
@@ -20,7 +20,7 @@ class Vpc_Columns_Update_37315 extends Vps_Update
             $listRow->save();
 
             // ersetzungen für master
-            $action = new Vps_Update_Action_Component_ConvertComponentIds(array(
+            $action = new Kwf_Update_Action_Component_ConvertComponentIds(array(
                 'search' => $colRow->component_id.'-'.$colRow->id,
                 'replace' => $listRow->component_id.'-'.$listRow->id
             ));
@@ -28,7 +28,7 @@ class Vpc_Columns_Update_37315 extends Vps_Update
             $action->update();
 
             // ersetzungen für trl
-            $action = new Vps_Update_Action_Component_ConvertComponentIds(array(
+            $action = new Kwf_Update_Action_Component_ConvertComponentIds(array(
                 'search' => $colRow->component_id.'-'.$colRow->id,
                 'replace' => $listRow->component_id.'-'.$listRow->id,
                 'pattern' => 'root-%\_'.$colRow->component_id.'-'.$colRow->id.'%'

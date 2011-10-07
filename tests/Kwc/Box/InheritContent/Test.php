@@ -1,12 +1,12 @@
 <?php
 /**
- * @group Vpc_Box_InheritContent
+ * @group Kwc_Box_InheritContent
  */
-class Vpc_Box_InheritContent_Test extends Vpc_TestAbstract
+class Kwc_Box_InheritContent_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Box_InheritContent_Root');
+        parent::setUp('Kwc_Box_InheritContent_Root');
     }
 
     public function testInheritContent()

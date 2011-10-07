@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_StaticTexts_Test_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Trl_StaticTexts_Test_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public function getTemplateVars()
     {
@@ -19,12 +19,12 @@ class Vpc_Trl_StaticTexts_Test_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['trlcpTest1'] = $this->getData()->trlcp('test', 'Antwort', 'Antworten', 1);
         $ret['trlcpTest2'] = $this->getData()->trlcp('test', 'Antwort', 'Antworten', 2);
 
-        $ret['trlVpsTest'] = $this->getData()->trlVps('Visible');
-        $ret['trlcVpsTest'] = $this->getData()->trlcVps('time', 'On');
-        $ret['trlpVpsTest1'] = $this->getData()->trlpVps('reply', 'replies', 1);
-        $ret['trlpVpsTest2'] = $this->getData()->trlpVps('reply', 'replies', 2);
-        $ret['trlcpVpsTest1'] = $this->getData()->trlcpVps('test', 'reply', 'replies', 1);
-        $ret['trlcpVpsTest2'] = $this->getData()->trlcpVps('test', 'reply', 'replies', 2);
+        $ret['trlKwfTest'] = $this->getData()->trlKwf('Visible');
+        $ret['trlcKwfTest'] = $this->getData()->trlcKwf('time', 'On');
+        $ret['trlpKwfTest1'] = $this->getData()->trlpKwf('reply', 'replies', 1);
+        $ret['trlpKwfTest2'] = $this->getData()->trlpKwf('reply', 'replies', 2);
+        $ret['trlcpKwfTest1'] = $this->getData()->trlcpKwf('test', 'reply', 'replies', 1);
+        $ret['trlcpKwfTest2'] = $this->getData()->trlcpKwf('test', 'reply', 'replies', 2);
 
         return $ret;
     }

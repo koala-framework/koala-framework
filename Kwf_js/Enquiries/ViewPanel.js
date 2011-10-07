@@ -1,9 +1,9 @@
 
-Vps.Enquiries.ViewPanel = Ext.extend(Vps.Binding.AbstractPanel,
+Kwf.Enquiries.ViewPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 {
     initComponent: function()
     {
-        Vps.Enquiries.ViewPanel.superclass.initComponent.call(this);
+        Kwf.Enquiries.ViewPanel.superclass.initComponent.call(this);
     },
 
     load: function(params, options) {

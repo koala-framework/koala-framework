@@ -1,10 +1,10 @@
 <?php
-class Vpc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
+class Kwc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['ownModel'] = 'Vpc_List_ChildPages_Teaser_TeaserImage_Model';
+        $ret['ownModel'] = 'Kwc_List_ChildPages_Teaser_TeaserImage_Model';
         return $ret;
     }
 
@@ -24,7 +24,7 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Vpc_Abstract_
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_Trl_GeneratorModel');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Root_Category_Trl_GeneratorModel');
         return $ret;
     }
 }

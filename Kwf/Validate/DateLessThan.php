@@ -1,5 +1,5 @@
 <?php
-class Vps_Validate_DateLessThan extends Zend_Validate_Abstract
+class Kwf_Validate_DateLessThan extends Zend_Validate_Abstract
 {
     const NOT_LESS = 'notLessThan';
 
@@ -26,9 +26,9 @@ class Vps_Validate_DateLessThan extends Zend_Validate_Abstract
     public function setMax($max)
     {
         if (!is_numeric($max)) $max = strtotime($max);
-        if (!$max) throw new Vps_Exception("Invalid max date");
+        if (!$max) throw new Kwf_Exception("Invalid max date");
         $this->_max = $max;
-        $this->_maxDate = date(trlVps('Y-m-d'), $max);
+        $this->_maxDate = date(trlKwf('Y-m-d'), $max);
         return $this;
     }
 
@@ -36,7 +36,7 @@ class Vps_Validate_DateLessThan extends Zend_Validate_Abstract
     {
         $value = strtotime($value);
         if ($value) {
-            $this->_setValue(date(trlVps('Y-m-d'), $value));
+            $this->_setValue(date(trlKwf('Y-m-d'), $value));
             if ($this->_max <= $value) {
                 $this->_error(self::NOT_LESS);
                 return false;

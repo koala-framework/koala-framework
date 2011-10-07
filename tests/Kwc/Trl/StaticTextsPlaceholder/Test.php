@@ -1,25 +1,25 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_Trl_StaticTexts
- * @group Vpc_Trl_StaticTexts_Placeholder
+ * @group Kwc_Trl
+ * @group Kwc_Trl_StaticTexts
+ * @group Kwc_Trl_StaticTexts_Placeholder
  */
-class Vpc_Trl_StaticTextsPlaceholder_Test extends Vpc_TestAbstract
+class Kwc_Trl_StaticTextsPlaceholder_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        Vps_Registry::get('config')->languages = array('de', 'en');
-        Vps_Trl::getInstance()->setWebCodeLanguage('de');
-        Vps_Trl::getInstance()->setModel(new Vpc_Trl_StaticTextsPlaceholder_TrlModelWeb(), Vps_Trl::SOURCE_WEB);
-        Vps_Trl::getInstance()->setModel(new Vps_Model_FnF(), Vps_Trl::SOURCE_VPS);
-        parent::setUp('Vpc_Trl_StaticTextsPlaceholder_Root');
+        Kwf_Registry::get('config')->languages = array('de', 'en');
+        Kwf_Trl::getInstance()->setWebCodeLanguage('de');
+        Kwf_Trl::getInstance()->setModel(new Kwc_Trl_StaticTextsPlaceholder_TrlModelWeb(), Kwf_Trl::SOURCE_WEB);
+        Kwf_Trl::getInstance()->setModel(new Kwf_Model_FnF(), Kwf_Trl::SOURCE_KWF);
+        parent::setUp('Kwc_Trl_StaticTextsPlaceholder_Root');
     }
 
     public function tearDown()
     {
-        Vps_Trl::getInstance()->setWebCodeLanguage(null);
-        Vps_Trl::getInstance()->setModel(null, Vps_Trl::SOURCE_WEB);
-        Vps_Trl::getInstance()->setModel(null, Vps_Trl::SOURCE_VPS);
+        Kwf_Trl::getInstance()->setWebCodeLanguage(null);
+        Kwf_Trl::getInstance()->setModel(null, Kwf_Trl::SOURCE_WEB);
+        Kwf_Trl::getInstance()->setModel(null, Kwf_Trl::SOURCE_KWF);
         parent::tearDown();
     }
 
@@ -27,7 +27,7 @@ class Vpc_Trl_StaticTextsPlaceholder_Test extends Vpc_TestAbstract
     {
         // web code language is 'de', tested language is 'en'
 
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/en/testtrl', 'en');
+        $c = $this->_root->getPageByUrl('http://'.Kwf_Registry::get('config')->server->domain.'/en/testtrl', 'en');
 
         $this->assertEquals('en', $c->getLanguage());
 
@@ -41,21 +41,21 @@ class Vpc_Trl_StaticTextsPlaceholder_Test extends Vpc_TestAbstract
         $this->assertContains('trlcpTest2: replies', $render);
     }
 
-    public function testPlaceholdingVps()
+    public function testPlaceholdingKwf()
     {
         // web code language is 'de', tested language is 'en'
 
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/en/testtrl', 'en');
+        $c = $this->_root->getPageByUrl('http://'.Kwf_Registry::get('config')->server->domain.'/en/testtrl', 'en');
 
         $this->assertEquals('en', $c->getLanguage());
 
         $render = $c->render();
 
-        $this->assertContains('trlVpsTest: Visible', $render);
-        $this->assertContains('trlcVpsTest: On', $render);
-        $this->assertContains('trlpVpsTest1: reply', $render);
-        $this->assertContains('trlpVpsTest2: replies', $render);
-        $this->assertContains('trlcpVpsTest1: reply', $render);
-        $this->assertContains('trlcpVpsTest2: replies', $render);
+        $this->assertContains('trlKwfTest: Visible', $render);
+        $this->assertContains('trlcKwfTest: On', $render);
+        $this->assertContains('trlpKwfTest1: reply', $render);
+        $this->assertContains('trlpKwfTest2: replies', $render);
+        $this->assertContains('trlcpKwfTest1: reply', $render);
+        $this->assertContains('trlcpKwfTest2: replies', $render);
     }
 }

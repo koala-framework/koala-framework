@@ -1,39 +1,39 @@
 <?php
 /**
  * @group slow
- * @group Vpc_Trl
- * @group Vpc_Trl_Image
+ * @group Kwc_Trl
+ * @group Kwc_Trl_Image
  *
 ansicht frontend:
-http://vps.vps.niko.vivid/vps/vpctest/Vpc_Trl_Image_Root/de/test1 (...2)
-http://vps.vps.niko.vivid/vps/vpctest/Vpc_Trl_Image_Root/en/test1 (...2)
+http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_Image_Root/de/test1 (...2)
+http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_Image_Root/en/test1 (...2)
  */
-class Vpc_Trl_Image_Test extends Vpc_TestAbstract
+class Kwc_Trl_Image_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_Image_Root');
+        parent::setUp('Kwc_Trl_Image_Root');
 
         //master image
-        Vps_Model_Abstract::getInstance('Vpc_Trl_Image_Image_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_Image_Image_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-master_test1', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test2', 'vps_upload_id'=>'1'),
+                array('component_id'=>'root-master_test1', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test2', 'kwf_upload_id'=>'1'),
             ));
 
 
         //trl image
-        Vps_Model_Abstract::getInstance('Vpc_Trl_Image_Image_Trl_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_Image_Image_Trl_TestModel')
             ->getProxyModel()->setData(array(
                 array('component_id'=>'root-en_test1', 'own_image'=>0),
                 array('component_id'=>'root-en_test2', 'own_image'=>1),
             ));
 
         //own image (below trl image)
-        Vps_Model_Abstract::getInstance('Vpc_Trl_Image_Image_Trl_Image_TestModel')
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_Image_Image_Trl_Image_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-en_test1-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test2-image', 'vps_upload_id'=>'2'),
+                array('component_id'=>'root-en_test1-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test2-image', 'kwf_upload_id'=>'2'),
             ));
     }
 
@@ -60,7 +60,7 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('root-master_test1');
         $this->_checkTheSizes($c->render(), 1, 120, 120);
         $row = $c->getComponent()->getRow();
-        $row->vps_upload_id = 2;
+        $row->kwf_upload_id = 2;
         $row->save();
         $this->_process();
         $this->_checkTheSizes($c->render(), 2, 120, 101);
@@ -73,7 +73,7 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('root-en_test1');
         $this->_checkTheSizes($c->render(), 1, 120, 120);
         $row = $this->_root->getComponentById('root-master_test1')->getComponent()->getRow();
-        $row->vps_upload_id = 2;
+        $row->kwf_upload_id = 2;
         $row->save();
         $this->_process();
         $this->_checkTheSizes($c->render(), 2, 120, 101);
@@ -94,7 +94,7 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
         $this->_process();
 
         $row = $this->_root->getComponentById('root-en_test1-image')->getComponent()->getRow();
-        $row->vps_upload_id = 2;
+        $row->kwf_upload_id = 2;
         $row->save();
         $this->_process();
 
@@ -116,7 +116,7 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
 
         preg_match('#src="(.+?)"#ms', $html, $matches);
 
-        $smallSrcSize = getimagesize('http://'.Vps_Registry::get('testDomain').$matches[1]);
+        $smallSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[1]);
 
         $this->assertEquals($smallWidth, $smallSrcSize[0]);
         $this->assertEquals($smallHeight, $smallSrcSize[1]);

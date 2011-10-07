@@ -1,20 +1,20 @@
-.vps-renderer-decimal .x-grid3-cell-inner { text-align: right; }
-.vps-renderer-bright { color: #888888; }
-.vps-renderer-linebreak {
+.kwf-renderer-decimal .x-grid3-cell-inner { text-align: right; }
+.kwf-renderer-bright { color: #888888; }
+.kwf-renderer-linebreak {
     overflow:visible;
     white-space: normal;
 }
 .x-grid3-check-col {
     height:14px;
 }
-.vps-renderer-noteditable {
+.kwf-renderer-noteditable {
     color: #777777;
     font-style:italic;
 }
-.vps-check-rtr-col {
+.kwf-check-rtr-col {
     background-image:none;
 }
-.vps-check-rtr-col-on {
-    background-image:url(/assets/vps/images/rtr.png);
+.kwf-check-rtr-col-on {
+    background-image:url(/assets/kwf/images/rtr.png);
 }
 .secondsToTimeRight { text-align: right; }

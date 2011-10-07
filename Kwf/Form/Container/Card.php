@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Container_Card extends Vps_Form_Container_Abstract
+class Kwf_Form_Container_Card extends Kwf_Form_Container_Abstract
 {
     public function __construct($name = null)
     {

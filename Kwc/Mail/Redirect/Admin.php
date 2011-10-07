@@ -1,18 +1,18 @@
 <?php
-class Vpc_Mail_Redirect_Admin extends Vpc_Admin
+class Kwc_Mail_Redirect_Admin extends Kwc_Admin
 {
     public function setup()
     {
         $sql = "
-CREATE TABLE `vpc_mail_redirect` (
+CREATE TABLE `kwc_mail_redirect` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `value` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB;
-ALTER TABLE `vpc_mail_redirect` ADD INDEX ( `value` );
+ALTER TABLE `kwc_mail_redirect` ADD INDEX ( `value` );
 
-CREATE TABLE `vpc_mail_redirect_statistics` (
+CREATE TABLE `kwc_mail_redirect_statistics` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `mail_component_id` varchar(255) NOT NULL,
   `redirect_id` int(10) unsigned default NULL,
@@ -24,6 +24,6 @@ CREATE TABLE `vpc_mail_redirect_statistics` (
   KEY `mail_component_id` (`mail_component_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
         ";
-        Vps_Registry::get('db')->query($sql);
+        Kwf_Registry::get('db')->query($sql);
     }
 }

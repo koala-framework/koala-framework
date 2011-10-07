@@ -3,11 +3,11 @@
  * @group Basic_ImageEnlarge
  * @group Image
  */
-class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
+class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Basic_ImageEnlarge_Root');
+        parent::setUp('Kwc_Basic_ImageEnlarge_Root');
         $this->_root->setFilename(null);
     }
 
@@ -19,7 +19,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $this->assertEquals(10, $dim['height']);
 
         $url = explode('/', trim($c->getComponent()->getImageUrl(), '/'));
-        $this->assertEquals('Vpc_Basic_ImageEnlarge_WithoutSmallImageComponent', $url[1]);
+        $this->assertEquals('Kwc_Basic_ImageEnlarge_WithoutSmallImageComponent', $url[1]);
         $this->assertEquals('1800', $url[2]);
         $this->assertEquals('default', $url[3]);
     }
@@ -44,8 +44,8 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Vps_Media_Image::scale(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(10, 10, Vps_Media_Image::SCALE_DEFORM)), $o['contents']);
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
@@ -68,8 +68,8 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
-        $this->assertEquals(Vps_Media_Image::scale(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(16, 16, Vps_Media_Image::SCALE_DEFORM)), $o['contents']);
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
     }
 
     public function testWithoutSmallImageUploaded()
@@ -80,7 +80,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $this->assertEquals(10, $dim['height']);
 
         $url = explode('/', trim($c->getComponent()->getImageUrl(), '/'));
-        $this->assertEquals('Vpc_Basic_ImageEnlarge_TestComponent', $url[1]);
+        $this->assertEquals('Kwc_Basic_ImageEnlarge_TestComponent', $url[1]);
         $this->assertEquals('1801', $url[2]);
         $this->assertEquals('default', $url[3]);
     }
@@ -105,8 +105,8 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Vps_Media_Image::scale(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(10, 10, Vps_Media_Image::SCALE_DEFORM)), $o['contents']);
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
@@ -130,8 +130,8 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
-        $this->assertEquals(Vps_Media_Image::scale(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(16, 16, Vps_Media_Image::SCALE_DEFORM)), $o['contents']);
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
     }
 
     public function testWithSmallImageUploaded()
@@ -144,7 +144,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $this->assertEquals('1802-linkTag', $data['row']->component_id);
 
         $url = explode('/', trim($c->getComponent()->getImageUrl(), '/'));
-        $this->assertEquals('Vpc_Basic_ImageEnlarge_TestComponent', $url[1]);
+        $this->assertEquals('Kwc_Basic_ImageEnlarge_TestComponent', $url[1]);
         $this->assertEquals('1802', $url[2]);
         $this->assertEquals('default', $url[3]);
 
@@ -176,8 +176,8 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Vps_Media_Image::scale(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(10, 10, Vps_Media_Image::SCALE_DEFORM)), $o['contents']);
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
@@ -200,8 +200,8 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(210, $im->getImageWidth());
         $this->assertEquals(70, $im->getImageHeight());
-        $this->assertEquals(Vps_Media_Image::scale(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
-                                    array(270, 70, Vps_Media_Image::SCALE_BESTFIT)), $o['contents']);
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
+                                    array(270, 70, Kwf_Media_Image::SCALE_BESTFIT)), $o['contents']);
     }
 
     public function testWithOriginalHtml()
@@ -219,6 +219,6 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('application/octet-stream', $o['mimeType']);
         $im = new Imagick();
-        $this->assertEquals(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1', $o['file']);
+        $this->assertEquals(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1', $o['file']);
     }
 }

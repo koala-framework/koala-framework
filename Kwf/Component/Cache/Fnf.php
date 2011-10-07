@@ -1,12 +1,12 @@
 <?php
-class Vps_Component_Cache_Fnf extends Vps_Component_Cache_Mysql
+class Kwf_Component_Cache_Fnf extends Kwf_Component_Cache_Mysql
 {
     public function __construct()
     {
         $this->_models = array (
-            'cache' => 'Vps_Component_Cache_Fnf_Model',
-            'url' => 'Vps_Component_Cache_Fnf_UrlModel',
-            'urlParents' => 'Vps_Component_Cache_Fnf_UrlParentsModel',
+            'cache' => 'Kwf_Component_Cache_Fnf_Model',
+            'url' => 'Kwf_Component_Cache_Fnf_UrlModel',
+            'urlParents' => 'Kwf_Component_Cache_Fnf_UrlParentsModel',
         );
     }
 }

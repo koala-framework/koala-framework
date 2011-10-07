@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Db_TestAdapter extends Zend_Db_Adapter_Abstract
+class Kwf_Model_Db_TestAdapter extends Zend_Db_Adapter_Abstract
 {
     public function __construct() {}
     public function listTables() {}

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_DownloadsTree_Data_Filename extends Vps_Data_Abstract
+class Kwc_Advanced_DownloadsTree_Data_Filename extends Kwf_Data_Abstract
 {
     public function load($row)
     {

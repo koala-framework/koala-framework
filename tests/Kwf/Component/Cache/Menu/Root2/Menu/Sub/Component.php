@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Menu_Root2_Menu_Sub_Component extends Vps_Component_Cache_Menu_Root_Menu_Component
+class Kwf_Component_Cache_Menu_Root2_Menu_Sub_Component extends Kwf_Component_Cache_Menu_Root_Menu_Component
 {
     public static function getSettings()
     {

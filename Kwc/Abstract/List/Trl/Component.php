@@ -1,18 +1,18 @@
 <?php
-class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Abstract_List_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['componentIcon'] = new Vps_Asset('page');
-        $ret['generators']['child']['class'] = 'Vpc_Abstract_List_Trl_Generator';
-        $ret['childModel'] = 'Vpc_Abstract_List_Trl_Model';
+        $ret['componentIcon'] = new Kwf_Asset('page');
+        $ret['generators']['child']['class'] = 'Kwc_Abstract_List_Trl_Generator';
+        $ret['childModel'] = 'Kwc_Abstract_List_Trl_Model';
 
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Trl/FullSizeEditPanel.js';
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
-        $ret['assetsAdmin']['dep'][] = 'VpsComponent';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/Trl/FullSizeEditPanel.js';
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'KwfComponent';
 
-        $ret['extConfig'] = 'Vpc_Abstract_List_Trl_ExtConfigList';
+        $ret['extConfig'] = 'Kwc_Abstract_List_Trl_ExtConfigList';
 
         return $ret;
     }

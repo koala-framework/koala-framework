@@ -1,9 +1,9 @@
-Ext.namespace('Vpc.Advanced.DownloadsTree.Downloads');
+Ext.namespace('Kwc.Advanced.DownloadsTree.Downloads');
 
-Vpc.Advanced.DownloadsTree.AdminPanelProjects = Ext.extend(Vps.Auto.TreePanel, {
+Kwc.Advanced.DownloadsTree.AdminPanelProjects = Ext.extend(Kwf.Auto.TreePanel, {
     border: false,
     initComponent: function() {
-        Vpc.Advanced.DownloadsTree.AdminPanelProjects.superclass.initComponent.call(this);
+        Kwc.Advanced.DownloadsTree.AdminPanelProjects.superclass.initComponent.call(this);
         this.editDialog.on('addaction', function() {
             if (!this.getSelectedId() || this.getSelectedId() == '0') {
                 this.showFieldset();
@@ -37,13 +37,13 @@ Vpc.Advanced.DownloadsTree.AdminPanelProjects = Ext.extend(Vps.Auto.TreePanel, {
     }
 });
 
-Vpc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Vps.Binding.ProxyPanel, {
+Kwc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
     initComponent: function() {
-        this.downloads = new Vps.Auto.GridPanel({
+        this.downloads = new Kwf.Auto.GridPanel({
             controllerUrl: this.downloadsUrl,
             region: 'center'
         });
-        this.projects = new Vpc.Advanced.DownloadsTree.AdminPanelProjects({
+        this.projects = new Kwc.Advanced.DownloadsTree.AdminPanelProjects({
             controllerUrl: this.projectsUrl,
             region: 'west',
             width: 300,
@@ -52,7 +52,7 @@ Vpc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Vps.Binding.ProxyPanel, {
                 item: this.downloads,
                 queryParam: 'project_id'
             }],
-            editDialog: new Vps.Auto.Form.Window({
+            editDialog: new Kwf.Auto.Form.Window({
                 controllerUrl: this.projectUrl,
                 width: 400,
                 height: 400
@@ -68,15 +68,15 @@ Vpc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Vps.Binding.ProxyPanel, {
         this.layout = 'border';
         this.items = [this.projects, this.downloads];
         this.proxyItem = this.projects;
-        Vpc.Advanced.DownloadsTree.AdminPanel.superclass.initComponent.call(this);
+        Kwc.Advanced.DownloadsTree.AdminPanel.superclass.initComponent.call(this);
     },
     applyBaseParams: function() {
         this.downloads.applyBaseParams.apply(this.downloads, arguments);
-        return Vpc.Advanced.DownloadsTree.AdminPanel.superclass.applyBaseParams.apply(this, arguments);
+        return Kwc.Advanced.DownloadsTree.AdminPanel.superclass.applyBaseParams.apply(this, arguments);
     },
     setBaseParams : function(baseParams) {
         this.downloads.setBaseParams.apply(this.downloads, arguments);
-        return Vpc.Advanced.DownloadsTree.AdminPanel.superclass.setBaseParams.apply(this, arguments);
+        return Kwc.Advanced.DownloadsTree.AdminPanel.superclass.setBaseParams.apply(this, arguments);
     }
 });
-Ext.reg('vpc.advanced.downloadstree', Vpc.Advanced.DownloadsTree.AdminPanel);
+Ext.reg('kwc.advanced.downloadstree', Kwc.Advanced.DownloadsTree.AdminPanel);

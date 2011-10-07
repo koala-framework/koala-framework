@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Gearman_AdminClient
+class Kwf_Util_Gearman_AdminClient
 {
     private $_connection;
     public function getInstance($server = 'localhost')
@@ -8,7 +8,7 @@ class Vps_Util_Gearman_AdminClient
         if (!isset($i)) {
             self::checkConnection($server);
             $i = new self();
-            $c = Vps_Registry::get('config')->server->gearman;
+            $c = Kwf_Registry::get('config')->server->gearman;
             $server = $c->jobServers->$server;
             if ($server->tunnelUser) {
                 $i->_connection = fsockopen('localhost', 4730, $errno, $errstr, 30);
@@ -16,7 +16,7 @@ class Vps_Util_Gearman_AdminClient
                 $i->_connection = fsockopen($server->host, $server->port, $errno, $errstr, 30);
             }
             if (!$i->_connection) {
-                throw new Vps_Exception("Can't connect: $errstr ($errno)");
+                throw new Kwf_Exception("Can't connect: $errstr ($errno)");
             }
         }
         return $i;
@@ -25,7 +25,7 @@ class Vps_Util_Gearman_AdminClient
     public static function checkConnection($server = 'localhost')
     {
         if (is_string($server)) {
-            $server = Vps_Registry::get('config')->server->gearman->jobServers->$server;
+            $server = Kwf_Registry::get('config')->server->gearman->jobServers->$server;
         }
         if ($server->tunnelUser) {
             $fp = @fsockopen('localhost', 4730, $errno, $errstr, 5);
@@ -53,7 +53,7 @@ class Vps_Util_Gearman_AdminClient
             if (substr($in, -3)=="\n.\n") break;
         }
         $in = substr($in, 0, -3);
-        $prefix = Vps_Registry::get('config')->server->gearman->functionPrefix.'_';
+        $prefix = Kwf_Registry::get('config')->server->gearman->functionPrefix.'_';
         $ret = array();
         foreach (explode("\n", $in) as $line) {
             $line = trim($line);

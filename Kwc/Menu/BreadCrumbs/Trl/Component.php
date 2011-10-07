@@ -1,5 +1,5 @@
 <?php
-class Vpc_Menu_BreadCrumbs_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
+class Kwc_Menu_BreadCrumbs_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
 {
     public function getTemplateVars()
     {

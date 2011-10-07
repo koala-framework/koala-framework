@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_FieldRows_Row extends Vps_Model_Row_Data_Abstract implements Vps_Model_RowsSubModel_Row_Interface
+class Kwf_Model_FieldRows_Row extends Kwf_Model_Row_Data_Abstract implements Kwf_Model_RowsSubModel_Row_Interface
 {
     protected $_parentRow;
     public function __construct(array $config)

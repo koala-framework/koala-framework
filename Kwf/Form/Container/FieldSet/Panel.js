@@ -1,5 +1,5 @@
-Ext.namespace('Vps.Form.Container.FieldSet');
-Vps.Form.Container.FieldSet.Panel = Ext.extend(Vpc.Paragraphs.Panel,
+Ext.namespace('Kwf.Form.Container.FieldSet');
+Kwf.Form.Container.FieldSet.Panel = Ext.extend(Kwc.Paragraphs.Panel,
 {
     initComponent: function()
     {
@@ -9,10 +9,10 @@ Vps.Form.Container.FieldSet.Panel = Ext.extend(Vpc.Paragraphs.Panel,
             icon: '/assets/silkicons/wrench.png',
             handler: function() {
                 if (!this.settingsWindow) {
-                    this.settingsWindow = new Vps.Auto.Form.Window({
+                    this.settingsWindow = new Kwf.Auto.Form.Window({
                         width:  450,
                         height: 200,
-                        title:  trlVps('Settings'),
+                        title:  trlKwf('Settings'),
                         modal:  true,
                         controllerUrl: this.controllerUrl + '!Settings'
                         });
@@ -21,7 +21,7 @@ Vps.Form.Container.FieldSet.Panel = Ext.extend(Vpc.Paragraphs.Panel,
             },
             scope: this
         });
-        Vps.Form.Container.FieldSet.Panel.superclass.initComponent.call(this);
+        Kwf.Form.Container.FieldSet.Panel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('vps.form.container.fieldset', Vps.Form.Container.FieldSet.Panel);
+Ext.reg('kwf.form.container.fieldset', Kwf.Form.Container.FieldSet.Panel);

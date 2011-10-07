@@ -1,5 +1,5 @@
 <?php
-class Vps_Dao
+class Kwf_Dao
 {
     private $_config;
     private $_tables = array();
@@ -10,7 +10,7 @@ class Vps_Dao
     {
         if (is_null($config)) {
             $cacheId = 'dbconfig';
-            $config = Vps_Cache_Simple::fetch($cacheId, $success);
+            $config = Kwf_Cache_Simple::fetch($cacheId, $success);
             if (!$success) {
                 if (file_exists('config.db.ini')) {
                     $config = new Zend_Config_Ini('config.db.ini', 'database');
@@ -18,7 +18,7 @@ class Vps_Dao
                 } else {
                     $config = array();
                 }
-                Vps_Cache_Simple::add($cacheId, $config);
+                Kwf_Cache_Simple::add($cacheId, $config);
             }
         }
         $this->_config = $config;
@@ -39,7 +39,7 @@ class Vps_Dao
     public function getDbConfig($db = 'web')
     {
         if (!isset($this->_config[$db])) {
-            throw new Vps_Dao_Exception("Connection \"$db\" in config.db.ini not found.
+            throw new Kwf_Dao_Exception("Connection \"$db\" in config.db.ini not found.
                     Please add $db.host, $db.username, $db.password and $db.dbname under the sction [database].");
         }
         $dbConfig = $this->_config[$db];
@@ -57,24 +57,24 @@ class Vps_Dao
             $this->_db[$db]->query('SET names UTF8');
 
             /**
-             * lc_time_names wird hier nicht gesetzt weil man für trlVps
+             * lc_time_names wird hier nicht gesetzt weil man für trlKwf
              * momentan das userModel benötigt und das gibts ohne DB
              * Verbindung nicht -> Endlosschleifen gefahr.
              * lc_time_names wurde früher vermutlich im TreeCache noch benötigt
              * (z.B. bei den News Month), aber das macht jetzt das PHP, dehalb
              * ist es nicht mehr nötig dies zu setzen.
              */
-//             $this->_db[$db]->query("SET lc_time_names = '".trlVps('en_US')."'");
+//             $this->_db[$db]->query("SET lc_time_names = '".trlKwf('en_US')."'");
 
 
-            if (Vps_Config::getValue('debug.querylog')) {
-                $profiler = new Vps_Db_Profiler(true);
+            if (Kwf_Config::getValue('debug.querylog')) {
+                $profiler = new Kwf_Db_Profiler(true);
                 $this->_db[$db]->setProfiler($profiler);
-            } else if (Vps_Config::getValue('debug.queryTimeout')) {
-                $profiler = new Vps_Db_Profiler_Timeout(Vps_Config::getValue('debug.queryTimeout'), true);
+            } else if (Kwf_Config::getValue('debug.queryTimeout')) {
+                $profiler = new Kwf_Db_Profiler_Timeout(Kwf_Config::getValue('debug.queryTimeout'), true);
                 $this->_db[$db]->setProfiler($profiler);
-            } else if (Vps_Config::getValue('debug.benchmark') || Vps_Config::getValue('debug.benchmarkLog')) {
-                $profiler = new Vps_Db_Profiler_Count(true);
+            } else if (Kwf_Config::getValue('debug.benchmark') || Kwf_Config::getValue('debug.benchmarkLog')) {
+                $profiler = new Kwf_Db_Profiler_Count(true);
                 $this->_db[$db]->setProfiler($profiler);
             }
         }
@@ -91,7 +91,7 @@ class Vps_Dao
         static $ret;
         if (!isset($ret)) {
             $connection = new Mongo(); // connects to localhost:27017
-            $mongoDb = Vps_Config::getValue('server.mongo.database');
+            $mongoDb = Kwf_Config::getValue('server.mongo.database');
             $ret = $connection->$mongoDb;
         }
         return $ret;

@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_HlpParseController extends Vps_Controller_Action_Cli_Abstract
+class Kwf_Controller_Action_Cli_Web_HlpParseController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -9,18 +9,18 @@ class Vps_Controller_Action_Cli_Web_HlpParseController extends Vps_Controller_Ac
     public function indexAction()
     {
         $maskedTexts = $this->_findMaskedTexts('./');
-        $trl = Vps_Trl::getInstance();
+        $trl = Kwf_Trl::getInstance();
         $this->_createXmlFromTexts($maskedTexts, 'hlp.xml', $trl->getLanguages());
 
-        $vpsLanguages = array_unique(array_merge(array('en'), $trl->getLanguages()));
-        $maskedTexts = $this->_findMaskedTexts(VPS_PATH, true);
+        $kwfLanguages = array_unique(array_merge(array('en'), $trl->getLanguages()));
+        $maskedTexts = $this->_findMaskedTexts(KWF_PATH, true);
         $maskedTexts += $this->_findMaskedTexts('./application', true);
-        $this->_createXmlFromTexts($maskedTexts, VPS_PATH . '/hlp.xml', $vpsLanguages);
+        $this->_createXmlFromTexts($maskedTexts, KWF_PATH . '/hlp.xml', $kwfLanguages);
         echo "Parsing durchgelaufen\n";
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    protected function _findMaskedTexts($directory, $isVps = false)
+    protected function _findMaskedTexts($directory, $isKwf = false)
     {
         $results = array();
         $iterator = new RecursiveDirectoryIterator($directory);
@@ -28,7 +28,7 @@ class Vps_Controller_Action_Cli_Web_HlpParseController extends Vps_Controller_Ac
             $extension = end(explode('.', $file->getFileName()));
             if ($extension == 'php' || $extension == 'js' || $extension == 'tpl') {
                 $m = array();
-                $vps = $isVps ? 'Vps' : '';
+                $vps = $isKwf ? 'Kwf' : '';
                 preg_match_all("#hlp$vps\('(.*)'\)#", implode("", file($file)), $m);
                 foreach ($m[1] as $key) {
                     // Dateiname mit Pfad vernünftig formatieren

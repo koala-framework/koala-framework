@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Model_Tree_Row
+class Kwc_Directories_CategoryTree_Directory_Row extends Kwf_Model_Tree_Row
 {
     public function __toString()
     {
@@ -9,8 +9,8 @@ class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Model_Tree_Row
     protected function _delete()
     {
         if (count($this->getChildNodes())) {
-            throw new Vps_ClientException(
-                trlVps("This category can't be deleted, because there exist sub-categories in it.")
+            throw new Kwf_ClientException(
+                trlKwf("This category can't be deleted, because there exist sub-categories in it.")
             );
         }
     }

@@ -1,5 +1,5 @@
 <?php
-class Vps_DateTime extends Vps_Date
+class Kwf_DateTime extends Kwf_Date
 {
     public function format($format = 'Y-m-d H:i:s')
     {

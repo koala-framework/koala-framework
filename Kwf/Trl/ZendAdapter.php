@@ -3,7 +3,7 @@
  * In Ermangelung eines translate adapter interfaces von Zend wurden einfach
  * nur die methoden geschrieben, die wir benötigen.
  */
-class Vps_Trl_ZendAdapter extends Zend_Translate_Adapter
+class Kwf_Trl_ZendAdapter extends Zend_Translate_Adapter
 {
     private $_locale = null;
 
@@ -29,6 +29,6 @@ class Vps_Trl_ZendAdapter extends Zend_Translate_Adapter
 
     public function toString()
     {
-        return 'vps';
+        return 'kwf';
     }
 }

@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Exception_Abstract extends Exception
+abstract class Kwf_Exception_Abstract extends Exception
 {
     private $_logFilename;
 
@@ -14,7 +14,7 @@ abstract class Vps_Exception_Abstract extends Exception
 
     public static function isDebug()
     {
-        return !Vps_Config::getValue('debug.error.log');
+        return !Kwf_Config::getValue('debug.error.log');
     }
 
     public function getException()
@@ -35,7 +35,7 @@ abstract class Vps_Exception_Abstract extends Exception
             fclose($fp);
         } catch(Exception $e) {
             $to = array();
-            foreach (Vps_Registry::get('config')->developers as $dev) {
+            foreach (Kwf_Registry::get('config')->developers as $dev) {
                 if (isset($dev->sendException) && $dev->sendException) {
                     $to[] = $dev->email;
                 }
@@ -66,12 +66,12 @@ abstract class Vps_Exception_Abstract extends Exception
             exit(1);
         }
 
-        $view = Vps_Debug::getView();
+        $view = Kwf_Debug::getView();
         $view->exception = $this->getException();
         $view->message = $this->getException()->getMessage();
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
             $_SERVER['REQUEST_URI'] : '' ;
-        $view->debug = Vps_Exception::isDebug();
+        $view->debug = Kwf_Exception::isDebug();
 
         $header = $this->getHeader();
         $template = $this->getTemplate();
@@ -92,7 +92,7 @@ abstract class Vps_Exception_Abstract extends Exception
             echo $e->__toString();
             echo '</pre>';
         }
-        Vps_Benchmark::shutDown();
-        Vps_Benchmark::output();
+        Kwf_Benchmark::shutDown();
+        Kwf_Benchmark::output();
    }
 }

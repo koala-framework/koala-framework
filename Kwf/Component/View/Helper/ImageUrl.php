@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_View_Helper_ImageUrl extends Vps_Component_View_Helper_ImageParam
+class Kwf_Component_View_Helper_ImageUrl extends Kwf_Component_View_Helper_ImageParam
 {
     public function imageUrl($image)
     {

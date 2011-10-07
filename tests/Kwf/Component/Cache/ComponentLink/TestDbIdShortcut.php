@@ -3,11 +3,11 @@
  * @group Component_Cache_ComponentLink
  * @group Component_Cache_ComponentLink_DbIdShortcut
  */
-class Vps_Component_Cache_ComponentLink_TestDbIdShortcut extends Vpc_TestAbstract
+class Kwf_Component_Cache_ComponentLink_TestDbIdShortcut extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Cache_ComponentLink_DbIdShortcut_Component');
+        parent::setUp('Kwf_Component_Cache_ComponentLink_DbIdShortcut_Component');
     }
 
     public function testLink()

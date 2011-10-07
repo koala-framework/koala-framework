@@ -1,11 +1,11 @@
 <?php
-class Vpc_Advanced_CodeSyntaxHighlight_Form extends Vpc_Abstract_Form
+class Kwc_Advanced_CodeSyntaxHighlight_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Vps_Form_Field_TextArea('code'))
-            ->setFieldLabel(trlVps('Code'))
+        $this->add(new Kwf_Form_Field_TextArea('code'))
+            ->setFieldLabel(trlKwf('Code'))
             ->setHeight(225)
             ->setWidth(450);
 
@@ -19,12 +19,12 @@ class Vpc_Advanced_CodeSyntaxHighlight_Form extends Vpc_Abstract_Form
             $values[$i] = $i;
         }
         asort($values);
-        $this->add(new Vps_Form_Field_Select('language'))
-            ->setFieldLabel(trlVps('Language'))
+        $this->add(new Kwf_Form_Field_Select('language'))
+            ->setFieldLabel(trlKwf('Language'))
             ->setValues($values);
 
 
-        $this->add(new Vps_Form_Field_Checkbox('line_numbers'))
-            ->setFieldLabel(trlVps('Line Numbers'));
+        $this->add(new Kwf_Form_Field_Checkbox('line_numbers'))
+            ->setFieldLabel(trlKwf('Line Numbers'));
     }
 }

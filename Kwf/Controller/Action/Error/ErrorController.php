@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
+class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
 {
     public function errorAction()
     {
@@ -7,7 +7,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||
             $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION)
         {
-            $errors->exception = new Vps_Exception_NotFound();
+            $errors->exception = new Kwf_Exception_NotFound();
         }
 
         $prefix = substr($this->_getParam('action'), 0, 4);
@@ -16,10 +16,10 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
             isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
         if ($prefix == 'json' &&
-            ($isXmlHttpRequest || $errors->exception instanceof Vps_Exception_Client)) {
+            ($isXmlHttpRequest || $errors->exception instanceof Kwf_Exception_Client)) {
             $this->_forward('json-error');
         } else {
-            throw $errors->exception; // wird von Vps_Debug::handleException behandelt
+            throw $errors->exception; // wird von Kwf_Debug::handleException behandelt
         }
     }
 
@@ -27,25 +27,25 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
     {
         $errors = $this->getRequest()->getParam('error_handler');
         $exception = $errors->exception;
-        if ($exception instanceof Vps_Exception_Client) {
+        if ($exception instanceof Kwf_Exception_Client) {
             $this->view->error = $exception->getMessage();
         } else {
-            if (!$exception instanceof Vps_ExceptionNoMail) {
-                $exception = new Vps_Exception_Other($exception);
+            if (!$exception instanceof Kwf_ExceptionNoMail) {
+                $exception = new Kwf_Exception_Other($exception);
             }
-            if (Vps_Exception::isDebug()) {
+            if (Kwf_Exception::isDebug()) {
                 $this->view->exception = $exception->getException()->__toString();
             } else {
-                $this->view->error = trlVps('An error has occurred. Please try again later.');
+                $this->view->error = trlKwf('An error has occurred. Please try again later.');
             }
         }
-        if ($exception instanceof Vps_Exception_Abstract) $exception->log();
+        if ($exception instanceof Kwf_Exception_Abstract) $exception->log();
     }
 
     public function jsonMailAction()
     {
         if ($this->_getParam('message')) {
-            $e = new Vps_Exception_JavaScript($this->_getParam('message'));
+            $e = new Kwf_Exception_JavaScript($this->_getParam('message'));
             $e->setUrl($this->_getParam('url'));
             $e->setLineNumber($this->_getParam('lineNumber'));
             $e->setLocation($this->_getParam('location'));
@@ -62,7 +62,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 
     public function jsonTimeoutAction()
     {
-        throw new Vps_Exception("exception");
+        throw new Kwf_Exception("exception");
         sleep(50);
     }
 
@@ -70,7 +70,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
     {
         $this->view->wrongversion = true;
         $this->view->success = false;
-        $l = new Vps_Assets_Loader();
+        $l = new Kwf_Assets_Loader();
         $this->view->maxAssetsMTime = $l->getDependencies()->getMaxFileMTime();
     }
 }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SocialBookmarks_AvaliableModel extends Vps_Model_FnF
+class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
 {
     protected $_toStringField = 'name';
     public function __construct()

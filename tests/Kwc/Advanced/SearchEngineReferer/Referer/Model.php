@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SearchEngineReferer_Referer_Model extends Vps_Model_FnF
+class Kwc_Advanced_SearchEngineReferer_Referer_Model extends Kwf_Model_FnF
 {
     protected $_data = array(
         array('id'=>1, 'component_id'=>'root-referer2', 'create_time' => '2008-11-20 10:20:30', 'referer_url' => 'http://www.google.at/search?hl=de&q=foo1'),

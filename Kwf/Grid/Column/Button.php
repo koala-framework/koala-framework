@@ -1,5 +1,5 @@
 <?php
-class Vps_Grid_Column_Button extends Vps_Grid_Column
+class Kwf_Grid_Column_Button extends Kwf_Grid_Column
 {
     public function __construct($dataIndex = null, $header = '', $width = 30)
     {

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
+class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
 {
     private function _componentNameToArray($name, $component, &$componentList)
     {
@@ -16,10 +16,10 @@ class Vpc_Paragraphs_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
         $componentList = array();
         $componentIcons = array();
         foreach ($this->_getComponents() as $component) {
-            if (!Vpc_Abstract::hasSetting($component, 'componentName')) continue;
-            $name = Vpc_Abstract::getSetting($component, 'componentName');
-            $name = Vps_Registry::get('trl')->trlStaticExecute($name);
-            $icon = Vpc_Abstract::getSetting($component, 'componentIcon');
+            if (!Kwc_Abstract::hasSetting($component, 'componentName')) continue;
+            $name = Kwc_Abstract::getSetting($component, 'componentName');
+            $name = Kwf_Registry::get('trl')->trlStaticExecute($name);
+            $icon = Kwc_Abstract::getSetting($component, 'componentIcon');
             if ($icon) {
                 $icon = $icon->__toString();
             }
@@ -29,7 +29,7 @@ class Vpc_Paragraphs_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
             }
         }
 
-        $config = $this->_getStandardConfig('vpc.paragraphs');
+        $config = $this->_getStandardConfig('kwc.paragraphs');
         $config['components'] = $componentList;
         $config['componentIcons'] = $componentIcons;
         $config['needsComponentPanel'] = true;
@@ -40,6 +40,6 @@ class Vpc_Paragraphs_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
 
     protected function _getComponents()
     {
-        return Vpc_Abstract::getChildComponentClasses($this->_class, 'paragraphs');
+        return Kwc_Abstract::getChildComponentClasses($this->_class, 'paragraphs');
     }
 }

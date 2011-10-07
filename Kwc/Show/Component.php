@@ -1,11 +1,11 @@
 <?php
-class Vpc_Show_Component extends Vpc_Abstract
+class Kwc_Show_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Show Component');
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['componentName'] = trlKwf('Show Component');
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
 
@@ -18,7 +18,7 @@ class Vpc_Show_Component extends Vpc_Abstract
 
     public function getShowComponent()
     {
-        return Vps_Component_Data_Root::getInstance()
+        return Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->getRow()->target);
     }
 }

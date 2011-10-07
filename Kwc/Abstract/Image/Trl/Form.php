@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Image_Trl_Form_ImageData extends Vpc_Abstract_Image_Trl_ImageData
+class Kwc_Abstract_Image_Trl_Form_ImageData extends Kwc_Abstract_Image_Trl_ImageData
 {
     public function load($row)
     {
@@ -11,25 +11,25 @@ class Vpc_Abstract_Image_Trl_Form_ImageData extends Vpc_Abstract_Image_Trl_Image
     }
 }
 
-class Vpc_Abstract_Image_Trl_Form extends Vpc_Abstract_Form //nicht von Vpc_Abstract_Composite_Trl_Form, da sonst die felder doppelt eingefügt werden
+class Kwc_Abstract_Image_Trl_Form extends Kwc_Abstract_Form //nicht von Kwc_Abstract_Composite_Trl_Form, da sonst die felder doppelt eingefügt werden
 {
     protected function _initFields()
     {
         parent::_initFields();
 
-        $imageCaption = Vpc_Abstract::getSetting(
-            Vpc_Abstract::getSetting($this->getClass(), 'masterComponentClass'),
+        $imageCaption = Kwc_Abstract::getSetting(
+            Kwc_Abstract::getSetting($this->getClass(), 'masterComponentClass'),
             'imageCaption'
         );
         if ($imageCaption) {
-            $this->add(new Vps_Form_Field_TextField('image_caption', trlVps('Image caption')));
+            $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')));
         }
 
-        $this->add(new Vps_Form_Field_ShowField('image', trlVps('Master Image')))
-            ->setData(new Vpc_Abstract_Image_Trl_Form_ImageData());
-        $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps('Own Image')));
+        $this->add(new Kwf_Form_Field_ShowField('image', trlKwf('Master Image')))
+            ->setData(new Kwc_Abstract_Image_Trl_Form_ImageData());
+        $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Own Image')));
         $fs->setCheckboxToggle(true);
         $fs->setCheckboxName('own_image');
-        $fs->add(Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-image', 'image'));
+        $fs->add(Kwc_Abstract_Form::createChildComponentForm($this->getClass(), '-image', 'image'));
     }
 }

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `vpc_events_to_categories` (
+CREATE TABLE IF NOT EXISTS `kwc_events_to_categories` (
   `id` int(11) NOT NULL auto_increment,
   `event_id` int(11) NOT NULL default '0',
   `category_id` int(11) NOT NULL default '0',

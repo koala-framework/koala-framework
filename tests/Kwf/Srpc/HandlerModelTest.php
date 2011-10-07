@@ -2,7 +2,7 @@
 /**
  * @group Service
  */
-class Vps_Srpc_HandlerModelTest extends Vps_Test_TestCase
+class Kwf_Srpc_HandlerModelTest extends Kwf_Test_TestCase
 {
     private $_handler;
     private $_modelData = array(
@@ -15,7 +15,7 @@ class Vps_Srpc_HandlerModelTest extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'firstname', 'lastname'),
             'data' => array(
                 $this->_modelData[3],
@@ -24,15 +24,15 @@ class Vps_Srpc_HandlerModelTest extends Vps_Test_TestCase
                 $this->_modelData[641]
             )
         ));
-        $this->_handler = new Vps_Srpc_Handler_Model(array('model' => $model));
+        $this->_handler = new Kwf_Srpc_Handler_Model(array('model' => $model));
     }
 
     /**
-     * @expectedException Vps_Exception
+     * @expectedException Kwf_Exception
      */
     public function testNoModel()
     {
-        $m = new Vps_Srpc_Handler_Model();
+        $m = new Kwf_Srpc_Handler_Model();
         $m->getModel();
     }
 
@@ -56,11 +56,11 @@ class Vps_Srpc_HandlerModelTest extends Vps_Test_TestCase
         $select->whereEquals('firstname', array('Foo', 'Max'));
         $this->assertEquals($this->_handler->countRows($select), 2);
 
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'firstname', 'lastname'),
             'data' => array()
         ));
-        $handler = new Vps_Srpc_Handler_Model(array('model' => $model));
+        $handler = new Kwf_Srpc_Handler_Model(array('model' => $model));
         $this->assertEquals(0, $handler->countRows());
     }
 
@@ -119,7 +119,7 @@ class Vps_Srpc_HandlerModelTest extends Vps_Test_TestCase
 
     public function testRowDelete()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'firstname', 'lastname'),
             'data' => array(
                 $this->_modelData[3],
@@ -128,7 +128,7 @@ class Vps_Srpc_HandlerModelTest extends Vps_Test_TestCase
                 $this->_modelData[641]
             )
         ));
-        $this->_handler = new Vps_Srpc_Handler_Model(array('model' => $model));
+        $this->_handler = new Kwf_Srpc_Handler_Model(array('model' => $model));
 
         // delete a row that does not exist
         $result = $this->_handler->rowDelete(1);

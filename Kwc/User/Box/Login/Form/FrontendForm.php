@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Box_Login_Form_FrontendForm extends Vpc_User_Login_Form_FrontendForm
+class Kwc_User_Box_Login_Form_FrontendForm extends Kwc_User_Login_Form_FrontendForm
 {
     protected function _init()
     {

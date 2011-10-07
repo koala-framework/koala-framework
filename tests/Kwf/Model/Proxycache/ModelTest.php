@@ -3,12 +3,12 @@
  * @group Model
  * @group proxycache
  */
-class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
+class Kwf_Model_Proxycache_ModelTest extends Kwf_Test_TestCase
 {
 
     public function testCache()
     {
-        $fnf1 = new Vps_Model_FnF(
+        $fnf1 = new Kwf_Model_FnF(
             array(
                 'uniqueIdentifier' => 'unique',
                 'columns' => array('id', 'en', 'de', 'context'),
@@ -18,7 +18,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
                 )
          ));
 
-        $proxyModel = new Vps_Model_ProxyCache(array('proxyModel' => $fnf1,
+        $proxyModel = new Kwf_Model_ProxyCache(array('proxyModel' => $fnf1,
                                                     'cacheSettings' => array(
                                                         array(
                                                             'index' => array('en'),
@@ -46,7 +46,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testMoreThanOneResult ()
     {
-        $fnf1 = new Vps_Model_FnF(
+        $fnf1 = new Kwf_Model_FnF(
             array(
                 'uniqueIdentifier' => 'unique',
                 'columns' => array('id', 'en', 'de', 'context'),
@@ -58,7 +58,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
                 )
          ));
 
-        $proxyModel = new Vps_Model_ProxyCache(array('proxyModel' => $fnf1,
+        $proxyModel = new Kwf_Model_ProxyCache(array('proxyModel' => $fnf1,
                                                     'cacheSettings' => array(
                                                         array(
                                                             'index' => array('en'),
@@ -91,7 +91,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testWhere()
     {
-        $fnf1 = new Vps_Model_FnF(
+        $fnf1 = new Kwf_Model_FnF(
             array(
                 'uniqueIdentifier' => 'unique',
                 'columns' => array('id', 'en', 'de', 'context'),
@@ -101,7 +101,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
                 )
          ));
 
-        $proxyModel = new Vps_Model_ProxyCache(array('proxyModel' => $fnf1,
+        $proxyModel = new Kwf_Model_ProxyCache(array('proxyModel' => $fnf1,
                                                     'cacheSettings' => array(
                                                         array(
                                                             'index' => array('en'),
@@ -125,7 +125,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testGetRow()
     {
-        $fnf1 = new Vps_Model_FnF(
+        $fnf1 = new Kwf_Model_FnF(
             array(
                 'uniqueIdentifier' => 'unique',
                 'columns' => array('id', 'en', 'de', 'context'),
@@ -135,7 +135,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
                 )
          ));
 
-        $proxyModel = new Vps_Model_ProxyCache(array('proxyModel' => $fnf1,
+        $proxyModel = new Kwf_Model_ProxyCache(array('proxyModel' => $fnf1,
                                                     'cacheSettings' => array(
                                                         array(
                                                             'index' => array('en'),
@@ -153,7 +153,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testGetRowCachedGetColumnNotInCache()
     {
-        $fnf1 = new Vps_Model_FnF(
+        $fnf1 = new Kwf_Model_FnF(
             array(
                 'uniqueIdentifier' => 'unique',
                 'columns' => array('id', 'en', 'de', 'context'),
@@ -163,7 +163,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
                 )
          ));
 
-        $proxyModel = new Vps_Model_ProxyCache(array('proxyModel' => $fnf1,
+        $proxyModel = new Kwf_Model_ProxyCache(array('proxyModel' => $fnf1,
                                                     'cacheSettings' => array(
                                                         array(
                                                             'index' => array('id'),
@@ -181,7 +181,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testGetRowsMultipleInIndex()
     {
-        $fnf1 = new Vps_Model_FnF(
+        $fnf1 = new Kwf_Model_FnF(
             array(
                 'uniqueIdentifier' => 'unique',
                 'columns' => array('id', 'en', 'de', 'context'),
@@ -191,7 +191,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
                 )
          ));
 
-        $proxyModel = new Vps_Model_ProxyCache(array('proxyModel' => $fnf1,
+        $proxyModel = new Kwf_Model_ProxyCache(array('proxyModel' => $fnf1,
                                                     'cacheSettings' => array(
                                                         array(
                                                             'index' => array('en'),
@@ -215,11 +215,11 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testDefaultValues()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'default' => array('foo'=>'defaultFoo')
         ));
-        $proxyModel = new Vps_Model_ProxyCache(array(
+        $proxyModel = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -235,11 +235,11 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObject()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -259,11 +259,11 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObjectCreateRow()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'de' => 'foo')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -284,12 +284,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObjectDeleteRow()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -306,12 +306,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObjectMultipleIndizies()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2', 'check' => 'lalala'),
             array('id' => 3, 'name' => 'foo3', 'check' => 'dadada')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('name'),
@@ -333,12 +333,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testEmptyCacheColumns()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('name'),
@@ -351,19 +351,19 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testVariableCols()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'en' => 'answer', 'context' => 'testContext', 'en_plural' => 'answers', 'de' => 'antwort', 'de_plural' => 'antworten'),
             array('id' => 3, 'en' => 'dog', 'de' => 'hund')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
                       'columns' => array())
             )
         ));
-        Vps_Debug::enable();
+        Kwf_Debug::enable();
         $proxy->clearCache();
         $row = $proxy->getRow($proxy->select()->whereEquals('en', 'answer')->whereEquals('context', 'testContext'));
         $this->assertEquals(2, $row->id);
@@ -372,12 +372,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUpdateRow()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('name'),
@@ -398,12 +398,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testDeleteRow()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('name'),
@@ -420,12 +420,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testInsertRow()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('name'),
@@ -443,12 +443,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testGetSimpleAndCache()
     {
-        $fnf = new Vps_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -466,19 +466,19 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
         $row = $proxy->getRow($proxy->select()->whereEquals('id', '2'));
         $this->assertEquals(1, $fnf->getRowsCalled);
 
-        $fnf = new Vps_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
                       'columns' => array('name'))
             )
         ));
-        Vps_Debug::enable();
+        Kwf_Debug::enable();
         $row = $proxy->getRow($proxy->select()->whereEquals('id', '2'));
         $this->assertEquals(0, $fnf->getRowsCalled);
         $this->assertEquals('foo2', $row->name);
@@ -490,12 +490,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testGetSimpleAndCacheNotUnique()
     {
-        $fnf = new Vps_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -513,12 +513,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
         $row = $proxy->getRow($proxy->select()->whereEquals('id', '2'));
         $this->assertEquals(1, $fnf->getRowsCalled);
 
-        $fnf = new Vps_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'notunique'));
+        $fnf = new Kwf_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'notunique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -540,12 +540,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowObjectUpdateRow()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -565,12 +565,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUniqueRowNotInIndex()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 2, 'name' => 'foo2'),
             array('id' => 3, 'name' => 'foo3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id'),
@@ -585,19 +585,19 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testXmlFindContextNull ()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
                       'columns' => array('de'))
             )
         ));
-         Vps_Debug::enable();
+         Kwf_Debug::enable();
         $proxy->clearCache();
         $row = $proxy->getRow($proxy->select()->whereEquals('en', 'foo')->whereNull('context'));
         $this->assertEquals('dings2', $row->de);
@@ -608,12 +608,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testAddNull ()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -633,12 +633,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testAddEmptyStringToXml ()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -659,12 +659,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUpdateValueToNull ()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -687,12 +687,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testGetValueNotWhichIsNotExistsColumnsNotSet()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -707,8 +707,8 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testGetValueNotWhichIsNotExistsColumns()
     {
-        $this->setExpectedException('Vps_Exception');
-        $fnf = new Vps_Model_FnF(array(
+        $this->setExpectedException('Kwf_Exception');
+        $fnf = new Kwf_Model_FnF(array(
                 'uniqueIdentifier' => 'unique',
                 'columns' => array('id', 'en', 'de', 'context')
         ));
@@ -716,7 +716,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -730,12 +730,12 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testSetValueNotWhichIsNotExistsColumnsNotSet()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -749,8 +749,8 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testSetValueNotWhichIsNotExistsColumns()
     {
-        $this->setExpectedException('Vps_Exception');
-        $fnf = new Vps_Model_FnF(array(
+        $this->setExpectedException('Kwf_Exception');
+        $fnf = new Kwf_Model_FnF(array(
                 'columns' => array('id', 'en', 'de', 'context'),
                 'uniqueIdentifier' => 'unique'
         ));
@@ -758,7 +758,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -771,7 +771,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testWrongWhere()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
                 'columns' => array('id', 'en', 'de', 'context'),
                 'uniqueIdentifier' => 'unique'
         ));
@@ -779,7 +779,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'context'),
@@ -792,7 +792,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testUnderscoreAtEndOfEntry()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
                 'columns' => array('id', 'en', 'de'),
                 'uniqueIdentifier' => 'unique'
         ));
@@ -800,7 +800,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
             array('id' => 1, 'en' => 'foo_', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en'),
@@ -814,20 +814,20 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testWhereNullTwoColumns()
     {
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
             array('id' => 2, 'en' => 'foo3', 'de' => 'dings3'),
             array('id' => 3, 'en' => null, 'de' => null)
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('id', 'en', 'de'),
                       'columns' => array('de'))
             )
         ));
-        Vps_Debug::enable();
+        Kwf_Debug::enable();
         $proxy->clearCache();
         $row = $proxy->getRow($proxy->select()->whereEquals('id', 3)
                                             ->whereNull('en')
@@ -837,8 +837,8 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testSearchKeys()
     {
-        Vps_Debug::enable();
-        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        Kwf_Debug::enable();
+        $fnf = new Kwf_Model_FnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'bar', 'sp' => 'blub'),
             array('id' => 2, 'en' => 'foo_', 'de' => 'bar', 'sp' => 'blub'),
@@ -849,7 +849,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
             array('id' => 7, 'en' => '__', 'de' => '___', 'sp' => '____'),
             array('id' => 8, 'en' => null, 'de' => '___', 'sp' => '____'),
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en', 'de', 'sp'),
@@ -901,11 +901,11 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
     public function testNewlineInIndex()
     {
-        $fnf = new Vps_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
+        $fnf = new Kwf_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
         $fnf->setData(array(
             array('id' => 1, 'en' => "foo\nbar", 'de' => "foo\\nbar"),
         ));
-        $proxy = new Vps_Model_ProxyCache(array(
+        $proxy = new Kwf_Model_ProxyCache(array(
             'proxyModel' => $fnf,
             'cacheSettings' => array(
                 array('index' => array('en'),
@@ -915,7 +915,7 @@ class Vps_Model_Proxycache_ModelTest extends Vps_Test_TestCase
 
             )
         ));
-        Vps_Debug::enable();
+        Kwf_Debug::enable();
         $proxy->clearCache();
         $row = $proxy->getRow($proxy->select()->whereEquals('en', "foo\nbar"));
         $this->assertEquals(1, $fnf->getRowsCalled);

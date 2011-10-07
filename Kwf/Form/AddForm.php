@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_AddForm extends Vps_Form
+class Kwf_Form_AddForm extends Kwf_Form
 {
     public function __construct($name = null)
     {

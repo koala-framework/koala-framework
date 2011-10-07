@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
+abstract class Kwf_Update_Action_Rrd_Abstract extends Kwf_Update_Action_Abstract
 {
     public $backup = true;
     public $file;
@@ -9,14 +9,14 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
     {
         $ret = null;
         system($cmd, $ret);
-        if ($ret != 0) throw new Vps_ClientException("Command failed");
+        if ($ret != 0) throw new Kwf_ClientException("Command failed");
     }
 
     public function checkSettings()
     {
         parent::checkSettings();
         if (!isset($this->file)) {
-            throw new Vps_ClientException("Required parameter: file");
+            throw new Kwf_ClientException("Required parameter: file");
         }
     }
 
@@ -25,7 +25,7 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
         $file = tempnam('/tmp', 'rrdupate');
         $this->_tempFiles[] = $file;
         if (!file_exists($this->file)) {
-            throw new Vps_ClientException("file not found: {$this->file}");
+            throw new Kwf_ClientException("file not found: {$this->file}");
         }
         $this->_systemCheckRet("rrdtool dump {$this->file} > $file");
         $c = file_get_contents($file);

@@ -1,16 +1,16 @@
 <?php
-class Vpc_Basic_Text_StylesAsset implements Vps_Assets_Dynamic_Interface
+class Kwc_Basic_Text_StylesAsset implements Kwf_Assets_Dynamic_Interface
 {
     private $_stylesModel;
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
+    public function __construct(Kwf_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
     {
-        if (!isset($arguments[0])) throw new Vps_Exception_NotFound();
+        if (!isset($arguments[0])) throw new Kwf_Exception_NotFound();
         $this->_stylesModel = $arguments[0];
     }
 
     public function getContents()
     {
-        return Vps_Model_Abstract::getInstance($this->_stylesModel)->getStylesContents();
+        return Kwf_Model_Abstract::getInstance($this->_stylesModel)->getStylesContents();
     }
 
     public function getMTimeFiles()
@@ -20,7 +20,7 @@ class Vpc_Basic_Text_StylesAsset implements Vps_Assets_Dynamic_Interface
 
     public function getMTime()
     {
-        return Vps_Model_Abstract::getInstance($this->_stylesModel)->getMTime();
+        return Kwf_Model_Abstract::getInstance($this->_stylesModel)->getMTime();
     }
 
     public function getType()

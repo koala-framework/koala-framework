@@ -1,10 +1,10 @@
 <?php
-class Vpc_Advanced_DownloadsTree_Data_Fileicon extends Vps_Data_Abstract
+class Kwc_Advanced_DownloadsTree_Data_Fileicon extends Kwf_Data_Abstract
 {
     public function load($row)
     {
         $f = $row->getParentRow('File');
         if (!$f) return '';
-        return (string)Vps_Util_FileIcon::getFileIcon($f->extension);
+        return (string)Kwf_Util_FileIcon::getFileIcon($f->extension);
     }
 }

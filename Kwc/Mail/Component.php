@@ -1,5 +1,5 @@
 <?php
-class Vpc_Mail_Component extends Vpc_Abstract
+class Kwc_Mail_Component extends Kwc_Abstract
 {
     private $_mailData;
     protected $_images = array();
@@ -8,29 +8,29 @@ class Vpc_Mail_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['generators']['content'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Paragraphs_Component'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Paragraphs_Component'
         );
         $ret['generators']['redirect'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Mail_Redirect_Component',
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Mail_Redirect_Component',
             'name' => 'r'
         );
 
-        $sender = Vps_Mail::getSenderFromConfig();
+        $sender = Kwf_Mail::getSenderFromConfig();
         $ret['default'] = array(
             'from_email' => $sender['address'],
             'from_name' => $sender['name']
         );
 
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
-        $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
-        $ret['ownModel'] = 'Vpc_Mail_Model';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/PreviewWindow.js';
+        $ret['plugins']['placeholders'] = 'Kwc_Mail_PlaceholdersPlugin';
+        $ret['ownModel'] = 'Kwc_Mail_Model';
         $ret['componentName'] = 'Mail';
 
         // set shorter source keys for recipient models
         // key = sourceShortcut, value = modelClass
-        // e.g. array('user' => 'Vps_User_Model')
+        // e.g. array('user' => 'Kwf_User_Model')
         $ret['recipientSources'] = array();
 
         $ret['mailHtmlStyles'] = array();
@@ -56,9 +56,9 @@ class Vpc_Mail_Component extends Vpc_Abstract
         // Hack für Tests, weil da der statische getStylesArray-Aufruf nicht funktioniert
         $contentComponent = $this->getData()->getChildComponent('-content');
         if ($contentComponent &&
-            is_instance_of($contentComponent->componentClass, 'Vpc_Paragraphs_Component')
+            is_instance_of($contentComponent->componentClass, 'Kwc_Paragraphs_Component')
         ) {
-            foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
+            foreach (Kwc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
                 foreach ($classes as $class => $style) {
                     $ret[] = array(
                         'tag' => $tag,
@@ -71,13 +71,13 @@ class Vpc_Mail_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function createMail(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
+    public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
         $this->_images = array();
 
         $this->_mailData = $data;
 
-        $mail = new Vps_Mail();
+        $mail = new Kwf_Mail();
         $name = $recipient->getMailFirstname() . ' ' . $recipient->getMailLastname();
         if (!$name == ' ') $name = null;
         if ($toAddress) {
@@ -86,8 +86,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
             $mail->addTo($recipient->getMailEmail(), $name);
         }
 
-        if ((!$format && $recipient->getMailFormat() == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) ||
-            $format == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
+        if ((!$format && $recipient->getMailFormat() == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) ||
+            $format == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
         {
             $mail->setBodyHtml($this->getHtml($recipient, true));
         }
@@ -118,11 +118,11 @@ class Vpc_Mail_Component extends Vpc_Abstract
     /**
      * Verschickt ein mail an @param $recipient.
      * @param $data Optionale Daten die benötigt werden, kann von den
-     *        Komponenten per $this->getData()->getParentByClass('Vpc_Mail_Component')->getComponent()->getMailData();
+     *        Komponenten per $this->getData()->getParentByClass('Kwc_Mail_Component')->getComponent()->getMailData();
      *        ausgelesen werden
      * Wird von Gästebuch verwendet
      */
-    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
+    public function send(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
         $mail = $this->createMail($recipient, $data, $toAddress, $format);
         return $mail->send();
@@ -140,10 +140,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *
      * @param bool forMail: ob images als attachment angehängt werden sollen oder nicht
      */
-    public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
+    public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
-        $renderer = new Vps_Component_Renderer_Mail();
-        $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_HTML);
+        $renderer = new Kwf_Component_Renderer_Mail();
+        $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_HTML);
         $renderer->setRecipient($recipient);
         $renderer->setAttachImages($attachImages);
         $ret = $renderer->renderComponent($this->getData());
@@ -151,7 +151,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         $htmlStyles = $this->getHtmlStyles();
         if ($htmlStyles){
-            $p = new Vpc_Mail_HtmlParser($htmlStyles);
+            $p = new Kwc_Mail_HtmlParser($htmlStyles);
             $ret = $p->parse($ret);
         }
         return $ret;
@@ -162,10 +162,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *
      * @see getHtml Für Ersetzungen siehe
      */
-    public function getText(Vpc_Mail_Recipient_Interface $recipient = null)
+    public function getText(Kwc_Mail_Recipient_Interface $recipient = null)
     {
-        $renderer = new Vps_Component_Renderer_Mail();
-        $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_TXT);
+        $renderer = new Kwf_Component_Renderer_Mail();
+        $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_TXT);
         $renderer->setRecipient($recipient);
         $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
@@ -174,18 +174,18 @@ class Vpc_Mail_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getSubject(Vpc_Mail_Recipient_Interface $recipient = null)
+    public function getSubject(Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $ret = $this->getRow()->subject;
         $ret = $this->_processPlaceholder($ret, $recipient);
         return $ret;
     }
 
-    protected function _processPlaceholder($ret, Vpc_Mail_Recipient_Interface $recipient = null)
+    protected function _processPlaceholder($ret, Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $plugins = $this->_getSetting('plugins');
         foreach ($plugins as $p) {
-            if (is_instance_of($p, 'Vps_Component_Plugin_View_Abstract')) {
+            if (is_instance_of($p, 'Kwf_Component_Plugin_View_Abstract')) {
                 $p = new $p($this->getData()->componentId);
                 $ret = $p->processMailOutput($ret, $recipient);
             }
@@ -193,32 +193,32 @@ class Vpc_Mail_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getPlaceholders(Vpc_Mail_Recipient_Interface $recipient = null)
+    public function getPlaceholders(Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $ret = array();
         if ($recipient) {
             $ret['firstname'] = $recipient->getMailFirstname();
             $ret['lastname'] = $recipient->getMailLastname();
-            if ($recipient instanceof Vpc_Mail_Recipient_TitleInterface) {
+            if ($recipient instanceof Kwc_Mail_Recipient_TitleInterface) {
                 $replace = array(
                     $recipient->getMailTitle(),
                     $recipient->getMailLastname()
                 );
-                $politeM = $this->getData()->trlVps('Dear Mr. {0} {1}', $replace);
-                $politeF = $this->getData()->trlVps('Dear Mrs. {0} {1}', $replace);
+                $politeM = $this->getData()->trlKwf('Dear Mr. {0} {1}', $replace);
+                $politeF = $this->getData()->trlKwf('Dear Mrs. {0} {1}', $replace);
                 if ($recipient->getMailGender() == 'male' && $recipient->getMailLastname()) {
-                    $t = $this->getData()->trlVps('Dear Mr. {0} {1}', $replace);
+                    $t = $this->getData()->trlKwf('Dear Mr. {0} {1}', $replace);
                 } else if ($recipient->getMailGender() == 'female' && $recipient->getMailLastname()) {
-                    $t = $this->getData()->trlVps('Dear Mrs. {0} {1}', $replace);
+                    $t = $this->getData()->trlKwf('Dear Mrs. {0} {1}', $replace);
                 } else {
-                    $t = $this->getData()->trlVps('Dear Sir or Madam');
+                    $t = $this->getData()->trlKwf('Dear Sir or Madam');
                 }
                 $ret['salutation_polite'] = trim(str_replace('  ', ' ', $t));
 
                 if ($recipient->getMailGender() == 'male') {
-                    $t = $this->getData()->trlVps('Mr. {0}', $recipient->getMailTitle());
+                    $t = $this->getData()->trlKwf('Mr. {0}', $recipient->getMailTitle());
                 } else if ($recipient->getMailGender() == 'female') {
-                    $t = $this->getData()->trlVps('Mrs. {0}', $recipient->getMailTitle());
+                    $t = $this->getData()->trlKwf('Mrs. {0}', $recipient->getMailTitle());
                 } else {
                     $t = $recipient->getMailTitle();
                 }
@@ -226,27 +226,27 @@ class Vpc_Mail_Component extends Vpc_Abstract
 
                 $ret['title'] = $recipient->getMailTitle();
             }
-            if ($recipient instanceof Vpc_Mail_Recipient_GenderInterface) {
+            if ($recipient instanceof Kwc_Mail_Recipient_GenderInterface) {
                 $replace = array($recipient->getMailLastname());
                 if ($recipient->getMailGender() == 'male') {
-                    $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear Mr. {0}', $replace);
-                    $ret['salutation_hello'] = $this->getData()->trlVps('Hello Mr. {0}', $replace);
-                    $ret['salutation'] = $this->getData()->trlVps('Mr.');
+                    $ret['salutation_polite_notitle'] = $this->getData()->trlKwf('Dear Mr. {0}', $replace);
+                    $ret['salutation_hello'] = $this->getData()->trlKwf('Hello Mr. {0}', $replace);
+                    $ret['salutation'] = $this->getData()->trlKwf('Mr.');
                 } else if ($recipient->getMailGender() == 'female') {
-                    $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear Mrs. {0}', $replace);
-                    $ret['salutation_hello'] = $this->getData()->trlVps('Hello Mrs. {0}', $replace);
-                    $ret['salutation'] = $this->getData()->trlVps('Mrs.');
+                    $ret['salutation_polite_notitle'] = $this->getData()->trlKwf('Dear Mrs. {0}', $replace);
+                    $ret['salutation_hello'] = $this->getData()->trlKwf('Hello Mrs. {0}', $replace);
+                    $ret['salutation'] = $this->getData()->trlKwf('Mrs.');
                 } else {
                     $replace = array(
                         $recipient->getMailFirstname(),
                         $recipient->getMailLastname()
                     );
                     if ($recipient->getMailFirstname() && $recipient->getMailLastname()) {
-                        $ret['salutation_polite_notitle'] = trim($this->getData()->trlVps('Dear {0} {1}', $replace));
+                        $ret['salutation_polite_notitle'] = trim($this->getData()->trlKwf('Dear {0} {1}', $replace));
                     } else {
-                        $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear Sir or Madam');
+                        $ret['salutation_polite_notitle'] = $this->getData()->trlKwf('Dear Sir or Madam');
                     }
-                    $ret['salutation_hello'] = trim($this->getData()->trlVps('Hello {0} {1}', $replace));
+                    $ret['salutation_hello'] = trim($this->getData()->trlKwf('Hello {0} {1}', $replace));
                 }
             }
         }

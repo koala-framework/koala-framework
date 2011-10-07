@@ -1,13 +1,13 @@
 <?php
-class Vps_Filter_Row_UniqueAsciiTest extends Vps_Test_TestCase
+class Kwf_Filter_Row_UniqueAsciiTest extends Kwf_Test_TestCase
 {
     public function testUniqueAscii()
     {
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'name'=>'Name1', 'test'=>'name1'),
             array('id'=>2, 'name'=>'Name2', 'test'=>'name2'),
             
-        ), 'filters'=>array('test'=>new Vps_Filter_Row_UniqueAscii('name'))));
+        ), 'filters'=>array('test'=>new Kwf_Filter_Row_UniqueAscii('name'))));
 
         $model->getRow(1)->save();
         $this->assertEquals('name1', $model->getRow(1)->test);
@@ -24,9 +24,9 @@ class Vps_Filter_Row_UniqueAsciiTest extends Vps_Test_TestCase
 
     public function testUniqueAsciiGroupBy()
     {
-        $f = new Vps_Filter_Row_UniqueAscii('name');
+        $f = new Kwf_Filter_Row_UniqueAscii('name');
         $f->setGroupBy('group');
-        $model = new Vps_Model_FnF(array('data'=>array(
+        $model = new Kwf_Model_FnF(array('data'=>array(
             array('id'=>1, 'name'=>'Name1', 'group'=>1, 'test'=>'name1'),
             array('id'=>2, 'name'=>'Name2', 'group'=>2, 'test'=>'name2'),
         ), 'filters'=>array('test'=>$f)));

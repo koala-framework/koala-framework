@@ -1,5 +1,5 @@
-Vps.onContentReady(function() {
-    Ext.select('.vpcForm', true).each(function(form) {
+Kwf.onContentReady(function() {
+    Ext.select('.kwcForm', true).each(function(form) {
         var config = form.parent().down('.config', true);
         if (!config) return;
         config = Ext.decode(config.value);
@@ -9,12 +9,12 @@ Vps.onContentReady(function() {
         //but for now this should do...
         //TODO move into own file, think about the name
         var fields = [];
-        form.select('.vpsField', true).each(function(fieldEl) {
+        form.select('.kwfField', true).each(function(fieldEl) {
             var classes = fieldEl.dom.className.split(' ');
             var fieldConstructor = false;
             classes.each(function (c) {
-                if (Vps.FrontendForm.fields[c]) {
-                    fieldConstructor = Vps.FrontendForm.fields[c];
+                if (Kwf.FrontendForm.fields[c]) {
+                    fieldConstructor = Kwf.FrontendForm.fields[c];
                 }
             }, this);
             if (fieldConstructor) {
@@ -89,7 +89,7 @@ Vps.onContentReady(function() {
                     if (error) error.remove();
 
                     if (r.errorMessages && r.errorMessages.length) {
-                        var html = '<div class="webStandard vpcFormError webFormError">';
+                        var html = '<div class="webStandard kwcFormError webFormError">';
                         html += '<p class="error">' + r.errorPlaceholder + ':</p>';
                         html += '<ul>';
                         for (var i=0; i<r.errorMessages.length; i++) {

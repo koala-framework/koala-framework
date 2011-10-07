@@ -3,11 +3,11 @@
  * Dynamisches Asset, um Dependencies Cachen zu können den Dateinamen aber
  * dynamisch zu ermitteln.
  *
- * Wird verwendet von Vpc_Basic_Text
+ * Wird verwendet von Kwc_Basic_Text
  **/
-interface Vps_Assets_Dynamic_Interface
+interface Kwf_Assets_Dynamic_Interface
 {
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments);
+    public function __construct(Kwf_Assets_Loader $loader, $assetsType, $rootComponent, $arguments);
     public function getContents();
     public function getMTimeFiles();
     public function getMTime();

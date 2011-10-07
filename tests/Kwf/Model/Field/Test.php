@@ -3,14 +3,14 @@
  * @group Model
  * @group Model_Field
  */
-class Vps_Model_Field_Test extends Vps_Test_TestCase
+class Kwf_Model_Field_Test extends Kwf_Test_TestCase
 {
     public function testFnFField()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub')))),
-            'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
+            'siblingModels' => array(new Kwf_Model_Field(array('fieldName'=>'data')))
         ));
 
         $row = $model->getRow(1);
@@ -38,14 +38,14 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testFnFFieldField()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub',
                         'data'=>json_encode(array('blub1'=>'blub1')))))),
-            'siblingModels' => array(new Vps_Model_Field(array(
+            'siblingModels' => array(new Kwf_Model_Field(array(
                 'fieldName'=>'data',
                 'columns' => array('blub', 'data'),
-                'siblingModels' => array(new Vps_Model_Field(array(
+                'siblingModels' => array(new Kwf_Model_Field(array(
                     'fieldName' => 'data',
                     'columns' => array('blub1', 'blub2')
                 )))
@@ -72,10 +72,10 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testDataIsEmpty()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(''))),
-            'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
+            'siblingModels' => array(new Kwf_Model_Field(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $row->blub = 1;
@@ -87,10 +87,10 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testDataIsLegacy()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'vpsSerialized'.json_encode(array('blub'=>'blub')))),
-            'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'kwfSerialized'.json_encode(array('blub'=>'blub')))),
+            'siblingModels' => array(new Kwf_Model_Field(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $row->blub = 1;
@@ -102,7 +102,7 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testGetIds()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar'),
@@ -115,10 +115,10 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testDefaultValues()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'default' => array('foo1'=>'defaultFoo1'),
             'columns' => array('id', 'foo1', 'data'),
-            'siblingModels' => array(new Vps_Model_Field(array(
+            'siblingModels' => array(new Kwf_Model_Field(array(
                 'fieldName'=>'data',
                 'default' => array('foo2'=>'defaultFoo2'),
             )))
@@ -130,12 +130,12 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testWithProxy()
     {
-        $fnf = new Vps_Model_FnF(array(
+        $fnf = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo1', 'data')
         ));
-        $model = new Vps_Model_Proxy(array(
+        $model = new Kwf_Model_Proxy(array(
             'proxyModel' => $fnf,
-            'siblingModels' => array(new Vps_Model_Field(array(
+            'siblingModels' => array(new Kwf_Model_Field(array(
                 'fieldName'=>'data'
             )))
         ));
@@ -150,9 +150,9 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testDuplicate()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo1', 'data'),
-            'siblingModels' => array(new Vps_Model_Field(array(
+            'siblingModels' => array(new Kwf_Model_Field(array(
                 'fieldName'=>'data',
             )))
         ));
@@ -170,9 +170,9 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
     public function testFieldEvents()
     {
-        $model = new Vps_Model_FnF(array(
+        $model = new Kwf_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'siblingModels' => array(new Vps_Model_Field_FieldModel(array(
+            'siblingModels' => array(new Kwf_Model_Field_FieldModel(array(
                 'fieldName'=>'data',
             )))
         ));
@@ -182,7 +182,7 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
         $row->blub2 = 'blub2';
         $row->save();
 
-        $counts = Vps_Model_Field_FieldModelRow::$counts;
+        $counts = Kwf_Model_Field_FieldModelRow::$counts;
         $this->assertEquals(1, $counts['beforeInsert']);
         $this->assertEquals(1, $counts['afterInsert']);
         $this->assertEquals(0, $counts['beforeUpdate']);
@@ -194,7 +194,7 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
 
         $row->save();
 
-        $counts = Vps_Model_Field_FieldModelRow::$counts;
+        $counts = Kwf_Model_Field_FieldModelRow::$counts;
         $this->assertEquals(1, $counts['beforeInsert']);
         $this->assertEquals(1, $counts['afterInsert']);
         $this->assertEquals(1, $counts['beforeUpdate']);

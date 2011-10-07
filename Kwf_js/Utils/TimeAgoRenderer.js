@@ -14,25 +14,25 @@
  * Copyright (c) 2008-2009, Ryan McGeary (ryanonjavascript -[at]- mcgeary [*dot*] org)
  */
 
-Vps.Utils.TimeAgo = {
+Kwf.Utils.TimeAgo = {
     settings: {
         allowFuture: false,
         strings: {
             prefixAgo: null,
             prefixFromNow: null,
-            suffixAgo: trlVps("ago"),
-            suffixFromNow: trlVps("from now"),
-            seconds: trlVps("less than a minute"),
-            minute: trlVps("about a minute"),
-            minutes: trlVps("{0} minutes"),
-            hour: trlVps("about an hour"),
-            hours: trlVps("about {0} hours"),
-            day: trlVps("a day"),
-            days: trlVps("{0} days"),
-            month: trlVps("about a month"),
-            months: trlVps("{0} months"),
-            year: trlVps("about a year"),
-            years: trlVps("{0} years")
+            suffixAgo: trlKwf("ago"),
+            suffixFromNow: trlKwf("from now"),
+            seconds: trlKwf("less than a minute"),
+            minute: trlKwf("about a minute"),
+            minutes: trlKwf("{0} minutes"),
+            hour: trlKwf("about an hour"),
+            hours: trlKwf("about {0} hours"),
+            day: trlKwf("a day"),
+            days: trlKwf("{0} days"),
+            month: trlKwf("about a month"),
+            months: trlKwf("{0} months"),
+            year: trlKwf("about a year"),
+            years: trlKwf("{0} years")
         }
     },
     inWords: function(v)
@@ -53,7 +53,7 @@ Vps.Utils.TimeAgo = {
 
         var distanceMillis = (new Date()).getTime() - v.getTime();
 
-        var settings = Vps.Utils.TimeAgo.settings;
+        var settings = Kwf.Utils.TimeAgo.settings;
         var $l = settings.strings;
         var prefix = $l.prefixAgo;
         var suffix = $l.suffixAgo;
@@ -89,5 +89,5 @@ Vps.Utils.TimeAgo = {
 
 Ext.util.Format.timeAgo = function(v, p)
 {
-    return Vps.Utils.TimeAgo.inWords(v);
+    return Kwf.Utils.TimeAgo.inWords(v);
 };

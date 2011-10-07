@@ -2,18 +2,18 @@
 /**
  * @group Db_TablesModel
  */
-class Vps_Db_TablesModel_TableFieldsTest extends Vps_Test_TestCase
+class Kwf_Db_TablesModel_TableFieldsTest extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        $this->_db = $this->getMock('Vps_Model_Db_TestAdapter',
+        $this->_db = $this->getMock('Kwf_Model_Db_TestAdapter',
             array('fetchCol', 'fetchAssoc', 'query'));
         $this->_db->expects($this->any())
             ->method('fetchCol')
             ->with($this->equalTo('SHOW TABLES'))
             ->will($this->returnValue(array('foo', 'bar', 'bam')));
 
-        $this->_model = new Vps_Db_TablesModel(array(
+        $this->_model = new Kwf_Db_TablesModel(array(
             'db' => $this->_db
         ));
         parent::setUp();

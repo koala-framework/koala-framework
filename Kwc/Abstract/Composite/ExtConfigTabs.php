@@ -1,14 +1,14 @@
 <?php
-class Vpc_Abstract_Composite_ExtConfigTabs extends Vps_Component_Abstract_ExtConfig_Abstract
+class Kwc_Abstract_Composite_ExtConfigTabs extends Kwf_Component_Abstract_ExtConfig_Abstract
 {
     protected function _getConfig()
     {
-        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
+        $classes = Kwc_Abstract::getChildComponentClasses($this->_class, 'child');
 
-        $config = $this->_getStandardConfig('vps.tabpanel', null);
+        $config = $this->_getStandardConfig('kwf.tabpanel', null);
         $config['activeTab'] = 0;
         foreach ($classes as $id=>$cls) {
-            $c = array_values(Vpc_Admin::getInstance($cls)->getExtConfig());
+            $c = array_values(Kwc_Admin::getInstance($cls)->getExtConfig());
             foreach ($c as $i) {
                 //TODO: hier nicht den titel als index verwenden, das stinkt
                 $componentIdSuffix = '-' . $id;

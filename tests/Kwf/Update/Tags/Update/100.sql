@@ -1,2 +1,2 @@
-#tags: vps foo
+#tags: kwf foo
 foo bar;

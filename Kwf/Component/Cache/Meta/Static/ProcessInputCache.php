@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Meta_Static_ProcessInputCache extends Vps_Component_Cache_Meta_Static_Model
+class Kwf_Component_Cache_Meta_Static_ProcessInputCache extends Kwf_Component_Cache_Meta_Static_Model
 {
     public function __construct($generator)
     {
@@ -13,14 +13,14 @@ class Vps_Component_Cache_Meta_Static_ProcessInputCache extends Vps_Component_Ca
         return self::META_TYPE_PROCESSINPUTCACHE;
     }
 
-    //TODO praktisch eine kopie von Vps_Component_Cache_Meta_Static_UrlCache
+    //TODO praktisch eine kopie von Kwf_Component_Cache_Meta_Static_UrlCache
     public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
     {
         $ret = array();
-        $generator = Vps_Component_Generator_Abstract::getInstance($params['generator']['class'], $params['generator']['key']);
-        $s = new Vps_Component_Select();
+        $generator = Kwf_Component_Generator_Abstract::getInstance($params['generator']['class'], $params['generator']['key']);
+        $s = new Kwf_Component_Select();
         $pk = $row->getModel()->getPrimaryKey();
-        if ($generator instanceof Vpc_Root_Category_Generator) {
+        if ($generator instanceof Kwc_Root_Category_Generator) {
             $s->whereId($row->$pk);
         } else {
             $s->whereId($generator->getIdSeparator().$row->$pk);

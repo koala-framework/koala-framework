@@ -1,15 +1,15 @@
 <?php
-class Vps_Form_Field_NumberField_Form extends Vps_Form_Field_TextField_Form
+class Kwf_Form_Field_NumberField_Form extends Kwf_Form_Field_TextField_Form
 {
     protected function _init()
     {
         parent::_init();
         unset($this->fields['v_type']);
-        $this->add(new Vps_Form_Field_NumberField('max_value', trlVps('Maximum Value')))
+        $this->add(new Kwf_Form_Field_NumberField('max_value', trlKwf('Maximum Value')))
             ->setWidth(50);
-        $this->add(new Vps_Form_Field_NumberField('min_value', trlVps('Minimum Value')))
+        $this->add(new Kwf_Form_Field_NumberField('min_value', trlKwf('Minimum Value')))
             ->setWidth(50);
-        $this->add(new Vps_Form_Field_Checkbox('allow_negative', trlVps('Allow Negative')));
-        $this->add(new Vps_Form_Field_Checkbox('allow_decimals', trlVps('Allow Decimals')));
+        $this->add(new Kwf_Form_Field_Checkbox('allow_negative', trlKwf('Allow Negative')));
+        $this->add(new Kwf_Form_Field_Checkbox('allow_decimals', trlKwf('Allow Decimals')));
     }
 }

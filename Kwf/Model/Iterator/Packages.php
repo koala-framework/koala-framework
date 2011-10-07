@@ -2,13 +2,13 @@
 /**
  * Iterator der einen ModelIterator mit einer Paketgröße durchgeht um speicher zu sparen
  */
-class Vps_Model_Iterator_Packages implements Iterator
+class Kwf_Model_Iterator_Packages implements Iterator
 {
     private $_packageSize;
     private $_currentOffset = 0;
     private $_innerIterator;
 
-    public function __construct(Vps_Model_Iterator_ModelIterator_Interface $iterator, $packageSize = 500)
+    public function __construct(Kwf_Model_Iterator_ModelIterator_Interface $iterator, $packageSize = 500)
     {
         $this->_packageSize = $packageSize;
         $this->_innerIterator = $iterator;

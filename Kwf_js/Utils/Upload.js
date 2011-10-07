@@ -1,4 +1,4 @@
-Vps.Utils.Upload = {
+Kwf.Utils.Upload = {
     supportsHtml5Upload: function()
     {
         if (XMLHttpRequest) {
@@ -37,10 +37,10 @@ Vps.Utils.Upload = {
                 }
                 if (errorMsg) {
                     var sendMail = !r || !r.exception;
-                    Vps.handleError({
-                        url: '/vps/media/upload/json-upload',
+                    Kwf.handleError({
+                        url: '/kwf/media/upload/json-upload',
                         message: errorMsg,
-                        title: trlVps('Upload Error'),
+                        title: trlKwf('Upload Error'),
                         mail: sendMail,
                         checkRetry: false
                     });
@@ -52,9 +52,9 @@ Vps.Utils.Upload = {
 
                 if (!r.success) {
                     if (r.error) {
-                        Ext.Msg.alert(trlVps('Error'), r.error);
+                        Ext.Msg.alert(trlKwf('Error'), r.error);
                     } else {
-                        Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
+                        Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
                     }
                     if (config.failure) {
                         config.failure.call(config.scope, r);
@@ -67,7 +67,7 @@ Vps.Utils.Upload = {
                 }
             }
         }
-        xhr.open('POST', '/vps/media/upload/json-upload');
+        xhr.open('POST', '/kwf/media/upload/json-upload');
         xhr.setRequestHeader('X-Upload-Name', file.name);
         xhr.setRequestHeader('X-Upload-Size', file.size);
         xhr.setRequestHeader('X-Upload-Type', file.type);

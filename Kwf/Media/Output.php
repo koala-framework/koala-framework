@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_Output
+class Kwf_Media_Output
 {
     public static function getEncoding()
     {
@@ -24,7 +24,7 @@ class Vps_Media_Output
             }
         }
         echo $data['contents'];
-        Vps_Benchmark::shutDown();
+        Kwf_Benchmark::shutDown();
         exit;
     }
 
@@ -38,12 +38,12 @@ class Vps_Media_Output
         if (!isset($file['contents'])) {
             if (isset($file['file'])) {
                 if (!is_file($file['file'])) {
-                    throw new Vps_Exception_NotFound("File '$file[file]' not found.");
+                    throw new Kwf_Exception_NotFound("File '$file[file]' not found.");
                 }
                 $file['contents'] = file_get_contents($file['file']);
                 $file['mtime'] = filemtime($file['file']);
             } else {
-                throw new Vps_Exception_NotFound();
+                throw new Kwf_Exception_NotFound();
             }
         }
         if (isset($file['mtime'])) {

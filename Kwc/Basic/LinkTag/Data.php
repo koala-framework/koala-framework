@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Data extends Vps_Component_Data
+class Kwc_Basic_LinkTag_Data extends Kwf_Component_Data
 {
     private $_linkData = false;
     private function _getLinkData()

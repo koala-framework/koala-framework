@@ -1,5 +1,5 @@
 <?php
-class Vps_Service_Amazon_BrowseNode
+class Kwf_Service_Amazon_BrowseNode
 {
     protected $_dom;
     /**

@@ -1,12 +1,12 @@
 <?php
-class Vpc_Box_AssetsSelect_Component extends Vpc_Box_Assets_Component
+class Kwc_Box_AssetsSelect_Component extends Kwc_Box_Assets_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
-        $ret['componentName'] = trlVps('Assets Select');
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['componentName'] = trlKwf('Assets Select');
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'section';
         return $ret;
     }

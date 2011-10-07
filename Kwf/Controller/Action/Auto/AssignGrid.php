@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Action_Auto_Grid
+abstract class Kwf_Controller_Action_Auto_AssignGrid extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_textAssignField = null;
     protected $_assignFromReference; //required
@@ -12,7 +12,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
         $this->_checkNecessaryProperties();
 
         $ids = Zend_Json::decode($this->_getParam('foreign_keys'));
-        if (!count($ids)) throw new Vps_ClientException(trlVps("There's no row selected"));
+        if (!count($ids)) throw new Kwf_ClientException(trlKwf("There's no row selected"));
 
         $assignFromRef = $this->_getModel()->getReference($this->_assignFromReference);
         $assignFromColumn = $assignFromRef['column'];
@@ -33,7 +33,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
     protected function _createAssignRow($id)
     {
         if (!$this->_assignToReference) {
-            throw new Vps_Exception('$this->_assignToReference not set');
+            throw new Kwf_Exception('$this->_assignToReference not set');
         }
 
         $assignToRef = $this->_getModel()->getReference($this->_assignToReference);
@@ -51,12 +51,12 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
     {
         $this->_checkNecessaryProperties();
         if (!$this->_textAssignField) {
-            throw new Vps_Exception('$this->_textAssignField not set');
+            throw new Kwf_Exception('$this->_textAssignField not set');
         }
 
         $text = $this->_getParam('assignText');
         if (!trim($text)) {
-            throw new Vps_ClientException('Textinput was empty');
+            throw new Kwf_ClientException('Textinput was empty');
         }
 
         $assignModel = $this->_getModel();
@@ -66,7 +66,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
         $assignFromRef = $assignModel->getReference($this->_assignFromReference);
         $assignFromColumn = $assignFromRef['column'];
 
-        $dataModel = Vps_Model_Abstract::getInstance($assignFromRef['refModelClass']);
+        $dataModel = Kwf_Model_Abstract::getInstance($assignFromRef['refModelClass']);
 
         ignore_user_abort(true);
         $this->_model->getAdapter()->beginTransaction();
@@ -104,10 +104,10 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
     protected function _checkNecessaryProperties()
     {
         if (!$this->_getModel()) {
-            throw new Vps_Exception('$this->_modelName not set');
+            throw new Kwf_Exception('$this->_modelName not set');
         }
         if (!$this->_assignFromReference) {
-            throw new Vps_Exception('$this->_assignFromReference not set');
+            throw new Kwf_Exception('$this->_assignFromReference not set');
         }
     }
 }

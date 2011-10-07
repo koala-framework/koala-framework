@@ -1,5 +1,5 @@
 <?php
-class Vpc_Cc_Paragraphs_Master_Paragraphs_Simple_Component extends Vpc_Abstract
+class Kwc_Cc_Paragraphs_Master_Paragraphs_Simple_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {

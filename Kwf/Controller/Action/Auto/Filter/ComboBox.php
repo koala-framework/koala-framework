@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Auto_Filter_ComboBox extends Vps_Controller_Action_Auto_Filter_Query
+class Kwf_Controller_Action_Auto_Filter_ComboBox extends Kwf_Controller_Action_Auto_Filter_Query
 {
     protected $_type = 'ComboBox';
 

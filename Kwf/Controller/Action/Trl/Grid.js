@@ -1,9 +1,9 @@
-Ext.namespace('Vps.Trl');
+Ext.namespace('Kwf.Trl');
 
-Vps.Trl.Grid = Ext.extend(Vps.Auto.GridPanel, {
+Kwf.Trl.Grid = Ext.extend(Kwf.Auto.GridPanel, {
     initComponent : function()
     {
-        Vps.Trl.Grid.superclass.initComponent.call(this);
+        Kwf.Trl.Grid.superclass.initComponent.call(this);
         this.on('loaded', function() {
             this.getEditDialog().getAutoForm().on('beforeloadform', function(form, data) {
                 form.items.items.each(function(value, index) {

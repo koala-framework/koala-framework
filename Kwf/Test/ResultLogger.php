@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_ResultLogger extends PHPUnit_TextUI_ResultPrinter
+class Kwf_Test_ResultLogger extends PHPUnit_TextUI_ResultPrinter
 {
     protected $_log = '';
     public function __construct($verbose = FALSE)

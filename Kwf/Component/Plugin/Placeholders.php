@@ -1,14 +1,14 @@
 <?php
-class Vps_Component_Plugin_Placeholders extends Vps_Component_Plugin_View_Abstract
+class Kwf_Component_Plugin_Placeholders extends Kwf_Component_Plugin_View_Abstract
 {
     public function getExecutionPoint()
     {
-        return Vps_Component_Plugin_Interface_View::EXECUTE_AFTER;
+        return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
     }
 
     protected function _getPlaceholders()
     {
-        return Vps_Component_Data_Root::getInstance()->getComponentById($this->_componentId)
+        return Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)
             ->getComponent()->getPlaceholders();
     }
 

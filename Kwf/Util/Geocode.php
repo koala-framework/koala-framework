@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Geocode
+class Kwf_Util_Geocode
 {
     /**
      * Gibt die Geokoordinaten anhand einer Adresse zurück
@@ -9,7 +9,7 @@ class Vps_Util_Geocode
      */
     public static function getCoordinates($address)
     {
-        $apiKey = Vps_Assets_GoogleMapsApiKey::getKey();
+        $apiKey = Kwf_Assets_GoogleMapsApiKey::getKey();
         $q = $address;
         $q = str_replace(array('ä','ö','ü','Ä','Ö','Ü','ß'), array('ae','oe','ue','Ae','Oe','Ue','ss'), $q);
         $getParams = array(
@@ -30,7 +30,7 @@ class Vps_Util_Geocode
         if (version_compare(PHP_VERSION, '5.2.3') == -1) {
             setlocale(LC_NUMERIC, 'C');
             $result = Zend_Json::decode($body);
-            setlocale(LC_NUMERIC, explode(', ', trlcVps('locale', 'C')));
+            setlocale(LC_NUMERIC, explode(', ', trlcKwf('locale', 'C')));
         } else {
             $result = Zend_Json::decode($body);
         }

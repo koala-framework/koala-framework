@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Download_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
+class Kwc_Basic_Download_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
     public function getTemplateVars()
@@ -37,7 +37,7 @@ class Vpc_Basic_Download_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vpc_Chained_Abstract_ParentIdCacheMeta(Vpc_Abstract::getSetting($componentClass, 'ownModel'));
+        $ret[] = new Kwc_Chained_Abstract_ParentIdCacheMeta(Kwc_Abstract::getSetting($componentClass, 'ownModel'));
         return $ret;
     }
 }

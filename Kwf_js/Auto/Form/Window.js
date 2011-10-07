@@ -1,18 +1,18 @@
-Ext.namespace('Vps.Auto.Form');
+Ext.namespace('Kwf.Auto.Form');
 
-Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
+Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
     initComponent : function()
     {
         if (!this.editTitle) {
-            this.editTitle = trlVps('Edit');
+            this.editTitle = trlKwf('Edit');
             if (this.title) {
-                this.editTitle = trlVps('Edit {0}', this.title);
+                this.editTitle = trlKwf('Edit {0}', this.title);
             }
         }
         if (!this.addTitle) {
-            this.addTitle = trlVps('Add');
+            this.addTitle = trlKwf('Add');
             if (this.title) {
-                this.addTitle = trlVps('Add {0}', this.title);
+                this.addTitle = trlKwf('Add {0}', this.title);
             }
         }
         if (!this.autoForm) {
@@ -24,7 +24,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
                 autoLoad: false,
                 checkDirty: false
             });
-            this.autoForm = new Vps.Auto.FormPanel(this.formConfig);
+            this.autoForm = new Kwf.Auto.FormPanel(this.formConfig);
         } else if (typeof this.autoForm == 'string') {
             try {
                 var d = eval(this.autoForm);
@@ -67,7 +67,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
         this.relayEvents(this.autoForm, ['renderform', 'datachange', 'beforeloadform', 'loadform', 'addaction']);
 
-        Vps.Auto.Form.Window.superclass.initComponent.call(this);
+        Kwf.Auto.Form.Window.superclass.initComponent.call(this);
     },
 
     getButtons : function ()
@@ -82,7 +82,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
         if (type == 'save') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Save'),
+                text    : trlKwf('Save'),
                 handler : function() {
                     this.getAutoForm().submit({
                         success: function() {
@@ -95,7 +95,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             });
         } else if (type == 'cancel') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Cancel'),
+                text    : trlKwf('Cancel'),
                 handler : function() {
                     this.hide();
                 },
@@ -103,7 +103,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             });
         } else if (type == 'close') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Close'),
+                text    : trlKwf('Close'),
                 handler : function() {
                     this.hide();
                 },
@@ -123,7 +123,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.getAutoForm().onAdd({
             success: function() {
                 if (!this.width || !this.height) {
-                    this._vpsResize();
+                    this._kwfResize();
                 }
             },
             scope: this
@@ -140,7 +140,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
                 focusAfterLoad: true,
                 success: function() {
                     if (!this.width || !this.height) {
-                        this._vpsResize();
+                        this._kwfResize();
                     }
                 },
                 scope: this
@@ -148,7 +148,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         }
     },
 
-    _vpsResize : function()
+    _kwfResize : function()
     {
         var maxHeight = Math.ceil(Ext.getBody().getHeight() * 0.9);
         var maxWidth = Math.ceil(Ext.getBody().getWidth() * 0.9);
@@ -186,4 +186,4 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.getAutoForm().applyBaseParams(p);
     }
 });
-Ext.reg('vps.autoformwindow', Vps.Auto.Form.Window);
+Ext.reg('kwf.autoformwindow', Kwf.Auto.Form.Window);

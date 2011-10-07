@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
+class Kwf_Data_Kwc_Frontend extends Kwf_Data_Abstract
 {
     private $_componentClass;
 
@@ -11,7 +11,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
     public function load($row)
     {
         $id = $row->component_id.'-'.$row->id;
-        $data = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+        $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
             $id,
             array('ignoreVisible' => true, 'limit' => 1)
         );
@@ -19,7 +19,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
             return "Component with '$id' not found";
         }
         $class = $data->componentClass;
-        if (is_instance_of($class, 'Vpc_Abstract')) {
+        if (is_instance_of($class, 'Kwc_Abstract')) {
 
             $process = $data
                 ->getRecursiveChildComponents(array(
@@ -27,7 +27,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                         'flags' => array('processInput' => true),
                         'ignoreVisible' => true
                     ));
-            if (Vps_Component_Abstract::getFlag($data->componentClass, 'processInput')) {
+            if (Kwf_Component_Abstract::getFlag($data->componentClass, 'processInput')) {
                 $process[] = $data;
             }
             foreach ($process as $i) {
@@ -40,10 +40,10 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                     $i->getComponent()->processInput(array());
                 }
             }
-            $view = new Vps_Component_Renderer();
+            $view = new Kwf_Component_Renderer();
             return $view->renderComponent($data);
         } else if (isset($row->settings)) {
-            $settingsModel = new Vps_Model_Field(array(
+            $settingsModel = new Kwf_Model_Field(array(
                 'parentModel' => $row->getModel(),
                 'fieldName' => 'settings'
             ));
@@ -52,7 +52,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
 
             $vars = $f->getTemplateVars(array());
 
-            $view = new Vps_View_Ext();
+            $view = new Kwf_View_Ext();
             $view->item = $vars;
             return $view->render('field.tpl');
         }

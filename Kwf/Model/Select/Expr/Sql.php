@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Select_Expr_Sql implements Vps_Model_Select_Expr_Interface
+class Kwf_Model_Select_Expr_Sql implements Kwf_Model_Select_Expr_Interface
 {
     private $_sql;
     private $_usedColumns;

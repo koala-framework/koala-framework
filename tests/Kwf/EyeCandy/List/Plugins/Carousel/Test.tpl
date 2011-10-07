@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->assets('Vps_EyeCandy_List_Plugins_Carousel:Test')?>
+        <?=$this->assets('Kwf_EyeCandy_List_Plugins_Carousel:Test')?>
         <style type="text/css">
             .testItem { margin: 20px; padding: 10px; background-color: #6be; width: 100px; height: 100px; float: left; }
         </style>

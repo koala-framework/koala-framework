@@ -2,13 +2,13 @@
 /**
  * @group Component_Cache_Menu
  */
-class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
+class Kwf_Component_Cache_Menu_Test2 extends Kwc_TestAbstract
 {
     public function setUp()
     {
         $this->markTestIncomplete('eventscache');
 
-        parent::setUp('Vps_Component_Cache_Menu_Root2_Component');
+        parent::setUp('Kwf_Component_Cache_Menu_Root2_Component');
         /*
         root
           -menu
@@ -86,10 +86,10 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
     public function testParentMenu()
     {
         $menu = $this->_root->getComponentById(2)->getChildComponent('-menu');
-        $this->assertEquals('Vps_Component_Cache_Menu_Root2_Menu_Component', $menu->componentClass);
+        $this->assertEquals('Kwf_Component_Cache_Menu_Root2_Menu_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById(3)->getChildComponent('-menu');
-        $this->assertEquals('Vpc_Basic_ParentContent_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Basic_ParentContent_Component', $menu->componentClass);
     }
     */
 }

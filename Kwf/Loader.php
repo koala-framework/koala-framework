@@ -1,15 +1,15 @@
 <?php
-class Vps_Loader
+class Kwf_Loader
 {
     public static function registerAutoload()
     {
-        require_once 'Vps/Benchmark.php';
-        if (Vps_Benchmark::isEnabled()) {
-            $class = 'Vps_Loader_Benchmark';
-            require_once 'Vps/Loader/Benchmark.php';
+        require_once 'Kwf/Benchmark.php';
+        if (Kwf_Benchmark::isEnabled()) {
+            $class = 'Kwf_Loader_Benchmark';
+            require_once 'Kwf/Loader/Benchmark.php';
         } else {
             //für performance
-            $class = 'Vps_Loader';
+            $class = 'Kwf_Loader';
         }
         spl_autoload_register(array($class, 'loadClass'));
     }

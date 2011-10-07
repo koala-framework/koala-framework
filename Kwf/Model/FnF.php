@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_FnF extends Vps_Model_Data_Abstract
+class Kwf_Model_FnF extends Kwf_Model_Data_Abstract
     implements Serializable
 {
     protected $_uniqueIdentifier;
@@ -21,7 +21,7 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
         $this->_autoId = null;
     }
 
-    public function isEqual(Vps_Model_Interface $other)
+    public function isEqual(Kwf_Model_Interface $other)
     {
         return $this === $other;
     }
@@ -31,7 +31,7 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
         if (isset($this->_uniqueIdentifier)) {
             return $this->_uniqueIdentifier;
         } else {
-            throw new Vps_Exception("no uniqueIdentifier set");
+            throw new Kwf_Exception("no uniqueIdentifier set");
         }
     }
 
@@ -57,7 +57,7 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
         foreach (unserialize($str) as $i=>$v) {
             if ($i == '_siblingModels' || $i == '_proxyContainerModels') {
                 foreach ($v as &$model) {
-                    $model = Vps_Model_Abstract::getInstance($model);
+                    $model = Kwf_Model_Abstract::getInstance($model);
                 }
             }
             $this->$i = $v;

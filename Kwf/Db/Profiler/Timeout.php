@@ -1,5 +1,5 @@
 <?php
-class Vps_Db_Profiler_Timeout extends Vps_Db_Profiler_Count
+class Kwf_Db_Profiler_Timeout extends Kwf_Db_Profiler_Count
 {
     private $_timeout;
     private $_lastQueryStart;
@@ -30,11 +30,11 @@ class Vps_Db_Profiler_Timeout extends Vps_Db_Profiler_Count
             $this->_lastQuery->end();
             $time = $this->_lastQuery->getElapsedSecs();
             if ($time > $this->_timeout) {
-                $e = new Vps_Exception('Query timed out with '.$time.'s. \''.$this->_lastQuery->getQuery().'\'');
+                $e = new Kwf_Exception('Query timed out with '.$time.'s. \''.$this->_lastQuery->getQuery().'\'');
                 $e->logOrThrow();
             }
         } else {
-            throw new Vps_Exception('Query not found');
+            throw new Kwf_Exception('Query not found');
         }
     }
 
@@ -43,7 +43,7 @@ class Vps_Db_Profiler_Timeout extends Vps_Db_Profiler_Count
         if ($queryId == $this->_count) {
             return $this->_lastQuery;
         } else {
-            throw new Vps_Exception('Query not found');
+            throw new Kwf_Exception('Query not found');
         }
     }
 

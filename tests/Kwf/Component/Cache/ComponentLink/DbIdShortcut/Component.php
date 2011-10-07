@@ -1,15 +1,15 @@
 <?php
-class Vps_Component_Cache_ComponentLink_DbIdShortcut_Component extends Vpc_Abstract
+class Kwf_Component_Cache_ComponentLink_DbIdShortcut_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['childpages'] = array(
-            'class' => 'Vps_Component_Cache_ComponentLink_DbIdShortcut_Generator',
-            'component' => 'Vpc_Basic_Empty_Component',
+            'class' => 'Kwf_Component_Cache_ComponentLink_DbIdShortcut_Generator',
+            'component' => 'Kwc_Basic_Empty_Component',
             'dbIdShortcut' => 'foo_'
         );
-        $ret['childModel'] = 'Vps_Component_Cache_ComponentLink_DbIdShortcut_Model';
+        $ret['childModel'] = 'Kwf_Component_Cache_ComponentLink_DbIdShortcut_Model';
         return $ret;
     }
 }

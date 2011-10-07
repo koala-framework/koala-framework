@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_Assets_Component extends Vpc_Abstract
+class Kwc_Box_Assets_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {

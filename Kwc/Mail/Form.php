@@ -1,22 +1,22 @@
 <?php
-class Vpc_Mail_Form extends Vpc_Abstract_Form
+class Kwc_Mail_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
         parent::_initFields();
 
-        $default = Vpc_Abstract::getSetting($this->getClass(), 'default');
-        $this->add(new Vps_Form_Field_TextField('subject', trlVps('Subject')))
+        $default = Kwc_Abstract::getSetting($this->getClass(), 'default');
+        $this->add(new Kwf_Form_Field_TextField('subject', trlKwf('Subject')))
             ->setAllowBlank(false)
             ->setWidth(300);
-        $this->add(new Vps_Form_Field_TextField('from_email', trlVps('From Address')))
+        $this->add(new Kwf_Form_Field_TextField('from_email', trlKwf('From Address')))
             ->setVtype('email')
             ->setWidth(300)
             ->setDefaultValue($default['from_email']);
-        $this->add(new Vps_Form_Field_TextField('from_name', trlVps('From Name')))
+        $this->add(new Kwf_Form_Field_TextField('from_name', trlKwf('From Name')))
             ->setWidth(300)
             ->setDefaultValue($default['from_name']);
-        $this->add(new Vps_Form_Field_TextField('reply_email', trlVps('Reply Address')))
+        $this->add(new Kwf_Form_Field_TextField('reply_email', trlKwf('Reply Address')))
             ->setVtype('email')
             ->setWidth(300);
     }

@@ -1,10 +1,10 @@
 <?php
-class Vps_Model_Select_Expr_Subtract extends Vps_Model_Select_Expr_Unary_Abstract
+class Kwf_Model_Select_Expr_Subtract extends Kwf_Model_Select_Expr_Unary_Abstract
 {
     public $lowerNullAllowed = true;
 
     public function getResultType()
     {
-        return Vps_Model_Interface::TYPE_INTEGER;
+        return Kwf_Model_Interface::TYPE_INTEGER;
     }
 }

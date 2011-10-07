@@ -1,6 +1,6 @@
 <?php
-class Vps_User_Row extends Vps_Model_RowCache_Row
-    implements Vps_User_RowInterface, Vpc_Mail_Recipient_TitleInterface
+class Kwf_User_Row extends Kwf_Model_RowCache_Row
+    implements Kwf_User_RowInterface, Kwc_Mail_Recipient_TitleInterface
 {
     protected $_changedPasswordData = array();
     protected $_changedOldMail = null;
@@ -75,7 +75,7 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
             if ($this->_changedPasswordData['password1'] == $this->_changedPasswordData['password2']) {
                 $this->setPassword($this->_changedPasswordData['password1']);
             } else {
-                throw new Vps_ClientException(trlVps('Passwords are different - please try again'));
+                throw new Kwf_ClientException(trlKwf('Passwords are different - please try again'));
             }
         }
     }
@@ -88,8 +88,8 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
 
         if ($this->getModel()->mailExists($this->email)) {
             $this->getModel()->unlockCreateUser();
-            throw new Vps_ClientException(
-                trlVps('An account with this email address already exists')
+            throw new Kwf_ClientException(
+                trlKwf('An account with this email address already exists')
             );
         }
 
@@ -106,8 +106,8 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
         parent::_beforeUpdate();
         if ($this->_changedOldMail) {
             if ($this->getModel()->mailExists($this->email)) {
-                throw new Vps_ClientException(
-                    trlVps('An account with this email address already exists')
+                throw new Kwf_ClientException(
+                    trlKwf('An account with this email address already exists')
                 );
             }
             $this->sendChangedMailMail($this->_changedOldMail);
@@ -185,7 +185,7 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
         }
         $this->_beforeSaveSiblingMaster();
         $ret = $this->_row->save();
-        Vps_Model_Row_Abstract::save();
+        Kwf_Model_Row_Abstract::save();
         if (!$id) {
             $this->_afterInsert();
         } else {
@@ -203,28 +203,28 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
     public function sendGlobalUserActivated()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - '.trlVps('Useraccount activated');
+        $subject .= ' - '.trlKwf('Useraccount activated');
         return $this->_sendMail('GlobalUserActivation', $subject);
     }
 
     public function sendActivationMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - '.trlVps('Useraccount created');
+        $subject .= ' - '.trlKwf('Useraccount created');
         return $this->_sendMail('UserActivation', $subject);
     }
 
     public function sendLostPasswordMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - '.trlVps('lost password');
+        $subject .= ' - '.trlKwf('lost password');
         return $this->_sendMail('UserLostPassword', $subject);
     }
 
     public function sendChangedMailMail($oldMail)
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - '.trlVps('Email changed');
+        $subject .= ' - '.trlKwf('Email changed');
         return $this->_sendMail(
             'UserChangedMail',
             $subject,
@@ -235,7 +235,7 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
     public function sendDeletedMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - '.trlVps('Account deleted');
+        $subject .= ' - '.trlKwf('Account deleted');
         return $this->_sendMail('UserDeleted', $subject);
     }
 
@@ -253,7 +253,7 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
         $mail->fullname = $this->__toString();
         $mail->userData = $this->toArray();
 
-        $root = Vps_Component_Data_Root::getInstance();
+        $root = Kwf_Component_Data_Root::getInstance();
         $activateComponent = null;
         $lostPasswortComponent = null;
         if ($root) {
@@ -262,11 +262,11 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
             // oder man leitet auf eine redirect seite um und schaut auf die
             // browser accept language
             $activateComponent = $root
-                ->getComponentByClass('Vpc_User_Activate_Component', array('limit' => 1));
+                ->getComponentByClass('Kwc_User_Activate_Component', array('limit' => 1));
             $lostPasswortComponent = $root
-                ->getComponentByClass('Vpc_User_LostPassword_SetPassword_Component', array('limit' => 1));
+                ->getComponentByClass('Kwc_User_LostPassword_SetPassword_Component', array('limit' => 1));
         }
-        $activateUrl = $lostPassUrl = '/vps/user/login/activate';
+        $activateUrl = $lostPassUrl = '/kwf/user/login/activate';
         if ($activateComponent) $activateUrl = $activateComponent->url;
         $mail->activationUrl = $mail->webUrl.$activateUrl.'?code='.$this->id.'-'.
                         $this->getActivationCode();
@@ -351,12 +351,12 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
         return $this->_additionalRolesCache;
     }
 
-    // interface Vpc_Mail_Recipient_Interface
+    // interface Kwc_Mail_Recipient_Interface
     public function getMailGender()
     {
         return $this->gender == 'male' ?
-            Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE :
-            Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
+            Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE :
+            Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
     }
 
     public function getMailTitle()
@@ -381,6 +381,6 @@ class Vps_User_Row extends Vps_Model_RowCache_Row
 
     public function getMailFormat()
     {
-        return Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
+        return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 }

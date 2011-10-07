@@ -1,18 +1,18 @@
 <?php
-class Vpc_Posts_Latest_Component extends Vpc_Abstract
+class Kwc_Posts_Latest_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Posts.Last Posts');
-        $ret['childModel'] = 'Vpc_Posts_Directory_Model';
+        $ret['componentName'] = trlKwf('Posts.Last Posts');
+        $ret['childModel'] = 'Kwc_Posts_Directory_Model';
         $ret['numberOfPosts'] = 9;
         return $ret;
     }
 
     protected function _getSelect()
     {
-        $select = new Vps_Model_Select();
+        $select = new Kwf_Model_Select();
         $select
             ->whereEquals('visible', 1)
             ->order('create_time', 'DESC')
@@ -27,9 +27,9 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
         $rows = $this->getChildModel()->fetchAll($this->_getSelect());
         foreach ($rows as $row) {
             $id = $row->component_id . '-' . $row->id;
-            $post = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
+            $post = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id);
             if ($post) {
-                $dateHelper = new Vps_View_Helper_Date();
+                $dateHelper = new Kwf_View_Helper_Date();
                 $linktexts = array();
                 $page = $post->getPage();
                 while ($page) {
@@ -49,8 +49,8 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Posts_Directory_Model');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vps_Registry::get('config')->user->model);
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Posts_Directory_Model');
+        $ret[] = new Kwf_Component_Cache_Meta_Static_Model(Kwf_Registry::get('config')->user->model);
         return $ret;
     }
 }

@@ -1,12 +1,12 @@
-Ext.namespace("Vps.EyeCandy");
+Ext.namespace("Kwf.EyeCandy");
 
-Vps.onContentReady(function() {
-    Ext.query('.vpsEyeCandyList').forEach(function(el) {
+Kwf.onContentReady(function() {
+    Ext.query('.kwfEyeCandyList').forEach(function(el) {
         if (!el.list) {
             var opts = Ext.fly(el).down('.options', true);
             if (opts) {
                 opts = Ext.decode(opts.value);
-                var cls = Vps.EyeCandy.List;
+                var cls = Kwf.EyeCandy.List;
                 if (opts['class']) {
                     cls = eval(opts['class']);
                     delete opts['class'];
@@ -18,12 +18,12 @@ Vps.onContentReady(function() {
     }, this);
 });
 
-Vps.EyeCandy.List = function(cfg) {
+Kwf.EyeCandy.List = function(cfg) {
     Ext.apply(this, cfg);
     this._init();
 };
 
-Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
+Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
     //el
     //plugins[]
     //states[]
@@ -52,7 +52,7 @@ Ext.extend(Vps.EyeCandy.List, Ext.util.Observable, {
         var idx = 0;
         items.forEach(function(el) {
 
-            var item = new Vps.EyeCandy.List.Item({
+            var item = new Kwf.EyeCandy.List.Item({
                 list: this,
                 id: Ext.id(el),
                 el: Ext.get(el),

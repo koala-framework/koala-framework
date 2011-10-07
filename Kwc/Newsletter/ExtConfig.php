@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_ExtConfig extends Vpc_Directories_Item_Directory_ExtConfigEditButtons
+class Kwc_Newsletter_ExtConfig extends Kwc_Directories_Item_Directory_ExtConfigEditButtons
 {
     protected function _getConfig()
     {

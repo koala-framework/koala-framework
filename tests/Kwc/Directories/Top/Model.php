@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Top_Model extends Vps_Model_FnF
+class Kwc_Directories_Top_Model extends Kwf_Model_FnF
 {
     public function __construct($config = array())
     {

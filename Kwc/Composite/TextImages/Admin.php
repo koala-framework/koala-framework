@@ -1,10 +1,10 @@
 <?php
-class Vpc_Composite_TextImages_Admin extends Vpc_Abstract_Composite_Admin
+class Kwc_Composite_TextImages_Admin extends Kwc_Abstract_Composite_Admin
 {
     public function getExtConfig()
     {
         $config = parent::getExtConfig();
-        $config['tabs']['Properties'] = Vpc_Abstract_Composite_Admin::getExtConfig();
+        $config['tabs']['Properties'] = Kwc_Abstract_Composite_Admin::getExtConfig();
         return $config;
     }
 
@@ -12,6 +12,6 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Abstract_Composite_Admin
     {
         parent::setup();
         $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
-        $this->createFormTable('vpc_composite_textimages', $fields);
+        $this->createFormTable('kwc_composite_textimages', $fields);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-class Vps_Validate_Row_Unique extends Vps_Validate_Row_Abstract
+class Kwf_Validate_Row_Unique extends Kwf_Validate_Row_Abstract
 {
     const NOT_UNIQUE = 'notUnique';
 
@@ -7,10 +7,10 @@ class Vps_Validate_Row_Unique extends Vps_Validate_Row_Abstract
 
     public function __construct()
     {
-        $this->_messageTemplates[self::NOT_UNIQUE] = trlVps("'%value%' does already exist");
+        $this->_messageTemplates[self::NOT_UNIQUE] = trlKwf("'%value%' does already exist");
     }
 
-    public function addSelectExpr(Vps_Model_Select_Expr_Interface $expr)
+    public function addSelectExpr(Kwf_Model_Select_Expr_Interface $expr)
     {
         $this->_addedExprs[] = $expr;
     }

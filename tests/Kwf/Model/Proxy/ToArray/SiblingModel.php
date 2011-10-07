@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Proxy_ToArray_SiblingModel extends Vps_Model_FnF
+class Kwf_Model_Proxy_ToArray_SiblingModel extends Kwf_Model_FnF
 {
 
     public function __construct(array $config = array())
@@ -16,7 +16,7 @@ class Vps_Model_Proxy_ToArray_SiblingModel extends Vps_Model_FnF
     protected $_referenceMap = array(
         'proxy' => array(
             'column' => 'id',
-            'refModelClass' => 'Vps_Model_Proxy_ToArray_ProxyModel'
+            'refModelClass' => 'Kwf_Model_Proxy_ToArray_ProxyModel'
         )
     );
 }

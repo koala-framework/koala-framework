@@ -1,31 +1,31 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Composite_Component
+class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
 
-        $ret['generators']['child']['component']['orderHeader'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component';
-        $ret['generators']['child']['component']['orderTable'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component';
-        $ret['generators']['child']['component']['confirmLink'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_ConfirmLink_Component';
+        $ret['generators']['child']['component']['orderHeader'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component';
+        $ret['generators']['child']['component']['orderTable'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component';
+        $ret['generators']['child']['component']['confirmLink'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_ConfirmLink_Component';
 
         $ret['generators']['confirm'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component',
-            'name' => trlVps('Send order')
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component',
+            'name' => trlKwf('Send order')
         );
 
         $ret['generators']['mail'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component',
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component',
         );
         $ret['generators']['shippedMail'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component',
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component',
         );
 
-        $ret['orderData'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData';
+        $ret['orderData'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderData';
 
         return $ret;
     }
@@ -42,7 +42,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
 
     protected function _getOrder()
     {
-        return Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+        return Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
     }
 
@@ -52,7 +52,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         return $this->getData()->parent->getComponent()->getSumRows($order);
     }
 
-    public function sendConfirmMail(Vpc_Shop_Cart_Order $order)
+    public function sendConfirmMail(Kwc_Shop_Cart_Order $order)
     {
         $mail = $this->getData()->getChildComponent('-mail')->getComponent();
         $data = array(
@@ -77,7 +77,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
             $p->orderConfirmed($order);
         }
         foreach ($order->getChildRows('Products') as $p) {
-            $addComponent = Vps_Component_Data_Root::getInstance()
+            $addComponent = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($p->add_component_id);
             $addComponent->getComponent()->orderConfirmed($p);
         }

@@ -4,34 +4,34 @@
  * @group selenium
  * @group Composite_ImagesEnlarge
  */
-class Vpc_Composite_ImagesEnlarge_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Kwc_Composite_ImagesEnlarge_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
         parent::setUp();
-        Vps_Component_Data_Root::setComponentClass('Vpc_Composite_ImagesEnlarge_Root');
+        Kwf_Component_Data_Root::setComponentClass('Kwc_Composite_ImagesEnlarge_Root');
     }
 
     public function testNextPrevLink()
     {
-        $this->openVpc('/foo');
-        $this->assertElementPresent('css=.vpcCompositeImagesEnlarge a img');
+        $this->openKwc('/foo');
+        $this->assertElementPresent('css=.kwcCompositeImagesEnlarge a img');
         $this->click('css=a');
         $this->waitForConnections();
-        $this->assertElementPresent('css=.vpsLightboxOpen');
-        $this->assertVisible('css=.vpsLightboxOpen');
-        $this->assertElementPresent('css=.vpsLightboxOpen div.image');
-        $this->assertElementPresent('css=.vpsLightboxOpen div.image img');
-        $this->assertElementPresent('css=.vpsLightboxOpen .nextBtn a');
-        $this->assertElementNotPresent('css=.vpsLightboxOpen .prevBtn a');
-        $this->click('css=.vpsLightboxOpen .nextBtn a');
-        $this->assertElementPresent('css=.vpsLightboxOpen .nextBtn a');
-        $this->assertElementPresent('css=.vpsLightboxOpen .prevBtn a');
-        $this->click('css=.vpsLightboxOpen .nextBtn a');
-        $this->assertElementNotPresent('css=.vpsLightboxOpen .nextBtn a');
-        $this->assertElementPresent('css=.vpsLightboxOpen .prevBtn a');
-        $this->click('css=.vpsLightboxOpen .prevBtn a');
-        $this->assertElementPresent('css=.vpsLightboxOpen .nextBtn a');
-        $this->assertElementPresent('css=.vpsLightboxOpen .prevBtn a');
+        $this->assertElementPresent('css=.kwfLightboxOpen');
+        $this->assertVisible('css=.kwfLightboxOpen');
+        $this->assertElementPresent('css=.kwfLightboxOpen div.image');
+        $this->assertElementPresent('css=.kwfLightboxOpen div.image img');
+        $this->assertElementPresent('css=.kwfLightboxOpen .nextBtn a');
+        $this->assertElementNotPresent('css=.kwfLightboxOpen .prevBtn a');
+        $this->click('css=.kwfLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.kwfLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.kwfLightboxOpen .prevBtn a');
+        $this->click('css=.kwfLightboxOpen .nextBtn a');
+        $this->assertElementNotPresent('css=.kwfLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.kwfLightboxOpen .prevBtn a');
+        $this->click('css=.kwfLightboxOpen .prevBtn a');
+        $this->assertElementPresent('css=.kwfLightboxOpen .nextBtn a');
+        $this->assertElementPresent('css=.kwfLightboxOpen .prevBtn a');
     }
 }

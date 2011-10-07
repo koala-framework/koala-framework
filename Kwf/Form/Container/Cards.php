@@ -1,20 +1,20 @@
 <?php
-class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
+class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
 {
     private $_combobox;
 
     public function __construct($name = null, $fieldLabel = null)
     {
-        $this->fields = new Vps_Collection_FormFields(null, 'Vps_Form_Container_Card');
+        $this->fields = new Kwf_Collection_FormFields(null, 'Kwf_Form_Container_Card');
 
-        $this->_combobox = new Vps_Form_Field_Select($name);
+        $this->_combobox = new Kwf_Form_Field_Select($name);
         $this->_combobox->setWidth(150)
             ->setListWidth(150);
 
         parent::__construct();
         $this->setFieldLabel($fieldLabel);
         $this->setBaseCls('x-plain');
-        $this->setXtype('vps.cards');
+        $this->setXtype('kwf.cards');
         $this->setLayout('form');
     }
 
@@ -80,7 +80,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
 
         $comboboxData = array();
         foreach ($this->fields as $card) {
-            if ($card instanceof Vps_Form_Container_Card) {
+            if ($card instanceof Kwf_Form_Container_Card) {
                 $comboboxData[$card->getName()] = $card->getTitle();
             }
         }
@@ -125,7 +125,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         
         $comboboxData = array();
         foreach ($this->fields as $card) {
-            if ($card instanceof Vps_Form_Container_Card) {
+            if ($card instanceof Kwf_Form_Container_Card) {
                 $comboboxData[$card->getName()] = $card->getTitle();
             }
         }

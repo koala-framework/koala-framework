@@ -2,11 +2,11 @@
 /**
  * @group Component_Cache_Menu
  */
-class Vps_Component_Cache_Menu_Test extends Vpc_TestAbstract
+class Kwf_Component_Cache_Menu_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Component_Cache_Menu_Root_Component');
+        parent::setUp('Kwf_Component_Cache_Menu_Root_Component');
         /*
         root
           -menu
@@ -65,7 +65,7 @@ class Vps_Component_Cache_Menu_Test extends Vpc_TestAbstract
 
         $page = $this->_root->getComponentById(3);
         $model = $this->_root->getGenerator('page')->getModel();
-        $m = Vps_Component_Cache::getInstance()->getModel();
+        $m = Kwf_Component_Cache::getInstance()->getModel();
 
         // ist ein ParentContent-Komponente, zeigt 1-menu an
         $html = $page->render(true, true);

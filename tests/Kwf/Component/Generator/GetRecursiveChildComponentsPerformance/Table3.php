@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_GetRecursiveChildComponentsPerformance_Table3 extends Vpc_Abstract
+class Kwf_Component_Generator_GetRecursiveChildComponentsPerformance_Table3 extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -7,8 +7,8 @@ class Vps_Component_Generator_GetRecursiveChildComponentsPerformance_Table3 exte
         $ret['flags']['processInput'] = true;
 
         $ret['generators']['static'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vps_Component_Generator_GetRecursiveChildComponentsPerformance_Static'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwf_Component_Generator_GetRecursiveChildComponentsPerformance_Static'
         );
         return $ret;
     }

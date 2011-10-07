@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_LogModel extends Vps_Model_Db_Proxy
+class Kwc_Newsletter_LogModel extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'vpc_newsletter_log';
+    protected $_table = 'kwc_newsletter_log';
 }

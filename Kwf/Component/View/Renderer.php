@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abstract
+abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abstract
 {
     protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $type = null, $plugins = array())
     {
@@ -12,9 +12,9 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
 
     protected function _getComponentById($componentId)
     {
-        $ret = Vps_Component_Data_Root::getInstance()
+        $ret = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($componentId, array('ignoreVisible' => true));
-        if (!$ret) throw new Vps_Exception("Can't find component '$componentId' for rendering");
+        if (!$ret) throw new Kwf_Exception("Can't find component '$componentId' for rendering");
         return $ret;
     }
 
@@ -45,17 +45,17 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         // Chained-Komponenten brauchen zum Cache löschen den Cache der Master-
         // Komponenten, deshalb hier schreiben
         if ($type == 'component' &&
-            ($component->getComponent() instanceof Vpc_Chained_Abstract_Component) &&
-            !Vps_Component_Cache::getInstance()->test($component->chained->componentId)
+            ($component->getComponent() instanceof Kwc_Chained_Abstract_Component) &&
+            !Kwf_Component_Cache::getInstance()->test($component->chained->componentId)
         ) {
             // neuer Helper, damit _getRenderer() leer ist
-            $helper = new Vps_Component_View_Helper_Component();
+            $helper = new Kwf_Component_View_Helper_Component();
             $chainedContent = $helper->render($component->chained->componentId, array());
             $helper->saveCache($component->chained->componentId, array(), null, $chainedContent);
         }
 
         // Content-Cache
-        Vps_Component_Cache::getInstance()->save(
+        Kwf_Component_Cache::getInstance()->save(
             $component,
             $content,
             $type,

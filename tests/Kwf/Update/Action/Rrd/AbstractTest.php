@@ -1,9 +1,9 @@
 <?php
-abstract class Vps_Update_Action_Rrd_AbstractTest extends Vps_Test_TestCase
+abstract class Kwf_Update_Action_Rrd_AbstractTest extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass(false);
+        Kwf_Component_Data_Root::setComponentClass(false);
     }
 
     public function tearDown()
@@ -14,7 +14,7 @@ abstract class Vps_Update_Action_Rrd_AbstractTest extends Vps_Test_TestCase
     {
         $ret = null;
         system($cmd, $ret);
-        if ($ret != 0) throw new Vps_ClientException("Command failed");
+        if ($ret != 0) throw new Kwf_ClientException("Command failed");
     }
 
     protected function _createTestFile()

@@ -1,7 +1,7 @@
 <?php
-class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
+class Kwf_Test_TestSuite extends PHPUnit_Framework_TestSuite
 {
-    public function __construct($name = 'Vps Framework')
+    public function __construct($name = 'Kwf Framework')
     {
         parent::__construct($name);
         $this->setBackupGlobals(false);
@@ -12,12 +12,12 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
         }
 
         // damit der js test auch im web immer ausgeführt wird
-        if (!in_array('Vps_Js_SyntaxTest', $classes)) {
-            $classes[] = 'Vps_Js_SyntaxTest';
+        if (!in_array('Kwf_Js_SyntaxTest', $classes)) {
+            $classes[] = 'Kwf_Js_SyntaxTest';
         }
 
         if (file_exists("/www/testtimes")) {
-            $app = Vps_Registry::get('config')->application->id;
+            $app = Kwf_Registry::get('config')->application->id;
             if (!file_exists("/www/testtimes/failure_$app")) mkdir("/www/testtimes/failure_$app");
 
             $times = array();
@@ -45,7 +45,7 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
     {
         if (!file_exists($basePath)) return array();
 
-        $dir = new Vps_Iterator_Filter_Php(
+        $dir = new Kwf_Iterator_Filter_Php(
             new RecursiveIteratorIterator(new RecursiveDirectoryIterator($basePath), true)
         );
 

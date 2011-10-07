@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_OrderData
+class Kwc_Shop_Cart_OrderData
 {
     protected $_class;
     private $_chartPlugins;
@@ -16,7 +16,7 @@ class Vpc_Shop_Cart_OrderData
     {
         static $instances = array();
         if (!isset($instances[$componentClass])) {
-            $c = Vpc_Abstract::getSetting($componentClass, 'orderData');
+            $c = Kwc_Abstract::getSetting($componentClass, 'orderData');
             $instances[$componentClass] = new $c($componentClass);
         }
         return $instances[$componentClass];
@@ -26,9 +26,9 @@ class Vpc_Shop_Cart_OrderData
     {
         if (!isset($this->_chartPlugins)) {
             $this->_chartPlugins = array();
-            $plugins = Vpc_Abstract::getSetting($this->_class, 'plugins');
+            $plugins = Kwc_Abstract::getSetting($this->_class, 'plugins');
             foreach ($plugins as $plugin) {
-                if (is_instance_of($plugin, 'Vpc_Shop_Cart_Plugins_Interface')) {
+                if (is_instance_of($plugin, 'Kwc_Shop_Cart_Plugins_Interface')) {
                     $this->_chartPlugins[] = new $plugin();
                 }
             }
@@ -39,8 +39,8 @@ class Vpc_Shop_Cart_OrderData
     //kann überschrieben werden um shipping zB abhängig von bestellmenge zu machen
     protected function _getShipping($order)
     {
-        return Vpc_Abstract::getSetting(
-            Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'),
+        return Kwc_Abstract::getSetting(
+            Kwc_Abstract::getChildComponentClass($this->_class, 'checkout'),
             'shipping'
         );
     }
@@ -59,10 +59,10 @@ class Vpc_Shop_Cart_OrderData
     protected function _getAdditionalSumRows($order, $total)
     {
         $ret = array();
-        $payments = Vpc_Abstract::getChildComponentClasses(
-            Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
+        $payments = Kwc_Abstract::getChildComponentClasses(
+            Kwc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
         if (isset($payments[$order->payment])) {
-            $rows = Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData
+            $rows = Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderData
                 ::getInstance($payments[$order->payment])
                 ->getAdditionalSumRows($order);
             foreach ($rows as $r) $total += $r['amount'];
@@ -82,33 +82,33 @@ class Vpc_Shop_Cart_OrderData
         $subTotal = $order->getSubTotal();
         $ret[] = array(
             'class' => 'valueOfGoods',
-            'text' => trlVps('value of goods').':',
+            'text' => trlKwf('value of goods').':',
             'amount' => $subTotal
         );
         $ret[] = array(
-            'text' => trlVps('net amount').':',
+            'text' => trlKwf('net amount').':',
             'amount' => round($subTotal/1.2, 2)
         );
         $ret[] = array(
-            'text' => trlVps('+20% VAT').':',
+            'text' => trlKwf('+20% VAT').':',
             'amount' => round($subTotal - $subTotal/1.2, 2)
         );
         $shipping = $this->_getShipping($order);
         $ret[] = array(
             'class' => 'shippingHandling',
-            'text' => trlVps('Shipping and Handling').':',
+            'text' => trlKwf('Shipping and Handling').':',
             'amount' => round($shipping/1.2, 2)
         );
         if ($shipping) {
             $ret[] = array(
-                'text' => trlVps('+20% VAT').':',
+                'text' => trlKwf('+20% VAT').':',
                 'amount' => round($shipping - $shipping/1.2, 2)
             );
         }
         $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
         $ret[] = array(
             'class' => 'totalAmount',
-            'text' => trlVps('Total Amount').':',
+            'text' => trlKwf('Total Amount').':',
             'amount' => $this->getTotal($order)
         );
         return $ret;

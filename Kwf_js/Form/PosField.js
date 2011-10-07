@@ -1,6 +1,6 @@
-Vps.Form.PosField = function(config)
+Kwf.Form.PosField = function(config)
 {
-    Vps.Form.PosField.superclass.constructor.call(this, config);
+    Kwf.Form.PosField.superclass.constructor.call(this, config);
     this.on('focus', function(o, e)
         {
             this.selectText();
@@ -8,7 +8,7 @@ Vps.Form.PosField = function(config)
         this
     );
 };
-Ext.extend(Vps.Form.PosField, Ext.form.TextField,
+Ext.extend(Kwf.Form.PosField, Ext.form.TextField,
 {
 });
-Ext.reg('posfield', Vps.Form.PosField);
+Ext.reg('posfield', Kwf.Form.PosField);

@@ -5,12 +5,12 @@
  * @group Model_Db
  * @group Model_DbWithConnection
  */
-class Vps_Model_DbWithConnection_DbSiblingProxy_Test extends Vps_Test_TestCase
+class Kwf_Model_DbWithConnection_DbSiblingProxy_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->_model = new Vps_Model_DbWithConnection_DbSiblingProxy_ProxyModel();
+        $this->_model = new Kwf_Model_DbWithConnection_DbSiblingProxy_ProxyModel();
     }
 
     public function tearDown()
@@ -49,16 +49,16 @@ class Vps_Model_DbWithConnection_DbSiblingProxy_Test extends Vps_Test_TestCase
         $r->baz = 'xxz';
         $r->save();
 
-        $tableName = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_DbSiblingProxy_DbModel')
+        $tableName = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_DbSiblingProxy_DbModel')
                         ->getTable()->info(Zend_Db_Table_Abstract::NAME);
-        $m = new Vps_Model_Db(array('table'=>$tableName));
+        $m = new Kwf_Model_Db(array('table'=>$tableName));
         $r = $m->getRow(3);
         $this->assertEquals('xxy', $r->foo);
         $this->assertEquals(null, $r->bar);
 
-        $tableName = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_DbSiblingProxy_SiblingModel')
+        $tableName = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_DbSiblingProxy_SiblingModel')
                         ->getTable()->info(Zend_Db_Table_Abstract::NAME);
-        $m = new Vps_Model_Db(array('table'=>$tableName));
+        $m = new Kwf_Model_Db(array('table'=>$tableName));
         $r = $m->getRow(3);
         $this->assertEquals('xxz', $r->baz);
 

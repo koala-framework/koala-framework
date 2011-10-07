@@ -5,11 +5,11 @@
  * @group Mongo_ChildRowsWithMirrorCacheSimple
  * @group slow
  */
-class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestCase
+class Kwf_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Kwf_Test_TestCase
 {
     public function testIt()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
 
         $m->initialSync(false);
 
@@ -22,7 +22,7 @@ class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestC
 
     public function testParentExpr()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
         $m->initialSync(false);
         $row = $m->getRow(1);
         $this->assertEquals('bar', $row->getChildRows('Children')->current()->parent_foo);
@@ -30,7 +30,7 @@ class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestC
 
     public function testParentExprIsntCached()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
 
         $m->initialSync(false);
         $row = $m->getProxyModel()->getCollection()->findOne();

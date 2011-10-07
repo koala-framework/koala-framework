@@ -1,4 +1,4 @@
-Vps.Form.File = Ext.extend(Ext.form.Field, {
+Kwf.Form.File = Ext.extend(Ext.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
     showPreview: true,
@@ -22,7 +22,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
     infoTpl: ['{filename}.{extension}<br />',
               '{fileSize:fileSize}',
               '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl>'],
-    emptyTpl: '<div style="height: 40px; width: 40px; text-align: center;"><br />('+trlVps('empty')+')</div>',
+    emptyTpl: '<div style="height: 40px; width: 40px; text-align: center;"><br />('+trlKwf('empty')+')</div>',
 
     initComponent: function() {
         this.addEvents(['uploaded']);
@@ -39,13 +39,13 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         }
         this.infoTpl.compile();
 
-        Vps.Form.File.superclass.initComponent.call(this);
+        Kwf.Form.File.superclass.initComponent.call(this);
 
     },
     afterRender: function() {
-        Vps.Form.File.superclass.afterRender.call(this);
+        Kwf.Form.File.superclass.afterRender.call(this);
 
-        if (Vps.Utils.Upload.supportsHtml5Upload()) {
+        if (Kwf.Utils.Upload.supportsHtml5Upload()) {
             this.el.on('dragenter', function(e) {
                 e.browserEvent.stopPropagation();
                 e.browserEvent.preventDefault();
@@ -86,7 +86,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         this.createUploadButton();
         if (this.showDeleteButton) {
             this.deleteButton = new Ext.Button({
-                text: trlVps('Delete File'),
+                text: trlKwf('Delete File'),
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/delete.png',
                 renderTo: this.el.createChild({}),
@@ -98,8 +98,8 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         }
         if (this.infoPosition == 'south') this.createInfoContainer();
 
-        if (!Vps.Utils.Upload.supportsHtml5Upload()) {
-            this.swfu = new Vps.Utils.SwfUpload({
+        if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
+            this.swfu = new Kwf.Utils.SwfUpload({
                 fileSizeLimit: this.fileSizeLimit,
                 allowOnlyImages: this.allowOnlyImages,
                 buttonPlaceholderId: this.uploadButtonContainer.id,
@@ -109,8 +109,8 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
             });
             this.swfu.on('fileQueued', function(file) {
                 this.progress = Ext.MessageBox.show({
-                    title : trlVps('Upload'),
-                    msg : trlVps('Uploading file'),
+                    title : trlKwf('Upload'),
+                    msg : trlKwf('Uploading file'),
                     buttons: false,
                     progress:true,
                     closable:false,
@@ -157,13 +157,13 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
             this.uploadButtonContainer.last().remove();
         }
         this.uploadButton = new Ext.Button({
-            text: trlVps('Upload File'),
+            text: trlKwf('Upload File'),
             cls: 'x-btn-text-icon',
             icon: '/assets/silkicons/add.png',
             renderTo: this.uploadButtonContainer,
             scope: this,
             handler: function() {
-                var win = new Vps.Form.FileUploadWindow({
+                var win = new Kwf.Form.FileUploadWindow({
                     maxResolution: this.maxResolution
                 });
                 win.on('uploaded', function(win, result) {
@@ -174,7 +174,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
             }
         });
 
-        if (!Vps.Utils.Upload.supportsHtml5Upload()) return;
+        if (!Kwf.Utils.Upload.supportsHtml5Upload()) return;
 
         var fileInputContainer = this.uploadButtonContainer.createChild({
             style: 'width: '+this.uploadButton.el.getWidth()+'px; height: '+this.uploadButton.el.getHeight()+'px; top: 0; position: absolute; overflow: hidden;'
@@ -199,8 +199,8 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
     html5UploadFile: function(file)
     {
         this.progress = Ext.MessageBox.show({
-            title : trlVps('Upload'),
-            msg : trlVps('Uploading file'),
+            title : trlKwf('Upload'),
+            msg : trlKwf('Uploading file'),
             buttons: false,
             progress:true,
             closable:false,
@@ -212,7 +212,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
             }
         });
 
-        var xhr = Vps.Utils.Upload.uploadFile({
+        var xhr = Kwf.Utils.Upload.uploadFile({
             maxResolution: this.maxResolution,
             file: file,
             success: function(r) {
@@ -248,11 +248,11 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
             this.fireEvent('change', this, value, this.value);
 
             var icon = false;
-            var href = '/vps/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
+            var href = '/kwf/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
             if (value.mimeType) {
                 if (this.showPreview) {
                     if (value.mimeType.match(/(^image\/)/)) {
-                        icon = '/vps/media/upload/preview?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
+                        icon = '/kwf/media/upload/preview?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
                     } else {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
@@ -263,7 +263,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
                     });
                 }
 
-                var infoVars = Vps.clone(value);
+                var infoVars = Kwf.clone(value);
                 infoVars.href = href;
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
@@ -273,7 +273,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
                 this.infoContainer.update('');
             }
         }
-        Vps.Form.File.superclass.setValue.call(this, value.uploadId);
+        Kwf.Form.File.superclass.setValue.call(this, value.uploadId);
     },
 
     validateValue : function(value){
@@ -282,7 +282,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
                  this.clearInvalid();
                  return true;
              }else{
-                 this.markInvalid(trlVps('This field is required'));
+                 this.markInvalid(trlKwf('This field is required'));
                  return false;
              }
         }
@@ -293,7 +293,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
 
 
 
-Ext.reg('vps.file', Vps.Form.File);
+Ext.reg('kwf.file', Kwf.Form.File);
 
 
 

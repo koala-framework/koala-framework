@@ -1,5 +1,5 @@
 <?php
-class Vps_Http_Requestor_Response_FromArray implements Vps_Http_Requestor_Response_Interface
+class Kwf_Http_Requestor_Response_FromArray implements Kwf_Http_Requestor_Response_Interface
 {
     private $_contents;
     public function __construct(array $contents)

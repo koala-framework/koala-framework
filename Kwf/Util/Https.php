@@ -1,13 +1,13 @@
 <?php
-class Vps_Util_Https
+class Kwf_Util_Https
 {
     public static function ensureHttps()
     {
-        if (php_sapi_name() != 'cli' && Vps_Registry::get('config')->server->https) {
+        if (php_sapi_name() != 'cli' && Kwf_Registry::get('config')->server->https) {
             if (!isset($_SERVER['HTTPS'])) {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
-                Vps_Benchmark::shutDown();
+                Kwf_Benchmark::shutDown();
                 exit;
             }
         }

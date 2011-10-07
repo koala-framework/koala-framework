@@ -1,21 +1,21 @@
 <?php
 /**
- * @group Vpc_Trl
- * @group Vpc_Trl_News
+ * @group Kwc_Trl
+ * @group Kwc_Trl_News
  *
 ansicht frontend:
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_News_Root/de/test
-http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_News_Root/en/test
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_News_Root/de/test
+http://doleschal.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_News_Root/en/test
 
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_News_Root/Vpc_Trl_News_News_Component?componentId=root-master_test
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_News_Root/Vpc_Trl_News_News_Trl_Component.Vpc_Trl_News_News_Component?componentId=root-en_test
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_News_Root/Kwc_Trl_News_News_Component?componentId=root-master_test
+http://doleschal.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_News_Root/Kwc_Trl_News_News_Trl_Component.Kwc_Trl_News_News_Component?componentId=root-en_test
 
 */
-class Vpc_Trl_News_Test extends Vpc_TestAbstract
+class Kwc_Trl_News_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Trl_News_Root');
+        parent::setUp('Kwc_Trl_News_Root');
     }
 
     public function testDe()
@@ -41,7 +41,7 @@ class Vpc_Trl_News_Test extends Vpc_TestAbstract
         $html = $c->render(); //cache it
         $this->assertEquals(1, substr_count($html, 'href='));
 
-        $model = Vps_Model_Abstract::getInstance('Vpc_Trl_News_News_Trl_TestModel');
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_News_News_Trl_TestModel');
         $r = $model->getRow('root-en_test_1');
         $r->visible = false;
         $r->save();

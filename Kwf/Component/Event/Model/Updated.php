@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_Event_Model_Updated extends Vps_Component_Event_Abstract
+class Kwf_Component_Event_Model_Updated extends Kwf_Component_Event_Abstract
 {
-    public function __construct(Vps_Model_Abstract $model)
+    public function __construct(Kwf_Model_Abstract $model)
     {
         $this->class = get_class($model);
     }

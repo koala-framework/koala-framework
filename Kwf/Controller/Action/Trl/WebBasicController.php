@@ -1,7 +1,7 @@
 <?php
-class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action_Auto_Grid
+class Kwf_Controller_Action_Trl_WebBasicController extends Kwf_Controller_Action_Auto_Grid
 {
-    protected $_modelName = "Vps_Trl_Model_Web";
+    protected $_modelName = "Kwf_Trl_Model_Web";
     protected $_buttons = array('save');
     protected $_sortable = false;
     protected $_defaultOrder = 'id';
@@ -20,8 +20,8 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         $config = Zend_Registry::get('config');
         $weblang = $config->webCodeLanguage;
 
-        $this->_columns->add(new Vps_Grid_Column('id'));
-        $this->_columns->add(new Vps_Grid_Column('context', trlVps('Context')))
+        $this->_columns->add(new Kwf_Grid_Column('id'));
+        $this->_columns->add(new Kwf_Grid_Column('context', trlKwf('Context')))
             ->setWidth(50);
 
         $languages = array();
@@ -49,14 +49,14 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         foreach ($languages as $lang) {
             //Singular
             if ($lang == $weblang) {
-                $this->_columns->add(new Vps_Grid_Column($lang, $lang." ".trlVps("Singular")))
+                $this->_columns->add(new Kwf_Grid_Column($lang, $lang." ".trlKwf("Singular")))
                     ->setWidth(200)
                     ->setRenderer('notEditable');
                 $this->_colNames[] = $lang;
             } else {
                 if ($lang == $user_lang || $showAllLanguages) {
-                    $this->_columns->add(new Vps_Grid_Column($lang, $lang." ".trlVps("Singular")))
-                        ->setEditor(new Vps_Form_Field_TextField())
+                    $this->_columns->add(new Kwf_Grid_Column($lang, $lang." ".trlKwf("Singular")))
+                        ->setEditor(new Kwf_Form_Field_TextField())
                         ->setWidth(200);;
                     $this->_colNames[] = $lang;
                 }
@@ -67,14 +67,14 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         foreach ($languages as $lang) {
             //Plural
             if ($lang == $weblang) {
-                $this->_columns->add(new Vps_Grid_Column($lang."_plural", $lang." ".trlVps("Plural")))
+                $this->_columns->add(new Kwf_Grid_Column($lang."_plural", $lang." ".trlKwf("Plural")))
                     ->setWidth(200)
                     ->setRenderer('notEditable');
                 $this->_colNames[] = $lang."_plural";
             } else {
                 if ($lang == $user_lang || $showAllLanguages) {
-                    $this->_columns->add(new Vps_Grid_Column($lang."_plural", $lang." ".trlVps("Plural")))
-                        ->setEditor(new Vps_Form_Field_TextField())
+                    $this->_columns->add(new Kwf_Grid_Column($lang."_plural", $lang." ".trlKwf("Plural")))
+                        ->setEditor(new Kwf_Form_Field_TextField())
                         ->setWidth(200);
                     $this->_colNames[] = $lang."_plural";
                 }
@@ -84,7 +84,7 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         parent::_initColumns();
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row, $submitRow)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row, $submitRow)
     {
         parent::_beforeSave($row, $submitRow);
         foreach ($this->_colNames as $colName)

@@ -3,12 +3,12 @@
  * @group Model
  * @group Model_MirrorCache
  */
-class Vps_Model_MirrorCache_NoModifiedField_Test extends Vps_Test_TestCase
+class Kwf_Model_MirrorCache_NoModifiedField_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->_sourceModel = new Vps_Model_FnF(array(
+        $this->_sourceModel = new Kwf_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'lastname', 'timefield'),
             'uniqueColumns' => array('id'),
@@ -18,7 +18,7 @@ class Vps_Model_MirrorCache_NoModifiedField_Test extends Vps_Test_TestCase
                 array('id' => 3, 'firstname' => 'Kurt', 'timefield' => '2008-07-15 20:00:00')
             )
         ));
-        $this->_mirrorModel = new Vps_Model_FnF(array(
+        $this->_mirrorModel = new Kwf_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'lastname', 'timefield'),
             'uniqueColumns' => array('id'),
@@ -27,7 +27,7 @@ class Vps_Model_MirrorCache_NoModifiedField_Test extends Vps_Test_TestCase
                 array('id' => 2, 'firstname' => 'Susi', 'timefield' => '2008-07-09 10:00:00')
             )
         ));
-        $this->_proxyModel = new Vps_Model_MirrorCache(array(
+        $this->_proxyModel = new Kwf_Model_MirrorCache(array(
             'proxyModel' => $this->_mirrorModel,
             'sourceModel' => $this->_sourceModel,
             'maxSyncDelay' => 0
@@ -36,19 +36,19 @@ class Vps_Model_MirrorCache_NoModifiedField_Test extends Vps_Test_TestCase
 
     public function testRequests()
     {
-        Vps_Benchmark::enable();
-        Vps_Benchmark::reset();
+        Kwf_Benchmark::enable();
+        Kwf_Benchmark::reset();
 
         $this->_proxyModel->getRows();
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('mirror sync'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('mirror sync'));
         $this->_proxyModel->getRow(3);
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('mirror sync'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('mirror sync'));
         $this->_proxyModel->getIds();
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('mirror sync'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('mirror sync'));
         $this->_proxyModel->countRows();
-        $this->assertEquals(1, Vps_Benchmark::getCounterValue('mirror sync'));
+        $this->assertEquals(1, Kwf_Benchmark::getCounterValue('mirror sync'));
 
-        Vps_Benchmark::disable();
+        Kwf_Benchmark::disable();
     }
 
     public function testInitialSync()

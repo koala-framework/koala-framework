@@ -1,5 +1,5 @@
 <?php
-interface Vps_Component_Partial_Interface
+interface Kwf_Component_Partial_Interface
 {
     public function getPartialVars($partial, $nr, $info);
     public function getPartialClass();

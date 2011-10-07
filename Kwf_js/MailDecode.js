@@ -1,4 +1,4 @@
-Vps.onContentReady(function()
+Kwf.onContentReady(function()
 {
     var atDecoding = '(vpsat)';
     var dotDecoding = '(vpsdot)';
@@ -11,7 +11,7 @@ Vps.onContentReady(function()
         }
     });
 
-    var els = Ext.query('span.vpsEncodedMail');
+    var els = Ext.query('span.kwfEncodedMail');
     els.forEach(function(el) {
         var txt = el.innerHTML;
         txt = txt.replace(atDecoding, '@');

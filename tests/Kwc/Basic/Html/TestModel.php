@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Html_TestModel extends Vpc_Basic_Html_Model
+class Kwc_Basic_Html_TestModel extends Kwc_Basic_Html_Model
 {
     public function __construct($config = array())
     {
         $this->_default = array('content'=>'ShouldGetOverwritten');
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Kwf_Model_FnF(array(
                 'columns' => array('component_id', 'content'),
                 'primaryKey' => 'component_id',
                 'data'=> array(

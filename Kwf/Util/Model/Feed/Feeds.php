@@ -1,18 +1,18 @@
 <?php
-class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
+class Kwf_Util_Model_Feed_Feeds extends Kwf_Model_Abstract
 {
-    protected $_rowClass = 'Vps_Util_Model_Feed_Row_Feed';
+    protected $_rowClass = 'Kwf_Util_Model_Feed_Row_Feed';
     protected $_dependentModels = array(
-        'Entries' => 'Vps_Util_Model_Feed_Entries'
+        'Entries' => 'Kwf_Util_Model_Feed_Entries'
     );
     protected $_defaultEncoding = 'utf-8';
 
     /**
-     * @return Vps_Http_Requestor
+     * @return Kwf_Http_Requestor
      */
     public function getHttpRequestor()
     {
-        return Vps_Http_Requestor::getInstance();
+        return Kwf_Http_Requestor::getInstance();
     }
 
     protected function _getOwnColumns()
@@ -27,11 +27,11 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         $select = $this->select($where, $order, $limit, $start);
-        $we = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
+        $we = $select->getPart(Kwf_Model_Select::WHERE_EQUALS);
         if ($we && isset($we['url'])) {
             $id = $we['url'];
         } else {
-            $id = $select->getPart(Vps_Model_Select::WHERE_ID);
+            $id = $select->getPart(Kwf_Model_Select::WHERE_ID);
         }
         if ($id) {
             $dataKeys = array($id);
@@ -40,7 +40,7 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                 'model' => $this
             ));
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 
@@ -62,7 +62,7 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
         $client = new Zend_Http_Client($uri);
         $response = $client->request();
         if ($response->getStatus() != 200) {
-            throw new Vps_Exception("invalid status response");
+            throw new Kwf_Exception("invalid status response");
         }
         $contents = $response->getBody();
 
