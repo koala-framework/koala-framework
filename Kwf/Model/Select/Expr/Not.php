@@ -26,14 +26,14 @@ class Kwf_Model_Select_Expr_Not implements Kwf_Model_Select_Expr_Interface
     public function toArray()
     {
         return array(
-            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'expression' => $this->_expression->toArray(),
         );
     }
 
     public static function fromArray(array $data)
     {
-        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
-        return new $cls(Vps_Model_Select_Expr::fromArray($data['expression']));
+        $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
+        return new $cls(Kwf_Model_Select_Expr::fromArray($data['expression']));
     }
 }

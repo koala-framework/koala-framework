@@ -42,7 +42,7 @@ class Kwf_Model_Select_Expr_Area implements Kwf_Model_Select_Expr_Interface
     public function toArray()
     {
         return array(
-            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'latitude' =>  $this->_latitude,
             'longitude' => $this->_longitude,
             'radius' =>  $this->_radius,
@@ -51,10 +51,10 @@ class Kwf_Model_Select_Expr_Area implements Kwf_Model_Select_Expr_Interface
 
     public static function fromArray(array $data)
     {
-        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
         $expressions = array();
         foreach ($data['expressions'] as $i) {
-            $expressions[] = Vps_Model_Select_Expr::fromArray($i);
+            $expressions[] = Kwf_Model_Select_Expr::fromArray($i);
         }
         return new $cls($data['latitude'], $data['longitude'], $data['radius']);
     }

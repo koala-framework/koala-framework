@@ -34,9 +34,9 @@ abstract class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_
     public function toArray()
     {
         $field = $this->_field;
-        if ($field instanceof Vps_Model_Select_Expr_Interface) $field = $field->toArray();
+        if ($field instanceof Kwf_Model_Select_Expr_Interface) $field = $field->toArray();
         return array(
-            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'field' => $field,
             'value' => $this->_value,
         );
@@ -44,10 +44,10 @@ abstract class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_
 
     public static function fromArray(array $data)
     {
-        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
         $field = $data['field'];
         if (is_array($field)) {
-            $field = Vps_Model_Select_Expr::fromArray($field);
+            $field = Kwf_Model_Select_Expr::fromArray($field);
         }
         return new $cls($field, $data['value']);
     }

@@ -251,7 +251,7 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
         foreach ($this->_parts as $k=>$i) {
             if (is_array($i)) {
                 foreach ($i as $ak=>$ai) {
-                    if ($ai instanceof Vps_Model_Select_Expr_Interface) {
+                    if ($ai instanceof Kwf_Model_Select_Expr_Interface) {
                         $ai = $ai->toArray();
                     }
                     $i[$ak] = $ai;
@@ -267,13 +267,13 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
 
     public static function fromArray(array $data)
     {
-        if ($data['selectObjVersion'] != 100) throw new Vps_Exception("invalid select version");
-        $ret = new Vps_Model_Select();
+        if ($data['selectObjVersion'] != 100) throw new Kwf_Exception("invalid select version");
+        $ret = new Kwf_Model_Select();
         foreach ($data['parts'] as $k=>$i) {
             if (is_array($i)) {
                 foreach ($i as $ak=>$ai) {
                     if (isset($ai['exprType'])) {
-                        $ai = Vps_Model_Select_Expr::fromArray($ai);
+                        $ai = Kwf_Model_Select_Expr::fromArray($ai);
                     }
                     $i[$ak] = $ai;
                 }

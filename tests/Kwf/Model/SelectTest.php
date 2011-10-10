@@ -76,16 +76,16 @@ class Kwf_Model_SelectTest extends Kwf_Test_TestCase
 
     public function testToArrayFromArray()
     {
-        $select = new Vps_Model_Select();
-        $select->where(new Vps_Model_Select_Expr_Or(array(
-            new Vps_Model_Select_Expr_Equals('foo', 'bar'),
-            new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Equals('baz', 'buz'))
+        $select = new Kwf_Model_Select();
+        $select->where(new Kwf_Model_Select_Expr_Or(array(
+            new Kwf_Model_Select_Expr_Equals('foo', 'bar'),
+            new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_Equals('baz', 'buz'))
         )));
         $select->whereEquals('blub', 123);
         $ar = $select->toArray();
         $this->assertEquals(is_array($ar), true);
 
-        $select2 = Vps_Model_Select::fromArray($ar);
+        $select2 = Kwf_Model_Select::fromArray($ar);
         $this->assertEquals($select, $select2);
     }
 }
