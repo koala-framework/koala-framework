@@ -418,6 +418,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     public function getPagePropertiesForm($componentOrParent)
     {
-        return new Kwc_Root_Category_GeneratorForm($componentOrParent);
+        return new Kwc_Root_Category_GeneratorForm($componentOrParent, $this);
     }
 }

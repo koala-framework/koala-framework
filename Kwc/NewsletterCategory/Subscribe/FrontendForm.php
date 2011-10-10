@@ -2,11 +2,11 @@
 class Kwc_NewsletterCategory_Subscribe_FrontendForm extends Kwc_Newsletter_Subscribe_FrontendForm
 {
     protected $_modelName = 'Kwc_NewsletterCategory_Subscribe_Model';
-    private $_componentId;
+    private $_subscribeComponentId;
 
-    public function __construct($name, $componentId)
+    public function __construct($name, $subscribeComponentId)
     {
-        $this->_componentId = $componentId;
+        $this->_subscribeComponentId = $subscribeComponentId;
         parent::__construct($name);
     }
 
@@ -27,10 +27,10 @@ class Kwc_NewsletterCategory_Subscribe_FrontendForm extends Kwc_Newsletter_Subsc
     {
         // Newsletterkategorien werden zum Newsletter gespeichert, welcher
         // Newsletter grade aktuell ist weiß nur die Komponente, deswegen
-        // $this->_newsletterComponentId
+        // $this->_subscribeComponentId
         $model = Kwf_Component_Model::getInstance('Kwc_NewsletterCategory_Subscribe_CategoriesModel');
         $select = $model->select()
-            ->whereEquals('component_id', $this->_componentId)
+            ->whereEquals('component_id', $this->_subscribeComponentId)
             ->order('pos');
         $categories = array();
         foreach ($model->getRows($select) as $row) {

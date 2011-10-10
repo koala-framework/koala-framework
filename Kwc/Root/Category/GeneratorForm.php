@@ -2,10 +2,10 @@
 class Kwc_Root_Category_GeneratorForm extends Kwf_Form
 {
     private $_componentOrParent;
-    public function __construct($componentOrParent)
+    public function __construct($componentOrParent, $generator)
     {
         $this->_componentOrParent = $componentOrParent;
-        $this->setModel($componentOrParent->generator->getModel());
+        $this->setModel($generator->getModel());
         parent::__construct();
     }
 
