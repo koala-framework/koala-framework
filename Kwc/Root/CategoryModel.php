@@ -24,4 +24,9 @@ class Kwc_Root_CategoryModel extends Kwf_Model_Data_Abstract
         }
         parent::_init();
     }
+
+    public function isEqual(Kwf_Model_Interface $other)
+    {
+        return $other === $this;
+    }
 }

@@ -4,8 +4,14 @@ class Kwf_Acl_Resource_Component_MenuUrl extends Kwf_Acl_Resource_MenuUrl
 {
     protected $_component;
 
-    public function __construct(Kwf_Component_Data $component, $menuConfig = null, $menuUrl = null)
+    public function __construct($resourceId, $menuConfig = null, $menuUrl = null, Kwf_Component_Data $component = null)
     {
+        if ($resourceId instanceof Kwf_Component_Data) {
+            $component = $resourceId;
+            $resourceId = 'kwc_'.$component->dbId;
+        } else {
+            if (!$component) throw new Kwf_Exception("component parameter is required");
+        }
         $this->_component = $component;
         if (!$menuConfig) {
             $name = Kwc_Abstract::getSetting($component->componentClass, 'componentName');
@@ -17,7 +23,7 @@ class Kwf_Acl_Resource_Component_MenuUrl extends Kwf_Acl_Resource_MenuUrl
             $menuUrl = Kwc_Admin::getInstance($component->componentClass)
                 ->getControllerUrl() . '?componentId=' . $component->dbId;
         }
-        parent::__construct('kwc_'.$component->dbId, $menuConfig, $menuUrl);
+        parent::__construct($resourceId, $menuConfig, $menuUrl);
     }
 
     public function getComponent()

@@ -47,6 +47,9 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $row->unsubscribed = 1;
             $row->activated = 0;
         }
+        $nl = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot'=>$this->getData()));
+        $row->newsletter_component_id = $nl->dbId;
     }
 
     protected function _afterInsert(Kwf_Model_Row_Interface $row)

@@ -7,6 +7,7 @@ class Kwc_NewsletterCategory_CategoriesModel extends Kwf_Model_Db
     protected function _setupFilters()
     {
         $filter = new Kwf_Filter_Row_Numberize();
+        $filter->setGroupBy('newsletter_component_id');
         $this->_filters = array('pos' => $filter);
     }
 }

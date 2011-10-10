@@ -17,11 +17,21 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
         $this->view->formControllerUrl = $formControllerUrl;
         $this->view->xtype = 'kwc.newsletter.recipients';
         $this->view->model = get_class($this->_model);
+        $this->view->baseParams = array(
+            'newsletterComponentId' => $this->_getParam('newsletterComponentId')
+        );
     }
 
-    public function preDispatch()
+    protected function _isAllowedComponent()
     {
-        parent::preDispatch();
+        $authData = $this->_getAuthData();
+        $class = $this->_getParam('class');
+        if (!Kwf_Registry::get('acl')->isAllowedComponent($class, $authData)) return false;
+
+        $nlComponentId = $this->_getParam('newsletterComponentId');
+        $component = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($nlComponentId, array('ignoreVisible'=>true));
+        return Kwf_Registry::get('acl')->isAllowedComponentById($nlComponentId, $component->componentClass, $authData);
     }
 
     protected function _initColumns()
@@ -45,5 +55,17 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
 
         $this->_columns->add(new Kwf_Grid_Column('is_active', trlKwf('Active?'), 80))
             ->setData(new Kwc_Newsletter_Detail_IsActiveData());
+    }
+
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        if ($this->_getParam('newsletterComponentId')) {
+            $ret->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'));
+        } else {
+            $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+            $ret->whereEquals('newsletter_component_id', $c->parent->dbId);
+        }
+        return $ret;
     }
 }
