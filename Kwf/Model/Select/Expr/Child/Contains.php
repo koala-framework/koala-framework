@@ -33,9 +33,9 @@ class Kwf_Model_Select_Expr_Child_Contains implements Kwf_Model_Select_Expr_Inte
     public function toArray()
     {
         $field = $this->_field;
-        if ($field instanceof Vps_Model_Select_Expr_Interface) $field = $field->toArray();
+        if ($field instanceof Kwf_Model_Select_Expr_Interface) $field = $field->toArray();
         return array(
-            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'child' => $this->_child,
             'select' => $this->_select ? $this->_select->toArray() : null
         );
@@ -43,8 +43,8 @@ class Kwf_Model_Select_Expr_Child_Contains implements Kwf_Model_Select_Expr_Inte
 
     public static function fromArray(array $data)
     {
-        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
-        $select = $data['select'] ? Vps_Model_Select::fromArray($data['select']) : null;
+        $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
+        $select = $data['select'] ? Kwf_Model_Select::fromArray($data['select']) : null;
         return new $cls($data['child'], $select);
     }
 }

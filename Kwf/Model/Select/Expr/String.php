@@ -28,14 +28,14 @@ class Kwf_Model_Select_Expr_String implements Kwf_Model_Select_Expr_Interface
     public function toArray()
     {
         return array(
-            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'string' => $this->_string,
         );
     }
 
     public static function fromArray(array $data)
     {
-        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
         return new $cls($data['string']);
     }
 }

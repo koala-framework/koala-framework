@@ -13,7 +13,7 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
 
     public function getAdditionalSumRows($order, $total)
     {
-        if (!$order instanceof Vpc_Shop_Cart_Order) return array();
+        if (!$order instanceof Kwc_Shop_Cart_Order) return array();
         if (!$order->voucher_code) return array();
 
         $text = trlKwf('Voucher');

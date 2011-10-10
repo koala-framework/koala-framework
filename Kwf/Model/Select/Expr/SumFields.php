@@ -28,21 +28,21 @@ class Kwf_Model_Select_Expr_SumFields implements Kwf_Model_Select_Expr_Interface
     {
         $fields = array();
         foreach ($this->_expressions as $i) {
-            if ($i instanceof Vps_Model_Select_Expr_Interface) $i = $i->toArray();
+            if ($i instanceof Kwf_Model_Select_Expr_Interface) $i = $i->toArray();
             $fields[] = $i;
         }
         return array(
-            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'fields' => $fields
         );
     }
 
     public static function fromArray(array $data)
     {
-        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
         $fields = array();
         foreach ($data['fields'] as $i) {
-            $fields[] = Vps_Model_Select_Expr::fromArray($i);
+            $fields[] = Kwf_Model_Select_Expr::fromArray($i);
         }
         return new $cls($fields);
     }

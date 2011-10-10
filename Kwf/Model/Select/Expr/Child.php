@@ -40,7 +40,7 @@ class Kwf_Model_Select_Expr_Child implements Kwf_Model_Select_Expr_Interface
     public function toArray()
     {
         return array(
-            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'child' => $this->_child,
             'expr' => $this->_expr->toArray(),
             'select' => $this->_select ? $this->_select->toArray() : null
@@ -49,8 +49,8 @@ class Kwf_Model_Select_Expr_Child implements Kwf_Model_Select_Expr_Interface
 
     public static function fromArray(array $data)
     {
-        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
-        $select = $data['select'] ? Vps_Model_Select::fromArray($data['select']) : null;
-        return new $cls($data['child'], Vps_Model_Select_Expr::fromArray($data['expr']), $select);
+        $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
+        $select = $data['select'] ? Kwf_Model_Select::fromArray($data['select']) : null;
+        return new $cls($data['child'], Kwf_Model_Select_Expr::fromArray($data['expr']), $select);
     }
 }
