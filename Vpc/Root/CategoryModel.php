@@ -24,4 +24,9 @@ class Vpc_Root_CategoryModel extends Vps_Model_Data_Abstract
         }
         parent::_init();
     }
+
+    public function isEqual(Vps_Model_Interface $other)
+    {
+        return $other === $this;
+    }
 }

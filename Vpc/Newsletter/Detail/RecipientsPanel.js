@@ -10,6 +10,9 @@ Vpc.Newsletter.Detail.RecipientsPanel = Ext.extend(Vps.Auto.GridPanel, {
                 height: 450
             };
         }
+                                                                            //cut off _123 for detail
+//         this.baseParams.newsletterComponentId = this.baseParams.componentId.substr(0, this.baseParams.componentId.lastIndexOf("_"));
+//         delete this.baseParams.componentId;
         Vpc.Newsletter.Detail.RecipientsPanel.superclass.initComponent.call(this);
     }
 });

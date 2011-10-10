@@ -7,6 +7,7 @@ class Vpc_NewsletterCategory_CategoriesModel extends Vps_Model_Db
     protected function _setupFilters()
     {
         $filter = new Vps_Filter_Row_Numberize();
+        $filter->setGroupBy('newsletter_component_id');
         $this->_filters = array('pos' => $filter);
     }
 }

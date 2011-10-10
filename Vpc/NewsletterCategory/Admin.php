@@ -8,19 +8,31 @@ class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin
                 array('text'=>trlVps('Newsletter'), 'icon'=>'email_open_image.png')), 'vps_component_root');
         }
 
+        $menuConfig = array('icon'=>new Vps_Asset('package'));
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
-        $c = $components[0];
-        $icon = new Vps_Asset('package');
-
-        $acl->add(
-            new Vps_Acl_Resource_ComponentClass_MenuUrl(
-                $c->componentClass,
-                array('text'=>trlVps('Edit {0}', trlVps('Categories')), 'icon'=>$icon),
-                $this->getControllerUrl('Categories').'?componentId='.$c->dbId
-            ),
-            'vpc_newsletter'
-        );
+        foreach ($components as $c) {
+            $menuConfig['text'] = trlVps('Edit {0}', trlVps('Categories'));
+            if (count($components) > 1) {
+                $subRoot = $c;
+                while($subRoot = $subRoot->parent) {
+                    if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+                }
+                if ($subRoot) {
+                    $menuConfig['text'] .= ' ('.$subRoot->name.')';
+                }
+            }
+            $acl->add(
+                new Vps_Acl_Resource_Component_MenuUrl(
+                    'vpc_'.$c->dbId.'-categories',
+                    $menuConfig,
+                    $this->getControllerUrl('Categories').'?componentId='.$c->dbId,
+                    $c
+                ),
+                'vpc_newsletter'
+            );
+        }
         parent::addResources($acl);
     }
 }

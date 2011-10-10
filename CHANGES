@@ -20,6 +20,8 @@ Neue Features:
 - Vpc_Menu_EditableItems: allows attach components to menu items (including images)
 - It's now possible to have any content in a lightbox and still have an unique url
 - Directories: Month/Category links now automatically show the number of items in componentLinks
+- There can be multiple Newsletter components, but only one per subroot
+  Subscribers and categories will be per newsletter component
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
