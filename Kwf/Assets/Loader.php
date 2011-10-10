@@ -233,6 +233,9 @@ class Kwf_Assets_Loader
                         if (substr($cssClass, 0, strlen($section)+5) == $section.'-kwf/') {
                             $cssClass = substr($cssClass, strlen($section)+5);
                         }
+                        if (substr($cssClass, 0, 11) == 'components/') {
+                            $cssClass = substr($cssClass, 11);
+                        }
                         if (substr($cssClass, -4) == '.css') {
                             $cssClass = substr($cssClass, 0, -4);
                         }
