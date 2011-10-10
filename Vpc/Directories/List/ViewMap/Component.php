@@ -94,6 +94,6 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
     {
         $row = $data->getRow();
         $link = new Vps_View_Helper_ComponentLink();
-        return $link->componentLinkRendered($data).'<br />'.$row->street.'<br />'.$row->zipcode.' '.$row->city;
+        return $link->componentLink($data);
     }
 }
