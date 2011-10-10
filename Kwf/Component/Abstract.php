@@ -227,6 +227,7 @@ class Kwf_Component_Abstract
                     $dirs = explode(PATH_SEPARATOR, get_include_path());
                     foreach ($dirs as $dir) {
                         if ($dir == '.') $dir = getcwd();
+                        if (substr($dir, 0, 1) != '/') $dir = getcwd().'/'.$dir;
                         $path = $dir . '/' . $file;
                         if (is_file($path)) {
                             if (substr($path, -14) == '/Component.php') {
