@@ -47,6 +47,9 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
             $row->unsubscribed = 1;
             $row->activated = 0;
         }
+        $nl = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_Newsletter_Component', array('subroot'=>$this->getData()));
+        $row->newsletter_component_id = $nl->dbId;
     }
 
     protected function _afterInsert(Vps_Model_Row_Interface $row)

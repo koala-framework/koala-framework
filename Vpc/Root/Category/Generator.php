@@ -418,6 +418,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
     public function getPagePropertiesForm($componentOrParent)
     {
-        return new Vpc_Root_Category_GeneratorForm($componentOrParent);
+        return new Vpc_Root_Category_GeneratorForm($componentOrParent, $this);
     }
 }

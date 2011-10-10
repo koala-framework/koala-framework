@@ -6,9 +6,17 @@ class Vpc_NewsletterCategory_Subscribe_CategoriesController extends Vps_Controll
 
     protected function _initColumns()
     {
+        $c = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'), array('limit'=>1, 'ignoreVisible'=>true));
+        $nl = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_Newsletter_Component', array('subroot'=>$c));
+
         $values = array();
         $model = Vps_Model_Abstract::getInstance('Vpc_NewsletterCategory_CategoriesModel');
-        foreach ($model->getRows($model->select()->order('pos')) as $row) {
+        $s = $model->select()
+            ->whereEquals('newsletter_component_id', $nl->dbId)
+            ->order('pos');
+        foreach ($model->getRows($s) as $row) {
             $values[$row->id] = $row->category;
         }
         $select = new Vps_Form_Field_Select();
