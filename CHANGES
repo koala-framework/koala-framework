@@ -37,6 +37,7 @@ möglicherweise nicht kompatible Änderungen:
 - componentLink helper: parameters $get and $anchor got removed, 3rd parameter now is a config array
 - Vps and Vpc renamed into Kwf and Kwc
 - application/* moved into web root
+- Admin::_addResourcesBySameClass got replaced by menuConfig setting
 
 == 2.1 ==
 Erstellt: 21.06.11

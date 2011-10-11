@@ -17,7 +17,7 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
         $ret['downloadsModel'] = 'Kwc_Advanced_DownloadsTree_Downloads';
 
         $ret['plugins'] = array('Kwc_Rotary_Password_Component');
-        $ret['flags']['hasResources'] = true;
+        $ret['menuConfig'] = 'Kwf_Component_Abstract_MenuConfig_SameClass';
 
         $ret['panelWidth'] = 490;
         $ret['panelHeight'] = 500;

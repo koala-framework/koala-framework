@@ -149,89 +149,22 @@ class Kwf_Component_Abstract_Admin
     {
     }
 
+    /**
+     * @deprecated use menuConfig instead
+     */
     public function addResources(Kwf_Acl $acl)
     {
     }
 
     /**
      * Hilfsfunktion zum hinzufügen von Menüpunkten für alle Komponenten dieser klasse
+     * @deprecated use Kwf_Component_Abstract_MenuConfig_Trl_SameClass instead
      */
     protected function _addResourcesBySameClass(Kwf_Acl $acl)
     {
-        $dropdownName = 'kwc_'.$this->_class;
-
-        //BEGIN hack
-        //TODO im 1.11 gscheite lösung
-        $isTrl = is_instance_of($this->_class, 'Kwc_Chained_Trl_Component');
-        $hasTrl = false;
-        foreach (Kwc_Abstract::getComponentClasses() as $cls) {
-            if (is_instance_of($cls, 'Kwc_Chained_Trl_Component')) {
-                if (Kwc_Abstract::getSetting($cls, 'masterComponentClass') == $this->_class) {
-                    $dropdownName = 'kwc_'.$cls;
-                    $hasTrl = true;
-                    break;
-                }
-            }
-        }
-        /*
-            class Kwf_Component_MenuConfig_Abstract {
-                public function __construct(...)
-                public static function getInstance($componentclass);
-                public function getPriority(); //trls haben niedrige priorität
-                abstract public function addResources(Kwf_Acl $acl);
-            }
-            $ret['menuConfig'] = 'Kwf_Component_MenuConfig_SameClass'; //fürs deutsche
-            $ret['menuConfig'] = 'Kwf_Component_MenuConfig_Trl_SameClass'; //fürs trls, erstellt ein dropdown und verschiebt auch das deutsche da hinein
-
-            $ret['menuConfigDropdownName'] = '';
-            $ret['menuConfig'] = 'Kwf_Component_MenuConfig_Dropdown_SameClass'; //fürs deutsche
-        */
-        //END hack
-
-        $components = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
-        $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
-        if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
-        $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
-        if ($hasTrl || $isTrl || count($components) > 1) {
-            if (!$acl->has($dropdownName)) {
-                $acl->add(
-                    new Kwf_Acl_Resource_MenuDropdown(
-                        $dropdownName, array('text'=>$name, 'icon'=>$icon)
-                    ), 'kwf_component_root'
-                );
-            }
-            foreach ($components as $c) {
-                $t = $c->getTitle();
-                if (!$t) $t = $name;
-                if ($hasTrl || $isTrl) {
-                    $t .= ' ('.$c->getLanguageData()->name.')';
-                }
-                $acl->add(
-                    new Kwf_Acl_Resource_Component_MenuUrl(
-                        $c, array('text'=>$t, 'icon'=>$icon)
-                    ), $dropdownName
-                );
-            }
-        } else if (count($components) == 1) {
-            $c = $components[0];
-            $name = $this->_addResourcesBySameClassResourceName($c);
-            $acl->add(
-                new Kwf_Acl_Resource_Component_MenuUrl(
-                    $c, array('text'=>$name, 'icon'=>$icon)
-                ), 'kwf_component_root'
-            );
-        }
+        throw new Vps_Exception('port to menuConfig');
     }
 
-    //TODO nicht recht flexibel... NUR in Kwc_News_Directory_Trl_Admin verwenden
-    //falls es wo anders gebraucht wird bitte flexibler machen
-    protected function _addResourcesBySameClassResourceName($c)
-    {
-        $ret = Kwc_Abstract::getSetting($this->_class, 'componentName');
-        if (strpos($ret, '.') !== false) $ret = substr(strrchr($ret, '.'), 1);
-        return $ret;
-    }
 
     protected final function _getSetting($name)
     {

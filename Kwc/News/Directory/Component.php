@@ -23,7 +23,8 @@ class Kwc_News_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
 
         $ret['enableExpireDate'] = false;
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
-        $ret['flags']['hasResources'] = true;
+
+        $ret['menuConfig'] = 'Kwf_Component_Abstract_MenuConfig_SameClass';
 
         //darf im seitenbaum nicht berbeitet werden
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';

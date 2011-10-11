@@ -245,12 +245,25 @@ class Kwf_Acl extends Zend_Acl
     public function loadKwcResources()
     {
         if ($this->_kwcResourcesLoaded) return;
+        $menuConfigs = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::getFlag($c, 'hasResources')) {
                 Kwc_Admin::getInstance($c)->addResources($this);
             }
+            if (Kwc_Abstract::getFlag($c, 'menuConfig')) {
+                $menuConfigs[] = Kwf_Component_Abstract_MenuConfig_Abstract::getInstance($c);
+            }
+        }
+        usort($menuConfigs, array(get_class($this), '_compareMenuConfig'));
+        foreach ($menuConfigs as $cfg) {
+            $cfg->addResources($this);
         }
         $this->_kwcResourcesLoaded = true;
+    }
+
+    public static function _compareMenuConfig(Kwf_Component_Abstract_MenuConfig_Abstract $a, Kwf_Component_Abstract_MenuConfig_Abstract $b)
+    {
+        return $a->getPriority() > $a->getPriority();
     }
 
     public function getMenuConfig($user)

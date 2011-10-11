@@ -5,8 +5,7 @@ class Kwc_News_Directory_Trl_Component extends Kwc_Directories_Item_Directory_Tr
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['childModel'] = 'Kwc_News_Directory_Trl_Model';
-
-        $ret['flags']['hasResources'] = true;
+        $ret['menuConfig'] = 'Kwf_Component_Abstract_MenuConfig_Trl_SameClass';
         return $ret;
     }
 

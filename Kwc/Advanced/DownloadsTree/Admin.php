@@ -1,12 +1,6 @@
 <?php
 class Kwc_Advanced_DownloadsTree_Admin extends Kwc_Admin
 {
-    public function addResources(Kwf_Acl $acl)
-    {
-        parent::addResources($acl);
-        $this->_addResourcesBySameClass($acl);
-    }
-
     public function getExtConfig()
     {
         $ret = parent::getExtConfig();
