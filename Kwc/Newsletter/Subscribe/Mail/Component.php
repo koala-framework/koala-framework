@@ -5,13 +5,6 @@ class Kwc_Newsletter_Subscribe_Mail_Component extends Kwc_Mail_Component
     {
         $ret = parent::getSettings();
         unset($ret['generators']['content']);
-        $ret['generators']['redirect'] = array(
-            'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Mail_Redirect_Component',
-            'name' => 'r'
-        );
-
-        $ret['default']['subject'] = trlKwf('Newsletter subscription');
 
         $ret['recipientSources'] = array(
             'sub' => 'Kwc_Newsletter_Subscribe_Model'

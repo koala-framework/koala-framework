@@ -1,6 +1,6 @@
 /* kwfTabsFx is set by javascript. So we can show all content elements if there is no javascript. */
 .kwfTabsFx .kwfTabsContents { position: relative; }
-.kwfTabsFx .kwfTabsContent { position: absolute; top: 0px; }
+
 .kwfTabsContent {
     border: 1px solid #bbb;
     padding: 3px 10px;
