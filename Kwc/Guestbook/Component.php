@@ -21,7 +21,7 @@ class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
         $ret['generators']['child']['component']['deactivate'] = 'Kwc_Guestbook_DeactivatePost_Component';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwc_Guestbook_ExtConfig';
-        $ret['flags']['hasResources'] = true;
+        $ret['menuConfig'] = 'Kwf_Component_Abstract_MenuConfig_SameClass';
         return $ret;
     }
 
