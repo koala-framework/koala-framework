@@ -38,6 +38,7 @@ Vps.Tabs = function(el) {
         tabsLinks.appendChild(this.switchEls[i]);
         var swEl = Ext.get(this.switchEls[i]);
 
+        Ext.get(this.contentEls[i]).enableDisplayMode('block');
         Ext.get(this.contentEls[i]).setVisible(false);
         Ext.get(this.switchEls[i]).removeClass('vpsTabsLinkActive');
 
@@ -69,7 +70,6 @@ Vps.Tabs = function(el) {
     if (activeTabIdx !== false) {
         Ext.get(this.switchEls[activeTabIdx]).addClass('vpsTabsLinkActive');
         Ext.get(this.contentEls[activeTabIdx]).setVisible(true);
-        this.tabsContents.setHeight(Ext.get(this.contentEls[activeTabIdx]).getHeight());
         this._activeTabIdx = activeTabIdx;
     }
 };
@@ -80,34 +80,46 @@ Ext.extend(Vps.Tabs, Ext.util.Observable, {
         this.fireEvent('beforeTabActivate', this, idx, this._activeTabIdx);
         if (this._activeTabIdx == idx) return;
 
+        var newContentEl = Ext.get(this.contentEls[idx]);
+        var oldContentEl = Ext.get(this.contentEls[this._activeTabIdx]);
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('vpsTabsLinkActive');
-            Ext.get(this.contentEls[this._activeTabIdx]).fadeOut({
+            oldContentEl.setStyle('position', 'absolute');
+            newContentEl.setStyle('position', 'absolute');
+            oldContentEl.setStyle('z-index', '2');
+            newContentEl.setStyle('z-index', '1');
+            oldContentEl.fadeOut({
                 duration: this.fxDuration,
                 callback: function(el) {
+                    this.oldEl.setStyle('position', 'static');
                     this.oldEl.removeClass('vpsTabsContentActive');
-                    this.oldEl.setStyle('z-index', '1');
 
-                    this.newEl.setStyle('z-index', '2');
+                    this.newEl.setStyle('position', 'static');
                     this.newEl.setVisible(true);
                     this.newEl.setOpacity(1);
                 },
                 scope: {
-                    oldEl: Ext.get(this.contentEls[this._activeTabIdx]),
-                    newEl: Ext.get(this.contentEls[idx])
+                    oldEl: oldContentEl,
+                    newEl: newContentEl
                 }
             });
         }
         Ext.get(this.switchEls[idx]).addClass('vpsTabsLinkActive');
-        var newContentEl = Ext.get(this.contentEls[idx]);
         newContentEl.setStyle('z-index', '1');
         newContentEl.setOpacity(1);
         newContentEl.setVisible(true);
         newContentEl.addClass('vpsTabsContentActive');
 
-        this.tabsContents.scale(undefined, newContentEl.getHeight(),
-            { easing: 'easeOut', duration: this.fxDuration }
-        );
+        this.tabsContents.setHeight(oldContentEl.getHeight());
+        this.tabsContents.scale(undefined, newContentEl.getHeight(), {
+            easing: 'easeOut',
+            duration: this.fxDuration,
+            callback: function(el) {
+                el.applyStyles({
+                    height: 'auto'
+                });
+            }
+        });
 
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
