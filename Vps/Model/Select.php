@@ -245,4 +245,41 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
         return $ret;
     }
 
+    public function toArray()
+    {
+        $parts = array();
+        foreach ($this->_parts as $k=>$i) {
+            if (is_array($i)) {
+                foreach ($i as $ak=>$ai) {
+                    if ($ai instanceof Vps_Model_Select_Expr_Interface) {
+                        $ai = $ai->toArray();
+                    }
+                    $i[$ak] = $ai;
+                }
+            }
+            $parts[$k] = $i;
+        }
+        return array(
+            'selectObjVersion' => 100, //version
+            'parts' => $parts
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        if ($data['selectObjVersion'] != 100) throw new Vps_Exception("invalid select version");
+        $ret = new Vps_Model_Select();
+        foreach ($data['parts'] as $k=>$i) {
+            if (is_array($i)) {
+                foreach ($i as $ak=>$ai) {
+                    if (isset($ai['exprType'])) {
+                        $ai = Vps_Model_Select_Expr::fromArray($ai);
+                    }
+                    $i[$ak] = $ai;
+                }
+            }
+            $ret->_parts[$k] = $i;
+        }
+        return $ret;
+    }
 }

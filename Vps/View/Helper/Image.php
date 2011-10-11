@@ -68,7 +68,7 @@ class Vps_View_Helper_Image extends Vps_Component_View_Helper_Abstract
 
         $size = $this->_getImageSize($image);
         $attr = '';
-        if (is_string($cssClass)) {
+        if ($cssClass && is_string($cssClass)) {
             $attr .= ' class="'.$cssClass.'"';
         } else if (is_array($cssClass)) {
             foreach ($cssClass as $k=>$i) {
