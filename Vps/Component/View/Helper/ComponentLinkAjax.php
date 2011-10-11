@@ -1,9 +1,9 @@
 <?php
 class Vps_Component_View_Helper_ComponentLinkAjax extends Vps_Component_View_Helper_ComponentLink
 {
-    public function componentLinkAjax(Vps_Component_Data $target, $switchConfig = array(), $text = null, $cssClass = null, $get = array(), $anchor = null)
+    public function componentLinkAjax(Vps_Component_Data $target, $switchConfig = array(), $text = null, $config = array())
     {
-        $config = $this->_getConfig($target, $text, $cssClass, $get, $anchor);
+        $config = $this->_getConfig($target, $text, $config);
         $switchConfig['sel'] = $target->componentClass . '-ComponentAjax';
         $config['switch'] = $switchConfig;
         return $this->_getRenderPlaceholder($target->componentId, $config);
