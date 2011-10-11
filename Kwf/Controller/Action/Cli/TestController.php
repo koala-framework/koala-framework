@@ -154,18 +154,11 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
         Kwf_Trl::getInstance()->setModel(null, 'web');
         Kwf_Trl::getInstance()->setModel(null, 'kwf');
 
-        try {
-            $result = $runner->doRun(
-              $suite,
-              $arguments
-            );
-        }
+        $result = $runner->doRun(
+            $suite,
+            $arguments
+        );
 
-        catch (Exception $e) {
-            throw new Kwf_ClientException(
-              'Could not create and run test suite: ' . $e->getMessage()
-            );
-        }
         if ($this->_getParam('report')) {
             $resultLogger->printResult($result);
 
