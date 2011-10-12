@@ -267,7 +267,7 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
         foreach ($data['parts'] as $k=>$i) {
             if (is_array($i)) {
                 foreach ($i as $ak=>$ai) {
-                    if (isset($ai['exprType'])) {
+                    if (is_array($ai) && isset($ai['exprType'])) {
                         $ai = Vps_Model_Select_Expr::fromArray($ai);
                     }
                     $i[$ak] = $ai;
