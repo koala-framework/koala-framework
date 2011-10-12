@@ -122,12 +122,6 @@ class Vps_Srpc_Client
             throw $result->getException();
         } else if ($result instanceof Exception) {
             throw $result;
-        } else if (is_array($result) && !empty($result['srpcException'])) {
-            throw new Vps_Exception("An Error occured in Srpc_Server:\n"
-                ."Message: ".$result['message']."\n"
-                ."File: ".$result['file']."\n"
-                ."Trace: ".$result['trace']
-            );
         }
 
         return $result;
