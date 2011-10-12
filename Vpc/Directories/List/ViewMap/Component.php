@@ -9,7 +9,7 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
         $ret['assets']['dep'][] = 'VpsGoogleMap';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['generators']['child']['component']['paging'] = null;
-        $ret['generators']['coordinates'] = array(
+        $ret['generators']['coordinates'] = array( // if removed markers are loaded directly
             'class'     => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Directories_List_ViewMap_Coordinates_Component',
             'name'      => 'Coordinates'
