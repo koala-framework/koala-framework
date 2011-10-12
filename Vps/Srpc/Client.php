@@ -99,7 +99,8 @@ class Vps_Srpc_Client
         if (strpos($params['arguments'], 'Vps_') !== false
             || strpos($params['extraParams'], 'Vps_') !== false
         ) {
-            throw new Vps_Exception("a class name with 'Vps_' must not be sent through srpc client");
+            $ex = new Vps_Exception("a class name with 'Vps_' must not be sent through srpc client");
+            $ex->logOrThrow();
         }
 
         $response = $this->_performRequest($params);
