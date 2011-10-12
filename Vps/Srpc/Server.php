@@ -76,7 +76,8 @@ class Vps_Srpc_Server
             $result = serialize($result);
 
             if (strpos($result, 'Vps_') !== false) {
-                throw new Vps_Exception("a class name with 'Vps_' must not be sent through srpc server");
+                $ex =  new Vps_Exception("a class name with 'Vps_' must not be sent through srpc server");
+                $ex->logOrThrow();
             }
         } catch (Exception $e) {
             $result = "An exception has been caught occured in Srpc_Server:\n\n"
