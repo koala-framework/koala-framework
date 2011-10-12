@@ -79,26 +79,10 @@ class Vps_Srpc_Server
                 throw new Vps_Exception("a class name with 'Vps_' must not be sent through srpc server");
             }
         } catch (Exception $e) {
-            try {
-                $result = array(
-                    'srpcException' => 1,
-                    'file' => $e->getFile().':'.$e->getLine(),
-                    'message' => $e->getMessage(),
-                    'trace' => "\n---=== Trace start ===---\n".$e->getTraceAsString()."\n---=== Trace end ===---\n"
-                );
-                $result = serialize($result);
-            } catch(Exception $e2) {
-                $result = false;
-            }
-            if (!$result) {
-                $result = array(
-                    'srpcException' => 1,
-                    'file' => '',
-                    'message' => 'Error Message can\'t be determined',
-                    'trace' => ''
-                );
-                $result = serialize($result);
-            }
+            $result = "An exception has been caught occured in Srpc_Server:\n\n"
+                ."Message: ".$e->getMessage()."\n"
+                ."File: ".$e->getFile().':'.$e->getLine()."\n"
+                ."Trace: \n---=== Trace start ===---\n".$e->getTraceAsString()."\n---=== Trace end ===---\n";
         }
 
         if (!$this->_returnResponse) {
