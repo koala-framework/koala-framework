@@ -84,7 +84,7 @@ class Vps_Srpc_Server
                     'srpcException' => 1,
                     'file' => $e->getFile().':'.$e->getLine(),
                     'message' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => "\n---=== Trace start ===---\n".$e->getTraceAsString()."\n---=== Trace end ===---\n"
                 );
                 $result = serialize($result);
             } catch(Exception $e2) {
