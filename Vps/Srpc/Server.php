@@ -74,14 +74,29 @@ class Vps_Srpc_Server
 
             $result = call_user_func_array(array($handler, $method), $arguments);
             $result = serialize($result);
+
+            if (strpos($result, 'Vps_') !== false) {
+                throw new Vps_Exception("a class name with 'Vps_' must not be sent through srpc server");
+            }
         } catch (Exception $e) {
             try {
-                $result = @serialize($e);
+                $result = array(
+                    'srpcException' => 1,
+                    'file' => $e->getFile().':'.$e->getLine(),
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                );
+                $result = serialize($result);
             } catch(Exception $e2) {
                 $result = false;
             }
             if (!$result) {
-                $result = new Vps_Exception_Serializable($e);
+                $result = array(
+                    'srpcException' => 1,
+                    'file' => '',
+                    'message' => 'Error Message can\'t be determined',
+                    'trace' => ''
+                );
                 $result = serialize($result);
             }
         }
