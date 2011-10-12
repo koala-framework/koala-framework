@@ -36,4 +36,14 @@ class Kwf_Assets_Effects
         $overlay->readImage(KWF_PATH."/Kwf/Assets/Overlay/bullet_go_small.png");
         $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 16-10, 16-10);
     }
+
+    public static function rotate(Imagick $image, $params)
+    {
+        if (isset($params[0])) {
+            $angle = $params[0];
+            if ($angle > 0 && $angle < 360) {
+                $image->rotateImage(new ImagickPixel('none'), $angle);
+            }
+        }
+    }
 }
