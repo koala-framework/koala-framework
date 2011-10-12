@@ -9,9 +9,9 @@ abstract class Kwf_Component_Event_Component_Abstract extends Kwf_Component_Even
         $this->dbId = $dbId;
     }
 
-    public function getParentComponentId($componentId)
+    public function getParentDbId()
     {
-        $pos = max(strrpos($componentId, '-'), strrpos($componentId, '_'));
-        return substr($componentId, 0, $pos);
+        $pos = max(strrpos($this->dbId, '-'), strrpos($this->dbId, '_'));
+        return substr($this->dbId, 0, $pos);
     }
 }
