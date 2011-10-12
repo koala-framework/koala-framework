@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_View_Helper_ComponentLinkAjax extends Kwf_Component_View_Helper_ComponentLink
 {
-    public function componentLinkAjax(Kwf_Component_Data $target, $switchConfig = array(), $text = null, $cssClass = null, $get = array(), $anchor = null)
+    public function componentLinkAjax(Kwf_Component_Data $target, $switchConfig = array(), $text = null, $config = array())
     {
-        $config = $this->_getConfig($target, $text, $cssClass, $get, $anchor);
+        $config = $this->_getConfig($target, $text, $config);
         $switchConfig['sel'] = $target->componentClass . '-ComponentAjax';
         $config['switch'] = $switchConfig;
         return $this->_getRenderPlaceholder($target->componentId, $config);

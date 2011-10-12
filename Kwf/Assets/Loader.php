@@ -290,7 +290,12 @@ class Kwf_Assets_Loader
                         $im->readImage($this->_getDep()->getAssetPath($file));
                         $fx = explode('_', substr($fx, 3));
                         foreach ($fx as $i) {
-                            call_user_func(array('Kwf_Assets_Effects', $i), $im);
+                            $params = array();
+                            if (($pos = strpos($i, '-')) !== false) {
+                                $params = explode('-', substr($i, $pos + 1));
+                                $i = substr($i, 0, $pos);
+                            }
+                            call_user_func(array('Kwf_Assets_Effects', $i), $im, $params);
                         }
                         $cacheData['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
                         $cacheData['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));

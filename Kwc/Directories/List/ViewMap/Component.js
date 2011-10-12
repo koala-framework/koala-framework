@@ -51,7 +51,8 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     }
 
     cfg.mapContainer = mapContainer;
-    var myMap = new Kwf.GoogleMap.Map(cfg);
+    var cls = eval(cfg.mapClass) || Kwf.GoogleMap.Map;
+    var myMap = new cls(cfg);
 
     Kwf.GoogleMap.load(function() {
         this.show();

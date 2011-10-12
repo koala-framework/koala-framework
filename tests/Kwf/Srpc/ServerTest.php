@@ -17,12 +17,7 @@ class Kwf_Srpc_ServerTest extends Kwf_Test_TestCase
     {
         $srv = new Kwf_Srpc_Server(array('returnResponse' => true));
         $response = $srv->handle();
-
-        $exception = unserialize($response);
-        if ($exception instanceof Kwf_Exception_Serializable) {
-            $exception = $exception->getException();
-        }
-        $this->assertTrue($exception instanceof Kwf_Srpc_Exception);
+        $this->assertContains('A handler has to be set', $response);
     }
 
     public function testNoMethodTransmitted()
@@ -32,11 +27,7 @@ class Kwf_Srpc_ServerTest extends Kwf_Test_TestCase
             'returnResponse' => true
         ));
         $response = $srv->handle(null, array(3));
-        $exception = unserialize($response);
-        if ($exception instanceof Kwf_Exception_Serializable) {
-            $exception = $exception->getException();
-        }
-        $this->assertTrue($exception instanceof Kwf_Srpc_Exception);
+        $this->assertContains('\'method\' must be set as first argument', $response);
     }
 
     // nötig weil der sonst den kompletten backtrace vom test ausgibt und da

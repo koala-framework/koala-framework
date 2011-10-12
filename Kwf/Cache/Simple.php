@@ -72,7 +72,11 @@ class Kwf_Cache_Simple
         static $prefix;
         if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         if (extension_loaded('apc')) {
-            apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#'));
+            if (!class_exists('APCIterator')) {
+                apc_clear_cache('user');
+            } else {
+                apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#'));
+            }
         } else {
             //we can't do any better here :/
             self::_getCache()->clean();

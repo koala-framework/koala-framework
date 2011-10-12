@@ -313,24 +313,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
 
     addMarker : function(markerConfig)
     {
-        var gmarkCfg = { draggable: false };
-        if (markerConfig.draggable) gmarkCfg.draggable = true;
-        if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
-            && this.config.lightMarkerSrc
-        ) {
-            var lightIcon = new GIcon(G_DEFAULT_ICON);
-            lightIcon.image = this.config.lightMarkerSrc;
-            gmarkCfg.icon = lightIcon;
-        } else if (this.config.markerSrc) {
-            var icon = new GIcon(G_DEFAULT_ICON);
-            icon.image = this.config.markerSrc;
-            gmarkCfg.icon = icon;
-        }
-        var marker = new GMarker(
-            new GLatLng(parseFloat(markerConfig.latitude),
-                parseFloat(markerConfig.longitude)),
-            gmarkCfg
-        );
+        var marker = this.createMarker(markerConfig);
         marker.kwfConfig = markerConfig;
         this.markers.push(marker);
         this.gmap.addOverlay(marker);
@@ -340,6 +323,33 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
                 this, [ marker ]
             ));
         }
+    },
+    
+    createMarker : function(markerConfig)
+    {
+        var gmarkCfg = { draggable: false };
+        if (markerConfig.draggable) gmarkCfg.draggable = true;
+        gmarkCfg.icon = this.getMarkerIcon(markerConfig);
+        return new GMarker(
+            new GLatLng(
+                parseFloat(markerConfig.latitude),
+                parseFloat(markerConfig.longitude)
+            ),
+            gmarkCfg
+        );
+    },
+    
+    getMarkerIcon : function(markerConfig)
+    {
+        var icon = new GIcon(G_DEFAULT_ICON);
+        if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
+                && this.config.lightMarkerSrc
+        ) {
+            icon.image = this.config.lightMarkerSrc;
+        } else if (this.config.markerSrc) {
+            icon.image = this.config.markerSrc;
+        }
+        return icon;
     },
 
     _isLightMarker : function(lat, lng) {

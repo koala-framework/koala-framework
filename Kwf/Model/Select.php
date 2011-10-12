@@ -272,7 +272,7 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
         foreach ($data['parts'] as $k=>$i) {
             if (is_array($i)) {
                 foreach ($i as $ak=>$ai) {
-                    if (isset($ai['exprType'])) {
+                    if (is_array($ai) && isset($ai['exprType'])) {
                         $ai = Kwf_Model_Select_Expr::fromArray($ai);
                     }
                     $i[$ak] = $ai;
