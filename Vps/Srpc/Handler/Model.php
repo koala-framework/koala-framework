@@ -28,11 +28,17 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function countRows($select = array())
     {
+        if (is_array($select) && !empty($select['selectObjVersion'])) {
+            $select = Vps_Model_Select::fromArray($select);
+        }
         return $this->getModel()->countRows($select);
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
+        if (is_array($where) && !empty($where['selectObjVersion'])) {
+            $where = Vps_Model_Select::fromArray($where);
+        }
         $result = $this->getModel()->getRows($where, $order, $limit, $start);
         if (!$result || !$result->current()) return null;
         return $result->toArray();
@@ -84,6 +90,9 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function deleteRows($where)
     {
+        if (is_array($where) && !empty($where['selectObjVersion'])) {
+            $where = Vps_Model_Select::fromArray($where);
+        }
         return $this->getModel()->deleteRows($where);
     }
 
@@ -94,11 +103,17 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function copyDataFromModel(Vps_Model_Interface $sourceModel, $select = null, $format = null)
     {
+        if (is_array($select) && !empty($select['selectObjVersion'])) {
+            $select = Vps_Model_Select::fromArray($select);
+        }
         return $this->getModel()->copyDataFromModel($sourceModel, $select, $format);
     }
 
     public function export($format, $select = array())
     {
+        if (is_array($select) && !empty($select['selectObjVersion'])) {
+            $select = Vps_Model_Select::fromArray($select);
+        }
         return $this->getModel()->export($format, $select);
     }
 
@@ -119,6 +134,13 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function callMultiple(array $call)
     {
+        foreach ($call as $method => $args) {
+            foreach ($args as $k => $arg) {
+                if (is_array($arg) && !empty($arg['selectObjVersion'])) {
+                    $call[$method][$k] = Vps_Model_Select::fromArray($arg);
+                }
+            }
+        }
         return $this->getModel()->callMultiple($call);
     }
 }
