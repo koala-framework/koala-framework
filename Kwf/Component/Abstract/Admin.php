@@ -162,7 +162,7 @@ class Kwf_Component_Abstract_Admin
      */
     protected function _addResourcesBySameClass(Kwf_Acl $acl)
     {
-        throw new Vps_Exception('port to menuConfig');
+        throw new Kwf_Exception('port to menuConfig');
     }
 
 
