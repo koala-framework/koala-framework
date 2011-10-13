@@ -167,7 +167,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         foreach ($pages as $p) {
             $r = array(
                 'data' => $p,
-                'text' => $p->name
+                'text' => '{name}'
             );
             $class = array();
             if ($i == 0) { $class[] = 'first'; }

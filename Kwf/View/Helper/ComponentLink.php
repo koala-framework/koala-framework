@@ -13,6 +13,7 @@ class Kwf_View_Helper_ComponentLink extends Kwf_Component_View_Helper_Abstract
         if ($target instanceof Kwf_Component_Data) {
             $target = $this->getTargetPage($target);
             if (!$text) $text = $target->name;
+            $text = str_replace('{name}', $target->name, $text);
             return $this->getLink($target->url, $target->rel, $text, $config);
         } else {
             if (is_array($target)) {
@@ -45,6 +46,7 @@ class Kwf_View_Helper_ComponentLink extends Kwf_Component_View_Helper_Abstract
             if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
             $cssClass = " class=\"$cssClass\"";
         }
+
         return "<a href=\"".htmlspecialchars($url)."\" rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
     }
 
