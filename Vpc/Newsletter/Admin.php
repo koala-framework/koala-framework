@@ -10,12 +10,23 @@ class Vpc_Newsletter_Admin extends Vpc_Directories_Item_Directory_Admin
                 array('text'=>trlVps('Newsletter'), 'icon'=>'email_open_image.png')), 'vps_component_root');
         }
 
+        $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
+        $menuConfig = array('icon'=>$icon);
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
-        if ($components) {
-            $c = $components[0];
-
-            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c), 'vpc_newsletter');
+        foreach ($components as $c) {
+            $menuConfig['text'] = trlVps('Edit {0}', trlVps('Newsletter'));
+            if (count($components) > 1) {
+                $subRoot = $c;
+                while($subRoot = $subRoot->parent) {
+                    if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+                }
+                if ($subRoot) {
+                    $menuConfig['text'] .= ' ('.$subRoot->name.')';
+                }
+            }
+            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c, $menuConfig), 'vpc_newsletter');
         }
     }
 

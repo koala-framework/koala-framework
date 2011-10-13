@@ -51,7 +51,8 @@ Vpc.Directories.List.ViewMap.renderMap = function(map) {
     }
 
     cfg.mapContainer = mapContainer;
-    var myMap = new Vps.GoogleMap.Map(cfg);
+    var cls = eval(cfg.mapClass) || Vps.GoogleMap.Map;
+    var myMap = new cls(cfg);
 
     Vps.GoogleMap.load(function() {
         this.show();

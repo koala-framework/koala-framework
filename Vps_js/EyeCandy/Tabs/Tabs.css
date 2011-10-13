@@ -1,6 +1,6 @@
 /* vpsTabsFx is set by javascript. So we can show all content elements if there is no javascript. */
 .vpsTabsFx .vpsTabsContents { position: relative; }
-.vpsTabsFx .vpsTabsContent { position: absolute; top: 0px; }
+
 .vpsTabsContent {
     border: 1px solid #bbb;
     padding: 3px 10px;

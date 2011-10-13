@@ -5,4 +5,5 @@ include_path
 .settings
 *.kdev4
 querylog
+eventlog
 .tmp*

@@ -2,21 +2,32 @@
 class Vpc_Directories_Month_Directory_Generator extends Vps_Component_Generator_Page_Table
 {
     protected $_uniqueFilename = true;
+
     public function getChildData($parentData, $select = array())
     {
         $ret = array();
-        $select = $this->_formatSelect($parentData, $select);
-        $rows = array();
-        if ($select) {
-            $rows = $this->_getModel()->fetchAll($select);
+        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE))
+                && !$this->_getModel()->hasColumn('component_id')) {
+            $parentDatas = $p->getRecursiveChildComponents(array(
+                'componentClass' => $this->_class
+            ));
+        } else {
+            $parentDatas = array($parentData /* kann auch null sein*/);
         }
-        foreach ($rows as $row) {
-            $currentPd = array($parentData);
-            if (!$parentData) {
-                $currentPd = $this->_getParentDataByRow($row, $select);
+        foreach ($parentDatas as $parentData) {
+            $select = $this->_formatSelect($parentData, $select);
+            $rows = array();
+            if ($select) {
+                $rows = $this->_getModel()->fetchAll($select);
             }
-            foreach ($currentPd as $pd) {
-                $ret[] = $this->_createData($pd, $row, $select);
+            foreach ($rows as $row) {
+                $currentPd = array($parentData);
+                if (!$parentData) {
+                    $currentPd = $this->_getParentDataByRow($row, $select);
+                }
+                foreach ($currentPd as $pd) {
+                    $ret[] = $this->_createData($pd, $row, $select);
+                }
             }
         }
         return $ret;
@@ -91,8 +102,12 @@ class Vpc_Directories_Month_Directory_Generator extends Vps_Component_Generator_
         } else {
             //den detail generator vom "haupt" directory holen und das select formatieren lassen
             //der kann korrekt where component_id einfügen oder andere wheres
-            $g = Vps_Component_Generator_Abstract::getInstance($parentData->parent->componentClass, 'detail');
-            $ret->merge($g->_formatSelect($parentData->parent, array()));
+            $c = $parentData->parent;
+            if (is_instance_of($c->componentClass, 'Vpc_Directories_YearMonth_Component')) {
+                $c = $c->parent;
+            }
+            $g = Vps_Component_Generator_Abstract::getInstance($c->componentClass, 'detail');
+            $ret->merge($g->_formatSelect($c, array()));
         }
         return $ret;
     }

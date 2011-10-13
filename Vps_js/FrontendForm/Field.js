@@ -33,6 +33,7 @@ Ext.extend(Vps.FrontendForm.Field, Ext.util.Observable, {
     },
     hideError: function()
     {
+        this.el.removeClass('vpsFieldError');
         if (this.errorEl) this.errorEl.hide();
     },
     showError: function(msg) {
@@ -41,6 +42,7 @@ Ext.extend(Vps.FrontendForm.Field, Ext.util.Observable, {
             this.errorEl = this.el.createChild({
                 cls: 'vpsFieldErrorMessage'
             });
+            this.errorEl.enableDisplayMode('block');
         }
         this.errorEl.show();
         this.errorEl.update(msg);

@@ -11,8 +11,9 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
         return $ret;
     }
 
-    public function getAdditionalSumRows(Vpc_Shop_Cart_Order $order, $total)
+    public function getAdditionalSumRows($order, $total)
     {
+        if (!$order instanceof Vpc_Shop_Cart_Order) return array();
         if (!$order->voucher_code) return array();
 
         $text = trlVps('Voucher');

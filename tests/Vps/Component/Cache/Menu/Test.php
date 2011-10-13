@@ -23,6 +23,8 @@ class Vps_Component_Cache_Menu_Test extends Vpc_TestAbstract
 
     public function testMenu()
     {
+        $this->markTestIncomplete('eventscache');
+
         $page = $this->_root->getComponentById(1);
 
         $html = $page->render(true, true);
@@ -59,6 +61,8 @@ class Vps_Component_Cache_Menu_Test extends Vpc_TestAbstract
 
     public function testMovePage()
     {
+        $this->markTestIncomplete('eventscache');
+
         $page = $this->_root->getComponentById(3);
         $model = $this->_root->getGenerator('page')->getModel();
         $m = Vps_Component_Cache::getInstance()->getModel();

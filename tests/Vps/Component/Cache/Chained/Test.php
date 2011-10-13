@@ -7,6 +7,8 @@ class Vps_Component_Cache_Chained_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
+        $this->markTestIncomplete('eventscache');
+
         parent::setUp('Vps_Component_Cache_Chained_Root');
     }
 

@@ -60,6 +60,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
                     }
                 }
             }
+            if (isset($g['model'])) unset($g['model']);
         }
         foreach ($copySettings as $i) {
             if (Vpc_Abstract::hasSetting($masterComponentClass, $i)) {

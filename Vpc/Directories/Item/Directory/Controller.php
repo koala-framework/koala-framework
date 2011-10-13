@@ -21,8 +21,8 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
                 'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel',
                 'controllerUrl' => $url
             );
-            if ($this->_editDialog['width']) $editDialog['width'] = $this->_editDialog['width'];
-            if ($this->_editDialog['height']) $editDialog['height'] = $this->_editDialog['height'];
+            if (!empty($this->_editDialog['width'])) $editDialog['width'] = $this->_editDialog['width'];
+            if (!empty($this->_editDialog['height'])) $editDialog['height'] = $this->_editDialog['height'];
             $this->_editDialog = $editDialog;
         }
     }

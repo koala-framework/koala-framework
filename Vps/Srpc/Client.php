@@ -101,6 +101,13 @@ class Vps_Srpc_Client
         $params['arguments'] = serialize($params['arguments']);
         $params['extraParams'] = serialize($params['extraParams']);
 
+        if (strpos($params['arguments'], 'Vps_') !== false
+            || strpos($params['extraParams'], 'Vps_') !== false
+        ) {
+            $ex = new Vps_Exception("a class name with 'Vps_' must not be sent through srpc client");
+            $ex->logOrThrow();
+        }
+
         $response = $this->_performRequest($params);
 
         $log = date('Y-m-d H:i:s').' '.round(microtime(true)-$start, 2)."s $this->_serverUrl $method ".(isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '?')."\n";

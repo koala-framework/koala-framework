@@ -40,4 +40,22 @@ class Vps_Model_Select_Expr_If implements Vps_Model_Select_Expr_Interface
         }
         return null;
     }
+
+    public function toArray()
+    {
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'if' => $this->_if->toArray(),
+            'then' => $this->_then->toArray(),
+            'else' => $this->_else->toArray(),
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        return new $cls(Vps_Model_Select_Expr::fromArray($data['if']),
+                        Vps_Model_Select_Expr::fromArray($data['then']),
+                        Vps_Model_Select_Expr::fromArray($data['else']));
+    }
 }
