@@ -78,7 +78,6 @@ class Vps_Component_Data
     public function __get($var)
     {
         if ($var == 'url') {
-            $filenames = array();
             if (!$this->isPage) {
                 $page = $this->getPage();
                 if (!$page) return '';

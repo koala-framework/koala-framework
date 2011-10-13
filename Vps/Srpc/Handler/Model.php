@@ -43,11 +43,17 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function countRows($select = array())
     {
+        if (is_array($select) && !empty($select['selectObjVersion'])) {
+            $select = Vps_Model_Select::fromArray($select);
+        }
         return $this->getModel()->countRows($select);
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
+        if (is_array($where) && !empty($where['selectObjVersion'])) {
+            $where = Vps_Model_Select::fromArray($where);
+        }
         $result = $this->getModel()->getRows($where, $order, $limit, $start);
         if (!$result || !$result->current()) return null;
         if ($this->_columns) {
@@ -120,6 +126,9 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function deleteRows($where)
     {
+        if (is_array($where) && !empty($where['selectObjVersion'])) {
+            $where = Vps_Model_Select::fromArray($where);
+        }
         return $this->getModel()->deleteRows($where);
     }
 
@@ -130,11 +139,17 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function copyDataFromModel(Vps_Model_Interface $sourceModel, $select = null, $format = null)
     {
+        if (is_array($select) && !empty($select['selectObjVersion'])) {
+            $select = Vps_Model_Select::fromArray($select);
+        }
         return $this->getModel()->copyDataFromModel($sourceModel, $select, $format);
     }
 
     public function export($format, $select = array(), $options = array())
     {
+        if (is_array($select) && !empty($select['selectObjVersion'])) {
+            $select = Vps_Model_Select::fromArray($select);
+        }
         if ($this->_columns) $options['columns'] = $this->_columns;
         return $this->getModel()->export($format, $select, $options);
     }
@@ -158,6 +173,12 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
     {
         $ret = array();
         foreach ($call as $method=>&$arguments) {
+            foreach ($arguments as $k => $arg) {
+                if (is_array($arg) && !empty($arg['selectObjVersion'])) {
+                    $call[$method][$k] = Vps_Model_Select::fromArray($arg);
+                }
+            }
+
             if ($method == 'export') {
                 if (!isset($arguments[1])) $arguments[1] = array();
                 if (!isset($arguments[2])) $arguments[2] = array();

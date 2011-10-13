@@ -55,6 +55,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/Image/DimensionField.js';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'vps_upload_id';
         return $ret;
     }
 
@@ -252,9 +253,11 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         }
 
         //paragraphs vorschau im backend
-        $authData = Vps_Registry::get('userModel')->getAuthedUser();
-        if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
-            return self::VALID_DONT_CACHE;
+        if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+            $authData = Vps_Registry::get('userModel')->getAuthedUser();
+            if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
+                return self::VALID_DONT_CACHE;
+            }
         }
 
         return self::INVALID;
@@ -304,24 +307,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $ret['mtime'] = filemtime($data['file']);
         }
         return $ret;
-    }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model);
-        //TODO: bild und view cache löschen wenn contentWidth geändert
-        return $ret;
-    }
-
-
-    public function onCacheCallback($row)
-    {
-        $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->componentId, 'default'
-        );
-        Vps_Media::getOutputCache()->remove($cacheId);
     }
 
     public function getContentWidth()

@@ -6,6 +6,7 @@ class Vpc_Advanced_CommunityVideo_Trl_Component extends Vpc_Chained_Trl_Componen
         $ret = parent::getSettings($masterComponentClass);
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
         return $ret;
     }
 

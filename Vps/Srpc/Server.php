@@ -74,19 +74,16 @@ class Vps_Srpc_Server
 
             $result = call_user_func_array(array($handler, $method), $arguments);
             $result = serialize($result);
+
+            if (strpos($result, 'Vps_') !== false) {
+                $ex =  new Vps_Exception("a class name with 'Vps_' must not be sent through srpc server");
+                $ex->logOrThrow();
+            }
         } catch (Exception $e) {
-            try {
-                // das @ hier kann weg, wenns ein fatal error wird dann kommt
-                // der eh im srpc client wieder auf. Alle anderen werden hier
-                // eh ge-catch't und $result wird false
-                $result = serialize($e);
-            } catch(Exception $e2) {
-                $result = false;
-            }
-            if (!$result) {
-                $result = new Vps_Exception_Serializable($e);
-                $result = serialize($result);
-            }
+            $result = "An exception has been caught occured in Srpc_Server:\n\n"
+                ."Message: ".$e->getMessage()."\n"
+                ."File: ".$e->getFile().':'.$e->getLine()."\n"
+                ."Trace: \n---=== Trace start ===---\n".$e->getTraceAsString()."\n---=== Trace end ===---\n";
         }
 
         if (!$this->_returnResponse) {

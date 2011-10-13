@@ -11,6 +11,7 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Component extends Vpc_Abstract_Comp
         $ret['componentName'] = trlVps('Teaser image');
         $ret['cssClass'] = 'webStandard';
         $ret['ownModel'] = 'Vpc_List_ChildPages_Teaser_TeaserImage_Model';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'visible';
         return $ret;
     }
 

@@ -12,6 +12,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
         $ret['dataClass'] = 'Vpc_Basic_DownloadTag_Data';
         $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/DownloadTag/Panel.js';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'vps_upload_id';
         return $ret;
     }
 
@@ -102,21 +103,9 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
         if (!$file || !file_exists($file)) {
             return null;
         }
-        Vps_Component_Cache::getInstance()->saveMeta(
-            Vps_Component_Data_Root::getInstance()->getComponentById($id),
-            new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
-        );
         return array(
             'file' => $file,
             'mimeType' => $mimeType
         );
-    }
-
-    public function onCacheCallback($row)
-    {
-        $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->componentId, 'default'
-        );
-        Vps_Media::getOutputCache()->remove($cacheId);
     }
 }

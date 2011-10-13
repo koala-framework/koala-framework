@@ -42,10 +42,12 @@ class Vpc_Basic_ImageEnlarge_Trl_Image_Component
             $d = $d->parent;
         }
         $row = $d->getComponent()->getRow();
+        /*
         Vps_Component_Cache::getInstance()->saveMeta(
             $d,
             new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
         );
+        */
 
         return parent::getMediaOutput($id, $type, $className);
     }

@@ -6,6 +6,7 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['componentIcon'] = new Vps_Asset('page_link');
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
         return $ret;
     }
 

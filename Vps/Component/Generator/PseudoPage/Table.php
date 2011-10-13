@@ -5,6 +5,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     protected $_uniqueFilename;
     protected $_nameColumn;
     protected $_maxFilenameLength;
+    protected $_eventsClass = 'Vps_Component_Generator_PseudoPage_Events_Table';
 
     protected function _init()
     {
@@ -95,5 +96,15 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         $ret = parent::getGeneratorFlags();
         $ret['pseudoPage'] = true;
         return $ret;
+    }
+
+    public function getNameColumn()
+    {
+        return $this->_settings['nameColumn'];
+    }
+
+    public function getFilenameColumn()
+    {
+        return $this->_settings['filenameColumn'];
     }
 }

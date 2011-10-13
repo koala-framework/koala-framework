@@ -4,8 +4,14 @@ class Vps_Acl_Resource_Component_MenuUrl extends Vps_Acl_Resource_MenuUrl
 {
     protected $_component;
 
-    public function __construct(Vps_Component_Data $component, $menuConfig = null, $menuUrl = null)
+    public function __construct($resourceId, $menuConfig = null, $menuUrl = null, Vps_Component_Data $component = null)
     {
+        if ($resourceId instanceof Vps_Component_Data) {
+            $component = $resourceId;
+            $resourceId = 'vpc_'.$component->dbId;
+        } else {
+            if (!$component) throw new Vps_Exception("component parameter is required");
+        }
         $this->_component = $component;
         if (!$menuConfig) {
             $name = Vpc_Abstract::getSetting($component->componentClass, 'componentName');
@@ -17,7 +23,7 @@ class Vps_Acl_Resource_Component_MenuUrl extends Vps_Acl_Resource_MenuUrl
             $menuUrl = Vpc_Admin::getInstance($component->componentClass)
                 ->getControllerUrl() . '?componentId=' . $component->dbId;
         }
-        parent::__construct('vpc_'.$component->dbId, $menuConfig, $menuUrl);
+        parent::__construct($resourceId, $menuConfig, $menuUrl);
     }
 
     public function getComponent()
