@@ -48,6 +48,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
 
         $componentLinkModifiers = $targetPage[3];
         $text = $config['text'] ? $config['text'] : $targetPage[2];
+        $text = str_replace('{name}', $targetPage[2], $text);
         foreach ($componentLinkModifiers as $s) {
             if ($s['type'] == 'appendLinkText') {
                 $text .= $s['text'];
