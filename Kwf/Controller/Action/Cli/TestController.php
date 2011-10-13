@@ -168,9 +168,11 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
                 'skipped' => $result->skippedCount(),
                 'not_implemented' => $result->notImplementedCount(),
                 //'log' => $resultLogger->getContent(),
-                'web_version' => Kwf_Util_Git::web()->getActiveBranch().' ('.Kwf_Util_Git::web()->revParse('HEAD').')',
                 'kwf_version' => Kwf_Util_Git::kwf()->getActiveBranch().' ('.Kwf_Util_Git::kwf()->revParse('HEAD').')'
             );
+            if (Kwf_Registry::get('config')->application->id != 'kwf') {
+                $reportData['web_version'] = Kwf_Util_Git::web()->getActiveBranch().' ('.Kwf_Util_Git::web()->revParse('HEAD').')';
+            }
             echo "===REPORT===";
             echo serialize($reportData);
             echo "===/REPORT===";
