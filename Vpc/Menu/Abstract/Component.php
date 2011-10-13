@@ -167,7 +167,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         foreach ($pages as $p) {
             $r = array(
                 'data' => $p,
-                'text' => $p->name
+                'text' => '{name}'
             );
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
