@@ -14,8 +14,6 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
-        $this->markTestIncomplete('eventscache');
-
         parent::setUp('Vpc_Trl_MenuCache_Root');
     }
 
@@ -52,7 +50,7 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
         $this->assertEquals($this->_root->getComponentById('6-mainMenu-subMenu'), null);
     }
 
-    public function testMenuDe()
+    public function testMenuDeNameChanged()
     {
         $c = $this->_root->getComponentById('1-mainMenu');
         $html = $c->render();
@@ -71,8 +69,10 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
         $this->assertContains('Testx</a>', $html);
     }
 
-    public function testMenuEn()
+    public function testMenuEnNameChanged()
     {
+        $this->markTestIncomplete();
+
         $c = $this->_root->getComponentById('root-en-main_1-mainMenu');
 
         $html = $c->render();
@@ -92,7 +92,7 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
         $this->assertContains('Testxen</a>', $html);
     }
 
-    public function testMenuOtherCategoryDe()
+    public function testMenuOtherCategoryDeNameChanged()
     {
         $c = $this->_root->getComponentById('root-master-bottom-mainMenu');
         $html = $c->render();
@@ -109,8 +109,10 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
         $this->assertContains('Homex de</a>', $html);
     }
 
-    public function testMenuOtherCategoryEn()
+    public function testMenuOtherCategoryEnNameChanged()
     {
+        $this->markTestIncomplete();
+
         $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
         $html = $c->render();
         $this->assertContains('Home en</a>', $html);
