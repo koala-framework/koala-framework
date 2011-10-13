@@ -23,7 +23,7 @@ class Kwf_Model_Mongo_RunTempMongoController extends Kwf_Controller_Action
 
         $mongoDir = "/usr";
 
-        $debugOutput = true;
+        $debugOutput = false;
 
         $port = $this->_getParam('port');
 
