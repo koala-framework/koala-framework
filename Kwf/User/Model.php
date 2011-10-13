@@ -28,7 +28,6 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         if (!isset($config['proxyModel'])) {
             $config['proxyModel'] = new Kwf_Model_Db(array('table'=>'kwf_users'));
         }
-        $this->_siblingModels['webuser'] = 'Kwf_User_Web_Model';
         if (isset($config['mailClass'])) {
             $this->_mailClass = $config['mailClass'];
         }
