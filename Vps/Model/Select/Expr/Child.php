@@ -36,4 +36,21 @@ class Vps_Model_Select_Expr_Child implements Vps_Model_Select_Expr_Interface
     {
         return $this->_expr->getResultType();
     }
+
+    public function toArray()
+    {
+        return array(
+            'exprType' => str_replace('Vps_Model_Select_Expr_', '', get_class($this)),
+            'child' => $this->_child,
+            'expr' => $this->_expr->toArray(),
+            'select' => $this->_select ? $this->_select->toArray() : null
+        );
+    }
+
+    public static function fromArray(array $data)
+    {
+        $cls = 'Vps_Model_Select_Expr_'.$data['exprType'];
+        $select = $data['select'] ? Vps_Model_Select::fromArray($data['select']) : null;
+        return new $cls($data['child'], Vps_Model_Select_Expr::fromArray($data['expr']), $select);
+    }
 }

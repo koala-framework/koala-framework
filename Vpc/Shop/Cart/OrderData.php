@@ -59,14 +59,16 @@ class Vpc_Shop_Cart_OrderData
     protected function _getAdditionalSumRows($order, $total)
     {
         $ret = array();
-        $payments = Vpc_Abstract::getChildComponentClasses(
-            Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
-        if (isset($payments[$order->payment])) {
-            $rows = Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData
-                ::getInstance($payments[$order->payment])
-                ->getAdditionalSumRows($order);
-            foreach ($rows as $r) $total += $r['amount'];
-            $ret = array_merge($ret, $rows);
+        if ($order instanceof Vpc_Shop_Cart_Order) {
+            $payments = Vpc_Abstract::getChildComponentClasses(
+                Vpc_Abstract::getChildComponentClass($this->_class, 'checkout'), 'payment');
+            if (isset($payments[$order->payment])) {
+                $rows = Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData
+                    ::getInstance($payments[$order->payment])
+                    ->getAdditionalSumRows($order);
+                foreach ($rows as $r) $total += $r['amount'];
+                $ret = array_merge($ret, $rows);
+            }
         }
         foreach ($this->getShopCartPlugins() as $p) {
             $rows = $p->getAdditionalSumRows($order, $total);

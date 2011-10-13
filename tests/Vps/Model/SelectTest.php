@@ -73,4 +73,19 @@ class Vps_Model_SelectTest extends Vps_Test_TestCase
         $select->unsetPart(Vps_Model_Select::WHERE);
         $this->assertEquals(count($select->getParts()), 0);
     }
+
+    public function testToArrayFromArray()
+    {
+        $select = new Vps_Model_Select();
+        $select->where(new Vps_Model_Select_Expr_Or(array(
+            new Vps_Model_Select_Expr_Equals('foo', 'bar'),
+            new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Equals('baz', 'buz'))
+        )));
+        $select->whereEquals('blub', 123);
+        $ar = $select->toArray();
+        $this->assertEquals(is_array($ar), true);
+
+        $select2 = Vps_Model_Select::fromArray($ar);
+        $this->assertEquals($select, $select2);
+    }
 }
