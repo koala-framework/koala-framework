@@ -11,9 +11,6 @@ class Kwf_Controller_Router_Cli extends Zend_Controller_Router_Abstract
             if (!$this->getFrontController()->getDispatcher()->isDispatchable($request)) {
                 $request->setModuleName('kwf_controller_action_cli_web');
             }
-            if (!$this->getFrontController()->getDispatcher()->isDispatchable($request)) {
-                $request->setModuleName('kwf_controller_action_cli_svn');
-            }
         }
         return $request;
     }
