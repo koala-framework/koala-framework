@@ -11,8 +11,7 @@ class Vps_Component_View_Helper_Dynamic extends Vps_Component_View_Renderer
             throw new Vps_Exception("Dynamic Class not found: $dynamicClass");
         $config = array(
             'class' => $dynamicClass,
-            'arguments' => array_slice(func_get_args(), 1),
-            'info' => $this->_getView()->info
+            'arguments' => array_slice(func_get_args(), 1)
         );
         return $this->_getRenderPlaceholder($component->componentId, $config);
     }
@@ -22,7 +21,7 @@ class Vps_Component_View_Helper_Dynamic extends Vps_Component_View_Renderer
         $class = $config['class'];
         $dynamic = new $class();
         call_user_func_array(array($dynamic, 'setArguments'), $config['arguments']);
-        $dynamic->setInfo($config['info']);
+        $dynamic->setInfo($config['info']); //added to config in Partial::renderCached
         return $dynamic->getContent();
     }
 
