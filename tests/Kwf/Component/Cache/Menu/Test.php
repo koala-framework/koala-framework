@@ -21,10 +21,8 @@ class Kwf_Component_Cache_Menu_Test extends Kwc_TestAbstract
          */
     }
 
-    public function testMenu()
+    public function testChangePage()
     {
-        $this->markTestIncomplete('eventscache');
-
         $page = $this->_root->getComponentById(1);
 
         $html = $page->render(true, true);
@@ -44,6 +42,14 @@ class Kwf_Component_Cache_Menu_Test extends Kwc_TestAbstract
         $this->assertEquals(2, substr_count($html, '<li'));
         $this->assertEquals(2, substr_count($html, 'g1'));
         $this->assertEquals(2, substr_count($html, 'f4'));
+    }
+
+    public function testAddPage()
+    {
+        $this->markTestIncomplete('eventscache');
+
+        $page = $this->_root->getComponentById(1);
+        $page->render(true, true);
 
         $row = $this->_root->getGenerator('page')->getModel()->createRow(array(
             'id'=>5, 'pos'=>3, 'visible'=>true, 'name'=>'f5', 'filename' => 'f5',
