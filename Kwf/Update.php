@@ -111,6 +111,12 @@ abstract class Kwf_Update
 
         $u = self::getUpdatesForDir(KWF_PATH.'/Kwf', $from, $to);
         $ret = array_merge($ret, $u);
+
+        if (defined('VKWF_PATH')) { //HACK
+            $u = self::getUpdatesForDir(VKWF_PATH.'/Vkwf', $from, $to);
+            $ret = array_merge($ret, $u);
+        }
+        
         $u = self::getUpdatesForDir('./update', $from, $to);
         foreach ($u as $i) $i->_tags[] = 'web';
         $ret = array_merge($ret, $u);
@@ -184,7 +190,7 @@ abstract class Kwf_Update
                             if ($file != './update') {
                                 $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
                             }
-                            if (substr($n, 0, 8) == 'kwf-lib_') continue;
+                            if (preg_match('#^[a-z]+-lib_#', $n)) continue; //kwf-lib, vkwf-lib
                             if (substr($n, 0, 8) == 'library_') continue;
                             $n .= 'Update_'.$nr;
                             $update = self::createUpdate($n, $i->getPathname());
