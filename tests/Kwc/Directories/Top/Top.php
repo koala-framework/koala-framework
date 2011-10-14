@@ -7,4 +7,9 @@ class Kwc_Directories_Top_Top extends Kwc_Directories_Top_Component
                                 ->getComponentById('root_directory');
     }
 
+    public static function getItemDirectoryClasses($componentClass)
+    {
+        return array('Kwc_Directories_Top_Directory');
+    }
+
 }

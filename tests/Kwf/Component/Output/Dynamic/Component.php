@@ -8,7 +8,7 @@ class Kwf_Component_Output_Dynamic_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getPartialClass()
+    public static function getPartialClass($componentClass)
     {
         return 'Kwf_Component_Partial_Paging';
     }

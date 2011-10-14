@@ -7,8 +7,6 @@ class Kwf_Component_Cache_Directory_TestDbIdShortcut extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        $this->markTestIncomplete('eventscache');
-
         parent::setUp('Kwf_Component_Cache_Directory_DbIdShortcut_Component');
     }
 

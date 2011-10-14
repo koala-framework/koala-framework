@@ -6,8 +6,6 @@ class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        $this->markTestIncomplete('eventscache');
-
         parent::setUp('Kwf_Component_Cache_Directory_Root_Component');
         /*
         root
@@ -18,6 +16,22 @@ class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
          _trldir (basiert auf _dir, ist trlRoot, hat eigenes Model)
            -view (ist wie immer bei trldir gleiche Komponente wie _dir-view)
         */
+    }
+
+    public function testImportUpdate()
+    {
+        $root = $this->_root;
+        $dir = $root->getChildComponent('_dir');
+        $dirModel = $dir->getComponent()->getChildModel();
+
+        $this->assertEquals('0 ', $dir->render());
+
+        $dirModel->import(Kwf_Model_Abstract::FORMAT_ARRAY, array(
+            array('id' => 1, 'component_id' => 'root_dir', 'content' => 'd1'),
+            array('id' => 2, 'component_id' => 'root_dir', 'content' => 'd2')
+        ));
+        $this->_process();
+        $this->assertEquals('2 d1d2', $dir->render());
     }
 
     public function testDirectory()
@@ -31,20 +45,24 @@ class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
         $this->assertEquals('0 ', $dir->render());
         $this->assertEquals('0 ', $list->render());
 
-        $dirModel->import(Kwf_Model_Abstract::FORMAT_ARRAY, array(
-            array('id' => 1, 'component_id' => 'root_dir', 'content' => 'd1'),
-            array('id' => 2, 'component_id' => 'root_dir', 'content' => 'd2')
+        $row = $dirModel->createRow(array(
+            'id' => 1, 'component_id' => 'root_dir', 'content' => 'd1'
         ));
+        $row->save();
+        $row = $dirModel->createRow(array(
+            'id' => 2, 'component_id' => 'root_dir', 'content' => 'd2'
+        ));
+        $row->save();
         $this->_process();
         $this->assertEquals('2 d1d2', $dir->render());
         $this->assertEquals('2 d1d2', $list->render());
 
+        // Bei Partial_Id darf im eigene Directory nur eine Row gelöscht werden
         $row = $dirModel->getRow(1);
         $row->content = 'foo';
         $row->save();
         $this->_process();
 
-        // Bei Partial_Id darf im eigene Directory nur eine Row gelöscht werden
         $select = $cacheModel->select()
             ->whereEquals('component_id', 'root_list-view')
             ->whereEquals('type', 'partial');
@@ -62,6 +80,8 @@ class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
 
     public function testTrl()
     {
+        $this->markTestIncomplete();
+
         $root = $this->_root;
         $dir = $root->getChildComponent('_dir');
         $trldir = $root->getChildComponent('_trldir');

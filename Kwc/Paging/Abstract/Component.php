@@ -21,7 +21,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getPartialClass()
+    public static function getPartialClass($componentClass)
     {
         return 'Kwf_Component_Partial_Pager';
     }
@@ -31,7 +31,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         $ret = parent::getViewCacheSettings();
         $c = $this->getData()->parent;
         if ($c->getComponent() instanceof Kwc_Directories_List_View_Component &&
-            $c->getComponent()->getPartialClass() == 'Kwf_Component_Partial_Id')
+            $c->getComponent()->getPartialClass($c->componentClass) == 'Kwf_Component_Partial_Id')
         {
             $ret['enabled'] = false;
         }
@@ -99,7 +99,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
 
         $classes = array();
         if ($currentPage == $pageNumber) $classes[] = 'active';
-        
+
         $buttonTexts = $this->_getPlaceholder();
         if ($text==$buttonTexts['next']) {
             $classes[] = 'jumpNext';

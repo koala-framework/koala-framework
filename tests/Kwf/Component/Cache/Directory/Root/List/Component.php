@@ -12,4 +12,9 @@ class Kwf_Component_Cache_Directory_Root_List_Component extends Kwc_Directories_
     {
         return $this->getData()->parent->getChildComponent('_dir');
     }
+
+    public static function getItemDirectoryClasses($componentClass)
+    {
+        return array('Kwf_Component_Cache_Directory_Root_Directory_Component');
+    }
 }
