@@ -32,11 +32,11 @@ class Kwf_Model_RowCache_Row extends Kwf_Model_Proxy_Row
         return parent::toArray();
     }
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
         $this->_loadRow();
         $this->_model->clearRowCache($this->{$this->_model->getPrimaryKey()});
-        return parent::save();
+        return parent::_saveWithoutResetDirty();
     }
 
     public function __isset($name)

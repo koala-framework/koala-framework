@@ -31,7 +31,7 @@ class Kwf_Model_Field_Row extends Kwf_Model_Row_Data_Abstract
         $this->_siblingRow->{$this->_fieldName} = json_encode($this->_data);
     }
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
         $this->_beforeSaveSiblingMaster();
         $this->_beforeSave();
@@ -41,7 +41,7 @@ class Kwf_Model_Field_Row extends Kwf_Model_Row_Data_Abstract
             $this->_beforeUpdate();
         }
 
-        Kwf_Model_Row_Abstract::save();
+        Kwf_Model_Row_Abstract::_saveWithoutResetDirty();
 
         if ($this->_isNewRow) {
             $this->_afterInsert();
