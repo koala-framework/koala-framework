@@ -35,11 +35,11 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             }
             unset($dc['visible']);
         }
-        if (isset($dc['pos']) && $event->row->visible) {
+        if (isset($dc['pos']) && isset($event->row->visible) && $event->row->visible) {
             $this->fireEvent(new Kwf_Component_Event_Component_PositionChanged($class, $dbId));
             unset($dc['pos']);
         }
-        if (isset($dc['component']) && $event->row->visible) {
+        if (isset($dc['component']) && isset($event->row->visible) && $event->row->visible) {
             $this->fireEvent(new Kwf_Component_Event_Component_ClassChanged($class, $dbId));
             unset($dc['pos']);
         }
