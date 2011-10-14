@@ -9,6 +9,16 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             'event' => 'Kwf_Component_Event_Row_Updated',
             'callback' => 'onPageRowUpdate'
         );
+        array_unshift($ret, array(
+            'class' => get_class($this->_getGenerator()->getModel()),
+            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'callback' => 'onPageDataChanged'
+        ));
+        array_unshift($ret, array(
+            'class' => get_class($this->_getGenerator()->getModel()),
+            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'callback' => 'onPageDataChanged'
+        ));
         return $ret;
     }
 
@@ -32,6 +42,11 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
                 );
             }
         }
+    }
+
+    public function onPageDataChanged(Kwf_Component_Event_Row_Abstract $event)
+    {
+        $this->_getGenerator()->pageDataChanged();
     }
 
     private function _getRecursiveChildIds($id, $model)

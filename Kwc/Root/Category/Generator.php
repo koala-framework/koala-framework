@@ -46,6 +46,12 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         }
     }
 
+    //called by GeneratorEvents wen model changes
+    public function pageDataChanged()
+    {
+        $this->_pageDataLoaded = false;
+    }
+
     protected function _formatSelectFilename(Kwf_Component_Select $select)
     {
         return $select;
