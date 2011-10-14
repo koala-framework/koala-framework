@@ -6,8 +6,6 @@ class Kwf_Component_Cache_Menu_Test2 extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        $this->markTestIncomplete('eventscache');
-
         parent::setUp('Kwf_Component_Cache_Menu_Root2_Component');
         /*
         root
@@ -23,7 +21,7 @@ class Kwf_Component_Cache_Menu_Test2 extends Kwc_TestAbstract
         */
     }
 
-    public function testMenu2Page1()
+    public function testMenu2Page1ChangePage()
     {
 
         $page = $this->_root->getComponentById('1');
@@ -50,6 +48,15 @@ class Kwf_Component_Cache_Menu_Test2 extends Kwc_TestAbstract
         $this->assertEquals(2, substr_count($html, 'f4'));
         $this->assertEquals(1, substr_count($html, 'g1/f2'));
         $this->assertEquals(2, substr_count($html, 'f2'));
+    }
+
+    public function testMenu2Page1CreatePage()
+    {
+
+        $page = $this->_root->getComponentById('1');
+        $html = $page->render(true, true);
+
+        $this->markTestIncomplete('eventscache');
 
         $row = $this->_root->getGenerator('page')->getModel()->createRow(array(
             'id'=>5, 'pos'=>3, 'visible'=>true, 'name'=>'f5', 'filename' => 'f5',
