@@ -458,21 +458,21 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
 
     protected function _beforeUpdate()
     {
-        $this->_callObserver('update');
     }
 
     protected function _afterUpdate()
     {
+        $this->_callObserver('update');
         $this->_updateFilters(true);
     }
 
     protected function _beforeInsert()
     {
-        $this->_callObserver('insert');
     }
 
     protected function _afterInsert()
     {
+        $this->_callObserver('insert');
     }
 
     protected function _beforeDelete()
@@ -483,8 +483,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                 $f->onDeleteRow($this);
             }
         }
-        $this->_callObserver('delete');
-
+        $this->_callObserver('delete'); //before to have the data still in the row
     }
 
     protected function _afterDelete()
