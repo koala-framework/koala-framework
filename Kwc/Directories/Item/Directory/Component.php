@@ -19,6 +19,11 @@ abstract class Kwc_Directories_Item_Directory_Component extends Kwc_Directories_
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        return array($directoryClass);
+    }
+
     protected function _getItemDirectory()
     {
         return $this->getData();

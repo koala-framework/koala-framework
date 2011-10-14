@@ -2,7 +2,7 @@
 class Kwf_Component_Output_Partial_Random_Component extends Kwc_Abstract
     implements Kwf_Component_Partial_Interface
 {
-    public function getPartialClass()
+    public static function getPartialClass($componentClass)
     {
         return 'Kwf_Component_Partial_Random';
     }

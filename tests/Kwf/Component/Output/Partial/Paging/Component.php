@@ -9,7 +9,7 @@ class Kwf_Component_Output_Partial_Paging_Component extends Kwc_Abstract_Composi
         return $ret;
     }
 
-    public function getPartialClass()
+    public static function getPartialClass($componentClass)
     {
         return 'Kwf_Component_Partial_Paging';
     }

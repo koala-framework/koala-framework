@@ -1,8 +1,10 @@
 <?php
 class Kwf_Component_Cache_Directory_DbIdShortcut_View_Component extends Kwc_Directories_List_View_Component
 {
-    public function getPartialClass()
+    public static function getSettings()
     {
-        return 'Kwf_Component_Partial_Id';
+        $ret = parent::getSettings();
+        $ret['partialClass'] = 'Kwf_Component_Partial_Id';
+        return $ret;
     }
 }

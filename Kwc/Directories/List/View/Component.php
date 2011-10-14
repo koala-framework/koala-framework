@@ -15,12 +15,13 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         return $ret;
     }
 
-    public function getPartialClass()
+    public final static function getPartialClass($componentClass)
     {
-        if ($this->_hasSetting('partialClass')) {
-            return $this->_getSetting('partialClass');
+        if (Kwc_Abstract::hasSetting($componentClass, 'partialClass')) {
+            return Kwc_Abstract::getSetting($componentClass, 'partialClass');
         }
-        if ($this->_getSearchForm()) {
+        $generators = Kwc_Abstract::getSetting($componentClass, 'generators');
+        if (isset($generators['child']['component']['searchForm'])) {
             return 'Kwf_Component_Partial_Id';
         } else {
             return 'Kwf_Component_Partial_Paging';
@@ -63,6 +64,9 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         if (!$ret) return $ret;
 
         $searchForm = $this->_getSearchForm();
+        if ($searchForm && $this->getPartialClass() != 'Kwf_Component_Partial_Id') {
+            throw new Vps_Exception(get_class($this) . ': if search-form ist used, you also have to use PartialId (use Setting "partialClass")');
+        }
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
             $values = $searchForm->getComponent()->getFormRow()->toArray();
             unset($values['id']);

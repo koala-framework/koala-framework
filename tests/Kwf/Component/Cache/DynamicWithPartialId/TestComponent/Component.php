@@ -10,7 +10,7 @@ class Kwf_Component_Cache_DynamicWithPartialId_TestComponent_Component extends K
         return $ret;
     }
 
-    public function getPartialClass()
+    public static function getPartialClass($componentClass)
     {
         return 'Kwf_Component_Partial_Id';
     }

@@ -7,3 +7,5 @@ include_path
 querylog
 eventlog
 .tmp*
+config.local.ini
+tests/cache/*
