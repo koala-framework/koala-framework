@@ -37,11 +37,11 @@ class Kwf_Model_ProxyCache_Row extends Kwf_Model_Proxy_Row
         return parent::$this->_getRow()->toArray();
     }
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
         $id = $this->{$this->_getPrimaryKey()};
         $this->_getRow();
-        $ret = parent::save();
+        $ret = parent::_saveWithoutResetDirty();
         if (!$id) {
             $this->_model->afterInsert($this);
         } else {

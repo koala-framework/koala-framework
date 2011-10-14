@@ -186,6 +186,9 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     protected function _resetDirty()
     {
         $this->_cleanData = array();
+        foreach ($this->_getSiblingRows() as $r) {
+            $r->_resetDirty();
+        }
     }
 
     /**
@@ -251,7 +254,10 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         return $this->_getSiblingRows();
     }
 
-    public function save()
+    //calling _resetDirty has to be done *after* all saving finished (proxies, siblings)
+    //to have cleanData available in eg. _afterSave
+    //TODO: investigate if it would make sense to move _afterSave also out to have it consistent across proxies&siblings
+    protected function _saveWithoutResetDirty()
     {
         foreach ($this->_getSiblingRowsForSave() as $k=>$r) {
             if (!$r->getModel() instanceof Kwf_Model_SubModel_Interface) {
@@ -260,9 +266,19 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                     $r->{$ref['column']} = $this->{$this->_getPrimaryKey()};
                 }
             }
-            $r->save();
+            $r->_saveWithoutResetDirty();
         }
         return null;
+    }
+
+    //override _saveWithoutResetDirty instead, or better _afterSave/_beforeSave
+    public final function save()
+    {
+        $ret = $this->_saveWithoutResetDirty();
+
+        $this->_resetDirty();
+
+        return $ret;
     }
 
     protected function _postInsert()
@@ -404,7 +420,6 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                 $row->save();
             }
         }
-        $this->_callObserver('save');
     }
 
     protected function _callObserver($fn)
@@ -431,6 +446,8 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         $this->_updateFilters(true);
 
         $this->_callReferencedModelsRowUpdated('save');
+
+        $this->_callObserver('save');
     }
 
     private function _callReferencedModelsRowUpdated($action)

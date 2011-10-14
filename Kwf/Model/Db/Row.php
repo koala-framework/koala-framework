@@ -65,7 +65,7 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         }
     }
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
         $insert =
             !is_array($this->_getPrimaryKey())
@@ -90,9 +90,7 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         }
         $this->_afterSave();
 
-        parent::save(); //siblings nach uns speichern; damit auto-inc id vorhanden
-
-        $this->_resetDirty();
+        parent::_saveWithoutResetDirty(); //siblings nach uns speichern; damit auto-inc id vorhanden
 
         return $ret;
     }

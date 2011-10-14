@@ -3,7 +3,7 @@ class Kwf_Model_MirrorCache_Row extends Kwf_Model_Proxy_Row
 {
     private $_doSyncOnUpdate = false;
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
         $this->_beforeSave();
         $id = $this->{$this->_getPrimaryKey()};
@@ -21,7 +21,7 @@ class Kwf_Model_MirrorCache_Row extends Kwf_Model_Proxy_Row
         } else {
             $this->_afterUpdate();
         }
-        return Kwf_Model_Row_Abstract::save(); //nicht parent, der würde wida _row->save machen
+        return Kwf_Model_Row_Abstract::_saveWithoutResetDirty(); //nicht parent, der würde wida _row->save machen
     }
 
     protected function _beforeInsert()

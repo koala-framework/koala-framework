@@ -53,7 +53,7 @@ class Kwf_Component_Model_Row extends Kwf_Model_Row_Abstract
     }
 
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
         $this->_beforeSave();
         if ($this->_data->generator instanceof Kwc_Root_Category_Generator) {

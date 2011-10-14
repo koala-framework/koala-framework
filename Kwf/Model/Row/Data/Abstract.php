@@ -93,8 +93,9 @@ class Kwf_Model_Row_Data_Abstract extends Kwf_Model_Row_Abstract
         return $ret;
     }
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
+
         $update = isset($this->_cleanData[$this->_getPrimaryKey()]);
 
         $this->_beforeSaveSiblingMaster();
@@ -123,8 +124,7 @@ class Kwf_Model_Row_Data_Abstract extends Kwf_Model_Row_Abstract
             $this->_afterInsert();
         }
         $this->_afterSave();
-        parent::save(); //siblings nach uns speichern; damit auto-inc id vorhanden
-        $this->_resetDirty();
+        parent::_saveWithoutResetDirty(); //siblings nach uns speichern; damit auto-inc id vorhanden
 
         return $ret;
     }

@@ -63,7 +63,6 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
 
     protected function _resetDirty()
     {
-        throw new Kwf_Exception("should not be needed");
     }
 
     protected function _isDirty()
@@ -91,7 +90,7 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
         }
     }
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
         $this->_beforeSave();
         $id = $this->{$this->_getPrimaryKey()};
@@ -102,7 +101,7 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
         }
         $this->_beforeSaveSiblingMaster();
         Kwf_Component_ModelObserver::getInstance()->disable();
-        $ret = $this->_row->save();
+        $ret = $this->_row->_saveWithoutResetDirty();
         Kwf_Component_ModelObserver::getInstance()->enable();
         $this->_afterSave();
         if (!$id) {
@@ -110,7 +109,7 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
         } else {
             $this->_afterUpdate();
         }
-        parent::save();
+        parent::_saveWithoutResetDirty();
         return $ret;
     }
 
