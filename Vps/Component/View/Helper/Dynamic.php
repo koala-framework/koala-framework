@@ -21,7 +21,7 @@ class Vps_Component_View_Helper_Dynamic extends Vps_Component_View_Renderer
         $class = $config['class'];
         $dynamic = new $class();
         call_user_func_array(array($dynamic, 'setArguments'), $config['arguments']);
-        $dynamic->setInfo($config['info']); //added to config in Partial::renderCached
+        if (isset($config['info'])) $dynamic->setInfo($config['info']); //added to config in Partial::renderCached
         return $dynamic->getContent();
     }
 
