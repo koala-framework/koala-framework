@@ -34,7 +34,7 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->assertEquals($this->_root->getComponentById('2-mainMenu')->componentClass, 'Kwc_Menu_ParentMenu_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('2-mainMenu-subMenu')->componentClass, 'Kwc_Menu_ParentMenu_Component.Kwc_Trl_MenuCache_MainMenu_SubMenu_Component');
 
-        $this->assertEquals($this->_root->getComponentById('4-mainMenu')->componentClass, 'Kwc_Basic_ParentContent_Component');
+        $this->assertEquals($this->_root->getComponentById('4-mainMenu')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('4-mainMenu-subMenu'), null);
     }
 
@@ -43,10 +43,10 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->assertEquals($this->_root->getComponentById('root-master-bottom-mainMenu')->componentClass, 'Kwc_Menu_OtherCategory_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('root-master-bottom-mainMenu-subMenu'), null);
 
-        $this->assertEquals($this->_root->getComponentById('5-mainMenu')->componentClass, 'Kwc_Basic_ParentContent_Component');
+        $this->assertEquals($this->_root->getComponentById('5-mainMenu')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('5-mainMenu-subMenu'), null);
 
-        $this->assertEquals($this->_root->getComponentById('6-mainMenu')->componentClass, 'Kwc_Basic_ParentContent_Component');
+        $this->assertEquals($this->_root->getComponentById('6-mainMenu')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('6-mainMenu-subMenu'), null);
     }
 
