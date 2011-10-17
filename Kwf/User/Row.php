@@ -174,26 +174,6 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         }
     }
 
-    public function save()
-    {
-        $this->_beforeSave();
-        $id = $this->{$this->_getPrimaryKey()};
-        if (!$id) {
-            $this->_beforeInsert();
-        } else {
-            $this->_beforeUpdate();
-        }
-        $this->_beforeSaveSiblingMaster();
-        $ret = $this->_row->save();
-        Kwf_Model_Row_Abstract::save();
-        if (!$id) {
-            $this->_afterInsert();
-        } else {
-            $this->_afterUpdate();
-        }
-        $this->_afterSave();
-    }
-
     public function setSendMails($value)
     {
         $this->_sendMails = $value;
