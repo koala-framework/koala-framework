@@ -48,7 +48,7 @@ class Kwf_Component_Cache_Menu_TestAlternativeComponent extends Kwc_TestAbstract
         $this->assertEquals('Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu1_Sub_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('3-menu1');
-        $this->assertEquals('Kwc_Basic_ParentContent_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_Menu_Root3_Menu1_Component', $menu->componentClass);
         $this->assertNull($this->_root->getComponentById('3-menu1-subMenu'));
     }
 
@@ -64,7 +64,7 @@ class Kwf_Component_Cache_Menu_TestAlternativeComponent extends Kwc_TestAbstract
         $this->assertEquals('Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu2_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('3-menu2');
-        $this->assertEquals('Kwc_Basic_ParentContent_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_Menu_Root3_Menu2_Component', $menu->componentClass);
     }
 
     public function testMenu3()
@@ -79,6 +79,6 @@ class Kwf_Component_Cache_Menu_TestAlternativeComponent extends Kwc_TestAbstract
         $this->assertEquals('Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('3-menu3');
-        $this->assertEquals('Kwc_Basic_ParentContent_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
     }
 }

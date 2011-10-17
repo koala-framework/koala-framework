@@ -42,7 +42,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
             'otherCategory' => 'Kwc_Menu_OtherCategory_Component.'.$componentClass,
 
             //if deep enough so no difference in menu content (depth is defined by _requiredLevels)
-            'parentContent' => 'Kwc_Basic_ParentContent_Component',
+            'parentContent' => 'Kwc_Menu_ParentContent_Component.'.$componentClass,
 
             //if above categories
             'empty' => 'Kwc_Basic_Empty_Component',

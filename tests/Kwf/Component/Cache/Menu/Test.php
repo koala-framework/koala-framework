@@ -63,8 +63,6 @@ class Kwf_Component_Cache_Menu_Test extends Kwc_TestAbstract
 
     public function testChangeParent()
     {
-        $this->markTestIncomplete('eventscache');
-
         $page = $this->_root->getComponentById(3);
         $model = $this->_root->getGenerator('page')->getModel();
         $m = Kwf_Component_Cache::getInstance()->getModel();
