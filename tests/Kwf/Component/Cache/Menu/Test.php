@@ -108,7 +108,8 @@ class Kwf_Component_Cache_Menu_Test extends Kwc_TestAbstract
     public function testPositionChange()
     {
         $page = $this->_root->getComponentById(1);
-        $page->render(true, true);
+        $html = $page->render(true, true);
+        $this->assertRegExp('#f1.*f4#s', $html);
 
         $row = $this->_root->getGenerator('page')->getModel()->getRow(1);
         $row->pos = 5;
@@ -116,8 +117,8 @@ class Kwf_Component_Cache_Menu_Test extends Kwc_TestAbstract
 
         $this->_process();
         $html = $page->render(true, true);
-        $this->markTestIncomplete('da muss noch genauer asserted wean');
 
+        $this->assertRegExp('#f4.*f1#s', $html);
         $this->assertEquals(2, substr_count($html, '<li'));
         $this->assertEquals(2, substr_count($html, 'f1'));
         $this->assertEquals(2, substr_count($html, 'f4'));

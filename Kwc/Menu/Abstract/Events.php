@@ -7,17 +7,22 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
         $ret[] = array(
             'class' => null,
             'event' => 'Kwf_Component_Event_Page_Added',
-            'callback' => 'onPageAddOrRemove'
+            'callback' => 'onPageChanged'
         );
         $ret[] = array(
             'class' => null,
             'event' => 'Kwf_Component_Event_Page_Removed',
-            'callback' => 'onPageAddOrRemove'
+            'callback' => 'onPageChanged'
+        );
+        $ret[] = array(
+            'class' => null,
+            'event' => 'Kwf_Component_Event_Page_PositionChanged',
+            'callback' => 'onPageChanged'
         );
         return $ret;
     }
 
-    public function onPageAddOrRemove(Kwf_Component_Event_Page_Abstract $event)
+    public function onPageChanged(Kwf_Component_Event_Page_Abstract $event)
     {
         $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $data) {
