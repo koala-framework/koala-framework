@@ -29,8 +29,6 @@ class Kwc_Directories_Top_Test extends Kwc_TestAbstract
 
     public function testCache()
     {
-        $this->markTestIncomplete('eventscache');
-
         $c = $this->_root->getChildComponent('_directory');
         $model = $c->getComponent()->getChildModel();
 
@@ -46,9 +44,7 @@ class Kwc_Directories_Top_Test extends Kwc_TestAbstract
 
         // Zeile löschen
         $model->getRow(9)->delete();
-        Kwf_Component_Data_Root::reset();
-        $this->_root = Kwf_Component_Data_Root::getInstance();
-        $c = $this->_root->getChildComponent('_directory');
+        $this->_process();
         $this->assertEquals(6, substr_count($c->render(), 'Foo'));
     }
 }
