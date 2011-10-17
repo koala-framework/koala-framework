@@ -12,25 +12,11 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
         parent::preDispatch();
     }
 
-    private function _eventuallyConvertToGitAndRestart()
-    {
-        if (!file_exists('.git')) {
-            $this->_convertToGit();
-
-            //nach git konvertierung script nochmal neu starten, da der KWF_PATH sich geändert haben kann
-            $argv = $_SERVER['argv'];
-            unset($argv[0]);
-            passthru('php bootstrap.php '.implode(' ', $argv));
-            exit;
-        }
-    }
-
     public function checkoutStagingAction()
     {
         if (!$this->_getParam('revWeb') || !$this->_getParam('revKwf')) {
             throw new Kwf_ClientException("revWeb and revKwf parameters required");
         }
-        $this->_eventuallyConvertToGitAndRestart();
 
         Kwf_Util_Git::kwf()->fetch();
         Kwf_Util_Git::web()->fetch();
@@ -42,8 +28,6 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
 
     public function checkoutMasterAction()
     {
-        $this->_eventuallyConvertToGitAndRestart();
-
         Kwf_Util_Git::kwf()->fetch();
         Kwf_Util_Git::web()->fetch();
 
@@ -55,8 +39,6 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
 
     public function checkoutProductionAction()
     {
-        $this->_eventuallyConvertToGitAndRestart();
-
         Kwf_Util_Git::kwf()->fetch();
         Kwf_Util_Git::web()->fetch();
 
@@ -82,141 +64,6 @@ class Kwf_Controller_Action_Cli_GitController extends Kwf_Controller_Action_Cli_
 
         system("php bootstrap.php update", $ret);
         exit($ret);
-    }
-
-    public function convertToGitAction()
-    {
-        $this->_convertToGit();
-        exit;
-    }
-
-    private function _convertToGit()
-    {
-        echo "Converting ".getcwd()." to git\n";
-        $this->_convertWcToGit(Kwf_Registry::get('config')->application->id);
-
-        $host = Kwf_Registry::get('config')->server->host;
-        if ($host == 'vivid' && Kwf_Setup::getConfigSection()!='vivid') {
-            echo "Converting ".KWF_PATH."\n";
-            $branch = file_get_contents('kwf_branch');
-            chdir(KWF_PATH);
-            $this->_convertWcToGit('kwf', $branch);
-        } else {
-            if (!file_exists('kwf-lib')) {
-                if (trim(`hostname`) == 'vivid') {
-                    $gitUrl = "ssh://git.vivid-planet.com/git/kwf";
-                } else {
-                    $gitUrl = "ssh://vivid@git.vivid-planet.com/git/kwf";
-                }
-                $cmd = "git clone $gitUrl kwf-lib";
-                echo "$cmd\n";
-                $this->_systemCheckRet($cmd);
-
-                $branch = file_get_contents('kwf_branch');
-
-                chdir('kwf-lib');
-
-                $cmd = "git branch --track $branch origin/$branch";
-                echo "$cmd\n";
-                $this->_systemCheckRet($cmd);
-
-                $cmd = "git checkout ".$branch;
-                echo "$cmd\n";
-                $this->_systemCheckRet($cmd);
-
-                chdir('..');
-
-                copy(KWF_PATH.'/include_path', 'kwf-lib/include_path');
-
-                unlink('include_path');
-            }
-        }
-    }
-
-    private function _convertWcToGit($id, $branch = null)
-    {
-        if (!file_exists('.svn')) {
-            echo "is already converted\n";
-            return;
-        }
-        if (file_exists('.git')) {
-            echo "strange, .svn AND .git exist\n";
-            return;
-        }
-        $this->_systemCheckRet("svn up");
-
-        if (!$branch) {
-            $branch = 'master';
-            $xml = simplexml_load_string(`svn info --xml`);
-            if (preg_match('#branches/[^/]+/([^/]+)$#', (string)$xml->entry->url, $m)) {
-                $branch = $m[1];
-            }
-        }
-        if ($branch == 'trunk') $branch = 'master';
-
-        if (trim(`hostname`) == 'vivid') {
-            $gitUrl = "ssh://git.vivid-planet.com/git/$id";
-        } else {
-            $gitUrl = "ssh://vivid@git.vivid-planet.com/git/$id";
-        }
-
-        $cmd = "git clone $gitUrl gitwc";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        chdir("gitwc");
-        if ($branch && $branch != 'master') {
-            $cmd = "git branch --track $branch origin/$branch";
-            echo "$cmd\n";
-            $this->_systemCheckRet($cmd);
-        }
-
-        $cmd = "git checkout latest-svn-".($branch=='master' ? 'trunk' : $branch);
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        chdir("..");
-
-        $cmd = "mv gitwc/.git .git";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        chdir("gitwc");
-        $cmd = "find -name .gitignore | xargs -t -I xxx mv xxx ../xxx";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-        chdir("..");
-
-        $cmd = "rm -rf gitwc";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        $cmd = "find -name .svn | xargs rm -rf";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        $cmd = "find -executable -type f | xargs chmod -x";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        if ($id == 'kwf') {
-            //die zwei wurden im svn im nachinhein geaendert
-            $cmd = "git checkout Kwf/Controller/Action/Cli/GitController.php Kwf/Controller/Action/Cli/Web/SvnUpController.php";
-            echo "$cmd\n";
-            $this->_systemCheckRet($cmd);
-        }
-
-        $cmd = "git stash";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        $cmd = "git checkout ".$branch;
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
-
-        $cmd = "git stash pop";
-        echo "$cmd\n";
-        $this->_systemCheckRet($cmd);
     }
 
     public function upAction()

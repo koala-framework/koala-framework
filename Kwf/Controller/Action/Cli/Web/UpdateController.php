@@ -49,17 +49,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
         echo "Update\n";
 
-        if (in_array('kwf', Kwf_Registry::get('config')->server->updateTags->toArray())) {
-            if (!file_exists('.git') && Kwf_Registry::get('config')->application->id!='zeiterfassung') {
-                echo "\n\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-                echo "ACHTUNG web (und eventuell kwf) wurden auf git umgestellt.\n";
-                system("php bootstrap.php git convert-to-git", $ret);
-                if ($ret) {
-                    throw new Kwf_ClientException("Git konvertierung fehlgeschlagen! Bitte manuell konvertieren.");
-                }
-            }
-        }
-
         $from = 1;
         $to = 9999999;
         if ($rev) {
