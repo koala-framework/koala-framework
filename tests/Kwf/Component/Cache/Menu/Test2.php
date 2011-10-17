@@ -56,15 +56,13 @@ class Kwf_Component_Cache_Menu_Test2 extends Kwc_TestAbstract
         $page = $this->_root->getComponentById('1');
         $html = $page->render(true, true);
 
-        $this->markTestIncomplete('eventscache');
-
         $row = $this->_root->getGenerator('page')->getModel()->createRow(array(
-            'id'=>5, 'pos'=>3, 'visible'=>true, 'name'=>'f5', 'filename' => 'f5',
+            'pos'=>3, 'visible'=>true, 'name'=>'f5', 'filename' => 'f5',
                   'parent_id'=>'root', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'custom_filename' => null
         ));
         $row->save();
         $row = $this->_root->getGenerator('page')->getModel()->createRow(array(
-            'id'=>6, 'pos'=>3, 'visible'=>true, 'name'=>'f6', 'filename' => 'f6',
+            'pos'=>3, 'visible'=>true, 'name'=>'f6', 'filename' => 'f6',
                   'parent_id'=>1, 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'custom_filename' => null
         ));
         $row->save();
@@ -72,7 +70,7 @@ class Kwf_Component_Cache_Menu_Test2 extends Kwc_TestAbstract
         $html = $page->render(true, true);
         //p($html);
         $this->assertEquals(5, substr_count($html, '<li'));
-        $this->assertEquals(4, substr_count($html, 'g1'));
+        $this->assertEquals(4, substr_count($html, 'f1'));
         $this->assertEquals(2, substr_count($html, 'f6'));
         $this->assertEquals(2, substr_count($html, 'f4'));
         $this->assertEquals(2, substr_count($html, 'f5'));
