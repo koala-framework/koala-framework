@@ -15,12 +15,12 @@ abstract class Kwf_Component_Abstract_MenuConfig_Abstract
     public static function getInstance($componentClass)
     {
         static $instances = array();
-        if (!isset($instances[$componentClass.'-'.$setting])) {
-            $c = Kwc_Abstract::getSetting($componentClass, $setting);
+        if (!isset($instances[$componentClass])) {
+            $c = Kwc_Abstract::getSetting($componentClass, 'menuConfig');
             if (!$c) throw new Kwf_Exception("extConfig not set");
-            $instances[$componentClass.'-'.$setting] = new $c($componentClass);
+            $instances[$componentClass] = new $c($componentClass);
         }
-        return $instances[$componentClass.'-'.$setting];
+        return $instances[$componentClass];
     }
 
     protected final function _getSetting($name)
