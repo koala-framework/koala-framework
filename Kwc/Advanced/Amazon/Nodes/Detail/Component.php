@@ -10,8 +10,12 @@ class Kwc_Advanced_Amazon_Nodes_Detail_Component extends Kwc_Directories_List_Co
 
     public static function getItemDirectoryClasses($directoryClass)
     {
+        $ret = array();
         $class = self::_getParentItemDirectoryClasses($directoryClass, 1);
-        return array(Kwc_Abstract::getChildComponentClass($class, 'products'));
+        foreach ($class as $c) {
+            $ret[] = Kwc_Abstract::getChildComponentClass($c, 'products');
+        }
+        return $ret;
     }
 
     protected function _getItemDirectory()
