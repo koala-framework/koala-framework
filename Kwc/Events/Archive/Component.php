@@ -16,6 +16,16 @@ class Kwc_Events_Archive_Component extends Kwc_Directories_List_Component
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        $classes = self::_getParentItemDirectoryClasses($directoryClass, 1);
+        $ret = array();
+        foreach ($classes as $class) {
+            $ret = array_merge($ret, call_user_func(array($class, 'getItemDirectoryClasses'), $class));
+        }
+        return $ret;
+    }
+
     protected function _getItemDirectory()
     {
         return $this->getData()->parent->getComponent()->getItemDirectory();

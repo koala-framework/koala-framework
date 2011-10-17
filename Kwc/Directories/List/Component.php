@@ -45,7 +45,26 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
 
     protected static function _getParentItemDirectoryClasses($directoryClass, $steps = null)
     {
-        throw new Kwf_Exception_NotYetImplemented();
+        $ret = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwc_Abstract::getChildComponentClasses($class) as $childClass) {
+                if ($childClass == $directoryClass) {
+                    if ($steps === 0) {
+                        $ret[] = $class;
+                    } else if (is_null($steps)) {
+                        if (is_instance_of($class, 'Kwc_Directories_Item_Directory_Component')) {
+                            $ret[] = $class;
+                        }
+                    } else {
+                        $ret = array_merge(
+                            $ret,
+                            self::_getParentItemDirectoryClasses($directoryClass, $steps - 1)
+                        );
+                    }
+                }
+            }
+        }
+        return $ret;
     }
 
     public function getSelect()

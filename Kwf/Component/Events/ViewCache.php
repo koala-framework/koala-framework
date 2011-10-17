@@ -46,10 +46,6 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'event' => 'Kwf_Component_Event_Media_Changed',
             'callback' => 'onMediaChanged'
         );
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
-            'callback' => 'onComponentClassContentChange'
-        );
         return $ret;
     }
 
@@ -59,7 +55,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             $select = new Kwf_Model_Select();
             $or = array();
             foreach ($this->_updates as $key => $values) {
-                if (is_string($key)) {
+                if ($key === 'db_id') {
                     $or[] = new Kwf_Model_Select_Expr_Equal($key, array_unique($values));
                 } else {
                     $and = array();
@@ -82,11 +78,6 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
         $this->_updates['db_id'][] = $event->dbId;
-    }
-
-    public function onComponentClassContentChange(Kwf_Component_Event_ComponentClass_ContentChanged $event)
-    {
-        $this->_updates['component_class'][] = $event->class;
     }
 
     public function onPageChanged(Kwf_Component_Event_Page_ContentChanged $event)

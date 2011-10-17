@@ -116,7 +116,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getPartialClass()
+    public static function getPartialClass()
     {
         return $this->getData()->chained->getComponent()->getPartialClass();
     }

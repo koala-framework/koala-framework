@@ -14,6 +14,11 @@ class Kwc_Box_Tags_RelatedNews_Component extends Kwc_Directories_List_Component
         return 'Kwc_News_Directory_Component';
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        return array('Kwc_News_Directory_Component');
+    }
+
     public function getSelect()
     {
         $ret = parent::getSelect();

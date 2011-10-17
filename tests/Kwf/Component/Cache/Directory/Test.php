@@ -34,7 +34,7 @@ class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
         $this->assertEquals('2 d1d2', $dir->render());
     }
 
-    public function testDirectory()
+    public function testDirectory1()
     {
         $root = $this->_root;
         $dir = $root->getChildComponent('_dir');

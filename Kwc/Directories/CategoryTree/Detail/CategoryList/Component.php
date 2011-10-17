@@ -10,6 +10,11 @@ class Kwc_Directories_CategoryTree_Detail_CategoryList_Component
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        return self::_getParentItemDirectoryClasses($directoryClass, 2);
+    }
+
     protected function _getItemDirectory()
     {
         return $this->getData()->parent->parent;

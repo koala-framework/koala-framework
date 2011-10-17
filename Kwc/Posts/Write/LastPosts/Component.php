@@ -9,6 +9,11 @@ class Kwc_Posts_Write_LastPosts_Component extends Kwc_Directories_List_Component
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        return self::_getParentItemDirectoryClasses($directoryClass, 2);
+    }
+
     protected function _getItemDirectory()
     {
         return $this->getData()->parent->parent;
