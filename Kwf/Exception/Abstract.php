@@ -14,7 +14,11 @@ abstract class Kwf_Exception_Abstract extends Exception
 
     public static function isDebug()
     {
-        return !Kwf_Config::getValue('debug.error.log');
+        try {
+            return !Kwf_Config::getValue('debug.error.log');
+        } catch (Exception $e) {
+            return true;
+        }
     }
 
     public function getException()
@@ -72,7 +76,6 @@ abstract class Kwf_Exception_Abstract extends Exception
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
             $_SERVER['REQUEST_URI'] : '' ;
         $view->debug = Kwf_Exception::isDebug();
-
         $header = $this->getHeader();
         $template = $this->getTemplate();
         $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
