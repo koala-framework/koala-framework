@@ -195,7 +195,7 @@ class Kwf_Util_Check_Config
 
     private static function _setup_kwf()
     {
-        Kwf_Setup::setUpKwf();
+        Kwf_Registry::get('config');
     }
 
     private static function _db_connection()

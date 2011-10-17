@@ -68,23 +68,6 @@ class Kwf_Util_Setup
         $ret .= "set_include_path('$ip');\n";
         $ret .= "\n";
         $ret .= "\n";
-        $ret .= "//here to be as fast as possible (and have no session)\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 25) == '/kwf/json-progress-status'\n";
-        $ret .= ") {\n";
-        $ret .= "    Kwf_Util_ProgressBar_DispatchStatus::dispatch();\n";
-        $ret .= "}\n";
-        $ret .= "\n";
-        $ret .= "//here to have less dependencies\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 17) == '/kwf/check-config'\n";
-        $ret .= ") {\n";
-        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
-        $ret .= "}\n";
-        $ret .= "if (php_sapi_name() == 'cli' && isset(\$_SERVER['argv'][1]) && \$_SERVER['argv'][1] == 'check-config') {\n";
-        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
-        $ret .= "}\n";
-        $ret .= "\n";
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
         $ret .= "\n";
         $ret .= "Kwf_Setup::\$configClass = '$configClass';\n";
@@ -92,6 +75,26 @@ class Kwf_Util_Setup
         if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
             $ret .= "Kwf_Config::checkMasterFiles();\n";
         }
+        $ret .= "\n";
+        $ret .= "//here to be as fast as possible (and have no session)\n";
+        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 25) == '/kwf/json-progress-status'\n";
+        $ret .= ") {\n";
+        $ret .= "    require_once('Kwf/Util/ProgressBar/DispatchStatus.php');\n";
+        $ret .= "    Kwf_Util_ProgressBar_DispatchStatus::dispatch();\n";
+        $ret .= "}\n";
+        $ret .= "\n";
+        $ret .= "//here to have less dependencies\n";
+        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 17) == '/kwf/check-config'\n";
+        $ret .= ") {\n";
+        $ret .= "    require_once('Kwf/Util/Check/Config.php');\n";
+        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
+        $ret .= "}\n";
+        $ret .= "if (php_sapi_name() == 'cli' && isset(\$_SERVER['argv'][1]) && \$_SERVER['argv'][1] == 'check-config') {\n";
+        $ret .= "    require_once('Kwf/Util/Check/Config.php');\n";
+        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
+        $ret .= "}\n";
 
         if (Kwf_Config::getValue('debug.benchmark')) {
             //vor registerAutoload aufrufen damit wir dort benchmarken können
