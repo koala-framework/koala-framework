@@ -17,9 +17,8 @@ class Kwf_Component_Cache_Directory_TestDbIdShortcut extends Kwc_TestAbstract
 
         $this->assertEquals('1 d1', $dir->render());
 
-        $dirModel->import(Kwf_Model_Abstract::FORMAT_ARRAY, array(
-            array('id' => 2, 'content' => 'd2')
-        ));
+        $row = $dirModel->createRow(array('id' => 2, 'content' => 'd2'));
+        $row->save();
         $this->_process();
         $this->assertEquals('2 d1d2', $dir->render());
     }

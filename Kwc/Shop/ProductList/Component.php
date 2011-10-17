@@ -11,6 +11,20 @@ class Kwc_Shop_ProductList_Component extends Kwc_Directories_List_Component
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        return self::_getParentItemDirectoryClasses($directoryClass, 4);
+    }
+
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        $ret = array();
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass('Kwc_Shop_Products_Directory_Component') as $component) {
+            $ret[] = $component->componentClass;
+        }
+        return $ret;
+    }
+
     protected function _getItemDirectory()
     {
         return Kwf_Component_Data_Root::getInstance()

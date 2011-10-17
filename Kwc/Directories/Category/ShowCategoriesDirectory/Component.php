@@ -11,6 +11,12 @@ class Kwc_Directories_Category_ShowCategoriesDirectory_Component extends Kwc_Dir
         $ret['useDirectorySelect'] = false;
         return $ret;
     }
+
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        return array($directoryClass);
+    }
+
     protected function _getItemDirectory()
     {
         return $this->getData();

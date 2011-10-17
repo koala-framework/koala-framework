@@ -35,7 +35,7 @@ class Kwc_Abstract_ListRandom_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
-    public function getPartialClass()
+    public static function getPartialClass()
     {
         return 'Kwf_Component_Partial_Random';
     }

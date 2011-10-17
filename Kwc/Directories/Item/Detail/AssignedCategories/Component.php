@@ -11,6 +11,12 @@ class Kwc_Directories_Item_Detail_AssignedCategories_Component
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        $class = self::_getParentItemDirectoryClasses($directoryClass, 2);
+        return array(Kwc_Abstract::getChildComponentClass($class, 'category'));
+    }
+
     protected function _getItemDirectory()
     {
         return $this->_getItemDetail()->parent->getChildComponent('_category');
