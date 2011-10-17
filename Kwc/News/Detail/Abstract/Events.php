@@ -16,7 +16,7 @@ class Kwc_News_Detail_Abstract_Events extends Kwc_Abstract_Events
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
     {
         $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-            $this->_class, $event->getParentComponentId($event->dbId)
+            $this->_class, $event->getParentDbId()
         ));
     }
 }
