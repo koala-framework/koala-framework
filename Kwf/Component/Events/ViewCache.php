@@ -15,6 +15,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onContentChange'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_RecursiveContentChanged',
+            'callback' => 'onRecursiveContentChange'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Page_NameChanged',
             'callback' => 'onPageChanged'
         );
@@ -78,6 +82,15 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
         $this->_updates['db_id'][] = $event->dbId;
+    }
+
+    public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'component',
+            'component_id' => $event->componentId . '%',
+            'component_class' => $event->class
+        );
     }
 
     public function onPageChanged(Kwf_Component_Event_Page_ContentChanged $event)
