@@ -237,8 +237,24 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
     {
         $out = '';
         foreach ($this->_parts as $type=>$p) {
-            $out .= "\n";
-            $out .= "$type => "._btArgString($p).", ";
+            if (is_array($p)) {
+                $out .= "\n";
+                $out .= "$type => array(\n";
+                foreach ($p as $k=>$i) {
+                    $out .= '    ';
+                    if ($i instanceof Kwf_Model_Select_Expr_Interface) {
+                        if (!is_int($k)) $out .= $k.' => ';
+                        $out .= _pArray($i, '    ');
+                    } else {
+                        $out .= $k.' => '._btArgString($i);
+                    }
+                    $out .= ",\n";
+                }
+                $out .= "),\n";
+            } else {
+                $out .= "\n";
+                $out .= "$type => "._btArgString($p).", ";
+            }
         }
         $out = trim($out, ', ');
         $ret = '<pre>'.get_class($this).'('.$out."\n)</pre>";
