@@ -12,7 +12,7 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
     {
         parent::_addValidators();
         $store = $this->_getStoreData();
-        if (isset($store['data'])) {
+        if (isset($store['data']) && $store['data']) {
             $a = array('');
             foreach ($store['data'] as $r) {
                 $a[] = $r[0];
