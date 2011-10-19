@@ -66,6 +66,10 @@ abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Aut
         $this->_form->initFields();
         $this->_form->trlStaticExecute();
 
+        if (!$this->_form->fields->first() instanceof Kwf_Form_Container_Tabs) {
+            $this->_form->setBodyStyle('padding: 10px;');
+        }
+
         if (!$this->_form->getId()) {
             if (is_array($this->_form->getPrimaryKey())) {
                 foreach ($this->_form->getPrimaryKey() as $key) {
