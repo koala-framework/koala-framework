@@ -4,8 +4,8 @@ document.write('<style type="text/css"> div.kwfSwitchDisplay div.switchContent {
 Kwf.onContentReady(function() {
     var els = Ext.query('div.kwfSwitchDisplay');
     els.forEach(function(el) {
+        el = Ext.get(el);
         if (!el.switchDisplayObject) {
-            el = Ext.get(el);
             el.switchDisplayObject = new Kwf.Switch.Display(el);
         }
     });
