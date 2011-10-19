@@ -81,7 +81,6 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         Ext.applyIf(meta.form, this.formConfig);
 
         if (this.baseCls) meta.form.baseCls = this.baseCls; //use the same
-        Ext.applyIf(meta.form, { bodyStyle: 'padding: 10px;'});
 
         for (var i in this.actions) {
             if (!meta.permissions[i] && this.getAction(i).hide) {
