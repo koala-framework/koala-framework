@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_35006 extends Vps_Update
+class Vps_Update_35007 extends Vps_Update
 {
     protected $_tags = array('vpc');
     public function update()
