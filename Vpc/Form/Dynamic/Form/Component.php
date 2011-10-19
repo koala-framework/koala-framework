@@ -42,6 +42,12 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
         return new Vpc_Form_Dynamic_Form_MailModel($config);
     }
 
+    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    {
+        parent::_beforeInsert($row);
+        $row->component_id = $this->getData()->parent->dbId;
+    }
+
     protected function _afterInsert(Vps_Model_Row_Interface $row)
     {
         parent::_afterInsert($row);
@@ -92,6 +98,7 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
                 }
             }
         }
+
         $row->sent_mail_content_text = $msg;
 
         $row->sendMail(); //manuell aufrufen weils beim speichern nicht automatisch gemacht wird (da da der content nocht nicht vorhanden ist)
