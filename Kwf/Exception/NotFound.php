@@ -36,14 +36,18 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
 
     public function render($ignoreCli = false)
     {
-        if (isset($_SERVER['REQUEST_URI']) && Kwf_Registry::get('db')) {
-            $target = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')
-                ->findRedirectUrl('path', $_SERVER['REQUEST_URI']);
-            if ($target) {
-                header('Location: '.$target, true, 301);
-                exit;
+        try {
+            if (isset($_SERVER['REQUEST_URI']) && Kwf_Registry::get('db')) {
+                $target = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')
+                    ->findRedirectUrl('path', $_SERVER['REQUEST_URI']);
+                if ($target) {
+                    header('Location: '.$target, true, 301);
+                    exit;
+                }
             }
+            parent::render($ignoreCli);
+        } catch (Exception $e) {
+            Kwf_Debug::handleException($e);
         }
-        parent::render($ignoreCli);
     }
 }
