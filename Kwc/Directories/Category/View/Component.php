@@ -7,6 +7,9 @@ class Kwc_Directories_Category_View_Component
         $ret = parent::getSettings();
         $ret['placeholder']['linkPrefix'] = '';
         $ret['hideCategoriesWithoutEntries'] = false;
+        // Setting hideCategoriesWithoutEntries on true doesn't work correctly
+        // It's fixed in Lofer, but probably to slow to use it everywhere, @author Franz
+        // better solution would be to fetch listCount by a subquery
         return $ret;
     }
 

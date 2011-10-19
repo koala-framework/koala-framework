@@ -7,6 +7,8 @@ class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwf('Code Syntax Highlighted');
         $ret['componentIcon'] = new Kwf_Asset('page_code');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        $ret['cssClass'] = ' webListNone';
         return $ret;
     }
 

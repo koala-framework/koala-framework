@@ -17,7 +17,6 @@ class Kwf_Component_Cache_DynamicWithPartialId_Test extends Kwc_TestAbstract
 
         Kwf_Component_Cache_DynamicWithPartialId_TestComponent_Component::$ids = array(2, 4);
         $html = $c->render();
-        $this->markTestIncomplete();
         $this->assertContains('Partial2-1 :: Partial4-2', $html);
     }
 }
