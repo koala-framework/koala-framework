@@ -1,24 +1,6 @@
 <?php
 class Kwc_Basic_Text_Admin extends Kwc_Admin
 {
-    public function setup()
-    {
-        //TODO: kann das ned einfach für alle unterkomponenten gemacht werden?!
-        $generators = Kwc_Abstract::getSetting($this->_class, 'generators');
-        if ($generators['child']['component']['link']) {
-            Kwc_Admin::getInstance($generators['child']['component']['link'])->setup();
-        }
-        if ($generators['child']['component']['image']) {
-            Kwc_Admin::getInstance($generators['child']['component']['image'])->setup();
-        }
-        if ($generators['child']['component']['download']) {
-            Kwc_Admin::getInstance($generators['child']['component']['download'])->setup();
-        }
-
-        $fields['content'] = 'text NOT NULL';
-        $this->createFormTable('kwc_basic_text', $fields);
-    }
-
     public function duplicate($source, $target)
     {
         if (!$source->getComponent()->getModel()->getRow($source->dbId)) {
