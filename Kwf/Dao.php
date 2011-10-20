@@ -9,17 +9,7 @@ class Kwf_Dao
     public function __construct(array $config = null)
     {
         if (is_null($config)) {
-            $cacheId = 'dbconfig';
-            $config = Kwf_Cache_Simple::fetch($cacheId, $success);
-            if (!$success) {
-                if (file_exists('config.db.ini')) {
-                    $config = new Zend_Config_Ini('config.db.ini', 'database');
-                    $config = $config->toArray();
-                } else {
-                    $config = array();
-                }
-                Kwf_Cache_Simple::add($cacheId, $config);
-            }
+            $config = Kwf_Config::getValueArray('database');
         }
         $this->_config = $config;
     }
@@ -39,8 +29,8 @@ class Kwf_Dao
     public function getDbConfig($db = 'web')
     {
         if (!isset($this->_config[$db])) {
-            throw new Kwf_Dao_Exception("Connection \"$db\" in config.db.ini not found.
-                    Please add $db.host, $db.username, $db.password and $db.dbname under the sction [database].");
+            throw new Kwf_Dao_Exception("Connection \"$db\" in config not found.
+                    Please add database.$db.host, database.$db.username, database.$db.password and database.$db.dbname to config.local.ini.");
         }
         $dbConfig = $this->_config[$db];
         if (!isset($dbConfig['username']) && isset($dbConfig['user'])) $dbConfig['username'] = $dbConfig['user'];
