@@ -133,7 +133,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             }
         }
         if (!$doneNames) {
-            throw new Kwf_ClientException("Invalid update revision");
+            //it's ok to have no updates throw new Kwf_ClientException("Invalid update revision");
         }
         return $doneNames;
     }
