@@ -49,6 +49,22 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
         echo "Update\n";
 
+        if (file_exists('config.db.ini')) {
+            $db = file_get_contents('config.db.ini');
+            if (file_exists('config.local.ini')) {
+                $c = file_get_contents('config.local.ini');
+            } else {
+                $c = "[production]\n";
+            }
+            $c .= "\n";
+            $db = str_replace("[database]\n", '', $db);
+            foreach (explode("\n", trim($db)) as $line) {
+                if (trim($line)) $c .= "database.".$line."\n";
+            }
+            file_put_contents('config.local.ini', $c);
+            unlink('config.db.ini');
+        }
+
         $from = 1;
         $to = 9999999;
         if ($rev) {

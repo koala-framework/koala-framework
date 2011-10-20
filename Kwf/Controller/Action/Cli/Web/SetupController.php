@@ -20,7 +20,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
         }
 
         if (!Kwf_Registry::get('db')) {
-            throw new Kwf_Exception_Client("Database not configured: create a config.db.ini");
+            throw new Kwf_Exception_Client("Database not configured: create a config.local.ini containing database connection.");
         }
 
         try {

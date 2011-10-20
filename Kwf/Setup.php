@@ -82,12 +82,8 @@ class Kwf_Setup
         static $ret;
         if (isset($ret)) return $ret;
 
-        $cacheId = 'hasDb';
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
-        if (!$success) {
-            $ret = file_exists('config.db.ini');
-            Kwf_Cache_Simple::add($cacheId, $ret);
-        }
+        $config = Kwf_Config::getValueArray('database');
+        $ret = isset($config['web']);
         return $ret;
     }
 
