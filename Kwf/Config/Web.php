@@ -102,7 +102,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             $webPath = '.';
         }
 
-        $webSection = $this->_getWebSection($section, $webPath);
+        $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
         $kwfSection = $this->_getKwfSection($section, $webPath, $kwfPath);
         if (!$kwfSection) {
             require_once 'Kwf/Exception.php';
@@ -146,9 +146,9 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         return $this->_section;
     }
 
-    protected function _getWebSection($section, $webPath)
+    protected function _getWebSection($section, $configFile)
     {
-        $webConfigSections = array_keys(parse_ini_file($webPath.'/config.ini', true));
+        $webConfigSections = array_keys(parse_ini_file($configFile, true));
         foreach ($webConfigSections as $i) {
             if ($i == $section
                 || substr($i, 0, strlen($section)+1)==$section.' '
@@ -163,7 +163,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     protected function _getKwfSection($section, $webPath, $kwfPath)
     {
         $kwfSection = false;
-        $webSection = $this->_getWebSection($section, $webPath);
+        $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
         $webConfig = parse_ini_file($webPath.'/config.ini', true);
         foreach ($webConfig as $i=>$cfg) {
             if ($i == $webSection
@@ -193,9 +193,10 @@ class Kwf_Config_Web extends Kwf_Config_Ini
 
     protected function _mergeWebConfig($section, $webPath)
     {
-        $webSection = $this->_getWebSection($section, $webPath);
+        $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
         self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));
         if (file_exists($webPath.'/config.local.ini')) {
+            $webSection = $this->_getWebSection($section, $webPath.'/config.local.ini');
             self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.local.ini', $webSection));
         }
     }
