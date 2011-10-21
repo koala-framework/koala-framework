@@ -47,9 +47,6 @@ class Kwc_Basic_Html_Component extends Kwc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
-        if (Kwc_Abstract::hasSetting(get_class($this), 'default')) {
-            throw new Kwf_Exception("Setting 'default' doesn't exist anymore for ".get_class($this).", you need to overwrite the Model.");
-        }
         $ret = parent::getTemplateVars();
         $ret['content'] = $this->_getContent();
         return $ret;
