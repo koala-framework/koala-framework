@@ -4,20 +4,52 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
     protected $_buttons = array();
     protected $_permissions = array('save', 'add');
 
-    public function _initFields()
+    protected function _initFields()
     {
-        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigTabs') ||
-            is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigTabs'))
+        $class = $this->_getParam('class');
+        $this->_form->setModel(Vpc_Abstract::createChildModel($class));
+        $this->_form->setIdTemplate(null);
+
+        if (is_instance_of(
+                Vpc_Abstract::getSetting($class, 'extConfig'),
+                'Vpc_Directories_Item_Directory_ExtConfigTabs'
+            ) || is_instance_of(
+                Vpc_Abstract::getSetting($class, 'extConfigControllerIndex'),
+                'Vpc_Directories_Item_Directory_ExtConfigTabs'
+            ))
         {
             $this->_buttons['save'] = true;
         }
-        $this->_form = Vpc_Abstract_Form::createChildComponentForm(
-                $this->_getParam('class'), '-detail', $this->_getParam('class'));
-        $this->_form->setIdTemplate(null);
 
-        $this->_form->setModel(Vpc_Abstract::createChildModel($this->_getParam('class')));
+        $detailClasses = Vpc_Abstract::getChildComponentClasses($class, 'detail');
+        $forms = array();
+        foreach ($detailClasses as $key => $detailClass) {
+            $form = Vpc_Abstract_Form::createComponentForm($detailClass, $class);
+            $form->setIdTemplate('{0}');
+            $form->setModel(Vpc_Abstract::createChildModel($class));
+            $forms[$key] = $form;
+        }
 
-        $classes = Vpc_Abstract::getChildComponentClasses($this->_getParam('class'));
+        if (count($forms) == 1) {
+            $this->_form->add(reset($forms));
+        } else {
+            $cards = $this->_form->add(new Vps_Form_Container_Cards('component', trlVps('Type')))
+                ->setDefaultValue(reset(array_keys($detailClasses)));
+            $cards->getCombobox()
+                ->setWidth(250)
+                ->setListWidth(250)
+                ->setAllowBlank(false);
+            foreach ($forms as $key => $form) {
+                $card = $cards->add();
+                $card->add($form);
+                $card->setTitle(Vpc_Abstract::getSetting($form->getClass(), 'componentName'));
+                $card->setName($key);
+                $card->setNamePrefix($key);
+            }
+            $cards->getCombobox()->getData()->cards = $cards->fields;
+        }
+
+        $classes = Vpc_Abstract::getChildComponentClasses($class);
         foreach ($classes as $class) {
             $formName = Vpc_Admin::getComponentClass($class, 'ItemEditForm');
             if ($formName) {

@@ -14,19 +14,20 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
         this.on('cellclick', function(grid, rowIndex, columnIndex, e) {
             var col = grid.getColumnModel().config[columnIndex];
             if (col.columnType != 'editContent') return;
-
             var row = grid.getStore().getAt(rowIndex);
-            var componentId = col.editIdTemplate.replace('{0}', row.data.id);
-            componentId = componentId.replace('{componentId}', this.getBaseParams().componentId);
-            this.fireEvent('editcomponent', {
-                componentClass: col.editComponentClass,
-                type: col.editType,
-                componentIdSuffix: col.editComponentIdSuffix,
-                editComponents: this.contentEditComponents,
-                componentId: componentId,
-                text: trlVps('Details') //TODO stimmt des?
-            });
-
+            if (row.get(col.dataIndex) != 'invisible') {
+                var componentId = col.editIdTemplate.replace('{0}', row.data.id);
+                componentId = componentId.replace('{componentId}', this.getBaseParams().componentId);
+                var editComponent = {
+                    componentClass: col.editComponentClass,
+                    type: col.editType,
+                    componentIdSuffix: col.editComponentIdSuffix,
+                    editComponents: this.contentEditComponents,
+                    componentId: componentId,
+                    text: trlVps('Details') //TODO stimmt des?
+                }
+                this.fireEvent('editcomponent', editComponent);
+            }
         }, this);
 
         this.fireEvent('gotComponentConfigs', this.componentConfigs);

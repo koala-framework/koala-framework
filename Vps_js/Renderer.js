@@ -141,15 +141,17 @@ Ext.util.Format.mouseoverPic = function(v, p, record){
 };
 
 Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
-    if (column && column.noIconWhenNew && !record.data.id) {
-        p.attr += 'style="background-image:none;" ';
-    } else {
-        p.css += 'vps-cell-button';
-        if (column && column.buttonIcon) {
-            p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
-        }
-        if (column && column.tooltip) {
-            p.attr += ' ext:qtip="'+column.tooltip+'"';
+    if (value != 'invisible') {
+        if (column && column.noIconWhenNew && !record.data.id) {
+            p.attr += 'style="background-image:none;" ';
+        } else {
+            p.css += 'vps-cell-button';
+            if (column && column.buttonIcon) {
+                p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
+            }
+            if (column && column.tooltip) {
+                p.attr += ' ext:qtip="'+column.tooltip+'"';
+            }
         }
     }
     return '';

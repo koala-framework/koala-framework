@@ -21,7 +21,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             ->setRenderer('component');
         $this->_columns->add(new Vps_Grid_Column_Visible());
         $this->_columns->add(new Vps_Grid_Column('edit_components'))
-            ->setData(new Vpc_Paragraphs_EditComponentsData($this->_getParam('class')));
+            ->setData(new Vps_Data_Vpc_EditComponents($this->_getParam('class')));
     }
 
     public function jsonDataAction()
