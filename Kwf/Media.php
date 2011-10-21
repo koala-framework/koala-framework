@@ -147,6 +147,6 @@ class Kwf_Media
 
     public static function createCacheId($class, $id, $type)
     {
-        return str_replace('.', '___', $class) . '_' . str_replace('-', '__', $id) . '_' . $type;
+        return str_replace(array('.', '>'), array('___', '____'), $class) . '_' . str_replace('-', '__', $id) . '_' . $type;
     }
 }
