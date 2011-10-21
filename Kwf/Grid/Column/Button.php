@@ -1,6 +1,9 @@
 <?php
 class Kwf_Grid_Column_Button extends Kwf_Grid_Column
 {
+    const BUTTON_VISIBLE = 'visible';
+    const BUTTON_INVISIBLE = 'invisible';
+
     public function __construct($dataIndex = null, $header = '', $width = 30)
     {
         parent::__construct($dataIndex, $header, $width);
@@ -12,6 +15,6 @@ class Kwf_Grid_Column_Button extends Kwf_Grid_Column
 
     public function load($row, $role)
     {
-        return null;
+        return self::BUTTON_VISIBLE;
     }
 }

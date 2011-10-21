@@ -4,20 +4,52 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
     protected $_buttons = array();
     protected $_permissions = array('save', 'add');
 
-    public function _initFields()
+    protected function _initFields()
     {
-        if (is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Kwc_Directories_Item_Directory_ExtConfigTabs') ||
-            is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Kwc_Directories_Item_Directory_ExtConfigTabs'))
+        $class = $this->_getParam('class');
+        $this->_form->setModel(Kwc_Abstract::createChildModel($class));
+        $this->_form->setIdTemplate(null);
+
+        if (is_instance_of(
+                Kwc_Abstract::getSetting($class, 'extConfig'),
+                'Kwc_Directories_Item_Directory_ExtConfigTabs'
+            ) || is_instance_of(
+                Kwc_Abstract::getSetting($class, 'extConfigControllerIndex'),
+                'Kwc_Directories_Item_Directory_ExtConfigTabs'
+            ))
         {
             $this->_buttons['save'] = true;
         }
-        $this->_form = Kwc_Abstract_Form::createChildComponentForm(
-                $this->_getParam('class'), '-detail', $this->_getParam('class'));
-        $this->_form->setIdTemplate(null);
 
-        $this->_form->setModel(Kwc_Abstract::createChildModel($this->_getParam('class')));
+        $detailClasses = Kwc_Abstract::getChildComponentClasses($class, 'detail');
+        $forms = array();
+        foreach ($detailClasses as $key => $detailClass) {
+            $form = Kwc_Abstract_Form::createComponentForm($detailClass, $class);
+            $form->setIdTemplate('{0}');
+            $form->setModel(Kwc_Abstract::createChildModel($class));
+            $forms[$key] = $form;
+        }
 
-        $classes = Kwc_Abstract::getChildComponentClasses($this->_getParam('class'));
+        if (count($forms) == 1) {
+            $this->_form->add(reset($forms));
+        } else {
+            $cards = $this->_form->add(new Kwf_Form_Container_Cards('component', trlKwf('Type')))
+                ->setDefaultValue(reset(array_keys($detailClasses)));
+            $cards->getCombobox()
+                ->setWidth(250)
+                ->setListWidth(250)
+                ->setAllowBlank(false);
+            foreach ($forms as $key => $form) {
+                $card = $cards->add();
+                $card->add($form);
+                $card->setTitle(Kwc_Abstract::getSetting($form->getClass(), 'componentName'));
+                $card->setName($key);
+                $card->setNamePrefix($key);
+            }
+            $cards->getCombobox()->getData()->cards = $cards->fields;
+        }
+
+        $classes = Kwc_Abstract::getChildComponentClasses($class);
         foreach ($classes as $class) {
             $formName = Kwc_Admin::getComponentClass($class, 'ItemEditForm');
             if ($formName) {
