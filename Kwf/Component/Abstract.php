@@ -122,7 +122,7 @@ class Kwf_Component_Abstract
     private static function _mergeSettings(&$settings, $mergeSettings)
     {
         foreach ($mergeSettings as $k=>$i) {
-            if ($k=='_merge') {
+            if ((string)$k=='_merge') {
                 //ignore, not a setting; only for controling merging
                 continue;
             }
@@ -137,14 +137,10 @@ class Kwf_Component_Abstract
                 */
                 if (isset($i['_merge']) && $i['_merge'] == 'reset') {
                     $settings[$k] = array(); //no merge; empty parent settings
+                } else if (!isset($settings[$k])) {
+                    $settings[$k] = array();
                 } else {
-                    $keys = array_keys($settings[$k]);
-                    if ($keys[0] == 0) {
-                        $settings[$k] = array(); //array; no merge; empty parent settings
-                    } else {
-                        //keep $settings[$k]
-                        if (!isset($settings[$k])) $settings[$k] = array();
-                    }
+                    if (!isset($settings[$k])) $settings[$k] = array();
                 }
                 self::_mergeSettings($settings[$k], $i);
             } else {
@@ -293,7 +289,7 @@ class Kwf_Component_Abstract
                             $csKeys = explode('.', substr($csKeys, strlen($childSettingsKey)+1));
                             $csKey = explode('_', $csKeys[0]); //just the first
                             if (!isset($ret[$csKey[0]])) {
-                                throw new Kwf_Exception("invalid childSetting; generator '$csKey[0]' does not exist");
+                                throw new Kwf_Exception("invalid childSetting; generator '$csKey[0]' does not exist for '$class'");
                             }
                             if (is_array($ret[$csKey[0]]['component'])) {
                                 if (!isset($csKey[1])) {
