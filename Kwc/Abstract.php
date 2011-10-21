@@ -424,6 +424,8 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
      */
     public function getContentWidth()
     {
+        if ($this->_hasSetting('contentWidth')) return $this->_getSetting('contentWidth');
+
         if ($this->getData()->isPage) {
             $p = $this->getData();
             while ($p->parent) $p = $p->parent; //root suchen TODO: wenn mehrere Master-tpl da stoppen
