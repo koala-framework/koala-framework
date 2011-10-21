@@ -71,7 +71,7 @@ class Kwf_Component_Abstract
     {
         $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
         if (!class_exists($c)) {
-            $file = str_replace('_', '/', $c).'.yml';
+            $file = 'components/'.str_replace('_', '/', $c).'.yml';
             if (file_exists($file)) {
                 $input = file_get_contents($file);
                 $yaml = new sfYamlParser();
@@ -87,7 +87,7 @@ class Kwf_Component_Abstract
                     throw new Kwf_Exception("'$file' base class '$settings[base]' does not exist");
                 }
                 $code = "<?php\nclass $c extends $settings[base]\n{\n";
-                $code .= "    public static _getYamlConfigFile() { return '$file'; }\n";
+                $code .= "    public static function _getYamlConfigFile() { return '$file'; }\n";
                 $code .= "}\n";
                 $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
                 mkdir(substr($classFile, 0, strrpos($classFile, '/')), 0777, true);
