@@ -15,7 +15,7 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->add(new Zend_Acl_Resource('kwf_component_benchmark'));
         $this->add(new Zend_Acl_Resource('kwf_component_show-component'));
         $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_pages',
-            array('text'=>trlKwf('Sitetree'), 'icon'=>'application_side_tree.png'),
+            array('text'=>trlKwf('Page tree'), 'icon'=>'application_side_tree.png'),
             '/admin/component/pages'));
             $this->add(new Zend_Acl_Resource('kwf_component_page'), 'kwf_component_pages');
             $this->add(new Zend_Acl_Resource('kwf_component_components'),
