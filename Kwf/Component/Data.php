@@ -301,9 +301,13 @@ class Kwf_Component_Data
         }
 
         if ($staticGeneratorComponentClasses) {
-            $pd = $this->getRecursiveChildComponents(array(
+            $pdSelect = array(
                 'componentClasses' => $staticGeneratorComponentClasses
-            ), $childSelect);
+            );
+            if ($select->hasPart('ignoreVisible')) {
+                $pdSelect['ignoreVisible'] = $select->getPart('ignoreVisible');
+            }
+            $pd = $this->getRecursiveChildComponents($pdSelect, $childSelect);
             foreach ($generators as $k=>$g) {
                 if ($g['static']) {
                     $parentDatas = array();

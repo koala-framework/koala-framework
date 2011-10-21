@@ -65,7 +65,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
 
         $searchForm = $this->_getSearchForm();
         if ($searchForm && $this->getPartialClass() != 'Kwf_Component_Partial_Id') {
-            throw new Vps_Exception(get_class($this) . ': if search-form ist used, you also have to use PartialId (use Setting "partialClass")');
+            throw new Kwf_Exception(get_class($this) . ': if search-form ist used, you also have to use PartialId (use Setting "partialClass")');
         }
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
             $values = $searchForm->getComponent()->getFormRow()->toArray();

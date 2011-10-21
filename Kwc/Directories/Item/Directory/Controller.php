@@ -43,14 +43,22 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
 
             $extConfig = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
                         ->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
+
             $extConfig = $extConfig['items'];
+            if (count($extConfig['contentEditComponents']) > 1 && !$this->_getModel()->hasColumn('component')) {
+                throw new Kwf_Exception('If you have more than one detail-component your table has to have a column named "component"');
+            }
+            if (count($extConfig['contentEditComponents']) == 0 && $this->_getModel()->hasColumn('component')) {
+                throw new Kwf_Exception('If you have just one detail-component your table is not allowed to have a column named "component"');
+            }
             $i=0;
             foreach ($extConfig['contentEditComponents'] as $ec) {
                 $name = Kwc_Abstract::getSetting($ec['componentClass'], 'componentName');
                 $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
-                $this->_columns->add(new Kwf_Grid_Column_Button('edit_'.$i, ' ', 20))
+                $this->_columns->add(new Kwc_Directories_Item_Directory_ControllerEditButton('edit_'.$i, ' ', 20))
                     ->setColumnType('editContent')
                     ->setEditComponentClass($ec['componentClass'])
+                    ->setEditComponent($ec['component'])
                     ->setEditType($ec['type'])
                     ->setEditIdTemplate($ec['idTemplate'])
                     ->setEditComponentIdSuffix($ec['componentIdSuffix'])
@@ -59,6 +67,10 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
                 $i++;
             }
         }
+        $this->_columns->add(new Kwf_Grid_Column('component_class'))
+            ->setData(new Kwf_Data_Kwc_ComponentClass($this->_getParam('class'), 'detail'));
+        $this->_columns->add(new Kwf_Grid_Column('edit_components'))
+            ->setData(new Kwf_Data_Kwc_EditComponents($this->_getParam('class'), 'detail'));
     }
 
     protected function _beforeSave(Kwf_Model_Row_Interface $row)
