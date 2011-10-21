@@ -210,7 +210,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 $s['width'] = $row->width;
             }
         } else if ($d['width'] == self::CONTENT_WIDTH) {
-            $s['width'] = $this->getContentWidth();
+            $s['width'] = self::CONTENT_WIDTH;
         } else {
             $s['width'] = $d['width'];
         }
@@ -233,6 +233,9 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     {
         $data = $this->_getImageDataOrEmptyImageData();
         $s = $this->_getImageDimensions();
+        if ($s['width'] == self::CONTENT_WIDTH) {
+            $s['width'] = $this->getContentWidth();
+        }
 
         if ($data && $data['file'] && file_exists($data['file'])) {
             return Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
@@ -274,6 +277,9 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
 
         $dim = $component->getComponent()->_getImageDimensions();
+        if ($dim['width'] == self::CONTENT_WIDTH) {
+            $dim['width'] = $component->getComponent()->getContentWidth();
+        }
         if ($dim) {
             $output = Kwf_Media_Image::scale($data['file'], $dim);
         } else {
@@ -311,14 +317,14 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
     public function getContentWidth()
     {
-        $row = $this->_getRow();
-        $fileRow = false;
-        if ($row) $fileRow = $row->getParentRow('Image');
-        if ($fileRow) {
-            $info = $fileRow->getFileInfo();
-            if (isset($info['imageWidth'])) {
-                return $info['imageWidth'];
-            }
+        $data = $this->_getImageDataOrEmptyImageData();
+        $s = $this->_getImageDimensions();
+        if ($s['width'] == self::CONTENT_WIDTH) {
+            return parent::getContentWidth();
+        }
+        if ($data && $data['file'] && file_exists($data['file'])) {
+            $s = Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
+            return $s['width'];
         }
         return 0;
     }
