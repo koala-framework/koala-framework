@@ -24,7 +24,8 @@ class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Compon
         $ret['componentName'] = trlVps('Newsletter');
         $ret['componentIcon'] = new Vps_Asset('email');
 
-        $ret['extConfig'] = 'Vpc_Newsletter_ExtConfig';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
+        $ret['extConfigControllerIndex'] = 'Vpc_Directories_Item_Directory_ExtConfigEditButtons';
 
         return $ret;
     }
