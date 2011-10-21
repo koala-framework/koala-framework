@@ -28,7 +28,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
 
         this.treePanel = new Kwf.Auto.TreePanel({
             controllerUrl: '/admin/component/pages',
-            title       : trlKwf('Seitenbaum'),
+            title       : trlKwf('Page tree'),
             region      : 'west',
             split       : true,
             width       : 300,
