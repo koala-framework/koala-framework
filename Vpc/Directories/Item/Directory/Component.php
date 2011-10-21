@@ -16,6 +16,7 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/TabsPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/EditFormPanel.js';
         $ret['extConfig'] = 'Vpc_Directories_Item_Directory_ExtConfigEditButtons';
+        $ret['extConfigControllerIndex'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 
