@@ -448,6 +448,9 @@ class Kwf_Component_Abstract
                             if (file_exists($incPath.DIRECTORY_SEPARATOR.$file . '.php')) {
                                 $f = $incPath.DIRECTORY_SEPARATOR.$file . '.php';
                                 break;
+                            } else if (file_exists($incPath.DIRECTORY_SEPARATOR.$file . '.yml')) {
+                                $f = $incPath.DIRECTORY_SEPARATOR.$file . '.yml';
+                                break;
                             }
                         }
                         if (!$f) { throw new Kwf_Exception("File $file not found"); }
