@@ -219,14 +219,18 @@ class Kwf_Component_Abstract
                 //value = klasse, key=pfad
                 $ret = array();
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
-                    $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
+                    if (method_exists($c, '_getYamlConfigFile')) {
+                        $file = call_user_func(array($c, '_getYamlConfigFile'));
+                    } else {
+                        $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
+                    }
                     $dirs = explode(PATH_SEPARATOR, get_include_path());
                     foreach ($dirs as $dir) {
                         if ($dir == '.') $dir = getcwd();
                         if (substr($dir, 0, 1) != '/') $dir = getcwd().'/'.$dir;
                         $path = $dir . '/' . $file;
                         if (is_file($path)) {
-                            if (substr($path, -14) == '/Component.php') {
+                            if (substr($path, -14) == '/Component.php' || substr($path, -14) == '/Component.yml') {
                                 $ret[substr($path, 0, -14)] = substr($c, 0, -10);
                             } else {
                                 $ret[substr($path, 0, -4)] = $c; //nur .php
