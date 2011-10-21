@@ -1,6 +1,6 @@
-Ext.namespace('Kwc.ListSwitch');
+Ext.namespace('Kwc.List.Switch');
 
-Kwc.ListSwitch.Component = Ext.extend(Kwf.EyeCandy.List,
+Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
 {
     //settings for Kwc.ListSwitch.Component
     //transition: {},
@@ -24,7 +24,7 @@ Kwc.ListSwitch.Component = Ext.extend(Kwf.EyeCandy.List,
             //    hideArrowsAtEnds: this.hideArrowsAtEnds,
             //}));
         }
-        Kwc.ListSwitch.Component.superclass.init.call(this);
+        Kwc.List.Switch.Component.superclass.init.call(this);
     }
 });
 
