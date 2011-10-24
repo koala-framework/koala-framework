@@ -23,23 +23,33 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCa
 
         this.list.on('activeChanged', function(item) {
             if (item == this.list.getFirstItem()) {
-                this.previousLink.addClass('listSwitchInactive');
+                this.previousLink.addClass('listSwitchEnd');
             } else {
-                this.previousLink.removeClass('listSwitchInactive');
+                this.previousLink.removeClass('listSwitchEnd');
             }
             if (item == this.list.getLastItem()) {
-                this.nextLink.addClass('listSwitchInactive');
+                this.nextLink.addClass('listSwitchEnd');
             } else {
-                this.nextLink.removeClass('listSwitchInactive');
+                this.nextLink.removeClass('listSwitchEnd');
             }
         }, this);
     },
     onPrevious: function() {
-        var item = this.list.getItem(this.list.getActiveItem().listIndex-1);
+        var item;
+        if (this.list.getActiveItem() === this.list.getFirstItem()) {
+            item = this.list.getLastItem();
+        } else {
+            item = this.list.getItem(this.list.getActiveItem().listIndex-1);
+        }
         if (item) this.list.setActiveItem(item);
     },
     onNext: function() {
-        var item = this.list.getItem(this.list.getActiveItem().listIndex+1);
+        var item;
+        if (this.list.getActiveItem() === this.list.getLastItem()) {
+            item = this.list.getFirstItem();
+        } else {
+            item = this.list.getItem(this.list.getActiveItem().listIndex+1);
+        }
         if (item) this.list.setActiveItem(item);
     }
 });
