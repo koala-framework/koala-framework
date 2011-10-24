@@ -9,7 +9,7 @@ class Vpc_Form_Dynamic_Admin extends Vpc_Abstract_Composite_Admin
             $acl->addResource(
                 new Vps_Acl_Resource_MenuDropdown(
                     'vps_enquiries_dropdown', array('text'=>trlVps('Enquiries'), 'icon'=>'email.png')
-                ), 'vps_component_root'
+                )
             );
         }
 
