@@ -32,7 +32,6 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         $ret = parent::getTemplateVars();
         $ret['previewCssClass'] = $this->_getSetting('previewCssClass');
         $ret['options']['transition'] = $this->_getSetting('transition');
-        $ret['options']['hideArrowsAtEnds'] = $this->_getSetting('hideArrowsAtEnds');
         $ret['options']['showArrows'] = $this->_getSetting('showArrows');
         $ret['options']['class'] = $this->_getSetting('eyeCandyListClass');
 
