@@ -15,9 +15,16 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
             'duration'           => 0.8,      // use with types: fade, slide
         );
         $ret['showArrows'] = true; // whether to show arrows at all or not
-        $ret['hideArrowsAtEnds'] = false; // false = wenn man beim letzten element ankommt und auf "weiter" klickt, kommt man wieder zum ersten
         $ret['eyeCandyListClass'] = 'Kwc.List.Switch.Component';
         return $ret;
+    }
+
+    public static function validateSettings($settings)
+    {
+        parent::validateSettings($settings);
+        if (isset($settings['hideArrowsAtEnds'])) {
+            throw new Vps_Exception('hideArrowsAtEnds setting got removed, hide them using css (.listSwitchEnd)');
+        }
     }
 
     public function getTemplateVars()
