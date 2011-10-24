@@ -1,8 +1,8 @@
 // um flackern zu unterbinden
-document.write('<style type="text/css"> div.kwfSwitchOverlay div.switchContent { display: none; } </style>');
+document.write('<style type="text/css"> .kwfSwitchOverlay .switchContent { display: none; } </style>');
 
 Kwf.onContentReady(function() {
-    var els = Ext.query('div.kwfSwitchOverlay');
+    var els = Ext.query('.kwfSwitchOverlay');
     els.forEach(function(el) {
         if (!el.switchOverlayObject) {
             el = Ext.get(el);
