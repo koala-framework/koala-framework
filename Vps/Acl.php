@@ -78,6 +78,8 @@ class Vps_Acl extends Zend_Acl
 
     public function isAllowed($role = null, $resource = null, $privilege = null)
     {
+        $this->loadVpcResources();
+
         $ret = parent::isAllowed($role, $resource, $privilege);
 
         if (!$ret) {
