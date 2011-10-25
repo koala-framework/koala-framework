@@ -28,7 +28,7 @@ class Kwf_Setup
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
         error_reporting(E_ALL);
-        if (!include('./cache/setup.php')) {
+        if (!@include('./cache/setup.php')) {
             if (!file_exists('cache/setup.php')) {
                 define('KWF_PATH', realpath(dirname(__FILE__).'/..'));
                 if (file_exists(KWF_PATH.'/include_path')) {
@@ -56,7 +56,8 @@ class Kwf_Setup
 
                 require_once 'Kwf/Util/Setup.php';
                 file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode($configClass));
-                die('created cache/setup.php');
+
+                Zend_Registry::_unsetInstance(); //cache/setup.php will call setClassName again
             }
             include('cache/setup.php');
         }
