@@ -1,0 +1,132 @@
+.cssClass .form_housenumber,
+.cssClass .form_city {
+    clear: none;
+}
+.cssClass form .kwfField label,
+.cssClass form .kwfField span.fieldContent {
+    line-height: 20px;
+    clear: both;
+}
+.cssClass .kwfButtonFlat button {
+    font-weight: bold;
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 4px;
+    cursor: pointer;
+    height: 25px;
+    overflow: visible;
+}
+.cssClass .submitWrapper {
+    text-align: center;
+    clear: both;
+}
+.cssClass .submitWrapper .beforeButton,
+.cssClass .submitWrapper .button,
+.cssClass .submitWrapper .saving,
+.cssClass .submitWrapper .afterButton {
+    float: left;
+}
+.cssClass .submitWrapper .saving {
+	background-image: url(/assets/kwf/Kwc/Form/saving.gif);
+	width: 30px;
+	height: 16px;
+	visibility: hidden
+}
+.cssClass input,
+.cssClass textarea,
+.cssClass select {
+    padding: 2px;
+    margin-bottom: 4px;
+}
+.cssClass input.radio {
+    margin-left: 10px;
+    border: none;
+    background: none;
+}
+.cssClass form .kwfFormFieldCheckbox input {
+    width: auto;
+    border: none;
+    background: none;
+    margin-left: 5px;
+    margin-top: 3px;
+}
+.ext-ie6 .cssClass form .kwfFormFieldCheckbox label {
+    margin-right: 0px;
+}
+.cssClass form .kwfFormFieldCheckbox label {
+    margin-right: 15px;
+}
+.cssClass label {
+    float: left;
+    width: 120px;
+    margin-right: 20px;
+    text-align: right;
+}
+.cssClass .kwfFieldRequired label { font-weight: bold; }
+.cssClass .kwfFieldRequired span label { font-weight: normal; }
+.cssClass .kwfFieldLabelAlignTop label {
+    width: auto;
+    margin: 0px;
+    text-align: left;
+}
+.cssClass .kwfFieldLabelAlignLeft label {
+    text-align: left;
+}
+.cssClass .showField {
+    font-weight: bold;
+    margin-bottom: 9px;
+}
+.cssClass fieldset {
+    margin-bottom: 20px;
+    padding: 10px;
+}
+.cssClass fieldset legend {
+    font-weight: bold;
+    margin-left: 20px;
+    padding: 5px;
+}
+.cssClass .kwfFormFieldRadio {
+    margin-left: -10px;
+}
+.cssClass form .kwfFormFieldRadio label {
+    margin-left: 10px;
+    margin-right: 20px;
+    clear: none;
+}
+.cssClass form .kwfFormFieldRadio input { margin: 0px; padding: 0px; }
+.cssClass form .kwfFormFieldRadioHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
+.cssClass form .kwfFormFieldRadioHorizontal span { white-space: nowrap; }
+.cssClass form .kwfFormFieldRadioVertical span { display: block; }
+.cssClass form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
+.cssClass form .kwfFormFieldRadioVertical label { float: none; }
+
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
+
+.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; }
+.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; }
+
+.ext-ie .cssClass .form_title {
+    margin-top: -5px;
+    padding-bottom: 5px;
+}
+.ext-ie .cssClass .form_title label {
+    margin-top: 5px;
+}
+.ext-ie .cssClass .form_title input {
+    margin-bottom: 0px;
+}
+.cssClass .kwcFormError {
+    border: 1px dashed $mainColor;
+    margin-bottom: 20px;
+    padding: 10px 10px 0px 10px !important;
+}
+.cssClass .kwcFormError p.error {
+    font-weight: bold;
+    color: $mainColor;
+}
+.cssClass span.comment { margin-left: 10px; color: #999; }
+.cssClass .kwfField { clear: both; }
+
+.cssClass .kwfFieldError label { color: red; } /* TODO beserer standard-wert */

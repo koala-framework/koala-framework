@@ -1,0 +1,4 @@
+<?php
+class Kwf_Component_Generator_GetComponentByClassWithComponentId_Table2 extends Kwf_Component_Generator_GetComponentByClassWithComponentId_Table
+{
+}

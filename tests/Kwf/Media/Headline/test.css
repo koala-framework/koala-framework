@@ -1,0 +1,5 @@
+h1.testHeadline {
+    color: #ff0000;
+    -kwf-headline: graphic;
+    -kwf-font-file: 'tests/Kwf/Media/Headline/arial.ttf';
+}

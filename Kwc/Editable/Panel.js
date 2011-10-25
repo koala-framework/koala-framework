@@ -1,0 +1,40 @@
+Ext.namespace('Kwc.Editable');
+Kwc.Editable.Panel = Ext.extend(Ext.Panel, {
+    layout: 'border',
+    initComponent: function() {
+        var componentsGrid = new Kwf.Auto.GridPanel({
+            controllerUrl: this.componentsControllerUrl,
+            region: 'west',
+            width: 200
+        });
+
+        var content = new Kwf.Component.ComponentPanel({
+            region: 'center',
+            componentConfigs: this.componentConfigs,
+            autoLoad: false,
+            mainComponentText: trlKwf('Content'),
+            mainComponentIcon: '/assets/silkicons/page_white_text.png'
+        });
+
+        componentsGrid.on('selectionchange', function() {
+            var record = componentsGrid.getSelected();
+            if (!record) {
+                content.disable();
+                return;
+            }
+            content.enable();
+            content.setBaseParams({
+                componentId: record.id+'-content'
+            });
+            content.load({
+                editComponents: record.get('edit_components'),
+                componentClass: record.get('edit_components')[0].componentClass,
+                type: record.get('edit_components')[0].type
+            });
+        }, this);
+
+        this.items = [content, componentsGrid];
+        Kwc.Editable.Panel.superclass.initComponent.call(this);
+    }
+});
+Ext.reg('kwc.editable', Kwc.Editable.Panel);

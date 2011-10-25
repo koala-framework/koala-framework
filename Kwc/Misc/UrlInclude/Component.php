@@ -1,0 +1,33 @@
+<?php
+class Kwc_Misc_UrlInclude_Component extends Kwc_Abstract
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlKwf('Url include');
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        return $ret;
+    }
+
+    public function getViewCacheLifetime()
+    {
+        return 15*60;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $row = $this->getRow();
+        $ret['content'] = '';
+        if ($row->url && preg_match('#^https?\\:/#', $row->url)) {
+            $ret['content'] = $this->_processContent(@file_get_contents($row->url));
+        }
+        return $ret;
+    }
+
+    protected function _processContent($content)
+    {
+        return $content;
+    }
+}

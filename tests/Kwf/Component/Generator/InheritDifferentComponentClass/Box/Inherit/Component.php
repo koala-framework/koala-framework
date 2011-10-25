@@ -1,0 +1,4 @@
+<?php
+class Kwf_Component_Generator_InheritDifferentComponentClass_Box_Inherit_Component extends Kwc_Abstract
+{
+}

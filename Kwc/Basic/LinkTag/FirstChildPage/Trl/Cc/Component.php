@@ -1,0 +1,4 @@
+<?php
+class Kwc_Basic_LinkTag_FirstChildPage_Trl_Cc_Component extends Kwc_Basic_LinkTag_FirstChildPage_Cc_Component
+{
+}

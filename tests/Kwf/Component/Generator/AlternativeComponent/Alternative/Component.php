@@ -1,0 +1,4 @@
+<?php
+class Kwf_Component_Generator_AlternativeComponent_Alternative_Component extends Kwc_Basic_ParentContent_Component
+{
+}

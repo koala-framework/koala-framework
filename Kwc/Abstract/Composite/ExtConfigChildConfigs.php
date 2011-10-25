@@ -1,0 +1,4 @@
+<?php
+class Kwc_Abstract_Composite_ExtConfigChildConfigs extends Kwf_Component_Abstract_ExtConfig_ChildConfigs
+{
+}

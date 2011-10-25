@@ -1,0 +1,1 @@
+<?=$this->image('/assets/kwf/images/rating/ratingStarFull.jpg');?>

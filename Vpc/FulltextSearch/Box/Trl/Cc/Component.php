@@ -1,4 +1,0 @@
-<?php
-class Vpc_FulltextSearch_Box_Trl_Cc_Component extends Vpc_FulltextSearch_Box_Cc_Component
-{
-}

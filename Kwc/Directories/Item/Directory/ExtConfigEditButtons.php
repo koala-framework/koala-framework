@@ -1,0 +1,4 @@
+<?php
+class Kwc_Directories_Item_Directory_ExtConfigEditButtons extends Kwc_Directories_Item_Directory_ExtConfigAbstract
+{
+}
