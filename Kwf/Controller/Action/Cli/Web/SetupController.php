@@ -55,7 +55,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
             $update->update();
         }
 
-        echo "Setup finished.\nThank you for using Koala Framework.\n";
+        echo "\n\nSetup finished.\nThank you for using Koala Framework.\n";
         exit;
     }
 }
