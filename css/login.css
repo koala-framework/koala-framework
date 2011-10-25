@@ -1,19 +1,19 @@
-.vpsLoginResult {
+.kwfLoginResult {
     margin-top:10px; margin-bottom: 0px;
     text-align: center;
 }
 
-.vpsLoginResult span {
+.kwfLoginResult span {
     background-position: left top; background-repeat: no-repeat;
     padding-left: 22px; padding-top: 2px;
 }
 
-.vpsLoginResultSuccess span {
+.kwfLoginResultSuccess span {
     color: #070;
     background-image: url(/assets/silkicons/tick.png);
 }
 
-.vpsLoginResultFailure span {
+.kwfLoginResultFailure span {
     color: #b11;
     background-image: url(/assets/silkicons/cross.png);
 }

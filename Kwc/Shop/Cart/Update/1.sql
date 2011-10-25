@@ -1,0 +1,1 @@
+ ALTER TABLE `kwc_shop_order_products` CHANGE `shop_product_price_id` `shop_product_price_id` INT( 10 ) UNSIGNED NULL  

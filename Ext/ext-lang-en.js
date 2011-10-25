@@ -6,41 +6,41 @@
  */
 
 if(Ext && Ext.UpdateManager && Ext.UpdateManager.defaults){
-    Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">'+trlVps('Loading...')+'</div>';
+    Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">'+trlKwf('Loading...')+'</div>';
 }
 if(Ext && Ext.View){
   Ext.View.prototype.emptyText = "";
 }
 
 if(Ext && Ext.grid.Grid){
-  Ext.grid.Grid.prototype.ddText = trlVps("{0} selected row(s)");
+  Ext.grid.Grid.prototype.ddText = trlKwf("{0} selected row(s)");
 }
 
 if(Ext && Ext.TabPanelItem){
-  Ext.TabPanelItem.prototype.closeText = trlVps("Close this tab");
+  Ext.TabPanelItem.prototype.closeText = trlKwf("Close this tab");
 }
 
 if(Ext && Ext.form.Field){
-  Ext.form.Field.prototype.invalidText = trlVps("The value in this field is invalid");
+  Ext.form.Field.prototype.invalidText = trlKwf("The value in this field is invalid");
 }
 
 if(Ext && Ext.LoadMask){
-  Ext.LoadMask.prototype.msg = trlVps("Loading...");
+  Ext.LoadMask.prototype.msg = trlKwf("Loading...");
 }
 
 Date.monthNames = [
-  trlVps("January"),
-  trlVps("February"),
-  trlVps("March"),
-  trlVps("April"),
-  trlVps("May"),
-  trlVps("June"),
-  trlVps("July"),
-  trlVps("August"),
-  trlVps("September"),
-  trlVps("October"),
-  trlVps("November"),
-  trlVps("December")
+  trlKwf("January"),
+  trlKwf("February"),
+  trlKwf("March"),
+  trlKwf("April"),
+  trlKwf("May"),
+  trlKwf("June"),
+  trlKwf("July"),
+  trlKwf("August"),
+  trlKwf("September"),
+  trlKwf("October"),
+  trlKwf("November"),
+  trlKwf("December")
 ];
 
 Date.getShortMonthName = function(month) {
@@ -67,12 +67,12 @@ Date.getMonthNumber = function(name) {
 };
 
 Date.dayNames = [
-  trlVps("Sunday"),
-  trlVps("Monday"),
-  trlVps("Tuesday"),
-  trlVps("Wednesday"),
-  trlVps("Thursday"),
-  trlVps("Friday"),
+  trlKwf("Sunday"),
+  trlKwf("Monday"),
+  trlKwf("Tuesday"),
+  trlKwf("Wednesday"),
+  trlKwf("Thursday"),
+  trlKwf("Friday"),
   "Saturday"
 ];
 
@@ -82,10 +82,10 @@ Date.getShortDayName = function(day) {
 
 if(Ext && Ext.MessageBox){
   Ext.MessageBox.buttonText = {
-    ok     : trlVps("OK"),
-    cancel : trlVps("Cancel"),
-    yes    : trlVps("Yes"),
-    no     : trlVps("No")
+    ok     : trlKwf("OK"),
+    cancel : trlKwf("Cancel"),
+    yes    : trlKwf("Yes"),
+    no     : trlKwf("No")
   };
 }
 
@@ -100,43 +100,43 @@ if(Ext && Ext.MessageBox){
 
 if(Ext && Ext.DatePicker){
   Ext.apply(Ext.DatePicker.prototype, {
-    todayText         : trlVps("Today"),
-    minText           : trlVps("This date is before the minimum date"),
-    maxText           : trlVps("This date is after the maximum date"),
+    todayText         : trlKwf("Today"),
+    minText           : trlKwf("This date is before the minimum date"),
+    maxText           : trlKwf("This date is after the maximum date"),
     disabledDaysText  : "",
     disabledDatesText : "",
     monthNames        : Date.monthNames,
     dayNames          : Date.dayNames,
-    nextText          : trlVps('Next Month (Control+Right)'),
-    prevText          : trlVps('Previous Month (Control+Left)'),
-    monthYearText     : trlVps('Choose a month (Control+Up/Down to move years)'),
-    todayTip          : trlVps("{0} (Spacebar)"),
-    format            : trlVps("m/d/y"),
-    okText            : "&#160;"+trlVps('OK')+"&#160;",
-    cancelText        : trlVps("Cancel"),
+    nextText          : trlKwf('Next Month (Control+Right)'),
+    prevText          : trlKwf('Previous Month (Control+Left)'),
+    monthYearText     : trlKwf('Choose a month (Control+Up/Down to move years)'),
+    todayTip          : trlKwf("{0} (Spacebar)"),
+    format            : trlKwf("m/d/y"),
+    okText            : "&#160;"+trlKwf('OK')+"&#160;",
+    cancelText        : trlKwf("Cancel"),
     startDay          : 0
   });
 }
 
 if(Ext && Ext.PagingToolbar){
   Ext.apply(Ext.PagingToolbar.prototype, {
-    beforePageText : trlVps("Page"),
-    afterPageText  : trlVps("of {0}"),
-    firstText      : trlVps("First Page"),
-    prevText       : trlVps("Previous Page"),
-    nextText       : trlVps("Next Page"),
-    lastText       : trlVps("Last Page"),
-    refreshText    : trlVps("Refresh"),
-    displayMsg     : trlVps("Displaying {0} - {1} of {2}"),
-    emptyMsg       : trlVps('No data to display')
+    beforePageText : trlKwf("Page"),
+    afterPageText  : trlKwf("of {0}"),
+    firstText      : trlKwf("First Page"),
+    prevText       : trlKwf("Previous Page"),
+    nextText       : trlKwf("Next Page"),
+    lastText       : trlKwf("Last Page"),
+    refreshText    : trlKwf("Refresh"),
+    displayMsg     : trlKwf("Displaying {0} - {1} of {2}"),
+    emptyMsg       : trlKwf('No data to display')
   });
 }
 
 if(Ext && Ext.form.TextField){
   Ext.apply(Ext.form.TextField.prototype, {
-    minLengthText : trlVps("The minimum length for this field is {0}"),
-    maxLengthText : trlVps("The maximum length for this field is {0}"),
-    blankText     : trlVps("This field is required"),
+    minLengthText : trlKwf("The minimum length for this field is {0}"),
+    maxLengthText : trlKwf("The maximum length for this field is {0}"),
+    blankText     : trlKwf("This field is required"),
     regexText     : "",
     emptyText     : null
   });
@@ -144,112 +144,112 @@ if(Ext && Ext.form.TextField){
 
 if(Ext && Ext.form.NumberField){
   Ext.apply(Ext.form.NumberField.prototype, {
-    minText : trlVps("The minimum value for this field is {0}"),
-    maxText : trlVps("The maximum value for this field is {0}"),
-    nanText : trlVps("{0} is not a valid number")
+    minText : trlKwf("The minimum value for this field is {0}"),
+    maxText : trlKwf("The maximum value for this field is {0}"),
+    nanText : trlKwf("{0} is not a valid number")
   });
 }
 
 if(Ext && Ext.form.DateField){
   Ext.apply(Ext.form.DateField.prototype, {
-    disabledDaysText  : trlVps("Disabled"),
-    disabledDatesText : trlVps("Disabled"),
-    minText           : trlVps("The date in this field must be after {0}"),
-    maxText           : trlVps("The date in this field must be before {0}"),
-    invalidText       : trlVps("{0} is not a valid date - it must be in the format {1}"),
-    format            : trlVps("m/d/y"),
+    disabledDaysText  : trlKwf("Disabled"),
+    disabledDatesText : trlKwf("Disabled"),
+    minText           : trlKwf("The date in this field must be after {0}"),
+    maxText           : trlKwf("The date in this field must be before {0}"),
+    invalidText       : trlKwf("{0} is not a valid date - it must be in the format {1}"),
+    format            : trlKwf("m/d/y"),
     altFormats        : "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d"
   });
 }
 
 if(Ext && Ext.form.ComboBox){
   Ext.apply(Ext.form.ComboBox.prototype, {
-    loadingText       : trlVps("Loading..."),
+    loadingText       : trlKwf("Loading..."),
     valueNotFoundText : undefined
   });
 }
 
 if(Ext && Ext.form.VTypes){
   Ext.apply(Ext.form.VTypes, {
-    emailText    : trlVps('This field should be an e-mail address in the format "user@domain.com"'),
-    urlText      : trlVps('This field should be a URL in the format "http:/'+'/www.domain.com"'),
-    alphaText    : trlVps('This field should only contain letters and _'),
-    alphanumText : trlVps('This field should only contain letters, numbers and _')
+    emailText    : trlKwf('This field should be an e-mail address in the format "user@domain.com"'),
+    urlText      : trlKwf('This field should be a URL in the format "http:/'+'/www.domain.com"'),
+    alphaText    : trlKwf('This field should only contain letters and _'),
+    alphanumText : trlKwf('This field should only contain letters, numbers and _')
   });
 }
 
 if(Ext && Ext.form.HtmlEditor){
   Ext.apply(Ext.form.HtmlEditor.prototype, {
-    createLinkText : trlVps('Please enter the URL for the link:'),
+    createLinkText : trlKwf('Please enter the URL for the link:'),
     buttonTips : {
       bold : {
-        title: trlVps('Bold (Ctrl+B)'),
-        text:  trlVps('Make the selected text bold.'),
+        title: trlKwf('Bold (Ctrl+B)'),
+        text:  trlKwf('Make the selected text bold.'),
         cls: 'x-html-editor-tip'
       },
       italic : {
-        title: trlVps('Italic (Ctrl+I)'),
-        text: trlVps('Make the selected text italic.'),
+        title: trlKwf('Italic (Ctrl+I)'),
+        text: trlKwf('Make the selected text italic.'),
         cls: 'x-html-editor-tip'
       },
       underline : {
-        title: trlVps('Underline (Ctrl+U)'),
-        text: trlVps('Underline the selected text.'),
+        title: trlKwf('Underline (Ctrl+U)'),
+        text: trlKwf('Underline the selected text.'),
         cls: 'x-html-editor-tip'
       },
       increasefontsize : {
-        title: trlVps('Grow Text'),
-        text: trlVps('Increase the font size.'),
+        title: trlKwf('Grow Text'),
+        text: trlKwf('Increase the font size.'),
         cls: 'x-html-editor-tip'
       },
       decreasefontsize : {
-        title: trlVps('Shrink Text'),
-        text: trlVps('Decrease the font size.'),
+        title: trlKwf('Shrink Text'),
+        text: trlKwf('Decrease the font size.'),
         cls: 'x-html-editor-tip'
       },
       backcolor : {
-        title: trlVps('Text Highlight Color'),
-        text: trlVps('Change the background color of the selected text.'),
+        title: trlKwf('Text Highlight Color'),
+        text: trlKwf('Change the background color of the selected text.'),
         cls: 'x-html-editor-tip'
       },
       forecolor : {
-        title: trlVps('Font Color'),
-        text: trlVps('Change the color of the selected text.'),
+        title: trlKwf('Font Color'),
+        text: trlKwf('Change the color of the selected text.'),
         cls: 'x-html-editor-tip'
       },
       justifyleft : {
-        title: trlVps('Align Text Left'),
-        text: trlVps('Align text to the left.'),
+        title: trlKwf('Align Text Left'),
+        text: trlKwf('Align text to the left.'),
         cls: 'x-html-editor-tip'
       },
       justifycenter : {
-        title: trlVps('Center Text'),
-        text: trlVps('Center text in the editor.'),
+        title: trlKwf('Center Text'),
+        text: trlKwf('Center text in the editor.'),
         cls: 'x-html-editor-tip'
       },
       justifyright : {
-        title: trlVps('Align Text Right'),
-        text: trlVps('Align text to the right.'),
+        title: trlKwf('Align Text Right'),
+        text: trlKwf('Align text to the right.'),
         cls: 'x-html-editor-tip'
       },
       insertunorderedlist : {
-        title: trlVps('Bullet List'),
-        text: trlVps('Start a bulleted list.'),
+        title: trlKwf('Bullet List'),
+        text: trlKwf('Start a bulleted list.'),
         cls: 'x-html-editor-tip'
       },
       insertorderedlist : {
-        title: trlVps('Numbered List'),
-        text: trlVps('Start a numbered list.'),
+        title: trlKwf('Numbered List'),
+        text: trlKwf('Start a numbered list.'),
         cls: 'x-html-editor-tip'
       },
       createlink : {
-        title: trlVps('Hyperlink'),
-        text: trlVps('Make the selected text a hyperlink.'),
+        title: trlKwf('Hyperlink'),
+        text: trlKwf('Make the selected text a hyperlink.'),
         cls: 'x-html-editor-tip'
       },
       sourceedit : {
-        title: trlVps('Source Edit'),
-        text: trlVps('Switch to source editing mode.'),
+        title: trlKwf('Source Edit'),
+        text: trlKwf('Switch to source editing mode.'),
         cls: 'x-html-editor-tip'
       }
     }
@@ -258,33 +258,33 @@ if(Ext && Ext.form.HtmlEditor){
 
 if(Ext && Ext.grid.GridView){
   Ext.apply(Ext.grid.GridView.prototype, {
-    sortAscText  : trlVps("Sort Ascending"),
-    sortDescText : trlVps("Sort Descending"),
-    lockText     : trlVps("Lock Column"),
-    unlockText   : trlVps("Unlock Column"),
-    columnsText  : trlVps("Columns")
+    sortAscText  : trlKwf("Sort Ascending"),
+    sortDescText : trlKwf("Sort Descending"),
+    lockText     : trlKwf("Lock Column"),
+    unlockText   : trlKwf("Unlock Column"),
+    columnsText  : trlKwf("Columns")
   });
 }
 
 if(Ext && Ext.grid.GroupingView){
   Ext.apply(Ext.grid.GroupingView.prototype, {
-    emptyGroupText : trlVps('(None)'),
-    groupByText    : trlVps('Group By This Field'),
-    showGroupsText : trlVps('Show in Groups')
+    emptyGroupText : trlKwf('(None)'),
+    groupByText    : trlKwf('Group By This Field'),
+    showGroupsText : trlKwf('Show in Groups')
   });
 }
 
 if(Ext && Ext.grid.PropertyColumnModel){
   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
-    nameText   : trlVps("Name"),
-    valueText  : trlVps("Value"),
+    nameText   : trlKwf("Name"),
+    valueText  : trlKwf("Value"),
     dateFormat : "m/j/Y"
   });
 }
 
 if(Ext && Ext.layout && Ext.layout.BorderLayout && Ext.layout.BorderLayout.SplitRegion){
   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
-    splitTip            : trlVps("Drag to resize."),
-    collapsibleSplitTip : trlVps("Drag to resize. Double click to hide.")
+    splitTip            : trlKwf("Drag to resize."),
+    collapsibleSplitTip : trlKwf("Drag to resize. Double click to hide.")
   });
 }

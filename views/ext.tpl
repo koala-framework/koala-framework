@@ -32,30 +32,30 @@
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
             document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32"/>');
-            document.write('<?= $this->applicationName ?><br /><span id="loading-msg"><?= trlVps('Loading...') ?></span></div>');
+            document.write('<?= $this->applicationName ?><br /><span id="loading-msg"><?= trlKwf('Loading...') ?></span></div>');
         document.write('</div>');
-        var Vps = {isApp: true};
+        var Kwf = {isApp: true};
     </script>
 
     <?= $this->debugData() ?>
     <?= $this->assets($this->ext['assetsType']) ?>
 
     <script type="text/javascript">
-        Vps.userRole = '<?= $this->ext['userRole'] ?>';
-        Vps.main = function() {
+        Kwf.userRole = '<?= $this->ext['userRole'] ?>';
+        Kwf.main = function() {
             <? if ($this->ext['class']) { ?>
             var panel = new <?= $this->ext['class'] ?>(<?= Zend_Json::encode($this->ext['config']) ?>);
             <? } else { ?>
             var panel = <?= Zend_Json::encode($this->ext['config']) ?>;
             <? } ?>
-            Vps.currentViewport = new <?= $this->ext['viewport'] ?>({
+            Kwf.currentViewport = new <?= $this->ext['viewport'] ?>({
                 items: [panel]
             });
-            if(Vps.Connection.masks == 0  && Ext.get('loading')) {
+            if(Kwf.Connection.masks == 0  && Ext.get('loading')) {
                 Ext.get('loading').fadeOut({remove: true});
             }
         };
         Ext.onReady(function() {
-            Vps.main();
+            Kwf.main();
         });
     </script>

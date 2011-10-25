@@ -1,0 +1,4 @@
+<?php
+class Kwc_Chained_Abstract_ParentIdCacheMeta extends Kwf_Component_Cache_Meta_Static_ModelParentComponent
+{
+}

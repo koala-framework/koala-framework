@@ -1,0 +1,192 @@
+<?php
+/**
+ * @group slow
+ * @group Kwc_Trl
+ * @group Kwc_Trl_ImageEnlarge
+ *
+ * Was wo angezeigt werden soll siehe Kwc_Trl_ImageEnlarge_Master
+ *
+ansicht frontend:
+http://fnprofile.markus.vivid/kwf/kwctest/Kwc_Trl_ImageEnlarge_Root/de/test1 (...2,3,4,5,6)
+http://fnprofile.markus.vivid/kwf/kwctest/Kwc_Trl_ImageEnlarge_Root/en/test1 (...2,3,4,5,6)
+
+backend
+http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_ImageEnlarge_Root/Kwc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-master_test1
+http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Trl_ImageEnlarge_Root/Kwc_Trl_ImageEnlarge_ImageEnlarge_Trl_Component.Kwc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-en_test1
+ */
+class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
+{
+    public function setUp()
+    {
+        parent::setUp('Kwc_Trl_ImageEnlarge_Root');
+
+        //master image
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-master_test1', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test2', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test3', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test4', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test5', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test6', 'kwf_upload_id'=>'1'),
+            ));
+
+        //image trl
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_Trl_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1', 'own_image'=>0),
+                array('component_id'=>'root-en_test2', 'own_image'=>0),
+                array('component_id'=>'root-en_test3', 'own_image'=>1),
+                array('component_id'=>'root-en_test4', 'own_image'=>1),
+                array('component_id'=>'root-en_test5', 'own_image'=>1),
+                array('component_id'=>'root-en_test6', 'own_image'=>0),
+            ));
+
+        //image trl own image
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_Trl_Image_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test2-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test3-image', 'kwf_upload_id'=>'6'),
+                array('component_id'=>'root-en_test4-image', 'kwf_upload_id'=>'6'),
+                array('component_id'=>'root-en_test5-image', 'kwf_upload_id'=>'6'),
+                array('component_id'=>'root-en_test6-image', 'kwf_upload_id'=>null),
+            ));
+
+
+        //master enlarge tag
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-master_test1-linkTag', 'kwf_upload_id'=>null, 'preview_image' => 0),
+                array('component_id'=>'root-master_test2-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test3-linkTag', 'kwf_upload_id'=>null, 'preview_image' => 0),
+                array('component_id'=>'root-master_test4-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test5-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test6-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+            ));
+
+        //enlarge tag trl
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test2-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test3-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test4-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test5-linkTag', 'own_image'=>1),
+                array('component_id'=>'root-en_test6-linkTag', 'own_image'=>1),
+            ));
+
+        //enlarge tag trl own image
+        Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test2-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test3-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test4-linkTag-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test5-linkTag-image', 'kwf_upload_id'=>'5'),
+                array('component_id'=>'root-en_test6-linkTag-image', 'kwf_upload_id'=>'5'),
+            ));
+    }
+
+    public function testDe()
+    {
+        $c = $this->_root->getComponentById('root-master_test1');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+
+        $c = $this->_root->getComponentById('root-master_test2');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+
+        $c = $this->_root->getComponentById('root-master_test3');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+
+        $c = $this->_root->getComponentById('root-master_test4');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+
+        $c = $this->_root->getComponentById('root-master_test5');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+
+        $c = $this->_root->getComponentById('root-master_test6');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+    }
+
+    public function testEn()
+    {
+        $c = $this->_root->getComponentById('root-en_test1');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+
+        $c = $this->_root->getComponentById('root-en_test2');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+
+        $c = $this->_root->getComponentById('root-en_test3');
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
+
+        $c = $this->_root->getComponentById('root-en_test4');
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 2, 120, 101);
+
+        $c = $this->_root->getComponentById('root-en_test5');
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 5, 95, 120);
+
+        $c = $this->_root->getComponentById('root-en_test6');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 5, 95, 120);
+    }
+
+    public function testDeClearCache()
+    {
+        $this->markTestIncomplete();
+        $c = $this->_root->getComponentById('root-master_test1');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+        $row = $c->getComponent()->getRow();
+        $row->kwf_upload_id = '6';
+        $row->save();
+        $this->_process();
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
+    }
+
+    public function testEnClearCache()
+    {
+        $this->markTestIncomplete();
+        $c = $this->_root->getComponentById('root-en_test1');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+        $row = $c->getComponent()->getRow();
+        $row->own_image = 1;
+        $row->save();
+        $row = $this->_root->getComponentById('root-en_test1-image')->getComponent()->getRow();
+        $row->kwf_upload_id = '6';
+        $row->save();
+        $this->_process();
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
+    }
+
+    private function _checkTheSizes($html, $largeImageNum, $largeWidth, $largeHeight, $smallImageNum, $smallWidth, $smallHeight)
+    {
+        // getMediaOutput aufrufen, damit Cache-Meta geschrieben wird (wegen d0cf3812b20fa19c40617ac5b08ed08a18ff808d)
+        // muss so gemacht werden, weil der request über getimagesize weiter unten
+        // nicht das FnF-Cache Model dieses Request schreiben kann
+        preg_match_all('/.*\/media\/([\w\.]+)\/([\w\-]+)\/(\w+)\/.*/', $html, $matches);
+        foreach ($matches[0] as $key => $m) {
+            $class = $matches[1][$key];
+            $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            call_user_func(array($classWithoutDot, 'getMediaOutput'), $matches[2][$key], $matches[3][$key], $class);
+        }
+        preg_match('#^.*?<a.+?&quot;width&quot;:(\d+),&quot;height&quot;:(\d+).+?<img.+?src=".+?(\d+)\.jpg.+width="(\d+)".+height="(\d+)".+$#ms', $html, $matches);
+        $this->assertEquals($matches[1], $largeWidth);
+        $this->assertEquals($matches[2], $largeHeight);
+        $this->assertEquals($matches[3], $smallImageNum);
+        $this->assertEquals($matches[4], $smallWidth);
+        $this->assertEquals($matches[5], $smallHeight);
+
+        preg_match('#href="(.+?)".*?src="(.+?)"#ms', $html, $matches);
+
+        $smallSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[2]);
+        $this->assertEquals($smallWidth, $smallSrcSize[0]);
+        $this->assertEquals($smallHeight, $smallSrcSize[1]);
+
+        $largeHtml = file_get_contents('http://'.Kwf_Registry::get('testDomain').$matches[1]);
+        preg_match('#class="kwfLightbox.*?<img .*?src="(.*?)"#s', $largeHtml, $matches);
+        $this->assertRegExp('#'.$largeImageNum.'\.jpg#', $matches[1]);
+        $largeSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[1]);
+        $this->assertEquals($largeWidth, $largeSrcSize[0]);
+        $this->assertEquals($largeHeight, $largeSrcSize[1]);
+
+    }
+}

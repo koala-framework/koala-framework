@@ -1,1 +1,0 @@
-<p><?=trlVps('Max Mustermann...');?></p>

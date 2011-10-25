@@ -1,0 +1,6 @@
+CREATE TABLE `kwc_access_by_mail` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`date` DATETIME NOT NULL ,
+`email` VARCHAR( 200 ) NOT NULL ,
+`key` VARCHAR( 200 ) NOT NULL
+) ENGINE = InnoDB ;

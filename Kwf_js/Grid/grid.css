@@ -1,0 +1,22 @@
+/* für Ext.util.Format.booleanTickCross */
+.kwf-check-tick-cross-col-on {
+    background-image:url(/assets/silkicons/tick.png);
+}
+.kwf-check-tick-cross-col {
+    background-image:url(/assets/silkicons/cross.png);
+}
+
+.kwf-cell-icon div.x-grid3-cell-inner,
+.kwf-cell-button div.x-grid3-cell-inner {
+    background-image: url(/assets/silkicons/page_edit.png);
+    background-position: center; background-repeat: no-repeat;
+}
+.kwf-cell-button div.x-grid3-cell-inner {
+    cursor: pointer;
+}
+
+a.xlsExportLink {
+    background: url(/assets/silkicons/page_excel.png) 0px 0px no-repeat;
+    padding-left: 21px; font-size: 16px; font-weight: bold;
+    text-decoration: none; color: #417e2d;
+}

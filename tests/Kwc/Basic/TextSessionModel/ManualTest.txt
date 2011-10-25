@@ -1,0 +1,8 @@
+*** Interner-Link einfügen nicht möglich ***
+- url aufrufen: http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Basic_TextSessionModel_Root/Kwc_Basic_TextSessionModel_TestComponent/Index?componentId=root_text
+- foo markieren
+- auf link einfügen in toolbar klicken
+- einen internen link in seitenbaum auswählen
+- alles bestätigen bis kein fenster mehr offen ist
+- Erwartet: foo ist als link hinterlegt
+
