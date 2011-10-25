@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS `kwc_basic_image` (
   PRIMARY KEY (`component_id`),
   KEY `kwf_upload_id` (`kwf_upload_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-ALTER TABLE  `vpc_basic_image` ADD  `scale` VARCHAR( 20 ) NOT NULL ;
+ALTER TABLE  `kwc_basic_image` ADD  `scale` VARCHAR( 20 ) NOT NULL ;
