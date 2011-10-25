@@ -20,7 +20,7 @@
         <?php if($content != '') { ?>
             <p><?= $this->application->name . ' ' . trlKwf('Version') . ' ' . $this->application->version ?></p>
         <?php } ?>
-        <h2><?= $this->application->kwf->name . ' ' . trlKwf('Version') . ' ' . $this->application->kwf->version ?></h2>
+        <h2><a href="http://www.koala-framework.org/" target="_blank"><?= $this->application->kwf->name . '</a> ' . trlKwf('Version') . ' ' . $this->application->kwf->version ?></h2>
         <img id="enteWelcome" src="/assets/kwf/images/welcome/ente.jpg" alt="" height="30" width="54" />
     </div>
 </div>
