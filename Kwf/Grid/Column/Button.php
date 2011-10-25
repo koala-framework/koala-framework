@@ -11,6 +11,7 @@ class Kwf_Grid_Column_Button extends Kwf_Grid_Column
         $this->setRenderer('cellButton');
         $this->setSortable(false);
         $this->setColumnType('button');
+        $this->setData(new Kwf_Data_Empty());
     }
 
     public function load($row, $role)
