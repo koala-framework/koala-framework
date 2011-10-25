@@ -53,7 +53,7 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
         foreach ($classes as $class) {
             $formName = Kwc_Admin::getComponentClass($class, 'ItemEditForm');
             if ($formName) {
-                $this->_form->add(new $formName($class, $class, $this->_getParam('componentId')));
+                $this->_form->add(new $formName('detail', $class, $this->_getParam('componentId')));
             }
         }
     }
