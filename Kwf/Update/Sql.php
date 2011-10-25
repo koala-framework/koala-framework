@@ -30,7 +30,7 @@ class Kwf_Update_Sql extends Kwf_Update
             fclose($pipes[2]);
 
             if (proc_close($process) != 0) {
-                throw new Kwf_Exception("Executing sql statement failed: ".$output);
+                throw new Kwf_Exception("Executing '$this->_uniqueName' sql statement failed: ".$output);
             }
         } else {
 
