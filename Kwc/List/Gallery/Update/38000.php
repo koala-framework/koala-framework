@@ -1,5 +1,5 @@
 <?php
-class Kwc_List_Gallery_Update_1 extends Kwf_Update
+class Kwc_List_Gallery_Update_38000 extends Kwf_Update
 {
     public function update()
     {
