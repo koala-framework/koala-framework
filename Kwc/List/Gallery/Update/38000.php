@@ -4,7 +4,7 @@ class Kwc_List_Gallery_Update_38000 extends Kwf_Update
     public function update()
     {
         //das wird hoffentlich schnell genug sein...
-        $galleries = Kwf_Component_Data_Root::getInstance()->getComponentsByClass('Kwc_List_Gallery_Component');
+        $galleries = Kwf_Component_Data_Root::getInstance()->getComponentsByClass('Kwc_List_Gallery_Component', array('ignoreVisible'=>true));
         echo "\nUpdating ".count($galleries)." galleries...\n";
         $variants = array();
         foreach ($galleries as $g) {
