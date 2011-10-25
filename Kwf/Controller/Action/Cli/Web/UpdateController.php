@@ -210,7 +210,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                     $update->getTags(),
                     Kwf_Registry::get('config')->server->updateTags->toArray()
                 ) && !($update->getTags()==array('db') && get_class($update)=='Kwf_Update_Sql')) {
-                    if ($method != 'checkSettings') {
+                    if ($method == 'update') {
                         echo "$method: skipping ".get_class($update);
                         if ($update->getRevision()) echo " (".$update->getRevision().")";
                         echo ", tags '".implode(', ', $update->getTags())."' don't match ";
@@ -228,9 +228,11 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                 Kwf_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
                 Kwf_Component_Generator_Abstract::clearInstances();
                 Kwf_Component_Data_Root::reset();
-                echo "\nexecuting $method ".$update->getUniqueName();
-                echo "... ";
-                flush();
+                if ($method == 'update') {
+                    echo "\nexecuting $method ".$update->getUniqueName();
+                    echo "... ";
+                    flush();
+                }
             }
             $e = false;
             if (in_array('db', $update->getTags())) {
@@ -240,7 +242,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             }
             foreach ($databases as $db) {
                 if (!$db) continue;
-                if ($method != 'checkSettings') {
+                if ($method == 'update') {
                     echo $db.' ';
                     flush();
                 }
@@ -251,8 +253,10 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                         $db = null;
                     }
                 } catch (Exception $e) {
-                    echo "skipping, invalid db\n";
-                    flush();
+                    if ($method == 'update') {
+                        echo "skipping, invalid db\n";
+                        flush();
+                    }
                     continue;
                 }
                 Kwf_Registry::set('db', $db);
@@ -281,7 +285,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                 } catch (Exception $e) {}
                 Kwf_Registry::set('db', $db);
             }
-            if ($method != 'checkSettings' && $ret) {
+            if ($method == 'update' && $ret) {
                 echo "\033[32 OK \033[0m\n";
             }
             flush();
