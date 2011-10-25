@@ -233,7 +233,10 @@ class Kwf_Util_ClearCache
             }
         }
         if (in_array('setup', $types)) {
-            if (file_exists('cache/setup.php')) unlink('cache/setup.php');
+            if (file_exists('cache/setup.php')) {
+                if ($output) echo "cleared:     cache/setup.php\n";
+                unlink('cache/setup.php');
+            }
         }
         foreach ($this->getDbCacheTables() as $t) {
             if ($server) {
