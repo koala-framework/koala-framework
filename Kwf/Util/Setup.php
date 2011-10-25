@@ -3,18 +3,7 @@ class Kwf_Util_Setup
 {
     public static function generateCode($configClass)
     {
-        if (file_exists(KWF_PATH.'/include_path')) {
-            $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
-            $zendPath = str_replace(
-                '%version%',
-                file_get_contents(KWF_PATH.'/include_path_version'),
-                $zendPath);
-        } else {
-            die ('zend not found');
-        }
-        set_include_path(get_include_path(). PATH_SEPARATOR . $zendPath);
-
-        $ip = get_include_path().KWF_PATH.PATH_SEPARATOR.$zendPath;
+        $ip = get_include_path();
         $ip .= PATH_SEPARATOR.'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
             $ip .= PATH_SEPARATOR . $p;
@@ -64,7 +53,7 @@ class Kwf_Util_Setup
         $ret .= "if (isset(\$_SERVER['HTTP_CLIENT_IP'])) \$_SERVER['REMOTE_ADDR'] = \$_SERVER['HTTP_CLIENT_IP'];\n";
         $ret .= "\n";
 
-        $ret .= "define('KWF_PATH', '".KWF_PATH."');\n";
+        $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
 
         $ret .= "set_include_path('$ip');\n";
         $ret .= "\n";
