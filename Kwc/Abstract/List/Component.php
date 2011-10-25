@@ -1,5 +1,5 @@
 <?php
-abstract class Kwc_Abstract_List_Component extends Kwc_Abstract
+class Kwc_Abstract_List_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
