@@ -10,10 +10,6 @@ class Kwc_Box_InheritContent_Component extends Kwc_Abstract
         );
         $ret['editComponents'] = array('child');
 
-        //TODO: viewcache nicht deaktiveren
-        //cache löschen muss dazu korrekt eingebaut werden
-        //$ret['viewCache'] = false;
-
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }
