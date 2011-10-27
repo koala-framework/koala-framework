@@ -3,8 +3,6 @@ class Kwc_Advanced_Amazon_Nodes_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
-        $this->add(new Kwf_Form_Field_TextField('associate_tag', trlKwf('Associate-Tag')));
-
         $multifields = $this->add(new Kwf_Form_Field_MultiFields('Nodes'));
         $multifields->setReferences(array(
             'columns' => array('component_id'),

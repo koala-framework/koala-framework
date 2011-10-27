@@ -63,10 +63,8 @@ class Kwf_Util_Model_Amazon_Products extends Kwf_Model_Abstract
             //wenn nach asin gesucht wird alles andere ignorieren
             $o = $options;
             $options = array('asin'=>$o['asin']);
-            if (isset($o['AssociateTag'])) {
-                $options['AssociateTag'] = $o['AssociateTag'];
-            }
         }
+        $options['AssociateTag'] = Kwf_Registry::get('config')->service->amazon->associateTag;
         if ($offs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET)) {
             $options['ItemPage'] = floor($offs/10) + 1;
         }

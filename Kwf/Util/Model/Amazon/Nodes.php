@@ -47,7 +47,10 @@ class Kwf_Util_Model_Amazon_Nodes extends Kwf_Model_Abstract
             throw new Kwf_Exception("only whereEquals or whereId in select allowed");
         }
         if (!isset($this->_rows[$BrowseNodeId])) {
-            $result = $this->_amazon->browseNodeLookup($BrowseNodeId);
+            $options = array(
+                'AssociateTag' => Kwf_Registry::get('config')->service->amazon->associateTag
+            );
+            $result = $this->_amazon->browseNodeLookup($BrowseNodeId, $options);
             $this->_rows[$BrowseNodeId] = new $this->_rowClass(array(
                 'item' => $result,
                 'model' => $this
