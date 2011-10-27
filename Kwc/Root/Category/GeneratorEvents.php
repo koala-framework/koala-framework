@@ -24,6 +24,7 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
 
     public function onPageFilenameChanged(Kwf_Component_Event_Page_FilenameChanged $event)
     {
+        parent::onPageFilenameChanged($event);
         if (is_numeric($event->dbId)) {
             foreach ($this->_getRecursiveChildIds($event->dbId, $this->_getGenerator()->getModel()) as $id) {
                 $this->fireEvent(
