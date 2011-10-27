@@ -3,8 +3,6 @@ class Vpc_Advanced_Amazon_Nodes_Form extends Vpc_Abstract_Form
 {
     protected function _initFields()
     {
-        $this->add(new Vps_Form_Field_TextField('associate_tag', trlVps('Associate-Tag')));
-
         $multifields = $this->add(new Vps_Form_Field_MultiFields('Nodes'));
         $multifields->setReferences(array(
             'columns' => array('component_id'),
