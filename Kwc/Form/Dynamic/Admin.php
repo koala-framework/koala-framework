@@ -9,7 +9,7 @@ class Kwc_Form_Dynamic_Admin extends Kwc_Abstract_Composite_Admin
             $acl->addResource(
                 new Kwf_Acl_Resource_MenuDropdown(
                     'kwf_enquiries_dropdown', array('text'=>trlKwf('Enquiries'), 'icon'=>'email.png')
-                ), 'kwf_component_root'
+                )
             );
         }
 
