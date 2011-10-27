@@ -429,7 +429,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
 
         // darf man die action?
         $config = $component->generator->getPagesControllerConfig($component);
-        $actions = $config['actions'];
+        $actions = isset($config['actions']) ? $config['actions'] : array();
         $actions['move'] = $config['allowDrag'];
         $data['moveTo'] = !!Kwf_Component_Generator_Abstract::getInstances($component, array(
             'pageGenerator' => true

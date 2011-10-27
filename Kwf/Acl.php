@@ -75,6 +75,8 @@ class Kwf_Acl extends Zend_Acl
 
     public function isAllowed($role = null, $resource = null, $privilege = null)
     {
+        $this->loadKwcResources();
+
         $ret = parent::isAllowed($role, $resource, $privilege);
 
         if (!$ret) {

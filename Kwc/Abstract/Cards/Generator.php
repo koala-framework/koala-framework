@@ -60,7 +60,10 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
         }
         $dbId .= $componentKey;
         $component = $this->_getModel()->fetchColumnByPrimaryId('component', $parentData->dbId);
-        if (!$component) $component = key($this->getChildComponentClasses()); //sollte eigentlich nicht vorkommen
+        if (!$component) {
+            $components = array_keys($this->getChildComponentClasses()); //sollte eigentlich nicht vorkommen
+            $component = $components[0];
+        }
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,

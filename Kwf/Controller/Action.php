@@ -22,31 +22,29 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         }
 
         $allowed = false;
-        $acl = $this->_getAcl();
-        $resource = $this->getRequest()->getResourceName();
-        if ($resource == 'kwf_user_changeuser') {
-            //spezielle berechtigungsabfrage für Benutzerwechsel
-            $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
-            $allowed = $acl->isAllowed($role, $resource, 'view');
-        } else if ($this->_getUserRole() == 'cli') {
-            $allowed = $acl->isAllowed('cli', $resource, 'view');
-        } else if ($resource == 'kwf_component') {
-            $allowed = $this->_isAllowedComponent(); // Bei Test ist niemand eingeloggt und deshalb keine Prüfung
+        if ($this->_getUserRole() == 'cli') {
+            $allowed = true;
         } else {
-            if (!$acl->has($resource)) {
-                throw new Kwf_Exception_NotFound();
+            $acl = $this->_getAcl();
+            $resource = $this->getRequest()->getResourceName();
+            if ($resource == 'kwf_user_changeuser') {
+                //spezielle berechtigungsabfrage für Benutzerwechsel
+                $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
+                $allowed = $acl->isAllowed($role, $resource, 'view');
+            } else if ($resource == 'kwf_component') {
+                $allowed = $this->_isAllowedComponent(); // Bei Test ist niemand eingeloggt und deshalb keine Prüfung
             } else {
-                if ($this->_getAuthData()) {
-                    $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+                if (!$acl->has($resource)) {
+                    throw new Kwf_Exception_NotFound();
                 } else {
-                    $allowed = $acl->isAllowed($this->_getUserRole(), $resource, 'view');
+                    if ($this->_getAuthData()) {
+                        $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+                    } else {
+                        $allowed = $acl->isAllowed($this->_getUserRole(), $resource, 'view');
+                    }
                 }
             }
-        }
-        if ($allowed) {
-            if ($this->_getUserRole() == 'cli') {
-                $allowed = $this->_isAllowed('cli');
-            } else {
+            if ($allowed) {
                 $allowed = $this->_isAllowed($this->_getAuthData());
             }
         }
