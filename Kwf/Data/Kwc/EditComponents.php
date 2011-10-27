@@ -28,8 +28,14 @@ class Kwf_Data_Kwc_EditComponents extends Kwf_Data_Abstract
         $this->_componentConfigs = array_merge($this->_componentConfigs, $edit['componentConfigs']);
         $ret = $edit['contentEditComponents'];
 
+        $g = Kwc_Abstract::getSetting($this->_componentClass, 'generators');
+        if (isset($g['detail']['dbIdShortcut'])) {
+            $dbId = $g['detail']['dbIdShortcut'].$row->id;
+        } else {
+            $dbId = $row->component_id.$gen->getIdSeparator().$row->id;
+        }
         $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
-            $row->component_id.$gen->getIdSeparator().$row->id, array('ignoreVisible'=>true)
+            $dbId, array('ignoreVisible'=>true)
         );
         if (isset($components[0])) {
             foreach (Kwf_Controller_Action_Component_PagesController::getSharedComponents($components[0]) as $cls=>$cmp) {
