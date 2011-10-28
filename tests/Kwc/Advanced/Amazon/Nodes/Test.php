@@ -18,7 +18,7 @@ class Kwc_Advanced_Amazon_Nodes_Test extends Kwf_Test_SeleniumTestCase
     public function testIt()
     {
         $amz = new Kwf_Service_Amazon();
-        $result = $amz->itemSearch(array('BrowseNode'=>'166039031', 'SearchIndex'=>'Books'));
+        $result = $amz->itemSearch(array('BrowseNode'=>'166039031', 'SearchIndex'=>'Books', 'AssociateTag'=>'kwf-21'));
         $item = $result->current();
 
         $this->openKwc('/amazon');
