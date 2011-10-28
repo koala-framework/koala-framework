@@ -12,10 +12,10 @@ Kwf.onContentReady(function()
 Ext.namespace("Kwf.Switch.HoverFade");
 
 Kwf.Switch.HoverFade = function(cfg) {
-    this.duration = 0.6;
+    this.duration = 0.2;
     this.easingFadeOut = 'easeOut';
     this.easingFadeIn = 'easeOut';
-    this.fadeOutAfter = 800;
+    this.fadeOutAfter = 200;
     this.fadeInAfter = 100;
     this.endOpacity = 1.0;
 
