@@ -41,11 +41,8 @@ class Kwf_Component_Cache_UrlClearCache_Test extends Kwc_TestAbstract
         $r = $m->getRow(1);
         $r->filename = 'fxx';
         $r->save();
+
         $this->_process();
-        Kwf_Component_Data_Root::reset();
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Cache_UrlClearCache_Root');
-        $this->_root = Kwf_Component_Data_Root::getInstance();
-        $this->_root->setFilename(false);
 
         $c = $this->_root->getPageByUrl("http://$d/fxx", null); //uncached
         $this->assertEquals('1', $c->componentId);
@@ -65,11 +62,8 @@ class Kwf_Component_Cache_UrlClearCache_Test extends Kwc_TestAbstract
         $r = $m->getRow(1);
         $r->filename = 'fxx';
         $r->save();
+
         $this->_process();
-        Kwf_Component_Data_Root::reset();
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Cache_UrlClearCache_Root');
-        $this->_root = Kwf_Component_Data_Root::getInstance();
-        $this->_root->setFilename(false);
 
         $c = $this->_root->getPageByUrl("http://$d/fxx/bar", null); //uncached
         $this->assertEquals('2', $c->componentId);
