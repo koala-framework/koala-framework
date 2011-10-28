@@ -25,11 +25,13 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
 
     protected final function _process()
     {
+        $filename = $this->_root->filename;
+
         Kwf_Component_ModelObserver::getInstance()->process();
         Kwf_Component_Data_Root::reset();
         Kwf_Component_Generator_Abstract::clearInstances();
         $this->_root = Kwf_Component_Data_Root::getInstance();
-        $this->_root->setFilename('kwf/kwctest/'.Kwf_Component_Data_Root::getComponentClass());
+        $this->_root->setFilename($filename);
         apc_clear_cache('user');
     }
 }
