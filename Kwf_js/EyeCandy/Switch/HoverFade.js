@@ -64,7 +64,7 @@ Kwf.Switch.HoverFade.prototype = {
         (function() {
             if (this.linkOver && !this.isVisible && !this.contentOver) {
                 this.isVisible = true;
-                this.switchContent.fadeIn({
+                this.switchContent.stopFx().fadeIn({
                     endOpacity: this.endOpacity, easing: this.easingFadeIn, duration: this.duration, useDisplay: true
                 });
             }
@@ -75,7 +75,7 @@ Kwf.Switch.HoverFade.prototype = {
         (function() {
             if (!this.contentOver && !this.linkOver) {
                 this.isVisible = false;
-                this.switchContent.fadeOut({
+                this.switchContent.stopFx().fadeOut({
                     endOpacity: 0.0, easing: this.easingFadeOut, duration: this.duration, useDisplay: true
                 });
             }
