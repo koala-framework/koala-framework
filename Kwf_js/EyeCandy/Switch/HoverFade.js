@@ -1,6 +1,6 @@
 Kwf.onContentReady(function()
 {
-    var els = Ext.query('div.kwfSwitchHoverFade');
+    var els = Ext.query('.kwfSwitchHoverFade');
     els.each(function(el) {
         var hoverFade = new Kwf.Switch.HoverFade({
             wrapper: el
@@ -27,7 +27,7 @@ Kwf.Switch.HoverFade = function(cfg) {
     if (cfg.endOpacity) this.endOpacity = cfg.endOpacity;
 
     this.switchLink = Ext.get(Ext.query('.switchLink', cfg.wrapper)[0]);
-    this.switchContent = Ext.get(Ext.query('div.switchContent', cfg.wrapper)[0]);
+    this.switchContent = Ext.get(Ext.query('.switchContent', cfg.wrapper)[0]);
     this.fadeWrapper = Ext.get(cfg.wrapper);
 
     this.switchContent.setStyle('display', 'none');
