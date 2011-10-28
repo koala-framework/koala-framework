@@ -89,7 +89,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     {
         $model = $this->getModel();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
-            $cacheId = $this->_getCacheId($row['component_id'], $row['type'], null);
+            $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
             Kwf_Cache_Simple::delete($cacheId);
         }
         $model->updateRows(array('deleted' => true), $select);
