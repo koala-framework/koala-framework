@@ -108,35 +108,4 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     {
         return !is_null($this->load($componentId, $type, $value));
     }
-
-/*
-    protected function _cleanUrl(Kwf_Component_Data $component)
-    {
-        $ids[] = $component->componentId;
-
-        $s = new Kwf_Model_Select();
-        $s->whereEquals('parent_page_id', $component->componentId);
-        foreach ($this->getModel('urlParents')->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s) as $r) {
-            $ids[] = $r['page_id'];
-        }
-
-        $s = new Kwf_Model_Select();
-        $s->whereEquals('page_id', $ids);
-        foreach ($this->getModel('url')->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s) as $row) {
-            static $prefix;
-            if (!isset($prefix)) $prefix = Kwf_Cache::getUniquePrefix();
-            $cacheId = $prefix.'url-'.$row['url'];
-            apc_delete($cacheId);
-        }
-        $this->getModel('url')->deleteRows($s);
-    }
-
-    protected function _cleanProcessInput(Kwf_Component_Data $component)
-    {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Kwf_Cache::getUniquePrefix();
-        $cacheId = $prefix.'procI-'.$component->getPageOrRoot()->componentId;
-        apc_delete($cacheId);
-    }
-    */
 }

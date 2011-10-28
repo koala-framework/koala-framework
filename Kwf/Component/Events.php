@@ -58,7 +58,8 @@ class Kwf_Component_Events
                     }
                 }
             }
-            $eventObjects[] = Kwf_Component_Events_ViewCache::getInstance('Kwf_Component_Events_ViewCache');
+            $eventObjects[] = self::getInstance('Kwf_Component_Events_ViewCache');
+            $eventObjects[] = self::getInstance('Kwf_Component_Events_UrlCache');
 
             $listeners = array();
             foreach ($eventObjects as $eventObject) {
