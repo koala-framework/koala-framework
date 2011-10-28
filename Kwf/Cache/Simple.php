@@ -45,14 +45,14 @@ class Kwf_Cache_Simple
         }
     }
 
-    public static function add($cacheId, $data)
+    public static function add($cacheId, $data, $ttl = null)
     {
         static $prefix;
         if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         if (extension_loaded('apc')) {
-            return apc_add($prefix.$cacheId, $data);
+            return apc_add($prefix.$cacheId, $data, $ttl);
         } else {
-            return self::_getCache()->save($data, self::_processId($cacheId));
+            return self::_getCache()->save($data, self::_processId($cacheId), array(), $ttl);
         }
     }
 

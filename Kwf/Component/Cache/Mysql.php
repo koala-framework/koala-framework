@@ -51,7 +51,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $cacheId = $this->_getCacheId($component->componentId, $type, $value);
         $ttl = 0;
         if ($settings['lifetime']) $ttl = $settings['lifetime'];
-        apc_add($cacheId, $content, $ttl);
+        Kwf_Cache_Simple::add($cacheId, $content, $ttl);
 
         return true;
     }
@@ -62,7 +62,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $componentId = $componentId->componentId;
         }
         $cacheId = $this->_getCacheId($componentId, $type, $value);
-        $content = apc_fetch($cacheId);
+        $content = Kwf_Cache_Simple::fetch($cacheId);
         if ($content === false) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
@@ -79,7 +79,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             if (isset($row[0])) {
                 $ttl = 0;
                 if ($row[0]['expire']) $ttl = $row[0]['expire']-time();
-                apc_add($cacheId, $content, $ttl);
+                Kwf_Cache_Simple::add($cacheId, $content, $ttl);
             }
         }
         return $content;
@@ -90,16 +90,14 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $model = $this->getModel();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
             $cacheId = $this->_getCacheId($row['component_id'], $row['type'], null);
-            apc_delete($cacheId);
+            Kwf_Cache_Simple::delete($cacheId);
         }
         $model->updateRows(array('deleted' => true), $select);
     }
 
     protected static function _getCacheId($componentId, $type, $value)
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix() . '-cc-';
-        return $prefix . "$componentId/$type/$value";
+        return "cc-$componentId/$type/$value";
     }
 
     // wird nur von Kwf_Component_View_Renderer->saveCache() verwendet
