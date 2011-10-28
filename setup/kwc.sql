@@ -21,16 +21,6 @@ CREATE TABLE IF NOT EXISTS `cache_component_url` (
   KEY `page_id` (`page_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cache_component_url_parents` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `page_id` varchar(200) NOT NULL,
-  `parent_page_id` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `page_id` (`page_id`),
-  KEY `parent_page_id` (`parent_page_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
-
 CREATE TABLE IF NOT EXISTS `kwc_data` (
   `component_id` varchar(255) NOT NULL,
   `data` text NOT NULL,

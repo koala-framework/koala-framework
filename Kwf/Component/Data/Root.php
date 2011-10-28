@@ -123,22 +123,6 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                             'url' => $cacheUrl,
                             'page_id' => $ret->componentId
                         )), array('replace'=>true));
-
-                    $m = Kwf_Component_Cache::getInstance()->getModel('urlParents');
-                    $s = new Kwf_Model_Select();
-                    $s->whereEquals('page_id', $ret->componentId);
-                    $m->deleteRows($s);
-
-                    $c = $ret;
-                    while($c = $c->parent) {
-                        if (isset($c->generator) && $c->generator->getGeneratorFlag('table')) {
-                            $m->import(Kwf_Model_Abstract::FORMAT_ARRAY,
-                                array(array(
-                                    'page_id' => $ret->componentId,
-                                    'parent_page_id' => $c->componentId
-                                )), array('buffer'=>true));
-                        }
-                    }
                 }
             } else {
                 $exactMatch = false;
