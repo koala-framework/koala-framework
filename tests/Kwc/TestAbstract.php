@@ -32,6 +32,5 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
         Kwf_Component_Generator_Abstract::clearInstances();
         $this->_root = Kwf_Component_Data_Root::getInstance();
         $this->_root->setFilename($filename);
-        apc_clear_cache('user');
     }
 }
