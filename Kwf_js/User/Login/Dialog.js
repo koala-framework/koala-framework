@@ -78,7 +78,9 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
                     }
                 }
             } else if (doc.getElementsByName('username').length >= 1) {
-                doc.getElementsByName('username')[0].focus();
+                if (doc.activeElement && doc.activeElement.tagName.toLowerCase() != 'input') { //only focus() if not password has focus (to avoid users typing their password into username)
+                    doc.getElementsByName('username')[0].focus();
+                }
             }
         }
     },
