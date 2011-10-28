@@ -94,7 +94,7 @@ class Kwf_Component_Generator_Page_Events_Table extends Kwf_Component_Generator_
         $components = Kwf_Component_Data_Root::getInstance()
             ->getComponentsByDbId($event->dbId);
         foreach ($components as $component) {
-            $this->fireEvent(new Kwf_Component_Event_Page_RecursiveFilenameChanged(
+            $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged(
                 $this->_class, $component->componentId
             ));
         }

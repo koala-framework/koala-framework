@@ -27,12 +27,8 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onPageChanged'
         );
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Page_RecursiveFilenameChanged',
-            'callback' => 'onPageRecursiveFilenameChanged'
-        );
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Page_ParentChanged',
-            'callback' => 'onPageParentChanged'
+            'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
+            'callback' => 'onPageRecursiveUrlChanged'
         );
         $ret[] = array(
             'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
@@ -101,19 +97,11 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         );
     }
 
-    public function onPageRecursiveFilenameChanged(Kwf_Component_Event_Page_RecursiveFilenameChanged $event)
+    public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
             'component_id' => $event->componentId . '%'
-        );
-    }
-
-    public function onPageParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
-    {
-        $this->_updates[] = array(
-            'type' => 'componentLink',
-            'component_id' => $event->dbId . '%'
         );
     }
 

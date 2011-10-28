@@ -28,7 +28,7 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         if (is_numeric($event->dbId)) {
             foreach ($this->_getRecursiveChildIds($event->dbId, $this->_getGenerator()->getModel()) as $id) {
                 $this->fireEvent(
-                    new Kwf_Component_Event_Page_RecursiveFilenameChanged($this->_class, $id)
+                    new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $id)
                 );
             }
         }
@@ -40,6 +40,9 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             foreach ($this->_getRecursiveChildIds($event->row->id, $event->row->getModel()) as $id) {
                 $this->fireEvent(
                     new Kwf_Component_Event_Page_ParentChanged($this->_class, $id)
+                );
+                $this->fireEvent(
+                    new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $id)
                 );
             }
         }
