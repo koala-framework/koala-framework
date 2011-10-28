@@ -25,12 +25,14 @@ class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
 
     public function onRowUpdatesFinished(Kwf_Component_Event_Row_UpdatesFinished $event)
     {
-        $select = new Kwf_Model_Select();
-        $select->where($this->_orExpr);
-        $rows = Kwf_Component_Cache::getInstance()->getModel('url')->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select);
-        foreach ($rows as $row) {
-            $cacheId = 'url-'.$row['url'];
-            Kwf_Cache_Simple::delete($cacheId);
+        if (count($this->_orExpr->getExpressions())) {
+            $select = new Kwf_Model_Select();
+            $select->where($this->_orExpr);
+            $rows = Kwf_Component_Cache::getInstance()->getModel('url')->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select);
+            foreach ($rows as $row) {
+                $cacheId = 'url-'.$row['url'];
+                Kwf_Cache_Simple::delete($cacheId);
+            }
         }
     }
 
