@@ -18,7 +18,7 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
     public function testIt()
     {
         $amz = new Vps_Service_Amazon();
-        $result = $amz->itemSearch(array('BrowseNode'=>'166039031', 'SearchIndex'=>'Books'));
+        $result = $amz->itemSearch(array('BrowseNode'=>'166039031', 'SearchIndex'=>'Books', 'AssociateTag'=>'vps-21'));
         $item = $result->current();
 
         $this->openVpc('/amazon');
