@@ -21,6 +21,9 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract
     {
         $components = $this->_getMetaTagComponents();
         $ret = array();
+        if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') {
+            $ret['generator'] = 'Koala Web Framework CMS';
+        }
         foreach ($components as $component) {
             foreach ($component->getComponent()->getMetaTags() as $name=>$content) {
                 if (!isset($ret[$name])) $ret[$name] = '';
