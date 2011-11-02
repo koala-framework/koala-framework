@@ -52,12 +52,12 @@ class Kwf_Component_Generator_PseudoPage_Events_Table extends Kwf_Component_Gene
         }
         if ($nameChanged) {
             $this->fireEvent(new Kwf_Component_Event_Page_NameChanged(
-                $this->_class, $this->_getDbId($event->row)
+                $this->_class, $this->_getDbIdFromRow($event->row)
             ));
         }
         if ($filenameChanged) {
             $this->fireEvent(new Kwf_Component_Event_Page_FilenameChanged(
-                $this->_class, $this->_getDbId($event->row)
+                $this->_class, $this->_getDbIdFromRow($event->row)
             ));
         }
     }
