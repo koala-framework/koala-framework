@@ -127,7 +127,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 this.lightboxEl.fadeIn();
                 this.preloadLinks();
             }
-            this.lightboxEl.center();
+            this.style.afterContentShown();
         } else {
             this.lightboxEl.show();
             this.fetchContent();
