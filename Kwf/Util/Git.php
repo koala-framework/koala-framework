@@ -253,8 +253,8 @@ class Kwf_Util_Git
         } else {
             $this->system("checkout $branch");
         }
-        $this->system("merge --no-ff -m \"merge into production for go-online\" $staging");
-        $this->system("push origin $branch:refs/heads/$branch");
+        $this->system("reset --hard $staging");
+        $this->system("push --force origin $branch:refs/heads/$branch");
 
         if ($activeBranch) $this->checkout($activeBranch);
     }
