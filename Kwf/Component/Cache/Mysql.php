@@ -87,6 +87,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function deleteViewCache($select)
     {
+        $select->whereEquals('deleted', false);
         $model = $this->getModel();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
             $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
