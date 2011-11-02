@@ -3,6 +3,7 @@ class Kwf_Component_Generator_Page_Static extends Kwf_Component_Generator_Pseudo
 {
     protected $_idSeparator = '_';
     protected $_inherits = true;
+    protected $_eventsClass = 'Kwf_Component_Generator_Page_Events_Static';
 
     protected function _formatConfig($parentData, $componentKey)
     {
