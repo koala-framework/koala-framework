@@ -134,5 +134,11 @@ class Kwf_Component_Events
             self::$_indent = $loopIndent;
             $ev->{$callback['method']}($event);
         }
+
+        if (!$callbacks) {
+            if ($logger) {
+                $logger->logEvent($loopIndent, null, $event);
+            }
+        }
     }
 }

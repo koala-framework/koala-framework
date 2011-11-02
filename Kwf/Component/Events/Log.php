@@ -20,7 +20,7 @@ class Kwf_Component_Events_Log extends Zend_Log
         $message =
             str_repeat(' ', ($indent - 1) * 2) .
             $event->__toString() . ': ' .
-            $callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')';
+            ( $callback ? ($callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')') : '(none)' );
         $this->log($message, Zend_Log::INFO);
     }
 }
