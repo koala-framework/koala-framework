@@ -28,6 +28,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         $success = false;
         if (!$showInvisible) { //don't cache in preview
             $processCached = Kwf_Cache_Simple::fetch($cacheId, $success);
+            //cache is cleared in Kwf_Component_Events_ProcessInputCache
         }
         if (!$success) {
             $process = $this->_data
