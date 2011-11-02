@@ -19,8 +19,8 @@ class Kwc_Abstract_Composite_Events extends Kwc_Abstract_Events
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, str_replace('-child', '', $event->dbId)
+        $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+            $this->_class, $event->getParentDbId()
         ));
     }
 }
