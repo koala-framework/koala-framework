@@ -57,18 +57,6 @@ class Kwc_Box_InheritContent_Component extends Kwc_Abstract
         return $c;
     }
 
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $generators = Kwc_Abstract::getSetting($componentClass, 'generators');
-        if (isset($generators['child']) && $generators['child']['component']) {
-            $childClass = $generators['child']['component'];
-            // TODO: es sollte nur mit Pattern wie "%-ic-child" gemacht werden, geht aber noch nicht
-            if ($childClass) $ret[] = new Kwc_Box_InheritContent_CacheMeta($childClass);
-        }
-        return $ret;
-    }
-
     public function hasContent()
     {
         $c = $this->getContentChild();

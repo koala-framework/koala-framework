@@ -8,18 +8,16 @@ class Kwf_Component_Cache_Box_InheritContentTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        $this->markTestIncomplete('eventscache');
-
         /*
         root
         |-ic
         | |-child
         |-1
-        | |-ic
-        |   |-child
-        |-2
           |-ic
-            |-child
+          | |-child
+          |-2
+            |-ic
+              |-child
         */
         parent::setUp('Kwf_Component_Cache_Box_IcRoot_Component');
     }
@@ -56,8 +54,12 @@ class Kwf_Component_Cache_Box_InheritContentTest extends Kwc_TestAbstract
 
         $this->assertEquals('1-ic-child', $c1->render(true, true));
         $this->assertEquals('1-ic-child', $c2->render(true, true));
-        $model->getRow('1-ic-child')->delete();
+        $row = $model->getRow('1-ic-child');
+        $row->content = null;
+        $row->save();
         $this->_process();
+        $this->assertEquals('root-ic-child', $c1->render(false, true));
+        $this->assertEquals('root-ic-child', $c2->render(false, true));
         $this->assertEquals('root-ic-child', $c1->render(true, true));
         $this->assertEquals('root-ic-child', $c2->render(true, true));
     }

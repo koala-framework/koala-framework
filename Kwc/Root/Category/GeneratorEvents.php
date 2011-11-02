@@ -1,6 +1,13 @@
 <?php
 class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Events_Table
 {
+    private static $_childIds;
+
+    protected function _init() {
+        parent::_init();
+        self::$_childIds = null;
+    }
+
     public function getListeners()
     {
         $ret = parent::getListeners();
@@ -19,57 +26,67 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             'event' => 'Kwf_Component_Event_Row_Deleted',
             'callback' => 'onPageDataChanged'
         ));
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_RecursiveContentChanged',
+            'callback' => 'onRecursiveEvent'
+        );
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
+            'callback' => 'onRecursiveEvent'
+        );
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_Page_ParentChanged',
+            'callback' => 'onRecursiveEvent'
+        );
         return $ret;
+    }
+
+    public function onRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        if (strpos($event->componentId, '_') !== false) return;
+        $pageId = $event->componentId;
+        $suffix = '';
+        if (($pos = strpos($event->componentId, '-')) !== false) {
+            $pageId = substr($event->componentId, 0, $pos);
+            $suffix = substr($event->componentId, $pos);
+        }
+        if (!is_numeric($pageId)) return;
+
+        if (!self::$_childIds) {
+            foreach ($this->_getGenerator()->getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY) as $row) {
+                self::$_childIds[$row['parent_id']][] = $row['id'];
+            }
+        }
+
+        if (!isset(self::$_childIds[$pageId])) return;
+        foreach(self::$_childIds[$pageId] as $childId) {
+            $eventsClass = get_class($event);
+            $this->fireEvent(new $eventsClass($event->class, $childId . $suffix));
+        }
     }
 
     public function onPageFilenameChanged(Kwf_Component_Event_Page_FilenameChanged $event)
     {
         parent::onPageFilenameChanged($event);
-        if (is_numeric($event->dbId)) {
-            foreach ($this->_getRecursiveChildIds($event->dbId, $this->_getGenerator()->getModel()) as $id) {
-                $this->fireEvent(
-                    new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $id)
-                );
-            }
-        }
+        $this->fireEvent(
+            new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $event->dbId)
+        );
     }
 
     public function onPageRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        if (in_array('parent_id', $event->row->getDirtyColumns())) {
-            foreach ($this->_getRecursiveChildIds($event->row->id, $event->row->getModel()) as $id) {
-                $this->fireEvent(
-                    new Kwf_Component_Event_Page_ParentChanged($this->_class, $id)
-                );
-                $this->fireEvent(
-                    new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $id)
-                );
-            }
+        if ($event->isDirty('parent_id')) {
+            $this->fireEvent(
+                new Kwf_Component_Event_Page_ParentChanged($this->_class, $event->row->id)
+            );
+            $this->fireEvent(
+                new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $event->row->id)
+            );
         }
     }
 
     public function onPageDataChanged(Kwf_Component_Event_Row_Abstract $event)
     {
         $this->_getGenerator()->pageDataChanged();
-    }
-
-    private function _getRecursiveChildIds($id, $model)
-    {
-        $ids = array();
-        foreach ($model->getRows() as $row) {
-            $ids[$row->parent_id][] = $row->id;
-        }
-        return $this->_rekGetRecursiveChildIds($id, $ids);
-    }
-
-    private function _rekGetRecursiveChildIds($id, $ids)
-    {
-        $ret = array($id);
-        if (isset($ids[$id])) {
-            foreach ($ids[$id] as $id) {
-                $ret = array_merge($ret, $this->_rekGetRecursiveChildIds($id, $ids));
-            }
-        }
-        return $ret;
     }
 }

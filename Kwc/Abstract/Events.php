@@ -11,9 +11,6 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
                 'callback' => 'onOwnRowUpdate'
             );
         }
-        if (Kwc_Admin::getComponentFile($this->_class, 'Master', 'tpl')) {
-            //p('A');
-        }
         return $ret;
     }
 
