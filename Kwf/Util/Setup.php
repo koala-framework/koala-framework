@@ -4,10 +4,12 @@ class Kwf_Util_Setup
     public static function generateCode($configClass)
     {
         $ip = get_include_path();
-        $ip .= PATH_SEPARATOR.'cache/generated';
+        $ip = explode(PATH_SEPARATOR, $ip);
+        $ip[] = 'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
-            $ip .= PATH_SEPARATOR . $p;
+            $ip[] = $p;
         }
+        $ip = array_unique($ip);
 
         $ret = "<?php\n";
 
@@ -39,7 +41,7 @@ class Kwf_Util_Setup
             'Kwf_View_Helper_ComponentLink',
         );
         foreach ($preloadClasses as $cls) {
-            foreach (explode(PATH_SEPARATOR, $ip) as $path) {
+            foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
                     $ret .= "require_once('".$file."');\n";
@@ -55,7 +57,7 @@ class Kwf_Util_Setup
 
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
 
-        $ret .= "set_include_path('$ip');\n";
+        $ret .= "set_include_path('".implode(PATH_SEPARATOR, $ip)."');\n";
         $ret .= "\n";
         $ret .= "\n";
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
