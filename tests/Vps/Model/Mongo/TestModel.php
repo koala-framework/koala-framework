@@ -15,7 +15,7 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
         static $m;
         if (!isset($m)) {
             $port = Vps_Util_Tcp::getFreePort(rand(27020, 30000));
-            $cmd = "vps test forward --controller=vps_model_mongo_run-temp-mongo --port=$port";
+            $cmd = "php bootstrap.php test forward --controller=vps_model_mongo_run-temp-mongo --port=$port";
             if ($debugOutput) {
                 echo $cmd."\n";
                 $descriptorspec = array(

@@ -10,6 +10,7 @@ class Vpc_Form_Dynamic_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['form'] = 'Vpc_Form_Dynamic_Form_Component';
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['editComponents'] = array('paragraphs');
+        $ret['flags']['hasResources'] = true;
         return $ret;
     }
 }

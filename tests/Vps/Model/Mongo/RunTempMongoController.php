@@ -23,7 +23,7 @@ class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
 
         $mongoDir = "/usr";
 
-        $debugOutput = true;
+        $debugOutput = false;
 
         $port = $this->_getParam('port');
 
