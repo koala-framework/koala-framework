@@ -60,6 +60,7 @@ class Kwf_Component_Events
             }
             $eventObjects[] = self::getInstance('Kwf_Component_Events_ViewCache');
             $eventObjects[] = self::getInstance('Kwf_Component_Events_UrlCache');
+            $eventObjects[] = self::getInstance('Kwf_Component_Events_ProcessInputCache');
 
             $listeners = array();
             foreach ($eventObjects as $eventObject) {
@@ -77,12 +78,17 @@ class Kwf_Component_Events
                     $event = $listener['event'];
                     if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
                     $class = isset($listener['class']) ? $listener['class'] : 'all';
-                    if (is_object($class)) $class = get_class($class);
-                    $listeners[$event][$class][] = array(
-                        'class' => get_class($eventObject),
-                        'method' => $listener['callback'],
-                        'config' => $eventObject->getConfig()
-                    );
+                    if (!is_array($class)) {
+                        $class = array($class);
+                    }
+                    foreach ($class as $c) {
+                        if (is_object($c)) $c = get_class($c);
+                        $listeners[$event][$c][] = array(
+                            'class' => get_class($eventObject),
+                            'method' => $listener['callback'],
+                            'config' => $eventObject->getConfig()
+                        );
+                    }
                 }
             }
 
