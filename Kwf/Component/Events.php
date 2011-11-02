@@ -120,8 +120,7 @@ class Kwf_Component_Events
         if (isset($listeners[$eventClass]['all'])) {
             $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
         }
-        if (!empty($callbacks)) self::$_indent++;
-        $loopIndent = self::$_indent;
+        self::$_indent++;
         foreach ($callbacks as $callback) {
             $ev = call_user_func(
                 array($callback['class'], 'getInstance'),
@@ -129,16 +128,15 @@ class Kwf_Component_Events
                 $callback['config']
             );
             if ($logger) {
-                $logger->logEvent($loopIndent, $callback, $event);
+                $logger->logEvent(self::$_indent, $callback, $event);
             }
-            self::$_indent = $loopIndent;
             $ev->{$callback['method']}($event);
         }
-
         if (!$callbacks) {
             if ($logger) {
-                $logger->logEvent($loopIndent, null, $event);
+                $logger->logEvent(self::$_indent, null, $event);
             }
         }
+        self::$_indent--;
     }
 }
