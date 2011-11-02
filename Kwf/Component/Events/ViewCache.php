@@ -61,7 +61,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
                     $and = array();
                     foreach ($values as $k => $v) {
                         if (strpos($v, '%') !== false) {
-                            $and[] = new Kwf_Model_Select_Expr_Like(str_replace('_', '\\_', $k), $v);
+                            $and[] = new Kwf_Model_Select_Expr_Like($k, str_replace('_', '\\_', $v));
                         } else {
                             $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
                         }
