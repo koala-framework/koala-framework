@@ -41,7 +41,6 @@ class Kwf_Component_Cache_MenuStaticPage_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $this->markTestIncomplete();
         $html = $c->render(true, false);
         $this->assertEquals(2, substr_count($html, '<li'));
         $this->assertContains('/test1/1:page"', $html);
@@ -58,7 +57,6 @@ class Kwf_Component_Cache_MenuStaticPage_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $this->markTestIncomplete();
         $html = $c->render(true, false);
         $this->assertEquals(0, substr_count($html, '<li'));
     }
