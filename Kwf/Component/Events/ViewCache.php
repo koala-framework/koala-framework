@@ -31,6 +31,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onPageRecursiveUrlChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_RecursiveRemoved',
+            'callback' => 'onComponentRecursiveRemoved'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
             'callback' => 'onComponentClassContentChanged'
         );
@@ -118,6 +122,18 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
             $log->log("view cache clear type=componentLink component_id=$event->componentId%", Zend_Log::INFO);
+        }
+    }
+
+    public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
+    {
+        $this->_updates[] = array(
+            //remove all types
+            'component_id' => $event->componentId . '%'
+        );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear component_id=$event->componentId%", Zend_Log::INFO);
         }
     }
 
