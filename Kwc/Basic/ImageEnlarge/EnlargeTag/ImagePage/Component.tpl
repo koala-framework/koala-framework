@@ -23,8 +23,8 @@
         </div>
     </div>
     <div class="lightboxFooter">
-        <? if(isset($this->options->title) && $this->options->title) { ?>
-            <p class="imageCaption<? if($this->options->title) { ?>Title<? } ?>">
+        <? if(isset($this->options->imageCaption) && $this->options->imageCaption) { ?>
+            <p class="imageCaption<? if(isset($this->options->title) && $this->options->title) { ?>Title<? } ?>">
                 <strong><?=$this->options->imageCaption?></strong>
             </p>
         <? } ?>
