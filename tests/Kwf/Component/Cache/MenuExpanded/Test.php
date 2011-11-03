@@ -100,7 +100,6 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
-        $this->markTestIncomplete();
         $this->assertRegExp('#/test1".*/test1/test4".*/test1/test2".*/test5"#s', $html); //test order
     }
 
@@ -142,7 +141,6 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
-        $this->markTestIncomplete();
         $this->assertEquals(5, substr_count($html, '<li'));
         $this->assertContains('/test1/testnew"', $html);
     }
@@ -173,7 +171,6 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
-        $this->markTestIncomplete();
         $this->assertEquals(3, substr_count($html, '<li'));
         $this->assertNotContains('/test4"', $html);
     }
@@ -222,7 +219,6 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
-        $this->markTestIncomplete();
         $this->assertEquals(5, substr_count($html, '<li'));
         $this->assertContains('/test3"', $html);
     }
@@ -239,7 +235,6 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
-        $this->markTestIncomplete();
         $this->assertEquals(3, substr_count($html, '<li'));
         $this->assertNotContains('/test4"', $html);
     }

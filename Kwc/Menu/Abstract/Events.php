@@ -1,6 +1,8 @@
 <?php
 class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 {
+    protected $_numLevels = 1; //overridden in Menu_Expanded
+
     public function getListeners()
     {
         $ret = parent::getListeners();
@@ -45,13 +47,13 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
             }
             $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
             if (is_int($menuLevel)) {
-                if ($menuLevel == $level+1) {
+                if ($menuLevel >= $level+1 && $menuLevel <= $level+$this->_numLevels) {
                     $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
                         $this->_class
                     ));
                 }
             } else {
-                if ($level == 1 && $cat == $menuLevel) {
+                if ($cat == $menuLevel && $level >= 1 && $level <= $this->_numLevels) {
                     $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
                         $this->_class
                     ));
