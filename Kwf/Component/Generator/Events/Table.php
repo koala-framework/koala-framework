@@ -43,7 +43,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             $this->_fireComponentEvent('PositionChanged', $event->row);
         }
         if (isset($dc['component']) && isset($event->row->visible) && $event->row->visible) {
-            $this->_fireComponentEvent('ClassChanged', $event->row);
+            $this->fireEvent(new Kwf_Component_Event_Component_ClassChanged($this->_getClassFromRow($row), $this->_getDbIdFromRow($row)));
         }
     }
 
