@@ -15,6 +15,12 @@ class Kwf_Component_Cache_MenuExpanded_PagesModel extends Kwc_Root_Category_Gene
                     'parent_id'=>1, 'component'=>'empty', 'is_home'=>false, 'hide'=>false),
                 array('id'=>5, 'pos'=>2, 'visible'=>true, 'name'=>'test5', 'filename' => 'test5', 'custom_filename' => false,
                     'parent_id'=>'root', 'component'=>'empty', 'is_home'=>false, 'hide'=>false),
+                array('id'=>6, 'pos'=>2, 'visible'=>true, 'name'=>'test6', 'filename' => 'test6', 'custom_filename' => false,
+                    'parent_id'=>2, 'component'=>'empty', 'is_home'=>false, 'hide'=>false),
+                array('id'=>7, 'pos'=>3, 'visible'=>true, 'name'=>'test7', 'filename' => 'test7', 'custom_filename' => false,
+                    'parent_id'=>2, 'component'=>'empty', 'is_home'=>false, 'hide'=>false),
+                array('id'=>8, 'pos'=>1, 'visible'=>true, 'name'=>'test8', 'filename' => 'test8', 'custom_filename' => false,
+                    'parent_id'=>3, 'component'=>'empty', 'is_home'=>false, 'hide'=>false),
             )
         ));
         parent::__construct($config);
