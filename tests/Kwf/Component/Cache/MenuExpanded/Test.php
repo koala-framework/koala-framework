@@ -190,7 +190,6 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
-        $this->markTestIncomplete();
         $this->assertEquals(5, substr_count($html, '<li'));
         $this->assertContains('/test7"', $html);
     }
@@ -207,7 +206,6 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
-        $this->markTestIncomplete();
         $this->assertEquals(3, substr_count($html, '<li'));
         $this->assertNotContains('/test5"', $html);
     }

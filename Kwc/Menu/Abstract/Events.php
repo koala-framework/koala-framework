@@ -19,7 +19,19 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Component_Event_Page_PositionChanged',
             'callback' => 'onPageChanged'
         );
+        $ret[] = array(
+            'class' => null,
+            'event' => 'Kwf_Component_Event_Page_ParentChanged',
+            'callback' => 'onParentChanged'
+        );
         return $ret;
+    }
+
+    public function onParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
+            $this->_class
+        ));
     }
 
     public function onPageChanged(Kwf_Component_Event_Page_Abstract $event)
