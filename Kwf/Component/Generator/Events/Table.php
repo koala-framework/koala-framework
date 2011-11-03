@@ -43,7 +43,11 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             $this->_fireComponentEvent('PositionChanged', $event->row);
         }
         if (isset($dc['component']) && isset($event->row->visible) && $event->row->visible) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ClassChanged($this->_getClassFromRow($row), $this->_getDbIdFromRow($row)));
+            $id = $this->_getDbIdFromRow($event->row);
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($id) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
+                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
+            }
         }
     }
 
@@ -61,14 +65,20 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         }
     }
 
-    protected function _getClassFromRow($row)
+    protected function _getClassFromRow($row, $cleanValue = false)
     {
         $classes = $this->_getGenerator()->getChildComponentClasses();
-        if (count($classes) > 1 && $row->getModel()->hasColumn('component') && isset($classes[$row->component])) {
-            $class = $classes[$row->component];
-        } else {
-            $class = array_shift($classes);
+        if (count($classes) > 1 && $row->getModel()->hasColumn('component')) {
+            if ($cleanValue) {
+                $c = $row->getCleanValue('component');
+            } else {
+                $c = $row->component;
+            }
+            if (isset($classes[$c])) {
+                return $classes[$row->component];
+            }
         }
+        $class = array_shift($classes);
         return $class;
     }
 

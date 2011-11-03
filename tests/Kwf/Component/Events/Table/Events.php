@@ -19,7 +19,7 @@ class Kwf_Component_Events_Table_Events extends Kwf_Component_Abstract_Events
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Component_ClassChanged',
+            'event' => 'Kwf_Component_Event_Component_RecursiveAdded',
             'callback' => 'onComponentChange'
         );
         return $ret;
