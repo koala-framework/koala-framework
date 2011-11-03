@@ -14,6 +14,10 @@ class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
             'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
             'callback' => 'onPageRecursiveUrlChanged'
         );
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_RecursiveRemoved',
+            'callback' => 'onComponentRecursiveRemoved'
+        );
         return $ret;
     }
 
@@ -37,6 +41,11 @@ class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
+    {
+        $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', str_replace('_', '\\_', $event->componentId).'%');
+    }
+
+    public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
         $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', str_replace('_', '\\_', $event->componentId).'%');
     }
