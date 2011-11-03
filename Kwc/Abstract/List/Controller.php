@@ -46,6 +46,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
                     $postData[$f->getFieldName()] = $asciiFilter->filter($fileRow->filename).'.'.$fileRow->extension;
                 }
             }
+            $postData = array_merge($postData, $this->_getDefaultValues($form));
             $postData = $form->processInput(null, $postData);
             if ($errors = $form->validate(null, $postData)) {
                 throw new Kwf_Exception('validate failed');
@@ -57,6 +58,18 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         Zend_Registry::get('db')->commit();
     }
 
+    private function _getDefaultValues(Kwf_Form_Container_Abstract $form)
+    {
+        $ret = array();
+        foreach ($form->getChildren() as $i) {
+            if ($i instanceof Kwf_Form_Container_Abstract) {
+                $ret = array_merge($ret, $this->_getDefaultValues($i));
+            } else if ($i->getDefaultValue()) {
+                $ret[$i->getFieldName()] = $i->getDefaultValue();
+            }
+        }
+        return $ret;
+    }
 
     private function _getFileUploadField($form)
     {
