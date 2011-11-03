@@ -78,6 +78,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
         $this->_updates['db_id'][] = $event->dbId;
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear db_id=$event->dbId", Zend_Log::INFO);
+        }
     }
 
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
@@ -87,6 +91,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'component_id' => $event->componentId . '%',
             'component_class' => $event->class
         );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear type=component component_id=$event->componentId% component_class=$event->class", Zend_Log::INFO);
+        }
     }
 
     public function onPageChanged(Kwf_Component_Event_Page_ContentChanged $event)
@@ -95,6 +103,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'type' => 'componentLink',
             'db_id' => $event->dbId
         );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear type=componentLink db_id=$event->dbId", Zend_Log::INFO);
+        }
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
@@ -103,6 +115,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'type' => 'componentLink',
             'component_id' => $event->componentId . '%'
         );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear type=componentLink component_id=$event->componentId%", Zend_Log::INFO);
+        }
     }
 
     public function onComponentClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
@@ -111,6 +127,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'type' => 'component',
             'component_class' => $event->class
         );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear type=component component_class=$event->class", Zend_Log::INFO);
+        }
     }
 
     public function onComponentClassPartialsChanged(Kwf_Component_Event_ComponentClass_PartialsChanged $event)
@@ -119,6 +139,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'type' => 'partial',
             'component_class' => $event->class
         );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear type=partial component_class=$event->class", Zend_Log::INFO);
+        }
     }
 
     public function onComponentClassPartialChanged(Kwf_Component_Event_ComponentClass_PartialChanged $event)
@@ -128,6 +152,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'component_class' => $event->class,
             'value' => $event->id
         );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear type=partial component_class=$event->class value=$event->id", Zend_Log::INFO);
+        }
     }
 
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
@@ -135,5 +163,9 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         Kwf_Media::getOutputCache()->remove(Kwf_Media::createCacheId(
             $event->class, $event->componentId, $event->type
         ));
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("media cache clear class=$event->class id=$event->componentId type=$event->type", Zend_Log::INFO);
+        }
     }
 }
