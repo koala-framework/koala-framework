@@ -1,6 +1,8 @@
 <?php
 class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_Static
 {
+    protected $_eventsClass = 'Kwf_Component_Generator_Box_Events_StaticSelect';
+
     protected function _init()
     {
         if (!is_array($this->_settings['component']) || $this->_settings['component'] < 2) {
