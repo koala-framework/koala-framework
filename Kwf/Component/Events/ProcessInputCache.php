@@ -29,6 +29,10 @@ class Kwf_Component_Events_ProcessInputCache extends Kwf_Component_Events
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $d) {
             $cacheId = 'procI-'.$d->getPageOrRoot()->componentId;
             Kwf_Cache_Simple::delete($cacheId);
+            $log = Kwf_Component_Events_Log::getInstance();
+            if ($log) {
+                $log->log("processInput cache clear componentId=".$d->getPageOrRoot()->componentId, Zend_Log::INFO);
+            }
         }
     }
 }

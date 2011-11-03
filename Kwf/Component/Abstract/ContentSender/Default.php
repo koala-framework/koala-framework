@@ -20,35 +20,36 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         return $ret;
     }
 
-    protected function _callProcessInput()
+    //public for unittest
+    public static function getProcessInputComponents(Kwf_Component_Data $data)
     {
         $showInvisible = Kwf_Config::getValue('showInvisible');
 
-        $cacheId = 'procI-'.$this->_data->getPageOrRoot()->componentId;
+        $cacheId = 'procI-'.$data->getPageOrRoot()->componentId;
         $success = false;
         if (!$showInvisible) { //don't cache in preview
             $processCached = Kwf_Cache_Simple::fetch($cacheId, $success);
             //cache is cleared in Kwf_Component_Events_ProcessInputCache
         }
         if (!$success) {
-            $process = $this->_data
+            $process = $data
                 ->getRecursiveChildComponents(array(
                         'page' => false,
                         'flags' => array('processInput' => true)
                     ));
-            if (Kwf_Component_Abstract::getFlag($this->_data->componentClass, 'processInput')) {
-                $process[] = $this->_data;
+            if (Kwf_Component_Abstract::getFlag($data->componentClass, 'processInput')) {
+                $process[] = $data;
             }
 
             // TODO: Äußerst suboptimal
-            if (is_instance_of($this->_data->componentClass, 'Kwc_Show_Component')) {
-                $process += $this->_data->getComponent()->getShowComponent()
+            if (is_instance_of($data->componentClass, 'Kwc_Show_Component')) {
+                $process += $data->getComponent()->getShowComponent()
                     ->getRecursiveChildComponents(array(
                         'page' => false,
                         'flags' => array('processInput' => true)
                     ));
-                if (Kwf_Component_Abstract::getFlag(get_class($this->_data->getComponent()->getShowComponent()->getComponent()), 'processInput')) {
-                    $process[] = $this->_data;
+                if (Kwf_Component_Abstract::getFlag(get_class($data->getComponent()->getShowComponent()->getComponent()), 'processInput')) {
+                    $process[] = $data;
                 }
             }
             if (!$showInvisible) {
@@ -64,6 +65,12 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                 $process[] = Kwf_Component_Data::kwfUnserialize($d);
             }
         }
+        return $process;
+    }
+
+    protected function _callProcessInput()
+    {
+        $process = self::getProcessInputComponents($this->_data);
 
         $postData = $this->_getRequestWithFiles();
         foreach ($process as $i) {
