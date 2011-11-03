@@ -26,6 +26,11 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Component_Event_Page_ParentChanged',
             'callback' => 'onParentChanged'
         );
+        $ret[] = array(
+            'class' => null,
+            'event' => 'Kwf_Component_Event_Component_RecursiveRemoved',
+            'callback' => 'onRecursiveRemoved'
+        );
         return $ret;
     }
 
@@ -60,5 +65,13 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                 }
             }
         }
+    }
+
+    public function onRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
+    {
+        //TODO: Component_RecursiveContentChanged could be used, ParentMenu etc have to listen to that too then
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
+            $this->_class
+        ));
     }
 }
