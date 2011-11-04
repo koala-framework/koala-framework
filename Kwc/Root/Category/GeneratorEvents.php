@@ -43,7 +43,6 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             $pageId = substr($event->componentId, 0, $pos);
             $suffix = substr($event->componentId, $pos);
         }
-        if (!is_numeric($pageId)) return;
 
         $childIds = $this->_getGenerator()->getPageChildIds($pageId);
         foreach($childIds as $childId) {
