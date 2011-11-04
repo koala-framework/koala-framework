@@ -1,10 +1,20 @@
 <?php
 class Kwf_Component_Events_Log extends Zend_Log
 {
+    public $indent = 0;
+
+    /**
+     * @return self
+     */
     public static function getInstance()
     {
         static $instance;
-        if (!$instance) $instance = new Kwf_Component_Events_Log();
+        if (is_null($instance)) {
+            $instance = false;
+            if (Kwf_Config::getValue('debug.eventlog')) {
+                $instance = new Kwf_Component_Events_Log();
+            }
+        }
         return $instance;
     }
 
@@ -15,12 +25,10 @@ class Kwf_Component_Events_Log extends Zend_Log
         parent::__construct($writer);
     }
 
-    public function logEvent($indent, $callback, Kwf_Component_Event_Abstract $event)
+    
+    public function log($message, $priority, $extras = null)
     {
-        $message =
-            str_repeat(' ', $indent * 2) .
-            $event->__toString() . ': ' .
-            ( $callback ? ($callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')') : '(none)' );
-        $this->log($message, Zend_Log::INFO);
+        $message = str_repeat(' ', $this->indent * 2) . $message;
+        parent::log($message, $priority, $extras);
     }
 }

@@ -104,16 +104,14 @@ class Kwf_Component_Events
 
     public static function fireEvent($event)
     {
-        if ($event instanceof Kwf_Component_Event_Row_Abstract ||
-            $event instanceof Kwf_Component_Event_Row_UpdatesFinished)
-        {
-            self::$_indent = 0;
-        }
-
-        $logger = null;
-        if (Zend_Registry::get('config')->debug->eventlog) {
-            $logger = Kwf_Component_Events_Log::getInstance();
-            if (self::$_indent == 0) $logger->info('----');
+        $logger = Kwf_Component_Events_Log::getInstance();
+        if ($logger) {
+            if ($event instanceof Kwf_Component_Event_Row_Abstract ||
+                $event instanceof Kwf_Component_Event_Row_UpdatesFinished)
+            {
+                $logger->indent = 0;
+            }
+            if ($logger->indent == 0) $logger->info('----');
         }
 
         $listeners = self::getAllListeners();
@@ -126,7 +124,10 @@ class Kwf_Component_Events
         if (isset($listeners[$eventClass]['all'])) {
             $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
         }
-        self::$_indent++;
+        if ($logger) {
+            $logger->info($event->__toString() . ':');
+            $logger->indent++;
+        }
         foreach ($callbacks as $callback) {
             $ev = call_user_func(
                 array($callback['class'], 'getInstance'),
@@ -134,15 +135,13 @@ class Kwf_Component_Events
                 $callback['config']
             );
             if ($logger) {
-                $logger->logEvent(self::$_indent, $callback, $event);
+                $msg = '-> '.$callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')';
+                $logger->info($msg . ':');
             }
             $ev->{$callback['method']}($event);
         }
-        if (!$callbacks) {
-            if ($logger) {
-                $logger->logEvent(self::$_indent, null, $event);
-            }
+        if ($logger) {
+            $logger->indent--;
         }
-        self::$_indent--;
     }
 }
