@@ -574,14 +574,11 @@ abstract class Kwf_Component_Generator_Abstract
         return count($this->getChildData($parentData, $select));
     }
 
-    protected function _getChildComponentClasses($parentData = null)
-    {
-        return $this->_settings['component'];
-    }
+    protected final function _getChildComponentClasses() {} //got removed, overwrite _getChildComponentClass or use alternative components instead
 
     protected function _getChildComponentClass($key, $parentData)
     {
-        $c = $this->_getChildComponentClasses($parentData);
+        $c = $this->getChildComponentClasses();
         if ($key) {
             if (!isset($c[$key])) {
                 throw new Kwf_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
