@@ -76,5 +76,7 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
         }
         $row->setMailContentManual(true);
         $row->setBodyText($msg);
+
+        $row->component_id = $this->getData()->parent->dbId;
     }
 }
