@@ -1,5 +1,5 @@
 <?php
-class Kwc_Menu_ParentMenu_Events extends Kwc_Abstract_Events
+class Kwc_Menu_ParentContent_Events extends Kwc_Basic_ParentContent_Events
 {
     public function getListeners()
     {
