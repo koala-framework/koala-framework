@@ -46,7 +46,16 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         }
     }
 
-    //called by GeneratorEvents wen model changes
+    //only used by GeneratorEvents
+    public function getPageChildIds($parentId)
+    {
+        if (isset($this->_pageChilds[$parentId])) {
+            return $this->_pageChilds[$parentId];
+        }
+        return array();
+    }
+
+    //called by GeneratorEvents when model changes
     public function pageDataChanged()
     {
         $this->_pageDataLoaded = false;

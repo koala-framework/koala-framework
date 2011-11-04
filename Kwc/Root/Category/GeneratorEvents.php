@@ -1,13 +1,6 @@
 <?php
 class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Events_Table
 {
-    private static $_childIds;
-
-    protected function _init() {
-        parent::_init();
-        self::$_childIds = null;
-    }
-
     public function getListeners()
     {
         $ret = parent::getListeners();
@@ -52,14 +45,8 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         }
         if (!is_numeric($pageId)) return;
 
-        if (!self::$_childIds) {
-            foreach ($this->_getGenerator()->getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY) as $row) {
-                self::$_childIds[$row['parent_id']][] = $row['id'];
-            }
-        }
-
-        if (!isset(self::$_childIds[$pageId])) return;
-        foreach(self::$_childIds[$pageId] as $childId) {
+        $childIds = $this->_getGenerator()->getPageChildIds($pageId);
+        foreach($childIds as $childId) {
             $eventsClass = get_class($event);
             $this->fireEvent(new $eventsClass($event->class, $childId . $suffix));
         }
