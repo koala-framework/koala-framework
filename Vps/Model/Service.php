@@ -152,11 +152,17 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     public function countRows($where = array())
     {
+        if (is_object($where) && is_instance_of($where, 'Vps_Model_Select')) {
+            $where = $where->toArray();
+        }
         return $this->_client->countRows($where);
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
+        if (is_object($where) && is_instance_of($where, 'Vps_Model_Select')) {
+            $where = $where->toArray();
+        }
         $pk = $this->getPrimaryKey();
         $keys = array();
         $data = $this->_client->getRows($where, $order, $limit, $start);
@@ -223,6 +229,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     public function deleteRows($where)
     {
+        if (is_object($where) && is_instance_of($where, 'Vps_Model_Select')) {
+            $where = $where->toArray();
+        }
         return $this->_client->deleteRows($where);
     }
 
@@ -241,6 +250,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     public function export($format, $select = array())
     {
+        if (is_object($select) && is_instance_of($select, 'Vps_Model_Select')) {
+            $select = $select->toArray();
+        }
         return $this->_client->export($format, $select);
     }
 
@@ -256,6 +268,13 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     public function callMultiple(array $call)
     {
+        foreach ($call as $method => $args) {
+            foreach ($args as $k => $arg) {
+                if (is_object($arg) && is_instance_of($arg, 'Vps_Model_Select')) {
+                    $call[$method][$k] = $arg->toArray();
+                }
+            }
+        }
         return $this->_client->callMultiple($call);
     }
 }
