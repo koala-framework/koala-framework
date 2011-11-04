@@ -23,4 +23,18 @@ class Kwf_Component_Generator_Box_Events_StaticSelect extends Kwf_Component_Gene
         }
     }
 
+    protected function _getClassFromRow($row, $cleanValue = false)
+    {
+        $classes = $this->_getGenerator()->getChildComponentClasses();
+        if ($cleanValue) {
+            $c = $row->getCleanValue('component');
+        } else {
+            $c = $row->component;
+        }
+        if (isset($classes[$c])) {
+            return $classes[$row->component];
+        }
+        $class = array_shift($classes);
+        return $class;
+    }
 }
