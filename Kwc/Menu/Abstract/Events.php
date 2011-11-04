@@ -46,22 +46,50 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
         $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $data) {
             $level = 0;
-            while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
-                if ($data->isPage) $level++;
-                $data = $data->parent;
+            $categoryData = $data;
+            while ($categoryData && !Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory')) {
+                if ($categoryData->isPage) $level++;
+                $categoryData = $categoryData->parent;
             }
-            $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
             if (is_int($menuLevel)) {
                 if ($level+1 >= $menuLevel && $level+1 <= $menuLevel+$this->_numLevels) {
-                    $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-                        $this->_class
-                    ));
+                    $l = $level + 1;
+                    while ($data) {
+                        if ($l == $menuLevel) {
+                            break;
+                        }
+                        if ($data->isPage) $l--;
+                        $data = $data->parent;
+                    }
+                    $data = $data->getPageOrRoot();
+                    $menus = $data->getRecursiveChildComponents(array('componentClass'=>$this->_class));
+                    foreach ($menus as $m) {
+                        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                            $this->_class, $m->dbId
+                        ));
+                    }
                 }
             } else {
-                if ($cat == $menuLevel && $level >= 1 && $level <= $this->_numLevels) {
-                    $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-                        $this->_class
-                    ));
+                $cat = Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory');
+                if ($cat) {
+                    if ($cat === true) $cat = $categoryData->id;
+                }
+                if ($cat === $menuLevel && $level >= 1 && $level <= $this->_numLevels) {
+                    $s = array(
+                        'subroot' => $data
+                    );
+                    foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($this->_class, $s) as $c) {
+                        /*
+                        if (true) { //TODO: more acurate
+                            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                                $this->_class, $c->dbId
+                            ));
+                        }
+                        */
+                        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                            $this->_class, $c->dbId
+                        ));
+                    }
                 }
             }
         }
