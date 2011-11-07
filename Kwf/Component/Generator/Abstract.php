@@ -508,7 +508,14 @@ abstract class Kwf_Component_Generator_Abstract
                  )
             )
         ) {
-            return $this->_settings['component']; //performance
+             //performance
+            $ret = $this->_settings['component'];
+            foreach ($ret as $c) {
+                if (Kwc_Abstract::getFlag($c, 'hasAlternativeComponent')) {
+                    $ret = array_merge($ret, call_user_func(array($c, 'getAlternativeComponents')));
+                }
+            }
+            return $ret;
         }
 
         if (is_array($select)) {
