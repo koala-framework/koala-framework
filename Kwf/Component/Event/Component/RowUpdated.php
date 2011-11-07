@@ -1,0 +1,4 @@
+<?php
+class Kwf_Component_Event_Component_RowUpdated extends Kwf_Component_Event_Component_Abstract
+{
+}

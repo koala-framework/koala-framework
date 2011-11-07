@@ -21,11 +21,4 @@ class Kwc_Directories_Item_Detail_Component extends Kwc_Abstract_Composite_Compo
     public static function modifyItemData(Kwf_Component_Data $item)
     {
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_GeneratorRow();
-        return $ret;
-    }
 }

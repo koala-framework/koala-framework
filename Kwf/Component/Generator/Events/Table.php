@@ -38,9 +38,11 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             } else {
                 $this->_fireComponentEvent('Removed', $event->row);
             }
+            unset($dc['visible']);
         }
         if (isset($dc['pos']) && isset($event->row->visible) && $event->row->visible) {
             $this->_fireComponentEvent('PositionChanged', $event->row);
+            unset($dc['pos']);
         }
         if (isset($dc['component']) && isset($event->row->visible) && $event->row->visible) {
             $id = $this->_getDbIdFromRow($event->row);
@@ -48,6 +50,12 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
                 $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
                 $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
             }
+            unset($dc['component']);
+        }
+        if (!empty($dc)) {
+            $this->fireEvent(new Kwf_Component_Event_Component_RowUpdated(
+                $this->_getClassFromRow($event->row), $this->_getDbIdFromRow($event->row)
+            ));
         }
     }
 
@@ -84,7 +92,10 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
 
     protected function _getDbIdFromRow($row)
     {
-        if ($row->hasColumn('component_id')) {
+        if ($this->_getGenerator()->getSetting('dbIdShortcut')) {
+            return $this->_getGenerator()->getSetting('dbIdShortcut') .
+                $row->id;
+        } else if ($row->hasColumn('component_id')) {
             return $row->component_id .
                 $this->_getGenerator()->getIdSeparator() .
                 $row->id;
