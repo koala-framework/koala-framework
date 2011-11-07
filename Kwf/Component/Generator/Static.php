@@ -56,7 +56,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
 
-        foreach (array_keys($this->_getChildComponentClasses($parentData)) as $key) {
+        foreach (array_keys($this->getChildComponentClasses()) as $key) {
             if ($this->_acceptKey($key, $select, $parentData)) {
                 $ret[] = $key;
             }
@@ -69,7 +69,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
 
     protected function _acceptKey($key, $select, $parentData)
     {
-        $components = $this->_getChildComponentClasses($parentData);
+        $components = $this->getChildComponentClasses();
         if (isset($components[$key]) && !$components[$key]) {
             return false;
         }
@@ -164,7 +164,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
     public function getStaticChildComponentIds()
     {
         $childComponentIds = array();
-        foreach (array_keys($this->_getChildComponentClasses()) as $c) {
+        foreach (array_keys($this->getChildComponentClasses()) as $c) {
             $childComponentIds[] = $this->getIdSeparator().$c;
         }
         return $childComponentIds;

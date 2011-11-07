@@ -574,7 +574,10 @@ abstract class Kwf_Component_Generator_Abstract
         return count($this->getChildData($parentData, $select));
     }
 
-    protected final function _getChildComponentClasses() {} //got removed, overwrite _getChildComponentClass or use alternative components instead
+     //got removed, overwrite _getChildComponentClass or use alternative components instead
+    protected final function _getChildComponentClasses() {
+        throw new Kwf_Exception("use getChildComponentClasses instead");
+    }
 
     protected function _getChildComponentClass($key, $parentData)
     {
