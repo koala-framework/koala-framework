@@ -56,7 +56,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
 
-        foreach (array_keys($this->getChildComponentClasses()) as $key) {
+        foreach (array_keys($this->_settings['component']) as $key) {
             if ($this->_acceptKey($key, $select, $parentData)) {
                 $ret[] = $key;
             }
@@ -69,13 +69,23 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
 
     protected function _acceptKey($key, $select, $parentData)
     {
-        $components = $this->getChildComponentClasses();
+        $components = $this->_settings['component'];
         if (isset($components[$key]) && !$components[$key]) {
             return false;
         }
         if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
             $value = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
-            if (!in_array($components[$key], $value)) {
+            $c = $components[$key];
+            if (Kwc_Abstract::getFlag($c, 'hasAlternativeComponent')) {
+                $cls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+                if (is_array($parentData)) $parentData = array_shift($parentData);
+                $alt = call_user_func(array($cls, 'useAlternativeComponent'), $c, $parentData, $this);
+                if ($alt) {
+                    $altCmps = call_user_func(array($cls, 'getAlternativeComponents'), $c);
+                    $c = $altCmps[$alt];
+                }
+            }
+            if (!in_array($c, $value)) {
                 return false;
             }
         }

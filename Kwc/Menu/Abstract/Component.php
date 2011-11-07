@@ -58,6 +58,8 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
 
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
+        if (!$parentData) return false;
+
         $foundPageOrCategory = false;
         $data = $parentData;
         do {

@@ -475,10 +475,7 @@ abstract class Kwf_Component_Generator_Abstract
             }
             if (isset($selectParts[Kwf_Component_Select::WHERE_COMPONENT_CLASSES])) {
                 $componentClasses = $selectParts[Kwf_Component_Select::WHERE_COMPONENT_CLASSES];
-                $generatorComponentClasses = $g->_settings['component'];
-                if (!is_array($generatorComponentClasses)) {
-                    $generatorComponentClasses = array($generatorComponentClasses);
-                }
+                $generatorComponentClasses = $g->getChildComponentClasses();
                 $continue = true;
                 foreach ($generatorComponentClasses as $cc) {
                     if (in_array($cc, $componentClasses)) {
@@ -512,7 +509,8 @@ abstract class Kwf_Component_Generator_Abstract
             $ret = $this->_settings['component'];
             foreach ($ret as $c) {
                 if (Kwc_Abstract::getFlag($c, 'hasAlternativeComponent')) {
-                    $ret = array_merge($ret, call_user_func(array($c, 'getAlternativeComponents')));
+                    $cls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+                    $ret = array_merge($ret, call_user_func(array($cls, 'getAlternativeComponents'), $c));
                 }
             }
             return $ret;
