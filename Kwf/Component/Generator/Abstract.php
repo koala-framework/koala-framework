@@ -853,4 +853,9 @@ abstract class Kwf_Component_Generator_Abstract
     {
         return $this->_settings[$setting];
     }
+
+    public function hasSetting($setting)
+    {
+        return isset($this->_settings[$setting]);
+    }
 }

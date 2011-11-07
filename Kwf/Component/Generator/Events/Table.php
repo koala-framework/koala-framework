@@ -92,7 +92,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
 
     protected function _getDbIdFromRow($row)
     {
-        if ($this->_getGenerator()->getSetting('dbIdShortcut')) {
+        if ($this->_getGenerator()->hasSetting('dbIdShortcut') && $this->_getGenerator()->getSetting('dbIdShortcut')) {
             return $this->_getGenerator()->getSetting('dbIdShortcut') .
                 $row->id;
         } else if ($row->hasColumn('component_id')) {
