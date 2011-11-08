@@ -38,7 +38,7 @@ class Kwf_Controller_Action_Auto_Filter_Text extends Kwf_Controller_Action_Auto_
     {
         $model = $this->getModel();
         list($field, $value) = explode(':', $query);
-        if (in_array($field, $model->getColumns())) {
+        if ($model->hasColumn($field)) {
             if (is_numeric($value)) {
                 return new Kwf_Model_Select_Expr_Equal($field, $value);
             } else {
