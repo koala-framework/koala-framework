@@ -90,13 +90,14 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $select->whereEquals('deleted', false);
         $model = $this->getModel();
         $log = Kwf_Component_Events_Log::getInstance();
+        $cacheIds = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
-            $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
-            Kwf_Cache_Simple::delete($cacheId);
+            $cacheIds[] = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
             if ($log) {
                 $log->log("delete view cache $row[component_id] $row[type] $row[value]", Zend_Log::INFO);
             }
         }
+        Kwf_Cache_Simple::delete($cacheIds);
         $model->updateRows(array('deleted' => true), $select);
     }
 

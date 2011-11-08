@@ -12,6 +12,42 @@ class Kwf_Util_Apc
         return file_get_contents($file);
     }
 
+    public static function callClearCacheByCli($params)
+    {
+        $config = Kwf_Registry::get('config');
+        $d = $config->server->domain;
+        if (!$d && file_exists('cache/lastdomain')) {
+            //this file gets written in Kwf_Setup to make it "just work"
+            $d = file_get_contents('cache/lastdomain');
+        }
+        $s = microtime(true);
+        $pwd = Kwf_Util_Apc::getHttpPassword();
+        $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
+        $url = "$urlPart$d/kwf/util/apc/clear-cache";
+
+        $client = new Zend_Http_Client();
+        $client->setMethod(Zend_Http_Client::POST);
+        $client->setParameterPost($params);
+
+        $client->setUri($url);
+        $response = $client->request();
+        $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+        if (!$result && $config->server->noRedirectPattern) {
+            $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
+            $url2 = "$urlPart$d/kwf/util/apc/clear-cache";
+            $client->setUri($url);
+            $response = $client->request();
+        }
+        return array(
+            'result' => $result,
+            'message' => $response->getBody(),
+            'time' => round((microtime(true)-$s)*1000),
+            'url' => $url,
+            'url2' => isset($url2) ? $url2 : null,
+            'params' => $params
+        );
+    }
+
     public static function dispatchUtils()
     {
         if (empty($_SERVER['PHP_AUTH_USER']) ||
@@ -25,16 +61,11 @@ class Kwf_Util_Apc
 
         if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/kwf/util/apc/clear-cache') {
             $s = microtime(true);
-            if ($_GET['type'] == 'user') {
-                /*
-                if (class_exists('APCIterator')) {
-                    $prefix = Kwf_Cache::getUniquePrefix();
-                    apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix, '#').'#'));
-                    apc_delete_file(new APCIterator('user', '#^config_[^/]+'.preg_quote(getcwd(), '#').'#'));
-                } else {
-                    apc_clear_cache('user');
+            if (isset($_REQUEST['cacheIds'])) {
+                foreach (explode(',', $_REQUEST['cacheIds']) as $cacheId) {
+                    apc_delete($cacheId);
                 }
-                */
+            } else if ($_REQUEST['type'] == 'user') {
                 $cacheInfo = apc_cache_info('user');
                 $prefix = Kwf_Cache::getUniquePrefix();
                 foreach ($cacheInfo['cache_list'] as $i) {

@@ -56,15 +56,28 @@ class Kwf_Cache_Simple
         }
     }
 
-    public static function delete($cacheId)
+    public static function delete($cacheIds)
     {
+        if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
         static $prefix;
         if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
-        if (extension_loaded('apc')) {
-            return apc_delete($prefix.$cacheId);
-        } else {
-            return self::_getCache()->remove(self::_processId($cacheId));
+        $ret = true;
+        $useApc = extension_loaded('apc');
+        $ids = array();
+        foreach ($cacheIds as $cacheId) {
+            if ($useApc) {
+                $r = apc_delete($prefix.$cacheId);
+                $ids[] = $prefix.$cacheId;
+            } else {
+                $r = self::_getCache()->remove(self::_processId($cacheId));
+            }
+            if (!$r) $ret = false;
         }
+        if ($useApc && php_sapi_name() == 'cli' && $ids) {
+            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+            if (!$result['result']) $ret = false;
+        }
+        return $ret;
     }
 
     public static function clear($cacheIdPrefix)

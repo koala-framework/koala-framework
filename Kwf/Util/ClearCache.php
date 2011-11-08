@@ -96,7 +96,7 @@ class Kwf_Util_ClearCache
 
         if ($refresh) {
             if ($output) echo "\n";
-            
+
             if ($output) echo "Refresh setup..........";
             file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
             if ($output) echo " [\033[00;32mOK\033[00m]\n";
@@ -179,27 +179,14 @@ class Kwf_Util_ClearCache
 
     private function _callApcUtil($type, $outputType, $output)
     {
-        $config = Kwf_Registry::get('config');
-        $d = $config->server->domain;
-        if (!$d && file_exists('cache/lastdomain')) {
-            //this file gets written in Kwf_Setup to make it "just work"
-            $d = file_get_contents('cache/lastdomain');
-        }
-        $s = microtime(true);
-        $pwd = Kwf_Util_Apc::getHttpPassword();
-        $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
-        $url = "$urlPart$d/kwf/util/apc/clear-cache?type=".$type;
-        $c = @file_get_contents($url);
-        if (substr($c, 0, 2) != 'OK' && $config->server->noRedirectPattern) {
-            $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-            $url2 = "$urlPart$d/kwf/util/apc/clear-cache?type=".$type;
-            $c = @file_get_contents($url2);
-        }
+        $result = Kwf_Util_Apc::callClearCacheByCli(array('type' => $type));
         if ($output) {
-            if (substr($c, 0, 2) == 'OK') {
-                if ($output) echo "cleared:     $outputType (".round((microtime(true)-$s)*1000)."ms) $c\n";
+            if ($result['result']) {
+                echo "cleared:     $outputType (".$result['time']."ms) " . $result['message'] . "\n";
             } else {
-                if ($output) echo "error:       $outputType ($url)\n$c\n\n";
+                $url = $result['url'];
+                if ($result['url2']) $url .= ' / ' . $result['url2'];
+                echo "error:       $outputType ($url)\n" . $result['message'] . "\n\n";
             }
         }
     }
