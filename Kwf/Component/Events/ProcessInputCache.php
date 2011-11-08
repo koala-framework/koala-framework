@@ -26,7 +26,7 @@ class Kwf_Component_Events_ProcessInputCache extends Kwf_Component_Events
     //clear cache used in Kwf_Component_Abstract_ContentSender_Default
     public function onComponentAddedOrRemoved(Kwf_Component_Event_Component_Abstract $event)
     {
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $d) {
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId, array('ignoreVisible'=>true)) as $d) {
             $cacheId = 'procI-'.$d->getPageOrRoot()->componentId;
             Kwf_Cache_Simple::delete($cacheId);
             $log = Kwf_Component_Events_Log::getInstance();

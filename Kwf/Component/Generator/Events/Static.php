@@ -18,22 +18,22 @@ class Kwf_Component_Generator_Events_Static extends Kwf_Component_Generator_Even
     }
 
     //overridden in Page_Events_Static
-    protected function _fireComponentEvent($event, $dbId)
+    protected function _fireComponentEvent($event, $dbId, $flag)
     {
         $cls = 'Kwf_Component_Event_Component_'.$event;
         $g = $this->_getGenerator();
         foreach ($g->getChildComponentClasses() as $k=>$c) {
-            $this->fireEvent(new $cls($c, $dbId.$g->getIdSeparator().$k));
+            $this->fireEvent(new $cls($c, $dbId.$g->getIdSeparator().$k, $flag));
         }
     }
 
     public function onComponentAdded(Kwf_Component_Event_Component_Added $ev)
     {
-        $this->_fireComponentEvent('Added', $ev->dbId);
+        $this->_fireComponentEvent('Added', $ev->dbId, $ev->flag);
     }
 
     public function onComponentRemoved(Kwf_Component_Event_Component_Removed $ev)
     {
-        $this->_fireComponentEvent('Removed', $ev->dbId);
+        $this->_fireComponentEvent('Removed', $ev->dbId, $ev->flag);
     }
 }

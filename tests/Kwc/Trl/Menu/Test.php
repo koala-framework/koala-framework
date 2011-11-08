@@ -1,7 +1,7 @@
 <?php
 /**
  * @group Kwc_Trl
- * @group Kwc_Trl_Menu
+ * @group Kwc_Menu
  */
 /*
 Ansicht frontend (en wird getestet):

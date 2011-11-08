@@ -1,8 +1,7 @@
 <?php
 /**
  * @group Kwc_Trl
- * @group Kwc_Trl_Menu
- * @group Kwc_Trl_MenuCache
+ * @group Kwc_Menu
 
 ansicht frontend:
 http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_MenuCache_Root/de

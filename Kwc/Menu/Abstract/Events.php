@@ -41,10 +41,18 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
         ));
     }
 
-    public function onPageChanged(Kwf_Component_Event_Page_Abstract $event)
+    //overridden in Kwc_Menu_Events to fire HasContentChanged
+    protected function _onMenuChanged(Kwf_Component_Event_Component_Abstract $event, Kwf_Component_Data $menu)
+    {
+        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+            $this->_class, $menu->dbId
+        ));
+    }
+
+    public function onPageChanged(Kwf_Component_Event_Component_Abstract $event)
     {
         $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $data) {
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId, array('ignoreVisible'=>true)) as $data) {
             $level = 0;
             $categoryData = $data;
             while ($categoryData && !Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory')) {
@@ -64,9 +72,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                     $data = $data->getPageOrRoot();
                     $menus = $data->getRecursiveChildComponents(array('componentClass'=>$this->_class));
                     foreach ($menus as $m) {
-                        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                            $this->_class, $m->dbId
-                        ));
+                        $this->_onMenuChanged($event, $m);
                     }
                 }
             } else {
@@ -78,17 +84,19 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                     $s = array(
                         'subroot' => $data
                     );
-                    foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($this->_class, $s) as $c) {
-                        /*
-                        if (true) { //TODO: more acurate
-                            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                                $this->_class, $c->dbId
-                            ));
+                    foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+                        $c = Kwc_Abstract::getFlag($cls, 'menuCategory');
+                        $cmps = array();
+                        if ($c === true) {
+                            $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls, array('id'=>$cat));
+                        } else if ($c == $cat) {
+                            $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls);
                         }
-                        */
-                        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                            $this->_class, $c->dbId
-                        ));
+                        foreach ($cmps as $i) {
+                            foreach ($i->getRecursiveChildComponents(array('componentClass'=>$this->_class)) as $m) {
+                                $this->_onMenuChanged($event, $m);
+                            }
+                        }
                     }
                 }
             }

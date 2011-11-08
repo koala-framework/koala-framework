@@ -23,10 +23,10 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     }
 
     //overridden in Page_Events_Table to fire Page events
-    protected function _fireComponentEvent($event, $row)
+    protected function _fireComponentEvent($event, $row, $flag)
     {
         $c = 'Kwf_Component_Event_Component_'.$event;
-        $this->fireEvent(new $c($this->_getClassFromRow($row), $this->_getDbIdFromRow($row)));
+        $this->fireEvent(new $c($this->_getClassFromRow($row), $this->_getDbIdFromRow($row), $flag));
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
@@ -34,14 +34,14 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         $dc = array_flip($event->row->getDirtyColumns());
         if (isset($dc['visible'])) {
             if ($event->row->visible) {
-                $this->_fireComponentEvent('Added', $event->row);
+                $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
             } else {
-                $this->_fireComponentEvent('Removed', $event->row);
+                $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
             }
             unset($dc['visible']);
         }
         if (isset($dc['pos']) && isset($event->row->visible) && $event->row->visible) {
-            $this->_fireComponentEvent('PositionChanged', $event->row);
+            $this->_fireComponentEvent('PositionChanged', $event->row, null);
             unset($dc['pos']);
         }
         if (isset($dc['component']) && isset($event->row->visible) && $event->row->visible) {
@@ -62,14 +62,14 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     public function onRowAdd(Kwf_Component_Event_Row_Inserted $event)
     {
         if (!$event->row->hasColumn('visible') || $event->row->visible) {
-            $this->_fireComponentEvent('Added', $event->row);
+            $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
 
     public function onRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
         if (!$event->row->hasColumn('visible') || $event->row->visible) {
-            $this->_fireComponentEvent('Removed', $event->row);
+            $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
 

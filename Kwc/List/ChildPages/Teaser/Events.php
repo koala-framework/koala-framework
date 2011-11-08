@@ -27,7 +27,7 @@ class Kwc_List_ChildPages_Teaser_Events extends Kwc_Abstract_Events
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $dbId));
     }
 
-    public function onPageAddedOrRemoved(Kwf_Component_Event_Page_Abstract $ev)
+    public function onPageAddedOrRemoved(Kwf_Component_Event_Component_Abstract $ev)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
     }

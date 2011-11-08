@@ -136,7 +136,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
     }
 
     /**
-     * Used by chained
+     * Used by chained and Events
      */
     public function getMenuData($parentData = null, $select = array())
     {

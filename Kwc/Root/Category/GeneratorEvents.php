@@ -19,6 +19,11 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             'event' => 'Kwf_Component_Event_Row_Deleted',
             'callback' => 'onPageDataChanged'
         ));
+        array_unshift($ret, array(
+            'class' => get_class($this->_getGenerator()->getModel()),
+            'event' => 'Kwf_Component_Event_Row_Updated',
+            'callback' => 'onPageDataChanged'
+        ));
         $ret[] = array(
             'event' => 'Kwf_Component_Event_Component_RecursiveContentChanged',
             'callback' => 'onRecursiveEvent'

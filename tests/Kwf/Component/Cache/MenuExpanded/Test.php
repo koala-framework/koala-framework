@@ -1,6 +1,6 @@
 <?php
 /**
- * @group Component_Cache_MenuExpanded
+ * @group Kwc_Menu
  */
 class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
 {
