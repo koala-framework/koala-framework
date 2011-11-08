@@ -14,6 +14,11 @@ class Kwc_Menu_ParentMenu_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Component_Event_Component_ContentChanged',
             'callback' => 'onMenuContentChanged'
         );
+        $ret[] = array(
+            'class' => Kwc_Abstract::getSetting($this->_class, 'menuComponentClass'),
+            'event' => 'Kwf_Component_Event_Component_HasContentChanged',
+            'callback' => 'onMenuHasContentChanged'
+        );
         return $ret;
     }
 
@@ -28,6 +33,15 @@ class Kwc_Menu_ParentMenu_Events extends Kwc_Abstract_Events
     {
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
+                $this->_class, $c->getPageOrRoot()->componentId
+            ));
+        }
+    }
+
+    public function onMenuHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
+    {
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveHasContentChanged(
                 $this->_class, $c->getPageOrRoot()->componentId
             ));
         }
