@@ -24,7 +24,7 @@
                 $class = trim($class);
                 $i++;
             ?>
-            <div class="listSwitchItem <?= $class; ?>">
+            <div class="listSwitchItem <?= $class; ?>" id="<?= $child->componentId; ?>">
                 <a href="#" class="previewLink"><?=$this->component($child);?></a>
                 <div class="largeContent"><?= $this->component($child->getChildComponent('-large')); ?></div>
             </div>
