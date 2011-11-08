@@ -1179,8 +1179,12 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function fetchColumnByPrimaryId($column, $id)
     {
-        $sql = "SELECT $column FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKey()."=?";
-        return Kwf_Registry::get('db')->query($sql, $id)->fetchColumn();
+        if (in_array($column, $this->_getOwnColumns())) {
+            $sql = "SELECT $column FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKey()."=?";
+            return Kwf_Registry::get('db')->query($sql, $id)->fetchColumn();
+        } else {
+            return parent::fetchColumnByPrimaryId($column, $id);
+        }
     }
 
     public function fetchColumnsByPrimaryId(array $columns, $id)

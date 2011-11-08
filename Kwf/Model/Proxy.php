@@ -240,7 +240,11 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function fetchColumnByPrimaryId($column, $id)
     {
-        return $this->getProxyModel()->fetchColumnByPrimaryId($column, $id);
+        if ($this->getProxyModel()->hasColumn($column)) {
+            return $this->getProxyModel()->fetchColumnByPrimaryId($column, $id);
+        } else {
+            return parent::fetchColumnByPrimaryId($column, $id);
+        }
     }
 
     public function fetchColumnsByPrimaryId(array $columns, $id)
