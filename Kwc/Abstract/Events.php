@@ -10,11 +10,16 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
                 'event' => 'Kwf_Component_Event_Row_Updated',
                 'callback' => 'onOwnRowUpdate'
             );
+            $ret[] = array(
+                'class' => Kwc_Abstract::getSetting($this->_class, 'ownModel'),
+                'event' => 'Kwf_Component_Event_Row_Inserted',
+                'callback' => 'onOwnRowUpdate'
+            );
         }
         return $ret;
     }
 
-    public function onOwnRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onOwnRowUpdate(Kwf_Component_Event_Row_Abstract $event)
     {
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
             $this->_class, $event->row->component_id
