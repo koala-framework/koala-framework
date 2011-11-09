@@ -70,13 +70,7 @@ class Kwf_Util_Apc
                     apc_delete($cacheId);
                 }
             } else if ($_REQUEST['type'] == 'user') {
-                $cacheInfo = apc_cache_info('user');
-                $prefix = Kwf_Cache::getUniquePrefix();
-                foreach ($cacheInfo['cache_list'] as $i) {
-                    if (substr($i['info'], 0, strlen($prefix))==$prefix) {
-                        apc_delete($i['info']);
-                    }
-                }
+                apc_clear_cache('user');
             } else {
                 $paths = array(preg_quote(getcwd(), '#'));
                 foreach (explode(PATH_SEPARATOR, get_include_path()) as $p) {
