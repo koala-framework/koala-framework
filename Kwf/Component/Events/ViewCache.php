@@ -19,6 +19,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onRecursiveContentChange'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_MasterContentChanged',
+            'callback' => 'onMasterContentChange'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Page_NameChanged',
             'callback' => 'onPageChanged'
         );
@@ -81,6 +85,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
+        //TODO: clear only type=component
         $this->_updates['db_id'][] = $event->dbId;
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
@@ -98,6 +103,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
             $log->log("view cache clear type=component component_id=$event->componentId% component_class=$event->class", Zend_Log::INFO);
+        }
+    }
+
+    public function onMasterContentChange(Kwf_Component_Event_Component_MasterContentChanged $event)
+    {
+        //TODO: clear only type=master
+        $this->_updates['db_id'][] = $event->dbId;
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear db_id=$event->dbId", Zend_Log::INFO);
         }
     }
 

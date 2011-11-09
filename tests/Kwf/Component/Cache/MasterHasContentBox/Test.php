@@ -42,14 +42,13 @@ class Kwf_Component_Cache_MasterHasContentBox_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, true);
-        $this->markTestIncomplete();
         $this->assertNotContains('box1', $html);
         $this->assertNotContains('asdf', $html); //box1 content
     }
 
     public function testAddedBoxContent()
     {
-        $c = $this->_root->getComponentById('root_page1');
+        $c = $this->_root->getComponentById('root_page2');
         $c->render(true, true);
 
         $row = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_MasterHasContentBox_Box_TestModel')
@@ -61,7 +60,6 @@ class Kwf_Component_Cache_MasterHasContentBox_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, true);
-        $this->markTestIncomplete();
         $this->assertContains('box1', $html);
         $this->assertContains('xxy', $html); //box1 content
     }
