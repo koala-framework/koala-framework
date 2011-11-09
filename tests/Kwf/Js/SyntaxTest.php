@@ -71,6 +71,7 @@ class Kwf_Js_SyntaxTest extends Kwf_Test_TestCase
     private function _isWhitelist($list, $path) {
         if (in_array(str_replace($this->_getScanPath().'/', '', $path), $this->_whitelist[$list])
             || in_array(str_replace($this->_getScanPath().'/kwf-lib/', '', $path), $this->_whitelist[$list])
+            || strpos($path, 'jquery') !== false
         ) {
             return true;
         }

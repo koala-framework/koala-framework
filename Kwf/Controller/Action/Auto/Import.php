@@ -35,14 +35,18 @@ abstract class Kwf_Controller_Action_Auto_Import extends Kwf_Controller_Action_A
         if (!$uploadsRow) throw new Kwf_Exception_Client(trlKwf('File not found.'));
 
         $source = $uploadsRow->getFileSource();
-        $excel = PHPExcel_IOFactory::load($source)->getActiveSheet();
+        $target = 'application/temp/xlsimport_' . date('YmdHis') . '.' . $uploadsRow->extension;
+        copy($source, $target); // copy with extension for xlsimport
+        $excel = PHPExcel_IOFactory::load($target);
+        if (!$excel) throw new Kwf_Exception_Client(trlKwf('Could not read excel'));
+        $excel = $excel->getActiveSheet();
         $message = $this->_import($excel);
         $this->view->message = null;
         if ($message) {
             if (is_string($message)) $this->view->message = nl2br($message);
-            unlink($source);
         }
         $uploadsRow->delete();
+        unlink($target);
     }
 
     protected abstract function _import($excel);
