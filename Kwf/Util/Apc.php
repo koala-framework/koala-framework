@@ -28,6 +28,7 @@ class Kwf_Util_Apc
         $client = new Zend_Http_Client();
         $client->setMethod(Zend_Http_Client::POST);
         $client->setParameterPost($params);
+        $client->setConfig(array('timeout'=>60));
 
         $client->setUri($url);
         $response = $client->request();
