@@ -96,19 +96,6 @@ abstract class Kwf_Update
     {
         $ret = self::getKwcUpdates($from, $to);
 
-        //web/Kwf/ * /Update nach updates durchsuchen
-        if (is_dir('./Kwf')) {
-            foreach (new DirectoryIterator('./Kwf') as $d) {
-                if ($d->isDir() && substr($d->__toString(), 0, 1) != '.'
-                    && is_dir('./Kwf/'.$d->__toString().'/Update')
-                ) {
-                    $u = self::getUpdatesForDir('Kwf/'.$d->__toString(), $from, $to);
-                    foreach ($u as $i) $i->_tags[] = 'web';
-                    $ret = array_merge($ret, $u);
-                }
-            }
-        }
-
         $u = self::getUpdatesForDir(KWF_PATH.'/Kwf', $from, $to);
         $ret = array_merge($ret, $u);
 
@@ -116,14 +103,11 @@ abstract class Kwf_Update
             $u = self::getUpdatesForDir(VKWF_PATH.'/Vkwf', $from, $to);
             $ret = array_merge($ret, $u);
         }
-        
-        $u = self::getUpdatesForDir('./update', $from, $to);
+
+        $u = self::getUpdatesForDir(getcwd() . '/app', $from, $to);
         foreach ($u as $i) $i->_tags[] = 'web';
         $ret = array_merge($ret, $u);
-        if (defined('DOC_CMS')) { //HACK
-            $u = self::getUpdatesForDir(DOC_CMS.'/Kwf', $from, $to);
-            $ret = array_merge($ret, $u);
-        }
+        
         $ret = self::_sortByRevision($ret);
         return $ret;
     }
@@ -187,8 +171,8 @@ abstract class Kwf_Update
                         $nr = (int)$f;
                         if ($nr >= $from && $nr < $to) {
                             $n = '';
-                            if ($file != './update') {
-                                $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
+                            if ($file) {
+                                $n = str_replace(DIRECTORY_SEPARATOR, '_', $file) . '_';
                             }
                             if (preg_match('#^[a-z]+-lib_#', $n)) continue; //kwf-lib, vkwf-lib
                             if (substr($n, 0, 8) == 'library_') continue;
