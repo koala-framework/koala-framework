@@ -78,7 +78,6 @@ class Kwf_Component_Cache_MasterHasContentBox_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, true);
-        $this->markTestIncomplete();
         $this->assertContains('box2', $html);
         $this->assertContains('xxyz', $html); //box2 content
     }
@@ -86,7 +85,8 @@ class Kwf_Component_Cache_MasterHasContentBox_Test extends Kwc_TestAbstract
     public function testRemovedUniqueBoxContent()
     {
         $c = $this->_root->getComponentById('root_page1');
-        $c->render(true, true);
+        $html = $c->render(true, true);
+        $this->assertNotContains('box2', $html);
 
         //first add content - so we can remove again later
         $row = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_MasterHasContentBox_Box_TestModel')
@@ -94,10 +94,12 @@ class Kwf_Component_Cache_MasterHasContentBox_Test extends Kwc_TestAbstract
         $row->component_id = 'root-box2';
         $row->content = 'xxyz';
         $row->save();
+        
 
         $this->_process();
 
-        $c->render(true, true);
+        $html = $c->render(true, true);
+        $this->assertContains('box2', $html);
 
         $row->content = '';
         $row->save();
@@ -105,7 +107,6 @@ class Kwf_Component_Cache_MasterHasContentBox_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, true);
-        $this->markTestIncomplete();
         $this->assertNotContains('box2', $html);
     }
 }
