@@ -7,6 +7,7 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
         foreach (Kwf_Component_Generator_Abstract::getInstances($this->_class) as $g) {
             if ($g->getGeneratorFlag('box')) {
                 foreach ($g->getChildComponentClasses() as $c) {
+                    //TODO: only listen to boxes that use if (hasContent(..)) in master template
                     if ($g->hasSetting('unique') && $g->getSetting('unique')) {
                         $ret[] = array(
                             'class' => $c,
@@ -28,7 +29,11 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
                 }
             }
         }
-        
+
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_RecursiveAdded',
+            'callback' => 'onRecursiveAdded'
+        );
         return $ret;
     }
 
@@ -54,6 +59,14 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
     }
 
     public function onBoxRecursiveHasContentChanged(Kwf_Component_Event_Component_RecursiveHasContentChanged $event)
+    {
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
+            $this->_class, $c->getPageOrRoot()->componentId
+        ));
+    }
+
+    public function onRecursiveAdded(Kwf_Component_Event_Component_RecursiveAdded $event)
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
