@@ -198,6 +198,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                     rename('bootstrap.php.backup', 'bootstrap.php');
                     echo "\nrestored bootstrap.php\n";
                 }
+                Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/bootstrap.php'));
             }
 
         } else {
