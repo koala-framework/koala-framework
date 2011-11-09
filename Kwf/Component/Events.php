@@ -106,11 +106,6 @@ class Kwf_Component_Events
     {
         $logger = Kwf_Component_Events_Log::getInstance();
         if ($logger) {
-            if ($event instanceof Kwf_Component_Event_Row_Abstract ||
-                $event instanceof Kwf_Component_Event_Row_UpdatesFinished)
-            {
-                $logger->indent = 0;
-            }
             if ($logger->indent == 0) $logger->info('----');
         }
 
