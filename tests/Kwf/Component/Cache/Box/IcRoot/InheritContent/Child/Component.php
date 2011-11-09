@@ -5,7 +5,7 @@ class Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Component extends Kwc_
     {
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Model';
-        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'has_content';
         return $ret;
     }
 
@@ -18,6 +18,6 @@ class Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Component extends Kwc_
 
     public function hasContent()
     {
-        return $this->getRow()->content != null;
+        return $this->getRow()->has_content;
     }
 }

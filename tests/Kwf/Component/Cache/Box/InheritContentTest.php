@@ -55,12 +55,65 @@ class Kwf_Component_Cache_Box_InheritContentTest extends Kwc_TestAbstract
         $this->assertEquals('1-ic-child', $c1->render(true, true));
         $this->assertEquals('1-ic-child', $c2->render(true, true));
         $row = $model->getRow('1-ic-child');
-        $row->content = null;
+        $row->has_content = null;
         $row->save();
         $this->_process();
         $this->assertEquals('root-ic-child', $c1->render(false, true));
         $this->assertEquals('root-ic-child', $c2->render(false, true));
         $this->assertEquals('root-ic-child', $c1->render(true, true));
         $this->assertEquals('root-ic-child', $c2->render(true, true));
+    }
+
+    function testHasContent()
+    {
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_Box_IcRoot_InheritContent_Child_Model');
+
+        $events = Kwf_Component_Cache_Box_IcRoot_Events::getInstance(
+            'Kwf_Component_Cache_Box_IcRoot_Events',
+            array('componentClass' => 'Kwf_Component_Cache_Box_IcRoot_Component')
+        );
+        $count = 0;
+
+        $row = $model->getRow('1-ic-child');
+        $row->content = 'foo';
+        $row->save();
+        $this->_process();
+        $this->assertEquals($count, $events->countCalled);
+
+        $row = $model->getRow('1-ic-child');
+        $row->has_content = false;
+        $row->save();
+        $this->_process();
+        $this->assertEquals($count, $events->countCalled);
+
+        $row = $model->getRow('root-ic-child');
+        $row->has_content = false;
+        $row->save();
+        $this->_process();
+        $this->assertEquals(++$count, $events->countCalled);
+
+        $row = $model->getRow('2-ic-child');
+        $row->has_content = true;
+        $row->save();
+        $this->_process();
+        $this->assertEquals(++$count, $events->countCalled);
+        
+        $row = $model->getRow('2-ic-child');
+        $row->has_content = false;
+        $row->save();
+        $this->_process();
+        $this->assertEquals(++$count, $events->countCalled);
+        
+        $row = $model->getRow('root-ic-child');
+        $row->has_content = true;
+        $row->save();
+        $this->_process();
+        $this->assertEquals(++$count, $events->countCalled);
+
+        $row = $model->getRow('1-ic-child');
+        $row->has_content = true;
+        $row->save();
+        $this->_process();
+        $this->assertEquals($count, $events->countCalled);
     }
 }
