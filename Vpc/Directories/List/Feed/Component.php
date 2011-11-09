@@ -63,4 +63,9 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
     {
         return parent::_getRssTitle().' - '.trlVps('Feed');
     }
+
+    public function getViewCacheLifetime()
+    {
+        return 60*60;
+    }
 }
