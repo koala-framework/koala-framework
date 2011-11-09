@@ -76,6 +76,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                     }
                 }
             } else {
+                if (!$categoryData) continue;
                 $cat = Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory');
                 if ($cat) {
                     if ($cat === true) $cat = $categoryData->id;
