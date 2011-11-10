@@ -5,7 +5,18 @@ Kwf.EyeCandy.List.Plugins.StateListener.Resize = Ext.extend(Kwf.EyeCandy.List.Pl
         this.list.on('childStateChanged', function(item) {
             var state = item.getState();
             if (this.sizes[state]) {
-                item.el.setSize(this.sizes[state], null, true);
+                if (this.sizes[state].constructor.toString().indexOf("Array") == -1) {
+                    // object, no array
+                    this.sizes[state] = [ this.sizes[state] ];
+                }
+                // array, set multiple sizes
+                this.sizes[state].forEach(function(resizeConfig) {
+                    if (!resizeConfig.selector) {
+                        item.el.setSize(resizeConfig, null, true);
+                    } else {
+                        item.el.child(resizeConfig.selector).setSize(resizeConfig, null, true);
+                    }
+                }, this);
             }
         }, this);
     },
@@ -13,7 +24,18 @@ Kwf.EyeCandy.List.Plugins.StateListener.Resize = Ext.extend(Kwf.EyeCandy.List.Pl
         this.list.items.each(function(item) {
             var state = item.getState();
             if (this.sizes[state]) {
-                item.el.setSize(this.sizes[state], null, false); //set initial size
+                if (this.sizes[state].constructor.toString().indexOf("Array") == -1) {
+                    // object, no array
+                    this.sizes[state] = [ this.sizes[state] ];
+                }
+                // array, set multiple sizes
+                this.sizes[state].forEach(function(resizeConfig) {
+                    if (!resizeConfig.selector) {
+                        item.el.setSize(resizeConfig, null, false);
+                    } else {
+                        item.el.child(resizeConfig.selector).setSize(resizeConfig, null, false);
+                    }
+                }, this);
             }
         }, this);
     }
