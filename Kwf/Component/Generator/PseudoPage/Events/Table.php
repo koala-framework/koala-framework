@@ -51,14 +51,18 @@ class Kwf_Component_Generator_PseudoPage_Events_Table extends Kwf_Component_Gene
             $filenameChanged = $event->isDirty($filenameColumn);
         }
         if ($nameChanged) {
-            $this->fireEvent(new Kwf_Component_Event_Page_NameChanged(
-                $this->_class, $this->_getDbIdFromRow($event->row)
-            ));
+            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+                $this->fireEvent(new Kwf_Component_Event_Page_NameChanged(
+                    $this->_class, $dbId
+                ));
+            }
         }
         if ($filenameChanged) {
-            $this->fireEvent(new Kwf_Component_Event_Page_FilenameChanged(
-                $this->_class, $this->_getDbIdFromRow($event->row)
-            ));
+            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+                $this->fireEvent(new Kwf_Component_Event_Page_FilenameChanged(
+                    $this->_class, $dbId
+                ));
+            }
         }
     }
 }

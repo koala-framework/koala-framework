@@ -1,6 +1,7 @@
 <?php
 class Kwf_Component_Events_PseudoPage_Model extends Kwf_Model_FnF
 {
+    protected $_toStringField = 'name';
     public function __construct()
     {
         $config = array('data'=>array(

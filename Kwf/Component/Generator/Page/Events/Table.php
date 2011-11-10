@@ -5,6 +5,8 @@ class Kwf_Component_Generator_Page_Events_Table extends Kwf_Component_Generator_
     {
         parent::_fireComponentEvent($event, $row, $flag);
         $c = 'Kwf_Component_Event_Page_'.$event;
-        $this->fireEvent(new $c($this->_getClassFromRow($row), $this->_getDbIdFromRow($row), $flag));
+        foreach ($this->_getDbIdsFromRow($row) as $dbId) {
+            $this->fireEvent(new $c($this->_getClassFromRow($row), $dbId, $flag));
+        }
     }
 }

@@ -84,4 +84,9 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
     {
         $this->_getGenerator()->pageDataChanged();
     }
+
+    protected function _getDbIdsFromRow($row)
+    {
+        return array($row->id);
+    }
 }

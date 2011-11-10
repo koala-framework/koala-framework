@@ -26,7 +26,9 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     protected function _fireComponentEvent($event, $row, $flag)
     {
         $c = 'Kwf_Component_Event_Component_'.$event;
-        $this->fireEvent(new $c($this->_getClassFromRow($row), $this->_getDbIdFromRow($row), $flag));
+        foreach ($this->_getDbIdsFromRow($row) as $dbId) {
+            $this->fireEvent(new $c($this->_getClassFromRow($row), $dbId, $flag));
+        }
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
@@ -45,17 +47,20 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             unset($dc['pos']);
         }
         if (isset($dc['component']) && isset($event->row->visible) && $event->row->visible) {
-            $id = $this->_getDbIdFromRow($event->row);
-            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($id) as $c) {
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
+            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
+                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
+                }
             }
             unset($dc['component']);
         }
         if (!empty($dc)) {
-            $this->fireEvent(new Kwf_Component_Event_Component_RowUpdated(
-                $this->_getClassFromRow($event->row), $this->_getDbIdFromRow($event->row)
-            ));
+            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+                $this->fireEvent(new Kwf_Component_Event_Component_RowUpdated(
+                    $this->_getClassFromRow($event->row), $dbId
+                ));
+            }
         }
     }
 
@@ -90,17 +95,25 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         return $class;
     }
 
-    protected function _getDbIdFromRow($row)
+    //overrridden in Kwc_Root_Category_GeneratorEvents
+    protected function _getDbIdsFromRow($row)
     {
         if ($this->_getGenerator()->hasSetting('dbIdShortcut') && $this->_getGenerator()->getSetting('dbIdShortcut')) {
-            return $this->_getGenerator()->getSetting('dbIdShortcut') .
-                $row->id;
+            return array($this->_getGenerator()->getSetting('dbIdShortcut') .
+                $row->id);
         } else if ($row->hasColumn('component_id')) {
-            return $row->component_id .
+            return array($row->component_id .
                 $this->_getGenerator()->getIdSeparator() .
-                $row->id;
+                $row->id);
         } else {
-            return $row->id;
+            $cls = $this->_getClassFromRow($row);
+            $c = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsByClass($cls, array('id' => $this->_getGenerator()->getIdSeparator().$row->id));
+            $ret = array();
+            foreach ($c as $i) {
+                $ret[] = $i->dbId;
+            }
+            return $ret;
         }
     }
 }
