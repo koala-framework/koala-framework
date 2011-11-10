@@ -878,8 +878,9 @@ class Kwf_Component_Data
                                 'limit'=>1),
                             array('pseudoPage'=>false));
             } else {
+                // if path is separated by ':', id comes without '-', search for child-component
                 $pages = $page->getRecursiveChildComponents(array(
-                                'id' => $pathPart,
+                                'id' => '-' . $pathPart,
                                 'pseudoPage'=>false,
                                 'limit'=>1),
                             array('pseudoPage'=>false));
