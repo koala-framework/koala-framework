@@ -379,9 +379,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
 
     public function getComponentsBySameClass($lookingForChildClasses, $select = array())
     {
-        if (!is_array($lookingForChildClasses) &&
-            is_instance_of($lookingForChildClasses, 'Kwc_Root_Abstract')
-        ) {
+        if (!is_array($lookingForChildClasses) && $lookingForChildClasses == $this->componentClass) {
             return array($this);
         }
 
