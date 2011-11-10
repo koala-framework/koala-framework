@@ -23,7 +23,11 @@ class Kwf_Media_Output
                 header($h);
             }
         }
-        echo $data['contents'];
+        if (isset($data['contents'])) {
+            echo $data['contents'];
+        } else if (isset($data['file'])) {
+            readfile($data['file']);
+        }
         Kwf_Benchmark::shutDown();
         exit;
     }
@@ -33,15 +37,14 @@ class Kwf_Media_Output
      */
     public static function getOutputData($file, array $headers)
     {
-        $ret = array('headers' => array(), 'contents' => '');
+        $ret = array('headers' => array());
 
         if (!isset($file['contents'])) {
             if (isset($file['file'])) {
                 if (!is_file($file['file'])) {
                     throw new Kwf_Exception_NotFound("File '$file[file]' not found.");
                 }
-                $file['contents'] = file_get_contents($file['file']);
-                $file['mtime'] = filemtime($file['file']);
+                if (!isset($file['mtime'])) $file['mtime'] = filemtime($file['file']);
             } else {
                 throw new Kwf_Exception_NotFound();
             }
@@ -90,7 +93,7 @@ class Kwf_Media_Output
             if (isset($file['encoding'])) {
                 $ret['headers'][] = "Content-Encoding: " . $file['encoding'];
             } else {
-                if (substr($file['mimeType'], 0, 5) == 'text/') {
+                if (substr($file['mimeType'], 0, 5) == 'text/' && isset($file['contents'])) {
                     $encoding = self::getEncoding($headers);
                     $file['contents'] = self::encode($file['contents'], $encoding);
                 } else {
@@ -99,8 +102,15 @@ class Kwf_Media_Output
                 $ret['headers'][] = "Content-Encoding: " . $encoding;
             }
             $ret['headers'][] = 'Content-Type: ' . $file['mimeType'];
-            $ret['headers'][] = 'Content-Length: ' . strlen($file['contents']);
-            $ret['contents'] = $file['contents'];
+            if (isset($file['contents'])) {
+                $ret['headers'][] = 'Content-Length: ' . strlen($file['contents']);
+                $ret['contents'] = $file['contents'];
+            } else if (isset($file['file'])) {
+                $ret['headers'][] = 'Content-Length: ' . filesize($file['file']);
+                $ret['file'] = $file['file'];
+            } else {
+                throw new Kwf_Exception("contents not set");
+            }
         }
         return $ret;
     }

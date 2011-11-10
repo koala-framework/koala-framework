@@ -280,15 +280,21 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($dim['width'] == self::CONTENT_WIDTH) {
             $dim['width'] = $component->getComponent()->getContentWidth();
         }
-        if ($dim) {
-            $output = Kwf_Media_Image::scale($data['file'], $dim);
-        } else {
-            $output = file_get_contents($data['file']);
+        $ret = array();
+        $size = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
+        $sourceSize = @getimagesize($data['file']);
+        $scalingNeeded = (bool)$dim;
+        if ($scalingNeeded && $sourceSize && array($size['width'], $size['height']) == array($sourceSize[0], $sourceSize[1])) {
+            $scalingNeeded = false;
         }
-        $ret = array(
-            'contents' => $output,
-            'mimeType' => $data['mimeType'],
-        );
+        if ($scalingNeeded) {
+            $output = Kwf_Media_Image::scale($data['file'], $dim);
+            $ret['contents'] = $output;
+        } else {
+            $ret['file'] = $data['file'];
+        }
+        $ret['mimeType'] = $data['mimeType'];
+
         if (Kwf_Registry::get('config')->debug->componentCache->checkComponentModification) {
             $mtimeFiles = array();
             $mtimeFiles[] = $data['file'];
