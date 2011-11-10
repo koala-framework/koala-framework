@@ -5,6 +5,7 @@ class Vpc_Basic_LinkTag_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponent);
         $ret['dataClass'] = 'Vpc_Basic_LinkTag_Data';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
