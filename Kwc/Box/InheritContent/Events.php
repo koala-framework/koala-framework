@@ -25,7 +25,7 @@ class Kwc_Box_InheritContent_Events extends Kwc_Abstract_Events
                     // always throw contentChanged
                     $this->fireEvent(
                         new Kwf_Component_Event_Component_RecursiveContentChanged(
-                            $ic->componentClass, $ic->componentId
+                            $ic->componentClass, $ic->getPageOrRoot()->componentId
                         )
                     );
                     
@@ -34,7 +34,7 @@ class Kwc_Box_InheritContent_Events extends Kwc_Abstract_Events
                     if (!$parentIc || !$parentIc->getComponent()->hasContent()) {
                         $this->fireEvent(
                             new Kwf_Component_Event_Component_RecursiveHasContentChanged(
-                                $ic->componentClass, $ic->dbId
+                                $ic->componentClass, $ic->getPageOrRoot()->componentId
                             )
                         );
                     }

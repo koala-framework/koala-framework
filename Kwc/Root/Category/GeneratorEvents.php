@@ -49,18 +49,14 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
 
     public function onRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
     {
-        if (strpos($event->componentId, '_') !== false) return;
-        $pageId = $event->componentId;
-        $suffix = '';
-        if (($pos = strpos($event->componentId, '-')) !== false) {
-            $pageId = substr($event->componentId, 0, $pos);
-            $suffix = substr($event->componentId, $pos);
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        if (!$c->isPage && $c->componentId != 'root') {
+            throw new Kwf_Exception("Recursive Events must be fired with a page componentId");
         }
-
-        $childIds = $this->_getGenerator()->getPageChildIds($pageId);
+        $childIds = $this->_getGenerator()->getPageChildIds($c->dbId);
         foreach($childIds as $childId) {
             $eventsClass = get_class($event);
-            $this->fireEvent(new $eventsClass($event->class, $childId . $suffix));
+            $this->fireEvent(new $eventsClass($event->class, $childId));
         }
     }
 
