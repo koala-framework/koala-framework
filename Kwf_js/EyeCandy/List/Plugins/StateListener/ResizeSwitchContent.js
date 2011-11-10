@@ -10,7 +10,7 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
 
         this.list.items.each(function(item) {
             var currentState = item.getState();
-            item.oldState = currentState;
+            this.oldState[item.id] = currentState;
 
             // measure the original sizes
             for (var i in this.sizes) {
@@ -49,11 +49,12 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
     },
     _change: function(item) {
         var state = item.getState();
+        var oldState = this.oldState[item.id];
 
         // measure old elements
         var contentElementsOldSizes = {};
-        for (var j in this.sizes[item.oldState].contentElements) {
-            var contentElement = item.el.child(this.sizes[item.oldState].contentElements[j].selector);
+        for (var j in this.sizes[oldState].contentElements) {
+            var contentElement = item.el.child(this.sizes[oldState].contentElements[j].selector);
             if (!contentElement) continue;
             contentElementsOldSizes[j] = contentElement.getSize();
         }
@@ -99,7 +100,7 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
             maxHeight+item.el.getPadding('tb'),
             true
         );
-        
-        item.oldState = state;
+
+        this.oldState[item.id] = state;
     }
 });
