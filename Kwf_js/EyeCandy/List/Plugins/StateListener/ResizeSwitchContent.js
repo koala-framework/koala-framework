@@ -77,6 +77,12 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
             contentElement.setDisplayed(true);
         }
 
+        //reset all manually set sizes, so getting biggest element works
+        item.el.select('*').each(function(childEl) {
+            childEl.dom.style.width = '';
+            childEl.dom.style.height = '';
+        }, this);
+
         // get the biggest element to later animate the item
         var maxWidth = 0;
         var maxHeight = 0;
