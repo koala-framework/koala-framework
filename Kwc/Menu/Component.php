@@ -74,10 +74,6 @@ class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
         } else if ($c > 0) {
             return true;
         }
-        $sub = $this->getData()->getChildComponent('-subMenu');
-        if ($sub && $sub->getComponent()->hasContent()) {
-            return true;
-        }
         return false;
     }
 }
