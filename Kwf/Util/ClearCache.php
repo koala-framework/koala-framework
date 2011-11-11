@@ -101,6 +101,7 @@ class Kwf_Util_ClearCache
             file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
             if ($output) echo " [\033[00;32mOK\033[00m]\n";
 
+
             if ($output) echo "Refresh settings.......";
 
             $configClass = Kwf_Setup::$configClass;
@@ -119,6 +120,11 @@ class Kwf_Util_ClearCache
                 Kwc_Abstract::getSettingMtime();
                 if ($output) echo " [\033[00;32mOK\033[00m]\n";
             }
+
+            if ($output) echo "Refresh assets.........";
+            $loader = new Kwf_Assets_Loader();
+            $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem
+            if ($output) echo " [\033[00;32mOK\033[00m]\n";
 
             if (in_array('cache_component', $this->getDbCacheTables())
                 && (in_array('component', $types) || in_array('cache_component', $types))
