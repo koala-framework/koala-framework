@@ -209,7 +209,11 @@ class Kwf_Assets_Dependencies
 
     private function _getDependenciesConfig($assetsType)
     {
-        if (!isset($this->_dependenciesConfig[$assetsType])) {
+        $key = 'dep';
+        if (strpos($assetsType, ':')) {
+            $key = $assetsType;
+        }
+        if (!isset($this->_dependenciesConfig[$key])) {
             $f = Kwf_Registry::get('config')->assets->dependencies->kwf;
             $ret = new Zend_Config_Ini($f, 'dependencies',
                                                 array('allowModifications'=>true));
@@ -227,9 +231,9 @@ class Kwf_Assets_Dependencies
                     }
                 }
             }
-            $this->_dependenciesConfig[$assetsType] = $ret;
+            $this->_dependenciesConfig[$key] = $ret;
         }
-        return $this->_dependenciesConfig[$assetsType];
+        return $this->_dependenciesConfig[$key];
     }
 
     private function _processDependency($assetsType, $dependency, $rootComponent)
