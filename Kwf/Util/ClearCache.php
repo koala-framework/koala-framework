@@ -81,6 +81,67 @@ class Kwf_Util_ClearCache
         return $types;
     }
 
+    private function _refresh($type)
+    {
+        if ($type == 'setup') {
+
+            file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
+
+        } else if ($type == 'settings') {
+
+            $configClass = Kwf_Setup::$configClass;
+            $config = new $configClass(Kwf_Setup::getConfigSection());
+            $cacheId = 'config_'.str_replace('-', '_', Kwf_Setup::getConfigSection());
+            Kwf_Config_Cache::getInstance()->save($config, $cacheId);
+
+            Kwf_Config_Web::clearInstances();
+            Kwf_Registry::set('config', $config);
+            Kwf_Registry::set('configMtime', Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection()));
+
+        } else if ($type == 'component') {
+
+            Kwc_Abstract::getSettingMtime();
+
+        } else if ($type == 'assets') {
+
+            $loader = new Kwf_Assets_Loader();
+            $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem
+
+        } else if ($type == 'events') {
+
+            Kwf_Component_Events::getAllListeners();
+
+        } else if ($type == 'users') {
+
+            Kwf_Registry::get('userModel')->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
+
+        } else if ($type == 'users cleanup') {
+
+            // alle zeilen löschen die zuviel sind in kwf_users
+            // nötig für lokale tests
+            $db = Kwf_Registry::get('db');
+            $dbRes = $db->query('SELECT COUNT(*) `cache_users_count` FROM `cache_users`')->fetchAll();
+            if ($dbRes[0]['cache_users_count'] >= 1) {
+                $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `kwf_users`
+                        WHERE NOT (SELECT cache_users.id
+                                    FROM cache_users
+                                    WHERE cache_users.id = kwf_users.id
+                                    )'
+                )->fetchAll();
+                $db->query('DELETE FROM `kwf_users`
+                        WHERE NOT (SELECT cache_users.id
+                                    FROM cache_users
+                                    WHERE cache_users.id = kwf_users.id
+                                    )'
+                );
+                return $dbRes[0]['sort_out_count']." rows cleared";
+            } else {
+                return "skipping: cache_users is empty";
+            }
+
+        }
+    }
+
     public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
     {
         if ($types == 'all') {
@@ -97,46 +158,19 @@ class Kwf_Util_ClearCache
         if ($refresh) {
             if ($output) echo "\n";
 
-            if ($output) echo "Refresh setup..........";
-            file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
-            if ($output) echo " [\033[00;32mOK\033[00m]\n";
-
-
-            if ($output) echo "Refresh settings.......";
-
-            $configClass = Kwf_Setup::$configClass;
-            $config = new $configClass(Kwf_Setup::getConfigSection());
-            $cacheId = 'config_'.str_replace('-', '_', Kwf_Setup::getConfigSection());
-            Kwf_Config_Cache::getInstance()->save($config, $cacheId);
-
-            Kwf_Config_Web::clearInstances();
-            Kwf_Registry::set('config', $config);
-            Kwf_Registry::set('configMtime', Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection()));
-
-            if ($output) echo " [\033[00;32mOK\033[00m]\n";
-
+            $refreshTypes = array();
+            $refreshTypes[] = 'setup';
+            $refreshTypes[] = 'settings';
             if (Kwf_Component_Data_Root::getComponentClass()) {
-                if ($output) echo "Refresh component......";
-                Kwc_Abstract::getSettingMtime();
-                if ($output) echo " [\033[00;32mOK\033[00m]\n";
+                $refreshTypes[] = 'component';
             }
-
-            if ($output) echo "Refresh assets.........";
-            $loader = new Kwf_Assets_Loader();
-            $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem
-            if ($output) echo " [\033[00;32mOK\033[00m]\n";
-
+            $refreshTypes[] = 'assets';
             if (in_array('cache_component', $this->getDbCacheTables())
                 && (in_array('component', $types) || in_array('cache_component', $types))
             ) {
-                if ($output) echo "Refresh events.........";
-                try {
-                    Kwf_Component_Events::getAllListeners();
-                    if ($output) echo " [\033[00;32mOK\033[00m]\n";
-                } catch (Exception $e) {
-                    if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
-                }
+                $refreshTypes[] = 'events';
             }
+
             try {
                 $db = Kwf_Registry::get('db');
             } catch (Exception $e) {
@@ -145,42 +179,31 @@ class Kwf_Util_ClearCache
             if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
                 $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
                 if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
-                    if ($output) echo "Synchronize users......";
-                    try {
-                        Kwf_Registry::get('userModel')->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
-                        if ($output) echo " [\033[00;32mOK\033[00m]\n";
-                    } catch (Exception $e) {
-                        if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
-                    }
-
-                    // alle zeilen löschen die zuviel sind in kwf_users
-                    // nötig für lokale tests
+                    $refreshTypes[] = 'users';
                     if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
-                        if ($output) echo "kwf_users cleanup......";
-
-                        $dbRes = $db->query('SELECT COUNT(*) `cache_users_count` FROM `cache_users`')->fetchAll();
-                        if ($dbRes[0]['cache_users_count'] >= 1) {
-                            $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `kwf_users`
-                                    WHERE NOT (SELECT cache_users.id
-                                                FROM cache_users
-                                                WHERE cache_users.id = kwf_users.id
-                                               )'
-                            )->fetchAll();
-                            $db->query('DELETE FROM `kwf_users`
-                                    WHERE NOT (SELECT cache_users.id
-                                                FROM cache_users
-                                                WHERE cache_users.id = kwf_users.id
-                                               )'
-                            );
-                            if ($output) echo " [\033[00;32mOK: ".$dbRes[0]['sort_out_count']." rows cleared\033[00m]\n";
-                        } else {
-                            if ($output) echo " [\033[01;33mskipping: cache_users is empty\033[00m]\n";
-                        }
-                    } else {
-                        if ($output) echo "kwf_users cleanup...... [\033[00;32mskipped by config\033[00m]\n";
+                        $refreshTypes[] = 'users cleanup';
                     }
                 }
             }
+
+            foreach ($refreshTypes as $type) {
+                if ($output) echo "Refresh $type".str_repeat('.', 15-strlen($type));
+                $t = microtime(true);
+                try {
+                    $result = $this->_refresh($type);
+                    if (!$result) $result= 'OK';
+                    $success = true;
+                } catch (Exception $e) {
+                    if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
+                    continue;
+                }
+                if ($output) {
+                    echo " [\033[00;32m".$result."\033[00m]";
+                    echo " ".round((microtime(true)-$t)*1000)."ms";
+                    echo "\n";
+                }
+            }
+
             $this->_refreshCache($types, $output, $server);
         }
     }
