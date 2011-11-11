@@ -139,25 +139,4 @@ class Kwf_Component_Cache_MenuHasContent_ContentTest extends Kwc_TestAbstract
         $this->assertContains('menuMainHasContent', $html);
 
     }
-
-    /*
-    public function testMakePageInvisibleFromMain()
-    {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_MenuHasContent_Category_PagesModel');
-        $row = $m->getRow(1);
-        $row->visible = false;
-        $row->save();
-        $this->_process();
-    }
-
-    public function testRemovePageFromMain()
-    {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_MenuHasContent_Category_PagesModel');
-        $row = $m->getRow(1)->delete();
-        $this->_process();
-
-        $ids = Kwf_Component_Cache_MenuHasContent_Root_Events::$hasContentChanged;
-        $this->assertEquals(array('root-main-menuMain'), $ids);
-    }
-    */
 }
