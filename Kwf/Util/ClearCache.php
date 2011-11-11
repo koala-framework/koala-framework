@@ -182,8 +182,8 @@ class Kwf_Util_ClearCache
             if ($output) echo "\n";
 
             $refreshTypes = array();
-            $refreshTypes[] = 'setup';
             $refreshTypes[] = 'config';
+            $refreshTypes[] = 'setup';
             if (Kwf_Component_Data_Root::getComponentClass()) {
                 $refreshTypes[] = 'component';
             }
