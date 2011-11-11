@@ -15,12 +15,21 @@ class Kwf_Component_Cache_MenuHasContent_Test extends Kwc_TestAbstract
           -top
             -menuMain
             -menuTop
+            2 (invisible)
+              -menuMain
+              -menuTop
           -main
             -menuMain
             -menuTop
-            _1
+            1
               -menuMain
               -menuTop
+              3
+                -menuMain
+                -menuTop
+                4
+                  -menuMain
+                  -menuTop
          */
     }
 
@@ -79,7 +88,9 @@ class Kwf_Component_Cache_MenuHasContent_Test extends Kwc_TestAbstract
     public function testRemovePageFromMain()
     {
         $m = Kwf_Model_Abstract::getInstance('Kwf_Component_Cache_MenuHasContent_Category_PagesModel');
-        $row = $m->getRow(1)->delete();
+        $m->getRow(4)->delete();
+        $m->getRow(3)->delete();
+        $m->getRow(1)->delete();
         $this->_process();
 
         $ids = Kwf_Component_Cache_MenuHasContent_Root_Events::$hasContentChanged;

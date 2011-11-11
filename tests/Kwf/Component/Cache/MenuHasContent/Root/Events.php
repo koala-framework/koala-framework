@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Cache_MenuHasContent_Root_Events extends Kwf_Component_Abstract_Events
+class Kwf_Component_Cache_MenuHasContent_Root_Events extends Kwc_Root_Abstract_Events
 {
     public function getListeners()
     {
