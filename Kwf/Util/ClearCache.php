@@ -107,6 +107,23 @@ class Kwf_Util_ClearCache
             $loader = new Kwf_Assets_Loader();
             $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem
 
+            /*
+            $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
+            $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip';
+            $assets = KWf_Registry::get('config')->assets->toArray();
+            $assetTypes = array();
+            foreach ($assets as $assetsType => $v) {
+                if ($assetsType == 'dependencies') continue;
+                echo $assetsType.' ';
+                $urls = $loader->getDependencies()->getAssetUrls($assetsType, 'js', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage);
+                foreach ($urls as $url) {
+                    $url = preg_replace('#^/assets/#', '', $url);
+                    $url = preg_replace('#\\?v=\d+$#', '', $url);
+                    $loader->getFileContents($url);
+                }
+            }
+            */
+
         } else if ($type == 'events') {
 
             Kwf_Component_Events::getAllListeners();
@@ -139,6 +156,12 @@ class Kwf_Util_ClearCache
                 return "skipping: cache_users is empty";
             }
 
+        } else if ($type == 'trl') {
+
+            $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
+            if ($webCodeLanguage != 'en') {
+                Kwf_Trl::getInstance()->trl('Login', array(), 'en', $webCodeLanguage);
+            }
         }
     }
 
@@ -164,6 +187,7 @@ class Kwf_Util_ClearCache
             if (Kwf_Component_Data_Root::getComponentClass()) {
                 $refreshTypes[] = 'component';
             }
+            $refreshTypes[] = 'trl';
             $refreshTypes[] = 'assets';
             if (in_array('cache_component', $this->getDbCacheTables())
                 && (in_array('component', $types) || in_array('cache_component', $types))
