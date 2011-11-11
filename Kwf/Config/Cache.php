@@ -13,7 +13,9 @@ class Kwf_Config_Cache extends Zend_Cache_Frontend_File
         if (file_exists('config.local.ini')) $files[] = 'config.local.ini';
         parent::__construct(array(
             'master_files' => $files,
-            'automatic_serialization' => true
+            'automatic_serialization' => true,
+            'lifetime' => null,
+            'automatic_cleaning_factor' => 0,
         ));
         require_once 'Kwf/Cache/Backend/File.php';
         $this->setBackend(new Kwf_Cache_Backend_File(array(
