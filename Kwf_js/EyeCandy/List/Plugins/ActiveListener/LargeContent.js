@@ -21,10 +21,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext.extend(Kwf.EyeCandy.
         }, this);
     },
 
-    render: function() {
-        this.list.setActiveItem(this.list.getFirstItem());
-    },
-
     _activate: function(item)
     {
         var activeEl = null;

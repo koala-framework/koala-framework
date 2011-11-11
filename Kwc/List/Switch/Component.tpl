@@ -1,32 +1,16 @@
 <div class="kwfEyeCandyList <?=$this->cssClass?>">
+
     <?=$this->hiddenOptions($this->options)?>
     <div class="listSwitchLargeWrapper">
-        <div class="listSwitchLargeContent">
-            <? foreach ($this->children as $child) {
-                // diese ausgabe ist nur um flackern zu unterbinden. könnte
-                // auch entfernt werden, da das bild sowieso vom javascript
-                // nochmal gesetzt wird.
-            ?>
-                <?= $this->component($child->getChildComponent('-large'));
-                break; ?>
-            <? } ?>
-        </div>
+        <div class="listSwitchLargeContent"></div> <?/* this div is requred, see LargeContentPlugin */?>
         <div class="clear"></div>
     </div>
 
     <div class="listSwitchPreviewWrapper <?=$this->previewCssClass?>">
         <? $i = 0; ?>
-        <? foreach ($this->children as $child) { ?>
-            <?
-                $class = '';
-                if ($i == 0) $class .= 'kwcFirst ';
-                if ($i == count($this->children)-1) $class .= 'kwcLast ';
-                $class = trim($class);
-                $i++;
-            ?>
-            <div class="listSwitchItem <?= $class; ?>" id="<?= $child->componentId; ?>">
-                <a href="#" class="previewLink"><?=$this->component($child);?></a>
-                <div class="largeContent"><?= $this->component($child->getChildComponent('-large')); ?></div>
+        <? foreach ($this->listItems as $item) { ?>
+            <div id="<?= $item['data']->componentId; ?>" class="listSwitchItem <?= $item['class']; ?>">
+                <?=$this->componentLink($item['largePage'], $this->component($item['data']), array('cssClass'=>'previewLink'))?>
             </div>
         <? } ?>
         <div class="clear"></div>

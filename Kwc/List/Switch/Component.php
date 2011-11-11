@@ -9,6 +9,18 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         $ret['generators']['child']['component'] = 'Kwc_List_Switch_Preview_Component';
         $ret['previewCssClass'] = '';
 
+        $ret['generators']['itemPages'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Table',
+            'filenameColumn' => 'id',
+            'uniqueFilename' => true,
+            'nameColumn' => 'id',
+            'component' => 'Kwc_List_Switch_ItemPage_Component',
+            'showInMenu' => false,
+        );
+        $ret['plugins'] = array(
+            'largeContent' => 'Kwc_List_Switch_LargeContentPlugin',
+        );
+
         // transition kann auch auf false gesetzt werden um "direkt" umzuschalten
         $ret['transition'] = array(
             'type'               => 'fade',   // possible values: fade, slide
@@ -35,25 +47,9 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         $ret['options']['showArrows'] = $this->_getSetting('showArrows');
         $ret['options']['class'] = $this->_getSetting('eyeCandyListClass');
 
-        $ret['items'] = array();
-        foreach ($ret['listItems'] as $item) {
-            $ret['items'][] = array(
-                'preview' => $this->_getPreviewComponent($item['data']),
-                'large' => $this->_getLargeComponent($item['data']),
-                'class' => $item['class']
-            );
+        foreach ($ret['listItems'] as &$item) {
+            $item['largePage'] = $this->getData()->getChildComponent('_'.$item['data']->id);
         }
-
         return $ret;
-    }
-
-    protected function _getPreviewComponent($childComponent)
-    {
-        return $childComponent;
-    }
-
-    protected function _getLargeComponent($childComponent)
-    {
-        return $childComponent->getChildComponent('-large');
     }
 }

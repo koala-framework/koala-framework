@@ -15,14 +15,14 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
         ];
 
         this.plugins = [
-            new Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent({
-                activatedState: 'active',
-                largeContentSelector: '.largeContent',
+            new Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax({
                 largeContainerSelector: '.listSwitchLargeContent',
                 transition: this.transition.type,
                 transitionConfig: this.transition
             }),
             new Kwf.EyeCandy.List.Plugins.ActiveChanger.Click({
+            }),
+            new Kwf.EyeCandy.List.Plugins.ActiveChanger.DefaultActiveClass({
             })
         ];
         if (this.showArrows) {

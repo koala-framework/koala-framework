@@ -88,7 +88,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $content = $helper->renderCached($content, $componentId, $config);
 
             foreach ($plugins as $pluginClass) {
-                $plugin = new $pluginClass($componentId);
+                $plugin = Kwf_Component_Plugin_View_Abstract::getInstance($pluginClass, $componentId);
                 if (!$plugin instanceof Kwf_Component_Plugin_Abstract)
                     throw Kwf_Exception('Plugin must be Instanceof Kwf_Component_Plugin_Abstract');
                 if ($plugin->getExecutionPoint() == Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
@@ -106,7 +106,7 @@ abstract class Kwf_Component_Renderer_Abstract
         }
         while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/s', $ret, $matches)) {
             $pluginClass = $matches[2];
-            $plugin = new $pluginClass($matches[3]);
+            $plugin = Kwf_Component_Plugin_View_Abstract::getInstance($pluginClass, $matches[3]);
             $content = $plugin->processOutput($matches[4]);
             $ret = str_replace($matches[0], $content, $ret);
         }
