@@ -72,7 +72,15 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             $or = array();
             foreach ($this->_updates as $key => $values) {
                 if ($key === 'db_id') {
-                    $or[] = new Kwf_Model_Select_Expr_Equal($key, array_unique($values));
+                    $or[] = new Kwf_Model_Select_Expr_And(array(
+                        new Kwf_Model_Select_Expr_Equal('db_id', array_unique($values)),
+                        new Kwf_Model_Select_Expr_Equal('type', 'component'),
+                    ));
+                } else if ($key === 'master-db_id') {
+                    $or[] = new Kwf_Model_Select_Expr_And(array(
+                        new Kwf_Model_Select_Expr_Equal('db_id', array_unique($values)),
+                        new Kwf_Model_Select_Expr_Equal('type', 'master'),
+                    ));
                 } else {
                     $and = array();
                     foreach ($values as $k => $v) {
@@ -93,11 +101,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        //TODO: clear only type=component
         $this->_updates['db_id'][] = $event->dbId;
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
-            $log->log("view cache clear db_id=$event->dbId", Zend_Log::INFO);
+            $log->log("view cache clear db_id=$event->dbId type=component", Zend_Log::INFO);
         }
     }
 
@@ -116,11 +123,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onMasterContentChange(Kwf_Component_Event_Component_MasterContentChanged $event)
     {
-        //TODO: clear only type=master
-        $this->_updates['db_id'][] = $event->dbId;
+        $this->_updates['master-db_id'][] = $event->dbId;
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
-            $log->log("view cache clear db_id=$event->dbId", Zend_Log::INFO);
+            $log->log("view cache clear db_id=$event->dbId type=master", Zend_Log::INFO);
         }
     }
 
