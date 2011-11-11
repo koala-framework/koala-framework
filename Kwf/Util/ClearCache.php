@@ -81,7 +81,7 @@ class Kwf_Util_ClearCache
         return $types;
     }
 
-    private function _refresh($type)
+    private function _refresh($type, $output)
     {
         if ($type == 'setup') {
 
@@ -114,7 +114,7 @@ class Kwf_Util_ClearCache
             $assetTypes = array();
             foreach ($assets as $assetsType => $v) {
                 if ($assetsType == 'dependencies') continue;
-                echo $assetsType.' ';
+                if ($output) echo $assetsType.' ';
                 $urls = $loader->getDependencies()->getAssetUrls($assetsType, 'js', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage);
                 foreach ($urls as $url) {
                     $url = preg_replace('#^/assets/#', '', $url);
@@ -214,7 +214,7 @@ class Kwf_Util_ClearCache
                 if ($output) echo "Refresh $type".str_repeat('.', 15-strlen($type));
                 $t = microtime(true);
                 try {
-                    $result = $this->_refresh($type);
+                    $result = $this->_refresh($type, $output);
                     if (!$result) $result= 'OK';
                     $success = true;
                 } catch (Exception $e) {
