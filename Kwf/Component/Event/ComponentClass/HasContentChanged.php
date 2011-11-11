@@ -1,0 +1,4 @@
+<?php
+class Kwf_Component_Event_ComponentClass_HasContentChanged extends Kwf_Component_Event_ComponentClass_Abstract
+{
+}
