@@ -87,7 +87,7 @@ class Kwf_Util_ClearCache
 
             file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
 
-        } else if ($type == 'settings') {
+        } else if ($type == 'config') {
 
             $configClass = Kwf_Setup::$configClass;
             $config = new $configClass(Kwf_Setup::getConfigSection());
@@ -183,7 +183,7 @@ class Kwf_Util_ClearCache
 
             $refreshTypes = array();
             $refreshTypes[] = 'setup';
-            $refreshTypes[] = 'settings';
+            $refreshTypes[] = 'config';
             if (Kwf_Component_Data_Root::getComponentClass()) {
                 $refreshTypes[] = 'component';
             }
