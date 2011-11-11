@@ -95,10 +95,10 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        $im->readImage($o['file']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
-        $this->assertEquals(file_get_contents(dirname(__FILE__).'/EmptyImageComponent/empty.png'), $o['contents']);
+        $this->assertEquals(dirname(__FILE__).'/EmptyImageComponent/empty.png', $o['file']);
     }
 
     public function testParentImage()
@@ -116,7 +116,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        $im->readImage($o['file']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
 

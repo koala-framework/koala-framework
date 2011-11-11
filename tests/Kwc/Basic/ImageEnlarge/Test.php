@@ -65,11 +65,11 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        $im->readImage($o['file']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
+                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
     }
 
     public function testWithoutSmallImageUploaded()
@@ -127,11 +127,11 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        $im->readImage($o['file']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
+                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
     }
 
     public function testWithSmallImageUploaded()
@@ -197,11 +197,11 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/gif', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        $im->readImage($o['file']);
         $this->assertEquals(210, $im->getImageWidth());
         $this->assertEquals(70, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
-                                    array(270, 70, Kwf_Media_Image::SCALE_BESTFIT)), $o['contents']);
+                                    array(270, 70, Kwf_Media_Image::SCALE_BESTFIT)), file_get_contents($o['file']));
     }
 
     public function testWithOriginalHtml()
