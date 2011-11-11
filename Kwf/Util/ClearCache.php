@@ -102,10 +102,16 @@ class Kwf_Util_ClearCache
             if ($output) echo " [\033[00;32mOK\033[00m]\n";
 
             if ($output) echo "Refresh settings.......";
+
+            $configClass = Kwf_Setup::$configClass;
+            $config = new $configClass(Kwf_Setup::getConfigSection());
+            $cacheId = 'config_'.str_replace('-', '_', Kwf_Setup::getConfigSection());
+            Kwf_Config_Cache::getInstance()->save($config, $cacheId);
+
             Kwf_Config_Web::clearInstances();
-            $config = Kwf_Config_Web::getInstance(Kwf_Setup::getConfigSection());
             Kwf_Registry::set('config', $config);
             Kwf_Registry::set('configMtime', Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection()));
+
             if ($output) echo " [\033[00;32mOK\033[00m]\n";
 
             if (Kwf_Component_Data_Root::getComponentClass()) {
