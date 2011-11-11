@@ -8,7 +8,7 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    private function _getMenuData()
     {
         $category = Kwc_Abstract::getSetting($this->_getSetting('menuComponentClass'), 'level');
         $categoryData = $this->getData()->parent->parent->getChildComponent('-'.$category);
@@ -16,12 +16,20 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
         if (!is_instance_of($menu->componentClass, 'Kwc_Menu_Abstract_Component')) {
             throw new Kwf_Exception("got invalid menu component");
         }
+        return $menu;
+    }
 
+    public function getTemplateVars()
+    {
+        $menu = $this->_getMenuData();
         $ret = $menu->getComponent()->getTemplateVars();
-
         $ret['includeTemplate'] = self::getTemplateFile($menu->componentClass);
-
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        return $this->_getMenuData()->hasContent();
     }
 
     public static function getStaticCacheMeta($componentClass)
