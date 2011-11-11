@@ -29,10 +29,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                     options.success.call(options.scope || this);
                 }
             },
-            failure: function() {
-                //fallback
-                location.href = item.el.child('a').dom.href;
-            },
             scope: this
         });
     },
