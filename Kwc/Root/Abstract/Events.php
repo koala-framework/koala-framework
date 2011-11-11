@@ -4,8 +4,9 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
-        foreach (Kwf_Component_Generator_Abstract::getInstances($this->_class) as $g) {
-            if ($g->getGeneratorFlag('box')) {
+        foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
+            $generators = Kwf_Component_Generator_Abstract::getInstances($componentClass, array('box'=>true));
+            foreach ($generators as $g) {
                 foreach ($g->getChildComponentClasses() as $c) {
                     //TODO: only listen to boxes that use if (hasContent(..)) in master template
                     if ($g->hasSetting('unique') && $g->getSetting('unique')) {
