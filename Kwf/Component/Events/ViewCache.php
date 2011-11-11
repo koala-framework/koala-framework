@@ -146,11 +146,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     {
         $this->_updates[] = array(
             'type' => 'master',
-            'component_class' => $event->class,
         );
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
-            $log->log("view cache clear component_class=$event->class type=master", Zend_Log::INFO);
+            $log->log("view cache clear type=master", Zend_Log::INFO);
         }
     }
 
