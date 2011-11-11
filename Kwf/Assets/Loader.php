@@ -19,7 +19,8 @@ class Kwf_Assets_Loader
 
             try {
                 $l = new self();
-                Kwf_Media_Output::output($l->getFileContents($url));
+                $out = $l->getFileContents($url);
+                Kwf_Media_Output::output($out);
             } catch (Kwf_Assets_NotFoundException $e) {
                 throw new Kwf_Exception_NotFound();
             }

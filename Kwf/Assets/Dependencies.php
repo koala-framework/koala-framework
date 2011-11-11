@@ -61,17 +61,9 @@ class Kwf_Assets_Dependencies
     {
         Kwf_Benchmark::count('getAssetUrls');
         if ($this->_config) {
-            $menu = $this->_config->debug->menu;
             $assets = $this->_config->debug->assets->toArray();
         } else {
-            $menu = Kwf_Config::getValue('debug.menu');
             $assets = Kwf_Config::getValueArray('debug.assets');
-        }
-        if ($menu) {
-            $session = new Zend_Session_Namespace('debug');
-            if (isset($session->enable) && $session->enable) {
-                $assetsType .= 'Debug';
-            }
         }
         $allUsed = false;
         $ret = array();
