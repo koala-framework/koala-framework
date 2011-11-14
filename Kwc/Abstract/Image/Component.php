@@ -126,7 +126,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     public function hasContent()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        if ($data && $data['file']) {
+        if ($data) {
             return true;
         }
         return false;
@@ -135,7 +135,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     public function getImageUrl()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        if ($data && $data['file']) {
+        if ($data) {
             $id = $this->getData()->componentId;
             return Kwf_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
         }
@@ -147,23 +147,22 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $row = $this->_getRow();
         $fileRow = false;
         if ($row) $fileRow = $row->getParentRow('Image');
+        if (!$fileRow) return null;
 
         $filename = null;
-        if ($fileRow) {
-            if ($this->_getSetting('editFilename')) {
-                $filename = $row->filename;
-            }
-            if (!$filename) {
-                $filename = $fileRow->filename;
-            }
-            $filename .= '.'.$fileRow->extension;
+        if ($this->_getSetting('editFilename')) {
+            $filename = $row->filename;
         }
-        $file = $fileRow ? $fileRow->getFileSource() : null;
-        if (!file_exists($file)) $file = null;
+        if (!$filename) {
+            $filename = $fileRow->filename;
+        }
+        $filename .= '.'.$fileRow->extension;
+        $file = $fileRow->getFileSource();
+        if (!$file || !file_exists($file)) return null;
         return array(
             'filename' => $filename,
             'file' => $file,
-            'mimeType' => $fileRow ? $fileRow->mime_type : null,
+            'mimeType' => $fileRow->mime_type,
             'row' => $row
         );
     }
@@ -172,7 +171,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     {
         if (!isset($this->_imageDataOrEmptyImageData)) {
             $file = $this->getImageData();
-            if (!$file['file']) {
+            if (!$file) {
                 $file = $this->_getEmptyImageData();
             }
             $this->_imageDataOrEmptyImageData = $file;
@@ -239,7 +238,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $s['width'] = $this->getContentWidth();
         }
 
-        if ($data && $data['file']) {
+        if ($data) {
             return Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
         }
         return $s;
@@ -274,7 +273,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if (!$component) return null;
 
         $data = $component->getComponent()->_getImageDataOrEmptyImageData();
-        if (!$data || !$data['file']) {
+        if (!$data) {
             return null;
         }
 
@@ -330,7 +329,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($s['width'] == self::CONTENT_WIDTH) {
             return parent::getContentWidth();
         }
-        if ($data && $data['file']) {
+        if ($data) {
             $s = Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
             return $s['width'];
         }
