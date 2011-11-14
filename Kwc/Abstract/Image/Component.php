@@ -126,7 +126,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     public function hasContent()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        if ($data && $data['file'] && file_exists($data['file'])) {
+        if ($data && $data['file']) {
             return true;
         }
         return false;
@@ -158,9 +158,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             }
             $filename .= '.'.$fileRow->extension;
         }
+        $file = $fileRow ? $fileRow->getFileSource() : null;
+        if (!file_exists($file)) $file = null;
         return array(
             'filename' => $filename,
-            'file' => $fileRow ? $fileRow->getFileSource() : null,
+            'file' => $file,
             'mimeType' => $fileRow ? $fileRow->mime_type : null,
             'row' => $row
         );
@@ -237,7 +239,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $s['width'] = $this->getContentWidth();
         }
 
-        if ($data && $data['file'] && file_exists($data['file'])) {
+        if ($data && $data['file']) {
             return Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
         }
         return $s;
@@ -272,7 +274,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if (!$component) return null;
 
         $data = $component->getComponent()->_getImageDataOrEmptyImageData();
-        if (!$data || !$data['file'] || !file_exists($data['file'])) {
+        if (!$data || !$data['file']) {
             return null;
         }
 
@@ -328,7 +330,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($s['width'] == self::CONTENT_WIDTH) {
             return parent::getContentWidth();
         }
-        if ($data && $data['file'] && file_exists($data['file'])) {
+        if ($data && $data['file']) {
             $s = Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
             return $s['width'];
         }
