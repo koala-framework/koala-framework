@@ -135,7 +135,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     public function getImageUrl()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        if ($data && $data['filename']) {
+        if ($data && $data['file']) {
             $id = $this->getData()->componentId;
             return Kwf_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
         }
