@@ -10,6 +10,9 @@ class Kwf_Media_Image
     {
         if (is_string($source)) {
             $sourceSize = @getimagesize($source);
+        } else if ($source instanceof Imagick) {
+            $sourceSize = $source->getImageGeometry();
+            $source = null;
         } else {
             $sourceSize = $source;
             $source = null;
@@ -181,7 +184,7 @@ class Kwf_Media_Image
         if ($source instanceof Kwf_Uploads_Row) {
             $source = $source->getFileSource();
         }
-        if (!is_file($source)) {
+        if (is_string($source) && !is_file($source)) {
             return false;
         }
 
@@ -191,7 +194,11 @@ class Kwf_Media_Image
         // wenn bild schon der angeforderten größe entspricht, original ausgeben
         // nötig für zB animierte gifs, da sonst die animation verloren geht
         if (($size['scale'] == self::SCALE_CROP || $size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM)) {
-            $originalSize = getimagesize($source);
+            if ($source instanceof Imagick) {
+                $originalSize = array($source->getImageWidth(), $source->getImageHeight());
+            } else {
+                $originalSize = getimagesize($source);
+            }
             if ($originalSize[0] == $size['width'] && $originalSize[1] == $size['height']) {
                 $size['scale'] = self::SCALE_ORIGINAL;
             }
@@ -201,8 +208,12 @@ class Kwf_Media_Image
 
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
             if (class_exists('Imagick')) {
-                $im = new Imagick();
-                $im->readImage($source);
+                if ($source instanceof Imagick) {
+                    $im = $source;
+                } else {
+                    $im = new Imagick();
+                    $im->readImage($source);
+                }
                 if (isset($size['rotate']) && $size['rotate']) {
                     $im->rotateImage('#FFF', $size['rotate']);
                 }
@@ -218,8 +229,12 @@ class Kwf_Media_Image
         } elseif ($size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM) {
 
             if (class_exists('Imagick')) {
-                $im = new Imagick();
-                $im->readImage($source);
+                if ($source instanceof Imagick) {
+                    $im = $source;
+                } else {
+                    $im = new Imagick();
+                    $im->readImage($source);
+                }
                 if (isset($size['rotate']) && $size['rotate']) {
                     $im->rotateImage('#FFF', $size['rotate']);
                 }
@@ -257,7 +272,11 @@ class Kwf_Media_Image
 
         } elseif ($size['scale'] == self::SCALE_ORIGINAL) {
 
-            $ret = file_get_contents($source);
+            if ($source instanceof Imagick) {
+                $ret = $source->getImageBlob();
+            } else {
+                $ret = file_get_contents($source);
+            }
 
         } else {
 
@@ -273,8 +292,8 @@ class Kwf_Media_Image
         $im->setCompressionQuality(90);
         $version = $im->getVersion();
         if (isset($version['versionNumber']) && (int)$version['versionNumber'] >= 1632) {
-            $im->setImageProperty('date:create', null);
-            $im->setImageProperty('date:modify', null);
+            if ($im->getImageProperty('date:create')) $im->setImageProperty('date:create', null);
+            if ($im->getImageProperty('date:modify')) $im->setImageProperty('date:modify', null);
         }
         return $im;
     }

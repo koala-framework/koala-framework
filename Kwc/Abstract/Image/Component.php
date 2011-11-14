@@ -239,7 +239,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($data) {
-            return Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
+            if (isset($data['image'])) {
+                $s = Kwf_Media_Image::calculateScaleDimensions($data['image'], $s);
+            } else {
+                $s = Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
+            }
         }
         return $s;
     }
@@ -282,17 +286,22 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $dim['width'] = $component->getComponent()->getContentWidth();
         }
         $ret = array();
-        $size = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
-        $sourceSize = @getimagesize($data['file']);
-        $scalingNeeded = (bool)$dim;
-        if ($scalingNeeded && $sourceSize && array($size['width'], $size['height']) == array($sourceSize[0], $sourceSize[1])) {
-            $scalingNeeded = false;
-        }
-        if ($scalingNeeded) {
-            $output = Kwf_Media_Image::scale($data['file'], $dim);
+        if (isset($data['image'])) {
+            $output = Kwf_Media_Image::scale($data['image'], $dim);
             $ret['contents'] = $output;
         } else {
-            $ret['file'] = $data['file'];
+            $size = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
+            $sourceSize = @getimagesize($data['file']);
+            $scalingNeeded = (bool)$dim;
+            if ($scalingNeeded && $sourceSize && array($size['width'], $size['height']) == array($sourceSize[0], $sourceSize[1])) {
+                $scalingNeeded = false;
+            }
+            if ($scalingNeeded) {
+                $output = Kwf_Media_Image::scale($data['file'], $dim);
+                $ret['contents'] = $output;
+            } else {
+                $ret['file'] = $data['file'];
+            }
         }
         $ret['mimeType'] = $data['mimeType'];
 
@@ -330,7 +339,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return parent::getContentWidth();
         }
         if ($data) {
-            $s = Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
+            if (isset($data['image'])) {
+                $s = Kwf_Media_Image::calculateScaleDimensions($data['image'], $s);
+            } else {
+                $s = Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
+            }
             return $s['width'];
         }
         return 0;
