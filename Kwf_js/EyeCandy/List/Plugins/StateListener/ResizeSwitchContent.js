@@ -18,24 +18,15 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
                     var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
                     if (!contentElement) continue;
 
+                    contentElement.enableDisplayMode('block');
+                    contentElement.show(); //show to mesure correctly
                     if (!contentElement.ResizeSwitchContentOriginalWidth) {
                         contentElement.ResizeSwitchContentOriginalWidth = contentElement.getWidth();
                     }
                     if (!contentElement.ResizeSwitchContentOriginalHeight) {
                         contentElement.ResizeSwitchContentOriginalHeight = contentElement.getHeight();
                     }
-                }
-            }
-
-            // deactivate not active contentElements
-            for (var i in this.sizes) {
-                for (var j in this.sizes[i].contentElements) {
-                    var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
-                    if (!contentElement) continue;
-
-                    if (i != currentState) {
-                        contentElement.setDisplayed(false);
-                    }
+                    contentElement.hide(); //hide by default, correct one will be activated below
                 }
             }
 
@@ -43,7 +34,7 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
             for (var j in this.sizes[currentState].contentElements) {
                 var contentElement = item.el.child(this.sizes[currentState].contentElements[j].selector);
                 if (!contentElement) continue;
-                contentElement.setDisplayed(true);
+                contentElement.show();
             }
         }, this);
     },
@@ -65,7 +56,7 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
                 for (var j in this.sizes[i].contentElements) {
                     var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
                     if (!contentElement) continue;
-                    contentElement.setDisplayed(false);
+                    contentElement.hide();
                 }
             }
         }
@@ -74,7 +65,7 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
         for (var j in this.sizes[state].contentElements) {
             var contentElement = item.el.child(this.sizes[state].contentElements[j].selector);
             if (!contentElement) continue;
-            contentElement.setDisplayed(true);
+            contentElement.show();
         }
 
         //reset all manually set sizes, so getting biggest element works
