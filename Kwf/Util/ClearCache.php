@@ -107,7 +107,6 @@ class Kwf_Util_ClearCache
             $loader = new Kwf_Assets_Loader();
             $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem
 
-            /*
             $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
             $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip';
             $assets = KWf_Registry::get('config')->assets->toArray();
@@ -116,13 +115,13 @@ class Kwf_Util_ClearCache
                 if ($assetsType == 'dependencies') continue;
                 if ($output) echo $assetsType.' ';
                 $urls = $loader->getDependencies()->getAssetUrls($assetsType, 'js', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage);
+                $urls = array_merge($urls, $loader->getDependencies()->getAssetUrls($assetsType, 'css', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage));
                 foreach ($urls as $url) {
                     $url = preg_replace('#^/assets/#', '', $url);
-                    $url = preg_replace('#\\?v=\d+$#', '', $url);
+                    $url = preg_replace('#\\?v=\d+(&t=\d+)?$#', '', $url);
                     $loader->getFileContents($url);
                 }
             }
-            */
 
         } else if ($type == 'events') {
 
