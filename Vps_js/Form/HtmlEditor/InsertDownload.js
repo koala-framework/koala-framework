@@ -77,7 +77,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
         this.beforeFocusBookmark = null;
         this.cmp.focus();
 
-        this.relayCmd('createlink', params.componentId);
+        this.cmp.relayCmd('createlink', params.componentId);
         this.cmp.updateToolbar();
     },
 
