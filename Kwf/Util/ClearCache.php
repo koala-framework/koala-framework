@@ -96,7 +96,7 @@ class Kwf_Util_ClearCache
 
             Kwf_Config_Web::clearInstances();
             Kwf_Registry::set('config', $config);
-            Kwf_Registry::set('configMtime', Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection()));
+            Kwf_Registry::set('configMtime', Kwf_Config_Cache::getInstance()->test($cacheId));
 
         } else if ($type == 'component') {
 

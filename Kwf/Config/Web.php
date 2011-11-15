@@ -45,7 +45,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                         $cache->save($ret, $cacheId);
                     }
                     apc_add($apcCacheId, $ret);
-                    apc_add($apcCacheId.'mtime', time());
+                    apc_add($apcCacheId.'mtime', $cache->test($cacheId));
                 }
             } else {
                 require_once 'Kwf/Config/Cache.php';
