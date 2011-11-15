@@ -42,11 +42,11 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             }
             unset($dc['visible']);
         }
-        if (isset($dc['pos']) && isset($event->row->visible) && $event->row->visible) {
+        if (isset($dc['pos']) && $event->row->getModel()->hasColumn('visible') && $event->row->visible) {
             $this->_fireComponentEvent('PositionChanged', $event->row, null);
             unset($dc['pos']);
         }
-        if (isset($dc['component']) && isset($event->row->visible) && $event->row->visible) {
+        if (isset($dc['component']) && $event->row->getModel()->hasColumn('visible') && $event->row->visible) {
             foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
                 foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
                     $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
@@ -66,14 +66,14 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
 
     public function onRowAdd(Kwf_Component_Event_Row_Inserted $event)
     {
-        if (!$event->row->hasColumn('visible') || $event->row->visible) {
+        if (!$event->row->getModel()->hasColumn('visible') || $event->row->visible) {
             $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
 
     public function onRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
-        if (!$event->row->hasColumn('visible') || $event->row->visible) {
+        if (!$event->row->getModel()->hasColumn('visible') || $event->row->visible) {
             $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
@@ -101,7 +101,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         if ($this->_getGenerator()->hasSetting('dbIdShortcut') && $this->_getGenerator()->getSetting('dbIdShortcut')) {
             return array($this->_getGenerator()->getSetting('dbIdShortcut') .
                 $row->id);
-        } else if ($row->hasColumn('component_id')) {
+        } else if ($row->getModel()->hasColumn('component_id')) {
             return array($row->component_id .
                 $this->_getGenerator()->getIdSeparator() .
                 $row->id);
