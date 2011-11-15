@@ -42,18 +42,6 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         $component = $this->_getComponentById($componentId);
         $type = $this->_getType();
 
-        // Chained-Komponenten brauchen zum Cache löschen den Cache der Master-
-        // Komponenten, deshalb hier schreiben
-        if ($type == 'component' &&
-            ($component->getComponent() instanceof Kwc_Chained_Abstract_Component) &&
-            !Kwf_Component_Cache::getInstance()->test($component->chained->componentId)
-        ) {
-            // neuer Helper, damit _getRenderer() leer ist
-            $helper = new Kwf_Component_View_Helper_Component();
-            $chainedContent = $helper->render($component->chained->componentId, array());
-            $helper->saveCache($component->chained->componentId, array(), null, $chainedContent);
-        }
-
         // Content-Cache
         Kwf_Component_Cache::getInstance()->save(
             $component,
