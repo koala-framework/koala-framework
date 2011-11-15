@@ -132,12 +132,26 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return false;
     }
 
+    //only for events
+    public function getImageUrlType()
+    {
+        $type = 'default';
+        $s = $this->_getImageDimensions();
+        if ($s['width'] == self::CONTENT_WIDTH) {
+            //use the contentWidth as type so we have an unique media cacheId depending on the width
+            //that way it's not necessary to delete the media cache when content with changes
+            $type = $this->getContentWidth();
+        }
+        return $type;
+    }
+
     public function getImageUrl()
     {
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data) {
             $id = $this->getData()->componentId;
-            return Kwf_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
+            $type = $this->getImageUrlType();
+            return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
         }
         return null;
     }

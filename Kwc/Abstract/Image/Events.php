@@ -9,8 +9,9 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
                 $event->row->component_id, array('componentClass' => $this->_class)
             );
             foreach ($components as $component) {
+                $type = $component->getComponent()->getImageUrlType();
                 $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                    $this->_class, $component->componentId
+                    $this->_class, $component->componentId, $type
                 ));
             }
         }
