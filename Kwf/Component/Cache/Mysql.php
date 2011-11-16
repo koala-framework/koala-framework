@@ -34,6 +34,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $data = array(
             'component_id' => (string)$component->componentId,
             'db_id' => (string)$component->dbId,
+            'page_db_id' => (string)$component->getPageOrRoot()->dbId,
             'component_class' => $component->componentClass,
             'type' => $type,
             'value' => (string)$value,
