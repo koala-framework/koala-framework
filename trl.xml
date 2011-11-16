@@ -6361,5 +6361,20 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Dimension: At least width or height must be set higher than 0.</en>
 <id>1709</id>
 </text>
+<text>
+<en>Service Unavailable</en>
+<de>Dienst nicht verfügbar</de>
+<id>1710</id>
+</text>
+<text>
+<en>Temporarily Down for Maintenance</en>
+<de>Vorübergehen wegen Wartungsarbeit nicht verfügbar</de>
+<id>1711</id>
+</text>
+<text>
+<en>Normal service will be restored soon.</en>
+<de>Der normale Betrieb wird baldmöglichst wieder herstestellt.</de>
+<id>1712</id>
+</text>
 </trl>
 

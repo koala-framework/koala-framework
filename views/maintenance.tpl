@@ -1,8 +1,8 @@
 <html>
 <head>
-    <title>503 Service Unavailable</title>
+    <title>503 <?=trlKwf('Service Unavailable')?></title>
 </head>
 <body>
-    <h1>Service Unavailable</h1>
-    <p>Server ist im Moment wegen Wartungsarbeiten nicht verfügbar.</p>
+    <h1><?=trlKwf('Temporarily Down for Maintenance')?></h1>
+    <p><?=trlKwf('Normal service will be restored soon.')?></p>
 </body></html>
