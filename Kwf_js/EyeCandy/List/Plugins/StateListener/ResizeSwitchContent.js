@@ -12,12 +12,12 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
             var currentState = item.getState();
             this.oldState[item.id] = currentState;
 
-            // measure the original sizes
+            // hide all
+            // and measure the original sizes
             for (var i in this.sizes) {
                 for (var j in this.sizes[i].contentElements) {
                     var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
                     if (!contentElement) continue;
-
                     contentElement.enableDisplayMode('block');
                     contentElement.show(); //show to mesure correctly
                     if (!contentElement.ResizeSwitchContentOriginalWidth) {
@@ -30,12 +30,40 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
                 }
             }
 
-            // activate self
+            // measure the max sizes
+            for (var i in this.sizes) {
+                //show all elements for this state (to be able to measure)
+                for (var j in this.sizes[i].contentElements) {
+                    var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
+                    if (!contentElement) continue;
+                    contentElement.show();
+                }
+                var maxWidth = 0;
+                var maxHeight = 0;
+                item.el.select('*').each(function(childEl) {
+                    if (childEl.isVisible(true)) {
+                        if (childEl.getWidth() > maxWidth) maxWidth = childEl.getWidth();
+                        if (childEl.getHeight() > maxHeight) maxHeight = childEl.getHeight();
+                    }
+                }, this);
+                if (!this.sizes[i].maxSize) this.sizes[i].maxSize = {};
+                this.sizes[i].maxSize[item.id] = { width: maxWidth, height: maxHeight };
+
+                //hide all elements for this state (to be able to measure the next state)
+                for (var j in this.sizes[i].contentElements) {
+                    var contentElement = item.el.child(this.sizes[i].contentElements[j].selector);
+                    if (!contentElement) continue;
+                    contentElement.hide();
+                }
+            }
+
+            // show elements for current state
             for (var j in this.sizes[currentState].contentElements) {
                 var contentElement = item.el.child(this.sizes[currentState].contentElements[j].selector);
                 if (!contentElement) continue;
                 contentElement.show();
             }
+
         }, this);
     },
     _change: function(item) {
@@ -68,20 +96,6 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
             contentElement.show();
         }
 
-        //reset all manually set sizes, so getting biggest element works
-        item.el.select('*').each(function(childEl) {
-            childEl.dom.style.width = '';
-            childEl.dom.style.height = '';
-        }, this);
-
-        // get the biggest element to later animate the item
-        var maxWidth = 0;
-        var maxHeight = 0;
-        item.el.select('*').each(function(childEl) {
-            if (childEl.getWidth() > maxWidth) maxWidth = childEl.getWidth();
-            if (childEl.getHeight() > maxHeight) maxHeight = childEl.getHeight();
-        }, this);
-        
         // set the inner content elements to the old size and animate them to their original size
         for (var j in this.sizes[state].contentElements) {
             var contentElement = item.el.child(this.sizes[state].contentElements[j].selector);
@@ -91,6 +105,9 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
             contentElement.setSize(contentElementsOldSizes[j].width, contentElementsOldSizes[j].height);
             contentElement.setSize(contentElement.ResizeSwitchContentOriginalWidth, contentElement.ResizeSwitchContentOriginalHeight, true);
         }
+
+        var maxWidth = this.sizes[state].maxSize[item.id].width;
+        var maxHeight = this.sizes[state].maxSize[item.id].height;
 
         item.el.setSize(
             maxWidth+item.el.getPadding('lr'),
