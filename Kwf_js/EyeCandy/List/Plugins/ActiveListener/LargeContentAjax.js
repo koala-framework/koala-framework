@@ -25,6 +25,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             success: function(response) {
                 var contentEl = this.largeContent[item.id].createChild();
                 contentEl.update(response.responseText);
+                Kwf.callOnContentReady();
                 if (options && options.success) {
                     options.success.call(options.scope || this);
                 }
