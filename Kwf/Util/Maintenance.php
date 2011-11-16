@@ -10,11 +10,16 @@ class Kwf_Util_Maintenance
             $offlineBootstrap .= "} else {\n";
             $offlineBootstrap .= "    header(\"HTTP/1.0 503 Service Unavailable\");\n";
             $offlineBootstrap .= "    header(\"Content-Type: text/html; charset=utf-8\");\n";
-            $view = new Kwf_View();
-            $html = $view->render('maintenance.tpl');
-            $html = str_replace("\\", "\\\\", $html);
-            $html = str_replace("\"", "\\\"", $html);
-            $offlineBootstrap .= "    echo \"".$html."\";\n";
+            if (file_exists('views/maintenance.php')) {
+                //dynamic maintenance page
+                $offlineBootstrap .= "    include('views/maintenance.php');\n";
+            } else {
+                $view = new Kwf_View();
+                $html = $view->render('maintenance.tpl');
+                $html = str_replace("\\", "\\\\", $html);
+                $html = str_replace("\"", "\\\"", $html);
+                $offlineBootstrap .= "    echo \"".$html."\";\n";
+            }
             $offlineBootstrap .= "}\n";
             if (!file_exists('bootstrap.php.backup')) {
                 rename('bootstrap.php', 'bootstrap.php.backup');
