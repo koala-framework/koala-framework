@@ -29,7 +29,9 @@ if ($this->showSuccess) {
             <div class="beforeButton"></div>
             <div class="button">
                 <div class="saving"></div>
-                <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button>
+                <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit">
+                    <span><?= $this->placeholder['submitButton'] ?></span>
+				</button>
             </div>
             <div class="afterButton"></div>
             <div class="clear"></div>
