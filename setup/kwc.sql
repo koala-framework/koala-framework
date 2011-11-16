@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `cache_component` (
   `component_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `db_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `page_db_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `component_class` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `type` enum('page','component','master','partials','partial','mail','componentLink') CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `value` varchar(20) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT '' COMMENT 'Bei Partial partialId oder bei master component_id zu der das master gehört',
@@ -10,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `cache_component` (
   PRIMARY KEY (`component_id`,`type`,`value`),
   KEY `component_class` (`component_class`),
   KEY `db_id` (`db_id`),
+  KEY `page_db_id` (`page_db_id`),
   KEY `value` (`value`),
   KEY `type` (`type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

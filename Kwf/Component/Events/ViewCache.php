@@ -59,6 +59,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onComponentClassPartialChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_ComponentClassPage_ContentChanged',
+            'callback' => 'onComponentClassPageContentChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Media_Changed',
             'callback' => 'onMediaChanged'
         );
@@ -223,6 +227,19 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
             $log->log("view cache clear type=partial component_class=$event->class value=$event->id", Zend_Log::INFO);
+        }
+    }
+
+    public function onComponentClassPageContentChanged(Kwf_Component_Event_ComponentClassPage_ContentChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'component',
+            'page_db_id' => $event->pageDbId,
+            'component_class' => $event->class
+        );
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear type=component page_db_id=$event->pageDbId component_class=$event->class", Zend_Log::INFO);
         }
     }
 
