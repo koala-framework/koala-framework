@@ -158,23 +158,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
     {
         if (self::_executeUpdate($updates, 'checkSettings', $debug, $skipClearCache)) {
 
-            if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
-                $offlineBootstrap  = "<?php\n";
-                $offlineBootstrap .= "if (isset(\$_SERVER['REDIRECT_URL']) && substr(\$_SERVER['REDIRECT_URL'], 0, 14) == '/kwf/util/apc/') {\n";
-                $offlineBootstrap .= "    require('bootstrap.php.backup');\n";
-                $offlineBootstrap .= "} else {\n";
-                $offlineBootstrap .= "    header(\"HTTP/1.0 503 Service Unavailable\");\n";
-                $offlineBootstrap .= "    echo \"<html><head><title>503 Service Unavailable</title></head><body>\";\n";
-                $offlineBootstrap .= "    echo \"<h1>Service Unavailable</h1>\";\n";
-                $offlineBootstrap .= "    echo \"<p>Server ist im Moment wegen Wartungsarbeiten nicht verfügbar.</p>\";\n";
-                $offlineBootstrap .= "    echo \"</body></html>\";\n";
-                $offlineBootstrap .= "}\n";
-                if (!file_exists('bootstrap.php.backup')) {
-                    rename('bootstrap.php', 'bootstrap.php.backup');
-                    file_put_contents('bootstrap.php', $offlineBootstrap);
-                    echo "\nwrote offline bootstrap.php\n\n";
-                }
-            }
+            Kwf_Util_Maintenance::writeMaintenanceBootstrap();
 
             self::_executeUpdate($updates, 'preUpdate', $debug, $skipClearCache);
             self::_executeUpdate($updates, 'update', $debug, $skipClearCache);
@@ -193,13 +177,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             file_put_contents('update', serialize($doneNames));
             echo "\n\033[32mupdate finished\033[0m\n";
 
-            if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
-                if (file_get_contents('bootstrap.php') == $offlineBootstrap) {
-                    rename('bootstrap.php.backup', 'bootstrap.php');
-                    echo "\nrestored bootstrap.php\n";
-                }
-                Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/bootstrap.php'));
-            }
+            Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
 
         } else {
             echo "\nupdate stopped\n";

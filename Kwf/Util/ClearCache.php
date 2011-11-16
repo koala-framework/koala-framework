@@ -166,6 +166,8 @@ class Kwf_Util_ClearCache
 
     public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
     {
+        Kwf_Util_Maintenance::writeMaintenanceBootstrap();
+
         if ($types == 'all') {
             $types = $this->getTypes();
         } else if ($types == 'component' && extension_loaded('apc')) {
@@ -229,6 +231,8 @@ class Kwf_Util_ClearCache
 
             $this->_refreshCache($types, $output, $server);
         }
+
+        Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
     }
 
     protected function _refreshCache($types, $output, $server)
