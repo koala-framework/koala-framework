@@ -14,5 +14,8 @@ class Kwc_Columns_ColumnsInColumns_Columns_ColumnsTestModel extends Kwf_Model_Fn
         array('id' => 12, 'component_id'=>'2-3-10-4', 'pos' => 1, 'visible' => true, 'width'=>'70%'),
         array('id' => 13, 'component_id'=>'2-3-10-4', 'pos' => 2, 'visible' => true, 'width'=>'20%'),
         array('id' => 14, 'component_id'=>'2-3-10-4', 'pos' => 3, 'visible' => true, 'width'=>''),
+
+        //testBoxChangesContent
+        array('id' => 15, 'component_id'=>'3-5', 'pos' => 1, 'visible' => true, 'width'=>'80%'),
     );
 }

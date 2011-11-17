@@ -87,4 +87,25 @@ class Kwc_Columns_ColumnsInColumns_WidthTest extends Kwc_TestAbstract
         $this->assertEquals(3, count($cols));
         $this->assertEquals('width: 112px', (string)$cols[0]['style']); //70%
     }
+
+    public function testBoxChangesContent()
+    {
+        $html = $this->_root->getComponentById('3')->render(true, false);
+        $xml = simplexml_load_string($html);
+        $cols = (array)$xml->xpath('/div/div/div/div[contains(@class, "column")]');
+        $this->assertEquals('width: 400px', (string)$cols[0]['style']); //600-100 80%
+
+        //box changes HasContent; 100px more available
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Columns_ColumnsInColumns_Box_TestModel')
+            ->getRow('3-box');
+        $row->content = '';
+        $row->save();
+
+        $this->_process();
+
+        $html = $this->_root->getComponentById('3')->render(true, false);
+        $xml = simplexml_load_string($html);
+        $cols = (array)$xml->xpath('/div/div/div/div[contains(@class, "column")]');
+        $this->assertEquals('width: 480px', (string)$cols[0]['style']);
+    }
 }

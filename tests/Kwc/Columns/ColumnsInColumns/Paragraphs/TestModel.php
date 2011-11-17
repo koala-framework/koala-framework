@@ -7,5 +7,7 @@ class Kwc_Columns_ColumnsInColumns_Paragraphs_TestModel extends Kwf_Model_FnF
 
         array('id'=>3, 'component_id' => 2, 'component' => 'columns', 'pos' => 1, 'visible' => true),
         array('id'=>4, 'component_id' => '2-3-10', 'component' => 'columns', 'pos' => 1, 'visible' => true),
+
+        array('id'=>5, 'component_id' => 3, 'component' => 'columns', 'pos' => 1, 'visible' => true),
     );
 }

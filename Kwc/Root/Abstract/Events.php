@@ -51,6 +51,14 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
             $this->fireEvent(new Kwf_Component_Event_Component_MasterContentChanged(
                 $this->_class, $c->getPageOrRoot()->dbId
             ));
+
+            $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
+            //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
+            if (isset($boxSubtract[$c->id])) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
+                    $this->_class, $c->getPageOrRoot()->dbId
+                ));
+            }
         }
     }
 
