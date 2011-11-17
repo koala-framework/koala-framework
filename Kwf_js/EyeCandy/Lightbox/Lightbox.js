@@ -56,7 +56,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
         var lightbox = Ext.getBody().createChild({
             cls: 'kwfLightbox kwfLightbox'+this.options.style,
-            html: '<div class="loading"></div>'
+            html: '<div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div>'
         });
         lightbox.dom.kwfLightbox = this; //don't initialize again in onContentReady
         lightbox.enableDisplayMode('block');
