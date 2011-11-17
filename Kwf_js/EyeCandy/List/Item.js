@@ -70,9 +70,12 @@ Ext.extend(Kwf.EyeCandy.List.Item, Ext.util.Observable, {
 
     getWidthIncludingMargin: function()
     {
+        var isVisible = this.el.isVisible();
+        this.el.show();
         var w = this.el.getWidth();
         var margins = this.el.getMargins();
         w += margins.left + margins.right;
+        if (!isVisible) this.el.hide();
         return w;
     }
 });
