@@ -30,12 +30,14 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
 
     public function onRowInsertOrDelete(Kwf_Component_Event_Row_Abstract $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $event->row->component_id
-        ));
-        $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-            $this->_class, $event->row->component_id
-        ));
+        if ($event->row->visible) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                $this->_class, $event->row->component_id
+            ));
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $event->row->component_id
+            ));
+        }
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
