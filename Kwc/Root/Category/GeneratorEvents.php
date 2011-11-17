@@ -62,7 +62,6 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
 
     public function onPageFilenameChanged(Kwf_Component_Event_Page_FilenameChanged $event)
     {
-        parent::onPageFilenameChanged($event);
         $this->fireEvent(
             new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $event->dbId)
         );
