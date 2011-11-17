@@ -101,8 +101,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                         if (imagesToLoad <= 0) showContent.call(this)
                     }).createDelegate(this);
                 }, this);
-                if (imagesToLoad == 0) showContent.call(this);
+                contentEl.show(); //needs to be visible for Cufon in IE8
                 Kwf.callOnContentReady();
+                contentEl.hide();
+                if (imagesToLoad == 0) showContent.call(this);
                 this.initialize();
             },
             failure: function() {
