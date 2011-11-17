@@ -12,6 +12,9 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
             var currentState = item.getState();
             this.oldState[item.id] = currentState;
 
+            var itemIsVisible = item.el.isVisible(); //could be hidden by Carousel plugin
+            item.el.show();
+
             // hide all
             // and measure the original sizes
             for (var i in this.sizes) {
@@ -63,6 +66,8 @@ Kwf.EyeCandy.List.Plugins.StateListener.ResizeSwitchContent = Ext.extend(Kwf.Eye
                 if (!contentElement) continue;
                 contentElement.show();
             }
+
+            if (!itemIsVisible) item.el.hide(); //restore item visibility
 
         }, this);
     },
