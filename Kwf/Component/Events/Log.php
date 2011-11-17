@@ -13,6 +13,7 @@ class Kwf_Component_Events_Log extends Zend_Log
             $instance = false;
             if (Kwf_Config::getValue('debug.eventlog')) {
                 $instance = new Kwf_Component_Events_Log();
+                $instance->resetTimer();
             }
         }
         return $instance;
@@ -29,6 +30,14 @@ class Kwf_Component_Events_Log extends Zend_Log
     public function log($message, $priority, $extras = null)
     {
         $message = str_repeat(' ', $this->indent * 2) . $message;
+        $time = round((microtime(true) - $this->_start) * 1000);
+        $time = str_repeat(' ', 4-strlen($time)).$time;
+        $message = $time.' '.$message;
         parent::log($message, $priority, $extras);
+    }
+
+    public function resetTimer()
+    {
+        $this->_start = microtime(true);
     }
 }

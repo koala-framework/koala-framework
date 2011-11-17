@@ -105,8 +105,9 @@ class Kwf_Component_Events
     public static function fireEvent($event)
     {
         $logger = Kwf_Component_Events_Log::getInstance();
-        if ($logger) {
-            if ($logger->indent == 0) $logger->info('----');
+        if ($logger && $logger->indent == 0) {
+            $logger->info('----');
+            $logger->resetTimer();
         }
 
         $listeners = self::getAllListeners();
