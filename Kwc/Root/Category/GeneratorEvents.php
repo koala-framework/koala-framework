@@ -53,7 +53,7 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         if (!$c->isPage && $c->componentId != 'root') {
             throw new Kwf_Exception("Recursive Events must be fired with a page componentId");
         }
-        $childIds = $this->_getGenerator()->getPageChildIds($c->dbId);
+        $childIds = $this->_getGenerator()->getVisiblePageChildIds($c->dbId);
         foreach($childIds as $childId) {
             $eventsClass = get_class($event);
             $this->fireEvent(new $eventsClass($event->class, $childId));
