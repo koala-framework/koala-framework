@@ -393,7 +393,7 @@ class Kwf_Component_Abstract
         if (!self::$_settings) {
             $cache = new Kwf_Assets_Cache(array('checkComponentSettings' => false));
             $cacheId = 'componentSettings'.Kwf_Trl::getInstance()->getTargetLanguage()
-                                .'_'.Kwf_Component_Data_Root::getComponentClass();
+                                .'_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
             self::$_settings = $cache->load($cacheId);
             if (!self::$_settings) {
                 self::$_rebuildingSettings = true;
