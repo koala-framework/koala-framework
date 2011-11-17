@@ -1,28 +1,6 @@
 <?php
 class Kwf_Component_Generator_PseudoPage_Events_Table extends Kwf_Component_Generator_Events_Table
 {
-    public function getListeners()
-    {
-        $ret = parent::getListeners();
-        $ret[] = array(
-            'class' => $this->_config['componentClass'],
-            'event' => 'Kwf_Component_Event_Page_FilenameChanged',
-            'callback' => 'onPageFilenameChanged'
-        );
-        return $ret;
-    }
-
-    public function onPageFilenameChanged(Kwf_Component_Event_Page_FilenameChanged $event)
-    {
-        $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByDbId($event->dbId);
-        foreach ($components as $component) {
-            $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged(
-                $this->_class, $component->componentId
-            ));
-        }
-    }
-
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
         parent::onRowUpdate($event);
@@ -59,9 +37,13 @@ class Kwf_Component_Generator_PseudoPage_Events_Table extends Kwf_Component_Gene
         }
         if ($filenameChanged) {
             foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
-                $this->fireEvent(new Kwf_Component_Event_Page_FilenameChanged(
-                    $this->_class, $dbId
-                ));
+                $components = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentsByDbId($dbId);
+                foreach ($components as $component) {
+                    $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged(
+                        $this->_class, $component->componentId
+                    ));
+                }
             }
         }
     }

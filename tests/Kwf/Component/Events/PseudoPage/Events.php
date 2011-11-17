@@ -11,7 +11,7 @@ class Kwf_Component_Events_PseudoPage_Events extends Kwf_Component_Abstract_Even
             'callback' => 'onComponentChange'
         );
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Page_FilenameChanged',
+            'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
             'callback' => 'onComponentChange'
         );
         return $ret;
