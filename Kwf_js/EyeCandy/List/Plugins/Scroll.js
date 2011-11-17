@@ -16,12 +16,6 @@ Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract
             this.moveElement = this.moveElement.child(this.moveElementSelector);
         }
 
-        if (this.list.items.length > this.numberShown) {
-            for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
-                this.list.getItem(i).el.hide();
-            }
-        }
-
         if (this.createMoveElementSelectorWrapper) {
             var wrapper = this.moveElement.parent().createChild({
                 tag: 'div', cls: 'listPluginScrollMoveWrapper'
@@ -70,20 +64,14 @@ Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract
         if (this._moveActive) return;
         this._moveActive = true;
 
-        // fade out first one
-        var cfg = Ext.applyIf({
-            useDisplay: false
-        }, this.animationConfig);
-        this.list.getItem(this._currentPosition).el.fadeOut(cfg);
-
-        // fade in new one
-        this.list.getItem(this._currentPosition + this.numberShown).el.fadeIn(cfg);
-
-        var firstElWidth = this.list.getItem(this._currentPosition).getWidthIncludingMargin();
+        var firstItem = this.list.getItem(this._currentPosition);
+        var firstElWidth = firstItem.getWidthIncludingMargin();
 
         var cfg = Ext.applyIf({
             callback: function() {
                 this._moveActive = false;
+                firstItem.el.hide();
+                this.moveElement.setStyle('left', 0);
                 if (this._previousButton) this._previousButton.removeClass('scrollInactive');
             },
             scope: this
@@ -102,23 +90,23 @@ Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract
         if (this._moveActive) return;
         this._moveActive = true;
 
-        // fade in first
-        var cfg = Ext.applyIf({
-            useDisplay: false
-        }, this.animationConfig);
-        this.list.getItem(this._currentPosition-1).el.fadeIn(cfg);
+        //show first
+        this.list.getItem(this._currentPosition-1).el.show();
 
-        // fade out last
-        this.list.getItem((this._currentPosition-1) + this.numberShown).el.fadeOut(cfg);
+        var firstElWidth = this.list.getItem(this._currentPosition-1).getWidthIncludingMargin();
+
+        //move left because first was shown
+        this.moveElement.move('left', firstElWidth, false);
+
         var cfg = Ext.applyIf({
+            useDisplay: true,
             callback: function() {
                 this._moveActive = false;
                 if (this._nextButton) this._nextButton.removeClass('scrollInactive');
             },
             scope: this
-        });
-
-        this.moveElement.move('right', this.list.getItem(this._currentPosition-1).getWidthIncludingMargin(), cfg);
+        }, this.animationConfig);
+        this.moveElement.move('right', firstElWidth, cfg); //move in first; animated
 
         if (this._currentPosition-1 <= 0) {
             if (this._previousButton) this._previousButton.addClass('scrollInactive');
