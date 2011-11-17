@@ -55,7 +55,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this.largeContent[item.id].enableDisplayMode('block');
             this.activeItem = item;
 
-            this._preload();
+//             this._preload();
             return;
         }
 

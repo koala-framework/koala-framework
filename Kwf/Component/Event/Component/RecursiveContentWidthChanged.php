@@ -1,0 +1,4 @@
+<?php
+class Kwf_Component_Event_Component_RecursiveContentWidthChanged extends Kwf_Component_Event_Component_RecursiveAbstract
+{
+}
