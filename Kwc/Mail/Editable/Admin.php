@@ -16,7 +16,7 @@ class Kwc_Mail_Editable_AdminResource extends Kwf_Acl_Resource_MenuUrl
     }
 }
 
-class Kwc_Mail_Editable_Admin extends Kwc_Mail_Admin
+class Kwc_Mail_Editable_Admin extends Kwc_Abstract_Admin
 {
     public function addResources(Kwf_Acl $acl)
     {
