@@ -47,12 +47,17 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     }
 
     //only used by GeneratorEvents
-    public function getPageChildIds($parentId)
+    public function getVisiblePageChildIds($parentId)
     {
+        $ret = array();
         if (isset($this->_pageChilds[$parentId])) {
-            return $this->_pageChilds[$parentId];
+            foreach ($this->_pageChilds[$parentId] as $id) {
+                if ($this->_pageData[$id]['visible']) {
+                    $ret[] = $id;
+                }
+            }
         }
-        return array();
+        return $ret;
     }
 
     //called by GeneratorEvents when model changes
