@@ -39,6 +39,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onPageChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Page_UrlChanged',
+            'callback' => 'onPageChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
             'callback' => 'onPageRecursiveUrlChanged'
         );
@@ -157,6 +161,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         }
     }
 
+    // namechanged and filnamechanged-events
     public function onPageChanged(Kwf_Component_Event_Page_ContentChanged $event)
     {
         $this->_updates[] = array(
