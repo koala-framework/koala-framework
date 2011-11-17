@@ -1,5 +1,5 @@
 <?php
-class Kwc_Columns_TestComponent_Column_Form extends Kwc_Abstract_Form
+class Kwc_Columns_Basic_TestComponent_Column_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {

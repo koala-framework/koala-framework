@@ -1,9 +1,9 @@
 <?php
-class Kwc_Columns_TestModel extends Kwc_Abstract_List_OwnModel
+class Kwc_Columns_Basic_TestModel extends Kwc_Abstract_List_OwnModel
 {
     public function __construct($config = array())
     {
-        $this->_dependentModels['Children'] = 'Kwc_Columns_TestColumnsModel';
+        $this->_dependentModels['Children'] = 'Kwc_Columns_Basic_TestColumnsModel';
 
         $config['proxyModel'] = new Kwf_Model_FnF(array(
                 'primaryKey' => 'component_id',

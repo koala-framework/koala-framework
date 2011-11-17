@@ -1,9 +1,9 @@
 <?php
-class Kwc_Columns_TestColumnsModel extends Kwc_Abstract_List_Model
+class Kwc_Columns_Basic_TestColumnsModel extends Kwc_Abstract_List_Model
 {
     public function __construct($config = array())
     {
-        $this->_referenceMap['Component']['refModelClass'] = 'Kwc_Columns_TestModel';
+        $this->_referenceMap['Component']['refModelClass'] = 'Kwc_Columns_Basic_TestModel';
 
         $config['proxyModel'] = new Kwf_Model_FnF(array(
             'columns' => array('id', 'component_id', 'pos', 'visible', 'data'),

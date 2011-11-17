@@ -1,5 +1,5 @@
 <?php
-class Kwc_Columns_Root extends Kwf_Component_NoCategoriesRoot
+class Kwc_Columns_Basic_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
@@ -9,7 +9,7 @@ class Kwc_Columns_Root extends Kwf_Component_NoCategoriesRoot
                   'parent_id'=>'root', 'component'=>'columns', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array(
-            'columns' => 'Kwc_Columns_TestComponent',
+            'columns' => 'Kwc_Columns_Basic_TestComponent',
         );
 
         unset($ret['generators']['title']);
