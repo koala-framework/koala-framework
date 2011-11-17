@@ -37,26 +37,19 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
             $ids = array();
             $model = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_class, 'ownModel'));
             foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY) as $row) {
-                // since Event_Page_RecursiveUrlChanged is not be thrown for subpages,
-                // convert "1_child" to "1" or "root_child_1" to "root_child"
                 $target = $row['target'];
-                if (!is_numeric($target)) {
-                    if (is_numeric(substr($target, 0, strpos($target, '_')))) {
-                        $maxUnderscores = 0;
-                    } else {
-                        $maxUnderscores = 1;
-                    }
-                    while (substr_count($target, '_') > $maxUnderscores) {
-                        $target = substr($target, 0, strrpos($target, '_'));
-                    }
-                }
                 if (!isset($ids[$target])) $ids[$target] = array();
                 $ids[$target][] = $row['component_id'];
             }
             $this->_pageIds = $ids;
         }
-        if (isset($this->_pageIds[$targetId])) return $this->_pageIds[$targetId];
-        return array();
+        $ret = array();
+        foreach ($this->_pageIds as $pageId => $dbIds) {
+            if (substr($pageId, 0, strlen($targetId)) == $targetId) {
+                $ret = array_merge($ret, $dbIds);
+            }
+        }
+        return $ret;
     }
 
 }
