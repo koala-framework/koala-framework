@@ -46,7 +46,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         // fade out first one
         var cfg = Ext.applyIf({
-            useDisplay: false
+            useDisplay: true
         }, this.animationConfig);
         this.list.getItem(0).el.fadeOut(cfg);
 
@@ -98,7 +98,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         // fade in first
         var cfg = Ext.applyIf({
-            useDisplay: false
+            useDisplay: true
         }, this.animationConfig);
         this.list.getItem(0).el.fadeIn(cfg);
 
