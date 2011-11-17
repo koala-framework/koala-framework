@@ -77,7 +77,11 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
                 */
                 this.fireEvent('childStateChanged', item);
             }, this);
-            item.el.enableDisplayMode('block');
+
+            var display = item.el.getStyle('display');
+            if (!display) display = 'block';
+            item.el.enableDisplayMode(display);
+
             this.items.push(item);
             idx += 1;
         }, this);
