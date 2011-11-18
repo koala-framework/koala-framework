@@ -37,7 +37,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     {
         if (!$this->_pageIds) {
             $ids = array();
-            $model = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_class, 'ownModel'));
+            $model = Kwc_Abstract::createOwnModel($this->_class);
             foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY) as $row) {
                 $target = $row['target'];
                 if (!isset($ids[$target])) $ids[$target] = array();
