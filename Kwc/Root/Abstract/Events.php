@@ -9,6 +9,7 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
             foreach ($generators as $g) {
                 foreach ($g->getChildComponentClasses() as $c) {
                     //TODO: only listen to boxes that use if (hasContent(..)) in master template
+                    //      (once this is implemented (Recursive)MasterContentChanged must be fired on (Recursive)ContentWidthChanged)
                     if ($g->hasSetting('unique') && $g->getSetting('unique')) {
                         $ret[] = array(
                             'class' => $c,
