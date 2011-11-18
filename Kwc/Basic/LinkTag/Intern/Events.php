@@ -6,11 +6,13 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $ret[] = array(
-            'class' => null,
-            'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
-            'callback' => 'onRecursiveUrlChanged'
-        );
+        if (Kwc_Abstract::createOwnModel($this->_class) instanceof Kwc_Basic_LinkTag_Intern_Model) {
+            $ret[] = array(
+                'class' => null,
+                'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
+                'callback' => 'onRecursiveUrlChanged'
+            );
+        }
         return $ret;
     }
 
