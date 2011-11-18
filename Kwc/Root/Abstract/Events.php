@@ -28,11 +28,6 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
                         'event' => 'Kwf_Component_Event_Component_RecursiveHasContentChanged',
                         'callback' => 'onBoxRecursiveHasContentChanged'
                     );
-                    $ret[] = array(
-                        'class' => $c,
-                        'event' => 'Kwf_Component_Event_ComponentClass_HasContentChanged',
-                        'callback' => 'onBoxClassHasContentChanged'
-                    );
                 }
             }
         }
@@ -95,13 +90,6 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
                 $this->_class, $c->getPageOrRoot()->componentId
             ));
         }
-    }
-
-    public function onBoxClassHasContentChanged(Kwf_Component_Event_ComponentClass_HasContentChanged $event)
-    {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_MasterContentChanged(
-            $this->_class
-        ));
     }
 
     public function onRecursiveAdded(Kwf_Component_Event_Component_RecursiveAdded $event)
