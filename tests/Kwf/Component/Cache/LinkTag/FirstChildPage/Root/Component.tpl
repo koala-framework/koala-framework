@@ -1,0 +1,1 @@
+<?if ($this->hasContent($this->link)) { echo '-' . $this->componentLink($this->link); }?>

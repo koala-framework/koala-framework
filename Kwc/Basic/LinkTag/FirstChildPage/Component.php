@@ -11,4 +11,11 @@ class Kwc_Basic_LinkTag_FirstChildPage_Component extends Kwc_Basic_LinkTag_Abstr
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }
+
+    public function getTemplateVars()
+    {
+        $ex = new Kwf_Exception(get_class($this) . ' must only be used as a page type.');
+        $ex->logOrThrow();
+        return parent::getTemplateVars();
+    }
 }
