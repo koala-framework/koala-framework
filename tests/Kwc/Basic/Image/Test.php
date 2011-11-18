@@ -1,7 +1,6 @@
 <?php
 /**
- * @group Basic_Image
- * @group Image
+ * @group Kwc_Image
  */
 class Kwc_Basic_Image_Test extends Kwc_TestAbstract
 {
