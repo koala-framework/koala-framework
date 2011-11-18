@@ -21,11 +21,6 @@ class Kwc_Basic_LinkTagFirstChildPage_Test extends Kwc_TestAbstract
         $this->assertEquals('', $c->rel);
 
     }
-    public function testHtml()
-    {
-        $html = $this->_root->getComponentById(1500)->render();
-        $this->assertEquals('<a href="/foo1/bar1">', $html);
-    }
 
     public function testEmpty()
     {
