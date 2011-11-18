@@ -63,25 +63,6 @@ class Kwc_Basic_LinkTag_FirstChildPage_Events extends Kwc_Abstract_Events
                 $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
                     $this->_class, $component->parent->dbId
                 ));
-
-                // copy from Kwc_Menu_Events
-                $newCount = count($component->parent->getChildPages());
-                if ($event instanceof Kwf_Component_Event_Page_Removed &&
-                    $event->flag == Kwf_Component_Event_Page_Removed::FLAG_ROW_ADDED_REMOVED
-                ) {
-                    $newCount--;
-                }
-                $previousCount = $newCount;
-                if ($event instanceof Kwf_Component_Event_Page_Added) {
-                    $previousCount--;
-                } else if ($event instanceof Kwf_Component_Event_Page_Removed) {
-                    $previousCount++;
-                }
-                if (!$previousCount && $newCount || $previousCount && !$newCount) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                        $this->_class, $component->parent->dbId
-                    ));
-                }
             }
         }
     }
