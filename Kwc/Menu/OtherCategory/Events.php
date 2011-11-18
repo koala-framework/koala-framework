@@ -29,17 +29,30 @@ class Kwc_Menu_OtherCategory_Events extends Kwc_Abstract_Events
         ));
     }
 
+    private function _getOwnDatas($menuDbId)
+    {
+        $ret = array();
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($menuDbId) as $menu) {
+            $ret = array_merge($ret, $menu->parent->getChildComponents(array('componentClass' => $this->_class)));
+        }
+        return $ret;
+    }
+
     public function onMenuContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
-        ));
+        foreach ($this->_getOwnDatas($event->dbId) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                $this->_class, $c->dbId
+            ));
+        }
     }
 
     public function onMenuHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_HasContentChanged(
-            $this->_class
-        ));
+        foreach ($this->_getOwnDatas($event->dbId) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $c->dbId
+            ));
+        }
     }
 }
