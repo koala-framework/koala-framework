@@ -32,7 +32,7 @@ class Kwf_Component_Events
 
     public static final function getAllListeners()
     {
-        $cacheId = 'Kwf_Component_Events_listeners';
+        $cacheId = 'Kwf_Component_Events_listeners'.Kwf_Component_Data_Root::getComponentClass();
         $listeners = Kwf_Cache_Simple::fetch($cacheId);
         if (!$listeners) {
 
