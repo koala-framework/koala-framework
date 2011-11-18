@@ -21,9 +21,16 @@ class Kwc_Columns_ColumnsInColumns_Root extends Kwf_Component_NoCategoriesRoot
             'component' => 'Kwc_Columns_ColumnsInColumns_Box_Component',
             'inherit' => true,
         );
+        $ret['generators']['uniqueBox'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Kwc_Columns_ColumnsInColumns_Box_Component',
+            'inherit' => true,
+            'unique' => true
+        );
 
         $ret['contentWidthBoxSubtract'] = array(
-            'box' => 100
+            'box' => 100,
+            'uniqueBox' => 50,
         );
 
         unset($ret['generators']['title']);

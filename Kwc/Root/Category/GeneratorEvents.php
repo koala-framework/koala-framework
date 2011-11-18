@@ -33,6 +33,10 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             'callback' => 'onRecursiveEvent'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_RecursiveContentWidthChanged',
+            'callback' => 'onRecursiveEvent'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Component_RecursiveMasterContentChanged',
             'callback' => 'onRecursiveEvent'
         );

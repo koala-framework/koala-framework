@@ -108,4 +108,27 @@ class Kwc_Columns_ColumnsInColumns_WidthTest extends Kwc_TestAbstract
         $cols = (array)$xml->xpath('/div/div/div/div[contains(@class, "column")]');
         $this->assertEquals('width: 480px', (string)$cols[0]['style']);
     }
+
+    public function testUniqueBoxChangesContent()
+    {
+        $html = $this->_root->getComponentById('3')->render(true, false);
+        $xml = simplexml_load_string($html);
+        $cols = (array)$xml->xpath('/div/div/div/div[contains(@class, "column")]');
+        $this->assertEquals('width: 400px', (string)$cols[0]['style']); //600-100 80%
+
+        //box changes HasContent; 50px less available
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Columns_ColumnsInColumns_Box_TestModel')
+            ->createRow();
+        $row->component_id = 'root-uniqueBox';
+        $row->content = 'foo';
+        $row->save();
+
+        $this->_process();
+
+        $html = $this->_root->getComponentById('3')->render(true, false);
+        $xml = simplexml_load_string($html);
+        $cols = (array)$xml->xpath('/div/div/div/div[contains(@class, "column")]');
+        $this->assertEquals('width: 360px', (string)$cols[0]['style']); //-80% of 50px
+        
+    }
 }

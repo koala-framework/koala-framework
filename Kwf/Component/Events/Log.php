@@ -31,7 +31,7 @@ class Kwf_Component_Events_Log extends Zend_Log
     {
         $message = str_repeat(' ', $this->indent * 2) . $message;
         $time = round((microtime(true) - $this->_start) * 1000);
-        $time = str_repeat(' ', 4-strlen($time)).$time;
+        if (strlen($time) < 4) $time = str_repeat(' ', 4-strlen($time)).$time;
         $message = $time.' '.$message;
         parent::log($message, $priority, $extras);
     }

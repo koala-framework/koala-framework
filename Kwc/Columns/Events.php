@@ -8,6 +8,10 @@ class Kwc_Columns_Events extends Kwc_Abstract_List_Events
             'event' => 'Kwf_Component_Event_Component_ContentWidthChanged',
             'callback' => 'onContentWidthChanged'
         );
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_Component_RecursiveContentWidthChanged',
+            'callback' => 'onRecursiveContentWidthChanged'
+        );
         return $ret;
     }
 
@@ -38,5 +42,13 @@ class Kwc_Columns_Events extends Kwc_Abstract_List_Events
                 $this->_class, $c->getPageOrRoot()->dbId
             ));
         }
+    }
+
+    public function onRecursiveContentWidthChanged(Kwf_Component_Event_Component_RecursiveContentWidthChanged $event)
+    {
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
+            $this->_class, $c->getPageOrRoot()->componentId
+        ));
     }
 }
