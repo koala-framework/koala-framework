@@ -8,15 +8,21 @@ class Kwc_Abstract_List_ExtConfigListUpload extends Kwc_Abstract_List_ExtConfigL
     protected function _getConfig()
     {
         $ret = parent::_getConfig();
-        $multiFileUpload = false;
-        $form = Kwc_Abstract_Form::createChildComponentForm($this->_class, 'child');
-        if ($field = $this->_getFileUploadField($form)) {
-            $multiFileUpload = array(
-                'allowOnlyImages' => $field->getAllowOnlyImages(),
-                'maxResolution' => $field->getMaxResolution(),
-                'maxResolution' => $field->getMaxResolution(),
-                'fileSizeLimit' => $field->getFileSizeLimit(),
-            );
+
+        $cacheId = 'extConfig_multiFileUpload_'.$this->_class;
+        $multiFileUpload = Kwf_Cache_Simple::fetch($cacheId, $success);
+        if (!$success) {
+            $multiFileUpload = false;
+            $form = Kwc_Abstract_Form::createChildComponentForm($this->_class, 'child');
+            if ($field = $this->_getFileUploadField($form)) {
+                $multiFileUpload = array(
+                    'allowOnlyImages' => $field->getAllowOnlyImages(),
+                    'maxResolution' => $field->getMaxResolution(),
+                    'maxResolution' => $field->getMaxResolution(),
+                    'fileSizeLimit' => $field->getFileSizeLimit(),
+                );
+            }
+            Kwf_Cache_Simple::add($cacheId, $multiFileUpload);
         }
         $ret['list']['multiFileUpload'] = $multiFileUpload;
         return $ret;
