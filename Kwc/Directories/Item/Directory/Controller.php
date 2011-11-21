@@ -48,7 +48,7 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             if (count($extConfig['contentEditComponents']) > 1 && !$this->_getModel()->hasColumn('component')) {
                 throw new Kwf_Exception('If you have more than one detail-component your table has to have a column named "component"');
             }
-            if (count($extConfig['contentEditComponents']) == 0 && $this->_getModel()->hasColumn('component')) {
+            if (count($extConfig['contentEditComponents']) == 1 && $this->_getModel()->hasColumn('component')) {
                 throw new Kwf_Exception('If you have just one detail-component your table is not allowed to have a column named "component"');
             }
             $i=0;
