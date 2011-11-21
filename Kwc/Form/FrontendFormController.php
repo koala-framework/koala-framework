@@ -59,4 +59,14 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action_Auto_Form
     {
         return true;
     }
+
+    protected function _getAuthData()
+    {
+        return null;
+    }
+
+    protected function _getUserRole()
+    {
+        return 'guest';
+    }
 }
