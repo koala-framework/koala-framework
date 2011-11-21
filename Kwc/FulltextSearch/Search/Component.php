@@ -24,7 +24,7 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
     {
         $index = Kwf_Util_Fulltext::getInstance();
 
-        if (isset($postData['query'])) {
+        if (isset($postData['query']) && is_string($postData['query'])) {
             $queryString = $postData['query'];
         } else {
             $queryString = '';
