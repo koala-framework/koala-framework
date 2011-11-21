@@ -9,14 +9,21 @@ class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_View_Abstr
 
     public function processOutput($output)
     {
-        if (!$this->_currentItem) {
-            $this->_currentItem = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($this->_componentId)
-                ->getChildComponent(array('generator'=>'child', 'limit'=>1))
-                ->getChildComponent('-large');
+        if (is_null($this->_currentItem)) {
+            $child = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($this->_componentId, array('ignoreVisible'=>true))
+                ->getChildComponent(array('generator'=>'child', 'limit'=>1));
+            if ($child) {
+                $this->_currentItem = $child->getChildComponent('-large');
+            } else {
+                $this->_currentItem = false;
+            }
         }
         $helper = new Kwf_Component_View_Helper_Component();
-        $html = $helper->component($this->_currentItem);
+        $html = '';
+        if ($this->_currentItem) {
+            $html = $helper->component($this->_currentItem);
+        }
         $output = str_replace(
             '<div class="listSwitchLargeContent"></div>',
             '<div class="listSwitchLargeContent">'.$html.'</div>',
@@ -24,11 +31,13 @@ class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_View_Abstr
         );
 
         //add active
-        $output = str_replace(
-            '<div id="'.$this->_currentItem->parent->componentId.'" class="listSwitchItem',
-            '<div id="'.$this->_currentItem->parent->componentId.'" class="listSwitchItem defaultActive',
-            $output
-        );
+        if ($this->_currentItem) {
+            $output = str_replace(
+                '<div id="'.$this->_currentItem->parent->componentId.'" class="listSwitchItem',
+                '<div id="'.$this->_currentItem->parent->componentId.'" class="listSwitchItem defaultActive',
+                $output
+            );
+        }
 
         return $output;
     }
