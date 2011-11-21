@@ -9,26 +9,26 @@ class Kwf_Component_Cache_MenuHasContent_ContentTest extends Kwc_TestAbstract
         parent::setUp('Kwf_Component_Cache_MenuHasContent_Root');
         /*
         root
-          -menuMain
-          -menuTop
+          -menuMain (empty)
+          -menuTop (empty)
           -top
-            -menuMain
-            -menuTop
+            -menuMain (otherCategory)
+            -menuTop (menu)
             2 (invisible)
-              -menuMain
-              -menuTop
+              -menuMain (parentMenu)
+              -menuTop (parentMenu)
           -main
-            -menuMain
-            -menuTop
+            -menuMain (menu)
+            -menuTop (otherCategory)
             1
-              -menuMain
-              -menuTop
+              -menuMain (parentMenu)
+              -menuTop (parentMenu)
               3
-                -menuMain
-                -menuTop
+                -menuMain (parentContent)
+                -menuTop (parentContent)
                 4
-                  -menuMain
-                  -menuTop
+                  -menuMain (parentContent)
+                  -menuTop (parentContent)
          */
     }
 
