@@ -164,12 +164,47 @@ class Kwf_Util_ClearCache
         }
     }
 
+    protected function _getRefreshTypes()
+    {
+        $refreshTypes = array();
+        $refreshTypes[] = 'config';
+        $refreshTypes[] = 'setup';
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $refreshTypes[] = 'component';
+        }
+        $refreshTypes[] = 'trl';
+        $refreshTypes[] = 'assets';
+        if (in_array('cache_component', $this->getDbCacheTables())
+            && (in_array('component', $types) || in_array('cache_component', $types))
+        ) {
+            $refreshTypes[] = 'events';
+        }
+
+        try {
+            $db = Kwf_Registry::get('db');
+        } catch (Exception $e) {
+            $db = false;
+        }
+        if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
+            $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
+            if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
+                $refreshTypes[] = 'users';
+                if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
+                    $refreshTypes[] = 'users cleanup';
+                }
+            }
+        }
+        return $refreshTypes;
+    }
+
     public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
     {
         Kwf_Util_Maintenance::writeMaintenanceBootstrap();
 
+        $refreshTypes = array();
         if ($types == 'all') {
             $types = $this->getTypes();
+            $refreshTypes = $this->_getRefreshTypes();
         } else if ($types == 'component' && extension_loaded('apc')) {
             $types = array('component', 'apc');
         } else {
@@ -181,35 +216,6 @@ class Kwf_Util_ClearCache
 
         if ($refresh) {
             if ($output) echo "\n";
-
-            $refreshTypes = array();
-            $refreshTypes[] = 'config';
-            $refreshTypes[] = 'setup';
-            if (Kwf_Component_Data_Root::getComponentClass()) {
-                $refreshTypes[] = 'component';
-            }
-            $refreshTypes[] = 'trl';
-            $refreshTypes[] = 'assets';
-            if (in_array('cache_component', $this->getDbCacheTables())
-                && (in_array('component', $types) || in_array('cache_component', $types))
-            ) {
-                $refreshTypes[] = 'events';
-            }
-
-            try {
-                $db = Kwf_Registry::get('db');
-            } catch (Exception $e) {
-                $db = false;
-            }
-            if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
-                $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
-                if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
-                    $refreshTypes[] = 'users';
-                    if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
-                        $refreshTypes[] = 'users cleanup';
-                    }
-                }
-            }
 
             foreach ($refreshTypes as $type) {
                 if ($output) echo "Refresh $type".str_repeat('.', 15-strlen($type));

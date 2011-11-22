@@ -4,6 +4,12 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
     protected $_permissions = array('add', 'save');
     protected $_buttons = array('save');
 
+    public function indexAction()
+    {
+        parent::indexAction();
+        $this->view->xtype = 'kwf.component.clearCache';
+    }
+
     public function preDispatch()
     {
         $this->_model = new Kwf_Model_FnF(array(
@@ -22,23 +28,16 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
         $this->_form->setId(1);
         $this->_form->setLabelWidth(30);
 
-        $this->_form->add(new Kwf_Form_Field_Static(
-            '1. '.trlKwf('Fill out the Form').'<br />'
-            .'2. '.trlKwf('Click the save button above').'<br />'
-            .'3. '.trlKwf('If no error pops up, the cache has been cleared sucessfully').'<br /><br />'
-        ));
-
         $this->_form->add(new Kwf_Form_Field_Static(trlKwf('Affected component / part (e.g.: References)')));
         $this->_form->add(new Kwf_Form_Field_TextField('clear_cache_affected'))
             ->setWidth(500)
             ->setLabelSeparator('')
             ->setAllowBlank(false);
 
-        $this->_form->add(new Kwf_Form_Field_Static(trlKwf('Why do you need to clear the cache? (steps to reproduce / description)')));
+        $this->_form->add(new Kwf_Form_Field_Static(trlKwf('Why did you have to clear the cache? (steps to reproduce / description)')));
         $this->_form->add(new Kwf_Form_Field_TextArea('clear_cache_comment'))
             ->setWidth(500)
             ->setHeight(250)
-            ->setMinLength(30)
             ->setLabelSeparator('')
             ->setAllowBlank(false);
     }
@@ -46,8 +45,6 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
     protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeSave($row);
-        
-        Kwf_Util_ClearCache::getInstance()->clearCache();
 
         $mail = new Kwf_Mail();
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
@@ -70,5 +67,18 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
 
         $row->clear_cache_affected = '';
         $row->clear_cache_comment = '';
+    }
+
+    public function jsonClearCacheAction()
+    {
+        $type = $this->_getParam('type');
+        $cc = Kwf_Util_ClearCache::getInstance();
+        if ($type == 'view') {
+            $cc->clearCache('component', false/*output*/, true/*refresh*/);
+        } else if ($type == 'media') {
+            $cc->clearCache('media', false/*output*/, true/*refresh*/);
+        } else if ($type == 'assets') {
+            $cc->clearCache('assets', false/*output*/, true/*refresh*/);
+        }
     }
 }
