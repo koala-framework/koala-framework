@@ -14,6 +14,19 @@ class Kwc_Trl_Columns_Test extends Kwc_TestAbstract
     public function setUp()
     {
         parent::setUp('Kwc_Trl_Columns_Root');
+
+        //initialize model content, I don't know why here
+        $proxyModel = Kwf_Model_Abstract::getInstance('Kwc_Trl_Columns_Columns_Trl_ColumnsTrlModel')->getProxyModel();
+        $proxyModel
+            ->createRow(array('component_id'=>'root-en_test-1', 'visible' => 1))
+            ->save();
+        $proxyModel
+            ->createRow(array('component_id'=>'root-en_test-2', 'visible' => 1))
+            ->save();
+        $proxyModel
+            ->createRow(array('component_id'=>'root-en_test-3', 'visible' => 1))
+            ->save();
+
     }
 
     public function testDe()

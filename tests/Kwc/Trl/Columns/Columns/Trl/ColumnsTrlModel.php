@@ -10,15 +10,7 @@ class Kwc_Trl_Columns_Columns_Trl_ColumnsTrlModel extends Kwc_Abstract_List_Trl_
                 new Kwf_Model_Field(array('fieldName'=>'data'))
             )
         ));
-        $config['proxyModel']
-            ->createRow(array('component_id'=>'root-en_test-1', 'visible' => 1))
-            ->save();
-        $config['proxyModel']
-            ->createRow(array('component_id'=>'root-en_test-2', 'visible' => 1))
-            ->save();
-        $config['proxyModel']
-            ->createRow(array('component_id'=>'root-en_test-3', 'visible' => 1))
-            ->save();
+        //rows get initialized in Kwc_Trl_Columns_Test::setUp
         parent::__construct($config);
     }
 }
