@@ -547,9 +547,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (isset($options['replace']) && $options['replace']) {
                 throw new Kwf_Exception_NotYetImplemented();
             }
+            Kwf_Component_ModelObserver::getInstance()->disable();
             foreach ($data as $k => $v) {
                 $this->createRow($v)->save();
             }
+            Kwf_Component_ModelObserver::getInstance()->enable();
             $this->_afterImport($format, $data, $options);
         } else {
             throw new Kwf_Exception_NotYetImplemented();

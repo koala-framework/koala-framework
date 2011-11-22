@@ -445,6 +445,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             if (isset($options['replace']) && $options['replace'] && !isset($this->_uniqueColumns)) {
                 throw new Kwf_Exception('You must set uniqueColumns for this model if you use replace');
             }
+            Kwf_Component_ModelObserver::getInstance()->disable();
             foreach ($data as $k => $v) {
                 if (isset($options['replace']) && $options['replace']) {
                     $s = $this->select();
@@ -467,6 +468,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 }
                 $row->save();
             }
+            Kwf_Component_ModelObserver::getInstance()->enable();
             $this->_afterImport($format, $data, $options);
         } else {
             throw new Kwf_Exception_NotYetImplemented();
