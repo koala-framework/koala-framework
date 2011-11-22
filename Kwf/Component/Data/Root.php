@@ -122,7 +122,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                         array(array(
                             'url' => $cacheUrl,
                             'page_id' => $ret->componentId
-                        )), array('replace'=>true));
+                        )), array('replace'=>true, 'skipModelObserver'=>true));
                 }
             } else {
                 $exactMatch = false;

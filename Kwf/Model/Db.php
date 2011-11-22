@@ -936,8 +936,10 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
     }
 
-    private function _updateModelObserver()
+    private function _updateModelObserver($options)
     {
+        if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
+
         if (Kwf_Component_Data_Root::getComponentClass()) {
             if ($this->_proxyContainerModels) {
                 foreach ($this->_proxyContainerModels as $m) {
@@ -971,7 +973,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $cmd .= "| {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
             unlink($filename);
-            $this->_updateModelObserver();
+            $this->_updateModelObserver($options);
             if ($ret != 0) throw new Kwf_Exception("SQL import failed: ".implode("\n", $output));
             $this->_afterImport($format, $data, $options);
         } else if ($format == self::FORMAT_CSV) {
@@ -1008,7 +1010,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             unlink($filename.'.gz');
             unlink($filename);
             rmdir($tmpImportFolder);
-            $this->_updateModelObserver();
+            $this->_updateModelObserver($options);
             $this->_afterImport($format, $data, $options);
         } else if ($format == self::FORMAT_ARRAY) {
             if (isset($options['buffer']) && $options['buffer']) {
@@ -1026,7 +1028,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             } else {
                 $this->_importArray($data, $options);
             }
-            $this->_updateModelObserver();
+            $this->_updateModelObserver($options);
             $this->_afterImport($format, $data, $options);
         } else {
             parent::import($format, $data);

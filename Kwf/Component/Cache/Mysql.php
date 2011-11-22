@@ -44,7 +44,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         );
         $options = array(
             'buffer' => true,
-            'replace' => true
+            'replace' => true,
+            'skipModelObserver' => true
         );
         $this->getModel('cache')->import(Kwf_Model_Abstract::FORMAT_ARRAY, array($data), $options);
 

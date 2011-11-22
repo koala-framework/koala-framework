@@ -192,9 +192,13 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function import($format, $data, $options = array())
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        if (!isset($options['skipModelObserver']) || !$options['skipModelObserver']) {
+            Kwf_Component_ModelObserver::getInstance()->disable();
+        }
         $this->getProxyModel()->import($format, $data, $options);
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        if (!isset($options['skipModelObserver']) || !$options['skipModelObserver']) {
+            Kwf_Component_ModelObserver::getInstance()->enable();
+        }
     }
 
     public function writeBuffer()
