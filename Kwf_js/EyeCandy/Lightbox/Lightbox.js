@@ -143,10 +143,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     initialize: function()
     {
-        this.lightboxEl.child('.closeButton').on('click', function(ev) {
-            this.close();
-            ev.stopEvent();
-        }, this);
+        var closeButton = this.lightboxEl.child('.closeButton');
+        if (closeButton) {
+            closeButton.on('click', function(ev) {
+                this.close();
+                ev.stopEvent();
+            }, this);
+        }
     },
     preloadLinks: function() {
         this.lightboxEl.query('a.preload').each(function(el) {
