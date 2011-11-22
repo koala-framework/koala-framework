@@ -164,7 +164,7 @@ class Kwf_Util_ClearCache
         }
     }
 
-    protected function _getRefreshTypes()
+    protected function _getRefreshTypes($types)
     {
         $refreshTypes = array();
         $refreshTypes[] = 'config';
@@ -204,7 +204,7 @@ class Kwf_Util_ClearCache
         $refreshTypes = array();
         if ($types == 'all') {
             $types = $this->getTypes();
-            $refreshTypes = $this->_getRefreshTypes();
+            $refreshTypes = $this->_getRefreshTypes($types);
         } else if ($types == 'component' && extension_loaded('apc')) {
             $types = array('component', 'apc');
         } else {
