@@ -29,6 +29,12 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
             this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks({
             }));
         }
+        if (this.showPlayPause) {
+            this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink({
+                autoPlay: this.autoPlay
+            }));
+        }
+
         Kwc.List.Switch.Component.superclass._init.call(this);
     }
 });
