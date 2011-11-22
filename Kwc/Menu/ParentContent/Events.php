@@ -27,7 +27,7 @@ class Kwc_Menu_ParentContent_Events extends Kwc_Abstract_Events //not Kwc_Basic_
     {
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveHasContentChanged(
-                $this->_class, $c->getPageOrRoot()->componentId
+                $this->_class, $c->componentId
             ));
         }
     }

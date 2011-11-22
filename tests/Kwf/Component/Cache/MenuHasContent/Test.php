@@ -44,7 +44,8 @@ class Kwf_Component_Cache_MenuHasContent_Test extends Kwc_TestAbstract
         $this->_process();
 
         $ids = Kwf_Component_Cache_MenuHasContent_Root_Events::$hasContentChanged;
-        $this->assertEquals(array('root-top-menuTop'), $ids);
+        sort($ids);
+        $this->assertEquals(array('root-main-menuTop', 'root-top-menuTop'), $ids);
     }
 
     public function testAddPageToMain()
@@ -70,7 +71,8 @@ class Kwf_Component_Cache_MenuHasContent_Test extends Kwc_TestAbstract
         $this->_process();
 
         $ids = Kwf_Component_Cache_MenuHasContent_Root_Events::$hasContentChanged;
-        $this->assertEquals(array('root-top-menuTop'), $ids);
+        sort($ids);
+        $this->assertEquals(array('root-main-menuTop', 'root-top-menuTop'), $ids);
     }
 
     public function testMakePageInvisibleFromMain()
@@ -82,7 +84,8 @@ class Kwf_Component_Cache_MenuHasContent_Test extends Kwc_TestAbstract
         $this->_process();
 
         $ids = Kwf_Component_Cache_MenuHasContent_Root_Events::$hasContentChanged;
-        $this->assertEquals(array('root-main-menuMain'), $ids);
+        sort($ids);
+        $this->assertEquals(array('root-main-menuMain', 'root-top-menuMain'), $ids);
     }
 
     public function testRemovePageFromMain()
@@ -94,6 +97,7 @@ class Kwf_Component_Cache_MenuHasContent_Test extends Kwc_TestAbstract
         $this->_process();
 
         $ids = Kwf_Component_Cache_MenuHasContent_Root_Events::$hasContentChanged;
-        $this->assertEquals(array('root-main-menuMain'), $ids);
+        sort($ids);
+        $this->assertEquals(array('root-main-menuMain', 'root-top-menuMain'), $ids);
     }
 }

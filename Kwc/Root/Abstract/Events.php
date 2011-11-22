@@ -63,14 +63,14 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
         $boxId = $event->dbId;
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($boxId) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
-                $this->_class, $c->getPageOrRoot()->componentId
+                $this->_class, $c->componentId
             ));
 
             $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
             //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
             if (isset($boxSubtract[$c->id])) {
                 $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentWidthChanged(
-                    $this->_class, $c->getPageOrRoot()->componentId
+                    $this->_class, $c->componentId
                 ));
             }
         }
@@ -80,14 +80,14 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
-            $this->_class, $c->getPageOrRoot()->componentId
+            $this->_class, $c->componentId
         ));
 
         $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
         //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
         if (isset($boxSubtract[$c->id])) {
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentWidthChanged(
-                $this->_class, $c->getPageOrRoot()->componentId
+                $this->_class, $c->componentId
             ));
         }
     }
@@ -96,7 +96,7 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
-            $this->_class, $c->getPageOrRoot()->componentId
+            $this->_class, $c->componentId
         ));
     }
 }

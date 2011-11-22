@@ -59,7 +59,7 @@ class Kwc_Basic_ParentContent_Events extends Kwc_Abstract_Events
     {
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $pc) {
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveHasContentChanged(
-                $this->_class, $pc->getPageOrRoot()->componentId
+                $this->_class, $pc->componentId
             ));
         }
     }
@@ -68,7 +68,7 @@ class Kwc_Basic_ParentContent_Events extends Kwc_Abstract_Events
     {
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->componentId) as $pc) {
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveHasContentChanged(
-                $this->_class, $pc->getPageOrRoot()->componentId
+                $this->_class, $pc->componentId
             ));
         }
     }

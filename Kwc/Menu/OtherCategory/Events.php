@@ -33,7 +33,10 @@ class Kwc_Menu_OtherCategory_Events extends Kwc_Abstract_Events
     {
         $ret = array();
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($menuDbId) as $menu) {
-            $ret = array_merge($ret, $menu->parent->getChildComponents(array('componentClass' => $this->_class)));
+            if (!$menu->parent->parent) continue;
+            foreach ($menu->parent->parent->getChildComponents(array('flags' => array('menuCategory'=>true))) as $c) {
+                $ret = array_merge($ret, $c->getChildComponents(array('componentClass' => $this->_class)));
+            }
         }
         return $ret;
     }

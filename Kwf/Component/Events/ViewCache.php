@@ -114,9 +114,11 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
     {
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $c = $c->getPageOrRoot();
         $this->_updates[] = array(
             'type' => 'component',
-            'component_id' => $event->componentId . '%',
+            'component_id' => $c->componentId . '%',
             'component_class' => $event->class
         );
         $log = Kwf_Component_Events_Log::getInstance();
@@ -136,9 +138,11 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onRecursiveMasterContentChange(Kwf_Component_Event_Component_RecursiveMasterContentChanged $event)
     {
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $c = $c->getPageOrRoot();
         $this->_updates[] = array(
             'type' => 'master',
-            'component_id' => $event->componentId . '%',
+            'component_id' => $c->componentId . '%',
         );
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {

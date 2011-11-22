@@ -52,7 +52,7 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
-            $this->_class, $c->getPageOrRoot()->componentId
+            $this->_class, $c->componentId
         ));
     }
 }
