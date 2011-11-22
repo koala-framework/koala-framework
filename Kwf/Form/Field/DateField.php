@@ -37,10 +37,17 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         return date('Y-m-d', strtotime($ret));
     }
 
+    protected function _getOutputValueFromValues($values)
+    {
+        $name = $this->getFieldName();
+        $ret = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        return (string)$ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = $this->_getOutputValueFromValues($values);
         if (!$value) $value = trlKwf('yyyy-mm-dd');
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 

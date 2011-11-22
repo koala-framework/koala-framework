@@ -1,0 +1,7 @@
+div.kwfFormFieldDateField a.icon {
+    display: block;
+    width: 16px; height: 16px;
+    background-image: url(/assets/silkicons/date.png);
+    position: absolute;
+}
+div.kwfFormFieldDateField input { width: 80px; }
