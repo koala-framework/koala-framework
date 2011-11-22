@@ -498,6 +498,21 @@ abstract class Kwf_Component_Generator_Abstract
 
     public function getChildComponentClasses($select = array())
     {
+        $cacheId = 'childComponentClasses-'.$this->_class.'-'.$this->_settings['generator'];
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        if (!$success) {
+            $ret = $this->_settings['component'];
+            foreach ($ret as $c) {
+                if (Kwc_Abstract::getFlag($c, 'hasAlternativeComponent')) {
+                    $cls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+                    foreach (call_user_func(array($cls, 'getAlternativeComponents'), $c) as $ac) {
+                        $ret[] = $ac;
+                    }
+                }
+            }
+            Kwf_Cache_Simple::add($cacheId, $ret);
+        }
+
         if ($select === array() ||
             ($select instanceof Kwf_Model_Select &&
                 !($select->hasPart(Kwf_Component_Select::WHERE_FLAGS) ||
@@ -506,21 +521,12 @@ abstract class Kwf_Component_Generator_Abstract
             )
         ) {
              //performance
-            $ret = $this->_settings['component'];
-            foreach ($ret as $c) {
-                if (Kwc_Abstract::getFlag($c, 'hasAlternativeComponent')) {
-                    $cls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                    $ret = array_merge($ret, call_user_func(array($cls, 'getAlternativeComponents'), $c));
-                }
-            }
             return $ret;
         }
 
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
         }
-
-        $ret = $this->_settings['component'];
 
         if ($select->hasPart(Kwf_Component_Select::WHERE_FLAGS)) {
             $flags = $select->getPart(Kwf_Component_Select::WHERE_FLAGS);
