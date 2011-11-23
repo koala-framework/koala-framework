@@ -24,45 +24,7 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             'event' => 'Kwf_Component_Event_Row_Updated',
             'callback' => 'onPageDataChanged'
         ));
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Component_RecursiveContentChanged',
-            'callback' => 'onRecursiveEvent'
-        );
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Component_RecursiveHasContentChanged',
-            'callback' => 'onRecursiveEvent'
-        );
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Component_RecursiveContentWidthChanged',
-            'callback' => 'onRecursiveEvent'
-        );
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Component_RecursiveMasterContentChanged',
-            'callback' => 'onRecursiveEvent'
-        );
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
-            'callback' => 'onRecursiveEvent'
-        );
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Page_ParentChanged',
-            'callback' => 'onRecursiveEvent'
-        );
         return $ret;
-    }
-
-    public function onRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
-    {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
-        while ($c && !$c->isPage && $c->componentClass !== $this->_class) {
-            $c = $c->parent;
-        }
-        if (!$c) return;
-        $childIds = $this->_getGenerator()->getVisiblePageChildIds($c->dbId);
-        foreach($childIds as $childId) {
-            $eventsClass = get_class($event);
-            $this->fireEvent(new $eventsClass($event->class, $childId));
-        }
     }
 
     public function onPageRowUpdate(Kwf_Component_Event_Row_Updated $event)

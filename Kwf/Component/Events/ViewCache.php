@@ -112,18 +112,36 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         }
     }
 
+    //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
+    //this method returns all child ids needed for deleting recursively
+    private function _getIdsFromRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        $changedComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $ids = array($changedComponent->getPageOrRoot()->componentId);
+        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
+            $c = $changedComponent;
+            while ($c && !$c->isPage && $c->componentClass !== $gen->getClass()) {
+                $c = $c->parent;
+            }
+            if ($c) {
+                $ids = array_merge($ids, $gen->getVisiblePageChildIds($c->dbId));
+            }
+        }
+        return $ids;
+    }
+
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
-        $c = $c->getPageOrRoot();
-        $this->_updates[] = array(
-            'type' => 'component',
-            'component_id' => $c->componentId . '%',
-            'component_class' => $event->class
-        );
         $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear type=component component_id=$event->componentId% component_class=$event->class", Zend_Log::INFO);
+        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+            $this->_updates[] = array(
+                'type' => 'component',
+                'component_id' => $id . '%',
+                'component_class' => $event->class
+            );
+            if ($log) {
+                $log->log("view cache clear type=component component_id=$id% component_class=$event->class", Zend_Log::INFO);
+            }
         }
     }
 
@@ -138,15 +156,15 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onRecursiveMasterContentChange(Kwf_Component_Event_Component_RecursiveMasterContentChanged $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
-        $c = $c->getPageOrRoot();
-        $this->_updates[] = array(
-            'type' => 'master',
-            'component_id' => $c->componentId . '%',
-        );
         $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear component_id=$event->componentId% type=master", Zend_Log::INFO);
+        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+            $this->_updates[] = array(
+                'type' => 'master',
+                'component_id' => $id . '%',
+            );
+            if ($log) {
+                $log->log("view cache clear component_id=$id% type=master", Zend_Log::INFO);
+            }
         }
     }
 
@@ -176,18 +194,21 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        $this->_updates[] = array(
-            'type' => 'componentLink',
-            'component_id' => $event->componentId . '%'
-        );
         $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear type=componentLink component_id=$event->componentId%", Zend_Log::INFO);
+        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+            $this->_updates[] = array(
+                'type' => 'componentLink',
+                'component_id' => $id . '%'
+            );
+            if ($log) {
+                $log->log("view cache clear type=componentLink component_id=$id%", Zend_Log::INFO);
+            }
         }
     }
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
+        //_getIdsFromRecursiveEvent is not needed as it doesn't effect child pages from pages table
         $this->_updates[] = array(
             //remove all types
             'component_id' => $event->componentId . '%'

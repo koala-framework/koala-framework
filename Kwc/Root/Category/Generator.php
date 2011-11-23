@@ -46,7 +46,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         }
     }
 
-    //only used by GeneratorEvents
+    /**
+     * Returns all recursive children of a page (only visible ones)
+     */
     public function getVisiblePageChildIds($parentId)
     {
         $ret = array();
@@ -54,6 +56,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             foreach ($this->_pageChilds[$parentId] as $id) {
                 if ($this->_pageData[$id]['visible']) {
                     $ret[] = $id;
+                    $ret = array_merge($ret, $this->getVisiblePageChildIds($id));
                 }
             }
         }

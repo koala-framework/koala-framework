@@ -16,12 +16,26 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
+    //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
+    //this method returns all child ids needed for deleting recursively
+    private function _getIdsFromRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $ids = array($c->dbId);
+        $c = $c->getPageOrRoot();
+        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
+            $ids = array_merge($ids, $gen->getVisiblePageChildIds($c->dbId));
+        }
+        return $ids;
+    }
+
     public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
-        foreach ($this->_getDbIds($component->dbId) as $dbId) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $dbId));
-            if ($component->isPage) {
+        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
+            foreach ($this->_getDbIds($childPageId) as $dbId) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $dbId));
+
+                //TODO: only fire if $dbId is a page
                 $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $dbId));
             }
         }
