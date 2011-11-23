@@ -35,6 +35,14 @@ class Kwf_Exception extends Kwf_Exception_NoLog
 
     public function log()
     {
+        $body = $this->_getLogBody();
+        $path = 'log/error/' . date('Y-m-d');
+        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
+        return $this->_writeLog($path, $filename, $body);
+    }
+
+    protected function _getLogBody()
+    {
         $user = "guest";
         try {
             if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
@@ -65,11 +73,6 @@ class Kwf_Exception extends Kwf_Exception_NoLog
         if (isset($_SESSION)) {
             $body .= $this->_format('_SESSION', print_r($_SESSION, true));
         }
-
-        $path = 'log/error/' . date('Y-m-d');
-
-        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
-
-        return $this->_writeLog($path, $filename, $body);
+        return $body;
     }
 }
