@@ -41,7 +41,11 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCa
         } else {
             item = this.list.getItem(this.list.getActiveItem().listIndex-1);
         }
-        if (item) this.list.setActiveItem(item);
+
+        if (item) {
+            this.list.setActiveItem(item);
+            this.list.fireEvent('nextPreviousClick', item);
+        }
     },
     onNext: function() {
         var item;
@@ -50,6 +54,10 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCa
         } else {
             item = this.list.getItem(this.list.getActiveItem().listIndex+1);
         }
-        if (item) this.list.setActiveItem(item);
+
+        if (item) {
+            this.list.setActiveItem(item);
+            this.list.fireEvent('nextPreviousClick', item);
+        }
     }
 });

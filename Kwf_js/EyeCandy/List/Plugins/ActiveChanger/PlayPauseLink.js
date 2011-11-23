@@ -23,6 +23,15 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext.extend(Kwf.EyeCandy.
             this._isPlaying = true;
             this.play.defer(this.interval, this);
         }
+
+        this.list.on('childClick', function(item, ev) {
+            ev.stopEvent();
+            this.pause();
+        }, this);
+
+        this.list.on('nextPreviousClick', function(item) {
+            this.pause();
+        }, this);
     },
 
     play: function() {
