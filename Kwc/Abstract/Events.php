@@ -19,7 +19,12 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
         return $ret;
     }
 
-    public function onOwnRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    {
+    }
+
+    //override _onOwnRowUpdate to implement custom functionality
+    public final function onOwnRowUpdate(Kwf_Component_Event_Row_Abstract $event)
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($event->row->component_id, array('limit'=>1));
         if ($c && $c->componentClass == $this->_class) {
@@ -34,6 +39,7 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
                     ));
                 }
             }
+            $this->_onOwnRowUpdate($c, $event);
         }
     }
 }
