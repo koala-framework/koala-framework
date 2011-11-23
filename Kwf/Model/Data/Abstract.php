@@ -439,6 +439,21 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
         throw new Kwf_Exception_NotYetImplemented();
     }
 
+    private function _updateModelObserver($options)
+    {
+        if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
+
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            if ($this->_proxyContainerModels) {
+                foreach ($this->_proxyContainerModels as $m) {
+                    Kwf_Component_ModelObserver::getInstance()->add('update', $m);
+                }
+            } else {
+                Kwf_Component_ModelObserver::getInstance()->add('update', $this);
+            }
+        }
+    }
+
     public function import($format, $data, $options = array())
     {
         if ($format == self::FORMAT_ARRAY) {
@@ -469,6 +484,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 $row->save();
             }
             Kwf_Component_ModelObserver::getInstance()->enable();
+            $this->_updateModelObserver($options);
             $this->_afterImport($format, $data, $options);
         } else {
             throw new Kwf_Exception_NotYetImplemented();
