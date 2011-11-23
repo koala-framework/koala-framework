@@ -81,7 +81,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     // These regexes limit input and validation to hex values
     regex: /[a-f0-9]/i,
 
-    width: 50,
+    width: 70,
 
     initComponent: function() {
         this.addEvents('select');
