@@ -5,6 +5,7 @@ class Kwc_Basic_LinkTag_Trl_Component extends Kwc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponent);
         $ret['dataClass'] = 'Kwc_Basic_LinkTag_Data';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
