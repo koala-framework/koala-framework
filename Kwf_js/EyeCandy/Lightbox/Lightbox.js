@@ -90,6 +90,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     if (this.lightboxEl.isVisible()) {
                         contentEl.fadeIn();
                         this.preloadLinks();
+                    } else {
+                        contentEl.show();
                     }
                     this.style.afterContentShown();
                 };
