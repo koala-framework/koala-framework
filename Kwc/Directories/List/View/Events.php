@@ -27,6 +27,11 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                             'event' => 'Kwc_Directories_List_EventRowUpdated',
                             'callback' => 'onDirectoryRowUpdate'
                         );
+                        $ret[] = array(
+                            'class' => $directoryClass,
+                            'event' => 'Kwc_Directories_List_EventModelUpdated',
+                            'callback' => 'onDirectoryModelUpdate'
+                        );
                     }
                 }
             }
@@ -54,5 +59,11 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         } else {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
         }
+    }
+
+    public function onDirectoryModelUpdate(Kwc_Directories_List_EventModelUpdated $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
     }
 }

@@ -20,6 +20,11 @@ class Kwc_Directories_Item_Directory_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Component_Event_Row_Deleted',
             'callback' => 'onChildRowDelete'
         );
+        $ret[] = array(
+            'class' => get_class($generator->getModel()),
+            'event' => 'Kwf_Component_Event_Model_Updated',
+            'callback' => 'onChildModelUpdated'
+        );
         return $ret;
     }
 
@@ -36,5 +41,10 @@ class Kwc_Directories_Item_Directory_Events extends Kwc_Abstract_Events
     public function onChildRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
         $this->fireEvent(new Kwc_Directories_List_EventRowDeleted($this->_class, $event->row));
+    }
+
+    public function onChildModelUpdated(Kwf_Component_Event_Model_Updated $event)
+    {
+        $this->fireEvent(new Kwc_Directories_List_EventModelUpdated($this->_class));
     }
 }
