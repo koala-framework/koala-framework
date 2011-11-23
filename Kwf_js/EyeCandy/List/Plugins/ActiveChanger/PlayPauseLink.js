@@ -12,26 +12,32 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext.extend(Kwf.EyeCandy.
         this.playPauseLink.on('click', function(ev) {
             ev.stopEvent();
             if (!this._isPlaying) {
-                this.play();
-                this.playPauseLink.removeClass('listIsPausing');
-                this.playPauseLink.addClass('listIsPlaying');
                 this._isPlaying = true;
+                this.play();
             } else {
                 this.pause();
-                this.playPauseLink.removeClass('listIsPlaying');
-                this.playPauseLink.addClass('listIsPausing');
-                this._isPlaying = false;
             }
         }, this);
 
         if (this.autoPlay) {
+            this._isPlaying = true;
             this.play.defer(this.interval, this);
         }
     },
 
     play: function() {
-        this.next();
-        this.play.defer(this.interval, this);
+        if (this._isPlaying) {
+            this.playPauseLink.removeClass('listIsPausing');
+            this.playPauseLink.addClass('listIsPlaying');
+            this.next();
+            this.play.defer(this.interval, this);
+        }
+    },
+
+    pause: function() {
+        this.playPauseLink.removeClass('listIsPlaying');
+        this.playPauseLink.addClass('listIsPausing');
+        this._isPlaying = false;
     },
 
     next: function() {
