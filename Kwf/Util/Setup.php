@@ -52,8 +52,6 @@ class Kwf_Util_Setup
 
         $ret .= "Kwf_Benchmark::\$startTime = microtime(true);\n";
         $ret .= "\n";
-        $ret .= "if (isset(\$_SERVER['HTTP_CLIENT_IP'])) \$_SERVER['REMOTE_ADDR'] = \$_SERVER['HTTP_CLIENT_IP'];\n";
-        $ret .= "\n";
 
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
 
