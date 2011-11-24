@@ -44,7 +44,6 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCa
 
         if (item) {
             this.list.setActiveItem(item);
-            this.list.fireEvent('nextPreviousClick', item);
         }
     },
     onNext: function() {
@@ -57,7 +56,6 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCa
 
         if (item) {
             this.list.setActiveItem(item);
-            this.list.fireEvent('nextPreviousClick', item);
         }
     }
 });

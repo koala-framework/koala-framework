@@ -36,8 +36,7 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
             'childMouseLeave': true,
             'childClick': true,
             'childStateChanged': true,
-            'activeChanged': true,
-            'nextPreviousClick': true // fired in ActiveChanger/NextPreviousLinks.js
+            'activeChanged': true
         });
         Ext.applyIf(this, {
             plugins: [],
