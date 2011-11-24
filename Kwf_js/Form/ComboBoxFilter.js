@@ -42,7 +42,7 @@ Kwf.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
             this.saveBox.store.clearFilter();
 
             var saveStoreData = this.saveBox.store.getAt(
-                this.saveBox.store.find('id', contactId)
+                this.saveBox.store.find('id', new RegExp("^" + contactId + "$"))
             );
 
             if (saveStoreData && saveStoreData.data[this.saveBox.filterField]) {
