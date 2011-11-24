@@ -77,10 +77,13 @@ Kwf.Switch.Display = function(el) {
 
 Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
     doClose: function() {
-        if (this._lockAnimation) return;
-        this._lockAnimation = true;
+        if (!this.switchLink.hasClass('switchLinkHover')) {
+            if (this._lockAnimation) return;
+            this._lockAnimation = true;
+        }
 
         this.fireEvent('beforeClose', this);
+        this.switchContent.stopFx();
         this.switchContent.scaleHeight = this.switchContent.getHeight();
         this.switchContent.scale(undefined, 0,
             { easing: 'easeOut', duration: .5, afterStyle: "display:none;",
@@ -95,10 +98,13 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
     },
 
     doOpen: function() {
-        if (this._lockAnimation) return;
-        this._lockAnimation = true;
+        if (!this.switchLink.hasClass('switchLinkHover')) {
+            if (this._lockAnimation) return;
+            this._lockAnimation = true;
+        }
 
         this.fireEvent('beforeOpen', this);
+        this.switchContent.stopFx();
         this.switchContent.setStyle('display', 'block');
         this.switchContent.scale(undefined, this.switchContent.scaleHeight,
             { easing: 'easeOut', duration: .5, afterStyle: "display:block;height:auto;",
