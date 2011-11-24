@@ -2,3 +2,10 @@
 .cssClass .listSwitchItem { float: left; }
 .cssClass .listSwitchLargeContent { position: relative; }
 .cssClass .listSwitchLargeContent > div { position: absolute; top: 0px; }
+.cssClass .listSwitchLargeContent > div.loading {
+    width: 100%;
+    height: 200px;
+    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+}

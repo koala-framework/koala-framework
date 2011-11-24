@@ -13,9 +13,10 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
     {
         if (this.largeContent[item.id]) return; //already loaded/loading
 
-        this.largeContent[item.id] = this.largeContainer.createChild();
+        this.largeContent[item.id] = this.largeContainer.createChild({
+            cls: 'loading'
+        });
         this.largeContent[item.id].enableDisplayMode('block');
-        this.largeContent[item.id].hide();
 
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
@@ -24,28 +25,30 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             url: url,
             success: function(response) {
                 var contentEl = this.largeContent[item.id].createChild();
+                contentEl.hide();
                 contentEl.update(response.responseText);
+
+                var showContent = function() {
+                    this.largeContent[item.id].removeClass('loading');
+                    contentEl.fadeIn();
+                    if (options && options.success) {
+                        options.success.call(options.scope || this);
+                    }
+                };
+
+                var imagesToLoad = 0;
+                contentEl.query('img').each(function(imgEl) {
+                    imagesToLoad++;
+                    imgEl.onload = (function() {
+                        imagesToLoad--;
+                        if (imagesToLoad <= 0) showContent.call(this)
+                    }).createDelegate(this);
+                }, this);
+
                 Kwf.callOnContentReady();
-                if (options && options.success) {
-                    options.success.call(options.scope || this);
-                }
             },
             scope: this
         });
-    },
-    _preload: function()
-    {
-        this.list.items.each(function(i) {
-            if (!this.largeContent[i.id]) {
-                this._loadItem(i, {
-                    success: function() {
-                        this._preload.defer(100, this);
-                    },
-                    scope: this
-                });
-                return(false);
-            }
-        }, this);
     },
     _activate: function(item)
     {
@@ -54,24 +57,23 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this.largeContent[item.id] = this.largeContainer.child('div');
             this.largeContent[item.id].enableDisplayMode('block');
             this.activeItem = item;
-
-//             this._preload();
             return;
         }
 
-        this._loadItem(item);
+        if (!this.largeContent[item.id]) {
+            this._loadItem(item);
+        }
         var activeEl = this.largeContent[this.activeItem.id];
         var nextEl = this.largeContent[item.id];
 
         if (this.transition == 'fade') {
             activeEl.dom.style.zIndex = 2;
-            activeEl.fadeOut(Ext.applyIf({
-                useDisplay: true
-            }, this.transitionConfig));
 
             nextEl.dom.style.zIndex = 1;
-            nextEl.fadeIn(Ext.applyIf({
-                useDisplay: true
+            nextEl.show();
+
+            activeEl.fadeOut(Ext.applyIf({
+                useDisplay: true,
             }, this.transitionConfig));
         } else if (this.transition == 'slide') {
             activeEl.slideOut(
