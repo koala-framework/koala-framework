@@ -52,6 +52,10 @@ class Kwc_Shop_Products_Detail_AddToCartGenerator extends Kwf_Component_Generato
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
         }
+        if (!$this->_acceptKey($this->getGeneratorKey(), $select, $parentData)) {
+            return array();
+        }
+
         $data = $this->_createData($parentData, $this->getGeneratorKey(), $select);
         return array($data);
     }
