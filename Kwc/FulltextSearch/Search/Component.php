@@ -30,7 +30,14 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
             $queryString = '';
         }
         if ($queryString) {
-            $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
+            try {
+                $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
+            } catch (ErrorException $e) {
+                //ignore iconv errors that happen with invalid input
+            }
+        }
+
+        if ($userQuery) {
             $query = new Zend_Search_Lucene_Search_Query_Boolean();
             $query->addSubquery($userQuery, true /* required */);
 
