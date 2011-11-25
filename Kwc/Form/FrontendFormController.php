@@ -1,18 +1,6 @@
 <?php
-class Kwc_Form_FrontendFormController extends Kwf_Controller_Action_Auto_Form
+class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
 {
-    protected $_permissions = array('save', 'add');
-
-    public function preDispatch()
-    {
-        $componentClass = $this->_getParam('class');
-        $formClass = Kwc_Admin::getComponentClass($componentClass, 'FrontendForm');
-        if ($formClass && $formClass != 'Kwc_Abstract_Form') {
-            $this->_form = new $formClass($componentClass, $componentClass);
-        }
-        parent::preDispatch();
-    }
-
     public function jsonSaveAction()
     {
         $postData = $this->getRequest()->getParams();
