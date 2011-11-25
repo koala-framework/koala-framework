@@ -23,23 +23,33 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
     {
     }
 
+    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    {
+    }
+
     //override _onOwnRowUpdate to implement custom functionality
     public final function onOwnRowUpdate(Kwf_Component_Event_Row_Abstract $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($event->row->component_id, array('limit'=>1));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)
+        );
         if ($c && $c->componentClass == $this->_class) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $event->row->component_id
-            ));
-            if (Kwc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate')) {
-                $columns = Kwc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate');
-                if ($event->isDirty(Kwc_Abstract::getSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate'))) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                        $this->_class, $event->row->component_id
-                    ));
+            if ($c->isVisible()) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $event->row->component_id
+                ));
+                if (Kwc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate')) {
+                    $columns = Kwc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate');
+                    if ($event->isDirty(Kwc_Abstract::getSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate'))) {
+                        $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                            $this->_class, $event->row->component_id
+                        ));
+                    }
                 }
+                $this->_onOwnRowUpdate($c, $event);
+            } else {
+                $this->_onOwnRowUpdateNotVisible($c, $event);
             }
-            $this->_onOwnRowUpdate($c, $event);
         }
     }
 }

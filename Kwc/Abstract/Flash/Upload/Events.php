@@ -1,9 +1,9 @@
 <?php
 class Kwc_Abstract_Flash_Upload_Events extends Kwc_Abstract_Events
 {
-    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
-        parent::_onOwnRowUpdate($c, $event);
+        parent::_onOwnRowUpdateNotVisible($c, $event);
         $reference = $event->row->getModel()->getReference(
             Kwc_Abstract::getSetting($this->_class, 'uploadModelRule')
         );

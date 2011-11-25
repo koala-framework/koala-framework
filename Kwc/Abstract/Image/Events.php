@@ -23,9 +23,9 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
-    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
-        parent::_onOwnRowUpdate($c, $event);
+        parent::_onOwnRowUpdateNotVisible($c, $event);
         if ($event->isDirty(array('kwf_upload_id', 'width', 'height', 'dimension'))) {
             $type = $c->getComponent()->getImageUrlType();
             $this->fireEvent(new Kwf_Component_Event_Media_Changed(
