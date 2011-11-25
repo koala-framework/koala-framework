@@ -14,12 +14,13 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         if (this.largeContent[item.id]) return; //already loaded/loading
 
         this.largeContent[item.id] = this.largeContainer.createChild({
-            cls: 'loading'
+            html: '<div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div>'
         });
         this.largeContent[item.id].enableDisplayMode('block');
 
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
+
         Ext.Ajax.request({
             params: { url: item.el.child('a').dom.href },
             url: url,
@@ -29,7 +30,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                 contentEl.update(response.responseText);
 
                 var showContent = function() {
-                    this.largeContent[item.id].removeClass('loading');
+                    this.largeContent[item.id].child('.loading').hide();
                     contentEl.fadeIn();
                     if (options && options.success) {
                         options.success.call(options.scope || this);
