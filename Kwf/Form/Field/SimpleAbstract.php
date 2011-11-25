@@ -105,7 +105,7 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
     {
         $fieldName = $this->getFieldName();
         if (!isset($postData[$fieldName])) $postData[$fieldName] = $this->getDefaultValue();
-        return $postData[$fieldName];
+        return (string)$postData[$fieldName];
     }
 
     public final function getValueFromPostData($postData)
