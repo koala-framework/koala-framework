@@ -39,6 +39,13 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
                 $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
             } else {
                 $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
+                foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+                    $components = Kwf_Component_Data_Root::getInstance()
+                        ->getComponentsByDbId($dbId, array('ignoreVisible' => true));
+                    foreach ($components as $component) {
+                        $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($component->componentClass, $component->componentId));
+                    }
+                }
             }
             unset($dc['visible']);
         }

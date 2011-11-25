@@ -40,8 +40,9 @@ class Kwf_Data_Kwc_Frontend extends Kwf_Data_Abstract
                     $i->getComponent()->processInput(array());
                 }
             }
-            $view = new Kwf_Component_Renderer();
-            return $view->renderComponent($data);
+            return $data->render($data->isVisible(), false);
+            //$view = new Kwf_Component_Renderer();
+            //return $view->renderComponent($data);
         } else if (isset($row->settings)) {
             $settingsModel = new Kwf_Model_Field(array(
                 'parentModel' => $row->getModel(),

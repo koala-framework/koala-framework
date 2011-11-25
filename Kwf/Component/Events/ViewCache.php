@@ -208,14 +208,15 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
-        //_getIdsFromRecursiveEvent is not needed as it doesn't effect child pages from pages table
-        $this->_updates[] = array(
-            //remove all types
-            'component_id' => $event->componentId . '%'
-        );
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear component_id=$event->componentId%", Zend_Log::INFO);
+        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+            $this->_updates[] = array(
+                //remove all types
+                'component_id' => $id . '%'
+            );
+            $log = Kwf_Component_Events_Log::getInstance();
+            if ($log) {
+                $log->log("view cache clear component_id=$id%", Zend_Log::INFO);
+            }
         }
     }
 
