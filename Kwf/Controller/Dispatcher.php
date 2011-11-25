@@ -32,7 +32,7 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             }
             $className = Kwc_Admin::getComponentClass($class, $controller);
             if (!$className) {
-                throw new Kwf_Exception("Controller '$controller' for component '$class' not found");
+                return false;
             }
             Zend_Loader::loadClass($className);
 
