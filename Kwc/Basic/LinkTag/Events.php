@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_LinkTag_Events extends Kwc_Abstract_Events
+class Kwc_Basic_LinkTag_Events extends Kwc_Abstract_Cards_Events
 {
     public function getListeners()
     {
