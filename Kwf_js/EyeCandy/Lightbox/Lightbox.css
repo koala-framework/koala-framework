@@ -53,11 +53,10 @@
 
 
 .kwfLightbox .loading {
-    position: absolute; top: 40%; text-align: center; width:100%;
+    position: absolute; top: 0; width: 100%; height: 100%;
     background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
     background-repeat: no-repeat;
 	background-position: center center;
-    height: 66px;
 }
 .kwfLightbox .lightboxBody .image { z-index: 1; }
 .kwfLightbox .lightboxBody .image .centerImage { margin-bottom: -3px; }
