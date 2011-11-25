@@ -104,26 +104,38 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             ignore_user_abort(true);
             $this->_errors = array_merge($this->_errors, $this->_form->validate(null, $postData));
             if (!$this->_errors) {
-                $this->_form->prepareSave(null, $postData);
-                $this->_beforeSave($this->_form->getRow());
-                $isInsert = false;
-                if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
-                    $isInsert = true;
-                    $this->_beforeInsert($this->_form->getRow());
+                try {
+                    $this->_form->prepareSave(null, $postData);
+                    $this->_beforeSave($this->_form->getRow());
+                    $isInsert = false;
+                    if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
+                        $isInsert = true;
+                        $this->_beforeInsert($this->_form->getRow());
+                    }
+                    $this->_form->save(null, $postData);
+                    $this->_form->afterSave(null, $postData);
+                    $this->_afterSave($this->_form->getRow());
+                    if ($isInsert) {
+                        $this->_afterInsert($this->_form->getRow());
+                    }
+                    $this->_isSaved = true;
+                } catch (Exception $e) {
+                    $this->_handleProcessException($e);
                 }
-                $this->_form->save(null, $postData);
-                $this->_form->afterSave(null, $postData);
-                $this->_afterSave($this->_form->getRow());
-                if ($isInsert) {
-                    $this->_afterInsert($this->_form->getRow());
-                }
-                $this->_isSaved = true;
             }
         }
 
         if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
             Kwf_Registry::get('db')->commit();
         }
+    }
+
+    //can be overriden to *not* log specific exceptions or adapt error
+    protected function _handleProcessException(Exception $e)
+    {
+        if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
+        $e->logOrThrow();
+        $this->_errors[] = trlKwf('An error occured while processing the form. Please try to submit again later.');
     }
 
     public function getPostData()

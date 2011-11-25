@@ -6376,5 +6376,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Der normale Betrieb wird baldmöglichst wieder herstestellt.</de>
 <id>1712</id>
 </text>
+<text>
+<en>An error occured while processing the form. Please try to submit again later.</en>
+<de>Ein Fehler beim verarbeiten des Formulars ist aufgetreten. Bitte versuchen sie es nach einer Weile erneut.</de>
+<id>1713</id>
+</text>
 </trl>
 
