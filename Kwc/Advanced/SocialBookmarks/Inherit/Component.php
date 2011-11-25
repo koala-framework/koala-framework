@@ -9,6 +9,7 @@ class Kwc_Advanced_SocialBookmarks_Inherit_Component extends Kwc_Abstract
             $ret = $c->getComponent()->getTemplateVarsWithNetworks($this->getData()->parent);
             $ret['linkTemplate'] = self::getTemplateFile($c->componentClass);
         }
+        $ret['data'] = $this->getData();
         return $ret;
     }
 
