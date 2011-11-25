@@ -83,7 +83,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             success: function(response, options) {
                 var contentEl = this.lightboxEl.createChild();
                 if (this.lightboxEl.isVisible()) contentEl.hide();
-                contentEl.update(response.responseText);
+
+                this.style.updateContent(contentEl, response.responseText);
 
                 var showContent = function() {
                     this.lightboxEl.child('.loading').hide();
@@ -173,6 +174,9 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     afterCreateLightboxEl: Ext.emptyFn,
     afterContentShown: Ext.emptyFn,
+    updateContent: function(contentEl, responseText) {
+        contentEl.update(responseText);
+    },
     onShow: Ext.emptyFn,
     onClose: Ext.emptyFn,
 
@@ -199,6 +203,16 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     afterContentShown: function() {
         this.lightbox.lightboxEl.center();
+    },
+    updateContent: function(contentEl, responseText) {
+        var originalSize = this.lightbox.lightboxEl.getSize();
+
+        Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
+
+        var newSize = this.lightbox.lightboxEl.getSize();
+        this.lightbox.lightboxEl.alignTo(document, 'c-c', null, true);
+        this.lightbox.lightboxEl.setSize(originalSize);
+        this.lightbox.lightboxEl.setSize(newSize, null, true);
     },
     onShow: function() {
         this.mask();
