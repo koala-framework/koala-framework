@@ -11,7 +11,7 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        $value = isset($values[$name]) ? (string)$values[$name] : $this->getDefaultValue();
         $ret = Kwf_Form_Field_SimpleAbstract::getTemplateVars($values);
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
