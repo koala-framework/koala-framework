@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Generator_IsVisible_Child extends Kwc_Abstract
+class Kwf_Component_Cache_Visible_Root_Child extends Kwc_Abstract
 {
     public static function getSettings()
     {

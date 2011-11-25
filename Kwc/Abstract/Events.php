@@ -47,6 +47,7 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
                     }
                 }
                 $this->_onOwnRowUpdate($c, $event);
+                $this->_onOwnRowUpdateNotVisible($c, $event);
             } else {
                 $this->_onOwnRowUpdateNotVisible($c, $event);
             }
