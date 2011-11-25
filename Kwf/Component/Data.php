@@ -930,7 +930,7 @@ class Kwf_Component_Data
     {
         $c = $this;
         while($c) {
-            if (isset($this->invisible) && $this->invisible) {
+            if (isset($c->invisible) && $c->invisible) {
                 return false;
             }
             $c = $c->parent;
