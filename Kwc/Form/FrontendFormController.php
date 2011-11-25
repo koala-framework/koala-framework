@@ -7,7 +7,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
         if (!isset($postData['componentId'])) throw new Kwf_Exception_Client('component not found');
 
         $component = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($postData['componentId'], array('ignoreVisible' => true));
+            ->getComponentById((string)$postData['componentId'], array('ignoreVisible' => true));
         if (!$component) throw new Kwf_Exception_Client('component not found');
         $component = $component->getComponent();
         $component->processInput($postData);
