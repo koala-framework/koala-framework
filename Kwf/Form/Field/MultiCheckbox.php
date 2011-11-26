@@ -1,5 +1,9 @@
 <?php
-// TODO: validators
+/**
+ * @ingroup form
+ *
+ * TODO: validators
+ */
 class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
 {
     protected $_fields;

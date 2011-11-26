@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form extends Kwf_Form_NonTableForm
 {
     protected $_tableName;

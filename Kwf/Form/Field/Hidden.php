@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Field_Hidden extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null)

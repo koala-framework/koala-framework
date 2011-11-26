@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Field_LoadData extends Kwf_Form_Field_SimpleAbstract
 {
     public function getMetaData($model)

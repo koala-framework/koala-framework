@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
 {
     public $fields;

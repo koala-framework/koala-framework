@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
 {
     private $_combobox;

@@ -1,5 +1,6 @@
 <?php
 /**
+ * @if internal
  * Wird benötigt um Exceptions zu serialisieren und wirft den trace weg
  * (PDOException ist tlw. im trace und die lässt sich nicht serialisieren).
  * Wird z.B. benötigt im Service.

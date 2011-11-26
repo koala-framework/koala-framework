@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
 {
     private $_fields;

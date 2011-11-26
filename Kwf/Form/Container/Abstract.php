@@ -1,5 +1,7 @@
 <?php
 /**
+ * @ingroup form
+ *
  * Basisklasse für Fields die andere Fields beinhalten
  *
  **/

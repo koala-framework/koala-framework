@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
 {
     private $_ruleKey;

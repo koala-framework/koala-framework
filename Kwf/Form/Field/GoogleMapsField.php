@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Field_GoogleMapsField extends Kwf_Form_Field_SimpleAbstract
 {
     protected $_latitudeFieldname = null;

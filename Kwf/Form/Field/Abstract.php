@@ -1,4 +1,8 @@
 <?php
+/**
+ * Base class for all form fields
+ * @ingroup form
+ */
 abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
     implements Kwf_Collection_Item_Interface
 {
@@ -219,6 +223,11 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         }
     }
 
+    /**
+     * returns the fully qualified field name, different to getName when using form in form
+     *
+     * @return string
+     */
     public function getFieldName()
     {
         $ret = $this->getName();
@@ -228,6 +237,11 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         return $ret;
     }
 
+    /**
+     * returns a field by its name
+     *
+     * @return Kwf_Form_Field_Abstract
+     */
     public function getByName($name)
     {
         if ($this->getName() == $name) {
@@ -345,5 +359,31 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         $ret .= '</pre>';
         $ret .= $children;
         return $ret;
+    }
+
+    /**
+     * Sets the field name, should be the same as the model column
+     */
+    public function setName($value)
+    {
+        return $this->setProperty('name', $value);
+    }
+
+    /**
+     * Sets the field label
+     */
+    public function setFieldLabel($value)
+    {
+        return $this->setProperty('fieldLabel', $value);
+    }
+
+    /**
+     * Sets the label separator
+     *
+     * defaults to ':'
+     */
+    public function setLabelSeparator($value)
+    {
+        return $this->setProperty('labelSeparator', $value);
     }
 }

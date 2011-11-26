@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated
+ */
 //todo: validators
 class Kwf_Form_Field_MultiCheckboxLegacy extends Kwf_Form_Field_Abstract
 {

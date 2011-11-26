@@ -1,5 +1,7 @@
 <?php
 /**
+ * @ingroup form
+ *
  * Text-Eingabefeld mit Autocomplete
  * Gespeichert wird nicht wie bei ComboBox bzw. Select die ID vom ausgewählten
  * Datensatz, sondern der eingegebene Text. ComboBox ist nur Ausfüllhilfe.

@@ -1,4 +1,8 @@
 <?php
+/**
+ * A standard textfield form field
+ * @ingroup form
+ */
 class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
@@ -78,5 +82,24 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
                 'max_length' => 100
             )
         ));
+    }
+
+    /**
+     * Set the validator used for this textfield. Validation will be done
+     * Server Side and for AutoForms in JavaScript
+     *
+     * Additional Zend Validators can be added by addValidator
+     *
+     * Possible values are:
+     * - email
+     * - url
+     * - alpha
+     * - alphanum
+     *
+     * @see addValidator
+     */
+    public function setVtype($value)
+    {
+        return $this->setProperty('vtype', $value);
     }
 }

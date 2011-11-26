@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Field_DoublePassword extends Kwf_Form_Field_Abstract
 {
     protected $_passwordField1;
