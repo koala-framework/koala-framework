@@ -30,7 +30,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             throw new Kwf_Exception("you can only insert unsaved rows");
         }
         $s = new Kwf_Model_Select();
-        $s->whereEquals('email', $row->email);
+        $s->whereEquals('email', $row->email); //what if the email field is not named email?
         if ($row->getModel()->countRows($s)) {
             //already subscribed, don't save
             return false;
