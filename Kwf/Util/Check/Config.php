@@ -47,7 +47,16 @@ class Kwf_Util_Check_Config
             'name' => 'executing system commands'
         );
         $checks['log_write'] = array(
-            'name' => 'log_write permissions'
+            'name' => 'log write permissions'
+        );
+        $checks['temp_write'] = array(
+            'name' => 'temp write permissions'
+        );
+        $checks['cache_write'] = array(
+            'name' => 'cache write permissions'
+        );
+        $checks['root_write'] = array(
+            'name' => 'root write permissions'
         );
         $checks['imagick_functionality_1'] = array(
             'name' => 'imagick functionality 1'
@@ -232,6 +241,42 @@ class Kwf_Util_Check_Config
         }
         unlink('log/error/test-config-check/test.log');
         rmdir('log/error/test-config-check');
+    }
+
+    private static function _temp_write()
+    {
+        if (!is_writeable('temp')) {
+            throw new Kwf_Exception("temp is not writeable");
+        }
+        if (file_exists('temp/checkconfig-test')) unlink('temp/checkconfig-test');
+        touch('temp/checkconfig-test');
+        unlink('temp/checkconfig-test');
+    }
+
+    private static function _cache_write()
+    {
+        $dirs = array('cache');
+        foreach (glob('cache/*') as $d) {
+            if (is_dir($d)) {
+                $dirs[] = $d;
+            }
+        }
+        foreach ($dirs as $d) {
+            if (!is_writeable($d)) {
+                throw new Kwf_Exception("$d is not writeable");
+            }
+            if (file_exists($d.'/checkconfig-test')) unlink($d.'/checkconfig-test');
+            touch($d.'/checkconfig-test');
+            unlink($d.'/checkconfig-test');
+        }
+    }
+
+    private static function _root_write()
+    {
+        if (!is_writeable(getcwd())) {
+            //needed for moving bootstrap.php when doing clear-cache from webinterface
+            throw new Kwf_Exception("root (".getcwd().") is not writeable");
+        }
     }
 
     private static function _imagick_functionality_1()
