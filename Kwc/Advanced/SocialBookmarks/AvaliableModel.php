@@ -101,6 +101,11 @@ class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
                 'url' => 'http://www.webnews.de/einstellen?url={0}',
                 'name' => 'Webnews'
             ),
+            array(
+                'id' => 'linkedin',
+                'url' => 'http://www.linkedin.com/shareArticle?url={0}',
+                'name' => 'Linkedin'
+            ),
         );
         parent::__construct($config);
     }
