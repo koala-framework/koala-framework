@@ -6,7 +6,7 @@ class Vpc_Directories_TopChoose_Component extends Vpc_Directories_Top_Component
         $ret = parent::getSettings();
         $ret['showDirectoryClass'] = 'Vpc_Directories_Item_Directory_Component'; // nur für form
         $ret['ownModel'] = 'Vpc_Directories_TopChoose_Model';
-        $ret['default'] = array();
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
