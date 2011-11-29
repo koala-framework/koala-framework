@@ -6,9 +6,9 @@
             <ul>
                 <li>
                     <?=trlKwf('If you typed the address, make sure the spelling is correct.');?><br/>
-                    <?=trlKwf('Note: Most addresses are also case sensitive');?>!!
+                    <?=trlKwf('Note: Most addresses are case sensitive');?>!!
                 </li>
-                <li><?=trlKwf('Check the page, you are comming from');?></li>
+                <li><?=trlKwf('Check the page you are coming from');?></li>
             </ul>
         </p>
         <p><strong><a href="/"><?=trlKwf('Go back to main page');?></a></strong></p>
