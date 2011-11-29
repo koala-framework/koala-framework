@@ -44,16 +44,16 @@
         <div class="teaser">
             <p>
                 <?=nl2br($this->item->row->teaser);?>
-                <? if($this->hasContent($this->item)) { ?>
+                <? if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
                     <span class="readMoreLink">
-                        <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+                        <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
                     </span>
                 <? } ?>
             </p>
         </div>
-    <? } else if($this->hasContent($this->item)) { ?>
+    <? } else if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
         <div class="readMoreLink">
-            <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+            <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
         </div>
     <? } ?>
 </div>
