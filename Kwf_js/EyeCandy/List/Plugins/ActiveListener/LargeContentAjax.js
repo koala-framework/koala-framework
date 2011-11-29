@@ -26,7 +26,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             url: url,
             success: function(response) {
                 var contentEl = this.largeContent[item.id].createChild();
-                contentEl.hide();
                 contentEl.update(response.responseText);
 
                 var showContent = function() {
@@ -47,6 +46,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                 }, this);
 
                 Kwf.callOnContentReady();
+                contentEl.hide(); //after callOnContentReady else cufon won't work inside contentEl
             },
             scope: this
         });
