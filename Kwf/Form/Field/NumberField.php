@@ -13,10 +13,10 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         parent::_addValidators();
 
         if ($this->getMaxValue()) {
-            $this->addValidator(new Zend_Validate_LessThan($this->getMaxValue()+0.000001));
+            $this->addValidator(new Kwf_Validate_MaxValue($this->getMaxValue()));
         }
         if ($this->getMinValue()) {
-            $this->addValidator(new Zend_Validate_GreaterThan($this->getMinValue()-0.000001));
+            $this->addValidator(new Kwf_Validate_MinValue($this->getMinValue()));
         }
         if ($this->getAllowNegative() === false) {
             $this->addValidator(new Kwf_Validate_NotNegative());
@@ -41,6 +41,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         ) {
             $postData[$fieldName] = null;
         }
+        if (!is_numeric($postData[$fieldName])) $postData[$fieldName] = null;
         if (!is_null($postData[$fieldName])) {
             if ($this->getDecimalSeparator() != '.') {
                 $postData[$fieldName] = str_replace($this->getDecimalSeparator(), '.', $postData[$fieldName]);
