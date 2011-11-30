@@ -2,7 +2,7 @@
 /**
  * Auswahl wo man nicht reinschreiben kann, so wie eine HTML-Select-Box
  **/
-class Kwf_Form_Field_Radio extends Kwf_Form_Field_ComboBox
+class Kwf_Form_Field_Radio extends Kwf_Form_Field_Select
 {
     public function __construct($field_name = null, $field_label = null)
     {
