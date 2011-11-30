@@ -9,7 +9,7 @@ class Kwf_Form_Field_Hidden extends Kwf_Form_Field_SimpleAbstract
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = (string)$values[$name];
 
         $ret = parent::getTemplateVars($values);
 
