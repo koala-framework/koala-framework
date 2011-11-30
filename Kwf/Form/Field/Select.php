@@ -15,6 +15,24 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
 
     //setHideIfNoValues
 
+
+    public function validate($row, $postData)
+    {
+        $ret = parent::validate($row, $postData);
+
+        $data = $this->_getValueFromPostData($postData);
+
+        if (!$this->getShowNoSelection() && !$data) {
+            //regardless of allowBlank a select *always* needs a selection
+            $ret[] = array(
+                'message' => $this->getEmptyText(),
+                'field' => $this
+            );
+        }
+
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
