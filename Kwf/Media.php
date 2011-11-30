@@ -109,7 +109,15 @@ class Kwf_Media
     {
         $cacheId = self::createCacheId($class, $id, $type);
 
-        if (!($output = self::getOutputCache()->load($cacheId))) {
+        $output = Kwf_Cache_Simple::fetch('media-output-'.$cacheId);
+
+        if (!isset($output['file']) && !isset($output['contents'])) {
+            //scaled image is not cached in apc as it might be larger - load from disk
+            $output['contents'] = self::getOutputCache()->load($cacheId);
+            if (!$output['contents']) $output = false;
+        }
+
+        if (!$output) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Kwf_Media_Output_Interface')) {
                 throw new Kwf_Exception_NotFound();
@@ -124,7 +132,13 @@ class Kwf_Media
                 }
             }
             if ($useCache) {
-                self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+                $cacheData = $output;
+                if (isset($cacheData['contents']) && strlen($cacheData['contents']) > 20*1024) {
+                    //don't cache contents larger than 20k in apc, use separate file cache
+                    self::getOutputCache()->save($cacheData['contents'], $cacheId, array(), $specificLifetime);
+                    unset($cacheData['contents']);
+                }
+                Kwf_Cache_Simple::add('media-output-'.$cacheId, $cacheData, $specificLifetime);
             }
         }
 
