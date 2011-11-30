@@ -61,7 +61,7 @@ class Kwf_Util_Component
     public static function dispatchRender()
     {
         if ((!isset($_REQUEST['url']) || !$_REQUEST["url"]) && (!isset($_REQUEST['componentId']) || !$_REQUEST['componentId'])) {
-            throw new Kwf_Exception('url or componentId Parameter required');
+            throw new Kwf_Exception_NotFound();
         }
         if (isset($_REQUEST['componentId'])) {
             $data = Kwf_Component_Data_Root::getInstance()->getComponentById($_REQUEST['componentId']);
