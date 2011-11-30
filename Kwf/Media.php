@@ -109,7 +109,7 @@ class Kwf_Media
     {
         $cacheId = self::createCacheId($class, $id, $type);
 
-        if (!Kwf_Config::getValue('debug.mediaCache') || !($output = self::getOutputCache()->load($cacheId))) {
+        if (!($output = self::getOutputCache()->load($cacheId))) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Kwf_Media_Output_Interface')) {
                 // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
@@ -124,15 +124,11 @@ class Kwf_Media
                     $useCache = false;
                 }
             }
-            if (Kwf_Registry::get('config')->debug->mediaCache) {
-                if ($useCache) {
-                    self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
-                }
-            } else {
-                //browser cache deaktivieren
-                $output['lifetime'] = false;
+            if ($useCache) {
+                self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
             }
         }
+
         return $output;
     }
 
