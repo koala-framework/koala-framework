@@ -26,8 +26,12 @@ class Kwf_Media
             }
         }
         if (is_null($time)) {
-            $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
-            if (!$time) $time = time();
+            $cacheId = 'media-output-mtime-'.self::createCacheId($class, $id, $type);
+            $time = Kwf_Cache_Simple::fetch($cacheId);
+            if (!$time) {
+                $time = time();
+                Kwf_Cache_Simple::add($cacheId, $time);
+            }
         }
         return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
     }
@@ -70,14 +74,6 @@ class Kwf_Media
         return null;
     }
 
-    public static function getOutputCache()
-    {
-        if (!isset(self::$_ouputCache)) {
-            self::$_ouputCache = new Kwf_Media_Cache();
-        }
-        return self::$_ouputCache;
-    }
-
     public static function getOutput($class, $id, $type)
     {
         $cacheId = 'media-isvalid-'.self::createCacheId($class, $id, $type);
@@ -105,16 +101,26 @@ class Kwf_Media
         return $output;
     }
 
+    public static function clearCache($class, $id, $type)
+    {
+        $cacheId = self::createCacheId($class, $id, $type);
+        Kwf_Cache_Simple::delete('media-output-'.$cacheId);
+        Kwf_Cache_Simple::delete('media-output-mtime-'.$cacheId);
+        if (file_exists('cache/media/'.$cacheId)) {
+            unlink('cache/media/'.$cacheId);
+        }
+    }
+
     private static function _getOutputWithoutCheckingIsValid($class, $id, $type)
     {
         $cacheId = self::createCacheId($class, $id, $type);
 
         $output = Kwf_Cache_Simple::fetch('media-output-'.$cacheId);
 
-        if (!isset($output['file']) && !isset($output['contents'])) {
+        if ($output && !isset($output['file']) && !isset($output['contents'])) {
             //scaled image is not cached in apc as it might be larger - load from disk
-            $output['contents'] = self::getOutputCache()->load($cacheId);
-            if (!$output['contents']) $output = false;
+            $output['file'] = 'cache/media/'.$cacheId;
+            if (!file_exists($output['file'])) $output = false;
         }
 
         if (!$output) {
@@ -135,7 +141,7 @@ class Kwf_Media
                 $cacheData = $output;
                 if (isset($cacheData['contents']) && strlen($cacheData['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
-                    self::getOutputCache()->save($cacheData['contents'], $cacheId, array(), $specificLifetime);
+                    file_put_contents('cache/media/'.$cacheId, $cacheData['contents']);
                     unset($cacheData['contents']);
                 }
                 Kwf_Cache_Simple::add('media-output-'.$cacheId, $cacheData, $specificLifetime);
