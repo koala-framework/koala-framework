@@ -80,16 +80,8 @@ class Kwf_Media
 
     public static function getOutput($class, $id, $type)
     {
-        $cacheId = self::createCacheId($class, $id, $type);
-
-        $isValidCache = Kwf_Cache::factory('Core', 'File',
-            array('lifetime'=>60*60, 'automatic_serialization'=>true),
-            array('file_name_prefix' => 'isValid',
-                'cache_dir' => 'cache/media',
-                'cache_file_umask' => 0666,
-                'hashed_directory_umask' => 0777
-            ));
-        if (!$isValidCache->load($cacheId)) {
+        $cacheId = 'media-isvalid-'.self::createCacheId($class, $id, $type);
+        if (!Kwf_Cache_Simple::fetch($cacheId)) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($classWithoutDot)) throw new Kwf_Exception_NotFound();
             $isValid = Kwf_Media_Output_IsValidInterface::VALID;
@@ -106,8 +98,7 @@ class Kwf_Media
                 }
             }
             if ($isValid != Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
-                $data = array('valid'=>true);
-                $isValidCache->save($data, $cacheId);
+                Kwf_Cache_Simple::add($cacheId, true, 60*60);
             }
         }
         $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
