@@ -29,6 +29,7 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
         } else {
             $queryString = '';
         }
+        $userQuery = false;
         if ($queryString) {
             try {
                 $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
