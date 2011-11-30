@@ -10,6 +10,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
             ->getComponentById((string)$postData['componentId'], array('ignoreVisible' => true));
         if (!$component) throw new Kwf_Exception_Client('component not found');
         $component = $component->getComponent();
+        $postData['doNotRelocate'] = true;
         $component->processInput($postData);
 
         $errors = $component->getErrors();
@@ -34,10 +35,14 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
         }
         $this->view->successContent = null;
         if (!$this->view->errorMessages && !$this->view->errorFields) {
-            $success = $component->getData()->getChildComponent('-success');
+            $success = $component->getData()->getComponent()->getSuccessComponent();
             if ($success) {
-                $renderer = new Kwf_Component_Renderer();
-                $this->view->successContent = $renderer->renderComponent($success);
+                if ($success->isPage) {
+                    $this->view->successUrl = $success->url;
+                } else {
+                    $renderer = new Kwf_Component_Renderer();
+                    $this->view->successContent = $renderer->renderComponent($success);
+                }
             }
         }
         $this->view->errorFields = (object)$this->view->errorFields;

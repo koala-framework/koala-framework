@@ -47,9 +47,10 @@ Kwc.Form.Component = function(form)
         }, this);
     }
 
-
-    form.child('form button.submit').on('click', this.onSubmit, this);
-    
+    var button = form.child('form button.submit');
+    if (button) {
+        button.on('click', this.onSubmit, this);
+    }
 };
 Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
     findField: function(fieldName) {
@@ -82,9 +83,6 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 button.down('.submit').dom.click();
             },
             success: function(response, options, r) {
-
-                button.down('.saving').hide();
-                button.down('.submit').show();
 
                 var hasErrors = false;
 
@@ -119,6 +117,13 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 if (r.successContent) {
                     this.el.parent().createChild(r.successContent);
                     this.el.remove();
+                } else if (r.successUrl) {
+                    document.location.href = r.successUrl;
+                }
+                
+                if (!r.successUrl) {
+                    button.down('.saving').hide();
+                    button.down('.submit').show();
                 }
 
                 if (!hasErrors) {
