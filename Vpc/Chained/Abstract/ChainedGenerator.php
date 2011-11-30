@@ -28,9 +28,14 @@ class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_Pseu
         $data['language'] = $row->filename;
         $data['visible'] = isset($row->visible) ? $row->visible : true;
 
+
         //vielleicht flexibler machen?
-        $data['chained'] = Vps_Component_Data_Root::getInstance()
-                    ->getComponentByClass(Vpc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
+        //$data['chained'] = Vps_Component_Data_Root::getInstance()
+        //            ->getComponentByClass(Vpc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
+
+        $mastetCc = Vpc_Abstract::getSetting($data['componentClass'], 'masterComponentClass');
+        $data['chained'] = $parentData->getChildComponent(array('componentClass'=>$mastetCc));
+
         return $data;
     }
 
