@@ -18,20 +18,30 @@ class Kwc_Columns_Events extends Kwc_Abstract_List_Events
     public function onRowInsertOrDelete(Kwf_Component_Event_Row_Abstract $event)
     {
         parent::onRowInsertOrDelete($event);
-        if ($event->row->visible) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
-                $this->_class, $event->row->component_id
-            ));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)
+        );
+        if ($c && $c->componentClass == $this->_class) {
+            if ($event->row->visible) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
+                    $this->_class, $event->row->component_id
+                ));
+            }
         }
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
         parent::onRowUpdate($event);
-        if ($event->isDirty('width') || $event->isDirty('visible')) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
-                $this->_class, $event->row->component_id
-            ));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)
+        );
+        if ($c && $c->componentClass == $this->_class) {
+            if ($event->isDirty('width') || $event->isDirty('visible')) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
+                    $this->_class, $event->row->component_id
+                ));
+            }
         }
     }
 

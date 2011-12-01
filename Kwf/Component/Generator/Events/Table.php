@@ -33,6 +33,14 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
+        $affected = false;
+        foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+            $c = Kwf_Component_Data_Root::getInstance()
+                ->getComponentByDbId($dbId, array('ignoreVisible' => true, 'limit' => 1));
+            if ($c && $c->generator->getClass() == $this->_class) $affected = true;
+        }
+        if (!$affected) return;
+
         $dc = array_flip($event->row->getDirtyColumns());
         if (isset($dc['visible'])) {
             if ($event->row->visible) {

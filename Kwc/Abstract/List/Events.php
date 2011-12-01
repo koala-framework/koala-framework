@@ -30,25 +30,35 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
 
     public function onRowInsertOrDelete(Kwf_Component_Event_Row_Abstract $event)
     {
-        if ($event->row->visible) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $event->row->component_id
-            ));
-            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $event->row->component_id
-            ));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)
+        );
+        if ($c && $c->componentClass == $this->_class) {
+            if ($event->row->visible) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $event->row->component_id
+                ));
+                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                    $this->_class, $event->row->component_id
+                ));
+            }
         }
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $event->row->component_id
-        ));
-        if ($event->isDirty('visible')) {
-            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)
+        );
+        if ($c && $c->componentClass == $this->_class) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                 $this->_class, $event->row->component_id
             ));
+            if ($event->isDirty('visible')) {
+                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                    $this->_class, $event->row->component_id
+                ));
+            }
         }
     }
 
