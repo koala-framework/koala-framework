@@ -21,22 +21,25 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         //default value
         $this->openKwc('/form');
         $this->assertElementValueEquals('css=#form_root_form-paragraphs-4', 'Def');
-        $this->clickAndWait('css=button');
+        $this->click('css=button');
+        $this->waitForConnections();
         $this->assertElementValueEquals('css=#form_root_form-paragraphs-4', 'Def');
 
         //required
         $this->openKwc('/form');
         $this->assertElementPresent('css=#form_root_form-paragraphs-2');
         $this->assertElementNotPresent('css=.kwfFieldError #form_root_form-paragraphs-2');
-        $this->clickAndWait('css=button');
-        $this->assertTextPresent('Required: Please fill out');
+        $this->click('css=button');
+        $this->waitForConnections();
+        $this->assertTextPresent('Please fill out');
         $this->assertElementPresent('css=.kwfFieldError #form_root_form-paragraphs-2');
 
         //vtype email
         $this->openKwc('/form');
         $this->type('css=#form_root_form-paragraphs-3', 'foo');
-        $this->clickAndWait('css=button');
-        $this->assertTextPresent('EMail: \'foo\' is not a valid');
+        $this->click('css=button');
+        $this->waitForConnections();
+        $this->assertTextPresent('\'foo\' is not a valid');
         $this->assertElementPresent('css=.kwfFieldError #form_root_form-paragraphs-3');
     }
 
@@ -52,8 +55,9 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         //required
         $this->openKwc('/form2');
-        $this->clickAndWait('css=button');
-        $this->assertTextPresent('Required: Please choose a file');
+        $this->click('css=button');
+        $this->waitForConnections();
+        $this->assertTextPresent('Please choose a file');
         $this->assertElementPresent('css=.kwfFieldError #form_root_form2-paragraphs-8');
     }
 
@@ -68,11 +72,13 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         //required
         $this->openKwc('/form3');
-        $this->clickAndWait('css=button');
-        $this->assertTextPresent('Required: Please choose an option');
+        $this->click('css=button');
+        $this->waitForConnections();
+        $this->assertTextPresent('Please choose an option');
         $this->assertElementPresent('css=.kwfFieldError');
         $this->click('css=#form_root_form3-paragraphs-10_root_form3-paragraphs-10_1');
-        $this->clickAndWait('css=button');
+        $this->click('css=button');
+        $this->waitForConnections();
         $this->assertTextPresent('successfully');
     }
 }
