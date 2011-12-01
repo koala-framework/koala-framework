@@ -28,6 +28,9 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['orderData'] = 'Kwc_Shop_Cart_OrderData';
+
+        $ret['vatRate'] = 0.2;
+        $ret['vatRateShipping'] = 0.2;
         return $ret;
     }
 

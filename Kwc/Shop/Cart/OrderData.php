@@ -87,24 +87,26 @@ class Kwc_Shop_Cart_OrderData
             'text' => trlKwf('value of goods').':',
             'amount' => $subTotal
         );
+        $vat = 1+Kwc_Abstract::getSetting($this->_class, 'vatRate');
         $ret[] = array(
             'text' => trlKwf('net amount').':',
-            'amount' => round($subTotal/1.2, 2)
+            'amount' => round($subTotal/$vat, 2)
         );
         $ret[] = array(
-            'text' => trlKwf('+20% VAT').':',
-            'amount' => round($subTotal - $subTotal/1.2, 2)
+            'text' => trlKwf('+'.(($vat-1 )*100).'% VAT').':',
+            'amount' => round($subTotal - $subTotal/$vat, 2)
         );
         $shipping = $this->_getShipping($order);
+        $vat = 1+Kwc_Abstract::getSetting($this->_class, 'vatRateShipping');
         $ret[] = array(
             'class' => 'shippingHandling',
             'text' => trlKwf('Shipping and Handling').':',
-            'amount' => round($shipping/1.2, 2)
+            'amount' => round($shipping/$vat, 2)
         );
         if ($shipping) {
             $ret[] = array(
-                'text' => trlKwf('+20% VAT').':',
-                'amount' => round($shipping - $shipping/1.2, 2)
+                'text' => trlKwf('+'.(($vat-1 )*100).'% VAT').':',
+                'amount' => round($shipping - $shipping/$vat, 2)
             );
         }
         $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
