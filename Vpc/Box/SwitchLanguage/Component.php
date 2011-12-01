@@ -13,11 +13,11 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
     protected function _getLanguages()
     {
         $languages = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_LanguageRoot_Language_Component');
+            ->getComponentsByClass('Vpc_Root_LanguageRoot_Language_Component', array('subroot'=>$this->getData()));
         $languages = array_merge($languages, Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_TrlRoot_Master_Component'));
+            ->getComponentsByClass('Vpc_Root_TrlRoot_Master_Component', array('subroot'=>$this->getData())));
         $languages = array_merge($languages, Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component'));
+            ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component', array('subroot'=>$this->getData())));
         return $languages;
     }
 
