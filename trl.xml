@@ -6485,5 +6485,15 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Ignore</en>
 <id>1739</id>
 </text>
+<text>
+<en>'%value%' must be less or equal than '%max%'</en>
+<de>'%value%' muss kleiner oder gleich '%max%' sein</de>
+<id>1740</id>
+</text>
+<text>
+<en>'%value%' must be greater or equal than '%min%'</en>
+<de>'%value%' muss gr&#xF6;&#xDF;er oder gleich '%min%' sein</de>
+<id>1741</id>
+</text>
 </trl>
 
