@@ -41,7 +41,9 @@ class Vpc_Directories_Category_Directory_CategoriesController
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        $ret->whereEquals('component_id', $this->_getCategoryDirectory()->dbId);
+        if ($this->_model->hasColumn('component_id')) {
+            $ret->whereEquals('component_id', $this->_getCategoryDirectory()->dbId);
+        }
         return $ret;
     }
 
@@ -56,6 +58,8 @@ class Vpc_Directories_Category_Directory_CategoriesController
     protected function _beforeInsert(Vps_Model_Row_Interface $row, $submitRow)
     {
         parent::_beforeInsert($row, $submitRow);
-        $row->component_id = $this->_getCategoryDirectory()->dbId;
+        if ($this->_model->hasColumn('component_id')) {
+            $row->component_id = $this->_getCategoryDirectory()->dbId;
+        }
     }
 }
