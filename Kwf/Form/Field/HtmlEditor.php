@@ -1,5 +1,7 @@
 <?php
 /**
+ * Rich Text Editor, only ExtJS implementation available
+ *
  * @package Form
  */
 class Kwf_Form_Field_HtmlEditor extends Kwf_Form_Field_SimpleAbstract

@@ -20,6 +20,9 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         $this->_init();
     }
 
+    /**
+     * Override to add custom initialisation code
+     */
     protected function _init()
     {
     }

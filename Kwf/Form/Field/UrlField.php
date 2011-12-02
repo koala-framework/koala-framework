@@ -1,5 +1,10 @@
 <?php
 /**
+ * text field for url input
+ *
+ * - Comes with an url validator
+ * - Supports punycode domains
+ *
  * @package Form
  */
 class Kwf_Form_Field_UrlField extends Kwf_Form_Field_TextField
