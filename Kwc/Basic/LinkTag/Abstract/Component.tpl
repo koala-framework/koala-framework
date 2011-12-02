@@ -1,6 +1,6 @@
 <?php
 if ($this->data->url) {
-    echo '<a href="' . $this->data->url . '"';
-    if($this->data->rel) { echo ' rel="' . $this->data->rel . '"'; }
+    echo '<a href="' . htmlspecialchars($this->data->url) . '"';
+    if($this->data->rel) { echo ' rel="' . htmlspecialchars($this->data->rel) . '"'; }
     echo '>';
 }
