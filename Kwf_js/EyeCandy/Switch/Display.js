@@ -110,6 +110,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
             { easing: 'easeOut', duration: .5, afterStyle: "display:block;height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
+                    Kwf.callOnContentReady(this.el.dom, {newRender: false});
                     if (Ext.isIE6) {
                         this.switchContent.setWidth(this.switchContent.getWidth());
                     }

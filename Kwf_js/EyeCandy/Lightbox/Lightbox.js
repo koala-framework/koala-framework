@@ -2,7 +2,7 @@ Kwf.onContentReady(function() {
     var els = document.getElementsByTagName('a');
     for (var i=0; i<els.length; i++) {
         if (els[i].kwfLightbox) continue;
-        var m = els[i].rel.match(/(^lightbox| lightbox)({.*?})?/)
+        var m = els[i].rel.match(/(^lightbox| lightbox)({.*?})?/);
         if (m) {
             var options = {};
             if (m[2]) options = Ext.decode(m[2]);
@@ -101,11 +101,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     imagesToLoad++;
                     imgEl.onload = (function() {
                         imagesToLoad--;
-                        if (imagesToLoad <= 0) showContent.call(this)
+                        if (imagesToLoad <= 0) showContent.call(this);
                     }).createDelegate(this);
                 }, this);
                 contentEl.show(); //needs to be visible for Cufon in IE8
-                Kwf.callOnContentReady();
+                Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                 contentEl.hide();
                 if (imagesToLoad == 0) showContent.call(this);
                 this.initialize();
