@@ -7,6 +7,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         if (Kwc_Abstract::hasSetting($this->_data->componentClass, 'lightboxOptions')) {
             $ret =  Kwc_Abstract::getSetting($this->_data->componentClass, 'lightboxOptions');
         }
+        $ret['width'] = $this->_data->getComponent()->getContentWidth();
         return $ret;
     }
 
@@ -35,9 +36,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $class = 'kwfLightbox';
             if (isset($options['style'])) $class .= " kwfLightbox$options[style]";
             $options = htmlspecialchars(json_encode($options));
-            $lightboxContent = "<div class=\"$class\" style=\"$style\">\n".
+            $lightboxContent = "<div class=\"$class\">\n".
+                "<div class=\"kwfLightboxInner\" style=\"$style\">\n".
                 "<input type=\"hidden\" class=\"options\" value=\"$options\" />".
-                "$lightboxContent\n</div>\n";
+                "$lightboxContent\n</div>\n</div>\n";
             echo preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
             echo $lightboxContent;
