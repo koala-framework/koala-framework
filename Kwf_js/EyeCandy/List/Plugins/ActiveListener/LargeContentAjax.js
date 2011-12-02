@@ -46,18 +46,18 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                         imagesToLoad++;
                         imgEl.onload = (function() {
                             imagesToLoad--;
-                            if (imagesToLoad <= 0) showContent.call(this)
+                            if (imagesToLoad <= 0) showContent.call(this);
                         }).createDelegate(this);
                     }, this);
 
                     Kwf.callOnContentReady();
                     contentEl.hide(); //after callOnContentReady else cufon won't work inside contentEl
-                    if (imagesToLoad == 0) showContent.call(this)
+                    if (imagesToLoad == 0) showContent.call(this);
 
                 } else {
                     this.largeContent[item.id].child('.loading').remove();
                     this.largeContent[item.id].show();
-                    Kwf.callOnContentReady();
+                    Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
                     this.largeContent[item.id].hide();
                 }
             },
@@ -93,7 +93,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             nextEl.show();
 
             activeEl.fadeOut(Ext.applyIf({
-                useDisplay: true,
+                useDisplay: true
             }, this.transitionConfig));
         } else if (this.transition == 'slide') {
             activeEl.slideOut(
