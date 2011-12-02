@@ -165,6 +165,7 @@ class Kwc_Mail_Component extends Kwc_Abstract
     public function getText(Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $renderer = new Kwf_Component_Renderer_Mail();
+        $renderer->setEnableCache(false); //TODO remove once text mails have their own cache entries
         $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_TXT);
         $renderer->setRecipient($recipient);
         $ret = $renderer->renderComponent($this->getData());
