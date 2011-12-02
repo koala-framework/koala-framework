@@ -50,7 +50,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                         }).createDelegate(this);
                     }, this);
 
-                    Kwf.callOnContentReady();
+                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                     contentEl.hide(); //after callOnContentReady else cufon won't work inside contentEl
                     if (imagesToLoad == 0) showContent.call(this);
 
