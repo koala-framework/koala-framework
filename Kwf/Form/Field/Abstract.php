@@ -49,6 +49,9 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         }
     }
 
+    /**
+     * Sets the field name, should be the same as the model column
+     */
     public function setName($name)
     {
         if ($name && !preg_match('#^[a-z0-9_\-\[\]]+$#i', $name)) {
@@ -84,6 +87,11 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         }
     }
 
+    /**
+     * Set any property supported by ExtJS for this field
+     *
+     * Alternatively use setFooBar() to set property fooBar
+     */
     public function setProperty($name, $value)
     {
         if (is_null($value)) {
@@ -94,6 +102,11 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         return $this;
     }
 
+    /**
+     * Get any property supported by ExtJS for this field
+     *
+     * Alternatively use getFooBar() to get property fooBar
+     */
     public function getProperty($name)
     {
         if (isset($this->_properties[$name])) {
@@ -285,8 +298,7 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
     }
 
     /**
-     * Fügt die Standard-Validatoren für dieses Feld hinzu.
-     * wird aufgerufen in prepareSave
+     * Add validators to the field here, called in prepareSave
     **/
     protected function _addValidators()
     {
@@ -306,6 +318,7 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         $data->setFieldname($this->getName());
         return $this;
     }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = array();
@@ -359,14 +372,6 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         $ret .= '</pre>';
         $ret .= $children;
         return $ret;
-    }
-
-    /**
-     * Sets the field name, should be the same as the model column
-     */
-    public function setName($value)
-    {
-        return $this->setProperty('name', $value);
     }
 
     /**
