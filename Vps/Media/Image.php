@@ -30,7 +30,11 @@ class Vps_Media_Image
             isset($sourceSize['mime']) &&
             ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
         ) {
-            $exif = exif_read_data($source);
+            try {
+                $exif = exif_read_data($source);
+            } catch (ErrorException $e) {
+            }
+
             if (isset($exif['Orientation'])) {
                 switch ($exif['Orientation']) {
                     case 6:
