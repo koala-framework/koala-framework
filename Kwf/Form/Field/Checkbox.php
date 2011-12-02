@@ -68,10 +68,4 @@ class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
         }
         return $postData;
     }
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Checkbox')
-        ));
-    }
 }

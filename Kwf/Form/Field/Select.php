@@ -60,14 +60,4 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
             $ret['html'] .= '<input type="submit" value="»" />';
         return $ret;
     }
-
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Select Field'),
-            'default' => array(
-                'width' => 100
-            )
-        ));
-    }
 }

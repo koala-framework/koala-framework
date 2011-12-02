@@ -74,13 +74,4 @@ class Kwf_Form_Field_Radio extends Kwf_Form_Field_ComboBox
         $ret['html'] .= '</div>';
         return $ret;
     }
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Radio Buttons'),
-            'default' => array(
-                'width' => 100
-            )
-        ));
-    }
 }

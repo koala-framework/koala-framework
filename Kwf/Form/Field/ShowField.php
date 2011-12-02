@@ -28,11 +28,4 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
         }
         return $ret;
     }
-
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Show field')
-        ));
-    }
 }

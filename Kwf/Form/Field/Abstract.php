@@ -332,13 +332,6 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         $this->_mask = $name;
     }
 
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentIcon' => new Kwf_Asset('textfield')
-        ));
-    }
-
     public function toDebug($indent=0)
     {
         $ind = str_repeat(' ', $indent*4);

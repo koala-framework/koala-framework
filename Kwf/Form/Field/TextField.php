@@ -73,17 +73,6 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         return $ret;
     }
 
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Text Field'),
-            'default' => array(
-                'width' => 150,
-                'max_length' => 100
-            )
-        ));
-    }
-
     /**
      * Set the validator used for this textfield. Validation will be done
      * Server Side and for AutoForms in JavaScript

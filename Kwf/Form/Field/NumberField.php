@@ -61,11 +61,4 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         $ret = number_format($ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         return $ret;
     }
-
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Number Field')
-        ));
-    }
 }
