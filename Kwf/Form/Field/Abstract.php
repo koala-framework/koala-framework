@@ -1,7 +1,7 @@
 <?php
 /**
  * Base class for all form fields
- * @ingroup form
+ * @package Form
  */
 abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
     implements Kwf_Collection_Item_Interface

@@ -1,9 +1,9 @@
 <?php
 /**
- * @ingroup form
- *
  * Für zwei (oder mehr) zusammengeschaltete ComboBoxen (Auswahl in der ersten
  * lädt Daten in der zweiten nach, gespeichert wird nur die zweite wenn nicht anders angegeben)
+ *
+ * @package Form
  **/
 class Kwf_Form_Field_ComboBoxFilter extends Kwf_Form_Field_Select
 {

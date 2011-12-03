@@ -1,7 +1,7 @@
 <?php
 /**
  * Base class for form fields that represent a textual value
- * @ingroup form
+ * @package Form
  */
 class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
 {

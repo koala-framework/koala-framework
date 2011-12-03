@@ -1,6 +1,6 @@
 <?php
 /**
- * @ingroup form
+ * @package Form
  */
 class Kwf_Form_Field_LoadData extends Kwf_Form_Field_SimpleAbstract
 {

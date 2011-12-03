@@ -1,8 +1,8 @@
 <?php
 /**
- * @ingroup form
- *
  * Auswahl wo man nicht reinschreiben kann, so wie eine HTML-Select-Box
+ *
+ * @package Form
  **/
 class Kwf_Form_Field_Radio extends Kwf_Form_Field_ComboBox
 {

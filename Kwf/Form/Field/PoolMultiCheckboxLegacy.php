@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Form
+ * @internal
+ */
 class Kwf_Form_Field_PoolMultiCheckboxLegacy extends Kwf_Form_Field_MultiCheckboxLegacy
 {
     public function __construct($tableName = null, $title = null)

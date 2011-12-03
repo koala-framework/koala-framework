@@ -1,8 +1,8 @@
 <?php
 /**
- * @ingroup form
- *
  * TODO: validators
+ *
+ * @package Form
  */
 class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * @ingroup form
+ * @package Form
  */
 class Kwf_Form_Field_AutoGrid extends Kwf_Form_Field_Abstract
 {

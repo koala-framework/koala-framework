@@ -1,7 +1,7 @@
 <?php
 /**
  * A standard textfield form field
- * @ingroup form
+ * @package Form
  */
 class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
 {
