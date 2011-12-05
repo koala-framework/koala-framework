@@ -73,15 +73,11 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
         $o = Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'nothing');
         unset($o['mtime']);
         $this->assertEquals(array(), $o);
-        $this->assertEquals(1, Kwf_Media_TestMediaOutputClass::$called);
+        $this->assertEquals(2, Kwf_Media_TestMediaOutputClass::$called); //this results in an 404 and won't be cached
     }
 
     public function testOutputCacheWithMtimeFiles()
     {
-        $checkCmpMod = Kwf_Registry::get('config')->debug->componentCache->checkComponentModification;
-        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = true;
-        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
-
         Kwf_Media_TestMediaOutputClass::$called = 0;
 
         $f = tempnam('/tmp', 'outputTest');
@@ -112,8 +108,5 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
 
         $o = Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'mtimeFiles');
         $this->assertEquals(2, Kwf_Media_TestMediaOutputClass::$called);
-
-        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
-        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 }

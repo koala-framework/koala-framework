@@ -123,6 +123,16 @@ class Kwf_Media
             if (!file_exists($output['file'])) $output = false;
         }
 
+        if ($output && isset($output['mtimeFiles'])) {
+            foreach ($output['mtimeFiles'] as $f) {
+                if (filemtime($f) > $output['mtime']) {
+                    Kwf_Cache_Simple::delete('media-output-'.$cacheId);
+                    $output = false;
+                    break;
+                }
+            }
+        }
+
         if (!$output) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Kwf_Media_Output_Interface')) {
@@ -135,6 +145,18 @@ class Kwf_Media
                 $specificLifetime = $output['lifetime'];
                 if (!$output['lifetime']) {
                     $useCache = false;
+                }
+            }
+            if (!isset($output['mtime'])) {
+                if (isset($output['file'])) {
+                    $output['mtime'] = filemtime($output['file']);
+                } else if (isset($output['mtimeFiles'])) {
+                    $output['mtime'] = 0;
+                    foreach ($output['mtimeFiles'] as $f) {
+                        $output['mtime'] = max($output['mtime'], filemtime($f));
+                    }
+                } else {
+                    $output['mtime'] = time();
                 }
             }
             if ($useCache) {
