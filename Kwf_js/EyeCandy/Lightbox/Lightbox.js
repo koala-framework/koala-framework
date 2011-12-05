@@ -221,16 +221,26 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this._center();
     },
     updateContent: function(contentEl, responseText) {
+        var isVisible = this.lightbox.lightboxEl.isVisible();
+
+        this.lightbox.lightboxEl.show(); //to mesaure
+
         var originalSize = this.lightbox.innerLightboxEl.getSize();
 
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
         var newSize = this.lightbox.innerLightboxEl.getSize();
 
-        this._center(true);
+        if (isVisible) {
+            this._center(true);
+            this.lightbox.innerLightboxEl.setSize(originalSize);
+            this.lightbox.innerLightboxEl.setSize(newSize, null, true);
+        } else {
+            this._center(false);
+            this.lightbox.innerLightboxEl.setSize(newSize);
+            this.lightbox.lightboxEl.hide();
+        }
 
-        this.lightbox.innerLightboxEl.setSize(originalSize);
-        this.lightbox.innerLightboxEl.setSize(newSize, null, true);
     },
     onShow: function() {
         this.mask();
