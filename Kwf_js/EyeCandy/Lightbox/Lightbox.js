@@ -185,6 +185,7 @@ Kwf.EyeCandy.Lightbox.Styles = {};
 Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
     this.lightbox = lightbox;
 };
+Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     afterCreateLightboxEl: Ext.emptyFn,
     afterContentShown: Ext.emptyFn,
@@ -196,6 +197,9 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     afterClose: Ext.emptyFn,
 
     mask: function() {
+        //calling mask multiple times in valid, unmask must be called exactly often
+        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks++;
+        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 1) return;
         Ext.getBody().addClass('kwfLightboxTheaterMode');
         var maskEl = Ext.getBody().mask();
         Ext.getBody().removeClass('x-masked');
@@ -208,6 +212,8 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         }, this);
     },
     unmask: function() {
+        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
+        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
         Ext.getBody().unmask();
         Ext.getBody().removeClass('kwfLightboxTheaterMode');
     }
