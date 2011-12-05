@@ -6472,6 +6472,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Copy page</en>
 <id>1736</id>
+<de>Seite kopieren</de>
 </text>
 <text>
 <en>Paste page</en>
@@ -6484,6 +6485,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Ignore</en>
 <id>1739</id>
+<de>Ignorieren</de>
 </text>
 <text>
 <en>'%value%' must be less or equal than '%max%'</en>

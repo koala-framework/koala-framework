@@ -272,9 +272,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
     {
-        Kwf_Media::getOutputCache()->remove(Kwf_Media::createCacheId(
-            $event->class, $event->componentId, $event->type
-        ));
+        Kwf_Media::clearCache($event->class, $event->componentId, $event->type);
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
             $log->log("media cache clear class=$event->class id=$event->componentId type=$event->type", Zend_Log::INFO);

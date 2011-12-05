@@ -131,7 +131,6 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
 
     public function testClearOutputCache()
     {
-        Kwf_Registry::get('config')->debug->mediaCache = true;
         Kwf_Media::getOutputCache()->clean();
 
         Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
