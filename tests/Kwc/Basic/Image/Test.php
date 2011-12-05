@@ -131,7 +131,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
 
     public function testClearOutputCache()
     {
-        Kwf_Media::getOutputCache()->clean();
+        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
 
         Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
 
@@ -141,7 +141,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
         $this->assertEquals(1, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        Kwf_Media::getOutputCache()->clean();
+        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
         Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
         $this->assertEquals(2, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 

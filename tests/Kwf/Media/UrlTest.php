@@ -41,10 +41,10 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
 
     public function testOutputCache()
     {
-        Kwf_Media::getOutputCache()->clean();
 
         Kwf_Media_TestMediaOutputClass::$called = 0;
         $id = time()+rand(0, 10000);
+        Kwf_Media::clearCache('Kwf_Media_TestMediaOutputClass', $id, 'simple');
         $o = Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'simple');
 
         unset($o['mtime']);
@@ -56,7 +56,7 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
         $this->assertEquals(array('mimeType' => 'text/plain', 'contents'=>'foobar'.$id), $o);
         $this->assertEquals(1, Kwf_Media_TestMediaOutputClass::$called);
 
-        Kwf_Media::getOutputCache()->clean();
+        Kwf_Media::clearCache('Kwf_Media_TestMediaOutputClass', $id, 'simple');
         Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'simple');
         $this->assertEquals(2, Kwf_Media_TestMediaOutputClass::$called);
     }
