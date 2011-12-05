@@ -144,7 +144,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     close: function() {
         this.style.onClose();
-        this.lightboxEl.fadeOut();
+        this.lightboxEl.fadeOut({
+            callback: function() {
+                this.style.afterClose();
+            },
+            scope: this
+        });
         this.lightboxEl.removeClass('kwfLightboxOpen');
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
@@ -188,6 +193,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     },
     onShow: Ext.emptyFn,
     onClose: Ext.emptyFn,
+    afterClose: Ext.emptyFn,
 
     mask: function() {
         Ext.getBody().addClass('kwfLightboxTheaterMode');
@@ -229,7 +235,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     onShow: function() {
         this.mask();
     },
-    onClose: function() {
+    afterClose: function() {
         this.unmask();
     },
     _getCenterXy: function() {
