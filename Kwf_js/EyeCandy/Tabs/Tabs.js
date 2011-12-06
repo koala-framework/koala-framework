@@ -123,6 +123,7 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
 
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
+        Kwf.callOnContentReady(this.contentEls[idx], {newRender: false});
 
         this._activeTabIdx = idx;
     },

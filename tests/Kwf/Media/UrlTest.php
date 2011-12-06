@@ -41,10 +41,10 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
 
     public function testOutputCache()
     {
-        Kwf_Media::getOutputCache()->clean();
 
         Kwf_Media_TestMediaOutputClass::$called = 0;
         $id = time()+rand(0, 10000);
+        Kwf_Media::clearCache('Kwf_Media_TestMediaOutputClass', $id, 'simple');
         $o = Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'simple');
 
         unset($o['mtime']);
@@ -56,7 +56,7 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
         $this->assertEquals(array('mimeType' => 'text/plain', 'contents'=>'foobar'.$id), $o);
         $this->assertEquals(1, Kwf_Media_TestMediaOutputClass::$called);
 
-        Kwf_Media::getOutputCache()->clean();
+        Kwf_Media::clearCache('Kwf_Media_TestMediaOutputClass', $id, 'simple');
         Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'simple');
         $this->assertEquals(2, Kwf_Media_TestMediaOutputClass::$called);
     }
@@ -73,15 +73,11 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
         $o = Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'nothing');
         unset($o['mtime']);
         $this->assertEquals(array(), $o);
-        $this->assertEquals(1, Kwf_Media_TestMediaOutputClass::$called);
+        $this->assertEquals(2, Kwf_Media_TestMediaOutputClass::$called); //this results in an 404 and won't be cached
     }
 
     public function testOutputCacheWithMtimeFiles()
     {
-        $checkCmpMod = Kwf_Registry::get('config')->debug->componentCache->checkComponentModification;
-        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = true;
-        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
-
         Kwf_Media_TestMediaOutputClass::$called = 0;
 
         $f = tempnam('/tmp', 'outputTest');
@@ -112,8 +108,5 @@ class Kwf_Media_UrlTest extends Kwc_TestAbstract
 
         $o = Kwf_Media::getOutput('Kwf_Media_TestMediaOutputClass', $id, 'mtimeFiles');
         $this->assertEquals(2, Kwf_Media_TestMediaOutputClass::$called);
-
-        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
-        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 }

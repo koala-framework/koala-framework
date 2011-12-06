@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->cssClass?>" id="<?=$this->data->componentId?>">
     <? if ($this->hasContent) { ?>
     <ul class="links">
         <? foreach ($this->links as $link) { ?>

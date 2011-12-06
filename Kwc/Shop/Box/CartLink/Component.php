@@ -5,7 +5,9 @@ class Kwc_Shop_Box_CartLink_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'webStandard kwcShopBoxCartLink';
+        $ret['assets']['dep'][] = 'ExtConnection';
+        $ret['assets']['files'][] = 'kwf/Kwc/Shop/Box/CartLink/Component.js';
         $ret['placeholder']['toCart'] = trlKwf('To cart');
         return $ret;
     }

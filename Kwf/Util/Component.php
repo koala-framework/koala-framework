@@ -60,23 +60,22 @@ class Kwf_Util_Component
 
     public static function dispatchRender()
     {
-        if (!isset($_REQUEST['url']) || !$_REQUEST["url"]) {
-            throw new Kwf_Exception('Url Parameter required');
+        if ((!isset($_REQUEST['url']) || !$_REQUEST["url"]) && (!isset($_REQUEST['componentId']) || !$_REQUEST['componentId'])) {
+            throw new Kwf_Exception_NotFound();
         }
-        $url = $_REQUEST['url'];
-        $componentId = isset($_REQUEST['componentId']) ? $_REQUEST['componentId'] : null;
-        $parsedUrl = parse_url($url);
-        $_GET = array();
-        if (isset($parsedUrl['query'])) {
-            foreach (explode('&' , $parsedUrl['query']) as $get) {
-                if (!$get) continue;
-                $pos = strpos($get, '=');
-                $_GET[substr($get, 0, $pos)] = substr($get, $pos+1); //ouch
-            }
-        }
-        if ($componentId) {
-            $data = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+        if (isset($_REQUEST['componentId'])) {
+            $data = Kwf_Component_Data_Root::getInstance()->getComponentById($_REQUEST['componentId']);
         } else {
+            $url = $_REQUEST['url'];
+            $parsedUrl = parse_url($url);
+            $_GET = array();
+            if (isset($parsedUrl['query'])) {
+                foreach (explode('&' , $parsedUrl['query']) as $get) {
+                    if (!$get) continue;
+                    $pos = strpos($get, '=');
+                    $_GET[substr($get, 0, $pos)] = substr($get, $pos+1); //ouch
+                }
+            }
             $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl($url, null);
         }
         if (!$data) throw new Kwf_Exception_NotFound();

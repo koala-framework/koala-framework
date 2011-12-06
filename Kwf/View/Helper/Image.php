@@ -54,6 +54,7 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         if ($this->_getMailInterface() instanceof Kwf_View_MailInterface) {
             if ($this->_getMailInterface()->getAttachImages()) {
                 $contents = $this->_getImageFileContents($image);
+                if (!isset($contents['contents'])) $contents['contents'] = file_get_contents($contents['file']);
                 $img = new Zend_Mime_Part($contents['contents']);
                 $img->type = $contents['mimeType'];
                 $img->disposition = Zend_Mime::DISPOSITION_INLINE;

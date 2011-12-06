@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_Maintenance
 {
-    public static function writeMaintenanceBootstrap()
+    public static function writeMaintenanceBootstrap($output = true)
     {
         if (Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
             $offlineBootstrap  = "<?php\n";
@@ -24,18 +24,18 @@ class Kwf_Util_Maintenance
             if (!file_exists('bootstrap.php.backup')) {
                 rename('bootstrap.php', 'bootstrap.php.backup');
                 file_put_contents('bootstrap.php', $offlineBootstrap);
-                echo "\nwrote offline bootstrap.php\n\n";
+                if ($output) echo "\nwrote offline bootstrap.php\n\n";
                 Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/bootstrap.php'));
             }
         }
     }
 
-    public function restoreMaintenanceBootstrap()
+    public function restoreMaintenanceBootstrap($output = true)
     {
         if (Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
             if (file_exists('bootstrap.php.backup')) {
                 rename('bootstrap.php.backup', 'bootstrap.php');
-                echo "\nrestored bootstrap.php\n";
+                if ($output) echo "\nrestored bootstrap.php\n";
             }
             Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/bootstrap.php'));
         }

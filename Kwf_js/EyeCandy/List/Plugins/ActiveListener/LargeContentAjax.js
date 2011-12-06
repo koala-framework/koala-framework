@@ -17,6 +17,9 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             html: '<div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div>'
         });
         this.largeContent[item.id].enableDisplayMode('block');
+        if (!options.visible) {
+            this.largeContent[item.id].hide();
+        }
 
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
@@ -26,33 +29,50 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             url: url,
             success: function(response) {
                 var contentEl = this.largeContent[item.id].createChild();
-                contentEl.hide();
                 contentEl.update(response.responseText);
 
-                var showContent = function() {
-                    this.largeContent[item.id].child('.loading').hide();
-                    contentEl.fadeIn();
-                    if (options && options.success) {
-                        options.success.call(options.scope || this);
-                    }
-                };
+                if (this.largeContent[item.id].isVisible()) {
 
-                var imagesToLoad = 0;
-                contentEl.query('img').each(function(imgEl) {
-                    imagesToLoad++;
-                    imgEl.onload = (function() {
-                        imagesToLoad--;
-                        if (imagesToLoad <= 0) showContent.call(this)
-                    }).createDelegate(this);
-                }, this);
+                    var showContent = function() {
+                        this.largeContent[item.id].child('.loading').remove();
+                        contentEl.fadeIn();
+                        if (options && options.success) {
+                            options.success.call(options.scope || this);
+                        }
+                    };
 
-                Kwf.callOnContentReady();
+                    var imagesToLoad = 0;
+                    contentEl.query('img').each(function(imgEl) {
+                        imagesToLoad++;
+                        imgEl.onload = (function() {
+                            imagesToLoad--;
+                            if (imagesToLoad <= 0) showContent.call(this);
+                        }).createDelegate(this);
+                    }, this);
+
+                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
+                    contentEl.hide(); //after callOnContentReady else cufon won't work inside contentEl
+                    if (imagesToLoad == 0) showContent.call(this);
+
+                } else {
+                    this.largeContent[item.id].child('.loading').remove();
+                    this.largeContent[item.id].show();
+                    Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
+                    this.largeContent[item.id].hide();
+                }
             },
             scope: this
         });
+
     },
     _activate: function(item)
     {
+        var nextItem = this.list.getItem(item.listIndex+1);
+        if (nextItem && !this.largeContent[nextItem.id]) {
+            //preload
+            this._loadItem.defer(1000, this, [nextItem, {visible: false}]);
+        }
+
         if (!this.activeItem) {
             //the first one activated must be already shown in largeContainer
             this.largeContent[item.id] = this.largeContainer.child('div');
@@ -61,9 +81,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             return;
         }
 
-        if (!this.largeContent[item.id]) {
-            this._loadItem(item);
-        }
+        this._loadItem(item, {visible: true});
+
         var activeEl = this.largeContent[this.activeItem.id];
         var nextEl = this.largeContent[item.id];
 
@@ -74,7 +93,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             nextEl.show();
 
             activeEl.fadeOut(Ext.applyIf({
-                useDisplay: true,
+                useDisplay: true
             }, this.transitionConfig));
         } else if (this.transition == 'slide') {
             activeEl.slideOut(

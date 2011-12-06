@@ -9,10 +9,7 @@ class Kwf_Mail_Template_View extends Kwf_View_Mail
     {
         parent::__construct();
 
-        // das substr mit Kwc_ muss sein weil auf prosalzburg test server sonst nur eine weiße seite kommt
-        if (is_object($template) || ((substr($template, 0, 4) == 'Kwc_' || substr($template, 0, 4) == 'Kwf_')
-            && class_exists($template) && is_instance_of($template, 'Kwc_Abstract'))
-        ) {
+        if (is_object($template) || in_array($template, Kwc_Abstract::getComponentClasses())) {
             if (is_object($template)) {
                 if ($template instanceof Kwc_Abstract) {
                     $template = $template->getData();

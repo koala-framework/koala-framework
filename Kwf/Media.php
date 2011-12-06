@@ -26,8 +26,12 @@ class Kwf_Media
             }
         }
         if (is_null($time)) {
-            $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
-            if (!$time) $time = time();
+            $cacheId = 'media-output-mtime-'.self::createCacheId($class, $id, $type);
+            $time = Kwf_Cache_Simple::fetch($cacheId);
+            if (!$time) {
+                $time = time();
+                Kwf_Cache_Simple::add($cacheId, $time);
+            }
         }
         return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
     }
@@ -70,26 +74,10 @@ class Kwf_Media
         return null;
     }
 
-    public static function getOutputCache()
-    {
-        if (!isset(self::$_ouputCache)) {
-            self::$_ouputCache = new Kwf_Media_Cache();
-        }
-        return self::$_ouputCache;
-    }
-
     public static function getOutput($class, $id, $type)
     {
-        $cacheId = self::createCacheId($class, $id, $type);
-
-        $isValidCache = Kwf_Cache::factory('Core', 'File',
-            array('lifetime'=>60*60, 'automatic_serialization'=>true),
-            array('file_name_prefix' => 'isValid',
-                'cache_dir' => 'cache/media',
-                'cache_file_umask' => 0666,
-                'hashed_directory_umask' => 0777
-            ));
-        if (!$isValidCache->load($cacheId)) {
+        $cacheId = 'media-isvalid-'.self::createCacheId($class, $id, $type);
+        if (!Kwf_Cache_Simple::fetch($cacheId)) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($classWithoutDot)) throw new Kwf_Exception_NotFound();
             $isValid = Kwf_Media_Output_IsValidInterface::VALID;
@@ -106,22 +94,48 @@ class Kwf_Media
                 }
             }
             if ($isValid != Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
-                $data = array('valid'=>true);
-                $isValidCache->save($data, $cacheId);
+                Kwf_Cache_Simple::add($cacheId, true, 60*60);
             }
         }
         $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
         return $output;
     }
 
+    public static function clearCache($class, $id, $type)
+    {
+        $cacheId = self::createCacheId($class, $id, $type);
+        Kwf_Cache_Simple::delete('media-output-'.$cacheId);
+        Kwf_Cache_Simple::delete('media-output-mtime-'.$cacheId);
+        if (file_exists('cache/media/'.$cacheId)) {
+            unlink('cache/media/'.$cacheId);
+        }
+    }
+
     private static function _getOutputWithoutCheckingIsValid($class, $id, $type)
     {
         $cacheId = self::createCacheId($class, $id, $type);
 
-        if (!Kwf_Config::getValue('debug.mediaCache') || !($output = self::getOutputCache()->load($cacheId))) {
+        $output = Kwf_Cache_Simple::fetch('media-output-'.$cacheId);
+
+        if ($output && !isset($output['file']) && !isset($output['contents'])) {
+            //scaled image is not cached in apc as it might be larger - load from disk
+            $output['file'] = 'cache/media/'.$cacheId;
+            if (!file_exists($output['file'])) $output = false;
+        }
+
+        if ($output && isset($output['mtimeFiles'])) {
+            foreach ($output['mtimeFiles'] as $f) {
+                if (filemtime($f) > $output['mtime']) {
+                    Kwf_Cache_Simple::delete('media-output-'.$cacheId);
+                    $output = false;
+                    break;
+                }
+            }
+        }
+
+        if (!$output) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Kwf_Media_Output_Interface')) {
-                // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
                 throw new Kwf_Exception_NotFound();
             }
             $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);
@@ -133,15 +147,30 @@ class Kwf_Media
                     $useCache = false;
                 }
             }
-            if (Kwf_Registry::get('config')->debug->mediaCache) {
-                if ($useCache) {
-                    self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+            if (!isset($output['mtime'])) {
+                if (isset($output['file'])) {
+                    $output['mtime'] = filemtime($output['file']);
+                } else if (isset($output['mtimeFiles'])) {
+                    $output['mtime'] = 0;
+                    foreach ($output['mtimeFiles'] as $f) {
+                        $output['mtime'] = max($output['mtime'], filemtime($f));
+                    }
+                } else {
+                    $output['mtime'] = time();
                 }
-            } else {
-                //browser cache deaktivieren
-                $output['lifetime'] = false;
+            }
+            if ($useCache) {
+                $cacheData = $output;
+                if (isset($cacheData['contents']) && strlen($cacheData['contents']) > 20*1024) {
+                    //don't cache contents larger than 20k in apc, use separate file cache
+                    //TODO lifetime isn't respected for this file
+                    file_put_contents('cache/media/'.$cacheId, $cacheData['contents']);
+                    unset($cacheData['contents']);
+                }
+                Kwf_Cache_Simple::add('media-output-'.$cacheId, $cacheData, $specificLifetime);
             }
         }
+
         return $output;
     }
 

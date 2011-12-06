@@ -1,12 +1,18 @@
 .kwfLightbox {
+    overflow: auto;
     position: absolute;
+    z-index: 100;
+    top: 0; left: 0;
+    height: 100%; width: 100%;
+}
+.kwfLightbox .kwfLightboxInner {
     min-width: 200px;
     min-height: 200px;
     padding: 10px;
     background: #fff;
-    z-index: 100;
+    margin-bottom: 40px;
 }
-.ext-ie6 .kwfLightbox { width: 800px; }
+.ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
 
 .kwfLightbox .lightboxHeader { position: relative; z-index: 102; }
 .kwfLightbox .lightboxHeader .closeButton {
@@ -74,4 +80,9 @@
     -moz-opacity: 0.8;
     filter: alpha(opacity=80);
     z-index: 50 !important;
+}
+body.kwfLightboxTheaterMode {
+    overflow: hidden;
+    height: 100% !important;
+    position: static !important;
 }

@@ -23,23 +23,32 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
 
         $ret['options'] = (object)$c->getOptions();
 
-
         $enlargeTag = $this->getData()->parent;
         $imageEnlarge = $enlargeTag->parent;
         if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_LinkTag_Component')) {
             $imageEnlarge = $imageEnlarge->parent;
         }
         $parent = $imageEnlarge->parent;
+        
+        $getChildren = array();
+        if (is_instance_of($parent->componentClass, 'Kwc_Abstract_List_Component')) {
+            //it's in an List_Gallery
+        } else if (is_instance_of($parent->parent->componentClass, 'Kwc_Abstract_List_Component')) {
+            //it's in an List_Switch with ImageEnlarge as large component (we have to go up one more level)
+            $getChildren = array('-'.$imageEnlarge->id);
+            $imageEnlarge = $imageEnlarge->parent;
+            $parent = $parent->parent;
+        }
 
         //TODO optimize in generator using something like whereNextSiblingOf / wherePreviousSiblingOf
         $allImages = $parent->getChildComponents(array('componentClass'=>$imageEnlarge->componentClass));
         $previous = null;
         foreach ($allImages as $c) {
             if ($c === $imageEnlarge) {
-                $ret['previous'] = self::_getImagePage($previous);
+                $ret['previous'] = self::_getImagePage($previous, $getChildren);
             }
             if ($previous === $imageEnlarge) {
-                $ret['next'] = self::_getImagePage($c);
+                $ret['next'] = self::_getImagePage($c, $getChildren);
                 break;
             }
             $previous = $c;
@@ -47,10 +56,14 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         return $ret;
     }
 
-    private static function _getImagePage($data)
+    private static function _getImagePage($data, $getChildren)
     {
         if (!$data) return null;
-        $ret = $data->getChildComponent('-linkTag');
+        $ret = $data;
+        foreach ($getChildren as $c) {
+            $ret = $ret->getChildComponent($c);
+        }
+        $ret = $ret->getChildComponent('-linkTag');
         if (is_instance_of($ret->componentClass, 'Kwc_Basic_LinkTag_Component')) {
             $ret = $ret->getChildComponent('-child');
         }

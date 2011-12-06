@@ -30,6 +30,10 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $controller = substr($class, $pos + 1) . 'Controller';
                 $class = substr($class, 0, $pos);
             }
+            if (!in_array($class, Kwc_Abstract::getComponentClasses())) {
+                //unknown component class
+                return false;
+            }
             $className = Kwc_Admin::getComponentClass($class, $controller);
             if (!$className) {
                 return false;

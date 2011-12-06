@@ -148,25 +148,22 @@ if (Kwf.isApp) {
 
 Kwf.contentReadyHandlers = [];
 Kwf.onContentReady = function(fn, scope) {
-    // Handler merken, damit zB in ComponentSwitch das Ganz nochmal ausgeführt
-    // werden kann
     Kwf.contentReadyHandlers.push({
         fn: fn,
         scope: scope
     });
-    //in einer Ext-Anwendung mit Kwf.main den contentReadHandler
-    //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
-    if (!Kwf.isApp) {
-        //normales Frontend
-        Ext.onReady(fn, scope);
-    }
 };
 
-Kwf.callOnContentReady = function() {
+Kwf.callOnContentReady = function(el, options) {
+    if (!options) options = {};
     Ext.each(Kwf.contentReadyHandlers, function(i) {
-        i.fn.call(i.scope | window);
+        i.fn.call(i.scope | window, (el || document.body), options);
     }, this);
 };
+
+if (!Kwf.isApp) {
+    Ext.onReady(Kwf.callOnContentReady);
+}
 
 Kwf.include =  function(url, restart)
 {

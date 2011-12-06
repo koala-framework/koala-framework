@@ -10,6 +10,9 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         $ret['maxPagingLinks'] = 13;
         $ret['bigPagingSteps'] = array(10, 50);
         $ret['nextPrevOnly'] = false;
+
+        // if one of the following is set to false, the link won't be output:
+        // first, previous, next, last
         $ret['placeholder'] = array(
             'first'    => '&laquo;',
             'previous' => '&#x8B;',
@@ -240,10 +243,10 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         $buttonTexts = $this->_getPlaceholder();
 
         $pageLinks = array();
-        if ($currentPage >= 3 && !$this->_getSetting('nextPrevOnly')) {
+        if ($currentPage >= 3 && !$this->_getSetting('nextPrevOnly') && $buttonTexts['first'] !== false) {
             $pageLinks[] = $this->_getLinkData(1, $buttonTexts['first']);
         }
-        if ($currentPage >= 2) {
+        if ($currentPage >= 2 && $buttonTexts['previous'] !== false) {
             $pageLinks[] = $this->_getLinkData($currentPage-1, $buttonTexts['previous']);
         }
 
@@ -264,10 +267,10 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
             }
         }
 
-        if ($currentPage < $pages) {
+        if ($currentPage < $pages && $buttonTexts['next'] !== false) {
             $appendPagelinks[] = $this->_getLinkData($currentPage+1, $buttonTexts['next']);
         }
-        if ($currentPage < $pages - 1 && !$this->_getSetting('nextPrevOnly')) {
+        if ($currentPage < $pages - 1 && !$this->_getSetting('nextPrevOnly') && $buttonTexts['last'] !== false) {
             $appendPagelinks[] = $this->_getLinkData($pages, $buttonTexts['last']);
         }
 

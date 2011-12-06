@@ -8,7 +8,6 @@ class Kwf_Test_TestCase extends PHPUnit_Framework_TestCase
         Kwf_Component_Data_Root::setComponentClass(false);
         Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
         Kwf_Component_ModelObserver::getInstance()->setSkipFnF(false);
-        Kwf_Media::getOutputCache()->clean();
     }
 
     public function tearDown()

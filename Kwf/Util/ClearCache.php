@@ -199,7 +199,7 @@ class Kwf_Util_ClearCache
 
     public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
     {
-        Kwf_Util_Maintenance::writeMaintenanceBootstrap();
+        Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
 
         $refreshTypes = array();
         if ($types == 'all') {
@@ -238,7 +238,7 @@ class Kwf_Util_ClearCache
             $this->_refreshCache($types, $output, $server);
         }
 
-        Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
+        Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
     }
 
     protected function _refreshCache($types, $output, $server)

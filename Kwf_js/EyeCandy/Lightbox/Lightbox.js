@@ -2,7 +2,7 @@ Kwf.onContentReady(function() {
     var els = document.getElementsByTagName('a');
     for (var i=0; i<els.length; i++) {
         if (els[i].kwfLightbox) continue;
-        var m = els[i].rel.match(/(^lightbox| lightbox)({.*?})?/)
+        var m = els[i].rel.match(/(^lightbox| lightbox)({.*?})?/);
         if (m) {
             var options = {};
             if (m[2]) options = Ext.decode(m[2]);
@@ -27,8 +27,9 @@ Kwf.onContentReady(function() {
         var l = new Kwf.EyeCandy.Lightbox.Lightbox(null, options);
         lightboxEl.enableDisplayMode('block');
         l.lightboxEl = lightboxEl;
-        l.style.afterCreateLightboxEl();
+        l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
         l.initialize();
+        l.style.afterCreateLightboxEl();
         l.style.onShow();
         el.kwfLightbox = l;
         Kwf.EyeCandy.Lightbox.currentOpen = l;
@@ -55,20 +56,23 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.lightboxEl) return;
 
         var lightbox = Ext.getBody().createChild({
-            cls: 'kwfLightbox kwfLightbox'+this.options.style,
-            html: '<div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div>'
+            cls: 'kwfLightbox' + (this.options.style ? ' kwfLightbox'+this.options.style : ''),
+            html: '<div class="kwfLightboxInner"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'
         });
         lightbox.dom.kwfLightbox = this; //don't initialize again in onContentReady
         lightbox.enableDisplayMode('block');
+        this.lightboxEl = lightbox;
+        this.innerLightboxEl = lightbox.down('.kwfLightboxInner');
+
+        var el = this.innerLightboxEl;
         if (this.options.width) {
-            lightbox.setWidth(this.options.width + lightbox.getBorderWidth("lr") + lightbox.getPadding("lr"));
+            el.setWidth(this.options.width + el.getBorderWidth("lr") + el.getPadding("lr"));
         }
         if (this.options.height) {
-            lightbox.setHeight(this.options.height + lightbox.getBorderWidth("tb") + lightbox.getPadding("tb"));
+            el.setHeight(this.options.height + el.getBorderWidth("tb") + el.getPadding("tb"));
         }
-        this.lightboxEl = lightbox;
         this.style.afterCreateLightboxEl();
-        lightbox.hide();
+        this.lightboxEl.hide();
     },
     fetchContent: function()
     {
@@ -81,13 +85,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             params: { url: this.linkEl.dom.href },
             url: url,
             success: function(response, options) {
-                var contentEl = this.lightboxEl.createChild();
+                var contentEl = this.innerLightboxEl.createChild();
                 if (this.lightboxEl.isVisible()) contentEl.hide();
 
                 this.style.updateContent(contentEl, response.responseText);
 
                 var showContent = function() {
-                    this.lightboxEl.child('.loading').hide();
+                    this.innerLightboxEl.child('.loading').remove();
                     if (this.lightboxEl.isVisible()) {
                         contentEl.fadeIn();
                         this.preloadLinks();
@@ -101,11 +105,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     imagesToLoad++;
                     imgEl.onload = (function() {
                         imagesToLoad--;
-                        if (imagesToLoad <= 0) showContent.call(this)
+                        if (imagesToLoad <= 0) showContent.call(this);
                     }).createDelegate(this);
                 }, this);
                 contentEl.show(); //needs to be visible for Cufon in IE8
-                Kwf.callOnContentReady();
+                Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                 contentEl.hide();
                 if (imagesToLoad == 0) showContent.call(this);
                 this.initialize();
@@ -140,22 +144,32 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     close: function() {
         this.style.onClose();
-        this.lightboxEl.fadeOut();
+        this.lightboxEl.fadeOut({
+            callback: function() {
+                this.style.afterClose();
+            },
+            scope: this
+        });
         this.lightboxEl.removeClass('kwfLightboxOpen');
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     initialize: function()
     {
-        var closeButton = this.lightboxEl.child('.closeButton');
+        var closeButton = this.innerLightboxEl.child('.closeButton');
         if (closeButton) {
             closeButton.on('click', function(ev) {
                 this.close();
                 ev.stopEvent();
             }, this);
         }
+        this.lightboxEl.on('click', function(ev) {
+            if (ev.getTarget() == this.lightboxEl.dom) {
+                this.close();
+            }
+        }, this);
     },
     preloadLinks: function() {
-        this.lightboxEl.query('a.preload').each(function(el) {
+        this.innerLightboxEl.query('a.preload').each(function(el) {
             el.kwfLightbox.preload();
         }, this);
     },
@@ -171,6 +185,7 @@ Kwf.EyeCandy.Lightbox.Styles = {};
 Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
     this.lightbox = lightbox;
 };
+Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     afterCreateLightboxEl: Ext.emptyFn,
     afterContentShown: Ext.emptyFn,
@@ -179,45 +194,72 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     },
     onShow: Ext.emptyFn,
     onClose: Ext.emptyFn,
+    afterClose: Ext.emptyFn,
 
     mask: function() {
+        //calling mask multiple times in valid, unmask must be called exactly often
+        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks++;
+        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 1) return;
+        Ext.getBody().addClass('kwfLightboxTheaterMode');
         var maskEl = Ext.getBody().mask();
         Ext.getBody().removeClass('x-masked');
         maskEl.addClass('lightboxMask');
 
-        maskEl.setHeight(Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight()));
+        //maskEl.setHeight(Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight()));
 
         maskEl.on('click', function() {
             this.lightbox.close();
         }, this);
     },
     unmask: function() {
+        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
+        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
         Ext.getBody().unmask();
-        Ext.getBody().removeClass('lightboxShowOverflow');
+        Ext.getBody().removeClass('kwfLightboxTheaterMode');
     }
 };
 
 Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
     afterCreateLightboxEl: function() {
-        this.lightbox.lightboxEl.center();
+        this._center();
     },
     afterContentShown: function() {
-        this.lightbox.lightboxEl.center();
+        this._center();
     },
     updateContent: function(contentEl, responseText) {
-        var originalSize = this.lightbox.lightboxEl.getSize();
+        var isVisible = this.lightbox.lightboxEl.isVisible();
+
+        this.lightbox.lightboxEl.show(); //to mesaure
+
+        var originalSize = this.lightbox.innerLightboxEl.getSize();
 
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
-        var newSize = this.lightbox.lightboxEl.getSize();
-        this.lightbox.lightboxEl.alignTo(document, 'c-c', null, true);
-        this.lightbox.lightboxEl.setSize(originalSize);
-        this.lightbox.lightboxEl.setSize(newSize, null, true);
+        var newSize = this.lightbox.innerLightboxEl.getSize();
+
+        if (isVisible) {
+            this._center(true);
+            this.lightbox.innerLightboxEl.setSize(originalSize);
+            this.lightbox.innerLightboxEl.setSize(newSize, null, true);
+        } else {
+            this._center(false);
+            this.lightbox.innerLightboxEl.setSize(newSize);
+            this.lightbox.lightboxEl.hide();
+        }
+
     },
     onShow: function() {
         this.mask();
     },
-    onClose: function() {
+    afterClose: function() {
         this.unmask();
+    },
+    _getCenterXy: function() {
+        var xy = this.lightbox.innerLightboxEl.getAlignToXY(document, 'c-c');
+        if (xy[1] < 20) xy[1] = 20;
+        return xy;
+    },
+    _center: function(anim) {
+        this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
     }
 });

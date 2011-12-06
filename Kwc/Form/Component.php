@@ -128,6 +128,13 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
             Kwf_Registry::get('db')->commit();
         }
+        if ($this->_posted && !$this->_errors &&
+            $this->getSuccessComponent() && $this->getSuccessComponent()->isPage &&
+            (!isset($postData['doNotRelocate']) || !$postData['doNotRelocate'])
+        ) {
+            header('Location: ' . $this->getSuccessComponent()->url);
+            exit;
+        }
     }
 
     //can be overriden to *not* log specific exceptions or adapt error
@@ -135,7 +142,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
         $e->logOrThrow();
-        $this->_errors[] = trlKwf('An error occured while processing the form. Please try to submit again later.');
+        $this->_errors[] = array(
+            'message' => trlKwf('An error occured while processing the form. Please try to submit again later.')
+        );
     }
 
     public function getPostData()
@@ -172,6 +181,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $this->_form;
     }
 
+    public function getSuccessComponent()
+    {
+        return $this->getData()->getChildComponent('-success');
+    }
+
     public function getTemplateVars()
     {
         $ret = Kwc_Abstract::getTemplateVars();
@@ -180,16 +194,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
 
-        $class = null;
-        if (self::hasChildComponentClass(get_class($this), 'child', 'success')) {
-            $class = self::getChildComponentClass(get_class($this), 'child', 'success');
-        }
-
         $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;
         $ret['errors'] = Kwf_Form::formatValidationErrors($this->getErrors());
         if ($this->isSaved()) {
-            if (!$ret['errors'] && $class) {
+            if (!$ret['errors'] && $this->getSuccessComponent()) {
                 $ret['showSuccess'] = true;
             }
         }

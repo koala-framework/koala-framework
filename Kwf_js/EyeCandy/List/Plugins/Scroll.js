@@ -23,8 +23,42 @@ Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract
             wrapper.insertBefore(this.moveElement);
             this.moveElement.appendTo(wrapper);
         }
+        this.list.on('activeChanged', this.onActivate, this);
+    },
+    onActivate: function(item)
+    {
+        var previousPosition = this._currentPosition;
+        while (item.listIndex > this._currentPosition + this.numberShown - 1) {
+            this._currentPosition++;
+        }
+        while (item.listIndex < this._currentPosition) {
+            this._currentPosition--;
+        }
+        if (previousPosition != this._currentPosition) {
+            this.onPositionChanged();
+        }
+    },
+    onPositionChanged: function() {
+        var x = this._initialX;
+        this.list.items.each(function(item) {
+            if (item.listIndex >= this._currentPosition) return false;
+            x -= item.getWidthIncludingMargin();
+        }, this);
+        this.moveElement.setX(x, true);
+
+        if (this._currentPosition >= this._getMaxPosition()) {
+            if (this._nextButton) this._nextButton.addClass('scrollInactive');
+        } else {
+            if (this._nextButton) this._nextButton.removeClass('scrollInactive');
+        }
+        if (this._currentPosition <= 0) {
+            if (this._previousButton) this._previousButton.addClass('scrollInactive');
+        } else {
+            if (this._previousButton) this._previousButton.removeClass('scrollInactive');
+        }
     },
     render: function() {
+        this._initialX = this.moveElement.getX();
         if (this.list.items.length > this.numberShown) {
             this._previousButton = this.list.el.createChild({
                 tag: 'a',
@@ -61,57 +95,13 @@ Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract
 
     onMoveNext: function() {
         if (this._currentPosition >= this._getMaxPosition()) return;
-        if (this._moveActive) return;
-        this._moveActive = true;
-
-        var firstItem = this.list.getItem(this._currentPosition);
-        var firstElWidth = firstItem.getWidthIncludingMargin();
-
-        var cfg = Ext.applyIf({
-            callback: function() {
-                this._moveActive = false;
-                firstItem.el.hide();
-                this.moveElement.setStyle('left', 0);
-                if (this._previousButton) this._previousButton.removeClass('scrollInactive');
-            },
-            scope: this
-        }, this.animationConfig);
-        this.moveElement.move('left', firstElWidth, cfg);
-
-        if (this._currentPosition+1 >= this._getMaxPosition()) {
-            if (this._nextButton) this._nextButton.addClass('scrollInactive');
-        }
-
         this._currentPosition += 1;
+        this.onPositionChanged();
     },
 
     onMovePrevious: function() {
         if (this._currentPosition <= 0) return;
-        if (this._moveActive) return;
-        this._moveActive = true;
-
-        //show first
-        this.list.getItem(this._currentPosition-1).el.show();
-
-        var firstElWidth = this.list.getItem(this._currentPosition-1).getWidthIncludingMargin();
-
-        //move left because first was shown
-        this.moveElement.move('left', firstElWidth, false);
-
-        var cfg = Ext.applyIf({
-            useDisplay: true,
-            callback: function() {
-                this._moveActive = false;
-                if (this._nextButton) this._nextButton.removeClass('scrollInactive');
-            },
-            scope: this
-        }, this.animationConfig);
-        this.moveElement.move('right', firstElWidth, cfg); //move in first; animated
-
-        if (this._currentPosition-1 <= 0) {
-            if (this._previousButton) this._previousButton.addClass('scrollInactive');
-        }
-
         this._currentPosition -= 1;
+        this.onPositionChanged();
     }
 });

@@ -136,6 +136,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
      */
     public function getComponentById($componentId, $select = array())
     {
+        if (!$componentId) return null;
+
         if (is_array($select)) {
             $partTypes = array_keys($select);
         } else {

@@ -30,3 +30,18 @@ Kwf.onContentReady(function() {
         }
     });
 });
+
+Kwf.FrontendForm.MultiCheckbox = Ext.extend(Kwf.FrontendForm.Field, {
+    initField: function() {
+    },
+    getValue: function() { //has no value itself
+        return null;
+    },
+    getFieldName: function() {
+        var m = this.el.dom.className.match(/ ([^ ]+) *$/);
+        return m[1];
+    }
+});
+
+Kwf.FrontendForm.fields['kwfFormFieldMultiCheckbox'] = Kwf.FrontendForm.MultiCheckbox;
+
