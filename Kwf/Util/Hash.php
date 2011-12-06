@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_Hash
 {
-    public function hash($str)
+    public static function hash($str)
     {
         $salt = Kwf_Cache_Simple::fetch('hashpp-');
         if (!$salt) {
