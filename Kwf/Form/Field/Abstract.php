@@ -335,6 +335,9 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         $this->_mask = $name;
     }
 
+    /**
+     * @internal
+     */
     public function toDebug($indent=0)
     {
         $ind = str_repeat(' ', $indent*4);
