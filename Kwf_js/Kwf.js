@@ -157,7 +157,7 @@ Kwf.onContentReady = function(fn, scope) {
 Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
     Ext.each(Kwf.contentReadyHandlers, function(i) {
-        i.fn.call(i.scope | window, (el || document.body), options);
+        i.fn.call(i.scope || window, (el || document.body), options);
     }, this);
 };
 
