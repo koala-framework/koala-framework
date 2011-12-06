@@ -91,4 +91,11 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
     {
         return $this->setProperty('vtype', $value);
     }
+    /**
+     * Set the maximum input field length allowed
+     */
+    public function setMaxLength($value)
+    {
+        return $this->setProperty('maxLength', $value);
+    }
 }
