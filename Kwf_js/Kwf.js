@@ -157,12 +157,14 @@ Kwf.onContentReady = function(fn, scope) {
 Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
     Ext.each(Kwf.contentReadyHandlers, function(i) {
-        i.fn.call(i.scope | window, (el || document.body), options);
+        i.fn.call(i.scope || window, (el || document.body), options);
     }, this);
 };
 
 if (!Kwf.isApp) {
-    Ext.onReady(Kwf.callOnContentReady);
+    Ext.onReady(function() {
+        Kwf.callOnContentReady(document.body, { newRender: true });
+    });
 }
 
 Kwf.include =  function(url, restart)
