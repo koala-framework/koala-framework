@@ -44,6 +44,12 @@ if ($this->showSuccess) {
 
         <? /* damit wir wissen ob gepostet wurde und ob wir laden sollen */ ?>
         <input type="hidden" name="<?= $this->formName ?>-post" value="post" />
+
+        <? if ($this->formId) { ?>
+            <? /* to pass id's even if we send by ajax */ ?>
+            <input type="hidden" name="<?= $this->formName ?>-id" value="<?= $this->formId; ?>" />
+            <input type="hidden" name="<?= $this->formName ?>-idHash" value="<?= $this->formIdHash; ?>" />
+        <? } ?>
     </form>
     </div>
     <? } ?>

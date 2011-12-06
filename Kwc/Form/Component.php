@@ -82,6 +82,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         if (!$this->getForm()) return;
 
+        if (!empty($postData[$this->getData()->componentId.'-id']) && !empty($postData[$this->getData()->componentId.'-idHash'])) {
+            if ($postData[$this->getData()->componentId.'-idHash'] == Kwf_Util_Hash::hash($postData[$this->getData()->componentId.'-id'])) {
+                $this->getForm()->setId($postData[$this->getData()->componentId.'-id']);
+            }
+        }
+
         $m = $this->getForm()->getModel();
         while ($m instanceof Kwf_Model_Proxy) {
             $m = $m->getProxyModel();
@@ -220,6 +226,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         $ret['formName'] = $this->getData()->componentId;
         $ret['buttonClass'] = $this->_getSetting('buttonClass');
+
+        $ret['formId'] = $this->getForm()->getId();
+        if ($ret['formId']) {
+            $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
+        }
 
         $cachedContent = Kwf_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
         if ($cachedContent) {
