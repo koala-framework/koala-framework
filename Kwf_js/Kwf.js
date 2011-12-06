@@ -162,7 +162,9 @@ Kwf.callOnContentReady = function(el, options) {
 };
 
 if (!Kwf.isApp) {
-    Ext.onReady(Kwf.callOnContentReady);
+    Ext.onReady(function() {
+        Kwf.callOnContentReady(document.body, { newRender: true });
+    });
 }
 
 Kwf.include =  function(url, restart)
