@@ -29,11 +29,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
             $imageEnlarge = $imageEnlarge->parent;
         }
         $parent = $imageEnlarge->parent;
-        
+
         $getChildren = array();
         if (is_instance_of($parent->componentClass, 'Kwc_Abstract_List_Component')) {
             //it's in an List_Gallery
-        } else if (is_instance_of($parent->parent->componentClass, 'Kwc_Abstract_List_Component')) {
+        } else if ($parent->parent && is_instance_of($parent->parent->componentClass, 'Kwc_Abstract_List_Component')) {
             //it's in an List_Switch with ImageEnlarge as large component (we have to go up one more level)
             $getChildren = array('-'.$imageEnlarge->id);
             $imageEnlarge = $imageEnlarge->parent;
