@@ -14,7 +14,8 @@ class Kwc_Mail_Component extends Kwc_Abstract
         $ret['generators']['redirect'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Mail_Redirect_Component',
-            'name' => 'r'
+            'name' => trlKwfStatic('E-Mail'),
+            'filename' => 'r'
         );
 
         $sender = Kwf_Mail::getSenderFromConfig();
