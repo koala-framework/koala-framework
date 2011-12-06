@@ -23,7 +23,7 @@
         </paths>
     </logging>
     <transformations>
-        <template name="agavi" />
+        <template name="default" />
     </transformations>
     <files>
         <directory>Kwf</directory>
