@@ -234,7 +234,7 @@ class Vps_Setup
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
-            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.28'
         ) {
             $ignore = false;
             foreach ($config->preLoginIgnore as $i) {
