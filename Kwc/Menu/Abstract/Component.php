@@ -91,15 +91,19 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 do {
                     if (Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) break;
                 } while ($data = $data->parent);
-                $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
-                if ($cat) {
-                    if ($cat === true) $cat = $data->id;
-                    if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
-                        //there are categories and we are in a different category than the menu is
-                        //(so none is active and we can just show the parentContent (=efficient))
-                        $ret = 'parentContent';
+                    if ($data) {
+                        $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
+                        if ($cat) {
+                            if ($cat === true) $cat = $data->id;
+                            if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
+                                //there are categories and we are in a different category than the menu is
+                                //(so none is active and we can just show the parentContent (=efficient))
+                                $ret = 'parentContent';
+                            }
+                        }
+                    } else {
+                        $ret = 'empty';
                     }
-                }
             }
         } else if ($menuLevel < $shownLevel-1) {
             return 'empty';

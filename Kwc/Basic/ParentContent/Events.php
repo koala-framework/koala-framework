@@ -10,8 +10,10 @@ class Kwc_Basic_ParentContent_Events extends Kwc_Abstract_Events
             'callback' => 'onPageParentChanged'
         );
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            $classWithoutPoint = $class;
+            if (($pos = strpos($class, '.')) !== false) $classWithoutPoint = substr($class, 0, $pos);
             if (Kwc_Abstract::getFlag($class, 'hasAlternativeComponent') &&
-                in_array($this->_class, call_user_func(array($class, 'getAlternativeComponents'), $class))
+                in_array($this->_class, call_user_func(array($classWithoutPoint, 'getAlternativeComponents'), $class))
             ) {
                 $ret[] = array(
                     'class' => $class,
@@ -54,7 +56,7 @@ class Kwc_Basic_ParentContent_Events extends Kwc_Abstract_Events
             $this->_class, $event->componentId
         ));
     }
-    
+
     public function onParentHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
     {
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $pc) {
@@ -63,7 +65,7 @@ class Kwc_Basic_ParentContent_Events extends Kwc_Abstract_Events
             ));
         }
     }
-    
+
     public function onParentRecursiveHasContentChanged(Kwf_Component_Event_Component_RecursiveHasContentChanged $event)
     {
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->componentId) as $pc) {
@@ -72,6 +74,6 @@ class Kwc_Basic_ParentContent_Events extends Kwc_Abstract_Events
             ));
         }
     }
-    
-    
+
+
 }
