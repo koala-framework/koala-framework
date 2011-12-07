@@ -35,7 +35,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $parent = $this->_getParent();
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
-            $ret = array_merge($ret, $parentContentSender->getProcessInputComponents());
+            $ret = array_merge($ret, $parentContentSender->_getProcessInputComponents($includeMaster));
         }
 
         return $ret;

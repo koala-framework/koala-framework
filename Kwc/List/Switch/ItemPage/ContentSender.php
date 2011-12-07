@@ -10,7 +10,7 @@ class Kwc_List_Switch_ItemPage_ContentSender extends Kwf_Component_Abstract_Cont
             $parent = $this->_data->getParentPage();
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
-            $ret = array_merge($ret, $parentContentSender->getProcessInputComponents());
+            $ret = array_merge($ret, $parentContentSender->_getProcessInputComponents($includeMaster));
         }
 
         return $ret;
