@@ -1,6 +1,5 @@
 <?php
-abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
-    implements Kwf_Collection_Item_Interface
+abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
 {
     private $_properties;
     private $_validatorsAdded = false;
