@@ -20,7 +20,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         return $ret;
     }
 
-    protected static function getProcessInputComponents()
+    protected function getProcessInputComponents()
     {
         return self::__getProcessInputComponents($this->_data);
     }
