@@ -20,11 +20,14 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         return $ret;
     }
 
-    //public for unittest
-    public function getProcessInputComponents()
+    protected static function getProcessInputComponents()
     {
-        $data = $this->_data;
+        return self::__getProcessInputComponents($this->_data);
+    }
 
+    //public for unittest
+    public static function __getProcessInputComponents($data)
+    {
         $showInvisible = Kwf_Config::getValue('showInvisible');
 
         $cacheId = 'procI-'.$data->getPageOrRoot()->componentId;
