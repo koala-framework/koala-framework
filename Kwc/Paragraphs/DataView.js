@@ -45,9 +45,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     },
     updateToolbars: function()
     {
-        Ext.each(Kwf.contentReadyHandlers, function(i) {
-            i.fn.call(i.scope | window);
-        }, this);
+        Kwf.callOnContentReady(this.el, { newRender: false });
 
         if (!this.showToolbars) return;
 
