@@ -6,7 +6,7 @@ class Kwc_Directories_TopChoose_Component extends Kwc_Directories_Top_Component
         $ret = parent::getSettings();
         $ret['showDirectoryClass'] = 'Kwc_Directories_Item_Directory_Component'; // nur für form
         $ret['ownModel'] = 'Kwc_Directories_TopChoose_Model';
-        $ret['default'] = array();
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 

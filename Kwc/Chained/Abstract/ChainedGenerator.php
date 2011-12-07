@@ -28,9 +28,14 @@ class Kwc_Chained_Abstract_ChainedGenerator extends Kwf_Component_Generator_Pseu
         $data['language'] = $row->filename;
         $data['visible'] = isset($row->visible) ? $row->visible : true;
 
+
         //vielleicht flexibler machen?
-        $data['chained'] = Kwf_Component_Data_Root::getInstance()
-                    ->getComponentByClass(Kwc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
+        //$data['chained'] = Kwf_Component_Data_Root::getInstance()
+        //            ->getComponentByClass(Kwc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
+
+        $mastetCc = Kwc_Abstract::getSetting($data['componentClass'], 'masterComponentClass');
+        $data['chained'] = $parentData->getChildComponent(array('componentClass'=>$mastetCc));
+
         return $data;
     }
 

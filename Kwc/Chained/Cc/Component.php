@@ -10,6 +10,11 @@ class Kwc_Chained_Cc_Component extends Kwc_Chained_Abstract_Component
         return $ret;
     }
 
+    public static function createChainedGenerator($g)
+    {
+        return parent::createChainedGenerator($g, 'Cc');
+    }
+
     public static function getChainedByMaster($masterData, $chainedData, $select = array())
     {
         return Kwc_Chained_Abstract_Component::_getChainedByMaster($masterData, $chainedData, 'Cc', $select);

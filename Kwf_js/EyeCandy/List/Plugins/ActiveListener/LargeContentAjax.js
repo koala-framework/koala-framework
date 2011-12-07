@@ -36,6 +36,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                     var showContent = function() {
                         this.largeContent[item.id].child('.loading').remove();
                         contentEl.fadeIn();
+                        Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                         if (options && options.success) {
                             options.success.call(options.scope || this);
                         }
@@ -50,15 +51,14 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                         }).createDelegate(this);
                     }, this);
 
-                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                     contentEl.hide(); //after callOnContentReady else cufon won't work inside contentEl
                     if (imagesToLoad == 0) showContent.call(this);
 
                 } else {
                     this.largeContent[item.id].child('.loading').remove();
                     this.largeContent[item.id].show();
-                    Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
                     this.largeContent[item.id].hide();
+                    Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
                 }
             },
             scope: this
@@ -115,6 +115,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             activeEl.hide();
             nextEl.show();
         }
+
+        Kwf.callOnContentReady(nextEl.dom, {newRender: false});
 
         this.activeItem = item;
     }

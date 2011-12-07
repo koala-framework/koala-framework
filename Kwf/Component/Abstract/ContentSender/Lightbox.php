@@ -14,19 +14,31 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
     public function sendContent($includeMaster = true)
     {
         header('Content-Type: text/html; charset=utf-8');
-        $parent = $this->_data->parent->getPage();
+
+        $parent = $this->_data->parent;
+        while ($parent && !$parent->isPage) {
+            $previous = $parent;
+            $parent = $parent->parent;
+        }
+
+        //TODO: the proper solution would be to restructure List_Switch so that the page is our parent
+        if (is_instance_of($parent->componentClass, 'Kwc_List_Switch_Component') && $previous) {
+            $parent = $parent->getChildComponent('_'.$previous->id);
+        }
+
+        $process = $this->getProcessInputComponents();
 
         //processInput parent *and* ourself
         if ($includeMaster) {
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
-            $parentProcess = $parentContentSender->_callProcessInput();
+            $process = array_merge($process, $parentContentSender->getProcessInputComponents());
         }
-        $process = $this->_callProcessInput();
+        self::_callProcessInput($process);
 
         $lightboxContent = $this->_data->render(null, false);
         if ($includeMaster) {
-            $parentContent = $parent->render(null, true);
+            $parentContent = $parentContentSender->_render($includeMaster);
 
             //append lightbox after <body> in parent
             $options = $this->_getOptions();
@@ -45,10 +57,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             echo $lightboxContent;
         }
 
-        if ($includeMaster) {
-            $parentContentSender->_callPostProcessInput($parentProcess);
-        }
-        $this->_callPostProcessInput($process);
+        self::_callPostProcessInput($process);
     }
 
     public function getLinkRel()
