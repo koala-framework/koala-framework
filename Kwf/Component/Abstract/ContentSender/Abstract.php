@@ -18,6 +18,4 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
     public function getLinkRel() { return ''; }
 
     abstract public function sendContent($includeMaster = true);
-    protected function _callProcessInput() { return array(); }
-    protected function _callPostProcessInput($process) {}
 }

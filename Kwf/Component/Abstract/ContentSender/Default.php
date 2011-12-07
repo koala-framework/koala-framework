@@ -1,7 +1,7 @@
 <?php
 class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstract_ContentSender_Abstract
 {
-    private function _getRequestWithFiles()
+    private static function _getRequestWithFiles()
     {
         $ret = $_REQUEST;
         //in _REQUEST sind _FILES nicht mit drinnen
@@ -21,8 +21,10 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     }
 
     //public for unittest
-    public static function getProcessInputComponents(Kwf_Component_Data $data)
+    public function getProcessInputComponents()
     {
+        $data = $this->_data;
+
         $showInvisible = Kwf_Config::getValue('showInvisible');
 
         $cacheId = 'procI-'.$data->getPageOrRoot()->componentId;
@@ -68,11 +70,9 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         return $process;
     }
 
-    protected function _callProcessInput()
+    protected static function _callProcessInput($process)
     {
-        $process = self::getProcessInputComponents($this->_data);
-
-        $postData = $this->_getRequestWithFiles();
+        $postData = self::_getRequestWithFiles();
         foreach ($process as $i) {
             Kwf_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
@@ -87,12 +87,11 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
             Kwf_Component_ModelObserver::getInstance()->process(false);
         }
-        return $process;
     }
 
-    protected function _callPostProcessInput($process)
+    protected static function _callPostProcessInput($process)
     {
-        $postData = $this->_getRequestWithFiles();
+        $postData = self::_getRequestWithFiles();
         foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'postProcessInput')) {
                 $i->getComponent()->postProcessInput($postData);
@@ -103,16 +102,20 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         }
     }
 
+    protected function _render($includeMaster)
+    {
+        return $this->_data->render(null, $includeMaster);
+    }
+
     public function sendContent($includeMaster = true)
     {
         header('Content-Type: text/html; charset=utf-8');
-        $process = $this->_callProcessInput();
+        $process = $this->getProcessInputComponents();
+        self::_callProcessInput($process);
         Kwf_Benchmark::checkpoint('processInput');
-        echo $this->_data->render(null, $includeMaster);
+        echo $this->_render($includeMaster);
         Kwf_Benchmark::checkpoint('render');
-        $this->_callPostProcessInput($process);
+        self::_callPostProcessInput($process);
         Kwf_Benchmark::checkpoint('postProcessInput');
-
     }
-
 }
