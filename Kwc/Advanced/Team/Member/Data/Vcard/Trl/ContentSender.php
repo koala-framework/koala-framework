@@ -1,7 +1,7 @@
 <?php
 class Kwc_Advanced_Team_Member_Data_Vcard_Trl_ContentSender extends Kwc_Advanced_Team_Member_Data_Vcard_ContentSender
 {
-    public function sendContent()
+    public function sendContent($includeMaster)
     {
         $dataRow = $this->_data->chained->parent->getComponent()->getRow()->toArray();
         $dataRow = (object)array_merge($dataRow, $this->_data->parent->getComponent()->getRow()->toArray());

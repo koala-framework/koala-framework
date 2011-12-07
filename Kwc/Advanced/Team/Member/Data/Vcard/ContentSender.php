@@ -1,7 +1,7 @@
 <?php
 class Kwc_Advanced_Team_Member_Data_Vcard_ContentSender extends Kwf_Component_Abstract_ContentSender_Abstract
 {
-    public function sendContent()
+    public function sendContent($includeMaster)
     {
         $dataRow = (object)$this->_data->parent->getComponent()->getRow()->toArray();
         $imageData = $this->_data->parent->parent->getChildComponent('-image');

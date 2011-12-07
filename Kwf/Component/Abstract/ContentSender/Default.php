@@ -110,7 +110,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         return $this->_data->render(null, $includeMaster);
     }
 
-    public function sendContent($includeMaster = true)
+    public function sendContent($includeMaster)
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_getProcessInputComponents($includeMaster);
