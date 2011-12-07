@@ -11,10 +11,8 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         return $ret;
     }
 
-    public function sendContent($includeMaster = true)
+    private function _getParent()
     {
-        header('Content-Type: text/html; charset=utf-8');
-
         $parent = $this->_data->parent;
         while ($parent && !$parent->isPage) {
             $previous = $parent;
@@ -25,19 +23,31 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         if (is_instance_of($parent->componentClass, 'Kwc_List_Switch_Component') && $previous) {
             $parent = $parent->getChildComponent('_'.$previous->id);
         }
+        return $parent;
+    }
 
-        $process = $this->getProcessInputComponents();
+    protected function _getProcessInputComponents($includeMaster)
+    {
+        $ret = parent::_getProcessInputComponents($includeMaster);
 
         //processInput parent *and* ourself
         if ($includeMaster) {
+            $parent = $this->_getParent();
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
-            $process = array_merge($process, $parentContentSender->getProcessInputComponents());
+            $ret = array_merge($ret, $parentContentSender->getProcessInputComponents());
         }
-        self::_callProcessInput($process);
 
+        return $ret;
+    }
+
+    protected function _render($includeMaster)
+    {
         $lightboxContent = $this->_data->render(null, false);
         if ($includeMaster) {
+            $parent = $this->_getParent();
+            $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
+            $parentContentSender = new $parentContentSender($parent);
             $parentContent = $parentContentSender->_render($includeMaster);
 
             //append lightbox after <body> in parent
@@ -52,12 +62,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                 "<div class=\"kwfLightboxInner\" style=\"$style\">\n".
                 "<input type=\"hidden\" class=\"options\" value=\"$options\" />".
                 "$lightboxContent\n</div>\n</div>\n";
-            echo preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
+            return preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
-            echo $lightboxContent;
+            return $lightboxContent;
         }
-
-        self::_callPostProcessInput($process);
     }
 
     public function getLinkRel()
