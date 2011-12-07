@@ -147,7 +147,9 @@ class Kwf_Setup
                 if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
                     throw new Kwf_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
                 }
-                header('Location: '.$data->url);
+                $url = $data->url;
+                if (isset($_SERVER['QUERY_STRING'])) $url .= '?' . $_SERVER['QUERY_STRING'];
+                header('Location: ' . $url);
                 exit;
             }
             $root->setCurrentPage($data);
