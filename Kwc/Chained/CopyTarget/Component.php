@@ -8,17 +8,11 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
             'class' => 'Kwc_Chained_CopyTarget_TargetGenerator',
             'component' => null
         );
-        $generator = Kwc_Abstract::getSetting('Kwc_Root_Category_Component', 'generators');
-        if (isset($generator['page'])) {
-            $ret['generators']['page'] = self::getPageGenerator($generator['page']);
+        $pageGenerator = Kwc_Chained_Cc_Component::createChainedGenerator('Kwc_Root_Category_Component', 'page');
+        if ($pageGenerator) {
+            $ret['generators']['page'] = $pageGenerator;
+            $ret['generators']['page']['class'] = 'Kwc_Chained_CopyTarget_PagesGenerator';
         }
-        return $ret;
-    }
-
-    public final static function getPageGenerator($generator)
-    {
-        $ret = Kwc_Chained_Cc_Component::createChainedGenerator($generator);
-        $ret['class'] = 'Kwc_Chained_CopyTarget_PagesGenerator';
         return $ret;
     }
 
