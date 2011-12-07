@@ -23,7 +23,11 @@ class Kwf_Component_View_Helper_Master extends Kwf_Component_View_Renderer
                     'data' => $c
                 );
             }
-            $c = $c->parent;
+            if (Kwc_Abstract::getFlag($c->componentClass, 'resetMaster')) {
+                $c = null;
+            } else {
+                $c = $c->parent;
+            }
         }
         $helper = new Kwf_Component_View_Helper_ComponentWithMaster();
         $helper->setRenderer($this->_getRenderer());
