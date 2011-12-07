@@ -22,45 +22,8 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         }
 
         $ret['generators'] = Kwc_Abstract::getSetting($masterComponentClass, 'generators');
-        foreach ($ret['generators'] as $k=>&$g) {
-            if (!is_array($g['component'])) $g['component'] = array($k=>$g['component']);
-            foreach ($g['component'] as $key=>&$c) {
-                if (!$c) continue;
-                $masterC = $c;
-                $c = Kwc_Admin::getComponentClass($c, "{$prefix}_Component");
-                if (!$c) $c = "Kwc_Chained_{$prefix}_Component";
-                $c .= '.'.$masterC;
-                $g['masterComponentsMap'][$masterC] = $c;
-
-                // Für jede Unterkomponente mit einer AlternativeComponent muss es auch einen Eintrag in der masterComponentsMap geben
-                if (Kwc_Abstract::getFlag($masterC, 'hasAlternativeComponent')) {
-                    $alternativeComponents = call_user_func(array($masterC, 'getAlternativeComponents'), $masterC);
-                    foreach ($alternativeComponents as $alternativeComponent) {
-                        $cmp = $alternativeComponent;
-                        $cmp = Kwc_Admin::getComponentClass($cmp, "{$prefix}_Component");
-                        if (!$cmp) $cmp = "Kwc_Chained_{$prefix}_Component";
-                        $cmp .= '.'.$alternativeComponent;
-                        $g['masterComponentsMap'][$alternativeComponent] = $cmp;
-                    }
-                }
-            }
-            if (!isset($g['class'])) {
-                throw new Kwf_Exception("generator class is not set: '$k' in '$masterComponentClass'");
-            }
-            $g['chainedGenerator'] = $g['class'];
-            $g['class'] = "Kwc_Chained_{$prefix}_Generator";
-            if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
-            if (isset($g['plugins'])) {
-                foreach ($g['plugins'] as $pKey => $plugin) {
-                    $pc = Kwc_Admin::getComponentClass($plugin, "{$prefix}_Component");
-                    if ($pc != $plugin) {
-                        $g['plugins'][$pKey] = $pc;
-                    } else {
-                        unset($g['plugins'][$pKey]); // generator-plugins in Translation only if there is an translated plugin available
-                    }
-                }
-            }
-            if (isset($g['model'])) unset($g['model']);
+        foreach ($ret['generators'] as $k=>$g) {
+            $ret['generators'][$k] = self::createChainedGenerator($g, $prefix);
         }
         foreach ($copySettings as $i) {
             if (Kwc_Abstract::hasSetting($masterComponentClass, $i)) {
@@ -74,6 +37,48 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
             }
         }
         return $ret;
+    }
+
+    public static function createChainedGenerator($g, $prefix)
+    {
+        if (!isset($g['class'])) throw new Kwf_Exception("generator class is not set");
+
+        if (!is_array($g['component'])) $g['component'] = array($g['component']);
+        foreach ($g['component'] as &$c) {
+            if (!$c) continue;
+            $masterC = $c;
+            $c = Kwc_Admin::getComponentClass($c, "{$prefix}_Component");
+            if (!$c) $c = "Kwc_Chained_{$prefix}_Component";
+            $c .= '.'.$masterC;
+            $g['masterComponentsMap'][$masterC] = $c;
+
+            // Für jede Unterkomponente mit einer AlternativeComponent muss es auch einen Eintrag in der masterComponentsMap geben
+            if (Kwc_Abstract::getFlag($masterC, 'hasAlternativeComponent')) {
+                $alternativeComponents = call_user_func(array($masterC, 'getAlternativeComponents'), $masterC);
+                foreach ($alternativeComponents as $alternativeComponent) {
+                    $cmp = $alternativeComponent;
+                    $cmp = Kwc_Admin::getComponentClass($cmp, "{$prefix}_Component");
+                    if (!$cmp) $cmp = "Kwc_Chained_{$prefix}_Component";
+                    $cmp .= '.'.$alternativeComponent;
+                    $g['masterComponentsMap'][$alternativeComponent] = $cmp;
+                }
+            }
+        }
+        $g['chainedGenerator'] = $g['class'];
+        $g['class'] = "Kwc_Chained_{$prefix}_Generator";
+        if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
+        if (isset($g['plugins'])) {
+            foreach ($g['plugins'] as $pKey => $plugin) {
+                $pc = Kwc_Admin::getComponentClass($plugin, "{$prefix}_Component");
+                if ($pc != $plugin) {
+                    $g['plugins'][$pKey] = $pc;
+                } else {
+                    unset($g['plugins'][$pKey]); // generator-plugins in Translation only if there is an translated plugin available
+                }
+            }
+        }
+        if (isset($g['model'])) unset($g['model']);
+        return $g;
     }
 
     public static function getAlternativeComponents($componentClass)
