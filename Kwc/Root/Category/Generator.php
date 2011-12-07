@@ -192,14 +192,28 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $pageIds = $this->_pageHome;
             } else if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
                 if (isset($this->_pageData[$id])) {
-                    if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                        $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
-                        $class = $this->_settings['component'][$this->_pageData[$id]['component']];
-                        if (in_array($class, $selectClasses)) {
+                    $accept = true;;
+                    if ($parentData) {
+                        $accept = false;
+                        $i = $id;
+                        while (isset($this->_pageData[$i])) {
+                            $i = $this->_pageData[$i]['parent_id'];
+                            if ($i == $parentData->dbId) {
+                                $accept = true;
+                                break;
+                            }
+                        }
+                    }
+                    if ($accept) {
+                        if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                            $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
+                            $class = $this->_settings['component'][$this->_pageData[$id]['component']];
+                            if (in_array($class, $selectClasses)) {
+                                $pageIds[] = $id;
+                            }
+                        } else {
                             $pageIds[] = $id;
                         }
-                    } else {
-                        $pageIds[] = $id;
                     }
                 }
             } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {

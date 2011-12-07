@@ -13,11 +13,11 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
     protected function _getLanguages()
     {
         $languages = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_Root_LanguageRoot_Language_Component');
+            ->getComponentsByClass('Kwc_Root_LanguageRoot_Language_Component', array('subroot'=>$this->getData()));
         $languages = array_merge($languages, Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_Root_TrlRoot_Master_Component'));
+            ->getComponentsByClass('Kwc_Root_TrlRoot_Master_Component', array('subroot'=>$this->getData())));
         $languages = array_merge($languages, Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_Root_TrlRoot_Chained_Component'));
+            ->getComponentsByClass('Kwc_Root_TrlRoot_Chained_Component', array('subroot'=>$this->getData())));
         return $languages;
     }
 

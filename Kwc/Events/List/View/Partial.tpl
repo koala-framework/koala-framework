@@ -17,22 +17,24 @@
                 //startdatum mit gleicher uhrzeit
                 echo $this->date($this->item->row->start_date);
             }
-			if ($this->date($this->item->row->start_date) != $this->date($this->item->row->end_date)) {
-                //datum unterschiedlich
-	            if ($this->date($this->item->row->end_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
-                    //enddatum mit unterschiedlicher uhrzeit
-	                echo " - ".$this->dateTime($this->item->row->end_date);
-	            } else {
-				    //enddatum mit gleicher uhrzeit
-	                echo " - ".$this->date($this->item->row->end_date);
-	            }
-			} else {
-			 //datum gleich
-                if ($this->date($this->item->row->end_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
-                    //enddatum mit unterschiedlicher uhrzeit
-                    echo " - ".$this->dateTime($this->item->row->end_date,'H:i');
-                }
-			}
+    	    if ($this->date($this->item->row->end_date)) {
+    			if ($this->date($this->item->row->start_date) != $this->date($this->item->row->end_date)) {
+                    //datum unterschiedlich
+    	            if ($this->date($this->item->row->end_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
+                        //enddatum mit unterschiedlicher uhrzeit
+    	                echo " - ".$this->dateTime($this->item->row->end_date);
+    	            } else {
+    				    //enddatum mit gleicher uhrzeit
+    	                echo " - ".$this->date($this->item->row->end_date);
+    	            }
+    			} else {
+    			 //datum gleich
+                    if ($this->date($this->item->row->end_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
+                        //enddatum mit unterschiedlicher uhrzeit
+                        echo " - ".$this->dateTime($this->item->row->end_date,'H:i');
+                    }
+    			}
+    	    }
 			//place
             if ($this->item->row->place) {
                 echo " | ".$this->item->row->place;
@@ -44,16 +46,16 @@
         <div class="teaser">
             <p>
                 <?=nl2br($this->item->row->teaser);?>
-                <? if($this->hasContent($this->item)) { ?>
+                <? if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
                     <span class="readMoreLink">
-                        <?=$this->componentLink($this->item, $this->item->trlKwf('Read more').' &raquo;');?>
+                        <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
                     </span>
                 <? } ?>
             </p>
         </div>
-    <? } else if($this->hasContent($this->item)) { ?>
+    <? } else if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
         <div class="readMoreLink">
-            <?=$this->componentLink($this->item, $this->item->trlKwf('Read more').' &raquo;');?>
+            <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
         </div>
     <? } ?>
 </div>

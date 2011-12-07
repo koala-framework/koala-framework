@@ -2,11 +2,12 @@
 class Kwf_Update_Action_Component_ConvertToChainedTrl extends Kwf_Update_Action_Abstract
 {
     public $rootPrefix = 'root-';
+    public $newRootPrefix = 'root-master-';
     public function update()
     {
         $db = Zend_Registry::get('db');
         $db->query("UPDATE kwf_pages
-            SET parent_id=CONCAT('root-master-', MID(parent_id, ".(strlen($this->rootPrefix)+1)."))
+            SET parent_id=CONCAT('".$this->newRootPrefix."', MID(parent_id, ".(strlen($this->rootPrefix)+1)."))
             WHERE parent_id LIKE ".$db->quote(str_replace('_', '\_', $this->rootPrefix).'%'));
 
         foreach ($db->query("SHOW TABLES")->fetchAll() as $table) {
@@ -18,12 +19,12 @@ class Kwf_Update_Action_Component_ConvertToChainedTrl extends Kwf_Update_Action_
             }
             if ($hasComponentId) {
                 $db->query("UPDATE $table SET component_id =
-                        CONCAT('root-master-', MID(component_id, ".(strlen($this->rootPrefix)+1)."))
+                        CONCAT('".$this->newRootPrefix."', MID(component_id, ".(strlen($this->rootPrefix)+1)."))
                         WHERE component_id LIKE ".$db->quote(str_replace('_', '\_', $this->rootPrefix).'%'));
             }
         }
         $db->query("UPDATE kwc_basic_text SET content =
-                REPLACE(content, 'href=\"$this->rootPrefix', 'href=\"root-master-')");
+                REPLACE(content, 'href=\"$this->rootPrefix', 'href=\"".$this->newRootPrefix."')");
         //TODO: Images
 
     }
