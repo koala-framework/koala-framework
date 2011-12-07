@@ -1,5 +1,5 @@
 <?php
-class Kwc_Export_Xml_ContentSender extends Kwf_Component_Abstract_ContentSender_Default
+class Kwc_Export_Xml_ContentSender extends Kwf_Component_Abstract_ContentSender_Abstract
 {
     public function sendContent()
     {

@@ -1,5 +1,5 @@
 <?php
-class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSender_Default
+class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSender_Abstract
 {
     protected function _getPdfComponent()
     {

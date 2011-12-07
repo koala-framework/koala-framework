@@ -1,5 +1,5 @@
 <?php
-class Kwc_Chained_Trl_MasterAsChild_ContentSender extends Kwf_Component_Abstract_ContentSender_Default
+class Kwc_Chained_Trl_MasterAsChild_ContentSender extends Kwf_Component_Abstract_ContentSender_Abstract
 {
     //wofür wird das benötigt?
     //habs *nicht* in Kwc_Chained_Abstract_MasterAsChild_Component gegeben da es da bei ingenieurbueros suche probleme verursacht hat
