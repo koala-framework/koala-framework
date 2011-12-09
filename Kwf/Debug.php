@@ -1,4 +1,7 @@
 <?php
+/**
+ * @internal
+ */
 function _pArray($src, $indent = '')
 {
     $ret = '';
@@ -30,6 +33,9 @@ function _pArray($src, $indent = '')
     return $ret;
 }
 
+/**
+ * @package Debug
+ */
 function p($src, $Type = 'LOG')
 {
     if (!Kwf_Debug::isEnabled()) return;
@@ -80,6 +86,9 @@ function p($src, $Type = 'LOG')
     }
 }
 
+/**
+ * @package Debug
+ */
 function d($src)
 {
     if (!Kwf_Debug::isEnabled()) return;
@@ -87,6 +96,9 @@ function d($src)
     exit;
 }
 
+/**
+ * @package Debug
+ */
 function pHex($s)
 {
     $terminalSize = explode(' ', `stty size`);
@@ -118,6 +130,9 @@ function pHex($s)
     echo "\n";
 }
 
+/**
+ * @internal
+ */
 function _btString($bt)
 {
     $ret = '';
@@ -129,6 +144,10 @@ function _btString($bt)
     }
     return $ret;
 }
+
+/**
+ * @internal
+ */
 function _btArgsString($args)
 {
     $ret = array();
@@ -137,6 +156,10 @@ function _btArgsString($args)
     }
     return implode(', ', $ret);
 }
+
+/**
+ * @internal
+ */
 function _btArgString($arg)
 {
     $ret = array();
@@ -175,6 +198,9 @@ function _btArgString($arg)
     return current($ret);
 }
 
+/**
+ * @package Debug
+ */
 function btString()
 {
     $bt = debug_backtrace();
@@ -194,6 +220,9 @@ function btString()
     return $ret;
 }
 
+/**
+ * @package Debug
+ */
 function bt($file = false)
 {
     if (!Kwf_Debug::isEnabled()) return;
@@ -223,6 +252,9 @@ function bt($file = false)
     }
 }
 
+/**
+ * @package Debug
+ */
 class Kwf_Debug
 {
     static $_enabled = 1;
