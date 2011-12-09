@@ -99,6 +99,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     } else {
                         contentEl.show();
                     }
+                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                     this.style.afterContentShown();
                 };
                 var imagesToLoad = 0;
@@ -109,9 +110,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                         if (imagesToLoad <= 0) showContent.call(this);
                     }).createDelegate(this);
                 }, this);
-                contentEl.show(); //needs to be visible for Cufon in IE8
-                Kwf.callOnContentReady(contentEl.dom, {newRender: true});
-                contentEl.hide();
                 if (imagesToLoad == 0) showContent.call(this);
                 this.initialize();
             },
