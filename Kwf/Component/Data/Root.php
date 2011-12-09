@@ -1,4 +1,9 @@
 <?php
+/**
+ *
+ *
+ * @package Components
+ */
 class Kwf_Component_Data_Root extends Kwf_Component_Data
 {
     private static $_instance;
@@ -14,6 +19,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     private $_dataCache = array();
     private $_dataCacheIgnoreVisible = array();
 
+    /**
+     * @internal
+     */
     public function __construct($config = array())
     {
         $config = array_merge(array(
@@ -32,6 +40,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     }
 
     /**
+     * Returns the root component data instance
+     *
      * @return Kwf_Component_Data_Root
      */
     public static function getInstance()
@@ -47,6 +57,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return self::$_instance;
     }
 
+    /**
+     * @internal
+     */
     public static function getComponentClass()
     {
         if (is_null(self::$_rootComponentClass)) {
@@ -59,12 +72,18 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return self::$_rootComponentClass;
     }
 
+    /**
+     * @internal
+     */
     public static function setComponentClass($componentClass)
     {
         self::$_rootComponentClass = $componentClass;
         self::reset();
     }
 
+    /**
+     * @internal
+     */
     public static function reset($resetCache = true)
     {
         self::$_instance = null;
@@ -73,6 +92,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         if ($resetCache) Kwf_Component_Abstract::resetSettingsCache();
     }
 
+    /**
+     * @internal
+     */
     public function __get($var)
     {
         if ($var == 'filename') {
@@ -82,7 +104,13 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return parent::__get($var);
     }
 
-    /*
+    /**
+     * Returns data by fully qualified url
+     *
+     * @param string url including http:// and domain
+     * @param string acceptLanguage as sent by browser (can be null if none was sent)
+     * @param bool will be set to true if the url exactly matches the data url (and no redirect to the correcty url is needed)
+     *
      * @return Kwf_Component_Data
      */
     public function getPageByUrl($url, $acceptLanguage, &$exactMatch = true)
@@ -132,6 +160,10 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     }
 
     /**
+     * Returns a component data by it's componentId
+     *
+     * @param string componentId
+     * @param array|Kwf_Component_Select additional contraint
      * @return Kwf_Component_Data
      */
     public function getComponentById($componentId, $select = array())
@@ -234,6 +266,13 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return $ret;
     }
 
+    /**
+     * Returns all Kwc_Root_Category_Generators used.
+     *
+     * the name of this method is a bit missleading
+     *
+     * @return Kwc_Root_Category_Generator[]
+     */
     public function getPageGenerators()
     {
         if (!is_null($this->_pageGenerators)) return $this->_pageGenerators;
@@ -284,6 +323,13 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     }
 
     /**
+     * Searches for a component data by it's dbId
+     *
+     * As multiple can have the same dbId you will get an exception if mutiple are found.
+     * To avoid that pass 'limit'=>1 as select
+     *
+     * @param string
+     * @param array|Kwf_Component_Select
      * @return Kwf_Component_Data
      */
     public function getComponentByDbId($dbId, $select = array())
@@ -296,6 +342,13 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return null;
     }
 
+    /**
+     * Searches for component datas by it's dbId
+     *
+     * @param string
+     * @param array|Kwf_Component_Select
+     * @return Kwf_Component_Data[]
+     */
     public function getComponentsByDbId($dbId, $select = array())
     {
         if (is_array($select)) {
@@ -358,6 +411,17 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         }
         return $this->_componentsByDbIdCache[$cacheId];
     }
+
+    /**
+     * Returns all components matching a component class (including classes inheriting that class)
+     *
+     * Use with care, this is only efficient if a few components exist.
+     *
+     * @see getComponentsBySameClass
+     * @param string|array component class
+     * @param array|Kwf_Component_Select
+     * @return Kwf_Component_Data[]
+     */
     public function getComponentsByClass($class, $select = array())
     {
         if (is_array($select)) {
@@ -379,6 +443,16 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return $this->_componentsByClassCache[$cacheId];
     }
 
+    /**
+     * Returns all components exactly matching a component class
+     *
+     * Use with care, this is only efficient if a few components exist.
+     *
+     * @see getComponentsByClass
+     * @param string|array component class
+     * @param array|Kwf_Component_Select
+     * @return Kwf_Component_Data[]
+     */
     public function getComponentsBySameClass($lookingForChildClasses, $select = array())
     {
         if (!is_array($lookingForChildClasses) && $lookingForChildClasses == $this->componentClass) {
@@ -448,6 +522,17 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return $this->_generatorsForClassesCache[$cacheId];
     }
 
+    /**
+     * Returns component by given component class
+     *
+     * If multiple are found you will get an exception,
+     * To avoid that pass 'limit'=>1 as select
+     *
+     * @see getComponentsByClass
+     * @param string component class
+     * @param array|Kwf_Component_Select
+     * @return Kwf_Component_Data
+     */
     public function getComponentByClass($class, $select = array())
     {
         $components = $this->getComponentsByClass($class, $select);
@@ -458,6 +543,17 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return null;
     }
 
+    /**
+     * Returns component by given component class
+     *
+     * If multiple are found you will get an exception,
+     * To avoid that pass 'limit'=>1 as select
+     *
+     * @see getComponentsBySameClass
+     * @param string component class
+     * @param array|Kwf_Component_Select
+     * @return Kwf_Component_Data
+     */
     public function getComponentBySameClass($class, $select = array())
     {
         $components = $this->getComponentsBySameClass($class, $select);
@@ -482,6 +578,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
 
     /**
      * @deprecated
+     * @internal
      */
     public function setCurrentPage(Kwf_Component_Data $page)
     {
@@ -490,6 +587,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
 
     /**
      * @deprecated
+     * @internal
      *
      * I will kick your ass if you use this
      */
@@ -498,6 +596,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return $this->_currentPage;
     }
 
+    /**
+     * @internal
+     */
     public function setFilename($f)
     {
         $this->_filename = $f;

@@ -485,6 +485,13 @@ class Kwf_Component_Data
     }
 
     /**
+     * returns the number of child components for a single generator
+     *
+     * Only works for a single generator - you have to specify the required generator.
+     *
+     * This is much more efficient than count(->getChildComponents()) as it will result in an
+     * SELECT COUNT() sql query
+     *
      * @param array|Kwf_Component_Select
      * @return int
      */
@@ -502,8 +509,14 @@ class Kwf_Component_Data
     }
 
     /**
-     * @param array Kwf_Component_Select
-     * @return array int
+     * Returns child ids for a single generator
+     *
+     * Only works for a single generator - you have to specify the required generator.
+     *
+     * This is much more efficient than getChildComponents as no rows or data objects will be created.
+     *
+     * @param array|Kwf_Component_Select
+     * @return int[]
      */
     public function getChildIds($select = array())
     {
@@ -515,6 +528,12 @@ class Kwf_Component_Data
         return $generator->getChildIds($this, $select);
     }
 
+    /**
+     * Returns child components matching the given select
+     *
+     * @param array|Kwf_Component_Select
+     * @return Kwf_Component_Data[]
+     */
     public function getChildComponents($select = array())
     {
         $select = $this->_formatSelect($select);
@@ -582,6 +601,15 @@ class Kwf_Component_Data
         return $ret;
     }
 
+    /**
+     * Returns child pages matching the given select
+     *
+     * Not only direct children will be returned, also pages created by child components.
+     *
+     * @param array|Kwf_Component_Select additional constraints
+     * @param array|Kwf_Component_Select constraints on how deep indirect child pages will be returned
+     * @return Kwf_Component_Data[]
+     */
     public function getChildPages($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
@@ -593,6 +621,15 @@ class Kwf_Component_Data
         return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
+    /**
+     * Returns child pseudo pages matching the given select
+     *
+     * Not only direct children will be returned, also pseudo pages created by child components.
+     *
+     * @param array|Kwf_Component_Select additional constraints
+     * @param array|Kwf_Component_Select constraints on how deep indirect child pseudo pages will be returned
+     * @return Kwf_Component_Data[]
+     */
     public function getChildPseudoPages($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
@@ -604,6 +641,14 @@ class Kwf_Component_Data
         return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
+    /**
+     * Returns child boxes matching the given select
+     *
+     * Not only direct children will be returned, also boxes created by child components.
+     *
+     * @param array|Kwf_Component_Select
+     * @return Kwf_Component_Data[]
+     */
     public function getChildBoxes($select = array())
     {
         if (is_array($select)) {
@@ -615,6 +660,10 @@ class Kwf_Component_Data
         return $this->getRecursiveChildComponents($select);
     }
 
+    /**
+     * (unused?)
+     * @internal
+     */
     public function getChildMultiBoxes($select = array())
     {
         if (is_array($select)) {
@@ -627,15 +676,23 @@ class Kwf_Component_Data
     }
 
     /**
-     * Abkürzung für $this->getComponent()->hasContent()
+     * Returns if the component has content
      *
-     * @return boolean $hasContent Ob die zugehörige Komponente Inhalt hat oder nicht
+     * Shortcut for $this->getComponent()->hasContent()
+     *
+     * @return bool
      */
     public function hasContent()
     {
         return $this->getComponent()->hasContent();
     }
 
+    /**
+     * Returns a single child page
+     *
+     * @see getChildPages
+     * @return Kwf_Component_Data
+     */
     public function getChildPage($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
@@ -645,6 +702,12 @@ class Kwf_Component_Data
         return current($this->getChildPages($select, $childSelect));
     }
 
+    /**
+     * Returns a single child pseudo page
+     *
+     * @see getChildPseudoPages
+     * @return Kwf_Component_Data
+     */
     public function getChildPseudoPage($select = array())
     {
         if (is_array($select)) {
@@ -656,11 +719,23 @@ class Kwf_Component_Data
         return current($ret);
     }
 
+    /**
+     * Returns a generator of this data
+     *
+     * shortcut for Kwf_Component_Generator_Abstract::getInstance($data->componentClass, $key);
+     *
+     * @param string generator key
+     * @return Kwf_Component_Generator_Abstract
+     */
     public function getGenerator($key)
     {
         return Kwf_Component_Generator_Abstract::getInstance($this->componentClass, $key);
     }
 
+    /**
+     * (unused?)
+     * @internal
+     */
     public function getChildComponentIds($constraints = array())
     {
         $ret = array();
@@ -671,6 +746,9 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns a single direct child component
+     *
+     * @see getChildComponents
      * @return Kwf_Component_Data
      */
     public function getChildComponent($select = array())
@@ -684,6 +762,9 @@ class Kwf_Component_Data
 
 
     /**
+     * Returns a single child component
+     *
+     * @see getRecursiveChildComponents
      * @return Kwf_Component_Data
      */
     public function getRecursiveChildComponent($select = array(), $childSelect = array('page'=>false))
@@ -696,6 +777,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the Component object of to this data
+     *
      * @return Kwc_Abstract
      */
     public function getComponent()
@@ -710,6 +793,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the page this data belongs to (might be a page itself)
+     *
      * @return Kwf_Component_Data
      */
     public function getPage()
@@ -743,6 +828,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the page this data belongs to (might be a page itself) OR (if there is no page) the root component
+     *
      * @return Kwf_Component_Data
      */
     public function getPageOrRoot()
@@ -756,6 +843,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the psuedo page or pagethis data belongs to (might be a page itself) OR (if there is no page) the root component
+     *
      * @return Kwf_Component_Data
      */
     public function getPseudoPageOrRoot()
@@ -769,6 +858,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the pseudo page this data belongs to (might be a pseudo page itself)
+     *
      * @return Kwf_Component_Data
      */
     public function getPseudoPage()
@@ -781,6 +872,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the parent page of this data
+     *
      * @return Kwf_Component_Data
      */
     public function getParentPage()
@@ -793,6 +886,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the parent page OR (if there is no none) the root component
+     *
      * @return Kwf_Component_Data
      */
     public function getParentPageOrRoot()
@@ -805,6 +900,8 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the parent pseudo page of this data
+     *
      * @return Kwf_Component_Data
      */
     public function getParentPseudoPage()
@@ -818,6 +915,8 @@ class Kwf_Component_Data
 
 
     /**
+     * Returns the parent pseudo page OR (if there is no none) the root component
+     *
      * @return Kwf_Component_Data
      */
     public function getParentPseudoPageOrRoot()
@@ -830,7 +929,9 @@ class Kwf_Component_Data
     }
 
     /**
-     * @param string|array
+     * Returns the parent matching a given component class
+     *
+     * @param string|array component class or array of component classes
      * @return Kwf_Component_Data
      */
     public function getParentByClass($cls)
@@ -848,6 +949,14 @@ class Kwf_Component_Data
         return $d;
     }
 
+    /**
+     * Returns a parent component from a given depth
+     *
+     * more efficient than getting ->parent multiple times (only if data was unserialized)
+     *
+     * @param int levels to go up
+     * @return Kwf_Component_Data
+     */
     public function getParentComponent($numParent = 1)
     {
         if (isset($this->_lazyParent)) {
@@ -873,6 +982,14 @@ class Kwf_Component_Data
         return $c;
     }
 
+    /**
+     * Returns a parent component id from a given depth
+     *
+     * more efficient than getting ->parent multiple times (only if data was unserialized)
+     *
+     * @param int levels to go up
+     * @return Kwf_Component_Data
+     */
     public function getParentComponentId($numParent = 1)
     {
         if (isset($this->_lazyParent)) {
@@ -898,6 +1015,15 @@ class Kwf_Component_Data
         return $c->componentId;
     }
 
+    /**
+     * Returns the title of the page
+     *
+     * Can be overridden to customize.
+     *
+     * By default names of parent pages will be used
+     *
+     * @return string
+     */
     public function getTitle()
     {
         $title = array();
@@ -913,6 +1039,9 @@ class Kwf_Component_Data
         return implode(' - ', $title);
     }
 
+    /**
+     * @internal
+     */
     public function getPlugins($interface = null)
     {
         $ret = array();
@@ -926,6 +1055,11 @@ class Kwf_Component_Data
     }
 
     /**
+     * Searches for a child page by a given path
+     *
+     * Should only be used to resolve incoming paths
+     *
+     * @param string
      * @return Kwf_Component_Data
      */
     public function getChildPageByPath($path)
@@ -957,6 +1091,12 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the data resposible for the language
+     *
+     * (has a hasLanguage flag)
+     *
+     * might be null if only a single language is used
+     *
      * @return Kwf_Component_Data
      */
     public function getLanguageData()
@@ -973,6 +1113,11 @@ class Kwf_Component_Data
         return $c;
     }
 
+    /**
+     * Returns the language used by this data
+     *
+     * @return string
+     */
     public function getLanguage()
     {
         if (!isset($this->_languageCache)) { //cache ist vorallem für bei kwfUnserialize nützlich
@@ -1058,6 +1203,15 @@ class Kwf_Component_Data
         return $this->componentId . ' (' . $this->componentClass . ')';
     }
 
+    /**
+     * Render the component
+     *
+     * Usually only used internally or for debugging
+     *
+     * @param bool if view cache should be used, if null config setting will be used
+     * @param bool if master should be rendered
+     * @return string
+     */
     public function render($enableCache = null, $renderMaster = false)
     {
         $output = new Kwf_Component_Renderer();
