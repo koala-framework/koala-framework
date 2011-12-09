@@ -57,7 +57,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
         var lightbox = Ext.getBody().createChild({
             cls: 'kwfLightbox' + (this.options.style ? ' kwfLightbox'+this.options.style : ''),
-            html: '<div class="kwfLightboxInner"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'
+            html: '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'
         });
         lightbox.dom.kwfLightbox = this; //don't initialize again in onContentReady
         lightbox.enableDisplayMode('block');
@@ -91,6 +91,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 this.style.updateContent(contentEl, response.responseText);
 
                 var showContent = function() {
+                    this.innerLightboxEl.removeClass('kwfLightboxLoading');
                     this.innerLightboxEl.child('.loading').remove();
                     if (this.lightboxEl.isVisible()) {
                         contentEl.fadeIn();
