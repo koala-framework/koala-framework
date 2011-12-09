@@ -661,21 +661,6 @@ class Kwf_Component_Data
     }
 
     /**
-     * (unused?)
-     * @internal
-     */
-    public function getChildMultiBoxes($select = array())
-    {
-        if (is_array($select)) {
-            $select = new Kwf_Component_Select($select);
-        } else {
-            $select = clone $select;
-        }
-        $select->whereMultiBox(true);
-        return $this->getChildComponents($select);
-    }
-
-    /**
      * Returns if the component has content
      *
      * Shortcut for $this->getComponent()->hasContent()
@@ -730,19 +715,6 @@ class Kwf_Component_Data
     public function getGenerator($key)
     {
         return Kwf_Component_Generator_Abstract::getInstance($this->componentClass, $key);
-    }
-
-    /**
-     * (unused?)
-     * @internal
-     */
-    public function getChildComponentIds($constraints = array())
-    {
-        $ret = array();
-        foreach ($this->getChildComponents($constraints) as $data) {
-            $ret[] = $data->componentId;
-        }
-        return $ret;
     }
 
     /**
