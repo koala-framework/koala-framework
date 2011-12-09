@@ -3,6 +3,8 @@
  * Text-Eingabefeld mit Autocomplete
  * Gespeichert wird nicht wie bei ComboBox bzw. Select die ID vom ausgewählten
  * Datensatz, sondern der eingegebene Text. ComboBox ist nur Ausfüllhilfe.
+ *
+ * @package Form
  **/
 class Kwf_Form_Field_ComboBoxText extends Kwf_Form_Field_ComboBox
 {

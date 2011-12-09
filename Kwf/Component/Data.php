@@ -1,4 +1,19 @@
 <?php
+/**
+ * @package Components
+ *
+ * @property string $componentId unique componentId of this data
+ * @property string $dbId dbId of this data
+ * @property int $id id of this data, excluding parants
+ * @property Kwf_Comonent_Generator_Abstract $generator generator that created this data
+ * @property Kwf_Component_Data $parent parent data
+ * @property string $url url pointing to the page of this data, generated from filename property of parents
+ * @property string $rel rel attribute when url is used in an a-tag
+ * @property string $filename (only if page): the filename of this data, used to generate urls
+ * @property Kwf_Model_Row_Interface $row only if created by table generator: row assigned to this data
+ * @property bool $isPage true if this data represents a page
+ * @property bool $isPseudopage true if this data represents a page
+ */
 class Kwf_Component_Data
 {
     /**
@@ -8,14 +23,29 @@ class Kwf_Component_Data
 
     private $_url;
     private $_rel;
+
+    /**
+     * @internal
+     */
     protected $_filename;
+
+    /**
+     * @internal
+     */
     protected $_inheritClasses;
+
+    /**
+     * @internal
+     */
     protected $_uniqueParentDatas;
 
     private $_childComponentsCache = array();
     private $_recursiveGeneratorsCache = array();
     private $_languageCache;
 
+    /**
+     * @internal
+     */
     public function __construct($config)
     {
         foreach ($config as $k=>$i) {
@@ -75,6 +105,9 @@ class Kwf_Component_Data
         return ($urlPrefix ? $urlPrefix : '').'/'.$filename;
     }
 
+    /**
+     * @internal
+     */
     public function __get($var)
     {
         if ($var == 'url') {
@@ -164,6 +197,9 @@ class Kwf_Component_Data
         }
     }
 
+    /**
+     * @internal
+     */
     public function __isset($var)
     {
         if ($var == 'url' || $var == 'rel' || $var == 'filename') {
@@ -176,6 +212,9 @@ class Kwf_Component_Data
         return false;
     }
 
+    /**
+     * @internal
+     */
     public function __unset($var)
     {
         if ($var == 'url' || $var == 'rel' || $var == 'filename') {
@@ -185,6 +224,9 @@ class Kwf_Component_Data
         }
     }
 
+    /**
+     * @internal
+     */
     public function __set($var, $value)
     {
         if ($var == 'url' || $var == 'rel' || $var == 'filename') {
@@ -194,6 +236,10 @@ class Kwf_Component_Data
         }
     }
 
+    /**
+     * deprecated, could be removed
+     * @internal
+     */
     public function __call($method, $arguments)
     {
         if (substr($method, 0, 3) == 'set') {
@@ -211,6 +257,16 @@ class Kwf_Component_Data
         }
     }
 
+    /**
+     * Returns child components recursively
+     *
+     * This method usually is very efficient and tries to create as less data objects as possible.
+     * It is still a complex operation thus should not get called too often.
+     *
+     * @param Kwf_Component_Select|array what to search for
+     * @param Kwf_Component_Select|array how deep to search
+     * @return array(Kwf_Component_Data)
+     */
     public function getRecursiveChildComponents($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
@@ -427,6 +483,11 @@ class Kwf_Component_Data
         }
         return $select;
     }
+
+    /**
+     * @param array|Kwf_Component_Select
+     * @return int
+     */
     public function countChildComponents($select = array())
     {
         Kwf_Benchmark::count('countChildComponents');
@@ -440,6 +501,10 @@ class Kwf_Component_Data
         return current($generators)->countChildData($this, $select);
     }
 
+    /**
+     * @param array Kwf_Component_Select
+     * @return array int
+     */
     public function getChildIds($select = array())
     {
         $select = $this->_formatSelect($select);
@@ -925,6 +990,8 @@ class Kwf_Component_Data
      * Returns if this component is visible
      *
      * A component is visible if all parents are visible.
+     *
+     * @return bool
      */
     public function isVisible()
     {
@@ -983,6 +1050,9 @@ class Kwf_Component_Data
         return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_KWF, $this->getLanguage());
     }
 
+    /**
+     * @internal
+     */
     public function toDebug()
     {
         return $this->componentId . ' (' . $this->componentClass . ')';
@@ -999,6 +1069,9 @@ class Kwf_Component_Data
         }
     }
 
+    /**
+     * @internal
+     */
     public function kwfSerialize()
     {
         $this->getLanguage(); //um _languageCache zu befüllen
@@ -1032,6 +1105,9 @@ class Kwf_Component_Data
         return $ret;
     }
 
+    /**
+     * @internal
+     */
     public static function kwfUnserialize($vars)
     {
         if ($ret = Kwf_Component_Data_Root::getInstance()->getFromDataCache($vars['componentId'])) {

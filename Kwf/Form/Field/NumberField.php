@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Form
+ */
 class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
@@ -58,12 +61,5 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         if (!$ret) return '';
         $ret = number_format($ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         return $ret;
-    }
-
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Number Field')
-        ));
     }
 }

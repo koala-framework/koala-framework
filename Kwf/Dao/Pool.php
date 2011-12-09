@@ -1,5 +1,6 @@
 <?php
 /**
+ * @if deprecated
  * @deprecated use Kwf_Util_Model_Pool instead
  */
 class Kwf_Dao_Pool extends Kwf_Db_Table

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Text field where only a date input is valid. Datepicker is shown in ExtJS and Frontend
+ *
+ * @package Form
+ */
 class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)

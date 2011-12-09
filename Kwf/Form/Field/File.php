@@ -1,13 +1,10 @@
 <?php
+/**
+ * @package Form
+ */
 class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
 {
     private $_fields;
-
-    public static function getSettings()
-    {
-        $ret = parent::getSettings();
-        return $ret;
-    }
 
     public function __construct($fieldname = null, $fieldLabel = null)
     {

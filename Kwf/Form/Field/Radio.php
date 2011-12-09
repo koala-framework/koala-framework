@@ -1,6 +1,8 @@
 <?php
 /**
  * Auswahl wo man nicht reinschreiben kann, so wie eine HTML-Select-Box
+ *
+ * @package Form
  **/
 class Kwf_Form_Field_Radio extends Kwf_Form_Field_Select
 {
@@ -71,14 +73,5 @@ class Kwf_Form_Field_Radio extends Kwf_Form_Field_Select
         }
         $ret['html'] .= '</div>';
         return $ret;
-    }
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Radio Buttons'),
-            'default' => array(
-                'width' => 100
-            )
-        ));
     }
 }

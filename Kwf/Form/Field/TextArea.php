@@ -1,4 +1,9 @@
 <?php
+/**
+ * A standard textarea field
+ *
+ * @package Form
+ */
 class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
@@ -24,11 +29,5 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
         $ret['html'] .= htmlspecialchars($value);
         $ret['html'] .= "</textarea>";
         return $ret;
-    }
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Text Area')
-        ));
     }
 }

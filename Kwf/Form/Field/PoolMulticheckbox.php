@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Form
+ */
 class Kwf_Form_Field_PoolMulticheckbox extends Kwf_Form_Field_MultiCheckbox
 {
     public function __construct($tableName = null, $title = null)

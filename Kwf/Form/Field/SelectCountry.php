@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Form
+ */
 class Kwf_Form_Field_SelectCountry extends Kwf_Form_Field_Select
 {
     public function __construct($field_name = null, $field_label = null)

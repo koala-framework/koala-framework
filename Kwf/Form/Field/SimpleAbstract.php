@@ -1,4 +1,8 @@
 <?php
+/**
+ * Base class for form fields that represent a textual value
+ * @package Form
+ */
 class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
 {
     public function load($row, $postData = array())
@@ -111,5 +115,46 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
     public final function getValueFromPostData($postData)
     {
         return $this->_getValueFromPostData($postData);
+    }
+
+    /**
+     * Set weather this field is allowed to be blank when submitting the form
+     *
+     * defaults to true
+     *
+     * @param bool
+     */
+    public function setAllowBlank($value)
+    {
+        return $this->setProperty('allowBlank', $value);
+    }
+
+    /**
+     * Set a custom validation message when the field is required but blank
+     *
+     * @param string
+     * @see setAllowBlank
+     */
+    public function setEmptyMessage($value)
+    {
+        return $this->setProperty('emptyMessage', $value);
+    }
+
+    /**
+     * Set a comment displayed right to the form field
+     *
+     * @param string
+     */
+    public function setComment($value)
+    {
+        return $this->setProperty('comment', $value);
+    }
+
+    /**
+     * Set the default value for this field used when adding a new entry
+     */
+    public function setDefaultValue($value)
+    {
+        return $this->setProperty('defaultValue', $value);
     }
 }

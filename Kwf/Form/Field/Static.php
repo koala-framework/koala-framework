@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Form
+ */
 class Kwf_Form_Field_Static extends Kwf_Form_Field_Abstract
 {
     //setText

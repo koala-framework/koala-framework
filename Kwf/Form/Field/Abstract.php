@@ -1,4 +1,8 @@
 <?php
+/**
+ * Base class for all form fields
+ * @package Form
+ */
 abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
 {
     private $_properties;
@@ -15,6 +19,9 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         $this->_init();
     }
 
+    /**
+     * Override to add custom initialisation code
+     */
     protected function _init()
     {
     }
@@ -44,6 +51,9 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         }
     }
 
+    /**
+     * Sets the field name, should be the same as the model column
+     */
     public function setName($name)
     {
         if ($name && !preg_match('#^[a-z0-9_\-\[\]]+$#i', $name)) {
@@ -79,6 +89,11 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         }
     }
 
+    /**
+     * Set any property supported by ExtJS for this field
+     *
+     * Alternatively use setFooBar() to set property fooBar
+     */
     public function setProperty($name, $value)
     {
         if (is_null($value)) {
@@ -89,6 +104,11 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         return $this;
     }
 
+    /**
+     * Get any property supported by ExtJS for this field
+     *
+     * Alternatively use getFooBar() to get property fooBar
+     */
     public function getProperty($name)
     {
         if (isset($this->_properties[$name])) {
@@ -218,6 +238,11 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         }
     }
 
+    /**
+     * returns the fully qualified field name, different to getName when using form in form
+     *
+     * @return string
+     */
     public function getFieldName()
     {
         $ret = $this->getName();
@@ -227,6 +252,11 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         return $ret;
     }
 
+    /**
+     * returns a field by its name
+     *
+     * @return Kwf_Form_Field_Abstract
+     */
     public function getByName($name)
     {
         if ($this->getName() == $name) {
@@ -270,8 +300,7 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
     }
 
     /**
-     * Fügt die Standard-Validatoren für dieses Feld hinzu.
-     * wird aufgerufen in prepareSave
+     * Add validators to the field here, called in prepareSave
     **/
     protected function _addValidators()
     {
@@ -291,6 +320,7 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         $data->setFieldname($this->getName());
         return $this;
     }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = array();
@@ -304,13 +334,9 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         $this->_mask = $name;
     }
 
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentIcon' => new Kwf_Asset('textfield')
-        ));
-    }
-
+    /**
+     * @internal
+     */
     public function toDebug($indent=0)
     {
         $ind = str_repeat(' ', $indent*4);
@@ -344,5 +370,23 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         $ret .= '</pre>';
         $ret .= $children;
         return $ret;
+    }
+
+    /**
+     * Sets the field label
+     */
+    public function setFieldLabel($value)
+    {
+        return $this->setProperty('fieldLabel', $value);
+    }
+
+    /**
+     * Sets the label separator
+     *
+     * defaults to ':'
+     */
+    public function setLabelSeparator($value)
+    {
+        return $this->setProperty('labelSeparator', $value);
     }
 }

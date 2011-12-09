@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Form
+ */
 class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
 {
     public function __construct($field_name = null, $field_label = null)
@@ -24,12 +27,5 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
             $ret['html'] = '<span class="fieldContent">'.$values[$name].'</span>';
         }
         return $ret;
-    }
-
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Show field')
-        ));
     }
 }

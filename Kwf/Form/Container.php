@@ -1,4 +1,7 @@
 <?php
+/**
+ * @ingroup form
+ */
 class Kwf_Form_Container extends Kwf_Form_Container_Abstract
 {
     public function getMetaData($model)
