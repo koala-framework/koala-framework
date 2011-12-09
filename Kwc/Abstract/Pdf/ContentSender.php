@@ -1,13 +1,16 @@
 <?php
-class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSender_Default
+class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSender_Abstract
 {
     protected function _getPdfComponent()
     {
         return $this->getData()->parent;
     }
 
-    public function sendContent($output = 'I', $filename = null)
+    public function sendContent($includeMaster)
     {
+        $output = 'I'; //TODO was passed as parameter, where was that call?
+        $filename = null;
+
         if ($output == 'I') {
             $plugins = $this->_data->getPlugins('Kwf_Component_Plugin_Interface_View');
             if ($plugins) {
@@ -16,7 +19,7 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
                 }
                 $p = new $plugins[0]($this->getData()->componentId);
                 if ($p->processOutput('')) {
-                    parent::sendContent();
+                    parent::sendContent($includeMaster);
                     return false;
                 }
             }

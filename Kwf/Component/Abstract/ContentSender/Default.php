@@ -20,7 +20,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         return $ret;
     }
 
-    protected function getProcessInputComponents()
+    protected function _getProcessInputComponents($includeMaster)
     {
         return self::__getProcessInputComponents($this->_data);
     }
@@ -110,10 +110,10 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         return $this->_data->render(null, $includeMaster);
     }
 
-    public function sendContent($includeMaster = true)
+    public function sendContent($includeMaster)
     {
         header('Content-Type: text/html; charset=utf-8');
-        $process = $this->getProcessInputComponents();
+        $process = $this->_getProcessInputComponents($includeMaster);
         self::_callProcessInput($process);
         Kwf_Benchmark::checkpoint('processInput');
         echo $this->_render($includeMaster);

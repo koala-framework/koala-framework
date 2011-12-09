@@ -155,7 +155,7 @@ class Kwf_Setup
             $root->setCurrentPage($data);
             $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
             $contentSender = new $contentSender($data);
-            $contentSender->sendContent();
+            $contentSender->sendContent(true);
             Kwf_Benchmark::shutDown();
 
             //TODO: ein flag oder sowas ähnliches stattdessen verwenden

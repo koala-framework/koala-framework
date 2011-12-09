@@ -23,7 +23,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 
         $ret['generators'] = Kwc_Abstract::getSetting($masterComponentClass, 'generators');
         foreach ($ret['generators'] as $k=>$g) {
-            $ret['generators'][$k] = self::createChainedGenerator($g, $prefix);
+            $ret['generators'][$k] = self::createChainedGenerator($masterComponentClass, $k, $prefix);
         }
         foreach ($copySettings as $i) {
             if (Kwc_Abstract::hasSetting($masterComponentClass, $i)) {
@@ -39,11 +39,13 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public static function createChainedGenerator($g, $prefix)
+    public static function createChainedGenerator($class, $key, $prefix)
     {
+        $generators = Kwc_Abstract::getSetting($class, 'generators');
+        $g = $generators[$key];
         if (!isset($g['class'])) throw new Kwf_Exception("generator class is not set");
 
-        if (!is_array($g['component'])) $g['component'] = array($g['component']);
+        if (!is_array($g['component'])) $g['component'] = array($key => $g['component']);
         foreach ($g['component'] as &$c) {
             if (!$c) continue;
             $masterC = $c;

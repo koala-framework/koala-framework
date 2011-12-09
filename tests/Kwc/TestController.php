@@ -58,7 +58,7 @@ class Kwc_TestController extends Kwf_Controller_Action
         $root->setCurrentPage($data);
         $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
         $contentSender = new $contentSender($data);
-        $contentSender->sendContent();
+        $contentSender->sendContent(true);
 
 
         $this->_helper->viewRenderer->setNoRender(true);
