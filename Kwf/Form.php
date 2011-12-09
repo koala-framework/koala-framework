@@ -1,6 +1,6 @@
 <?php
 /**
- * @ingroup form
+ * @package Form
  */
 class Kwf_Form extends Kwf_Form_NonTableForm
 {

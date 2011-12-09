@@ -28,5 +28,6 @@
     <files>
         <directory>Kwf</directory>
         <!--<directory>Kwc</directory>-->
+        <ignore>Controller/Action/Debug/ApcController.php</ignore>
     </files>
 </docblox>

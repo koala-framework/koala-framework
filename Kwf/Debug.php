@@ -1,39 +1,5 @@
 <?php
 /**
- * @internal
- */
-function _pArray($src, $indent = '')
-{
-    $ret = '';
-    if (is_array($src)) {
-        $ret .= "{$indent}array ".count($src)." entries (\n";
-        foreach ($src as $k=>$i) {
-            $ret .= $indent."$k =>\n";
-            $ret .= _pArray($i, $indent . '  ');
-        }
-        $ret .= "{$indent})\n";
-    } else {
-        if (is_object($src) && method_exists($src, 'toDebug')) {
-            $src = $src->toDebug();
-            $src = str_replace('<pre>', '', $src);
-            $src = str_replace('</pre>', '', $src);
-        } else if (is_object($src) && method_exists($src, '__toString')) {
-            $src = $src->__toString();
-        } else if (!is_string($src)) {
-            $src = print_r($src, true);
-        } else {
-            if (strlen($src) > 400) {
-                $src = substr($src, 0, 400)."...".' (length='.strlen($src).')';
-            }
-        }
-        foreach (explode("\n", $src) as $l) {
-            $ret .= $indent.$l."\n";
-        }
-    }
-    return $ret;
-}
-
-/**
  * @package Debug
  */
 function p($src, $Type = 'LOG')
@@ -84,6 +50,40 @@ function p($src, $Type = 'LOG')
         if (php_sapi_name() != 'cli') echo "<br />";
         echo "\n";
     }
+}
+
+/**
+ * @internal
+ */
+function _pArray($src, $indent = '')
+{
+    $ret = '';
+    if (is_array($src)) {
+        $ret .= "{$indent}array ".count($src)." entries (\n";
+        foreach ($src as $k=>$i) {
+            $ret .= $indent."$k =>\n";
+            $ret .= _pArray($i, $indent . '  ');
+        }
+        $ret .= "{$indent})\n";
+    } else {
+        if (is_object($src) && method_exists($src, 'toDebug')) {
+            $src = $src->toDebug();
+            $src = str_replace('<pre>', '', $src);
+            $src = str_replace('</pre>', '', $src);
+        } else if (is_object($src) && method_exists($src, '__toString')) {
+            $src = $src->__toString();
+        } else if (!is_string($src)) {
+            $src = print_r($src, true);
+        } else {
+            if (strlen($src) > 400) {
+                $src = substr($src, 0, 400)."...".' (length='.strlen($src).')';
+            }
+        }
+        foreach (explode("\n", $src) as $l) {
+            $ret .= $indent.$l."\n";
+        }
+    }
+    return $ret;
 }
 
 /**

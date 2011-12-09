@@ -1,78 +1,135 @@
 <?php
+/**
+ * @package Trl
+ */
 function hlp($string) {
     return Zend_Registry::get('hlp')->hlp($string);
 }
 
+/**
+ * @package Trl
+ */
 function hlpKwf($string) {
     return Zend_Registry::get('hlp')->hlpKwf($string);
 }
 
+/**
+ * @package Trl
+ */
 function trl($string, $text = array()) {
     return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_WEB);
 }
 
+/**
+ * @package Trl
+ */
 function trlc($context, $string, $text = array()) {
     return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_WEB);
 }
 
+/**
+ * @package Trl
+ */
 function trlp($single, $plural, $text =  array()) {
     return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_WEB);
 }
 
+/**
+ * @package Trl
+ */
 function trlcp($context, $single, $plural, $text = array()) {
     return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_WEB);
 }
 
+/**
+ * @package Trl
+ */
 function trlKwf($string, $text = array()) {
     return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_KWF);
 }
 
+/**
+ * @package Trl
+ */
 function trlcKwf($context, $string, $text = array()) {
     return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_KWF);
 }
 
+/**
+ * @package Trl
+ */
 function trlpKwf($single, $plural, $text =  array()) {
     return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_KWF);
 }
 
+/**
+ * @package Trl
+ */
 function trlcpKwf($context, $single, $plural, $text = array()) {
     return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_KWF);
 }
 
 // trl functions for e.g. placeholders
+/**
+ * @package Trl
+ */
 function trlStatic($string, $text = array()) {
     return '*trlserialized-'.serialize(array('type' => 'trl', 'args' => array($string, $text))).'-trlserialized*';
 }
 
+/**
+ * @package Trl
+ */
 function trlcStatic($context, $string, $text = array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlc', 'args' => array($context, $string, $text))).'-trlserialized*';
 }
 
+/**
+ * @package Trl
+ */
 function trlpStatic($single, $plural, $text =  array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlp', 'args' => array($single, $plural, $text))).'-trlserialized*';
 }
 
+/**
+ * @package Trl
+ */
 function trlcpStatic($context, $single, $plural, $text = array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
 }
 
+/**
+ * @package Trl
+ */
 function trlKwfStatic($string, $text = array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlKwf', 'args' => array($string, $text))).'-trlserialized*';
 }
 
+/**
+ * @package Trl
+ */
 function trlcKwfStatic($context, $string, $text = array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlcKwf', 'args' => array($context, $string, $text))).'-trlserialized*';
 }
 
+/**
+ * @package Trl
+ */
 function trlpKwfStatic($single, $plural, $text =  array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlpKwf', 'args' => array($single, $plural, $text))).'-trlserialized*';
 }
 
+/**
+ * @package Trl
+ */
 function trlcpKwfStatic($context, $single, $plural, $text = array()) {
     return '*trlserialized-'.serialize(array('type' => 'trlcpKwf', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
 }
 
 
+/**
+ * @package Trl
+ */
 class Kwf_Trl
 {
     private $_cache = array();
