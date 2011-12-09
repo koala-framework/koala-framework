@@ -235,17 +235,23 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
         var newSize = this.lightbox.innerLightboxEl.getSize();
+        newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
+        newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
 
         if (isVisible) {
             this._center(true);
-            this.lightbox.innerLightboxEl.setSize(originalSize);
-            this.lightbox.innerLightboxEl.setSize(newSize, null, true);
+            if (this.lightbox.innerLightboxEl.getColor('backgroundColor')) {
+                //animate size only if backgroundColor is set - else it doesn't make sense
+                this.lightbox.innerLightboxEl.setSize(originalSize);
+                this.lightbox.innerLightboxEl.setSize(newSize, null, true);
+            } else {
+                this.lightbox.innerLightboxEl.setSize(newSize);
+            }
         } else {
             this._center(false);
             this.lightbox.innerLightboxEl.setSize(newSize);
             this.lightbox.lightboxEl.hide();
         }
-
     },
     onShow: function() {
         this.mask();

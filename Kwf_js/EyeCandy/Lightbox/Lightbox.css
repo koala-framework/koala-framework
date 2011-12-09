@@ -11,6 +11,7 @@
     padding: 10px;
     background: #fff;
     margin-bottom: 40px;
+    overflow: hidden;
 }
 .ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
 
