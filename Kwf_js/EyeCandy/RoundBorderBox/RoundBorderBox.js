@@ -5,10 +5,27 @@ Kwf.onContentReady(function()
         throw 'Please correct the name "kwfRoundBoderBox" - there is a "R" missing in "Border"';
     }
 
+    var setSizes = function(extEl) {
+
+        var wd = extEl.getWidth() - extEl.down('.kwfTopLeft').getWidth() - extEl.down('.kwfTopRight').getWidth();
+        extEl.down('.kwfTopCenter').setWidth(wd);
+
+        var wd = extEl.getWidth() - extEl.down('.kwfBottomLeft').getWidth() - extEl.down('.kwfBottomRight').getWidth();
+        extEl.down('.kwfBottomCenter').setWidth(wd);
+
+        var ht = extEl.getHeight() - extEl.down('.kwfTopLeft').getHeight() - extEl.down('.kwfBottomLeft').getHeight();
+        extEl.down('.kwfMiddleLeft').setHeight(ht);
+        extEl.down('.kwfMiddleRight').setHeight(ht);
+
+    };
+
     var els = Ext.query('.kwfRoundBorderBox');
     Ext.each(els, function(el) {
         var extEl = Ext.get(el);
-        if (extEl.child('.kwfMiddleCenterContent')) return;
+        if (extEl.child('.kwfMiddleCenterContent')) {
+            setSizes(extEl);
+            return;
+        }
         var children = el.childNodes;
 
         // mit elementen direkt arbeiten, sonst gehen zB events die auf den
@@ -53,16 +70,6 @@ Kwf.onContentReady(function()
         tmpEl.className = 'kwfRoundBorder kwfBottomRight';
         el.appendChild(tmpEl);
 
-
-        var wd = extEl.getWidth() - extEl.down('.kwfTopLeft').getWidth() - extEl.down('.kwfTopRight').getWidth();
-        extEl.down('.kwfTopCenter').setWidth(wd);
-
-        var wd = extEl.getWidth() - extEl.down('.kwfBottomLeft').getWidth() - extEl.down('.kwfBottomRight').getWidth();
-        extEl.down('.kwfBottomCenter').setWidth(wd);
-
-        var ht = extEl.getHeight() - extEl.down('.kwfTopLeft').getHeight() - extEl.down('.kwfBottomLeft').getHeight();
-        extEl.down('.kwfMiddleLeft').setHeight(ht);
-        extEl.down('.kwfMiddleRight').setHeight(ht);
-
+        setSizes(extEl);
     });
 });
