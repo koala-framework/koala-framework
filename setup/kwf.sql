@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `kwf_redirects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('path','domain','domainPath') NOT NULL,
   `source` varchar(255) NOT NULL,
+  `target_type` enum('intern','extern','downloadTag') NOT NULL,
   `target` varchar(200) NOT NULL,
   `comment` text NOT NULL,
   `active` tinyint(4) NOT NULL,
