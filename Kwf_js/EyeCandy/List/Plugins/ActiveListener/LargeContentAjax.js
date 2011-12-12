@@ -7,6 +7,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
         this.largeContainer = this.list.el.child(this.largeContainerSelector);
         this.largeContent = {};
+        this.fetchedItems = {};
     },
 
     _loadItem: function(item, options)
@@ -29,9 +30,13 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             url: url,
             success: function(response) {
                 var contentEl = this.largeContent[item.id].createChild();
+                this.largeContent[item.id].setStyle('position', 'absolute');
+                this.fetchedItems[item.id] = true;
                 contentEl.update(response.responseText);
 
                 if (this.largeContent[item.id].isVisible()) {
+
+                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight(), true);
 
                     var showContent = function() {
                         this.largeContent[item.id].child('.loading').remove();
@@ -77,6 +82,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             //the first one activated must be already shown in largeContainer
             this.largeContent[item.id] = this.largeContainer.child('div');
             this.largeContent[item.id].enableDisplayMode('block');
+            this.largeContent[item.id].setStyle('position', 'absolute');
+            this.largeContainer.setHeight(this.largeContent[item.id].getHeight());
             this.activeItem = item;
             return;
         }
@@ -85,6 +92,12 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
         var activeEl = this.largeContent[this.activeItem.id];
         var nextEl = this.largeContent[item.id];
+
+        if (this.fetchedItems[item.id]) {
+            nextEl.show();
+            this.largeContainer.setHeight(nextEl.getHeight(), true);
+            nextEl.hide();
+        }
 
         if (this.transition == 'fade') {
             activeEl.dom.style.zIndex = 2;
