@@ -26,7 +26,7 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
             if (is_array($parentData)) {
             } else {
                 $row = $this->_getModel()->getRow($parentData->dbId);
-                if (!in_array($this->_settings['component'][$row->component], $cc)) return null;
+                if (!$row || !in_array($this->_settings['component'][$row->component], $cc)) return null;
             }
         }
         return parent::_formatSelect($parentData, $select);

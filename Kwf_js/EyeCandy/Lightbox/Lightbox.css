@@ -85,5 +85,6 @@
 }
 
 body.kwfLightboxTheaterMode {
-    overflow: hidden;
+    /*overflow: hidden;
+    margin-right: 16px;*/
 }

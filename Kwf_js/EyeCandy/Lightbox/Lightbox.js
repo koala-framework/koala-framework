@@ -86,9 +86,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             url: url,
             success: function(response, options) {
                 var contentEl = this.innerLightboxEl.createChild();
-                if (this.lightboxEl.isVisible()) contentEl.hide();
 
                 this.style.updateContent(contentEl, response.responseText);
+
+                if (this.lightboxEl.isVisible()) contentEl.hide();
 
                 var showContent = function() {
                     this.innerLightboxEl.removeClass('kwfLightboxLoading');
@@ -248,7 +249,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
-        var newSize = this.lightbox.innerLightboxEl.getSize();
+        if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
+        if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.dom.style.width = '';
+        var newSize = contentEl.getSize();
         newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
         newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
 
@@ -259,8 +262,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
                 //animate size only if backgroundColor is set - else it doesn't make sense
                 this.lightbox.innerLightboxEl.setSize(originalSize);
                 this.lightbox.innerLightboxEl.setSize(newSize, null, true);
-            } else {
-                this.lightbox.innerLightboxEl.setSize(newSize);
             }
         } else {
             this.lightbox.innerLightboxEl.setSize(newSize);
