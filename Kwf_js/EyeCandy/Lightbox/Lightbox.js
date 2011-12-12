@@ -249,7 +249,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
-        var newSize = this.lightbox.innerLightboxEl.getSize();
+        if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
+        if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.dom.style.width = '';
+        var newSize = contentEl.getSize();
         newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
         newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
 
