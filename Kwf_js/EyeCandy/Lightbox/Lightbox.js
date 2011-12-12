@@ -95,14 +95,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     this.innerLightboxEl.child('.loading').remove();
                     if (this.lightboxEl.isVisible()) {
                         contentEl.fadeIn();
-                        this.preloadLinks();
                     } else {
                         contentEl.show();
                     }
                     Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                     this.style.afterContentShown();
                     if (this.lightboxEl.isVisible()) {
-                        contentEl.fadeIn();
+                        this.preloadLinks();
                     }
                 };
                 var imagesToLoad = 0;
@@ -125,13 +124,14 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     show: function()
     {
+        this.createLightboxEl();
+        this.style.onShow();
+
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
             Kwf.EyeCandy.Lightbox.currentOpen.close();
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
 
-        this.createLightboxEl();
-        this.style.onShow();
         this.lightboxEl.addClass('kwfLightboxOpen');
         if (this.fetched) {
             if (!this.lightboxEl.isVisible()) {
