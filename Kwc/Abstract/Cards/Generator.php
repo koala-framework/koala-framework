@@ -6,7 +6,7 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
     protected function _getModel()
     {
         if (!$this->_model) {
-            $this->_model = Kwc_Abstract::createModel($this->_class);
+            $this->_model = Kwc_Abstract::createOwnModel($this->_class);
         }
         return $this->_model;
     }
