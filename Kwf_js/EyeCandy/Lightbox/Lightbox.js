@@ -86,9 +86,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             url: url,
             success: function(response, options) {
                 var contentEl = this.innerLightboxEl.createChild();
-                if (this.lightboxEl.isVisible()) contentEl.hide();
 
                 this.style.updateContent(contentEl, response.responseText);
+
+                if (this.lightboxEl.isVisible()) contentEl.hide();
 
                 var showContent = function() {
                     this.innerLightboxEl.removeClass('kwfLightboxLoading');
