@@ -263,8 +263,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
                 this.lightbox.innerLightboxEl.setSize(newSize);
             }
         } else {
-            this._center(false);
             this.lightbox.innerLightboxEl.setSize(newSize);
+            this._center(false);
             this.lightbox.lightboxEl.hide();
         }
     },
