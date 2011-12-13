@@ -299,7 +299,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         var newSize = this.lightbox.contentEl.getSize();
         newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
         newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
-
+        if (this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter')) {
+            newSize['height'] -= this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter').getPadding('tb');
+        }
         var originalSize = this.lightbox.innerLightboxEl.getSize();
         this.lightbox.innerLightboxEl.setSize(newSize); //set to new size so centering works (no animation)
         var centerXy = this._getCenterXy();
