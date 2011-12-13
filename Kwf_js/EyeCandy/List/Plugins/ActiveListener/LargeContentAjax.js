@@ -36,12 +36,16 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
                 if (this.largeContent[item.id].isVisible()) {
 
-                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight(), true);
+                    var previousHeight = this.largeContainer.getHeight();
+                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight()); //set to new height, not animated
+                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
+                    contentEl.hide(); //hide after callOnContentReady, will be faded in after images loaded
+                    this.largeContainer.setHeight(previousHeight, false); //set back to previous height, not animated
+                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight(), true); //animate to new height
 
                     var showContent = function() {
                         this.largeContent[item.id].child('.loading').remove();
                         contentEl.fadeIn();
-                        Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                         if (options && options.success) {
                             options.success.call(options.scope || this);
                         }
@@ -56,7 +60,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                         }).createDelegate(this);
                     }, this);
 
-                    contentEl.hide(); //after callOnContentReady else cufon won't work inside contentEl
                     if (imagesToLoad == 0) showContent.call(this);
 
                 } else {
@@ -95,7 +98,11 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
         if (this.fetchedItems[item.id]) {
             nextEl.show();
-            this.largeContainer.setHeight(nextEl.getHeight(), true);
+            var oldHeight = this.largeContainer.getHeight();
+            this.largeContainer.setHeight(nextEl.getHeight()); //set new height without animation
+            Kwf.callOnContentReady(nextEl.dom, {newRender: false});
+            this.largeContainer.setHeight(oldHeight); //set previous height without animation
+            this.largeContainer.setHeight(nextEl.getHeight(), true); //and now animate to new height
             nextEl.hide();
         }
 
@@ -129,7 +136,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             nextEl.show();
         }
 
-        Kwf.callOnContentReady(nextEl.dom, {newRender: false});
         Kwf.Statistics.count(item.el.child('a').dom.href);
 
         this.activeItem = item;

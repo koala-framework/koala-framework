@@ -1,4 +1,4 @@
-Kwf.onContentReady(function() {
+Kwf.onContentReady(function(readyEl) {
     var els = document.getElementsByTagName('a');
     for (var i=0; i<els.length; i++) {
         if (els[i].kwfLightbox) continue;
@@ -34,6 +34,16 @@ Kwf.onContentReady(function() {
         el.kwfLightbox = l;
         Kwf.EyeCandy.Lightbox.currentOpen = l;
     });
+
+    readyEl = Ext.get(readyEl);
+    if (readyEl.isVisible() && Kwf.EyeCandy.Lightbox.currentOpen) {
+        if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.isVisible()
+            && (Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl.contains(readyEl)
+            || readyEl.contains(Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl))
+        ) {
+            Kwf.EyeCandy.Lightbox.currentOpen.style.onContentReady();
+        }
+    }
 });
 
 Ext.ns('Kwf.EyeCandy.Lightbox');
@@ -85,28 +95,28 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             params: { url: this.linkEl.dom.href },
             url: url,
             success: function(response, options) {
-                var contentEl = this.innerLightboxEl.createChild();
+                this.contentEl = this.innerLightboxEl.createChild();
 
-                this.style.updateContent(contentEl, response.responseText);
+                this.style.updateContent(response.responseText);
 
-                if (this.lightboxEl.isVisible()) contentEl.hide();
+                if (this.lightboxEl.isVisible()) this.contentEl.hide();
 
                 var showContent = function() {
                     this.innerLightboxEl.removeClass('kwfLightboxLoading');
                     this.innerLightboxEl.child('.loading').remove();
                     if (this.lightboxEl.isVisible()) {
-                        contentEl.fadeIn();
+                        this.contentEl.fadeIn();
                     } else {
-                        contentEl.show();
+                        this.contentEl.show();
                     }
-                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
+                    Kwf.callOnContentReady(this.contentEl.dom, {newRender: true});
                     this.style.afterContentShown();
                     if (this.lightboxEl.isVisible()) {
                         this.preloadLinks();
                     }
                 };
                 var imagesToLoad = 0;
-                contentEl.query('img').each(function(imgEl) {
+                this.contentEl.query('img').each(function(imgEl) {
                     imagesToLoad++;
                     imgEl.onload = (function() {
                         imagesToLoad--;
@@ -195,12 +205,13 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     afterCreateLightboxEl: Ext.emptyFn,
     afterContentShown: Ext.emptyFn,
-    updateContent: function(contentEl, responseText) {
-        contentEl.update(responseText);
+    updateContent: function(responseText) {
+        this.lightbox.contentEl.update(responseText);
     },
     onShow: Ext.emptyFn,
     onClose: Ext.emptyFn,
     afterClose: Ext.emptyFn,
+    onContentReady: Ext.emptyFn,
 
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
@@ -241,7 +252,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     afterContentShown: function() {
         this._center();
     },
-    updateContent: function(contentEl, responseText) {
+    updateContent: function(responseText) {
         var isVisible = this.lightbox.lightboxEl.isVisible();
 
         this.lightbox.lightboxEl.show(); //to mesaure
@@ -252,7 +263,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
         if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.dom.style.width = '';
-        var newSize = contentEl.getSize();
+        var newSize = this.lightbox.contentEl.getSize();
         newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
         newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
 
@@ -283,5 +294,22 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     _center: function(anim) {
         this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
+    },
+
+    onContentReady: function() {
+        //adjust size if height changed
+        var newSize = this.lightbox.contentEl.getSize();
+        newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
+        newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
+
+        var originalSize = this.lightbox.innerLightboxEl.getSize();
+        this.lightbox.innerLightboxEl.setSize(newSize); //set to new size so centering works (no animation)
+        var centerXy = this._getCenterXy();
+        var xy = this.lightbox.innerLightboxEl.getXY();
+        xy[0] = centerXy[0];
+        if (centerXy[1] < xy[1]) xy[1] = centerXy[1]; //move up, but not down
+        this.lightbox.innerLightboxEl.setXY(xy, true);
+        this.lightbox.innerLightboxEl.setSize(originalSize); //set back to previous size for animation
+        this.lightbox.innerLightboxEl.setSize(newSize, null, true); //now animate to new size
     }
 });
