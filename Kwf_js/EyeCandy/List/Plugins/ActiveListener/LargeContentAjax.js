@@ -113,7 +113,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             activeEl.stopFx();
             nextEl.stopFx();
             nextEl.fadeIn(Ext.applyIf({
-                useDisplay: true,
                 callback: function() {
                     activeEl.hide();
                 },
@@ -124,14 +123,12 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                 this.activeItem.listIndex < item.listIndex ? 'l' : 'r',
                 Ext.applyIf({
                     remove: false,
-                    useDisplay: true
                 }, this.transitionConfig)
             );
             nextEl.slideIn(
                 this.activeItem.listIndex < item.listIndex ? 'r' : 'l',
                 Ext.applyIf({
                     remove: false,
-                    useDisplay: true
                 }, this.transitionConfig)
             );
         } else {
