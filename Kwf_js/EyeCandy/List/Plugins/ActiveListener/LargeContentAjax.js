@@ -107,13 +107,15 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         }
 
         if (this.transition == 'fade') {
-            activeEl.dom.style.zIndex = 2;
+            activeEl.dom.style.zIndex = 1;
+            nextEl.dom.style.zIndex = 2;
 
-            nextEl.dom.style.zIndex = 1;
-            nextEl.show();
-
-            activeEl.fadeOut(Ext.applyIf({
-                useDisplay: true
+            nextEl.fadeIn(Ext.applyIf({
+                useDisplay: true,
+                callback: function() {
+                    activeEl.hide();
+                },
+                scope: this
             }, this.transitionConfig));
         } else if (this.transition == 'slide') {
             activeEl.slideOut(
