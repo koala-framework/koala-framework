@@ -118,6 +118,13 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
                 el.applyStyles({
                     height: 'auto'
                 });
+                if (Ext.isIE7) {
+                    (function() {
+                        this.enableDisplayMode('block');
+                        this.hide();
+                        this.show();
+                    }).defer(1, el);
+                }
             }
         });
 
