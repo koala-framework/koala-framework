@@ -10,6 +10,5 @@ Kwf.Statistics.onCount(function(url) {
     var piwikTracker = Kwc.Statistics.Piwik.getTracker();
     piwikTracker.setCustomUrl(url);
     piwikTracker.setReferrerUrl(location.href);
-    console.log(url);
     piwikTracker.trackPageView();
 });
