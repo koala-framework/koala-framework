@@ -7,6 +7,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
         this.largeContainer = this.list.el.child(this.largeContainerSelector);
         this.largeContent = {};
+        this.fetchedItems = {};
     },
 
     _loadItem: function(item, options)
@@ -29,14 +30,22 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             url: url,
             success: function(response) {
                 var contentEl = this.largeContent[item.id].createChild();
+                this.largeContent[item.id].setStyle('position', 'absolute');
+                this.fetchedItems[item.id] = true;
                 contentEl.update(response.responseText);
 
                 if (this.largeContent[item.id].isVisible()) {
 
+                    var previousHeight = this.largeContainer.getHeight();
+                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight()); //set to new height, not animated
+                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
+                    contentEl.hide(); //hide after callOnContentReady, will be faded in after images loaded
+                    this.largeContainer.setHeight(previousHeight, false); //set back to previous height, not animated
+                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight(), true); //animate to new height
+
                     var showContent = function() {
                         this.largeContent[item.id].child('.loading').remove();
                         contentEl.fadeIn();
-                        Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                         if (options && options.success) {
                             options.success.call(options.scope || this);
                         }
@@ -51,7 +60,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                         }).createDelegate(this);
                     }, this);
 
-                    contentEl.hide(); //after callOnContentReady else cufon won't work inside contentEl
                     if (imagesToLoad == 0) showContent.call(this);
 
                 } else {
@@ -77,6 +85,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             //the first one activated must be already shown in largeContainer
             this.largeContent[item.id] = this.largeContainer.child('div');
             this.largeContent[item.id].enableDisplayMode('block');
+            this.largeContent[item.id].setStyle('position', 'absolute');
+            this.largeContainer.setHeight(this.largeContent[item.id].getHeight());
             this.activeItem = item;
             return;
         }
@@ -85,6 +95,16 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
         var activeEl = this.largeContent[this.activeItem.id];
         var nextEl = this.largeContent[item.id];
+
+        if (this.fetchedItems[item.id]) {
+            nextEl.show();
+            var oldHeight = this.largeContainer.getHeight();
+            this.largeContainer.setHeight(nextEl.getHeight()); //set new height without animation
+            Kwf.callOnContentReady(nextEl.dom, {newRender: false});
+            this.largeContainer.setHeight(oldHeight); //set previous height without animation
+            this.largeContainer.setHeight(nextEl.getHeight(), true); //and now animate to new height
+            nextEl.hide();
+        }
 
         if (this.transition == 'fade') {
             activeEl.dom.style.zIndex = 2;
@@ -116,7 +136,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             nextEl.show();
         }
 
-        Kwf.callOnContentReady(nextEl.dom, {newRender: false});
+        Kwf.Statistics.count(item.el.child('a').dom.href);
 
         this.activeItem = item;
     }

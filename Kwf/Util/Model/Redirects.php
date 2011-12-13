@@ -8,13 +8,13 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', $type);
         $s->whereEquals('source', $source);
-        $s->whereEquals('active', 1);
+        $s->whereEquals('active', true);
         $row = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')->getRow($s);
         $target = null;
         if ($row) {
-            if (substr($row->target, 0, 1) == '/') {
+            if ($row->target_type == 'extern') {
                 $target = $row->target;
-            } else if (Kwf_Component_Data_Root::getComponentClass()) {
+            } else if ($row->target_type == 'intern' || $row->target_type == 'downloadTag') {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->target);
                 if ($c) $target = $c->url;
             }

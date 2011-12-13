@@ -11,8 +11,8 @@ class Kwf_Controller_Action_Redirects_RedirectsController extends Kwf_Controller
     protected function _initColumns()
     {
         parent::_initColumns();
-        $this->_columns->add(new Kwf_Grid_Column('source', trlKwf('Source')));
-        $this->_columns->add(new Kwf_Grid_Column('comment', trlKwf('Comment')));
+        $this->_columns->add(new Kwf_Grid_Column('source', trlKwf('Source'), 200));
+        $this->_columns->add(new Kwf_Grid_Column('comment', trlKwf('Comment'), 150));
         $this->_columns->add(new Kwf_Grid_Column_Visible('active'));
     }
 }
