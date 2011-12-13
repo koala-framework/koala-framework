@@ -116,7 +116,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     }
                 };
                 var imagesToLoad = 0;
-                this.contentEl.query('img').each(function(imgEl) {
+                this.contentEl.query('img.hideWhileLoading').each(function(imgEl) {
                     imagesToLoad++;
                     imgEl.onload = (function() {
                         imagesToLoad--;

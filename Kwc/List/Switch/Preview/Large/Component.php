@@ -11,6 +11,7 @@ class Kwc_List_Switch_Preview_Large_Component extends Kwc_Basic_Image_Component
             'scale' => Kwf_Media_Image::SCALE_CROP
         ));
         $ret['useParentImage'] = true;
+        $ret['imgCssClass'] = 'hideWhileLoading';
         return $ret;
     }
 }

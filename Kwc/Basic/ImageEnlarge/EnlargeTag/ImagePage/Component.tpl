@@ -19,7 +19,7 @@
         <div class="nextBtnInactive"></div>
         <? } ?>
         <div class="image" style="width:<?=$this->width?>px; height:<?=$this->height?>px">
-            <img class="centerImage" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+            <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
         </div>
     </div>
     <div class="lightboxFooter">
