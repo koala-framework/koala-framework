@@ -1,12 +1,14 @@
 <? if ($this->domain && $this->id) { ?>
 <!-- Piwik -->
 <script type="text/javascript">
-    var pkBaseURL = (("https:" == document.location.protocol) ? "https://<?=$this->domain?>/" : "<?=$this->domain?>/");
+    var pkBaseURL = (("https:" == document.location.protocol) ? "https://<?=$this->domain?>/" : "http://<?=$this->domain?>/");
     document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
     try {
-        var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", <?=$this->id?>);
+        Kwf.Statistics.url = pkBaseURL + "piwik.php";
+        Kwf.Statistics.id = <?=$this->id?>;
+        var piwikTracker = Kwf.Statistics.getTracker();
         <? foreach ($this->customVariables as $cv) { ?>
         piwikTracker.setCustomVariable(<?=$cv['index']?>, '<?=$cv['name']?>', '<?=$cv['value']?>', '<?=$cv['scope']?>');
         <? } ?>
