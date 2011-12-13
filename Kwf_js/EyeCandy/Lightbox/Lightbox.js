@@ -145,6 +145,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             this.lightboxEl.show();
             this.fetchContent();
         }
+        Kwf.Statistics.count(this.linkEl.dom.href);
     },
     close: function() {
         this.style.onClose();

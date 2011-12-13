@@ -130,6 +130,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         }
 
         Kwf.callOnContentReady(nextEl.dom, {newRender: false});
+        Kwf.Statistics.count(item.el.child('a').dom.href);
 
         this.activeItem = item;
     }
