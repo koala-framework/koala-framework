@@ -183,6 +183,14 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
 
     public function tidy($html, Kwc_Basic_Text_Parser $parser = null)
     {
+        //convert umlauts from NFD to NFC
+        $html = str_replace('u'.chr(0xCC), 'ü', $html);
+        $html = str_replace('a'.chr(0xCC), 'ä', $html);
+        $html = str_replace('o'.chr(0xCC), 'ö', $html);
+        $html = str_replace('U'.chr(0xCC), 'Ü', $html);
+        $html = str_replace('A'.chr(0xCC), 'Ä', $html);
+        $html = str_replace('O'.chr(0xCC), 'Ö', $html);
+
         $config = array(
                     'indent'         => true,
                     'output-xhtml'   => true,
