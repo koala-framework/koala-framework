@@ -2,8 +2,8 @@ Ext.ns('Kwc.Statistics.Piwik');
 
 Kwc.Statistics.Piwik.getTracker = function()
 {
-    if (!Kwf.Statistics.url || !Kwf.Statistics.id) return null;
-    return Piwik.getTracker(Kwf.Statistics.url, Kwf.Statistics.id);
+    if (!Kwc.Statistics.Piwik.url || !Kwc.Statistics.Piwik.idSite) return null;
+    return Piwik.getTracker(Kwc.Statistics.Piwik.url, Kwc.Statistics.Piwik.idSite);
 };
 
 Kwf.Statistics.onCount(function(url) {
