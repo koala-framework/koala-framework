@@ -13,14 +13,14 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['domain'] = $this->_getDomain();
-        $ret['id'] = $this->_getId();
+        $ret['id'] = $this->_getIdSite();
         $ret['customVariables'] = $this->_getCustomVariables();
         return $ret;
     }
 
     public function hasContent()
     {
-        return !!$this->_getId();
+        return !!$this->_getIdSite();
     }
 
     protected function _getDomain()
@@ -29,7 +29,7 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         return isset($cfg['piwikDomain']) ? $cfg['piwikDomain'] : null;
     }
 
-    protected function _getId()
+    protected function _getIdSite()
     {
         $cfg = Kwf_Config::getValueArray('statistic');
         return isset($cfg['piwikId']) ? $cfg['piwikId'] : null;

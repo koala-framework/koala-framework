@@ -6,9 +6,9 @@
 </script>
 <script type="text/javascript">
     try {
-        Kwf.Statistics.url = pkBaseURL + "piwik.php";
-        Kwf.Statistics.id = <?=$this->id?>;
-        var piwikTracker = Kwf.Statistics.getTracker();
+        Kwc.Statistics.Piwik.url = pkBaseURL + "piwik.php";
+        Kwc.Statistics.Piwik.idSite = <?=$this->id?>;
+        var piwikTracker = Kwc.Statistics.Piwik.getTracker();
         <? foreach ($this->customVariables as $cv) { ?>
         piwikTracker.setCustomVariable(<?=$cv['index']?>, '<?=$cv['name']?>', '<?=$cv['value']?>', '<?=$cv['scope']?>');
         <? } ?>

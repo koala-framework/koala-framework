@@ -2,12 +2,6 @@ Ext.ns('Kwf.Statistics');
 
 Kwf.Statistics.counter = [];
 
-Kwf.Statistics.getTracker = function()
-{
-    if (!Kwf.Statistics.url || !Kwf.Statistics.id) return null;
-    return Piwik.getTracker(Kwf.Statistics.url, Kwf.Statistics.id);
-};
-
 Kwf.Statistics.onCount = function(fn) {
     Kwf.Statistics.counter.push(fn);
 };
