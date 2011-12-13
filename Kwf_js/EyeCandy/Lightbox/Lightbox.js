@@ -106,8 +106,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     this.innerLightboxEl.child('.loading').remove();
                     if (this.lightboxEl.isVisible()) {
                         this.contentEl.fadeIn();
-                    } else {
-                        this.contentEl.show();
                     }
                     Kwf.callOnContentReady(this.contentEl.dom, {newRender: true});
                     this.style.afterContentShown();
