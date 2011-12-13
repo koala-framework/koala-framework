@@ -110,6 +110,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             activeEl.dom.style.zIndex = 1;
             nextEl.dom.style.zIndex = 2;
 
+            activeEl.stopFx();
+            nextEl.stopFx();
             nextEl.fadeIn(Ext.applyIf({
                 useDisplay: true,
                 callback: function() {
