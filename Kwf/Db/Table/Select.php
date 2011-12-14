@@ -1,4 +1,7 @@
 <?php
+/**
+ * @internal
+ */
 class Kwf_Db_Table_Select extends Zend_Db_Table_Select
 {
     public function where($cond, $value = null, $type = null)

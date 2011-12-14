@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Filter
+ */
 class Kwf_Filter_Row_UniqueAscii extends Kwf_Filter_Row_Abstract
 {
     private $_sourceField;

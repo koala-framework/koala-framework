@@ -2,6 +2,8 @@
 /**
  * Proxy das standard-mäßig ein Db-Model mit tabellennamen _table
  * erstellt.
+ *
+ * @package Model
  */
 class Kwf_Model_Db_Proxy extends Kwf_Model_Proxy
 {

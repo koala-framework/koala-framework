@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Tree_Row extends Kwf_Model_Proxy_Row
     implements IteratorAggregate, Kwf_Model_Tree_Row_Interface
 {

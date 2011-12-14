@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Expr
+ */
 class Kwf_Model_Select_Expr_String implements Kwf_Model_Select_Expr_Interface
 {
     protected $_string;

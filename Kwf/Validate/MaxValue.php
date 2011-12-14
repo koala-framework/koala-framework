@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_MaxValue extends Zend_Validate_LessThan
 {
     public function __construct($max)

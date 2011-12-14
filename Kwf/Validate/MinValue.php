@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_MinValue extends Zend_Validate_GreaterThan
 {
     public function __construct($min)

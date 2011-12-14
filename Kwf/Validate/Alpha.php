@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_Alpha extends Zend_Validate_Alpha
 {
     public function __construct($allowWhiteSpace = false)

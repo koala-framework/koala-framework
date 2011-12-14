@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @package Validate
+ */
 class Kwf_Validate_Time extends Zend_Validate_Abstract
 {
     /**

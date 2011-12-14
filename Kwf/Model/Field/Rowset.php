@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Field_Rowset implements Kwf_Model_Rowset_Interface
 {
     protected $_fieldName;

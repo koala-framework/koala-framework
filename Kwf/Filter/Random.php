@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Filter
+ */
 class Kwf_Filter_Random implements Zend_Filter_Interface
 {
     private $_length;

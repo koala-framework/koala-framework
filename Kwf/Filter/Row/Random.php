@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Filter
+ */
 class Kwf_Filter_Row_Random extends Kwf_Filter_Row_Abstract
 {
     private $_length;

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Mongo_Row extends Kwf_Model_Row_Data_Abstract
 {
     public function __set($name, $value)

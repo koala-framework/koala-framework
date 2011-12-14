@@ -2,6 +2,8 @@
 /**
  * In Ermangelung eines translate adapter interfaces von Zend wurden einfach
  * nur die methoden geschrieben, die wir benötigen.
+ * @deprecated unused, TODO remove?
+ * @internal
  */
 class Kwf_Trl_ZendAdapter extends Zend_Translate_Adapter
 {

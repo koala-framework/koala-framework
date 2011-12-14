@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
 {
     protected $_rowClass = 'Kwf_Model_Row_Data_Abstract';

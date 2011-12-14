@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Mail_VarsSiblingRow extends Kwf_Model_Field_Row
 {
     public function _afterInsert()

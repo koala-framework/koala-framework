@@ -1,6 +1,9 @@
 <?php
 /**
  * Iterator der einen ModelIterator mit einer Paketgröße durchgeht um speicher zu sparen
+ *
+ * @package Model
+ * @subpackage Iterator
  */
 class Kwf_Model_Iterator_Packages implements Iterator
 {

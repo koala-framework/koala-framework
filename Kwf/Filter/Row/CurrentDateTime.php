@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Filter
+ */
 class Kwf_Filter_Row_CurrentDateTime extends Kwf_Filter_Row_Abstract
 {
     protected $_dateFormat;

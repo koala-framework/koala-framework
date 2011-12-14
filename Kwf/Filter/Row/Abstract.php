@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Filter
+ */
 abstract class Kwf_Filter_Row_Abstract implements Zend_Filter_Interface
 {
     protected $_field = null;

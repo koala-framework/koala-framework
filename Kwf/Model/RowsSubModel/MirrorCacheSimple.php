@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_RowsSubModel_MirrorCacheSimple extends Kwf_Model_RowsSubModel_Proxy
 {
     protected $_rowClass = 'Kwf_Model_RowsSubModel_MirrorCacheSimple_Row';

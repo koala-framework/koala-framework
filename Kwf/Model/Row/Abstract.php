@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serializable
 {
     private $_skipFilters = false; //für saveSkipFilters

@@ -3,6 +3,8 @@
  * Generates the current date for a model, but makes it unique.
  * If a row already exists with the current date, it adds one second.
  * Is used for instance in the service
+ *
+ * @package Filter
  */
 class Kwf_Filter_Row_CurrentDateTimeUnique extends Kwf_Filter_Row_CurrentDateTime
 {

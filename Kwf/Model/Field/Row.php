@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Field_Row extends Kwf_Model_Row_Data_Abstract
 {
     protected $_fieldName;

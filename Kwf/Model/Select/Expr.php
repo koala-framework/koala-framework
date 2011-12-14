@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Expr
+ */
 class Kwf_Model_Select_Expr
 {
     public static function fromArray(array $data)

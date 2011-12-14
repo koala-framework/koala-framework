@@ -1,4 +1,7 @@
 <?php
+/**
+ * @internal
+ */
 abstract class Kwf_Db_Table_Abstract extends Zend_Db_Table_Abstract
 {
     private $_dao;

@@ -1,6 +1,8 @@
 <?php
 /**
  * Validierer Einfachere Validierungs-Meldungen
+ *
+ * @package Validate
  */
 class Kwf_Validate_EmailAddressSimple extends Kwf_Validate_EmailAddress
 {

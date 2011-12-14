@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_DateLessThan extends Zend_Validate_Abstract
 {
     const NOT_LESS = 'notLessThan';

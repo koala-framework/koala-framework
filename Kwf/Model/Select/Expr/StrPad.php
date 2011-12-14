@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Expr
+ */
 class Kwf_Model_Select_Expr_StrPad implements Kwf_Model_Select_Expr_Interface
 {
     const LEFT = 'left';

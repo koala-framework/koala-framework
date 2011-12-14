@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_UserPassword extends Zend_Validate_Abstract
 {
     const NOT_LOGGEDIN = 'notLoggedin';

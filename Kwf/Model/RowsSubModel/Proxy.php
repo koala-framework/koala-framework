@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_RowsSubModel_Proxy extends Kwf_Model_Proxy
     implements Kwf_Model_RowsSubModel_Interface
 {

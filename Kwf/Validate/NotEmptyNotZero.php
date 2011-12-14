@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_NotEmptyNotZero extends Kwf_Validate_NotEmpty
 {
     public function isValid($value)

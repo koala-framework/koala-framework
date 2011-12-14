@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_ProxyCache_Rowset extends Kwf_Model_Proxy_Rowset
 {
     protected $_cacheData = null;

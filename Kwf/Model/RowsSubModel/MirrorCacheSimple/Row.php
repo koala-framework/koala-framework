@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_RowsSubModel_MirrorCacheSimple_Row extends Kwf_Model_RowsSubModel_Proxy_Row
 {
     protected function _beforeSave()

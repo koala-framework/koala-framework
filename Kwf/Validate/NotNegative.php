@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_NotNegative extends Zend_Validate_Abstract
 {
     const NEGATIVE = 'negative';

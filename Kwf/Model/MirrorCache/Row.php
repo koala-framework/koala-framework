@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_MirrorCache_Row extends Kwf_Model_Proxy_Row
 {
     private $_doSyncOnUpdate = false;

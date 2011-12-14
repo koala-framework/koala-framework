@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Interface
+ */
 interface Kwf_Model_RowsSubModel_Interface
 {
     const SUBMODEL_PARENT = 'submodelParent';

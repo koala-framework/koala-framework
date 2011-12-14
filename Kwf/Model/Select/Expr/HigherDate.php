@@ -1,6 +1,9 @@
 <?php
 /**
+ * @package Model
+ * @subpackage Expr
  * @deprecated
+ * @internal
  *
  * Ist nur dafür da damit der Service noch mit Webs die HigherDate verwenden funktioniert (<1.11)
  */

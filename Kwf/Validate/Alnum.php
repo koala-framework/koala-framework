@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_Alnum extends Zend_Validate_Alnum
 {
     public function __construct($allowWhiteSpace = false)

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Trl
+ * @internal
+ */
 class Kwf_Trl_JsLoader
 {
     public function trlLoad($contents, $language)

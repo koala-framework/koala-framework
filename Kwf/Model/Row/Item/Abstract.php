@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Row_Item_Abstract extends Kwf_Model_Row_Abstract
 {
     protected $_item;

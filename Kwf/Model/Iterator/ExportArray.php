@@ -3,6 +3,9 @@
  * Iterator der Array-Export-Rows eines Models mit einem Select iteriert
  *
  * Sollte zusammen mit Kwf_Model_Iterator_Packages speichersparend sein
+ *
+ * @package Model
+ * @subpackage Iterator
  */
 class Kwf_Model_Iterator_ExportArray implements Kwf_Model_Iterator_ModelIterator_Interface
 {

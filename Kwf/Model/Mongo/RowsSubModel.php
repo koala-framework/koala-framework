@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Mongo_RowsSubModel extends Kwf_Model_Data_Abstract
     implements Kwf_Model_RowsSubModel_Interface
 {

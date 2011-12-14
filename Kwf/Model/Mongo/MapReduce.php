@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Mongo_MapReduce extends Kwf_Model_Mongo
 {
     protected $_primaryKey = '_id';

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Iterator
+ */
 class Kwf_Model_Tree_RecursiveIterator implements RecursiveIterator
 {
     private $_rowset;

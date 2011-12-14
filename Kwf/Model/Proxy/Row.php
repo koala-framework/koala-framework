@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
 {
     protected $_row;

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Rowset_ParentRow extends Kwf_Model_Rowset_Abstract
 {
     protected $_parentRow;

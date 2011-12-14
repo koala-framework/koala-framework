@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_EmailAddress extends Zend_Validate_EmailAddress
 {
     public function __construct($options = array())

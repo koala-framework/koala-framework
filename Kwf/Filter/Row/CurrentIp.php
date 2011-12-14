@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Filter
+ */
 class Kwf_Filter_Row_CurrentIp extends Kwf_Filter_Row_Abstract
 {
     public function filter($row)

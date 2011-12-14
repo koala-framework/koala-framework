@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_Row_Unique extends Kwf_Validate_Row_Abstract
 {
     const NOT_UNIQUE = 'notUnique';

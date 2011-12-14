@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Interface
+ */
 interface Kwf_Model_Tree_Row_Interface extends Kwf_Model_Row_Interface
 {
     public function getParentNode();

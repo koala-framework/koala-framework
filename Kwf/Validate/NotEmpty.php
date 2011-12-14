@@ -1,5 +1,9 @@
 <?php
-//empty, aber 0 ist erlaubt
+/**
+ * empty, aber 0 ist erlaubt
+ *
+ * @package Validate
+ */
 class Kwf_Validate_NotEmpty extends Zend_Validate_NotEmpty
 {
     public function __construct()

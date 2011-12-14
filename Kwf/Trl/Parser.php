@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Trl
+ * @internal
+ */
 class Kwf_Trl_Parser
 {
     private $_modelKwf;

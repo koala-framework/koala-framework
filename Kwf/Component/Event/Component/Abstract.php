@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Component
+ * @subpackage Event
+ */
 abstract class Kwf_Component_Event_Component_Abstract extends Kwf_Component_Event_Abstract
 {
     public $dbId;

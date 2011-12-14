@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Expr
+ */
 class Kwf_Model_Select_Expr_Sql implements Kwf_Model_Select_Expr_Interface
 {
     private $_sql;

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @internal
+ */
 class Kwf_Model_Rowset_Abstract implements Kwf_Model_Rowset_Interface, Serializable
 {
     protected $_pointer = 0;

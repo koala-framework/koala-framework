@@ -3,6 +3,9 @@
  * Iterator der Rows eines Models mit einem Select iteriert
  *
  * könnte womöglich in normales rowset integiert werden
+ *
+ * @package Model
+ * @subpackage Iterator
  */
 class Kwf_Model_Iterator_Rows implements Kwf_Model_Iterator_ModelIterator_Interface
 {

@@ -1,6 +1,7 @@
 <?php
 /**
  * @package Model
+ * @subpackage Interface
  */
 interface Kwf_Model_Interface
 {

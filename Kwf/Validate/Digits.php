@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Validate
+ */
 class Kwf_Validate_Digits extends Zend_Validate_Digits
 {
     protected $_allowEmpty;

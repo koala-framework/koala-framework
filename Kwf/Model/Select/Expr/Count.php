@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Model
+ * @subpackage Expr
+ */
 class Kwf_Model_Select_Expr_Count implements Kwf_Model_Select_Expr_Interface
 {
     private $_field;
