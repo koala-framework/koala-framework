@@ -1,6 +1,6 @@
 <?php
 /**
- * @ingroup form
+ * @package Form
  */
 class Kwf_Form_Container_Card extends Kwf_Form_Container_Abstract
 {

@@ -1,9 +1,8 @@
 <?php
 /**
- * @ingroup form
- *
  * Basisklasse für Fields die andere Fields beinhalten
  *
+ * @package Form
  **/
 abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
     implements IteratorAggregate
