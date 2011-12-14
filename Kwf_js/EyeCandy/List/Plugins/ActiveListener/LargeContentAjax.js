@@ -86,7 +86,14 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this.largeContent[item.id] = this.largeContainer.child('div');
             this.largeContent[item.id].enableDisplayMode('block');
             this.largeContent[item.id].setStyle('position', 'absolute');
-            this.largeContainer.setHeight(this.largeContent[item.id].getHeight());
+            var height = this.largeContent[item.id].getHeight();
+            if (this.largeContainer.getStyle('margin-top') && this.largeContainer.getStyle('margin-top').substr(-2)=='px') {
+                height += parseInt(this.largeContainer.getStyle('margin-top'));
+            }
+            if (this.largeContainer.getStyle('margin-bottom') && this.largeContainer.getStyle('margin-bottom').substr(-2)=='px') {
+                height += parseInt(this.largeContainer.getStyle('margin-bottom'));
+            }
+            this.largeContainer.setHeight(height);
             this.activeItem = item;
             return;
         }
