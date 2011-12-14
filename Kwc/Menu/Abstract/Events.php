@@ -23,6 +23,11 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
         );
         $ret[] = array(
             'class' => null,
+            'event' => 'Kwf_Component_Event_Page_ShowInMenuChanged',
+            'callback' => 'onPageChanged'
+        );
+        $ret[] = array(
+            'class' => null,
             'event' => 'Kwf_Component_Event_Page_ParentChanged',
             'callback' => 'onParentChanged'
         );

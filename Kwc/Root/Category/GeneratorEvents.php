@@ -37,6 +37,11 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
                 new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $event->row->id)
             );
         }
+        if ($event->isDirty('hide')) {
+            $this->fireEvent(
+                new Kwf_Component_Event_Page_ShowInMenuChanged($this->_class, $event->row->id)
+            );
+        }
     }
 
     public function onPageDataChanged(Kwf_Component_Event_Row_Abstract $event)
