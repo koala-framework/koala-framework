@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_FnFFile extends Kwf_Model_FnF
 {
     protected $_fileName;

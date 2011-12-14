@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_Session extends Kwf_Model_Data_Abstract
 {
     protected $_namespace;

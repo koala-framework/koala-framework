@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_Mail extends Kwf_Model_Db_Proxy
 {
     protected $_table = 'kwf_enquiries';

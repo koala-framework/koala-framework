@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_FieldRows extends Kwf_Model_Data_Abstract
     implements Kwf_Model_RowsSubModel_Interface
 {

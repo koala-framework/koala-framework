@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_Proxy extends Kwf_Model_Abstract
 {
     /**

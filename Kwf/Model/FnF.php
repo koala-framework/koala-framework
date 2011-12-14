@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_FnF extends Kwf_Model_Data_Abstract
     implements Serializable
 {

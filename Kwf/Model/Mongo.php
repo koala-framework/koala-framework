@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_Mongo extends Kwf_Model_Abstract
 {
     protected $_rowClass = 'Kwf_Model_Mongo_Row';

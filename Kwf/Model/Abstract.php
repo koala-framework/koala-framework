@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 {
     protected $_rowClass = 'Kwf_Model_Row_Abstract';

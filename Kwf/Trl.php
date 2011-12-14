@@ -1,19 +1,25 @@
 <?php
 /**
- * @package Trl
+ * @package Hlp
  */
 function hlp($string) {
     return Zend_Registry::get('hlp')->hlp($string);
 }
 
 /**
- * @package Trl
+ * @package Hlp
  */
 function hlpKwf($string) {
     return Zend_Registry::get('hlp')->hlpKwf($string);
 }
 
 /**
+ * Basic translated string
+ *
+ * More information: https://github.com/vivid-planet/koala-framework/wiki/Translation
+ *
+ * @param string translated string
+ * @param string|string[] string will be replaced with {0} in translated string, array with their {index}
  * @package Trl
  */
 function trl($string, $text = array()) {
@@ -21,6 +27,11 @@ function trl($string, $text = array()) {
 }
 
 /**
+ * Translated string in a context
+ *
+ * @param string Context describing usage of translated string
+ * @param string translated string
+ * @param string|string[] string will be replaced with {0} in translated string, array with their {index}
  * @package Trl
  */
 function trlc($context, $string, $text = array()) {
@@ -28,6 +39,11 @@ function trlc($context, $string, $text = array()) {
 }
 
 /**
+ * Translated string in singular/plural form
+ *
+ * @param string singular form
+ * @param string plural form including {0}
+ * @param string|string[] string will be replaced with {0} in translated string, array with their {index}
  * @package Trl
  */
 function trlp($single, $plural, $text =  array()) {
@@ -35,6 +51,12 @@ function trlp($single, $plural, $text =  array()) {
 }
 
 /**
+ * Translated string in singular/plural form in a context
+ *
+ * @param string Context describing usage of translated string
+ * @param string singular form
+ * @param string plural form including {0}
+ * @param string|string[] string will be replaced with {0} in translated string, array with their {index}
  * @package Trl
  */
 function trlcp($context, $single, $plural, $text = array()) {
@@ -42,6 +64,7 @@ function trlcp($context, $single, $plural, $text = array()) {
 }
 
 /**
+ * @see trl
  * @package Trl
  */
 function trlKwf($string, $text = array()) {
@@ -49,6 +72,7 @@ function trlKwf($string, $text = array()) {
 }
 
 /**
+ * @see trlc
  * @package Trl
  */
 function trlcKwf($context, $string, $text = array()) {
@@ -56,6 +80,7 @@ function trlcKwf($context, $string, $text = array()) {
 }
 
 /**
+ * @see trlp
  * @package Trl
  */
 function trlpKwf($single, $plural, $text =  array()) {
@@ -63,6 +88,7 @@ function trlpKwf($single, $plural, $text =  array()) {
 }
 
 /**
+ * @see trlcp
  * @package Trl
  */
 function trlcpKwf($context, $single, $plural, $text = array()) {
@@ -71,6 +97,7 @@ function trlcpKwf($context, $single, $plural, $text = array()) {
 
 // trl functions for e.g. placeholders
 /**
+ * @see trl
  * @package Trl
  */
 function trlStatic($string, $text = array()) {
@@ -78,6 +105,7 @@ function trlStatic($string, $text = array()) {
 }
 
 /**
+ * @see trlc
  * @package Trl
  */
 function trlcStatic($context, $string, $text = array()) {
@@ -85,6 +113,7 @@ function trlcStatic($context, $string, $text = array()) {
 }
 
 /**
+ * @see trlp
  * @package Trl
  */
 function trlpStatic($single, $plural, $text =  array()) {
@@ -92,6 +121,7 @@ function trlpStatic($single, $plural, $text =  array()) {
 }
 
 /**
+ * @see trlcp
  * @package Trl
  */
 function trlcpStatic($context, $single, $plural, $text = array()) {
@@ -99,6 +129,7 @@ function trlcpStatic($context, $single, $plural, $text = array()) {
 }
 
 /**
+ * @see trl
  * @package Trl
  */
 function trlKwfStatic($string, $text = array()) {
@@ -106,6 +137,7 @@ function trlKwfStatic($string, $text = array()) {
 }
 
 /**
+ * @see trlc
  * @package Trl
  */
 function trlcKwfStatic($context, $string, $text = array()) {
@@ -113,6 +145,7 @@ function trlcKwfStatic($context, $string, $text = array()) {
 }
 
 /**
+ * @see trlp
  * @package Trl
  */
 function trlpKwfStatic($single, $plural, $text =  array()) {
@@ -120,6 +153,7 @@ function trlpKwfStatic($single, $plural, $text =  array()) {
 }
 
 /**
+ * @see trlcp
  * @package Trl
  */
 function trlcpKwfStatic($context, $single, $plural, $text = array()) {
@@ -140,16 +174,46 @@ class Kwf_Trl
     private $_useUserLanguage = true;
     private $_webCodeLanguage;
 
+    /**
+     * @internal
+     */
     const SOURCE_KWF = 'kwf';
+    /**
+     * @internal
+     */
     const SOURCE_WEB = 'web';
+    /**
+     * @internal
+     */
     const TRLCP = 'trlcp';
+    /**
+     * @internal
+     */
     const TRLP = 'trlp';
+    /**
+     * @internal
+     */
     const TRLC = 'trlc';
+    /**
+     * @internal
+     */
     const TRL = 'trl';
 
+    /**
+     * @internal
+     */
     const ERROR_INVALID_CHAR = 'invalidChar';
+    /**
+     * @internal
+     */
     const ERROR_INVALID_STRING = 'invalidString';
+    /**
+     * @internal
+     */
     const ERROR_WRONG_NR_OF_ARGUMENTS = 'wrongNrOfArguments';
+    /**
+     * @internal
+     */
     protected $_errorMessages = array(
         self::ERROR_INVALID_CHAR => 'Unallowed character inbetween two quotationmark blocks (e.g. "aa"."bb)"',
         self::ERROR_INVALID_STRING => 'String is not valid. Unallowed characters are used',

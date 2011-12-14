@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_ProxyCache extends Kwf_Model_Proxy
 {
     protected $_cacheSettings;

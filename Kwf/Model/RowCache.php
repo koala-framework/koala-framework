@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_RowCache extends Kwf_Model_Proxy
 {
     protected $_rowClass = 'Kwf_Model_RowCache_Row';

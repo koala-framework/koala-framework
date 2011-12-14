@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_Field extends Kwf_Model_Abstract implements Kwf_Model_SubModel_Interface
 {
     protected $_rowClass = 'Kwf_Model_Field_Row';

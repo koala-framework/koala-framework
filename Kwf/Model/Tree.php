@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 class Kwf_Model_Tree extends Kwf_Model_Db_Proxy
                         implements Kwf_Model_Tree_Interface
 {

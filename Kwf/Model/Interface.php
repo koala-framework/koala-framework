@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Model
+ */
 interface Kwf_Model_Interface
 {
     const FORMAT_SQL = 'sql';

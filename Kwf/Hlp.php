@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Hlp
+ */
 class Kwf_Hlp {
     
     protected $_xml;
