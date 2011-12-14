@@ -12,16 +12,6 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         $this->setInputType('text');
     }
 
-    public function __call($n, $v)
-    {
-        if ($n == 'setVType') {
-            $e = new Kwf_Exception('use setVtype instead of setVType');
-            $e->logOrThrow();
-            $n = 'setVtype';
-        }
-        return parent::__call($n, $v);
-    }
-
     protected function _addValidators()
     {
         parent::_addValidators();
@@ -86,13 +76,19 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
      * - alphanum
      *
      * @see addValidator
+     * @param string
+     * @return $this
      */
     public function setVtype($value)
     {
         return $this->setProperty('vtype', $value);
     }
+
     /**
      * Set the maximum input field length allowed
+     *
+     * @param bool
+     * @return $this
      */
     public function setMaxLength($value)
     {

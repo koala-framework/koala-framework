@@ -30,7 +30,7 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
     protected function _getTrlProperties()
     {
         $ret = parent::_getTrlProperties();
-        $ret[] = 'emptyMessage';
+        $ret[] = 'blankText';
         $ret[] = 'comment';
         $ret[] = 'defaultValue';
         return $ret;
@@ -45,8 +45,8 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
             || $this->getAllowBlank() === '0'
         ) {
             $v = new Kwf_Validate_NotEmpty();
-            if ($this->getEmptyMessage()) {
-                $v->setMessage(Kwf_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
+            if ($this->getBlankText()) {
+                $v->setMessage(Kwf_Validate_NotEmpty::IS_EMPTY, $this->getBlankText());
             }
             $this->addValidator($v, 'notEmpty');
         }
@@ -130,14 +130,23 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
     }
 
     /**
-     * Set a custom validation message when the field is required but blank
+     * Error text to display if the allow blank validation fails (defaults to "This field is required")
      *
      * @param string
      * @see setAllowBlank
      */
+    public function setBlankText($value)
+    {
+        return $this->setProperty('blankText', $value);
+    }
+
+    /**
+     * @internal
+     * @deprecated
+     */
     public function setEmptyMessage($value)
     {
-        return $this->setProperty('emptyMessage', $value);
+        return $this->setBlankText($value);
     }
 
     /**

@@ -1,5 +1,9 @@
 <?php
 /**
+ * Numeric text field
+ *
+ * ExtJS provides automatic keystroke filtering and numeric validation.
+ *
  * @package Form
  */
 class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
@@ -61,5 +65,71 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         if (!$ret) return '';
         $ret = number_format($ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         return $ret;
+    }
+
+    /**
+     * The maximum allowed value
+     *
+     * @param float
+     * @return $this
+     */
+    public function setMaxValue($value)
+    {
+        return $this->setProperty('maxValue', $value);
+    }
+
+    /**
+     * The minimum allowed value
+     *
+     * @param float
+     * @return $this
+     */
+    public function setMinValue($value)
+    {
+        return $this->setProperty('minValue', $value);
+    }
+
+    /**
+     * False to prevent entering a negative sign (defaults to true)
+     *
+     * @param bool
+     * @return $this
+     */
+    public function setAllowNegative($value)
+    {
+        return $this->setProperty('allowNegative', $value);
+    }
+
+    /**
+     * False to disallow decimal values (defaults to true)
+     *
+     * @param bool
+     * @return $this
+     */
+    public function setAllowDecimals($value)
+    {
+        return $this->setProperty('allowDecimals', $value);
+    }
+
+    /**
+     * Character(s) to allow as the decimal separator (default depends on current language)
+     *
+     * @param string
+     * @return $this
+     */
+    public function setDecimalSeparator($value)
+    {
+        return $this->setProperty('decimalSeparator', $value);
+    }
+
+    /**
+     * The maximum precision to display after the decimal separator (defaults to 2)
+     *
+     * @param int
+     * @return $this
+     */
+    public function setDecimalPrecision($value)
+    {
+        return $this->setProperty('decimalPrecision', $value);
     }
 }

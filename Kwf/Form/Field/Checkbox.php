@@ -8,7 +8,7 @@ class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('checkbox');
-        $this->setEmptyMessage(trlKwfStatic("Please mark the checkbox"));
+        $this->setBlankText(trlKwfStatic("Please mark the checkbox"));
     }
 
     /**
@@ -16,7 +16,7 @@ class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
      */
     public function setErrorText()
     {
-        throw new Kwf_Exception('setErrorText is deprecated, use setEmptyText');
+        throw new Kwf_Exception('setErrorText is deprecated, use setBlankText');
     }
 
     protected function _getTrlProperties()
@@ -68,4 +68,16 @@ class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
         }
         return $postData;
     }
+
+    /**
+     * The text that appears beside the checkbox (defaults to '')
+     *
+     * @param string
+     * @return $this
+     */
+    public function setBoxLabel($value)
+    {
+        return $this->setProperty('boxLabel', $value);
+    }
+
 }

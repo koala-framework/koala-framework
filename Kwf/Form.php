@@ -1,5 +1,9 @@
 <?php
 /**
+ * Container for all forms
+ *
+ * Introduction to Forms: https://github.com/vivid-planet/koala-framework/wiki/Kwf_Form
+ *
  * @package Form
  */
 class Kwf_Form extends Kwf_Form_NonTableForm
@@ -168,7 +172,10 @@ class Kwf_Form extends Kwf_Form_NonTableForm
         return $this->_primaryKey;
     }
 
-
+    /**
+     * @internal
+     * @deprecated
+     */
     public function setTable(Zend_Db_Table_Abstract $table)
     {
         $this->_model = new Kwf_Model_Db(array(
@@ -286,6 +293,11 @@ class Kwf_Form extends Kwf_Form_NonTableForm
     {
     }
 
+    /**
+     * Static helper function that formats form errors
+     *
+     * @return string[]
+     */
     public static function formatValidationErrors($errors)
     {
         $msg = array();

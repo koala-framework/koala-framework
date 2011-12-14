@@ -24,6 +24,9 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
         $this->setBaseCls('x-plain');
     }
 
+    /**
+     * @internal
+     */
     public function __clone()
     {
         $this->fields = clone $this->fields;
