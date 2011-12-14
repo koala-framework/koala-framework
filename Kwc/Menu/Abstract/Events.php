@@ -58,6 +58,14 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
     {
         $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId, array('ignoreVisible'=>true)) as $data) {
+
+            if (!$event instanceof Kwf_Component_Event_Page_ShowInMenuChanged
+                && !$data->isShownInMenu()
+            ) {
+                //ignore pages not shown in menu
+                continue;
+            }
+
             $level = 0;
             $categoryData = $data;
             while ($categoryData && !Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory')) {
