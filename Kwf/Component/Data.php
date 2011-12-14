@@ -1122,6 +1122,24 @@ class Kwf_Component_Data
         return true;
     }
 
+    /**
+     * Returns if this page should be shown in menus
+     *
+     * Category_Generators can change that dynamically using the hide column,
+     * other generators have a 'showInMenu' setting (defaults to false)
+     */
+    public function isShownInMenu()
+    {
+        if (!$this->isPage) return false;
+        if ($this->generator instanceof Kwc_Root_Category_Generator) {
+            //it's not worth for this single special case to add a generator method, but should be done if other special cases are needed
+            return !$this->row->hide;
+        } else {
+            if (!$this->generator->hasSetting('showInMenu')) return false;
+            return (bool)$this->generator->getSetting('showInMenu');
+        }
+    }
+
     public function trlStaticExecute($trlStaticData)
     {
         return Kwf_Trl::getInstance()->trlStaticExecute($trlStaticData, $this->getLanguage());

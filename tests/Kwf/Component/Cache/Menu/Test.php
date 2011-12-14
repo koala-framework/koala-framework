@@ -168,4 +168,36 @@ class Kwf_Component_Cache_Menu_Test extends Kwc_TestAbstract
         $this->assertEquals(2, substr_count($html, 'f1'));
         $this->assertEquals(2, substr_count($html, 'f4'));
     }
+
+    public function testHideInMenu()
+    {
+        $page = $this->_root->getComponentById(1);
+
+        $html = $page->render(true, true);
+        $this->assertEquals(2, substr_count($html, '<li'));
+        $this->assertEquals(2, substr_count($html, 'f1'));
+        $this->assertEquals(2, substr_count($html, 'f4'));
+        Kwf_Component_Data_Root::reset();
+
+        $row = $this->_root->getGenerator('page')->getModel()->getRow(1);
+        $row->hide = true;
+        $row->save();
+        $this->_process();
+
+        $html = $page->render(true, true);
+
+        $this->assertEquals(1, substr_count($html, '<li'));
+        $this->assertEquals(2, substr_count($html, 'f4'));
+
+        $row = $this->_root->getGenerator('page')->getModel()->getRow(1);
+        $row->hide = false;
+        $row->save();
+        $this->_process();
+
+        $html = $page->render(true, true);
+
+        $this->assertEquals(2, substr_count($html, '<li'));
+        $this->assertEquals(2, substr_count($html, 'f1'));
+        $this->assertEquals(2, substr_count($html, 'f4'));
+    }
 }
