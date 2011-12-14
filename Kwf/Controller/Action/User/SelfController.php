@@ -21,7 +21,12 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
         $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Change password')));
         $fs->setLabelWidth(130);
 
-        $fs->add(new Kwf_Form_Field_Password('password1', trlKwf('Change password')));
+        $passwordField = $fs->add(new Kwf_Form_Field_Password('password1', trlKwf('Change password')));
+        $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
+        if ($validatorClass) {
+            $passwordField->addValidator(new $validatorClass());
+        }
+
         $fs->add(new Kwf_Form_Field_Password('password2', trlKwf('Repeat password')));
     }
 

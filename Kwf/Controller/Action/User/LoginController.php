@@ -135,6 +135,14 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_ClientException(trlKwf('Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?'));
         }
 
+        $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
+        if ($validatorClass) {
+            $validator = new $validatorClass();
+            if (!$validator->isValid($password)) {
+                throw new Kwf_ClientException(implode('<br />', $validator->getMessages()));
+            }
+        }
+
         $row->setPassword($password);
         $row->save();
 
