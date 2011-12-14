@@ -1127,6 +1127,8 @@ class Kwf_Component_Data
      *
      * Category_Generators can change that dynamically using the hide column,
      * other generators have a 'showInMenu' setting (defaults to false)
+     *
+     * @return bool
      */
     public function isShownInMenu()
     {
