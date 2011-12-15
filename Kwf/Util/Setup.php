@@ -207,7 +207,7 @@ class Kwf_Util_Setup
                     if (isset($domain['noRedirectPattern'])) {
                         $ret .= "\n";
                         $ret .= "        //noRedirectPattern\n";
-                        $ret .= "        if (!\$domainMatches && !preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
+                        $ret .= "        if (!\$domainMatches && preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
                         $ret .= "            \$redirect = false;\n";
                         $ret .= "            \$domainMatches = true;\n";
                         $ret .= "        }\n";
