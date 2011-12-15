@@ -62,6 +62,7 @@ Kwf.EyeCandy.Lightbox.Lightbox = function(linkEl, options) {
 };
 Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     fetched: false,
+    _blockOnContentReady: false,
     createLightboxEl: function()
     {
         if (this.lightboxEl) return;
@@ -108,7 +109,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     if (this.lightboxEl.isVisible()) {
                         this.contentEl.fadeIn();
                     }
+                    this._blockOnContentReady = true; //don't resize twice
                     Kwf.callOnContentReady(this.contentEl.dom, {newRender: true});
+                    this._blockOnContentReady = false;
                     this.style.afterContentShown();
                     if (this.lightboxEl.isVisible()) {
                         this.preloadLinks();
@@ -297,7 +300,10 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
     },
 
-    onContentReady: function() {
+    onContentReady: function()
+    {
+        if (this.lightbox._blockOnContentReady) return;
+
         //adjust size if height changed
         var newSize = this.lightbox.contentEl.getSize();
         newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
