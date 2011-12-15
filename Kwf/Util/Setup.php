@@ -177,6 +177,14 @@ class Kwf_Util_Setup
             $ret .= "    }\n";
         $ret .= "}\n";
 
+        //up here to have less dependencies or broken redirect
+        $ret .= "\n";
+        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 14) == '/kwf/util/apc/'\n";
+        $ret .= ") {\n";
+        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
+        $ret .= "}\n";
+
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {
             $ret .= "if (\$host) {\n";
@@ -233,14 +241,6 @@ class Kwf_Util_Setup
             $ret .= "    }\n";
             $ret .= "}\n";
         }
-
-        $ret .= "\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 14) == '/kwf/util/apc/'\n";
-        $ret .= ") {\n";
-        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
-        $ret .= "}\n";
-
 
         if (Kwf_Config::getValue('showPlaceholder') && !Kwf_Config::getValue('ignoreShowPlaceholder')) {
             $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REQUEST_URI']) && substr(\$_SERVER['REQUEST_URI'], 0, 8)!='/assets/') {\n";
