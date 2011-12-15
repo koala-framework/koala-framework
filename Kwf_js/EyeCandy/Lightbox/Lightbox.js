@@ -268,11 +268,13 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         if (isVisible) {
             this.lightbox.innerLightboxEl.setSize(newSize);
-            this._center(true);
             if (this.lightbox.innerLightboxEl.getColor('backgroundColor')) {
                 //animate size only if backgroundColor is set - else it doesn't make sense
+                this._center(true);
                 this.lightbox.innerLightboxEl.setSize(originalSize);
                 this.lightbox.innerLightboxEl.setSize(newSize, null, true);
+            } else {
+                this._center(false);
             }
         } else {
             this.lightbox.innerLightboxEl.setSize(newSize);
