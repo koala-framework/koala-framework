@@ -182,25 +182,28 @@ class Kwf_Util_Setup
             $ret .= "if (\$host) {\n";
             $ret .= "    \$redirect = false;\n";
             if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
-                $ret .= "    \$noRedirect = false;\n";
+                $ret .= "    \$domainMatches = false;\n";
                 foreach ($domains as $domain) {
-                    $ret .= "    if ('{$domain['domain']}' == \$host) \$noRedirect = true;\n";
+                    $ret .= "    if ('{$domain['domain']}' == \$host) \$domainMatches = true;\n";
                 }
-                $ret .= "    if (!\$noRedirect) {\n";
+                $ret .= "    if (!\$domainMatches) {\n";
                 foreach ($domains as $domain) {
                     if (isset($domain['pattern'])) {
-                        $ret .= "        if (preg_match('/{$domain['pattern']}/', \$host)) {\n";
-                        if ($domain['noRedirectPattern']) {
-                            $ret .= "            if (!preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
-                            $ret .= "                \$redirect = '{$domain['domain']}';\n";
-                            $ret .= "            }\n";
-                            //$ret .= "            break;\n";
-                        }
+                        $ret .= "        if (!\$domainMatches && preg_match('/{$domain['pattern']}/', \$host)) {\n";
+                        $ret .= "            if (!\$redirect) \$redirect = '{$domain['domain']}';\n";
+                        $ret .= "            \$domainMatches = true;\n";
                         $ret .= "        }\n";
-                    } else {
-                        $ret .= "        if (!\$redirect) \$redirect = '{$domain['domain']}';\n";
+                    }
+                    if (isset($domain['noRedirectPattern'])) {
+                        $ret .= "        if (!\$domainMatches && !preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
+                        $ret .= "            \$redirect = false;\n";
+                        $ret .= "            \$domainMatches = true;\n";
+                        $ret .= "        }\n";
                     }
                 }
+                $ret .= "    }\n";
+                $ret .= "    if (!\$domainMatches) {\n";
+                $ret .= "        \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
                 $ret .= "    }\n";
             } else if (Kwf_Config::getValue('server.domain')) {
                 $ret .= "    if (\$host != '".Kwf_Config::getValue('server.domain')."') {\n";
