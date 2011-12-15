@@ -37,7 +37,8 @@ Kwf.onContentReady(function(readyEl) {
 
     readyEl = Ext.get(readyEl);
     if (readyEl.isVisible() && Kwf.EyeCandy.Lightbox.currentOpen) {
-        if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.isVisible()
+        if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl
+            && Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.isVisible()
             && (Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl.contains(readyEl)
             || readyEl.contains(Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl))
         ) {
