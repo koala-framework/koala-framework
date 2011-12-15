@@ -94,7 +94,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         if (!$this->getForm()) return;
 
-        $this->getForm()->setId($this->_getIdFromPostData($postData));
+        if ($this->_getIdFromPostData($postData)) {
+            $this->getForm()->setId($this->_getIdFromPostData($postData));
+        }
 
         $m = $this->getForm()->getModel();
         while ($m instanceof Kwf_Model_Proxy) {
