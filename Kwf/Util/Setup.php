@@ -197,12 +197,16 @@ class Kwf_Util_Setup
                 $ret .= "    if (!\$domainMatches) {\n";
                 foreach ($domains as $domain) {
                     if (isset($domain['pattern'])) {
+                        $ret .= "\n";
+                        $ret .= "        //pattern\n";
                         $ret .= "        if (!\$domainMatches && preg_match('/{$domain['pattern']}/', \$host)) {\n";
-                        $ret .= "            if (!\$redirect) \$redirect = '{$domain['domain']}';\n";
+                        $ret .= "            \$redirect = '{$domain['domain']}';\n";
                         $ret .= "            \$domainMatches = true;\n";
                         $ret .= "        }\n";
                     }
                     if (isset($domain['noRedirectPattern'])) {
+                        $ret .= "\n";
+                        $ret .= "        //noRedirectPattern\n";
                         $ret .= "        if (!\$domainMatches && !preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
                         $ret .= "            \$redirect = false;\n";
                         $ret .= "            \$domainMatches = true;\n";
