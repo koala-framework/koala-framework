@@ -1,2 +1,2 @@
-.cssClass .listItem { float: left; margin-right: 10px; }
+.cssClass > .listItem { float: left; margin-right: 10px; }
 .cssClass .vpcLast { margin-right: 0px; }
