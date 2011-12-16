@@ -199,6 +199,8 @@ class Kwf_Util_ClearCache
 
     public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
     {
+        Kwf_Component_ModelObserver::getInstance()->disable();
+
         Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
 
         $refreshTypes = array();
@@ -239,6 +241,8 @@ class Kwf_Util_ClearCache
         }
 
         Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
+
+        Kwf_Component_ModelObserver::getInstance()->enable();
     }
 
     protected function _refreshCache($types, $output, $server)
