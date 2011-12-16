@@ -2,7 +2,7 @@
 /**
  * @group Validate
  */
-class Kwf_Validate_EmailAddressSimpleTest extends Kwf_Test_TestCase
+class Kwf_Validate_PasswordTest extends Kwf_Test_TestCase
 {
     public function test3of4()
     {
