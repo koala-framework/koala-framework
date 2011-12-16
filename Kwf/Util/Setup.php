@@ -125,6 +125,8 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
+
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
         $ret .= "if (\$host) {\n";
@@ -163,9 +165,6 @@ class Kwf_Util_Setup
             //$config->debug->benchmark = false;
         }
         */
-
-
-        $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
         if (!Kwf_Config::getValue('server.domain')) {
             //hack to make clear-cache just work
