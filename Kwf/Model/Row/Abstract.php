@@ -120,7 +120,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                 return;
             }
         }
-        throw new Kwf_Exception("Invalid column '$name'");
+        throw new Kwf_Exception("Invalid column '$name' for model '".get_class($this->getModel())."'");
     }
 
     public function __get($name)
@@ -136,7 +136,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                 return $r->$name;
             }
         }
-        throw new Kwf_Exception("Invalid column '$name'");
+        throw new Kwf_Exception("Invalid column '$name' for model '".get_class($this->getModel())."'");
     }
 
     public function __set($name, $value)
@@ -151,7 +151,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                     return;
                 }
             }
-            throw new Kwf_Exception("Invalid column '$name'");
+            throw new Kwf_Exception("Invalid column '$name' for model '".get_class($this->getModel())."'");
         }
     }
 
