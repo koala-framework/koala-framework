@@ -13,9 +13,9 @@ class Kwc_Newsletter_Detail_Form extends Kwc_Abstract_Form
             ->setWidth(300);
     }
 
-    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
     {
         $row->create_date = date('Y-m-d H:i:s');
+        $row->save();
     }
-
 }
