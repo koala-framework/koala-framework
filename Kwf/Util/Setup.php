@@ -62,10 +62,6 @@ class Kwf_Util_Setup
         $ret .= "\n";
         $ret .= "Kwf_Setup::\$configClass = '$configClass';\n";
         $ret .= "\n";
-        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $ret .= "Kwf_Config::checkMasterFiles();\n";
-        }
-        $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
         $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 25) == '/kwf/json-progress-status'\n";
@@ -129,6 +125,23 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
+        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
+        $ret .= "if (\$host) {\n";
+            $ret .= "    if (substr(\$host, 0, 9)=='dev.test.') {\n";
+            $ret .= "        Kwf_Setup::\$configSection = 'devtest';\n";
+            $ret .= "    } else if (substr(\$host, 0, 4)=='dev.') {\n";
+            $ret .= "        Kwf_Setup::\$configSection = 'dev';\n";
+            $ret .= "    } else if (substr(\$host, 0, 8)=='preview.') {\n";
+            $ret .= "        Kwf_Setup::\$configSection = 'preview';\n";
+            $ret .= "    }\n";
+        $ret .= "}\n";
+
+        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
+            $ret .= "Kwf_Config::checkMasterFiles();\n";
+        }
+        $ret .= "\n";
+
         if (Kwf_Config::getValue('debug.checkBranch')) {
             $ret .= "if (is_file('kwf_branch') && trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
             $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
@@ -158,18 +171,6 @@ class Kwf_Util_Setup
             //hack to make clear-cache just work
             $ret .= "if (\$host) file_put_contents('cache/lastdomain', \$host);\n";
         }
-
-        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
-        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
-        $ret .= "if (\$host) {\n";
-            $ret .= "    if (substr(\$host, 0, 9)=='dev.test.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'devtest';\n";
-            $ret .= "    } else if (substr(\$host, 0, 4)=='dev.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'dev';\n";
-            $ret .= "    } else if (substr(\$host, 0, 8)=='preview.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'preview';\n";
-            $ret .= "    }\n";
-        $ret .= "}\n";
 
         //up here to have less dependencies or broken redirect
         $ret .= "\n";
