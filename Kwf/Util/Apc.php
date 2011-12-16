@@ -124,13 +124,18 @@ class Kwf_Util_Apc
         echo $it->getTotalCount()." entries\n";
         echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
 
-        $it = new APCIterator('user', '#^'.preg_quote($prefix.'procI-').'#', APC_ITER_KEY);
+        $it = new APCIterator('user', '#^'.preg_quote($prefix.'-procI-').'#', APC_ITER_KEY);
         echo "processInput cache:\n";
         echo $it->getTotalCount()." entries\n";
         echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
 
-        $it = new APCIterator('user', '#^'.preg_quote($prefix.'url-').'#', APC_ITER_KEY);
+        $it = new APCIterator('user', '#^'.preg_quote($prefix.'-url-').'#', APC_ITER_KEY);
         echo "url cache:\n";
+        echo $it->getTotalCount()." entries\n";
+        echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
+
+        $it = new APCIterator('user', '#^'.preg_quote($prefix.'-config-').'#', APC_ITER_KEY);
+        echo "config cache:\n";
         echo $it->getTotalCount()." entries\n";
         echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
 
