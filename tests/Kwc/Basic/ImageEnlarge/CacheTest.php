@@ -79,4 +79,87 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
             array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo1/image')
         );
     }
+
+    public function testWithoutSmallImageComponentAddSmall()
+    {
+        $this->_assert(
+            '1800',
+            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
+            array('width'=>16, 'height'=>16, 'uploadId'=>1, 'mimeType' => 'image/png', 'pageUrl'=>'/foo1/image')
+        );
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->createRow();
+        $row->component_id = '1800-linkTag';
+        $row->kwf_upload_id = 2;
+        $row->preview_image = 1;
+        $row->save();
+        $this->_process();
+
+        $this->_assert(
+            '1800',
+            array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
+            array('width'=>16, 'height'=>16, 'uploadId'=>1, 'mimeType' => 'image/png', 'pageUrl'=>'/foo1/image')
+        );
+    }
+
+    public function testWithSmallImageComponentRemoveSmall1()
+    {
+        $this->_assert(
+            '1802',
+            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
+            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
+        );
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->getRow('1802-linkTag');
+        $row->preview_image = 0;
+        $row->save();
+        $this->_process();
+
+        $this->_assert(
+            '1802',
+            array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
+            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
+        );
+    }
+
+    public function testWithSmallImageComponentRemoveSmall2()
+    {
+        $this->_assert(
+            '1802',
+            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
+            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
+        );
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->getRow('1802-linkTag');
+        $row->kwf_upload_id = null;
+        $row->save();
+        $this->_process();
+
+        $this->_assert(
+            '1802',
+            array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
+            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
+        );
+    }
+
+    public function testWithSmallImageComponentChangeSmall()
+    {
+        $this->_assert(
+            '1802',
+            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
+            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
+        );
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->getRow('1802-linkTag');
+        $row->kwf_upload_id = 3;
+        $row->save();
+        $this->_process();
+
+        $this->_assert(
+            '1802',
+            array('width'=>10, 'height'=>10, 'uploadId'=>3, 'mimeType' => 'image/png'),
+            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
+        );
+    }
+
 }
