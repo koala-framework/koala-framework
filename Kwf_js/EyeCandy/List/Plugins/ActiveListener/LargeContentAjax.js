@@ -37,11 +37,12 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                 if (this.largeContent[item.id].isVisible()) {
 
                     var previousHeight = this.largeContainer.getHeight();
-                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight()); //set to new height, not animated
+                    var newHeight = this._getLargeContentHeight(item);
+                    this.largeContainer.setHeight(newHeight); //set to new height, not animated
                     Kwf.callOnContentReady(contentEl.dom, {newRender: true});
                     contentEl.hide(); //hide after callOnContentReady, will be faded in after images loaded
                     this.largeContainer.setHeight(previousHeight, false); //set back to previous height, not animated
-                    this.largeContainer.setHeight(this.largeContent[item.id].getHeight(), true); //animate to new height
+                    this.largeContainer.setHeight(newHeight, true); //animate to new height
 
                     var showContent = function() {
                         this.largeContent[item.id].child('.loading').remove();
@@ -73,6 +74,18 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         });
 
     },
+
+    _getLargeContentHeight: function(item) {
+        var height = this.largeContent[item.id].getHeight();
+        if (this.largeContainer.getStyle('margin-top') && this.largeContainer.getStyle('margin-top').substr(-2)=='px') {
+            height += parseInt(this.largeContainer.getStyle('margin-top'));
+        }
+        if (this.largeContainer.getStyle('margin-bottom') && this.largeContainer.getStyle('margin-bottom').substr(-2)=='px') {
+            height += parseInt(this.largeContainer.getStyle('margin-bottom'));
+        }
+        return height;
+    },
+
     _activate: function(item)
     {
         var nextItem = this.list.getItem(item.listIndex+1);
@@ -86,7 +99,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this.largeContent[item.id] = this.largeContainer.child('div');
             this.largeContent[item.id].enableDisplayMode('block');
             this.largeContent[item.id].setStyle('position', 'absolute');
-            this.largeContainer.setHeight(this.largeContent[item.id].getHeight());
+            this.largeContainer.setHeight(this._getLargeContentHeight(item));
             this.activeItem = item;
             return;
         }
@@ -99,10 +112,11 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         if (this.fetchedItems[item.id]) {
             nextEl.show();
             var oldHeight = this.largeContainer.getHeight();
-            this.largeContainer.setHeight(nextEl.getHeight()); //set new height without animation
+            var newHeight = this._getLargeContentHeight(item);
+            this.largeContainer.setHeight(newHeight); //set new height without animation
             Kwf.callOnContentReady(nextEl.dom, {newRender: false});
             this.largeContainer.setHeight(oldHeight); //set previous height without animation
-            this.largeContainer.setHeight(nextEl.getHeight(), true); //and now animate to new height
+            this.largeContainer.setHeight(newHeight, true); //and now animate to new height
             nextEl.hide();
         }
 

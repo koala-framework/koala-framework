@@ -39,7 +39,7 @@ class Kwf_Util_Apc
         if (!$result && $config->server->noRedirectPattern) {
             $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
             $url2 = "$urlPart$d/kwf/util/apc/clear-cache";
-            $client->setUri($url);
+            $client->setUri($url2);
             $response = $client->request();
         }
         return array(
@@ -71,7 +71,7 @@ class Kwf_Util_Apc
                 }
             } else if (isset($_REQUEST['files'])) {
                 foreach (explode(',', $_REQUEST['files']) as $file) {
-                    apc_delete_file($file);
+                    @apc_delete_file($file);
                 }
             } else if ($_REQUEST['type'] == 'user') {
                 apc_clear_cache('user');
@@ -124,13 +124,18 @@ class Kwf_Util_Apc
         echo $it->getTotalCount()." entries\n";
         echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
 
-        $it = new APCIterator('user', '#^'.preg_quote($prefix.'procI-').'#', APC_ITER_KEY);
+        $it = new APCIterator('user', '#^'.preg_quote($prefix.'-procI-').'#', APC_ITER_KEY);
         echo "processInput cache:\n";
         echo $it->getTotalCount()." entries\n";
         echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
 
-        $it = new APCIterator('user', '#^'.preg_quote($prefix.'url-').'#', APC_ITER_KEY);
+        $it = new APCIterator('user', '#^'.preg_quote($prefix.'-url-').'#', APC_ITER_KEY);
         echo "url cache:\n";
+        echo $it->getTotalCount()." entries\n";
+        echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
+
+        $it = new APCIterator('user', '#^'.preg_quote($prefix.'-config-').'#', APC_ITER_KEY);
+        echo "config cache:\n";
         echo $it->getTotalCount()." entries\n";
         echo round($it->getTotalSize()/(1024*1024))." MB (".round(($it->getTotalSize()/$totalSize)*100)."%)\n\n";
 

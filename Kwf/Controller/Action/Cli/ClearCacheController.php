@@ -27,7 +27,7 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         } else {
             Kwf_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true);
         }
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 
     public static function getHelpOptions()

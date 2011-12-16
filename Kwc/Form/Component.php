@@ -73,6 +73,18 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $this->_processInput($postData);
     }
 
+    protected final function _getIdFromPostData($postData)
+    {
+        if (!empty($postData[$this->getData()->componentId.'-id']) && !empty($postData[$this->getData()->componentId.'-idHash'])) {
+            if ($postData[$this->getData()->componentId.'-idHash'] == Kwf_Util_Hash::hash($postData[$this->getData()->componentId.'-id'])) {
+                //TODO: if hash doesn't match -> exception
+                //TODO: remove component id from field name
+                return $postData[$this->getData()->componentId.'-id'];
+            }
+        }
+        return null;
+    }
+
     protected function _processInput($postData)
     {
         if ($this->_processed) {
@@ -82,10 +94,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         if (!$this->getForm()) return;
 
-        if (!empty($postData[$this->getData()->componentId.'-id']) && !empty($postData[$this->getData()->componentId.'-idHash'])) {
-            if ($postData[$this->getData()->componentId.'-idHash'] == Kwf_Util_Hash::hash($postData[$this->getData()->componentId.'-id'])) {
-                $this->getForm()->setId($postData[$this->getData()->componentId.'-id']);
-            }
+        if ($this->_getIdFromPostData($postData)) {
+            $this->getForm()->setId($this->_getIdFromPostData($postData));
         }
 
         $m = $this->getForm()->getModel();

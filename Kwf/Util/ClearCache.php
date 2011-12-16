@@ -86,6 +86,7 @@ class Kwf_Util_ClearCache
         if ($type == 'setup') {
 
             file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
+            Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup.php'));
 
         } else if ($type == 'config') {
 

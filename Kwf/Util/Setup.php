@@ -62,10 +62,6 @@ class Kwf_Util_Setup
         $ret .= "\n";
         $ret .= "Kwf_Setup::\$configClass = '$configClass';\n";
         $ret .= "\n";
-        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $ret .= "Kwf_Config::checkMasterFiles();\n";
-        }
-        $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
         $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 25) == '/kwf/json-progress-status'\n";
@@ -129,6 +125,25 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
+
+        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
+        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
+        $ret .= "if (\$host) {\n";
+            $ret .= "    if (substr(\$host, 0, 9)=='dev.test.') {\n";
+            $ret .= "        Kwf_Setup::\$configSection = 'devtest';\n";
+            $ret .= "    } else if (substr(\$host, 0, 4)=='dev.') {\n";
+            $ret .= "        Kwf_Setup::\$configSection = 'dev';\n";
+            $ret .= "    } else if (substr(\$host, 0, 8)=='preview.') {\n";
+            $ret .= "        Kwf_Setup::\$configSection = 'preview';\n";
+            $ret .= "    }\n";
+        $ret .= "}\n";
+
+        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
+            $ret .= "Kwf_Config::checkMasterFiles();\n";
+        }
+        $ret .= "\n";
+
         if (Kwf_Config::getValue('debug.checkBranch')) {
             $ret .= "if (is_file('kwf_branch') && trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
             $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
@@ -151,30 +166,17 @@ class Kwf_Util_Setup
         }
         */
 
-
-        $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
-
         if (!Kwf_Config::getValue('server.domain')) {
             //hack to make clear-cache just work
             $ret .= "if (\$host) file_put_contents('cache/lastdomain', \$host);\n";
         }
 
-        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
-        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
-        $ret .= "if (\$host) {\n";
-            $ret .= "    //www abschneiden damit www.test und www.preview usw auch funktionieren\n";
-            $ret .= "    \$h = \$host;\n";
-            $ret .= "    if (substr(\$h, 0, 4)== 'www.') \$h = substr(\$h, 4);\n";
-            $ret .= "    if (substr(\$h, 0, 9)=='dev.test.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'devtest';\n";
-            $ret .= "    } else if (substr(\$h, 0, 4)=='dev.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'dev';\n";
-            $ret .= "    } else if (substr(\$h, 0, 5)=='test.' ||\n";
-            $ret .= "            substr(\$h, 0, 3)=='qa.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'test';\n";
-            $ret .= "    } else if (substr(\$h, 0, 8)=='preview.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'preview';\n";
-            $ret .= "    }\n";
+        //up here to have less dependencies or broken redirect
+        $ret .= "\n";
+        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 14) == '/kwf/util/apc/'\n";
+        $ret .= ") {\n";
+        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";
 
         // Falls redirectToDomain eingeschalten ist, umleiten
@@ -182,25 +184,32 @@ class Kwf_Util_Setup
             $ret .= "if (\$host) {\n";
             $ret .= "    \$redirect = false;\n";
             if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
-                $ret .= "    \$noRedirect = false;\n";
+                $ret .= "    \$domainMatches = false;\n";
                 foreach ($domains as $domain) {
-                    $ret .= "    if ('{$domain['domain']}' == \$host) \$noRedirect = true;\n";
+                    $ret .= "    if ('{$domain['domain']}' == \$host) \$domainMatches = true;\n";
                 }
-                $ret .= "    if (!\$noRedirect) {\n";
+                $ret .= "    if (!\$domainMatches) {\n";
                 foreach ($domains as $domain) {
                     if (isset($domain['pattern'])) {
-                        $ret .= "        if (preg_match('/{$domain['pattern']}/', \$host)) {\n";
-                        if ($domain['noRedirectPattern']) {
-                            $ret .= "            if (!preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
-                            $ret .= "                \$redirect = '{$domain['domain']}';\n";
-                            $ret .= "            }\n";
-                            //$ret .= "            break;\n";
-                        }
+                        $ret .= "\n";
+                        $ret .= "        //pattern\n";
+                        $ret .= "        if (!\$domainMatches && preg_match('/{$domain['pattern']}/', \$host)) {\n";
+                        $ret .= "            \$redirect = '{$domain['domain']}';\n";
+                        $ret .= "            \$domainMatches = true;\n";
                         $ret .= "        }\n";
-                    } else {
-                        $ret .= "        if (!\$redirect) \$redirect = '{$domain['domain']}';\n";
+                    }
+                    if (isset($domain['noRedirectPattern'])) {
+                        $ret .= "\n";
+                        $ret .= "        //noRedirectPattern\n";
+                        $ret .= "        if (!\$domainMatches && preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
+                        $ret .= "            \$redirect = false;\n";
+                        $ret .= "            \$domainMatches = true;\n";
+                        $ret .= "        }\n";
                     }
                 }
+                $ret .= "    }\n";
+                $ret .= "    if (!\$domainMatches) {\n";
+                $ret .= "        \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
                 $ret .= "    }\n";
             } else if (Kwf_Config::getValue('server.domain')) {
                 $ret .= "    if (\$host != '".Kwf_Config::getValue('server.domain')."') {\n";
@@ -230,14 +239,6 @@ class Kwf_Util_Setup
             $ret .= "    }\n";
             $ret .= "}\n";
         }
-
-        $ret .= "\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 14) == '/kwf/util/apc/'\n";
-        $ret .= ") {\n";
-        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
-        $ret .= "}\n";
-
 
         if (Kwf_Config::getValue('showPlaceholder') && !Kwf_Config::getValue('ignoreShowPlaceholder')) {
             $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REQUEST_URI']) && substr(\$_SERVER['REQUEST_URI'], 0, 8)!='/assets/') {\n";

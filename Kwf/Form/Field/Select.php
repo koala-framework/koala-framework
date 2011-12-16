@@ -22,7 +22,7 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
 
         $data = $this->_getValueFromPostData($postData);
 
-        if (!$this->getShowNoSelection() && !$data) {
+        if (!$this->getShowNoSelection() && is_null($data)) {
             //regardless of allowBlank a select *always* needs a selection
             $ret[] = array(
                 'message' => $this->getEmptyText(),

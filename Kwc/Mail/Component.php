@@ -144,6 +144,7 @@ class Kwc_Mail_Component extends Kwc_Abstract
     public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
         $renderer = new Kwf_Component_Renderer_Mail();
+        $renderer->setEnableCache(false); // TODO: remove once text mails have their own cache entries
         $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_HTML);
         $renderer->setRecipient($recipient);
         $renderer->setAttachImages($attachImages);
