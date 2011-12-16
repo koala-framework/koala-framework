@@ -213,12 +213,13 @@ class Kwf_Util_ClearCache
             if (!is_array($types)) {
                 $types = explode(',', $types);
             }
+            $refreshTypes = $types;
         }
+
         $this->_clearCache($types, $output, $server);
 
         if ($refresh) {
             if ($output) echo "\n";
-
             foreach ($refreshTypes as $type) {
                 if ($output) echo "Refresh $type".str_repeat('.', 15-strlen($type));
                 $t = microtime(true);
