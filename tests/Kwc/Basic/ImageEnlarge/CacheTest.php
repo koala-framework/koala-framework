@@ -10,9 +10,9 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $this->_root->setFilename(null);
     }
 
-    public function testWithoutSmallImageComponentHtml()
+    private function _assert($componentId, $smallImage, $largeImage)
     {
-        $html = $this->_root->getComponentById('1800')->render();
+        $html = $this->_root->getComponentById($componentId)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -21,25 +21,25 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
 
         $img = $xml->xpath("//img");
         $this->assertEquals(1, count($img));
-        $this->assertEquals(10, (string)$img[0]['width']);
-        $this->assertEquals(10, (string)$img[0]['height']);
+        $this->assertEquals($smallImage['width'], (string)$img[0]['width']);
+        $this->assertEquals($smallImage['height'], (string)$img[0]['height']);
         $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
-        $this->assertEquals('image/png', $o['mimeType']);
+        $this->assertEquals($smallImage['mimeType'], $o['mimeType']);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
-        $this->assertEquals(10, $im->getImageWidth());
-        $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
+        $this->assertEquals($smallImage['width'], $im->getImageWidth());
+        $this->assertEquals($smallImage['height'], $im->getImageHeight());
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/'.$smallImage['uploadId'],
+                                    array($smallImage['width'], $smallImage['height'], Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":16,"height":16,"style":"CenterBox"}', (string)$a[0]['rel']);
-        $this->assertEquals('/foo1/image', (string)$a[0]['href']);
+        $this->assertEquals('lightbox{"width":'.$largeImage['width'].',"height":'.$largeImage['height'].',"style":"CenterBox"}', (string)$a[0]['rel']);
+        $this->assertEquals($largeImage['pageUrl'], (string)$a[0]['href']);
 
 
-        $html = $this->_root->getComponentById('1800-linkTag_imagePage')->render();
+        $html = $this->_root->getComponentById($componentId.'-linkTag_imagePage')->render();
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
         $doc->loadHTML($html);
@@ -47,69 +47,36 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
 
         $img = $xml->xpath("//img");
         $this->assertEquals(1, count($img));
-        $this->assertEquals(16, (string)$img[0]['width']);
-        $this->assertEquals(16, (string)$img[0]['height']);
+        $this->assertEquals($largeImage['width'], (string)$img[0]['width']);
+        $this->assertEquals($largeImage['height'], (string)$img[0]['height']);
         $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
-        $this->assertEquals('image/png', $o['mimeType']);
+        $this->assertEquals($largeImage['mimeType'], $o['mimeType']);
         $im = new Imagick();
         $im->readImage($o['file']);
-        $this->assertEquals(16, $im->getImageWidth());
-        $this->assertEquals(16, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
+        $this->assertEquals($largeImage['width'], $im->getImageWidth());
+        $this->assertEquals($largeImage['height'], $im->getImageHeight());
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/'.$largeImage['uploadId'],
+                                    array($largeImage['width'], $largeImage['height'], Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
+    }
+
+    public function testWithoutSmallImageComponentHtml()
+    {
+        $this->_assert(
+            '1800',
+            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
+            array('width'=>16, 'height'=>16, 'uploadId'=>1, 'mimeType' => 'image/png', 'pageUrl'=>'/foo1/image')
+        );
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->getRow('1800');
         $row->kwf_upload_id = 2;
         $row->save();
         $this->_process();
 
-        $html = $this->_root->getComponentById('1800')->render();
-
-        $doc = new DOMDocument();
-        $doc->strictErrorChecking = FALSE;
-        $doc->loadHTML($html);
-        $xml = simplexml_import_dom($doc);
-
-        $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertEquals(10, (string)$img[0]['width']);
-        $this->assertEquals(10, (string)$img[0]['height']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
-        $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
-        $this->assertEquals('image/gif', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImageBlob($o['contents']);
-        $this->assertEquals(10, $im->getImageWidth());
-        $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
-                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
-
-        $a = $xml->xpath("//a");
-        $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":210,"height":70,"style":"CenterBox"}', (string)$a[0]['rel']);
-        $this->assertEquals('/foo1/image', (string)$a[0]['href']);
-
-
-        $html = $this->_root->getComponentById('1800-linkTag_imagePage')->render();
-        $doc = new DOMDocument();
-        $doc->strictErrorChecking = FALSE;
-        $doc->loadHTML($html);
-        $xml = simplexml_import_dom($doc);
-
-        $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertEquals(210, (string)$img[0]['width']);
-        $this->assertEquals(70, (string)$img[0]['height']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
-        $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
-        $this->assertEquals('image/gif', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImage($o['file']);
-        $this->assertEquals(210, $im->getImageWidth());
-        $this->assertEquals(70, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
-                                    array(210, 70, Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
-        
+        $this->_assert(
+            '1800',
+            array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
+            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo1/image')
+        );
     }
 }
