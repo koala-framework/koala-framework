@@ -37,7 +37,7 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
     {
         parent::validateSettings($settings);
         if (isset($settings['hideArrowsAtEnds'])) {
-            throw new Vps_Exception('hideArrowsAtEnds setting got removed, hide them using css (.listSwitchEnd)');
+            throw new Kwf_Exception('hideArrowsAtEnds setting got removed, hide them using css (.listSwitchEnd)');
         }
     }
 
