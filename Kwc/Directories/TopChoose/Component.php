@@ -13,7 +13,7 @@ class Kwc_Directories_TopChoose_Component extends Kwc_Directories_Top_Component
     public static function getItemDirectoryClasses($directoryClass)
     {
         $ret = array();
-        $class = self::getSetting($componentClass, 'showDirectoryClass');
+        $class = self::getSetting($directoryClass, 'showDirectoryClass');
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($class) as $component) {
             $ret[] = $component->componentClass;
         }
