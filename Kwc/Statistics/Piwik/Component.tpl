@@ -13,7 +13,9 @@
         piwikTracker.setCustomVariable(<?=$cv['index']?>, '<?=$cv['name']?>', '<?=$cv['value']?>', '<?=$cv['scope']?>');
         <? } ?>
         piwikTracker.trackPageView();
+        <? if ($this->enableLinkTracking) { ?>
         piwikTracker.enableLinkTracking();
+        <? } ?>
     } catch( err ) {}
 </script>
 <noscript><p><img src="http://<?=$this->domain?>/piwik.php?idsite=<?=$this->id?>" style="border:0" alt="" /></p></noscript>
