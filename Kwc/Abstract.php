@@ -6,6 +6,9 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     private $_pdfWriter;
     const LOREM_IPSUM = 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.';
 
+    /**
+     * Constructor; don't create component objects directly, always use Kwf_Component_Data::getComponent()
+     */
     public function __construct(Kwf_Component_Data $data)
     {
         $this->_data = $data;
@@ -14,6 +17,8 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
+     * Returns the data object of this component
+     *
      * @return Kwf_Component_Data
      */
     public function getData()
@@ -21,47 +26,69 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $this->_data;
     }
 
+    /**
+     * Returns the dbId of this component
+     *
+     * shortcut for ::getData()->dbId;
+     *
+     * @return string
+     * @internal
+     * @deprecated
+     */
     public function getDbId()
     {
         return $this->getData()->dbId;
     }
 
+    /**
+     * Returns the componentId of this component
+     *
+     * shortcut for ::getData()->componentId;
+     *
+     * @return string
+     * @internal
+     * @deprecated
+     */
     public function getComponentId()
     {
         return $this->getData()->componentId;
     }
 
-    protected function _getParam($param)
-    {
-        return isset($_REQUEST[$param]) ? $_REQUEST[$param] : null;
-    }
-
     /**
-     * Shortcut, fragt vom Seitenbaum die Url für eine Komponente ab
+     * Returns url of this component in the component tree
      *
-     * @return string URL der Seite
+     * shortcut for ::getData->getPage()->url
+     *
+     * @return string
+     * @internal
+     * @deprecated
      */
     public function getUrl()
     {
         return $this->getData()->getPage()->url;
     }
 
+    /**
+     * Returns page name of this component in the component tree
+     *
+     * shortcut for ::getData->getPage()->name
+     *
+     * @return string
+     * @internal
+     * @deprecated
+     */
     public function getName()
     {
         return $this->getData()->getPage()->name;
     }
 
     /**
-     * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
-     * auch angezeige werden
+     * Returns static settings of this component
      *
-     * @return boolean
+     * Override to change settings
+     *
+     * @return array
      */
-    protected function _showInvisible()
-    {
-        return Kwf_Registry::get('config')->showInvisible;
-    }
-
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -72,9 +99,9 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
-     * get child component classes of a componentclass or a componentData
+     * Returns child component classes of a componentclass or a componentData
      *
-     * @param string/Kwf_Component_Data if data inherited generators are returned as well
+     * @param string|Kwf_Component_Data if data inherited generators are returned as well
      * @param array Optional filtering (string to get for one generator)
      */
     public static function getChildComponentClasses($class, $select = array())
@@ -124,6 +151,12 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $ret;
     }
 
+    /**
+     * Returns indirect child component classes of a componentclass or a componentData
+     *
+     * @param string|Kwf_Component_Data if data inherited generators are returned as well
+     * @param array Optional filtering (string to get for one generator)
+     */
     public static function getIndirectChildComponentClasses($class, $select = array())
     {
         if (is_array($select)) {
@@ -171,6 +204,16 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
     }
 
+    /**
+     * Returns a single child component class of a componentClass
+     *
+     * throws an exception if not found
+     *
+     * @param string componentClass
+     * @param string generator key
+     * @param string component key
+     * @param string
+     */
     public static function getChildComponentClass($class, $generator, $componentKey = null)
     {
         $constraints = array(
@@ -184,6 +227,16 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $classes[0];
     }
 
+    /**
+     * Return if a child component class with a given generator key and componentKey exists
+     *
+     * if returnf false getChildComponentClass will give an exception.
+     *
+     * @param string componentClass
+     * @param string generator key
+     * @param string component key
+     * @param bool
+     */
     public static function hasChildComponentClass($class, $generator, $componentKey = null)
     {
         $constraints = array(
@@ -194,19 +247,26 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return isset($classes[0]);
     }
 
+    /**
+     * @internal
+     */
     public function getRow()
     {
         return $this->_getRow();
     }
 
+    /**
+     * Returns the row from the ownModel of this component
+     *
+     * @return Kwf_Model_Row_Abstract
+     */
     protected function _getRow()
     {
         if (!isset($this->_row)) {
-            $model = $this->getModel();
+            $model = $this->getOwnModel();
             if (!$model) return null;
+            $dbId = $this->getData()->dbId();
             if ($model instanceof Kwf_Model_Interface) {
-
-                $dbId = $this->getDbId();
                 $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
                 if ($sharedDataClass) {
                     $component = $this->getData();
@@ -223,25 +283,27 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
                     $this->_row->component_id = $dbId;
                 }
             } else {
-                $this->_row = $model->find($this->getDbId())->current();
+                $this->_row = $model->find($dbId)->current();
             }
         }
         return $this->_row;
     }
 
     /**
-     * Gibt an, ob eine Komponente Inhalt hat
+     * Returns if the component has content
      *
-     * Wird verwendet in Templates um zu prüfen, ob eine Komponente einen Inhalt
-     * hat (z.B. Text oder Download)
+     * Can be used to hide eg. empty boxes
      *
-     * @return boolean $hasContent Ob die Komponente Inhalt hat (true) oder nicht (false)
+     * @return bool if this component has content
      */
     public function hasContent()
     {
         return true;
     }
 
+    /**
+     * Returns the Pdf Writer object associated with this component.
+     */
     public function getPdfWriter($pdf)
     {
         if (!isset($this->_pdfWriter)) {
@@ -252,9 +314,9 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
-     * Gibt die Variablen für View zurück.
+     * Returns variables that can be used in Component.tpl
      *
-     * @return array Template-Variablen
+     * @return array
      */
     public function getTemplateVars()
     {
@@ -266,6 +328,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $ret;
     }
 
+    /**
+     * Returns a placeholder text, placeholders are set in settings
+     *
+     * @return string
+     */
     protected function _getPlaceholder($placeholder = null)
     {
         $ret = $this->_getSetting('placeholder');
@@ -286,46 +353,46 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         throw new Kwf_Exception_NotYetImplemented("getExportData is not yet implemented for component '".get_class($this)."'");
     }
 
+    /**
+     * Returns variables that can be used in Mail.*.tpl
+     *
+     * @return array
+     */
     public function getMailVars($user = null)
     {
         return $this->getTemplateVars();
     }
 
-    // deprecated
-    public function getCacheVars() {
-        throw new Kwf_Exception('getCacheVars is not supported anymore.');
-    }
-
-    public static function getStaticCacheVars() {
-        throw new Kwf_Exception('getStaticCacheVars is not supported anymore.');
-    }
-
-    public function getCacheMeta()
-    {
-        return array();
-    }
-
-    public static function getStaticCacheMeta($componentClass) {
-        $ret = array();
-        if (Kwc_Abstract::hasSetting($componentClass, 'ownModel')) {
-            $ret[] = new Kwf_Component_Cache_Meta_Static_OwnModel();
-        }
-        return $ret;
-    }
-
-    public function onCacheCallback($row) {}
-
+    /**
+     * Returns path of a template file for a given component
+     *
+     * @param string componentClass
+     * @param string template filename without extension
+     * @return string
+     */
     public static function getTemplateFile($componentClass, $filename = 'Component')
     {
         return Kwc_Admin::getComponentFile($componentClass, $filename, 'tpl');
     }
 
+    /**
+     * Returns the processed cssClass used in various places for a component
+     *
+     * @param string|Kwf_Component_Data
+     * @return string
+     */
     static public function getCssClass($component)
     {
         if (!is_string($component)) $component = $component->getData()->componentClass;
         return self::getSetting($component, 'processedCssClass');
     }
 
+    /**
+     * Returns the sortcutUrl of a given componentClass
+     *
+     * @param string
+     * @return string
+     */
     static public function getShortcutUrl($componentClass, Kwf_Component_Data $data)
     {
         if (!Kwc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
@@ -334,6 +401,13 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return Kwc_Abstract::getSetting($componentClass, 'shortcutUrl');
     }
 
+    /**
+     * Returns data for a given shortcut url
+     *
+     * @param string
+     * @param string
+     * @return Kwf_Component_Data
+     */
     public static function getDataByShortcutUrl($componentClass, $url)
     {
         if (!Kwc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
@@ -368,6 +442,14 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return false;
     }
 
+    /**
+     * Returns componentClasses that match a given class in their inheritance chain
+     *
+     * Fast, as the result is static and will be cached
+     *
+     * @param string
+     * @return string[]
+     */
     public static function getComponentClassesByParentClass($class)
     {
         if (!is_array($class)) $class = array($class);
@@ -394,6 +476,17 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         Kwf_Cache_Simple::add($cacheId, $ret);
         return $ret;
     }
+
+    /**
+     * Returns a componentClass that match a given class in their inheritance chain
+     *
+     * Fast, as the result is static and will be cached
+     *
+     * will throw an error if multiple are found
+     *
+     * @param string
+     * @return string
+     */
     public static function getComponentClassByParentClass($class)
     {
         $ret = self::getComponentClassesByParentClass($class);
@@ -406,11 +499,24 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $ret[0];
     }
 
+
+    /**
+     * Returns the view cache lifetime of this component
+     *
+     * if null (the default) infinite lifetime
+     *
+     * @return int
+     */
     public function getViewCacheLifetime()
     {
         return null;
     }
 
+    /**
+     * Returns the view cache settings of this component
+     *
+     * @return array
+     */
     public function getViewCacheSettings()
     {
         return array(
@@ -419,8 +525,12 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         );
     }
 
-    /*
-     * Breite dieser Komponente zu ermitteln
+    /**
+     * Returns available width of this component
+     *
+     * use 'contentWidth' setting to set a fixed with
+     *
+     * @return int
      */
     public function getContentWidth()
     {
@@ -435,10 +545,16 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         }
     }
 
-    /*
-     * Kann überschrieben werden, um die verfügbare Breite für eine Kindkomponente anzupassen.
+    /**
+     * Returns the contentWidth of a given child
      *
-     * In den meisten Fällen wird contentWidthSubtract setting reichen
+     * Can be overridden to adapt the available child width
+     *
+     * Use 'contentWidthSubtract' setting to subtract a fixed amount
+     * from getContentWidth() value
+     *
+     * @param Kwf_Component_Data
+     * @return int
      */
     protected function _getChildContentWidth(Kwf_Component_Data $child)
     {
@@ -451,8 +567,17 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
     /**
      * @deprecated use ContentSender instead
+     * @internal
      */
     final public function sendContent() {}
+    /**
+     * @deprecated
+     * @internal
+     */
     final protected function _callProcessInput() {}
+    /**
+     * @deprecated
+     * @internal
+     */
     final protected function _callPostProcessInput($process) {}
 }
