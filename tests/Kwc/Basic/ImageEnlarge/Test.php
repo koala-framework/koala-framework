@@ -1,7 +1,7 @@
 <?php
 /**
  * @group Basic_ImageEnlarge
- * @group Image
+ * @group Kwc_Image
  */
 class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 {

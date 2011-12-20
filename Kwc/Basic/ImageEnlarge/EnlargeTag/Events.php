@@ -1,13 +1,31 @@
 <?php
 class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Image_Events
 {
+    private function _canCreateUsIndirectly($class)
+    {
+        foreach (Kwc_Abstract::getChildComponentClasses($class, array('generatorFlags'=>array('static'=>true))) as $c) {
+            if ($c == $this->_class) {
+                return true;
+            }
+            if ($this->_canCreateUsIndirectly($c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Media_Changed',
-            'callback' => 'onMediaChanged'
-        );
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            if ($this->_canCreateUsIndirectly($class)) {
+                $ret[] = array(
+                    'class' => $class,
+                    'event' => 'Kwf_Component_Event_Media_Changed',
+                    'callback' => 'onMediaChanged'
+                );
+            }
+        }
         return $ret;
     }
 
