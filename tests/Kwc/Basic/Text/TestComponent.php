@@ -13,10 +13,4 @@ class Kwc_Basic_Text_TestComponent extends Kwc_Basic_Text_Component
         $ret['assets']['files']['styles'] = 'dynamic/Kwc_Basic_Text_StylesAsset:Kwc_Basic_Text_TestStylesModel';
         return $ret;
     }
-
-    public function getRow()
-    {
-        return $this->_getRow();
-    }
-
 }
