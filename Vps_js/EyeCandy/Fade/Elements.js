@@ -118,6 +118,11 @@ Vps.Fade.Elements.prototype = {
         if (this.fadeElements.length <= 1) return;
 
         var activeEl = Ext.get(this.fadeElements[this.active]);
+        if (!activeEl.isVisible(true)) {
+            this._timeoutId = this.doFade.defer(this._getDeferTime(), this);
+            return;
+        }
+
         activeEl.fadeOut({ endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true });
 
         var nextEl = Ext.get(this.fadeElements[this.next]);
