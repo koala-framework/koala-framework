@@ -113,7 +113,8 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     }
                     html += '</ul>';
                     html += '</div>';
-                    this.el.parent().createChild(html, form);
+                    this.el.parent().createChild(html, this.el.down('form'));
+                    Kwf.callOnContentReady(this.el.dom, {newRender: true});
                 }
 
                 // show success content
