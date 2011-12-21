@@ -55,6 +55,8 @@ Vps.Fade.Elements = function(cfg) {
     if (typeof cfg.fadeEvery != 'undefined') this.fadeEvery = cfg.fadeEvery;
     if (typeof cfg.startRandom != 'undefined') this.startRandom = cfg.startRandom;
 
+    this._elementAccessLinkEls = [];
+
     this.fadeElements = Ext.query(this.selector, this.selectorRoot);
 
     if (this.startRandom) {
@@ -104,7 +106,6 @@ Vps.Fade.Elements.prototype = {
     next: 1,
     _firstFaded: false,
     _timeoutId: null,
-    _elementAccessLinkEls: [ ],
     _playPause: 'play',
     _playPauseButton: null,
 
