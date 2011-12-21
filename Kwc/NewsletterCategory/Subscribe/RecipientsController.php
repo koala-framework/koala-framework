@@ -36,16 +36,9 @@ class Kwc_NewsletterCategory_Subscribe_RecipientsController extends Kwc_Newslett
         $select = parent::_getSelect();
 
         if ($this->_getParam('query_category_id') && $this->_getParam('query_category_id') != 'all') {
-            $model = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_SubscriberToCategory');
-            $rows = $model->getRows($model->select()
-                ->whereEquals('category_id', $this->_getParam('query_category_id'))
-            );
-            $ids = array();
-            foreach ($rows as $row) {
-                $ids[] = $row->subscriber_id;
-            }
-            if (!count($ids)) return null;
-            $select->whereEquals('id', $ids);
+            $childSelect = new Kwf_Model_Select();
+            $childSelect->whereEquals('category_id', $this->_getParam('query_category_id'));
+            $select->where(new Kwf_Model_Select_Expr_Child_Contains('ToCategory', $childSelect));
         }
         return $select;
     }
