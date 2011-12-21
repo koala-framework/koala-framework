@@ -535,11 +535,19 @@ class Kwf_Component_Abstract
         }
     }
 
+    /**
+     * @deprecated
+     * @internal
+     */
     public function getTable($tablename = null)
     {
         return self::createTable($this->getData()->componentClass);
     }
 
+    /**
+     * @deprecated
+     * @internal
+     */
     public static function createTable($class, $tablename = null)
     {
         $tables = self::$_modelsCache['table'];
@@ -563,6 +571,7 @@ class Kwf_Component_Abstract
 
     /**
      * @deprecated
+     * @internal
      */
     public static function createModel($class)
     {
@@ -635,6 +644,9 @@ class Kwf_Component_Abstract
         return self::$_modelsCache['form'][$class];
     }
 
+    /**
+     * @internal
+     */
     public static function clearModelInstances()
     {
         self::$_modelsCache = array(
@@ -653,16 +665,25 @@ class Kwf_Component_Abstract
         return $this->getOwnModel();
     }
 
+    /**
+     * @return Kwf_Model_Abstract
+     */
     public function getOwnModel()
     {
         return self::createOwnModel($this->getData()->componentClass);
     }
 
+    /**
+     * @return Kwf_Model_Abstract
+     */
     public function getChildModel()
     {
         return self::createChildModel($this->getData()->componentClass);
     }
 
+    /**
+     * @return Kwf_Model_Abstract
+     */
     public function getFormModel()
     {
         return self::createFormModel($this->getData()->componentClass);
@@ -678,6 +699,15 @@ class Kwf_Component_Abstract
         return self::hasSetting($this->getData()->componentClass, $setting);
     }
 
+    /**
+     * Returns flag for a given componentClass
+     *
+     * Shortcut for getting flag using ::getSettings
+     *
+     * @param string componentClass
+     * @param string flag name
+     * @return mixed
+     */
     static public function getFlag($class, $flag)
     {
         $cacheId = 'flag-'.$class.'-'.$flag;
@@ -696,6 +726,13 @@ class Kwf_Component_Abstract
         return $ret;
     }
 
+    /**
+     * Returns all component classes used in this app
+     *
+     * Fast, result is cached
+     *
+     * @return string[]
+     */
     public static function getComponentClasses()
     {
         $root = Kwf_Component_Data_Root::getComponentClass();
