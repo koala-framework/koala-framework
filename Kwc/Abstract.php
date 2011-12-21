@@ -265,7 +265,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if (!isset($this->_row)) {
             $model = $this->getOwnModel();
             if (!$model) return null;
-            $dbId = $this->getData()->dbId();
+            $dbId = $this->getData()->dbId;
             if ($model instanceof Kwf_Model_Interface) {
                 $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
                 if ($sharedDataClass) {
