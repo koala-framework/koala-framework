@@ -71,7 +71,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         //nicht parent aufrufen weil da würde das model erstellt werden ohne componentClass zu übergeben
     }
 
-    public function getModel()
+    public function getOwnModel()
     {
         return self::getTextModel(get_class($this));
     }
