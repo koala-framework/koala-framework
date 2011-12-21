@@ -23,6 +23,16 @@ class Kwc_NewsletterCategory_Subscribe_FrontendForm extends Kwc_Newsletter_Subsc
         }
     }
 
+    protected function _afterSave(Kwf_Model_Row_Interface $row)
+    {
+        $this->addCategoryIfOnlyOne();
+    }
+
+    public function getCategories()
+    {
+        return $this->_getCategories();
+    }
+
     protected function _getCategories()
     {
         // Newsletterkategorien werden zum Newsletter gespeichert, welcher
@@ -39,7 +49,7 @@ class Kwc_NewsletterCategory_Subscribe_FrontendForm extends Kwc_Newsletter_Subsc
         return $categories;
     }
 
-    protected function _afterSave(Kwf_Model_Row_Interface $row)
+    public function addCategoryIfOnlyOne(Kwf_Model_Row_Interface $row)
     {
         $categories = $this->_getCategories();
         if (count($categories) == 1) {

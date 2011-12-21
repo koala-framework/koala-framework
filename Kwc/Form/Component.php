@@ -90,7 +90,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if ($this->_processed) {
             return;
         }
-        $this->_processed = true;
+        $this->_setProcessed();
 
         if (!$this->getForm()) return;
 
@@ -292,6 +292,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $this->_getPlaceholder($placeholder);
     }
 
+    protected function _setProcessed()
+    {
+        $this->_processed = true;
+        return $this;
+    }
 
     public function hasContent()
     {
