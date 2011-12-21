@@ -62,6 +62,7 @@ Ext.extend(Vps.Tabs, Ext.util.Observable, {
 
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('vpsTabsLinkActive');
+            Ext.get(this.contentEls[this._activeTabIdx]).setStyle('z-index', '2');
             Ext.get(this.contentEls[this._activeTabIdx]).fadeOut({
                 duration: this.fxDuration,
                 callback: function(el) {
