@@ -76,17 +76,7 @@ class Kwf_Util_Apc
             } else if ($_REQUEST['type'] == 'user') {
                 apc_clear_cache('user');
             } else {
-                $paths = array(preg_quote(getcwd(), '#'));
-                foreach (explode(PATH_SEPARATOR, get_include_path()) as $p) {
-                    if (substr($p, 0, 1) == '/') {
-                        $paths[] = preg_quote($p, '#');
-                    }
-                }
-                if (class_exists('APCIterator')) {
-                    apc_delete_file(new APCIterator('file', '#^'.'('.implode('|', $paths).')'.'#'));
-                } else {
-                    apc_clear_cache('file');
-                }
+                apc_clear_cache('file');
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
             exit;
