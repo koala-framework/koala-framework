@@ -356,11 +356,16 @@ class Kwf_Util_Check_Config
 
     private static function _apc()
     {
-        if (php_sapi_name() == 'cli') return; //apc gibts im cli nicht
-
         if (!extension_loaded('apc')) {
             throw new Kwf_Exception("apc extension not loaded");
         }
+
+        if (php_sapi_name() == 'cli') {
+            if (!ini_get('apc.enable_cli')) {
+                throw new Kwf_Exception("apc extension not enabled in cli");
+            }
+        }
+
         $info = apc_sma_info(false);
         if ($info['num_seg'] * $info['seg_size'] < 128*1000*1000) {
             throw new Kwf_Exception("apc memory size < 128");
