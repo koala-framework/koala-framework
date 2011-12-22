@@ -53,6 +53,7 @@ class Kwf_View_Helper_ComponentLink extends Kwf_Component_View_Helper_Abstract
     public function getTargetPage($component)
     {
         $ret = $component->getPage();
+        if (!$ret) return null;
         if (is_instance_of($ret->componentClass, 'Kwc_Basic_LinkTag_Abstract_Component')) {
             if (!$ret->getComponent()->hasContent()) {
                 return null;
