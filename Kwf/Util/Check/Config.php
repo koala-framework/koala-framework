@@ -393,7 +393,7 @@ class Kwf_Util_Check_Config
         if (php_sapi_name()!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
             && get_magic_quotes_gpc()
         ) {
-            throw new Kwf_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .httaccess or turn off in php.ini");
+            throw new Kwf_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini");
         }
     }
 }
