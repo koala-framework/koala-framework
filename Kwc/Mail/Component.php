@@ -99,6 +99,7 @@ class Kwc_Mail_Component extends Kwc_Abstract
         }
         if ($this->getRow()->reply_email) {
             $mail->setReplyTo($this->getRow()->reply_email);
+            $mail->setReturnPath($this->getRow()->reply_email);
         }
 
         if ($this->_images){
