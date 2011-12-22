@@ -36,7 +36,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         $affected = false;
         foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
             $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($dbId, array('ignoreVisible' => true, 'limit' => 1));
+                ->getComponentByDbId($dbId, array('ignoreVisible' => true, 'limit' => 1));  // not sure whether ignoreVisible is necessary - rething on reimplementation
             if ($c && $c->generator->getClass() == $this->_class) $affected = true;
         }
         if (!$affected) return;
@@ -82,14 +82,26 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     public function onRowAdd(Kwf_Component_Event_Row_Inserted $event)
     {
         if (!$event->row->getModel()->hasColumn('visible') || $event->row->visible) {
-            $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, array('ignoreVisible' => true)) as $c) {
+                    if ($c && $c->generator->getClass() == $this->_class) {
+                        $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+                    }
+                }
+            }
         }
     }
 
     public function onRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
         if (!$event->row->getModel()->hasColumn('visible') || $event->row->visible) {
-            $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, array('ignoreVisible' => true)) as $c) {
+                    if ($c && $c->generator->getClass() == $this->_class) {
+                        $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+                    }
+                }
+            }
         }
     }
 

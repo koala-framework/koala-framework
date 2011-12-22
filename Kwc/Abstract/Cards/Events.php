@@ -5,8 +5,15 @@ class Kwc_Abstract_Cards_Events extends Kwc_Abstract_Composite_Events // extends
     {
         parent::_onOwnRowUpdate($c, $event);
         if ($event->isDirty('component')) {
-            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
-            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
+            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved(
+                $this->_getClassFromRow($event->row, true), $c->componentId)
+            );
+            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded(
+                $this->_getClassFromRow($event->row, false), $c->componentId)
+            );
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $event->row->component_id)
+            );
         }
     }
 

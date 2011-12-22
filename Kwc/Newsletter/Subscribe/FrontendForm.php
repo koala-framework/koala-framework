@@ -29,7 +29,7 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
             ->setWidth(255)
             ->setVtype('email')
             ->setAllowBlank(false)
-            ->addValidator($validator);
+            ->addValidator($validator, 'email');
         $this->add(new Kwf_Form_Field_Radio('format', trlKwfStatic('Format')))
             ->setAllowBlank(false)
             ->setValues(array(

@@ -39,9 +39,15 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
     showError: function(msg) {
         this.el.addClass('kwfFieldError');
         if (!this.errorEl) {
-            this.errorEl = this.el.createChild({
-                cls: 'kwfFieldErrorMessage'
-            });
+            if (this.el.up('.kwfFormContainerColumn')) {
+                this.errorEl = this.el.up('.kwfFormContainerColumn').up('.kwfFormContainerColumns').createChild({
+                    cls: 'kwfFieldErrorMessage'
+                });
+            } else {
+                this.errorEl = this.el.createChild({
+                    cls: 'kwfFieldErrorMessage'
+                });
+            }
             this.errorEl.enableDisplayMode('block');
         }
         this.errorEl.show();

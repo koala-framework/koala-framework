@@ -55,6 +55,8 @@ Kwf.Fade.Elements = function(cfg) {
     if (typeof cfg.fadeEvery != 'undefined') this.fadeEvery = cfg.fadeEvery;
     if (typeof cfg.startRandom != 'undefined') this.startRandom = cfg.startRandom;
 
+    this._elementAccessLinkEls = [];
+
     this.fadeElements = Ext.query(this.selector, this.selectorRoot);
 
     if (this.startRandom) {
@@ -104,7 +106,6 @@ Kwf.Fade.Elements.prototype = {
     next: 1,
     _firstFaded: false,
     _timeoutId: null,
-    _elementAccessLinkEls: [ ],
     _playPause: 'play',
     _playPauseButton: null,
 
@@ -117,6 +118,11 @@ Kwf.Fade.Elements.prototype = {
         if (this.fadeElements.length <= 1) return;
 
         var activeEl = Ext.get(this.fadeElements[this.active]);
+        if (!activeEl.isVisible(true)) {
+            this._timeoutId = this.doFade.defer(this._getDeferTime(), this);
+            return;
+        }
+
         activeEl.fadeOut({ endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true });
 
         var nextEl = Ext.get(this.fadeElements[this.next]);

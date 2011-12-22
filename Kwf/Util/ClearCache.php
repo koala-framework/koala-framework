@@ -86,6 +86,7 @@ class Kwf_Util_ClearCache
         if ($type == 'setup') {
 
             file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
+            Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup.php'));
 
         } else if ($type == 'config') {
 
@@ -199,6 +200,8 @@ class Kwf_Util_ClearCache
 
     public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
     {
+        Kwf_Component_ModelObserver::getInstance()->disable();
+
         Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
 
         $refreshTypes = array();
@@ -211,12 +214,13 @@ class Kwf_Util_ClearCache
             if (!is_array($types)) {
                 $types = explode(',', $types);
             }
+            $refreshTypes = $types;
         }
+
         $this->_clearCache($types, $output, $server);
 
         if ($refresh) {
             if ($output) echo "\n";
-
             foreach ($refreshTypes as $type) {
                 if ($output) echo "Refresh $type".str_repeat('.', 15-strlen($type));
                 $t = microtime(true);
@@ -239,6 +243,8 @@ class Kwf_Util_ClearCache
         }
 
         Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
+
+        Kwf_Component_ModelObserver::getInstance()->enable();
     }
 
     protected function _refreshCache($types, $output, $server)

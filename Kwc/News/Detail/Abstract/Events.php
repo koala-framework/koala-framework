@@ -10,6 +10,11 @@ class Kwc_News_Detail_Abstract_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Component_Event_Component_HasContentChanged',
             'callback' => 'onChildHasContentChange'
         );
+        $ret[] = array(
+            'class' => $this->_class,
+            'event' => 'Kwf_Component_Event_Component_RowUpdated',
+            'callback' => 'onDirectoryRowUpdated'
+        );
         return $ret;
     }
 
@@ -17,6 +22,13 @@ class Kwc_News_Detail_Abstract_Events extends Kwc_Abstract_Events
     {
         $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
             $this->_class, $event->getParentDbId()
+        ));
+    }
+
+    public function onDirectoryRowUpdated(Kwf_Component_Event_Component_RowUpdated $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+            $this->_class, $event->dbId
         ));
     }
 }

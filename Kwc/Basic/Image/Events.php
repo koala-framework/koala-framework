@@ -5,10 +5,20 @@ class Kwc_Basic_Image_Events extends Kwc_Abstract_Image_Events
     {
         $ret = parent::getListeners();
         if (Kwc_Abstract::hasSetting($this->_class, 'useParentImage')) {
-            $ret[] = array(
-                'event' => 'Kwf_Component_Event_Media_Changed',
-                'callback' => 'onMediaChanged'
-            );
+            //find components that can create ourself ($this->_class)
+            foreach (Kwc_Abstract::getComponentClasses() as $class) {
+                if (in_array('Kwc_Abstract_Image_Component', Kwc_Abstract::getParentClasses($class))) {
+                    if (Kwc_Abstract::getChildComponentClasses($class, array('componentClass'=>$this->_class))) {
+
+                        $ret[] = array(
+                            'class' => $class,
+                            'event' => 'Kwf_Component_Event_Media_Changed',
+                            'callback' => 'onMediaChanged'
+                        );
+
+                    }
+                }
+            }
         }
         return $ret;
     }

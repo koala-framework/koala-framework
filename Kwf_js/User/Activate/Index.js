@@ -21,7 +21,7 @@ Kwf.User.Activate.Index = Ext.extend(Ext.Panel,
 
                 items: [{
                     html: trlKwf('Please type in your password. After clicking the button below')+' '
-                         +trlKwf('you are logged in automatically and may use the typed in password'+' ')
+                         +trlKwf('you are logged in automatically and may use the typed in password')+' '
                          +trlKwf('for future logins.')+'<br />'+trlKwf('Your email address:')+' <b>' + this.email + '</b>',
                     xtype: 'panel',
                     bodyStyle: 'background-color:transparent; padding:5px; margin-bottom:10px;'
