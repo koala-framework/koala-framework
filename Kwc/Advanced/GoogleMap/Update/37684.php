@@ -1,7 +1,7 @@
 <?php
 class Kwc_Advanced_GoogleMap_Update_37684 extends Kwf_Update
 {
-    public function update()
+    public function postUpdate()
     {
         $components = Kwf_Component_Data_Root::getInstance()
             ->getComponentsByClass('Kwc_Advanced_GoogleMap_Component');
