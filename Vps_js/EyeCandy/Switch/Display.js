@@ -22,6 +22,7 @@ Vps.Switch.Display = function(el) {
 
     this.el = el;
     this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
+    if (!this.switchLink) this.switchLink = Ext.get(Ext.query('.switchLinkHover', this.el.dom)[0]);
     this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
     this.vpsSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
     if (this.vpsSwitchCloseLink.length) {
@@ -49,13 +50,22 @@ Vps.Switch.Display = function(el) {
     }
 
     if (this.switchLink && this.switchContent) {
-        Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
-            if (this.switchLink.hasClass('switchLinkOpened')) {
-                this.doClose();
-            } else {
+        if (this.switchLink.hasClass('switchLinkHover')) {
+            Vps.Event.on(this.el.dom, 'mouseEnter', function() {
                 this.doOpen();
-            }
-        }, this, { stopEvent: true });
+            }, this);
+            Vps.Event.on(this.el.dom, 'mouseLeave', function() {
+                this.doClose();
+            }, this);
+        } else {
+            Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
+                if (this.switchLink.hasClass('switchLinkOpened')) {
+                    this.doClose();
+                } else {
+                    this.doOpen();
+                }
+            }, this, { stopEvent: true });
+        }
     }
 
     if (this.vpsSwitchCloseLink) {
@@ -67,10 +77,13 @@ Vps.Switch.Display = function(el) {
 
 Ext.extend(Vps.Switch.Display, Ext.util.Observable, {
     doClose: function() {
-        if (this._lockAnimation) return;
-        this._lockAnimation = true;
+        if (!this.switchLink.hasClass('switchLinkHover')) {
+            if (this._lockAnimation) return;
+            this._lockAnimation = true;
+        }
 
         this.fireEvent('beforeClose', this);
+        this.switchContent.stopFx();
         this.switchContent.scaleHeight = this.switchContent.getHeight();
         this.switchContent.scale(undefined, 0,
             { easing: 'easeOut', duration: .5, afterStyle: "display:none;",
@@ -85,15 +98,19 @@ Ext.extend(Vps.Switch.Display, Ext.util.Observable, {
     },
 
     doOpen: function() {
-        if (this._lockAnimation) return;
-        this._lockAnimation = true;
+        if (!this.switchLink.hasClass('switchLinkHover')) {
+            if (this._lockAnimation) return;
+            this._lockAnimation = true;
+        }
 
         this.fireEvent('beforeOpen', this);
+        this.switchContent.stopFx();
         this.switchContent.setStyle('display', 'block');
         this.switchContent.scale(undefined, this.switchContent.scaleHeight,
             { easing: 'easeOut', duration: .5, afterStyle: "display:block;height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
+                    Vps.callOnContentReady(this.el.dom, {newRender: false});
                     if (Ext.isIE6) {
                         this.switchContent.setWidth(this.switchContent.getWidth());
                     }

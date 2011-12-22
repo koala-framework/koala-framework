@@ -31,7 +31,7 @@ class Vpc_Directories_Category_Directory_CategoriesController
         return $allowed;
     }
 
-    private function _getCategoryDirectory()
+    protected  function _getCategoryDirectory()
     {
         $c = Vps_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
