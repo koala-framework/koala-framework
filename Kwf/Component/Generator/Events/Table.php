@@ -19,6 +19,11 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             'event' => 'Kwf_Component_Event_Row_Deleted',
             'callback' => 'onRowDelete'
         );
+        $ret[] = array(
+            'class' => get_class($this->_getGenerator()->getModel()),
+            'event' => 'Kwf_Component_Event_Model_Updated',
+            'callback' => 'onModelUpdate'
+        );
         return $ret;
     }
 
@@ -102,6 +107,19 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
                     }
                 }
             }
+        }
+    }
+
+    public function onModelUpdate(Kwf_Component_Event_Model_Updated $event)
+    {
+        //now it's getting inefficient (but this event will /usually/ not be  called at all)
+
+        $classes = $this->_getGenerator()->getChildComponentClasses();
+        //we don't know the class, fire event for all possible ones
+        foreach ($classes as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ModelUpdated(
+                $c
+            ));
         }
     }
 
