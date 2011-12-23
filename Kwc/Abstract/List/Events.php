@@ -19,6 +19,11 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Component_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
+        $ret[] = array(
+            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'event' => 'Kwf_Component_Event_Model_Updated',
+            'callback' => 'onModelUpdate'
+        );
         $generators = Kwc_Abstract::getSetting($this->_class, 'generators');
         $ret[] = array(
             'class' => $generators['child']['component'],
@@ -60,6 +65,13 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
                 ));
             }
         }
+    }
+
+    public function onModelUpdate(Kwf_Component_Event_Model_Updated $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
+            $this->_class
+        ));
     }
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
