@@ -16,9 +16,22 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
                         'callback' => 'onMediaChanged'
                     );
 
+                    $ret[] = array(
+                        'class' => $class,
+                        'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
+                        'callback' => 'onClassContentChanged'
+                    );
+
                 }
             }
         }
+    }
+
+    public function onClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
+            $this->_class
+        ));
     }
 
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
