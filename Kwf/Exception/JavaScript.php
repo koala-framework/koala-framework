@@ -47,6 +47,7 @@ class Kwf_Exception_JavaScript extends Kwf_Exception
         $body .= $this->_format('stack', $this->_stack);
         $body .= $this->_format('REQUEST_URI', $this->_location);
         $body .= $this->_format('HTTP_REFERER', $this->_referrer ? $this->_referrer : '(none)');
+        $body .= $this->_format('HTTP_USER_AGENT', isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
         $body .= $this->_format('User', $user);
         $body .= $this->_format('Time', date('H:i:s'));
 
