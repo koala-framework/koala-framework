@@ -136,7 +136,7 @@ class Vps_View_Helper_HighlightTerms
                     $lastBlockPos = $blockPos;
                     $i++;
                 }
-                if ($lastBlockPos) {
+                if (!empty($lastBlockPos)) {
                     if ($lastBlockPos['pos'] + $lastBlockPos['length'] < mb_strlen($text)) {
                         $ret .= $options['blockSeparator'];
                     }
