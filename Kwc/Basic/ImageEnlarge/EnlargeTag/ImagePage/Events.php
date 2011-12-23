@@ -4,11 +4,21 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $ret[] = array(
-            'event' => 'Kwf_Component_Event_Media_Changed',
-            'callback' => 'onMediaChanged'
-        );
-        return $ret;
+
+        //find components that can create ourself ($this->_class)
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            if (in_array('Kwc_Abstract_Image_Component', Kwc_Abstract::getParentClasses($class))) {
+                if (Kwc_Abstract::getChildComponentClasses($class, array('componentClass'=>$this->_class))) {
+
+                    $ret[] = array(
+                        'class' => $class,
+                        'event' => 'Kwf_Component_Event_Media_Changed',
+                        'callback' => 'onMediaChanged'
+                    );
+
+                }
+            }
+        }
     }
 
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
