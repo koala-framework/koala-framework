@@ -32,67 +32,89 @@ class Kwf_Component_Events
 
     public static final function getAllListeners()
     {
-        $cacheId = 'Kwf_Component_Events_listeners'.Kwf_Component_Data_Root::getComponentClass();
-        $listeners = Kwf_Cache_Simple::fetch($cacheId);
-        if (!$listeners) {
+        static $listeners;
 
-            $eventObjects = array();
-            foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
-                $eventsClass = Kwc_Admin::getComponentClass($componentClass, 'Events');
-                $eventObjects[] = Kwf_Component_Abstract_Events::getInstance(
-                    $eventsClass, array('componentClass' => $componentClass)
+        if (!isset($listeners)) {
+            $cacheId = 'Kwf_Component_Events_listeners'.Kwf_Component_Data_Root::getComponentClass();
+
+            $listeners = Kwf_Cache_Simple::fetch($cacheId);
+            if (!$listeners) {
+                $feOptions = array(
+                    'automatic_serialization' => true,
+                    'write_control' => false,
                 );
-                foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $null) {
-                    $generator = current(Kwf_Component_Generator_Abstract::getInstances(
+                $beOptions = array(
+                    'cache_dir' => 'cache/events',
+                );
+                $cache = Kwf_Cache::factory('Core', 'File', $feOptions, $beOptions);
+                $listeners = $cache->load($cacheId);
+                if (!$listeners) {
+                    $listeners = self::_getAllListeners();
+                    $cache->save($listeners, $cacheId);
+                }
+                Kwf_Cache_Simple::add($cacheId, $listeners);
+            }
+        }
+
+        return $listeners;
+    }
+
+    private static function _getAllListeners()
+    {
+        $eventObjects = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
+            $eventsClass = Kwc_Admin::getComponentClass($componentClass, 'Events');
+            $eventObjects[] = Kwf_Component_Abstract_Events::getInstance(
+                    $eventsClass, array('componentClass' => $componentClass)
+            );
+            foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $null) {
+                $generator = current(Kwf_Component_Generator_Abstract::getInstances(
                         $componentClass, array('generator' => $generatorKey))
-                    );
-                    $eventsClass = $generator->getEventsClass();
-                    if ($eventsClass) {
-                        $eventObjects[] = Kwf_Component_Generator_Events::getInstance(
+                );
+                $eventsClass = $generator->getEventsClass();
+                if ($eventsClass) {
+                    $eventObjects[] = Kwf_Component_Generator_Events::getInstance(
                             $eventsClass,
                             array(
-                                'componentClass' => $componentClass,
-                                'generatorKey' => $generatorKey
+                                    'componentClass' => $componentClass,
+                                    'generatorKey' => $generatorKey
                             )
-                        );
-                    }
+                    );
                 }
             }
-            $eventObjects[] = self::getInstance('Kwf_Component_Events_ViewCache');
-            $eventObjects[] = self::getInstance('Kwf_Component_Events_UrlCache');
-            $eventObjects[] = self::getInstance('Kwf_Component_Events_ProcessInputCache');
+        }
+        $eventObjects[] = self::getInstance('Kwf_Component_Events_ViewCache');
+        $eventObjects[] = self::getInstance('Kwf_Component_Events_UrlCache');
+        $eventObjects[] = self::getInstance('Kwf_Component_Events_ProcessInputCache');
 
-            $listeners = array();
-            foreach ($eventObjects as $eventObject) {
-                if (get_class($eventObject) == 'Kwf_Component_Generator_Events_Table') {
+        $listeners = array();
+        foreach ($eventObjects as $eventObject) {
+            if (get_class($eventObject) == 'Kwf_Component_Generator_Events_Table') {
 
-                }
+            }
 
-                foreach ($eventObject->getListeners() as $listener) {
-                    if (!is_array($listener) ||
+            foreach ($eventObject->getListeners() as $listener) {
+                if (!is_array($listener) ||
                         !isset($listener['event']) ||
                         !isset($listener['callback'])
-                    ) {
-                        throw new Kwf_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
-                    }
-                    $event = $listener['event'];
-                    if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
-                    $class = isset($listener['class']) ? $listener['class'] : 'all';
-                    if (!is_array($class)) {
-                        $class = array($class);
-                    }
-                    foreach ($class as $c) {
-                        if (is_object($c)) $c = get_class($c);
-                        $listeners[$event][$c][] = array(
+                ) {
+                    throw new Kwf_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
+                }
+                $event = $listener['event'];
+                if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
+                $class = isset($listener['class']) ? $listener['class'] : 'all';
+                if (!is_array($class)) {
+                    $class = array($class);
+                }
+                foreach ($class as $c) {
+                    if (is_object($c)) $c = get_class($c);
+                    $listeners[$event][$c][] = array(
                             'class' => get_class($eventObject),
                             'method' => $listener['callback'],
                             'config' => $eventObject->getConfig()
-                        );
-                    }
+                    );
                 }
             }
-
-            Kwf_Cache_Simple::add($cacheId, $listeners);
         }
         return $listeners;
     }

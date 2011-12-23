@@ -21,6 +21,9 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
         if (in_array($requestUri, $ignore)) {
             return false;
         }
+        if (substr($requestUri, 0, 7) == '/files/' || substr($requestUri, 0, 12) == '/monitoring/') { //TODO: don't hardcode here
+            return false;
+        }
 
         $body = '';
         $body .= $this->_format('REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '(none)');
