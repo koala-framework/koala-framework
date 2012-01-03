@@ -130,11 +130,7 @@ class Kwf_Util_Setup
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
         $ret .= "if (\$host) {\n";
-            $ret .= "    if (substr(\$host, 0, 9)=='dev.test.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'devtest';\n";
-            $ret .= "    } else if (substr(\$host, 0, 4)=='dev.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'dev';\n";
-            $ret .= "    } else if (substr(\$host, 0, 8)=='preview.') {\n";
+            $ret .= "    if (substr(\$host, 0, 8)=='preview.') {\n";
             $ret .= "        Kwf_Setup::\$configSection = 'preview';\n";
             $ret .= "    }\n";
         $ret .= "}\n";
