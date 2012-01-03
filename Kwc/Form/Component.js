@@ -100,7 +100,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 }
 
                 // remove and add error messages
-                var error = this.el.parent().down('.webFormError');
+                var error = this.el.parent().child('.webFormError');
                 if (error) error.remove();
 
                 if (r.errorMessages && r.errorMessages.length) {
