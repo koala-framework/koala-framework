@@ -51,17 +51,6 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $this->getData()->getPage()->name;
     }
 
-    /**
-     * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
-     * auch angezeige werden
-     *
-     * @return boolean
-     */
-    protected function _showInvisible()
-    {
-        return Kwf_Registry::get('config')->showInvisible;
-    }
-
     public static function getSettings()
     {
         $ret = parent::getSettings();

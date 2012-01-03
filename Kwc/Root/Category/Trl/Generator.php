@@ -30,11 +30,7 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         $limit = null;
         $ignoreVisible = $select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE) ?
             $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) : false;
-            static $showInvisible;
-        if (is_null($showInvisible)) {
-            $showInvisible = Kwf_Registry::get('config')->showInvisible;
-        }
-        if ($showInvisible) $ignoreVisible = true;
+        if (Kwf_Component_Data_Root::getShowInvisible()) $ignoreVisible = true;
 
         $select = clone $select;
 

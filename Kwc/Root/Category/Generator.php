@@ -101,12 +101,8 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $menu = $select->getPart(Kwf_Component_Select::WHERE_SHOW_IN_MENU);
                 if ($menu == $page['hide']) continue;
             }
-            static $showInvisible;
-            if (is_null($showInvisible)) {
-                $showInvisible = Kwf_Config::getValue('showInvisible');
-            }
             if ($select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
-            } else if (!$showInvisible) {
+            } else if (!Kwf_Component_Data_Root::getShowInvisible()) {
                 if (!$this->_pageData[$pageId]['visible']) continue;
             }
             $d = $this->_createData($parentData, $pageId, $select);

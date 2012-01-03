@@ -211,10 +211,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             $select->order("pos");
         }
 
-        static $showInvisible;
-        if (is_null($showInvisible)) {
-            $showInvisible = Kwf_Config::getValue('showInvisible');
-        }
+        $showInvisible = Kwf_Component_Data_Root::getShowInvisible();
         if (!$select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)
             && $this->_getModel()->hasColumn('visible') && !$showInvisible) {
             $select->whereEquals("visible", 1);

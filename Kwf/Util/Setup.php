@@ -129,11 +129,12 @@ class Kwf_Util_Setup
 
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
-        $ret .= "if (\$host) {\n";
-            $ret .= "    if (substr(\$host, 0, 8)=='preview.') {\n";
-            $ret .= "        Kwf_Setup::\$configSection = 'preview';\n";
-            $ret .= "    }\n";
-        $ret .= "}\n";
+
+        if (Kwf_Config::getValue('server.previewDomain')) {
+            $ret .= "if (\$host == '".Kwf_Config::getValue('server.previewDomain')."') {\n";
+            $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
+            $ret .= "}\n";
+        }
 
         if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
             $ret .= "Kwf_Config::checkMasterFiles();\n";
@@ -236,12 +237,12 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
-        if (Kwf_Config::getValue('showPlaceholder') && !Kwf_Config::getValue('ignoreShowPlaceholder')) {
-            $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REQUEST_URI']) && substr(\$_SERVER['REQUEST_URI'], 0, 8)!='/assets/') {\n";
+        if (Kwf_Config::getValue('showPlaceholder')) {
+            $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REQUEST_URI']) && substr(\$_SERVER['REQUEST_URI'], 0, 8)!='/assets/' && !Kwf_Component_Data_Root::getShowInvisible()) {\n";
             $ret .= "    $view = new Kwf_View();\n";
             $ret .= "    echo $view->render('placeholder.tpl');\n";
             $ret .= "    exit;\n";
-            $ret .= "    }\n";
+            $ret .= "}\n";
         }
 
 

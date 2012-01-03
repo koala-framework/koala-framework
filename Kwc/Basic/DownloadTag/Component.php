@@ -63,7 +63,7 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         if (!$c) {
             $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
             if (!$c) return self::INVALID;
-            if (Kwf_Registry::get('config')->showInvisible) {
+            if (Kwf_Component_Data_Root::getShowInvisible()) {
                 //preview im frontend
                 $retValid = self::VALID_DONT_CACHE;
             } else if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $className, Kwf_Registry::get('userModel')->getAuthedUser())) {
