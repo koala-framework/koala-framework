@@ -130,10 +130,20 @@ class Kwf_Util_Setup
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
 
-        if (Kwf_Config::getValue('server.previewDomain')) {
-            $ret .= "if (\$host == '".Kwf_Config::getValue('server.previewDomain')."') {\n";
-            $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
-            $ret .= "}\n";
+        if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
+            foreach ($domains as $domain) {
+                if (isset($domain['previewDomain'])) {
+                    $ret .= "if (\$host == '".$domain['previewDomain']."') {\n";
+                    $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
+                    $ret .= "}\n";
+                }
+            }
+        } else {
+            if (Kwf_Config::getValue('server.previewDomain')) {
+                $ret .= "if (\$host == '".Kwf_Config::getValue('server.previewDomain')."') {\n";
+                $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
+                $ret .= "}\n";
+            }
         }
 
         if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
@@ -184,6 +194,9 @@ class Kwf_Util_Setup
                 $ret .= "    \$domainMatches = false;\n";
                 foreach ($domains as $domain) {
                     $ret .= "    if ('{$domain['domain']}' == \$host) \$domainMatches = true;\n";
+                    if (isset($domain['previewDomain'])) {
+                        $ret .= "    if ('{$domain['previewDomain']}' == \$host) \$domainMatches = true;\n";
+                    }
                 }
                 $ret .= "    if (!\$domainMatches) {\n";
                 foreach ($domains as $domain) {
@@ -216,6 +229,11 @@ class Kwf_Util_Setup
                         $ret .= "        }\n";
                     } else {
                         $ret .= "        \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
+                    }
+                    if (Kwf_Config::getValue('server.previewDomain')) {
+                        $ret .= "    if (\$host == '".Kwf_Config::getValue('server.previewDomain')."') {\n";
+                        $ret .= "        \$redirect = false;\n";
+                        $ret .= "    }\n";
                     }
                 $ret .= "    }\n";
             }
