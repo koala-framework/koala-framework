@@ -264,8 +264,12 @@ class Kwf_Util_Setup
         }
 
 
-        if (Kwf_Config::getValue('preLogin')) {
-            $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REDIRECT_URL'])) {\n";
+        if (Kwf_Config::getValue('preLoginUser')) {
+            if (Kwf_Config::getValue('preLogin')) {
+                $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REDIRECT_URL'])) {\n";
+            } else {
+                $ret .= "if (Kwf_Component_Data_Root::getShowInvisible()) {\n";
+            }
             $ret .= "    \$ignore = false;\n";
             foreach (Kwf_Config::getValueArray('preLoginIgnore') as $i) {
                 $ret .= "    if (substr(\$_SERVER['REDIRECT_URL'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";
@@ -279,7 +283,9 @@ class Kwf_Util_Setup
             $ret .= "            || \$_SERVER['PHP_AUTH_USER']!='".Kwf_Config::getValue('preLoginUser')."'\n";
             $ret .= "           || \$_SERVER['PHP_AUTH_PW']!='".Kwf_Config::getValue('preLoginPassword')."')\n";
             $ret .= "    ) {\n";
-            $ret .= "        header('WWW-Authenticate: Basic realm=\"Testserver\"');\n";
+            $ret .= "        \$realm = 'Testserver';\n";
+            $ret .= "        if (Kwf_Component_Data_Root::getShowInvisible()) \$realm = 'Preview';\n";
+            $ret .= "        header('WWW-Authenticate: Basic realm=\"'.\$realm.'\"');\n";
             $ret .= "        throw new Kwf_Exception_AccessDenied();\n";
             $ret .= "    }\n";
             $ret .= "}\n";
