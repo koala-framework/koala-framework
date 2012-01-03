@@ -8,6 +8,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
 {
     private static $_instance;
     private static $_rootComponentClass;
+    private static $_showInvisible;
     private $_hasChildComponentCache;
     private $_componentsByClassCache;
     private $_componentsByDbIdCache;
@@ -79,6 +80,24 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     {
         self::$_rootComponentClass = $componentClass;
         self::reset();
+    }
+
+    /**
+     * @internal
+     */
+    public static function setShowInvisible($showInvisible)
+    {
+        self::$_showInvisible = $showInvisible;
+    }
+
+    /**
+     * Returns true if invisible items should be shown, true if app is opened in previewDomain
+     *
+     * @return bool
+     */
+    public static function getShowInvisible()
+    {
+        return self::$_showInvisible;
     }
 
     /**

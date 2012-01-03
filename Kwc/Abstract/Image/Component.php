@@ -267,7 +267,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if (Kwf_Component_Data_Root::getInstance()->getComponentById($id)) {
             return self::VALID;
         }
-        if (Kwf_Registry::get('config')->showInvisible) {
+        if (Kwf_Component_Data_Root::getShowInvisible()) {
             //preview im frontend
             if (Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
                 return self::VALID_DONT_CACHE;

@@ -28,7 +28,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     //public for unittest
     public static function __getProcessInputComponents($data)
     {
-        $showInvisible = Kwf_Config::getValue('showInvisible');
+        $showInvisible = Kwf_Component_Data_Root::getShowInvisible();
 
         $cacheId = 'procI-'.$data->getPageOrRoot()->componentId;
         $success = false;

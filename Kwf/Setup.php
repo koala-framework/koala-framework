@@ -148,7 +148,7 @@ class Kwf_Setup
                     throw new Kwf_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
                 }
                 $url = $data->url;
-                if (isset($_SERVER['QUERY_STRING'])) $url .= '?' . $_SERVER['QUERY_STRING'];
+                if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) $url .= '?' . $_SERVER['QUERY_STRING'];
                 header('Location: ' . $url);
                 exit;
             }
