@@ -3,6 +3,7 @@ class Kwf_Component_Events
 {
     protected $_config;
     public static $_indent = 0;
+    private static $_listeners;
 
     protected function __construct($config = array())
     {
@@ -32,9 +33,7 @@ class Kwf_Component_Events
 
     public static final function getAllListeners()
     {
-        static $listeners;
-
-        if (!isset($listeners)) {
+        if (!isset(self::$_listeners)) {
             $cacheId = 'Kwf_Component_Events_listeners'.Kwf_Component_Data_Root::getComponentClass();
 
             $listeners = Kwf_Cache_Simple::fetch($cacheId);
@@ -54,9 +53,15 @@ class Kwf_Component_Events
                 }
                 Kwf_Cache_Simple::add($cacheId, $listeners);
             }
+            self::$_listeners = $listeners;
         }
 
-        return $listeners;
+        return self::$_listeners;
+    }
+
+    public static function clearCache()
+    {
+        self::$_listeners = null;
     }
 
     private static function _getAllListeners()

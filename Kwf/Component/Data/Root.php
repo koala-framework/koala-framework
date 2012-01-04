@@ -81,6 +81,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         self::$_instance = null;
         Kwf_Component_Generator_Abstract::clearInstances();
         Kwf_Component_Abstract::clearModelInstances();
+        Kwf_Component_Events::clearCache();
         if ($resetCache) Kwf_Component_Abstract::resetSettingsCache();
     }
 
