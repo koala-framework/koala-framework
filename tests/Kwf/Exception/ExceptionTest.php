@@ -81,10 +81,13 @@ class Kwf_Exception_ExceptionTest extends Kwf_Test_TestCase
 
     private function _processException($exception)
     {
-        Kwf_Benchmark::disable();
+        if (!$exception instanceof Kwf_Exception_Abstract) {
+            $exception = new Kwf_Exception_Other($exception);
+        }
+
         $view = new Kwf_Exception_TestView();
         Kwf_Debug::setView($view);
-        Kwf_Debug::handleException($exception, true);
+        $exception->render(true);
         return $view;
     }
     /**

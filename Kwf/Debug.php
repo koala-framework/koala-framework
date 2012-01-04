@@ -238,12 +238,14 @@ class Kwf_Debug
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
-    public static function handleException($exception, $ignoreCli = false)
+    public static function handleException($exception)
     {
         if (!$exception instanceof Kwf_Exception_Abstract) {
             $exception = new Kwf_Exception_Other($exception);
         }
-        $exception->render($ignoreCli);
+        $exception->render();
+        Kwf_Benchmark::shutDown();
+        Kwf_Benchmark::output();
     }
 
     public static function setView(Kwf_View $view)
