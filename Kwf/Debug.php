@@ -229,7 +229,7 @@ function bt($file = false)
     if (php_sapi_name() == 'cli' || $file) {
         $ret = btString();
         if ($file) {
-            $ret = "============================================= \n".
+            $ret = str_repeat("=", 45)."\n".
                 php_sapi_name().' '.(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '').
                 "\n".$ret;
             file_put_contents('backtrace', $ret, FILE_APPEND);
@@ -270,12 +270,14 @@ class Kwf_Debug
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
-    public static function handleException($exception, $ignoreCli = false)
+    public static function handleException($exception)
     {
         if (!$exception instanceof Kwf_Exception_Abstract) {
             $exception = new Kwf_Exception_Other($exception);
         }
-        $exception->render($ignoreCli);
+        $exception->render();
+        Kwf_Benchmark::shutDown();
+        Kwf_Benchmark::output();
     }
 
     public static function setView(Kwf_View $view)

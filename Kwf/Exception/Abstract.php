@@ -95,7 +95,5 @@ abstract class Kwf_Exception_Abstract extends Exception
             echo $e->__toString();
             echo '</pre>';
         }
-        Kwf_Benchmark::shutDown();
-        Kwf_Benchmark::output();
    }
 }
