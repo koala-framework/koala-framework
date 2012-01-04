@@ -81,6 +81,7 @@ class Kwf_Exception_ExceptionTest extends Kwf_Test_TestCase
 
     private function _processException($exception)
     {
+        Kwf_Benchmark::disable();
         $view = new Kwf_Exception_TestView();
         Kwf_Debug::setView($view);
         Kwf_Debug::handleException($exception, true);
