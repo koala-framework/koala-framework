@@ -10,13 +10,15 @@ Kwf.onContentReady(function(readyEl) {
             if (Kwf.EyeCandy.Lightbox.allByUrl[els[i].href]) {
                 l = Kwf.EyeCandy.Lightbox.allByUrl[els[i].href];
             } else {
-                l = new Kwf.EyeCandy.Lightbox.Lightbox(Ext.get(els[i]), options);
+                l = new Kwf.EyeCandy.Lightbox.Lightbox(Ext.get(els[i]).dom.href, options);
             }
             els[i].kwfLightbox = l;
             Ext.EventManager.addListener(els[i], 'click', function(ev) {
-                this.show();
+                this.kwfLightbox.show();
+                Kwf.Utils.HistoryState.currentState.lightbox = this.href;
+                Kwf.Utils.HistoryState.pushState(document.title, this.href);
                 ev.stopEvent();
-            }, l, { stopEvent: true });
+            }, els[i], { stopEvent: true });
         }
     }
 
@@ -24,10 +26,13 @@ Kwf.onContentReady(function(readyEl) {
         if (el.kwfLightbox) return;
         var lightboxEl = Ext.get(el);
         var options = Ext.decode(lightboxEl.child('input.options').dom.value);
-        var l = new Kwf.EyeCandy.Lightbox.Lightbox(null, options);
+        var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
+        Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
+        Kwf.Utils.HistoryState.replaceState(document.title, window.location.href);
         lightboxEl.enableDisplayMode('block');
         l.lightboxEl = lightboxEl;
         l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
+        l.fetched = true;
         l.initialize();
         l.style.afterCreateLightboxEl();
         l.style.onShow();
@@ -47,12 +52,26 @@ Kwf.onContentReady(function(readyEl) {
     }
 });
 
+Kwf.Utils.HistoryState.on('popstate', function() {
+    var lightbox = Kwf.Utils.HistoryState.currentState.lightbox;
+    if (lightbox) {
+        if (!Kwf.EyeCandy.Lightbox.allByUrl[lightbox]) return;
+        if (Kwf.EyeCandy.Lightbox.currentOpen != Kwf.EyeCandy.Lightbox.allByUrl[lightbox]) {
+            Kwf.EyeCandy.Lightbox.allByUrl[lightbox].show();
+        }
+    } else {
+        if (Kwf.EyeCandy.Lightbox.currentOpen) {
+            Kwf.EyeCandy.Lightbox.currentOpen.close();
+        }
+    }
+});
+
 Ext.ns('Kwf.EyeCandy.Lightbox');
 Kwf.EyeCandy.Lightbox.currentOpen = null;
 Kwf.EyeCandy.Lightbox.allByUrl = {};
-Kwf.EyeCandy.Lightbox.Lightbox = function(linkEl, options) {
-    this.linkEl = linkEl;
-    if (linkEl) Kwf.EyeCandy.Lightbox.allByUrl[linkEl.dom.href] = this;
+Kwf.EyeCandy.Lightbox.Lightbox = function(href, options) {
+    this.href = href;
+    Kwf.EyeCandy.Lightbox.allByUrl[href] = this;
     this.options = options;
     if (options.style) {
         this.style = new Kwf.EyeCandy.Lightbox.Styles[options.style](this);
@@ -94,7 +113,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
         Ext.Ajax.request({
-            params: { url: this.linkEl.dom.href },
+            params: { url: this.href },
             url: url,
             success: function(response, options) {
                 this.contentEl = this.innerLightboxEl.createChild();
@@ -130,7 +149,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             },
             failure: function() {
                 //fallback
-                location.href = this.linkEl.dom.href;
+                location.href = this.href;
             },
             scope: this
         });
@@ -157,7 +176,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             this.lightboxEl.show();
             this.fetchContent();
         }
-        Kwf.Statistics.count(this.linkEl.dom.href);
+        Kwf.Statistics.count(this.href);
     },
     close: function() {
         this.style.onClose();
@@ -171,18 +190,25 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.lightboxEl.removeClass('kwfLightboxOpen');
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
+    closeAndPushState: function() {
+        var href = this.href;
+        href = href.substr(0, href.lastIndexOf('/'));
+        delete Kwf.Utils.HistoryState.currentState.lightbox;
+        Kwf.Utils.HistoryState.pushState(document.title, href);
+        this.close();
+    },
     initialize: function()
     {
         var closeButton = this.innerLightboxEl.child('.closeButton');
         if (closeButton) {
             closeButton.on('click', function(ev) {
-                this.close();
+                this.closeAndPushState();
                 ev.stopEvent();
             }, this);
         }
         this.lightboxEl.on('click', function(ev) {
             if (ev.getTarget() == this.lightboxEl.dom) {
-                this.close();
+                this.closeAndPushState();
             }
         }, this);
     },
@@ -230,7 +256,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         //maskEl.setHeight(Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight()));
 
         maskEl.on('click', function() {
-            this.lightbox.close();
+            this.lightbox.closeAndPushState();
         }, this);
     },
     unmask: function() {
@@ -303,6 +329,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     onContentReady: function()
     {
         if (this.lightbox._blockOnContentReady) return;
+        if (!this.lightbox.contentEl) return;
 
         //adjust size if height changed
         var newSize = this.lightbox.contentEl.getSize();
