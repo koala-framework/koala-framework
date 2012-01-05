@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <h1><?=trlKwf('Your cart contains');?></h1><br />
+    <h1><?=$this->placeholder['headline'];?></h1><br />
     <form action="<?= $this->data->url ?>" method="post">
         <?=$this->component($this->view)?>
         <div class="clear"></div>

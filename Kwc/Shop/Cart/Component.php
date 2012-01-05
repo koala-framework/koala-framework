@@ -21,6 +21,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['componentName'] = trlKwf('Shop.Cart');
         $ret['placeholder']['backToShop'] = trlKwf('Back to shop');
         $ret['placeholder']['checkout'] = trlKwf('To checkout');
+        $ret['placeholder']['headline'] = trlKwfStatic('Your cart contains');
 
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Keepalive.js';
         $ret['assets']['dep'][] = 'ExtCore';
