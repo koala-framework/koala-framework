@@ -27,6 +27,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['assets']['dep'][] = 'ExtConnection';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['contentSender'] = 'Kwc_Shop_Cart_ContentSender';
         $ret['orderData'] = 'Kwc_Shop_Cart_OrderData';
 
         $ret['vatRate'] = 0.2;
