@@ -650,6 +650,7 @@ class Kwf_Component_Data
     public function getPage()
     {
         $page = $this;
+        if ($this->isPage) return $this;
         if (isset($this->_lazyParent)) {
             //optimierung: hier koennen eventuell ein paar nicht-pages uebersprungen werden
             $id = $this->_lazyParent;
