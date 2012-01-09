@@ -7,7 +7,7 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
 
     defaultState: 'normal',
 
-    childSelector: '.listSwitchItem',
+    childSelector: '> div > .listSwitchItem',
 
     _init: function() {
         this.states = [

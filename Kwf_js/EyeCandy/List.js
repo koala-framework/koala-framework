@@ -29,7 +29,7 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
     //states[]
     defaultState: 'normal',
     activeState: 'active',
-    childSelector: '.listItem',
+    childSelector: '> .listItem',
     _init: function() {
         this.addEvents({
             'childMouseEnter': true,

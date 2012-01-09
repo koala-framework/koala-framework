@@ -1,4 +1,5 @@
 Kwf.onContentReady(function() {
+(function() {
     Ext.select('.kwcForm', true).each(function(form) {
         if (form.shopBoxCartInitDone) return;
         form.shopBoxCartInitDone = true;
@@ -19,4 +20,5 @@ Kwf.onContentReady(function() {
             }, this);
         }, this);
     });
+}).defer(1);
 });

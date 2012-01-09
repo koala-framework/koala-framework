@@ -1,15 +1,15 @@
 <?php
-class Kwc_Basic_Empty_Component extends Kwc_Abstract
+class Kwc_Basic_Blank_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('None');
+        $ret['componentName'] = trlKwfStatic('Blank');
         return $ret;
     }
 
     public function hasContent()
     {
-        return false;
+        return true;
     }
 }

@@ -1323,7 +1323,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>(None)</en>
-<de>(Keine)</de>
+<de>(Kein)</de>
 <id>399</id>
 </text>
 <text>
@@ -3415,7 +3415,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>None</en>
-<de>Keine</de>
+<de>Kein</de>
 <id>966</id>
 </text>
 <text>
@@ -5140,7 +5140,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>none</en>
-<de>keine</de>
+<de>kein</de>
 <id>1381</id>
 </text>
 <text>
@@ -6531,6 +6531,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>+</en>
 <id>1749</id>
+</text>
+<text>
+<en>Blank</en>
+<de>Leer</de>
+<id>1750</id>
 </text>
 </trl>
 
