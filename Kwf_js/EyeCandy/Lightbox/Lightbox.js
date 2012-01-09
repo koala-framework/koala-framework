@@ -303,6 +303,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     onContentReady: function()
     {
         if (this.lightbox._blockOnContentReady) return;
+        if (!this.lightbox.contentEl) return;
 
         //adjust size if height changed
         var newSize = this.lightbox.contentEl.getSize();
