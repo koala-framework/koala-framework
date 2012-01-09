@@ -9,7 +9,7 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Root extends Kwf_Compo
             'showInMenu' => true,
             'inherit' => true,
             'component' => array(
-                'empty' => 'Kwc_Basic_Empty_Component',
+                'empty' => 'Kwc_Basic_None_Component',
                 'special' => 'Kwf_Component_PagesController_PagesGeneratorActions_SpecialComponent',
                 'specialContainer' => 'Kwf_Component_PagesController_PagesGeneratorActions_SpecialContainerComponent',
                 'specialWithoutEdit' => 'Kwf_Component_PagesController_PagesGeneratorActions_SpecialWithoutEditContainerComponent',

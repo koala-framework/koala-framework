@@ -48,7 +48,7 @@ class Kwf_Component_Generator_GetRecursiveChildComponentsWithAlternativeComponen
     public function test2()
     {
         $c = $this->_root->getRecursiveChildComponents(array(
-            'componentClass' => 'Kwc_Basic_Empty_Component'
+            'componentClass' => 'Kwc_Basic_None_Component'
         ));
         $this->assertEquals(1, count($c));
         $c = array_values($c);

@@ -48,7 +48,7 @@ class Kwf_Component_Generator_Page_Test extends Kwc_TestAbstract
     {
         $ccc = Kwc_Abstract::getChildComponentClasses('Kwf_Component_Generator_Page_Root', array('filename' => 'home'));
         $this->assertEquals(2, count($ccc));
-        $this->assertEquals('Kwc_Basic_Empty_Component', current($ccc));
+        $this->assertEquals('Kwc_Basic_None_Component', current($ccc));
         $children = $this->_root->getChildComponents(array('filename' => 'home'));
         $this->assertEquals(1, count($children));
         $child = $this->_root->getChildComponent(array('filename' => 'home'));
@@ -74,7 +74,7 @@ class Kwf_Component_Generator_Page_Test extends Kwc_TestAbstract
 
     public function testIdAndComponentClassConstraints()
     {
-        $c = $this->_root->getComponentById(2, array('componentClass'=>'Kwc_Basic_Empty_Component'));
+        $c = $this->_root->getComponentById(2, array('componentClass'=>'Kwc_Basic_None_Component'));
         $this->assertNotNull($c);
 
         $c = $this->_root->getComponentById(2, array('componentClass'=>'Kwf_Component_Generator_Page_Child'));

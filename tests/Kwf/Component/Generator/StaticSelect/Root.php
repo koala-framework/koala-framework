@@ -10,24 +10,24 @@ class Kwf_Component_Generator_StaticSelect_Root extends Kwf_Component_NoCategori
 
         $ret['generators']['page1'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'name' => 'page1'
         );
         $ret['generators']['page2'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'name' => 'page2'
         );
         $ret['generators']['page3'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'name' => 'page3'
         );
 
         $ret['generators']['box'] = array(
             'class' => 'Kwf_Component_Generator_Box_StaticSelect',
             'component' => array(
-                'empty' => 'Kwc_Basic_Empty_Component',
+                'empty' => 'Kwc_Basic_None_Component',
                 'banner' => 'Kwf_Component_Generator_StaticSelect_Banner_Component',
             ),
             'inherit' => true,

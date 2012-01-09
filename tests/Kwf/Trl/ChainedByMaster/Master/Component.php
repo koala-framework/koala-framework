@@ -8,7 +8,7 @@ class Kwf_Trl_ChainedByMaster_Master_Component extends Kwc_Abstract
             'class' => 'Kwc_Root_Category_Generator',
             'inherit' => true,
             'component' => array(
-                'empty' => 'Kwc_Basic_Empty_Component',
+                'empty' => 'Kwc_Basic_None_Component',
                 'link' => 'Kwc_Basic_LinkTag_Component',
                 'firstChildPage' => 'Kwc_Basic_LinkTag_FirstChildPage_Component'
             ),
@@ -16,7 +16,7 @@ class Kwf_Trl_ChainedByMaster_Master_Component extends Kwc_Abstract
         );
         $ret['generators']['99'] = array(
             'class' => 'Kwf_Component_Generator_Static',
-            'component' => 'Kwc_Basic_Empty_Component'
+            'component' => 'Kwc_Basic_None_Component'
         );
         $ret['flags']['hasLanguage'] = true;
         $ret['flags']['chainedType'] = 'Trl';

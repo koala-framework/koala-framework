@@ -79,7 +79,7 @@ class Kwf_Component_Generator_Components_ComponentsTest extends Kwc_TestAbstract
             'Kwf_Component_Generator_Components_Multiple', 'Kwc_Basic_Html_Component'
         )), 2, 'Kwf_Component_Generator_Components_Root');
         $this->_assertGeneratorsCount(array('componentClasses' => array(
-            'Kwf_Component_Generator_Components_Multiple', 'Kwc_Basic_Empty_Component'
+            'Kwf_Component_Generator_Components_Multiple', 'Kwc_Basic_None_Component'
         )), 3, 'Kwf_Component_Generator_Components_Root');
     }
 

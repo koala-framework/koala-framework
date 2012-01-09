@@ -6,7 +6,7 @@ class Kwf_Component_Generator_ChildPage_Child extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['foo'] = array(
             'class' => 'Kwf_Component_Generator_Page_Table',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'nameColumn' => 'id',
             'model' => new Kwf_Model_FnF(array(
                 'columns' => array('id', 'component_id', 'filename'),

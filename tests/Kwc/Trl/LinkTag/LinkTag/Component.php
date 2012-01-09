@@ -6,7 +6,7 @@ class Kwc_Trl_LinkTag_LinkTag_Component extends Kwc_Basic_LinkTag_Component
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwc_Trl_LinkTag_LinkTag_TestModel';
         $ret['generators']['child']['component'] = array(
-            'empty' => 'Kwc_Basic_Empty_Component',
+            'empty' => 'Kwc_Basic_None_Component',
             'extern' => 'Kwc_Trl_LinkTag_LinkTag_Extern_Component'
         );
         return $ret;

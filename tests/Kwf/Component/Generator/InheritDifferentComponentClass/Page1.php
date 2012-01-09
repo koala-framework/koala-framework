@@ -6,7 +6,7 @@ class Kwf_Component_Generator_InheritDifferentComponentClass_Page1 extends Kwc_A
         $ret = parent::getSettings();
         $ret['generators']['page2'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'name' => 'page2'
         );
         return $ret;

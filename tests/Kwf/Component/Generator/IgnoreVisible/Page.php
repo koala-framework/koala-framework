@@ -6,7 +6,7 @@ class Kwf_Component_Generator_IgnoreVisible_Page extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['bar'] = array(
             'class' => 'Kwf_Component_Generator_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
         );
         return $ret;
     }

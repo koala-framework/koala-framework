@@ -8,7 +8,7 @@ class Kwf_Component_Generator_GetRecursiveChildComponentsPerformance_Table2 exte
             'class' => 'Kwf_Component_Generator_Table',
             'component' => array(
                 'table3' => 'Kwf_Component_Generator_GetRecursiveChildComponentsPerformance_Table3',
-                'empty'  => 'Kwc_Basic_Empty_Component'
+                'empty'  => 'Kwc_Basic_None_Component'
             ),
             'model' => 'Kwf_Component_Generator_GetRecursiveChildComponentsPerformance_Table2Model'
         );

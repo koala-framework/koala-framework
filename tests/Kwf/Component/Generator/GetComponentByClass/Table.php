@@ -6,7 +6,7 @@ class Kwf_Component_Generator_GetComponentByClass_Table extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['child'] = array(
             'class' => 'Kwf_Component_Generator_GetComponentByClass_Generator',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'model' => new Kwf_Model_FnF(array(
                 'columns' => array('id', 'name'),
                 'data'=>array(

@@ -20,7 +20,7 @@ class Kwf_Component_Generator_Subroot_Category extends Kwc_Root_Category_Compone
             )));
         $ret['generators']['page']['component'] = array(
             'image' => 'Kwc_Basic_Image_Component',
-            'empty' => 'Kwc_Basic_Empty_Component',
+            'empty' => 'Kwc_Basic_None_Component',
             'empty_ch' => 'Kwc_Basic_Link_Component',
         );
         return $ret;

@@ -8,7 +8,7 @@ class Kwf_Component_Generator_InheritNotFromPage_Root extends Kwf_Component_NoCa
 
         $ret['generators']['box'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'inherit' => true
         );
 

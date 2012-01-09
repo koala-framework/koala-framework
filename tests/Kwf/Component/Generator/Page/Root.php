@@ -15,7 +15,7 @@ class Kwf_Component_Generator_Page_Root extends Kwf_Component_NoCategoriesRoot
                   'parent_id'=>2, 'component'=>'empty', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array(
-            'empty' => 'Kwc_Basic_Empty_Component',
+            'empty' => 'Kwc_Basic_None_Component',
             'child' => 'Kwf_Component_Generator_Page_Child'
         );
         unset($ret['generators']['box']);

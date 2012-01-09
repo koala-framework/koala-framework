@@ -17,7 +17,7 @@ class Kwf_Component_Generator_InheritComponentClass_Root extends Kwf_Component_N
             'name' => 'page2'
         );
 
-        $ret['generators']['box']['component']['box1'] = 'Kwc_Basic_Empty_Component';
+        $ret['generators']['box']['component']['box1'] = 'Kwc_Basic_None_Component';
         unset($ret['generators']['title']);
         return $ret;
     }

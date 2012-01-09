@@ -20,7 +20,7 @@ class Kwf_Component_Generator_Components_Multiple extends Kwc_Abstract
         $ret['generators']['pageTable'] = array(
             'class' => 'Kwf_Component_Generator_Page_Table',
             'component' => array(
-                'editComponent' => 'Kwc_Basic_Empty_Component',
+                'editComponent' => 'Kwc_Basic_None_Component',
                 'flag' => 'Kwf_Component_Generator_Components_Flag'
             ),
             'nameColumn' => 'name',
@@ -35,7 +35,7 @@ class Kwf_Component_Generator_Components_Multiple extends Kwc_Abstract
         );
         $ret['generators']['pseudoPageTable'] = array(
             'class' => 'Kwf_Component_Generator_PseudoPage_Table',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'model' => 'Kwf_Model_FnF',
             'inherit' => true
         );
@@ -47,7 +47,7 @@ class Kwf_Component_Generator_Components_Multiple extends Kwc_Abstract
         );
         $ret['generators']['table'] = array(
             'class' => 'Kwf_Component_Generator_Table',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'model' => 'Kwf_Model_FnF',
         );
         $ret['plugins'] = array(

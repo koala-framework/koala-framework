@@ -12,6 +12,6 @@ class Kwf_Component_Generator_GetComponentByClassSubPage_Test extends Kwc_TestAb
     public function testById()
     {
         $this->assertNotNull($this->_root->getComponentById(2));
-        $this->assertEquals(2, count($this->_root->getComponentsByClass('Kwc_Basic_Empty_Component')));
+        $this->assertEquals(2, count($this->_root->getComponentsByClass('Kwc_Basic_None_Component')));
     }
 }

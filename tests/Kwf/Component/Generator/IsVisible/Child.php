@@ -6,7 +6,7 @@ class Kwf_Component_Generator_IsVisible_Child extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['child'] = array(
             'class' => 'Kwf_Component_Generator_Static',
-            'component' => 'Kwc_Basic_Empty_Component'
+            'component' => 'Kwc_Basic_None_Component'
         );
         return $ret;
     }

@@ -13,7 +13,7 @@ class Kwf_Component_Generator_HomeNotTopLevel_Category extends Kwc_Root_Category
                   'parent_id'=>2, 'component'=>'empty', 'is_home'=>true, 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array(
-            'empty' => 'Kwc_Basic_Empty_Component'
+            'empty' => 'Kwc_Basic_None_Component'
         );
         return $ret;
     }

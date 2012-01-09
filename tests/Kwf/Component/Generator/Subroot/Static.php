@@ -6,7 +6,7 @@ class Kwf_Component_Generator_Subroot_Static extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['foo'] = array(
             'class' => 'Kwf_Component_Generator_Subroot_StaticGenerator',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'dbIdShortcut' => 'test_',
             'nameColumn' => 'name',
             'model' => new Kwf_Model_FnF(array('data' => array(

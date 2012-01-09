@@ -14,7 +14,7 @@ class Kwc_Basic_LinkTagParentPage_Root extends Kwf_Component_NoCategoriesRoot
         )));
         $ret['generators']['page']['component'] = array(
             'link' => 'Kwc_Basic_LinkTag_ParentPage_Component',
-            'empty' => 'Kwc_Basic_Empty_Component'
+            'empty' => 'Kwc_Basic_None_Component'
         );
 
         unset($ret['generators']['title']);

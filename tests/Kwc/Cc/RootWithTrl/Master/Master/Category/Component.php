@@ -6,7 +6,7 @@ class Kwc_Cc_RootWithTrl_Master_Master_Category_Component extends Kwc_Root_Categ
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = 'Kwc_Cc_RootWithTrl_Master_Master_Category_PagesModel';
         $ret['generators']['page']['component'] = array(
-            'empty' => 'Kwc_Basic_Empty_Component'
+            'empty' => 'Kwc_Basic_None_Component'
         );
         return $ret;
     }

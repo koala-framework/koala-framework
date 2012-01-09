@@ -10,7 +10,7 @@ class Kwf_Component_Generator_Recursive_Static2 extends Kwc_Abstract
         );
         $ret['generators']['page'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'name' => 'Foo'
         );
         return $ret;

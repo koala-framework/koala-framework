@@ -17,7 +17,7 @@ class Kwc_ListChildPages_Teaser_Root extends Kwf_Component_NoCategoriesRoot
         )));
         $ret['generators']['page']['component'] = array(
             'listchild' => 'Kwc_List_ChildPages_Teaser_Component',
-            'empty' => 'Kwc_Basic_Empty_Component'
+            'empty' => 'Kwc_Basic_None_Component'
         );
 
         unset($ret['generators']['title']);

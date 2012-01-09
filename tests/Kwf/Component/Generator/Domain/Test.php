@@ -45,7 +45,7 @@ class Kwf_Component_Generator_Domain_Test extends Kwc_TestAbstract
         $this->assertEquals(2, count($main->getChildComponents()));
         $c = $main->getChildComponent();
         $this->assertEquals(1, $c->componentId);
-        $this->assertEquals('Kwc_Basic_Empty_Component', $c->componentClass);
+        $this->assertEquals('Kwc_Basic_None_Component', $c->componentClass);
         $this->assertEquals('root-at-main', $c->parent->componentId);
         $this->assertEquals(2, $c->getChildComponent()->componentId);
     }
@@ -68,7 +68,7 @@ class Kwf_Component_Generator_Domain_Test extends Kwc_TestAbstract
         $this->assertEquals(5, $page->componentId);
         $this->assertEquals('root-ch-main', $page->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('6'));
-        $this->assertEquals('Kwc_Basic_Empty_Component', $this->_root->getComponentById('6')->componentClass);
+        $this->assertEquals('Kwc_Basic_None_Component', $this->_root->getComponentById('6')->componentClass);
         $this->assertEquals('5', $this->_root->getComponentById('6')->parent->componentId);
         $this->assertEquals('root-ch-main', $this->_root->getComponentById('6')->parent->parent->componentId);
     }
