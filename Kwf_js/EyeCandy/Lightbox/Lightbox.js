@@ -297,6 +297,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         return xy;
     },
     _center: function(anim) {
+        if (!this.lightbox.lightboxEl.isVisible(true)) return;
         this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
     },
 
