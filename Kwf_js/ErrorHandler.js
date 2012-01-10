@@ -1,5 +1,5 @@
 Ext.ux.ErrorHandler.on('error', function(ex) {
-    var ownPrefix = location.protocol+'/'+location.host;
+    var ownPrefix = location.protocol+'//'+location.host;
     if (ex.url && ex.url.substr(0, ownPrefix.length) != ownPrefix) {
         //ignore errors out of our control (other server, chrome://)
         return;
