@@ -28,6 +28,16 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
 
     protected function _beforeInsert(&$row)
     {
+        $select = $this->_getCheckProductRowExistsSelect($row);
+        $existingRow = $row->getModel()->getRow($select);
+        if ($existingRow) {
+            $existingRow->amount += $row->amount;
+            $row = $existingRow;
+        }
+    }
+
+    protected function _getCheckProductRowExistsSelect($row)
+    {
         $select = $row->getModel()->select()
             ->whereEquals('shop_order_id', $row->shop_order_id)
             ->whereEquals('shop_product_price_id', $row->shop_product_price_id)
@@ -36,10 +46,6 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
         foreach ($row->getSiblingRow(0)->toArray() as $key => $val) {
             $select->whereEquals($key, $val);
         }
-        $existingRow = $row->getModel()->getRow($select);
-        if ($existingRow) {
-            $existingRow->amount += $row->amount;
-            $row = $existingRow;
-        }
+        return $select;
     }
 }
