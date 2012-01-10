@@ -41,7 +41,7 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
                 ->getComponentById($whereEquals['parent_component_id'], array(
                     Kwf_Component_Select::IGNORE_VISIBLE => true
                 ))
-                ->parent->parent
+                ->getPageOrRoot()
                 ->getChildPages($childPagesComponentSelect);
             foreach ($childPages as $childPage) {
                 if (is_numeric($childPage->dbId)) {
