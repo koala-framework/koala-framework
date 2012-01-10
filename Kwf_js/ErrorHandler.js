@@ -1,3 +1,4 @@
+Kwf.Debug.sentErrors = [];
 Ext.ux.ErrorHandler.on('error', function(ex) {
     var ownPrefix = location.protocol+'//'+location.host;
     if (ex.url && ex.url.substr(0, ownPrefix.length) != ownPrefix) {
@@ -7,17 +8,23 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
     if (Kwf.Debug.displayErrors) {
         throw ex;
     }
+    var params = {
+        url: ex.url,
+        lineNumber: ex.lineNumber,
+        stack: Ext.encode(ex.stack),
+        message: ex.message,
+        location: location.href,
+        referrer: document.referrer
+    };
+    if (Kwf.Debug.sentErrors.indexOf(Ext.encode(params)) != -1) {
+        //this error has been sent alrady, don't send again
+        return;
+    }
+    Kwf.Debug.sentErrors.push(Ext.encode(params));
     Ext.Ajax.request({
         url: '/kwf/error/error/json-mail',
         ignoreErrors: true,
-        params: {
-            url: ex.url,
-            lineNumber: ex.lineNumber,
-            stack: Ext.encode(ex.stack),
-            message: ex.message,
-            location: location.href,
-            referrer: document.referrer
-        }
+        params: params
     });
 });
 
