@@ -20,5 +20,4 @@ Kwf.onContentReady(function(readyEl, param) {
             }, this);
         }, this);
     });
-}).defer(1);
-});
+}, window, { priority: 10 }); //call after Kwc.Form.Component
