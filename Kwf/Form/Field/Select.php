@@ -33,9 +33,9 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
         return $ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
         $store = $this->_getStoreData();
 
@@ -53,7 +53,7 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
             $onchange= " onchange=\"this.form.submit();\"";
 
         //todo: escapen
-        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $style = '';
         if ($this->getWidth()) {
             $style = " style=\"width: ".$this->getWidth()."px\"";

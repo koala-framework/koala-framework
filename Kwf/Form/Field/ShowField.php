@@ -9,12 +9,12 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
     public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
     }
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         //todo: escapen
-        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['id'] = $idPrefix.$name.$fieldNamePostfix;
         if ($this->getShowText()) {
             throw new Kwf_Exception("ShowField shows a field of a row, but no static text set by 'setShowText'. Use Kwf_Form_Field_Panel instead.");
         }

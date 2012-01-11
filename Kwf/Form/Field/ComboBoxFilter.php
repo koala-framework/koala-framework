@@ -108,9 +108,9 @@ class Kwf_Form_Field_ComboBoxFilter extends Kwf_Form_Field_Select
         return $ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $this->setSubmitOnChange(true);
-        return parent::getTemplateVars($values, $fieldNamePostfix);
+        return parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
     }
 }

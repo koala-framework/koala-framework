@@ -8,13 +8,13 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
         $this->setWidth(100);
         $this->setHeight(60);
     }
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? (string)$values[$name] : $this->getDefaultValue();
-        $ret = Kwf_Form_Field_SimpleAbstract::getTemplateVars($values);
+        $ret = Kwf_Form_Field_SimpleAbstract::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         //todo: escapen
-        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<textarea id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
         $width = $this->getWidth();
         if (is_numeric($width)) {

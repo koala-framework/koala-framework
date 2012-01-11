@@ -116,7 +116,7 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
         return $childField->getName() == $value;
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = array();
         
@@ -131,13 +131,13 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
         }
         $this->getCombobox()->setValues($comboboxData);
         $this->getCombobox()->setSubmitOnChange(true);
-        $r = $this->getCombobox()->getTemplateVars($values);
+        $r = $this->getCombobox()->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $ret['preHtml'] = $r['html'];
         $ret['item'] = $r['item'];
         
         foreach ($this->fields as $card) {
             if ($card->getName() != $value) continue;
-            $ret['items'][] = $card->getTemplateVars($values);
+            $ret['items'][] = $card->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         }
         
         return $ret;

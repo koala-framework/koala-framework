@@ -325,12 +325,12 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
         return $ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $helper = new Kwf_View_Helper_FormField();
         $ret['html'] = '<div class="kwfFormFieldMultiCheckbox kwfFormFieldMultiCheckbox'.ucfirst($this->getOutputType()).'">';
-        $fields = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix);
+        $fields = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $i = 0;
         foreach ($fields as $field) {
             $ret['html'] .= '<div class="checkboxItem'.($i==0?' first':'').'">'.$helper->returnFormField($field).'</div>';

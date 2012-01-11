@@ -153,10 +153,10 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
         return parent::processInput($row, $postData);
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix='')
+    public function getTemplateVars($values, $fieldNamePostfix='', $idPrefix='')
     {
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
-        $ret['items'] = $this->fields->getTemplateVars($values, $fieldNamePostfix);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+        $ret['items'] = $this->fields->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         return $ret;
     }
 }

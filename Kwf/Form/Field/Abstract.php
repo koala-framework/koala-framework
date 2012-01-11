@@ -292,7 +292,7 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         $data->setFieldname($this->getName());
         return $this;
     }
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = array();
         $ret['item'] = $this;

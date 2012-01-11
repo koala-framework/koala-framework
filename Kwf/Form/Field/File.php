@@ -155,14 +155,14 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         }
     }
 
-    public function getTemplateVars($values, $namePostfix = '')
+    public function getTemplateVars($values, $namePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : null;
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $namePostfix, $idPrefix);
 
         $name = htmlspecialchars($name);
-        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
+        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
         $ret['html']  = "<div class=\"kwfFormFieldFileInnerImg\">\n";
         if ($value) {
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".

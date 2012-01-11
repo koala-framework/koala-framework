@@ -39,14 +39,14 @@ class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
         }
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         //todo: escapen
-        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input type=\"checkbox\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
         if ($value) $ret['html'] .= 'checked="checked" ';
         $ret['html'] .= "/>";

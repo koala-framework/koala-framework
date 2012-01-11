@@ -46,12 +46,12 @@ class Kwf_Form_Field_DoublePassword extends Kwf_Form_Field_Abstract
         }
         return $ret;
     }
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = array();
         $ret['items'] = array();
-        $ret['items'][] = $this->_passwordField1->getTemplateVars($values, $fieldNamePostfix);
-        $ret['items'][] = $this->_passwordField2->getTemplateVars($values, $fieldNamePostfix);
+        $ret['items'][] = $this->_passwordField1->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+        $ret['items'][] = $this->_passwordField2->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         return $ret;
     }
 

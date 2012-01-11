@@ -335,20 +335,19 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         }
     }
 
-    public function getTemplateVars($values, $namePostfix = '')
+    public function getTemplateVars($values, $namePostfix = '', $idPrefix = '')
     {
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $namePostfix, $idPrefix);
         $name = $this->getFieldName();
         $value = $values[$name];
 
-        $ret = parent::getTemplateVars($values);
         $ret['preHtml'] = '<input type="hidden" name="'.$name.'_num'.$namePostfix.'" value="'.count($value).'" />';
         $ret['postHtml'] = '<div class="addLayer"><div class="submitWrapper"><span class="beforeButton"></span><span class="button"><button class="submit add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">'.trlKwf("New Entry").'</button></span><span class="afterButton"></span></div></div>';
 
         $ret['items'] = array();
         foreach ($value as $i=>$rowValues) {
             $ret['items'][] = array('preHtml' => "<div class=\"kwfFormFieldMultiFieldsRow\">\n", 'item' => null);
-            $ret['items'] = array_merge($ret['items'], $this->fields->getTemplateVars($rowValues, $namePostfix."[$i]"));
+            $ret['items'] = array_merge($ret['items'], $this->fields->getTemplateVars($rowValues, $namePostfix."[$i]", $idPrefix));
             $ret['items'][] = array('postHtml' => "</div>\n", 'html' => '<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">'.trlKwf("Delete Entry").'</button>', 'item' => null);
         }
         return $ret;
