@@ -4,7 +4,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
     /**
      * @param Kwf_Component_Data target page
      * @param string custom text, if empty component name will be used
-     * @param config array: cssClass, get, anchor, skipComponentLinkModifiers
+     * @param config array: cssClass, get, anchor, skipAppendLinkText, skipAppendText
      */
     public function componentLink($target, $text = null, $config = array())
     {
@@ -49,20 +49,24 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
         $componentLinkModifiers = $targetPage[3];
         $text = $config['text'] ? $config['text'] : $targetPage[2];
         $text = str_replace('{name}', $targetPage[2], $text);
-        foreach ($componentLinkModifiers as $s) {
-            if ($s['type'] == 'appendLinkText') {
-                $text .= $s['text'];
+        if (!isset($config['skipAppendLinkText']) || !$config['skipAppendLinkText']) {
+            foreach ($componentLinkModifiers as $s) {
+                if ($s['type'] == 'appendLinkText') {
+                    $text .= $s['text'];
+                }
             }
         }
         $ret = $this->_getHelper()->getLink(
             $targetPage[0], $targetPage[1], $text,
             $config
         );
-        foreach ($componentLinkModifiers as $s) {
-            if ($s['type'] == 'appendText') {
-                $ret .= $s['text'];
-            } else if ($s['type'] == 'callback') {
-                $ret = call_user_func($s['callback'], $ret, $s['text']);
+        if (!isset($config['skipAppendText']) || !$config['skipAppendText']) {
+            foreach ($componentLinkModifiers as $s) {
+                if ($s['type'] == 'appendText') {
+                   $ret .= $s['text'];
+               } else if ($s['type'] == 'callback') {
+                    $ret = call_user_func($s['callback'], $ret, $s['text']);
+                }
             }
         }
         return $ret;
