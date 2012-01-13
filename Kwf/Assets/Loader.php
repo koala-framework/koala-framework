@@ -214,17 +214,8 @@ class Kwf_Assets_Loader
                         $cacheData['contents'] = str_replace('../images/', '/assets/ext/resources/images/', $cacheData['contents']);
                     }
 
-                    if (file_exists('assetVariables.ini')) {
-                        $cacheData['mtimeFiles'][] = 'assetVariables.ini';
-                        static $assetVariables = array();
-                        if (!isset($assetVariables[$section])) {
-                            $assetVariables[$section] = new Zend_Config_Ini('assetVariables.ini', $section);
-                        }
-                        foreach ($assetVariables[$section] as $k=>$i) {
-                            $cacheData['contents'] = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $cacheData['contents']);
-                            $cacheData['contents'] = str_replace('var('.$k.')', $i, $cacheData['contents']);
-                        }
-                    }
+                    $cacheData['contents'] = self::expandAssetVariables($cacheData['contents'], $section, $cacheData['mtimeFiles']);
+
                     $cacheData['maxFileMTime'] = $this->getDependencies()->getMaxFileMTime();
                     if (substr($ret['mimeType'], 0, 8) == 'text/css') {
                         $cssClass = $file;
@@ -316,6 +307,22 @@ class Kwf_Assets_Loader
         }
 
         return $ret;
+    }
+
+    public static function expandAssetVariables($contents, $section, &$mtimeFiles = array())
+    {
+        if (file_exists('assetVariables.ini')) {
+            $mtimeFiles[] = 'assetVariables.ini';
+            static $assetVariables = array();
+            if (!isset($assetVariables[$section])) {
+                $assetVariables[$section] = new Zend_Config_Ini('assetVariables.ini', $section);
+            }
+            foreach ($assetVariables[$section] as $k=>$i) {
+                $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
+                $contents = str_replace('var('.$k.')', $i, $contents);
+            }
+        }
+        return $contents;
     }
 
     private function _getConfig()
