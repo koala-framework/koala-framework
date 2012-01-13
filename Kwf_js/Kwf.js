@@ -167,6 +167,7 @@ Kwf.callOnContentReady = function(el, options) {
     Kwf.contentReadyHandlers.sort(function(a, b) {
         return a.options.priority - b.options.priority;
     });
+    if (el instanceof Ext.Element) el = el.dom;
     Ext.each(Kwf.contentReadyHandlers, function(i) {
         i.fn.call(i.scope || window, (el || document.body), options);
     }, this);
