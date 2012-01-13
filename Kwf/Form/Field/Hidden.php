@@ -9,12 +9,12 @@ class Kwf_Form_Field_Hidden extends Kwf_Form_Field_SimpleAbstract
         parent::__construct($field_name);
         $this->setXtype('hidden');
     }
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
         $value = (string)$values[$name];
 
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);

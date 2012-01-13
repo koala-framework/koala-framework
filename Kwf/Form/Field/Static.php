@@ -26,10 +26,10 @@ class Kwf_Form_Field_Static extends Kwf_Form_Field_Abstract
         return $this->setProperty('fieldLabel', $v);
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
-        $ret = parent::getTemplateVars($values);
-        $ret['id'] = $this->getFieldName().$fieldNamePostfix;
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+        $ret['id'] = $idPrefix.$this->getFieldName().$fieldNamePostfix;
         $cls = $this->getCls();
         $ret['html'] = "<div class=\"$cls\">" . $this->getText() . "</div>";
         return $ret;

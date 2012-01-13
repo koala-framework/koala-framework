@@ -38,15 +38,15 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         return (string)$ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
         $value = $this->_getOutputValueFromValues($values);
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
             $cls = trim($cls.' kwfClearOnFocus');

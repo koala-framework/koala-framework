@@ -18,7 +18,7 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
         $ret['fadeConfig'] = array(
             'elementAccessDirect' => false, // a button for each element to acces
             'elementAccessPlayPause' => false, // a play pause button to break fade-switching
-            'elementAccessLinks' => false, // deprecated, sets both of above
+            //'elementAccessLinks' => false, // deprecated, sets both of above
             'elementAccessNextPrevious' => false, // a previous and next button to switch pictures
             'fadeDuration'       => 1.5,
             'fadeEvery'          => 7,

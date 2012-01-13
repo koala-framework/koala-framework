@@ -11,9 +11,9 @@ class Kwf_Form_Container_Column extends Kwf_Form_Container_Abstract
         $this->setStyle('margin: 0px 10px;');
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix='')
+    public function getTemplateVars($values, $fieldNamePostfix='', $idPrefix = '')
     {
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $ret['preHtml'] = ''; // damit ein div ausgegeben wird
         $ret['postHtml'] = '';
 

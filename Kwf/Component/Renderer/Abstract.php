@@ -13,6 +13,9 @@ abstract class Kwf_Component_Renderer_Abstract
     {
         if (is_null($this->_enableCache)) {
             $this->_enableCache = !Kwf_Config::getValue('debug.componentCache.disable');
+            if (Kwf_Component_Data_Root::getShowInvisible()) {
+                $this->_enableCache = false;
+            }
         }
         $this->_renderComponent = $component;
         $content = $this->_renderComponentContent($component);

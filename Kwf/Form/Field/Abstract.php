@@ -321,7 +321,7 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         return $this;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = array();
         $ret['item'] = $this;

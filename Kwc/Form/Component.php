@@ -226,7 +226,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         $values = $this->getForm()->load(null, $this->_postData);
-        $ret['form'] = $this->getForm()->getTemplateVars($values);
+        $ret['form'] = $this->getForm()->getTemplateVars($values, '', $this->getData()->componentId.'_');
 
         $dec = $this->_getSetting('decorator');
         if ($dec && is_string($dec)) {

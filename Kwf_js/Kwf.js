@@ -147,15 +147,27 @@ if (Kwf.isApp) {
 }
 
 Kwf.contentReadyHandlers = [];
-Kwf.onContentReady = function(fn, scope) {
+
+/**
+ * Register a function that will be called when content is loaded or shown
+ * @param callback function
+ * @param scope for callback
+ * @options supported are: priority (integer, higher number means it's called after all with lower number)
+ */
+Kwf.onContentReady = function(fn, scope, options) {
     Kwf.contentReadyHandlers.push({
         fn: fn,
-        scope: scope
+        scope: scope,
+        options: options || {}
     });
 };
 
 Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
+    Kwf.contentReadyHandlers.sort(function(a, b) {
+        return a.options.priority - b.options.priority;
+    });
+    if (el instanceof Ext.Element) el = el.dom;
     Ext.each(Kwf.contentReadyHandlers, function(i) {
         i.fn.call(i.scope || window, (el || document.body), options);
     }, this);
