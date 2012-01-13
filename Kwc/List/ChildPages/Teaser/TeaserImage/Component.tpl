@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <h2><?= $this->componentLink($this->data->targetPage); ?></h2>
+    <h2><?= $this->componentLink($this->data->targetPage, null, $this->headlineComponentLinkConfig); ?></h2>
     <? if ($this->hasContent($this->image)) { ?>
         <div class="left prevImg">
             <?= $this->componentLink($this->data->targetPage, $this->component($this->image)); ?>
@@ -9,5 +9,5 @@
         <?= $this->component($this->text); ?>
     </div>
     <div class="clear"></div>
-    <p class="goTo"><?= $this->componentLink($this->data->targetPage, $this->readMoreLinktext); ?></p>
+    <p class="goTo"><?= $this->componentLink($this->data->targetPage, $this->readMoreLinktext, $this->readMoreComponentLinkConfig); ?></p>
 </div>
