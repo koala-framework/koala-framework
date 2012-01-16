@@ -17,8 +17,10 @@ class Kwf_Component_Generator_Box_Events_StaticSelect extends Kwf_Component_Gene
         if ($event->isDirty('component')) {
             $id = $event->row->component_id;
             foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($id) as $c) {
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
+                if ($c->generator === $this->_getGenerator()) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
+                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
+                }
             }
         }
     }
