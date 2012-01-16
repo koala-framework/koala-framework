@@ -25,7 +25,7 @@ class Kwc_NewsletterCategory_Subscribe_FrontendForm extends Kwc_Newsletter_Subsc
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
-        $this->addCategoryIfOnlyOne();
+        $this->addCategoryIfOnlyOne($row);
     }
 
     public function getCategories()
