@@ -47,14 +47,14 @@ class Kwf_Form_Field_Radio extends Kwf_Form_Field_Select
         return $ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
-        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
             array_unshift($store['data'], array('', '('.trlKwf('no selection').')'));

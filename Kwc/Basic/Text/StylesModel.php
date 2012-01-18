@@ -21,14 +21,15 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
     public static function parseMasterStyles($masterContent)
     {
         $styles = array();
-        preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
+        preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{([^}]*)} */\\* +(.*?) +\\*/#m', $masterContent, $m);
         foreach (array_keys($m[1]) as $i) {
             $tagName = $m[2][$i];
             $styles[] = array(
                 'id' => 'master'.$i,
-                'name' => $m[4][$i],
+                'name' => $m[5][$i],
                 'tagName' => $tagName,
                 'className' => $m[3][$i],
+                'styles' => Kwf_Assets_Loader::expandAssetVariables($m[4][$i], 'web'),
             );
         }
         return $styles;

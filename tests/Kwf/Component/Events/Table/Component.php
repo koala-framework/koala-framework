@@ -6,7 +6,7 @@ class Kwf_Component_Events_Table_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['child'] = array(
             'class' => 'Kwf_Component_Generator_Table',
-            'component' => 'Kwc_Basic_Empty_Component'
+            'component' => 'Kwc_Basic_None_Component'
         );
         $ret['childModel'] = 'Kwf_Component_Events_Table_Model';
         return $ret;

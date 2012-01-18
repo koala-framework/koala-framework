@@ -14,7 +14,7 @@ class Kwf_Component_Generator_Priority_Root extends Kwf_Component_NoCategoriesRo
         );
 
         $ret['generators']['box']['component'] = array();
-        $ret['generators']['box']['component']['foo'] = 'Kwc_Basic_Empty_Component';
+        $ret['generators']['box']['component']['foo'] = 'Kwc_Basic_None_Component';
         unset($ret['generators']['title']);
         return $ret;
     }

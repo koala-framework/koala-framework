@@ -68,6 +68,19 @@ class Kwc_Mail_Component extends Kwc_Abstract
                     );
                 }
             }
+            foreach (Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_StylesModel')->getMasterStyles() as $style) {
+                $styles = array();
+                if (preg_match_all('/([a-z-]+): +([^;]+);/', $style['styles'], $m)) {
+                    foreach (array_keys($m[0]) as $i) {
+                        $styles[$m[1][$i]] = $m[2][$i];
+                    }
+                }
+                $ret[] = array(
+                    'tag' => $style['tagName'],
+                    'class' => $style['className'],
+                    'styles' => $styles
+                );
+            }
         }
         return $ret;
     }

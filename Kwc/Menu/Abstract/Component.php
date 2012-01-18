@@ -45,7 +45,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
             'parentContent' => 'Kwc_Menu_ParentContent_Component.'.$componentClass,
 
             //if above categories
-            'empty' => 'Kwc_Basic_Empty_Component',
+            'none' => 'Kwc_Basic_None_Component',
         );
     }
 
@@ -68,7 +68,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 break;
             }
         } while ($data = $data->parent);
-        if (!$foundPageOrCategory) return 'empty';
+        if (!$foundPageOrCategory) return 'none';
 
         $data = $parentData;
         $menuLevel = 0;
@@ -102,11 +102,11 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                             }
                         }
                     } else {
-                        $ret = 'empty';
+                        $ret = 'none';
                     }
             }
         } else if ($menuLevel < $shownLevel-1) {
-            return 'empty';
+            return 'none';
         }
 
         if ($ret == false) {

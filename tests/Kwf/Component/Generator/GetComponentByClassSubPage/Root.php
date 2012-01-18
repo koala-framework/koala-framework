@@ -10,7 +10,7 @@ class Kwf_Component_Generator_GetComponentByClassSubPage_Root extends Kwf_Compon
             array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'Home', 'filename' => 'home',
                   'parent_id'=>1, 'component'=>'empty', 'is_home'=>true, 'category' =>'main', 'hide'=>false)
             )));
-        $ret['generators']['page']['component'] = array('empty' => 'Kwc_Basic_Empty_Component');
+        $ret['generators']['page']['component'] = array('empty' => 'Kwc_Basic_None_Component');
         return $ret;
     }
 }

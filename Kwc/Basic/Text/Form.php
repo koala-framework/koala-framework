@@ -12,7 +12,8 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
         $ignoreSettings = array('tablename', 'componentName',
                 'default', 'assets', 'assetsAdmin',
                 'placeholder');
-        foreach (call_user_func(array($class, 'getSettings')) as $key => $val) {
+        $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+        foreach (call_user_func(array($c, 'getSettings')) as $key => $val) {
             if (!in_array($key, $ignoreSettings)) {
                 $method = 'set' . ucfirst($key);
                 $field->$method($val);

@@ -1,8 +1,9 @@
 Ext.namespace("Kwf.EyeCandy");
 
-Kwf.onContentReady(function() {
-    Ext.query('.kwfEyeCandyList').forEach(function(el) {
-        if (!el.list) {
+Kwf.onContentReady(function(readyEl) {
+    if (readyEl.tagName.toLowerCase() != 'body' && !Ext.fly(readyEl).isVisible(true)) return; //initialize only visible items
+    Ext.query('.kwfEyeCandyList', readyEl).forEach(function(el) {
+        if (!el.list && Ext.fly(el).isVisible(true)) {
             var opts = Ext.fly(el).down('.options', true);
             if (opts) {
                 opts = Ext.decode(opts.value);
@@ -29,7 +30,7 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
     //states[]
     defaultState: 'normal',
     activeState: 'active',
-    childSelector: '.listItem',
+    childSelector: '> .listItem',
     _init: function() {
         this.addEvents({
             'childMouseEnter': true,

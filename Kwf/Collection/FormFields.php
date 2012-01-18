@@ -39,12 +39,12 @@ class Kwf_Collection_FormFields extends Kwf_Collection
         return $ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix='')
     {
         $ret = array();
         foreach ($this as $field) {
             if ($field->getHidden()) continue;
-            $data = $field->getTemplateVars($values, $fieldNamePostfix);
+            $data = $field->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
             if (!is_null($data)) $ret[] = $data;
         }
         return $ret;

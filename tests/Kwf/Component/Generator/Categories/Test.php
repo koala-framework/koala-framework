@@ -33,7 +33,7 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $main = $this->_root->getChildComponent('-main');
         $this->assertEquals(2, count($main->getChildComponents()));
         $this->assertEquals(1, $main->getChildComponent()->componentId);
-        $this->assertEquals('Kwc_Basic_Empty_Component', $main->getChildComponent()->componentClass);
+        $this->assertEquals('Kwc_Basic_None_Component', $main->getChildComponent()->componentClass);
         $this->assertEquals('root-main', $main->getChildComponent()->parent->componentId);
         $this->assertEquals(2, $main->getChildComponent()->getChildComponent()->componentId);
     }

@@ -16,25 +16,25 @@ class Kwf_Component_Acl_Test extends Kwc_TestAbstract
 
     public function testDefaultRule()
     {
-        $this->assertFalse($this->_acl->isAllowed('test', 'Kwc_Basic_Empty_Component'));
-        $this->assertFalse($this->_acl->isAllowed('guest', 'Kwc_Basic_Empty_Component'));
-        $this->assertFalse($this->_acl->isAllowed(null, 'Kwc_Basic_Empty_Component'));
+        $this->assertFalse($this->_acl->isAllowed('test', 'Kwc_Basic_None_Component'));
+        $this->assertFalse($this->_acl->isAllowed('guest', 'Kwc_Basic_None_Component'));
+        $this->assertFalse($this->_acl->isAllowed(null, 'Kwc_Basic_None_Component'));
     }
 
     public function testAllowComponentAll()
     {
         $this->_acl->allowComponent('test', null);
-        $this->assertFalse($this->_acl->isAllowed(null, 'Kwc_Basic_Empty_Component'));
-        $this->assertTrue($this->_acl->isAllowed('test', 'Kwc_Basic_Empty_Component'));
+        $this->assertFalse($this->_acl->isAllowed(null, 'Kwc_Basic_None_Component'));
+        $this->assertTrue($this->_acl->isAllowed('test', 'Kwc_Basic_None_Component'));
         $this->assertTrue($this->_acl->isAllowed('test', 'Kwf_Component_Acl_Root'));
     }
 
     public function testAllowComponent()
     {
         $this->_acl->allowComponent('test', 'Kwf_Component_Acl_Empty2');
-        $this->assertFalse($this->_acl->isAllowed(null, 'Kwc_Basic_Empty_Component'));
+        $this->assertFalse($this->_acl->isAllowed(null, 'Kwc_Basic_None_Component'));
         $this->assertTrue($this->_acl->isAllowed('test', 'Kwf_Component_Acl_Empty2'));
-        $this->assertFalse($this->_acl->isAllowed('test', 'Kwc_Basic_Empty_Component'));
+        $this->assertFalse($this->_acl->isAllowed('test', 'Kwc_Basic_None_Component'));
         $this->assertFalse($this->_acl->isAllowed('test', 'Kwf_Component_Acl_Root'));
     }
 
@@ -42,14 +42,14 @@ class Kwf_Component_Acl_Test extends Kwc_TestAbstract
     {
         $this->_acl->allowComponent('test', 'Kwf_Component_Acl_TestComponent');
         $this->assertTrue($this->_acl->isAllowed('test', 'Kwf_Component_Acl_TestComponent'));
-        $this->assertTrue($this->_acl->isAllowed('test', 'Kwc_Basic_Empty_Component'));
+        $this->assertTrue($this->_acl->isAllowed('test', 'Kwc_Basic_None_Component'));
     }
 
     public function testAllowComponentChildRoot()
     {
         $this->_acl->allowComponent('test', 'Kwf_Component_Acl_Root');
         $this->assertTrue($this->_acl->isAllowed('test', 'Kwf_Component_Acl_Root'));
-        $this->assertTrue($this->_acl->isAllowed('test', 'Kwc_Basic_Empty_Component'));
+        $this->assertTrue($this->_acl->isAllowed('test', 'Kwc_Basic_None_Component'));
         $this->assertTrue($this->_acl->isAllowed('test', 'Kwf_Component_Acl_Empty2'));
         $this->assertTrue($this->_acl->isAllowed('test', 'Kwf_Component_Acl_TestComponent'));
     }

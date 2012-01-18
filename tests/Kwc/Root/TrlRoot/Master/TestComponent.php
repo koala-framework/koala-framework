@@ -10,7 +10,7 @@ class Kwc_Root_TrlRoot_Master_TestComponent extends Kwc_Root_TrlRoot_Master_Comp
             'showInMenu' => true,
             'inherit' => true,
             'component' => array(
-                'empty' => 'Kwc_Basic_Empty_Component',
+                'empty' => 'Kwc_Basic_None_Component',
                 'static' => 'Kwc_Root_TrlRoot_Master_Static_Component'
             ),
             'model' => 'Kwc_Root_TrlRoot_Master_PagesTestModel'

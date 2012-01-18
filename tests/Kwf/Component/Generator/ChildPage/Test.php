@@ -25,7 +25,7 @@ class Kwf_Component_Generator_ChildPage_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-child', array('componentClass'=>'NotExistent'));
         $this->assertNull($c);
 
-        $c = $this->_root->getComponentById('root-child_1', array('componentClass'=>'Kwc_Basic_Empty_Component'));
+        $c = $this->_root->getComponentById('root-child_1', array('componentClass'=>'Kwc_Basic_None_Component'));
         $this->assertNotNull($c);
     }
 

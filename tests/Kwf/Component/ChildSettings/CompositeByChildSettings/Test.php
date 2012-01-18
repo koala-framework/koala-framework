@@ -17,8 +17,8 @@ class Kwf_Component_ChildSettings_CompositeByChildSettings_Test extends Kwc_Test
 
         $gen = Kwc_Abstract::getSetting($c, 'generators');
         $c = $gen['child']['component'];
-        $this->assertTrue(is_instance_of($c['second1'], 'Kwc_Basic_Empty_Component'));
-        $this->assertTrue(is_instance_of($c['second2'], 'Kwc_Basic_Empty_Component'));
+        $this->assertTrue(is_instance_of($c['second1'], 'Kwc_Basic_None_Component'));
+        $this->assertTrue(is_instance_of($c['second2'], 'Kwc_Basic_None_Component'));
 
         $this->assertEquals(Kwc_Abstract::getSetting($c['second1'], 'componentName'), 'second1name');
         $this->assertEquals(Kwc_Abstract::getSetting($c['second2'], 'componentName'), 'second2name');

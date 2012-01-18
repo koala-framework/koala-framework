@@ -12,13 +12,13 @@ class Kwf_Component_Generator_UniqueRoot_Root extends Kwf_Component_NoCategories
 
         $ret['generators']['page2'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'name' => 'page1'
         );
 
         $ret['generators']['box'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'unique' => true,
             'inherit' => true
         );

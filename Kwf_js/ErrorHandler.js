@@ -1,24 +1,30 @@
+Kwf.Debug.sentErrors = [];
 Ext.ux.ErrorHandler.on('error', function(ex) {
-    // zeitweise kommt aus ein fehler von chrome://skype_ff_toolbar_win/content/injection_graph_func.js:1
-    // der hier ignoriert wird. (falsche / nicht mehr verfügbare toolbar?)
-    // gefunden bei 2F Stargate
-    if (ex.url && ex.url.substr(0, 9) == 'chrome:/'+'/') {
+    var ownPrefix = location.protocol+'//'+location.host;
+    if (ex.url && ex.url.substr(0, ownPrefix.length) != ownPrefix) {
+        //ignore errors out of our control (other server, chrome://)
         return;
     }
     if (Kwf.Debug.displayErrors) {
         throw ex;
     }
+    var params = {
+        url: ex.url,
+        lineNumber: ex.lineNumber,
+        stack: Ext.encode(ex.stack),
+        message: ex.message,
+        location: location.href,
+        referrer: document.referrer
+    };
+    if (Kwf.Debug.sentErrors.indexOf(Ext.encode(params)) != -1) {
+        //this error has been sent alrady, don't send again
+        return;
+    }
+    Kwf.Debug.sentErrors.push(Ext.encode(params));
     Ext.Ajax.request({
         url: '/kwf/error/error/json-mail',
         ignoreErrors: true,
-        params: {
-            url: ex.url,
-            lineNumber: ex.lineNumber,
-            stack: Ext.encode(ex.stack),
-            message: ex.message,
-            location: location.href,
-            referrer: document.referrer
-        }
+        params: params
     });
 });
 

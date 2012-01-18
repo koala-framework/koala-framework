@@ -6,7 +6,7 @@ class Kwf_Component_Generator_GetComponentByClassWithComponentId_Table extends K
         $ret = parent::getSettings();
         $ret['generators']['child'] = array(
             'class' => 'Kwf_Component_Generator_Table',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'model' => 'Kwf_Component_Generator_GetComponentByClassWithComponentId_TableModel'
         );
         return $ret;

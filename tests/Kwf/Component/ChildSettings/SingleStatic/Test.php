@@ -13,7 +13,7 @@ class Kwf_Component_ChildSettings_SingleStatic_Test extends Kwc_TestAbstract
     {
         $gen = Kwc_Abstract::getSetting('Kwf_Component_ChildSettings_SingleStatic_Root', 'generators');
         $c = $gen['empty']['component'];
-        $this->assertTrue(is_instance_of($c, 'Kwc_Basic_Empty_Component'));
+        $this->assertTrue(is_instance_of($c, 'Kwc_Basic_None_Component'));
 
         $this->assertEquals(Kwc_Abstract::getSetting($c, 'componentName'), 'test123');
     }

@@ -49,16 +49,16 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         return (string)$ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '')
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
         $value = $this->_getOutputValueFromValues($values);
         if (!$value) $value = trlKwf('yyyy-mm-dd');
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }

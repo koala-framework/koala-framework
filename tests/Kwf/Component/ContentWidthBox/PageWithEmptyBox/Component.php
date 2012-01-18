@@ -5,7 +5,7 @@ class Kwf_Component_ContentWidthBox_PageWithEmptyBox_Component extends Kwc_Abstr
     {
         $ret = parent::getSettings();
         $ret['generators']['testBox'] = array(
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'class' => 'Kwf_Component_Generator_Box_Static',
             'unique' => true,
             'inherit' => true

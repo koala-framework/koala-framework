@@ -14,7 +14,7 @@ class Kwf_Component_Generator_TablePageUnderTable_Page1_Child_Component extends 
                 ),
                 'toStringField' => 'name',
             )),
-            'component' => 'Kwc_Basic_Empty_Component'
+            'component' => 'Kwc_Basic_None_Component'
         );
         return $ret;
     }

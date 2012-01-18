@@ -3,6 +3,9 @@ class Kwc_Shop_Products_Directory_Generator extends Kwf_Component_Generator_Page
 {
     protected function _getParentDataByRow($row, $select)
     {
+        if ($this->_getModel()->hasColumn('component_id')) {
+           return parent::_getParentDataByRow($row, $select);
+        }
         $constraints = array();
         if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
             $constraints['subroot'] = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);

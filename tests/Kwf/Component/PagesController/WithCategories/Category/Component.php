@@ -6,7 +6,7 @@ class Kwf_Component_PagesController_WithCategories_Category_Component extends Kw
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = 'Kwf_Component_PagesController_WithCategories_Category_PagesModel';
         $ret['generators']['page']['component'] = array(
-            'empty' => 'Kwc_Basic_Empty_Component',
+            'empty' => 'Kwc_Basic_None_Component',
         );
         return $ret;
     }

@@ -6,7 +6,7 @@ class Kwf_Component_Generator_Subroot_CategoryCh extends Kwf_Component_Generator
         $ret = parent::getSettings();
         $ret['generators']['page']['component'] = array(
             'image' => 'Kwc_Basic_Image_Component',
-            'empty_ch' => 'Kwc_Basic_Empty_Component'
+            'empty_ch' => 'Kwc_Basic_None_Component'
         );
         return $ret;
     }

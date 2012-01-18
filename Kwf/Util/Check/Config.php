@@ -103,26 +103,24 @@ class Kwf_Util_Check_Config
                 }
             }
             if (php_sapi_name()!= 'cli') {
-                passthru("php bootstrap.php check-config quiet", $ret);
+                passthru("php bootstrap.php check-config silent 2>&1", $ret);
                 if ($ret) echo "\nFAILED CLI";
             }
         } else {
-            $res = '';
             if (php_sapi_name()!= 'cli') {
-                $res .= "<h3>Test Webserver...\n</h3>";
+                echo "<h3>Test Webserver...\n</h3>";
             }
             foreach ($checks as $k=>$i) {
-                $res .= "<p style=\"margin:0;\">";
-                $res .= $i['name'].': ';
+                echo "<p style=\"margin:0;\">";
+                echo $i['name'].': ';
                 try {
                     call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
-                    $res .= "<span style=\"background-color:green\">OK</span>";
+                    echo "<span style=\"background-color:green\">OK</span>";
                 } catch (Exception $e) {
-                    $res .= "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
+                    echo "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
                 }
-                $res .= "</p>";
+                echo "</p>";
             }
-            echo $res;
 
             if (php_sapi_name()!= 'cli') {
                 echo "<h3>Test Cli...\n</h3>";

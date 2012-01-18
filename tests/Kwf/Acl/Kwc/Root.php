@@ -10,7 +10,7 @@ class Kwf_Acl_Kwc_Root extends Kwf_Component_NoCategoriesRoot
         );
         $ret['generators']['child'] = array(
             'class' => 'Kwf_Component_Generator_Static',
-            'component' => 'Kwc_Basic_Empty_Component'
+            'component' => 'Kwc_Basic_None_Component'
         );
         $ret['generators']['box']['component'] = array();
         unset($ret['generators']['title']);

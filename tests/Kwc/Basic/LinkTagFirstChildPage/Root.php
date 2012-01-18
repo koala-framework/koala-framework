@@ -25,7 +25,7 @@ class Kwc_Basic_LinkTagFirstChildPage_Root extends Kwf_Component_NoCategoriesRoo
         )));
         $ret['generators']['page']['component'] = array(
             'link' => 'Kwc_Basic_LinkTag_FirstChildPage_Component',
-            'empty' => 'Kwc_Basic_Empty_Component'
+            'empty' => 'Kwc_Basic_None_Component'
         );
 
         unset($ret['generators']['title']);

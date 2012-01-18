@@ -11,7 +11,7 @@ class Kwf_Component_Generator_Components_Recursive extends Kwc_Abstract
         $ret['generators']['table'] = array(
             'class' => 'Kwf_Component_Generator_Table',
             'component' => array(
-                'empty' => 'Kwc_Basic_Empty_Component',
+                'empty' => 'Kwc_Basic_None_Component',
                 'recursive' => 'Kwf_Component_Generator_Components_RecursiveTable',
             ),
             'model' => 'Kwf_Model_FnF'

@@ -7,7 +7,7 @@ class Kwf_Component_DependingOnRows_Root extends Kwf_Component_NoCategoriesRoot
         $ret['generators']['page']['model'] = 'Kwf_Component_DependingOnRows_PagesModel';
         $ret['generators']['page']['component'] = array(
             'test' => 'Kwf_Component_DependingOnRows_TestComponent_Component',
-            'empty' => 'Kwc_Basic_Empty_Component',
+            'empty' => 'Kwc_Basic_None_Component',
         );
         return $ret;
     }

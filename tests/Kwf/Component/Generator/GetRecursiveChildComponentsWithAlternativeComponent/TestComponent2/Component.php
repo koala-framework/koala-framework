@@ -4,7 +4,7 @@ class Kwf_Component_Generator_GetRecursiveChildComponentsWithAlternativeComponen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['test2'] = 'Kwc_Basic_Empty_Component';
+        $ret['generators']['child']['component']['test2'] = 'Kwc_Basic_None_Component';
         return $ret;
     }
 }

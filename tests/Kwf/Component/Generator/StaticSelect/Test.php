@@ -15,7 +15,7 @@ class Kwf_Component_Generator_StaticSelect_Test extends Kwc_TestAbstract
         $box = $page->getChildComponent('-box');
         $this->assertNotNull($box);
         $this->assertEquals($box->componentId, 'root_page1-box');
-        $this->assertEquals($box->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals($box->componentClass, 'Kwc_Basic_None_Component');
     }
 
     public function testSetToSecond()
@@ -33,6 +33,6 @@ class Kwf_Component_Generator_StaticSelect_Test extends Kwc_TestAbstract
         $box = $page->getChildComponent('-box');
         $this->assertNotNull($box);
         $this->assertEquals($box->componentId, 'root_page3-box');
-        $this->assertEquals($box->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals($box->componentClass, 'Kwc_Basic_None_Component');
     }
 }

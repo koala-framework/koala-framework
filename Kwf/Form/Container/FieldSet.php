@@ -60,7 +60,7 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
         return $ret;
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         if ($this->getCheckboxToggle() && $this->_checkboxHiddenField) {
             $name = $this->_checkboxHiddenField->getFieldName();
@@ -70,7 +70,7 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
                 $value = $this->getDefaultValue();
             }
         }
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         foreach ($ret['items'] as $k=>$i) {
             if ($i['item'] === $this->_checkboxHiddenField) {
                 unset($ret['items'][$k]);

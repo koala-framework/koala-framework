@@ -6,7 +6,7 @@ class Kwc_Trl_Menu_Master_Category_Component extends Kwc_Root_Category_Component
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = 'Kwc_Trl_Menu_Master_Category_Model';
         $ret['generators']['page']['component'] = array(
-            'empty' => 'Kwc_Basic_Empty_Component'
+            'empty' => 'Kwc_Basic_None_Component'
         );
         return $ret;
     }

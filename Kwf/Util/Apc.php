@@ -73,7 +73,7 @@ class Kwf_Util_Apc
                 foreach (explode(',', $_REQUEST['files']) as $file) {
                     @apc_delete_file($file);
                 }
-            } else if ($_REQUEST['type'] == 'user') {
+            } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'user') {
                 apc_clear_cache('user');
             } else {
                 apc_clear_cache('file');

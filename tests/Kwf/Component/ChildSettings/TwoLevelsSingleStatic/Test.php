@@ -17,7 +17,7 @@ class Kwf_Component_ChildSettings_TwoLevelsSingleStatic_Test extends Kwc_TestAbs
 
         $gen = Kwc_Abstract::getSetting($c, 'generators');
         $c = $gen['second']['component'];
-        $this->assertTrue(is_instance_of($c, 'Kwc_Basic_Empty_Component'));
+        $this->assertTrue(is_instance_of($c, 'Kwc_Basic_None_Component'));
 
         $this->assertEquals(Kwc_Abstract::getSetting($c, 'componentName'), 'test123');
 

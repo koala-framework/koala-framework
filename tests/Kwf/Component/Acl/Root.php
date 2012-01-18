@@ -14,7 +14,7 @@ class Kwf_Component_Acl_Root extends Kwf_Component_NoCategoriesRoot
             array('id'=>4, 'pos'=>1, 'visible'=>true, 'name'=>'Test4', 'filename' => 'test4',
                   'tags' => '', 'parent_id'=>3, 'component'=>'empty', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
-        $ret['generators']['page']['component'] = array('empty' => 'Kwc_Basic_Empty_Component',
+        $ret['generators']['page']['component'] = array('empty' => 'Kwc_Basic_None_Component',
                                                         'empty2' => 'Kwf_Component_Acl_Empty2',
                                                         'testComponent' => 'Kwf_Component_Acl_TestComponent');
         return $ret;

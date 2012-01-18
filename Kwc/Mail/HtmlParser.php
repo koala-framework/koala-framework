@@ -63,9 +63,16 @@ class Kwc_Mail_HtmlParser
         $tag = strtolower($tag);
         if ($tag == 'body') return;
 
+        foreach (array_keys($attributes) as $n) {
+            if (strtolower($n) != $n) {
+                $attributes[strtolower($n)] = $attributes[$n];
+                unset($attributes[$n]);
+            }
+        }
+
         $class = '';
-        if (isset($attributes['CLASS'])) {
-            $class = $attributes['CLASS'];
+        if (isset($attributes['class'])) {
+            $class = $attributes['class'];
         }
         $stack = $this->_stack;
         $stack[] = array( //extra stack der _matches übergeben werden kann, den richtigen stack kömma nu ned bauen
@@ -75,6 +82,7 @@ class Kwc_Mail_HtmlParser
         );
 
         $appendTags = array();
+        $attributes['style'] = '';
         foreach ($this->_styles as $s) {
             if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
@@ -85,14 +93,18 @@ class Kwc_Mail_HtmlParser
                         } else if ($style == 'font-size') {
                             if (substr($value, -2) == 'px') {
                                 $value = round((int)$value / 6); // TODO: das ist pi mal daumen
+                                $appendTags['font']['size'] = $value;
+                            } else {
+                                $attributes['style'] .= "$style: $value; ";
                             }
-                            $appendTags['font']['size'] = $value;
                         } else if ($style == 'color') {
                             $appendTags['font']['color'] = $value;
                         } else if ($style == 'font-weight' && $value == 'bold') {
                             $appendTags['b'] = array();
                         } else if ($style == 'text-align') {
                             $appendTags['center'] = array();
+                        } else {
+                            $attributes['style'] .= "$style: $value; ";
                         }
                     }
                 }
@@ -105,8 +117,7 @@ class Kwc_Mail_HtmlParser
 
         $this->_ret .= "<$tag";
         foreach ($attributes as $n=>$v) {
-            $n= strtolower($n);
-            $this->_ret .= " $n=\"$v\"";
+            if ($v) $this->_ret .= " $n=\"$v\"";
         }
         if (in_array($tag, $this->_noCloseTags)) {
             $this->_ret .= " /";
@@ -138,6 +149,40 @@ class Kwc_Mail_HtmlParser
     {
         // replace entities
         $html = preg_replace('/&([a-z0-9#]{2,5});/i', '+$1;', $html);
+
+
+        //before sending to xml parser make sure we have valid xml by tidying it up
+        $config = array(
+            'indent'         => true,
+            'output-xhtml'   => true,
+            'clean'          => false,
+            'wrap'           => '86',
+            'doctype'        => 'omit',
+            'drop-proprietary-attributes' => false,
+            'word-2000'      => true,
+            'show-body-only' => true,
+            'bare'           => true,
+            'enclose-block-text'=>true,
+            'enclose-text'   => true,
+            'join-styles'    => false,
+            'join-classes'   => false,
+            'logical-emphasis' => true,
+            'lower-literals' => true,
+            'literal-attributes' => false,
+            'indent-spaces' => 2,
+            'quote-nbsp'     => true,
+            'output-bom'     => false,
+            'char-encoding'  =>'utf8',
+            'newline'        =>'LF',
+            'uppercase-tags' => false,
+            'drop-font-tags' => false,
+        );
+        if (class_exists('tidy')) {
+            $tidy = new tidy;
+            $tidy->parseString($html, $config, 'utf8');
+            $tidy->cleanRepair();
+            $html = $tidy->value;
+        }
 
         $this->_stack = array();
         $this->_ret = '';

@@ -14,8 +14,8 @@ class Kwf_Component_ChildSettings_CompositeByChildSettings_Root extends Kwc_Abst
             'generators' => array(
                 'child' => array(
                     'component' => array(
-                        'second1' => 'Kwc_Basic_Empty_Component',
-                        'second2' => 'Kwc_Basic_Empty_Component'
+                        'second1' => 'Kwc_Basic_None_Component',
+                        'second2' => 'Kwc_Basic_None_Component'
                     )
                 )
             )

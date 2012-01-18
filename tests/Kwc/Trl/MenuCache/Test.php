@@ -18,14 +18,14 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
 
     public function testComponentClasses()
     {
-        $this->assertEquals($this->_root->getComponentById('root-mainMenu')->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals($this->_root->getComponentById('root-mainMenu')->componentClass, 'Kwc_Basic_None_Component');
         $this->assertEquals($this->_root->getComponentById('root-mainMenu-subMenu'), null);
 
-        $this->assertEquals($this->_root->getComponentById('root-master-mainMenu')->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals($this->_root->getComponentById('root-master-mainMenu')->componentClass, 'Kwc_Basic_None_Component');
         $this->assertEquals($this->_root->getComponentById('root-master-mainMenu-subMenu'), null);
 
         $this->assertEquals($this->_root->getComponentById('root-master-main-mainMenu')->componentClass, 'Kwc_Trl_MenuCache_MainMenu_Component');
-        $this->assertEquals($this->_root->getComponentById('root-master-main-mainMenu-subMenu')->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals($this->_root->getComponentById('root-master-main-mainMenu-subMenu')->componentClass, 'Kwc_Basic_None_Component');
 
         $this->assertEquals($this->_root->getComponentById('1-mainMenu')->componentClass, 'Kwc_Menu_ParentMenu_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('1-mainMenu-subMenu')->componentClass, 'Kwc_Trl_MenuCache_MainMenu_SubMenu_Component');

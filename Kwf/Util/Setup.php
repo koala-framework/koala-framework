@@ -275,7 +275,12 @@ class Kwf_Util_Setup
                 $ret .= "    if (substr(\$_SERVER['REDIRECT_URL'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";
             }
             foreach (Kwf_Config::getValueArray('preLoginIgnoreIp') as $i) {
-                $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$i') \$ignore = true;\n";
+                if (substr($i, -1)=='*') {
+                    $i = substr($i, 0, -1);
+                    $ret .= "    if (substr(\$_SERVER['REMOTE_ADDR'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";
+                } else {
+                    $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$i') \$ignore = true;\n";
+                }
             }
 
             $ret .= "    if (!\$ignore && (empty(\$_SERVER['PHP_AUTH_USER'])\n";

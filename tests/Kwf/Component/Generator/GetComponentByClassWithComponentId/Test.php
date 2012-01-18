@@ -8,6 +8,6 @@ class Kwf_Component_Generator_GetComponentByClassWithComponentId_Test extends Kw
 
     public function testByClass2()
     {
-        $this->assertEquals(3, count($this->_root->getComponentsByClass('Kwc_Basic_Empty_Component')));
+        $this->assertEquals(3, count($this->_root->getComponentsByClass('Kwc_Basic_None_Component')));
     }
 }

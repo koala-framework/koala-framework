@@ -10,9 +10,9 @@ class Kwf_Form_Field_Panel extends Kwf_Form_Container_Abstract
         $this->setXtype('panel');
         $this->setBaseCls('x-plain');
     }
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $namePostfix = '', $idPrefix = '')
     {
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $namePostfix, $idPrefix);
         if ($this->getHtml()) {
             $ret['html'] = $this->getHtml();
         }

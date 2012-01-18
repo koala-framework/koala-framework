@@ -8,7 +8,7 @@ class Kwc_Basic_LinkTag_TestComponent extends Kwc_Basic_LinkTag_Component
         $ret['generators']['child']['component'] = array();
         $ret['generators']['child']['component']['test'] = 'Kwc_Basic_LinkTag_TestLinkTag_Component';
         $ret['generators']['child']['component']['test2'] = 'Kwc_Basic_LinkTag_TestLinkTag2_Component';
-        $ret['generators']['child']['component']['empty'] = 'Kwc_Basic_Empty_Component';
+        $ret['generators']['child']['component']['empty'] = 'Kwc_Basic_None_Component';
         return $ret;
     }
 }

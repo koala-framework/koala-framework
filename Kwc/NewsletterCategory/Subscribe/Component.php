@@ -15,8 +15,10 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
             if (!$this->getForm()) return;
 
             $model = $this->getForm()->getModel();
+            //TODO: don't poke into $postData directly, get value from field instead
             $exists = $model->getRow($model->select()->whereEquals('email', $postData['form_email']));
             if ($exists) {
+                //already subscribed
                 $categories = $this->getForm()->getCategories();
                 if (count($categories) == 1) {
                     $catKeys = array_keys($categories);
@@ -40,10 +42,15 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
                     }
                 } else {
                     // if more than one category: anything special neccessary here?
+                    //TODO: implement "neccessary special"
                     parent::processInput($postData);
                 }
+            } else {
+                //not yet subscribed, form inserts new row plus category
+                parent::processInput($postData);
             }
         } else {
+            //no post
             parent::processInput($postData);
         }
     }

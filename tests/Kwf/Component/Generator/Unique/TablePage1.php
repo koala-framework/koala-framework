@@ -6,7 +6,7 @@ class Kwf_Component_Generator_Unique_TablePage1 extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['pbox'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
-            'component' => 'Kwc_Basic_Empty_Component',
+            'component' => 'Kwc_Basic_None_Component',
             'priority' => 3,
             'unique' => true,
             'inherit' => true,

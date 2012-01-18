@@ -10,7 +10,7 @@ class Kwc_Root_LanguageRoot_Language_TestComponent extends Kwc_Root_LanguageRoot
             'showInMenu' => true,
             'inherit' => true,
             'component' => array(
-                'empty' => 'Kwc_Basic_Empty_Component',
+                'empty' => 'Kwc_Basic_None_Component',
             ),
             'model' => 'Kwc_Root_LanguageRoot_Language_PagesTestModel'
         );
