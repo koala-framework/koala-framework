@@ -160,7 +160,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.style.onShow();
 
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
+            this.closeHref = Kwf.EyeCandy.Lightbox.currentOpen.closeHref;
             Kwf.EyeCandy.Lightbox.currentOpen.close();
+        } else {
+            this.closeHref = window.location.href;
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
 
@@ -191,10 +194,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        var href = this.href;
-        href = href.substr(0, href.lastIndexOf('/'));
         delete Kwf.Utils.HistoryState.currentState.lightbox;
-        Kwf.Utils.HistoryState.pushState(document.title, href);
+        Kwf.Utils.HistoryState.pushState(document.title, this.closeHref);
         this.close();
     },
     initialize: function()
