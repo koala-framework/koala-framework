@@ -12,6 +12,9 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Comp
         $ret['cssClass'] = 'webStandard';
         $ret['ownModel'] = 'Kwc_List_ChildPages_Teaser_TeaserImage_Model';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'visible';
+
+        $ret['headlineComponentLinkConfig'] = array();
+        $ret['readMoreComponentLinkConfig'] = array();
         return $ret;
     }
 
@@ -19,6 +22,8 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Comp
     {
         $ret = parent::getTemplateVars();
         $ret['readMoreLinktext'] = $this->getRow()->link_text;
+        $ret['headlineComponentLinkConfig'] = $this->_getSetting('headlineComponentLinkConfig');
+        $ret['readMoreComponentLinkConfig'] = $this->_getSetting('readMoreComponentLinkConfig');
         return $ret;
     }
 

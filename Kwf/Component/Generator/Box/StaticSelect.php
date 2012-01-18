@@ -48,6 +48,9 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
             $select = new Kwf_Component_Select($select);
         }
         $data = $this->_createData($parentData, $this->getGeneratorKey(), $select);
+        if ($select->hasPart('whereId')) {
+            if ('-' . $data->id != $select->getPart('whereId')) return array();
+        }
         return array($data);
     }
 
