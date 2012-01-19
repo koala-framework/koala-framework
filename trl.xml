@@ -4,63 +4,74 @@
 <en>Visible</en>
 <de>Sichtbar</de>
 <id>2</id>
+<ro>Vizibil</ro>
 </text>
 <text>
 <en>Error</en>
 <de>Fehler</de>
 <id>5</id>
+<ro>Eroare</ro>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem sp&#xE4;teren Zeitpunkt noch einmal.</de>
 <id>8</id>
+<ro>O eroare a avut loc. Va rugam sa incercati mai tarziu.</ro>
 </text>
 <text>
 <en>Page not found</en>
 <de>Seite wurde nicht gefunden.</de>
 <id>9</id>
+<ro>Pagina solicitata nu a fost gasita</ro>
 </text>
 <text>
 <en>Lost password?</en>
 <de>Passwort vergessen?</de>
 <id>12</id>
+<ro>Ati uitat parola?</ro>
 </text>
 <text>
 <en>Login</en>
 <de>Einloggen</de>
 <id>13</id>
+<ro>Autentificare</ro>
 </text>
 <text>
 <en>Hello {0}!</en>
 <de>Hallo {0}!</de>
 <id>14</id>
+<ro>Buna ziua {0}!</ro>
 </text>
 <text>
 <en>Your account at {0}
 has just been created.</en>
-<de>Ihr Konto bei {0}
-wurde soeben erstellt.</de>
+<de>Ihr Konto bei {0}wurde soeben erstellt.</de>
 <id>15</id>
+<ro>Contul dumneavoastra la {0} a fost creat.</ro>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
 <de>Bitte verwenden Sie diesen Link um sich ein Passwort zu erstellen und einzuloggen.</de>
 <id>16</id>
+<ro>Va rugam sa folositi urmatorul link pentru a va alege parola si pentru autentificare.</ro>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
 <de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
 <id>17</id>
+<ro>Acest e-mail a afost generat automat. In caz ca raspundeti la acest e-mail exista posibilitatea sa nu fie un destinatar pentru mesajul dumneavoastra.</ro>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
 <de>Ihr Konto bei {0} wurde gel&#xF6;scht.</de>
 <id>19</id>
+<ro>Contul dumneavoasta la {0} a fost sters.</ro>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
 <de>Bitte verwenden Sie den folgenden Link um sich selbst ein neues Passwort zu erstellen.</de>
 <id>22</id>
+<ro>Va rugam sa folositi acest link pentru a va schimba parola.</ro>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -68,163 +79,195 @@ wurde soeben erstellt.</de>
 <fr>Place of departure: zip code, Town, Street</fr>
 <es>Place of departure: zip code, Town, Street</es>
 <id>31</id>
+<ro>Loc de plecare: Cod postal, Oras, Strada</ro>
 </text>
 <text>
 <en>Entered place could not been found!</en>
 <de>Eingetragener Ort konnte nicht gefunden werden!</de>
 <es>Entered place could not been found!</es>
 <id>32</id>
+<ro>Locatia cautata nu a putut fi gasita!</ro>
 </text>
 <text>
 <en>Show Route</en>
 <de>Route zeigen</de>
 <es>Show Route</es>
 <id>33</id>
+<ro>Arata ruta</ro>
 </text>
 <text>
 <en>Suggestions</en>
 <de>Vorschl&#xE4;ge</de>
 <id>34</id>
+<ro>Sugesti</ro>
 </text>
 <text>
 <en>Coordinates</en>
 <de>Koordinaten</de>
 <id>35</id>
+<ro>Coordonate</ro>
 </text>
 <text>
 <en>Zoomlevel</en>
 <de>Zoomebene</de>
 <id>36</id>
+<ro>Nivel zoom</ro>
 </text>
 <text>
 <en>Width</en>
 <de>Breite</de>
 <id>37</id>
+<ro>Latime</ro>
 </text>
 <text>
 <en>Height</en>
 <de>H&#xF6;he</de>
 <id>38</id>
+<ro>Inaltime</ro>
 </text>
 <text>
 <en>Move + Zoom</en>
 <de>Bewegen + Zoomen</de>
 <id>39</id>
+<ro>Muta + Zoom</ro>
 </text>
 <text>
 <en>Move + Zoom (without zoombar)</en>
 <de>Bewegen + Zoomen (ohne Vergr&#xF6;&#xDF;erungsleiste)</de>
 <id>40</id>
+<ro>Muta + Zoom (fara bara de zoom)</ro>
 </text>
 <text>
 <en>Scale</en>
 <de>Skalieren</de>
 <id>42</id>
+<ro>Scara</ro>
 </text>
 <text>
 <en>Satelitemap</en>
 <de>Satellitenkarte</de>
 <id>43</id>
+<ro>Satelitemap</ro>
 </text>
 <text>
 <en>Overviewmap</en>
 <de>&#xDC;bersichtskarte</de>
 <id>44</id>
+<ro>Prezentare mapa</ro>
 </text>
 <text>
 <en>Worldview</en>
 <de>Weltansicht</de>
 <id>45</id>
+<ro>Worldview</ro>
 </text>
 <text>
 <en>Detailview</en>
 <de>Detailansicht</de>
 <id>46</id>
+<ro>Viziune detaliata</ro>
 </text>
 <text>
 <en>Filename</en>
 <de>Dateiname</de>
 <id>48</id>
+<ro>Nume fisier</ro>
 </text>
 <text>
 <en>File</en>
 <de>Datei</de>
 <id>49</id>
+<ro>Fisier</ro>
 </text>
 <text>
 <en>Content</en>
 <de>Inhalt</de>
 <id>50</id>
+<ro>Continut</ro>
 </text>
 <text>
 <en>Image</en>
 <de>Bild</de>
 <id>51</id>
+<ro>Imagine</ro>
 </text>
 <text>
 <en>Image Enlarge</en>
 <de>Bild vergr&#xF6;&#xDF;ern</de>
 <id>52</id>
+<ro>Mareste imaginea</ro>
 </text>
 <text>
 <en>Comment</en>
 <de>Kommentar</de>
 <id>55</id>
+<ro>Comentariu</ro>
 </text>
 <text>
 <en>Size</en>
 <de>Gr&#xF6;&#xDF;e</de>
 <id>56</id>
+<ro>Marime</ro>
 </text>
 <text>
 <en>Preview</en>
 <de>Vorschau</de>
 <id>58</id>
+<ro>Anunt</ro>
 </text>
 <text>
 <en>Text</en>
 <de>Text</de>
 <id>59</id>
+<ro>Text</ro>
 </text>
 <text>
 <en>Position of Image</en>
 <de>Bildposition</de>
 <id>60</id>
+<ro>Pozitia imaginii</ro>
 </text>
 <text>
 <en>Left</en>
 <de>Links</de>
 <id>61</id>
+<ro>Stanga</ro>
 </text>
 <text>
 <en>Right</en>
 <de>Rechts</de>
 <id>62</id>
+<ro>Dreapta</ro>
 </text>
 <text>
 <en>Alternate</en>
 <de>Alternierend</de>
 <id>63</id>
+<ro>Altrenativ</ro>
 </text>
 <text>
 <en>Maximum Length</en>
 <de>Maximale L&#xE4;nge</de>
 <id>67</id>
+<ro>Lungime maxima</ro>
 </text>
 <text>
 <en>Default Value</en>
 <de>Standardwert</de>
 <id>68</id>
+<ro>Valoare implicita</ro>
 </text>
 <text>
 <en>Passwords are different. Please try again.</en>
 <de>Passw&#xF6;rter sind unterschiedlich. Bitte versuchen Sie es erneut.</de>
 <id>73</id>
+<ro>Parolele sunt diferite. Va rugam incercati din nou.</ro>
 </text>
 <text>
 <en>Description</en>
 <de>Beschreibung</de>
 <id>79</id>
+<ro>Descriere</ro>
 </text>
 <text>
 <en>Submit</en>
@@ -236,16 +279,19 @@ wurde soeben erstellt.</de>
 <jp>&#x4F1D;&#x9001;&#x3059;&#x308B;</jp>
 <fr>envoyer</fr>
 <it>inviare</it>
+<ro>Trimitere</ro>
 </text>
 <text>
 <en>Validator</en>
 <de>Validator</de>
 <id>83</id>
+<ro>Validator</ro>
 </text>
 <text>
 <en>No Validator</en>
 <de>Kein Validator</de>
 <id>84</id>
+<ro>Numar validator</ro>
 </text>
 <text>
 <en>E-Mail</en>
@@ -254,41 +300,49 @@ wurde soeben erstellt.</de>
 <es>E-Mail</es>
 <ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
 <id>85</id>
+<ro>E-Mail</ro>
 </text>
 <text>
 <en>Date</en>
 <de>Datum</de>
 <id>86</id>
+<ro>Data</ro>
 </text>
 <text>
 <en>Group</en>
 <de>Gruppe</de>
 <id>87</id>
+<ro>Grup</ro>
 </text>
 <text>
 <en>enable posts</en>
 <de>Beitr&#xE4;ge erlauben</de>
 <id>88</id>
+<ro>Activati posturi</ro>
 </text>
 <text>
 <en>Last Entry</en>
 <de>Letzter Beitrag</de>
 <id>91</id>
+<ro>Ultima intrare</ro>
 </text>
 <text>
 <en>at</en>
 <de>um</de>
 <id>93</id>
+<ro>la</ro>
 </text>
 <text>
 <en>Empty</en>
 <de>Leer</de>
 <id>95</id>
+<ro>Gol</ro>
 </text>
 <text>
 <en>Title</en>
 <de>Titel</de>
 <id>96</id>
+<ro>Titlu</ro>
 </text>
 <text>
 <en>Firstname</en>
@@ -297,6 +351,7 @@ wurde soeben erstellt.</de>
 <es>Nombre</es>
 <ru>&#x418;&#x43C;&#x44F;</ru>
 <id>97</id>
+<ro>Prenume</ro>
 </text>
 <text>
 <en>Lastname</en>
@@ -305,6 +360,7 @@ wurde soeben erstellt.</de>
 <es>Apellidos</es>
 <ru>&#x424;&#x430;&#x43C;&#x438;&#x43B;&#x438;&#x44F;</ru>
 <id>98</id>
+<ro>Nume</ro>
 </text>
 <text>
 <en>Email</en>
@@ -313,296 +369,355 @@ wurde soeben erstellt.</de>
 <es>E-Mail</es>
 <ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
 <id>99</id>
+<ro>E-Mail</ro>
 </text>
 <text>
 <en>Subject</en>
 <de>Betreff</de>
 <id>101</id>
+<ro>Subiect</ro>
 </text>
 <text>
 <en>Moderators of selected group</en>
 <de>Moderatoren der ausgew&#xE4;hlten Gruppe</de>
 <id>102</id>
+<ro>Moderatorii grupului selectat</ro>
 </text>
 <text>
 <en>Member since</en>
 <de>Mitglied seit</de>
 <id>107</id>
+<ro>Membru din </ro>
 </text>
 <text>
 <en>Click here</en>
 <de>Hier klicken</de>
 <id>120</id>
+<ro>Click aici</ro>
 </text>
 <text>
 <en>Name</en>
 <de>Name</de>
 <id>125</id>
+<ro>Nume</ro>
 </text>
 <text>
 <en>Latest online</en>
 <de>Zuletzt online</de>
 <id>126</id>
+<ro>Ultimul online</ro>
 </text>
 <text>
 <en>Short description</en>
 <de>Kurze Beschreibung</de>
 <id>128</id>
+<ro>Descriere scurta</ro>
 </text>
 <text>
 <en>Signature</en>
 <de>Signatur</de>
 <id>130</id>
+<ro>Semnatura </ro>
 </text>
 <text>
 <en>Publish Date</en>
 <de>Datum der Ver&#xF6;ffentlichung</de>
 <id>135</id>
+<ro>Data publicarii</ro>
 </text>
 <text>
 <en>Expiry Date</en>
 <de>Ablauf Datum</de>
 <id>136</id>
+<ro>Data expirarii</ro>
 </text>
 <text>
 <en>Teaser</en>
 <de>Kurztext (Teaser)</de>
 <id>137</id>
+<ro>Teaser</ro>
 </text>
 <text>
 <en>Comment was successfully saved.</en>
 <de>Kommentar wurde erfolgreich gespeichert.</de>
 <id>148</id>
+<ro>Comentariul a fost salvat cu succes</ro>
 </text>
 <text>
 <en>to continue</en>
 <de>um fortzufahren</de>
 <id>149</id>
+<ro>pentru a continua</ro>
 </text>
 <text>
 <en>Product</en>
 <de>Produkt</de>
 <id>150</id>
+<ro>Produs</ro>
 </text>
 <text>
 <en>Activate Useraccount</en>
 <de>Benutzerkonto aktivieren</de>
 <id>159</id>
+<ro>Activare cont utilizator</ro>
 </text>
 <text>
 <en>Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein</de>
 <id>160</id>
+<ro>Va rugam sa introduceti in ambele campuri parola pe care doriti sa o utilizati pentru contul dumneavoastra</ro>
 </text>
 <text>
 <en>Your useraccount was successfully activated.</en>
 <de>Ihr Benutzerkonto wurde erfolgreich aktiviert.</de>
 <id>162</id>
+<ro>Contul dumneavoastra a fost activat cu succes</ro>
 </text>
 <text>
 <en>to get back to the Startpage</en>
 <de>um zur Startseite zur&#xFC;ckzukehren</de>
 <id>164</id>
+<ro>pentru a merge la pagina Home</ro>
 </text>
 <text>
 <en>Female</en>
 <de>Weiblich</de>
 <id>165</id>
+<ro>Femeie</ro>
 </text>
 <text>
 <en>Male</en>
 <de>M&#xE4;nnlich</de>
 <id>166</id>
+<ro>Barbat</ro>
 </text>
 <text>
 <en>Gender</en>
 <de>Geschlecht</de>
 <id>167</id>
+<ro>Gen</ro>
 </text>
 <text>
 <en>Account - Properties</en>
 <de>Konto - Eigenschaften</de>
 <id>169</id>
+<ro>Cont - Proprietati</ro>
 </text>
 <text>
 <en>The changed data was saved successfully</en>
 <de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
 <id>171</id>
+<ro>Informatiile schimbate au fost salvate cu succes</ro>
 </text>
 <text>
 <en>You don't have enough permissions for this Action</en>
 <de>Sie haben nicht die erforderlichen Befugnisse f&#xFC;r diese Aktion.</de>
 <id>182</id>
+<ro>Nu aveti permisiune pentru aceasta actiune</ro>
 </text>
 <text>
 <en>Login failed</en>
 <de>Login fehlgeschlagen</de>
 <id>183</id>
+<ro>Autentificare esuata</ro>
 </text>
 <text>
 <en>Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
 <de>Aktivierungscode ist fehlerhaft. Vielleicht wurde die URL nicht vollst&#xE4;ndig kopiert?</de>
 <id>184</id>
+<ro>Codul de activare este invalid. Poate ca URL-ul nu a fost copiat corect?</ro>
 </text>
 <text>
 <en>Data not submitted completely.</en>
 <de>Daten wurden nicht vollst&#xE4;ndig vorgelegt.</de>
 <id>185</id>
+<ro>Datele nu au fost salvate complet</ro>
 </text>
 <text>
 <en>Change password</en>
 <de>Passwort &#xE4;ndern</de>
 <id>190</id>
+<ro>Schimbati parola</ro>
 </text>
 <text>
 <en>Repeat password</en>
 <de>Passwort wiederholen</de>
 <id>191</id>
+<ro>Repetati parola</ro>
 </text>
 <text>
 <en>First name</en>
 <de>Vorname</de>
 <id>193</id>
+<ro>Prenume</ro>
 </text>
 <text>
 <en>Last name</en>
 <de>Familienname</de>
 <id>194</id>
+<ro>Nume</ro>
 </text>
 <text>
 <en>Advice</en>
 <de>Information</de>
 <id>195</id>
+<ro>Indrumare</ro>
 </text>
 <text>
 <en>After following actions emails are sent automatically to the respective user:</en>
 <de>Nach &#xC4;nderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
 <id>196</id>
+<ro>Dupa urmatoarele actiuni e-mail-urile sunt trimise automat catre respectivul user</ro>
 </text>
 <text>
 <en>Create, Delete and E-Mail change</en>
 <de>Hinzuf&#xFC;gen, L&#xF6;schen und E-Mail-&#xC4;nderungen</de>
 <id>197</id>
+<ro>Creaza, Sterge si schimba E-mail-ul</ro>
 </text>
 <text>
 <en>Rights</en>
 <de>Rechte</de>
 <id>200</id>
+<ro>Drepturi</ro>
 </text>
 <text>
 <en>Edit</en>
 <de>Bearbeiten</de>
 <id>201</id>
+<ro>Editeaza</ro>
 </text>
 <text>
 <en>edit</en>
 <de>bearbeiten</de>
 <id>202</id>
+<ro>editeaza</ro>
 </text>
 <text>
 <en>The file is larger than the maximum upload amount.</en>
 <de>Die Datei &#xFC;bersteigt die maximale Dategr&#xF6;&#xDF;e f&#xFC;r Dateiuploads.</de>
 <id>207</id>
+<ro>Dimensiunea documentului depaseste dimensiunea maxima acceptata</ro>
 </text>
 <text>
 <en>The file was not uploaded completely.</en>
 <de>Die Datei wurde nicht vollst&#xE4;ndig hochgeladen.</de>
 <id>208</id>
+<ro>Documentul nu a fost incarcat complet</ro>
 </text>
 <text>
 <en>An account with this email address already exists</en>
 <de>Es besteht bereits ein Konto mit dieser E-Mail Adresse</de>
 <id>214</id>
+<ro>Exista deja un cont cu aceasta adresa de e-mail</ro>
 </text>
 <text>
 <en>Passwords are different - please try again</en>
 <de>Passw&#xF6;rter sind unterschiedlich - bitte versuchen Sie es erneut</de>
 <id>215</id>
+<ro>Parolele sunt diferite - va rugam sa incercati din nou</ro>
 </text>
 <text>
 <en>Please enter the text you wish to assign.</en>
 <de>Bitte geben Sie den Text ein, welchen Sie zuweisen m&#xF6;chten.</de>
 <id>228</id>
+<ro>Va rugam introduceti textul pe care doriti sa il incarcati</ro>
 </text>
 <text>
 <en>Seperate items by a new line.</en>
 <de>Unterteilen Sie Elemente durch eine neue Zeile.</de>
 <id>229</id>
+<ro>Separati elementele printr-o linie noua </ro>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
 <de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle rot unterstrichenen Felder korrekt aus.</de>
 <id>230</id>
+<ro>Nu se poate salva, va rugam sa completati corect toate campurile subliniate cu rosu</ro>
 </text>
 <text>
 <en>Do you really want to delete this entry?</en>
 <de>Wollen Sie diesen Eintrag wirklich l&#xF6;schen?</de>
 <id>232</id>
+<ro>Doriti sa stergeti aceasta intrare?</ro>
 </text>
 <text>
 <en>Do you want to save the changes?</en>
 <de>Wollen Sie die &#xC4;nderungen speichern?</de>
 <id>233</id>
+<ro>Doriti sa salvati modificarile?</ro>
 </text>
 <text>
 <en>Copying...</en>
 <de>Kopiere...</de>
 <id>234</id>
+<ro>Copiere</ro>
 </text>
 <text>
 <en>create</en>
 <de>erstellen</de>
 <id>235</id>
+<ro>a crea</ro>
 </text>
 <text>
 <en>File successfully created:</en>
 <de>Datei wurde erfolgreich erstellt:</de>
 <id>236</id>
+<ro>Document creat cu succes</ro>
 </text>
 <text>
 <en>Component</en>
 <de>Komponente</de>
 <id>237</id>
+<ro>Component</ro>
 </text>
 <text>
 <en>Add Component</en>
 <de>Komponente hinzuf&#xFC;gen</de>
 <id>238</id>
+<ro>Adaugati component</ro>
 </text>
 <text>
 <en>Creating...</en>
 <de>Erzeugen...</de>
 <id>239</id>
+<ro>Creeaza...</ro>
 </text>
 <text>
 <en>Page</en>
 <de>Seite</de>
 <id>240</id>
+<ro>Pagina</ro>
 </text>
 <text>
 <en>Page properties</en>
 <de>Seiteneigenschaften</de>
 <id>242</id>
+<ro>Proprietatile paginii</ro>
 </text>
 <text>
 <en>Add new child page</en>
 <de>Neue Unterseite hinzuf&#xFC;gen</de>
 <id>243</id>
+<ro>Adauga subpagina</ro>
 </text>
 <text>
 <en>Delete page</en>
 <de>Seite l&#xF6;schen</de>
 <id>244</id>
+<ro>Sterge pagina</ro>
 </text>
 <text>
 <en>Show / hide page</en>
 <de>Seite ein-/ausblenden</de>
 <id>245</id>
+<ro>Arata/Ascunde pagina</ro>
 </text>
 <text>
 <en>Use as homepage</en>
 <de>Als Startseite verwenden</de>
 <id>246</id>
+<ro>Foloseste ca Homepage</ro>
 </text>
 <text>
 <en>Expand here</en>
