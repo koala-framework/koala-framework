@@ -1,7 +1,7 @@
 <?php
 class Vpc_Chained_Trl_MasterGenerator extends Vpc_Chained_Abstract_MasterGenerator
 {
-    private $_languageRow = null;
+    private $_languageRowCache = array();
 
     public function getPagesControllerConfig($component, $generatorClass = null)
     {
@@ -10,26 +10,31 @@ class Vpc_Chained_Trl_MasterGenerator extends Vpc_Chained_Abstract_MasterGenerat
         return $ret;
     }
 
-    private function _getLanguageRow()
+    protected function _getLanguageRow($parentData)
     {
-        if (!$this->_languageRow) {
-            $s = new Vps_Model_Select();
-            $s->whereEquals('master', 1);
-            $this->_languageRow = $this->_getModel()->getRow($s);
+        $s = new Vps_Model_Select();
+        $s->whereEquals('master', 1);
+        return $this->_getModel()->getRow($s);
+    }
+
+    private function _getLanguageRowCached($parentData)
+    {
+        if (!isset($this->_languageRowCache[$parentData->componentId])) {
+            $this->_languageRowCache[$parentData->componentId] = $this->_getLanguageRow($parentData);
         }
-        return $this->_languageRow;
+        return $this->_languageRowCache[$parentData->componentId];
     }
 
     protected function _formatConfig($parentData, $componentKey)
     {
         $data = parent::_formatConfig($parentData, $componentKey);
-        $data['name'] = $this->_getLanguageRow()->name;
-        $data['language'] = $this->_getLanguageRow()->filename;
+        $data['name'] = $this->_getLanguageRowCached($parentData)->name;
+        $data['language'] = $this->_getLanguageRowCached($parentData)->filename;
         return $data;
     }
 
     protected function _getFilenameFromRow($componentKey, $parentData)
     {
-        return $this->_getLanguageRow()->filename;
+        return $this->_getLanguageRowCached($parentData)->filename;
     }
 }
