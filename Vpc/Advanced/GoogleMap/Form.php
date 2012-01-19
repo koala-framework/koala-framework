@@ -24,6 +24,15 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
             ->setAllowBlank(false)
             ->setWidth(120);
 
+        $this->fields->add(new Vps_Form_Field_Select('map_type', trlVps('Map Type')))
+            ->setValues(array(
+                'map' => trlVpsStatic('Map'),
+                'satellite' => trlVpsStatic('Satellite'),
+                'hybrid' => trlVpsStatic('Hybrid'),
+            ))
+            ->setWidth(300)
+            ->setAllowBlank(false);
+
         $this->fields->add(new Vps_Form_Field_Select('zoom_properties', trlVps('Zoom properties')))
             ->setValues(array(
                 '0' => trlVpsStatic('Move + Zoom'),

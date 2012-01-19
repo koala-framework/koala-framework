@@ -181,6 +181,12 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
     {
         this.gmap = new GMap2(this.mapContainer.down(".container").dom);
 
+        if (this.config.map_type == 'satellite') {
+            this.gmap.setMapType(G_SATELLITE_MAP);
+        } else if (this.config.map_type == 'hybrid') {
+            this.gmap.setMapType(G_HYBRID_MAP);
+        }
+
         if (this.config.zoom_properties == '0') {
             this.gmap.addControl(new GLargeMapControl());
         } else if (this.config.zoom_properties == '1') {
@@ -212,7 +218,7 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
                 new GLatLng(this.config.zoom[0], this.config.zoom[1])
             ));
             if (this.config.maximumInitialResolution < this.config.zoom)
-            	this.config.zoom = this.config.maximumInitialResolution;
+                this.config.zoom = this.config.maximumInitialResolution;
         }
 
         this.gmap.setCenter(
