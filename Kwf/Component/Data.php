@@ -1103,9 +1103,10 @@ class Kwf_Component_Data
             $this->_lazyRow = $this->row->{$this->generator->getModel()->getPrimaryKey()};
             unset($this->row);
         }
-        unset($this->_uniqueParentDatas);
-        unset($this->_childComponentsCache);
-        unset($this->_recursiveGeneratorsCache);
+        if (isset($this->_uniqueParentDatas)) unset($this->_uniqueParentDatas);
+        if (isset($this->_inheritClasses)) unset($this->_inheritClasses);
+        $this->_childComponentsCache = array();
+        $this->_recursiveGeneratorsCache = array();
         if (isset($this->_languageCache)) unset($this->_languageCache);
     }
 }
