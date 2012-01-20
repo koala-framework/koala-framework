@@ -16,6 +16,9 @@ class Kwf_Component_Data
     private $_recursiveGeneratorsCache = array();
     private $_languageCache;
 
+    //public static $objectsCount;
+    //public static $objectsById = array();
+
     public function __construct($config)
     {
         foreach ($config as $k=>$i) {
@@ -34,11 +37,22 @@ class Kwf_Component_Data
             $this->dbId = $this->componentId;
         }
 
+        //self::$objectsCount++;
+        //if (!isset(self::$objectsById[$this->componentId])) self::$objectsById[$this->componentId] = 0;
+        //self::$objectsById[$this->componentId]++;
+
         if (isset($config['unserialized']) && $config['unserialized']) {
             Kwf_Benchmark::count('unserialized componentDatas', $this->componentId);
         } else {
             Kwf_Benchmark::count('componentDatas', $this->componentId);
         }
+    }
+
+    public function __destruct()
+    {
+        //self::$objectsCount--;
+        //self::$objectsById[$this->componentId]--;
+        //if (!self::$objectsById[$this->componentId]) unset(self::$objectsById[$this->componentId]);
     }
 
     /**

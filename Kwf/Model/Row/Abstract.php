@@ -16,8 +16,20 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     private $_childRows = array();
     private $_isDeleted = false;
 
+    //public static $objectsCount;
+    //public static $objectsByModel = array();
+    //private $countKey;
+
     public function __construct(array $config)
     {
+        //self::$objectsCount++;
+        //$this->countKey = get_class($config['model']);
+        //if ($this->countKey == 'Kwf_Model_Db') {
+        //    $this->countKey = $config['model']->getTableName();
+        //}
+        //if (!isset(self::$objectsByModel[$this->countKey])) self::$objectsByModel[$this->countKey] = 0;
+        //self::$objectsByModel[$this->countKey]++;
+
         if (isset($config['siblingRows'])) {
             $this->_siblingRows = (array)$config['siblingRows'];
         }
@@ -34,6 +46,13 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         //Kwf_Benchmark::count('Model_Row', get_class($this->_model).' '.$this->{$this->_model->getPrimaryKey()});
     }
 
+    public function __destruct()
+    {
+        //self::$objectsCount--;
+        //self::$objectsByModel[$this->countKey]--;
+        //if (!self::$objectsByModel[$this->countKey]) unset(self::$objectsByModel[$this->countKey]);
+    }
+
     public function serialize()
     {
         if (Kwf_Model_Abstract::getInstance(get_class($this->getModel())) !== $this->getModel()) {
@@ -48,6 +67,8 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
 
     public function unserialize($str)
     {
+        //self::$objectsCount++;
+
         $data = unserialize($str);
         $this->_siblingRows = $data['siblingRows'];
         $this->_model = Kwf_Model_Abstract::getInstance($data['model']);

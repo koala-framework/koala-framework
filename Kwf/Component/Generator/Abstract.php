@@ -17,6 +17,8 @@ abstract class Kwf_Component_Generator_Abstract
 
     protected $_eventsClass;
 
+    //public static $objectsCount;
+
     public function getEventsClass()
     {
         return $this->_eventsClass;
@@ -41,10 +43,15 @@ abstract class Kwf_Component_Generator_Abstract
 
     protected function __construct($class, $settings)
     {
+        //self::$objectsCount++;
         $this->_class = $class;
         $this->_settings = $settings;
         $this->_init();
         Kwf_Benchmark::count('generators');
+    }
+    protected function __destruct()
+    {
+        //self::$objectsCount--;
     }
 
     protected function _init()
