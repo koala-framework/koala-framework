@@ -49,7 +49,8 @@ abstract class Kwf_Component_Generator_Abstract
         $this->_init();
         Kwf_Benchmark::count('generators');
     }
-    protected function __destruct()
+
+    public function __destruct()
     {
         //self::$objectsCount--;
     }
