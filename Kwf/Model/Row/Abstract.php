@@ -599,4 +599,13 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         $new->save();
         return $new;
     }
+
+    /**
+     * @internal
+     */
+    public function freeMemory()
+    {
+        unset($this->_siblingRows);
+        $this->_childRows = array();
+    }
 }

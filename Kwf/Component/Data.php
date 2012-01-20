@@ -1064,4 +1064,31 @@ class Kwf_Component_Data
         //TODO: generator data-cache?
         return $ret;
     }
+
+    /**
+     * @internal
+     */
+    protected function _freeMemory()
+    {
+        if (isset($this->parent)) {
+            $this->_lazyParent = $this->parent->componentId;
+            unset($this->parent);
+        }
+        if (isset($this->_component)) {
+            $this->_component->freeMemory();
+            unset($this->_component);
+        }
+        //unset($this->generator);
+        if (isset($this->row)) {
+            if ($this->row instanceof Kwf_Model_Row_Interface && $this->generator->getModel() !== $this->row->getModel()) {
+                throw new Kwf_Exception('data row has invalid model');
+            }
+            $this->_lazyRow = $this->row->{$this->generator->getModel()->getPrimaryKey()};
+            unset($this->row);
+        }
+        unset($this->_uniqueParentDatas);
+        unset($this->_childComponentsCache);
+        unset($this->_recursiveGeneratorsCache);
+        if (isset($this->_languageCache)) unset($this->_languageCache);
+    }
 }
