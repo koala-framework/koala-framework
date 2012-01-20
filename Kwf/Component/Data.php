@@ -153,6 +153,9 @@ class Kwf_Component_Data
                 }
             }
             return $this->_inheritClasses;
+        } else if ($var == '_uniqueParentDatas') {
+            $this->inheritClasses; //populates _uniqueParentDatas as side effect
+            return $this->_uniqueParentDatas;
         } else if ($var == 'parent' && isset($this->_lazyParent)) {
             $ret = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_lazyParent, array('ignoreVisible'=>true));
             $this->parent = $ret;
