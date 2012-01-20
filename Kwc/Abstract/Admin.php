@@ -45,7 +45,7 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 
     public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
-        if ($model = $source->getComponent()->getOwnModel()) {
+        if (($model = $source->getComponent()->getOwnModel()) && $source->dbId != $target->dbId) {
             $row = $model->getRow($source->dbId);
             if ($row) {
                 $newRow = $row->duplicate(array(
