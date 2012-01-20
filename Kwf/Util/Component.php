@@ -41,7 +41,9 @@ class Kwf_Util_Component
 
     public static function duplicate(Kwf_Component_Data $source, Kwf_Component_Data $parentTarget, Zend_ProgressBar $progressBar = null)
     {
+        $sourceId = $source->componentId;
         $new = $source->generator->duplicateChild($source, $parentTarget, $progressBar);
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentById($sourceId, array('ignoreVisible'=>true));
 
         if (!$new) {
             throw new Kwf_Exception("Failed duplicating '$source->componentId'");

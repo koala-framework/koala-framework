@@ -117,7 +117,30 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                         $queue[] = $c->componentId;
                         file_put_contents($queueFile, implode("\n", $queue));
                     }
+                    unset($c);
 
+                    $pageId = $page->componentId;
+                    unset($page);
+
+                    /*
+                    echo round(memory_get_usage()/1024/1024, 2)."MB";
+                    echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+                    echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+                    echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+                    */
+                    Kwf_Component_Data_Root::getInstance()->freeMemory();
+                    /*
+                    echo ' / '.round(memory_get_usage()/1024/1024, 2)."MB";
+                    echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+                    echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+                    echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+                    //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
+                    //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
+                    //var_dump(Kwf_Component_Data::$objectsById);
+                    echo "\n";
+                    */
+
+                    $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
                     if (!$page->isPage) continue;
 
                     //echo "checking for childComponents\n";
@@ -152,7 +175,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                                 echo " [no $c->componentId $c->componentClass]";
                                 break;
                             }
+                            unset($c);
                         }
+                        unset($fulltextComponents);
                         if (!$doc->getField('content')->value) {
                             echo " [no content]";
                             $doc = null;
@@ -181,6 +206,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                                 $field->boost = 0.0001;
                                 $doc->addField($field);
                             }
+                            unset($subRoot);
                             if ($this->_getParam('debug')) {
                                 foreach ($doc->getFieldNames() as $fieldName) {
                                     echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
@@ -205,6 +231,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                             }
                             $row->indexed_date = date('Y-m-d H:i:s');
                             $row->save();
+                            unset($row);
                         }
                     }
                 }
