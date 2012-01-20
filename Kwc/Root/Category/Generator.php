@@ -392,7 +392,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $ret += Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         if (isset($this->_pageChilds[$source->id])) {
             foreach ($this->_pageChilds[$source->id] as $i) {
-                $data = $this->getChildData(null, array('id'=>$i));
+                $data = $this->getChildData(null, array('id'=>$i, 'ignoreVisible'=>true));
                 $data = array_shift($data);
                 $ret += $this->getDuplicateProgressSteps($data);
             }
