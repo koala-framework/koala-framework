@@ -58,4 +58,28 @@ class Kwc_Root_CategoryGenerator extends Kwf_Component_Generator_Table
         $ret['showInPageTreeAdmin'] = true;
         return $ret;
     }
+
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
+    {
+        if ($progressBar) $progressBar->next();
+
+        if ($source->generator !== $this) {
+            throw new Kwf_Exception("you must call this only with the correct source");
+        }
+        $id = $source->id;
+        $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
+        if (!$target) {
+            return null;
+        }
+        Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
+        return $target;
+    }
+
+
+    public function getDuplicateProgressSteps($source)
+    {
+        $ret = 1;
+        $ret += Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
+        return $ret;
+    }
 }
