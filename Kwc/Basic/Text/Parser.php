@@ -8,7 +8,8 @@ class Kwc_Basic_Text_Parser
     protected $_deleteContent;
 
     //einstellungen für parser
-    protected $_row;
+    private $_dbId;
+    private $_model;
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
@@ -16,9 +17,10 @@ class Kwc_Basic_Text_Parser
     private $_masterStyles;
 
 
-    public function __construct(Kwc_Basic_Text_Row $row = null)
+    public function __construct($dbId, $model)
     {
-        $this->_row = $row;
+        $this->_dbId = $dbId;
+        $this->_model = $model;
     }
 
     public function setMasterStyles($ms)
@@ -101,10 +103,10 @@ class Kwc_Basic_Text_Parser
         } else {
             if ($element == 'IMG') {
                 $src = $attributes['SRC'];
-                $id = preg_quote($this->_row->component_id);
+                $id = preg_quote($this->_dbId);
                 if (preg_match('#/media/([^/]+)/('.$id.'-i[0-9]+)#', $src, $m)) {
                     //"/media/$class/$id/$type/$checksum/$filename.$extension$random"
-                    $class = Kwc_Abstract::getChildComponentClass($this->_row->getModel()
+                    $class = Kwc_Abstract::getChildComponentClass($this->_model
                                 ->getComponentClass(), 'child', 'image');
                     $imageRow = Kwc_Abstract::createModel($class)->getRow($m[2]);
 

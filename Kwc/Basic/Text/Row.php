@@ -239,7 +239,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $tidy->cleanRepair();
             $html = $tidy->value;
             if (!$parser) {
-                $parser = new Kwc_Basic_Text_Parser($this);
+                $parser = new Kwc_Basic_Text_Parser($this->componentId, $this->getModel());
                 $parser->setMasterStyles(Kwc_Basic_Text_StylesModel::getMasterStyles());
             }
             $parser->setEnableColor(Kwc_Abstract::getSetting($this->_componentClass, 'enableColors'));
