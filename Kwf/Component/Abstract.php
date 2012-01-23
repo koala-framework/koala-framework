@@ -70,9 +70,13 @@ class Kwf_Component_Abstract
     private static function _verifyComponentClass($class)
     {
         $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        if (!class_exists($c)) {
-            $file = 'components/'.str_replace('_', '/', $c).'.yml';
-            if (file_exists($file)) {
+        $file = 'components/'.str_replace('_', '/', $c).'.yml';
+        if (substr($class, 0, 4) != 'Kwc_' && file_exists($file)) {
+            if (file_exists('components/'.str_replace('_', '/', $c).'.php')) {
+                throw new Kwf_Exception("both yml and php exist for '$c'");
+            }
+            $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
+            if (!file_exists($classFile)) {
                 $input = file_get_contents($file);
                 $yaml = new sfYamlParser();
                 try {
@@ -89,14 +93,15 @@ class Kwf_Component_Abstract
                 $code = "<?php\nclass $c extends $settings[base]\n{\n";
                 $code .= "    public static function _getYamlConfigFile() { return '$file'; }\n";
                 $code .= "}\n";
-                $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
                 mkdir(substr($classFile, 0, strrpos($classFile, '/')), 0777, true);
                 file_put_contents($classFile, $code);
                 if (!class_exists($c)) {
                     throw new Kwf_Exception("just generated class still does not exist");
                 }
-            } else {
-                throw new Kwf_Exception("Invalid component '$class'");
+            }
+        } else {
+            if (!class_exists($c)) {
+                throw new Kwf_Exception("Invalid component '$c'");
             }
         }
     }
