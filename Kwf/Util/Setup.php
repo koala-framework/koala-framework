@@ -1,6 +1,39 @@
 <?php
 class Kwf_Util_Setup
 {
+    public static function minimalBootstrapAndGenerateFile($configClass)
+    {
+        if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
+        if (file_exists(KWF_PATH.'/include_path')) {
+            $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
+            $zendPath = str_replace(
+                '%version%',
+                file_get_contents(KWF_PATH.'/include_path_version'),
+                $zendPath);
+
+        } else {
+            die ('zend not found');
+        }
+        set_include_path(get_include_path(). PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
+
+        require_once 'Kwf/Loader.php';
+        Kwf_Loader::registerAutoload();
+
+        Kwf_Setup::$configClass = $configClass;
+        require_once 'Kwf/Registry.php';
+        Zend_Registry::setClassName('Kwf_Registry');
+
+        require_once 'Kwf/Trl.php';
+
+        umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen
+
+        Kwf_Config::checkMasterFiles(Kwf_Registry::get('config')->getMasterFiles());
+
+        file_put_contents('cache/setup.php', self::generateCode($configClass));
+
+        Zend_Registry::_unsetInstance(); //cache/setup.php will call setClassName again
+    }
+
     public static function generateCode($configClass)
     {
         $ip = get_include_path();
@@ -12,6 +45,19 @@ class Kwf_Util_Setup
         $ip = array_unique($ip);
 
         $ret = "<?php\n";
+
+        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
+            $masterFiles = Kwf_Registry::get('config')->getMasterFiles();
+            $masterFiles = "array('" . implode("', '", $masterFiles) . "')";
+            $ret .= "foreach($masterFiles as \$f) {\n";
+            $ret .= "    if (filemtime(\$f) > ".time().") {\n";
+            $ret .= "        require_once('".KWF_PATH."/Kwf/Util/Setup.php');\n";
+            $ret .= "        Kwf_Util_Setup::minimalBootstrapAndGenerateFile('$configClass');\n";
+            $ret .= "        return;\n";
+            $ret .= "    }\n";
+            $ret .= "}\n";
+            $ret .= "";
+        }
 
         $preloadClasses = array(
             'Zend_Registry',

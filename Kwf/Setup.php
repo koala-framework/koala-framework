@@ -30,34 +30,8 @@ class Kwf_Setup
         error_reporting(E_ALL);
         if (!@include('./cache/setup.php')) {
             if (!file_exists('cache/setup.php')) {
-                define('KWF_PATH', realpath(dirname(__FILE__).'/..'));
-                if (file_exists(KWF_PATH.'/include_path')) {
-                    $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
-                    $zendPath = str_replace(
-                        '%version%',
-                        file_get_contents(KWF_PATH.'/include_path_version'),
-                        $zendPath);
-
-                } else {
-                    die ('zend not found');
-                }
-                set_include_path(get_include_path(). PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
-
-                require_once 'Kwf/Loader.php';
-                Kwf_Loader::registerAutoload();
-
-                Kwf_Setup::$configClass = $configClass;
-                require_once 'Kwf/Registry.php';
-                Zend_Registry::setClassName('Kwf_Registry');
-
-                require_once 'Kwf/Trl.php';
-
-                umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen
-
-                require_once 'Kwf/Util/Setup.php';
-                file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode($configClass));
-
-                Zend_Registry::_unsetInstance(); //cache/setup.php will call setClassName again
+                require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
+                Kwf_Util_Setup::minimalBootstrapAndGenerateFile($configClass);
             }
             include('cache/setup.php');
         }
