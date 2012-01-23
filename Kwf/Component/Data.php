@@ -53,7 +53,7 @@ class Kwf_Component_Data
         $hadStaticPage = false;
         do {
             if ($data->isPseudoPage || $data->componentId == 'root') {
-                if (!empty($filenames) && Kwc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
+                if ($filename && Kwc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
                     $filename = call_user_func(array($data->componentClass, 'getShortcutUrl'), $data->componentClass, $data).($filename ? '/' : '').$filename;
                     break;
                 } else {
