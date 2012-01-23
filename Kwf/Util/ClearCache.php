@@ -101,7 +101,7 @@ class Kwf_Util_ClearCache
 
         } else if ($type == 'component') {
 
-            Kwc_Abstract::getSettingMtime();
+            Kwc_Abstract::getComponentClasses();
 
         } else if ($type == 'assets') {
 
