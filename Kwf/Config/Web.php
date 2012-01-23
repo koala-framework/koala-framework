@@ -4,6 +4,7 @@ require_once 'Kwf/Config/Ini.php';
 class Kwf_Config_Web extends Kwf_Config_Ini
 {
     private $_section;
+    protected $_masterFiles = array();
 
     static private $_instances = array();
     public static function getInstance($section = null)
@@ -20,12 +21,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                 $apcCacheId = $cacheId.getcwd();
                 $ret = apc_fetch($apcCacheId);
                 if ($ret && $ret->debug->componentCache->checkComponentModification) {
-                    $masterFiles = array(
-                        KWF_PATH . '/config.ini'
-                    );
-                    if (file_exists('config.ini')) $masterFiles[] = 'config.ini';
-                    if (file_exists('kwf_branch')) $masterFiles[] = 'kwf_branch';
-                    if (file_exists('config.local.ini')) $files[] = 'config.local.ini';
+                    $masterFiles = $ret->getMasterFiles();
                     $mtime = apc_fetch($apcCacheId.'mtime');
                     foreach ($masterFiles as $f) {
                         if (filemtime($f) > $mtime) {
@@ -40,7 +36,17 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                     //two level cache
                     require_once 'Kwf/Config/Cache.php';
                     $cache = Kwf_Config_Cache::getInstance();
-                    if(!$ret = $cache->load($cacheId)) {
+                    $ret = $cache->load($cacheId);
+                    if ($ret) {
+                        $mtime = $cache->test($cacheId);
+                        foreach ($ret->getMasterFiles() as $f) {
+                            if (filemtime($f) > $mtime) {
+                                $ret = false;
+                                break;
+                            }
+                        }
+                    }
+                    if(!$ret) {
                         $ret = new $configClass($section);
                         $cache->save($ret, $cacheId);
                     }
@@ -109,6 +115,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             throw new Kwf_Exception("Add either '$section' to kwf/config.ini or set kwfConfigSection in web config.ini");
         }
 
+        $this->_masterFiles[] = $kwfPath.'/config.ini';
         parent::__construct($kwfPath.'/config.ini', $kwfSection,
                         array('allowModifications'=>true));
 
@@ -139,6 +146,11 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                                             array($this->libraryPath, $kwfPath),
                                             $i);
         }
+    }
+
+    public function getMasterFiles()
+    {
+        return $this->_masterFiles;
     }
 
     public function getSection()
@@ -194,9 +206,11 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     protected function _mergeWebConfig($section, $webPath)
     {
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
+        $this->_masterFiles[] = $webPath.'/config.ini';
         self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));
         if (file_exists($webPath.'/config.local.ini')) {
             $webSection = $this->_getWebSection($section, $webPath.'/config.local.ini');
+            $this->_masterFiles[] = $webPath.'/config.local.ini';
             self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.local.ini', $webSection));
         }
     }

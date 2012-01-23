@@ -61,13 +61,8 @@ class Kwf_Config
         Kwf_Cache_Simple::clear('configAr-');
     }
 
-    public static function checkMasterFiles()
+    public static function checkMasterFiles($masterFiles)
     {
-        $masterFiles = array(
-            'config.ini',
-            KWF_PATH . '/config.ini'
-        );
-        if (file_exists('kwf_branch')) $masterFiles[] = 'kwf_branch';
         require_once 'Kwf/Config/Web.php';
         $mtime = Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection());
         foreach ($masterFiles as $f) {

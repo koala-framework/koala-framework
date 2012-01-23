@@ -147,7 +147,9 @@ class Kwf_Util_Setup
         }
 
         if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $ret .= "Kwf_Config::checkMasterFiles();\n";
+            $masterFiles = Kwf_Registry::get('config')->getMasterFiles();
+            $masterFiles = "array('" . implode("', '", $masterFiles) . "')";
+            $ret .= "Kwf_Config::checkMasterFiles($masterFiles);\n";
         }
         $ret .= "\n";
 
