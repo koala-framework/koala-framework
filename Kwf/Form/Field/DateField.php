@@ -7,6 +7,9 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         $this->setXtype('datefield');
     }
 
+    //setHideDatePicker in Frontend only
+
+
     protected function _processLoaded($v)
     {
         if (strlen($v) > 10) {
@@ -42,6 +45,13 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         $name = $this->getFieldName();
         $ret = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
         return (string)$ret;
+    }
+
+    public function getFrontendMetaData()
+    {
+        $ret = parent::getFrontendMetaData();
+        $ret['hideDatePicker'] = $this->getHideDatePicker();
+        return $ret;
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')

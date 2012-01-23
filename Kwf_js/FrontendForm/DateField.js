@@ -1,18 +1,20 @@
 Kwf.FrontendForm.DateField = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
-        var icon = this.el.createChild({
-            tag: 'a',
-            cls: 'icon',
-            href: '#'
-        });
-        icon.alignTo(this.el.child('input'), 'tr');
-        icon.on('click', function(ev) {
-            ev.stopEvent();
-            this.showPicker();
-        }, this);
-        this.el.child('input').on('focus', function(ev) {
-            this.showPicker();
-        }, this);
+        if (!this.form.getFieldConfig(this.getFieldName()).hideDatePicker) {
+            var icon = this.el.createChild({
+                tag: 'a',
+                cls: 'icon',
+                href: '#'
+            });
+            icon.alignTo(this.el.child('input'), 'tr');
+            icon.on('click', function(ev) {
+                ev.stopEvent();
+                this.showPicker();
+            }, this);
+            this.el.child('input').on('focus', function(ev) {
+                this.showPicker();
+            }, this);
+        }
     },
     showPicker: function() {
         if (!this.menu) {

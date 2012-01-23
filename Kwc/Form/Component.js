@@ -27,7 +27,7 @@ Kwc.Form.Component = function(form)
             }
         }, this);
         if (fieldConstructor) {
-            var field = new fieldConstructor(fieldEl);
+            var field = new fieldConstructor(fieldEl, this);
             this.fields.push(field);
         }
     }, this);
@@ -56,6 +56,13 @@ Kwc.Form.Component = function(form)
     }
 };
 Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
+    getFieldConfig: function(fieldName)
+    {
+        if (this.config.fieldConfig[fieldName]) {
+            return this.config.fieldConfig[fieldName];
+        }
+        return {};
+    },
     findField: function(fieldName) {
         var ret = null;
         this.fields.each(function(f) {

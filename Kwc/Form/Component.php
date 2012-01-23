@@ -276,10 +276,17 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
                 'hide' => $v['hide']->getFieldName(),
             );
         }
+
+        $fieldConfig = array();
+        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_RecursiveFormFields($this->_form->fields));
+        foreach ($iterator as $field) {
+            $fieldConfig[$field->getFieldName()] = (object)$field->getFrontendMetaData();
+        }
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
-            'hideForValue' => $hideForValue
+            'hideForValue' => $hideForValue,
+            'fieldConfig' => (object)$fieldConfig,
         );
 
         return $ret;

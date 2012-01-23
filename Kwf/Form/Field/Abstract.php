@@ -123,6 +123,11 @@ abstract class Kwf_Form_Field_Abstract extends Kwf_Component_Abstract
         return $ret;
     }
 
+    public function getFrontendMetaData()
+    {
+        return array();
+    }
+
     public function load($row, $postData = array())
     {
         $ret = array();

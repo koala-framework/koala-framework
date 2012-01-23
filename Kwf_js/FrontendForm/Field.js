@@ -1,8 +1,9 @@
 Ext.namespace('Kwf.FrontendForm');
-Kwf.FrontendForm.Field = function(fieldEl) {
+Kwf.FrontendForm.Field = function(fieldEl, form) {
     Kwf.FrontendForm.Field.superclass.constructor.call(this);
     this.el = fieldEl;
     this.el.enableDisplayMode();
+    this.form = form;
     this.initField();
     this.addEvents('change');
 };
