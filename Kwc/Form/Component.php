@@ -279,7 +279,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
-            'savingImage' => '/assets/kwf/Kwc/Form/saving.gif',
             'hideForValue' => $hideForValue
         );
 
