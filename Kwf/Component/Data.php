@@ -43,6 +43,9 @@ class Kwf_Component_Data
     private $_recursiveGeneratorsCache = array();
     private $_languageCache;
 
+    //public static $objectsCount;
+    //public static $objectsById = array();
+
     /**
      * @internal
      */
@@ -64,11 +67,22 @@ class Kwf_Component_Data
             $this->dbId = $this->componentId;
         }
 
+        //self::$objectsCount++;
+        //if (!isset(self::$objectsById[$this->componentId])) self::$objectsById[$this->componentId] = 0;
+        //self::$objectsById[$this->componentId]++;
+
         if (isset($config['unserialized']) && $config['unserialized']) {
             Kwf_Benchmark::count('unserialized componentDatas', $this->componentId);
         } else {
             Kwf_Benchmark::count('componentDatas', $this->componentId);
         }
+    }
+
+    public function __destruct()
+    {
+        //self::$objectsCount--;
+        //self::$objectsById[$this->componentId]--;
+        //if (!self::$objectsById[$this->componentId]) unset(self::$objectsById[$this->componentId]);
     }
 
     /**
@@ -83,7 +97,7 @@ class Kwf_Component_Data
         $hadStaticPage = false;
         do {
             if ($data->isPseudoPage || $data->componentId == 'root') {
-                if (!empty($filenames) && Kwc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
+                if ($filename && Kwc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
                     $filename = call_user_func(array($data->componentClass, 'getShortcutUrl'), $data->componentClass, $data).($filename ? '/' : '').$filename;
                     break;
                 } else {
@@ -172,6 +186,9 @@ class Kwf_Component_Data
                 }
             }
             return $this->_inheritClasses;
+        } else if ($var == '_uniqueParentDatas') {
+            $this->inheritClasses; //populates _uniqueParentDatas as side effect
+            return $this->_uniqueParentDatas;
         } else if ($var == 'parent' && isset($this->_lazyParent)) {
             $ret = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_lazyParent, array('ignoreVisible'=>true));
             $this->parent = $ret;
@@ -1267,5 +1284,33 @@ class Kwf_Component_Data
         Kwf_Component_Data_Root::getInstance()->addToDataCache($ret, new Kwf_Component_Select());
         //TODO: generator data-cache?
         return $ret;
+    }
+
+    /**
+     * @internal
+     */
+    protected function _freeMemory()
+    {
+        if (isset($this->parent)) {
+            $this->_lazyParent = $this->parent->componentId;
+            unset($this->parent);
+        }
+        if (isset($this->_component)) {
+            $this->_component->freeMemory();
+            unset($this->_component);
+        }
+        //unset($this->generator);
+        if (isset($this->row)) {
+            if ($this->row instanceof Kwf_Model_Row_Interface && $this->generator->getModel() !== $this->row->getModel()) {
+                throw new Kwf_Exception('data row has invalid model');
+            }
+            $this->_lazyRow = $this->row->{$this->generator->getModel()->getPrimaryKey()};
+            unset($this->row);
+        }
+        if (isset($this->_uniqueParentDatas)) unset($this->_uniqueParentDatas);
+        if (isset($this->_inheritClasses)) unset($this->_inheritClasses);
+        $this->_childComponentsCache = array();
+        $this->_recursiveGeneratorsCache = array();
+        if (isset($this->_languageCache)) unset($this->_languageCache);
     }
 }

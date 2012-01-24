@@ -239,12 +239,6 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
         return $this->_rows;
     }
 
-    public function clearRows()
-    {
-        parent::clearRows();
-        $this->getProxyModel()->clearRows();
-    }
-
     public function fetchColumnByPrimaryId($column, $id)
     {
         if ($this->getProxyModel()->hasColumn($column)) {

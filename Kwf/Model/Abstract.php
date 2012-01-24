@@ -36,6 +36,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     protected $_rows = array();
 
     private static $_instances = array();
+    private static $_allInstances = array();
     private $_hasColumnsCache = array();
 
     protected $_proxyContainerModels = array();
@@ -52,6 +53,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
         if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
         self::$instanceCount[spl_object_hash($this)] = get_class($this);
+        self::$_allInstances[] = $this;
         $this->_init();
     }
 
@@ -84,6 +86,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     public static function clearInstances()
     {
         self::$_instances = array();
+        self::$_allInstances = array();
     }
 
     public static function getInstances()
@@ -822,10 +825,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     /**
      * Kann zum Speicher-Sparen aufgerufen werden
+     * @internal
+     * @deprecated
      */
     public function clearRows()
     {
-        $this->_rows = array();
     }
 
     /**
@@ -846,8 +850,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public static function clearAllRows()
     {
-        foreach (self::$_instances as $i) {
-            $i->clearRows();
+        foreach (self::$_allInstances as $i) {
+            foreach ($i->_rows as $row) {
+                $row->freeMemory();
+            }
+            $i->_rows = array();
         }
     }
 

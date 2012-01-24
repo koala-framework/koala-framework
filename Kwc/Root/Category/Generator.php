@@ -392,7 +392,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $ret += Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         if (isset($this->_pageChilds[$source->id])) {
             foreach ($this->_pageChilds[$source->id] as $i) {
-                $data = $this->getChildData(null, array('id'=>$i));
+                $data = $this->getChildData(null, array('id'=>$i, 'ignoreVisible'=>true));
                 $data = array_shift($data);
                 $ret += $this->getDuplicateProgressSteps($data);
             }
@@ -409,16 +409,24 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             throw new Kwf_Exception("you must call this only with the correct target");
         }
 
-        $target = $this->_duplicateChildPages($source->parent, $parentTarget, $source->id, $progressBar);
-        return $target;
+        $sourceId = $source->id;
+        $parentSourceId = $source->parent->componentId;
+        $parentTargetId = $parentTarget->componentId;
+        unset($source);
+        unset($parentTarget);
+        $targetId = $this->_duplicateChildPages($parentSourceId, $parentTargetId, $sourceId, $progressBar);
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($targetId, array('ignoreVisible'=>true));
     }
 
-    private function _duplicateChildPages($parentSource, $parentTarget, $childId, Zend_ProgressBar $progressBar = null)
+    private function _duplicateChildPages($parentSourceId, $parentTargetId, $childId, Zend_ProgressBar $progressBar = null)
     {
         if ($progressBar) $progressBar->next(1, trlKwf("Pasting {0}", $this->_pageData[$childId]['name']));
 
         $data = array();
-        $data['parent_id'] = $parentTarget->dbId;
+        $data['parent_id'] = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($parentTargetId, array('ignoreVisible'=>true))
+            ->dbId;
         $sourceRow = $this->getModel()->getRow($childId);
         $newRow = $sourceRow->duplicate($data);
 
@@ -426,17 +434,52 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $this->_pageDataLoaded = false; //TODO do this only once
         $this->_loadPageData();
 
-        $source = $parentSource->getChildComponent(array('id'=>$childId, 'ignoreVisible'=>true));
-        $target = $parentTarget->getChildComponent(array('id'=>$newRow->id, 'ignoreVisible'=>true));
+        $source = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($parentSourceId, array('ignoreVisible'=>true))
+            ->getChildComponent(array('id'=>$childId, 'ignoreVisible'=>true));
+        $target = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($parentTargetId, array('ignoreVisible'=>true))
+            ->getChildComponent(array('id'=>$newRow->id, 'ignoreVisible'=>true));
+
+        if (!$target) {
+            throw new Kwf_Exception("didn't find just duplicated component '$newRow->id' below '{$parentTarget->componentId}'");
+        }
 
         Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
 
+        $sourceId = $source->componentId;
+        $targetId = $target->componentId;
+        unset($source);
+        unset($target);
+        unset($sourceRow);
+        unset($newRow);
+
+        /*
+        echo round(memory_get_usage()/1024/1024, 2)."MB";
+        echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+        echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+        echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+        $s = microtime(true);
+        */
+        Kwf_Component_Data_Root::getInstance()->freeMemory();
+        /*
+        echo ' / '.round((microtime(true)-$s)*1000, 2).' ms ';
+        echo ' / '.round(memory_get_usage()/1024/1024, 2)."MB";
+        echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+        echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+        echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+        //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
+        //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
+        //var_dump(Kwf_Component_Data::$objectsById);
+        echo "\n";
+        */
+
         if (isset($this->_pageChilds[$childId])) {
             foreach ($this->_pageChilds[$childId] as $i) {
-                $this->_duplicateChildPages($source, $target, $i, $progressBar);
+                $this->_duplicateChildPages($sourceId, $targetId, $i, $progressBar);
             }
         }
-        return $target;
+        return $targetId;
     }
 
     public function getNameColumn()

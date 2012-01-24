@@ -580,4 +580,14 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
      * @internal
      */
     final protected function _callPostProcessInput($process) {}
+
+    /**
+     * @internal
+     */
+    public function freeMemory()
+    {
+        //unset($this->_data);
+        if (isset($this->_row)) unset($this->_row);
+        if (isset($this->_pdfWriter)) unset($this->_pdfWriter);
+    }
 }

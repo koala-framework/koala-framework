@@ -113,6 +113,39 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     }
 
     /**
+     * Tries to clear all cached data objects and row objects
+     *
+     * Usful when processing lot of components to avoid memory issues
+     */
+    public function freeMemory()
+    {
+        foreach ($this->_dataCache as $id=>$c) {
+            if (isset($this->_dataCacheIgnoreVisible[$id])) {
+                unset($this->_dataCacheIgnoreVisible[$id]);
+            }
+            $c->_freeMemory();
+        }
+        foreach ($this->_dataCacheIgnoreVisible as $id=>$c) {
+            $c->_freeMemory();
+        }
+        $this->_dataCache = array();
+        $this->_dataCacheIgnoreVisible = array();
+
+        if (isset($this->_component)) unset($this->_component);
+        $this->_childComponentsCache = array();
+        $this->_recursiveGeneratorsCache = array();
+        if (isset($this->_languageCache)) unset($this->_languageCache);
+
+        if (isset($this->_componentsByClassCache)) unset($this->_componentsByClassCache);
+        if (isset($this->_componentsByDbIdCache)) unset($this->_componentsByDbIdCache);
+        $this->_generatorsForClassesCache = array();
+        //Kwf_Component_Generator_Abstract::clearInstances();
+        KWf_Model_Abstract::clearAllRows();
+
+        if (method_exists('gc_collect_cycles')) gc_collect_cycles();
+    }
+
+    /**
      * @internal
      */
     public function __get($var)

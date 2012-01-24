@@ -142,6 +142,11 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         return $ret;
     }
 
+    public function getFrontendMetaData()
+    {
+        return array();
+    }
+
     public function load($row, $postData = array())
     {
         $ret = array();
