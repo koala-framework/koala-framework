@@ -25,6 +25,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState = Ext.extend(Kwf.EyeCandy.L
             this.ignoreNextSetActive = false;
             return;
         }
+        if (!this.list.el.isVisible(true)) return;
         if (item.el.down('a')) {
             var href = item.el.down('a').dom.href;
             if (!Kwf.Utils.HistoryState.currentState.eyeCandyListActive) {
