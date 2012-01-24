@@ -34,6 +34,7 @@ Kwf.onContentReady(function(readyEl) {
         l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
         l.fetched = true;
         l.initialize();
+        l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
         l.style.afterCreateLightboxEl();
         l.style.onShow();
         el.kwfLightbox = l;
@@ -159,11 +160,15 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.createLightboxEl();
         this.style.onShow();
 
+        if (!this.closeHref) {
+            if (Kwf.EyeCandy.Lightbox.currentOpen) {
+                this.closeHref = Kwf.EyeCandy.Lightbox.currentOpen.closeHref;
+            } else {
+                this.closeHref = window.location.href;
+            }
+        }
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
-            this.closeHref = Kwf.EyeCandy.Lightbox.currentOpen.closeHref;
             Kwf.EyeCandy.Lightbox.currentOpen.close();
-        } else {
-            this.closeHref = window.location.href;
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
 
