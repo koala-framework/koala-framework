@@ -169,7 +169,9 @@ class Vpc_Mail_HtmlParser
             // macht aber normal weiter. wenns zu oft vorkommt, evtl. exception
             // entfernen und ignorieren, oder was andres überlegen :-)
             $errorCode = xml_get_error_code($this->_parser);
-            $ex = new Vps_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode));
+            $ex = new Vps_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode).
+                    "in line ".xml_get_current_line_number($this->_parser)." parsed html: ".$html
+                    );
             $ex->logOrThrow();
         }
 
