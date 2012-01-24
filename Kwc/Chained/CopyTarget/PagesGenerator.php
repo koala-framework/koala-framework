@@ -8,12 +8,13 @@ class Kwc_Chained_CopyTarget_PagesGenerator extends Kwc_Root_Category_Cc_Generat
 
     protected function _getChainedData($data)
     {
-        $parentClasses = Kwc_Abstract::getParentClasses($data->componentClass);
-        if (in_array('Kwc_Chained_CopyTarget_Component' , $parentClasses)) {
-            return $data->getComponent()->getTargetComponent();
-        } else {
-            return parent::_getChainedData($data);
+        if ($data) {
+            $parentClasses = Kwc_Abstract::getParentClasses($data->componentClass);
+            if (in_array('Kwc_Chained_CopyTarget_Component' , $parentClasses)) {
+                return $data->getComponent()->getTargetComponent();
+            }
         }
+        return parent::_getChainedData($data);
     }
 
     protected function _formatConfig($parentData, $row)
