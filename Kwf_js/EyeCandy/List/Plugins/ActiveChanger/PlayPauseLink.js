@@ -22,8 +22,19 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext.extend(Kwf.EyeCandy.
         }, this);
 
         if (this.autoPlay) {
-            this._isPlaying = true;
-            this.play.defer(this.interval, this);
+            if (this.list.el.isVisible(true)) {
+                this._isPlaying = true;
+                this.play.defer(this.interval, this);
+                this._playQueued = true;
+            }
+            Kwf.onContentReady(function() {
+                if (this._isPlaying && this.list.el.isVisible(true)) {
+                    if (!this._playQueued) {
+                        this.play.defer(this.interval, this);
+                        this._playQueued = true;
+                    }
+                }
+            }, this);
         }
     },
 
@@ -36,11 +47,15 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext.extend(Kwf.EyeCandy.
     },
 
     play: function() {
+        this._playQueued = false;
         if (this._isPlaying) {
             this.playPauseLink.removeClass('listIsPausing');
             this.playPauseLink.addClass('listIsPlaying');
-            this.next();
-            this.play.defer(this.interval, this);
+            if (this.list.el.isVisible(true)) {
+                this.play.defer(this.interval, this);
+                this._playQueued = true;
+                this.next();
+            }
         }
     },
 
