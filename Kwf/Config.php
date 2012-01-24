@@ -61,8 +61,14 @@ class Kwf_Config
         Kwf_Cache_Simple::clear('configAr-');
     }
 
-    public static function checkMasterFiles($masterFiles)
+    /**
+     * TODO: masterFiles should not be optional, but is for now because of old cached setup.php files
+     * @param string[] array of absolute paths to config master files (required)
+     */
+    public static function checkMasterFiles($masterFiles = null)
     {
+        if (!is_null($masterFiles)) return;
+
         require_once 'Kwf/Config/Web.php';
         $mtime = Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection());
         foreach ($masterFiles as $f) {
