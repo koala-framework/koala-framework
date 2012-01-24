@@ -368,6 +368,22 @@ class Kwf_Component_Abstract
         return $ret;
     }
 
+    public static function getSettingMtime()
+    {
+        if (!Kwf_Config::getValue('kwc.rootComponent')) return 0;
+
+        $cacheId = 'settingsMtime';
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
+        $s =& self::_getSettingsCached();
+        $ret = $s['mtime'];
+        Kwf_Cache_Simple::add($cacheId, $ret);
+        return $ret;
+    }
+
     //wenn root geändert wird muss der cache hier gelöscht werden können
     public static function resetSettingsCache()
     {
