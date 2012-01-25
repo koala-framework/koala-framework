@@ -7,6 +7,7 @@ Kwf.Form.PageSelect = Ext.extend(Kwf.Form.AbstractSelect, {
         if (!this._windowItem) {
             this._windowItem = new Kwf.Auto.TreePanel({
                 controllerUrl: this.controllerUrl,
+                baseParams: this.baseParams,
                 listeners: {
                     click: function(node) {
                         var n = node;
