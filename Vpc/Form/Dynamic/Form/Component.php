@@ -58,9 +58,9 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
             $host = Vps_Registry::get('config')->server->domain;
         }
         $row->setFrom("noreply@$host");
-        $settings = $this->getData()->parent->getComponent()->getRow(); //TODO interface dafür machen, nicht auf row direkt zugreifen
-        $row->addTo($settings->recipient);
-        $row->setSubject($settings->subject);
+        $settings = $this->getData()->parent->getComponent()->getMailSettings();
+        $row->addTo($settings['recipient']);
+        $row->setSubject($settings['subject']);
 
         $msg = '';
         foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {

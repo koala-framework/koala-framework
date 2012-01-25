@@ -24,4 +24,9 @@ class Vpc_Form_Dynamic_Trl_Component extends Vpc_Chained_Trl_Component
 
         return $ret;
     }
+
+    public function getMailSettings()
+    {
+        return $this->getData()->chained->getComponent()->getMailSettings();
+    }
 }

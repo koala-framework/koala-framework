@@ -13,4 +13,13 @@ class Vpc_Form_Dynamic_Component extends Vpc_Abstract_Composite_Component
         $ret['flags']['hasResources'] = true;
         return $ret;
     }
+
+    public function getMailSettings()
+    {
+        $row = $this->getRow();
+        return array(
+            'recipient' => $row->recipient,
+            'subject' => $row->subject,
+        );
+    }
 }
