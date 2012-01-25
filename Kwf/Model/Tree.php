@@ -20,20 +20,6 @@ class Kwf_Model_Tree extends Kwf_Model_Db_Proxy
         $this->_dependentModels['Childs'] = $this;
     }
 
-    public function getRecursiveIdsCache()
-    {
-        if (!$this->useRecursiveIdsCache()) return false;
-
-        if (!isset($this->_recursiveIdsCache)) {
-            $this->_recursiveIdsCache = Kwf_Cache::factory('Core', 'Apc', array(
-                'automatic_serialization' => true
-            ), array(
-                'cache_id_prefix' => $this->getUniqueIdentifier().'_recid_',
-            ));
-        }
-        return $this->_recursiveIdsCache;
-    }
-
     public function useRecursiveIdsCache()
     {
         return $this->_useRecursiveIdsCache;
@@ -46,7 +32,8 @@ class Kwf_Model_Tree extends Kwf_Model_Db_Proxy
     {
         $ret = false;
         if ($this->useRecursiveIdsCache()) {
-            $ret = $this->getRecursiveIdsCache()->load((string)$parentId);
+            $cacheId = 'recid-'.$this->getUniqueIdentifier().'-'.(string)$parentId;
+            $ret = Kwf_Cache_Simple::fetch($cacheId);
         }
         if ($ret === false) {
             if (!isset($this->_parentIdsCache)) {
@@ -63,7 +50,7 @@ class Kwf_Model_Tree extends Kwf_Model_Db_Proxy
 
             $ret = array_values(array_unique($ret));
             if ($this->useRecursiveIdsCache()) {
-                $this->getRecursiveIdsCache()->save($ret, (string)$parentId);
+                Kwf_Cache_Simple::add($cacheId, $ret);
             }
         }
         return $ret;
