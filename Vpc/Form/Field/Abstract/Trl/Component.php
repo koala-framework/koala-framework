@@ -7,6 +7,7 @@ class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['flags']['formField'] = true;
         $ret['viewCache'] = false;
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
