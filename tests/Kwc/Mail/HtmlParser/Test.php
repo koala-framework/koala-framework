@@ -4,6 +4,13 @@
  */
 class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
 {
+    private function _assertHtmlEquals($expected, $html)
+    {
+        $html = preg_replace('#^ +#m', '', $html);
+        $html = str_replace("\n", '', $html);
+        $this->assertEquals($expected, $html);
+    }
+
     public function testIt()
     {
         $styles = array(
@@ -39,33 +46,33 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
         $p = new Kwc_Mail_HtmlParser($styles);
         $html = '<p>Lorem Ipsum</p>';
         $html = $p->parse($html);
-        $this->assertEquals('<p><font face="Verdana" size="3">Lorem Ipsum</font></p>', $html);
+        $this->_assertHtmlEquals('<p><font face="Verdana" size="3">Lorem Ipsum</font></p>', $html);
 
         $html = '<p class="red">Lorem Ipsum</p>';
         $html = $p->parse($html);
-        $this->assertEquals('<p class="red"><font face="Verdana" size="3" color="red">Lorem Ipsum</font></p>', $html);
+        $this->_assertHtmlEquals('<p class="red"><font face="Verdana" size="3" color="red">Lorem Ipsum</font></p>', $html);
 
         $html = '<h1>Lorem Ipsum</h1>';
         $html = $p->parse($html);
-        $this->assertEquals('<h1><font face="Verdana" size="4"><b>Lorem Ipsum</b></font></h1>', $html);
+        $this->_assertHtmlEquals('<h1><font face="Verdana" size="4"><b>Lorem Ipsum</b></font></h1>', $html);
 
         $html = '<div>Lorem</div><div>Ipsum</div>';
         $html = $p->parse($html);
-        $this->assertEquals('<div>Lorem</div><div>Ipsum</div>', $html);
+        $this->_assertHtmlEquals('<div>Lorem</div><div>Ipsum</div>', $html);
 
         $html = '<strong foo="bar">Lorem Ipsum</strong>';
         $html = $p->parse($html);
-        $this->assertEquals('<b>Lorem Ipsum</b>', $html);
+        $this->_assertHtmlEquals('<p><font face="Verdana" size="3"><b>Lorem Ipsum</b></font></p>', $html);
 
         $html = 'Lorem<br />Ipsum';
         $html = $p->parse($html);
-        $this->assertEquals('Lorem<br />Ipsum', $html);
+        $this->_assertHtmlEquals('<p><font face="Verdana" size="3">Lorem<br />Ipsum</font></p>', $html);
 
         // wenn man ein nicht geschlossenes <br> rein gibt, macht das xml einen fehler,
         // geht aber normal weiter, deshalb dieser teil auskommentiert. siehe auch den kommentar beim HtmlParser
 /*        $html = 'Lorem<br>Ipsum';
         $html = $p->parse($html);
-        $this->assertEquals('Lorem<br />Ipsum', $html);*/
+        $this->_assertHtmlEquals('Lorem<br />Ipsum', $html);*/
     }
 
     public function testMore()
@@ -83,7 +90,7 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
         $expected= '<table><tr><td><font face="Verdana" size="2">Guten Tag, &NBSP; <strong>Frau Staterau!</strong></font></td><td><font face="Verdana" size="2">&nbsp;</font></td><td><font face="Verdana" size="2">Testtext</font></td></tr></table>';
         $p = new Kwc_Mail_HtmlParser($styles);
         $html = $p->parse($html);
-        $this->assertEquals($expected, $html);
+        $this->_assertHtmlEquals($expected, $html);
 
     }
 
@@ -109,7 +116,7 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
         $expected .= '<table class="foo"><tr><td><p><font size="2">Blu bla Bli</font></p></td></tr></table>';
         $p = new Kwc_Mail_HtmlParser($styles);
         $html = $p->parse($html);
-        $this->assertEquals($expected, $html);
+        $this->_assertHtmlEquals($expected, $html);
 
     }
 }
