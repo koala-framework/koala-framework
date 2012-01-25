@@ -28,7 +28,6 @@ class Kwc_Advanced_SearchEngineReferer_Component extends Kwc_Abstract_Composite_
         if (!$_SERVER['HTTP_REFERER']) return;
         $referer = $_SERVER['HTTP_REFERER'];
         $host = parse_url($referer, PHP_URL_HOST);
-        if (strpos($host, 'google') !== false && strpos($referer, '&url=') !== false) return;
         $allowedHosts = $this->_getSetting('allowedHosts');
         if (preg_match('/^(www\.)?(('.implode(')|(', $allowedHosts).'))\.[a-z]+$/i', $host)) {
             $model = $this->getChildModel();
@@ -38,31 +37,36 @@ class Kwc_Advanced_SearchEngineReferer_Component extends Kwc_Abstract_Composite_
                 ->order('id', 'DESC'));
 
             $query = self::getQueryVar($referer);
-
-            if ($rowCompare) {
-                $hostCompare = parse_url($rowCompare->referer_url, PHP_URL_HOST);
-                $queryCompare = self::getQueryVar($rowCompare->referer_url);
-            }
-
-            if ((!$rowCompare || $hostCompare != $host || $queryCompare != $query)
-                && strpos($query, 'site:') === false
-            ) {
-                $row = $model->createRow();
-                $row->component_id = $this->getData()->componentId;
-                $row->referer_url = $referer;
-                $row->save();
-
-                // alte löschen
-                $select = new Kwf_Model_Select();
-                $select->whereEquals('component_id', $row->component_id)
-                    ->order('id', 'DESC')
-                    ->limit(20, 10);
-                $deleteRows = $model->getRows($select);
-                foreach ($deleteRows as $deleteRow) {
-                    $deleteRow->delete();
+            
+            if ($query){
+                if ($rowCompare) {
+                    $hostCompare = parse_url($rowCompare->referer_url, PHP_URL_HOST);
+                    $queryCompare = self::getQueryVar($rowCompare->referer_url);
                 }
-                Kwf_Component_ModelObserver::getInstance()->process();
+    
+                if ((!$rowCompare || $hostCompare != $host || $queryCompare != $query)
+                    && strpos($query, 'site:') === false
+                ) {
+                    $row = $model->createRow();
+                    $row->component_id = $this->getData()->componentId;
+                    $row->referer_url = $referer;
+                    $row->save();
+    
+                    // alte löschen
+                    $select = new Kwf_Model_Select();
+                    $select->whereEquals('component_id', $row->component_id)
+                        ->order('id', 'DESC')
+                        ->limit(20, 10);
+                    $deleteRows = $model->getRows($select);
+                    foreach ($deleteRows as $deleteRow) {
+                        $deleteRow->delete();
+                    }
+                    Kwf_Component_ModelObserver::getInstance()->process();
+                }
+            } else {
+                file_put_contents('log/unknownsearchenginereferer', $referer. "\n", FILE_APPEND);
             }
+            
         }
     }
 

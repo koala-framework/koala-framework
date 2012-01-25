@@ -7,7 +7,7 @@ class Kwc_Basic_Text_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
         $html = preg_replace('#(<span\s+class\s*=\s*"?cursor"?\s*>)\s*(</span>)#is', '<span class="cursor">cursor</span>', $html);
 
         $row = $this->_form->getRow();
-        $parser = new Kwc_Basic_Text_Parser();
+        $parser = new Kwc_Basic_Text_Parser($row->component_id, $row->getModel());
         $m = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
         $parser->setMasterStyles($m->getMasterStyles());
         if ($this->_getParam('allowCursorSpan')) {

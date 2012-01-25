@@ -7,7 +7,7 @@ class Kwc_Basic_Text_ParserTest extends Kwf_Test_TestCase
     private $_parser;
     public function setUp()
     {
-        $this->_parser = new Kwc_Basic_Text_Parser(null);
+        $this->_parser = new Kwc_Basic_Text_Parser('', null);
         $this->_parser->setMasterStyles(array(
             array(
                 'tagName' => 'h1',

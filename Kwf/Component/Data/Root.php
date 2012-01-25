@@ -142,7 +142,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         //Kwf_Component_Generator_Abstract::clearInstances();
         KWf_Model_Abstract::clearAllRows();
 
-        if (method_exists('gc_collect_cycles')) gc_collect_cycles();
+        if (function_exists('gc_collect_cycles')) gc_collect_cycles();
     }
 
     /**

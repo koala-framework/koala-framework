@@ -31,14 +31,14 @@ class Kwc_Trl_StaticTextsForm_Test extends Kwc_TestAbstract
 
         $render = $c->render();
 
-        $this->assertContains('<label for="form_firstname">Firstname:</label>', $render);
-        $this->assertContains('<label for="form_lastname">Lastname:</label>', $render);
-        $this->assertContains('<label for="form_company">Company:</label>', $render);
+        $this->assertContains('<label for="root-en_testtrl-child_form_firstname">Firstname:</label>', $render);
+        $this->assertContains('<label for="root-en_testtrl-child_form_lastname">Lastname:</label>', $render);
+        $this->assertContains('<label for="root-en_testtrl-child_form_company">Company:</label>', $render);
 
-        $this->assertContains('<label for="form_firstname2">Firstname:</label>', $render);
-        $this->assertContains('<label for="form_lastname2">Lastname:</label>', $render);
-        $this->assertContains('<label for="form_company2">Company:</label>', $render);
+        $this->assertContains('<label for="root-en_testtrl-child_form_firstname2">Firstname:</label>', $render);
+        $this->assertContains('<label for="root-en_testtrl-child_form_lastname2">Lastname:</label>', $render);
+        $this->assertContains('<label for="root-en_testtrl-child_form_company2">Company:</label>', $render);
 
-        $this->assertContains('<label for="form_company3">Company-Lastname:</label>', $render);
+        $this->assertContains('<label for="root-en_testtrl-child_form_company3">Company-Lastname:</label>', $render);
     }
 }

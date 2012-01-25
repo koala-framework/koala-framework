@@ -51,11 +51,10 @@ class Kwc_Advanced_SearchEngineReferer_Test extends Kwc_TestAbstract
         );
         $this->assertEquals(7, $newRow->id);
 
-        // Wenn &url= in Url vorkommt, nicht tracken (Adi fragen warum)
         $count = count($model->getRows());
         $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=foo3&url=foo';
         $ref2->processInput();
-        $this->assertEquals($count, count($model->getRows()));
+        $this->assertEquals($count+1, count($model->getRows()));
     }
 
     public function testCache()
