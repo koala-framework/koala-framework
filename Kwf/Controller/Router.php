@@ -26,11 +26,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     array('module'     => 'kwf_controller_action_pool',
                           'controller' => 'pools',
                           'action'     => 'index')));
-        $this->AddRoute('kwf_todo', new Zend_Controller_Router_Route(
-                    '/kwf/todo/:controller/:action',
-                    array('module'     => 'kwf_controller_action_todo',
-                          'controller' => 'todos',
-                          'action'     => 'index')));
         $this->AddRoute('trl', new Zend_Controller_Router_Route(
                     '/kwf/trl/:controller/:action',
                     array('module'     => 'kwf_controller_action_trl',
@@ -53,10 +48,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
         $this->AddRoute('kwf_enquiries', new Zend_Controller_Router_Route(
                     '/kwf/enquiries/:controller/:action',
                     array('module'     => 'kwf_controller_action_enquiries',
-                          'action'     =>'index')));
-        $this->AddRoute('kwf_project-timer', new Zend_Controller_Router_Route(
-                    '/kwf/project-timer/:controller/:action',
-                    array('module'     => 'kwf_controller_action_project-timer',
                           'action'     =>'index')));
         $this->AddRoute('kwfredirects', new Zend_Controller_Router_Route(
                     '/kwf/redirects/:controller/:action',

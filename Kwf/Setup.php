@@ -97,7 +97,7 @@ class Kwf_Setup
             $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
         }
 
-        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets'))
+        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf'))
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
         ) {
             if (!isset($_SERVER['HTTP_HOST'])) {
