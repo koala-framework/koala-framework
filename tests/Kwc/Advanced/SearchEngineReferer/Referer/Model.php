@@ -7,5 +7,6 @@ class Kwc_Advanced_SearchEngineReferer_Referer_Model extends Kwf_Model_FnF
         array('id'=>3, 'component_id'=>'root2', 'create_time' => '2008-11-20 10:20:40', 'referer_url' => 'http://www.google.at/search?hl=de&q=foo3'),
         array('id'=>4, 'component_id'=>'root2', 'create_time' => '2008-11-20 10:20:45', 'referer_url' => 'http://www.google.at/search?hl=de&q=foo4'),
         array('id'=>5, 'component_id'=>'root2', 'create_time' => '2008-11-20 10:20:50', 'referer_url' => 'http://www.google.at/search?hl=de&q=foo5'),
+        array('id'=>6, 'component_id'=>'root2', 'create_time' => '2008-11-20 10:20:50', 'referer_url' => 'http://www.google.at/search?hl=de&q=foo6$url=foo6'),
     );
 }
