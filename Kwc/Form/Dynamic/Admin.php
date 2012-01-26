@@ -30,6 +30,9 @@ class Kwc_Form_Dynamic_Admin extends Kwc_Abstract_Composite_Admin
         foreach ($components as $c) {
             $t = $c->getTitle();
             if (!$t) $t = $c->getPage()->name;
+            if ($domain = $c->getParentByClass('Kwc_Root_DomainRoot_Domain_Component')) {
+                $t .= " - $domain->name";
+            }
             $t = $name .' ('.$t.')';
             $menuUrl = Kwc_Admin::getInstance($c->componentClass)
                 ->getControllerUrl('Enquiries') . '?componentId=' . $c->dbId;

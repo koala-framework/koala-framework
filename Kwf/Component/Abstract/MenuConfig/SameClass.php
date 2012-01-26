@@ -20,6 +20,9 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
             foreach ($components as $c) {
                 $t = $c->getTitle();
                 if (!$t) $t = $name;
+                if ($domain = $c->getParentByClass('Kwc_Root_DomainRoot_Domain_Component')) {
+                    $t .= " ($domain->name)";
+                }
                 $acl->add(
                     new Kwf_Acl_Resource_Component_MenuUrl(
                         $c, array('text'=>$t, 'icon'=>$icon)
