@@ -23,27 +23,6 @@ class Kwf_Cache_Core extends Zend_Cache_Core
                 }
             }
         }
-
-        if ($ret && Kwf_Config::getValue('debug.componentCache.checkComponentModification'))
-        {
-            if (isset($ret['mtimeFiles'])) {
-                foreach ($ret['mtimeFiles'] as $f) {
-                    if (file_exists($f) && filemtime($f) > $ret['mtime']) {
-                        $ret = false;
-                        break;
-                    }
-                }
-            }
-            if ($ret && $this->_checkComponentSettings)
-            {
-                if ($ret['mtime'] < Kwc_Abstract::getSettingMtime()) {
-                    $ret = false;
-                }
-            }
-            if ($ret && $ret['mtime'] < Kwf_Registry::get('configMtime')) {
-                $ret = false;
-            }
-        }
         return $ret;
     }
 

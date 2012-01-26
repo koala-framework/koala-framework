@@ -444,27 +444,6 @@ class Kwf_Component_Abstract
                     self::$_settings[$c]['processedCssClass'] .= implode(' ', array_reverse($cssClass));
                     self::$_settings[$c]['processedCssClass'] = trim(self::$_settings[$c]['processedCssClass']);
 
-                    //*** mtimeFiles
-                    if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-                        $p = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                        do {
-                            $file = str_replace('_', DIRECTORY_SEPARATOR, $p);
-                            $f = false;
-                            foreach ($incPaths as $incPath) {
-                                if (file_exists($incPath.DIRECTORY_SEPARATOR.$file . '.php')) {
-                                    $f = $incPath.DIRECTORY_SEPARATOR.$file . '.php';
-                                    break;
-                                } else if (file_exists($incPath.DIRECTORY_SEPARATOR.$file . '.yml')) {
-                                    $f = $incPath.DIRECTORY_SEPARATOR.$file . '.yml';
-                                    break;
-                                }
-                            }
-                            if (!$f) { throw new Kwf_Exception("File $file not found"); }
-                            self::$_settings['mtimeFiles'][] = $f;
-                            self::$_settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
-                        } while ($p = get_parent_class($p));
-                    }
-
                     //*** generators
                     self::$_settings[$c]['generators'] = self::getSetting($c, 'generators');
                 }

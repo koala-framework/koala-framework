@@ -46,19 +46,6 @@ class Kwf_Util_Setup
 
         $ret = "<?php\n";
 
-        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $masterFiles = Kwf_Registry::get('config')->getMasterFiles();
-            $masterFiles = "array('" . implode("', '", $masterFiles) . "')";
-            $ret .= "foreach($masterFiles as \$f) {\n";
-            $ret .= "    if (filemtime(\$f) > ".time().") {\n";
-            $ret .= "        require_once('".KWF_PATH."/Kwf/Util/Setup.php');\n";
-            $ret .= "        Kwf_Util_Setup::minimalBootstrapAndGenerateFile('$configClass');\n";
-            $ret .= "        return;\n";
-            $ret .= "    }\n";
-            $ret .= "}\n";
-            $ret .= "";
-        }
-
         $preloadClasses = array(
             'Zend_Registry',
             'Kwf_Registry',
@@ -191,13 +178,6 @@ class Kwf_Util_Setup
                 $ret .= "}\n";
             }
         }
-
-        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $masterFiles = Kwf_Registry::get('config')->getMasterFiles();
-            $masterFiles = "array('" . implode("', '", $masterFiles) . "')";
-            $ret .= "Kwf_Config::checkMasterFiles($masterFiles);\n";
-        }
-        $ret .= "\n";
 
         if (Kwf_Config::getValue('debug.checkBranch')) {
             $ret .= "if (is_file('kwf_branch') && trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";

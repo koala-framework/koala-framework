@@ -320,29 +320,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
         $ret['mimeType'] = $data['mimeType'];
 
-        if (Kwf_Registry::get('config')->debug->componentCache->checkComponentModification) {
-            $mtimeFiles = array();
-            $mtimeFiles[] = $data['file'];
-            $classes = Kwc_Abstract::getParentClasses($className);
-            $classes[] = $className;
-            $incPaths = explode(PATH_SEPARATOR, get_include_path());
-            foreach ($classes as $c) {
-                $file = str_replace('_', DIRECTORY_SEPARATOR, $c);
-                foreach ($incPaths as $incPath) {
-                    if (file_exists($incPath.DIRECTORY_SEPARATOR.$file . '.php')) {
-                        $mtimeFiles[] = $incPath.DIRECTORY_SEPARATOR.$file . '.php';
-                    }
-                }
-            }
-            $mtime = 0;
-            foreach ($mtimeFiles as $f) {
-                $mtime = max($mtime, filemtime($f));
-            }
-            $ret['mtime'] = $mtime;
-            $ret['mtimeFiles'] = $mtimeFiles;
-        } else {
-            $ret['mtime'] = filemtime($data['file']);
-        }
+        $ret['mtime'] = filemtime($data['file']);
         return $ret;
     }
 

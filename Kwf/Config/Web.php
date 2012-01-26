@@ -20,18 +20,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             if (extension_loaded('apc')) {
                 $apcCacheId = $cacheId.getcwd();
                 $ret = apc_fetch($apcCacheId);
-                if ($ret && $ret->debug->componentCache->checkComponentModification) {
-                    $masterFiles = $ret->getMasterFiles();
-                    $mtime = apc_fetch($apcCacheId.'mtime');
-                    foreach ($masterFiles as $f) {
-                        if (filemtime($f) > $mtime) {
-                            apc_delete($apcCacheId);
-                            apc_delete($apcCacheId.'mtime');
-                            $ret = false;
-                            break;
-                        }
-                    }
-                }
                 if (!$ret) {
                     //two level cache
                     require_once 'Kwf/Config/Cache.php';
