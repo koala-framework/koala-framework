@@ -49,7 +49,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if ($params['hash'] != $this->_getHash(array(
             $params['redirectId'], $params['recipientId'], $params['recipientModelShortcut']
         ))) {
-//             throw new Kwf_Exception("The submitted hash is incorrect.");
+            throw new Kwf_Exception("The submitted hash is incorrect.");
         }
 
         // statistics
