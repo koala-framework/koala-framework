@@ -630,7 +630,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     public function freeMemory()
     {
         if (!$this->_siblingRowsWhereSet) {
-            unset($this->_siblingRows);
+            $this->_siblingRows = null;
         }
         $this->_childRows = array();
     }
