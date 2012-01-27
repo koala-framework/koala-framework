@@ -21,15 +21,15 @@ class Kwc_Basic_DownloadTagBehindLogin_Test extends Kwf_Test_SeleniumTestCase
         $this->assertElementNotPresent("link=test");
 
         //login formular muss da sein
-        $this->assertElementPresent("css=div.login_password input");
+        $this->assertElementPresent("css=input[name=\"login_password\"]");
 
         //einloggen
-        $this->type("css=div.login_password input", "planet");
+        $this->type("css=input[name=\"login_password\"]", "planet");
 
         $this->submitAndWait("css=form");
 
         //login formular muss weg sein
-        $this->assertElementNotPresent("css=div.login_password input");
+        $this->assertElementNotPresent("css=input[name=\"login_password\"]");
 
         //link muss da sein
         $this->assertElementPresent("link=test");
