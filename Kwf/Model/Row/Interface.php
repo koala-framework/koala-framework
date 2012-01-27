@@ -23,6 +23,9 @@ interface Kwf_Model_Row_Interface
     public function getInternalId();
     public function hasColumn($col);
 
+    public function getByColumnMapping($mapping, $column);
+
+
     //abwärtskompatibilität für Db-Models, sonst null
     public function getTable();
 }

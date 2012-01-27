@@ -629,4 +629,10 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         //unset($this->_siblingRows);
         $this->_childRows = array();
     }
+
+    public function getByColumnMapping($mapping, $column)
+    {
+        $c = $this->getModel()->getColumnMapping($mapping, $column);
+        return $this->$c;
+    }
 }

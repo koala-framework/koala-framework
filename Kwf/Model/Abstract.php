@@ -40,6 +40,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public static $instanceCount = array();
 
+    protected $_columnMappings = array();
+
+
     public function __construct(array $config = array())
     {
         if (isset($config['default'])) $this->_default = (array)$config['default'];
@@ -871,5 +874,24 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $ret[$c] = $row->$c;
         }
         return $ret;
+    }
+
+    public function getColumnMapping($mapping, $column)
+    {
+        if (!isset($this->_columnMappings[$mapping])) {
+            throw new Kwf_Exception("unknown mapping: '$mapping'");
+        }
+        if (!isset($this->_columnMappings[$mapping][$column])) {
+            throw new Kwf_Exception("unknown mapping column: '$column' for mapping '$mapping'");
+        }
+        return $this->_columnMappings[$mapping][$column];
+    }
+
+    public function getColumnMappings($mapping)
+    {
+        if (!isset($this->_columnMappings[$mapping])) {
+            throw new Kwf_Exception("unknown mapping: '$mapping'");
+        }
+        return $this->_columnMappings[$mapping];
     }
 }
