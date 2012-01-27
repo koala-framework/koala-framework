@@ -29,7 +29,7 @@ class Kwf_Form_FieldSet_Frontend_Test extends Kwf_Test_SeleniumTestCase
     public function testNoValidationInFieldset()
     {
         $this->openKwc('/form');
-        $this->type("css=#root-form_foo1", 'blah');
+        $this->type("css=#root_form_foo1", 'blah');
         $this->click("css=fieldset legend input");
         $this->click("css=button.submit");
         $this->waitForConnections();

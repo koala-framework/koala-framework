@@ -19,20 +19,20 @@ class Kwc_FormStatic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->initTestDb(dirname(__FILE__).'/bootstrap.sql');
         $this->openKwc('/form');
 
-        $this->type('css=#root-form_form_fullname', 'myname');
-        $this->type('css=#root-form_form_content', 'lorem ipsum');
+        $this->type('css=#root_form_form_fullname', 'myname');
+        $this->type('css=#root_form_form_content', 'lorem ipsum');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
         $this->assertTextPresent('Please fill out the field');
 
-        $this->type('css=#root-form_form_email', 'testmail@vivid');
+        $this->type('css=#root_form_form_email', 'testmail@vivid');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
         $this->assertTextPresent('is not a valid email address');
 
-        $this->type('css=#root-form_form_email', 'test@vivid-planet.com');
+        $this->type('css=#root_form_form_email', 'test@vivid-planet.com');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();

@@ -148,6 +148,30 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                 }
             }
         }
+
+        //convert old updates from pre 3.0 times (where kwf was called vps)
+        foreach ($doneNames as &$i) {
+            if (substr($i, 0, 4) == 'Vpc_' || substr($i, 0, 4) == 'Vps_') {
+                $updateWithoutWebname = substr($i, strpos($i, '_', 4)+1);
+                if (class_exists($updateWithoutWebname)) {
+                    $i = $updateWithoutWebname;
+                    continue;
+                }
+                $updateSqlFile = str_replace('_', '/', $updateWithoutWebname).'.sql';
+                foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
+                    if (file_exists($ip.'/'.$updateSqlFile)) {
+                        $i = $updateWithoutWebname;
+                        continue;
+                    }
+                }
+
+                $i = str_replace('Vps_Update_', 'Vkwf_Update_', $i);
+
+                $i = str_replace('Vps_', 'Kwf_', $i);
+                $i = str_replace('Vpc_', 'Kwc_', $i);
+            }
+        }
+
         if (!$doneNames) {
             //it's ok to have no updates throw new Kwf_ClientException("Invalid update revision");
         }
