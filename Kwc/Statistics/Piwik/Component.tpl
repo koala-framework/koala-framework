@@ -9,13 +9,15 @@
         Kwc.Statistics.Piwik.url = pkBaseURL + "piwik.php";
         Kwc.Statistics.Piwik.idSite = <?=$this->id?>;
         var piwikTracker = Kwc.Statistics.Piwik.getTracker();
-        <? foreach ($this->customVariables as $cv) { ?>
-        piwikTracker.setCustomVariable(<?=$cv['index']?>, '<?=$cv['name']?>', '<?=$cv['value']?>', '<?=$cv['scope']?>');
-        <? } ?>
-        piwikTracker.trackPageView();
-        <? if ($this->enableLinkTracking) { ?>
-        piwikTracker.enableLinkTracking();
-        <? } ?>
+        if (piwikTracker) {
+            <? foreach ($this->customVariables as $cv) { ?>
+            piwikTracker.setCustomVariable(<?=$cv['index']?>, '<?=$cv['name']?>', '<?=$cv['value']?>', '<?=$cv['scope']?>');
+            <? } ?>
+            piwikTracker.trackPageView();
+            <? if ($this->enableLinkTracking) { ?>
+            piwikTracker.enableLinkTracking();
+            <? } ?>
+        }
     } catch( err ) {}
 </script>
 <noscript><p><img src="http://<?=$this->domain?>/piwik.php?idsite=<?=$this->id?>" style="border:0" alt="" /></p></noscript>
