@@ -13,12 +13,12 @@
         </div>
     <?php } else { ?>
         <div class="welcomeContent">
-            <h1><?= $this->application->name . ' ' . trlKwf('Version') . ' ' . $this->application->version ?></h1>
+            <h1><?= $this->application->name ?></h1>
         </div>
     <?php } ?>
     <div class="footer">
         <?php if($content != '') { ?>
-            <p><?= $this->application->name . ' ' . trlKwf('Version') . ' ' . $this->application->version ?></p>
+            <p><?= $this->application->name ?></p>
         <?php } ?>
         <? if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') { ?>
             <h2><a href="http://www.koala-framework.org/" target="_blank"><?= $this->application->kwf->name . '</a> ' . trlKwf('Version') . ' ' . $this->application->kwf->version ?></h2>

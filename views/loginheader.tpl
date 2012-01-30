@@ -4,5 +4,5 @@
 <?php if($this->image) { ?>
     <img src="<?= $this->image ?>" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />
 <?php } else { ?>
-    <h1><?= $this->application['name'] . ' ' . trlKwf('Version') . ' ' . $this->application['version'] ?></h1>
+    <h1><?= $this->application['name'] ?></h1>
 <?php } ?>
