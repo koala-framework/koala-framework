@@ -21,7 +21,8 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
             }, this);
         }
 
-        this.detailsForm = new Kwc.Directories.Item.Directory.EditFormPanel({
+        this.detailsForm = Ext.ComponentMgr.create({
+            xtype: this.detailsXtype,
             controllerUrl: this.detailsControllerUrl,
             title: trlKwf('Details')
         });
