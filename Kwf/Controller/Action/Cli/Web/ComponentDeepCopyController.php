@@ -52,4 +52,68 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
 
         exit;
     }
+
+    private function _getChildIds($id)
+    {
+        static $pageParentIds;
+        if (!isset($pageParentIds)) {
+            $pageParentIds = array();
+            foreach (Kwf_Registry::get('db')->query("SELECT id, parent_id FROM kwf_pages")->fetchAll() as $row) {
+                $pageParentIds[$row['id']] = $row['parent_id'];
+            }
+        }
+        $ret = array();
+        foreach ($pageParentIds as $pageId=>$parentId) {
+            if ($parentId == $id) {
+                $ret[] = $pageId;
+                $ret = array_merge($ret, $this->_getChildIds($pageId));
+            }
+        }
+        return $ret;
+    }
+
+    //if component-deep-copy stopped for some reason use this action to delete a half copied domain
+    //attention: components with dbIdShortcut are NOT handled correctly
+    public function cleanAction()
+    {
+        set_time_limit(0);
+
+        if (!$this->_getParam('id')) throw new Kwf_Exception_Client("required parameter --id");
+        $db = Zend_Registry::get('db');
+        $tables = array();
+        foreach ($db->query("SHOW TABLES")->fetchAll() as $table) {
+            $table = array_values($table);
+            $table = $table[0];
+            $hasComponentId = false;
+            if ($table == 'kwf_pages') {
+                $tables[] = $table;
+            } else {
+                foreach ($db->query("SHOW FIELDS FROM $table")->fetchAll() as $field) {
+                    if ($field['Field'] == 'component_id') {
+                        $tables[] = $table;
+                    }
+                }
+            }
+        }
+
+        $ids = $this->_getChildIds($this->_getParam('id'));
+        foreach ($ids as $id) {
+            foreach ($tables as $table) {
+                if ($table == 'kwf_pages') {
+                    $column = 'id';
+                } else {
+                    $column = 'component_id';
+                }
+                $sql = "DELETE FROM $table ".
+                    "WHERE $column=$id ".
+                       "OR $column LIKE '".str_replace('_', '\_', $id)."\_%' ".
+                       "OR $column LIKE '".str_replace('_', '\_', $id)."-%'";
+                echo $sql."\n";
+                //echo ".";
+                if ($this->_getParam('force')) $db->query($sql);
+            }
+        }
+        if (!$this->_getParam('force')) echo "\nadd parameter --force to actually execute queries\n";
+        exit;
+    }
 }
