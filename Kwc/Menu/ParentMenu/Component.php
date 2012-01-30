@@ -83,11 +83,4 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
 
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $c = Kwc_Abstract::getSetting($componentClass, 'menuComponentClass');
-        return call_user_func(array($c, 'getStaticCacheMeta'), $c);
-        return $ret;
-    }
 }
