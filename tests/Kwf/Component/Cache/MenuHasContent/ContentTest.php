@@ -34,23 +34,23 @@ class Kwf_Component_Cache_MenuHasContent_ContentTest extends Kwc_TestAbstract
 
     public function testAlternativeComponentClass()
     {
-        $this->assertEquals($this->_root->getComponentById('root-menuMain')->componentClass, 'Kwc_Basic_Empty_Component');
-        $this->assertEquals($this->_root->getComponentById('root-menuTop')->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals('Kwc_Menu_OtherCategoryChild_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component', $this->_root->getComponentById('root-menuMain')->componentClass);
+        $this->assertEquals('Kwc_Menu_OtherCategoryChild_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component', $this->_root->getComponentById('root-menuTop')->componentClass);
 
-        $this->assertEquals($this->_root->getComponentById('root-main-menuMain')->componentClass, 'Kwf_Component_Cache_MenuHasContent_MenuMain_Component');
-        $this->assertEquals($this->_root->getComponentById('root-main-menuTop')->componentClass, 'Kwc_Menu_OtherCategory_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component');
+        $this->assertEquals('Kwf_Component_Cache_MenuHasContent_MenuMain_Component', $this->_root->getComponentById('root-main-menuMain')->componentClass);
+        $this->assertEquals('Kwc_Menu_OtherCategory_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component', $this->_root->getComponentById('root-main-menuTop')->componentClass);
 
-        $this->assertEquals($this->_root->getComponentById('root-top-menuMain')->componentClass, 'Kwc_Menu_OtherCategory_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component');
-        $this->assertEquals($this->_root->getComponentById('root-top-menuTop')->componentClass, 'Kwf_Component_Cache_MenuHasContent_MenuTop_Component');
+        $this->assertEquals('Kwc_Menu_OtherCategory_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component', $this->_root->getComponentById('root-top-menuMain')->componentClass);
+        $this->assertEquals('Kwf_Component_Cache_MenuHasContent_MenuTop_Component', $this->_root->getComponentById('root-top-menuTop')->componentClass);
 
-        $this->assertEquals($this->_root->getComponentById('1-menuMain')->componentClass, 'Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component');
-        $this->assertEquals($this->_root->getComponentById('1-menuTop')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component');
+        $this->assertEquals('Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component', $this->_root->getComponentById('1-menuMain')->componentClass);
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component', $this->_root->getComponentById('1-menuTop')->componentClass);
 
-        $this->assertEquals($this->_root->getComponentById('3-menuMain')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component');
-        $this->assertEquals($this->_root->getComponentById('3-menuTop')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component');
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component', $this->_root->getComponentById('3-menuMain')->componentClass);
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component', $this->_root->getComponentById('3-menuTop')->componentClass);
 
-        $this->assertEquals($this->_root->getComponentById('4-menuMain')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component');
-        $this->assertEquals($this->_root->getComponentById('4-menuTop')->componentClass, 'Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component');
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuMain_Component', $this->_root->getComponentById('4-menuMain')->componentClass);
+        $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_MenuHasContent_MenuTop_Component', $this->_root->getComponentById('4-menuTop')->componentClass);
     }
 
     public function testInitial()

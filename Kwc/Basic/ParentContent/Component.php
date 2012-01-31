@@ -19,7 +19,7 @@ class Kwc_Basic_ParentContent_Component extends Kwc_Abstract
         return $ret;
     }
 
-    private function _getParentContentData()
+    protected function _getParentContentData()
     {
         $data = $this->getData();
         $ids = array();

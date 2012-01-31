@@ -18,10 +18,10 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
 
     public function testComponentClasses()
     {
-        $this->assertEquals($this->_root->getComponentById('root-mainMenu')->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals($this->_root->getComponentById('root-mainMenu')->componentClass, 'Kwc_Menu_OtherCategoryChild_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('root-mainMenu-subMenu'), null);
 
-        $this->assertEquals($this->_root->getComponentById('root-master-mainMenu')->componentClass, 'Kwc_Basic_Empty_Component');
+        $this->assertEquals($this->_root->getComponentById('root-master-mainMenu')->componentClass, 'Kwc_Menu_OtherCategoryChild_Component.Kwc_Trl_MenuCache_MainMenu_Component');
         $this->assertEquals($this->_root->getComponentById('root-master-mainMenu-subMenu'), null);
 
         $this->assertEquals($this->_root->getComponentById('root-master-main-mainMenu')->componentClass, 'Kwc_Trl_MenuCache_MainMenu_Component');
