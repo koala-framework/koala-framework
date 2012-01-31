@@ -751,10 +751,10 @@ class Kwf_Component_Data
     public function getParentPageOrRoot()
     {
         $page = $this->getPageOrRoot();
-        if ($page && $page->parent) {
+        if ($page->parent) {
             return $page->parent->getPageOrRoot();
         }
-        return null;
+        return $page;
     }
 
     /**
