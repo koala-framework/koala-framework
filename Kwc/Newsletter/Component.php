@@ -27,6 +27,8 @@ class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Compon
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['extConfigControllerIndex'] = 'Kwc_Directories_Item_Directory_ExtConfigEditButtons';
 
+        $ret['contentSender'] = 'Kwc_Newsletter_ContentSender';
+
         return $ret;
     }
 }

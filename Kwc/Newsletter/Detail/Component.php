@@ -26,6 +26,8 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         $ret['checkRtrList'] = !!Kwf_Registry::get('config')->service->rtrlist->url;
 
         $ret['extConfig'] = 'Kwc_Newsletter_Detail_ExtConfig';
+
+        $ret['contentSender'] = 'Kwc_Newsletter_Detail_ContentSender';
         return $ret;
     }
 
