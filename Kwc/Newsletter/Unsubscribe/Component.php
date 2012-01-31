@@ -49,16 +49,6 @@ class Kwc_Newsletter_Unsubscribe_Component extends Kwc_Form_Component
         return $this->_form;
     }
 
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        // Wird von redirect component eingebunden, obwohl sie direkt unter
-        // newsletter liegt. Dadurch dass die action '' ist, bleibt die form
-        // nach dem abschicken auf der selben seite
-        $ret['action'] = '';
-        return $ret;
-    }
-
     protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
         $row->mailUnsubscribe();
