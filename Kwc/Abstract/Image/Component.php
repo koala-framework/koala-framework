@@ -52,6 +52,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
+        $ret['flags']['hasFulltext'] = true;
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
@@ -361,5 +362,17 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return $s['width'];
         }
         return 0;
+    }
+
+    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    {
+        if ($this->_getSetting('imageCaption')) {
+
+            $text = $this->_getRow()->image_caption;
+
+            $doc->getField('content')->value .= ' '.$text;
+            $doc->getField('normalContent')->value .= ' '.$text;
+        }
+        return $doc;
     }
 }
