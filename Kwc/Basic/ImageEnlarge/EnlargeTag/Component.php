@@ -106,4 +106,22 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
             return parent::getMediaOutput($id, $type, $className);
         }
     }
+
+    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    {
+        //don't call parent, we handle imageCaption ourself
+
+        $options = (object)$this->_getOptions();
+        $text = '';
+        if (isset($options->title) && $options->title) {
+            $text .= ' '.$options->title;
+        }
+        if (isset($options->imageCaption) && $options->imageCaption) {
+            $text .= ' '.$options->imageCaption;
+        }
+        $doc->getField('content')->value .= ' '.$text;
+        $doc->getField('normalContent')->value .= ' '.$text;
+
+        return $doc;
+    }
 }
