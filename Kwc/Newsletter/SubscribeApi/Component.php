@@ -17,38 +17,19 @@ class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
         }
     }
 
-    protected function _getSubscribeApiUrl()
+    protected function _processParams(array $params)
     {
-        $domain = Kwf_Config::getValue('newsletter.subscribeApiDomain');
-        return "http://$domain/admin/component/edit/Newsletter_Subscribe_Component/Api/json-insert";
+        return $params;
     }
 
-    protected function _initForm()
+    public function insertSubscription(array $params)
     {
-        parent::_initForm();
-        $this->_form->setModel(new Kwf_Model_FnF());
-    }
-
-    protected function _getApiInsertParameter(Kwf_Model_Row_Interface $row)
-    {
-        return array(
-            'gender' => $row->gender,
-            'title' => $row->title,
-            'firstname' => $row->firstname,
-            'lastname' => $row->lastname,
-            'email' => $row->email,
-            'format' => $row->format,
-        );
-    }
-
-    protected function _afterInsert(Kwf_Model_Row_Interface $row)
-    {
-        parent::_afterInsert($row);
         $c = new Zend_Http_Client($this->_getSubscribeApiUrl());
         $c->setConfig(array(
             'timeout' => 30
         ));
-        $c->setParameterPost($this->_getApiInsertParameter($row));
+        $params = $this->_processParams($params);
+        $c->setParameterPost($params);
         $response = $c->request(Zend_Http_Client::POST);
         if (!$response->isSuccessful()) {
             throw new Kwf_Exception("subscribe failed: ".$response->getBody());
@@ -61,5 +42,31 @@ class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
                 throw new Kwf_Exception("subscribe failed: ".$response->getBody());
             }
         }
+    }
+
+    protected function _getSubscribeApiUrl()
+    {
+        $domain = Kwf_Config::getValue('newsletter.subscribeApiDomain');
+        return "http://$domain/admin/component/edit/Newsletter_Subscribe_Component/Api/json-insert";
+    }
+
+    protected function _initForm()
+    {
+        parent::_initForm();
+        $this->_form->setModel(new Kwf_Model_FnF());
+    }
+
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
+    {
+        parent::_afterInsert($row);
+        $params = array(
+            'gender' => $row->gender,
+            'title' => $row->title,
+            'firstname' => $row->firstname,
+            'lastname' => $row->lastname,
+            'email' => $row->email,
+            'format' => $row->format,
+        );
+        $this->insertSubscription($params);
     }
 }
