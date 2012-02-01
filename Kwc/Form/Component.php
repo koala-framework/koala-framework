@@ -156,11 +156,17 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     //can be overriden to *not* log specific exceptions or adapt error
     protected function _handleProcessException(Exception $e)
     {
-        if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
-        $e->logOrThrow();
-        $this->_errors[] = array(
-            'message' => trlKwf('An error occured while processing the form. Please try to submit again later.')
-        );
+        if ($e instanceof Kwf_Exception_Client) {
+            $this->_errors[] = array(
+                'message' => $e->getMessage()
+            );
+        } else {
+            if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
+            $e->logOrThrow();
+            $this->_errors[] = array(
+                'message' => trlKwf('An error occured while processing the form. Please try to submit again later.')
+            );
+        }
     }
 
     public function getPostData()
