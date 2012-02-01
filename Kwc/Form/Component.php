@@ -60,7 +60,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         if (!isset($this->_form)) {
             $formClass = Kwc_Admin::getComponentClass($this, 'FrontendForm');
-            $this->_form = new $formClass('form', get_class($this));
+            $this->_form = new $formClass('form', $this->getData()->componentClass);
         }
     }
 
