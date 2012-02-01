@@ -51,7 +51,7 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
         $row->format = $this->_getParam('format') ? $this->_getParam('format') : 'html';
         $row->subscribe_date = date('Y-m-d H:i:s');
 
-        $inserted = $this->_subscribe->getComponent()->insertSubscription($row);
+        $inserted = $this->_insertSubscription($row);
         if ($inserted) {
             $this->view->message = $this->_subscribe->trl('The subscription has been saved successfully.');
         } else {
@@ -61,9 +61,8 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
         $this->_afterInsertedSubscription($row, $inserted);
     }
 
-    //overridden in Kwc_NewsletterCategory_Subscribe_RecipientsController to insert category
-    //called when row is inserted using insertAction()
-    protected function _afterInsertedSubscription(Kwc_Newsletter_Subscribe_Row $row, $inserted)
+    protected function _insertSubscription(Kwc_Newsletter_Subscribe_Row $row)
     {
+        return $this->_subscribe->getComponent()->insertSubscription($row);
     }
 }
