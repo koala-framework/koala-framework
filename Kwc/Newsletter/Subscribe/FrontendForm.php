@@ -3,11 +3,28 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
 {
     protected $_modelName = 'Kwc_Newsletter_Subscribe_Model';
     protected $_subscribeComponentId;
+    protected $_newsletterComponentId;
 
-    public function __construct($name, $subscribeComponentId)
+    public function __construct($name, $componentClass, $subscribeOrNewsletterComponentId)
     {
-        $this->_subscribeComponentId = $subscribeComponentId;
+        if ($subscribeOrNewsletterComponentId) {
+            $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($subscribeOrNewsletterComponentId);
+            if (is_instance_of($c->componentClass, 'Kwc_Newsletter_Component')) {
+                $this->_newsletterComponentId = $subscribeOrNewsletterComponentId;
+            } else if (is_instance_of($c->componentClass, 'Kwc_Newsletter_Subscribe_Component')) {
+                $this->_subscribeComponentId = $subscribeOrNewsletterComponentId;
+                $this->_newsletterComponentId = $c->getComponent()->getSubscribeToNewsletterComponent()->dbId;
+            } else {
+                throw new Kwf_Exception("component '$subscribeOrNewsletterComponentId' is not a newsletter or a newsletter_subscribe component");
+            }
+        }
         parent::__construct($name);
+    }
+
+    protected function _addEmailValidator()
+    {
+        $validator = new Kwc_Newsletter_Subscribe_EmailValidator($this->_newsletterComponentId);
+        $this->fields['email']->addValidator($validator, 'email');
     }
 
     protected function _initFields()
@@ -30,12 +47,10 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
             ->setWidth(255)
             ->setAllowBlank(false);
 
-        $validator = new Kwc_Newsletter_Subscribe_EmailValidator($this->_subscribeComponentId);
         $this->add(new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
             ->setWidth(255)
             ->setVtype('email')
-            ->setAllowBlank(false)
-            ->addValidator($validator, 'email');
+            ->setAllowBlank(false);
         $this->add(new Kwf_Form_Field_Radio('format', trlKwfStatic('Format')))
             ->setAllowBlank(false)
             ->setValues(array(
@@ -43,5 +58,7 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
                 'text' => trlKwfStatic('Text-Format')
             ))
             ->setCls('kwf-radio-group-transparent');
+
+        $this->_addEmailValidator();
     }
 }

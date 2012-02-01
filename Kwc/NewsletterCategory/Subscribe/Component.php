@@ -19,7 +19,7 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
             $s = new Kwf_Model_Select();
             $s->whereEquals('email', $row->email);
             $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
-            $row = $this->_model->getRow($s);
+            $row = $this->getForm()->getModel()->getRow($s);
 
             $s = $nl2cat->select()
                 ->whereEquals('subscriber_id', $row->id)

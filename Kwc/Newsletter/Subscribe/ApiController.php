@@ -58,7 +58,6 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
             //atm this message is also shown when the user is already subscribed but not in the given category (which he is added to)
             $this->view->message = $this->_subscribe->trl('You are already subscribed to new newsletter.');
         }
-        $this->_afterInsertedSubscription($row, $inserted);
     }
 
     protected function _insertSubscription(Kwc_Newsletter_Subscribe_Row $row)

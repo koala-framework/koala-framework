@@ -41,8 +41,8 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         }
         $s = new Kwf_Model_Select();
         $s->whereEquals('email', $row->email); //what if the email field is not named email?
-
         $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
+        $s->whereEquals('unsubscribed', false);
 
         if ($row->getModel()->countRows($s)) {
             //already subscribed, don't save
@@ -57,6 +57,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
+        if (!$row->format) $row->format = 'html';
         $row->subscribe_date = date('Y-m-d H:i:s');
         if ($this->_getSetting('subscribeType') == self::CONFIRM_MAIL_ONLY) {
             $row->unsubscribed = 0;
@@ -104,7 +105,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     {
         $formClass = Kwc_Admin::getComponentClass($this, 'FrontendForm');
         $this->_form = new $formClass(
-            'form', $this->getData()->componentId
+            'form', $this->getData()->componentClass, $this->getData()->dbId
         );
     }
 }

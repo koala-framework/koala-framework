@@ -21,26 +21,20 @@ class Kwc_Newsletter_Unsubscribe_Component extends Kwc_Form_Component
         $this->processInput($params);
     }
 
-    public function getForm()
-    {
-        if (!$this->_recipient) return null;
-        return parent::getForm();
-    }
-
     protected function _initForm()
     {
         parent::_initForm();
+        $this->_form->setModel(Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Subscribe_Model'));
         if ($this->_recipient) {
-            $this->_form->setModel($this->_recipient->getModel());
             $this->_form->setId($this->_recipient->id);
-
-            $this->getParentField()->add(new Kwf_Form_Field_ShowField('firstname_interface', trlKwfStatic('Firstname')))
-                ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailFirstname'));
-            $this->getParentField()->add(new Kwf_Form_Field_ShowField('lastname_interface', trlKwfStatic('Lastname')))
-                ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailLastname'));
-            $this->getParentField()->add(new Kwf_Form_Field_ShowField('email_interface', trlKwfStatic('E-Mail')))
-                ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailEmail'));
         }
+
+        $this->getParentField()->add(new Kwf_Form_Field_ShowField('firstname_interface', trlKwfStatic('Firstname')))
+            ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailFirstname'));
+        $this->getParentField()->add(new Kwf_Form_Field_ShowField('lastname_interface', trlKwfStatic('Lastname')))
+            ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailLastname'));
+        $this->getParentField()->add(new Kwf_Form_Field_ShowField('email_interface', trlKwfStatic('E-Mail')))
+            ->setData(new Kwc_Newsletter_Unsubscribe_RecipientData('getMailEmail'));
     }
 
     // Falls Unterkomponente will, das Felder zB in ein Fieldset hinzugefügt werden
