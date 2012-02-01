@@ -81,13 +81,13 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         }
 
         $nlData = $this->getSubscribeToNewsletterComponent();
-        $editComponentId = $nlData->getChildComponent('-editSubscriber')->componentId;
+        $editComponentId = $nlData->getChildComponent('_editSubscriber')->componentId;
         $unsubscribeComponentId = null;
         $doubleOptInComponentId = null;
         if ($this->_getSetting('subscribeType') == self::DOUBLE_OPT_IN) {
             $doubleOptInComponentId = $this->getData()->getChildComponent('-doubleOptIn')->componentId;
         } else {
-            $unsubscribeComponentId = $nlData->getChildComponent('-unsubscribe')->componentId;
+            $unsubscribeComponentId = $nlData->getChildComponent('_unsubscribe')->componentId;
         }
 
         $mail = $this->getData()->getChildComponent('-mail')->getComponent();

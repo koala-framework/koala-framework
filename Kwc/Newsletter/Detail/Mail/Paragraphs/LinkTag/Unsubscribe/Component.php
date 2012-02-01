@@ -34,7 +34,7 @@ class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
     {
         $ret = parent::getTemplateVars();
         $nlData = $this->_getNewsletterComponent();
-        $ret['unsubscribe'] = $nlData->getChildComponent('-unsubscribe');
+        $ret['unsubscribe'] = $nlData->getChildComponent('_unsubscribe');
         return $ret;
     }
 }

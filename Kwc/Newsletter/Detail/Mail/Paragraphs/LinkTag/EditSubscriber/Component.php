@@ -15,7 +15,7 @@ class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_EditSubscriber_Component
     {
         $ret = parent::getTemplateVars();
         $nlData = $this->_getNewsletterComponent();
-        $ret['editSubscriber'] = $nlData->getChildComponent('-editSubscriber');
+        $ret['editSubscriber'] = $nlData->getChildComponent('_editSubscriber');
         return $ret;
     }
 }
