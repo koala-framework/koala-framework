@@ -24,6 +24,16 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    public function getSubscribeToNewsletterComponent()
+    {
+        $nlData = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot'=>$this->getData()));
+        if (!$nlData) {
+            throw new Kwf_Exception('Cannot find newsletter component');
+        }
+        return $nlData;
+    }
+
     public function insertSubscription(Kwc_Newsletter_Subscribe_Row $row)
     {
         if ($row->id) {
@@ -31,6 +41,9 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         }
         $s = new Kwf_Model_Select();
         $s->whereEquals('email', $row->email); //what if the email field is not named email?
+
+        $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
+
         if ($row->getModel()->countRows($s)) {
             //already subscribed, don't save
             return false;
@@ -54,9 +67,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $row->unsubscribed = 1;
             $row->activated = 0;
         }
-        $nl = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot'=>$this->getData()));
-        $row->newsletter_component_id = $nl->dbId;
+        $row->newsletter_component_id = $this->getSubscribeToNewsletterComponent()->dbId;
     }
 
     protected function _afterInsert(Kwf_Model_Row_Interface $row)
@@ -69,11 +80,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $host = Kwf_Registry::get('config')->server->domain;
         }
 
-        $nlData = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot' => $this->getData()));
-        if (!$nlData) {
-            throw new Kwf_Exception('Cannot find newsletter component');
-        }
+        $nlData = $this->getSubscribeToNewsletterComponent();
         $editComponentId = $nlData->getChildComponent('-editSubscriber')->componentId;
         $unsubscribeComponentId = null;
         $doubleOptInComponentId = null;
