@@ -2,6 +2,13 @@
 class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
 {
     protected $_modelName = 'Kwc_Newsletter_Subscribe_Model';
+    protected $_subscribeComponentId;
+
+    public function __construct($name, $subscribeComponentId)
+    {
+        $this->_subscribeComponentId = $subscribeComponentId;
+        parent::__construct($name);
+    }
 
     protected function _initFields()
     {
@@ -23,8 +30,7 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
             ->setWidth(255)
             ->setAllowBlank(false);
 
-        $validator = new Kwf_Validate_Row_Unique();
-        $validator->addSelectExpr(new Kwf_Model_Select_Expr_Equal('unsubscribed', 0));
+        $validator = new Kwc_Newsletter_Subscribe_EmailValidator($this->_subscribeComponentId);
         $this->add(new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
             ->setWidth(255)
             ->setVtype('email')

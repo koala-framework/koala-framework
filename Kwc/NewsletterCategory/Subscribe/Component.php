@@ -18,7 +18,7 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
             //already subscribed
             $s = new Kwf_Model_Select();
             $s->whereEquals('email', $row->email);
-            $s->whereEquals('newsletter_component_id', $this->_getSubscribeToNewsletterComponent()->dbId);
+            $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
             $row = $this->_model->getRow($s);
 
             $s = $nl2cat->select()
@@ -46,7 +46,7 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
             $model = $this->getForm()->getModel();
             //TODO: don't poke into $postData directly, get value from field instead
             $s = $model->select();
-            $s->whereEquals('newsletter_component_id', $this->_getSubscribeToNewsletterComponent()->dbId);
+            $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
             $s->whereEquals('email', $postData['form_email']);
             $exists = $model->getRow($s);
             if ($exists) {
@@ -86,12 +86,5 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
             //no post
             parent::processInput($postData);
         }
-    }
-
-    protected function _initForm()
-    {
-        $this->_form = new Kwc_NewsletterCategory_Subscribe_FrontendForm(
-            'form', $this->getData()->componentId
-        );
     }
 }
