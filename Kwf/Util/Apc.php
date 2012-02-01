@@ -34,17 +34,29 @@ class Kwf_Util_Apc
         ));
 
         $client->setUri($url);
-        $response = $client->request();
-        $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+        $body = 'could not reach web per http';
+        try {
+            $response = $client->request();
+            $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+            $body = $response->getBody();
+        } catch (Exception $e) {
+            $result = false;
+        }
         if (!$result && $config->server->noRedirectPattern) {
             $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
             $url2 = "$urlPart$d/kwf/util/apc/clear-cache";
             $client->setUri($url2);
-            $response = $client->request();
+            try {
+                $response = $client->request();
+                $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+                $body = $response->getBody();
+            } catch (Exception $e) {
+                $result = false;
+            }
         }
         return array(
             'result' => $result,
-            'message' => $response->getBody(),
+            'message' => $body,
             'time' => round((microtime(true)-$s)*1000),
             'url' => $url,
             'url2' => isset($url2) ? $url2 : null,
