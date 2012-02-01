@@ -165,7 +165,7 @@ Kwf.onContentReady = function(fn, scope, options) {
 Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
     Kwf.contentReadyHandlers.sort(function(a, b) {
-        return a.options.priority - b.options.priority;
+        return (a.options.priority || 0) - (b.options.priority || 0);
     });
     if (el instanceof Ext.Element) el = el.dom;
     Ext.each(Kwf.contentReadyHandlers, function(i) {
