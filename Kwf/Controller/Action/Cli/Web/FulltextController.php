@@ -63,7 +63,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function rebuildAction()
     {
-        system("php bootstrap.php fulltext check-for-invalid");
+        if (!$this->_getParam('skip-check-for-invalid')) {
+            system("php bootstrap.php fulltext check-for-invalid");
+        }
 
         $queueFile = 'temp/fulltextRebuildQueue';
 
