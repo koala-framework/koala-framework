@@ -24,6 +24,7 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
         $ret['checkRtrList'] = !!Kwf_Registry::get('config')->service->rtrlist->url;
+        $ret['flags']['skipFulltext'] = true;
 
         $ret['extConfig'] = 'Kwc_Newsletter_Detail_ExtConfig';
 
