@@ -287,15 +287,15 @@ class Kwf_Util_Setup
             }
             $ret .= "    if (\$redirect) {\n";
             $ret .= "        \$target = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')\n";
-            $ret .= "            ->findRedirectUrl('domainPath', array(\$host.\$_SERVER['REQUEST_URI'], 'http://'.\$host.\$_SERVER['REQUEST_URI']));\n";
+            $ret .= "            ->findRedirectUrl('domainPath', \$host.\$_SERVER['REQUEST_URI']);\n";
             $ret .= "        if (!\$target) {\n";
             $ret .= "            \$target = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')\n";
             $ret .= "                ->findRedirectUrl('domain', \$host);\n";
             $ret .= "        }\n";
             $ret .= "        if (\$target) {\n";
-            $ret .= "            //TODO: funktioniert nicht bei mehreren domains\n";
-            $ret .= "            header('Location: http://'.\$redirect.\$target, true, 301);\n";
+            $ret .= "            header('Location: '.\$target, true, 301);\n";
             $ret .= "        } else {\n";
+            $ret .= "            //redirect to main domain (server.domain)\n";
             $ret .= "            header('Location: http://'.\$redirect.\$_SERVER['REQUEST_URI'], true, 301);\n";
             $ret .= "        }\n";
             $ret .= "        exit;\n";
