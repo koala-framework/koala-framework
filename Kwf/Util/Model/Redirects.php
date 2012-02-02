@@ -9,7 +9,7 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
         $s->whereEquals('type', $type);
         $s->whereEquals('source', $source);
         $s->whereEquals('active', true);
-        $row = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')->getRow($s);
+        $row = $this->getRow($s);
         $target = null;
         if ($row) {
             if ($row->target_type == 'extern') {
