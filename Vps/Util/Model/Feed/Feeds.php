@@ -85,7 +85,9 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                     $link = mb_convert_encoding($link, 'UTF-8');
                 }
                 $link = html_entity_decode($link, ENT_QUOTES, "utf-8");
+                $entityLoaderWasDisabled = libxml_disable_entity_loader(true);
                 $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
+                libxml_disable_entity_loader($entityLoaderWasDisabled);
                 if ($xml === false) {
                     continue;
                 }

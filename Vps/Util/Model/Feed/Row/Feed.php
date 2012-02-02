@@ -51,6 +51,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             } catch (Exception $e) {}
         }
 
+        $entityLoaderWasDisabled = libxml_disable_entity_loader(true);
         $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
         if (!$this->_xml) {
             //try with another encoding
@@ -79,6 +80,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
                 $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
             }
         }
+        libxml_disable_entity_loader($entityLoaderWasDisabled);
 
         if (!$this->_xml) {
             throw new Vps_Exception("Can't load feed: '$data[url]' ".$originalContent);
