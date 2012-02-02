@@ -144,7 +144,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     if (!$page->isPage) continue;
 
                     //echo "checking for childComponents\n";
-                    $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext'));
+                    $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false));
                     if (Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
                         $fulltextComponents[] = $page;
                     }
