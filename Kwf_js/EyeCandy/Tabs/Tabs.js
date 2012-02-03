@@ -18,8 +18,8 @@ Kwf.Tabs = function(el) {
     this.el = el;
     this.el.addClass('kwfTabsFx');
     this._activeTabIdx = null;
-    this.switchEls = Ext.query('.kwfTabsLink', this.el.dom);
-    this.contentEls = Ext.query('.kwfTabsContent', this.el.dom);
+    this.switchEls = Ext.query('> .kwfTabsLink', this.el.dom);
+    this.contentEls = Ext.query('> .kwfTabsContent', this.el.dom);
     this.fxDuration = .5;
 
     this.tabsContents = this.el.createChild({
