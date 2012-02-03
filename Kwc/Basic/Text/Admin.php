@@ -7,6 +7,9 @@ class Kwc_Basic_Text_Admin extends Kwc_Admin
             //falls es nur eine nicht-vorhandene standard-row gibt müssen wir gar nichts tun
             return;
         }
+        if ($source->dbId == $target->dbId) {
+            return;
+        }
 
         $idMap = array();
 
