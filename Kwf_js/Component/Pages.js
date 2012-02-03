@@ -299,7 +299,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
-                text    : trlKwf('Delete page'),
+                text    : trlKwf('Delete Page'),
                 handler : function() {
                     this.treePanel.onDelete();
                 },
@@ -309,7 +309,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'copy') {
             this.actions[type] = new Ext.Action({
-                text    : trlKwf('Copy page'),
+                text    : trlKwf('Copy Page'),
                 handler : function() {
                     this.onCopy();
                 },
@@ -319,7 +319,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'paste') {
             this.actions[type] = new Ext.Action({
-                text    : trlKwf('Paste page'),
+                text    : trlKwf('Paste Page'),
                 handler : function() {
                     this.onPaste();
                 },
@@ -329,7 +329,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'visible') {
             this.actions[type] = new Ext.Action({
-                text    : trlKwf('Show / hide page'),
+                text    : trlKwf('Show / Hide Page'),
                 handler : function() {
                     this.treePanel.onVisible();
                 },

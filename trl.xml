@@ -590,12 +590,12 @@ wurde soeben erstellt.</de>
 <id>243</id>
 </text>
 <text>
-<en>Delete page</en>
+<en>Delete Page</en>
 <de>Seite l&#xF6;schen</de>
 <id>244</id>
 </text>
 <text>
-<en>Show / hide page</en>
+<en>Show / Hide Page</en>
 <de>Seite ein-/ausblenden</de>
 <id>245</id>
 </text>
@@ -6470,17 +6470,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1735</id>
 </text>
 <text>
-<en>Copy page</en>
+<en>Copy Page</en>
 <id>1736</id>
 <de>Seite kopieren</de>
 </text>
 <text>
-<en>Paste page</en>
-<id>1737</id>
-</text>
-<text>
 <en>Paste Page</en>
-<id>1738</id>
+<en>Seite einfügen</en>
+<id>1737</id>
 </text>
 <text>
 <en>Ignore</en>
