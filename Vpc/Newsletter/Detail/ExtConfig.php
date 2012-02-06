@@ -45,8 +45,9 @@ class Vpc_Newsletter_Detail_ExtConfig extends Vps_Component_Abstract_ExtConfig_F
                     'tbar'                  => array()
                 ),
                 'statistics' => array(
-                    'xtype'                 => 'vps.autogrid',
-                    'controllerUrl'         => $this->getControllerUrl('Statistics'),
+                    'xtype'                 => 'vpc.newsletter.statistics',
+                    'linksControllerUrl'    => $this->getControllerUrl('Statistics'),
+                    'clicksControllerUrl'   => $this->getControllerUrl('StatisticsClicks'),
                     'title'                 => trlVps('Statistics')
                 )
             )

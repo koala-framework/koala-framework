@@ -1,10 +1,13 @@
 <?php
 class Vpc_Newsletter_Detail_StatisticsController extends Vps_Controller_Action_Auto_Grid
 {
+    protected $_primaryKey = 'id';
+
     protected function _initColumns()
     {
         parent::_initColumns();
 
+        $this->_columns->add(new Vps_Grid_Column('id'));
         $this->_columns->add(new Vps_Grid_Column('link', trlVps('Link'), 600));
         $this->_columns->add(new Vps_Grid_Column('count', trlVps('Count'), 50));
     }
@@ -12,7 +15,7 @@ class Vpc_Newsletter_Detail_StatisticsController extends Vps_Controller_Action_A
     protected function _fetchData()
     {
         $sql = "
-            SELECT r.value, r.type, count(*) c
+            SELECT r.id, r.value, r.type, count(*) c
             FROM vpc_mail_redirect_statistics s, vpc_mail_redirect r
             WHERE s.redirect_id=r.id AND mail_component_id='" . $this->_getParam('componentId') . "-mail'
             GROUP BY redirect_id
@@ -35,6 +38,7 @@ class Vpc_Newsletter_Detail_StatisticsController extends Vps_Controller_Action_A
             }
             $row['value'] = $link;
             $ret[] = array(
+                'id' => $row['id'],
                 'link' => $link,
                 'count' => $row['c']
             );
