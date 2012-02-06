@@ -48,7 +48,7 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
 
         $mail = new Kwf_Mail();
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
-        $mail->setReturnPath('noreply@'.preg_replace('#^www\.', '', Kwf_Config::getValue('server.domain')));
+        $mail->setReturnPath('noreply@'.preg_replace('#^www\.#', '', Kwf_Config::getValue('server.domain')));
         $mail->setFrom($user->email, $user->__toString());
         foreach (Kwf_Registry::get('config')->developers as $dev) {
             if (isset($dev->sendClearCacheReport) && $dev->sendClearCacheReport) {
