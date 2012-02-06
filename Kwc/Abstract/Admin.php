@@ -54,8 +54,13 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
             }
         }
 
-        $s = array('inherit' => false, 'ignoreVisible'=>true);
+        $s = array('ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
+            if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit')) {
+                if ($c->generator->hasSetting('unique') && $c->generator->getSetting('unique')) {
+                    continue;
+                }
+            }
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
     }
