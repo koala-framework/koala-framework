@@ -36,8 +36,16 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
     public function getDuplicateProgressSteps($source)
     {
         $ret = 0;
-        $s = array('inherit' => false, 'ignoreVisible'=>true);
+        $s = array('ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
+            if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit')) {
+                if ($c->generator->hasSetting('unique') && $c->generator->getSetting('unique')) {
+                    continue;
+                }
+            }
+            if ($c->generator->getGeneratorFlag('pageGenerator')) {
+                continue;
+            }
             $ret += $c->generator->getDuplicateProgressSteps($c);
         }
         return $ret;
@@ -60,6 +68,9 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
                 if ($c->generator->hasSetting('unique') && $c->generator->getSetting('unique')) {
                     continue;
                 }
+            }
+            if ($c->generator->getGeneratorFlag('pageGenerator')) {
+                continue;
             }
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
