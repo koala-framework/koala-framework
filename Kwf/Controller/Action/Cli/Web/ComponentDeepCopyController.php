@@ -20,6 +20,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
             )
         );
     }
+
     public function indexAction()
     {
         ini_set('memory_limit', '512M');
@@ -36,6 +37,11 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
         echo "counting pages...";
         $steps = 0;
         foreach ($parentSource->getChildComponents(array('ignoreVisible'=>true)) as $source) {
+            if ($source->generator->hasSetting('inherit') && $source->generator->getSetting('inherit')) {
+                if ($source->generator->hasSetting('unique') && $source->generator->getSetting('unique')) {
+                    continue;
+                }
+            }
             $steps += Kwf_Util_Component::getDuplicateProgressSteps($source);
         }
         echo " ".$steps."\n";
