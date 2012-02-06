@@ -22,6 +22,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
     }
     public function indexAction()
     {
+        ini_set('memory_limit', '512M');
         set_time_limit(0);
 
         $parentSource = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
