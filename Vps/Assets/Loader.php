@@ -182,6 +182,8 @@ class Vps_Assets_Loader
                 $ret['mimeType'] = 'application/octet-stream';
             } else if (substr($file, -5)=='.woff') { // für Schriften
                 $ret['mimeType'] = 'application/x-woff';
+            } else if (substr($file, -4)=='.htc') { // für ie css3
+                $ret['mimeType'] = 'text/x-component';
             } else {
                 throw new Vps_Assets_NotFoundException("Invalid filetype ($file)");
             }
