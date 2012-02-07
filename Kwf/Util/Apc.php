@@ -77,9 +77,14 @@ class Kwf_Util_Apc
 
         if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/kwf/util/apc/clear-cache') {
             $s = microtime(true);
-            if (isset($_REQUEST['cacheSimple'])) {
-                foreach ($_REQUEST['cacheSimple'] as $id) {
+            if (isset($_REQUEST['clearCacheSimple'])) {
+                foreach ($_REQUEST['clearCacheSimple'] as $id) {
                     Kwf_Cache_Simple::clear($id);
+                }
+            }
+            if (isset($_REQUEST['deleteCacheSimple'])) {
+                foreach ($_REQUEST['deleteCacheSimple'] as $id) {
+                    Kwf_Cache_Simple::delete($id);
                 }
             }
             if (isset($_REQUEST['cacheIds'])) {

@@ -108,6 +108,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         return "cc-$componentId/$type/$value";
     }
 
+    public static function getCacheId($componentId, $type, $value)
+    {
+        return self::_getCacheId($componentId, $type, $value);
+    }
+
     // wird nur von Kwf_Component_View_Renderer->saveCache() verwendet
     public function test($componentId, $type = 'component', $value = '')
     {
