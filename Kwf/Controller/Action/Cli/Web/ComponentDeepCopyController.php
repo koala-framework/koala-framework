@@ -25,6 +25,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
     {
         ini_set('memory_limit', '512M');
         set_time_limit(0);
+        ini_set('memory_limit', '512M');
 
         $parentSource = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
         if (!$parentSource) throw new Kwf_Exception_Client("source not found");
