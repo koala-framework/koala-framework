@@ -20,6 +20,10 @@ class Kwf_Util_Apc
             //this file gets written in Kwf_Setup to make it "just work"
             $d = file_get_contents('cache/lastdomain');
         }
+        if (!$d) return array(
+            'result' => false,
+            'message' => 'domain not set'
+        );
         $s = microtime(true);
         $pwd = Kwf_Util_Apc::getHttpPassword();
         $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
