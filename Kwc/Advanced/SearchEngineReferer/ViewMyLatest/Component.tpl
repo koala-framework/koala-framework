@@ -4,13 +4,23 @@
         <ul>
             <?  $i = 0;
             foreach ($this->referers as $v) { ?>
-                <li class="<? if($i++ == 0) echo 'first'; ?>">
-                    <a href="http://<?= htmlspecialchars($v['host']); ?>/search?q=<?= htmlspecialchars($v['query']); ?>" rel="popup_blank"><?= htmlspecialchars($v['host']); ?></a>
-                    <? if ($v['query']) { ?>
-                        mit Suche nach
-                        <a href="http://<?= htmlspecialchars($v['host']); ?>/search?q=<?= htmlspecialchars($v['query']); ?>" rel="popup_blank"><?= htmlspecialchars($v['query']); ?></a>
-                    <? } ?>
-                </li>
+                <? if (!strpos($v['query'], 'url')){?>
+                    <li class="<? if($i++ == 0) echo 'first'; ?>">
+                        <a href="http://<?= htmlspecialchars($v['host']); ?>/search?q=<?= htmlspecialchars($v['query']); ?>" rel="popup_blank"><?= htmlspecialchars($v['host']); ?></a>
+                        <? if ($v['query']) { ?>
+                            mit Suche nach
+                            <a href="http://<?= htmlspecialchars($v['host']); ?>/search?q=<?= htmlspecialchars($v['query']); ?>" rel="popup_blank"><?= htmlspecialchars($v['query']); ?></a>
+                        <? } ?>
+                    </li>
+                <? } else {?>
+                    <li class="<? if($i++ == 0) echo 'first'; ?>">
+                        <a href="<?= htmlspecialchars($v['row']->referer_url); ?>" rel="popup_blank"><?= htmlspecialchars($v['host']); ?></a>
+                        <? if ($v['query']) { ?>
+                            mit Suche nach
+                            <a href="<?= htmlspecialchars($v['row']->referer_url);?>" rel="popup_blank"><?= htmlspecialchars($v['query']); ?></a>
+                        <? } ?>
+                    </li>
+                <? } ?>
             <? } ?>
         </ul>
     </div>
