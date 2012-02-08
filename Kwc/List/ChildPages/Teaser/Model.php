@@ -11,7 +11,7 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
 
     protected function _getOwnColumns()
     {
-        return array('id', 'pos', 'target_page_id', 'name');
+        return array('id', 'pos', 'target_page_id', 'target_page_db_id', 'name');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
@@ -54,6 +54,7 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
                         'id' => $id,
                         'pos' => $i++,
                         'target_page_id' => $childPage->componentId,
+                        'target_page_db_id' => $childPage->dbId,
                         'name' => $childPage->name
                     );
                     $dataKeys[] = $id;
