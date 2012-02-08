@@ -25,41 +25,25 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
     {
         ini_set('memory_limit', '512M');
         set_time_limit(0);
-        ini_set('memory_limit', '512M');
 
-        $parentSource = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
-        if (!$parentSource) throw new Kwf_Exception_Client("source not found");
-        $parentTarget = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('target'), array('ignoreVisible'=>true));
-        if (!$parentTarget) throw new Kwf_Exception_Client("target not found");
-        
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
+        if (!$source) throw new Kwf_Exception_Client("source not found");
+        $target = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('target'), array('ignoreVisible'=>true));
+        if (!$target) throw new Kwf_Exception_Client("target not found");
 
         Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         echo "counting pages...";
-        $steps = 0;
-        foreach ($parentSource->getChildComponents(array('ignoreVisible'=>true)) as $source) {
-            if ($source->generator->hasSetting('inherit') && $source->generator->getSetting('inherit')) {
-                if ($source->generator->hasSetting('unique') && $source->generator->getSetting('unique')) {
-                    continue;
-                }
-            }
-            $steps += Kwf_Util_Component::getDuplicateProgressSteps($source);
-        }
+        $steps = Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         echo " ".$steps."\n";
 
         $ad = new Zend_ProgressBar_Adapter_Console();
         $ad->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_BAR, Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT, Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
         $progressBar = new Zend_ProgressBar($ad, 0, $steps);
 
-        foreach ($parentSource->getChildComponents(array('ignoreVisible'=>true)) as $source) {
-            if ($source->generator->hasSetting('inherit') && $source->generator->getSetting('inherit')) {
-                if ($source->generator->hasSetting('unique') && $source->generator->getSetting('unique')) {
-                    continue;
-                }
-            }
-            Kwf_Util_Component::duplicate($source, $parentTarget, $progressBar);
-        }
-        Kwf_Util_Component::afterDuplicate($parentSource, $parentTarget);
+        Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
+
+        Kwf_Util_Component::afterDuplicate($source, $target);
 
         $progressBar->finish();
 
