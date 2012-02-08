@@ -53,6 +53,8 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 
     public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
+        Kwf_Registry::get('db')->insert('kwc_log_duplicate', array('source_db_id' => $source->dbId, 'target_db_id' => $target->dbId));
+
         if (($model = $source->getComponent()->getOwnModel()) && $source->dbId != $target->dbId) {
             $row = $model->getRow($source->dbId);
             if ($row) {
@@ -74,6 +76,14 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
             }
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
+    }
+
+    /**
+     * Called when duplication of a number of components finished
+     */
+    public function afterDuplicate($rootSource, $rootTarget)
+    {
+        parent::afterDuplicate($rootSource, $rootTarget);
     }
 
     public function makeVisible($source)

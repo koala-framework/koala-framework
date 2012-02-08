@@ -39,6 +39,11 @@ class Kwf_Util_Component
         return $source->generator->getDuplicateProgressSteps($source);
     }
 
+    /**
+     * Recursively duplicate components
+     *
+     * You need to call afterDuplicate afterwards!
+     */
     public static function duplicate(Kwf_Component_Data $source, Kwf_Component_Data $parentTarget, Zend_ProgressBar $progressBar = null)
     {
         $sourceId = $source->componentId;
@@ -58,6 +63,17 @@ class Kwf_Util_Component
         Kwc_Root_TrlRoot_Chained_Admin::duplicated($source, $new);
 
         return $new;
+    }
+
+    /**
+     * Needs to be called after (multiple) duplicate() calls with a common root
+     */
+    public static function afterDuplicate(Kwf_Component_Data $rootSource, Kwf_Component_Data $rootTarget)
+    {
+        foreach (Kwf_Component_Abstract::getComponentClasses() as $c) {
+            $admin = Kwf_Component_Abstract_Admin::getInstance($c);
+            $admin->afterDuplicate($rootSource, $rootTarget);
+        }
     }
 
     public static function dispatchRender()
