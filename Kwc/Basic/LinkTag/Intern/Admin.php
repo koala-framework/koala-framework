@@ -66,7 +66,7 @@ class Kwc_Basic_LinkTag_Intern_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
                 $q = Kwf_Registry::get('db')->query($sql, $sourceRow->target);
                 $q = $q->fetchAll();
                 if (!$q) continue;
-                $linkTargetId =  $q[0]['target_db_id'];
+                $linkTargetId =  $q[0]['target_component_id'];
                 $target = Kwf_Component_Data_Root::getInstance()->getComponentById($d['target'], array('ignoreVisible'=>true));
                 $targetRow = $target->getComponent()->getRow();
                 $targetRow->target = $linkTargetId;
