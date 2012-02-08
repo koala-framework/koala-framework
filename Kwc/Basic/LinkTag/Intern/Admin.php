@@ -51,8 +51,9 @@ class Kwc_Basic_LinkTag_Intern_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
             //only IF link points to page below $rootSource
             $source = Kwf_Component_Data_Root::getInstance()->getComponentById($d['source'], array('ignoreVisible'=>true));
             $sourceLinkedData = $source->getLinkedData();
-            $linkTargetIsBelowRootSource = false;
+            if (!$sourceLinkedData) continue;
 
+            $linkTargetIsBelowRootSource = false;
             $data = $sourceLinkedData;
             do {
                 if ($data->componentId == $rootSource->componentId) {
@@ -65,21 +66,21 @@ class Kwc_Basic_LinkTag_Intern_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
             if ($linkTargetIsBelowRootSource) {
                 $target = Kwf_Component_Data_Root::getInstance()->getComponentById($d['target'], array('ignoreVisible'=>true));
                 $targetRow = $target->getComponent()->getRow();
-                //get duplicated link target id from duplicate log
-                $sql = "SELECT target_component_id FROM kwc_log_duplicate WHERE source_component_id = ? ORDER BY id DESC LIMIT 1";
-                $q = Kwf_Registry::get('db')->query($sql, $sourceLinkedData->dbId);
-                $q = $q->fetchAll();
-                if (!$q) continue;
-                $linkTargetId =  $q[0]['target_component_id'];
-                $this->_modifyOwnRowAfterDuplicate($targetRow, $linkTargetId);
+                $this->_modifyOwnRowAfterDuplicate($targetRow, $sourceLinkedData);
                 $targetRow->save();
             }
         }
         $this->_duplicated = array();
     }
 
-    protected function _modifyOwnRowAfterDuplicate($targetRow, $linkTargetId)
+    protected function _modifyOwnRowAfterDuplicate($targetRow, $sourceLinkedData)
     {
+        //get duplicated link target id from duplicate log
+        $sql = "SELECT target_component_id FROM kwc_log_duplicate WHERE source_component_id = ? ORDER BY id DESC LIMIT 1";
+        $q = Kwf_Registry::get('db')->query($sql, $sourceLinkedData->dbId);
+        $q = $q->fetchAll();
+        if (!$q) continue;
+        $linkTargetId =  $q[0]['target_component_id'];
         $targetRow->target = $linkTargetId;
     }
 }
