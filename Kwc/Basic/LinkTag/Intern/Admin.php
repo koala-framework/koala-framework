@@ -50,29 +50,36 @@ class Kwc_Basic_LinkTag_Intern_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
             //modify duplicated links so they point to duplicated page
             //only IF link points to page below $rootSource
             $source = Kwf_Component_Data_Root::getInstance()->getComponentById($d['source'], array('ignoreVisible'=>true));
-            $sourceRow = $source->getComponent()->getRow();
-            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($sourceRow->target, array('ignoreVisible'=>true)) as $sourceLinkTarget) {
-                $linkTargetIsBelowRootSource = false;
-                do {
-                    if ($sourceLinkTarget->componentId == $rootSource->componentId) {
-                        $linkTargetIsBelowRootSource = true;
-                        break;
-                    }
-                } while ($sourceLinkTarget = $sourceLinkTarget->parent);
-            }
+            $sourceLinkedData = $source->getLinkedData();
+            $linkTargetIsBelowRootSource = false;
+
+            $data = $sourceLinkedData;
+            do {
+                if ($data->componentId == $rootSource->componentId) {
+                    $linkTargetIsBelowRootSource = true;
+                    break;
+                }
+            } while ($data = $data->parent);
+            unset($data);
+
             if ($linkTargetIsBelowRootSource) {
+                $target = Kwf_Component_Data_Root::getInstance()->getComponentById($d['target'], array('ignoreVisible'=>true));
+                $targetRow = $target->getComponent()->getRow();
                 //get duplicated link target id from duplicate log
                 $sql = "SELECT target_component_id FROM kwc_log_duplicate WHERE source_component_id = ? ORDER BY id DESC LIMIT 1";
-                $q = Kwf_Registry::get('db')->query($sql, $sourceRow->target);
+                $q = Kwf_Registry::get('db')->query($sql, $sourceLinkedData->dbId);
                 $q = $q->fetchAll();
                 if (!$q) continue;
                 $linkTargetId =  $q[0]['target_component_id'];
-                $target = Kwf_Component_Data_Root::getInstance()->getComponentById($d['target'], array('ignoreVisible'=>true));
-                $targetRow = $target->getComponent()->getRow();
-                $targetRow->target = $linkTargetId;
+                $this->_modifyOwnRowAfterDuplicate($targetRow, $linkTargetId);
                 $targetRow->save();
             }
         }
         $this->_duplicated = array();
+    }
+
+    protected function _modifyOwnRowAfterDuplicate($targetRow, $linkTargetId)
+    {
+        $targetRow->target = $linkTargetId;
     }
 }
