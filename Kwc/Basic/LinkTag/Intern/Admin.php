@@ -62,7 +62,7 @@ class Kwc_Basic_LinkTag_Intern_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
             }
             if ($linkTargetIsBelowRootSource) {
                 //get duplicated link target id from duplicate log
-                $sql = "SELECT target_db_id FROM kwc_log_duplicate WHERE source_db_id = ? ORDER BY id DESC LIMIT 1";
+                $sql = "SELECT target_component_id FROM kwc_log_duplicate WHERE source_component_id = ? ORDER BY id DESC LIMIT 1";
                 $q = Kwf_Registry::get('db')->query($sql, $sourceRow->target);
                 $q = $q->fetchAll();
                 if (!$q) continue;
