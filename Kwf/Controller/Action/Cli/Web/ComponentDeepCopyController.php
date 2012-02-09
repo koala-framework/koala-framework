@@ -94,6 +94,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
         }
 
         $ids = $this->_getChildIds($this->_getParam('id'));
+        array_unshift($ids, $this->_getParam('id'));
         foreach ($ids as $id) {
             foreach ($tables as $table) {
                 if ($table == 'kwf_pages') {
