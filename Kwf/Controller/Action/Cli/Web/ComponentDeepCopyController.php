@@ -103,7 +103,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
                     $column = 'component_id';
                 }
                 $sql = "DELETE FROM $table ".
-                    "WHERE $column=$id ".
+                    "WHERE $column='$id' ".
                        "OR $column LIKE '".str_replace('_', '\_', $id)."\_%' ".
                        "OR $column LIKE '".str_replace('_', '\_', $id)."-%'";
                 echo $sql."\n";
