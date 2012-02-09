@@ -79,7 +79,7 @@ class Kwc_Basic_LinkTag_Intern_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
         $sql = "SELECT target_component_id FROM kwc_log_duplicate WHERE source_component_id = ? ORDER BY id DESC LIMIT 1";
         $q = Kwf_Registry::get('db')->query($sql, $sourceLinkedData->dbId);
         $q = $q->fetchAll();
-        if (!$q) continue;
+        if (!$q) return;
         $linkTargetId =  $q[0]['target_component_id'];
         $targetRow->target = $linkTargetId;
     }
