@@ -5,6 +5,8 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
     protected $_prefix = 'news';
     protected $_prefixPlural = 'news';
 
+    private $_duplicated = array();
+
     public function componentToString(Kwf_Component_Data $data)
     {
         $row = $data->getComponent()->getRow();
@@ -57,4 +59,49 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
         return $ret;
     }
 
+    public function duplicate($source, $target, $progressBar = null)
+    {
+        parent::duplicate($source, $target, $progressBar);
+        $this->_duplicated[] = array(
+            'source' => $source->componentId,
+            'target' => $target->componentId,
+        );
+    }
+
+    //TODO: reuse code from Link_Intern, but for that we have to inherit Link_Intern_Admin which we don't atm
+    public function afterDuplicate($rootSource, $rootTarget)
+    {
+        parent::afterDuplicate($rootSource, $rootTarget);
+        foreach ($this->_duplicated as $d) {
+            //modify duplicated links so they point to duplicated page
+            //only IF link points to page below $rootSource
+            $source = Kwf_Component_Data_Root::getInstance()->getComponentById($d['source'], array('ignoreVisible'=>true));
+            $sourceRow = $source->getComponent()->getRow();
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId('news_'.$sourceRow->news_id, array('ignoreVisible'=>true)) as $sourceLinkTarget) {
+                $linkTargetIsBelowRootSource = false;
+                do {
+                    if ($sourceLinkTarget->componentId == $rootSource->componentId) {
+                        $linkTargetIsBelowRootSource = true;
+                        break;
+                    }
+                } while ($sourceLinkTarget = $sourceLinkTarget->parent);
+            }
+            if ($linkTargetIsBelowRootSource) {
+                //get duplicated link target id from duplicate log
+                $sql = "SELECT target_component_id FROM kwc_log_duplicate WHERE source_component_id = ? ORDER BY id DESC LIMIT 1";
+                $q = Kwf_Registry::get('db')->query($sql, 'news_'.$sourceRow->news_id);
+                $q = $q->fetchAll();
+                if (!$q) continue;
+                $linkTargetId =  $q[0]['target_component_id'];
+                $target = Kwf_Component_Data_Root::getInstance()->getComponentById($d['target'], array('ignoreVisible'=>true));
+                $targetRow = $target->getComponent()->getRow();
+                if (substr($linkTargetId, 0, 5) != 'news_') {
+                    throw new Kwf_Exception('invalid target_component_id');
+                }
+                $targetRow->news_id = substr($linkTargetId, 5);
+                $targetRow->save();
+            }
+        }
+        $this->_duplicated = array();
+    }
 }

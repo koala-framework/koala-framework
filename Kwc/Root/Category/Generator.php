@@ -388,6 +388,8 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     public function getDuplicateProgressSteps($source)
     {
+        $this->_loadPageData();
+
         $ret = 1;
         $ret += Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         if (isset($this->_pageChilds[$source->id])) {
@@ -402,6 +404,8 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
     {
+        $this->_loadPageData();
+
         if ($source->generator !== $this) {
             throw new Kwf_Exception("you must call this only with the correct source");
         }
@@ -479,6 +483,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $this->_duplicateChildPages($sourceId, $targetId, $i, $progressBar);
             }
         }
+
         return $targetId;
     }
 

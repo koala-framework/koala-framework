@@ -159,14 +159,14 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $newPos = $this->_getParam('pos');
         $countDuplicated = 0;
         $errorMsg = false;
-        foreach ($sources as $source) {
+        foreach ($sources as $s) {
             $targetCls = false;
-            if (isset($classes[$source->row->component])) {
-                $targetCls = $classes[$source->row->component];
+            if (isset($classes[$s->row->component])) {
+                $targetCls = $classes[$s->row->component];
             }
-            if ($source->componentClass != $targetCls) {
-                if (Kwc_Abstract::hasSetting($source->componentClass, 'componentName')) {
-                    $name = Kwc_Abstract::getSetting($source->componentClass, 'componentName');
+            if ($s->componentClass != $targetCls) {
+                if (Kwc_Abstract::hasSetting($s->componentClass, 'componentName')) {
+                    $name = Kwc_Abstract::getSetting($s->componentClass, 'componentName');
                     $errorMsg = trlKwf("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
                 } else {
                     $errorMsg = trlKwf('Source and target paragraphs are not compatible.');
@@ -174,7 +174,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
                 continue; //skip this one
             }
 
-            $newParagraph = Kwf_Util_Component::duplicate($source, $target, $progressBar);
+            $newParagraph = Kwf_Util_Component::duplicate($s, $target, $progressBar);
             $countDuplicated++;
 
             $row = $newParagraph->row;
@@ -182,6 +182,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $row->visible = false;
             $row->save();
         }
+        Kwf_Util_Component::afterDuplicate($source, $target);
         $progressBar->finish();
         Kwf_Component_ModelObserver::getInstance()->enable();
 

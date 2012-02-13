@@ -20,6 +20,8 @@ abstract class Kwc_Abstract_Flash_Component extends Kwc_Abstract
 
         $ret['cssClass'] = 'webStandard';
 
+        $ret['removeHiddenFlash'] = true;
+
         return $ret;
     }
 
@@ -47,6 +49,7 @@ abstract class Kwc_Abstract_Flash_Component extends Kwc_Abstract
             $ret['flash']['vars'][$k] = urlencode($v);
         }
         $ret['flash']['vars'] = (object)$ret['flash']['vars'];
+        $ret['flash']['removeHiddenFlash'] = $this->_getSetting('removeHiddenFlash');
         $ret['placeholder'] = $this->_getPlaceholderComponent();
 
         return $ret;

@@ -75,4 +75,24 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
     {
         return array($this->_idSeparator.$this->getGeneratorKey());
     }
+
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
+    {
+        if ($source->generator !== $this) {
+            throw new Kwf_Exception("you must call this only with the correct source");
+        }
+
+        $sourceRow = $this->_getModel()->getRow($source->dbId);
+
+        if ($sourceRow) { //if not row exists that's ok, it's also not needed in the duplicated one
+            $id = $this->_idSeparator . array_pop(explode($this->_idSeparator, $source->componentId));
+            $target = $parentTarget->getChildComponent($id);
+
+            $sourceRow->duplicate(array(
+                'component_id' => $target->dbId,
+            ));
+        }
+
+        return parent::duplicateChild($source, $parentTarget, $progressBar);
+    }
 }

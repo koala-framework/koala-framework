@@ -55,7 +55,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if ($params['hash'] != $this->_getHash(array(
             $params['redirectId'], $params['recipientId'], $params['recipientModelShortcut']
         ))) {
-//             throw new Kwf_Exception("The submitted hash is incorrect.");
+            throw new Kwf_Exception("The submitted hash is incorrect.");
         }
 
         // statistics
@@ -113,7 +113,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $m = $this->getChildModel();
         }
 
-        while (preg_match('/\*(.+?)\*(.+?)\*/', $mailText, $matches)) {
+        while (preg_match('/\*([a-zA-Z_]+?)\*(.+?)\*/', $mailText, $matches)) {
             if (!$recipient) {
                 $mailText = str_replace(
                     $matches[0],

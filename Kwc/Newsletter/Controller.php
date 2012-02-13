@@ -41,6 +41,7 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
             // Switch off observer due to performance - it's not necessary here
             Kwf_Component_ModelObserver::getInstance()->disable();
             $newDetail = Kwf_Util_Component::duplicate($source, $parentTarget);
+            Kwf_Util_Component::afterDuplicate($source, $newDetail);
             Kwf_Component_ModelObserver::getInstance()->enable();
 
             $newDetailRow = $newDetail->row;

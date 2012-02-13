@@ -72,6 +72,8 @@ class Kwf_Util_Setup
             'Kwf_Component_View_Helper_Component',
             'Kwf_Component_View_Helper_ComponentLink',
             'Kwf_View_Helper_ComponentLink',
+            'Kwf_Component_Abstract_ContentSender_Abstract',
+            'Kwf_Component_Abstract_ContentSender_Default',
         );
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {

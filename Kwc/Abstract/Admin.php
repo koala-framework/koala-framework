@@ -36,8 +36,16 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
     public function getDuplicateProgressSteps($source)
     {
         $ret = 0;
-        $s = array('inherit' => false, 'ignoreVisible'=>true);
+        $s = array('ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
+            if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit')) {
+                if ($c->generator->hasSetting('unique') && $c->generator->getSetting('unique')) {
+                    continue;
+                }
+            }
+            if ($c->generator->getGeneratorFlag('pageGenerator')) {
+                continue;
+            }
             $ret += $c->generator->getDuplicateProgressSteps($c);
         }
         return $ret;
@@ -45,6 +53,8 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 
     public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
+        Kwf_Registry::get('db')->insert('kwc_log_duplicate', array('source_component_id' => $source->dbId, 'target_component_id' => $target->dbId));
+
         if (($model = $source->getComponent()->getOwnModel()) && $source->dbId != $target->dbId) {
             $row = $model->getRow($source->dbId);
             if ($row) {
@@ -54,10 +64,26 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
             }
         }
 
-        $s = array('inherit' => false, 'ignoreVisible'=>true);
+        $s = array('ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
+            if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit')) {
+                if ($c->generator->hasSetting('unique') && $c->generator->getSetting('unique')) {
+                    continue;
+                }
+            }
+            if ($c->generator->getGeneratorFlag('pageGenerator')) {
+                continue;
+            }
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
+    }
+
+    /**
+     * Called when duplication of a number of components finished
+     */
+    public function afterDuplicate($rootSource, $rootTarget)
+    {
+        parent::afterDuplicate($rootSource, $rootTarget);
     }
 
     public function makeVisible($source)

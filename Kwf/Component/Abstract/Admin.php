@@ -2,6 +2,7 @@
 class Kwf_Component_Abstract_Admin
 {
     protected $_class;
+    static private $_instances = array();
 
     protected function __construct($class)
     {
@@ -18,13 +19,12 @@ class Kwf_Component_Abstract_Admin
      */
     public static function getInstance($componentClass)
     {
-        static $instances = array();
-        if (!isset($instances[$componentClass])) {
+        if (!isset(self::$_instances[$componentClass])) {
             $c = self::getComponentClass($componentClass, 'Admin');
             if (!$c) { return null; }
-            $instances[$componentClass] = new $c($componentClass);
+            self::$_instances[$componentClass] = new $c($componentClass);
         }
-        return $instances[$componentClass];
+        return self::$_instances[$componentClass];
     }
 
     public static function getAvailableComponents($path = '')
@@ -212,5 +212,12 @@ class Kwf_Component_Abstract_Admin
         }
 
         return $ret;
+    }
+
+    /**
+     * Called when duplication of a number of components finished
+     */
+    public function afterDuplicate($rootSource, $rootTarget)
+    {
     }
 }

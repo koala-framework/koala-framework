@@ -10,7 +10,7 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         $ret['previewCssClass'] = '';
 
         $ret['generators']['itemPages'] = array(
-            'class' => 'Kwf_Component_Generator_Page_Table',
+            'class' => 'Kwc_List_Switch_ItemPageGenerator',
             'filenameColumn' => 'id',
             'uniqueFilename' => true,
             'nameColumn' => 'id',

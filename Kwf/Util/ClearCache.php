@@ -336,7 +336,7 @@ class Kwf_Util_ClearCache
         } else {
             $dir = new DirectoryIterator($path);
             foreach ($dir as $fileinfo) {
-                if ($fileinfo->isFile() && $fileinfo->getFilename() != '.gitignore') {
+                if ($fileinfo->isFile() && $fileinfo->getFilename() != '.gitignore' && substr($fileinfo->getFilename(), 0, 4) != '.nfs') {
                     unlink($fileinfo->getPathName());
                 } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
                     $this->_removeDirContents($fileinfo->getPathName(), $server);
