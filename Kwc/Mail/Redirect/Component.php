@@ -113,7 +113,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $m = $this->getChildModel();
         }
 
-        while (preg_match('/\*(.+?)\*(.+?)\*/', $mailText, $matches)) {
+        while (preg_match('/\*([a-zA-Z_]+?)\*(.+?)\*/', $mailText, $matches)) {
             if (!$recipient) {
                 $mailText = str_replace(
                     $matches[0],
