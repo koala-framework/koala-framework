@@ -8,7 +8,9 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
     public function __construct($name, $componentClass, $subscribeOrNewsletterComponentId)
     {
         if ($subscribeOrNewsletterComponentId) {
-            $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($subscribeOrNewsletterComponentId);
+            $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+                $subscribeOrNewsletterComponentId, array('ignoreVisible' => true)
+            );
             if (is_instance_of($c->componentClass, 'Kwc_Newsletter_Component')) {
                 $this->_newsletterComponentId = $subscribeOrNewsletterComponentId;
             } else if (is_instance_of($c->componentClass, 'Kwc_Newsletter_Subscribe_Component')) {
