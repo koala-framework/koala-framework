@@ -4,21 +4,26 @@
 <en>Visible</en>
 <de>Sichtbar</de>
 <id>2</id>
+<bg>&#x432;&#x438;&#x434;&#x438;&#x43C;</bg>
 </text>
 <text>
 <en>Error</en>
 <de>Fehler</de>
 <id>5</id>
+<bg>&#x413;&#x440;&#x435;&#x448;&#x43A;&#x430;</bg>
+<ua>&#x41F;&#x43E;&#x43C;&#x438;&#x43B;&#x43A;&#x430;</ua>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem sp&#xE4;teren Zeitpunkt noch einmal.</de>
 <id>8</id>
+<ua>&#x421;&#x442;&#x430;&#x43B;&#x430;&#x441;&#x44F; &#x43F;&#x43E;&#x43C;&#x438;&#x43B;&#x43A;&#x430;. &#x411;&#x443;&#x434;&#x44C; &#x43B;&#x430;&#x441;&#x43A;&#x430;, &#x441;&#x43F;&#x440;&#x43E;&#x431;&#x443;&#x439;&#x442;&#x435; &#x43F;&#x456;&#x437;&#x43D;&#x456;&#x448;&#x435;.</ua>
 </text>
 <text>
 <en>Page not found</en>
 <de>Seite wurde nicht gefunden.</de>
 <id>9</id>
+<ua>&#x421;&#x442;&#x43E;&#x440;&#x456;&#x43D;&#x43A;&#x430; &#x43D;&#x435; &#x437;&#x43D;&#x430;&#x439;&#x434;&#x435;&#x43D;&#x430;</ua>
 </text>
 <text>
 <en>Lost password?</en>
@@ -215,6 +220,7 @@ wurde soeben erstellt.</de>
 <en>Default Value</en>
 <de>Standardwert</de>
 <id>68</id>
+<bg>&#x421;&#x442;&#x430;&#x43D;&#x434;&#x430;&#x440;&#x442;&#x43D;&#x430; &#x441;&#x442;&#x43E;&#x439;&#x43D;&#x43E;&#x441;&#x442;</bg>
 </text>
 <text>
 <en>Passwords are different. Please try again.</en>
@@ -6476,7 +6482,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Paste Page</en>
-<en>Seite einfügen</en>
+<en>Seite einf&#xFC;gen</en>
 <id>1737</id>
 </text>
 <text>
@@ -6496,7 +6502,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password is invalid</en>
-<de>Das Passwort ist ungültig</de>
+<de>Das Passwort ist ung&#xFC;ltig</de>
 <id>1742</id>
 </text>
 <text>
@@ -6506,7 +6512,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
-<de>Das passwort muss mindestens aus 3 der folgenden 4 Bedingungen erfüllen: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen</de>
+<de>Das passwort muss mindestens aus 3 der folgenden 4 Bedingungen erf&#xFC;llen: Kleinbuchstaben, Gro&#xDF;buchstaben, Ziffern und Sonderzeichen</de>
 <id>1744</id>
 </text>
 <text>
