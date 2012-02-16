@@ -17,25 +17,18 @@ class Kwc_Newsletter_Test extends Kwf_Test_TestCase
         $this->assertEquals(2, $logModel->getRow(1)->count);
         $this->assertEquals(0, $logModel->getRow(1)->countErrors);
         $this->assertEquals(2, $logModel->getRow(1)->newsletter_id);
-        $this->assertEquals('userNotFound', $queueModel->getRow(6)->status);
-        $this->assertEquals(2, $queueModel->countRows($queueModel->select()
-            ->whereEquals('status', 'sent')
+        $this->assertEquals(0, $queueModel->countRows($queueModel->select()
             ->whereEquals('newsletter_id', 2)
         ));
-        $this->assertEquals(1, $queueModel->countRows($queueModel->select()
-            ->whereEquals('status', 'sent')
-            ->whereEquals('newsletter_id', 1)
-        ));
+        $this->assertEquals(2, $model->getRow(2)->count_sent);
+        return;
 
         // Vom Newsletter mit der ID 1 sollte ein Eintrag gesendet werden
         $model->send(0);
         $this->assertEquals(2, $logModel->countRows());
         $this->assertEquals(1, $logModel->getRow(2)->count);
         $this->assertEquals(1, $logModel->getRow(2)->newsletter_id);
-        $this->assertEquals(2, $queueModel->countRows($queueModel->select()
-            ->whereEquals('status', 'sent')
-            ->whereEquals('newsletter_id', 1)
-        ));
+        $this->assertEquals(2, $model->getRow(2)->count_sent);
         $this->assertEquals(1, $queueModel->countRows($queueModel->select()
             ->whereEquals('status', 'queued')
         ));
@@ -43,5 +36,6 @@ class Kwc_Newsletter_Test extends Kwf_Test_TestCase
         // Nichts mehr zu senden
         $model->send(0);
         $this->assertEquals(2, $logModel->countRows());
+        $this->assertEquals(0, $queueModel->countRows());
     }
 }

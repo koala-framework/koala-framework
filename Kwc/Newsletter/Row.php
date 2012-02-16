@@ -77,10 +77,10 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                         $countErrors++;
                         if ($debugOutput) echo 'x';
                     }
+                    $this->count_sent++;
+                    $this->last_sent_date = date('Y-m-d H:i:s');
+                    $this->save();
                 }
-                $this->count_sent++;
-                $this->last_sent_date = date('Y-m-d H:i:s');
-                $this->save();
 
                 $row->delete();
 
