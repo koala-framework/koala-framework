@@ -53,34 +53,43 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             // Zeile aus queue holen, falls nichts gefunden, Newsletter fertig
             $row = $this->getNextRow($this->id);
             if ($row) {
+
                 $row->status = 'sending';
                 $row->save();
 
                 $recipient = $row->getRecipient();
-                if (!$recipient) {
-                    $row->status = 'userNotFound';
+                if (!$recipient || !$recipient->getMailEmail()) {
                     $countNoUser++;
-                } else if (!$recipient->getMailEmail()) {
-                    $row->status = 'noAddress';
+                } else if ($recipient instanceof Kwc_Mail_Recipient_UnsubscribableInterface &&
+                    $recipient->getMailUnsubscribe())
+                {
+                    $countNoUser++;
+                } else if ($recipient instanceof Kwf_Model_Row_Abstract &&
+                    $recipient->hasColumn('activated') && !$recipient->activated)
+                {
                     $countNoUser++;
                 } else {
                     $result = $this->_sendMail($recipient);
                     if ($result) {
-                        $row->status = 'sent';
                         $count++;
                         if ($debugOutput) echo '.';
                     } else {
-                        $row->status = 'sendingError';
                         $countErrors++;
                         if ($debugOutput) echo 'x';
                     }
                 }
-                $row->sent_date = date('Y-m-d H:i:s');
-                $row->save();
-            } else {
-                $this->status = 'finished';
+                $this->count_sent++;
+                $this->last_sent_date = date('Y-m-d H:i:s');
                 $this->save();
+
+                $row->delete();
+
+            } else {
+
+                $this->status = 'finished';
+
             }
+
         } while ($row && (((microtime(true) - $start) < ($timeLimit)) || !$timeLimit));
         $stop = microtime(true);
 
@@ -127,30 +136,16 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         return $model->getRow($select);
     }
 
-    public function getLastRow()
-    {
-        $model = $this->getModel()->getDependentModel('Queue');
-        $select = $model->select()
-            ->whereEquals('status', 'sent')
-            ->whereEquals('newsletter_id', $this->id)
-            ->order('id', 'DESC')
-            ->limit(1);
-        return $model->getRow($select);
-    }
-
     public function getInfo()
     {
         $queue = $this->getModel()->getDependentModel('Queue');
         $select = $queue->select()->whereEquals('newsletter_id', $this->id);
-        $lastRow = $this->getLastRow();
         $ret = array();
         $ret['state']    = $this->status;
-        $ret['total']    = $queue->countRows($select);
-        $ret['sent']     = $queue->countRows($select->whereEquals('status', 'sent'));
-        $ret['notFound'] = $queue->countRows($select->whereEquals('status', 'userNotFound'));
-        $ret['errors']   = $queue->countRows($select->whereEquals('status', 'sendingError'));
+        $ret['sent']     = $this->count_sent;
+        $ret['total']    = $queue->countRows($select) + $this->count_sent;
         $ret['queued']   = $queue->countRows($select->whereEquals('status', 'queued'));
-        $ret['lastSentDate'] = $lastRow ? strtotime($lastRow->sent_date) : null;
+        $ret['lastSentDate'] = strtotime($this->last_sent_date);
 
         $text = '';
         switch ($this->status) {
@@ -164,15 +159,9 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $text .= ' ';
 
         $text .= trlKwf(
-            '{0} total, {1} sent, {2} waiting to send.',
-            array($ret['total'], $ret['sent'], $ret['queued'])
+            '{0} sent, {1} waiting to send.',
+            array($ret['sent'], $ret['queued'])
         );
-        if ($ret['notFound'] > 0) {
-            $text .= ' ' . trlpKwf('{0} receiver not found.', '{0} receivers not found.', $ret['notFound']);
-        }
-        if ($ret['errors'] > 0) {
-            $text .= ' ' . trlKwf('{0} errors while sending mail.', $ret['error']);
-        }
         if ($ret['lastSentDate']) {
             $time = date(trlKwf('Y-m-d H:i'), $ret['lastSentDate']);
             $t = ' ' . trlKwf('Last mail sent: {0}', $time);;
