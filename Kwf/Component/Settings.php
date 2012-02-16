@@ -445,7 +445,7 @@ class Kwf_Component_Settings
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
 
                 $t = microtime(true);
-                $classes = self::getComponentClasses(false/*don't use settings cache*/);
+                $classes = self::getComponentClasses();
                 foreach ($classes as $c) {
                     self::$_settings[$c] = self::_getSettingsIncludingPreComputed($c);
                 }
