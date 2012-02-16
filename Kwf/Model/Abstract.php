@@ -889,9 +889,13 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getColumnMappings($mapping)
     {
-        if (!isset($this->_columnMappings[$mapping])) {
+        if (!$this->hasColumnMappings($mapping)) {
             throw new Kwf_Exception("unknown mapping: '$mapping'");
         }
         return $this->_columnMappings[$mapping];
+    }
+
+    public function hasColumnMappings($mapping) {
+        return isset($this->_columnMappings[$mapping]);
     }
 }
