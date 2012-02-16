@@ -480,6 +480,8 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
 
         $newPage = Kwf_Util_Component::duplicate($source, $target, $progressBar);
 
+        Kwf_Util_Component::afterDuplicate($source, $newPage);
+
         $progressBar->finish();
 
 

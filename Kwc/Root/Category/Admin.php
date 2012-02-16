@@ -7,7 +7,7 @@ class Kwc_Root_Category_Admin extends Kwc_Abstract_Admin
         //pages are not duplicated because they are not returned by 'inherit'=>false
         //so duplicate them here
         $s = array(
-            'whereGeneratorFlags' => array('pageGenerator'=>true),
+            'generatorFlags' => array('pageGenerator'=>true),
             'ignoreVisible'=>true
         );
         foreach ($source->getChildComponents($s) as $c) {
@@ -23,7 +23,7 @@ class Kwc_Root_Category_Admin extends Kwc_Abstract_Admin
         //pages are not duplicated because they are not returned by 'inherit'=>false
         //so duplicate them here
         $s = array(
-            'whereGeneratorFlags' => array('pageGenerator'=>true),
+            'generatorFlags' => array('pageGenerator'=>true),
             'ignoreVisible'=>true
         );
         foreach ($source->getChildComponents($s) as $c) {

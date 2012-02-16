@@ -63,7 +63,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function rebuildAction()
     {
-        system("php bootstrap.php fulltext check-for-invalid");
+        if (!$this->_getParam('skip-check-for-invalid')) {
+            system("php bootstrap.php fulltext check-for-invalid");
+        }
 
         $queueFile = 'temp/fulltextRebuildQueue';
 
@@ -142,9 +144,10 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
                     if (!$page->isPage) continue;
+                    if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) continue;
 
                     //echo "checking for childComponents\n";
-                    $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext'));
+                    $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false));
                     if (Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
                         $fulltextComponents[] = $page;
                     }

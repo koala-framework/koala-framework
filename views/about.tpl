@@ -1,4 +1,4 @@
-<h1><?= $this->application['name'] . ' ' . trlKwf('Version') . ' ' . $this->application['version'] ?></h1>
+<h1><?= $this->application['name'] ?></h1>
 <h1>
 <? if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') { ?>
 <a href="http://www.koala-framework.org/" onclick="window.open(this.href); return false;" >

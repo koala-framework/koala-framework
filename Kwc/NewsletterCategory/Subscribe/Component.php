@@ -9,6 +9,36 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
         return $ret;
     }
 
+    public function insertSubscriptionWithCategory(Kwc_Newsletter_Subscribe_Row $row, $categoryId)
+    {
+        $inserted = $this->insertSubscription($row);
+
+        $nl2cat = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_SubscriberToCategory');
+        if (!$inserted) {
+            //already subscribed
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('email', $row->email);
+            $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
+            $s->whereEquals('unsubscribed', false);
+            $row = $this->getForm()->getModel()->getRow($s);
+
+            $s = $nl2cat->select()
+                ->whereEquals('subscriber_id', $row->id)
+                ->whereEquals('category_id', $categoryId);
+            if ($nl2cat->countRows($s)) {
+                //already subscribed to given category
+                return $inserted;
+            }
+        }
+        $nl2CatRow = $nl2cat->createRow();
+        $nl2CatRow->subscriber_id = $row->id;
+        $nl2CatRow->category_id = $categoryId;
+        $nl2CatRow->save();
+
+        return $inserted;
+    }
+
+    //this method is a big mess and will break soon
     public function processInput(array $postData)
     {
         if (!empty($postData[$this->getData()->componentId]) && !empty($postData['form_email'])) {
@@ -16,7 +46,11 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
 
             $model = $this->getForm()->getModel();
             //TODO: don't poke into $postData directly, get value from field instead
-            $exists = $model->getRow($model->select()->whereEquals('email', $postData['form_email']));
+            $s = $model->select();
+            $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
+            $s->whereEquals('email', $postData['form_email']);
+            $s->whereEquals('unsubscribed', false);
+            $exists = $model->getRow($s);
             if ($exists) {
                 //already subscribed
                 $categories = $this->getForm()->getCategories();
@@ -33,6 +67,7 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
                         $this->_setProcessed();
                         $this->getForm()->addCategoryIfOnlyOne($exists);
 
+                        //TODO the following code is copied from Kwc_Form, why not make a protected method or something?
                         if ($this->getSuccessComponent() && $this->getSuccessComponent()->isPage &&
                             (!isset($postData['doNotRelocate']) || !$postData['doNotRelocate'])
                         ) {
@@ -53,12 +88,5 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
             //no post
             parent::processInput($postData);
         }
-    }
-
-    protected function _initForm()
-    {
-        $this->_form = new Kwc_NewsletterCategory_Subscribe_FrontendForm(
-            'form', $this->getData()->componentId
-        );
     }
 }

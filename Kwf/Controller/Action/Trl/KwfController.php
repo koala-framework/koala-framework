@@ -57,9 +57,14 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
             $langs = array_values(array_unique($langs));
         }
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            //TODO besser wär getComponentByFlag('hasLanguage') aber das gibt snicht
+            $lngClasses = array();
+            foreach(Kwc_Abstract::getComponentClasses() as $c) {
+                if (KWc_Abstract::getFlag($c, 'hasLanguage')) {
+                    $lngClasses[] = $c;
+                }
+            }
             $lngs = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsByClass('Kwc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); 
+                ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
             foreach ($lngs as $c) {
                 $langs[] = $c->getComponent()->getLanguage();
             }

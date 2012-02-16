@@ -24,6 +24,16 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    public function getSubscribeToNewsletterComponent()
+    {
+        $nlData = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot'=>$this->getData()));
+        if (!$nlData) {
+            throw new Kwf_Exception('Cannot find newsletter component');
+        }
+        return $nlData;
+    }
+
     public function insertSubscription(Kwc_Newsletter_Subscribe_Row $row)
     {
         if ($row->id) {
@@ -31,6 +41,9 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         }
         $s = new Kwf_Model_Select();
         $s->whereEquals('email', $row->email); //what if the email field is not named email?
+        $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
+        $s->whereEquals('unsubscribed', false);
+
         if ($row->getModel()->countRows($s)) {
             //already subscribed, don't save
             return false;
@@ -44,6 +57,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
+        if (!$row->format) $row->format = 'html';
         $row->subscribe_date = date('Y-m-d H:i:s');
         if ($this->_getSetting('subscribeType') == self::CONFIRM_MAIL_ONLY) {
             $row->unsubscribed = 0;
@@ -54,9 +68,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $row->unsubscribed = 1;
             $row->activated = 0;
         }
-        $nl = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot'=>$this->getData()));
-        $row->newsletter_component_id = $nl->dbId;
+        $row->newsletter_component_id = $this->getSubscribeToNewsletterComponent()->dbId;
     }
 
     protected function _afterInsert(Kwf_Model_Row_Interface $row)
@@ -69,18 +81,14 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $host = Kwf_Registry::get('config')->server->domain;
         }
 
-        $nlData = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot' => $this->getData()));
-        if (!$nlData) {
-            throw new Kwf_Exception('Cannot find newsletter component');
-        }
-        $editComponentId = $nlData->getChildComponent('-editSubscriber')->componentId;
+        $nlData = $this->getSubscribeToNewsletterComponent();
+        $editComponentId = $nlData->getChildComponent('_editSubscriber')->componentId;
         $unsubscribeComponentId = null;
         $doubleOptInComponentId = null;
         if ($this->_getSetting('subscribeType') == self::DOUBLE_OPT_IN) {
             $doubleOptInComponentId = $this->getData()->getChildComponent('-doubleOptIn')->componentId;
         } else {
-            $unsubscribeComponentId = $nlData->getChildComponent('-unsubscribe')->componentId;
+            $unsubscribeComponentId = $nlData->getChildComponent('_unsubscribe')->componentId;
         }
 
         $mail = $this->getData()->getChildComponent('-mail')->getComponent();
@@ -91,5 +99,13 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             'editComponentId' => $editComponentId,
             'doubleOptInComponentId' => $doubleOptInComponentId
         ));
+    }
+
+    protected function _initForm()
+    {
+        $formClass = Kwc_Admin::getComponentClass($this, 'FrontendForm');
+        $this->_form = new $formClass(
+            'form', $this->getData()->componentClass, $this->getData()->dbId
+        );
     }
 }

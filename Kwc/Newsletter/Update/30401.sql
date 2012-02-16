@@ -33,21 +33,6 @@ CREATE TABLE IF NOT EXISTS `kwc_newsletter_queue` (
 ALTER TABLE `kwc_newsletter_queue`
     ADD CONSTRAINT `kwc_newsletter_queue_ibfk_1` FOREIGN KEY (`newsletter_id`) REFERENCES `kwc_newsletter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE TABLE IF NOT EXISTS `kwc_newsletter_subscribers` (
-`id` int(10) unsigned NOT NULL auto_increment,
-`gender` enum('','female','male') NOT NULL,
-`title` varchar(255) NOT NULL,
-`firstname` varchar(255) NOT NULL,
-`lastname` varchar(255) NOT NULL,
-`email` varchar(255) NOT NULL,
-`format` enum('','html','text') NOT NULL,
-`subscribe_date` datetime NOT NULL,
-`unsubscribed` tinyint(1) NOT NULL,
-`activated` tinyint( 1 ) NOT NULL DEFAULT '0',
-PRIMARY KEY  (`id`)
-) ENGINE=InnoDB ;
-
-
 
 UPDATE `kwc_newsletter_queue` SET `recipient_model` = 'Kwc_Newsletter_Subscribe_Model'
 	WHERE recipient_model='Kwc_Berlot_Newsletter_Subscribe_Model';

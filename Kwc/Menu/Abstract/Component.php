@@ -41,6 +41,9 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
             //a category is shown but the current page is in another one. gets templateVars from the right component
             'otherCategory' => 'Kwc_Menu_OtherCategory_Component.'.$componentClass,
 
+            //a category is shown but the current page is above categories. displays using ParentContent from the right child component
+            'otherCategoryChild' => 'Kwc_Menu_OtherCategoryChild_Component.'.$componentClass,
+
             //if deep enough so no difference in menu content (depth is defined by _requiredLevels)
             'parentContent' => 'Kwc_Menu_ParentContent_Component.'.$componentClass,
 
@@ -68,7 +71,9 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 break;
             }
         } while ($data = $data->parent);
-        if (!$foundPageOrCategory) return 'none';
+        if (!$foundPageOrCategory) {
+            return 'otherCategoryChild';
+        }
 
         $data = $parentData;
         $menuLevel = 0;
@@ -91,22 +96,23 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 do {
                     if (Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) break;
                 } while ($data = $data->parent);
-                    if ($data) {
-                        $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
-                        if ($cat) {
-                            if ($cat === true) $cat = $data->id;
-                            if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
-                                //there are categories and we are in a different category than the menu is
-                                //(so none is active and we can just show the parentContent (=efficient))
-                                $ret = 'parentContent';
-                            }
+                if ($data) {
+                    $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
+                    if ($cat) {
+                        if ($cat === true) $cat = $data->id;
+                        if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
+                            //there are categories and we are in a different category than the menu is
+                            //(so none is active and we can just show the parentContent (=efficient))
+                            $ret = 'parentContent';
                         }
-                    } else {
-                        $ret = 'none';
                     }
+                } else {
+                    //we are outside categories, show parentContent (until we reach otherCategoryChild)
+                    $ret = 'parentContent';
+                }
             }
         } else if ($menuLevel < $shownLevel-1) {
-            return 'none';
+            $ret = 'none';
         }
 
         if ($ret == false) {

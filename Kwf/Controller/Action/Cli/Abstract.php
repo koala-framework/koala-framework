@@ -15,24 +15,26 @@ class Kwf_Controller_Action_Cli_Abstract extends Kwf_Controller_Action
         //php sux
         $options = call_user_func(array(get_class($this), 'getHelpOptions'));
 
-        foreach ($options as $opt) {
-            $p = $this->_getParam($opt['param']);
-            if (isset($opt['value']) && ($p===true || !$p) &&
-                    !(isset($opt['valueOptional']) && $opt['valueOptional']) &&
-                    !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
-                throw new Kwf_ClientException("Parameter '$opt[param]' is missing");
-            }
-            if (is_null($p) && isset($opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
-                if (is_array($opt['value'])) {
-                    $v = $opt['value'][0];
-                } else {
-                    $v = $opt['value'];
+        if ($this->getRequest()->getActionName() == 'index') { //helpOptions are only valid vor index action atm
+            foreach ($options as $opt) {
+                $p = $this->_getParam($opt['param']);
+                if (isset($opt['value']) && ($p===true || !$p) &&
+                        !(isset($opt['valueOptional']) && $opt['valueOptional']) &&
+                        !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
+                    throw new Kwf_ClientException("Parameter '$opt[param]' is missing");
                 }
-                $this->getRequest()->setParam($opt['param'], $v);
-                $p = $v;
-            }
-            if (isset($opt['value']) && is_array($opt['value']) && !in_array($p, $opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
-//                 throw new Kwf_ClientException("Invalid value for parameter '$opt[param]'");
+                if (is_null($p) && isset($opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
+                    if (is_array($opt['value'])) {
+                        $v = $opt['value'][0];
+                    } else {
+                        $v = $opt['value'];
+                    }
+                    $this->getRequest()->setParam($opt['param'], $v);
+                    $p = $v;
+                }
+                if (isset($opt['value']) && is_array($opt['value']) && !in_array($p, $opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
+    //                 throw new Kwf_ClientException("Invalid value for parameter '$opt[param]'");
+                }
             }
         }
     }

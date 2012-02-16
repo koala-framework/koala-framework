@@ -120,8 +120,22 @@ class Kwf_Component_Data
     }
 
     /**
-     * @internal
+     * Returns absolute url including domain
+     *
+     * @return string
      */
+    public function getAbsoluteUrl()
+    {
+        $ret = $this->url;
+        $data = $this;
+        do {
+            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
+                return 'http://'.$data->getComponent()->getDomain().$ret;
+            }
+        } while($data = $data->parent);
+        return 'http://'.Kwf_Config::getValue('server.domain').$url;
+    }
+
     public function __get($var)
     {
         if ($var == 'url') {
@@ -883,10 +897,10 @@ class Kwf_Component_Data
     public function getParentPageOrRoot()
     {
         $page = $this->getPageOrRoot();
-        if ($page && $page->parent) {
+        if ($page->parent) {
             return $page->parent->getPageOrRoot();
         }
-        return null;
+        return $page;
     }
 
     /**

@@ -315,7 +315,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         }
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
-        $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
+        $target = array_pop($this->getChildData($parentTarget, array('id'=>$id, 'ignoreVisible'=>true, 'limit'=>1)));
         if (!$target) {
             return null;
         }

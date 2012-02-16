@@ -31,11 +31,4 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
     {
         return $this->_getMenuData()->hasContent();
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $c = Kwc_Abstract::getSetting($componentClass, 'menuComponentClass');
-        return call_user_func(array($c, 'getStaticCacheMeta'), $c);
-        return $ret;
-    }
 }

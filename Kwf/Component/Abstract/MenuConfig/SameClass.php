@@ -11,15 +11,18 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
         if (count($components) > 1) {
             $dropdownName = 'kwc_'.$this->_class;
             if (!$acl->has($dropdownName)) {
-                $acl->add(
-                    new Kwf_Acl_Resource_MenuDropdown(
+                $dropDown = new Kwf_Acl_Resource_MenuDropdown(
                         $dropdownName, array('text'=>$name, 'icon'=>$icon)
-                    ), 'kwf_component_root'
-                );
+                    );
+                $dropDown->setCollapseIfSingleChild(true);
+                $acl->add($dropDown, 'kwf_component_root');
             }
             foreach ($components as $c) {
                 $t = $c->getTitle();
                 if (!$t) $t = $name;
+                if ($domain = $c->getParentByClass('Kwc_Root_DomainRoot_Domain_Component')) {
+                    $t .= " ($domain->name)";
+                }
                 $acl->add(
                     new Kwf_Acl_Resource_Component_MenuUrl(
                         $c, array('text'=>$t, 'icon'=>$icon)

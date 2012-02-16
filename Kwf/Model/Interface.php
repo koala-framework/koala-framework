@@ -60,6 +60,10 @@ interface Kwf_Model_Interface
     public function fetchColumnByPrimaryId($column, $id);
     public function fetchColumnsByPrimaryId(array $columns, $id);
 
+    public function getColumnMapping($mapping, $column);
+    public function getColumnMappings($mapping);
+
+
     //deprecated
     public function find($id);
     public function fetchAll($where=null, $order=null, $limit=null, $start=null);

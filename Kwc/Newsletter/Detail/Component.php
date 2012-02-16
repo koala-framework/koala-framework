@@ -24,8 +24,83 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
         $ret['checkRtrList'] = !!Kwf_Registry::get('config')->service->rtrlist->url;
+        $ret['flags']['skipFulltext'] = true;
 
         $ret['extConfig'] = 'Kwc_Newsletter_Detail_ExtConfig';
+
+        $ret['contentSender'] = 'Kwc_Newsletter_Detail_ContentSender';
+        return $ret;
+    }
+
+    public function countQueue()
+    {
+        $model = $this->getData()->parent->getComponent()->getChildModel()->getDependentModel('Queue');
+        $select = $model->select()->whereEquals('newsletter_id', $this->getData()->row->id);
+        return $model->countRows($select);
+    }
+
+    public function importToQueue(Kwf_Model_Abstract $model, Kwf_Model_Select $select)
+    {
+        $ret = array('rtrExcluded' => array());
+        $newsletter = $this->getData()->row;
+        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
+            throw new Kwf_ClientException(trlKwf('Can only add users to a paused newsletter'));
+        }
+
+        // check if the necessary modelShortcut is set in 'mail' childComponent
+        $generators = $this->_getSetting('generators');
+        // this function checks if everything neccessary is set
+        Kwc_Mail_Redirect_Component::getRecipientModelShortcut(
+            $generators['mail']['component'],
+            get_class($model)
+        );
+
+        if (!$model->hasColumnMappings('Kwc_Mail_Recipient_Mapping')) {
+            throw new Kwf_Exception('importToQueue must only be called for model that have column mapping "Kwc_Mail_Recipient_Mapping"');
+        }
+
+        if ($model->hasColumnMappings('Kwc_Mail_Recipient_UnsubscribableMapping')) {
+            $unsubscribeColumn = $model->getColumnMapping(
+                'Kwc_Mail_Recipient_UnsubscribableMapping', 'unsubscribed'
+            );
+            $select->whereEquals($unsubscribeColumn, 0);
+        }
+        if ($model->hasColumn('activated')) {
+            $select->whereEquals('activated', 1);
+        }
+        $mapping = $model->getColumnMappings('Kwc_Mail_Recipient_Mapping');
+        $import = array();
+        $emails = array();
+        foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $e) {
+            $import[] = array(
+                'newsletter_id' => $newsletter->id,
+                'recipient_model' => get_class($model),
+                'recipient_id' => $e['id'],
+                'status' => 'queued',
+                'searchtext' =>
+                    $e[$mapping['firstname']] . ' ' .
+                    $e[$mapping['lastname']] . ' ' .
+                    $e[$mapping['email']]
+            );
+            $emails[] = $e[$mapping['email']];
+        }
+
+        // check against rtr-ecg list
+        if (count($this->_rtrCheck)) {
+            $badKeys = Kwf_Util_RtrList::getBadKeys($emails);
+
+            // remove the bad rtr entries from the list
+            if ($badKeys) {
+                foreach ($badKeys as $badKey) {
+                    $ret['rtrExcluded'][] = $this->_rtrCheck[$badKey];
+                    unset($import[$badKey]);
+                }
+            }
+        }
+
+        // add to model
+        $queueModel = $this->getData()->parent->getComponent()->getChildModel()->getDependentModel('Queue');
+        $queueModel->import(Kwf_Model_Db::FORMAT_ARRAY, $import, array('ignore' => true));
         return $ret;
     }
 

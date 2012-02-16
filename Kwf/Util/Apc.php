@@ -34,17 +34,29 @@ class Kwf_Util_Apc
         ));
 
         $client->setUri($url);
-        $response = $client->request();
-        $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+        $body = 'could not reach web per http';
+        try {
+            $response = $client->request();
+            $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+            $body = $response->getBody();
+        } catch (Exception $e) {
+            $result = false;
+        }
         if (!$result && $config->server->noRedirectPattern) {
             $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
             $url2 = "$urlPart$d/kwf/util/apc/clear-cache";
             $client->setUri($url2);
-            $response = $client->request();
+            try {
+                $response = $client->request();
+                $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+                $body = $response->getBody();
+            } catch (Exception $e) {
+                $result = false;
+            }
         }
         return array(
             'result' => $result,
-            'message' => $response->getBody(),
+            'message' => $body,
             'time' => round((microtime(true)-$s)*1000),
             'url' => $url,
             'url2' => isset($url2) ? $url2 : null,
@@ -65,11 +77,17 @@ class Kwf_Util_Apc
 
         if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/kwf/util/apc/clear-cache') {
             $s = microtime(true);
+            if (isset($_REQUEST['cacheSimple'])) {
+                foreach ($_REQUEST['cacheSimple'] as $id) {
+                    Kwf_Cache_Simple::clear($id);
+                }
+            }
             if (isset($_REQUEST['cacheIds'])) {
                 foreach (explode(',', $_REQUEST['cacheIds']) as $cacheId) {
                     apc_delete($cacheId);
                 }
-            } else if (isset($_REQUEST['files'])) {
+            }
+            if (isset($_REQUEST['files'])) {
                 foreach (explode(',', $_REQUEST['files']) as $file) {
                     @apc_delete_file($file);
                 }

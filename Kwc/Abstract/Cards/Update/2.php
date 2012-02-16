@@ -16,10 +16,9 @@ class Kwc_Abstract_Cards_Update_2 extends Kwf_Update
             $config = array(
                 'search' => $row['component_id'] . '-link',
                 'replace' => $row['component_id'] . '-child',
-                'pattern' => $row['component_id'] . '-link%',
             );
             $this->_actions[] = new Kwf_Update_Action_Component_ConvertComponentIds($config);
         }
-        parent::preUpdate();
+        parent::update();
     }
 }

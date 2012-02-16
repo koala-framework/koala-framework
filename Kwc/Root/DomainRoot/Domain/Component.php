@@ -13,12 +13,17 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwf('Domain');
         $ret['flags']['subroot'] = 'domain';
         $ret['flags']['hasHome'] = true;
+        $ret['flags']['hasDomain'] = true;
         return $ret;
+    }
+
+    public function getDomain()
+    {
+        return $this->getData()->row->domain;
     }
 
     public static function getComponentForHost($host)
     {
-        $host = str_replace('www.', '', $host);
         $root = Kwf_Component_Data_Root::getInstance();
         $settings = Kwc_Abstract::getSetting($root->componentClass, 'generators');
         $row = Kwf_Model_Abstract::getInstance($settings['domain']['model'])->getRowByHost($host);

@@ -313,6 +313,11 @@ class Kwf_Acl extends Zend_Acl
                     //wenn keine children dropdown ignorieren
                     continue;
                 }
+                if (count($menu['children']) == 1 && $resource->getCollapseIfSingleChild()) {
+                    $m = $menu;
+                    $menu = $menu['children'][0];
+                    $menu['menuConfig'] = $m['menuConfig'];
+                }
             } else if ($resource instanceof Kwf_Acl_Resource_MenuEvent) {
                 $menu['type'] = 'event';
                 $menu['eventConfig'] = $resource->getMenuEventConfig();

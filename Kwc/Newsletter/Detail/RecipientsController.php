@@ -7,4 +7,11 @@ class Kwc_Newsletter_Detail_RecipientsController extends Kwc_Newsletter_Subscrib
     {
         return Kwf_Controller_Action::_isAllowedComponent();
     }
+
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        $ret->whereEquals('unsubscribed', false);
+        return $ret;
+    }
 }

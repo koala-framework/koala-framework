@@ -19,6 +19,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     //damit im save() die childRows autom. mitgespeichert werden können
     private $_childRows = array();
     private $_isDeleted = false;
+    private $_siblingRowsWhereSet = false;  //for free memory
 
     //public static $objectsCount;
     //public static $objectsByModel = array();
@@ -36,6 +37,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
 
         if (isset($config['siblingRows'])) {
             $this->_siblingRows = (array)$config['siblingRows'];
+            $this->_siblingRowsWhereSet = true;
         }
 
         if (isset($config['exprValues'])) {
@@ -90,6 +92,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
 
     public function setSiblingRows(array $rows)
     {
+        $this->_siblingRowsWhereSet = true;
         $this->_siblingRows = $rows;
         return $this;
     }
@@ -630,7 +633,15 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
      */
     public function freeMemory()
     {
-        //unset($this->_siblingRows);
+        if (!$this->_siblingRowsWhereSet) {
+            $this->_siblingRows = null;
+        }
         $this->_childRows = array();
+    }
+
+    public function getByColumnMapping($mapping, $column)
+    {
+        $c = $this->getModel()->getColumnMapping($mapping, $column);
+        return $this->$c;
     }
 }

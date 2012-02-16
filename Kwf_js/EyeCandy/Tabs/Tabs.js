@@ -18,8 +18,8 @@ Kwf.Tabs = function(el) {
     this.el = el;
     this.el.addClass('kwfTabsFx');
     this._activeTabIdx = null;
-    this.switchEls = Ext.query('.kwfTabsLink', this.el.dom);
-    this.contentEls = Ext.query('.kwfTabsContent', this.el.dom);
+    this.switchEls = Ext.query('> .kwfTabsLink', this.el.dom);
+    this.contentEls = Ext.query('> .kwfTabsContent', this.el.dom);
     this.fxDuration = .5;
 
     this.tabsContents = this.el.createChild({
@@ -81,6 +81,12 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
         if (this._activeTabIdx == idx) return;
 
         var newContentEl = Ext.get(this.contentEls[idx]);
+        Ext.get(this.switchEls[idx]).addClass('kwfTabsLinkActive');
+        newContentEl.setStyle('z-index', '1');
+        newContentEl.setOpacity(1);
+        newContentEl.setVisible(true);
+        newContentEl.addClass('kwfTabsContentActive');
+
         var oldContentEl = Ext.get(this.contentEls[this._activeTabIdx]);
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('kwfTabsLinkActive');
@@ -88,6 +94,11 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
             newContentEl.setStyle('position', 'absolute');
             oldContentEl.setStyle('z-index', '2');
             newContentEl.setStyle('z-index', '1');
+            oldContentEl.setVisible(false);
+        }
+        Kwf.callOnContentReady(this.contentEls[idx], {newRender: false});
+        if (this._activeTabIdx !== null) {
+            oldContentEl.setVisible(true);
             oldContentEl.fadeOut({
                 duration: this.fxDuration,
                 callback: function(el) {
@@ -104,11 +115,6 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
                 }
             });
         }
-        Ext.get(this.switchEls[idx]).addClass('kwfTabsLinkActive');
-        newContentEl.setStyle('z-index', '1');
-        newContentEl.setOpacity(1);
-        newContentEl.setVisible(true);
-        newContentEl.addClass('kwfTabsContentActive');
 
         this.tabsContents.setHeight(oldContentEl.getHeight());
         this.tabsContents.scale(undefined, newContentEl.getHeight(), {
@@ -130,7 +136,6 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
 
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
-        Kwf.callOnContentReady(this.contentEls[idx], {newRender: false});
         Kwf.Statistics.count(document.location.href + '#tab' + (idx + 1));
 
         this._activeTabIdx = idx;

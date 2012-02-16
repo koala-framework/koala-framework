@@ -20,32 +20,122 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
             )
         );
     }
+
     public function indexAction()
     {
+        ini_set('memory_limit', '512M');
         set_time_limit(0);
 
-        $parentSource = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
-        if (!$parentSource) throw new Kwf_Exception_Client("source not found");
-        $parentTarget = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('target'), array('ignoreVisible'=>true));
-        if (!$parentTarget) throw new Kwf_Exception_Client("target not found");
-        
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
+        if (!$source) throw new Kwf_Exception_Client("source not found");
+        $target = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('target'), array('ignoreVisible'=>true));
+        if (!$target) throw new Kwf_Exception_Client("target not found");
 
         Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         echo "counting pages...";
-        $steps = 0;
-        foreach ($parentSource->getChildComponents(array('ignoreVisible'=>true)) as $source) {
-            $steps += Kwf_Util_Component::getDuplicateProgressSteps($source);
-        }
+        $steps = Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         echo " ".$steps."\n";
 
         $ad = new Zend_ProgressBar_Adapter_Console();
         $ad->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_BAR, Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT, Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
         $progressBar = new Zend_ProgressBar($ad, 0, $steps);
 
-        foreach ($parentSource->getChildComponents(array('ignoreVisible'=>true)) as $source) {
-            Kwf_Util_Component::duplicate($source, $parentTarget, $progressBar);
+        Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
+
+        Kwf_Util_Component::afterDuplicate($source, $target);
+
+        $progressBar->finish();
+
+        exit;
+    }
+
+    private function _getChildIds($id)
+    {
+        static $pageParentIds;
+        if (!isset($pageParentIds)) {
+            $pageParentIds = array();
+            foreach (Kwf_Registry::get('db')->query("SELECT id, parent_id FROM kwf_pages")->fetchAll() as $row) {
+                $pageParentIds[$row['id']] = $row['parent_id'];
+            }
         }
+        $ret = array();
+        foreach ($pageParentIds as $pageId=>$parentId) {
+            if ($parentId == $id) {
+                $ret[] = $pageId;
+                $ret = array_merge($ret, $this->_getChildIds($pageId));
+            }
+        }
+        return $ret;
+    }
+
+    //if component-deep-copy stopped for some reason use this action to delete a half copied domain
+    //attention: components with dbIdShortcut are NOT handled correctly
+    public function cleanAction()
+    {
+        set_time_limit(0);
+
+        if (!$this->_getParam('id')) throw new Kwf_Exception_Client("required parameter --id");
+        $db = Zend_Registry::get('db');
+        $tables = array();
+        foreach ($db->query("SHOW TABLES")->fetchAll() as $table) {
+            $table = array_values($table);
+            $table = $table[0];
+            $hasComponentId = false;
+            if ($table == 'kwf_pages') {
+                $tables[] = $table;
+            } else {
+                foreach ($db->query("SHOW FIELDS FROM $table")->fetchAll() as $field) {
+                    if ($field['Field'] == 'component_id') {
+                        $tables[] = $table;
+                    }
+                }
+            }
+        }
+
+        $ids = $this->_getChildIds($this->_getParam('id'));
+        array_unshift($ids, $this->_getParam('id'));
+        foreach ($ids as $id) {
+            foreach ($tables as $table) {
+                if ($table == 'kwf_pages') {
+                    $column = 'id';
+                } else {
+                    $column = 'component_id';
+                }
+                $sql = "DELETE FROM $table ".
+                    "WHERE $column='$id' ".
+                       "OR $column LIKE '".str_replace('_', '\_', $id)."\_%' ".
+                       "OR $column LIKE '".str_replace('_', '\_', $id)."-%'";
+                echo $sql."\n";
+                //echo ".";
+                if ($this->_getParam('force')) $db->query($sql);
+            }
+        }
+        if (!$this->_getParam('force')) echo "\nadd parameter --force to actually execute queries\n";
+        exit;
+    }
+
+    public function testAction()
+    {
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
+        if (!$source) throw new Kwf_Exception_Client("source not found");
+        $parentTarget = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('target'), array('ignoreVisible'=>true));
+        if (!$parentTarget) throw new Kwf_Exception_Client("target not found");
+
+
+        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+
+        echo "counting pages...";
+        $steps = Kwf_Util_Component::getDuplicateProgressSteps($source);
+        echo " ".$steps."\n";
+
+        $ad = new Zend_ProgressBar_Adapter_Console();
+        $ad->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_BAR, Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT, Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
+        $progressBar = new Zend_ProgressBar($ad, 0, $steps);
+
+        $target = Kwf_Util_Component::duplicate($source, $parentTarget, $progressBar);
+
+        Kwf_Util_Component::afterDuplicate($source, $target);
 
         $progressBar->finish();
 

@@ -40,12 +40,7 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                     if ($c == 'Kwf_Form_Field_Abstract' || $c == 'Kwf_Form_Field_SimpleAbstract') break;
                 }
                 $class .= implode(' ', array_reverse($classParts));
-				if (!isset($item['id'])) {
-                    $class .= ' '.$item['item']->getFieldName();
-                }
-            }
-            if (isset($item['id'])) {
-                $class .= ' '.$item['id'];
+                $class .= ' '.$item['item']->getFieldName();
             }
             $preHtml = '<div class="'.$class.'">';
             if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getFieldLabel()) {

@@ -4,6 +4,16 @@ class Kwc_Newsletter_Subscribe_RecipientController extends Kwf_Controller_Action
     protected $_permissions = array('save', 'add');
     protected $_formName = 'Kwc_Newsletter_EditSubscriber_Form';
 
+    public function preDispatch()
+    {
+        if (!isset($this->_form)) {
+            if (isset($this->_formName)) {
+                $this->_form = new $this->_formName('form', $this->_getParam('class'), $this->_getParam('newsletterComponentId'));
+            }
+        }
+        parent::preDispatch();
+    }
+
     protected function _isAllowedComponent()
     {
         $authData = $this->_getAuthData();

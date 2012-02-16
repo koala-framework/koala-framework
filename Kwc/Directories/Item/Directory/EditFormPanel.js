@@ -23,3 +23,5 @@ Kwc.Directories.Item.Directory.EditFormPanel = Ext.extend(Kwf.Auto.FormPanel,
         this.lastComponentId = this.getBaseParams().componentId;
     }
 });
+
+Ext.reg('kwc.directories.item.directory.form', Kwc.Directories.Item.Directory.EditFormPanel);

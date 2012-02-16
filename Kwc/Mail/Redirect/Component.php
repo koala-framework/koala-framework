@@ -9,7 +9,13 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         $ret['childModel'] = 'Kwc_Mail_Redirect_Model';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
+        $ret['contentSender'] = 'Kwc_Mail_Redirect_ContentSender';
         return $ret;
+    }
+
+    public final function getRedirectRow()
+    {
+        return $this->_getRedirectRow();
     }
 
     protected function _getRedirectRow()
@@ -49,7 +55,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if ($params['hash'] != $this->_getHash(array(
             $params['redirectId'], $params['recipientId'], $params['recipientModelShortcut']
         ))) {
-//             throw new Kwf_Exception("The submitted hash is incorrect.");
+            throw new Kwf_Exception("The submitted hash is incorrect.");
         }
 
         // statistics
@@ -76,12 +82,8 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $statRow->save();
         }
 
-        // if it is of type redirect, do the redirect
         $r = $this->_getRedirectRow();
-        if ($r->type == 'redirect') {
-            header('Location: '.$r->value);
-            exit;
-        } else if ($r->type == 'showcomponent') {
+        if ($r->type == 'showcomponent') {
             $recipientRow = Kwf_Model_Abstract::getInstance($params['recipientModelClass'])
                 ->getRow($params['recipientId']);
             $c = Kwf_Component_Data_Root::getInstance()
@@ -89,18 +91,6 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $c->processMailRedirectInput($recipientRow, $inputData);
         }
     }
-
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $r = $this->_getRedirectRow();
-        if ($r->type == 'showcomponent') {
-            $ret['showcomponent'] = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($r->value);
-        }
-        return $ret;
-    }
-
 
     public function replaceLinks($mailText, Kwc_Mail_Recipient_Interface $recipient = null)
     {
@@ -123,7 +113,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $m = $this->getChildModel();
         }
 
-        while (preg_match('/\*(.+?)\*(.+?)\*/', $mailText, $matches)) {
+        while (preg_match('/\*([a-zA-Z_]+?)\*(.+?)\*/', $mailText, $matches)) {
             if (!$recipient) {
                 $mailText = str_replace(
                     $matches[0],

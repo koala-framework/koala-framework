@@ -18,19 +18,10 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
         $this->processInput($params);
     }
 
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        // Wird von redirect component eingebunden, obwohl sie direkt unter
-        // newsletter liegt. Dadurch dass die action '' ist, bleibt die form
-        // nach dem abschicken auf der selben seite
-        $ret['action'] = '';
-        return $ret;
-    }
-
     protected function _initForm()
     {
-        parent::_initForm();
+        $formClass = Kwc_Admin::getComponentClass($this, 'FrontendForm');
+        $this->_form = new $formClass('form', $this->getData()->componentClass, null);
         if ($this->_recipient) {
             $this->_form->setId($this->_recipient->id);
         }

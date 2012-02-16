@@ -2,13 +2,6 @@
 class Kwc_NewsletterCategory_Subscribe_FrontendForm extends Kwc_Newsletter_Subscribe_FrontendForm
 {
     protected $_modelName = 'Kwc_NewsletterCategory_Subscribe_Model';
-    private $_subscribeComponentId;
-
-    public function __construct($name, $subscribeComponentId)
-    {
-        $this->_subscribeComponentId = $subscribeComponentId;
-        parent::__construct($name);
-    }
 
     protected function _initFields()
     {

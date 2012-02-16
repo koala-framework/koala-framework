@@ -4,7 +4,7 @@ class Kwf_Controller_Action_Welcome_IndexController extends Kwf_Controller_Actio
     public function indexAction()
     {
         $location = '/';
-        if ($this->getFrontController() instanceof Kwf_Controller_Front_Component) {
+        if ($this->getFrontController()->getRouter()->hasRoute('admin')) {
             $location = '/admin';
         }
         header('Location: ' . $location);

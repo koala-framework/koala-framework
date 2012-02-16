@@ -36,6 +36,7 @@ class Kwc_Mail_Component extends Kwc_Abstract
 
         $ret['mailHtmlStyles'] = array();
         $ret['bcc'] = false;
+        $ret['returnPath'] = null;
         $ret['viewCache'] = false;
         return $ret;
     }
@@ -112,7 +113,9 @@ class Kwc_Mail_Component extends Kwc_Abstract
         }
         if ($this->getRow()->reply_email) {
             $mail->setReplyTo($this->getRow()->reply_email);
-            $mail->setReturnPath($this->getRow()->reply_email);
+        }
+        if ($this->_getSetting('returnPath')) {
+            $mail->setReturnPath($this->_getSetting('returnPath'));
         }
 
         if ($this->_images){

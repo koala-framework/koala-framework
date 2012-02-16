@@ -5,9 +5,40 @@ class Kwf_Controller_Action_Redirects_RedirectController extends Kwf_Controller_
     protected $_buttons = array('save');
     protected $_permissions = array('save', 'add');
 
+    public static function getDomains()
+    {
+        if (!Kwf_Component_Data_Root::getComponentClass()) {
+            return null;
+        }
+        $domainComponentClasses = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            if (Kwc_Abstract::getFlag($c, 'hasDomain')) {
+                $domainComponentClasses[] = $c;
+            }
+        }
+        $domains = array();
+        foreach (Kwf_Component_Data_Root::getInstance()
+            ->getComponentsBySameClass($domainComponentClasses, array('ignoreVisible'=>true)) as $c
+        ) {
+            $acl = Zend_Registry::get('acl');
+            if ($acl->getComponentAcl()->isAllowed(Kwf_Registry::get('userModel')->getAuthedUser(), $c)) {
+                $domains[$c->dbId] = $c->name;
+            }
+        }
+        return $domains;
+    }
+
     protected function _initFields()
     {
         parent::_initFields();
+        $domains = self::getDomains();
+        if ($domains && count($domains) > 1) {
+            $this->_form->add(new Kwf_Form_Field_Select('domain_component_id', trlKwf('Domain')))
+                ->setWidth(150)
+                ->setValues($domains)
+                ->setAllowBlank(false);
+        }
+
         $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Source')));
         $fs->add(new Kwf_Form_Field_Select('type', trlKwf('Type')))
             ->setWidth(150)
@@ -51,5 +82,30 @@ class Kwf_Controller_Action_Redirects_RedirectController extends Kwf_Controller_
 
         $this->_form->add(new Kwf_Form_Field_TextField('comment', trlKwf('Comment')))
             ->setWidth(500);
+    }
+
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
+    {
+        parent::_beforeSave($row);
+        $domains = self::getDomains();
+        if ($domains && count($domains) == 1) {
+            $row->domain_component_id = array_pop(array_keys($domains));
+        }
+    }
+
+    protected function _hasPermissions($row, $action)
+    {
+        $ret = parent::_hasPermissions($row, $action);
+
+        $acl = Zend_Registry::get('acl');
+        if ($ret) {
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($row->domain_component_id, array('limit'=>1)) as $d) {
+                if (!$acl->getComponentAcl()->isAllowed(Kwf_Registry::get('userModel')->getAuthedUser(), $d)) {
+                    $ret = false;
+                    break;
+                }
+            }
+        }
+        return $ret;
     }
 }
