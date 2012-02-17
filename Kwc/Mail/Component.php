@@ -2,7 +2,6 @@
 class Kwc_Mail_Component extends Kwc_Abstract
 {
     private $_mailData;
-    protected $_images = array();
 
     public static function getSettings()
     {
@@ -88,8 +87,6 @@ class Kwc_Mail_Component extends Kwc_Abstract
 
     public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
-        $this->_images = array();
-
         $this->_mailData = $data;
 
         $mail = new Kwf_Mail();
@@ -104,7 +101,7 @@ class Kwc_Mail_Component extends Kwc_Abstract
         if ((!$format && $recipient->getMailFormat() == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) ||
             $format == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
         {
-            $mail->setBodyHtml($this->getHtml($recipient, true));
+            $mail->setBodyHtml($this->getHtml($recipient));
         }
         $mail->setBodyText($this->getText($recipient));
         $mail->setSubject($this->getSubject($recipient));
@@ -116,13 +113,6 @@ class Kwc_Mail_Component extends Kwc_Abstract
         }
         if ($this->_getSetting('returnPath')) {
             $mail->setReturnPath($this->_getSetting('returnPath'));
-        }
-
-        if ($this->_images){
-            $mail->setType(Zend_Mime::MULTIPART_RELATED);
-            foreach ($this->_images as $image) {
-                $mail->addAttachment($image);
-            }
         }
 
         if ($this->_getSetting('bcc')) {
@@ -155,15 +145,12 @@ class Kwc_Mail_Component extends Kwc_Abstract
 
     /**
      * Gibt den personalisierten HTML-Quelltext der Mail zurück
-     *
-     * @param bool forMail: ob images als attachment angehängt werden sollen oder nicht
      */
-    public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
+    public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $renderer = new Kwf_Component_Renderer_Mail();
         $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_HTML);
         $renderer->setRecipient($recipient);
-        $renderer->setAttachImages($attachImages);
         $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
@@ -269,16 +256,5 @@ class Kwc_Mail_Component extends Kwc_Abstract
             }
         }
         return $ret;
-    }
-
-    public function addImage(Zend_Mime_Part $image)
-    {
-        // Bild nur hinzufügen wenn dasselbe nicht bereits hinzugefügt wurde.
-        // wenns das bild schon gibt, hat es eh die gleiche cid
-        $found = false;
-        foreach ($this->_images as $addedImg) {
-            if ($image == $addedImg) $found = true;
-        }
-        if ($found === false) $this->_images[] = $image;
     }
 }

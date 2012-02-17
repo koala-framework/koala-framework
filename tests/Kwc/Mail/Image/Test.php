@@ -16,7 +16,6 @@ class Kwc_Mail_Image_Test extends Kwc_TestAbstract
         $c = $mail->getComponent();
 
         $url = '/assets/kwf/images/rating/ratingStarFull.jpg';
-        $this->assertEquals('<img src="cid:' . md5($url) . '" width="13" height="12" alt="" />', $c->getHtml(null, true));
         $this->assertEquals('<img src="' . $url . '" width="13" height="12" alt="" />', $c->getHtml());
         $images = $this->_root->getComponent()->getImages();
         $this->assertEquals(1, count($images));

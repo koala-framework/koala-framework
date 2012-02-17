@@ -33,9 +33,4 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
             array($image->getComponent()->getData()->componentId, null, $image->componentClass)
         );
     }
-
-    protected function _getMailInterface()
-    {
-        return $this->_getRenderer();
-    }
 }

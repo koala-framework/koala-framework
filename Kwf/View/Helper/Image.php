@@ -39,32 +39,12 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         }
     }
 
-    protected function _getMailInterface()
-    {
-        return $this->_getView();
-    }
-
     public function image($image, $alt = '', $cssClass = null)
     {
         if (!$image) return '';
 
         $url = $this->_getImageUrl($image);
         if ($url == '') return '';
-
-        if ($this->_getMailInterface() instanceof Kwf_View_MailInterface) {
-            if ($this->_getMailInterface()->getAttachImages()) {
-                $contents = $this->_getImageFileContents($image);
-                if (!isset($contents['contents'])) $contents['contents'] = file_get_contents($contents['file']);
-                $img = new Zend_Mime_Part($contents['contents']);
-                $img->type = $contents['mimeType'];
-                $img->disposition = Zend_Mime::DISPOSITION_INLINE;
-                $img->encoding = Zend_Mime::ENCODING_BASE64;
-                $img->filename = substr(strrchr($url, '/'), 1); //filename wird gesucht
-                $img->id = md5($url);
-                $this->_getMailInterface()->addImage($img);
-                $url = "cid:".$img->id;
-            }
-        }
 
         $size = $this->_getImageSize($image);
         $attr = '';
