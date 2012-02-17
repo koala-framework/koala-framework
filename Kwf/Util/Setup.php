@@ -84,7 +84,7 @@ class Kwf_Util_Setup
             'Kwf_Component_View_Helper_Master',
             'Kwf_Component_View_Helper_Component',
             'Kwf_Component_View_Helper_ComponentLink',
-            'Kwf_View_Helper_ComponentLink',
+            'Kwf_View_Helper_Link',
             'Kwf_Component_Abstract_ContentSender_Abstract',
             'Kwf_Component_Abstract_ContentSender_Default',
         );

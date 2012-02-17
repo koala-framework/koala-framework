@@ -1,13 +1,47 @@
 <?php
 class Kwf_View_Helper_Link
 {
-    public function link($url)
+    /**
+     * @param string target page
+     * @param string custom text, if empty component name will be used
+     * @param config array: cssClass, get, anchor
+     */
+    public function componentLink($target, $text = null, $config = array())
     {
-        $withHttp = $url;
-        if (substr($withHttp, 0, 7) != 'http://') {
-            $withHttp = 'http://'.$withHttp;
+        if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
+
+        if (is_array($target)) {
+            $url = $target['url'];
+            $rel = isset($target['rel']) ? $target['rel'] : '';
+        } else {
+            $url = $target;
+            $rel = '';
         }
-        $withoutHttp = substr($withHttp, 7);
-        return '<a href="'.$withHttp.'" rel="popup_blank">'.$withoutHttp.'</a>';
+        return $this->getLink($url, $rel, $text, $config);
+    }
+
+    public function getLink($url, $rel, $text, $config)
+    {
+        if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
+
+        if (!empty($config['get'])) {
+            $url .= '?';
+            foreach ($config['get'] as $key => $val) $url .= "&$key=$val";
+        }
+        /*
+        if ($this->_getRenderer() instanceof Kwf_View_MailInterface) {
+            $url = '*redirect*' . $url . '*';
+        }
+        */
+
+        if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
+        $cssClass = '';
+        if (!empty($config['cssClass'])) {
+            $cssClass = $config['cssClass'];
+            if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
+            $cssClass = " class=\"$cssClass\"";
+        }
+
+        return "<a href=\"".htmlspecialchars($url)."\" rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
     }
 }

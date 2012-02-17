@@ -6,16 +6,12 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
      * @param string custom text, if empty component name will be used
      * @param config array: cssClass, get, anchor, skipAppendLinkText, skipAppendText
      */
-    public function componentLink($target, $text = null, $config = array())
+    public function componentLink(Kwf_Component_Data $target, $text = null, $config = array())
     {
         if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
 
-        if ($target instanceof Kwf_Component_Data) {
-            $config = $this->_getConfig($target, $text, $config);
-            return $this->_getRenderPlaceholder($target->componentId, $config);
-        } else {
-            return $this->_getHelper()->componentLink($target, $text, $config);
-        }
+        $config = $this->_getConfig($target, $text, $config);
+        return $this->_getRenderPlaceholder($target->componentId, $config);
     }
 
     protected function _getConfig($target, $text, $config)
@@ -29,9 +25,13 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
     public function render($componentId, $config)
     {
         $targetComponent = $this->_getComponentById($config['targetComponentId']);
-        $targetPage = $this->_getHelper()->getTargetPage($targetComponent);
+        $targetPage = $targetComponent->getPage();
         if (!$targetPage) return '';
-
+        if (is_instance_of($targetPage->componentClass, 'Kwc_Basic_LinkTag_Abstract_Component')) {
+            if (!$targetPage->getComponent()->hasContent()) {
+                return '';
+            }
+        }
         $componentLinkModifiers = array();
         if (Kwc_Abstract::getFlag($targetPage->componentClass, 'hasComponentLinkModifiers')) {
             $componentLinkModifiers = $targetPage->getComponent()->getComponentLinkModifiers();
@@ -42,7 +42,6 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
     public function renderCached($cachedContent, $componentId, $config)
     {
         if (!$cachedContent) return '';
-
 
         $targetPage = unserialize($cachedContent);
 
@@ -56,7 +55,8 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
                 }
             }
         }
-        $ret = $this->_getHelper()->getLink(
+        $helper = new Kwf_View_Helper_Link();
+        $ret = $helper->getLink(
             $targetPage[0], $targetPage[1], $text,
             $config
         );
@@ -70,12 +70,5 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
             }
         }
         return $ret;
-    }
-
-    private function _getHelper()
-    {
-        $helper = new Kwf_View_Helper_ComponentLink();
-        $helper->setRenderer($this->_getRenderer());
-        return $helper;
     }
 }
