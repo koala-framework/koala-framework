@@ -57,14 +57,14 @@ class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
         foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
-            $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', str_replace('_', '\\_', $id).'%');
+            $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', $id.'%');
         }
     }
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
         foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
-            $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', str_replace('_', '\\_', $id).'%');
+            $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', $id.'%');
         }
     }
 }
