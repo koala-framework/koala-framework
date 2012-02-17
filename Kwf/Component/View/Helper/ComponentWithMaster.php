@@ -18,11 +18,10 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             foreach ($innerComponent->getChildBoxes() as $box) {
                 $vars['boxes'][$box->box] = $box;
             }
-            $template = Kwc_Abstract::getTemplateFile($component->componentClass, 'Master');
 
             $view = new Kwf_Component_View($this->_getRenderer());
             $view->assign($vars);
-            return $view->render($template);
+            return $view->render($this->_getRenderer()->getTemplate($component, 'Master'));
         } else if ($last['type'] == 'component') {
             $plugins = $component->getPlugins();
             return $this->_getRenderPlaceholder($component->componentId, array(), null, 'component', $plugins);

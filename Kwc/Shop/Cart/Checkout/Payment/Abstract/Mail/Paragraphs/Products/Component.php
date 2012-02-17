@@ -10,15 +10,16 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_Component
         return $ret;
     }
 
-    public function getMailVars(Kwc_Shop_Cart_Order $order)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getMailVars($order);
+        $ret = parent::getTemplateVars();
+        if ($renderer && $renderer instanceof Kwf_Component_Renderer_Mail) {
+            $order = $renderer->getRecipient();
+            $ret['items'] = $order->getProductsData();
 
-        $ret['items'] = $order->getProductsData();
-
-        $c = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component');
-        $ret['sumRows'] = $c->getComponent()->getSumRows($order);
-
+            $c = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component');
+            $ret['sumRows'] = $c->getComponent()->getSumRows($order);
+        }
         return $ret;
     }
 }

@@ -24,6 +24,15 @@ abstract class Kwf_Component_Renderer_Abstract
         return $ret;
     }
 
+    protected abstract function _getCacheName();
+
+    public function getTemplate(Kwf_Component_Data $component, $type)
+    {
+        $template = Kwc_Abstract::getTemplateFile($component->componentClass, $type);
+        if (!$template) throw new Kwf_Exception("No $type-Template found for '{$component->componentClass}'");
+        return $template;
+    }
+
     protected function _renderComponentContent($component)
     {
         $masterHelper = new Kwf_Component_View_Helper_Component();
@@ -72,7 +81,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 $saveCache = true;
                 $content = Kwf_Component_Cache::NO_CACHE;
                 if ($helper->enableCache()) {
-                    $content = Kwf_Component_Cache::getInstance()->load($componentId, $type, $value);
+                    $content = Kwf_Component_Cache::getInstance()->load($componentId, $this->_getCacheName(), $type, $value);
                     $statType = 'cache';
                 }
                 if ($content == Kwf_Component_Cache::NO_CACHE) {
@@ -82,7 +91,7 @@ abstract class Kwf_Component_Renderer_Abstract
             }
             if (is_null($content)) {
                 $content = $helper->render($componentId, $config);
-                if ($saveCache && $helper->saveCache($componentId, $config, $value, $content)) {
+                if ($saveCache && $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content)) {
                     $statType = 'nocache';
                 } else {
                     $statType = 'noviewcache';

@@ -8,11 +8,6 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         $partial = new $partialsClass($config['params']);
 
         // Normaler Output
-        $componentClass = $component->componentClass;
-        $template = $this->_getTemplate($componentClass, $config);
-        if (!$template) {
-            throw new Kwf_Exception("No Partial-Template found for '$componentClass'");
-        }
         $vars = $component->getComponent()->getPartialVars($partial, $config['id'], $config['info']);
         if (is_null($vars)) {
             throw new Kwf_Exception('Return value of getPartialVars() returns null. Maybe forgot "return $ret?"');
@@ -21,10 +16,10 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         $vars['data'] = $component;
         $view = new Kwf_Component_View($this->_getRenderer());
         $view->assign($vars);
-        return $view->render($template);
+        return $view->render($this->_getRenderer()->getTemplate($component, 'Partial'));
     }
 
-    
+
     public function renderCached($cachedContent, $componentId, $config)
     {
         //add info to dynamic config, has to be done here because config is dynamic (from partials)
@@ -41,9 +36,4 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         return $cachedContent;
     }
 
-
-    protected function _getTemplate($componentClass, $config)
-    {
-        return Kwc_Abstract::getTemplateFile($componentClass, 'Partial');
-    }
 }

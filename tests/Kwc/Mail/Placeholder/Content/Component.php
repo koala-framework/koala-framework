@@ -1,10 +1,13 @@
 <?php
 class Kwc_Mail_Placeholder_Content_Component extends Kwc_Abstract
 {
-    public function getMailVars($user = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        return array(
-            'username' => $user ? $user->getMailLastname() : 'noname'
-        );
+        $ret = parent::getTemplateVars();
+        if ($renderer && $renderer instanceof Kwf_Component_Renderer_Mail) {
+            $user = $renderer->getRecipient();
+            $ret['username'] = $user ? $user->getMailLastname() : 'noname';
+        }
+        return $ret;
     }
 }

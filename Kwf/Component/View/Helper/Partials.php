@@ -36,13 +36,7 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
                     'number' => $number++,
                 )
             );
-            $type = 'partial';
-            $renderer = $this->_getRenderer();
-            if ($renderer instanceof Kwf_Component_Renderer_Mail) {
-                $type = 'mailPartial';
-                $config['type'] = $renderer->getRenderFormat();
-            }
-            $ret .= $this->_getRenderPlaceholder($componentId, $config, $id, $type);
+            $ret .= $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
         }
         if (empty($ids) && isset($params['noEntriesFound']) && $params['noEntriesFound']) {
             $ret .= '<span class="noEntriesFound">' . $params['noEntriesFound'] . '<span>';

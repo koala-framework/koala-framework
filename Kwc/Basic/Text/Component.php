@@ -115,6 +115,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                 $ret['contentParts'][] = $part;
             }
         }
+        $ret['styles'] = $this->_getSetting('emailStyles');
         return $ret;
     }
 
@@ -193,12 +194,5 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $html = preg_replace('#  +#', ' ', $html);
         $html = trim($html);
         return $html;
-    }
-
-    public function getMailVars($user)
-    {
-        $ret = parent::getMailVars($user);
-        $ret['styles'] = $this->_getSetting('emailStyles');
-        return $ret;
     }
 }

@@ -37,7 +37,7 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
      *
      * wird nur aufgerufen wenn ungecached (logisch)
      */
-    public function saveCache($componentId, $config, $value, $content)
+    public function saveCache($componentId, $renderer, $config, $value, $content)
     {
         $component = $this->_getComponentById($componentId);
         $type = $this->_getType();
@@ -46,6 +46,7 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         Kwf_Component_Cache::getInstance()->save(
             $component,
             $content,
+            $renderer,
             $type,
             $value
         );

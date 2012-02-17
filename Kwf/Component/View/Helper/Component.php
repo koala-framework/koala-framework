@@ -10,7 +10,6 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
         $type = 'component';
 
         if ($renderer instanceof Kwf_Component_Renderer_Mail) {
-            $type = 'mail';
             $config = array(
                 'type' => $renderer->getRenderFormat()
             );
@@ -25,15 +24,14 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
 
     public function render($componentId, $config)
     {
+        $renderer = $this->_getRenderer();
         $component = $this->_getComponentById($componentId);
-        $template = Kwc_Abstract::getTemplateFile($component->componentClass);
-        if (!$template) throw new Kwf_Exception("No Component-Template found for '{$component->componentClass}'");
 
-        $vars = $component->getComponent()->getTemplateVars();
+        $vars = $component->getComponent()->getTemplateVars($renderer);
         if (is_null($vars)) throw new Kwf_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
 
-        $view = new Kwf_Component_View($this->_getRenderer());
+        $view = new Kwf_Component_View($renderer);
         $view->assign($vars);
-        return $view->render($template);
+        return $view->render($renderer->getTemplate($component, 'Component'));
     }
 }

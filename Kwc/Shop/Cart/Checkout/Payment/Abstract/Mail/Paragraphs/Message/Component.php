@@ -9,11 +9,12 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Message_Component 
         return $ret;
     }
 
-    public function getMailVars(Kwc_Shop_Cart_Order $order)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getMailVars($order);
-        $ret['order'] = $order;
+        $ret = parent::getTemplateVars();
+        if ($renderer && $renderer instanceof Kwf_Component_Renderer_Mail) {
+            $ret['order'] = $renderer->getRecipient();
+        }
         return $ret;
     }
-
 }

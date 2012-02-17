@@ -315,10 +315,10 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
     /**
      * Returns variables that can be used in Component.tpl
-     *
+     * @param e.g. for accessing recipient in Mail_Renderer
      * @return array
      */
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ret = array();
         $ret['placeholder'] = $this->_getPlaceholder();
@@ -354,13 +354,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
-     * Returns variables that can be used in Mail.*.tpl
-     *
-     * @return array
+     * @deprecated
      */
-    public function getMailVars($user = null)
+    public final function getMailVars($user = null)
     {
-        return $this->getTemplateVars();
+        throw new Kwf_Exception('not supported anymore, replace by getTemplateVars($renderer)');
     }
 
     /**

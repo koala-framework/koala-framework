@@ -1,19 +1,20 @@
 CREATE TABLE IF NOT EXISTS `cache_component` (
   `component_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `db_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
-  `page_db_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `page_db_id` varchar(255) NOT NULL,
   `component_class` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `type` enum('page','component','master','partials','partial','mail','componentLink') CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `value` varchar(20) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT '' COMMENT 'Bei Partial partialId oder bei master component_id zu der das master gehört',
+  `renderer` enum('component','mail_html','mail_txt') NOT NULL,
+  `type` enum('page','component','master','partial','componentLink') CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `value` varchar(20) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT '' COMMENT 'Bei Partial partialId oder bei master component_id zu der das master gehÃƒÂ¶rt',
   `expire` int(11) DEFAULT NULL,
   `deleted` smallint(1) NOT NULL DEFAULT '0',
-  `content` longtext NOT NULL,
+  `content` longblob NOT NULL,
   PRIMARY KEY (`component_id`,`type`,`value`),
   KEY `component_class` (`component_class`),
   KEY `db_id` (`db_id`),
-  KEY `page_db_id` (`page_db_id`),
   KEY `value` (`value`),
-  KEY `type` (`type`)
+  KEY `type` (`type`),
+  KEY `page_db_id` (`page_db_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `cache_component_url` (
