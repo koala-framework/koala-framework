@@ -19,6 +19,8 @@ class Kwf_Assets_GoogleMapsApiKey
     // for unit testing only
     public static function getConfigDomain($host)
     {
+        if (!$host) return null;
+
         $longDomainEndings = array('or.at', 'co.at', 'gv.at', 'co.uk');
 
         // cleaning out the dots of long domain endings
