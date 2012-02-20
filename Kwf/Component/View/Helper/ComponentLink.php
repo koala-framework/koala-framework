@@ -55,9 +55,15 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
                 }
             }
         }
+
+        $url = $targetPage[0];
+        if ($this->_getRenderer() instanceof Kwf_View_MailInterface) {
+            $url = '*redirect*' . $url . '*';
+        }
+
         $helper = new Kwf_View_Helper_Link();
         $ret = $helper->getLink(
-            $targetPage[0], $targetPage[1], $text,
+            $url, $targetPage[1], $text,
             $config
         );
         if (!isset($config['skipAppendText']) || !$config['skipAppendText']) {

@@ -24,7 +24,9 @@ class Kwc_Mail_Component extends Kwc_Abstract
         );
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/PreviewWindow.js';
-        $ret['plugins']['placeholders'] = 'Kwc_Mail_PlaceholdersPlugin';
+        $ret['mailPlugins'] = array(
+            'placeholders' => 'Kwc_Mail_PlaceholdersPlugin',
+        );
         $ret['ownModel'] = 'Kwc_Mail_Model';
         $ret['componentName'] = 'Mail';
 
@@ -188,12 +190,10 @@ class Kwc_Mail_Component extends Kwc_Abstract
 
     protected function _processPlaceholder($ret, Kwc_Mail_Recipient_Interface $recipient = null)
     {
-        $plugins = $this->_getSetting('plugins');
+        $plugins = $this->_getSetting('mailPlugins');
         foreach ($plugins as $p) {
-            if (is_instance_of($p, 'Kwf_Component_Plugin_View_Abstract')) {
-                $p = new $p($this->getData()->componentId);
-                $ret = $p->processMailOutput($ret, $recipient);
-            }
+            $p = new $p($this->getData()->componentId);
+            $ret = $p->processMailOutput($ret, $recipient);
         }
         return $ret;
     }

@@ -1,6 +1,13 @@
 <?php
 class Kwf_View_Helper_Link
 {
+    protected $_view = null;
+    public function setView($view)
+    {
+        $this->_view = $view;
+    }
+
+
     /**
      * @param string target page
      * @param string custom text, if empty component name will be used
@@ -28,11 +35,6 @@ class Kwf_View_Helper_Link
             $url .= '?';
             foreach ($config['get'] as $key => $val) $url .= "&$key=$val";
         }
-        /*
-        if ($this->_getRenderer() instanceof Kwf_View_MailInterface) {
-            $url = '*redirect*' . $url . '*';
-        }
-        */
 
         if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
         $cssClass = '';

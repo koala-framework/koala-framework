@@ -10,4 +10,9 @@ abstract class Kwf_Component_Plugin_Abstract extends Kwf_Component_Abstract
     {
         return self::hasSetting(get_class($this), $setting);
     }
+
+    public function processOutput($output)
+    {
+        return $output;
+    }
 }
