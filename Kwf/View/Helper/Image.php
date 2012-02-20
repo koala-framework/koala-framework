@@ -45,6 +45,11 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
 
         $url = $this->_getImageUrl($image);
         if ($url == '') return '';
+        if ($this->_getRenderer() instanceof Kwf_View_MailInterface &&
+            substr($url, 0, 1) == '/'
+        ) {
+            $url = 'http://'.Kwf_Config::getValue('server.domain') . $url;
+        }
 
         $size = $this->_getImageSize($image);
         $attr = '';

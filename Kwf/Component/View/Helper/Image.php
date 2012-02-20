@@ -16,7 +16,24 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
             !is_instance_of($image->componentClass, 'Kwc_Abstract_Image_Component')
         ) throw new Kwf_Exception("No Kwc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
 
-        return $image->getComponent()->getImageUrl();
+        $url = $image->getComponent()->getImageUrl();
+
+        if ($this->_getRenderer() instanceof Kwf_View_MailInterface &&
+            substr($url, 0, 1) == '/'
+        ) {
+            $data = $image;
+            while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
+                $data = $data->parent;
+            }
+            if ($data) {
+                $domain = $data->getComponent()->getDomain();
+            } else {
+                $domain = Kwf_Config::getValue('server.domain');
+            }
+            $url = "http://$domain$url";
+        }
+
+        return $url;
     }
 
     protected function _getImageSize($image)
