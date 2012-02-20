@@ -9,7 +9,9 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
 
         $this->_columns->add(new Kwf_Grid_Column('pos'));
         $this->_columns->add(new Kwf_Grid_Column('link', trlKwf('Link'), 600));
-        $this->_columns->add(new Kwf_Grid_Column('count', trlKwf('Count'), 50));
+        $this->_columns->add(new Kwf_Grid_Column('count', trlKwf('Count'), 50))
+            ->setCssClass('kwf-renderer-decimal');
+        $this->_columns->add(new Kwf_Grid_Column('percent', trlKwf('[%]'), 50));
     }
 
     protected function _fetchData()
@@ -29,12 +31,14 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             $ret[] = array(
                 'pos' => $pos++,
                 'link' => '<b>' . trlKwf('click rate') . '</b> (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
-                'count' => number_format(($count / $total)*100, 2) . '%'
+                'count' => $count,
+                'percent' => number_format(($count / $total)*100, 2) . '%'
             );
             $ret[] = array(
                 'pos' => $pos++,
                 'link' => ' ',
-                'count' => ''
+                'count' => '',
+                'percent' => '',
             );
         }
         $sql = "
@@ -62,7 +66,8 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             $ret[] = array(
                 'pos' => $pos++,
                 'link' => $link,
-                'count' => $row['c']
+                'count' => $row['c'],
+                'percent' => number_format(($row['c'] / $total)*100, 2) . '%'
             );
         }
         return $ret;
