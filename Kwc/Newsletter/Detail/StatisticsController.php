@@ -18,7 +18,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
 
         $ret = array();
         $newsletterId = substr(strrchr($this->_getParam('componentId'), '_'), 1);
-        $total = $db->fetchOne("SELECT count_sent FROM kwc_newsletter WHERE id=$newsletterId");
+        $total = $db->fetchOne("SELECT count(*) FROM kwc_newsletter_queue WHERE newsletter_id=$newsletterId AND status='sent'");
         if ($total) {
             $sql = "
                 SELECT count(distinct (concat (recipient_id,recipient_model_shortcut)))
