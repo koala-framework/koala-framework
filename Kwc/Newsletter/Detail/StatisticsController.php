@@ -24,7 +24,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         $total = $db->fetchOne("SELECT count_sent FROM kwc_newsletter WHERE id=$newsletterId");
         if ($total) {
             $sql = "
-                SELECT count(distinct (concat (recipient_id,recipient_model_shortcut)))
+                SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
                 FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
                 WHERE s.redirect_id=r.id AND mail_component_id='" . $this->_getParam('componentId') . "-mail'";
             $count = $db->fetchOne($sql);
