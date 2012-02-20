@@ -45,7 +45,6 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             GROUP BY redirect_id
             ORDER BY c DESC
         ";
-        $ret = array();
         foreach (Kwf_Registry::get('db')->fetchAll($sql) as $row) {
             if ($row['type'] == 'showcomponent') {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row['value']);
