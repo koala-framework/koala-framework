@@ -5,6 +5,7 @@
 <de>Sichtbar</de>
 <id>2</id>
 <bg>&#x432;&#x438;&#x434;&#x438;&#x43C;</bg>
+<ua>&#x412;&#x438;&#x434;&#x438;&#x43C;&#x438;&#x439;</ua>
 </text>
 <text>
 <en>Error</en>
@@ -34,6 +35,7 @@
 <en>Login</en>
 <de>Einloggen</de>
 <id>13</id>
+<ua>&#x41B;&#x43E;&#x433;&#x456;&#x43D;</ua>
 </text>
 <text>
 <en>Hello {0}!</en>
