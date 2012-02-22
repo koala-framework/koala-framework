@@ -103,7 +103,7 @@ class Kwf_Component_Data
                 return 'http://'.$data->getComponent()->getDomain().$ret;
             }
         } while($data = $data->parent);
-        return 'http://'.Kwf_Config::getValue('server.domain').$url;
+        return 'http://'.Kwf_Config::getValue('server.domain').$ret;
     }
 
     public function __get($var)
