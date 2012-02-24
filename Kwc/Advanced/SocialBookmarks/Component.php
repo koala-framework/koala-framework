@@ -33,11 +33,10 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
                     $icon = false;
                 }
                 if ($icon) $icon = '/assets/kwf'.$icon;
-                if ($net->network_id == 'googleplus') {
-                    $pageUrl = Kwf_Component_Data_Root::getInstance()->getAbsoluteUrl();
-                    $pageUrl = substr(strrchr($pageUrl, '/'), 1);
-                } else {
-                    $pageUrl = $currentPage->getAbsoluteUrl();
+                $pageUrl = $currentPage->getAbsoluteUrl();
+                if ($net->network_id == 'googleplus') { // g+ only likes domain name
+                    $parts = parse_url($pageUrl);
+                    if (isset($parts['host'])) $pageUrl = $parts['host'];
                 }
                 $url = str_replace('{0}', $pageUrl, $networks[$net->network_id]['url']);
                 $ret[] = array(
