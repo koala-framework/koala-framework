@@ -53,7 +53,7 @@ class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
             ),
             array(
                 'id' => 'googleplus',
-                'url' => 'https://plus.google.com/u/0/s/{0}',
+                'url' => 'https://plusone.google.com/_/+1/confirm?hl=en&url={0}',
                 'name' => 'GooglePlus'
                 ),
             array(
