@@ -38,6 +38,11 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         } else {
             $return['icon'] = null;
         }
+        if ($parentRow) {
+            $return['extension'] = $parentRow->extension;
+        } else {
+            $return['extension'] = null;
+        }
         return $return;
     }
 
