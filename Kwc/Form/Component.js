@@ -54,6 +54,8 @@ Kwc.Form.Component = function(form)
     if (button) {
         button.on('click', this.onSubmit, this);
     }
+
+    this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
 };
 Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
     getFieldConfig: function(fieldName)
@@ -80,6 +82,8 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         button.down('.saving').show();
         button.down('.submit').hide();
 
+        this.errorStyle.hideErrors();
+
         Ext.Ajax.request({
             url: this.config.controllerUrl + '/json-save',
             ignoreErrors: true,
@@ -94,34 +98,17 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             },
             success: function(response, options, r) {
 
+                this.errorStyle.showErrors({
+                    errorFields: r.errorFields,
+                    errorMessages: r.errorMessages
+                });
+
                 var hasErrors = false;
-
-                // remove and set error classes for fields
-                this.fields.each(function(field) {
-                    field.hideError();
-                }, this);
-                for(var fieldName in r.errorFields) {
-                    var field = this.findField(fieldName);
-                    field.showError(r.errorFields[fieldName]);
-                    hasErrors= true;
-                }
-
-                // remove and add error messages
-                var error = this.el.parent().child('.webFormError');
-                if (error) error.remove();
-
                 if (r.errorMessages && r.errorMessages.length) {
-                    hasErrors= true;
-                    var html = '<div class="webStandard kwcFormError webFormError">';
-                    html += '<p class="error">' + r.errorPlaceholder + ':</p>';
-                    html += '<ul>';
-                    for (var i=0; i<r.errorMessages.length; i++) {
-                        html += '<li>' + r.errorMessages[i] + '</li>';
-                    }
-                    html += '</ul>';
-                    html += '</div>';
-                    this.el.parent().createChild(html, this.el.down('form'));
-                    Kwf.callOnContentReady(this.el.dom, {newRender: true});
+                    hasErrors = true;
+                }
+                for(var fieldName in r.errorFields) {
+                    hasErrors = true;
                 }
 
                 // show success content

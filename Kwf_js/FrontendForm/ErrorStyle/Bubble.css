@@ -1,0 +1,7 @@
+
+.kwfFieldErrorBubble { position: absolute; border: 1px solid red; }
+.kwfFieldErrorBubble .closeButton {
+    width: 10px; height: 10px; position: absolute;
+    top: 0; right: 0;
+    background-color: black;
+}

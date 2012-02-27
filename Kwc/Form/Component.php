@@ -27,6 +27,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['dep'][] = 'ExtDateMenu';
         $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
+        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Abstract.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
 
         $ret['flags']['processInput'] = true;
@@ -34,6 +35,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
         $ret['buttonClass'] = 'kwfButtonFlat'; //um standard styles aus dem Kwf zu umgehen
+
+        $ret['errorStyle'] = null; //default from config.ini: kwc.form.errorStyle
 
         return $ret;
     }
@@ -292,11 +295,14 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         foreach ($iterator as $field) {
             $fieldConfig[$field->getFieldName()] = (object)$field->getFrontendMetaData();
         }
+        $errorStyle = $this->_getSetting('errorStyle');
+        if (!$errorStyle) $errorStyle = Kwf_Config::getValue('kwc.form.errorStyle');
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'componentId' => $this->getData()->componentId,
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,
+            'errorStyle' => $errorStyle,
         );
 
         return $ret;

@@ -31,28 +31,6 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
     },
     show: function() {
         this.el.show();
-    },
-    hideError: function()
-    {
-        this.el.removeClass('kwfFieldError');
-        if (this.errorEl) this.errorEl.hide();
-    },
-    showError: function(msg) {
-        this.el.addClass('kwfFieldError');
-        if (!this.errorEl) {
-            if (this.el.up('.kwfFormContainerColumn')) {
-                this.errorEl = this.el.up('.kwfFormContainerColumn').up('.kwfFormContainerColumns').createChild({
-                    cls: 'kwfFieldErrorMessage'
-                });
-            } else {
-                this.errorEl = this.el.createChild({
-                    cls: 'kwfFieldErrorMessage'
-                });
-            }
-            this.errorEl.enableDisplayMode('block');
-        }
-        this.errorEl.show();
-        this.errorEl.update(msg);
     }
 });
 
