@@ -5,6 +5,8 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
 
     private $_dynamicForms = array();
 
+    private $_componentField;
+
     protected function _hasPermissions($row, $action)
     {
         if ($row->getModel() instanceof Kwf_Component_Model) {
@@ -70,6 +72,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
 
         if (isset($fields['component'])) {
             $possibleComponentClasses = $fields['component']->getPossibleComponentClasses();
+            $this->_componentField = $fields['component'];
         } else {
             if (!$this->_getParam('id')) {
                 throw new Kwf_Exception("not supported for adding");
@@ -168,13 +171,15 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
     {
         parent::_beforeValidate($postData);
         //don't save hidden forms
-        $cmpField = $this->_form->fields['component'];
-        $component = $postData[$cmpField->getFieldName()];
-        $formsForComponent = $cmpField->getFormsForComponent();
-        $visibleForms = $formsForComponent[$component];
-        foreach ($this->_dynamicForms as $f) {
-            if (!in_array($f->getName(), $visibleForms)) {
-                $this->_form->fields->remove($f);
+        if ($this->_componentField) {
+            $cmpField = $this->_form->fields['component'];
+            $component = $postData[$cmpField->getFieldName()];
+            $formsForComponent = $cmpField->getFormsForComponent();
+            $visibleForms = $formsForComponent[$component];
+            foreach ($this->_dynamicForms as $f) {
+                if (!in_array($f->getName(), $visibleForms)) {
+                    $this->_form->fields->remove($f);
+                }
             }
         }
     }
