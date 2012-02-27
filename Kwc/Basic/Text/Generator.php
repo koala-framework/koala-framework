@@ -42,12 +42,15 @@ class Kwc_Basic_Text_Generator extends Kwf_Component_Generator_Table
         if ($source->generator !== $this) {
             throw new Kwf_Exception("you must call this only with the correct source");
         }
-        $newRow = $source->row->duplicate(array(
-            'component_id' => $parentTarget->dbId
-        ));
-        $id = '-' . substr($newRow->component, 0, 1) . $newRow->nr;
-        $target = $parentTarget->getChildComponent($id);
-        Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        $target = null;
+        if ($source->row->saved == 1) {
+            $newRow = $source->row->duplicate(array(
+                'component_id' => $parentTarget->dbId
+            ));
+            $id = '-' . substr($newRow->component, 0, 1) . $newRow->nr;
+            $target = $parentTarget->getChildComponent($id);
+            Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        }
         return $target;
     }
 }
