@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
 {
-    protected $_fileRow;
+    private $_fileRow;
 
     public static function getSettings()
     {
