@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `kwf_redirects` (
   KEY `type` (`type`),
   KEY `source` (`source`),
   KEY `active` (`active`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `kwf_uploads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

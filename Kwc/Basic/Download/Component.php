@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
 {
-    protected $_fileRow;
+    private $_fileRow;
 
     public static function getSettings()
     {
@@ -37,6 +37,11 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
             $return['icon'] = $this->getIcon();
         } else {
             $return['icon'] = null;
+        }
+        if ($parentRow) {
+            $return['extension'] = $parentRow->extension;
+        } else {
+            $return['extension'] = null;
         }
         return $return;
     }

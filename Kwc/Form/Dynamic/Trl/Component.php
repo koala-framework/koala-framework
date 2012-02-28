@@ -25,4 +25,9 @@ class Kwc_Form_Dynamic_Trl_Component extends Kwc_Chained_Trl_Component
 
         return $ret;
     }
+
+    public function getMailSettings()
+    {
+        return $this->getData()->chained->getComponent()->getMailSettings();
+    }
 }

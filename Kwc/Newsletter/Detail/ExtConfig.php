@@ -45,8 +45,9 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                     'tbar'                  => array()
                 ),
                 'statistics' => array(
-                    'xtype'                 => 'kwf.autogrid',
-                    'controllerUrl'         => $this->getControllerUrl('Statistics'),
+                    'xtype'                 => 'kwc.newsletter.statistics',
+                    'linksControllerUrl'    => $this->getControllerUrl('Statistics'),
+                    'clicksControllerUrl'   => $this->getControllerUrl('StatisticsClicks'),
                     'title'                 => trlKwf('Statistics')
                 )
             )

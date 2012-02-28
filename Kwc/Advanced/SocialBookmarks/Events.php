@@ -28,8 +28,16 @@ class Kwc_Advanced_SocialBookmarks_Events extends Kwf_Component_Abstract_Events
 
     public function onNetworksRowUpdate(Kwf_Component_Event_Row_Abstract $event)
     {
+        $dbId = $event->row->component_id;
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $event->row->component_id
+            $this->_class, $dbId
         ));
+
+        $alternativeCmps = call_user_func(array($this->_class, 'getAlternativeComponents'));
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
+                $alternativeCmps['inherit'], $c->componentId
+            ));
+        }
     }
 }

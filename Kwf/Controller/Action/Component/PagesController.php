@@ -371,13 +371,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (!$page) {
             throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
-        if (Kwf_Registry::get('config')->server->previewDomain) {
-            $previewDomain = Kwf_Registry::get('config')->server->previewDomain;
-            $href = 'http://' . $previewDomain . $page->url;
-        } else {
-            $href = $page->url;
-        }
-        header('Location: '.$href);
+        header('Location: '.$page->getAbsolutePreviewUrl());
         exit;
     }
 

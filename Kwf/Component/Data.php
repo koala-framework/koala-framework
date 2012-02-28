@@ -133,7 +133,29 @@ class Kwf_Component_Data
                 return 'http://'.$data->getComponent()->getDomain().$ret;
             }
         } while($data = $data->parent);
-        return 'http://'.Kwf_Config::getValue('server.domain').$url;
+        return 'http://'.Kwf_Config::getValue('server.domain').$ret;
+    }
+
+    /**
+     * Returns absolute url including preview domain
+     *
+     * @return string
+     */
+    public function getAbsolutePreviewUrl()
+    {
+        $ret = $this->url;
+        $data = $this;
+        do {
+            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
+                return 'http://'.$data->getComponent()->getPreviewDomain().$ret;
+            }
+        } while($data = $data->parent);
+
+        if (Kwf_Config::getValue('server.previewDomain')) {
+            return 'http://' . Kwf_Config::getValue('server.previewDomain') . $page->url;
+        } else {
+            return 'http://' . Kwf_Config::getValue('server.domain') . $page->url;
+        }
     }
 
     public function __get($var)

@@ -11,7 +11,15 @@ class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Compo
             'Kwc_Paragraphs_Component';
         $ret['cssClass'] = 'webStandard';
         $ret['assets']['dep'][] = 'KwfSwitchDisplay';
-        $ret['extConfig'] = 'Kwc_Abstract_Composite_ExtConfigTabs';
+        $ret['extConfig'] = 'Kwc_Composite_SwitchDisplay_ExtConfig';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['startOpened'] = $this->getRow()->start_opened;
         return $ret;
     }
 }

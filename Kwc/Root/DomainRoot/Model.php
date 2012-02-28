@@ -2,7 +2,7 @@
 class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
 {
     private $_domains;
-    protected $_columns = array('id', 'name', 'domain', 'component', 'pattern');
+    protected $_columns = array('id', 'name', 'domain', 'preview_domain', 'component', 'pattern');
     protected $_toStringField = 'name';
 
     public function __construct($config = array())
@@ -24,6 +24,7 @@ class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
                 'id' => $key,
                 'name' => isset($val['name']) ? $val['name'] : $key,
                 'domain' => $val['domain'],
+                'preview_domain' => isset($val['previewDomain']) ? $val['previewDomain'] : $val['domain'],
                 'component' => $key,
                 'pattern' => $pattern
             );

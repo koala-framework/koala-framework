@@ -15,9 +15,6 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
 
     private function _getNetworks($currentPage)
     {
-        //TODO: funktioniert mit mehreren domains nicht korrekt
-        $pageUrl = 'http://'.Kwf_Registry::get('config')->server->domain.$currentPage->url;
-
         $networks = array();
         foreach (Kwf_Model_Abstract::getInstance('Kwc_Advanced_SocialBookmarks_AvaliableModel')->getRows() as $n) {
             $networks[$n->id] = $n->toArray();
@@ -36,7 +33,7 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
                     $icon = false;
                 }
                 if ($icon) $icon = '/assets/kwf'.$icon;
-                $url = str_replace('{0}', $pageUrl, $networks[$net->network_id]['url']);
+                $url = str_replace('{0}', $currentPage->getAbsoluteUrl(), $networks[$net->network_id]['url']);
                 $ret[] = array(
                     'name' => $networks[$net->network_id]['name'],
                     'url' => $url,

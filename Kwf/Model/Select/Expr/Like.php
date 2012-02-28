@@ -1,5 +1,9 @@
 <?php
 /**
+ * % matches any number of characters
+ *
+ * Unlike Sql _ is not a wildcard!
+ *
  * @package Model
  * @subpackage Expr
  */
