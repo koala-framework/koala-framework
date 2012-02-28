@@ -52,7 +52,18 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     public function getVisiblePageChildIds($parentId)
     {
         $ret = array();
-        if (isset($this->_pageChilds[$parentId])) {
+        if (!is_numeric($parentId)) {
+            foreach ($this->_pageChilds as $parentId=>$childs) {
+                if (substr($parentId, 0, strlen($parentId)) == $parentId) {
+                    foreach ($childs as $id) {
+                        if ($this->_pageData[$id]['visible']) {
+                            $ret[] = $id;
+                            $ret = array_merge($ret, $this->getVisiblePageChildIds($id));
+                        }
+                    }
+                }
+            }
+        } else if (isset($this->_pageChilds[$parentId])) {
             foreach ($this->_pageChilds[$parentId] as $id) {
                 if ($this->_pageData[$id]['visible']) {
                     $ret[] = $id;
