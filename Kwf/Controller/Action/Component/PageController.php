@@ -117,6 +117,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                 'inheritClasses' => $inheritClasses
             );
             $formsForComponent[$key] = array();
+            $classesToCheckForPagePropertiesForm = array('__pageComponent' => $componentClass);
             foreach (Kwf_Component_Generator_Abstract::getInstances($component) as $g) {
                 if ($g->getGeneratorFlag('page')) continue;
                 if (!array_key_exists($g->getClass().'.'.$g->getGeneratorKey(), $generatorForms)) {
@@ -135,29 +136,28 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                     $formsForComponent[$key][] = 'gen_'.$g->getGeneratorKey();
                 }
 
-                $classesToCheckForPagePropertiesForm = array('__pageComponent' => $componentClass);
                 if ($g instanceof Kwf_Component_Generator_Static) {
                     $classesToCheckForPagePropertiesForm = array_merge($classesToCheckForPagePropertiesForm, $g->getChildComponentClasses());
                 }
-                foreach ($classesToCheckForPagePropertiesForm as $childComponentKey=>$childComponentClass) {
-                    if (!array_key_exists($childComponentKey.'_'.$childComponentClass, $componentForms)) {
-                        $f = Kwc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
-                        if ($f) {
-                            $f->setName('cmp_'.$childComponentKey.'_'.$childComponentClass);
-                            if ($childComponentKey=='__pageComponent') {
-                                $f->setIdTemplate('{0}');
-                            } else {
-                                $f->setIdTemplate('{0}-'.$childComponentKey);
-                            }
-                            $f->setShowDependingOnComponent(true);
-                            $this->_dynamicForms[] = $f;
-                            $fields->add($f);
+            }
+            foreach ($classesToCheckForPagePropertiesForm as $childComponentKey=>$childComponentClass) {
+                if (!array_key_exists($childComponentKey.'_'.$childComponentClass, $componentForms)) {
+                    $f = Kwc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
+                    if ($f) {
+                        $f->setName('cmp_'.$childComponentKey.'_'.$childComponentClass);
+                        if ($childComponentKey=='__pageComponent') {
+                            $f->setIdTemplate('{0}');
+                        } else {
+                            $f->setIdTemplate('{0}-'.$childComponentKey);
                         }
-                        $componentForms[$childComponentKey.'_'.$childComponentClass] = $f;
+                        $f->setShowDependingOnComponent(true);
+                        $this->_dynamicForms[] = $f;
+                        $fields->add($f);
                     }
-                    if ($componentForms[$childComponentKey.'_'.$childComponentClass]) {
-                        $formsForComponent[$key][] = 'cmp_'.$childComponentKey.'_'.$childComponentClass;
-                    }
+                    $componentForms[$childComponentKey.'_'.$childComponentClass] = $f;
+                }
+                if ($componentForms[$childComponentKey.'_'.$childComponentClass]) {
+                    $formsForComponent[$key][] = 'cmp_'.$childComponentKey.'_'.$childComponentClass;
                 }
             }
         }
@@ -172,9 +172,8 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
         parent::_beforeValidate($postData);
         //don't save hidden forms
         if ($this->_componentField) {
-            $cmpField = $this->_form->fields['component'];
-            $component = $postData[$cmpField->getFieldName()];
-            $formsForComponent = $cmpField->getFormsForComponent();
+            $component = $postData[$this->_componentField->getFieldName()];
+            $formsForComponent = $this->_componentField->getFormsForComponent();
             $visibleForms = $formsForComponent[$component];
             foreach ($this->_dynamicForms as $f) {
                 if (!in_array($f->getName(), $visibleForms)) {
