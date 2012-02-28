@@ -12,7 +12,7 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
      * @param  array $options Options to use for the Search Query
      * @throws Zend_Service_Exception
      * @return Vps_Service_Amazon_ResultSet
-     * @see http://www.amazon.com/gp/aws/sdk/main.html/102-9041115-9057709?s=AWSEcommerceService&v=2005-10-05&p=ApiReference/ItemSearchOperation
+     * @see http://www.amazon.com/gp/aws/sdk/main.html/102-9041115-9057709?s=AWSEcommerceService&v=2011-08-01&p=ApiReference/ItemSearchOperation
      */
     public function itemSearch(array $options)
     {
@@ -48,7 +48,7 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
      *
      * @param  string $asin    Amazon ASIN ID
      * @param  array  $options Query Options
-     * @see http://www.amazon.com/gp/aws/sdk/main.html/102-9041115-9057709?s=AWSEcommerceService&v=2005-10-05&p=ApiReference/ItemLookupOperation
+     * @see http://www.amazon.com/gp/aws/sdk/main.html/102-9041115-9057709?s=AWSEcommerceService&v=2011-08-01&p=ApiReference/ItemLookupOperation
      * @throws Zend_Service_Exception
      * @return Vps_Service_Amazon_Item|Vps_Service_Amazon_ResultSet
      */
@@ -79,7 +79,7 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
         $dom->loadXML($response->getBody());
         self::_checkErrors($dom);
         $xpath = new DOMXPath($dom);
-        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2011-08-01');
         $items = $xpath->query('//az:Items/az:Item');
 
         if ($items->length == 1) {
@@ -94,7 +94,7 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
      *
      * @param  string $asin    Amazon ASIN ID
      * @param  array  $options Query Options
-     * @see http://docs.amazonwebservices.com/AWSEcommerceService/2005-10-05/ApiReference/BrowseNodeLookupOperation.html
+     * @see http://docs.amazonwebservices.com/AWSEcommerceService/2011-08-01/ApiReference/BrowseNodeLookupOperation.html
      * @throws Zend_Service_Exception
      * @return Vps_Service_Amazon_BrowseNode
      */

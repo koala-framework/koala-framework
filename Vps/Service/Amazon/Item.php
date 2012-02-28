@@ -8,7 +8,7 @@ class Vps_Service_Amazon_Item extends Zend_Service_Amazon_Item
         parent::__construct($dom);
 
         $xpath = new DOMXPath($dom->ownerDocument);
-        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2011-08-01');
         $result = $xpath->query('./az:BrowseNodes/az:BrowseNode', $dom);
         if ($result->length >= 1) {
             $this->BrowseNodes = array();

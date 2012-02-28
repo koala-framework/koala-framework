@@ -12,12 +12,12 @@ class Vps_Service_Amazon_BrowseNode
     {
 /*
         $this->_xpath = new DOMXPath($dom);
-        $this->_xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $this->_xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2011-08-01');
         $this->_results = $this->_xpath->query('//az:Item');
 
     */
         $xpath = new DOMXPath($dom);
-        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2011-08-01');
         $this->BrowseNodeId = $xpath->query('//az:BrowseNode/az:BrowseNodeId/text()', $dom)->item(0)->data;
         $this->Name = $xpath->query('//az:BrowseNode/az:Name/text()', $dom)->item(0)->data;
 
