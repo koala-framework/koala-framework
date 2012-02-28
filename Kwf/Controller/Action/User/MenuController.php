@@ -36,10 +36,26 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
         $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
         $this->view->changeUser = $acl->isAllowed($role, 'kwf_user_changeuser', 'view');
 
+        $this->view->frontendUrls = array();
         if (Kwf_Registry::get('acl')->has('kwf_component_pages')) {
-            $this->view->hasFrontend = true;
-        } else {
-            $this->view->hasFrontend = false;
+            foreach (Kwc_Abstract::getComponentClasses() as $c) {
+                if (Kwc_Abstract::getFlag($c, 'hasDomain')) {
+                    foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($c, array('ignoreVisible'=>true)) as $domain)  {
+                        if ($acl->getComponentAcl()->isAllowed($authData, $domain)) {
+                            $this->view->frontendUrls[] = array(
+                                'href' => 'http://'.$domain->getComponent()->getDomain().'/',
+                                'text' => $domain->name,
+                            );
+                        }
+                    }
+                }
+            }
+            if (!$this->view->frontendUrls) {
+                $this->view->frontendUrls[] = array(
+                    'href' => '/',
+                    'text' => trlKwf('Frontend'),
+                );
+            }
         }
     }
 }

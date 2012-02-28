@@ -255,15 +255,40 @@ Kwf.Menu.Index = Ext.extend(Ext.Toolbar,
         this.userToolbar.hide();
 
 
-        if (result.hasFrontend) {
+        if (result.frontendUrls.length == 1) {
+            //single frontend urls
             this.add({
                 tooltip: trlKwf('Open frontend in a new window'),
                 cls: 'x-btn-icon',
                 icon: '/assets/silkicons/world.png',
                 handler: function() {
-                    window.open('/');
+                    window.open(result.frontendUrls[0].href);
                 },
                 scope: this
+            });
+        } else if (result.frontendUrls.length > 1) {
+            //multiple frontend urls
+            var frontendItems = [];
+            result.frontendUrls.each(function(url) {
+                frontendItems.push({
+                    text: url.text,
+                    cls: 'x-btn-text-icon',
+                    icon: '/assets/silkicons/world.png',
+                    tooltip: trlKwf('Open frontend in a new window'),
+                    handler: function(options) {
+                        window.open(options.url.href);
+                    },
+                    url: url,
+                    scope: this
+                });
+            }, this);
+            this.add({
+                tooltip: trlKwf('Open frontend in a new window'),
+                cls: 'x-btn-icon',
+                icon: '/assets/silkicons/world.png',
+                menu: new Ext.menu.Menu({
+                    items: frontendItems
+                })
             });
         }
     }
