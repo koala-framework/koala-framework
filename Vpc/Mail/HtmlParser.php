@@ -92,7 +92,11 @@ class Vpc_Mail_HtmlParser
                         } else if ($style == 'font-weight' && $value == 'bold') {
                             $appendTags['b'] = array();
                         } else if ($style == 'text-align') {
-                            $appendTags['center'] = array();
+                            if ($value == 'center') {
+                                $appendTags[$value] = array();
+                            } else if ($value != 'left') {
+                                $attributes['align'] = $value;
+                            }
                         }
                     }
                 }
