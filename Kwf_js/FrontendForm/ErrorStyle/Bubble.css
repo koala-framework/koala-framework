@@ -1,7 +1,36 @@
 
-.kwfFieldErrorBubble { position: absolute; border: 1px solid red; }
+.kwfFieldErrorBubble { 
+    position: absolute; 
+    border: 2px solid #dddddd; 
+    width: 175px;
+    border-radius: 6px;
+    background-color: var(mainColor);
+    opacity: 0.8;
+    color: #fff;
+    z-index: 1000;
+    left: 65px !important;
+    top: 23px !important;
+}
+
+.kwfFieldErrorBubble:after {
+    border-color: var(mainColor) transparent;
+    border-style: solid;
+    border-width: 0px 8px 8px;
+    top: -8px;
+    content:"";
+    display: block;
+    right: 145px;
+    position: absolute;
+    width: 0;
+    z-index:10;
+}
+
+.kwfFieldErrorBubble .message {
+    padding: 5px;
+}
+
 .kwfFieldErrorBubble .closeButton {
     width: 10px; height: 10px; position: absolute;
     top: 0; right: 0;
-    background-color: black;
+    background: url('/assets/kwf/images/close.png');
 }
