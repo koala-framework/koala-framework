@@ -449,13 +449,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $this->_pageDataLoaded = false; //TODO do this only once
         $this->_loadPageData();
 
-        $source = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($parentSourceId, array('ignoreVisible'=>true))
-            ->getChildComponent(array('id'=>$childId, 'ignoreVisible'=>true));
-        $target = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($parentTargetId, array('ignoreVisible'=>true))
-            ->getChildComponent(array('id'=>$newRow->id, 'ignoreVisible'=>true));
-
+                                                        //ids are numeric, we don't have to use parentSource/parentTarget
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentById($childId, array('ignoreVisible'=>true));
+        $target = Kwf_Component_Data_Root::getInstance()->getComponentById($newRow->id, array('ignoreVisible'=>true));
         if (!$target) {
             throw new Kwf_Exception("didn't find just duplicated component '$newRow->id' below '{$parentTarget->componentId}'");
         }
