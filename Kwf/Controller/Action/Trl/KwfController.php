@@ -51,7 +51,7 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
         $langs = array();
         if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
         if ($config->languages) {
-            foreach ($config->languages as $lang) {
+            foreach ($config->languages as $lang=>$name) {
                 $langs[] = $lang;
             }
             $langs = array_values(array_unique($langs));

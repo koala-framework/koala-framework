@@ -13,4 +13,13 @@ class Kwc_Form_Dynamic_Component extends Kwc_Abstract_Composite_Component
         $ret['flags']['hasResources'] = true;
         return $ret;
     }
+
+    public function getMailSettings()
+    {
+        $row = $this->getRow();
+        return array(
+            'recipient' => $row->recipient,
+            'subject' => $row->subject,
+        );
+    }
 }

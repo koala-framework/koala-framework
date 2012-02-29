@@ -141,10 +141,10 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                 }
             }
             foreach ($classesToCheckForPagePropertiesForm as $childComponentKey=>$childComponentClass) {
-                if (!array_key_exists($childComponentKey.'_'.$childComponentClass, $componentForms)) {
+                if (!array_key_exists($key.'_'.$childComponentKey, $componentForms)) {
                     $f = Kwc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
                     if ($f) {
-                        $f->setName('cmp_'.$childComponentKey.'_'.$childComponentClass);
+                        $f->setName('cmp_'.$key.'_'.$childComponentKey);
                         if ($childComponentKey=='__pageComponent') {
                             $f->setIdTemplate('{0}');
                         } else {
@@ -154,10 +154,10 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                         $this->_dynamicForms[] = $f;
                         $fields->add($f);
                     }
-                    $componentForms[$childComponentKey.'_'.$childComponentClass] = $f;
+                    $componentForms[$key.'_'.$childComponentKey] = $f;
                 }
-                if ($componentForms[$childComponentKey.'_'.$childComponentClass]) {
-                    $formsForComponent[$key][] = 'cmp_'.$childComponentKey.'_'.$childComponentClass;
+                if ($componentForms[$key.'_'.$childComponentKey]) {
+                    $formsForComponent[$key][] = 'cmp_'.$key.'_'.$childComponentKey;
                 }
             }
         }
