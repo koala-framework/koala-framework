@@ -78,7 +78,10 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                     new Kwf_Model_Select_Expr_Higher('expire', time()),
                     new Kwf_Model_Select_Expr_IsNull('expire'),
                 )));
-            $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select);
+            $options = array(
+                'columns' => array('content', 'expire'),
+            );
+            $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select, $options);
             $content = isset($row[0]) ? $row[0]['content'] : null;
             if (isset($row[0])) {
                 $ttl = 0;
@@ -95,6 +98,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $model = $this->getModel();
         $log = Kwf_Component_Events_Log::getInstance();
         $cacheIds = array();
+        $options = array(
+            'columns' => array('component_id', 'renderer', 'type', 'value'),
+        );
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
             if ($log) {
