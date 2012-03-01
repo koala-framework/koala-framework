@@ -76,7 +76,10 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                     new Kwf_Model_Select_Expr_Higher('expire', time()),
                     new Kwf_Model_Select_Expr_IsNull('expire'),
                 )));
-            $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select);
+            $options = array(
+                'columns' => array('content', 'expire'),
+            );
+            $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select, $options);
             $content = isset($row[0]) ? $row[0]['content'] : null;
             if (isset($row[0])) {
                 $ttl = 0;
