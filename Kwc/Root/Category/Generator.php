@@ -52,7 +52,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     public function getVisiblePageChildIds($parentId)
     {
         $ret = array();
-        if (!is_numeric($parentId)) {
+        if (!is_numeric(substr($parentId, 0, 1))) {
             foreach ($this->_pageChilds as $parentId=>$childs) {
                 if (substr($parentId, 0, strlen($parentId)) == $parentId) {
                     foreach ($childs as $id) {
