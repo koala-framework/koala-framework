@@ -1,3 +1,27 @@
+.cssClass .kwfFieldError label { color: var(typo); }
+.cssClass .kwfFieldError input,
+.cssClass .kwfFieldError textarea {
+    color: var(typo);
+    background: var(highlightBg) url('/assets/web/images/stripesDark.png') repeat left 3px !important;
+    border: 1px solid var(highlightBorder) !important;
+}
+
+.cssClass button {
+    height: auto !important;
+    margin: 10px 0px 10px 190px;
+    padding: 5px 10px !important;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: var(typo);
+    line-height: 18px;
+    background: var(light);
+    border: 1px solid var(gray);
+    border-radius: 4px;
+    behavior: url(/assets/css3pie/pie.htc);
+}
+
+.cssClass button:hover { color: var(gray); }
+
 .cssClass .form_housenumber,
 .cssClass .form_city {
     clear: none;
@@ -27,16 +51,20 @@
     float: left;
 }
 .cssClass .submitWrapper .saving {
-	background-image: url(/assets/kwf/Kwc/Form/saving.gif);
-	width: 30px;
-	height: 16px;
-	visibility: hidden
+    background-image: url(/assets/kwf/Kwc/Form/saving.gif);
+    width: 30px;
+    height: 16px;
+    visibility: hidden
 }
 .cssClass input,
 .cssClass textarea,
 .cssClass select {
     padding: 2px;
     margin-bottom: 4px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: var(typo);
+    line-height: 18px;
 }
 .cssClass input.radio {
     margin-left: 10px;
@@ -61,6 +89,10 @@
     width: 120px;
     margin-right: 20px;
     text-align: right;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: var(typo);
+    line-height: 18px;
 }
 .cssClass .kwfFieldRequired label { font-weight: bold; }
 .cssClass .kwfFieldRequired span label { font-weight: normal; }
@@ -127,6 +159,4 @@
     color: $mainColor;
 }
 .cssClass span.comment { margin-left: 10px; color: #999; }
-.cssClass .kwfField { clear: both; }
-
-.cssClass .kwfFieldError label { color: red; } /* TODO beserer standard-wert */
+.cssClass .kwfField { clear: both; position: relative; }
