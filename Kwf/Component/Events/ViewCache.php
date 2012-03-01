@@ -88,7 +88,14 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
                 } else {
                     $and = array();
                     foreach ($values as $k => $v) {
-                        if (strpos($v, '%') !== false) {
+                        if (substr($v, -1) == '%') {
+                            $v = substr($v, 0, -1);
+                            $and[] = new Kwf_Model_Select_Expr_Or(array(
+                                new Kwf_Model_Select_Expr_Equal($k, $v),
+                                new Kwf_Model_Select_Expr_Like($k, $v.'-%'),
+                                new Kwf_Model_Select_Expr_Like($k, $v.'_%'),
+                            ));
+                        } else if (strpos($v, '%') !== false) {
                             $and[] = new Kwf_Model_Select_Expr_Like($k, $v);
                         } else {
                             $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
