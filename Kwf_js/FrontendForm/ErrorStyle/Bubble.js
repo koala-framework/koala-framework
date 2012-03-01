@@ -19,13 +19,21 @@ Kwf.FrontendForm.ErrorStyle.Bubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abov
                     ev.stopEvent();
                     this.fadeOut();
                 }, field.errorEl);
-
-                field.errorEl.alignTo(field.el, 'tr');
+                if (field instanceof Kwf.FrontendForm.TextArea) {
+                    field.errorEl.alignTo(field.el.child('textarea'), 'bl');
+                } else if (field.el.child('input')) {
+                    field.errorEl.alignTo(field.el.child('input'), 'bl');
+                } else {
+                    field.errorEl.alignTo(field.el, 'bl');
+                }
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();
             }
             field.errorEl.child('.message').update(r.errorFields[fieldName]);
-            field.errorEl.fadeIn();
+            field.errorEl.clearOpacity();
+            field.errorEl.fadeIn({
+                endOpacity: 0.8 //TODO read from css (but that's hard for IE)
+            });
         }
 
         if (r.errorMessages && r.errorMessages.length) {

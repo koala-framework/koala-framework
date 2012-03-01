@@ -8,8 +8,7 @@
     opacity: 0.8;
     color: #fff;
     z-index: 1000;
-    left: 65px !important;
-    top: 23px !important;
+    behavior: url(/assets/css3pie/pie.htc);
 }
 
 .kwfFieldErrorBubble:after {
