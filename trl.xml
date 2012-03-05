@@ -35,6 +35,7 @@
 <de>Passwort vergessen?</de>
 <id>12</id>
 <ro>Ati uitat parola?</ro>
+<ua>&#x417;&#x430;&#x431;&#x443;&#x43B;&#x438; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;?</ua>
 </text>
 <text>
 <en>Login</en>
@@ -55,30 +56,35 @@ has just been created.</en>
 <de>Ihr Konto bei {0}wurde soeben erstellt.</de>
 <id>15</id>
 <ro>Contul dumneavoastra la {0} a fost creat.</ro>
+<ua>&#x412;&#x430;&#x448; &#x430;&#x43A;&#x43A;&#x430;&#x443;&#x43D;&#x442; &#x441;&#x442;&#x432;&#x43E;&#x440;&#x435;&#x43D;&#x43E;</ua>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
 <de>Bitte verwenden Sie diesen Link um sich ein Passwort zu erstellen und einzuloggen.</de>
 <id>16</id>
 <ro>Va rugam sa folositi urmatorul link pentru a va alege parola si pentru autentificare.</ro>
+<ua>&#x411;&#x443;&#x434;&#x44C; &#x43B;&#x430;&#x441;&#x43A;&#x430;, &#x432;&#x438;&#x43A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x43E;&#x432;&#x443;&#x439;&#x442;&#x435; &#x446;&#x435; &#x43F;&#x43E;&#x441;&#x438;&#x43B;&#x430;&#x43D;&#x43D;&#x44F;, &#x449;&#x43E;&#x431; &#x43F;&#x43E;&#x442;&#x440;&#x430;&#x43F;&#x438;&#x442;&#x438; &#x43D;&#x430; &#x432;&#x430;&#x448; &#x430;&#x43A;&#x43A;&#x430;&#x443;&#x43D;&#x442;</ua>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
 <de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
 <id>17</id>
 <ro>Acest e-mail a afost generat automat. In caz ca raspundeti la acest e-mail exista posibilitatea sa nu fie un destinatar pentru mesajul dumneavoastra.</ro>
+<ua>&#x426;&#x435; &#x43F;&#x43E;&#x432;&#x456;&#x434;&#x43E;&#x43C;&#x43B;&#x435;&#x43D;&#x43D;&#x44F; &#x431;&#x443;&#x43B;&#x43E; &#x441;&#x444;&#x43E;&#x440;&#x43C;&#x43E;&#x432;&#x430;&#x43D;&#x43E; &#x430;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x438;&#x447;&#x43D;&#x43E;. &#x42F;&#x43A;&#x449;&#x43E; &#x412;&#x438; &#x432;&#x456;&#x434;&#x43F;&#x43E;&#x432;&#x456;&#x441;&#x442;&#x435; &#x43D;&#x430; &#x446;&#x435;&#x439; &#x43B;&#x438;&#x441;&#x442;, &#x43E;&#x434;&#x435;&#x440;&#x436;&#x443;&#x432;&#x430;&#x447;&#x430; &#x43C;&#x43E;&#x436;&#x435; &#x43D;&#x435; &#x431;&#x443;&#x442;&#x438;</ua>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
 <de>Ihr Konto bei {0} wurde gel&#xF6;scht.</de>
 <id>19</id>
 <ro>Contul dumneavoasta la {0} a fost sters.</ro>
+<ua>&#x412;&#x430;&#x448; &#x430;&#x43A;&#x43A;&#x430;&#x443;&#x43D;&#x442; &#x432;&#x438;&#x434;&#x430;&#x43B;&#x435;&#x43D;&#x43E;</ua>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
 <de>Bitte verwenden Sie den folgenden Link um sich selbst ein neues Passwort zu erstellen.</de>
 <id>22</id>
 <ro>Va rugam sa folositi acest link pentru a va schimba parola.</ro>
+<ua>&#x411;&#x443;&#x434;&#x44C; &#x43B;&#x430;&#x441;&#x43A;&#x430;, &#x432;&#x438;&#x43A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x430;&#x439;&#x442;&#x435; &#x446;&#x435; &#x43F;&#x43E;&#x441;&#x438;&#x43B;&#x430;&#x43D;&#x43D;&#x44F;, &#x449;&#x43E;&#x431; &#x43E;&#x431;&#x440;&#x430;&#x442;&#x438; &#x441;&#x432;&#x456;&#x439; &#x43D;&#x43E;&#x432;&#x438;&#x439; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;</ua>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -87,6 +93,7 @@ has just been created.</en>
 <es>Place of departure: zip code, Town, Street</es>
 <id>31</id>
 <ro>Loc de plecare: Cod postal, Oras, Strada</ro>
+<ua>&#x41C;&#x456;&#x441;&#x446;&#x435; &#x432;&#x456;&#x434;&#x43F;&#x440;&#x430;&#x432;&#x43A;&#x438;:&#x43F;&#x43E;&#x448;&#x442;&#x43E;&#x432;&#x438;&#x439; &#x43A;&#x43E;&#x434;, &#x43C;&#x456;&#x441;&#x442;&#x43E;, &#x432;&#x443;&#x43B;&#x438;&#x446;&#x44F;</ua>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -94,6 +101,7 @@ has just been created.</en>
 <es>Entered place could not been found!</es>
 <id>32</id>
 <ro>Locatia cautata nu a putut fi gasita!</ro>
+<ua>&#x412;&#x432;&#x435;&#x434;&#x435;&#x43D;&#x435; &#x43C;&#x456;&#x441;&#x446;&#x435; &#x43D;&#x435; &#x431;&#x443;&#x43B;&#x43E; &#x437;&#x43D;&#x430;&#x439;&#x434;&#x435;&#x43D;&#x43E;</ua>
 </text>
 <text>
 <en>Show Route</en>
@@ -101,66 +109,77 @@ has just been created.</en>
 <es>Show Route</es>
 <id>33</id>
 <ro>Arata ruta</ro>
+<ua>&#x41F;&#x43E;&#x43A;&#x430;&#x437;&#x430;&#x442;&#x438; &#x43C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;</ua>
 </text>
 <text>
 <en>Suggestions</en>
 <de>Vorschl&#xE4;ge</de>
 <id>34</id>
 <ro>Sugesti</ro>
+<ua>&#x41F;&#x440;&#x43E;&#x43F;&#x43E;&#x437;&#x438;&#x446;&#x456;&#x457;</ua>
 </text>
 <text>
 <en>Coordinates</en>
 <de>Koordinaten</de>
 <id>35</id>
 <ro>Coordonate</ro>
+<ua>&#x41A;&#x43E;&#x43E;&#x440;&#x434;&#x438;&#x43D;&#x430;&#x442;&#x438;</ua>
 </text>
 <text>
 <en>Zoomlevel</en>
 <de>Zoomebene</de>
 <id>36</id>
 <ro>Nivel zoom</ro>
+<ua>&#x421;&#x442;&#x443;&#x43F;&#x456;&#x43D;&#x44C; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x435;&#x43D;&#x43D;&#x44F;</ua>
 </text>
 <text>
 <en>Width</en>
 <de>Breite</de>
 <id>37</id>
 <ro>Latime</ro>
+<ua>&#x428;&#x438;&#x440;&#x438;&#x43D;&#x430;</ua>
 </text>
 <text>
 <en>Height</en>
 <de>H&#xF6;he</de>
 <id>38</id>
 <ro>Inaltime</ro>
+<ua>&#x412;&#x438;&#x441;&#x43E;&#x442;&#x430;</ua>
 </text>
 <text>
 <en>Move + Zoom</en>
 <de>Bewegen + Zoomen</de>
 <id>39</id>
 <ro>Muta + Zoom</ro>
+<ua>&#x41F;&#x435;&#x440;&#x435;&#x43C;&#x456;&#x441;&#x442;&#x438;&#x442;&#x438; &#x442;&#x430; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x438;&#x442;&#x438;</ua>
 </text>
 <text>
 <en>Move + Zoom (without zoombar)</en>
 <de>Bewegen + Zoomen (ohne Vergr&#xF6;&#xDF;erungsleiste)</de>
 <id>40</id>
 <ro>Muta + Zoom (fara bara de zoom)</ro>
+<ua>&#x41F;&#x435;&#x440;&#x435;&#x43C;&#x456;&#x441;&#x442;&#x438;&#x442;&#x438; &#x442;&#x430; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x438;&#x442;&#x438; &#x431;&#x435;&#x437; &#x448;&#x43A;&#x430;&#x43B;&#x438; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x435;&#x43D;&#x43D;&#x44F;</ua>
 </text>
 <text>
 <en>Scale</en>
 <de>Skalieren</de>
 <id>42</id>
 <ro>Scara</ro>
+<ua>&#x428;&#x43A;&#x430;&#x43B;&#x430;</ua>
 </text>
 <text>
 <en>Satelitemap</en>
 <de>Satellitenkarte</de>
 <id>43</id>
 <ro>Satelitemap</ro>
+<ua>&#x421;&#x443;&#x43F;&#x443;&#x442;&#x43D;&#x438;&#x43A;&#x43E;&#x432;&#x430; &#x43A;&#x430;&#x440;&#x442;&#x430;</ua>
 </text>
 <text>
 <en>Overviewmap</en>
 <de>&#xDC;bersichtskarte</de>
 <id>44</id>
 <ro>Prezentare mapa</ro>
+<ua>&#x41A;&#x440;&#x443;&#x43F;&#x43D;&#x43E;&#x43C;&#x430;&#x441;&#x448;&#x442;&#x430;&#x431;&#x43D;&#x430; &#x43A;&#x430;&#x440;&#x442;&#x430;</ua>
 </text>
 <text>
 <en>Worldview</en>
@@ -173,24 +192,28 @@ has just been created.</en>
 <de>Detailansicht</de>
 <id>46</id>
 <ro>Viziune detaliata</ro>
+<ua>&#x414;&#x435;&#x442;&#x430;&#x43B;&#x44C;&#x43D;&#x438;&#x439; &#x43E;&#x433;&#x43B;&#x44F;&#x434;</ua>
 </text>
 <text>
 <en>Filename</en>
 <de>Dateiname</de>
 <id>48</id>
 <ro>Nume fisier</ro>
+<ua>&#x406;'&#x43C;&#x44F; &#x444;&#x430;&#x439;&#x43B;&#x443;</ua>
 </text>
 <text>
 <en>File</en>
 <de>Datei</de>
 <id>49</id>
 <ro>Fisier</ro>
+<ua>&#x424;&#x430;&#x439;&#x43B;</ua>
 </text>
 <text>
 <en>Content</en>
 <de>Inhalt</de>
 <id>50</id>
 <ro>Continut</ro>
+<ua>&#x417;&#x43C;&#x456;&#x441;&#x442;</ua>
 </text>
 <text>
 <en>Image</en>
