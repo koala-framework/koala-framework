@@ -38,18 +38,23 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     private function _checkForInvalid()
     {
         $index = Kwf_Util_Fulltext::getInstance();
-        echo "numDocs: ".$index->numDocs()."\n";
+        if ($this->_getParam('debug')) echo "numDocs: ".$index->numDocs()."\n";
         $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
-        echo "checking: ".count($index->find($query))."\n";
-        $c = new Zend_ProgressBar_Adapter_Console();
-        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
-        $progress = new Zend_ProgressBar($c, 0, count($index->find($query)));
+        $progress = null;
+        if ($this->_getParam('debug')) {
+            echo "checking: ".count($index->find($query))."\n";
+            $c = new Zend_ProgressBar_Adapter_Console();
+            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                    Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                    Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
+            $progress = new Zend_ProgressBar($c, 0, count($index->find($query)));
+        }
         foreach ($index->find($query) as $doc) {
-            $progress->next();
+            if ($progress) $progress->next();
             if (!Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
-                echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
+                if ($this->_getParam('debug')) {
+                    echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
+                }
                 $index->delete($doc->id);
                 $m = Kwf_Model_Abstract::getInstance('Kwc_FulltextSearch_MetaModel');
                 $row = $m->getRow($doc->componentId);
@@ -58,13 +63,15 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 }
             }
         }
-        $progress->finish();
+        if ($progress) $progress->finish();
     }
 
     public function rebuildAction()
     {
         if (!$this->_getParam('skip-check-for-invalid')) {
-            system("php bootstrap.php fulltext check-for-invalid");
+            $cmd = "php bootstrap.php fulltext check-for-invalid";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            system($cmd);
         }
 
         $queueFile = 'temp/fulltextRebuildQueue';
@@ -83,9 +90,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     throw new Kwf_Exception("child process failed");
                 }
 
-                //echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
+                if ($this->_getParam('debug')) echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
                 if (!file_get_contents($queueFile)) {
-                    echo "fertig.\n";
+                    if ($this->_getParam('debug')) echo "fertig.\n";
                     break;
                 }
             } else {
@@ -95,7 +102,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
                     //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
                     if (memory_get_usage() > 50*1024*1024) {
-                        echo "new process...\n";
+                        if ($this->_getParam('debug')) echo "new process...\n";
                         break;
                     }
 
@@ -103,14 +110,14 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     if (!$queue) break;
 
                     $queue = explode("\n", $queue);
-                    //echo "queued: ".count($queue)."\n";
+                    if ($this->_getParam('debug')) echo "queued: ".count($queue)."\n";
                     $componentId = array_shift($queue);
                     file_put_contents($queueFile, implode("\n", $queue));
 
                     //echo "==> ".$componentId."\n";
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
                     if (!$page) {
-                        echo "$componentId not found!\n";
+                        if ($this->_getParam('debug')) echo "$componentId not found!\n";
                         continue;
                     }
                     //echo "$page->url\n";
@@ -124,23 +131,23 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     $pageId = $page->componentId;
                     unset($page);
 
-                    /*
-                    echo round(memory_get_usage()/1024/1024, 2)."MB";
-                    echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
-                    echo " data: ".Kwf_Component_Data::$objectsCount.', ';
-                    echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
-                    */
+                    if ($this->_getParam('debug')) {
+                        echo round(memory_get_usage()/1024/1024, 2)."MB";
+                        echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+                        echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+                        echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+                    }
                     Kwf_Component_Data_Root::getInstance()->freeMemory();
-                    /*
-                    echo ' / '.round(memory_get_usage()/1024/1024, 2)."MB";
-                    echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
-                    echo " data: ".Kwf_Component_Data::$objectsCount.', ';
-                    echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
-                    //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
-                    //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
-                    //var_dump(Kwf_Component_Data::$objectsById);
-                    echo "\n";
-                    */
+                    if ($this->_getParam('debug')) {
+                        echo ' / '.round(memory_get_usage()/1024/1024, 2)."MB";
+                        echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+                        echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+                        echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+                        //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
+                        //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
+                        //var_dump(Kwf_Component_Data::$objectsById);
+                        echo "\n";
+                    }
 
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
                     if (!$page->isPage) continue;
@@ -152,7 +159,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                         $fulltextComponents[] = $page;
                     }
                     if ($fulltextComponents) {
-                        echo " *** indexing $page->componentId $page->url...";
+                        if ($this->_getParam('debug')) echo " *** indexing $page->componentId $page->url...";
                         $index = Kwf_Util_Fulltext::getInstance();
 
                         $doc = new Zend_Search_Lucene_Document();
@@ -175,17 +182,17 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                             }
                             //Komponente kann null zurückgeben um zu sagen dass gar nicht indiziert werden soll
                             if (!$doc) {
-                                echo " [no $c->componentId $c->componentClass]";
+                                if ($this->_getParam('debug')) echo " [no $c->componentId $c->componentClass]";
                                 break;
                             }
                             unset($c);
                         }
                         unset($fulltextComponents);
                         if (!$doc->getField('content')->value) {
-                            echo " [no content]";
+                            if ($this->_getParam('debug')) echo " [no content]";
                             $doc = null;
                         }
-                        echo "\n";
+                        if ($this->_getParam('debug')) echo "\n";
 
                         if ($doc) {
                             //das wird verwendet um alle dokumente im index zu finden
@@ -210,7 +217,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                                 $doc->addField($field);
                             }
                             unset($subRoot);
-                            if ($this->_getParam('debug')) {
+                            if ($this->_getParam('verbose')) {
                                 foreach ($doc->getFieldNames() as $fieldName) {
                                     echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
                                     //echo "$fieldName: ".$doc->$fieldName."\n";
