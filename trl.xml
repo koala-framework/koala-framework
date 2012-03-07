@@ -723,21 +723,25 @@ has just been created.</en>
 <en>Expand here</en>
 <de>Hier erweitern</de>
 <id>248</id>
+<ro>Extinde aici</ro>
 </text>
 <text>
 <en>Collapse here</en>
 <de>Hier schrumpfen</de>
 <id>249</id>
+<ro>Restrange</ro>
 </text>
 <text>
 <en>Open preview</en>
 <de>Vorschau &#xF6;ffnen</de>
 <id>250</id>
+<ro>Vizualizare</ro>
 </text>
 <text>
 <en>A Server failure occured.</en>
 <de>Ein Server Fehler ist aufgetreten.</de>
 <id>253</id>
+<ro>A avut loc eroare de server</ro>
 </text>
 <text>
 <en>Error - wrong version</en>
@@ -895,56 +899,67 @@ has just been created.</en>
 <en>Link cannot link to itself</en>
 <de>Link kann nicht auf sich sich selbst verlinken</de>
 <id>287</id>
+<ro>Link-ul nu se poate conecta</ro>
 </text>
 <text>
 <en>Add Paragraph</en>
 <de>Absatz hinzuf&#xFC;gen</de>
 <id>288</id>
+<ro>Adauga paragraf</ro>
 </text>
 <text>
 <en>Save</en>
 <de>Speichern</de>
 <id>289</id>
+<ro>Salveaza</ro>
 </text>
 <text>
 <en>Cancel</en>
 <de>Abbrechen</de>
 <id>290</id>
+<ro>Anuleaza</ro>
 </text>
 <text>
 <en>Save and Back</en>
 <de>Speichern und zur&#xFC;ck</de>
 <id>291</id>
+<ro>Salvare si revenire</ro>
 </text>
 <text>
 <en>Delete</en>
 <de>L&#xF6;schen</de>
 <id>292</id>
+<ro>Sterge</ro>
 </text>
 <text>
 <en>delete</en>
 <de>l&#xF6;schen</de>
 <id>293</id>
+<ro>sterge</ro>
 </text>
 <text>
 <en>New Entry</en>
 <de>Neuer Eintrag</de>
 <id>294</id>
+<ro>Intrare noua</ro>
 </text>
 <text>
 <en>delete?</en>
 <de>L&#xF6;schen?</de>
 <id>296</id>
+<ro>sterge?</ro>
 </text>
 <text>
 <en>Duplicate</en>
 <de>Duplizieren</de>
 <id>297</id>
+<ro>Duplicat</ro>
 </text>
 <text>
 <en>Print</en>
 <de>Drucken</de>
 <id>298</id>
+<ro>Printeaza</ro>
 </text>
 <text>
 <en>CSV Export</en>
