@@ -5,6 +5,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     private $_model;
     private $_references;
     private $_referenceName;
+    private $_select;
 
     public function __construct($reference = null)
     {
@@ -82,6 +83,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         return $this->fields;
     }
 
+    public function setSelect(Vps_Model_Select $select)
+    {
+        $this->_select = $select;
+    }
+
     protected function _getRowsByRow(Vps_Model_Row_Interface $row)
     {
         $pk = $row->getModel()->getPrimaryKey();
@@ -90,7 +96,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             return array();
         }
         if (isset($this->_referenceName)) {
-            $select = new Vps_Model_Select();
+            if ($this->_select) {
+                $select = $this->_select;
+            } else {
+                $select = new Vps_Model_Select();
+            }
             if ($row->getModel()->getDependentModel($this->_referenceName)->hasColumn('pos')) {
                 $select->order('pos');
             }
