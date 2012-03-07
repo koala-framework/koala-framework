@@ -98,10 +98,16 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
         $ret = array();
         $title = Kwc_Abstract::getSetting($this->_class, 'componentName');
         $title = str_replace('.', ' ', $title);
-        $ret[] = array(
+        $ret['form'] = array(
             'form' => Kwc_Abstract_Form::createComponentForm($this->_class, 'child'),
             'title' => $title,
         );
+        return $ret;
+    }
+
+    public function getVisibleCardForms()
+    {
+        $ret = array('form');
         return $ret;
     }
 
