@@ -22,33 +22,34 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         $ret = array();
         $newsletterId = substr(strrchr($this->_getParam('componentId'), '_'), 1);
         $total = $db->fetchOne("SELECT count_sent FROM kwc_newsletter WHERE id=$newsletterId");
-        if ($total) {
-            $sql = "
-                SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
-                FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-                WHERE s.redirect_id=r.id AND mail_component_id='" . $this->_getParam('componentId') . "-mail'";
-            $count = $db->fetchOne($sql);
-            $ret[] = array(
-                'pos' => $pos++,
-                'link' => '<b>' . trlKwf('click rate') . '</b> (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
-                'count' => $count,
-                'percent' => number_format(($count / $total)*100, 2) . '%'
-            );
-            $ret[] = array(
-                'pos' => $pos++,
-                'link' => ' ',
-                'count' => '',
-                'percent' => '',
-            );
-        }
+
+        if (!$total) { return array(); }
+
+        $sql = "
+            SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
+            FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
+            WHERE s.redirect_id=r.id AND mail_component_id=?";
+        $count = $db->fetchOne($sql, $this->_getParam('componentId') . '-mail');
+        $ret[] = array(
+            'pos' => $pos++,
+            'link' => '<b>' . trlKwf('click rate') . '</b> (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
+            'count' => $count,
+            'percent' => number_format(($count / $total)*100, 2) . '%'
+        );
+        $ret[] = array(
+            'pos' => $pos++,
+            'link' => ' ',
+            'count' => '',
+            'percent' => '',
+        );
         $sql = "
             SELECT r.value, r.type, count(*) c
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-            WHERE s.redirect_id=r.id AND mail_component_id='" . $this->_getParam('componentId') . "-mail'
+            WHERE s.redirect_id=r.id AND mail_component_id=?
             GROUP BY redirect_id
             ORDER BY c DESC
         ";
-        foreach ($db->fetchAll($sql) as $row) {
+        foreach ($db->fetchAll($sql, $this->_getParam('componentId') . '-mail') as $row) {
             if ($row['type'] == 'showcomponent') {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row['value']);
                 if ($c) {

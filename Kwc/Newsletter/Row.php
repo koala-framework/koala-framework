@@ -87,6 +87,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             } else {
 
                 $this->status = 'finished';
+                $this->save();
 
             }
 
