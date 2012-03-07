@@ -66,6 +66,15 @@
     color: var(typo);
     line-height: 18px;
 }
+
+.cssClass input,
+.cssClass textarea {
+    background: var(light) !important;
+    border: 1px solid var(gray) !important;
+    border-radius: 4px;
+    behavior: url(/assets/css3pie/pie.htc);
+}
+
 .cssClass input.radio {
     margin-left: 10px;
     border: none;
@@ -94,7 +103,8 @@
     color: var(typo);
     line-height: 18px;
 }
-.cssClass .kwfFieldRequired label { font-weight: bold; }
+.cssClass .kwfFieldRequired label { font-weight: normal; }
+.webForm .kwfFieldRequired label .requiredSign { display: none; }
 .cssClass .kwfFieldRequired span label { font-weight: normal; }
 .cssClass .kwfFieldLabelAlignTop label {
     width: auto;
