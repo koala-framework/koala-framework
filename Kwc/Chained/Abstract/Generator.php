@@ -301,8 +301,9 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
 
         //Annahme: sourceChildren und targetChildren müssen in der gleichen Reinhenfolge daherkommen
         //gibt es einen generator ohne pos oder datum oder ähnlichem?
-        $sourceChildren = array_values($source->parent->getChildComponents(array('ignoreVisible'=>true, 'generator'=>$this->getGeneratorKey())));
-        $targetChildren = array_values($parentTarget->getChildComponents(array('ignoreVisible'=>true, 'generator'=>$this->getGeneratorKey())));
+        $sourceChildren = array_values($source->generator->getChildData($source->parent, array('ignoreVisible'=>true)));
+        $targetChildren = array_values($this->getChildData($parentTarget, array('ignoreVisible'=>true)));
+
         $target = null;
         foreach ($sourceChildren as $i=>$sc) {
             if ($sc->componentId == $source->componentId) {
