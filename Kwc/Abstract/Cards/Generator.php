@@ -50,8 +50,8 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
                     Kwf_Component_Select::IGNORE_VISIBLE,
                 ), $select);
                 foreach ($data as $i) {
-                    foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($i['component_id'], $s) as $d) {
-                        if ($d->componentClass == $this->_class) {
+                    foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($i['component_id'].'-child', $s) as $d) {
+                        if ($d->parent->componentClass == $this->_class) {
                             $ret[] = $d;
                         }
                     }
