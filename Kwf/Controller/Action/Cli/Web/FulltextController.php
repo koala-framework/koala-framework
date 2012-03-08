@@ -29,9 +29,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     public function checkForInvalidAction()
     {
         $this->_checkForInvalid();
-        echo "\noptimize index...\n";
+        if ($this->_getParam('debug')) echo "\noptimize index...\n";
         Kwf_Util_Fulltext::getInstance()->optimize();
-        echo "done.\n";
+        if ($this->_getParam('debug')) echo "done.\n";
         exit;
     }
 
@@ -41,15 +41,18 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         if ($this->_getParam('debug')) echo "numDocs: ".$index->numDocs()."\n";
         $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
         $progress = null;
+        $documents = $index->find($query);
         if ($this->_getParam('debug')) {
-            echo "checking: ".count($index->find($query))."\n";
+            echo "checking: ".count($documents)."\n";
             $c = new Zend_ProgressBar_Adapter_Console();
             $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                     Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                     Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
-            $progress = new Zend_ProgressBar($c, 0, count($index->find($query)));
+            $progress = new Zend_ProgressBar($c, 0, count($documents));
         }
-        foreach ($index->find($query) as $doc) {
+        $i = 0;
+        foreach ($documents as $doc) {
+            echo ".";
             if ($progress) $progress->next();
             if (!Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
                 if ($this->_getParam('debug')) {
@@ -62,8 +65,19 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     $row->delete();
                 }
             }
+            if ($i++ % 10) {
+                Kwf_Component_Data_Root::getInstance()->freeMemory();
+            }
         }
         if ($progress) $progress->finish();
+    }
+
+    public function testAction()
+    {
+        echo ".";
+        $page = Kwf_Component_Data_Root::getInstance()->getComponentById('root-at');
+        $childPages = $page->getChildPseudoPages(array(), array('pseudoPage'=>false));
+        exit;
     }
 
     public function rebuildAction()
@@ -74,12 +88,23 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             system($cmd);
         }
 
+        $startTime = microtime(true);
+        $numProcesses = 0;
+
         $queueFile = 'temp/fulltextRebuildQueue';
+        $statsFile = 'temp/fulltextRebuildStats';
 
         $componentId = 'root';
         if ($this->_getParam('componentId')) $componentId = $this->_getParam('componentId');
         file_put_contents($queueFile, $componentId);
+
+        $stats = array(
+            'pages' => 0,
+            'indexedPages' => 0,
+        );
+        file_put_contents($statsFile, serialize($stats));
         while(true) {
+            $numProcesses++;
             $pid = pcntl_fork();
             if ($pid == -1) {
                 throw new Kwf_Exception("fork failed");
@@ -97,6 +122,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 }
             } else {
 
+                $stats = unserialize(file_get_contents($statsFile));
                 while (true) {
                     //child process
 
@@ -110,19 +136,24 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     if (!$queue) break;
 
                     $queue = explode("\n", $queue);
-                    if ($this->_getParam('debug')) echo "queued: ".count($queue)."\n";
+                    if ($this->_getParam('verbose')) echo "queued: ".count($queue)."\n";
                     $componentId = array_shift($queue);
                     file_put_contents($queueFile, implode("\n", $queue));
+                    $stats['pages']++;
 
-                    //echo "==> ".$componentId."\n";
+                    if ($this->_getParam('verbose')) echo "==> ".$componentId."\n";
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
                     if (!$page) {
                         if ($this->_getParam('debug')) echo "$componentId not found!\n";
                         continue;
                     }
                     //echo "$page->url\n";
-                    foreach ($page->getChildPseudoPages(array(), array('pseudoPage'=>false)) as $c) {
-                        //echo "queued $c->componentId\n";
+                    if ($this->_getParam('verbose')) echo "getting child pages...";
+
+                    $childPages = $page->getChildPseudoPages(array(), array('pseudoPage'=>false));
+                    if ($this->_getParam('verbose')) echo " done\n";
+                    foreach ($childPages as $c) {
+                        if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
                         $queue[] = $c->componentId;
                         file_put_contents($queueFile, implode("\n", $queue));
                     }
@@ -133,16 +164,16 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
                     if ($this->_getParam('debug')) {
                         echo round(memory_get_usage()/1024/1024, 2)."MB";
-                        echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
-                        echo " data: ".Kwf_Component_Data::$objectsCount.', ';
-                        echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+                        //echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+                        //echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+                        //echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
                     }
-                    Kwf_Component_Data_Root::getInstance()->freeMemory();
+                    //Kwf_Component_Data_Root::getInstance()->freeMemory();
                     if ($this->_getParam('debug')) {
-                        echo ' / '.round(memory_get_usage()/1024/1024, 2)."MB";
-                        echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
-                        echo " data: ".Kwf_Component_Data::$objectsCount.', ';
-                        echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
+                        //echo ' / '.round(memory_get_usage()/1024/1024, 2)."MB";
+                        //echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
+                        //echo " data: ".Kwf_Component_Data::$objectsCount.', ';
+                        //echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
                         //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
                         //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
                         //var_dump(Kwf_Component_Data::$objectsById);
@@ -242,15 +273,28 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                             $row->indexed_date = date('Y-m-d H:i:s');
                             $row->save();
                             unset($row);
+                            $stats['indexedPages']++;
                         }
                     }
+
                 }
-                //echo "child finished\n";
+                file_put_contents($statsFile, serialize($stats));
+                if ($this->_getParam('debug')) echo "child finished\n";
                 exit(0);
             }
         }
-        echo "optimizing...\n";
+
+        if ($this->_getParam('debug')) echo "optimizing...\n";
         Kwf_Util_Fulltext::getInstance()->optimize();
+
+        if ($this->_getParam('debug')) {
+            $stats = unserialize(file_get_contents($statsFile));
+            echo "fulltext reindex finished.\n";
+            echo "duration: ".round(microtime(true)-$startTime)."s\n";
+            echo "used child processes: $numProcesses\n";
+            echo "processed pages: $stats[pages]\n";
+            echo "indexed pages: $stats[indexedPages]\n";
+        }
         exit;
     }
 
