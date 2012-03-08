@@ -423,6 +423,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                                 $quotedValueContains);
             }
             return $field." LIKE ".$quotedValue;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_RegExp) {
+            return $field." REGEXP ".$quotedValue;
         } else if ($expr instanceof Kwf_Model_Select_Expr_StartsWith) {
             return "LEFT($field, ".strlen($this->_fixStupidQuoteBug($expr->getValue())).") = ".$quotedValue;
         } else if ($expr instanceof Kwf_Model_Select_Expr_NOT) {
