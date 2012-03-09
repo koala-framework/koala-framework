@@ -11,15 +11,69 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
         return $this->_model;
     }
 
-    protected function _formatSelect($parentData, $select = array())
+    public function getChildData($parentData, $select = array())
     {
+        Kwf_Benchmark::count('GenCards::getChildData');
+
+        if (is_array($select)) {
+            $select = new Kwf_Component_Select($select);
+        }
+
         //es gibt exakt eine unterkomponente mit der id 'child'
         if ($select->hasPart(Kwf_Component_Select::WHERE_ID)) {
-            $select->processed(Kwf_Component_Select::WHERE_ID);
             if ($select->getPart(Kwf_Component_Select::WHERE_ID) != '-child') {
-                return null;
+                return array();
             }
         }
+
+        $ret = array();
+        if (!$parentData) {
+            if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $cc = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
+                $componentValues = array_keys(array_intersect($this->_settings['component'], $cc));
+                if (!$componentValues) throw new Kwf_Exception("no component classes found in this generator, should not have been clled");
+                reset($this->_settings['component']);
+                if (in_array(current($this->_settings['component']), $cc)) throw new Kwf_Exception("can't get the first=default component without parentData as it can be not in the database");
+                $s = new Kwf_Model_Select();
+                $s->whereEquals('component', $componentValues);
+                if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+                    $s->where(new Kwf_Model_Select_Expr_Like('component_id', $p->dbId.'%')); //so db can make use of index
+                    $s->where(new Kwf_Model_Select_Expr_RegExp('component_id', '^'.$p->dbId.'[-_][^_]+$'));
+                }
+                if ($p = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT)) {
+                    $s->where(new Kwf_Model_Select_Expr_Like('component_id', $p->dbId.'%'));
+                }
+                $data = $this->_getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
+                $parentData = array();
+                $s = new Kwf_Component_Select();
+                $s->copyParts(array(
+                    Kwf_Component_Select::IGNORE_VISIBLE,
+                ), $select);
+                foreach ($data as $i) {
+                    foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($i['component_id'].'-child', $s) as $d) {
+                        if ($d->parent->componentClass == $this->_class) {
+                            $ret[] = $d;
+                        }
+                    }
+                }
+            } else {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+            return $ret;
+        }
+        $pData = $parentData;
+        $parentDatas = is_array($parentData) ? $parentData : array($parentData);
+        foreach ($this->_fetchKeys($pData, $select) as $key) {
+            foreach ($parentDatas as $parentData) {
+                $data = $this->_createData($parentData, $key, $select);
+                if ($data) $ret[] = $data;
+            }
+        }
+        return $ret;
+    }
+
+    protected function _formatSelect($parentData, $select = array())
+    {
 
         if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
             $cc = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);

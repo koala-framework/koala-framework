@@ -138,6 +138,19 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
                 $constraints['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
             }
+
+            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+                //avoid getComponentsByDbId call when possible
+
+                if ($p->dbId != substr($row->component_id, 0, strlen($p->dbId))) {
+                    return null; //different dbId
+                }
+                $childIdPart = substr($row->component_id, strlen($p->dbId));
+                if (strpos($childIdPart, '_') !== false) {
+                    return null; //not a direct child component
+                }
+            }
+
             $ret = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsByDbId($row->component_id, $constraints);
 
