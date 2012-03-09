@@ -290,7 +290,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         if ($this->_getParam('debug')) {
             $stats = unserialize(file_get_contents($statsFile));
             echo "fulltext reindex finished.\n";
-            echo "duration: ".round(microtime(true)-$startTime)."s\n";
+            echo "duration: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
             echo "used child processes: $numProcesses\n";
             echo "processed pages: $stats[pages]\n";
             echo "indexed pages: $stats[indexedPages]\n";
