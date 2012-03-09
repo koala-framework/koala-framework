@@ -42,10 +42,10 @@
     margin-left: 5px;
     margin-top: 3px;
 }
-.ext-ie6 .$cssClass form .vpsFormFieldCheckbox label {
+.ext-ie6 .$cssClass form .vpsFormFieldCheckbox > label {
     margin-right: 0px;
 }
-.$cssClass form .vpsFormFieldCheckbox label {
+.$cssClass form .vpsFormFieldCheckbox > label {
     margin-right: 15px;
 }
 .$cssClass label {
@@ -54,14 +54,14 @@
     margin-right: 20px;
     text-align: right;
 }
-.$cssClass .vpsFieldRequired label { font-weight: bold; }
+.$cssClass .vpsFieldRequired > label { font-weight: bold; }
 .$cssClass .vpsFieldRequired span label { font-weight: normal; }
-.$cssClass .vpsFieldLabelAlignTop label {
+.$cssClass .vpsFieldLabelAlignTop > label {
     width: auto;
     margin: 0px;
     text-align: left;
 }
-.$cssClass .vpsFieldLabelAlignLeft label {
+.$cssClass .vpsFieldLabelAlignLeft > label {
     text-align: left;
 }
 .$cssClass .showField {
