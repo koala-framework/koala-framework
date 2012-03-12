@@ -22,16 +22,21 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function optimizeAction()
     {
+        ini_set('memory_limit', '512M');
+        if ($this->_getParam('debug')) echo "\noptimize index...\n";
         Kwf_Util_Fulltext::getInstance()->optimize();
+        if ($this->_getParam('debug')) echo "done.\n";
         exit;
     }
 
     public function checkForInvalidAction()
     {
         $this->_checkForInvalid();
-        if ($this->_getParam('debug')) echo "\noptimize index...\n";
-        Kwf_Util_Fulltext::getInstance()->optimize();
-        if ($this->_getParam('debug')) echo "done.\n";
+
+        $cmd = "php bootstrap.php fulltext optimize";
+        if ($this->_getParam('debug')) $cmd .= " --debug";
+        system($cmd);
+
         exit;
     }
 
@@ -118,6 +123,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function rebuildAction()
     {
+        ini_set('memory_limit', '512M');
         if (!$this->_getParam('skip-check-for-invalid')) {
             $cmd = "php bootstrap.php fulltext check-for-invalid";
             if ($this->_getParam('debug')) $cmd .= " --debug";
@@ -337,8 +343,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             }
         }
 
-        if ($this->_getParam('debug')) echo "optimizing...\n";
-        Kwf_Util_Fulltext::getInstance()->optimize();
 
         if ($this->_getParam('debug')) {
             $stats = unserialize(file_get_contents($statsFile));
@@ -347,6 +351,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             echo "used child processes: $numProcesses\n";
             echo "processed pages: $stats[pages]\n";
             echo "indexed pages: $stats[indexedPages]\n";
+        }
+
+        if (!$this->_getParam('skip-optimize')) {
+            $cmd = "php bootstrap.php fulltext optimize";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            system($cmd);
         }
         exit;
     }
