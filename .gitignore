@@ -7,6 +7,5 @@ include_path
 querylog
 eventlog
 .tmp*
-tests/cache/*
 nbproject
 
