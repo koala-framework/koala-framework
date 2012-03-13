@@ -8,3 +8,5 @@ querylog
 eventlog
 .tmp*
 tests/cache/*
+nbproject
+
