@@ -3,7 +3,7 @@
  * @group Component_Cache_ComponentLink
  * @group Component_Cache_ComponentLink_DbIdShortcut
  */
-class Kwf_Component_Cache_ComponentLink_TestDbIdShortcut extends Kwc_TestAbstract
+class Kwf_Component_Cache_ComponentLink_DbIdShortcutTest extends Kwc_TestAbstract
 {
     public function setUp()
     {

@@ -2,7 +2,7 @@
 /**
  * @group Kwc_Menu
  */
-class Kwf_Component_Cache_Menu_TestAlternativeComponent extends Kwc_TestAbstract
+class Kwf_Component_Cache_Menu_AlternativeComponentTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
