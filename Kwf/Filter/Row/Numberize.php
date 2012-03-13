@@ -1,7 +1,11 @@
 <?php
 class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
 {
+    const POSITION_FIRST = 'first';
+    const POSITION_LAST = 'last';
+
     private $_groupBy = array();
+    private $_defaultPosition = self::POSITION_LAST;
 
     public function __construct()
     {
@@ -26,6 +30,18 @@ class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
     public function getGroupBy()
     {
         return $this->_groupBy;
+    }
+
+    /**
+     * Set default position used when a row has no number
+     *
+     * default is POSITION_LAST
+     *
+     * @params POSITION_FIRST/POSITION_LAST
+     */
+    public function setDefaultPosition($pos)
+    {
+        $this->_defaultPosition = $pos;
     }
 
     //legacy für Db_Table
@@ -122,7 +138,11 @@ class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
         // is_numeric: Wenn in grid direkt bearbeitet wird kann sein, dass es
         // ein leerer string ist
         if (is_null($value) || !is_numeric($value)) {
-            $value = $count;
+            if ($this->_defaultPosition == self::POSITION_LAST) {
+                $value = $count;
+            } else {
+                $value = 1;
+            }
         }
         if ($value < 1) $value = 1;
         if ($value > $count) $value = $count;
