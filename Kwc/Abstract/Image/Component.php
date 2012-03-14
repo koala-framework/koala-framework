@@ -247,20 +247,23 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
     public function getImageDimensions()
     {
-        $data = $this->_getImageDataOrEmptyImageData();
-        $s = $this->_getImageDimensions();
-        if ($s['width'] == self::CONTENT_WIDTH) {
-            $s['width'] = $this->getContentWidth();
+        $size = $this->_getImageDimensions();
+        if ($size['width'] == self::CONTENT_WIDTH) {
+            $size['width'] = $this->getContentWidth();
         }
+        $size = $this->_calculateResultingImageDimensions($size);
+        return $size;
+    }
 
-        if ($data) {
-            if (isset($data['image'])) {
-                $s = Kwf_Media_Image::calculateScaleDimensions($data['image'], $s);
-            } else {
-                $s = Kwf_Media_Image::calculateScaleDimensions($data['file'], $s);
-            }
+    protected function _calculateResultingImageDimensions($size)
+    {
+        $data = $this->_getImageDataOrEmptyImageData();
+        if (isset($data['image'])) {
+            $size = Kwf_Media_Image::calculateScaleDimensions($data['image'], $size);
+        } else {
+            $size = Kwf_Media_Image::calculateScaleDimensions($data['file'], $size);
         }
-        return $s;
+        return $size;
     }
 
     public static function isValidMediaOutput($id, $type, $className)

@@ -4,9 +4,13 @@ Kwf.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
     fileSizeLimit: null,
     allowOnlyImages: false,
     maxResolution: 0,
-    baseParams: {},
+    //baseParams: {},
     controllerUrl: '',
     
+    initComponent: function() {
+        if (!this.baseParams) this.baseParams = {};
+        Kwf.Utils.MultiFileUploadPanel.superclass.initComponent.call(this);
+    },
     afterRender: function() {
         Kwf.Utils.MultiFileUploadPanel.superclass.afterRender.call(this);
 
@@ -219,5 +223,14 @@ Kwf.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
     },
     onDestroy: function() {
         if (this.swfu) this.swfu.destroy();
+    },
+
+    applyBaseParams: function(baseParams)
+    {
+        Ext.apply(this.baseParams, baseParams);
+    },
+    setBaseParams: function(baseParams)
+    {
+        this.baseParams = Kwf.clone(baseParams);
     }
 });

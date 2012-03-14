@@ -117,7 +117,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             if (!$recipient) {
                 $mailText = str_replace(
                     $matches[0],
-                    'http://'.Kwf_Registry::get('config')->server->domain.$matches[2],
+                    $matches[2],
                     $mailText
                 );
             } else {

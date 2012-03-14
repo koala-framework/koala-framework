@@ -18,15 +18,14 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     public static function suite($className)
     {
         self::$browsers = array();
-        foreach (Kwf_Registry::get('config')->server->testBrowser as $b) {
-            if (!$b->browser) continue; //deaktiviert
-            $b = $b->toArray();
-            if (isset($b['port'])) $b['port'] = (int)$b['port'];
-            if (isset($b['timeout'])) $b['timeout'] = (int)$b['timeout'];
-            self::$browsers[] = $b;
-        }
-        if (!self::$browsers) {
-            throw new Kwf_Exception("No test-Browser avaliable");
+        if (Kwf_Registry::get('config')->server->testBrowser) { 
+            foreach (Kwf_Registry::get('config')->server->testBrowser as $b) {
+                if (!$b->browser) continue; //deaktiviert
+                $b = $b->toArray();
+                if (isset($b['port'])) $b['port'] = (int)$b['port'];
+                if (isset($b['timeout'])) $b['timeout'] = (int)$b['timeout'];
+                self::$browsers[] = $b;
+            }
         }
         return parent::suite($className);
     }

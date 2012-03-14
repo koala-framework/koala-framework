@@ -102,17 +102,30 @@ class Kwf_Model_Db_ExpressionTest extends Kwf_Test_TestCase
     public function testExprStartsWith()
     {
         $select = $this->_model->select()->where(new Kwf_Model_Select_Expr_StartsWith('foo', 'aaa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (LEFT(testtable.foo, 3) = 'aaa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE 'aaa%')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
-    public function testExprStartsWithEscaping()
+    public function testExprStartsWithEscaping1()
     {
         $select = $this->_model->select()->where(new Kwf_Model_Select_Expr_StartsWith('foo', 'a\'aa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (LEFT(testtable.foo, 4) = 'a\'aa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE 'a\\'aa%')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
+    public function testExprStartsWithEscaping2()
+    {
+        $select = $this->_model->select()->where(new Kwf_Model_Select_Expr_StartsWith('foo', 'a%aa'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE 'a\\\\%aa%')",
+            $this->_model->createDbSelect($select)->__toString());
+    }
+
+    public function testExprStartsWithEscaping3()
+    {
+        $select = $this->_model->select()->where(new Kwf_Model_Select_Expr_StartsWith('foo', 'a_aa'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE 'a\\\\_aa%')",
+            $this->_model->createDbSelect($select)->__toString());
+    }
     public function testExprSmallerDate()
     {
         $select = $this->_model->select()->where(new Kwf_Model_Select_Expr_Lower('foo', new Kwf_Date('2008-06-06')));

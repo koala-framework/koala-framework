@@ -22,16 +22,21 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function optimizeAction()
     {
+        ini_set('memory_limit', '512M');
+        if ($this->_getParam('debug')) echo "\noptimize index...\n";
         Kwf_Util_Fulltext::getInstance()->optimize();
+        if ($this->_getParam('debug')) echo "done.\n";
         exit;
     }
 
     public function checkForInvalidAction()
     {
         $this->_checkForInvalid();
-        if ($this->_getParam('debug')) echo "\noptimize index...\n";
-        Kwf_Util_Fulltext::getInstance()->optimize();
-        if ($this->_getParam('debug')) echo "done.\n";
+
+        $cmd = "php bootstrap.php fulltext optimize";
+        if ($this->_getParam('debug')) $cmd .= " --debug";
+        system($cmd);
+
         exit;
     }
 
@@ -80,13 +85,59 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         exit;
     }
 
+    private static function _getAllPossiblePageComponentClasses()
+    {
+        $ret = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwf_Component_Generator_Abstract::getInstances($class, array('pseudoPage'=>true)) as $g) {
+                foreach ($g->getChildComponentClasses() as $c) {
+                    if (!in_array($c, $ret)) {
+                        $ret[] = $c;
+                    }
+                }
+            }
+        }
+        return $ret;
+    }
+
+    private static function _canHaveFulltext($class)
+    {
+        static $cache = array();
+        if (isset($cache[$class])) return $cache[$class];
+        $cache[$class] = false;
+        if (Kwc_Abstract::getFlag($class, 'skipFulltext')) {
+            return $cache[$class]; //false
+        }
+        if (Kwc_Abstract::getFlag($class, 'hasFulltext')) {
+            $cache[$class] = true;
+            return $cache[$class];
+        }
+        foreach (Kwc_Abstract::getChildComponentClasses($class) as $c) {
+            if (self::_canHaveFulltext($c)) {
+                $cache[$class] = true;
+                return $cache[$class];
+            }
+        }
+        return $cache[$class]; //false
+    }
+
     public function rebuildAction()
     {
+        ini_set('memory_limit', '512M');
         if (!$this->_getParam('skip-check-for-invalid')) {
             $cmd = "php bootstrap.php fulltext check-for-invalid";
             if ($this->_getParam('debug')) $cmd .= " --debug";
             system($cmd);
         }
+
+
+        $pageClassesThatCanHaveFulltext = array();
+        foreach (self::_getAllPossiblePageComponentClasses() as $c) {
+            if (self::_canHaveFulltext($c)) {
+                $pageClassesThatCanHaveFulltext[] = $c;
+            }
+        }
+
 
         $startTime = microtime(true);
         $numProcesses = 0;
@@ -127,7 +178,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     //child process
 
                     //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
-                    if (memory_get_usage() > 50*1024*1024) {
+                    if (memory_get_usage() > 64*1024*1024) {
                         if ($this->_getParam('debug')) echo "new process...\n";
                         break;
                     }
@@ -136,13 +187,14 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     if (!$queue) break;
 
                     $queue = explode("\n", $queue);
-                    if ($this->_getParam('verbose')) echo "queued: ".count($queue)."\n";
+                    if ($this->_getParam('debug')) echo "queued: ".count($queue).' :: '.round(memory_get_usage()/1024/1024, 2)."MB\n";
                     $componentId = array_shift($queue);
                     file_put_contents($queueFile, implode("\n", $queue));
                     $stats['pages']++;
 
-                    if ($this->_getParam('verbose')) echo "==> ".$componentId."\n";
+                    if ($this->_getParam('debug')) echo "==> ".$componentId;
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+                    if ($this->_getParam('debug')) echo " :: $page->url\n";
                     if (!$page) {
                         if ($this->_getParam('debug')) echo "$componentId not found!\n";
                         continue;
@@ -150,7 +202,14 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     //echo "$page->url\n";
                     if ($this->_getParam('verbose')) echo "getting child pages...";
 
-                    $childPages = $page->getChildPseudoPages(array(), array('pseudoPage'=>false));
+                    $childPages = $page->getChildPseudoPages(
+                        array('pageGenerator' => false, 'componentClasses'=>$pageClassesThatCanHaveFulltext),
+                        array('pseudoPage'=>false)
+                    );
+                    $childPages = array_merge($childPages, $page->getChildPseudoPages(
+                        array('pageGenerator' => true),
+                        array('pseudoPage'=>false)
+                    ));
                     if ($this->_getParam('verbose')) echo " done\n";
                     foreach ($childPages as $c) {
                         if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
@@ -163,7 +222,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     unset($page);
 
                     if ($this->_getParam('debug')) {
-                        echo round(memory_get_usage()/1024/1024, 2)."MB";
+                        //echo round(memory_get_usage()/1024/1024, 2)."MB";
                         //echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
                         //echo " data: ".Kwf_Component_Data::$objectsCount.', ';
                         //echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
@@ -177,7 +236,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                         //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
                         //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
                         //var_dump(Kwf_Component_Data::$objectsById);
-                        echo "\n";
+                        //echo "\n";
                     }
 
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
@@ -284,8 +343,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             }
         }
 
-        if ($this->_getParam('debug')) echo "optimizing...\n";
-        Kwf_Util_Fulltext::getInstance()->optimize();
 
         if ($this->_getParam('debug')) {
             $stats = unserialize(file_get_contents($statsFile));
@@ -294,6 +351,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             echo "used child processes: $numProcesses\n";
             echo "processed pages: $stats[pages]\n";
             echo "indexed pages: $stats[indexedPages]\n";
+        }
+
+        if (!$this->_getParam('skip-optimize')) {
+            $cmd = "php bootstrap.php fulltext optimize";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            system($cmd);
         }
         exit;
     }
