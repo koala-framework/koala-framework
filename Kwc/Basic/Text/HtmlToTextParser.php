@@ -7,10 +7,14 @@ class Kwc_Basic_Text_HtmlToTextParser
     private $_p = false;
     private $_pClose = false;
     private $_href = false;
-    private $_trim = true;
+    private $_break = false;
+    private $_lastCData = '';
+    private $_isLastCData = false;
 
     protected function _startElement($parser, $element, $attributes)
     {
+        $this->_isLastCData = false;
+        $this->_lastCData = '';
         $element = strtolower($element);
         
         //debugging
@@ -52,37 +56,58 @@ class Kwc_Basic_Text_HtmlToTextParser
     protected function _characterData($parser, $cdata)
     {
 //        echo "cData: $cdata \n";
-        if ($this->_trim) {
-            $cdata = trim($cdata);
+        if ($this->_isLastCData) {
+            if (strrpos($this->_lastCData," ")+1 == strlen($this->_lastCData)) {
+                if (!$this->_ret) {
+                    $this->_ret .= " ";
+                }
+            }
+            //d(strlen($cdata));
         }
+        $this->_lastCData = $cdata;
+        $cdata = trim($cdata);
         $cdata = preg_replace("/\n/", ' ', $cdata);
         $cdata = preg_replace('/\s\s+/', ' ', $cdata);
         $cdata = str_replace('+nbsp;', ' ', $cdata);
+        if ($cdata != '') $this->_break = false;
         $this->_pClose = false;
         if ($this->_href) {
-            $this->_ret .= " " . $cdata;
-            $this->_ret .= ": " . $this->_href;
-            $this->_href = false;
+            //$this->_ret .= " " . $cdata;
+            $this->_ret .= $cdata;
+            //$this->_ret .= ": " . $this->_href;
+            //$this->_href = false;
         } else {
             $this->_ret .= $cdata;
         }
+        $this->_isLastCData = true;
     }
 
     protected function _endElement($parser, $element)
     {
+        $this->_isLastCData = false;
+        $this->_lastCData = '';
         $element = strtolower($element);
 //        echo "endElement: $element \n";
+        if ($this->_href) {
+            $this->_ret .= ": " . $this->_href;
+            $this->_href = false;
+        }
         if ($element == 'p' && !$this->_pClose) {
-            $this->_ret .= "\n";
+            if (!$this->_break){
+                $this->_ret .= "\n";
+                }
             $this->_p = false;
             $this->_pClose = true; //damit bei 2 </p> nur 1 \n erzeugt wird
         } else if ($element == 'p' && $this->_pClose) {
             $this->_p = false;
             $this->_pClose = true;
-        } else if ($element == 'h1' || $element == 'h2'  || $element == 'h3' || $element == 'h4' || $element == 'h5') {
+        } else if ($element == 'h1' || $element == 'h2'  || $element == 'h3' || $element == 'h4' || $element == 'h5' || $element == 'strong') {
             $this->_ret .= "\n\n";
-        }else if ($element == 'br' || $element == 'strong') {
+            $this->_break = true;
+        }else if ($element == 'br') {
+            if (!$this->_break) {
             $this->_ret .= "\n";
+            }
         }else if ($element == 'li' && $this->_liLayer) {
             $this->_liLayer -= 1;
         }else if ($element == 'li' && !$this->_liLayer) {
