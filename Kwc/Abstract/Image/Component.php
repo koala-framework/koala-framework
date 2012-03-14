@@ -304,18 +304,18 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $dim['width'] = $component->getComponent()->getContentWidth();
         }
         $ret = array();
+        $size = $component->getComponent()->_calculateResultingImageDimensions($dim);
         if (isset($data['image'])) {
-            $output = Kwf_Media_Image::scale($data['image'], $dim);
+            $output = Kwf_Media_Image::scale($data['image'], $size);
             $ret['contents'] = $output;
         } else {
-            $size = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
             $sourceSize = @getimagesize($data['file']);
-            $scalingNeeded = (bool)$dim;
-            if ($scalingNeeded && $sourceSize && array($size['width'], $size['height']) == array($sourceSize[0], $sourceSize[1])) {
+            $scalingNeeded = true;
+            if ($sourceSize && array($size['width'], $size['height']) == array($sourceSize[0], $sourceSize[1])) {
                 $scalingNeeded = false;
             }
             if ($scalingNeeded) {
-                $output = Kwf_Media_Image::scale($data['file'], $dim);
+                $output = Kwf_Media_Image::scale($data['file'], $size);
                 $ret['contents'] = $output;
             } else {
                 $ret['file'] = $data['file'];
