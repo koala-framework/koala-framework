@@ -1,16 +1,14 @@
 <?php
-$lastLinkComponent = null;
+$output = '';
 foreach ($this->contentParts as $part) {
-    if (!is_string($part) && isset($part['type']) && $part['type'] == 'link') {
-        $lastLinkComponent = $part;
-    } else if (is_string($part)) {
-        if ($lastLinkComponent && strpos($part, '</a>') !== false) {
-            $part = str_replace('</a>', ': '.$this->component($lastLinkComponent['component']), $part);
-            $lastLinkComponent = null;
-        }
-        echo strip_tags($part);
+    if (is_string($part)) {
+        $output .= $part;
     } else {
-        echo $this->component($part['component']);
+        if ($part['type']=='link') {
+            $output .= '<a href="' . $this->component($part['component']) . '">';
+        } else {
+            $output .= $this->component($part['component']);
+        }
     }
 }
-?>
+echo Kwc_Basic_Text_HtmlToTextParser::parse($output);
