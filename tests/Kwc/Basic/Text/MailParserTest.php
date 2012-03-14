@@ -77,6 +77,19 @@ class Kwc_Basic_Text_MailParserTest extends Kwc_TestAbstract
 
         return;
     }
+    
+    public function test2cData()
+    {
+        $mailParser = new Kwc_Basic_Text_HtmlToTextParser(null);
+        $mailOut = $mailParser->parse("Ã¼berrascht er Ã–sterreich miasdeiner Gewinnchance, die es so noch nie zuvor gegeben hat:+nbsp;Mit der groÃŸen Social Media-Kampagne asdasdasda+nbsp;suchen wir 300 Testfahrer+nbsp;fÃ¼r ein halbes Jahr fÃ¼r 300 neue up!. Sie haben ab+nbsp;heute zwei spektakulÃ¤re Monate Zeit, sich zu qualifizieren. Die einzigen Bedingungen: FÃ¼hrerscheinbesitz, Wohnsitz in Ã–sterreich+nbsp;und die UnterstÃ¼tzung von Freunden durch+nbsp;deren Klicks.");
+        $this->assertEquals("Ã¼berrascht er Ã–sterreich miasdeiner Gewinnchance, die es so noch nie\n".
+                "zuvor gegeben hat: Mit der groÃŸen Social Media-Kampagne asdasdasda\n".
+                "suchen wir 300 Testfahrer fÃ¼r ein halbes Jahr fÃ¼r 300 neue up!. Sie\n".
+                "haben ab heute zwei spektakulÃ¤re Monate Zeit, sich zu qualifizieren. Die\n".
+                "einzigen Bedingungen: FÃ¼hrerscheinbesitz, Wohnsitz in Ã–sterreich und\n".
+                "die UnterstÃ¼tzung von Freunden durch deren Klicks.", $mailOut);
+        return;
+    }
 
     public function testP1()
     {
