@@ -18,7 +18,7 @@ class Kwc_List_Gallery_Image_Component extends Kwc_Basic_ImageEnlarge_Component
             ),
         );
 
-        $ret['aspectRatio'] = false; //eg. 3/4
+        $ret['aspectRatio'] = 3/4;
         return $ret;
     }
 
