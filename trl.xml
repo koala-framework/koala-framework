@@ -6657,5 +6657,36 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Leer</de>
 <id>1750</id>
 </text>
+<text>
+<en>Start opened</en>
+<id>1751</id>
+</text>
+<text>
+<en>[%]</en>
+<id>1752</id>
+</text>
+<text>
+<en>click rate</en>
+<id>1753</id>
+</text>
+<text>
+<en>percentage of users which clicked at least one link in newsletter</en>
+<de>Prozentsatz der User, die mindenstens einen Link im Newsletter geklickt haben</de>
+<id>1754</id>
+</text>
+<text>
+<en>Frontend</en>
+<id>1755</id>
+</text>
+<text>
+<en>'%value%' does not appear to be a valid date</en>
+<de>'%value%' hat kein Datumsformat</de>
+<id>1756</id>
+</text>
+<text>
+<en>'%value%' does not fit the date format '{0}'</en>
+<de>'%value%' liegt nicht im ben&#xF6;tigen Format vor: '{0}'</de>
+<id>1757</id>
+</text>
 </trl>
 
