@@ -242,6 +242,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $s['height'] = $d['height'];
         }
         $s['scale'] = $d['scale'];
+        if (isset($d['aspectRatio'])) $s['aspectRatio'] = $d['aspectRatio'];
         return $s;
     }
 
