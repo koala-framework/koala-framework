@@ -43,16 +43,16 @@ class Kwc_Basic_Text_MailParserTest extends Kwc_TestAbstract
 //         //d($mailOut);
 //         $this->assertEquals(" hallo", $mailOut);
         
-        $mailOut = $mailParser->parse("<p>\n<strong>Sehr geehrte Frau Mag Gruber,</strong>\n</p>\n<p>\nder beste Weg, um Treibstoff zu sparen, ist der Kauf eines neuen Volkswagen. Ab\nsofort gibt es daher bis zu EUR 2.000,-&nbsp;Spritspar-Prämie* bei Eintausch eines\nmindestens 2 Jahre alten Fahrzeuges und Kauf eines neuen, sparsamen und\numweltfreundlichen Volkswagen (VW Pkw und VW Nutzfahrzeuge). Schnell zugreifen, die\nAktion ist streng limitiert!\n</p>\n<p>\n<strong>Viel Spaß beim Lesen</strong><br />\n<strong>Ihr Volkswagen Online Team</strong></p>\n");
+        $mailOut = $mailParser->parse("<p>\n<strong>Sehr geehrte Frau Mag Gruber,</strong>\n</p>\n<p>\nder beste Weg, um Treibstoff zu sparen, ist der Kauf eines neuen Volkswagen. Ab\nsofort gibt es daher bis zu EUR 2.000,-&nbsp;Spritspar-Prämie* bei Eintausch eines\nmindestens 2 Jahre alten Fahrzeuges und Kauf eines neuen, sparsamen und\numweltfreundlichen Volkswagen (VW Pkw und VW Nutzfahrzeuge). Schnell zugreifen, die\nAktion ist streng limitiert!\n</p>\n<p>\n<strong>Viel Spaß beim Lesen</strong>\n<strong>Ihr Volkswagen Online Team</strong></p>\n");
         //d($mailOut);
-        $this->assertEquals("Sehr geehrte Frau Mag Gruber,\n".
+        $this->assertEquals("Sehr geehrte Frau Mag Gruber,\n\n".
                 "der beste Weg, um Treibstoff zu sparen, ist der Kauf eines neuen\n".
                 "Volkswagen. Ab sofort gibt es daher bis zu EUR 2.000,- Spritspar-Prämie*\n".
                 "bei Eintausch eines mindestens 2 Jahre alten Fahrzeuges und Kauf eines\n".
                 "neuen, sparsamen und umweltfreundlichen Volkswagen (VW Pkw und VW\n".
                 "Nutzfahrzeuge). Schnell zugreifen, die Aktion ist streng limitiert!\n".
-                "Viel Spaß beim Lesen\n".
-                "Ihr Volkswagen Online Team\n", $mailOut);
+                "Viel Spaß beim Lesen\n\n".
+                "Ihr Volkswagen Online Team\n\n", $mailOut);
         return;
         
     }
@@ -74,7 +74,20 @@ class Kwc_Basic_Text_MailParserTest extends Kwc_TestAbstract
 
         $mailOut = $mailParser->parse("<p>Foo<br />\nBar</p>");
         $this->assertEquals("Foo\nBar\n", $mailOut);
+        return;
 
+    }
+    
+    public function test2cData()
+    {
+        $mailParser = new Kwc_Basic_Text_HtmlToTextParser(null);
+        $mailOut = $mailParser->parse("Ã¼berrascht er Ã–sterreich miasdeiner Gewinnchance, die es so noch nie zuvor gegeben hat:+nbsp;Mit der groÃŸen Social Media-Kampagne asdasdasda+nbsp;suchen wir 300 Testfahrer+nbsp;fÃ¼r ein halbes Jahr fÃ¼r 300 neue up!. Sie haben ab+nbsp;heute zwei spektakulÃ¤re Monate Zeit, sich zu qualifizieren. Die einzigen Bedingungen: FÃ¼hrerscheinbesitz, Wohnsitz in Ã–sterreich+nbsp;und die UnterstÃ¼tzung von Freunden durch+nbsp;deren Klicks.");
+        $this->assertEquals("Ã¼berrascht er Ã–sterreich miasdeiner Gewinnchance, die es so noch nie\n".
+                "zuvor gegeben hat: Mit der groÃŸen Social Media-Kampagne asdasdasda\n".
+                "suchen wir 300 Testfahrer fÃ¼r ein halbes Jahr fÃ¼r 300 neue up!. Sie\n".
+                "haben ab heute zwei spektakulÃ¤re Monate Zeit, sich zu qualifizieren. Die\n".
+                "einzigen Bedingungen: FÃ¼hrerscheinbesitz, Wohnsitz in Ã–sterreich und\n".
+                "die UnterstÃ¼tzung von Freunden durch deren Klicks.", $mailOut);
         return;
     }
 

@@ -242,6 +242,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $s['height'] = $d['height'];
         }
         $s['scale'] = $d['scale'];
+        if (isset($d['aspectRatio'])) $s['aspectRatio'] = $d['aspectRatio'];
         return $s;
     }
 
@@ -251,12 +252,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($size['width'] == self::CONTENT_WIDTH) {
             $size['width'] = $this->getContentWidth();
         }
-        $size = $this->_calculateResultingImageDimensions($size);
-        return $size;
-    }
-
-    protected function _calculateResultingImageDimensions($size)
-    {
         $data = $this->_getImageDataOrEmptyImageData();
         if (isset($data['image'])) {
             $size = Kwf_Media_Image::calculateScaleDimensions($data['image'], $size);
@@ -308,13 +303,14 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $output = Kwf_Media_Image::scale($data['image'], $dim);
             $ret['contents'] = $output;
         } else {
-            $size = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
             $sourceSize = @getimagesize($data['file']);
-            $scalingNeeded = (bool)$dim;
-            if ($scalingNeeded && $sourceSize && array($size['width'], $size['height']) == array($sourceSize[0], $sourceSize[1])) {
+            $scalingNeeded = true;
+            if ($sourceSize && array($dim['width'], $dim['height']) == array($sourceSize[0], $sourceSize[1])) {
                 $scalingNeeded = false;
             }
             if ($scalingNeeded) {
+                //NOTE: don't pass actual size of the resulting image, scale() will calculate that on it's own
+                //else size is calculated twice and we get rounding errors
                 $output = Kwf_Media_Image::scale($data['file'], $dim);
                 $ret['contents'] = $output;
             } else {

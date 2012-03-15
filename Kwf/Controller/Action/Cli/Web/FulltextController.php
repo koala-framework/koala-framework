@@ -6,25 +6,14 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         return "various fulltext index commands";
     }
 
-    public function termsAction()
-    {
-        //d(Kwf_Util_Fulltext::getInstance()->terms());
-        $i = Kwf_Util_Fulltext::getInstance();
-        $i->resetTermsStream();
-        $i->skipTo(new Zend_Search_Lucene_Index_Term('w', 'title'));
-        while ($i->currentTerm()) {
-            p($i->currentTerm());
-            $i->nextTerm();
-        }
-        $i->closeTermsStream();
-        exit;
-    }
-
     public function optimizeAction()
     {
         ini_set('memory_limit', '512M');
         if ($this->_getParam('debug')) echo "\noptimize index...\n";
-        Kwf_Util_Fulltext::getInstance()->optimize();
+        foreach (Kwf_Util_Fulltext::getInstances() as $subroot=>$i) {
+            if ($this->_getParam('debug')) echo "$subroot\n";
+            $i->optimize();
+        };
         if ($this->_getParam('debug')) echo "done.\n";
         exit;
     }
@@ -42,47 +31,41 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     private function _checkForInvalid()
     {
-        $index = Kwf_Util_Fulltext::getInstance();
-        if ($this->_getParam('debug')) echo "numDocs: ".$index->numDocs()."\n";
-        $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
-        $progress = null;
-        $documents = $index->find($query);
-        if ($this->_getParam('debug')) {
-            echo "checking: ".count($documents)."\n";
-            $c = new Zend_ProgressBar_Adapter_Console();
-            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
-            $progress = new Zend_ProgressBar($c, 0, count($documents));
-        }
-        $i = 0;
-        foreach ($documents as $doc) {
-            echo ".";
-            if ($progress) $progress->next();
-            if (!Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
-                if ($this->_getParam('debug')) {
-                    echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
+        foreach (Kwf_Util_Fulltext::getInstances() as $subroot=>$index) {
+            if ($this->_getParam('debug')) echo "$subroot\n";
+            if ($this->_getParam('debug')) echo "numDocs: ".$index->numDocs()."\n";
+            $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
+            $progress = null;
+            $documents = $index->find($query);
+            if ($this->_getParam('debug')) {
+                echo "checking: ".count($documents)."\n";
+                $c = new Zend_ProgressBar_Adapter_Console();
+                $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
+                $progress = new Zend_ProgressBar($c, 0, count($documents));
+            }
+            $i = 0;
+            foreach ($documents as $doc) {
+                echo ".";
+                if ($progress) $progress->next();
+                if (!Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
+                    if ($this->_getParam('debug')) {
+                        echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
+                    }
+                    $index->delete($doc->id);
+                    $m = Kwc_FulltextSearch_MetaModel::getInstance();
+                    $row = $m->getRow($doc->componentId);
+                    if ($row) {
+                        $row->delete();
+                    }
                 }
-                $index->delete($doc->id);
-                $m = Kwf_Model_Abstract::getInstance('Kwc_FulltextSearch_MetaModel');
-                $row = $m->getRow($doc->componentId);
-                if ($row) {
-                    $row->delete();
+                if ($i++ % 10) {
+                    Kwf_Component_Data_Root::getInstance()->freeMemory();
                 }
             }
-            if ($i++ % 10) {
-                Kwf_Component_Data_Root::getInstance()->freeMemory();
-            }
+            if ($progress) $progress->finish();
         }
-        if ($progress) $progress->finish();
-    }
-
-    public function testAction()
-    {
-        echo ".";
-        $page = Kwf_Component_Data_Root::getInstance()->getComponentById('root-at');
-        $childPages = $page->getChildPseudoPages(array(), array('pseudoPage'=>false));
-        exit;
     }
 
     private static function _getAllPossiblePageComponentClasses()
@@ -250,7 +233,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     }
                     if ($fulltextComponents) {
                         if ($this->_getParam('debug')) echo " *** indexing $page->componentId $page->url...";
-                        $index = Kwf_Util_Fulltext::getInstance();
 
                         $doc = new Zend_Search_Lucene_Document();
 
@@ -285,6 +267,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                         if ($this->_getParam('debug')) echo "\n";
 
                         if ($doc) {
+
                             //das wird verwendet um alle dokumente im index zu finden
                             //ned wirklisch a schöne lösung :(
                             $field = Zend_Search_Lucene_Field::UnStored('dummy', 'dummy', 'utf-8');
@@ -295,18 +278,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                             $field->boost = 0.0001;
                             $doc->addField($field);
 
-                            $subRoot = $page;
-                            while ($subRoot) {
-                                if (Kwc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
-                                $subRoot = $subRoot->parent;
-                            }
-                            if ($subRoot) {
-                                //echo "subroot $subRoot->componentId\n";
-                                $field = Zend_Search_Lucene_Field::Keyword('subroot', $subRoot->componentId, 'utf-8');
-                                $field->boost = 0.0001;
-                                $doc->addField($field);
-                            }
-                            unset($subRoot);
                             if ($this->_getParam('verbose')) {
                                 foreach ($doc->getFieldNames() as $fieldName) {
                                     echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
@@ -315,6 +286,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                             }
 
                             $term = new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId');
+                            $index = Kwf_Util_Fulltext::getInstance($page);
                             $hits = $index->termDocs($term);
                             foreach ($hits as $id) {
                                 //echo "deleting $hit->componentId\n";
@@ -323,7 +295,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
                             $index->addDocument($doc);
 
-                            $m = Kwf_Model_Abstract::getInstance('Kwc_FulltextSearch_MetaModel');
+                            $m = Kwc_FulltextSearch_MetaModel::getInstance();
                             $row = $m->getRow($page->componentId);
                             if (!$row) {
                                 $row = $m->createRow();
@@ -363,7 +335,8 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function searchAction()
     {
-        $index = Kwf_Util_Fulltext::getInstance();
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        $index = Kwf_Util_Fulltext::getInstance($subroot);
 
         echo "indexSize ".$index->count()."\n";
         echo "numDocs ".$index->numDocs()."\n";
@@ -377,11 +350,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $query = new Zend_Search_Lucene_Search_Query_Boolean();
         $query->addSubquery($userQuery, true /* required */);
 
-        if ($this->_getParam('subroot')) {
-            $pathTerm  = new Zend_Search_Lucene_Index_Term($this->_getParam('subroot'), 'subroot');
-            $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
-            $query->addSubquery($pathQuery, true /* required */);
-        }
         if ($this->_getParam('news')) {
             $pathTerm  = new Zend_Search_Lucene_Index_Term('kwcNews', 'kwcNews');
             $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
