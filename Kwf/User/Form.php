@@ -38,7 +38,7 @@ class Kwf_User_Form extends Kwf_Form
         if (isset($authedUser->language) && $config->languages){
             $data = array();
             foreach ($config->languages as $key => $value){
-                $data[$value] = $value;
+                $data[$key] = $value;
             }
             $this->fields->add(new Kwf_Form_Field_Select('language', trlKwf('Language')))
             ->setValues($data);

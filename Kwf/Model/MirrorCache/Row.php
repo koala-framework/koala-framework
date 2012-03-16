@@ -32,8 +32,11 @@ class Kwf_Model_MirrorCache_Row extends Kwf_Model_Proxy_Row
     {
         parent::_beforeInsert();
 
-        //$this->_row->toArray() statt $this->toArray() da sonst sibling felder zuviel dabei sind
-        $data = $this->_row->toArray();
+        //access $this->_row-> instead of $this, else we get sibling columns
+        $data = array();
+        foreach ($this->_row->getDirtyColumns() as $c) {
+            $data[$c] = $this->_row->$c;
+        }
 
         $returnedData = $this->getModel()->synchronizeAndInsertRow($data);
         foreach ($returnedData as $k=>$v) {
