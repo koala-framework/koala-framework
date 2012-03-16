@@ -10,14 +10,14 @@ class Kwf_Component_Cache_Menu_AlternativeComponentTest extends Kwc_TestAbstract
         /*
       root (menuCategory)
         root-menu1 (menu) Kwc_Menu_Component, level root, including subMenu
-          root-menu1-subMenu (empty)
+          root-menu1-subMenu (none)
           1-menu1 (parentMenu)
             1-menu1-subMenu (menu)
             2-menu1 (parentMenu, because of submenu)
               2-menu1-subMenu (parentMenu)
               3-menu1 (parentContent)
 
-        root-menu2 (empty) Kwc_Menu_Component, level 2
+        root-menu2 (none) Kwc_Menu_Component, level 2
           1-menu2 (menu)
             2-menu2 (parentMenu)
               3-menu2 (parentContent)
@@ -34,7 +34,7 @@ class Kwf_Component_Cache_Menu_AlternativeComponentTest extends Kwc_TestAbstract
         $menu = $this->_root->getComponentById('root-menu1');
         $this->assertEquals('Kwf_Component_Cache_Menu_Root3_Menu1_Component', $menu->componentClass);
         $menu = $this->_root->getComponentById('root-menu1-subMenu');
-        $this->assertEquals('Kwc_Basic_Empty_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Basic_None_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('1-menu1');
         $this->assertEquals('Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu1_Component', $menu->componentClass);
@@ -54,7 +54,7 @@ class Kwf_Component_Cache_Menu_AlternativeComponentTest extends Kwc_TestAbstract
     public function testMenu2()
     {
         $menu = $this->_root->getComponentById('root-menu2');
-        $this->assertEquals('Kwc_Basic_Empty_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Basic_None_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('1-menu2');
         $this->assertEquals('Kwf_Component_Cache_Menu_Root3_Menu2_Component', $menu->componentClass);
