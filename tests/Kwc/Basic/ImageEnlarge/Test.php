@@ -41,11 +41,16 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        if (isset($o['contents'])) {
+            $contents = $o['contents'];
+        } else {
+            $contents = file_get_contents($o['file']);
+        }
+        $im->readImageBlob($contents);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
+                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $contents);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
@@ -65,11 +70,16 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImage($o['file']);
+        if (isset($o['contents'])) {
+            $contents = $o['contents'];
+        } else {
+            $contents = file_get_contents($o['file']);
+        }
+        $im->readImageBlob($contents);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
+                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), $contents);
     }
 
     public function testWithoutSmallImageUploaded()
@@ -102,11 +112,16 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        if (isset($o['contents'])) {
+            $contents = $o['contents'];
+        } else {
+            $contents = file_get_contents($o['file']);
+        }
+        $im->readImageBlob($contents);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
+                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $contents);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
@@ -127,11 +142,16 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImage($o['file']);
+        if (isset($o['contents'])) {
+            $contents = $o['contents'];
+        } else {
+            $contents = file_get_contents($o['file']);
+        }
+        $im->readImageBlob($contents);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
+                                    array(16, 16, Kwf_Media_Image::SCALE_DEFORM)), $contents);
     }
 
     public function testWithSmallImageUploaded()
@@ -173,11 +193,16 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $im->readImageBlob($o['contents']);
+        if (isset($o['contents'])) {
+            $contents = $o['contents'];
+        } else {
+            $contents = file_get_contents($o['file']);
+        }
+        $im->readImageBlob($contents);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
-                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
+                                    array(10, 10, Kwf_Media_Image::SCALE_DEFORM)), $contents);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
@@ -197,11 +222,16 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/gif', $o['mimeType']);
         $im = new Imagick();
-        $im->readImage($o['file']);
+        if (isset($o['contents'])) {
+            $contents = $o['contents'];
+        } else {
+            $contents = file_get_contents($o['file']);
+        }
+        $im->readImageBlob($contents);
         $this->assertEquals(210, $im->getImageWidth());
         $this->assertEquals(70, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
-                                    array(270, 70, Kwf_Media_Image::SCALE_BESTFIT)), file_get_contents($o['file']));
+                                    array(270, 70, Kwf_Media_Image::SCALE_BESTFIT)), $contents);
     }
 
     public function testWithOriginalHtml()
