@@ -28,6 +28,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Abstract.js';
+        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Above.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
 
         $ret['flags']['processInput'] = true;
