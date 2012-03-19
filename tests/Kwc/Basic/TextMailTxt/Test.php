@@ -8,6 +8,8 @@ class Kwc_Basic_TextMailTxt_Test extends Kwc_TestAbstract
 
     public function testMailText()
     {
+        $this->markTestIncomplete();
+
         $m1 = Kwf_Component_Data_Root::getInstance()->getComponentById('root_mail1');
         $text1 = $m1->getComponent()->getText();
         $this->assertEquals("xxy foo:\nhttp://vivid.com\nyyx\n", $text1); //linebreak before the link happens, because of the length of the created link ({cc mail: ...)
