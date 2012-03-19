@@ -4,6 +4,7 @@
  */
 class Kwf_Util_Mysql_Test extends Kwf_Test_TestCase
 {
+    /* Test disabled because it requires a mysql user with GRANT permissions
     public function testGrantFileRight()
     {
         // einen test user erstellen
@@ -60,4 +61,5 @@ class Kwf_Util_Mysql_Test extends Kwf_Test_TestCase
             throw new Kwf_ClientException("Konnte berechtigungen nicht setzen");
         }
     }
+    */
 }
