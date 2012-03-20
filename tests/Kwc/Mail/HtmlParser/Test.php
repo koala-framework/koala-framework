@@ -18,7 +18,7 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
                 'tag' => 'p',
                 'styles' => array(
                     'font-family' => 'Verdana',
-                    'font-size' => '3'
+                    'font-size' => '18px'
                 )
             ),
             array(
@@ -26,7 +26,7 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
                 'class' => 'red',
                 'styles' => array(
                     'font-family' => 'Verdana',
-                    'font-size' => '3',
+                    'font-size' => '18px',
                     'color' => 'red'
                 )
             ),
@@ -34,7 +34,7 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
                 'tag' => 'h1',
                 'styles' => array(
                     'font-family' => 'Verdana',
-                    'font-size' => '4',
+                    'font-size' => '21px',
                     'font-weight' => 'bold'
                 )
             ),
@@ -82,7 +82,7 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
                 'tag' => 'td',
                 'styles' => array(
                     'font-family' => 'Verdana',
-                    'font-size' => '2'
+                    'font-size' => '12px'
                 ),
             )
         );
@@ -100,13 +100,13 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
             array(
                 'tag' => 'p',
                 'styles' => array(
-                    'font-size' => '3'
+                    'font-size' => '18px'
                 ),
             ),
             array(
                 'selector' => 'table.foo p',
                 'styles' => array(
-                    'font-size' => '2'
+                    'font-size' => '12px'
                 ),
             )
         );
