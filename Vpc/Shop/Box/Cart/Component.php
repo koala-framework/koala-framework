@@ -18,7 +18,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
         $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                             ->getCartOrder();
         $ret['items'] = $ret['order']->getProductsDataWithProduct();
-        $ret['sumRows'] = $this->_getCart()->getChildComponent('_checkout')
+        $ret['sumRows'] = $this->_getCart()->getChildComponent(array('componentClass' => 'Vpc_Shop_Cart_Checkout_Component'))
                                 ->getComponent()->getSumRows($ret['order']);
 
         $ret['links'] = $this->_getLinks();
@@ -34,7 +34,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
             'text' => $this->_getPlaceholder('toCart')
         );
         $ret['checkout'] = array(
-            'component' => $this->_getCart()->getChildComponent('_checkout'),
+            'component' => $this->_getCart()->getChildComponent(array('componentClass' => 'Vpc_Shop_Cart_Checkout_Component')),
             'text' => $this->_getPlaceholder('toCheckout')
         );
         return $ret;
