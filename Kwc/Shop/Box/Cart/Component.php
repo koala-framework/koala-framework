@@ -20,7 +20,7 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
         $ret['order'] = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
         $ret['items'] = $ret['order']->getProductsDataWithProduct();
-        $ret['sumRows'] = $this->_getCart()->getChildComponent(array('componentClass' => 'Kwc_Shop_Cart_Checkout_Component'))
+        $ret['sumRows'] = $this->_getCart()->getChildComponent(array('generator' => 'checkout'))
                                 ->getComponent()->getSumRows($ret['order']);
 
         $ret['links'] = $this->_getLinks();
@@ -36,7 +36,7 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
             'text' => $this->_getPlaceholder('toCart')
         );
         $ret['checkout'] = array(
-            'component' => $this->_getCart()->getChildComponent(array('componentClass' => 'Kwc_Shop_Cart_Checkout_Component')),
+            'component' => $this->_getCart()->getChildComponent(array('generator' => 'checkout')),
             'text' => $this->_getPlaceholder('toCheckout')
         );
         return $ret;
