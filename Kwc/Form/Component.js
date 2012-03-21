@@ -50,9 +50,11 @@ Kwc.Form.Component = function(form)
         }, this);
     }
 
-    var button = form.child('form button.submit');
-    if (button) {
-        button.on('click', this.onSubmit, this);
+    if (this.config.useAjaxRequest) {
+        var button = form.child('form button.submit');
+        if (button) {
+            button.on('click', this.onSubmit, this);
+        }
     }
 };
 Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
@@ -93,7 +95,6 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 button.down('.submit').dom.click();
             },
             success: function(response, options, r) {
-
                 var hasErrors = false;
 
                 // remove and set error classes for fields
@@ -130,7 +131,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     this.el.remove();
                     Kwf.callOnContentReady(el.dom, {newRender: true});
                 } else if (r.successUrl) {
-                    document.location.href = r.successUrl;
+                    //document.location.href = r.successUrl;
                 }
                 
                 if (!r.successUrl) {
