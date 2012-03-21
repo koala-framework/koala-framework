@@ -487,7 +487,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
         if (isset($this->_pageChilds[$childId])) {
             foreach ($this->_pageChilds[$childId] as $i) {
-                $this->_duplicatePageRecursive($sourceId, $targetId, $i, $progressBar);
+                if ($i != $targetId) { //no endless recursion id page is pasted below itself
+                    $this->_duplicatePageRecursive($sourceId, $targetId, $i, $progressBar);
+                }
             }
         }
 
