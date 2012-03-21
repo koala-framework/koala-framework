@@ -131,7 +131,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     this.el.remove();
                     Kwf.callOnContentReady(el.dom, {newRender: true});
                 } else if (r.successUrl) {
-                    //document.location.href = r.successUrl;
+                    document.location.href = r.successUrl;
                 }
                 
                 if (!r.successUrl) {
