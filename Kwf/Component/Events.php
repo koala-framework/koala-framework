@@ -91,6 +91,7 @@ class Kwf_Component_Events
         $eventObjects[] = self::getInstance('Kwf_Component_Events_ViewCache');
         $eventObjects[] = self::getInstance('Kwf_Component_Events_UrlCache');
         $eventObjects[] = self::getInstance('Kwf_Component_Events_ProcessInputCache');
+        $eventObjects[] = self::getInstance('Kwf_Component_Events_Fulltext');
 
         $listeners = array();
         foreach ($eventObjects as $eventObject) {
