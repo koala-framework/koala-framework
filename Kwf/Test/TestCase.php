@@ -16,6 +16,7 @@ class Kwf_Test_TestCase extends PHPUnit_Framework_TestCase
         Kwf_Component_Data_Root::reset();
         Kwf_Component_Cache::clearInstance();
         Kwf_Model_Abstract::clearInstances();
+        Kwc_FulltextSearch_MetaModel::clearInstance();
     }
 
     public static function assertValidHtml($uri)
