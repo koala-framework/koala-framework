@@ -157,7 +157,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     //child process
 
                     //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
-                    if (memory_get_usage() > 64*1024*1024) {
+                    if (memory_get_usage() > 128*1024*1024) {
                         if ($this->_getParam('debug')) echo "new process...\n";
                         break;
                     }
