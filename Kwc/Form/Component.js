@@ -50,9 +50,11 @@ Kwc.Form.Component = function(form)
         }, this);
     }
 
-    var button = form.child('form button.submit');
-    if (button) {
-        button.on('click', this.onSubmit, this);
+    if (this.config.useAjaxRequest) {
+        var button = form.child('form button.submit');
+        if (button) {
+            button.on('click', this.onSubmit, this);
+        }
     }
 
     this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);

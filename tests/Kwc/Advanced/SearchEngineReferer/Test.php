@@ -59,8 +59,6 @@ class Kwc_Advanced_SearchEngineReferer_Test extends Kwc_TestAbstract
 
     public function testCache()
     {
-        $this->markTestIncomplete('eventscache');
-
         $ref2 = $this->_root->getChildComponent('-referer2');
         $ref2->getChildComponent('-view')->getComponent()->emptyReferersCache();
         $render = $ref2->render();
@@ -71,6 +69,7 @@ class Kwc_Advanced_SearchEngineReferer_Test extends Kwc_TestAbstract
         $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=fooNew';
         $ref2 = $this->_root->getChildComponent('-referer2');
         $ref2->getComponent()->processInput();
+        unset($_SERVER['HTTP_REFERER']);
         $ref2->getChildComponent('-view')->getComponent()->emptyReferersCache();
         $render = $ref2->render();
         $this->assertEquals(3, substr_count($render, 'fooNew'));

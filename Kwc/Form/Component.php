@@ -31,6 +31,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Above.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
 
+        $ret['useAjaxRequest'] = true;
+
         $ret['flags']['processInput'] = true;
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
@@ -300,6 +302,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if (!$errorStyle) $errorStyle = Kwf_Config::getValue('kwc.form.errorStyle');
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
+            'useAjaxRequest' => $this->_getSetting('useAjaxRequest'),
             'componentId' => $this->getData()->componentId,
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,

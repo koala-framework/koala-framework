@@ -20,7 +20,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function checkForInvalidAction()
     {
-        $this->_checkForInvalid();
+        foreach (Kwf_Util_Fulltext::getInstances() as $subroot=>$index) {
+            if ($this->_getParam('debug')) echo "$subroot\n";
+            $cmd = "php bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            system($cmd);
+        }
 
         $cmd = "php bootstrap.php fulltext optimize";
         if ($this->_getParam('debug')) $cmd .= " --debug";
@@ -29,43 +34,34 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         exit;
     }
 
-    private function _checkForInvalid()
+    public function checkForInvalidSubrootAction()
     {
-        foreach (Kwf_Util_Fulltext::getInstances() as $subroot=>$index) {
-            if ($this->_getParam('debug')) echo "$subroot\n";
-            if ($this->_getParam('debug')) echo "numDocs: ".$index->numDocs()."\n";
-            $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
-            $progress = null;
-            $documents = $index->find($query);
-            if ($this->_getParam('debug')) {
-                echo "checking: ".count($documents)."\n";
-                $c = new Zend_ProgressBar_Adapter_Console();
-                $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                        Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                        Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
-                $progress = new Zend_ProgressBar($c, 0, count($documents));
-            }
-            $i = 0;
-            foreach ($documents as $doc) {
-                echo ".";
-                if ($progress) $progress->next();
-                if (!Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
-                    if ($this->_getParam('debug')) {
-                        echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
-                    }
-                    $index->delete($doc->id);
-                    $m = Kwc_FulltextSearch_MetaModel::getInstance();
-                    $row = $m->getRow($doc->componentId);
-                    if ($row) {
-                        $row->delete();
-                    }
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        $index = Kwf_Util_Fulltext::getInstance($subroot);
+        if (!$this->_getParam('silent')) echo "numDocs: ".$index->numDocs()."\n";
+        $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
+        $documents = $index->find($query);
+        $i = 0;
+        foreach ($documents as $doc) {
+            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
+            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
+            if (!$page) {
+                if (!$this->_getParam('slient')) {
+                    echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
                 }
-                if ($i++ % 10) {
-                    Kwf_Component_Data_Root::getInstance()->freeMemory();
+                $index->delete($doc->id);
+                $m = Kwc_FulltextSearch_MetaModel::getInstance();
+                $row = $m->getRow($doc->componentId);
+                if ($row) {
+                    $row->delete();
                 }
             }
-            if ($progress) $progress->finish();
+            unset($page);
+            if ($i++ % 10) {
+                Kwf_Component_Data_Root::getInstance()->freeMemory();
+            }
         }
+        exit;
     }
 
     private static function _getAllPossiblePageComponentClasses()
@@ -161,7 +157,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     //child process
 
                     //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
-                    if (memory_get_usage() > 64*1024*1024) {
+                    if (memory_get_usage() > 128*1024*1024) {
                         if ($this->_getParam('debug')) echo "new process...\n";
                         break;
                     }
@@ -221,92 +217,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                         //var_dump(Kwf_Component_Data::$objectsById);
                         //echo "\n";
                     }
-
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
                     if (!$page->isPage) continue;
-                    if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) continue;
-
-                    //echo "checking for childComponents\n";
-                    $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false));
-                    if (Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
-                        $fulltextComponents[] = $page;
+                    if (Kwc_FulltextSearch_MetaModel::getInstance()->indexPage($page)) {
+                        $stats['indexedPages']++;
                     }
-                    if ($fulltextComponents) {
-                        if ($this->_getParam('debug')) echo " *** indexing $page->componentId $page->url...";
-
-                        $doc = new Zend_Search_Lucene_Document();
-
-                        //whole content, for preview in search result
-                        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('content', '', 'utf-8'));
-
-                        //normal content with boost=1 goes here
-                        $doc->addField(Zend_Search_Lucene_Field::UnStored('normalContent', '', 'utf-8'));
-
-                        $t = $page->getTitle();
-                        if (substr($t, -3) == ' - ') $t = substr($t, 0, -3);
-                        $field = Zend_Search_Lucene_Field::Text('title', $t, 'utf-8');
-                        $field->boost = 10;
-                        $doc->addField($field);
-
-                        foreach ($fulltextComponents as $c) {
-                            if (method_exists($c->getComponent(), 'modifyFulltextDocument')) {
-                                $doc = $c->getComponent()->modifyFulltextDocument($doc);
-                            }
-                            //Komponente kann null zurückgeben um zu sagen dass gar nicht indiziert werden soll
-                            if (!$doc) {
-                                if ($this->_getParam('debug')) echo " [no $c->componentId $c->componentClass]";
-                                break;
-                            }
-                            unset($c);
-                        }
-                        unset($fulltextComponents);
-                        if (!$doc->getField('content')->value) {
-                            if ($this->_getParam('debug')) echo " [no content]";
-                            $doc = null;
-                        }
-                        if ($this->_getParam('debug')) echo "\n";
-
-                        if ($doc) {
-
-                            //das wird verwendet um alle dokumente im index zu finden
-                            //ned wirklisch a schöne lösung :(
-                            $field = Zend_Search_Lucene_Field::UnStored('dummy', 'dummy', 'utf-8');
-                            $field->boost = 0.0001;
-                            $doc->addField($field);
-
-                            $field = Zend_Search_Lucene_Field::Keyword('componentId', $page->componentId, 'utf-8');
-                            $field->boost = 0.0001;
-                            $doc->addField($field);
-
-                            if ($this->_getParam('verbose')) {
-                                foreach ($doc->getFieldNames() as $fieldName) {
-                                    echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
-                                    //echo "$fieldName: ".$doc->$fieldName."\n";
-                                }
-                            }
-
-                            $term = new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId');
-                            $index = Kwf_Util_Fulltext::getInstance($page);
-                            $hits = $index->termDocs($term);
-                            foreach ($hits as $id) {
-                                //echo "deleting $hit->componentId\n";
-                                $index->delete($id);
-                            }
-
-                            $index->addDocument($doc);
-
-                            $m = Kwc_FulltextSearch_MetaModel::getInstance();
-                            $row = $m->getRow($page->componentId);
-                            if (!$row) {
-                                $row = $m->createRow();
-                                $row->page_id = $page->componentId;
-                            }
-                            $row->indexed_date = date('Y-m-d H:i:s');
-                            $row->save();
-                            unset($row);
-                            $stats['indexedPages']++;
-                        }
-                    }
+                    unset($page);
 
                 }
                 file_put_contents($statsFile, serialize($stats));
@@ -316,7 +232,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         }
 
 
-        if ($this->_getParam('debug')) {
+        if (!$this->_getParam('silent')) {
             $stats = unserialize(file_get_contents($statsFile));
             echo "fulltext reindex finished.\n";
             echo "duration: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
@@ -364,6 +280,257 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             echo "score ".$hit->score."\n";
             echo "  componentId: ".$hit->componentId."\n";
             echo "\n";
+        }
+        exit;
+    }
+
+    private function _processRecursive(Kwf_Component_Data $page)
+    {
+        static $pageClassesThatCanHaveFulltext;
+        if (!isset($pageClassesThatCanHaveFulltext)) {
+            $pageClassesThatCanHaveFulltext = array();
+            foreach (self::_getAllPossiblePageComponentClasses() as $c) {
+                if (self::_canHaveFulltext($c)) {
+                    $pageClassesThatCanHaveFulltext[] = $c;
+                }
+            }
+        }
+
+        if ($this->_getParam('debug')) echo "processing changed_recursive $page->componentId\n";
+        $childPages = $page->getChildPseudoPages(
+            array('pageGenerator' => false, 'componentClasses'=>$pageClassesThatCanHaveFulltext),
+            array('pseudoPage'=>false)
+        );
+        $ret = array();
+        foreach ($childPages as $p) {
+            $m = Kwc_FulltextSearch_MetaModel::getInstance();
+            $s = $m->select()
+                ->whereEquals('page_id', $p->componentId);
+            $r = $m->getRow($s);
+            if (!$r) {
+                $r = $m->createRow();
+                $r->page_id = $p->componentId;
+            }
+            $r->changed_date = date('Y-m-d H:i:s');
+            $r->save();
+            $this->_processRecursive($p);
+        }
+    }
+
+    public function updateChangedAction()
+    {
+        $start = microtime(true);
+        $m = Kwc_FulltextSearch_MetaModel::getInstance();
+        $s = $m->select();
+        $s->where(new Kwf_Model_Select_Expr_Lower('changed_date', new Kwf_DateTime(time() - 5*60))); //>5min ago (for buffering!)
+        //$s->where(new Kwf_Model_Expr_Not(new Kwf_Model_Expr_Equals('changed_date', 'indexed_date')));
+        $s->where('changed_date > indexed_date OR ISNULL(indexed_date)');
+        foreach ($m->getRows($s) as $row) {
+            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
+            if (!$page->isPage) continue;
+            if ($row->changed_recursive) {
+                $row->changed_recursive = false;
+                $this->_processRecursive($page);
+            } else {
+                if ($this->_getParam('debug')) echo "indexing $page->componentId\n";
+                if (Kwc_FulltextSearch_MetaModel::getInstance()->indexPage($page)) {
+                    //does have no fulltext content
+                    $row->indexed_date = date('Y-m-d H:i:s');
+                } else {
+                    $row->changed_date = null;
+                    $row->indexed_date = null;
+                }
+                unset($page);
+            }
+            $row->save();
+            if (microtime(true) - $start > 30) {
+                if ($this->_getParam('debug')) echo "stopped after ".round(microtime(true) - $start)."sec\n";
+                break;
+            }
+        }
+
+        $cmd = "php bootstrap.php fulltext optimize";
+        if ($this->_getParam('debug')) $cmd .= " --debug";
+        system($cmd);
+
+        exit;
+    }
+
+    public function checkContentsAction()
+    {
+        $startTime = microtime(true);
+
+        foreach (Kwf_Util_Fulltext::getInstances() as $subroot=>$i) {
+
+            $t = time();
+            if (!$this->_getParam('silent')) echo "\n[$subroot] check-for-invalid...\n";
+            $cmd = "php bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            if ($this->_getParam('silent')) $cmd .= " --silent";
+            passthru($cmd, $ret);
+            if ($ret) exit($ret);
+            if (!$this->_getParam('silent')) echo "[$subroot] check-for-invalid finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
+
+            $t = time();
+            if (!$this->_getParam('silent')) echo "\n[$subroot] check-pages...\n";
+            $cmd = "php bootstrap.php fulltext check-pages-subroot --componentId=$subroot";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            if ($this->_getParam('silent')) $cmd .= " --silent";
+            passthru($cmd, $ret);
+            if ($ret) exit($ret);
+            if (!$this->_getParam('silent')) echo "[$subroot] check-pages finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
+
+            $t = time();
+            if (!$this->_getParam('silent')) echo "\n[$subroot] check-contents...\n";
+            $cmd = "php bootstrap.php fulltext check-contents-subroot --subroot=$subroot";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            if ($this->_getParam('silent')) $cmd .= " --silent";
+            passthru($cmd, $ret);
+            if ($ret) exit($ret);
+            if (!$this->_getParam('silent')) echo "[$subroot] check-contents finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
+
+            $t = time();
+            if (!$this->_getParam('silent')) echo "\n[$subroot] optimize...\n";
+            $i->optimize();
+            if (!$this->_getParam('silent')) echo "[$subroot] optimize finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
+        }
+
+        if (!$this->_getParam('silent')) echo "\ncomplete fulltext check-contents finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
+        exit;
+    }
+
+    public function checkContentsSubrootAction()
+    {
+        ini_set('memory_limit', '256M');
+
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        $index = Kwf_Util_Fulltext::getInstance($subroot);
+        if ($this->_getParam('debug')) echo "numDocs: ".$index->numDocs()."\n";
+        $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
+        $documents = $index->find($query);
+        $i = 0;
+
+        $stats = array(
+            'indexedPages' => 0,
+            'diffPages' => 0,
+        );
+        foreach ($documents as $doc) {
+            $doc = $index->getDocument($doc);
+            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
+            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
+            if (!$page) continue; //should not happen
+            $newDoc = Kwc_FulltextSearch_MetaModel::getInstance()->getDocumentForPage($page);
+            if ($newDoc->getField('content')->value != $doc->getField('content')->value) {
+                $stats['diffPages']++;
+                if (Kwc_FulltextSearch_MetaModel::getInstance()->indexPage($page)) {
+                    $stats['indexedPages']++;
+                }
+                if (!$this->_getParam('silent')) echo "DIFF: $doc->componentId\n";
+            }
+            unset($page);
+            if ($i++ % 10) {
+                Kwf_Component_Data_Root::getInstance()->freeMemory();
+            }
+            //if ($this->_getParam('debug')) echo "memory_usage ".(memory_get_usage()/(1024*1024))."MB\n";
+        }
+
+        if (!$this->_getParam('silent')) {
+            echo "pages with diff: $stats[diffPages]\n";
+            echo "indexed pages: $stats[indexedPages]\n";
+        }
+        exit;
+    }
+
+    public function checkPagesSubrootAction()
+    {
+        ini_set('memory_limit', '256M');
+
+        $pageClassesThatCanHaveFulltext = array();
+        foreach (self::_getAllPossiblePageComponentClasses() as $c) {
+            if (self::_canHaveFulltext($c)) {
+                $pageClassesThatCanHaveFulltext[] = $c;
+            }
+        }
+
+
+        $startTime = microtime(true);
+
+        if (!$this->_getParam('componentId')) throw new Kwf_Exception_Client("componentId parameter required");
+
+        $componentId = $this->_getParam('componentId');
+        $queue = array($componentId);
+
+        $stats = array(
+            'pages' => 0,
+            'indexedPages' => 0
+        );
+        while ($queue) {
+
+            if (!$queue) break;
+
+            if ($this->_getParam('debug')) echo "queued: ".count($queue).' :: '.round(memory_get_usage()/1024/1024, 2)."MB\n";
+            $componentId = array_shift($queue);
+            $stats['pages']++;
+
+            //if ($this->_getParam('debug')) echo "==> ".$componentId;
+            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+            //if ($this->_getParam('debug')) echo " :: $page->url\n";
+            if (!$page) {
+                if ($this->_getParam('debug')) echo "$componentId not found!\n";
+                continue;
+            }
+            //echo "$page->url\n";
+            if ($this->_getParam('verbose')) echo "getting child pages...";
+
+            $childPages = $page->getChildPseudoPages(
+                array('pageGenerator' => false, 'componentClasses'=>$pageClassesThatCanHaveFulltext),
+                array('pseudoPage'=>false)
+            );
+            $childPages = array_merge($childPages, $page->getChildPseudoPages(
+                array('pageGenerator' => true),
+                array('pseudoPage'=>false)
+            ));
+            if ($this->_getParam('verbose')) echo " done\n";
+            foreach ($childPages as $c) {
+                if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
+                $queue[] = $c->componentId;
+            }
+            unset($c);
+
+            $hasFulltext = false;
+            if (!Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext') &&
+                $page->isPage &&
+                ($page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false)) || Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext'))
+            ) {
+                $hasFulltext = true;
+            }
+
+            if ($hasFulltext) {
+                $index = Kwf_Util_Fulltext::getInstance($page);
+                $term = new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId');
+                $found = false;
+                foreach ($index->find(new Zend_Search_Lucene_Search_Query_Term($term)) as $doc) {
+                    $found = true;
+                }
+                if (!$found) {
+                    if (Kwc_FulltextSearch_MetaModel::getInstance()->indexPage($page)) {
+                        $stats['indexedPages']++;
+                        if (!$this->_getParam('silent')) echo "not found in index: $page->componentId has content!!!!\n";
+                    } else {
+                        if ($this->_getParam('debug')) echo "not found in index: $page->componentId has NO content (that's ok)\n";
+                    }
+                }
+            }
+            unset($page);
+
+            if ($stats['pages'] % 50 == 0) {
+                Kwf_Component_Data_Root::getInstance()->freeMemory();
+            }
+        }
+
+        if (!$this->_getParam('silent')) {
+            echo "processed pages: $stats[pages]\n";
+            echo "indexed pages: $stats[indexedPages]\n";
         }
         exit;
     }

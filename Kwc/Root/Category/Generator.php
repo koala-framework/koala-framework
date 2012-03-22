@@ -429,12 +429,12 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $parentTargetId = $parentTarget->componentId;
         unset($source);
         unset($parentTarget);
-        $targetId = $this->_duplicateChildPages($parentSourceId, $parentTargetId, $sourceId, $progressBar);
+        $targetId = $this->_duplicatePageRecursive($parentSourceId, $parentTargetId, $sourceId, $progressBar);
         return Kwf_Component_Data_Root::getInstance()
             ->getComponentById($targetId, array('ignoreVisible'=>true));
     }
 
-    private function _duplicateChildPages($parentSourceId, $parentTargetId, $childId, Zend_ProgressBar $progressBar = null)
+    private function _duplicatePageRecursive($parentSourceId, $parentTargetId, $childId, Zend_ProgressBar $progressBar = null)
     {
         if ($progressBar) $progressBar->next(1, trlKwf("Pasting {0}", $this->_pageData[$childId]['name']));
 
@@ -487,7 +487,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
         if (isset($this->_pageChilds[$childId])) {
             foreach ($this->_pageChilds[$childId] as $i) {
-                $this->_duplicateChildPages($sourceId, $targetId, $i, $progressBar);
+                if ($i != $targetId) { //no endless recursion id page is pasted below itself
+                    $this->_duplicatePageRecursive($sourceId, $targetId, $i, $progressBar);
+                }
             }
         }
 
