@@ -40,14 +40,17 @@ class Kwf_View_Helper_ComponentLink extends Kwf_Component_View_Helper_Abstract
         }
 
         if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
-        $cssClass = '';
+        $html = '';
         if (!empty($config['cssClass'])) {
             $cssClass = $config['cssClass'];
             if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
-            $cssClass = " class=\"$cssClass\"";
+            $html .= " class=\"".htmlspecialchars($cssClass)."\"";
+        }
+        if (isset($config['id'])) {
+            $html .= " id=\"".htmlspecialchars($config['id'])."\"";
         }
 
-        return "<a href=\"".htmlspecialchars($url)."\" rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
+        return "<a href=\"".htmlspecialchars($url)."\" rel=\"".htmlspecialchars($rel)."\"$html>$text</a>";
     }
 
     public function getTargetPage($component)
