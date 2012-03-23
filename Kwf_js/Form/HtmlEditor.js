@@ -196,8 +196,8 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
 
     //private
-	getFocusElement : function(tag)
-	{
+    getFocusElement : function(tag)
+    {
         if (tag == 'block') tag = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
                                     'pre', 'code', 'address'];
         var isNeededTag = function(t) {
