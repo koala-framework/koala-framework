@@ -6,7 +6,7 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
     initComponent : function()
     {
-        this.plugins = [];
+        if (!this.plugins) this.plugins = [];
         if (this.enableFormat) {
             this.plugins.push(new Kwf.Form.HtmlEditor.Formats());
             this.enableFormat = false; //ext implementation deaktivieren, unsere ist besser
