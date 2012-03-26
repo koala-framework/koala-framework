@@ -18,21 +18,21 @@ class Kwc_Basic_TextMasterStyles_Test extends Kwf_Test_TestCase
                 'name' => 'Headline 1',
                 'tagName' => 'h1',
                 'className' => false,
-                'styles' => 'font-size: 12px; ',
+                'styles' => ' font-size: 12px; ',
             ),
             array(
                 'id' => 'master1',
                 'name' => 'Headline Red',
                 'tagName' => 'h1',
                 'className' => 'red',
-                'styles' => 'color: red; ',
+                'styles' => ' color: red; ',
             ),
             array(
                 'id' => 'master2',
                 'name' => 'Red',
                 'tagName' => 'span',
                 'className' => 'red',
-                'styles' => 'color: red; ',
+                'styles' => ' color: red; ',
             )
         ), $s);
     }
