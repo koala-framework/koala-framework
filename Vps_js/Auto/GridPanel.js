@@ -1042,6 +1042,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }
     },
     setBaseParams : function(baseParams) {
+        baseParams = Vps.clone(baseParams);
         if (this.editDialog && this.editDialog.setBaseParams) {
             this.editDialog.setBaseParams(baseParams);
         }
