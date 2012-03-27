@@ -250,7 +250,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
         }
 
-        $cachedContent = Kwf_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
+        $cachedContent = Kwf_Component_Cache::getInstance()->load(
+            $this->getData()->getPageOrRoot()->componentId, 'componentLink'
+        );
         if ($cachedContent) {
             $targetPage = unserialize($cachedContent);
             $ret['action'] = $targetPage[0];
