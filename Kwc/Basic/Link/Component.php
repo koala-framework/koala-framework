@@ -30,11 +30,13 @@ class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
         return $this->_getRow()->text;
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
-        $doc->getField('content')->value .= ' '.$this->_getRow()->text;
-        $doc->getField('normalContent')->value .= ' '.$this->_getRow()->text;
-        return $doc;
+        $ret = array();
+        $text = $this->_getRow()->text;
+        $ret['content'] = $text;
+        $ret['normalContent'] = $text;
+        return $ret;
     }
 
     public function hasContent()

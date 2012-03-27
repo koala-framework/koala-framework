@@ -49,16 +49,28 @@ class Kwc_FulltextSearch_MetaModel extends Kwf_Model_Db
         $field->boost = 10;
         $doc->addField($field);
 
+        $boosts = array(
+            'contenth1' => 5,
+            'contenth2' => 3,
+            'contenth3' => 2,
+            'contenth4' => 1.5,
+            'contenth5' => 1.3,
+            'contenth6' => 1.2,
+            'contentstrong' => 2,
+        );
         foreach ($fulltextComponents as $c) {
-            if (method_exists($c->getComponent(), 'modifyFulltextDocument')) {
-                $doc = $c->getComponent()->modifyFulltextDocument($doc);
-            }
-            //Komponente kann null zurückgeben um zu sagen dass gar nicht indiziert werden soll
-            if (!$doc) {
-                //echo " [no $c->componentId $c->componentClass]";
-                return null;
-            }
+            if (!method_exists($c->getComponent(), 'getFulltextContent')) continue;
+            $content = $c->getComponent()->getFulltextContent();
             unset($c);
+            foreach ($content as $field=>$text) {
+                if (!in_array($field, $doc->getFieldNames())) {
+                    $field = Zend_Search_Lucene_Field::UnStored($field, $text, 'utf-8');
+                    if (isset($boosts[$field])) $field->boost = $boosts[$field];
+                    $doc->addField($field);
+                } else {
+                    $doc->$field .= ' '.$text;
+                }
+            }
         }
 
         if (!$doc->getField('content')->value) {

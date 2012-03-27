@@ -142,36 +142,36 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
         $html = '';
         foreach ($this->_getRow()->getContentParts() as $part) {
             if (is_string($part)) $html .= ' '.$part;
         }
 
-        $doc->getField('content')->value .= ' '.$this->_stripTags($html);
+        $ret = array();
+
+        $ret['content'] = $this->_stripTags($html);
 
         $tags = array(
-            'h1' => 5,
-            'h2' => 3,
-            'h3' => 2,
-            'h4' => 1.5,
-            'h5' => 1.3,
-            'h6' => 1.2,
-            'strong' => 2,
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'strong',
         );
-        foreach ($tags as $tag=>$boost) {
+        foreach ($tags as $tag) {
             if (preg_match_all("#<$tag.*?>(.*?)</$tag>#", $html, $m)) {
                 $html = preg_replace("#<$tag.*?>.*?</$tag>#", '', $html);
                 foreach ($m[1] as $text) {
                     $text = $this->_stripTags($text);
                     if ($text) {
-                        if (!in_array('content'.$tag, $doc->getFieldNames())) {
-                            $field = Zend_Search_Lucene_Field::UnStored('content'.$tag, $text, 'utf-8');
-                            $field->boost = $boost;
-                            $doc->addField($field);
+                        if (!isset($ret['content'.$tag])) {
+                            $ret['content'.$tag] =  $text;
                         } else {
-                            $doc->getField('content'.$tag)->value .= ' '.$text;
+                            $ret['content'.$tag] .=  ' '.$text;
                         }
                     }
                 }
@@ -180,10 +180,9 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
 
         $html = $this->_stripTags($html);
         if ($html) {
-            $doc->getField('normalContent')->value .= ' '.$html;
+            $ret['normalContent'] = $html;
         }
-
-        return $doc;
+        return $ret;
     }
 
     private static function _stripTags($html)

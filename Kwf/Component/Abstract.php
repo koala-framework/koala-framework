@@ -793,4 +793,10 @@ class Kwf_Component_Abstract
             }
         }
     }
+
+    /***
+     * doesn't exist anymore, use getFulltextContent instead
+     * @internal
+     */
+    public final function modifyFulltextDocument(Zend_Search_Lucene_Document $doc) {}
 }

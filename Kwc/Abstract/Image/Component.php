@@ -364,15 +364,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return 0;
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
+        $ret = array();
+
         if ($this->_getSetting('imageCaption')) {
-
             $text = $this->_getRow()->image_caption;
-
-            $doc->getField('content')->value .= ' '.$text;
-            $doc->getField('normalContent')->value .= ' '.$text;
+            $ret['content'] = $text;
+            $ret['normalContent'] = $text;
         }
-        return $doc;
+        return $ret;
     }
 }
