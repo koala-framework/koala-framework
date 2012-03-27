@@ -13,7 +13,7 @@ class Kwf_View_Helper_Link
      * @param string custom text, if empty component name will be used
      * @param config array: cssClass, get, anchor
      */
-    public function componentLink($target, $text = null, $config = array())
+    public function link($target, $text = null, $config = array())
     {
         if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
 

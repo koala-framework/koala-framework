@@ -1,1 +1,1 @@
-<?= $this->componentLink($this->data->getChildComponent('_c1'), 'C1')?> <?= $this->componentLink(array('url' => '/foo', 'rel' => 'bar'), 'Foo', array('cssClass'=>'Bar', 'get'=>array('f1' => 1), 'anchor'=>'a2'))?>
+<?= $this->componentLink($this->data->getChildComponent('_c1'), 'C1')?> <?= $this->link(array('url' => '/foo', 'rel' => 'bar'), 'Foo', array('cssClass'=>'Bar', 'get'=>array('f1' => 1), 'anchor'=>'a2'))?>
