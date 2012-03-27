@@ -250,8 +250,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
         }
 
+        $page = $this->getData()->getPage();
+        if (!$page) {
+            throw new Kwf_Exception('Form must have an url so it must be on a page but is on "' . $this->getData()->componentId . '". (If component is a box it must not be unique)');
+        }
         $cachedContent = Kwf_Component_Cache::getInstance()->load(
-            $this->getData()->getPageOrRoot()->componentId, 'componentLink'
+            $page->componentId, 'componentLink'
         );
         if ($cachedContent) {
             $targetPage = unserialize($cachedContent);
