@@ -166,7 +166,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                     Kwf_Component_Cache::getInstance()->getModel('url')->import(Kwf_Model_Abstract::FORMAT_ARRAY,
                         array(array(
                             'url' => $cacheUrl,
-                            'page_id' => $ret->componentId
+                            'page_id' => $ret->componentId,
+                            'expanded_page_id' => $ret->getExpandedComponentId()
                         )), array('replace'=>true, 'skipModelObserver'=>true));
                 }
             } else {
