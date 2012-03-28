@@ -122,6 +122,11 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return parent::__get($var);
     }
 
+    public function getExpandedComponentId()
+    {
+        return $this->componentId;
+    }
+
     /*
      * @return Kwf_Component_Data
      */
