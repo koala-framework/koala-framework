@@ -282,6 +282,9 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
 
     public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
+        //TODO remove in later branches?
+        if ($this->getSave() === false || $this->getInternalSave() === false) return;
+
         $dataModel = $row->getModel();
         if ($dataModel) $this->setDataModel($dataModel);
 
