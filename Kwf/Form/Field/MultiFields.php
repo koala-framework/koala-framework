@@ -369,7 +369,7 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
             }
 
             if ($i['insert']
-                && !isset($this->getReferenceName()) //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
+                && !$this->getReferenceName() //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
             ) {
                 if ($this->getModel() instanceof Kwf_Model_FieldRows) {
                     //nichts zu tun, keine parent_id muss gesetzt werden
