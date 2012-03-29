@@ -13,6 +13,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
 
     private function _getParent()
     {
+        $previous = null;
         $parent = $this->_data->parent;
         while ($parent && !$parent->isPage) {
             $previous = $parent;

@@ -3,28 +3,17 @@ class Kwc_Basic_Text_HtmlToTextParser
 {
     private $_ret;
     private $_cdata;
-    private $_li = false;
+    private $_li = false; // $liLayer can be 0 if $_li is set
     private $_liLayer = 0;
     private $_p = false;
     private $_pClose = false;
-    private $_href = false;
-    private $_break = false;
-    private $_lastCData = '';
-    private $_isLastCData = false;
+    private $_lastHref = false;
+    private $_noLineBreak = false;
     private $_firstCData = true;
-    private $_i = 0;
 
     protected function _startElement($parser, $element, $attributes)
     {
-        $this->_isLastCData = false;
-        $this->_lastCData = '';
         $element = strtolower($element);
-        
-        //debugging
-//        echo "startElement: $element \n";
-//        foreach ($attributes as $attribute) {
-//            echo "attribute: $attribute \n";
-//        }
         if ($element == 'h1' || $element == 'h2' || $element == 'h3' || $element == 'h4' || $element == 'h5') {
             $this->_ret .= "\n";
         }else if ($element == 'li' && !$this->_li) {
@@ -48,18 +37,15 @@ class Kwc_Basic_Text_HtmlToTextParser
             $this->_p = true;
         } else if ($element == 'a'){
             if (isset($attributes['HREF'])){
-                $this->_href = $attributes['HREF'];
+                $this->_lastHref = $attributes['HREF']; //save the href to print it out later (after the cdata of the link)
             } else {
-                $this->_href = false;
+                $this->_lastHref = false;
             }
         }
     }
 
     protected function _characterData($parser, $cdata)
     {
-//      debugging
-//         echo "cData: $cdata \n";
-        $this->_lastCData = $cdata;
         $cdata = preg_replace('/\\\s\\\s+/', ' ', $cdata);
         $cdata = preg_replace("/\n/", ' ', $cdata);
         $cdata = preg_replace('/\s\s+/', ' ', $cdata);
@@ -68,14 +54,13 @@ class Kwc_Basic_Text_HtmlToTextParser
             $cdata = ltrim($cdata);
             $this->_firstCData = false;
         }
-        if ($cdata != '') $this->_break = false;
+        if ($cdata != '') $this->_noLineBreak = false;
         $this->_pClose = false;
         $this->_cdata .= $cdata;
     }
 
     protected function _endElement($parser, $element)
     {
-        $this->_i ++;
         $this->_cdata = trim($this->_cdata);
         $lines = explode("\n",$this->_cdata);
         $this->_cdata = '';
@@ -91,31 +76,34 @@ class Kwc_Basic_Text_HtmlToTextParser
         }
         $this->_ret .= $this->_cdata;
         $this->_cdata = '';
-        $this->_isLastCData = false;
-        $this->_lastCData = '';
+
+        //check the endtag of elements
         $element = strtolower($element);
-//         debugging
-//         echo "endElement: $element \n";
-        if ($this->_href) {
-            $this->_ret .= ": " . $this->_href . " ";
-            $this->_href = false;
+        //links
+        if ($this->_lastHref) {
+            $this->_ret .= ": " . $this->_lastHref . " ";
+            $this->_lastHref = false;
         }
+        //paragraphs
         if ($element == 'p' && !$this->_pClose) {
-            if (!$this->_break){
+            if (!$this->_noLineBreak){
                 $this->_ret .= "\n";
             }
             $this->_p = false;
-            $this->_pClose = true; //damit bei 2 </p> nur 1 \n erzeugt wird
+            $this->_pClose = true; //if there are 2 </p> only 1 \n should be printed
         } else if ($element == 'p' && $this->_pClose) {
             $this->_p = false;
             $this->_pClose = true;
+        //headlines
         } else if ($element == 'h1' || $element == 'h2'  || $element == 'h3' || $element == 'h4' || $element == 'h5') {
             $this->_ret .= "\n\n";
-            $this->_break = true;
+            $this->_noLineBreak = true;
+        //linebreake
         }else if ($element == 'br') {
-            if (!$this->_break) {
+            if (!$this->_noLineBreak) {
             $this->_ret .= "\n";
             }
+        //lists
         }else if ($element == 'li' && $this->_liLayer) {
             $this->_liLayer -= 1;
         }else if ($element == 'li' && !$this->_liLayer) {
@@ -166,6 +154,7 @@ class Kwc_Basic_Text_HtmlToTextParser
             $ex = new Kwf_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode));
             $ex->logOrThrow();
         }
+        //replace spaces in links (otherwise there would be a linebreak inside the link after wordwrap)
         $this->_ret = preg_replace_callback(
                 '/{cc[^}]+}/',
                 create_function(
@@ -174,7 +163,9 @@ class Kwc_Basic_Text_HtmlToTextParser
                 ),
                 $this->_ret
         );
+        //make a linebreak after 72 chars
         $this->_ret = wordwrap($this->_ret, 75, "\n", false);
+        //reconstruct spaces inside links
         $this->_ret = preg_replace_callback(
                 '/{cc[^}]+}/',
                 create_function(

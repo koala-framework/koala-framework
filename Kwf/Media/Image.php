@@ -81,7 +81,7 @@ class Kwf_Media_Image
                 if ($width <= 0) $width = 1;
             }
             if ($height == 0) {
-                if (isset($targetSize['aspectRatio'])) {
+                if (isset($targetSize['aspectRatio']) && $targetSize['aspectRatio']) {
                     $height = round($width * $targetSize['aspectRatio']);
                 } else {
                     $height = round($width * ($size[1]/$size[0]));

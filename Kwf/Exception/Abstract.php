@@ -86,6 +86,7 @@ abstract class Kwf_Exception_Abstract extends Exception
             header('Content-Type: text/html; charset=utf-8');
         }
 
+        while(@ob_end_clean()) {} //end all output buffers to avoid exception output getting into output buffer
         try {
             echo $view->render($template);
         } catch (Exception $e) {
@@ -95,5 +96,6 @@ abstract class Kwf_Exception_Abstract extends Exception
             echo $e->__toString();
             echo '</pre>';
         }
+
    }
 }

@@ -53,8 +53,8 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         $ret = array();
         if (!is_numeric(substr($parentId, 0, 1))) {
-            foreach ($this->_pageChilds as $parentId=>$childs) {
-                if (substr($parentId, 0, strlen($parentId)) == $parentId) {
+            foreach ($this->_pageChilds as $pId=>$childs) {
+                if (substr($pId, 0, strlen($pId)) == $parentId) {
                     foreach ($childs as $id) {
                         if ($this->_pageData[$id]['visible']) {
                             $ret[] = $id;
