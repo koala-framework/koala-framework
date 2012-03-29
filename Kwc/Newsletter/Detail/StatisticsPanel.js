@@ -1,21 +1,21 @@
-Ext.ns('Vpc.Newsletter.Detail');
-Vpc.Newsletter.Detail.StatisticsPanel = Ext.extend(Vps.Binding.AbstractPanel, {
+Ext.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.StatisticsPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     layout: 'border',
 
     initComponent: function() {
-        var clicks = new Vps.Auto.GridPanel({
+        var clicks = new Kwf.Auto.GridPanel({
             region: 'center',
             baseParams: this.baseParams,
             controllerUrl: this.clicksControllerUrl
         });
-        var links = new Vps.Auto.GridPanel({
+        var links = new Kwf.Auto.GridPanel({
             region: 'west',
             controllerUrl:  this.linksControllerUrl,
             baseParams: this.baseParams,
             bindings: [ clicks ]
         });
         this.items = [links, clicks];
-        Vpc.Newsletter.Detail.StatisticsPanel.superclass.initComponent.call(this);
+        Kwc.Newsletter.Detail.StatisticsPanel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('vpc.newsletter.statistics', Vpc.Newsletter.Detail.StatisticsPanel);
+Ext.reg('kwc.newsletter.statistics', Kwc.Newsletter.Detail.StatisticsPanel);
