@@ -1,5 +1,5 @@
 <?php
-class Kwf_Util_Fulltext
+class Kwf_Util_Fulltext_Lucene
 {
     /**
      * @param Kwf_Component_Data for this index

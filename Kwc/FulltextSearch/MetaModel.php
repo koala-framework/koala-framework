@@ -115,7 +115,7 @@ class Kwc_FulltextSearch_MetaModel extends Kwf_Model_Db
                 //}
 
                 $term = new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId');
-                $index = Kwf_Util_Fulltext::getInstance($page);
+                $index = Kwf_Util_Fulltext_Lucene::getInstance($page);
                 $hits = $index->termDocs($term);
                 foreach ($hits as $id) {
                     //echo "deleting $hit->componentId\n";

@@ -28,7 +28,7 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
             $subRoot = $subRoot->parent;
         }
         if (!$subRoot) $subRoot = Kwf_Component_Data_Root::getInstance();
-        $index = Kwf_Util_Fulltext::getInstance($subRoot);
+        $index = Kwf_Util_Fulltext_Lucene::getInstance($subRoot);
 
         if (isset($postData['query']) && is_string($postData['query'])) {
             $queryString = $postData['query'];
