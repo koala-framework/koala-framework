@@ -413,9 +413,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
     },
     setBaseParams : function(baseParams) {
-        this.baseParams = baseParams;
+        this.baseParams = Vps.clone(baseParams);
         if (this.getForm()) {
-            this.getForm().baseParams = baseParams;
+            this.getForm().baseParams = this.baseParams;
         }
         this._setFieldBaseParams();
     },
