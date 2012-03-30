@@ -89,6 +89,27 @@ Kwf.Component.ClearCache = Ext.extend(Ext.Panel, {
 
         this.body.createChild({
             style: 'font-size: 12px',
+            html: 'Changed translations aren\'t updated'
+        });
+        new Ext.Button({
+            text: 'Clear Trl Cache',
+            icon: '/assets/silkicons/application_view_columns.png',
+            cls: 'x-btn-text-icon',
+            renderTo: this.body,
+            style: 'margin-bottom: 20px',
+            scope: this,
+            handler: function() {
+                Ext.Ajax.request({
+                    url: this.controllerUrl+'/json-clear-cache',
+                    params: { type: 'trl' },
+                    mask: true,
+                    maskText: trlKwf('clearing cache...')
+                });
+            }
+        });
+
+        this.body.createChild({
+            style: 'font-size: 12px',
             html: 'Images or other uploads aren\'t updated or shown in the wrong dimension'
         });
         new Ext.Button({

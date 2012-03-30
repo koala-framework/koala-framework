@@ -78,6 +78,14 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
             $cc->clearCache('media', false/*output*/, true/*refresh*/);
         } else if ($type == 'assets') {
             $cc->clearCache('assets', false/*output*/, true/*refresh*/);
+        } else if ($type == 'trl') {
+            foreach (glob('cache/model/zend_cache---trl_*') as $f) {
+                unlink($f);
+            }
+            foreach (glob('cache/model/zend_cache---internal-metadatas---trl_*') as $f) {
+                unlink($f);
+            }
+            Kwf_Cache_Simple::clear('trl-');
         }
     }
     public function jsonClearViewCacheAction()
