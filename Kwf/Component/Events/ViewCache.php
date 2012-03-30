@@ -194,6 +194,14 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
+        //the component itself
+        $this->_updates[] = array(
+            //remove all types
+            'component_id' => $event->componentId
+        );
+        $this->_log("component_id=$event->componentId");
+
+        //all child components
         $changedComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
         $changedChildIdPostfix = substr($changedComponent->componentId, strlen($changedComponent->getPageOrRoot()->componentId));
         foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
