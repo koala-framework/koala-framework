@@ -59,7 +59,7 @@ class Kwf_Util_ClearCache
         }
         $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
         foreach ($tables as $table) {
-            if (substr($table, 0, 6) == 'cache_') {
+            if (substr($table, 0, 6) == 'cache_' && $table != 'cache_component') {
                 $ret[] = $table;
             }
         }
