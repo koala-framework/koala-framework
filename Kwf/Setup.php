@@ -39,9 +39,6 @@ class Kwf_Setup
 
     public static function shutDown()
     {
-        if (Kwf_Config::getValue('debug.querylog') && php_sapi_name() != 'cli') {
-            header('X-Kwf-DbQueries: '.Kwf_Db_Profiler::getCount());
-        }
         Kwf_Benchmark::shutDown();
     }
 
