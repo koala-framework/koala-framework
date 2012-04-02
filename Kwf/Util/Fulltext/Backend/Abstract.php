@@ -3,7 +3,12 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
 {
     public static function getInstance()
     {
-        return new Kwf_Util_Fulltext_Backend_ZendSearch();
+        static $i;
+        if (!isset($i)) {
+            $be = Kwf_Config::getValue('fulltext.backend');
+            $i = new $be();
+        }
+        return $i;
     }
 
     abstract public function search(Kwf_Component_Data $subroot, $query);
@@ -12,8 +17,7 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
     abstract public function indexPage(Kwf_Component_Data $page, $debugOutput = false);
     abstract public function getAllDocuments(Kwf_Component_Data $subroot);
     abstract public function documentExists(Kwf_Component_Data $page);
-    abstract public function deleteDocument($componentId);
-
+    abstract public function deleteDocument(Kwf_Component_Data $subroot, $componentId);
 
     public function getFulltextContentForPage(Kwf_Component_Data $page, array $fulltextComponents = array())
     {
