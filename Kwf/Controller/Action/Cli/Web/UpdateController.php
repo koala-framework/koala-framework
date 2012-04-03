@@ -37,12 +37,12 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $updates = array($update);
             self::_executeUpdates(array($update), self::_getDoneNames(), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
         } else {
-            self::update($this->_getParam('rev'), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
+            self::update($this->_getParam('rev'), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'), $this->_getParam('clear-view-cache'));
         }
         exit;
     }
 
-    public static function update($rev = false, $debug = false, $skipClearCache = false)
+    public static function update($rev = false, $debug = false, $skipClearCache = false, $clearViewCache = false)
     {
         if (!$skipClearCache) {
             Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
@@ -95,7 +95,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         echo " found ".count($updates)."\n\n";
         self::_executeUpdates($updates, $doneNames, $debug, $skipClearCache);
 
-        if ($this->_getParam('clear-view-cache')) {
+        if (!$skipClearCache && $clearViewCache) {
             Zend_Registry::get('db')->query("TRUNCATE TABLE cache_component");
         }
     }
