@@ -1,50 +1,68 @@
 <?php
 class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
 {
-    private function _getSolrService()
+    /**
+     * @return Apache_Solr_Service
+     */
+    private function _getSolrService($subroot)
     {
-        static $i;
-        if (is_null($i)) {
-            $solr = Kwf_Config::getValueArray('fulltext.solr');
-            $i = new Apache_Solr_Service($solr['host'], $solr['port'], $solr['path']); //add subroot somehow to path??
+        static $i = array();
+        if (is_string($subroot)) {
+            $subrootId = $subroot;
+        } else {
+            $subrootId = ''; //valid; no subroots exist
+            while ($subroot) {
+                if (Kwc_Abstract::getFlag($subroot->componentClass, 'subroot')) {
+                    $subrootId = $subroot->id;
+                }
+                $subroot = $subroot->parent;
+            }
         }
-        return $i;
+        if (!isset($i[$subrootId])) {
+            $solr = Kwf_Config::getValueArray('fulltext.solr');
+            $path = $solr['path'];
+            $path = str_replace('%subroot%', $subrootId, $path);
+            $i[$subrootId] = new Kwf_Util_Fulltext_Solr_Service($solr['host'], $solr['port'], $path);
+        }
+        return $i[$subrootId];
     }
 
     public function getSubroots()
     {
+        $ret = Kwf_Config::getValueArray('fulltext.solr.subroots');
+        if ($ret) return $ret;
         $ret = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::getFlag($c, 'subroot')) {
                 foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($c) as $sr) {
-                    $ret[] = $sr->componentId;
+                    $ret[] = $sr->id;
                 }
             }
         }
+        if (!$ret) $ret = array(''); //no subroots exist
         return $ret;
     }
 
     public function optimize($debugOutput = false)
     {
-        $this->_getSolrService()->optimize();
+        foreach ($this->getSubroots() as $sr) {
+            $this->_getSolrService($sr)->optimize();
+        }
     }
 
     public function deleteDocument(Kwf_Component_Data $subroot, $componentId)
     {
-        //TODO use subroot?
-        $this->_getSolrService()->deleteById($componentId);
+        $this->_getSolrService($subroot)->deleteById($componentId);
     }
 
     public function documentExists(Kwf_Component_Data $page)
     {
-        //TODO use subroot
-        $this->_getSolrService()->search('componentId:'.$page->componentId);
+        $this->_getSolrService($page)->search('componentId:'.$page->componentId);
     }
 
     public function getAllDocuments(Kwf_Component_Data $subroot)
     {
-        //TODO use subroot
-        return $this->_getSolrService()->search('*:*');
+        return $this->_getSolrService($subroot)->getAllDocuments();
     }
 
     public function indexPage(Kwf_Component_Data $page, $debugOutput = false)
@@ -70,10 +88,11 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
             }
             $doc->addField('componentId', $page->componentId);
 
-            $response = $solr->addDocument($doc);
+            $response = $this->_getSolrService($page)->addDocument($doc);
             if ($response->getHttpStatus() != 200) {
                 throw new Kwf_Exception("addDocument failed");
             }
+            $this->_getSolrService($page)->commit();
             return true;
         }
         return false;
@@ -81,7 +100,14 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
 
     public function search(Kwf_Component_Data $subroot, $query)
     {
-        //TODO use subroot!!
-        return $this->_getSolrService()->search($query);
+        $ret = array();
+        foreach ($this->_getSolrService($subroot)->search($query)->response->docs as $doc) {
+            $ret[] = array(
+                'componentId' => $doc->componentId,
+                'title' => $doc->title,
+                'content' => $doc->content,
+            );
+        }
+        return $ret;
     }
 }

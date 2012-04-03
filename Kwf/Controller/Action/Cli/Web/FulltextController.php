@@ -260,7 +260,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $hits = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->search($subroot, $queryStr);
         echo "searched in ".(microtime(true)-$start)."s\n";
         foreach ($hits as $hit) {
-            echo "score ".$hit['score']."\n";
+            //echo "score ".$hit['score']."\n";
             echo "  componentId: ".$hit['componentId']."\n";
             echo "\n";
         }
@@ -406,7 +406,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             'diffPages' => 0,
         );
         foreach ($documents as $componentId=>$doc) {
+            if ($this->_getParam('debug')) echo "checking: $i: $componentId\n";;
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+            if (!$page) continue;
             if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
             if (!$page) continue; //should not happen
             $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
@@ -415,7 +417,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
                     $stats['indexedPages']++;
                 }
-                if (!$this->_getParam('silent')) echo "DIFF: $doc->componentId\n";
+                if (!$this->_getParam('silent')) echo "DIFF: $componentId\n";
             }
             unset($page);
             if ($i++ % 10) {
