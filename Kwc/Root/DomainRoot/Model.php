@@ -36,9 +36,12 @@ class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
     {
         $rows = $this->getRows();
         foreach ($rows as $row) {
-            if ($row->domain == $host) return $row;
+            if ($row->domain == $host || $row->preview_domain == $host) {
+                return $row;
+            }
         }
         $ret = null;
+        //TODO: this always picks the *first* domain that's not always wanted
         foreach ($rows as $row) {
             if (!$ret && !$row->pattern) $ret = $row;
             if ($row->pattern && preg_match('/' . $row->pattern . '/', $host)

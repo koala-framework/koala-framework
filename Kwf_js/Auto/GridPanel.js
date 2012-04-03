@@ -1046,6 +1046,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         }
     },
     setBaseParams : function(baseParams) {
+        baseParams = Kwf.clone(baseParams);
         if (this.editDialog && this.editDialog.setBaseParams) {
             this.editDialog.setBaseParams(baseParams);
         }

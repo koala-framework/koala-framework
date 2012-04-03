@@ -152,9 +152,9 @@ class Kwf_Component_Data
         } while($data = $data->parent);
 
         if (Kwf_Config::getValue('server.previewDomain')) {
-            return 'http://' . Kwf_Config::getValue('server.previewDomain') . $page->url;
+            return 'http://' . Kwf_Config::getValue('server.previewDomain') . $ret;
         } else {
-            return 'http://' . Kwf_Config::getValue('server.domain') . $page->url;
+            return 'http://' . Kwf_Config::getValue('server.domain') . $ret;
         }
     }
 

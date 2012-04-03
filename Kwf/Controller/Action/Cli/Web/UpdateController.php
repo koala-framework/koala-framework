@@ -94,6 +94,10 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
         echo " found ".count($updates)."\n\n";
         self::_executeUpdates($updates, $doneNames, $debug, $skipClearCache);
+
+        if ($this->_getParam('clear-view-cache')) {
+            Zend_Registry::get('db')->query("TRUNCATE TABLE cache_component");
+        }
     }
 
     private static function _getDoneNames()

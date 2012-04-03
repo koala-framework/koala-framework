@@ -66,7 +66,8 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
 
             $ret['listItems'][] = array(
                 'data' => $this->_getItemComponent($child),
-                'class' => $class
+                'class' => $class,
+                'style' => '',
             );
         }
         return $ret;
