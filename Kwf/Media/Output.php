@@ -15,7 +15,10 @@ class Kwf_Media_Output
 
     public static function output($file)
     {
-        $data = self::getOutputData($file, apache_request_headers());
+        $headers = array();
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) $headers['If-Modified-Since'] = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+        if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) $headers['If-None-Match'] = $_SERVER['HTTP_IF_NONE_MATCH'];
+        $data = self::getOutputData($file, $headers);
         foreach ($data['headers'] as $h) {
             if (is_array($h)) {
                 call_user_func_array('header', $h);
