@@ -19,7 +19,8 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         $index = Kwf_Util_Fulltext_Lucene::getInstance($subroot);
         $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
         $ret = array();
-        foreach ($index->find($query) as $doc) {
+        foreach ($index->find($query) as $hit) {
+            $doc = $hit->getDocument();
             $data = array();
             foreach ($doc->getFieldNames() as $n) {
                 $data[$n] = $doc->getFieldValue($n);
@@ -73,7 +74,6 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
     public function indexPage(Kwf_Component_Data $page, $debugOutput = false)
     {
         $boosts = array(
-            'title' => 10,
             'contenth1' => 5,
             'contenth2' => 3,
             'contenth3' => 2,
@@ -94,14 +94,25 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
             if ($debugOutput) echo " *** indexing $page->componentId $page->url...";
             $contents = $this->getFulltextContentForPage($page, $fulltextComponents);
             unset($fulltextComponents);
-            if (!$contents) {
+            if (!$contents || !isset($contents['content']) || !$contents['content']) {
                 if ($debugOutput) echo " [no content]";
                 return false;
             }
             $doc = new Zend_Search_Lucene_Document();
-            foreach ($contents as $field=>$text) {
-                $field = Zend_Search_Lucene_Field::UnStored($field, $text, 'utf-8');
-                if (isset($boosts[$field])) $field->boost = $boosts[$field];
+
+            //whole content, for preview in search result
+            $doc->addField(Zend_Search_Lucene_Field::UnIndexed('content', $contents['content'], 'utf-8'));
+            unset($contents['content']);
+
+            $t = $page->getTitle();
+            if (substr($t, -3) == ' - ') $t = substr($t, 0, -3);
+            $field = Zend_Search_Lucene_Field::Text('title', $t, 'utf-8');
+            $field->boost = 10;
+            $doc->addField($field);
+
+            foreach ($contents as $fieldName=>$text) {
+                $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
+                if (isset($boosts[$fieldName])) $field->boost = $boosts[$fieldName];
                 $doc->addField($field);
             }
             if ($debugOutput) echo "\n";

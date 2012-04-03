@@ -10,14 +10,15 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     {
         ini_set('memory_limit', '512M');
         if ($this->_getParam('debug')) echo "\noptimize index...\n";
-        Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize(true);
+        Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize($this->_getParam('debug'));
         if ($this->_getParam('debug')) echo "done.\n";
         exit;
     }
 
     public function checkForInvalidAction()
     {
-        foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstances()->getSubroots() as $subroot) {
+        if ($this->_getParam('debug')) echo "check for invalid entries...\n";
+        foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $subroot) {
             if ($this->_getParam('debug')) echo "$subroot\n";
             $cmd = "php bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
             if ($this->_getParam('debug')) $cmd .= " --debug";
@@ -304,11 +305,17 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $start = microtime(true);
         $m = Kwc_FulltextSearch_MetaModel::getInstance();
         $s = $m->select();
-        $s->where(new Kwf_Model_Select_Expr_Lower('changed_date', new Kwf_DateTime(time() - 5*60))); //>5min ago (for buffering!)
+        $s->where(new Kwf_Model_Select_Expr_Higher('changed_date', new Kwf_DateTime(time() - 5*60))); //>5min ago (for buffering!)
         //$s->where(new Kwf_Model_Expr_Not(new Kwf_Model_Expr_Equals('changed_date', 'indexed_date')));
         $s->where('changed_date > indexed_date OR ISNULL(indexed_date)');
         foreach ($m->getRows($s) as $row) {
+            if ($this->_getParam('debug')) echo "changed: $row->page_id\n";
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
+            if (!$page) {
+                //TODO: also delete from index
+                $row->delete();
+                continue;
+            }
             if (!$page->isPage) continue;
             if ($row->changed_recursive) {
                 $row->changed_recursive = false;
@@ -486,7 +493,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
             if ($hasFulltext) {
                 if (!Kwf_Util_Fulltext_Backend_Abstract::getInstance()->documentExists($page)) {
-                    if (Kwc_FulltextSearch_MetaModel::getInstance()->indexPage($page)) {
+                    if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page, $this->_getParam('debug'))) {
                         $stats['indexedPages']++;
                         if (!$this->_getParam('silent')) echo "not found in index: $page->componentId has content!!!!\n";
                     } else {
