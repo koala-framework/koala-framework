@@ -302,6 +302,9 @@ class Vps_Setup
             return trim(file_get_contents('application/config_section'));
         } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
+        } else if (substr(php_uname('n'), -6)  == '.vivid') {
+            //eg. niko.vivid
+            return substr(php_uname('n'), 0, -6);
         } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
             if ($m[3]=='vps-projekte') return 'vivid';
             return $m[3];
