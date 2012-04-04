@@ -369,7 +369,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
 
             if ($i['insert']
-                && !isset($this->getReferenceName()) //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
+                && !$this->getReferenceName() //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
             ) {
                 if ($this->getModel() instanceof Vps_Model_FieldRows) {
                     //nichts zu tun, keine parent_id muss gesetzt werden
