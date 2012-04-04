@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass;?>">
     <? foreach ($this->listItems as $child) { ?>
-    <div class="<?=$child['class'];?>" class="<?=$child['style'];?>">
+    <div class="<?=$child['class'];?>" style="<?=$child['style'];?>">
         <?=$this->component($child['data']);?>
     </div>
     <? } ?>

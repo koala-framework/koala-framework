@@ -6688,5 +6688,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>'%value%' liegt nicht im ben&#xF6;tigen Format vor: '{0}'</de>
 <id>1757</id>
 </text>
+<text>
+<en>Recipient</en>
+<id>1758</id>
+</text>
+<text>
+<en>IP-Address</en>
+<id>1759</id>
+</text>
+<text>
+<en>Paragraphs Group</en>
+<de>Absatzgruppe</de>
+<id>1760</id>
+</text>
+<text>
+<en>Can't submit order because the cart is empty.</en>
+<id>1761</id>
+</text>
 </trl>
 
