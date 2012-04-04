@@ -19,6 +19,18 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
     abstract public function documentExists(Kwf_Component_Data $page);
     abstract public function deleteDocument(Kwf_Component_Data $subroot, $componentId);
 
+    public function getAllDocumentIds(Kwf_Component_Data $subroot)
+    {
+        return array_keys($this->getAllDocuments());
+    }
+
+    public function deleteAll(Kwf_Component_Data $subroot)
+    {
+        foreach ($this->getAllDocumentIds() as $id) {
+            $this->deleteDocument($subroot, $id);
+        }
+    }
+
     public function getFulltextContentForPage(Kwf_Component_Data $page, array $fulltextComponents = array())
     {
         if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) return null;

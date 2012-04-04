@@ -35,11 +35,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     public function checkForInvalidSubrootAction()
     {
         $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
-        $documentIds = array_keys(Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocuments($subroot));
+        $documentIds = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocumentIds($subroot);
         $i = 0;
         foreach ($documentIds as $documentId) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($documentId);
-            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
+            if ($page && Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
             if (!$page) {
                 if (!$this->_getParam('slient')) {
                     echo "\n$documentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
@@ -93,6 +93,15 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             }
         }
         return $cache[$class]; //false
+    }
+
+    public function deleteAllAction()
+    {
+        $subroot = $this->_getParam('subroot');
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteAll($subroot);
+        echo "deleted ALL documents\n";
+        exit;
     }
 
     public function rebuildAction()

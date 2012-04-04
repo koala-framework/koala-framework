@@ -8,7 +8,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     {
         static $i = array();
         if (is_string($subroot)) {
-            $subrootId = $subroot;
+            $subrootId = Kwf_Component_Data_Root::getInstance()->getComponentById($subroot)->id;
         } else {
             $subrootId = ''; //valid; no subroots exist
             while ($subroot) {
@@ -35,7 +35,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::getFlag($c, 'subroot')) {
                 foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($c) as $sr) {
-                    $ret[] = $sr->id;
+                    $ret[] = $sr->componentId;
                 }
             }
         }
@@ -53,11 +53,33 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     public function deleteDocument(Kwf_Component_Data $subroot, $componentId)
     {
         $this->_getSolrService($subroot)->deleteById($componentId);
+        $this->_getSolrService($subroot)->commit();
     }
+
+    public function deleteAll(Kwf_Component_Data $subroot)
+    {
+        $this->_getSolrService($subroot)->deleteByQuery('*:*');
+        $this->_getSolrService($subroot)->commit();
+    }
+
 
     public function documentExists(Kwf_Component_Data $page)
     {
-        $this->_getSolrService($page)->search('componentId:'.$page->componentId);
+        $createDocs = $this->_getSolrService($page)->getCreateDocuments();
+        $this->_getSolrService($page)->setCreateDocuments(false);
+
+        $numFound = $this->_getSolrService($page)
+            ->search('componentId:'.$page->componentId, 0, 10, array('fl'=>'componentId'))
+            ->response->numFound;
+
+        $this->_getSolrService($page)->setCreateDocuments($createDocs);
+
+        return $numFound > 0;
+    }
+
+    public function getAllDocumentIds(Kwf_Component_Data $subroot)
+    {
+        return $this->_getSolrService($subroot)->getAllDocumentIds();
     }
 
     public function getAllDocuments(Kwf_Component_Data $subroot)

@@ -14,6 +14,17 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         };
     }
 
+    public function getAllDocumentIds(Kwf_Component_Data $subroot)
+    {
+        $index = Kwf_Util_Fulltext_Lucene::getInstance($subroot);
+        $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
+        $ret = array();
+        foreach ($index->find($query) as $hit) {
+            $ret[] = $hit->componentId();
+        }
+        return $ret;
+    }
+
     public function getAllDocuments(Kwf_Component_Data $subroot)
     {
         $index = Kwf_Util_Fulltext_Lucene::getInstance($subroot);
@@ -34,6 +45,7 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
     {
         $index = Kwf_Util_Fulltext_Lucene::getInstance($subroot);
         $index->delete($componentId);
+        $index->commit();
     }
 
     public function search(Kwf_Component_Data $subroot, $query)
