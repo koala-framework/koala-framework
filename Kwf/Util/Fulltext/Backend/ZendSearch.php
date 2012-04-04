@@ -70,7 +70,7 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         return $ret;
     }
 
-    public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit)
+    public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit, $params = array())
     {
         $index = Kwf_Util_Fulltext_Lucene::getInstance($subroot);
 
@@ -89,7 +89,13 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         if ($userQuery) {
             $query = new Zend_Search_Lucene_Search_Query_Boolean();
             $query->addSubquery($userQuery, true /* required */);
-            $this->_beforeFind($query);
+
+            if (isset($params['type'])) {
+                $pathTerm  = new Zend_Search_Lucene_Index_Term('type', $param['type']);
+                $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
+                $query->addSubquery($pathQuery, true /* required */);
+            }
+
             $time = microtime(true);
             try {
                 $hits = $index->find($query);

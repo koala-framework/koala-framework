@@ -17,6 +17,8 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
 
         $ret['placeholder']['helpFooter'] = trlKwfStatic('Search results can be extended using wildcards.').'<br />'.
                                             trlKwfStatic('Examples: "Hallo Welt" , ? , * , AND , OR');
+        $ret['searchParams'] = null; //backend dependent params
+        //example: $ret['searchParams'] = array('type'=>'news');
         return $ret;
     }
 
@@ -34,7 +36,7 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
 
         $limit = $this->getData()->getChildComponent('-paging')->getComponent()->getLimit();
         $res = Kwf_Util_Fulltext_Backend_Abstract::getInstance()
-            ->userSearch($this->getData(), $queryString, $limit['start'], $limit['limit']);
+            ->userSearch($this->getData(), $queryString, $limit['start'], $limit['limit'], $this->_getSetting('searchParams'));
         $this->_hits = $res['hits'];
         $this->_numHits = $res['numHits'];
         $this->_error = $res['error'];

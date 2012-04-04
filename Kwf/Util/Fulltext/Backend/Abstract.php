@@ -12,7 +12,7 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
     }
 
     abstract public function search(Kwf_Component_Data $subroot, $query);
-    abstract public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit);
+    abstract public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit, $params = array());
     abstract public function getSubroots();
     abstract public function optimize($debugOutput = false);
     abstract public function indexPage(Kwf_Component_Data $page, $debugOutput = false);
