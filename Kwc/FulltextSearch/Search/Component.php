@@ -34,12 +34,17 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
 
         $time = microtime(true);
 
-        $limit = $this->getData()->getChildComponent('-paging')->getComponent()->getLimit();
-        $res = Kwf_Util_Fulltext_Backend_Abstract::getInstance()
-            ->userSearch($this->getData(), $queryString, $limit['start'], $limit['limit'], $this->_getSetting('searchParams'));
-        $this->_hits = $res['hits'];
-        $this->_numHits = $res['numHits'];
-        $this->_error = $res['error'];
+        $this->_hits = array();
+        $this->_numHits = 0;
+        $this->_error = '';
+        if ($queryString) {
+            $limit = $this->getData()->getChildComponent('-paging')->getComponent()->getLimit();
+            $res = Kwf_Util_Fulltext_Backend_Abstract::getInstance()
+                ->userSearch($this->getData(), $queryString, $limit['start'], $limit['limit'], $this->_getSetting('searchParams'));
+            $this->_hits = $res['hits'];
+            $this->_numHits = $res['numHits'];
+            $this->_error = $res['error'];
+        }
         $this->_time = microtime(true)-$time;
     }
 
