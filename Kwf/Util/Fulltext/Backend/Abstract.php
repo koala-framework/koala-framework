@@ -52,6 +52,11 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
         //normal content with boost=1 goes here
         $ret['normalContent'] = '';
 
+        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow($page->componentId);
+        if ($row && $row->changed_date) {
+            $ret['lastModified'] = new Kwf_DateTime($row->changed_date);
+        }
+
         $t = $page->getTitle();
         if (substr($t, -3) == ' - ') $t = substr($t, 0, -3);
         $ret['title'] = $t;
@@ -62,7 +67,9 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
             unset($c);
             foreach ($content as $field=>$text) {
                 if (isset($ret[$field])) {
-                    $ret[$field] = $ret[$field].' '.$text;
+                    if (is_string($ret[$field])) {
+                        $ret[$field] = $ret[$field].' '.$text;
+                    }
                 } else {
                     $ret[$field] = $text;
                 }

@@ -106,6 +106,9 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
             }
             $doc = new Apache_Solr_Document();
             foreach ($contents as $field=>$text) {
+                if ($text instanceof Kwf_DateTime) {
+                    $text = gmdate('Y-m-d\TH:i:s\Z', $text->getTimestamp());
+                }
                 $doc->addField($field, $text);
             }
             $doc->addField('componentId', $page->componentId);

@@ -335,10 +335,8 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 $this->_processRecursive($page);
             } else {
                 if ($this->_getParam('debug')) echo "indexing $page->componentId\n";
-                if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
+                if (!Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
                     //does have no fulltext content
-                    $row->indexed_date = date('Y-m-d H:i:s');
-                } else {
                     $row->changed_date = null;
                     $row->indexed_date = null;
                 }

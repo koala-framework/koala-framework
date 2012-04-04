@@ -123,6 +123,9 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
             $doc->addField($field);
 
             foreach ($contents as $fieldName=>$text) {
+                if ($text instanceof Kwf_DateTime) {
+                    $text = $text->format();
+                }
                 $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
                 if (isset($boosts[$fieldName])) $field->boost = $boosts[$fieldName];
                 $doc->addField($field);
