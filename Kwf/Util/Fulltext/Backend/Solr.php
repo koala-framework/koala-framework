@@ -138,4 +138,8 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         }
         return $ret;
     }
+
+    public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit)
+    {
+    }
 }

@@ -70,6 +70,54 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         return $ret;
     }
 
+    public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit)
+    {
+        $index = Kwf_Util_Fulltext_Lucene::getInstance($subroot);
+
+        $error = false;
+
+        $userQuery = false;
+        if ($queryString) {
+            try {
+                $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
+            } catch (ErrorException $e) {
+                //ignore iconv errors that happen with invalid input
+            }
+        }
+
+        $hits = array();
+        if ($userQuery) {
+            $query = new Zend_Search_Lucene_Search_Query_Boolean();
+            $query->addSubquery($userQuery, true /* required */);
+            $this->_beforeFind($query);
+            $time = microtime(true);
+            try {
+                $hits = $index->find($query);
+            } catch (Zend_Search_Lucene_Exception $e) {
+                $error = $subroot->trlKwf('Invalid search terms');
+            }
+        }
+        $ret = array();
+        if (count($hits)) {
+            $numStart = $offset;
+            $numEnd = min(count($hits), $offset + $limit);
+            for ($i=$numStart; $i < $numEnd; $i++) {
+                $h = $hits[$i];
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentById($h->componentId);
+                if ($c) {
+                    $ret[] = array(
+                        'data' => $c,
+                        'content' => $h->content
+                    );
+                }
+            }
+        }
+        return array(
+            'error' => $error,
+            'numHits' => count($hits),
+            'hits' => $ret,
+        );
+    }
 
     public function documentExists(Kwf_Component_Data $page)
     {
