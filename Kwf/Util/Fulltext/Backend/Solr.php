@@ -141,5 +141,21 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
 
     public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit, $params = array())
     {
+        $ret = array();
+        $params['fl'] = 'componentId,content,title';
+        $res = $this->_getSolrService($subroot)->search($queryString, $offset, $limit, $params);
+        foreach ($res->response->docs as $doc) {
+            $ret[] = array(
+                'componentId' => $doc->componentId,
+                'title' => $doc->title,
+                'content' => $doc->content,
+            );
+        }
+        //TODO: error handling
+        return array(
+            'hits' => $ret,
+            'numHits' => $res->response->numFound,
+            'error' => false
+        );
     }
 }
