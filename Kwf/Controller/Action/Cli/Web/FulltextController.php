@@ -393,7 +393,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
             $t = time();
             if (!$this->_getParam('silent')) echo "\n[$subroot] optimize...\n";
-            $i->optimize();
+            Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize($this->_getParam('debug'));
             if (!$this->_getParam('silent')) echo "[$subroot] optimize finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
         }
 
