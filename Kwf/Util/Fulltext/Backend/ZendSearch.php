@@ -154,16 +154,7 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
 
             $index->addDocument($doc);
 
-            $m = Kwc_FulltextSearch_MetaModel::getInstance();
-            $row = $m->getRow($page->componentId);
-            if (!$row) {
-                $row = $m->createRow();
-                $row->page_id = $page->componentId;
-            }
-            $row->indexed_date = date('Y-m-d H:i:s');
-            $row->save();
-            unset($row);
-
+            $this->_afterIndex($page);
             return true;
         }
         return false;

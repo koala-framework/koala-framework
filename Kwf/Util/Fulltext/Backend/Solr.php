@@ -115,6 +115,9 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
                 throw new Kwf_Exception("addDocument failed");
             }
             $this->_getSolrService($page)->commit();
+
+            $this->_afterIndex($page);
+
             return true;
         }
         return false;
