@@ -98,7 +98,7 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) return; //performance
 
         //echo "checking for childComponents\n";
-        $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false));
+        $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false, 'page'=>false));
         if (Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
             $fulltextComponents[] = $page;
         }
