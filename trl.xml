@@ -4,58 +4,59 @@
 <en>Visible</en>
 <de>Sichtbar</de>
 <id>2</id>
-<bg>&#x432;&#x438;&#x434;&#x438;&#x43C;</bg>
-<ua>&#x412;&#x438;&#x434;&#x438;&#x43C;&#x438;&#x439;</ua>
+<bg>видим</bg>
+<ua>Видимий</ua>
 <ro>Vizibil</ro>
-<mk>&#x412;&#x438;&#x434;&#x43B;&#x438;&#x432;&#x43E;</mk>
+<mk>Видливо</mk>
+<hu>x</hu>
 </text>
 <text>
 <en>Error</en>
 <de>Fehler</de>
 <id>5</id>
-<bg>&#x413;&#x440;&#x435;&#x448;&#x43A;&#x430;</bg>
-<ua>&#x41F;&#x43E;&#x43C;&#x438;&#x43B;&#x43A;&#x430;</ua>
+<bg>Грешка</bg>
+<ua>Помилка</ua>
 <ro>Eroare</ro>
-<mk>&#x413;&#x440;&#x435;&#x448;&#x43A;&#x430;</mk>
+<mk>Грешка</mk>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
-<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem sp&#xE4;teren Zeitpunkt noch einmal.</de>
+<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.</de>
 <id>8</id>
-<ua>&#x421;&#x442;&#x430;&#x43B;&#x430;&#x441;&#x44F; &#x43F;&#x43E;&#x43C;&#x438;&#x43B;&#x43A;&#x430;. &#x411;&#x443;&#x434;&#x44C; &#x43B;&#x430;&#x441;&#x43A;&#x430;, &#x441;&#x43F;&#x440;&#x43E;&#x431;&#x443;&#x439;&#x442;&#x435; &#x43F;&#x456;&#x437;&#x43D;&#x456;&#x448;&#x435;.</ua>
+<ua>Сталася помилка. Будь ласка, спробуйте пізніше.</ua>
 <ro>O eroare a avut loc. Va rugam sa incercati mai tarziu.</ro>
-<mk>&#x421;&#x435; &#x43F;&#x43E;&#x458;&#x430;&#x432;&#x438; &#x433;&#x440;&#x435;&#x448;&#x43A;&#x430;. &#x412;&#x435; &#x43C;&#x43E;&#x43B;&#x438;&#x43C;&#x435; &#x43F;&#x440;&#x43E;&#x431;&#x430;&#x458;&#x442;&#x435; &#x43F;&#x43E;&#x434;&#x43E;&#x446;&#x43D;&#x430;.</mk>
+<mk>Се појави грешка. Ве молиме пробајте подоцна.</mk>
 </text>
 <text>
 <en>Page not found</en>
 <de>Seite wurde nicht gefunden.</de>
 <id>9</id>
-<ua>&#x421;&#x442;&#x43E;&#x440;&#x456;&#x43D;&#x43A;&#x430; &#x43D;&#x435; &#x437;&#x43D;&#x430;&#x439;&#x434;&#x435;&#x43D;&#x430;</ua>
+<ua>Сторінка не знайдена</ua>
 <ro>Pagina solicitata nu a fost gasita</ro>
-<mk>&#x421;&#x442;&#x440;&#x430;&#x43D;&#x430;&#x442;&#x430; &#x43D;&#x435; &#x435; &#x43F;&#x440;&#x43E;&#x43D;&#x430;&#x458;&#x434;&#x435;&#x43D;&#x430;</mk>
+<mk>Страната не е пронајдена</mk>
 </text>
 <text>
 <en>Lost password?</en>
 <de>Passwort vergessen?</de>
 <id>12</id>
 <ro>Ati uitat parola?</ro>
-<ua>&#x417;&#x430;&#x431;&#x443;&#x43B;&#x438; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;?</ua>
-<mk>&#x408;&#x430; &#x437;&#x430;&#x431;&#x43E;&#x440;&#x430;&#x432;&#x438;&#x432;&#x442;&#x435; &#x43B;&#x43E;&#x437;&#x438;&#x43D;&#x43A;&#x430;&#x442;&#x430;?</mk>
+<ua>Забули пароль?</ua>
+<mk>Ја заборавивте лозинката?</mk>
 </text>
 <text>
 <en>Login</en>
 <de>Einloggen</de>
 <id>13</id>
-<ua>&#x41B;&#x43E;&#x433;&#x456;&#x43D;</ua>
+<ua>Логін</ua>
 <ro>Autentificare</ro>
-<mk>&#x41B;&#x43E;&#x433;&#x438;&#x43D;</mk>
+<mk>Логин</mk>
 </text>
 <text>
 <en>Hello {0}!</en>
 <de>Hallo {0}!</de>
 <id>14</id>
 <ro>Buna ziua {0}!</ro>
-<mk>&#x417;&#x434;&#x440;&#x430;&#x432;&#x43E; {0}!</mk>
+<mk>Здраво {0}!</mk>
 </text>
 <text>
 <en>Your account at {0}
@@ -63,50 +64,50 @@ has just been created.</en>
 <de>Ihr Konto bei {0}wurde soeben erstellt.</de>
 <id>15</id>
 <ro>Contul dumneavoastra la {0} a fost creat.</ro>
-<ua>&#x412;&#x430;&#x448; &#x430;&#x43A;&#x43A;&#x430;&#x443;&#x43D;&#x442; &#x441;&#x442;&#x432;&#x43E;&#x440;&#x435;&#x43D;&#x43E;</ua>
-<mk>&#x412;&#x430;&#x448;&#x438;&#x43E;&#x442; &#x430;&#x43A;&#x430;&#x443;&#x43D;&#x442; &#x435; &#x43A;&#x440;&#x435;&#x438;&#x440;&#x430;&#x43D;.</mk>
+<ua>Ваш аккаунт створено</ua>
+<mk>Вашиот акаунт е креиран.</mk>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
 <de>Bitte verwenden Sie diesen Link um sich ein Passwort zu erstellen und einzuloggen.</de>
 <id>16</id>
 <ro>Va rugam sa folositi urmatorul link pentru a va alege parola si pentru autentificare.</ro>
-<ua>&#x411;&#x443;&#x434;&#x44C; &#x43B;&#x430;&#x441;&#x43A;&#x430;, &#x432;&#x438;&#x43A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x43E;&#x432;&#x443;&#x439;&#x442;&#x435; &#x446;&#x435; &#x43F;&#x43E;&#x441;&#x438;&#x43B;&#x430;&#x43D;&#x43D;&#x44F;, &#x449;&#x43E;&#x431; &#x43F;&#x43E;&#x442;&#x440;&#x430;&#x43F;&#x438;&#x442;&#x438; &#x43D;&#x430; &#x432;&#x430;&#x448; &#x430;&#x43A;&#x43A;&#x430;&#x443;&#x43D;&#x442;</ua>
-<mk>&#x412;&#x435; &#x43C;&#x43E;&#x43B;&#x438;&#x43C;&#x435; &#x43A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x435;&#x442;&#x435; &#x433;&#x43E; &#x441;&#x43B;&#x435;&#x434;&#x43D;&#x438;&#x43E;&#x442; &#x43B;&#x438;&#x43D;&#x43A; &#x437;&#x430; &#x434;&#x430; &#x438;&#x437;&#x431;&#x435;&#x440;&#x435;&#x442;&#x435; &#x43B;&#x43E;&#x437;&#x438;&#x43D;&#x43A;&#x430; &#x438; &#x434;&#x430; &#x441;&#x435; &#x43D;&#x430;&#x458;&#x430;&#x432;&#x438;&#x442;&#x435;</mk>
+<ua>Будь ласка, використовуйте це посилання, щоб потрапити на ваш аккаунт</ua>
+<mk>Ве молиме користете го следниот линк за да изберете лозинка и да се најавите</mk>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
-<de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
+<de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empfänger an den eine Antwort gesendet werden kann.</de>
 <id>17</id>
 <ro>Acest e-mail a afost generat automat. In caz ca raspundeti la acest e-mail exista posibilitatea sa nu fie un destinatar pentru mesajul dumneavoastra.</ro>
-<ua>&#x426;&#x435; &#x43F;&#x43E;&#x432;&#x456;&#x434;&#x43E;&#x43C;&#x43B;&#x435;&#x43D;&#x43D;&#x44F; &#x431;&#x443;&#x43B;&#x43E; &#x441;&#x444;&#x43E;&#x440;&#x43C;&#x43E;&#x432;&#x430;&#x43D;&#x43E; &#x430;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x438;&#x447;&#x43D;&#x43E;. &#x42F;&#x43A;&#x449;&#x43E; &#x412;&#x438; &#x432;&#x456;&#x434;&#x43F;&#x43E;&#x432;&#x456;&#x441;&#x442;&#x435; &#x43D;&#x430; &#x446;&#x435;&#x439; &#x43B;&#x438;&#x441;&#x442;, &#x43E;&#x434;&#x435;&#x440;&#x436;&#x443;&#x432;&#x430;&#x447;&#x430; &#x43C;&#x43E;&#x436;&#x435; &#x43D;&#x435; &#x431;&#x443;&#x442;&#x438;</ua>
-<mk>&#x41E;&#x432;&#x43E;&#x458; e-mail &#x435; &#x433;&#x435;&#x43D;&#x435;&#x440;&#x438;&#x440;&#x430;&#x43D; &#x430;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x441;&#x43A;&#x438;. &#x410;&#x43A;&#x43E; &#x43E;&#x434;&#x433;&#x43E;&#x432;&#x43E;&#x440;&#x438;&#x442;&#x435; &#x43D;&#x430; &#x43E;&#x432;&#x430; &#x43F;&#x43E;&#x440;&#x430;&#x43A;&#x430; &#x43C;&#x43E;&#x436;&#x435; &#x434;&#x430; &#x43D;&#x435;&#x43C;&#x430; &#x43F;&#x440;&#x438;&#x43C;&#x430;&#x447;.</mk>
+<ua>Це повідомлення було сформовано автоматично. Якщо Ви відповісте на цей лист, одержувача може не бути</ua>
+<mk>Овој e-mail е генериран автоматски. Ако одговорите на ова порака може да нема примач.</mk>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
-<de>Ihr Konto bei {0} wurde gel&#xF6;scht.</de>
+<de>Ihr Konto bei {0} wurde gelöscht.</de>
 <id>19</id>
 <ro>Contul dumneavoasta la {0} a fost sters.</ro>
-<ua>&#x412;&#x430;&#x448; &#x430;&#x43A;&#x43A;&#x430;&#x443;&#x43D;&#x442; &#x432;&#x438;&#x434;&#x430;&#x43B;&#x435;&#x43D;&#x43E;</ua>
-<mk>&#x412;&#x430;&#x448;&#x438;&#x43E;&#x442; &#x430;&#x43A;&#x430;&#x443;&#x43D;&#x442; &#x435; &#x438;&#x437;&#x431;&#x440;&#x438;&#x448;&#x430;&#x43D;.</mk>
+<ua>Ваш аккаунт видалено</ua>
+<mk>Вашиот акаунт е избришан.</mk>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
 <de>Bitte verwenden Sie den folgenden Link um sich selbst ein neues Passwort zu erstellen.</de>
 <id>22</id>
 <ro>Va rugam sa folositi acest link pentru a va schimba parola.</ro>
-<ua>&#x411;&#x443;&#x434;&#x44C; &#x43B;&#x430;&#x441;&#x43A;&#x430;, &#x432;&#x438;&#x43A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x430;&#x439;&#x442;&#x435; &#x446;&#x435; &#x43F;&#x43E;&#x441;&#x438;&#x43B;&#x430;&#x43D;&#x43D;&#x44F;, &#x449;&#x43E;&#x431; &#x43E;&#x431;&#x440;&#x430;&#x442;&#x438; &#x441;&#x432;&#x456;&#x439; &#x43D;&#x43E;&#x432;&#x438;&#x439; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;</ua>
-<mk>&#x412;&#x435; &#x43C;&#x43E;&#x43B;&#x438;&#x43C;&#x435; &#x43A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x435;&#x442;&#x435; &#x433;&#x43E; &#x441;&#x43B;&#x435;&#x434;&#x43D;&#x438;&#x43E;&#x442; &#x43B;&#x438;&#x43D;&#x43A; &#x437;&#x430; &#x434;&#x430; &#x432;&#x43D;&#x435;&#x441;&#x435;&#x442;&#x435; &#x43D;&#x43E;&#x432;&#x430; &#x43B;&#x43E;&#x437;&#x438;&#x43D;&#x43A;&#x430;.</mk>
+<ua>Будь ласка, використайте це посилання, щоб обрати свій новий пароль</ua>
+<mk>Ве молиме користете го следниот линк за да внесете нова лозинка.</mk>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
-<de>Ort der Abreise: Postleitzahl, Ort, Stra&#xDF;e</de>
+<de>Ort der Abreise: Postleitzahl, Ort, Straße</de>
 <fr>Place of departure: zip code, Town, Street</fr>
 <es>Place of departure: zip code, Town, Street</es>
 <id>31</id>
 <ro>Loc de plecare: Cod postal, Oras, Strada</ro>
-<ua>&#x41C;&#x456;&#x441;&#x446;&#x435; &#x432;&#x456;&#x434;&#x43F;&#x440;&#x430;&#x432;&#x43A;&#x438;:&#x43F;&#x43E;&#x448;&#x442;&#x43E;&#x432;&#x438;&#x439; &#x43A;&#x43E;&#x434;, &#x43C;&#x456;&#x441;&#x442;&#x43E;, &#x432;&#x443;&#x43B;&#x438;&#x446;&#x44F;</ua>
-<mk>&#x41C;&#x435;&#x441;&#x442;&#x43E; &#x43D;&#x430; &#x442;&#x440;&#x433;&#x43D;&#x443;&#x432;&#x430;&#x45A;&#x435;: &#x41F;&#x43E;&#x448;&#x442;&#x435;&#x43D;&#x441;&#x43A;&#x438; &#x431;&#x440;&#x43E;&#x458;, &#x41C;&#x435;&#x441;&#x442;&#x43E;, &#x423;&#x43B;&#x438;&#x446;&#x430;</mk>
+<ua>Місце відправки:поштовий код, місто, вулиця</ua>
+<mk>Место на тргнување: Поштенски број, Место, Улица</mk>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -114,8 +115,8 @@ has just been created.</en>
 <es>Entered place could not been found!</es>
 <id>32</id>
 <ro>Locatia cautata nu a putut fi gasita!</ro>
-<ua>&#x412;&#x432;&#x435;&#x434;&#x435;&#x43D;&#x435; &#x43C;&#x456;&#x441;&#x446;&#x435; &#x43D;&#x435; &#x431;&#x443;&#x43B;&#x43E; &#x437;&#x43D;&#x430;&#x439;&#x434;&#x435;&#x43D;&#x43E;</ua>
-<mk>&#x412;&#x43D;&#x435;&#x441;&#x435;&#x43D;&#x435;&#x442;&#x43E; &#x43C;&#x435;&#x441;&#x442;&#x43E; &#x43D;&#x435; &#x43C;&#x43E;&#x436;&#x435; &#x434;&#x430; &#x441;&#x435; &#x43D;&#x430;&#x43E;&#x453;&#x430;!</mk>
+<ua>Введене місце не було знайдено</ua>
+<mk>Внесенето место не може да се наоѓа!</mk>
 </text>
 <text>
 <en>Show Route</en>
@@ -123,86 +124,86 @@ has just been created.</en>
 <es>Show Route</es>
 <id>33</id>
 <ro>Arata ruta</ro>
-<ua>&#x41F;&#x43E;&#x43A;&#x430;&#x437;&#x430;&#x442;&#x438; &#x43C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;</ua>
+<ua>Показати маршрут</ua>
 </text>
 <text>
 <en>Suggestions</en>
-<de>Vorschl&#xE4;ge</de>
+<de>Vorschläge</de>
 <id>34</id>
 <ro>Sugesti</ro>
-<ua>&#x41F;&#x440;&#x43E;&#x43F;&#x43E;&#x437;&#x438;&#x446;&#x456;&#x457;</ua>
-<mk>&#x41F;&#x440;&#x435;&#x434;&#x43B;&#x43E;&#x437;&#x438;</mk>
+<ua>Пропозиції</ua>
+<mk>Предлози</mk>
 </text>
 <text>
 <en>Coordinates</en>
 <de>Koordinaten</de>
 <id>35</id>
 <ro>Coordonate</ro>
-<ua>&#x41A;&#x43E;&#x43E;&#x440;&#x434;&#x438;&#x43D;&#x430;&#x442;&#x438;</ua>
-<mk>&#x41A;&#x43E;&#x440;&#x434;&#x438;&#x43D;&#x430;&#x442;&#x438;</mk>
+<ua>Координати</ua>
+<mk>Кординати</mk>
 </text>
 <text>
 <en>Zoomlevel</en>
 <de>Zoomebene</de>
 <id>36</id>
 <ro>Nivel zoom</ro>
-<ua>&#x421;&#x442;&#x443;&#x43F;&#x456;&#x43D;&#x44C; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x435;&#x43D;&#x43D;&#x44F;</ua>
-<mk>&#x41D;&#x438;&#x432;&#x43E; &#x43D;&#x430; &#x437;&#x433;&#x43E;&#x43B;&#x435;&#x43C;&#x443;&#x432;&#x430;&#x45A;&#x435;</mk>
+<ua>Ступінь збільшення</ua>
+<mk>Ниво на зголемување</mk>
 </text>
 <text>
 <en>Width</en>
 <de>Breite</de>
 <id>37</id>
 <ro>Latime</ro>
-<ua>&#x428;&#x438;&#x440;&#x438;&#x43D;&#x430;</ua>
-<mk>&#x428;&#x438;&#x440;&#x438;&#x43D;&#x430;</mk>
+<ua>Ширина</ua>
+<mk>Ширина</mk>
 </text>
 <text>
 <en>Height</en>
-<de>H&#xF6;he</de>
+<de>Höhe</de>
 <id>38</id>
 <ro>Inaltime</ro>
-<ua>&#x412;&#x438;&#x441;&#x43E;&#x442;&#x430;</ua>
-<mk>&#x412;&#x438;&#x441;&#x438;&#x43D;&#x430;</mk>
+<ua>Висота</ua>
+<mk>Висина</mk>
 </text>
 <text>
 <en>Move + Zoom</en>
 <de>Bewegen + Zoomen</de>
 <id>39</id>
 <ro>Muta + Zoom</ro>
-<ua>&#x41F;&#x435;&#x440;&#x435;&#x43C;&#x456;&#x441;&#x442;&#x438;&#x442;&#x438; &#x442;&#x430; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x438;&#x442;&#x438;</ua>
-<mk>&#x41F;&#x440;&#x435;&#x43C;&#x435;&#x441;&#x442;&#x438; + &#x417;&#x433;&#x43E;&#x43B;&#x435;&#x43C;&#x438;</mk>
+<ua>Перемістити та збільшити</ua>
+<mk>Премести + Зголеми</mk>
 </text>
 <text>
 <en>Move + Zoom (without zoombar)</en>
-<de>Bewegen + Zoomen (ohne Vergr&#xF6;&#xDF;erungsleiste)</de>
+<de>Bewegen + Zoomen (ohne Vergrößerungsleiste)</de>
 <id>40</id>
 <ro>Muta + Zoom (fara bara de zoom)</ro>
-<ua>&#x41F;&#x435;&#x440;&#x435;&#x43C;&#x456;&#x441;&#x442;&#x438;&#x442;&#x438; &#x442;&#x430; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x438;&#x442;&#x438; &#x431;&#x435;&#x437; &#x448;&#x43A;&#x430;&#x43B;&#x438; &#x437;&#x431;&#x456;&#x43B;&#x44C;&#x448;&#x435;&#x43D;&#x43D;&#x44F;</ua>
-<mk>&#x41F;&#x440;&#x435;&#x43C;&#x435;&#x441;&#x442;&#x438; + &#x417;&#x433;&#x43E;&#x43B;&#x435;&#x43C;&#x438; (&#x431;&#x435;&#x437; &#x431;&#x430;&#x440;&#x43E;&#x442; &#x437;&#x430;&#x437;&#x433;&#x43E;&#x43B;&#x435;&#x43C;&#x443;&#x432;&#x430;&#x45A;&#x435;)</mk>
+<ua>Перемістити та збільшити без шкали збільшення</ua>
+<mk>Премести + Зголеми (без барот зазголемување)</mk>
 </text>
 <text>
 <en>Scale</en>
 <de>Skalieren</de>
 <id>42</id>
 <ro>Scara</ro>
-<ua>&#x428;&#x43A;&#x430;&#x43B;&#x430;</ua>
-<mk>&#x421;&#x43A;&#x430;&#x43B;&#x430;</mk>
+<ua>Шкала</ua>
+<mk>Скала</mk>
 </text>
 <text>
 <en>Satelitemap</en>
 <de>Satellitenkarte</de>
 <id>43</id>
 <ro>Satelitemap</ro>
-<ua>&#x421;&#x443;&#x43F;&#x443;&#x442;&#x43D;&#x438;&#x43A;&#x43E;&#x432;&#x430; &#x43A;&#x430;&#x440;&#x442;&#x430;</ua>
-<mk>&#x41C;&#x430;&#x43F;&#x430; &#x43D;&#x430; &#x441;&#x442;&#x440;&#x430;&#x43D;&#x430;&#x442;&#x430;</mk>
+<ua>Супутникова карта</ua>
+<mk>Мапа на страната</mk>
 </text>
 <text>
 <en>Overviewmap</en>
-<de>&#xDC;bersichtskarte</de>
+<de>Übersichtskarte</de>
 <id>44</id>
 <ro>Prezentare mapa</ro>
-<ua>&#x41A;&#x440;&#x443;&#x43F;&#x43D;&#x43E;&#x43C;&#x430;&#x441;&#x448;&#x442;&#x430;&#x431;&#x43D;&#x430; &#x43A;&#x430;&#x440;&#x442;&#x430;</ua>
+<ua>Крупномасштабна карта</ua>
 </text>
 <text>
 <en>Worldview</en>
@@ -215,130 +216,130 @@ has just been created.</en>
 <de>Detailansicht</de>
 <id>46</id>
 <ro>Viziune detaliata</ro>
-<ua>&#x414;&#x435;&#x442;&#x430;&#x43B;&#x44C;&#x43D;&#x438;&#x439; &#x43E;&#x433;&#x43B;&#x44F;&#x434;</ua>
+<ua>Детальний огляд</ua>
 </text>
 <text>
 <en>Filename</en>
 <de>Dateiname</de>
 <id>48</id>
 <ro>Nume fisier</ro>
-<ua>&#x406;'&#x43C;&#x44F; &#x444;&#x430;&#x439;&#x43B;&#x443;</ua>
-<mk>&#x418;&#x43C;&#x435; &#x43D;&#x430; &#x444;&#x430;&#x458;&#x43B;&#x43E;&#x442;</mk>
+<ua>І'мя файлу</ua>
+<mk>Име на фајлот</mk>
 </text>
 <text>
 <en>File</en>
 <de>Datei</de>
 <id>49</id>
 <ro>Fisier</ro>
-<ua>&#x424;&#x430;&#x439;&#x43B;</ua>
-<mk>&#x424;&#x430;&#x458;&#x43B;</mk>
+<ua>Файл</ua>
+<mk>Фајл</mk>
 </text>
 <text>
 <en>Content</en>
 <de>Inhalt</de>
 <id>50</id>
 <ro>Continut</ro>
-<ua>&#x417;&#x43C;&#x456;&#x441;&#x442;</ua>
-<mk>&#x421;&#x43E;&#x434;&#x440;&#x436;&#x438;&#x43D;&#x430;</mk>
+<ua>Зміст</ua>
+<mk>Содржина</mk>
 </text>
 <text>
 <en>Image</en>
 <de>Bild</de>
 <id>51</id>
 <ro>Imagine</ro>
-<mk>&#x421;&#x43B;&#x438;&#x43A;&#x430;</mk>
+<mk>Слика</mk>
 </text>
 <text>
 <en>Image Enlarge</en>
-<de>Bild vergr&#xF6;&#xDF;ern</de>
+<de>Bild vergrößern</de>
 <id>52</id>
 <ro>Mareste imaginea</ro>
-<mk>&#x417;&#x433;&#x43E;&#x43B;&#x435;&#x43C;&#x438; &#x458;&#x430; &#x441;&#x43B;&#x438;&#x43A;&#x430;&#x442;&#x430;</mk>
+<mk>Зголеми ја сликата</mk>
 </text>
 <text>
 <en>Comment</en>
 <de>Kommentar</de>
 <id>55</id>
 <ro>Comentariu</ro>
-<mk>&#x41A;&#x43E;&#x43C;&#x435;&#x43D;&#x442;</mk>
+<mk>Комент</mk>
 </text>
 <text>
 <en>Size</en>
-<de>Gr&#xF6;&#xDF;e</de>
+<de>Größe</de>
 <id>56</id>
 <ro>Marime</ro>
-<mk>&#x413;&#x43E;&#x43B;&#x435;&#x43C;&#x438;&#x43D;&#x430;</mk>
+<mk>Големина</mk>
 </text>
 <text>
 <en>Preview</en>
 <de>Vorschau</de>
 <id>58</id>
 <ro>Anunt</ro>
-<mk>&#x41F;&#x440;&#x435;&#x433;&#x43B;&#x435;&#x434;</mk>
+<mk>Преглед</mk>
 </text>
 <text>
 <en>Text</en>
 <de>Text</de>
 <id>59</id>
 <ro>Text</ro>
-<mk>&#x422;&#x435;&#x43A;&#x441;&#x442;</mk>
+<mk>Текст</mk>
 </text>
 <text>
 <en>Position of Image</en>
 <de>Bildposition</de>
 <id>60</id>
 <ro>Pozitia imaginii</ro>
-<mk>&#x41F;&#x43E;&#x437;&#x438;&#x446;&#x438;&#x458;&#x430; &#x43D;&#x430; &#x441;&#x43B;&#x438;&#x43A;&#x430;</mk>
+<mk>Позиција на слика</mk>
 </text>
 <text>
 <en>Left</en>
 <de>Links</de>
 <id>61</id>
 <ro>Stanga</ro>
-<mk>&#x41B;&#x435;&#x432;&#x43E;</mk>
+<mk>Лево</mk>
 </text>
 <text>
 <en>Right</en>
 <de>Rechts</de>
 <id>62</id>
 <ro>Dreapta</ro>
-<mk>&#x414;&#x435;&#x441;&#x43D;&#x43E;</mk>
+<mk>Десно</mk>
 </text>
 <text>
 <en>Alternate</en>
 <de>Alternierend</de>
 <id>63</id>
 <ro>Altrenativ</ro>
-<mk>&#x410;&#x43B;&#x442;&#x435;&#x440;&#x43D;&#x430;&#x442;&#x438;&#x432;&#x435;&#x43D;</mk>
+<mk>Алтернативен</mk>
 </text>
 <text>
 <en>Maximum Length</en>
-<de>Maximale L&#xE4;nge</de>
+<de>Maximale Länge</de>
 <id>67</id>
 <ro>Lungime maxima</ro>
-<mk>&#x41C;&#x430;&#x43A;&#x441;&#x438;&#x43C;&#x430;&#x43B;&#x43D;&#x430; &#x434;&#x43E;&#x43B;&#x436;&#x438;&#x43D;&#x430;</mk>
+<mk>Максимална должина</mk>
 </text>
 <text>
 <en>Default Value</en>
 <de>Standardwert</de>
 <id>68</id>
-<bg>&#x421;&#x442;&#x430;&#x43D;&#x434;&#x430;&#x440;&#x442;&#x43D;&#x430; &#x441;&#x442;&#x43E;&#x439;&#x43D;&#x43E;&#x441;&#x442;</bg>
+<bg>Стандартна стойност</bg>
 <ro>Valoare implicita</ro>
-<mk>&#x421;&#x442;&#x430;&#x43D;&#x434;&#x430;&#x440;&#x434;&#x43D;&#x430; &#x432;&#x440;&#x435;&#x434;&#x43D;&#x43E;&#x441;&#x442;</mk>
+<mk>Стандардна вредност</mk>
 </text>
 <text>
 <en>Passwords are different. Please try again.</en>
-<de>Passw&#xF6;rter sind unterschiedlich. Bitte versuchen Sie es erneut.</de>
+<de>Passwörter sind unterschiedlich. Bitte versuchen Sie es erneut.</de>
 <id>73</id>
 <ro>Parolele sunt diferite. Va rugam incercati din nou.</ro>
-<mk>&#x41B;&#x438;&#x437;&#x438;&#x43D;&#x43A;&#x438;&#x442;&#x435; &#x441;&#x435; &#x440;&#x430;&#x437;&#x43B;&#x438;&#x447;&#x43D;&#x438;. &#x412;&#x435; &#x43C;&#x43E;&#x43B;&#x438;&#x43C;&#x435; &#x43F;&#x440;&#x43E;&#x431;&#x430;&#x458;&#x442;&#x435; &#x43F;&#x430;&#x43A;.</mk>
+<mk>Лизинките се различни. Ве молиме пробајте пак.</mk>
 </text>
 <text>
 <en>Description</en>
 <de>Beschreibung</de>
 <id>79</id>
 <ro>Descriere</ro>
-<mk>&#x41E;&#x43F;&#x438;&#x441;</mk>
+<mk>Опис</mk>
 </text>
 <text>
 <en>Submit</en>
@@ -346,8 +347,8 @@ has just been created.</en>
 <id>81</id>
 <es>enviar</es>
 <pt>mandar</pt>
-<ru>&#x43F;&#x43E;&#x441;&#x43B;&#x430;&#x442;&#x44C;</ru>
-<jp>&#x4F1D;&#x9001;&#x3059;&#x308B;</jp>
+<ru>послать</ru>
+<jp>伝送する</jp>
 <fr>envoyer</fr>
 <it>inviare</it>
 <ro>Trimitere</ro>
@@ -357,21 +358,21 @@ has just been created.</en>
 <de>Validator</de>
 <id>83</id>
 <ro>Validator</ro>
-<mk>&#x412;&#x430;&#x43B;&#x438;&#x434;&#x430;&#x442;&#x43E;&#x440;</mk>
+<mk>Валидатор</mk>
 </text>
 <text>
 <en>No Validator</en>
 <de>Kein Validator</de>
 <id>84</id>
 <ro>Numar validator</ro>
-<mk>&#x411;&#x435;&#x437; &#x432;&#x430;&#x43B;&#x438;&#x434;&#x430;&#x442;&#x43E;&#x440;.</mk>
+<mk>Без валидатор.</mk>
 </text>
 <text>
 <en>E-Mail</en>
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
-<ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
+<ru>Электронная почта</ru>
 <id>85</id>
 <ro>E-Mail</ro>
 <mk>E-Mail</mk>
@@ -381,28 +382,28 @@ has just been created.</en>
 <de>Datum</de>
 <id>86</id>
 <ro>Data</ro>
-<mk>&#x414;&#x430;&#x442;&#x443;&#x43C;</mk>
+<mk>Датум</mk>
 </text>
 <text>
 <en>Group</en>
 <de>Gruppe</de>
 <id>87</id>
 <ro>Grup</ro>
-<mk>&#x413;&#x440;&#x443;&#x43F;&#x430;</mk>
+<mk>Група</mk>
 </text>
 <text>
 <en>enable posts</en>
-<de>Beitr&#xE4;ge erlauben</de>
+<de>Beiträge erlauben</de>
 <id>88</id>
 <ro>Activati posturi</ro>
-<mk>&#x41E;&#x432;&#x43E;&#x437;&#x43C;&#x43E;&#x436;&#x438; &#x43F;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x443;&#x432;&#x430;&#x45A;&#x430;</mk>
+<mk>Овозможи поставувања</mk>
 </text>
 <text>
 <en>Last Entry</en>
 <de>Letzter Beitrag</de>
 <id>91</id>
 <ro>Ultima intrare</ro>
-<mk>&#x41F;&#x43E;&#x441;&#x43B;&#x435;&#x434;&#x43D;&#x43E; &#x41F;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x443;&#x432;&#x430;&#x45A;&#x435;</mk>
+<mk>Последно Поставување</mk>
 </text>
 <text>
 <en>at</en>
@@ -415,41 +416,41 @@ has just been created.</en>
 <de>Leer</de>
 <id>95</id>
 <ro>Gol</ro>
-<mk>&#x41F;&#x440;&#x430;&#x437;&#x43D;&#x43E;</mk>
+<mk>Празно</mk>
 </text>
 <text>
 <en>Title</en>
 <de>Titel</de>
 <id>96</id>
 <ro>Titlu</ro>
-<mk>&#x422;&#x438;&#x442;&#x443;&#x43B;&#x430;</mk>
+<mk>Титула</mk>
 </text>
 <text>
 <en>Firstname</en>
 <de>Vorname</de>
-<fr>Pr&#xE9;nom</fr>
+<fr>Prénom</fr>
 <es>Nombre</es>
-<ru>&#x418;&#x43C;&#x44F;</ru>
+<ru>Имя</ru>
 <id>97</id>
 <ro>Prenume</ro>
-<mk>&#x418;&#x43C;&#x435;</mk>
+<mk>Име</mk>
 </text>
 <text>
 <en>Lastname</en>
 <de>Nachname</de>
 <fr>Nom</fr>
 <es>Apellidos</es>
-<ru>&#x424;&#x430;&#x43C;&#x438;&#x43B;&#x438;&#x44F;</ru>
+<ru>Фамилия</ru>
 <id>98</id>
 <ro>Nume</ro>
-<mk>&#x41F;&#x440;&#x435;&#x437;&#x438;&#x43C;&#x435;</mk>
+<mk>Презиме</mk>
 </text>
 <text>
 <en>Email</en>
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
-<ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
+<ru>Электронная почта</ru>
 <id>99</id>
 <ro>E-Mail</ro>
 </text>
@@ -458,35 +459,35 @@ has just been created.</en>
 <de>Betreff</de>
 <id>101</id>
 <ro>Subiect</ro>
-<mk>&#x41D;&#x430;&#x441;&#x43B;&#x43E;&#x432;</mk>
+<mk>Наслов</mk>
 </text>
 <text>
 <en>Moderators of selected group</en>
-<de>Moderatoren der ausgew&#xE4;hlten Gruppe</de>
+<de>Moderatoren der ausgewählten Gruppe</de>
 <id>102</id>
 <ro>Moderatorii grupului selectat</ro>
-<mk>&#x41C;&#x43E;&#x434;&#x435;&#x440;&#x430;&#x442;&#x43E;&#x440;&#x438; &#x43D;&#x430; &#x43E;&#x434;&#x431;&#x440;&#x430;&#x43D;&#x430;&#x442;&#x430; &#x433;&#x440;&#x443;&#x43F;&#x430;</mk>
+<mk>Модератори на одбраната група</mk>
 </text>
 <text>
 <en>Member since</en>
 <de>Mitglied seit</de>
 <id>107</id>
 <ro>Membru din </ro>
-<mk>&#x427;&#x43B;&#x435;&#x43D; &#x43E;&#x434;</mk>
+<mk>Член од</mk>
 </text>
 <text>
 <en>Click here</en>
 <de>Hier klicken</de>
 <id>120</id>
 <ro>Click aici</ro>
-<mk>&#x41A;&#x43B;&#x438;&#x43D;&#x438; &#x442;&#x443;&#x43A;&#x430;</mk>
+<mk>Клини тука</mk>
 </text>
 <text>
 <en>Name</en>
 <de>Name</de>
 <id>125</id>
 <ro>Nume</ro>
-<mk>&#x418;&#x43C;&#x435;</mk>
+<mk>Име</mk>
 </text>
 <text>
 <en>Latest online</en>
@@ -499,28 +500,28 @@ has just been created.</en>
 <de>Kurze Beschreibung</de>
 <id>128</id>
 <ro>Descriere scurta</ro>
-<mk>&#x41A;&#x440;&#x430;&#x442;&#x43E;&#x43A; &#x43E;&#x43F;&#x438;&#x441;</mk>
+<mk>Краток опис</mk>
 </text>
 <text>
 <en>Signature</en>
 <de>Signatur</de>
 <id>130</id>
 <ro>Semnatura </ro>
-<mk>&#x41F;&#x43E;&#x442;&#x43F;&#x438;&#x441;</mk>
+<mk>Потпис</mk>
 </text>
 <text>
 <en>Publish Date</en>
-<de>Datum der Ver&#xF6;ffentlichung</de>
+<de>Datum der Veröffentlichung</de>
 <id>135</id>
 <ro>Data publicarii</ro>
-<mk>&#x414;&#x430;&#x442;&#x443;&#x43C; &#x43D;&#x430; &#x43F;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x443;&#x432;&#x430;&#x45A;&#x435;</mk>
+<mk>Датум на поставување</mk>
 </text>
 <text>
 <en>Expiry Date</en>
 <de>Ablauf Datum</de>
 <id>136</id>
 <ro>Data expirarii</ro>
-<mk>&#x414;&#x430;&#x442;&#x443;&#x43C; &#x43D;&#x430; &#x438;&#x441;&#x442;&#x435;&#x43A;&#x443;&#x432;&#x430;&#x45A;&#x435;</mk>
+<mk>Датум на истекување</mk>
 </text>
 <text>
 <en>Teaser</en>
@@ -545,7 +546,7 @@ has just been created.</en>
 <de>Produkt</de>
 <id>150</id>
 <ro>Produs</ro>
-<mk>&#x41F;&#x440;&#x43E;&#x438;&#x437;&#x432;&#x43E;&#x434;</mk>
+<mk>Производ</mk>
 </text>
 <text>
 <en>Activate Useraccount</en>
@@ -555,7 +556,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Plese enter in both fields the password which you want to use for your useraccount</en>
-<de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein</de>
+<de>Bitte geben Sie in beide Felder das gewünschte Passwort für Ihr Benutzerkonto ein</de>
 <id>160</id>
 <ro>Va rugam sa introduceti in ambele campuri parola pe care doriti sa o utilizati pentru contul dumneavoastra</ro>
 </text>
@@ -567,7 +568,7 @@ has just been created.</en>
 </text>
 <text>
 <en>to get back to the Startpage</en>
-<de>um zur Startseite zur&#xFC;ckzukehren</de>
+<de>um zur Startseite zurückzukehren</de>
 <id>164</id>
 <ro>pentru a merge la pagina Home</ro>
 </text>
@@ -576,21 +577,21 @@ has just been created.</en>
 <de>Weiblich</de>
 <id>165</id>
 <ro>Femeie</ro>
-<mk>&#x416;&#x435;&#x43D;&#x441;&#x43A;&#x438;</mk>
+<mk>Женски</mk>
 </text>
 <text>
 <en>Male</en>
-<de>M&#xE4;nnlich</de>
+<de>Männlich</de>
 <id>166</id>
 <ro>Barbat</ro>
-<mk>&#x41C;&#x430;&#x448;&#x43A;&#x438;</mk>
+<mk>Машки</mk>
 </text>
 <text>
 <en>Gender</en>
 <de>Geschlecht</de>
 <id>167</id>
 <ro>Gen</ro>
-<mk>&#x41F;&#x43E;&#x43B;</mk>
+<mk>Пол</mk>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -600,81 +601,81 @@ has just been created.</en>
 </text>
 <text>
 <en>The changed data was saved successfully</en>
-<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
+<de>Die geänderten Daten wurden erfolgreich gespeichert</de>
 <id>171</id>
 <ro>Informatiile schimbate au fost salvate cu succes</ro>
-<mk>&#x41F;&#x440;&#x43E;&#x43C;&#x435;&#x43D;&#x435;&#x442;&#x438;&#x442;&#x435; &#x43F;&#x43E;&#x434;&#x430;&#x442;&#x43E;&#x446;&#x438; &#x441;&#x435; &#x437;&#x430;&#x447;&#x443;&#x432;&#x430;&#x43D;&#x438; &#x443;&#x441;&#x43F;&#x435;&#x448;&#x43D;&#x43E;</mk>
+<mk>Променетите податоци се зачувани успешно</mk>
 </text>
 <text>
 <en>You don't have enough permissions for this Action</en>
-<de>Sie haben nicht die erforderlichen Befugnisse f&#xFC;r diese Aktion.</de>
+<de>Sie haben nicht die erforderlichen Befugnisse für diese Aktion.</de>
 <id>182</id>
 <ro>Nu aveti permisiune pentru aceasta actiune</ro>
-<mk>&#x41D;&#x435;&#x43C;&#x430;&#x442;&#x435; &#x434;&#x43E;&#x432;&#x43E;&#x43B;&#x43D;&#x43E; &#x43F;&#x435;&#x440;&#x43C;&#x438;&#x441;&#x438;&#x438; &#x437;&#x430; &#x43E;&#x432;&#x430; &#x430;&#x43A;&#x446;&#x438;&#x458;&#x430;</mk>
+<mk>Немате доволно пермисии за ова акција</mk>
 </text>
 <text>
 <en>Login failed</en>
 <de>Login fehlgeschlagen</de>
 <id>183</id>
 <ro>Autentificare esuata</ro>
-<mk>&#x41D;&#x435;&#x443;&#x441;&#x43F;&#x435;&#x448;&#x43D;&#x43E; &#x43B;&#x43E;&#x433;&#x438;&#x440;&#x430;&#x45A;&#x435;</mk>
+<mk>Неуспешно логирање</mk>
 </text>
 <text>
 <en>Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
-<de>Aktivierungscode ist fehlerhaft. Vielleicht wurde die URL nicht vollst&#xE4;ndig kopiert?</de>
+<de>Aktivierungscode ist fehlerhaft. Vielleicht wurde die URL nicht vollständig kopiert?</de>
 <id>184</id>
 <ro>Codul de activare este invalid. Poate ca URL-ul nu a fost copiat corect?</ro>
 </text>
 <text>
 <en>Data not submitted completely.</en>
-<de>Daten wurden nicht vollst&#xE4;ndig vorgelegt.</de>
+<de>Daten wurden nicht vollständig vorgelegt.</de>
 <id>185</id>
 <ro>Datele nu au fost salvate complet</ro>
 </text>
 <text>
 <en>Change password</en>
-<de>Passwort &#xE4;ndern</de>
+<de>Passwort ändern</de>
 <id>190</id>
 <ro>Schimbati parola</ro>
-<mk>&#x41F;&#x440;&#x43E;&#x43C;&#x435;&#x43D;&#x438;&#x458;&#x430; &#x43B;&#x43E;&#x437;&#x438;&#x43D;&#x43A;&#x430;&#x442;&#x430;</mk>
+<mk>Променија лозинката</mk>
 </text>
 <text>
 <en>Repeat password</en>
 <de>Passwort wiederholen</de>
 <id>191</id>
 <ro>Repetati parola</ro>
-<mk>&#x41F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x438;&#x458;&#x430; &#x43B;&#x43E;&#x437;&#x438;&#x43D;&#x43A;&#x430;&#x442;&#x430;</mk>
+<mk>Повторија лозинката</mk>
 </text>
 <text>
 <en>First name</en>
 <de>Vorname</de>
 <id>193</id>
 <ro>Prenume</ro>
-<mk>&#x418;&#x43C;&#x435;</mk>
+<mk>Име</mk>
 </text>
 <text>
 <en>Last name</en>
 <de>Familienname</de>
 <id>194</id>
 <ro>Nume</ro>
-<mk>&#x41F;&#x440;&#x435;&#x437;&#x438;&#x43C;&#x435;</mk>
+<mk>Презиме</mk>
 </text>
 <text>
 <en>Advice</en>
 <de>Information</de>
 <id>195</id>
 <ro>Indrumare</ro>
-<mk>&#x421;&#x43E;&#x432;&#x435;&#x442;</mk>
+<mk>Совет</mk>
 </text>
 <text>
 <en>After following actions emails are sent automatically to the respective user:</en>
-<de>Nach &#xC4;nderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
+<de>Nach Änderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
 <id>196</id>
 <ro>Dupa urmatoarele actiuni e-mail-urile sunt trimise automat catre respectivul user</ro>
 </text>
 <text>
 <en>Create, Delete and E-Mail change</en>
-<de>Hinzuf&#xFC;gen, L&#xF6;schen und E-Mail-&#xC4;nderungen</de>
+<de>Hinzufügen, Löschen und E-Mail-Änderungen</de>
 <id>197</id>
 <ro>Creaza, Sterge si schimba E-mail-ul</ro>
 </text>
@@ -683,31 +684,31 @@ has just been created.</en>
 <de>Rechte</de>
 <id>200</id>
 <ro>Drepturi</ro>
-<mk>&#x41F;&#x440;&#x430;&#x432;&#x430;</mk>
+<mk>Права</mk>
 </text>
 <text>
 <en>Edit</en>
 <de>Bearbeiten</de>
 <id>201</id>
 <ro>Editeaza</ro>
-<mk>&#x423;&#x440;&#x435;&#x434;&#x438;</mk>
+<mk>Уреди</mk>
 </text>
 <text>
 <en>edit</en>
 <de>bearbeiten</de>
 <id>202</id>
 <ro>editeaza</ro>
-<mk>&#x443;&#x440;&#x435;&#x434;&#x438;</mk>
+<mk>уреди</mk>
 </text>
 <text>
 <en>The file is larger than the maximum upload amount.</en>
-<de>Die Datei &#xFC;bersteigt die maximale Dategr&#xF6;&#xDF;e f&#xFC;r Dateiuploads.</de>
+<de>Die Datei übersteigt die maximale Dategröße für Dateiuploads.</de>
 <id>207</id>
 <ro>Dimensiunea documentului depaseste dimensiunea maxima acceptata</ro>
 </text>
 <text>
 <en>The file was not uploaded completely.</en>
-<de>Die Datei wurde nicht vollst&#xE4;ndig hochgeladen.</de>
+<de>Die Datei wurde nicht vollständig hochgeladen.</de>
 <id>208</id>
 <ro>Documentul nu a fost incarcat complet</ro>
 </text>
@@ -719,13 +720,13 @@ has just been created.</en>
 </text>
 <text>
 <en>Passwords are different - please try again</en>
-<de>Passw&#xF6;rter sind unterschiedlich - bitte versuchen Sie es erneut</de>
+<de>Passwörter sind unterschiedlich - bitte versuchen Sie es erneut</de>
 <id>215</id>
 <ro>Parolele sunt diferite - va rugam sa incercati din nou</ro>
 </text>
 <text>
 <en>Please enter the text you wish to assign.</en>
-<de>Bitte geben Sie den Text ein, welchen Sie zuweisen m&#xF6;chten.</de>
+<de>Bitte geben Sie den Text ein, welchen Sie zuweisen möchten.</de>
 <id>228</id>
 <ro>Va rugam introduceti textul pe care doriti sa il incarcati</ro>
 </text>
@@ -737,19 +738,19 @@ has just been created.</en>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
-<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle rot unterstrichenen Felder korrekt aus.</de>
+<de>Speichern ist nicht möglich, bitte füllen Sie alle rot unterstrichenen Felder korrekt aus.</de>
 <id>230</id>
 <ro>Nu se poate salva, va rugam sa completati corect toate campurile subliniate cu rosu</ro>
 </text>
 <text>
 <en>Do you really want to delete this entry?</en>
-<de>Wollen Sie diesen Eintrag wirklich l&#xF6;schen?</de>
+<de>Wollen Sie diesen Eintrag wirklich löschen?</de>
 <id>232</id>
 <ro>Doriti sa stergeti aceasta intrare?</ro>
 </text>
 <text>
 <en>Do you want to save the changes?</en>
-<de>Wollen Sie die &#xC4;nderungen speichern?</de>
+<de>Wollen Sie die Änderungen speichern?</de>
 <id>233</id>
 <ro>Doriti sa salvati modificarile?</ro>
 </text>
@@ -758,7 +759,7 @@ has just been created.</en>
 <de>Kopiere...</de>
 <id>234</id>
 <ro>Copiere</ro>
-<mk>&#x421;&#x435; &#x43A;&#x43E;&#x43F;&#x438;&#x440;&#x430;...</mk>
+<mk>Се копира...</mk>
 </text>
 <text>
 <en>create</en>
@@ -777,14 +778,14 @@ has just been created.</en>
 <de>Komponente</de>
 <id>237</id>
 <ro>Component</ro>
-<mk>&#x41A;&#x43E;&#x43C;&#x43F;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x430;</mk>
+<mk>Компонента</mk>
 </text>
 <text>
 <en>Add Component</en>
-<de>Komponente hinzuf&#xFC;gen</de>
+<de>Komponente hinzufügen</de>
 <id>238</id>
 <ro>Adaugati component</ro>
-<mk>&#x414;&#x43E;&#x434;&#x430;&#x434;&#x438; &#x43A;&#x43E;&#x43C;&#x43F;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x430;</mk>
+<mk>Додади компонента</mk>
 </text>
 <text>
 <en>Creating...</en>
@@ -797,27 +798,27 @@ has just been created.</en>
 <de>Seite</de>
 <id>240</id>
 <ro>Pagina</ro>
-<mk>&#x421;&#x442;&#x440;&#x430;&#x43D;&#x430;</mk>
+<mk>Страна</mk>
 </text>
 <text>
 <en>Page properties</en>
 <de>Seiteneigenschaften</de>
 <id>242</id>
 <ro>Proprietatile paginii</ro>
-<mk>&#x421;&#x432;&#x43E;&#x458;&#x441;&#x442;&#x432;&#x430; &#x43D;&#x430; &#x441;&#x442;&#x440;&#x430;&#x43D;&#x430;&#x442;&#x430;</mk>
+<mk>Својства на страната</mk>
 </text>
 <text>
 <en>Add new child page</en>
-<de>Neue Unterseite hinzuf&#xFC;gen</de>
+<de>Neue Unterseite hinzufügen</de>
 <id>243</id>
 <ro>Adauga subpagina</ro>
 </text>
 <text>
 <en>Delete Page</en>
-<de>Seite l&#xF6;schen</de>
+<de>Seite löschen</de>
 <id>244</id>
 <ro>Sterge pagina</ro>
-<mk>&#x418;&#x437;&#x431;&#x440;&#x438;&#x448;&#x438;&#x458;&#x430; &#x441;&#x442;&#x440;&#x430;&#x43D;&#x430;&#x442;&#x430;</mk>
+<mk>Избришија страната</mk>
 </text>
 <text>
 <en>Show / Hide Page</en>
@@ -830,7 +831,7 @@ has just been created.</en>
 <de>Als Startseite verwenden</de>
 <id>246</id>
 <ro>Foloseste ca Homepage</ro>
-<mk>&#x41A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x438; &#x43A;&#x430;&#x43A;&#x43E; &#x43F;&#x43E;&#x447;&#x435;&#x442;&#x43D;&#x430; &#x441;&#x442;&#x440;&#x430;&#x43D;&#x430;</mk>
+<mk>Користи како почетна страна</mk>
 </text>
 <text>
 <en>Expand here</en>
@@ -844,14 +845,14 @@ has just been created.</en>
 </text>
 <text>
 <en>Open preview</en>
-<de>Vorschau &#xF6;ffnen</de>
+<de>Vorschau öffnen</de>
 <id>250</id>
 </text>
 <text>
 <en>A Server failure occured.</en>
 <de>Ein Server Fehler ist aufgetreten.</de>
 <id>253</id>
-<mk>&#x421;&#x435; &#x441;&#x43B;&#x443;&#x447;&#x438; &#x433;&#x440;&#x435;&#x448;&#x43A;&#x430; &#x43D;&#x430; &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x43E;&#x442;.</mk>
+<mk>Се случи грешка на серверот.</mk>
 </text>
 <text>
 <en>Error - wrong version</en>
@@ -870,26 +871,26 @@ has just been created.</en>
 </text>
 <text>
 <en>Select your Position</en>
-<de>W&#xE4;hlen Sie Ihre Position.</de>
+<de>Wählen Sie Ihre Position.</de>
 <id>258</id>
 </text>
 <text>
 <en>enter address</en>
 <de>Adresse eingeben.</de>
 <id>259</id>
-<mk>&#x432;&#x43D;&#x435;&#x441;&#x438; &#x430;&#x434;&#x440;&#x435;&#x441;&#x430;</mk>
+<mk>внеси адреса</mk>
 </text>
 <text>
 <en>Example</en>
 <de>Beispiel</de>
 <id>260</id>
-<mk>&#x41F;&#x440;&#x438;&#x43C;&#x435;&#x440;</mk>
+<mk>Пример</mk>
 </text>
 <text>
 <en>Unknown address</en>
 <de>Unbekannte Adresse.</de>
 <id>261</id>
-<mk>&#x41D;&#x435;&#x43F;&#x43E;&#x437;&#x43D;&#x430;&#x442;&#x430; &#x430;&#x434;&#x440;&#x435;&#x441;&#x430;</mk>
+<mk>Непозната адреса</mk>
 </text>
 <text>
 <en>Address could not be found</en>
@@ -908,27 +909,27 @@ has just been created.</en>
 </text>
 <text>
 <en>Longitude</en>
-<de>L&#xE4;ngengrad</de>
+<de>Längengrad</de>
 <id>265</id>
 </text>
 <text>
 <en>Insert new image or edit selected image.</en>
-<de>F&#xFC;gt neues Bild ein oder bearbeitet das ausgew&#xE4;hlte Bild.</de>
+<de>Fügt neues Bild ein oder bearbeitet das ausgewählte Bild.</de>
 <id>267</id>
 </text>
 <text>
 <en>Create new Download for the selected text or edit selected Download.</en>
-<de>Erstellt neuen Download f&#xFC;r den ausgew&#xE4;hlten Text oder bearbeitet den ausgew&#xE4;hlten Download.</de>
+<de>Erstellt neuen Download für den ausgewählten Text oder bearbeitet den ausgewählten Download.</de>
 <id>268</id>
 </text>
 <text>
 <en>Create new Link for the selected text or edit selected Link.</en>
-<de>Erzeugt neuen Link f&#xFC;r den ausgew&#xE4;hlten Text oder bearbeitet den ausgew&#xE4;hlten Link.</de>
+<de>Erzeugt neuen Link für den ausgewählten Text oder bearbeitet den ausgewählten Link.</de>
 <id>269</id>
 </text>
 <text>
 <en>Undo the last action.</en>
-<de>Letzten Arbeitsschritt r&#xFC;ckg&#xE4;ngig machen.</de>
+<de>Letzten Arbeitsschritt rückgängig machen.</de>
 <id>270</id>
 </text>
 <text>
@@ -938,22 +939,22 @@ has just been created.</en>
 </text>
 <text>
 <en>Insert a custom character.</en>
-<de>Sonderzeichen einf&#xFC;gen.</de>
+<de>Sonderzeichen einfügen.</de>
 <id>272</id>
 </text>
 <text>
 <en>Insert text without formating.</en>
-<de>Text ohne Formatierung einf&#xFC;gen.</de>
+<de>Text ohne Formatierung einfügen.</de>
 <id>273</id>
 </text>
 <text>
 <en>Insert Custom Character</en>
-<de>Benutzerdefiniertes Zeichen einf&#xFC;gen</de>
+<de>Benutzerdefiniertes Zeichen einfügen</de>
 <id>275</id>
 </text>
 <text>
 <en>Insert Plain Text</en>
-<de>"Sauberen" Text einf&#xFC;gen</de>
+<de>"Sauberen" Text einfügen</de>
 <id>276</id>
 </text>
 <text>
@@ -978,19 +979,19 @@ has just been created.</en>
 </text>
 <text>
 <en>you are logged in automatically and may use the typed in password</en>
-<de>werden Sie automatisch angemeldet und k&#xF6;nnen das eingegebenen Passwort</de>
+<de>werden Sie automatisch angemeldet und können das eingegebenen Passwort</de>
 <id>281</id>
 </text>
 <text>
 <en>for future logins.</en>
-<de>f&#xFC;r k&#xFC;nftige Anmeldungen verwenden.</de>
+<de>für künftige Anmeldungen verwenden.</de>
 <id>282</id>
 </text>
 <text>
 <en>Your email address:</en>
 <de>Ihre E-Mail Adresse:</de>
 <id>283</id>
-<mk>&#x412;&#x430;&#x448;&#x430;&#x442;&#x430; email &#x430;&#x434;&#x440;&#x435;&#x441;&#x430;:</mk>
+<mk>Вашата email адреса:</mk>
 </text>
 <text>
 <en>Activate and login account</en>
@@ -1006,9 +1007,9 @@ has just been created.</en>
 <en>An error has occurred</en>
 <de>Ein Fehler ist aufgetreten</de>
 <es>Ha ocurrido un error</es>
-<ru>&#x41F;&#x440;&#x43E;&#x438;&#x437;&#x43E;&#x448;&#x43B;&#x430; &#x43E;&#x448;&#x438;&#x431;&#x43A;&#x430;</ru>
+<ru>Произошла ошибка</ru>
 <id>286</id>
-<mk>&#x421;&#x435; &#x441;&#x43B;&#x443;&#x447;&#x438; &#x433;&#x440;&#x435;&#x448;&#x43A;&#x430;</mk>
+<mk>Се случи грешка</mk>
 </text>
 <text>
 <en>Link cannot link to itself</en>
@@ -1017,7 +1018,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Add Paragraph</en>
-<de>Absatz hinzuf&#xFC;gen</de>
+<de>Absatz hinzufügen</de>
 <id>288</id>
 </text>
 <text>
@@ -1032,17 +1033,17 @@ has just been created.</en>
 </text>
 <text>
 <en>Save and Back</en>
-<de>Speichern und zur&#xFC;ck</de>
+<de>Speichern und zurück</de>
 <id>291</id>
 </text>
 <text>
 <en>Delete</en>
-<de>L&#xF6;schen</de>
+<de>Löschen</de>
 <id>292</id>
 </text>
 <text>
 <en>delete</en>
-<de>l&#xF6;schen</de>
+<de>löschen</de>
 <id>293</id>
 </text>
 <text>
@@ -1052,7 +1053,7 @@ has just been created.</en>
 </text>
 <text>
 <en>delete?</en>
-<de>L&#xF6;schen?</de>
+<de>Löschen?</de>
 <id>296</id>
 </text>
 <text>
@@ -1077,12 +1078,12 @@ has just been created.</en>
 </text>
 <text>
 <en>Do you really wish to remove this entry / these entries?</en>
-<de>Wollen Sie diesen Eintrag (diese Eintr&#xE4;ge) wirklich l&#xF6;schen?</de>
+<de>Wollen Sie diesen Eintrag (diese Einträge) wirklich löschen?</de>
 <id>301</id>
 </text>
 <text>
 <en>Add</en>
-<de>Hinzuf&#xFC;gen</de>
+<de>Hinzufügen</de>
 <id>302</id>
 </text>
 <text>
@@ -1097,7 +1098,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Possible Destinations</en>
-<de>M&#xF6;glicher Bestimmungsort</de>
+<de>Möglicher Bestimmungsort</de>
 <id>305</id>
 </text>
 <text>
@@ -1107,7 +1108,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Undo (Ctrl+Z)</en>
-<de>R&#xFC;ckg&#xE4;ngig (Ctrl+Z)</de>
+<de>Rückgängig (Ctrl+Z)</de>
 <id>307</id>
 </text>
 <text>
@@ -1132,17 +1133,17 @@ has just been created.</en>
 </text>
 <text>
 <en>Close this tab</en>
-<de>Schlie&#xDF;t diesen tab</de>
+<de>Schließt diesen tab</de>
 <id>313</id>
 </text>
 <text>
 <en>The value in this field is invalid</en>
-<de>Wert in diesem Feld ist ung&#xFC;ltig</de>
+<de>Wert in diesem Feld ist ungültig</de>
 <id>314</id>
 </text>
 <text>
 <en>January</en>
-<de>J&#xE4;nner</de>
+<de>Jänner</de>
 <id>315</id>
 </text>
 <text>
@@ -1152,7 +1153,7 @@ has just been created.</en>
 </text>
 <text>
 <en>March</en>
-<de>M&#xE4;rz</de>
+<de>März</de>
 <id>317</id>
 </text>
 <text>
@@ -1262,17 +1263,17 @@ has just been created.</en>
 </text>
 <text>
 <en>Next Month (Control+Right)</en>
-<de>n&#xE4;chstes Monat (Control + &#x279D;)</de>
+<de>nächstes Monat (Control + ➝)</de>
 <id>339</id>
 </text>
 <text>
 <en>Previous Month (Control+Left)</en>
-<de>letztes Monat (Control + &#x2190;)</de>
+<de>letztes Monat (Control + ←)</de>
 <id>340</id>
 </text>
 <text>
 <en>Choose a month (Control+Up/Down to move years)</en>
-<de>W&#xE4;hlen Sie ein Monat (Control + &#x2191;/&#x2193; um Jahre zu bewegen)</de>
+<de>Wählen Sie ein Monat (Control + ↑/↓ um Jahre zu bewegen)</de>
 <id>341</id>
 </text>
 <text>
@@ -1302,7 +1303,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Next Page</en>
-<de>N&#xE4;chste Seite</de>
+<de>Nächste Seite</de>
 <id>347</id>
 </text>
 <text>
@@ -1327,12 +1328,12 @@ has just been created.</en>
 </text>
 <text>
 <en>The minimum length for this field is {0}</en>
-<de>Die Mindestl&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
+<de>Die Mindestlänge für dieses Feld ist {0}</de>
 <id>352</id>
 </text>
 <text>
 <en>The maximum length for this field is {0}</en>
-<de>Die Maximall&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
+<de>Die Maximallänge für dieses Feld ist {0}</de>
 <id>353</id>
 </text>
 <text>
@@ -1342,17 +1343,17 @@ has just been created.</en>
 </text>
 <text>
 <en>The minimum value for this field is {0}</en>
-<de>Der Mindestwert f&#xFC;r dieses Feld ist {0}</de>
+<de>Der Mindestwert für dieses Feld ist {0}</de>
 <id>355</id>
 </text>
 <text>
 <en>The maximum value for this field is {0}</en>
-<de>Der Maximalwert f&#xFC;r dieses Feld ist {0}</de>
+<de>Der Maximalwert für dieses Feld ist {0}</de>
 <id>356</id>
 </text>
 <text>
 <en>{0} is not a valid number</en>
-<de>{0} ist keine g&#xFC;ltige Nummer.</de>
+<de>{0} ist keine gültige Nummer.</de>
 <id>357</id>
 </text>
 <text>
@@ -1372,7 +1373,7 @@ has just been created.</en>
 </text>
 <text>
 <en>{0} is not a valid date - it must be in the format {1}</en>
-<de>{0} ist kein g&#xFC;ltiges Datum - es muss im Format {1} sein</de>
+<de>{0} ist kein gültiges Datum - es muss im Format {1} sein</de>
 <id>361</id>
 </text>
 <text>
@@ -1392,7 +1393,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Please enter the URL for the link:</en>
-<de>Bitte geben Sie die Webadresse f&#xFC;r den Link ein:</de>
+<de>Bitte geben Sie die Webadresse für den Link ein:</de>
 <id>366</id>
 </text>
 <text>
@@ -1427,12 +1428,12 @@ has just been created.</en>
 </text>
 <text>
 <en>Grow Text</en>
-<de>Text vergr&#xF6;&#xDF;ern.</de>
+<de>Text vergrößern.</de>
 <id>373</id>
 </text>
 <text>
 <en>Increase the font size.</en>
-<de>Die Schriftgr&#xF6;&#xDF;e wird vergr&#xF6;&#xDF;ert.</de>
+<de>Die Schriftgröße wird vergrößert.</de>
 <id>374</id>
 </text>
 <text>
@@ -1442,7 +1443,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Decrease the font size.</en>
-<de>Die Schriftgr&#xF6;&#xDF;e wird verkleinern.</de>
+<de>Die Schriftgröße wird verkleinern.</de>
 <id>376</id>
 </text>
 <text>
@@ -1472,7 +1473,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Align text to the left.</en>
-<de>Richtet den Text linksb&#xFC;ndig aus.</de>
+<de>Richtet den Text linksbündig aus.</de>
 <id>382</id>
 </text>
 <text>
@@ -1492,12 +1493,12 @@ has just been created.</en>
 </text>
 <text>
 <en>Align text to the right.</en>
-<de>Richtet den Text rechtsb&#xFC;ndig aus.</de>
+<de>Richtet den Text rechtsbündig aus.</de>
 <id>386</id>
 </text>
 <text>
 <en>Bullet List</en>
-<de>Aufz&#xE4;hlungsliste</de>
+<de>Aufzählungsliste</de>
 <id>387</id>
 </text>
 <text>
@@ -1512,7 +1513,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Start a numbered list.</en>
-<de>Eine Aufz&#xE4;hlungsliste beginnen.</de>
+<de>Eine Aufzählungsliste beginnen.</de>
 <id>390</id>
 </text>
 <text>
@@ -1577,12 +1578,12 @@ has just been created.</en>
 </text>
 <text>
 <en>Drag to resize.</en>
-<de>Ziehen um die Gr&#xF6;&#xDF;e zu ver&#xE4;ndern.</de>
+<de>Ziehen um die Größe zu verändern.</de>
 <id>403</id>
 </text>
 <text>
 <en>Drag to resize. Double click to hide.</en>
-<de>Ziehen um die Gr&#xF6;&#xDF;e zu ver&#xE4;ndern. Doppelt klicken um unsichtabr zu machen.</de>
+<de>Ziehen um die Größe zu verändern. Doppelt klicken um unsichtabr zu machen.</de>
 <id>404</id>
 </text>
 <text>
@@ -1602,7 +1603,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Paragraphs</en>
-<de>Abs&#xE4;tze</de>
+<de>Absätze</de>
 <id>411</id>
 </text>
 <text>
@@ -1627,7 +1628,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Headline</en>
-<de>&#xDC;berschrift</de>
+<de>Überschrift</de>
 <id>416</id>
 </text>
 <text>
@@ -1652,7 +1653,7 @@ has just been created.</en>
 </text>
 <text>
 <en>to get back to the formular</en>
-<de>um zum Formular zur&#xFC;ck zu gelangen</de>
+<de>um zum Formular zurück zu gelangen</de>
 <id>427</id>
 </text>
 <text>
@@ -1692,12 +1693,12 @@ has just been created.</en>
 </text>
 <text>
 <en>add new entry</en>
-<de>neuen Eintrag hinzuf&#xFC;gen</de>
+<de>neuen Eintrag hinzufügen</de>
 <id>450</id>
 </text>
 <text>
 <en>An error has occurred. Please try again later.</en>
-<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es sp&#xE4;ter wieder.</de>
+<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es später wieder.</de>
 <id>454</id>
 </text>
 <text>
@@ -1712,7 +1713,7 @@ has just been created.</en>
 </text>
 <text>
 <en>You will receive an email with a passwort reset link and further instructions.</en>
-<de>Sie erhalten eine E-Mail mit einem Link, mit dem Sie Ihr Passwort zur&#xFC;cksetzen k&#xF6;nnen.</de>
+<de>Sie erhalten eine E-Mail mit einem Link, mit dem Sie Ihr Passwort zurücksetzen können.</de>
 <id>464</id>
 </text>
 <text>
@@ -1732,7 +1733,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
-<de>Bitte bleibt in den Beitr&#xE4;gen bei einem freundlichen Umgangston. Jeder Verfasser haftet f&#xFC;r s&#xE4;mtliche von ihm ver&#xF6;ffentlichte Beitr&#xE4;ge selbst. Beleidigende oder verletzende Beitr&#xE4;ge werden von uns ohne Kommentar gel&#xF6;scht.</de>
+<de>Bitte bleibt in den Beiträgen bei einem freundlichen Umgangston. Jeder Verfasser haftet für sämtliche von ihm veröffentlichte Beiträge selbst. Beleidigende oder verletzende Beiträge werden von uns ohne Kommentar gelöscht.</de>
 <id>468</id>
 </text>
 <text>
@@ -1752,7 +1753,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Add {0}</en>
-<de>{0} hinzuf&#xFC;gen</de>
+<de>{0} hinzufügen</de>
 <id>477</id>
 </text>
 <text>
@@ -1767,7 +1768,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Deleting...</en>
-<de>L&#xF6;schen...</de>
+<de>Löschen...</de>
 <id>480</id>
 </text>
 <text>
@@ -1787,7 +1788,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Delete File</en>
-<de>Datei l&#xF6;schen</de>
+<de>Datei löschen</de>
 <id>486</id>
 </text>
 <text>
@@ -1927,12 +1928,12 @@ has just been created.</en>
 </text>
 <text>
 <en>Additional Styles</en>
-<de>Zus&#xE4;tzliche CSS Einstellungen</de>
+<de>Zusätzliche CSS Einstellungen</de>
 <id>524</id>
 </text>
 <text>
 <en>You can't delete master styles</en>
-<de>Master Formatvorlagen k&#xF6;nnen nicht gel&#xF6;scht werden</de>
+<de>Master Formatvorlagen können nicht gelöscht werden</de>
 <id>525</id>
 </text>
 <text>
@@ -2042,7 +2043,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Checkbox</en>
-<de>Kontrollk&#xE4;stchen</de>
+<de>Kontrollkästchen</de>
 <id>559</id>
 </text>
 <text>
@@ -2062,7 +2063,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Additional rights</en>
-<de>Zus&#xE4;tzliche Rechte</de>
+<de>Zusätzliche Rechte</de>
 <id>566</id>
 </text>
 <text>
@@ -2092,7 +2093,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Can't delete page as there are child pages.</en>
-<de>Die Seite kann nicht gel&#xF6;scht werden, da es Unterseiten dazu gibt.</de>
+<de>Die Seite kann nicht gelöscht werden, da es Unterseiten dazu gibt.</de>
 <id>576</id>
 </text>
 <text>
@@ -2102,7 +2103,7 @@ has just been created.</en>
 </text>
 <text>
 <en>A new entry has been written in your guestbook.</en>
-<de>Ein neuer Eintrag wurde in Ihr G&#xE4;stebuch geschrieben.</de>
+<de>Ein neuer Eintrag wurde in Ihr Gästebuch geschrieben.</de>
 <id>581</id>
 </text>
 <text>
@@ -2112,7 +2113,7 @@ has just been created.</en>
 </text>
 <text>
 <en>This is the text that was saved in your guestbook:</en>
-<de>Das ist der Text der in Ihrem G&#xE4;stebuch gespeichert wurde:</de>
+<de>Das ist der Text der in Ihrem Gästebuch gespeichert wurde:</de>
 <id>583</id>
 </text>
 <text>
@@ -2132,12 +2133,12 @@ has just been created.</en>
 </text>
 <text>
 <en>If the activationlink does not work, copy the following address and paste it in your browser (it is possible that the address has a line-break, so please be sure to copy everything correctly):</en>
-<de>Wenn der Aktivierungslink nicht funktioniert, kopieren Sie bitte die folgende Adresse und f&#xFC;gen Sie in Ihrem Browser in der Adresszeile ein (es ist m&#xF6;glich, dass die Adresse umbricht, also stellen Sie bitte sicher, dass Sie alles korrekt kopiert haben):</de>
+<de>Wenn der Aktivierungslink nicht funktioniert, kopieren Sie bitte die folgende Adresse und fügen Sie in Ihrem Browser in der Adresszeile ein (es ist möglich, dass die Adresse umbricht, also stellen Sie bitte sicher, dass Sie alles korrekt kopiert haben):</de>
 <id>588</id>
 </text>
 <text>
 <en>Your email address at {0} has been changed.</en>
-<de>Ihre Email Adresse auf {0} wurde ge&#xE4;ndert.</de>
+<de>Ihre Email Adresse auf {0} wurde geändert.</de>
 <id>589</id>
 </text>
 <text>
@@ -2172,7 +2173,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Click here to choose a new password</en>
-<de>Klicken Sie hier, um ein neues Passwort zu w&#xE4;hlen</de>
+<de>Klicken Sie hier, um ein neues Passwort zu wählen</de>
 <id>601</id>
 </text>
 <text>
@@ -2187,7 +2188,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Passwords not equal</en>
-<de>Passw&#xF6;rter unterschiedlich</de>
+<de>Passwörter unterschiedlich</de>
 <id>605</id>
 </text>
 <text>
@@ -2202,7 +2203,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Open in</en>
-<de>&#xD6;ffnen im</de>
+<de>Öffnen im</de>
 <id>612</id>
 </text>
 <text>
@@ -2227,7 +2228,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Invalid Password</en>
-<de>Ung&#xFC;ltiges Passwort</de>
+<de>Ungültiges Passwort</de>
 <id>617</id>
 </text>
 <text>
@@ -2247,7 +2248,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?</en>
-<de>Aktivierungscode ist ung&#xFC;ltig. Vielleicht wurde Ihr Account bereits aktiviert, oder die URL wurde nicht vollst&#xE4;ndig kopiert, oder Ihr Passwort wurde bereits gesetzt?</de>
+<de>Aktivierungscode ist ungültig. Vielleicht wurde Ihr Account bereits aktiviert, oder die URL wurde nicht vollständig kopiert, oder Ihr Passwort wurde bereits gesetzt?</de>
 <id>622</id>
 </text>
 <text>
@@ -2282,7 +2283,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Posts</en>
-<de>Beitr&#xE4;ge</de>
+<de>Beiträge</de>
 <id>635</id>
 </text>
 <text>
@@ -2304,7 +2305,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Forum.Latest Threads</en>
-<de>Forum.Letzte Eintr&#xE4;ge</de>
+<de>Forum.Letzte Einträge</de>
 <id>639</id>
 </text>
 <text>
@@ -2319,12 +2320,12 @@ has just been created.</en>
 </text>
 <text>
 <en>Reopen Thread</en>
-<de>Thema &#xF6;ffnen</de>
+<de>Thema öffnen</de>
 <id>643</id>
 </text>
 <text>
 <en>Close Thread</en>
-<de>Thema schlie&#xDF;en</de>
+<de>Thema schließen</de>
 <id>644</id>
 </text>
 <text>
@@ -2360,8 +2361,8 @@ has just been created.</en>
 <text>
 <en>The form has been submitted successfully.</en>
 <de>Das Formular wurde erfolgreich abgeschickt.</de>
-<es>El formulario es enviado con &#xE9;xito.</es>
-<ru>&#x444;&#x43E;&#x440;&#x43C;&#x430; &#x443;&#x441;&#x43F;&#x435;&#x448;&#x43D;&#x43E; &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x43B;&#x435;&#x43D;&#x430;.</ru>
+<es>El formulario es enviado con éxito.</es>
+<ru>форма успешно отправлена.</ru>
 <id>651</id>
 </text>
 <text>
@@ -2376,7 +2377,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Open the post or read it directly:</en>
-<de>Kommentar &#xF6;ffnen oder direkt lesen:</de>
+<de>Kommentar öffnen oder direkt lesen:</de>
 <id>658</id>
 </text>
 <text>
@@ -2391,7 +2392,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Open this url to go to the post or read it here:</en>
-<de>&#xD6;ffnen sie diesem Link um zum Kommentar zu gelangen oder lesen sie ihn hier:</de>
+<de>Öffnen sie diesem Link um zum Kommentar zu gelangen oder lesen sie ihn hier:</de>
 <id>662</id>
 </text>
 <text>
@@ -2406,27 +2407,27 @@ has just been created.</en>
 </text>
 <text>
 <en>confirmed</en>
-<de>best&#xE4;tigt</de>
+<de>bestätigt</de>
 <id>665</id>
 </text>
 <text>
 <en>Comment was successfully deleted.</en>
-<de>Der Eintrag wurde erfolgreich gel&#xF6;scht.</de>
+<de>Der Eintrag wurde erfolgreich gelöscht.</de>
 <id>666</id>
 </text>
 <text>
 <en>Do you really want to delete this post?</en>
-<de>Wollen Sie den Eintrag wirklich l&#xF6;schen?</de>
+<de>Wollen Sie den Eintrag wirklich löschen?</de>
 <id>667</id>
 </text>
 <text>
 <en>&lt;strong&gt;Create Post: &lt;/strong&gt;&lt;br /&gt;Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
-<de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gew&#xFC;nschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+<de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
 <id>668</id>
 </text>
 <text>
 <en>Last Posts</en>
-<de>Letzte Aktivit&#xE4;ten</de>
+<de>Letzte Aktivitäten</de>
 <id>669</id>
 </text>
 <text>
@@ -2441,12 +2442,12 @@ has just been created.</en>
 </text>
 <text>
 <en>After the activation you are automatically logged in and you could use your account.</en>
-<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie k&#xF6;nnen Ihr Konto verwenden.</de>
+<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie können Ihr Konto verwenden.</de>
 <id>672</id>
 </text>
 <text>
 <en>Guestbook</en>
-<de>G&#xE4;stebuch</de>
+<de>Gästebuch</de>
 <id>673</id>
 </text>
 <text>
@@ -2476,7 +2477,7 @@ has just been created.</en>
 </text>
 <text>
 <en>Nickname</en>
-<de>Name f&#xFC;r Forum</de>
+<de>Name für Forum</de>
 <id>679</id>
 </text>
 <text>
@@ -2507,8 +2508,8 @@ has just been created.</en>
 <text>
 <en>Your Account has been created successfully. You will receive an confirmation e-mail soon.</en>
 <de>Ihr Account wurde erfolgreich erstellt.
-Sie erhalten in K&#xFC;rze eine Email mit einem Aktivierungslink.
-Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie k&#xFC;nftig f&#xFC;r Ihren Account verwenden m&#xF6;chten.
+Sie erhalten in Kürze eine Email mit einem Aktivierungslink.
+Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.
 </de>
 <id>685</id>
 </text>
@@ -2569,12 +2570,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You have to login to see the requested page.</en>
-<de>Sie m&#xFC;ssen sich einloggen, um die gew&#xFC;nschte Seite zu sehen.</de>
+<de>Sie müssen sich einloggen, um die gewünschte Seite zu sehen.</de>
 <id>698</id>
 </text>
 <text>
 <en>If you don't have an account, you can</en>
-<de>Sollten Sie noch kein Benutzerkonto besitzen, k&#xF6;nnen Sie</de>
+<de>Sollten Sie noch kein Benutzerkonto besitzen, können Sie</de>
 <id>699</id>
 </text>
 <text>
@@ -2594,12 +2595,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Delete Entry</en>
-<de>Eintrag l&#xF6;schen</de>
+<de>Eintrag löschen</de>
 <id>703</id>
 </text>
 <text>
 <en>Delete Image</en>
-<de>Bild l&#xF6;schen</de>
+<de>Bild löschen</de>
 <id>704</id>
 </text>
 <text>
@@ -2624,9 +2625,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please fill out the field</en>
-<de>Bitte f&#xFC;llen Sie das Feld aus</de>
+<de>Bitte füllen Sie das Feld aus</de>
 <es>Por favor, rellene el campo</es>
-<ru>&#x41F;&#x43E;&#x436;&#x430;&#x43B;&#x443;&#x439;&#x441;&#x442;&#x430;, &#x437;&#x430;&#x43F;&#x43E;&#x43B;&#x43D;&#x438;&#x442;&#x435; &#x43F;&#x43E;&#x43B;&#x44F;</ru>
+<ru>Пожалуйста, заполните поля</ru>
 <id>709</id>
 </text>
 <text>
@@ -2641,34 +2642,34 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' is not a valid email address</en>
-<de>'%value%' ist keine g&#xFC;ltige E-Mail-Adresse</de>
-<es>'%value%' no es una direcci&#xF3;n v&#xE1;lida de correo electr&#xF3;nico</es>
-<ru>'%value%' &#x43D;&#x435; &#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x44B;&#x439; &#x430;&#x434;&#x440;&#x435;&#x441; &#x44D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x43E;&#x439; &#x43F;&#x43E;&#x447;&#x442;&#x44B;</ru>
+<de>'%value%' ist keine gültige E-Mail-Adresse</de>
+<es>'%value%' no es una dirección válida de correo electrónico</es>
+<ru>'%value%' не действительный адрес электронной почты</ru>
 <id>712</id>
 </text>
 <text>
 <en>'%hostname%' is not a valid hostname for email address '%value%'</en>
-<de>'%hostname%' ist kein g&#xFC;ltiger Hostname</de>
+<de>'%hostname%' ist kein gültiger Hostname</de>
 <id>713</id>
 </text>
 <text>
 <en>'%hostname%' does not appear to have a valid MX record for the email address '%value%'</en>
-<de>'%hostname%' erscheint nicht in einem validen MX record f&#xFC;r die E-Mail-Adresse '%value%'</de>
+<de>'%hostname%' erscheint nicht in einem validen MX record für die E-Mail-Adresse '%value%'</de>
 <id>714</id>
 </text>
 <text>
 <en>'%localPart%' not matched against dot-atom format</en>
-<de>'%localPart%' stimmt nicht mit dem dot-atom Format &#xFC;berein</de>
+<de>'%localPart%' stimmt nicht mit dem dot-atom Format überein</de>
 <id>715</id>
 </text>
 <text>
 <en>'%localPart%' not matched against quoted-string format</en>
-<de>'%localPart%'stimmt nicht mit dem quoted-string Format &#xFC;berein</de>
+<de>'%localPart%'stimmt nicht mit dem quoted-string Format überein</de>
 <id>716</id>
 </text>
 <text>
 <en>'%localPart%' is not a valid local part for email address '%value%'</en>
-<de>%localPart%' ist kein valider lokaler Teil f&#xFC;r die E-Mail-Adresse '%value%'</de>
+<de>%localPart%' ist kein valider lokaler Teil für die E-Mail-Adresse '%value%'</de>
 <id>717</id>
 </text>
 <text>
@@ -2688,12 +2689,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Email changed</en>
-<de>E-Mail-Adresse ge&#xE4;ndert</de>
+<de>E-Mail-Adresse geändert</de>
 <id>722</id>
 </text>
 <text>
 <en>Account deleted</en>
-<de>Account gel&#xF6;scht</de>
+<de>Account gelöscht</de>
 <id>723</id>
 </text>
 <text>
@@ -2725,7 +2726,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>a post has been reported for the following reason:</en>
-<de>Ein Kommentar wurde aus folgenden Gr&#xFC;nden gemeldet:</de>
+<de>Ein Kommentar wurde aus folgenden Gründen gemeldet:</de>
 <id>732</id>
 </text>
 <text>
@@ -2740,7 +2741,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Data was not sent completely. Please copy the complete address out of the email.</en>
-<de>Daten wurden nicht vollst&#xE4;ndig gesendet. Bitte kopieren Sie die vollst&#xE4;ndige Adresse aus der E-Mail.</de>
+<de>Daten wurden nicht vollständig gesendet. Bitte kopieren Sie die vollständige Adresse aus der E-Mail.</de>
 <id>735</id>
 </text>
 <text>
@@ -2770,17 +2771,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
-<de>Mit einem kostenlosen Benutzerkonto auf "{0}" k&#xF6;nnen Sie aktiv am Forum teilnehmen und eigene Beitr&#xE4;ge verfassen. Zus&#xE4;tzlich haben Sie die M&#xF6;glichkeit, einzelne Diskussionen gezielt zu beobachten und werden per E-Mail &#xFC;ber neue Beitr&#xE4;ge zum Thema informiert.</de>
+<de>Mit einem kostenlosen Benutzerkonto auf "{0}" können Sie aktiv am Forum teilnehmen und eigene Beiträge verfassen. Zusätzlich haben Sie die Möglichkeit, einzelne Diskussionen gezielt zu beobachten und werden per E-Mail über neue Beiträge zum Thema informiert.</de>
 <id>743</id>
 </text>
 <text>
 <en>'%value%' is less than %min% characters long</en>
-<de>'%value%' ist k&#xFC;rzer als %min% Zeichen</de>
+<de>'%value%' ist kürzer als %min% Zeichen</de>
 <id>745</id>
 </text>
 <text>
 <en>'%value%' is greater than %max% characters long</en>
-<de>'%value%' ist l&#xE4;nger als %max% Zeichen</de>
+<de>'%value%' ist länger als %max% Zeichen</de>
 <id>746</id>
 </text>
 <text>
@@ -2790,17 +2791,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot match TLD against known list</en>
-<de>'%value%' stimmt nicht mit der TLD Liste &#xFC;berein</de>
+<de>'%value%' stimmt nicht mit der TLD Liste überein</de>
 <id>748</id>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position</en>
-<de>'%value%' hat einen Bindestrich (-) an einer ung&#xFC;ltigen Position</de>
+<de>'%value%' hat einen Bindestrich (-) an einer ungültigen Position</de>
 <id>749</id>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'</en>
-<de>'%value%' stimmt nicht mit dem Schema f&#xFC;r TLD '%tld%' &#xFC;berein</de>
+<de>'%value%' stimmt nicht mit dem Schema für TLD '%tld%' überein</de>
 <id>750</id>
 </text>
 <text>
@@ -2815,7 +2816,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' does not appear to be a valid local network name</en>
-<de>'%value%' scheint kein g&#xFC;ltiger Netzwerkname zu sein</de>
+<de>'%value%' scheint kein gültiger Netzwerkname zu sein</de>
 <id>753</id>
 </text>
 <text>
@@ -2841,7 +2842,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Close</en>
-<de>Schlie&#xDF;en</de>
+<de>Schließen</de>
 <id>760</id>
 </text>
 <text>
@@ -2851,7 +2852,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>No entries were found.</en>
-<de>Es konnten keine Eintr&#xE4;ge gefunden werden.</de>
+<de>Es konnten keine Einträge gefunden werden.</de>
 <id>762</id>
 </text>
 <text>
@@ -2861,12 +2862,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>New entry in your guestbook</en>
-<de>Neuer Eintrag in Ihrem G&#xE4;stebuch</de>
+<de>Neuer Eintrag in Ihrem Gästebuch</de>
 <id>764</id>
 </text>
 <text>
 <en>Posts.Last Posts</en>
-<de>Eintr&#xE4;e-Letzte Eintr&#xE4;e</de>
+<de>Einträe-Letzte Einträe</de>
 <id>765</id>
 </text>
 <text>
@@ -2886,12 +2887,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You are not allowed to enter this page.</en>
-<de>Sie haben keine Berechtigungen f&#xFC;r diese Seite.</de>
+<de>Sie haben keine Berechtigungen für diese Seite.</de>
 <id>770</id>
 </text>
 <text>
 <en>Menu</en>
-<de>Men&#xFC;</de>
+<de>Menü</de>
 <id>771</id>
 </text>
 <text>
@@ -2906,7 +2907,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Hide in Menu</en>
-<de>In Men&#xFC; verstecken</de>
+<de>In Menü verstecken</de>
 <id>774</id>
 </text>
 <text>
@@ -2921,7 +2922,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>No File uploaded, please select a file.</en>
-<de>Keine Datei wurde hochgeladen, bitte w&#xE4;hlen Sie eine aus.</de>
+<de>Keine Datei wurde hochgeladen, bitte wählen Sie eine aus.</de>
 <id>777</id>
 </text>
 <text>
@@ -2936,12 +2937,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>previous</en>
-<de>zur&#xFC;ck</de>
+<de>zurück</de>
 <id>781</id>
 </text>
 <text>
 <en>Amount</en>
-<de>St&#xFC;ck</de>
+<de>Stück</de>
 <id>782</id>
 </text>
 <text>
@@ -3031,10 +3032,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Street</en>
-<de>Stra&#xDF;e</de>
+<de>Straße</de>
 <fr>Rue</fr>
 <es>Calle</es>
-<ru>&#x423;&#x43B;&#x438;&#x446;&#x430;</ru>
+<ru>Улица</ru>
 <id>803</id>
 </text>
 <text>
@@ -3051,16 +3052,16 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Country</en>
 <de>Land</de>
 <fr>Pays</fr>
-<es>Pa&#xED;s</es>
-<ru>&#x421;&#x442;&#x440;&#x430;&#x43D;&#x430;</ru>
+<es>País</es>
+<ru>Страна</ru>
 <id>806</id>
 </text>
 <text>
 <en>Phone</en>
 <de>Telefon</de>
-<fr>T&#xE9;l&#xE9;phone</fr>
-<es>Tel&#xE9;fono</es>
-<ru>&#x442;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;</ru>
+<fr>Téléphone</fr>
+<es>Teléfono</es>
+<ru>телефон</ru>
 <id>807</id>
 </text>
 <text>
@@ -3120,12 +3121,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Back to shop</en>
-<de>Zur&#xFC;ck zum Shop</de>
+<de>Zurück zum Shop</de>
 <id>824</id>
 </text>
 <text>
 <en>Back to cart</en>
-<de>Zur&#xFC;ck zum Warenkorb</de>
+<de>Zurück zum Warenkorb</de>
 <id>826</id>
 </text>
 <text>
@@ -3137,32 +3138,32 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Mr.</en>
 <de>Herr</de>
 <fr>Monsieur</fr>
-<es>Se&#xF1;or</es>
+<es>Señor</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
 <fr>Madame</fr>
-<es>Se&#xF1;ora</es>
+<es>Señora</es>
 <id>830</id>
 </text>
 <text>
 <context>sex</context>
 <en>Title</en>
 <de>Anrede</de>
-<fr>Civilit&#xE9;</fr>
+<fr>Civilité</fr>
 <es>Tratamiento</es>
 <id>832</id>
 </text>
 <text>
 <en>What type of payment do you wish?</en>
-<de>Welche Zahlungsart w&#xFC;nschen Sie?</de>
+<de>Welche Zahlungsart wünschen Sie?</de>
 <id>834</id>
 </text>
 <text>
 <en>Cash on Delivery Charge</en>
-<de>Nachnahmegeb&#xFC;hr</de>
+<de>Nachnahmegebühr</de>
 <id>835</id>
 </text>
 <text>
@@ -3182,7 +3183,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please check your petitions</en>
-<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihre Daten</de>
+<de>Bitte überprüfen Sie Ihre Daten</de>
 <id>840</id>
 </text>
 <text>
@@ -3207,7 +3208,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really want to delete this entry:nn"</en>
-<de>Wollen Sie diesen Eintrag:nn wirklich l&#xF6;schen</de>
+<de>Wollen Sie diesen Eintrag:nn wirklich löschen</de>
 <id>855</id>
 </text>
 <text>
@@ -3217,12 +3218,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>a post in an observed thread has been submitted</en>
-<de>ein Eintrag in einem &#xFC;berwachten Thread wurde vorgebracht</de>
+<de>ein Eintrag in einem überwachten Thread wurde vorgebracht</de>
 <id>858</id>
 </text>
 <text>
 <en>If you have lost your password,</en>
-<de>Wenn Sie Ihr Passwort vergessen haben, k&#xF6;nnen Sie</de>
+<de>Wenn Sie Ihr Passwort vergessen haben, können Sie</de>
 <id>861</id>
 </text>
 <text>
@@ -3254,10 +3255,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Adresses</en>
 <de>Adressen</de>
 <id>870</id>
-<es>direcci&#xF3;n</es>
-<pt>endere&#xE7;o</pt>
-<ru>&#x430;&#x434;&#x440;&#x435;&#x441;</ru>
-<jp>&#x4F4F;&#x6240;</jp>
+<es>dirección</es>
+<pt>endereço</pt>
+<ru>адрес</ru>
+<jp>住所</jp>
 <fr>adresse</fr>
 <it>indirizzo</it>
 </text>
@@ -3268,7 +3269,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Image big</en>
-<de>Bild gro&#xDF;</de>
+<de>Bild groß</de>
 <id>872</id>
 </text>
 <text>
@@ -3298,12 +3299,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Color big 1</en>
-<de>Farbe gro&#xDF; 1</de>
+<de>Farbe groß 1</de>
 <id>878</id>
 </text>
 <text>
 <en>Color big 2</en>
-<de>Farbe gro&#xDF; 2</de>
+<de>Farbe groß 2</de>
 <id>879</id>
 </text>
 <text>
@@ -3313,7 +3314,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Welcome-Image</en>
-<de>Begr&#xFC;&#xDF;ungsbild</de>
+<de>Begrüßungsbild</de>
 <id>881</id>
 </text>
 <text>
@@ -3348,7 +3349,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Priority</en>
-<de>Priorit&#xE4;t</de>
+<de>Priorität</de>
 <id>889</id>
 </text>
 <text>
@@ -3391,7 +3392,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Fax</de>
 <fr>Fax</fr>
 <es>Fax</es>
-<ru>&#x424;&#x430;&#x43A;&#x441;</ru>
+<ru>Факс</ru>
 <id>897</id>
 </text>
 <text>
@@ -3441,17 +3442,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Size of Target Image</en>
-<de>Gr&#xF6;&#xDF;e des Bildes</de>
+<de>Größe des Bildes</de>
 <id>915</id>
 </text>
 <text>
 <en>If size does not fit, scale method will be</en>
-<de>Falls die Gr&#xF6;&#xDF;e des Bildes nicht passt, wird folgende Skalierungsmethode angewendet</de>
+<de>Falls die Größe des Bildes nicht passt, wird folgende Skalierungsmethode angewendet</de>
 <id>916</id>
 </text>
 <text>
 <en>Assets Select</en>
-<de>Assets ausw&#xE4;hlen</de>
+<de>Assets auswählen</de>
 <id>917</id>
 </text>
 <text>
@@ -3511,32 +3512,32 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Headline 1 (h1)</en>
-<de>&#xDC;berschrift 1 (h1)</de>
+<de>Überschrift 1 (h1)</de>
 <id>936</id>
 </text>
 <text>
 <en>Headline 2 (h2)</en>
-<de>&#xDC;berschrift 2 (h2)</de>
+<de>Überschrift 2 (h2)</de>
 <id>937</id>
 </text>
 <text>
 <en>Headline 3 (h3)</en>
-<de>&#xDC;berschrift 3 (h3)</de>
+<de>Überschrift 3 (h3)</de>
 <id>938</id>
 </text>
 <text>
 <en>Headline 4 (h4)</en>
-<de>&#xDC;berschrift 4 (h4)</de>
+<de>Überschrift 4 (h4)</de>
 <id>939</id>
 </text>
 <text>
 <en>Headline 5 (h5)</en>
-<de>&#xDC;berschrift 5 (h5)</de>
+<de>Überschrift 5 (h5)</de>
 <id>940</id>
 </text>
 <text>
 <en>Headline 6 (h6)</en>
-<de>&#xDC;berschrift 6 (h6)</de>
+<de>Überschrift 6 (h6)</de>
 <id>941</id>
 </text>
 <text>
@@ -3551,7 +3552,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Bookmark at</en>
-<de>Bookmark f&#xFC;r</de>
+<de>Bookmark für</de>
 <id>944</id>
 </text>
 <text>
@@ -3561,7 +3562,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>order now at amazon</en>
-<de>Jetzt &#xFC;ber Amazon bestellen</de>
+<de>Jetzt über Amazon bestellen</de>
 <id>946</id>
 </text>
 <text>
@@ -3589,7 +3590,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>similar products</en>
-<de>&#xC4;hnliche Produkte</de>
+<de>Ähnliche Produkte</de>
 <id>954</id>
 </text>
 <text>
@@ -3619,12 +3620,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>File size exceeds allowed limit.</en>
-<de>Dateigr&#xF6;&#xDF;e &#xFC;berschreitet das erlaubte Limit.</de>
+<de>Dateigröße überschreitet das erlaubte Limit.</de>
 <id>960</id>
 </text>
 <text>
 <en>File is zero bytes and cannot be uploaded.</en>
-<de>Datei hat keine Gr&#xF6;&#xDF;e und kann nicht hochgeladen werden.</de>
+<de>Datei hat keine Größe und kann nicht hochgeladen werden.</de>
 <id>961</id>
 </text>
 <text>
@@ -3679,7 +3680,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Image Size</en>
-<de>Bildgr&#xF6;&#xDF;e</de>
+<de>Bildgröße</de>
 <id>973</id>
 </text>
 <text>
@@ -3704,7 +3705,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Text flows around Image</en>
-<de>Text umflie&#xDF;t Bild</de>
+<de>Text umfließt Bild</de>
 <id>979</id>
 </text>
 <text>
@@ -3713,7 +3714,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>980</id>
 </text>
 <text>
-<de>Benutzer l&#xF6;schen</de>
+<de>Benutzer löschen</de>
 <en>Delete user</en>
 <id>981</id>
 </text>
@@ -3728,7 +3729,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>983</id>
 </text>
 <text>
-<de>Sind Sie sicher dass Sie diesen Benutzer (ent-)sperren m&#xF6;chten?</de>
+<de>Sind Sie sicher dass Sie diesen Benutzer (ent-)sperren möchten?</de>
 <en>Do you really wish to (un)lock this user?</en>
 <id>984</id>
 </text>
@@ -3738,22 +3739,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>985</id>
 </text>
 <text>
-<de>Sind Sie sicher dass Sie diesen Benutzer l&#xF6;schen m&#xF6;chten?</de>
+<de>Sind Sie sicher dass Sie diesen Benutzer löschen möchten?</de>
 <en>Do you really wish to delete this user?</en>
 <id>986</id>
 </text>
 <text>
-<de>Bild vergr&#xF6;&#xDF;ern</de>
+<de>Bild vergrößern</de>
 <en>Enlarge Image</en>
 <id>987</id>
 </text>
 <text>
-<de>Nur f&#xFC;r dieses Web</de>
+<de>Nur für dieses Web</de>
 <en>Only for this web</en>
 <id>988</id>
 </text>
 <text>
-<de>Wenn diese Box aktiv ist kann der Benutzer nur f&#xFC;r dieses Web verwendet werden. Wenn Sie den selben Benutzer in einem anderen Web verwenden m&#xF6;chten, dann muss diese Box leer bleiben.</de>
+<de>Wenn diese Box aktiv ist kann der Benutzer nur für dieses Web verwendet werden. Wenn Sie den selben Benutzer in einem anderen Web verwenden möchten, dann muss diese Box leer bleiben.</de>
 <en>If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.</en>
 <id>989</id>
 </text>
@@ -3778,7 +3779,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>995</id>
 </text>
 <text>
-<de>&#xDC;bergebenes Passwort ist ung&#xFC;ltig</de>
+<de>Übergebenes Passwort ist ungültig</de>
 <en>Supplied password is invalid</en>
 <id>996</id>
 </text>
@@ -3814,7 +3815,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Firma</de>
 <fr>Entreprise</fr>
 <es>Empresa</es>
-<ru>&#x424;&#x438;&#x440;&#x43C;&#x430;</ru>
+<ru>Фирма</ru>
 <id>1004</id>
 </text>
 <text>
@@ -3876,7 +3877,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Agency</en>
-<de>Beh&#xF6;rde</de>
+<de>Behörde</de>
 <id>1021</id>
 </text>
 <text>
@@ -3924,14 +3925,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1032</id>
 <es>imprimir</es>
 <pt>imprimir</pt>
-<ru>&#x43F;&#x435;&#x447;&#x430;&#x442;&#x44C;</ru>
-<jp>&#x30A4;&#x30F3;&#x30D7;&#x30EA;&#x30F3;&#x30C8;</jp>
+<ru>печать</ru>
+<jp>インプリント</jp>
 <fr>imprimer</fr>
 <it>marchio</it>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
-<de>Betreiber / Verantwortlicher f&#xFC;r den Inhalt</de>
+<de>Betreiber / Verantwortlicher für den Inhalt</de>
 <id>1033</id>
 </text>
 <text>
@@ -3950,13 +3951,13 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1039</id>
 </text>
 <text>
-<en>Agency accordant &#xA7;5 ECG</en>
-<de>Beh&#xF6;rde gem&#xE4;&#xDF; &#xA7;55 ECG</de>
+<en>Agency accordant §5 ECG</en>
+<de>Behörde gemäß §55 ECG</de>
 <id>1041</id>
 </text>
 <text>
 <en>Entry at WK Austria</en>
-<de>Eintrag bei WK &#xD6;sterreich</de>
+<de>Eintrag bei WK Österreich</de>
 <id>1042</id>
 </text>
 <text>
@@ -4008,12 +4009,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Go back to main page</en>
-<de>Zur&#xFC;ck zur Startseite</de>
+<de>Zurück zur Startseite</de>
 <id>1056</id>
 </text>
 <text>
 <en>Customer added by {0}</en>
-<de>Kunde hinzugef&#xFC;gt von {0}</de>
+<de>Kunde hinzugefügt von {0}</de>
 <id>1057</id>
 </text>
 <text>
@@ -4029,12 +4030,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Note: Most addresses are case sensitive</en>
-<de>Beachten Sie die Gro&#xDF;- und Kleinschreibung</de>
+<de>Beachten Sie die Groß- und Kleinschreibung</de>
 <id>1061</id>
 </text>
 <text>
 <en>Check the page you are coming from</en>
-<de>&#xDC;berpr&#xFC;fen Sie die Seite, von der Sie gekommen sind</de>
+<de>Überprüfen Sie die Seite, von der Sie gekommen sind</de>
 <id>1062</id>
 </text>
 <text>
@@ -4086,7 +4087,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>No entries found for search term &amp;quot;{0}&amp;quot;.</en>
-<de>F&#xFC;r den Suchbegriff &amp;quot;{0}&amp;quot; wurden keine Eintr&#xE4;ge gefunden.</de>
+<de>Für den Suchbegriff &amp;quot;{0}&amp;quot; wurden keine Einträge gefunden.</de>
 <id>1074</id>
 </text>
 <text>
@@ -4146,7 +4147,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really wish to remove this paragraph?</en>
-<de>Wollen Sie diesen Absatz wirklich l&#xF6;schen?</de>
+<de>Wollen Sie diesen Absatz wirklich löschen?</de>
 <id>1102</id>
 </text>
 <text>
@@ -4344,7 +4345,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Error while sending E-Mail.</en>
-<de>Fehler w&#xE4;hrend E-Mail Versand.</de>
+<de>Fehler während E-Mail Versand.</de>
 <id>1149</id>
 </text>
 <text>
@@ -4354,18 +4355,18 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Save Recipients</en>
-<de>Empf&#xE4;nger speichern</de>
+<de>Empfänger speichern</de>
 <id>1151</id>
 </text>
 <text>
 <en>{0} recipients added, total {1} recipients.</en>
-<de>{0} Empf&#xE4;nger hinzugef&#xFC;gt, Insgesamt {1} Empf&#xE4;nger.</de>
+<de>{0} Empfänger hinzugefügt, Insgesamt {1} Empfänger.</de>
 <id>1152</id>
 </text>
 <text>
 <en>Format</en>
 <id>1153</id>
-<mk>&#x424;&#x43E;&#x440;&#x43C;&#x430;&#x442;</mk>
+<mk>Формат</mk>
 </text>
 <text>
 <en>Date Sent</en>
@@ -4374,12 +4375,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can only delete queued recipients</en>
-<de>Es k&#xF6;nnen nur Empf&#xE4;nger entfernt werden, die sich in der Warteschlange befinden</de>
+<de>Es können nur Empfänger entfernt werden, die sich in der Warteschlange befinden</de>
 <id>1155</id>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
-<de>Newsletter wurde gestoppt. Status kann nicht ge&#xE4;ndert werden.</de>
+<de>Newsletter wurde gestoppt. Status kann nicht geändert werden.</de>
 <id>1156</id>
 </text>
 <text>
@@ -4401,7 +4402,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Delete All</en>
-<de>Alle l&#xF6;schen</de>
+<de>Alle löschen</de>
 <id>1161</id>
 </text>
 <text>
@@ -4411,12 +4412,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really want to delete all receivers with status "queued"?.</en>
-<de>M&#xF6;chten Sie wirklich alle Empf&#xE4;nger aus der Warteschlange entfernen?.</de>
+<de>Möchten Sie wirklich alle Empfänger aus der Warteschlange entfernen?.</de>
 <id>1163</id>
 </text>
 <text>
 <en>If you press yes, the mailing will be stopped an can\'t be restarted again.</en>
-<de>Wenn Sie "Ja" w&#xE4;hlen, wird das Versenden gestoppt und kann nicht mehr gestartet werden.</de>
+<de>Wenn Sie "Ja" wählen, wird das Versenden gestoppt und kann nicht mehr gestartet werden.</de>
 <id>1164</id>
 </text>
 <text>
@@ -4425,7 +4426,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Recipients</en>
-<de>Empf&#xE4;nger</de>
+<de>Empfänger</de>
 <id>1166</id>
 </text>
 <text>
@@ -4465,13 +4466,13 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>{0} receiver not found.</en>
 <en_plural>{0} receivers not found.</en_plural>
-<de>{0} Empf&#xE4;nger nicht gefunden.</de>
-<de_plural>{0} Empf&#xE4;nger nicht gefunden.</de_plural>
+<de>{0} Empfänger nicht gefunden.</de>
+<de_plural>{0} Empfänger nicht gefunden.</de_plural>
 <id>1175</id>
 </text>
 <text>
 <en>{0} errors while sending mail.</en>
-<de>{0} Fehler w&#xE4;hrend des Sendens.</de>
+<de>{0} Fehler während des Sendens.</de>
 <id>1176</id>
 </text>
 <text>
@@ -4481,7 +4482,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Order Products</en>
-<de>Bestell&#xFC;bersicht</de>
+<de>Bestellübersicht</de>
 <id>1178</id>
 </text>
 <text>
@@ -4491,17 +4492,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop Confirmation Mail</en>
-<de>Shop Best&#xE4;tigungsmail</de>
+<de>Shop Bestätigungsmail</de>
 <id>1180</id>
 </text>
 <text>
 <en>Shop Confirmation Text</en>
-<de>Shop Best&#xE4;tigungstext</de>
+<de>Shop Bestätigungstext</de>
 <id>1181</id>
 </text>
 <text>
 <en>back to ...</en>
-<de>zur&#xFC;ck zu ...</de>
+<de>zurück zu ...</de>
 <id>1182</id>
 </text>
 <text>
@@ -4529,12 +4530,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You cannot delete your own account.</en>
-<de>Sie k&#xF6;nnen Ihr eigenes Konto nicht l&#xF6;schen.</de>
+<de>Sie können Ihr eigenes Konto nicht löschen.</de>
 <id>1189</id>
 </text>
 <text>
 <en>You cannot lock your own account.</en>
-<de>Sie k&#xF6;nnen Ihr eigenes Konto nicht sperren.</de>
+<de>Sie können Ihr eigenes Konto nicht sperren.</de>
 <id>1190</id>
 </text>
 <text>
@@ -4544,12 +4545,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You may now log in to your account.</en>
-<de>Sie k&#xF6;nnen sich nun in Ihr Konto einloggen.</de>
+<de>Sie können sich nun in Ihr Konto einloggen.</de>
 <id>1192</id>
 </text>
 <text>
 <en>If you lost your password, you may use the Lost Password? service.</en>
-<de>Wenn Sie Ihr Passwort vergessen haben, k&#xF6;nnen Sie den "Passwort vergessen?"-Service nutzen.</de>
+<de>Wenn Sie Ihr Passwort vergessen haben, können Sie den "Passwort vergessen?"-Service nutzen.</de>
 <id>1193</id>
 </text>
 <text>
@@ -4592,7 +4593,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Message</en>
 <de>Mitteilung</de>
 <es>Mensaje</es>
-<ru>&#x421;&#x432;&#x44F;&#x437;&#x44C;</ru>
+<ru>Связь</ru>
 <id>1207</id>
 </text>
 <text>
@@ -4713,7 +4714,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can only add users to a paused newsletter</en>
-<de>Empf&#xE4;nger k&#xF6;nnen nur in einen pausierten Newsletter hinzugef&#xFC;gt werden</de>
+<de>Empfänger können nur in einen pausierten Newsletter hinzugefügt werden</de>
 <id>1234</id>
 </text>
 <text>
@@ -4748,7 +4749,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct.</en>
-<de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
+<de>Wenn Sie die Adresse selbst eingegeben haben, überprüfen Sie die Schreibweise</de>
 <id>1243</id>
 </text>
 <text>
@@ -4768,7 +4769,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Newsletter Subscriber settings</en>
-<de>Newsletter Empf&#xE4;nger Einstellungen</de>
+<de>Newsletter Empfänger Einstellungen</de>
 <id>1255</id>
 </text>
 <text>
@@ -4788,7 +4789,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Edit subscriber</en>
-<de>Empf&#xE4;nger bearbeiten</de>
+<de>Empfänger bearbeiten</de>
 <id>1259</id>
 </text>
 <text>
@@ -4803,7 +4804,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You have just been subscribed to the newsletter at {0}.</en>
-<de>Sie wurden so eben als Empf&#xE4;nger des Newsletters bei {0} eingetragen.</de>
+<de>Sie wurden so eben als Empfänger des Newsletters bei {0} eingetragen.</de>
 <id>1262</id>
 </text>
 <text>
@@ -4813,47 +4814,47 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please click here, to confirm your E-Mail address and to receive our newsletters in future.</en>
-<de>Bitte klicken Sie hier, um Ihre E-Mail Adresse zu verifizieren und die k&#xFC;nftigen Newsletter zu erhalten.</de>
+<de>Bitte klicken Sie hier, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
 <id>1264</id>
 </text>
 <text>
 <en>To unsubscribe anytime from our newsletter, click this link:</en>
-<de>Sie k&#xF6;nnen sich jederzeit vom Newsletter abmelden, indem Sie folgenden Link klicken:</de>
+<de>Sie können sich jederzeit vom Newsletter abmelden, indem Sie folgenden Link klicken:</de>
 <id>1265</id>
 </text>
 <text>
 <en>To change you data or settings, click this link:</en>
-<de>Um Ihre Daten oder Einstellungen zu &#xE4;ndern, klicken Sie den folgenden Link:</de>
+<de>Um Ihre Daten oder Einstellungen zu ändern, klicken Sie den folgenden Link:</de>
 <id>1266</id>
 </text>
 <text>
 <en>Thanks for your subscription!</en>
-<de>Vielen Dank f&#xFC;r Ihre Anmeldung!</de>
+<de>Vielen Dank für Ihre Anmeldung!</de>
 <id>1267</id>
 </text>
 <text>
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
-<de>Bitte klicken Sie den folgenden link, um Ihre E-Mail Adresse zu verifizieren und die k&#xFC;nftigen Newsletter zu erhalten.</de>
+<de>Bitte klicken Sie den folgenden link, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
 <id>1268</id>
 </text>
 <text>
 <en>Subscribe the newsletter</en>
-<de>F&#xFC;r den Newsletter anmelden</de>
+<de>Für den Newsletter anmelden</de>
 <id>1269</id>
 </text>
 <text>
 <en>HTML-Format</en>
-<de>HTML-&#x424;&#x43E;&#x440;&#x43C;&#x430;&#x442;</de>
+<de>HTML-Формат</de>
 <id>1270</id>
 </text>
 <text>
 <en>Text-Format</en>
-<de>&#x422;&#x435;&#x43A;&#x441;&#x442;-&#x424;&#x43E;&#x440;&#x43C;&#x430;&#x442;</de>
+<de>Текст-Формат</de>
 <id>1271</id>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
-<de>Ihre E-Mail Adresse wurde verifiziert. Sie werden k&#xFC;nftig unseren Newsletter erhalten</de>
+<de>Ihre E-Mail Adresse wurde verifiziert. Sie werden künftig unseren Newsletter erhalten</de>
 <id>1272</id>
 </text>
 <text>
@@ -4873,12 +4874,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The entry in your guestbook has been acitvated.</en>
-<de>Der Eintrag in Ihrem G&#xE4;stebuch wurde aktiviert.</de>
+<de>Der Eintrag in Ihrem Gästebuch wurde aktiviert.</de>
 <id>1276</id>
 </text>
 <text>
 <en>Use this link to get to your guestbook:</en>
-<de>Benutzen Sie diesen Link um zu Ihrem G&#xE4;stebuch zu gelangen:</de>
+<de>Benutzen Sie diesen Link um zu Ihrem Gästebuch zu gelangen:</de>
 <id>1277</id>
 </text>
 <text>
@@ -4888,7 +4889,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>A new post has been written in your Guestbook.</en>
-<de>Ein neuer Eintrag wurde in Ihrem G&#xE4;stebuch geschrieben.</de>
+<de>Ein neuer Eintrag wurde in Ihrem Gästebuch geschrieben.</de>
 <id>1279</id>
 </text>
 <text>
@@ -4908,22 +4909,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>If you wish to deactivate the post in your guestbook, click here:</en>
-<de>Wenn Sie diesen Eintrag in Ihrem G&#xE4;stebuch deaktivieren m&#xF6;chten, klicken Sie bitte hier:</de>
+<de>Wenn Sie diesen Eintrag in Ihrem Gästebuch deaktivieren möchten, klicken Sie bitte hier:</de>
 <id>1283</id>
 </text>
 <text>
 <en>Click this link to get to your guestbook:</en>
-<de>Klicken Sie hier, um zu Ihrem G&#xE4;stebuch zu gelangen:</de>
+<de>Klicken Sie hier, um zu Ihrem Gästebuch zu gelangen:</de>
 <id>1284</id>
 </text>
 <text>
 <en>The entry in your guestbook has been deacitvated.</en>
-<de>Der Eintrag in Ihrem G&#xE4;stebuch wurde deaktiviert.</de>
+<de>Der Eintrag in Ihrem Gästebuch wurde deaktiviert.</de>
 <id>1285</id>
 </text>
 <text>
 <en>Remind mail receiver</en>
-<de>Hinweismail empf&#xE4;nger</de>
+<de>Hinweismail empfänger</de>
 <id>1286</id>
 </text>
 <text>
@@ -4948,7 +4949,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Valid From</en>
-<de>G&#xFC;ltig von</de>
+<de>Gültig von</de>
 <id>1291</id>
 </text>
 <text>
@@ -5078,7 +5079,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please fill the marked fields correctly.</en>
-<de>Bitte f&#xFC;llen Sie die markierten Felder korrekt aus.</de>
+<de>Bitte füllen Sie die markierten Felder korrekt aus.</de>
 <id>1320</id>
 </text>
 <text>
@@ -5105,7 +5106,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The following E-Mail addresses were excluded due to the RTR-ECG-Check (see {0})</en>
-<de>Die folgenden E-Mail Adressen wurden aufgrund der RTR-ECG-&#xDC;berpr&#xFC;fung ausgeschlossen (siehe {0})</de>
+<de>Die folgenden E-Mail Adressen wurden aufgrund der RTR-ECG-Überprüfung ausgeschlossen (siehe {0})</de>
 <id>1326</id>
 </text>
 <text>
@@ -5153,7 +5154,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please select the E-Mail type you wish to send to the user.</en>
-<de>Bitte w&#xE4;hlen Sie den E-Mail Typ aus, den Sie senden m&#xF6;chten.</de>
+<de>Bitte wählen Sie den E-Mail Typ aus, den Sie senden möchten.</de>
 <id>1336</id>
 </text>
 <text>
@@ -5168,7 +5169,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Green</en>
-<de>Gr&#xFC;n</de>
+<de>Grün</de>
 <id>1339</id>
 </text>
 <text>
@@ -5258,22 +5259,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Account deleted e-mail sent.</en>
-<de>Account gel&#xF6;scht E-Mail gesendet.</de>
+<de>Account gelöscht E-Mail gesendet.</de>
 <id>1357</id>
 </text>
 <text>
 <en>Account deleted e-mail sent by {0}.</en>
-<de>Account gel&#xF6;scht E-Mail gesendet von {0}.</de>
+<de>Account gelöscht E-Mail gesendet von {0}.</de>
 <id>1358</id>
 </text>
 <text>
 <en>Changed mail address e-mail sent.</en>
-<de>Ge&#xE4;nderte E-Mail-Adresse E-Mail gesendet.</de>
+<de>Geänderte E-Mail-Adresse E-Mail gesendet.</de>
 <id>1359</id>
 </text>
 <text>
 <en>Changed mail address e-mail sent by {0}.</en>
-<de>Ge&#xE4;nderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
+<de>Geänderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
 <id>1360</id>
 </text>
 <text>
@@ -5328,12 +5329,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>User deleted.</en>
-<de>Benutzer gel&#xF6;scht.</de>
+<de>Benutzer gelöscht.</de>
 <id>1371</id>
 </text>
 <text>
 <en>User deleted by {0}.</en>
-<de>Benutzer gel&#xF6;scht von {0}.</de>
+<de>Benutzer gelöscht von {0}.</de>
 <id>1372</id>
 </text>
 <text>
@@ -5402,12 +5403,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password was changed successfully</en>
-<de>Das Passwort wurde erfolgreich ge&#xE4;ndert</de>
+<de>Das Passwort wurde erfolgreich geändert</de>
 <id>1389</id>
 </text>
 <text>
 <en>Change Password</en>
-<de>Passwort &#xE4;ndern</de>
+<de>Passwort ändern</de>
 <id>1390</id>
 </text>
 <text>
@@ -5422,7 +5423,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Account - Change Password</en>
-<de>Benutzer - Passwort &#xE4;ndern</de>
+<de>Benutzer - Passwort ändern</de>
 <id>1393</id>
 </text>
 <text>
@@ -5474,19 +5475,19 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Dimension: At width and height must be set higher than 0 when using deform.</en>
-<de>Dimension: Breite und H&#xF6;he muss gesetzt werden, wenn Verzerrung verwendet wird.</de>
+<de>Dimension: Breite und Höhe muss gesetzt werden, wenn Verzerrung verwendet wird.</de>
 <id>1404</id>
 </text>
 <text>
-<en>Read more &#xBB;</en>
-<de>Weiterlesen &#xBB;</de>
-<fr>Davantage &#xBB;</fr>
-<es>M&#xE1;s &#xBB;</es>
+<en>Read more »</en>
+<de>Weiterlesen »</de>
+<fr>Davantage »</fr>
+<es>Más »</es>
 <id>1405</id>
 </text>
 <text>
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
-<de>Bitte f&#xFC;gen Sie die Adresse von YouTube oder Vimeo ein.</de>
+<de>Bitte fügen Sie die Adresse von YouTube oder Vimeo ein.</de>
 <id>1407</id>
 </text>
 <text>
@@ -5495,17 +5496,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Link.to parent page</en>
-<de>Link.zur &#xFC;bergeordneten Seite</de>
+<de>Link.zur übergeordneten Seite</de>
 <id>1409</id>
 </text>
 <text>
-<en>&#xAB; back</en>
-<de>&#xAB; zur&#xFC;ck</de>
+<en>« back</en>
+<de>« zurück</de>
 <id>1410</id>
 </text>
 <text>
 <en>Link to parent page</en>
-<de>Link zur &#xFC;bergeordneten Seite</de>
+<de>Link zur übergeordneten Seite</de>
 <id>1411</id>
 </text>
 <text>
@@ -5517,7 +5518,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1413</id>
 </text>
 <text>
-<en>Pfongauerstra&#xDF;e 67</en>
+<en>Pfongauerstraße 67</en>
 <id>1414</id>
 </text>
 <text>
@@ -5596,7 +5597,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can't delete translated pages.</en>
-<de>Kann &#xFC;bersetzte Seite nicht l&#xF6;schen.</de>
+<de>Kann übersetzte Seite nicht löschen.</de>
 <id>1436</id>
 </text>
 <text>
@@ -5606,7 +5607,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please choose an option</en>
-<de>Bitte w&#xE4;hlen Sie eine Option aus</de>
+<de>Bitte wählen Sie eine Option aus</de>
 <id>1438</id>
 </text>
 <text>
@@ -5635,7 +5636,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please mark the checkbox</en>
-<de>Bitte setzen Sie das H&#xE4;kchen</de>
+<de>Bitte setzen Sie das Häkchen</de>
 <id>1445</id>
 </text>
 <text>
@@ -5656,7 +5657,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please select a value</en>
-<de>Bitte w&#xE4;hlen Sie eine Option aus</de>
+<de>Bitte wählen Sie eine Option aus</de>
 <id>1451</id>
 </text>
 <text>
@@ -5745,7 +5746,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Paste Paragraph</en>
-<de>Absatz einf&#xFC;gen</de>
+<de>Absatz einfügen</de>
 <id>1475</id>
 </text>
 <text>
@@ -5804,7 +5805,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Read more</en>
 <de>Weiterlesen</de>
 <fr>Davantage</fr>
-<es>M&#xE1;s</es>
+<es>Más</es>
 <id>1492</id>
 </text>
 <text>
@@ -5813,7 +5814,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?</en>
-<de>Achtung! Mit dieser Aktion machen Sie die ausgew&#xE4;hlte Seite zur Startseite Ihrer Website. Dies hat Auswirkungen auf die gesamte Website. Wollen Sie diese Aktion jetzt durchf&#xFC;hren?</de>
+<de>Achtung! Mit dieser Aktion machen Sie die ausgewählte Seite zur Startseite Ihrer Website. Dies hat Auswirkungen auf die gesamte Website. Wollen Sie diese Aktion jetzt durchführen?</de>
 <id>1494</id>
 </text>
 <text>
@@ -5823,7 +5824,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You can't paste a paragraph into itself.</en>
-<de>Sie k&#xF6;nnen einen Absatz nicht in sich selbst hinein kopieren.</de>
+<de>Sie können einen Absatz nicht in sich selbst hinein kopieren.</de>
 <id>1496</id>
 </text>
 <text>
@@ -5848,7 +5849,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
-<de>M&#xF6;chten Sie wirklich alles auf Sichtbar setzen?</de>
+<de>Möchten Sie wirklich alles auf Sichtbar setzen?</de>
 <id>1509</id>
 </text>
 <text>
@@ -6021,7 +6022,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollst&#xE4;ndig in den Browser kopiert?</de>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollständig in den Browser kopiert?</de>
 <id>1542</id>
 <en>Voucher</en>
 <de>Gutschein</de>
@@ -6056,12 +6057,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' is not a valid voucher code</en>
-<de>'%value%' ist ein ung&#xFC;ltiger Gutschein Code</de>
+<de>'%value%' ist ein ungültiger Gutschein Code</de>
 <id>1581</id>
 </text>
 <text>
 <en>Redeem Voucher</en>
-<de>Gutschein einl&#xF6;sen</de>
+<de>Gutschein einlösen</de>
 <id>1582</id>
 </text>
 <text>
@@ -6071,7 +6072,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Your Voucher has been successfully redeemed.</en>
-<de>Ihr Gutschein wurde erfolgreich eingel&#xF6;st.</de>
+<de>Ihr Gutschein wurde erfolgreich eingelöst.</de>
 <id>1634</id>
 </text>
 <text>
@@ -6082,7 +6083,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Produkt: Gutschein</de>
 <id>1393</id>
 <en>No items to display</en>
-<de>Keine Eintr&#xE4;ge zum anzeigen</de>
+<de>Keine Einträge zum anzeigen</de>
 <id>1484</id>
 </text>
 <text>
@@ -6117,7 +6118,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can't paste paragraph type '{0}', as it is not avaliable here.</en>
-<de>Absatz vom Typ '{0}' kann nicht eingef&#xFC;gt werden, da er hier nicht verf&#xFC;gbar ist.</de>
+<de>Absatz vom Typ '{0}' kann nicht eingefügt werden, da er hier nicht verfügbar ist.</de>
 <id>1618</id>
 </text>
 <text>
@@ -6212,7 +6213,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The Form has been submitted successfully. You will receive an E-Mail with the access link to the protected area.</en>
-<de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in K&#xFC;rze eine E-Mail mit dem Zugangslink zum gesch&#xFC;tzten Bereich.</de>
+<de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in Kürze eine E-Mail mit dem Zugangslink zum geschützten Bereich.</de>
 <id>1615</id>
 </text>
 <text>
@@ -6222,7 +6223,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Invalid or expired Link. Please request a new one.</en>
-<de>Ung&#xFC;ltiger oder abgelaufener Link. Bitte fordern Sie einen neuen an.</de>
+<de>Ungültiger oder abgelaufener Link. Bitte fordern Sie einen neuen an.</de>
 <id>1617</id>
 </text>
 <text>
@@ -6267,12 +6268,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Invalid search terms</en>
-<de>Ung&#xFC;ltige Suchbegriffe</de>
+<de>Ungültige Suchbegriffe</de>
 <id>1630</id>
 </text>
 <text>
 <en>Search results can be extended using wildcards.</en>
-<de>Die Suchergebnisse k&#xF6;nnen durch die Verwendung von Wildcards erweitert werden.</de>
+<de>Die Suchergebnisse können durch die Verwendung von Wildcards erweitert werden.</de>
 <id>1631</id>
 </text>
 <text>
@@ -6282,7 +6283,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>No results found for &lt;strong&gt;"{0}"&lt;/strong&gt;</en>
-<de>Keine Ergebnisse gefunden f&#xFC;r &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
+<de>Keine Ergebnisse gefunden für &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
 <id>1633</id>
 </text>
 <text>
@@ -6320,7 +6321,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Back</en>
-<de>Zur&#xFC;ck</de>
+<de>Zurück</de>
 <id>1574</id>
 </text>
 <text>
@@ -6335,7 +6336,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct</en>
-<de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
+<de>Wenn Sie die Adresse selbst eingegeben haben, überprüfen Sie die Schreibweise</de>
 <id>1685</id>
 </text>
 <text>
@@ -6375,7 +6376,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
 <es>CP / Localidad</es>
-<ru>&#x41F;&#x43E;&#x447;&#x442;&#x43E;&#x432;&#x44B;&#x439; &#x438;&#x43D;&#x434;&#x435;&#x43A;&#x441; / &#x413;&#x43E;&#x440;&#x43E;&#x434;</ru>
+<ru>Почтовый индекс / Город</ru>
 <id>1648</id>
 </text>
 <text>
@@ -6437,14 +6438,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Mandatory field</en>
 <de>Pflichtfeld</de>
 <es>Campo obligatorio</es>
-<ru>&#x41E;&#x431;&#x44F;&#x437;&#x430;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x43E;&#x435; &#x43F;&#x43E;&#x43B;&#x435;</ru>
+<ru>Обязательное поле</ru>
 <id>1670</id>
 </text>
 <text>
 <en>Send message</en>
 <de>Nachricht absenden</de>
 <es>Enviar un mensaje</es>
-<ru>&#x41E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x43E;&#x43E;&#x431;&#x449;&#x435;&#x43D;&#x438;&#x435;</ru>
+<ru>Отправить сообщение</ru>
 <id>1671</id>
 </text>
 <text>
@@ -6501,7 +6502,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Back to overview</en>
-<de>Zur&#xFC;ck zur &#xDC;bersicht</de>
+<de>Zurück zur Übersicht</de>
 <id>1702</id>
 </text>
 <text>
@@ -6511,7 +6512,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Guestbook Detail</en>
-<de>G&#xE4;stebuch Detail</de>
+<de>Gästebuch Detail</de>
 <id>1674</id>
 </text>
 <text>
@@ -6540,7 +6541,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Predefined text of E-Mail</en>
-<de>Vordefinierter Text f&#xFC;r die E-Mail</de>
+<de>Vordefinierter Text für die E-Mail</de>
 <id>1680</id>
 </text>
 <text>
@@ -6563,7 +6564,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Show check all links</en>
-<de>Zeige alle ausw&#xE4;hlen Links</de>
+<de>Zeige alle auswählen Links</de>
 <id>1705</id>
 </text>
 <text>
@@ -6581,7 +6582,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please choose a file</en>
-<de>Bitte Datei ausw&#xE4;hlen</de>
+<de>Bitte Datei auswählen</de>
 <id>1657</id>
 </text>
 <text>
@@ -6598,17 +6599,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Service Unavailable</en>
-<de>Dienst nicht verf&#xFC;gbar</de>
+<de>Dienst nicht verfügbar</de>
 <id>1710</id>
 </text>
 <text>
 <en>Temporarily Down for Maintenance</en>
-<de>Vor&#xFC;bergehen wegen Wartungsarbeit nicht verf&#xFC;gbar</de>
+<de>Vorübergehen wegen Wartungsarbeit nicht verfügbar</de>
 <id>1711</id>
 </text>
 <text>
 <en>Normal service will be restored soon.</en>
-<de>Der normale Betrieb wird baldm&#xF6;glichst wieder hergestellt.</de>
+<de>Der normale Betrieb wird baldmöglichst wieder hergestellt.</de>
 <id>1712</id>
 </text>
 <text>
@@ -6711,7 +6712,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Paste Page</en>
-<de>Seite einf&#xFC;gen</de>
+<de>Seite einfügen</de>
 <id>1737</id>
 </text>
 <text>
@@ -6726,12 +6727,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' must be greater or equal than '%min%'</en>
-<de>'%value%' muss gr&#xF6;&#xDF;er oder gleich '%min%' sein</de>
+<de>'%value%' muss größer oder gleich '%min%' sein</de>
 <id>1741</id>
 </text>
 <text>
 <en>The password is invalid</en>
-<de>Das Passwort ist ung&#xFC;ltig</de>
+<de>Das Passwort ist ungültig</de>
 <id>1742</id>
 </text>
 <text>
@@ -6741,7 +6742,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
-<de>Das passwort muss mindestens aus 3 der folgenden 4 Bedingungen erf&#xFC;llen: Kleinbuchstaben, Gro&#xDF;buchstaben, Ziffern und Sonderzeichen</de>
+<de>Das passwort muss mindestens aus 3 der folgenden 4 Bedingungen erfüllen: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen</de>
 <id>1744</id>
 </text>
 <text>
@@ -6797,7 +6798,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' does not fit the date format '{0}'</en>
-<de>'%value%' liegt nicht im ben&#xF6;tigen Format vor: '{0}'</de>
+<de>'%value%' liegt nicht im benötigen Format vor: '{0}'</de>
 <id>1757</id>
 </text>
 <text>
