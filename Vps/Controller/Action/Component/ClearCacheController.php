@@ -54,7 +54,6 @@ class Vps_Controller_Action_Component_ClearCacheController extends Vps_Controlle
         $mail->setFrom($user->email, $user->__toString());
         $mail->addTo('ufx@vivid-planet.com', 'Franz Unger');
         $mail->addTo('ns@vivid-planet.com', 'Niko Sams');
-        $mail->addTo('mh@vivid-planet.com', 'Markus Hauser');
         $mail->setSubject('Clear Cache Report. Affected: '.$row->clear_cache_affected);
         $mail->setBodyText(
             "Clear Cache Report\n\n"
