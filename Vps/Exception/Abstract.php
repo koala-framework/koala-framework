@@ -34,7 +34,7 @@ abstract class Vps_Exception_Abstract extends Exception
             fwrite($fp, $content);
             fclose($fp);
         } catch(Exception $e) {
-            mail('ufx@vivid-planet.com; ns@vivid-planet.com; mh@vivid-planet.com',
+            mail('ufx@vivid-planet.com; ns@vivid-planet.com',
                 'Error while trying to write error file',
                 $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
                 );
