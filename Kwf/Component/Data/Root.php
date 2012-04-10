@@ -158,7 +158,13 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
      * @param string url including http:// and domain
      * @param string acceptLanguage as sent by browser (can be null if none was sent)
      * @param bool will be set to true if the url exactly matches the data url (and no redirect to the correcty url is needed)
-     *
+     */
+    public function getExpandedComponentId()
+    {
+        return $this->componentId;
+    }
+
+    /*
      * @return Kwf_Component_Data
      */
     public function getPageByUrl($url, $acceptLanguage, &$exactMatch = true)
@@ -197,7 +203,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                     Kwf_Component_Cache::getInstance()->getModel('url')->import(Kwf_Model_Abstract::FORMAT_ARRAY,
                         array(array(
                             'url' => $cacheUrl,
-                            'page_id' => $ret->componentId
+                            'page_id' => $ret->componentId,
+                            'expanded_page_id' => $ret->getExpandedComponentId()
                         )), array('replace'=>true, 'skipModelObserver'=>true));
                 }
             } else {

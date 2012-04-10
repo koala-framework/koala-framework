@@ -120,6 +120,30 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns component_id with seperate entries from every page in tree
+     *
+     * @example
+     * root
+     *   |-1
+     *     |-2
+     *       |-3
+     * componentId: 3, expandedComponentId: root-1_2_3
+     *
+     * @return string
+     */
+    public function getExpandedComponentId()
+    {
+        $generator = $this->generator;
+        if ($generator instanceof Kwc_Root_Category_Generator) {
+            $separator = '_';
+        } else {
+            $separator = $generator->getIdSeparator();
+        }
+        return $this->parent->getExpandedComponentId() .
+            $separator . $this->id;
+    }
+
+    /**
      * Returns absolute url including domain
      *
      * @return string

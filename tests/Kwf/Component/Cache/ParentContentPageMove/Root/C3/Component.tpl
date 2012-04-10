@@ -1,0 +1,1 @@
+<?=$this->component($this->data->getChildComponent('-child'))?>

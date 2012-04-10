@@ -2,6 +2,7 @@
 class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 {
     private $_updates = array();
+    private $_pageParentChanges = array();
 
     public function getListeners()
     {
@@ -63,6 +64,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onComponentClassPageContentChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Page_ParentChanged',
+            'callback' => 'onPageParentChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Media_Changed',
             'callback' => 'onMediaChanged'
         );
@@ -108,6 +113,40 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             Kwf_Component_Cache::getInstance()->deleteViewCache($select);
             $this->_updates = array();
         }
+
+        foreach ($this->_pageParentChanges as $changes) {
+            $oldParentId = $changes['oldParentId'];
+            $newParentId = $changes['newParentId'];
+            $componentId = $changes['componentId'];
+            $length = strlen($oldParentId);
+            $like = $oldParentId . '_' . $componentId;
+            $model = Kwf_Component_Cache::getInstance()->getModel();
+            if ($model instanceof Kwf_Model_Db) {
+                $db = Kwf_Registry::get('db');
+                $newParentId = $db->quote($newParentId);
+                $where[] = 'expanded_component_id = ' . $db->quote($like);
+                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '-%'));
+                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '_%'));
+                $sql = "UPDATE cache_component
+                    SET expanded_component_id=CONCAT(
+                        $newParentId, SUBSTRING(expanded_component_id, $length)
+                    )
+                    WHERE " . implode(' OR ', $where);
+                $model->executeSql($sql);
+                $this->_log("expanded_component_id={$like}%->{$newParentId}");
+            } else {
+                $select = $model->select()->where(
+                    new Kwf_Model_Select_Expr_Like('expanded_component_id', $like . '%')
+                );
+                foreach ($model->getRows($select) as $row) {
+                    $oldExpandedId = $row->expanded_component_id;
+                    $newExpandedId = $newParentId . substr($oldExpandedId, $length);
+                    $row->expanded_component_id = $newExpandedId;
+                    $row->save();
+                    $this->_log("expanded_component_id={$oldExpandedId}->{$newExpandedId}");
+                }
+            }
+        }
     }
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
@@ -116,33 +155,15 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         $this->_log("db_id=$event->dbId type=component");
     }
 
-    //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
-    //this method returns all child ids needed for deleting recursively
-    private function _getIdsFromRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
-    {
-        $changedComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
-        $ids = array($changedComponent->getPageOrRoot()->componentId);
-        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $c = $changedComponent;
-            while ($c && !$c->isPage && !$c instanceof Kwf_Component_Data_Root && $c->componentClass !== $gen->getClass()) {
-                $c = $c->parent;
-            }
-            if ($c) {
-                $ids = array_merge($ids, $gen->getVisiblePageChildIds($c->dbId));
-            }
-        }
-        return $ids;
-    }
-
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
     {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+        foreach ($this->_getParentComponentsForRecursive($event) as $c) {
             $this->_updates[] = array(
                 'type' => 'component',
-                'component_id' => $id . '%',
+                'expanded_component_id' => $c->getExpandedComponentId() . '%',
                 'component_class' => $event->class
             );
-            $this->_log("type=component component_id=$id% component_class=$event->class");
+            $this->_log("type=component expanded_component_id={$c->getExpandedComponentId()}% component_class=$event->class");
         }
     }
 
@@ -154,12 +175,12 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onRecursiveMasterContentChange(Kwf_Component_Event_Component_RecursiveMasterContentChanged $event)
     {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+        foreach ($this->_getParentComponentsForRecursive($event) as $component) {
             $this->_updates[] = array(
                 'type' => 'master',
-                'component_id' => $id . '%',
+                'expanded_component_id' => $component->getExpandedComponentId() . '%',
             );
-            $this->_log("component_id=$id% type=master");
+            $this->_log("type=master expanded_component_id={$component->getExpandedComponentId()}%");
         }
     }
 
@@ -183,12 +204,12 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+        foreach ($this->_getParentComponentsForRecursive($event) as $component) {
             $this->_updates[] = array(
                 'type' => 'componentLink',
-                'component_id' => $id . '%'
+                'expanded_component_id' => $component->getExpandedComponentId() . '%',
             );
-            $this->_log("type=componentLink component_id=$id%");
+            $this->_log("type=componentLink expanded_component_id={$component->getExpandedComponentId()}%");
         }
     }
 
@@ -204,22 +225,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         //all child components
         $changedComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
         $changedChildIdPostfix = substr($changedComponent->componentId, strlen($changedComponent->getPageOrRoot()->componentId));
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+
+        foreach ($this->_getParentComponentsForRecursive($event) as $component) {
+            $pattern = $component->getExpandedComponentId() . '%';
             if ($changedChildIdPostfix) {
-                if (is_numeric($id)) {
-                    $pattern = $id . $changedChildIdPostfix . '%';
-                } else {
-                                    //plus child pages not generated by CategoryGenerator
-                    $pattern = $id . '%' . $changedChildIdPostfix . '%';
-                }
-            } else {
-                $pattern = $id . '%';
+                $pattern .= $changedChildIdPostfix . '%';
             }
             $this->_updates[] = array(
-                //remove all types
-                'component_id' => $pattern
+                'expanded_component_id' => $pattern,
             );
-            $this->_log("component_id=$pattern");
+            $this->_log("expanded_component_id=$pattern");
         }
     }
 
@@ -259,6 +274,35 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'component_class' => $event->class
         );
         $this->_log("type=component page_db_id=$event->pageDbId component_class=$event->class");
+    }
+
+    public function onPageParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
+    {
+        $oldParentId = Kwf_Component_Data_Root::getInstance()->getComponentById(
+            $event->oldParentId, array('ignoreVisible' => true)
+        )->getExpandedComponentId();
+        $newParentId = Kwf_Component_Data_Root::getInstance()->getComponentById(
+            $event->newParentId, array('ignoreVisible' => true)
+        )->getExpandedComponentId();
+        $this->_pageParentChanges[] = array(
+            'oldParentId' => $oldParentId,
+            'newParentId' => $newParentId,
+            'componentId' => $event->componentId
+        );
+    }
+
+    private function _getParentComponentsForRecursive(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $ret = array($c->getPageOrRoot());
+        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
+            while ($c && !$c->isPage && !$c instanceof Kwf_Component_Data_Root && $c->componentClass !== $gen->getClass()) {
+                $c = $c->parent;
+            }
+            if ($c) $ret[] = $c;
+        }
+        return $ret;
     }
 
     private function _log($msg)
