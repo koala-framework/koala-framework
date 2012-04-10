@@ -4,10 +4,11 @@
 <en>Visible</en>
 <de>Sichtbar</de>
 <id>2</id>
-<bg>&#x432;&#x438;&#x434;&#x438;&#x43C;</bg>
-<ua>&#x412;&#x438;&#x434;&#x438;&#x43C;&#x438;&#x439;</ua>
-<mk>&#x412;&#x438;&#x434;&#x43B;&#x438;&#x432;&#x43E;</mk>
+<bg>видим</bg>
+<ua>Видимий</ua>
+<mk>Видливо</mk>
 <ro>Vizibil</ro>
+<sl>x</sl>
 </text>
 <text>
 <en>Error</en>
@@ -351,7 +352,7 @@ has just been created.</en>
 <fr>envoyer</fr>
 <it>inviare</it>
 <ro>Trimitere</ro>
-<ua>&#x41D;&#x430;&#x434;&#x456;&#x441;&#x43B;&#x430;&#x442;&#x438;</ua>
+<ua>Надіслати</ua>
 </text>
 <text>
 <en>Validator</en>
@@ -424,7 +425,7 @@ has just been created.</en>
 <id>96</id>
 <ro>Titlu</ro>
 <mk>Титула</mk>
-<ua>&#x422;&#x438;&#x442;&#x443;&#x43B;</ua>
+<ua>Титул</ua>
 </text>
 <text>
 <en>Firstname</en>
@@ -435,7 +436,7 @@ has just been created.</en>
 <id>97</id>
 <ro>Prenume</ro>
 <mk>Име</mk>
-<ua>&#x406;&#x43C;'&#x44F;</ua>
+<ua>Ім'я</ua>
 </text>
 <text>
 <en>Lastname</en>
@@ -446,7 +447,7 @@ has just been created.</en>
 <id>98</id>
 <ro>Nume</ro>
 <mk>Презиме</mk>
-<ua>&#x41F;&#x440;&#x456;&#x437;&#x432;&#x438;&#x449;&#x435;</ua>
+<ua>Прізвище</ua>
 </text>
 <text>
 <en>Email</en>
@@ -580,7 +581,7 @@ has just been created.</en>
 <de>Weiblich</de>
 <id>165</id>
 <ro>Femeie</ro>
-<ua>&#x416;&#x456;&#x43D;&#x43E;&#x447;&#x430;</ua>
+<ua>Жіноча</ua>
 </text>
 <text>
 <en>Male</en>
@@ -588,7 +589,7 @@ has just been created.</en>
 <id>166</id>
 <ro>Barbat</ro>
 <mk>Машки</mk>
-<ua>&#x427;&#x43E;&#x43B;&#x43E;&#x432;&#x456;&#x447;&#x430;</ua>
+<ua>Чоловіча</ua>
 </text>
 <text>
 <en>Gender</en>
@@ -596,7 +597,7 @@ has just been created.</en>
 <id>167</id>
 <ro>Gen</ro>
 <mk>Пол</mk>
-<ua>&#x421;&#x442;&#x430;&#x442;&#x44C;</ua>
+<ua>Стать</ua>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -1695,7 +1696,7 @@ has just been created.</en>
 <en>no selection</en>
 <de>keine Auswahl</de>
 <id>449</id>
-<ua>&#x43E;&#x431;&#x440;&#x430;&#x442;&#x438;</ua>
+<ua>обрати</ua>
 </text>
 <text>
 <en>add new entry</en>
@@ -2370,7 +2371,7 @@ has just been created.</en>
 <es>El formulario es enviado con éxito.</es>
 <ru>форма успешно отправлена.</ru>
 <id>651</id>
-<ua>&#x412;&#x430;&#x448; &#x43B;&#x438;&#x441;&#x442; &#x431;&#x443;&#x43B;&#x43E; &#x443;&#x441;&#x43F;&#x456;&#x448;&#x43D;&#x43E; &#x432;&#x456;&#x434;&#x43F;&#x440;&#x430;&#x432;&#x43B;&#x435;&#x43D;&#x43E;.</ua>
+<ua>Ваш лист було успішно відправлено.</ua>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -2653,7 +2654,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <es>'%value%' no es una dirección válida de correo electrónico</es>
 <ru>'%value%' не действительный адрес электронной почты</ru>
 <id>712</id>
-<ua>'%value%' &#x43D;&#x435;&#x43A;&#x43E;&#x440;&#x435;&#x43A;&#x442;&#x43D;&#x43E; &#x432;&#x432;&#x435;&#x434;&#x435;&#x43D;&#x430; &#x430;&#x434;&#x440;&#x435;&#x441;&#x430; &#x435;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x43E;&#x457; &#x43F;&#x43E;&#x448;&#x442;&#x438;</ua>
+<ua>'%value%' некоректно введена адреса електронної пошти</ua>
 </text>
 <text>
 <en>'%hostname%' is not a valid hostname for email address '%value%'</en>
@@ -4375,7 +4376,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Format</en>
 <id>1153</id>
 <mk>Формат</mk>
-<ua>&#x424;&#x43E;&#x440;&#x43C;&#x430;&#x442;</ua>
+<ua>Формат</ua>
 </text>
 <text>
 <en>Date Sent</en>
@@ -4855,13 +4856,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>HTML-Format</en>
 <ua>HTML-Формат</ua>
 <id>1270</id>
-<ua>HTML-&#x424;&#x43E;&#x440;&#x43C;&#x430;&#x442;</ua>
+<ua>HTML-Формат</ua>
 </text>
 <text>
 <en>Text-Format</en>
 <ua>Текст-Формат</ua>
 <id>1271</id>
-<ua>&#x422;&#x435;&#x43A;&#x441;&#x442;&#x43E;&#x432;&#x438;&#x439; &#x444;&#x43E;&#x440;&#x43C;&#x430;&#x442;</ua>
+<ua>Текстовий формат</ua>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -5670,7 +5671,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please select a value</en>
 <de>Bitte wählen Sie eine Option aus</de>
 <id>1451</id>
-<ua>&#x411;&#x443;&#x434;&#x44C; &#x43B;&#x430;&#x441;&#x43A;&#x430; &#x43E;&#x431;&#x435;&#x440;&#x456;&#x442;&#x44C; &#x43E;&#x434;&#x438;&#x43D; &#x437; &#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x43D;&#x438;&#x445; &#x432;&#x430;&#x440;&#x456;&#x430;&#x43D;&#x442;&#x456;&#x432;</ua>
+<ua>Будь ласка оберіть один з доступних варіантів</ua>
 </text>
 <text>
 <en>Link.First Child Page</en>
@@ -6591,7 +6592,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>The Form has been submitted successfully.</en>
 <id>1656</id>
-<ua>&#x412;&#x430;&#x448; &#x43B;&#x438;&#x441;&#x442; &#x431;&#x443;&#x43B;&#x43E; &#x443;&#x441;&#x43F;&#x456;&#x448;&#x43D;&#x43E; &#x432;&#x456;&#x434;&#x43F;&#x440;&#x430;&#x432;&#x43B;&#x435;&#x43D;&#x43E;.</ua>
+<ua>Ваш лист було успішно відправлено.</ua>
 </text>
 <text>
 <en>Please choose a file</en>
