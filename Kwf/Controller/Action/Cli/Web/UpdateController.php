@@ -44,6 +44,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
 
     public static function update($rev = false, $debug = false, $skipClearCache = false, $clearViewCache = false)
     {
+        ini_set('memory_limit', '512M');
         if (!$skipClearCache) {
             Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
         }
