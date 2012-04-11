@@ -310,7 +310,6 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
             }
         }
 
-        $dataPrimaryKey = $this->getDataModel()->getPrimaryKey();
         foreach ($new as $id) {
             if (in_array($id, $avaliableKeys)) {
                 $i = $row->createChildRow($this->getRelModel());
