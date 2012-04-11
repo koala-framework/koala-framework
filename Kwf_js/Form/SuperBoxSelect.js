@@ -721,6 +721,21 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
             }
         }
         this.fireEvent('newitem', this, val, this.filteredQueryData);
+        if (this.addNewItemUrl) {
+            Ext.Ajax.request({
+                url: this.addNewItemUrl,
+                params: {
+                    val: val
+                },
+                success: function(request, options, r) {
+                    var newItemObject = {};
+                    newItemObject[this.valueField] = r.id;
+                    newItemObject[this.displayField] = r.name;
+                    this.addNewItem(newItemObject);
+                },
+                scope: this
+            });
+        }
     },
     onKeyUp : function(e) {
         if (this.editable !== false && (!e.isSpecialKey() || e.getKey() === e.BACKSPACE) && this.itemDelimiterKey.indexOf !== e.getKey()  && (!e.hasModifier() || e.shiftKey)) {
