@@ -6,9 +6,9 @@
 <id>2</id>
 <bg>видим</bg>
 <ua>Видимий</ua>
-<ro>Vizibil</ro>
 <mk>Видливо</mk>
-<hu>x</hu>
+<ro>Vizibil</ro>
+<sl>x</sl>
 </text>
 <text>
 <en>Error</en>
@@ -352,6 +352,7 @@ has just been created.</en>
 <fr>envoyer</fr>
 <it>inviare</it>
 <ro>Trimitere</ro>
+<ua>Надіслати</ua>
 </text>
 <text>
 <en>Validator</en>
@@ -424,6 +425,7 @@ has just been created.</en>
 <id>96</id>
 <ro>Titlu</ro>
 <mk>Титула</mk>
+<ua>Титул</ua>
 </text>
 <text>
 <en>Firstname</en>
@@ -434,6 +436,7 @@ has just been created.</en>
 <id>97</id>
 <ro>Prenume</ro>
 <mk>Име</mk>
+<ua>Ім'я</ua>
 </text>
 <text>
 <en>Lastname</en>
@@ -444,6 +447,7 @@ has just been created.</en>
 <id>98</id>
 <ro>Nume</ro>
 <mk>Презиме</mk>
+<ua>Прізвище</ua>
 </text>
 <text>
 <en>Email</en>
@@ -577,7 +581,7 @@ has just been created.</en>
 <de>Weiblich</de>
 <id>165</id>
 <ro>Femeie</ro>
-<mk>Женски</mk>
+<ua>Жіноча</ua>
 </text>
 <text>
 <en>Male</en>
@@ -585,6 +589,7 @@ has just been created.</en>
 <id>166</id>
 <ro>Barbat</ro>
 <mk>Машки</mk>
+<ua>Чоловіча</ua>
 </text>
 <text>
 <en>Gender</en>
@@ -592,6 +597,7 @@ has just been created.</en>
 <id>167</id>
 <ro>Gen</ro>
 <mk>Пол</mk>
+<ua>Стать</ua>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -1690,6 +1696,7 @@ has just been created.</en>
 <en>no selection</en>
 <de>keine Auswahl</de>
 <id>449</id>
+<ua>обрати</ua>
 </text>
 <text>
 <en>add new entry</en>
@@ -2364,6 +2371,7 @@ has just been created.</en>
 <es>El formulario es enviado con éxito.</es>
 <ru>форма успешно отправлена.</ru>
 <id>651</id>
+<ua>Ваш лист було успішно відправлено.</ua>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -2646,6 +2654,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <es>'%value%' no es una dirección válida de correo electrónico</es>
 <ru>'%value%' не действительный адрес электронной почты</ru>
 <id>712</id>
+<ua>'%value%' некоректно введена адреса електронної пошти</ua>
 </text>
 <text>
 <en>'%hostname%' is not a valid hostname for email address '%value%'</en>
@@ -4367,6 +4376,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Format</en>
 <id>1153</id>
 <mk>Формат</mk>
+<ua>Формат</ua>
 </text>
 <text>
 <en>Date Sent</en>
@@ -4844,13 +4854,15 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en>HTML-Format</en>
-<de>HTML-Формат</de>
+<ua>HTML-Формат</ua>
 <id>1270</id>
+<ua>HTML-Формат</ua>
 </text>
 <text>
 <en>Text-Format</en>
-<de>Текст-Формат</de>
+<ua>Текст-Формат</ua>
 <id>1271</id>
+<ua>Текстовий формат</ua>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -5659,6 +5671,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please select a value</en>
 <de>Bitte wählen Sie eine Option aus</de>
 <id>1451</id>
+<ua>Будь ласка оберіть один з доступних варіантів</ua>
 </text>
 <text>
 <en>Link.First Child Page</en>
@@ -6579,6 +6592,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>The Form has been submitted successfully.</en>
 <id>1656</id>
+<ua>Ваш лист було успішно відправлено.</ua>
 </text>
 <text>
 <en>Please choose a file</en>
