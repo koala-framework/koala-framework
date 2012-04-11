@@ -1661,7 +1661,15 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
             this.collapse();
         }
 
+    },
+    resetDirty: function() {
+        if(this.mode === 'remote' && this.remoteLookup.length > 0){
+            this.setOriginal = true;
+        } else {
+            this.originalValue = this.getValue();
+        }
     }
+
 });
 Ext.reg('superboxselect', Kwf.Form.SuperBoxSelect);
 /*
