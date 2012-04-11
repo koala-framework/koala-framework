@@ -130,11 +130,11 @@ Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
     },
     getBaseParams : function() {
         //Annahme: alle haben die gleichen baseParams
-        this.tabItems.first().getBaseParams();
+        this.tabItems[0].getBaseParams();
     },
     hasBaseParams: function() {
         //Annahme: alle haben die gleichen baseParams
-        this.tabItems.first().hasBaseParams();
+        this.tabItems[0].hasBaseParams();
     },
     setAutoLoad: function(v) {
         this.tabItems.each(function(i) {
@@ -143,7 +143,7 @@ Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
     },
     getAutoLoad: function() {
         //Annahme: alle haben die gleiches autoLoad
-        return this.tabItems.first().getAutoLoad.apply(this.proxyItem, arguments);
+        return this.tabItems[0].getAutoLoad.apply(this.proxyItem, arguments);
     }
 });
 Ext.reg('kwf.tabpanel', Kwf.Binding.TabPanel);
