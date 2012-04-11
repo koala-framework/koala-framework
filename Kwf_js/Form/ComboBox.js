@@ -197,7 +197,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
     },
     setFormBaseParams: function(params) {
-    	Ext.apply(this.store.baseParams, params);
+        Ext.apply(this.store.baseParams, params);
     },
 
 
