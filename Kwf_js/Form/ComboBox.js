@@ -73,6 +73,9 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                     reader: reader
                 };
                 Ext.apply(storeConfig, this.storeConfig);
+                if (typeof storeConfig.remoteSort == 'undefined') {
+                    storeConfig.remoteSort = proxy instanceof Ext.data.HttpProxy;
+                }
                 if (store.type && Ext.data[store.type]) {
                     this.store = new Ext.data[store.type](storeConfig);
                 } else if (store.type) {
@@ -197,7 +200,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
     },
     setFormBaseParams: function(params) {
-    	Ext.apply(this.store.baseParams, params);
+        Ext.apply(this.store.baseParams, params);
     },
 
 
