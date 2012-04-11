@@ -26,13 +26,28 @@ Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             // nochmal kopiert werden, und dann bearbeitet man falsche
             // datensätze...
             var tab = Kwf.clone(this.tabs[i]);
-            var item = Ext.ComponentMgr.create(Ext.applyIf(tab, {
-                autoScroll  : true,
-                closable    : false,
-                title       : i,
-                baseParams  : b,
-                autoLoad    : this.autoLoad
-            }));
+            if (tab.needsComponentPanel) {
+                var componentIdSuffix = tab.componentIdSuffix;
+                delete tab.componentIdSuffix;
+                var item = new Kwf.Component.ComponentPanel({
+                    title: tab.title,
+                    mainComponentClass: 'Dummy',
+                    mainType: 'content',
+                    componentIdSuffix: componentIdSuffix,
+                    componentConfigs: {
+                        'Dummy-content': tab
+                    },
+                    mainEditComponents: ['Dummy-content']
+                });
+            } else {
+                var item = Ext.ComponentMgr.create(Ext.applyIf(tab, {
+                    autoScroll  : true,
+                    closable    : false,
+                    title       : i,
+                    baseParams  : b,
+                    autoLoad    : this.autoLoad
+                }));
+            }
 
             this.relayEvents(item, ['editcomponent', 'gotComponentConfigs']);
             this.tabPanel.add(item);
