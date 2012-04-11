@@ -44,7 +44,9 @@ Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 i.setAutoLoad(false);
             }
             i.on('activate', function(i) {
-                i.load();
+                if (!this.disabled) {
+                    i.load();
+                }
             }, this);
         }, this);
 
