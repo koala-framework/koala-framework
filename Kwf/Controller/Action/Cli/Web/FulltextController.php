@@ -327,6 +327,10 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $s->where('changed_date > indexed_date OR ISNULL(indexed_date)');
         foreach ($m->getRows($s) as $row) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
+            if (!$page) {
+                $row->delete();
+                continue;
+            }
             if (!$page->isPage) continue;
             if ($row->changed_recursive) {
                 $row->changed_recursive = false;
