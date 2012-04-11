@@ -1000,9 +1000,11 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         return this;
     },
     sortStore: function(){
-        var ss = this.store.getSortState();
-        if(ss && ss.field){
-            this.store.sort(ss.field, ss.direction);
+        if(!this.store.remoteSort){
+            var ss = this.store.getSortState();
+            if(ss && ss.field){
+                this.store.sort(ss.field, ss.direction);
+            }
         }
         return this;
     },
