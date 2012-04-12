@@ -6,6 +6,8 @@ class Vpc_Form_Dynamic_Form extends Vpc_Abstract_Form
         parent::_initFields();
         $this->add(new Vps_Form_Field_TextField('recipient', trlVps('E-Mail Recipient')))
             ->setVtype('email');
+        $this->add(new Vps_Form_Field_TextField('recipient_cc', trlVps('E-Mail CC')))
+            ->setVtype('email');
         $this->add(new Vps_Form_Field_TextField('subject', trlVps('E-Mail Subject')));
     }
 }
