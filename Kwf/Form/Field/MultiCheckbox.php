@@ -273,6 +273,10 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
     public function validate($row, $postData)
     {
         $ret = parent::validate($row, $postData);
+
+        $dataModel = $row->getModel();
+        if ($dataModel) $this->setDataModel($dataModel);
+
         if (!is_null($this->getAllowBlank()) && !$this->getAllowBlank()) {
             if (!count($this->_getIdsFromPostData($postData))) {
                 $ret[] = array(
