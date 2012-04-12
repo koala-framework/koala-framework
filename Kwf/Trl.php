@@ -136,11 +136,10 @@ class Kwf_Trl
 
     public function getLanguages()
     {
-
         if (!isset($this->_languages)) {
             $langauges = Kwf_Config::getValueArray('languages');
             if ($langauges) {
-                $this->_languages = array_values($langauges);
+                $this->_languages = array_keys($langauges);
             } else {
                 $this->_languages = array($this->getWebCodeLanguage());
             }
