@@ -7,7 +7,7 @@ class Kwc_Basic_Table_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     protected function _initColumns()
     {
         $component = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($this->_getParam('componentId'), array('ignoreVisible'=>true));
+            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
         $maxColumns = Kwc_Abstract::getSetting($component->componentClass, 'maxColumns');
 
         $sel = new Kwf_Form_Field_Select();
