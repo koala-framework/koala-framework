@@ -306,20 +306,6 @@ has just been created.</en>
 <mk>Десно</mk>
 </text>
 <text>
-<en>Alternate</en>
-<de>Alternierend</de>
-<id>63</id>
-<ro>Altrenativ</ro>
-<mk>Алтернативен</mk>
-</text>
-<text>
-<en>Maximum Length</en>
-<de>Maximale Länge</de>
-<id>67</id>
-<ro>Lungime maxima</ro>
-<mk>Максимална должина</mk>
-</text>
-<text>
 <en>Default Value</en>
 <de>Standardwert</de>
 <id>68</id>
@@ -362,13 +348,6 @@ has just been created.</en>
 <mk>Валидатор</mk>
 </text>
 <text>
-<en>No Validator</en>
-<de>Kein Validator</de>
-<id>84</id>
-<ro>Numar validator</ro>
-<mk>Без валидатор.</mk>
-</text>
-<text>
 <en>E-Mail</en>
 <de>E-Mail</de>
 <fr>E-mail</fr>
@@ -384,27 +363,6 @@ has just been created.</en>
 <id>86</id>
 <ro>Data</ro>
 <mk>Датум</mk>
-</text>
-<text>
-<en>Group</en>
-<de>Gruppe</de>
-<id>87</id>
-<ro>Grup</ro>
-<mk>Група</mk>
-</text>
-<text>
-<en>enable posts</en>
-<de>Beiträge erlauben</de>
-<id>88</id>
-<ro>Activati posturi</ro>
-<mk>Овозможи поставувања</mk>
-</text>
-<text>
-<en>Last Entry</en>
-<de>Letzter Beitrag</de>
-<id>91</id>
-<ro>Ultima intrare</ro>
-<mk>Последно Поставување</mk>
 </text>
 <text>
 <en>at</en>
@@ -464,13 +422,6 @@ has just been created.</en>
 <id>101</id>
 <ro>Subiect</ro>
 <mk>Наслов</mk>
-</text>
-<text>
-<en>Moderators of selected group</en>
-<de>Moderatoren der ausgewählten Gruppe</de>
-<id>102</id>
-<ro>Moderatorii grupului selectat</ro>
-<mk>Модератори на одбраната група</mk>
 </text>
 <text>
 <en>Member since</en>
@@ -1792,16 +1743,6 @@ has just been created.</en>
 <ro>Vă rugăm să scrieţi comentariile într-un ton politicos. Fiecare autor răspunde de conţinutul tuturor comentariilor sale. Comentariile ofensatoare vor fi şterse fără niciun comentariu. </ro>
 </text>
 <text>
-<en>Created by</en>
-<de>Erstellt von</de>
-<id>470</id>
-</text>
-<text>
-<en>Create a new topic</en>
-<de>Neues Thema erstellen</de>
-<id>471</id>
-</text>
-<text>
 <en>Upload</en>
 <de>Hochladen</de>
 <id>476</id>
@@ -2059,41 +2000,6 @@ has just been created.</en>
 <id>548</id>
 </text>
 <text>
-<en>Alpha Numeric</en>
-<de>Zeichen und Zahlen</de>
-<id>549</id>
-</text>
-<text>
-<en>Maximum Value</en>
-<de>Maximum</de>
-<id>550</id>
-</text>
-<text>
-<en>Minimum Value</en>
-<de>Minimum</de>
-<id>551</id>
-</text>
-<text>
-<en>Allow Negative</en>
-<de>Negative Zahlen erlaubt</de>
-<id>552</id>
-</text>
-<text>
-<en>Allow Decimals</en>
-<de>Dezimalzahlen erlaubt</de>
-<id>553</id>
-</text>
-<text>
-<en>Allow Blank</en>
-<de>Leerzeichen erlaubt</de>
-<id>554</id>
-</text>
-<text>
-<en>Values</en>
-<de>Werte</de>
-<id>555</id>
-</text>
-<text>
 <en>Number Field</en>
 <de>Zahlenfeld</de>
 <id>556</id>
@@ -2139,16 +2045,6 @@ has just been created.</en>
 <de>Aktiviert</de>
 <id>567</id>
 <ro>Activat</ro>
-</text>
-<text>
-<en>Template</en>
-<de>Vorlage</de>
-<id>568</id>
-</text>
-<text>
-<en>Variable</en>
-<de>Variable</de>
-<id>570</id>
 </text>
 <text>
 <en>Html</en>
@@ -2350,26 +2246,10 @@ has just been created.</en>
 <id>631</id>
 </text>
 <text>
-<en>Forum</en>
-<de>Forum</de>
-<id>632</id>
-<ro>Forum</ro>
-</text>
-<text>
-<en>Threads</en>
-<de>Themen</de>
-<id>634</id>
-</text>
-<text>
 <en>Posts</en>
 <de>Beiträge</de>
 <id>635</id>
 <ro>Posturi</ro>
-</text>
-<text>
-<en>Last post by</en>
-<de>Letzter Beitrag von</de>
-<id>636</id>
 </text>
 <text>
 <en>reply</en>
@@ -2380,66 +2260,9 @@ has just been created.</en>
 <ro>Răspuns</ro>
 </text>
 <text>
-<en defailt="1">Reply</en>
-<de>Antworten</de>
-<id>638</id>
-<ro>Răspunde</ro>
-</text>
-<text>
-<en>Forum.Latest Threads</en>
-<de>Forum.Letzte Einträge</de>
-<id>639</id>
-<ro>Forum.Ultimele postări</ro>
-</text>
-<text>
 <en>Comment was successfully reported.</en>
 <de>Der Kommentar wurde erfolgreich gemeldet.</de>
 <id>641</id>
-</text>
-<text>
-<en>Thread closed</en>
-<de>Thema geschlossen</de>
-<id>642</id>
-</text>
-<text>
-<en>Reopen Thread</en>
-<de>Thema öffnen</de>
-<id>643</id>
-</text>
-<text>
-<en>Close Thread</en>
-<de>Thema schließen</de>
-<id>644</id>
-</text>
-<text>
-<en>Move Thread</en>
-<de>Thema verschieben</de>
-<id>645</id>
-</text>
-<text>
-<en>Thread was successfully moved.</en>
-<de>Das Thema wurde erfolgreich verschoben.</de>
-<id>646</id>
-</text>
-<text>
-<en>Moderate Thread</en>
-<de>Thema moderieren</de>
-<id>647</id>
-</text>
-<text>
-<en>Observe Thread</en>
-<de>Thema beobachten</de>
-<id>648</id>
-</text>
-<text>
-<en>Thread was successfully saved.</en>
-<de>Thema wurde erfolgreich gespeichert.</de>
-<id>649</id>
-</text>
-<text>
-<en>new thread</en>
-<de>Neues Thema</de>
-<id>650</id>
 </text>
 <text>
 <en>The form has been submitted successfully.</en>
@@ -2612,11 +2435,6 @@ has just been created.</en>
 <id>687</id>
 </text>
 <text>
-<en>My account</en>
-<de>Mein Account</de>
-<id>689</id>
-</text>
-<text>
 <en>My Profile</en>
 <de>Mein Profil</de>
 <id>690</id>
@@ -2687,12 +2505,6 @@ has just been created.</en>
 <en>Delete Entry</en>
 <de>Eintrag löschen</de>
 <id>703</id>
-</text>
-<text>
-<en>Delete Image</en>
-<de>Bild löschen</de>
-<id>704</id>
-<ro>Şterge imaginea</ro>
 </text>
 <text>
 <en>Show field</en>
@@ -2816,11 +2628,6 @@ has just been created.</en>
 <id>726</id>
 </text>
 <text>
-<en>Link to concerning thread:</en>
-<de>Link zum betreffenden Thread:</de>
-<id>730</id>
-</text>
-<text>
 <en>Edit Post</en>
 <de>Kommentar bearbeiten</de>
 <id>731</id>
@@ -2932,12 +2739,6 @@ has just been created.</en>
 <id>754</id>
 </text>
 <text>
-<en>Please choose a group, in which the thread should be moved</en>
-<de>Bitte klicken Sie auf die Gruppe, in die das Thema verschoben werden soll</de>
-<id>756</id>
-<ro>Vă rugăm să faceţi click pe grupul în care să fie mutat subiectul</ro>
-</text>
-<text>
 <context>decimal separator</context>
 <en>.</en>
 <de>,</de>
@@ -2966,17 +2767,6 @@ has just been created.</en>
 <en>Link</en>
 <de>Link</de>
 <id>761</id>
-</text>
-<text>
-<en>No entries were found.</en>
-<de>Es konnten keine Einträge gefunden werden.</de>
-<id>762</id>
-</text>
-<text>
-<en>Forum.Forum</en>
-<de>Forum.Forum</de>
-<id>763</id>
-<ro>Forum.Forum</ro>
 </text>
 <text>
 <en>New entry in your guestbook</en>
@@ -3048,16 +2838,6 @@ has just been created.</en>
 <en>Download original image</en>
 <de>Originalbild herunterladen</de>
 <id>778</id>
-</text>
-<text>
-<en>next</en>
-<de>weiter</de>
-<id>780</id>
-</text>
-<text>
-<en>previous</en>
-<de>zurück</de>
-<id>781</id>
 </text>
 <text>
 <en>Amount</en>
@@ -3348,11 +3128,6 @@ has just been created.</en>
 <id>856</id>
 </text>
 <text>
-<en>a post in an observed thread has been submitted</en>
-<de>ein Eintrag in einem überwachten Thread wurde vorgebracht</de>
-<id>858</id>
-</text>
-<text>
 <en>If you have lost your password,</en>
 <de>Wenn Sie Ihr Passwort vergessen haben, können Sie</de>
 <id>861</id>
@@ -3484,47 +3259,6 @@ has just been created.</en>
 <id>888</id>
 </text>
 <text>
-<en>Priority</en>
-<de>Priorität</de>
-<id>889</id>
-</text>
-<text>
-<en>Estimated time</en>
-<de>veranschlagte Zeit</de>
-<id>890</id>
-</text>
-<text>
-<en>Create date</en>
-<de>Datum erzeugen</de>
-<id>891</id>
-</text>
-<text>
-<en>Deadline</en>
-<de>Deadline</de>
-<id>892</id>
-<ro>Deadline</ro>
-</text>
-<text>
-<en>Open</en>
-<de>Offen</de>
-<id>893</id>
-</text>
-<text>
-<en>Done</en>
-<de>Erledigt</de>
-<id>894</id>
-</text>
-<text>
-<en>In progress</en>
-<de>In Arbeit</de>
-<id>895</id>
-</text>
-<text>
-<en>Is being tested</en>
-<de>Wird getestet</de>
-<id>896</id>
-</text>
-<text>
 <en>Fax</en>
 <de>Fax</de>
 <fr>Fax</fr>
@@ -3541,11 +3275,6 @@ has just been created.</en>
 <en>Type</en>
 <de>Typ</de>
 <id>900</id>
-</text>
-<text>
-<en>Todo Details</en>
-<de>Todo Details</de>
-<id>901</id>
 </text>
 <text>
 <en>Contact person</en>
@@ -3778,11 +3507,6 @@ has just been created.</en>
 <de>Dateityp ist nicht erlaubt.</de>
 <id>962</id>
 <ro>Tipul fişierului nu este permis.</ro>
-</text>
-<text>
-<en>Associate-Tag</en>
-<de>Assoziierender-Tag {0}</de>
-<id>963</id>
 </text>
 <text>
 <en>Node {0}</en>
@@ -4049,11 +3773,6 @@ has just been created.</en>
 <id>1023</id>
 </text>
 <text>
-<en>Hide webdesign</en>
-<de>Webdesign Verstecken</de>
-<id>1024</id>
-</text>
-<text>
 <en>Disclaimer name</en>
 <de>Haftungsausschluss Name</de>
 <id>1025</id>
@@ -4132,23 +3851,6 @@ has just been created.</en>
 <id>1042</id>
 </text>
 <text>
-<en>Imprint.Vivid-Planet</en>
-<de>Impressum.Vivid-Planet</de>
-<id>1043</id>
-<ro>Copyright.Vivid-Planet</ro>
-</text>
-<text>
-<en>Webdesign</en>
-<id>1044</id>
-<de>Webdesign</de>
-</text>
-<text>
-<en>IsiWeb</en>
-<id>1046</id>
-<de>isiWeb</de>
-<ro>isiWeb</ro>
-</text>
-<text>
 <en>Imprint.Disclaimer</en>
 <de>Impressum.Haftungsausschluss</de>
 <id>1047</id>
@@ -4158,11 +3860,6 @@ has just been created.</en>
 <en>Clubnumber ZVR</en>
 <de>Vereinsnummer ZVR</de>
 <id>1048</id>
-</text>
-<text>
-<en>Programming</en>
-<de>Programmierung</de>
-<id>1049</id>
 </text>
 <text>
 <en>Bank data</en>
@@ -4324,11 +4021,6 @@ has just been created.</en>
 <id>1520</id>
 </text>
 <text>
-<en>Seitenbaum</en>
-<id>1083</id>
-<de>Seitenbaum</de>
-</text>
-<text>
 <en>Open frontend in a new window</en>
 <id>1084</id>
 <de>Frontend in einem neuen Fenster öffnen.</de>
@@ -4415,11 +4107,6 @@ has just been created.</en>
 <en>visibility</en>
 <id>1116</id>
 <de>Sichtbarkeit</de>
-</text>
-<text>
-<en>Edit Product</en>
-<id>1117</id>
-<de>Produkt bearbeiten</de>
 </text>
 <text>
 <en>To Checkout</en>
@@ -4608,16 +4295,6 @@ has just been created.</en>
 <ro>Format</ro>
 </text>
 <text>
-<en>Date Sent</en>
-<de>Sendedatum</de>
-<id>1154</id>
-</text>
-<text>
-<en>Can only delete queued recipients</en>
-<de>Es können nur Empfänger entfernt werden, die sich in der Warteschlange befinden</de>
-<id>1155</id>
-</text>
-<text>
 <en>Newsletter stopped, cannot change status.</en>
 <de>Newsletter wurde gestoppt. Status kann nicht geändert werden.</de>
 <id>1156</id>
@@ -4709,18 +4386,6 @@ has just been created.</en>
 <id>1174</id>
 </text>
 <text>
-<en>{0} receiver not found.</en>
-<en_plural>{0} receivers not found.</en_plural>
-<de>{0} Empfänger nicht gefunden.</de>
-<de_plural>{0} Empfänger nicht gefunden.</de_plural>
-<id>1175</id>
-</text>
-<text>
-<en>{0} errors while sending mail.</en>
-<de>{0} Fehler während des Sendens.</de>
-<id>1176</id>
-</text>
-<text>
 <en>Last mail sent: {0}</en>
 <de>Letzte gesendete Mail: {0}</de>
 <id>1177</id>
@@ -4735,11 +4400,6 @@ has just been created.</en>
 <de>Adresskopf</de>
 <id>1179</id>
 <ro>Antet adresă</ro>
-</text>
-<text>
-<en>Shop Confirmation Mail</en>
-<de>Shop Bestätigungsmail</de>
-<id>1180</id>
 </text>
 <text>
 <en>Shop Confirmation Text</en>
@@ -4986,11 +4646,6 @@ has just been created.</en>
 <en>Unsubscribe Newsletter</en>
 <de>Newsletter abmelden</de>
 <id>1235</id>
-</text>
-<text>
-<en>Edit or send Newsletter</en>
-<de>Newsletter bearbeiten oder senden</de>
-<id>1236</id>
 </text>
 <text>
 <en>You have been successfully unsubscribed from the newsletter.</en>
@@ -5350,11 +5005,6 @@ has just been created.</en>
 <id>1315</id>
 </text>
 <text>
-<en>Dimension: At least width or height must be set higher than 0 when using crop or bestfit.</en>
-<id>1318</id>
-<de>Dimension: Bei der Verwendung von Beschneiden oder BestFit muss die Breite oder Höhe größer als 0 gesetzt werden.</de>
-</text>
-<text>
 <en>Width or height must be higher than 0 when using crop or bestfit.</en>
 <id>1319</id>
 <de>Bei der Verwendung von Beschneiden oder BestFit muss die Breite oder Höhe größer als 0 sein.</de>
@@ -5460,11 +5110,6 @@ has just been created.</en>
 <en>Green</en>
 <de>Grün</de>
 <id>1339</id>
-</text>
-<text>
-<en>How many columns</en>
-<de>Wie viele Spalten</de>
-<id>1340</id>
 </text>
 <text>
 <en>Table style</en>
@@ -5672,10 +5317,6 @@ has just been created.</en>
 <de>Link. zu Komponente</de>
 </text>
 <text>
-<en>Moderators</en>
-<id>1378</id>
-</text>
-<text>
 <en>Company A-Z</en>
 <de>Firmen A-Z</de>
 <id>1379</id>
@@ -5795,11 +5436,6 @@ has just been created.</en>
 <de>Schlüsselwörter</de>
 </text>
 <text>
-<en>Dimension: At width and height must be set higher than 0 when using deform.</en>
-<de>Dimension: Breite und Höhe muss gesetzt werden, wenn Verzerrung verwendet wird.</de>
-<id>1404</id>
-</text>
-<text>
 <en>Read more »</en>
 <de>Weiterlesen »</de>
 <fr>Davantage »</fr>
@@ -5833,38 +5469,6 @@ has just been created.</en>
 <id>1411</id>
 </text>
 <text>
-<en>Vivid Planet Software GmbH</en>
-<id>1412</id>
-<de>Vivid Planet Software GmbH</de>
-</text>
-<text>
-<en>Internet-Agentur Salzburg</en>
-<id>1413</id>
-<de>Internet-Agentur Salzburg</de>
-<ro>Ageţie internet Salzburg</ro>
-</text>
-<text>
-<en>Pfongauerstraße 67</en>
-<id>1414</id>
-<de>Landesstraße 23</de>
-</text>
-<text>
-<en>A-5202 Neumarkt a. Wallersee</en>
-<id>1415</id>
-<de>A-5302 Henndorf a. Wallersee</de>
-</text>
-<text>
-<en>This {0} is an {1}</en>
-<de>Diese {0} ist ein {1}</de>
-<id>1417</id>
-</text>
-<text>
-<en>isiWEB</en>
-<id>1418</id>
-<de>isiWEB</de>
-<ro>isiWEB</ro>
-</text>
-<text>
 <en>hh:mm</en>
 <id>1419</id>
 <de>hh:mm</de>
@@ -5874,16 +5478,6 @@ has just been created.</en>
 <en>Google Analytics</en>
 <id>1420</id>
 <de>Google Analytics</de>
-</text>
-<text>
-<en>www.isiweb.at</en>
-<id>1422</id>
-<de>www.isiweb.at</de>
-</text>
-<text>
-<en>A product of Vivid Planet Software GmbH</en>
-<de>Ein Produkt der Vivid Planet Software GmbH</de>
-<id>1424</id>
 </text>
 <text>
 <en>Typ</en>
@@ -5916,16 +5510,6 @@ has just been created.</en>
 <en>Sent E-Mail again</en>
 <de>Eine E-Mail erneut senden</de>
 <id>1431</id>
-</text>
-<text>
-<en>Useradministration</en>
-<de>Benutzerverwaltung</de>
-<id>1432</id>
-</text>
-<text>
-<en>Time</en>
-<de>Zeit</de>
-<id>1433</id>
 </text>
 <text>
 <en>All</en>
@@ -6039,17 +5623,6 @@ has just been created.</en>
 <id>1456</id>
 </text>
 <text>
-<en>Offset</en>
-<id>1457</id>
-<de>Offset</de>
-</text>
-<text>
-<en>Format of entry</en>
-<id>1458</id>
-<de>Format des Eintrags</de>
-<ro>Formatul datelor introduse</ro>
-</text>
-<text>
 <en>Not a valid time.  Must be in the format "12:34:00".</en>
 <id>1459</id>
 <de>Kein gültiges Zeitformat. Muss im Format "12:34:00" sein.</de>
@@ -6136,16 +5709,6 @@ has just been created.</en>
 <en>Fade images</en>
 <id>1479</id>
 <de>Bilder überblenden</de>
-</text>
-<text>
-<en>zwei Bilder</en>
-<id>1481</id>
-<de>zwei Bilder</de>
-</text>
-<text>
-<en>Variant</en>
-<de>Varianten</de>
-<id>1482</id>
 </text>
 <text>
 <en>Paragraph {0}</en>
@@ -6236,37 +5799,6 @@ has just been created.</en>
 <id>1510</id>
 </text>
 <text>
-<en>Time recording</en>
-<de>Zeiterfassung</de>
-<id>1512</id>
-</text>
-<text>
-<en>Year</en>
-<de>Jahr</de>
-<id>1513</id>
-<ro>An</ro>
-</text>
-<text>
-<en>Spent time</en>
-<de>Verbrauchte Zeit</de>
-<id>1514</id>
-</text>
-<text>
-<en>Included time</en>
-<de>Inkludierte Zeit</de>
-<id>1515</id>
-</text>
-<text>
-<en>Year {0}</en>
-<de>{0}. Jahr</de>
-<id>1516</id>
-</text>
-<text>
-<en>Spent time by years</en>
-<de>Verbrauchte Zeite nach Jahren</de>
-<id>1518</id>
-</text>
-<text>
 <en>Original Filename</en>
 <id>1521</id>
 <de>Original Dateiname</de>
@@ -6305,16 +5837,6 @@ has just been created.</en>
 <en>Right column</en>
 <id>1529</id>
 <de>Rechte Spalte</de>
-</text>
-<text>
-<en>Toolbox</en>
-<id>1533</id>
-<de>Werkzeugkasten</de>
-</text>
-<text>
-<en>Timer</en>
-<id>1539</id>
-<de>Timer</de>
 </text>
 <text>
 <en>Dear Sir or Madam</en>
@@ -6638,11 +6160,6 @@ has just been created.</en>
 <de>Quelle</de>
 </text>
 <text>
-<en>Redirects</en>
-<id>1613</id>
-<de>Redirects</de>
-</text>
-<text>
 <en>{0}-{1} of about {2}</en>
 <de>{0}-{1} von zirka {2}</de>
 <id>1614</id>
@@ -6686,29 +6203,9 @@ has just been created.</en>
 <de>Aktivierungs-Code ist fehlerhaft. Vielleicht wurde die Adresse falsch aus der E-Mail kopiert?</de>
 </text>
 <text>
-<en>Fill out the Form</en>
-<id>1624</id>
-<de>Füllen Sie das Formular aus</de>
-</text>
-<text>
-<en>Click the save button above</en>
-<id>1625</id>
-<de>Klicken Sie oben auf Speichern</de>
-</text>
-<text>
-<en>If no error pops up, the cache has been cleared sucessfully</en>
-<id>1626</id>
-<de>Wenn keine Fehlermeldung erscheint, wurde der Cache erfolgreich gelöscht.</de>
-</text>
-<text>
 <en>Affected component / part (e.g.: References)</en>
 <id>1627</id>
 <de>Betroffene Komponente / Teil (z.B. Referenzen)</de>
-</text>
-<text>
-<en>Why do you need to clear the cache? (steps to reproduce / description)</en>
-<id>1628</id>
-<de>Warum wollen Sie den Cache löschen? (Schritte zur Reproduzierung / Beschreibung)</de>
 </text>
 <text>
 <en>Clear Cache</en>
@@ -6752,11 +6249,6 @@ has just been created.</en>
 <en>net amount</en>
 <de>Nettobetrag</de>
 <id>1602</id>
-</text>
-<text>
-<en>+20% VAT</en>
-<de>+20% MwSt</de>
-<id>1683</id>
 </text>
 <text>
 <en>Count</en>
@@ -6831,40 +6323,6 @@ has just been created.</en>
 <ro>Vă rugăm să introduceţi un text pentru căutare</ro>
 </text>
 <text>
-<en>ZIP / City</en>
-<de>PLZ / Ort</de>
-<es>CP / Localidad</es>
-<ru>Почтовый индекс / Город</ru>
-<id>1648</id>
-</text>
-<text>
-<en>You got a requst on {0}</en>
-<de>Es wurde eine Anfrage auf {0} gestellt</de>
-<id>1649</id>
-</text>
-<text>
-<en>This enquiry was sent by</en>
-<de>Die Anfrage wurde gesendet von</de>
-<id>1650</id>
-</text>
-<text>
-<en>http://www.vivid-planet.com</en>
-<id>1651</id>
-<de>http://www.vivid-planet.com</de>
-<ro>http://www.vivid-planet.com</ro>
-</text>
-<text>
-<en>Imprint.Facebook Disclaimer</en>
-<de>Impressum.Facebook Disclaimer</de>
-<id>1652</id>
-<ro>Copyright.Facebook Disclaimer</ro>
-</text>
-<text>
-<en>Facebook Social Plugin</en>
-<id>1653</id>
-<de>Facebook Social Plugin</de>
-</text>
-<text>
 <en>XLS Import</en>
 <id>1658</id>
 <de>XLS Import</de>
@@ -6875,21 +6333,6 @@ has just been created.</en>
 <de>Datei hochladen und zum importieren auf "Speichern" klicken.</de>
 </text>
 <text>
-<en>Adjust columns</en>
-<id>1660</id>
-<de>Spalten anpassen</de>
-</text>
-<text>
-<en>Add columns if necessary</en>
-<id>1661</id>
-<de>Wenn nötig Spalten hinzufügen</de>
-</text>
-<text>
-<en>Uploaded file is not of type "xls".</en>
-<id>1662</id>
-<de>Hochgeladene Datei ist nicht vom Typ "xls".</de>
-</text>
-<text>
 <en>Import done</en>
 <id>1663</id>
 <de>Import abgeschlossen</de>
@@ -6898,25 +6341,6 @@ has just been created.</en>
 <en>The File has been imported successfully.</en>
 <id>1664</id>
 <de>Die Datei wurde erfolgreich importiert.</de>
-</text>
-<text>
-<en>Newsletter Show in Web</en>
-<id>1669</id>
-<de>Newsletter im Web zeigen</de>
-</text>
-<text>
-<en>Mandatory field</en>
-<de>Pflichtfeld</de>
-<es>Campo obligatorio</es>
-<ru>Обязательное поле</ru>
-<id>1670</id>
-</text>
-<text>
-<en>Send message</en>
-<de>Nachricht absenden</de>
-<es>Enviar un mensaje</es>
-<ru>Отправить сообщение</ru>
-<id>1671</id>
 </text>
 <text>
 <de>Durchsuchen</de>
@@ -6993,11 +6417,6 @@ has just been created.</en>
 <id>1702</id>
 </text>
 <text>
-<en>Entry {current} of {total}</en>
-<de>Eintrag {current} von {total}</de>
-<id>1673</id>
-</text>
-<text>
 <en>Guestbook Detail</en>
 <de>Gästebuch Detail</de>
 <id>1674</id>
@@ -7070,12 +6489,6 @@ has just been created.</en>
 <en>Filter</en>
 <id>1655</id>
 <de>Filter</de>
-</text>
-<text>
-<en>The Form has been submitted successfully.</en>
-<id>1656</id>
-<ua>Ваш лист було успішно відправлено.</ua>
-<de>Das Formular wurde erfolgreich übermittelt.</de>
 </text>
 <text>
 <en>Please choose a file</en>
@@ -7358,6 +6771,10 @@ has just been created.</en>
 <en>Can't submit order because the cart is empty.</en>
 <id>1761</id>
 <de>Bestellung kann nicht abgesendet werden, weil der Warenkorb leer ist.</de>
+</text>
+<text>
+<en>Link Text</en>
+<id>1762</id>
 </text>
 </trl>
 
