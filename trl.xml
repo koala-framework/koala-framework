@@ -5944,11 +5944,6 @@ has just been created.</en>
 <de>Alphanumerisch</de>
 </text>
 <text>
-<en>Bezeichnung</en>
-<id>1570</id>
-<de>Bezeichnung</de>
-</text>
-<text>
 <en>This account has already been activated.</en>
 <de>Dieser Account wurde bereits aktiviert.</de>
 <id>1541</id>
@@ -6366,11 +6361,6 @@ has just been created.</en>
 <en>Master height</en>
 <id>1690</id>
 <de>Master-Höhe</de>
-</text>
-<text>
-<en>Land</en>
-<id>1691</id>
-<de>Land</de>
 </text>
 <text>
 <en>E-Mail Address</en>

@@ -90,7 +90,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
         $this->_columns->add(new Kwf_Grid_Column_Datetime('date', trlKwf('Date')));
         $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('Firstname'), 90));
         $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Lastname'), 90));
-        $this->_columns->add(new Kwf_Grid_Column('country', trlKwf('Land'), 15)); // TODO: Pfusch
+        $this->_columns->add(new Kwf_Grid_Column('country', trlKwf('Country'), 15)); // TODO: Pfusch
         $this->_columns->add(new Kwf_Grid_Column('sum_amount', trlKwf('Amt'), 30))
             ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_SumAmount())
             ->setSortable(false);
