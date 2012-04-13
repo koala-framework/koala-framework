@@ -86,13 +86,13 @@ Kwf.clone = function(o) {
 
 if (!Ext.isObject) {
     //TODO Ext4: remove
-    Ext.isObject = (toString.call(null) === '[object Object]') ?
+    Ext.isObject = (Ext.toString.call(null) === '[object Object]') ?
     function(value) {
         // check ownerDocument here as well to exclude DOM nodes
-        return value !== null && value !== undefined && toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
+        return value !== null && value !== undefined && Ext.toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
     } :
     function(value) {
-        return toString.call(value) === '[object Object]';
+        return Ext.toString.call(value) === '[object Object]';
     };
 }
 
