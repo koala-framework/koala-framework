@@ -5419,11 +5419,6 @@ has just been created.</en>
 <ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail</ro>
 </text>
 <text>
-<en>Betreff</en>
-<id>1331</id>
-<de>Betreff</de>
-</text>
-<text>
 <en>To</en>
 <de>An</de>
 <context>email</context>
