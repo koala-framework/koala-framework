@@ -45,10 +45,18 @@ class Vpc_Shop_Cart_OrderData
         );
     }
 
+    //return false to completely hide shipping
+    protected function _hasShipping($order)
+    {
+        return true;
+    }
+
     public final function getTotal($order)
     {
         $ret = $order->getSubTotal();
-        $ret += $this->_getShipping($order);
+        if ($this->_hasShipping($order)) {
+            $ret += $this->_getShipping($order);
+        }
         foreach ($this->_getAdditionalSumRows($order, $ret) as $r) {
             $ret += $r['amount'];
         }
@@ -95,17 +103,21 @@ class Vpc_Shop_Cart_OrderData
             'text' => trlVps('+20% VAT').':',
             'amount' => round($subTotal - $subTotal/1.2, 2)
         );
-        $shipping = $this->_getShipping($order);
-        $ret[] = array(
-            'class' => 'shippingHandling',
-            'text' => trlVps('Shipping and Handling').':',
-            'amount' => round($shipping/1.2, 2)
-        );
-        if ($shipping) {
+        if (!$this->_hasShipping($order)) {
+            $shipping = 0;
+        } else {
+            $shipping = $this->_getShipping($order);
             $ret[] = array(
-                'text' => trlVps('+20% VAT').':',
-                'amount' => round($shipping - $shipping/1.2, 2)
+                'class' => 'shippingHandling',
+                'text' => trlVps('Shipping and Handling').':',
+                'amount' => round($shipping/1.2, 2)
             );
+            if ($shipping) {
+                $ret[] = array(
+                    'text' => trlVps('+20% VAT').':',
+                    'amount' => round($shipping - $shipping/1.2, 2)
+                );
+            }
         }
         $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
         $ret[] = array(
