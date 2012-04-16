@@ -104,7 +104,9 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
                 ->setSortable(false);
         }
         $this->_columns->add(new Vps_Grid_Column_Date('payed', trlVps('Payed')));
-        $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlcVps('Invoice', 'IN')));
+        if (Vpc_Abstract::getSetting($this->_getParam('class'), 'generateInvoices')) {
+            $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlcVps('Invoice', 'IN')));
+        }
         $this->_columns->add(new Vps_Grid_Column_Button('shipped', trlcVps('Shipped', 'SH')))
             ->setButtonIcon('/assets/silkicons/package_go.png');
 
