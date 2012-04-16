@@ -22,9 +22,11 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         foreach ($cc as $k=>$c) {
             $payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
         }
-        $this->_form->add(new Vps_Form_Field_Select('payment', trlVps('Payment')))
-            ->setValues($payments)
-            ->setAllowBlank(false);
+        if (count($payments) > 1) {
+            $this->_form->add(new Vps_Form_Field_Select('payment', trlVps('Payment')))
+                ->setValues($payments)
+                ->setAllowBlank(false);
+        }
 
         $cols = $this->_form->add(new Vps_Form_Container_Columns());
         $col = $cols->add();

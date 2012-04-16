@@ -58,30 +58,30 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
             $paymentsFilterData[] = array($k, $payments[$k]);
         }
 
-        $this->_filters = array(
-            'text' => true,
-            'payment' => array(
+        $this->_filters['text'] = true;
+        if (count($payments) > 1) {
+            $this->_filters['payment'] = array(
                 'type'   => 'ComboBox',
                 'text'   => trlVps('Payment'),
                 'data'   => $paymentsFilterData,
                 'width'  => 100
-            ),
-            'canceled' => array(
-                'type'      => 'Button',
-                'skipWhere' => true,
-                'cls'       => 'x-btn-text-icon',
-                'icon'      => '/assets/silkicons/stop.png',
-                'text'      => trlVps('canceled'),
-                'tooltip'   => trlVps('Show canceled orders')
-            ),
-            'shipped' => array(
-                'type'      => 'Button',
-                'skipWhere' => true,
-                'cls'       => 'x-btn-text-icon',
-                'icon'      => '/assets/silkicons/package.png',
-                'text'      => trlVps('shipped'),
-                'tooltip'   => trlVps('Show shipped orders')
-            ),
+            );
+        }
+        $this->_filters['canceled'] = array(
+            'type'      => 'Button',
+            'skipWhere' => true,
+            'cls'       => 'x-btn-text-icon',
+            'icon'      => '/assets/silkicons/stop.png',
+            'text'      => trlVps('canceled'),
+            'tooltip'   => trlVps('Show canceled orders')
+        );
+        $this->_filters['shipped'] = array(
+            'type'      => 'Button',
+            'skipWhere' => true,
+            'cls'       => 'x-btn-text-icon',
+            'icon'      => '/assets/silkicons/package.png',
+            'text'      => trlVps('shipped'),
+            'tooltip'   => trlVps('Show shipped orders')
         );
 
         $this->_columns->add(new Vps_Grid_Column('order_number', trlVps('Order Nr'), 50));
@@ -98,9 +98,11 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
             ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_SumPrice())
             ->setSortable(false)
             ->setRenderer('euroMoney');
-        $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 80))
-            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($payments))
-            ->setSortable(false);
+        if (count($payments) > 1) {
+            $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 80))
+                ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($payments))
+                ->setSortable(false);
+        }
         $this->_columns->add(new Vps_Grid_Column_Date('payed', trlVps('Payed')));
         $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlcVps('Invoice', 'IN')));
         $this->_columns->add(new Vps_Grid_Column_Button('shipped', trlcVps('Shipped', 'SH')))
