@@ -1210,11 +1210,12 @@ class Kwf_Component_Data
     public function getLanguage()
     {
         if (!isset($this->_languageCache)) { //cache ist vorallem für bei kwfUnserialize nützlich
-            $langData = $this->getLanguageData();
-            if (!$langData) {
-                $this->_languageCache = Kwf_Trl::getInstance()->getWebCodeLanguage();
+            if (Kwc_Abstract::getFlag($this->componentClass, 'hasLanguage')) {
+                $this->_languageCache = $this->getComponent()->getLanguage();
+            } else if ($this->parent) {
+                $this->_languageCache = $this->parent->getLanguage();
             } else {
-                $this->_languageCache = $langData->getComponent()->getLanguage();
+                $this->_languageCache = Kwf_Trl::getInstance()->getWebCodeLanguage();
             }
         }
         return $this->_languageCache;

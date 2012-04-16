@@ -66,7 +66,6 @@ class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
                     if ($i === null) {
                        unset ($f->$k);
                     } else {
-                        $i =  str_replace('&', '&amp;', $i); //bugfix für php bug, sonst kommt der fehler "unterminated entity reference"
                         $f->$k = $i;
                     }
 

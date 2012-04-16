@@ -55,7 +55,7 @@
 <en>Hello {0}!</en>
 <de>Hallo {0}!</de>
 <id>14</id>
-<ro>Buna ziua {0}!</ro>
+<ro>Bună ziua {0}!</ro>
 <mk>Здраво {0}!</mk>
 </text>
 <text>
@@ -63,7 +63,7 @@
 has just been created.</en>
 <de>Ihr Konto bei {0}wurde soeben erstellt.</de>
 <id>15</id>
-<ro>Contul dumneavoastra la {0} a fost creat.</ro>
+<ro>A fost creat contul dumneavoastră pentru {0}.</ro>
 <ua>Ваш аккаунт створено</ua>
 <mk>Вашиот акаунт е креиран.</mk>
 </text>
@@ -87,7 +87,7 @@ has just been created.</en>
 <en>Your account at {0} has been deleted.</en>
 <de>Ihr Konto bei {0} wurde gelöscht.</de>
 <id>19</id>
-<ro>Contul dumneavoasta la {0} a fost sters.</ro>
+<ro>Contul dumneavoastră pentru {0} a fost şters.</ro>
 <ua>Ваш аккаунт видалено</ua>
 <mk>Вашиот акаунт е избришан.</mk>
 </text>
@@ -238,7 +238,7 @@ has just been created.</en>
 <en>Content</en>
 <de>Inhalt</de>
 <id>50</id>
-<ro>Continut</ro>
+<ro>Conţinut</ro>
 <ua>Зміст</ua>
 <mk>Содржина</mk>
 </text>
@@ -267,7 +267,7 @@ has just been created.</en>
 <en>Size</en>
 <de>Größe</de>
 <id>56</id>
-<ro>Marime</ro>
+<ro>Dimensiune</ro>
 <mk>Големина</mk>
 </text>
 <text>
@@ -304,20 +304,6 @@ has just been created.</en>
 <id>62</id>
 <ro>Dreapta</ro>
 <mk>Десно</mk>
-</text>
-<text>
-<en>Alternate</en>
-<de>Alternierend</de>
-<id>63</id>
-<ro>Altrenativ</ro>
-<mk>Алтернативен</mk>
-</text>
-<text>
-<en>Maximum Length</en>
-<de>Maximale Länge</de>
-<id>67</id>
-<ro>Lungime maxima</ro>
-<mk>Максимална должина</mk>
 </text>
 <text>
 <en>Default Value</en>
@@ -362,13 +348,6 @@ has just been created.</en>
 <mk>Валидатор</mk>
 </text>
 <text>
-<en>No Validator</en>
-<de>Kein Validator</de>
-<id>84</id>
-<ro>Numar validator</ro>
-<mk>Без валидатор.</mk>
-</text>
-<text>
 <en>E-Mail</en>
 <de>E-Mail</de>
 <fr>E-mail</fr>
@@ -384,27 +363,6 @@ has just been created.</en>
 <id>86</id>
 <ro>Data</ro>
 <mk>Датум</mk>
-</text>
-<text>
-<en>Group</en>
-<de>Gruppe</de>
-<id>87</id>
-<ro>Grup</ro>
-<mk>Група</mk>
-</text>
-<text>
-<en>enable posts</en>
-<de>Beiträge erlauben</de>
-<id>88</id>
-<ro>Activati posturi</ro>
-<mk>Овозможи поставувања</mk>
-</text>
-<text>
-<en>Last Entry</en>
-<de>Letzter Beitrag</de>
-<id>91</id>
-<ro>Ultima intrare</ro>
-<mk>Последно Поставување</mk>
 </text>
 <text>
 <en>at</en>
@@ -464,13 +422,6 @@ has just been created.</en>
 <id>101</id>
 <ro>Subiect</ro>
 <mk>Наслов</mk>
-</text>
-<text>
-<en>Moderators of selected group</en>
-<de>Moderatoren der ausgewählten Gruppe</de>
-<id>102</id>
-<ro>Moderatorii grupului selectat</ro>
-<mk>Модератори на одбраната група</mk>
 </text>
 <text>
 <en>Member since</en>
@@ -568,7 +519,7 @@ has just been created.</en>
 <en>Your useraccount was successfully activated.</en>
 <de>Ihr Benutzerkonto wurde erfolgreich aktiviert.</de>
 <id>162</id>
-<ro>Contul dumneavoastra a fost activat cu succes</ro>
+<ro>Contul dumneavoastră de utilizator a fost activat cu succes.</ro>
 </text>
 <text>
 <en>to get back to the Startpage</en>
@@ -670,7 +621,7 @@ has just been created.</en>
 <en>Advice</en>
 <de>Information</de>
 <id>195</id>
-<ro>Indrumare</ro>
+<ro>Info</ro>
 <mk>Совет</mk>
 </text>
 <text>
@@ -843,171 +794,204 @@ has just been created.</en>
 <en>Expand here</en>
 <de>Hier erweitern</de>
 <id>248</id>
+<ro>Măreşte aici</ro>
 </text>
 <text>
 <en>Collapse here</en>
 <de>Hier schrumpfen</de>
 <id>249</id>
+<ro>Micşorează aici</ro>
 </text>
 <text>
 <en>Open preview</en>
 <de>Vorschau öffnen</de>
 <id>250</id>
+<ro>Deschide preview</ro>
 </text>
 <text>
 <en>A Server failure occured.</en>
 <de>Ein Server Fehler ist aufgetreten.</de>
 <id>253</id>
 <mk>Се случи грешка на серверот.</mk>
+<ro>A intervenit o eroare de server.</ro>
 </text>
 <text>
 <en>Error - wrong version</en>
 <de>Fehler - falsche Version.</de>
 <id>254</id>
+<ro>Eroare - versiune eronată.</ro>
 </text>
 <text>
 <en>Because of an application update the application has to be reloaded.</en>
 <de>Aufgrund eines Updates muss die Anwendung neu geladen werden.</de>
 <id>255</id>
+<ro>Datorită unei actualizări, aplicaţia trebuie reîncărcată.</ro>
 </text>
 <text>
 <en>A connection problem occured.</en>
 <de>Ein Verbindungsfehler ist aufgetreten.</de>
 <id>256</id>
+<ro>A intervenit o eroare de conexiune.</ro>
 </text>
 <text>
 <en>Select your Position</en>
 <de>Wählen Sie Ihre Position.</de>
 <id>258</id>
+<ro>Selectaţi poziţia dumneavoastră.</ro>
 </text>
 <text>
 <en>enter address</en>
 <de>Adresse eingeben.</de>
 <id>259</id>
 <mk>внеси адреса</mk>
+<ro>Introduceţi adresa.</ro>
 </text>
 <text>
 <en>Example</en>
 <de>Beispiel</de>
 <id>260</id>
 <mk>Пример</mk>
+<ro>Exemplu</ro>
 </text>
 <text>
 <en>Unknown address</en>
 <de>Unbekannte Adresse.</de>
 <id>261</id>
 <mk>Непозната адреса</mk>
+<ro>Adresă necunoscută.</ro>
 </text>
 <text>
 <en>Address could not be found</en>
 <de>Adresse kann nicht gefunden werden.</de>
 <id>262</id>
+<ro>Adresa nu poate fi găsită.</ro>
 </text>
 <text>
 <en>Move marker while pressing mousekey.</en>
 <de>Bewegen Sie den Marker mit der Maus.</de>
 <id>263</id>
+<ro>Mişcaţi marker-ul apăsând pe tasta mouse-ului.</ro>
 </text>
 <text>
 <en>Latitude</en>
 <de>Breitengrad</de>
 <id>264</id>
+<ro>Latitudine</ro>
 </text>
 <text>
 <en>Longitude</en>
 <de>Längengrad</de>
 <id>265</id>
+<ro>Longitudine</ro>
 </text>
 <text>
 <en>Insert new image or edit selected image.</en>
 <de>Fügt neues Bild ein oder bearbeitet das ausgewählte Bild.</de>
 <id>267</id>
+<ro>Introdu imagine nouă sau editează imaginea selectată.</ro>
 </text>
 <text>
 <en>Create new Download for the selected text or edit selected Download.</en>
 <de>Erstellt neuen Download für den ausgewählten Text oder bearbeitet den ausgewählten Download.</de>
 <id>268</id>
+<ro>Creează download nou pentru textul selectat sau editează download selectat.</ro>
 </text>
 <text>
 <en>Create new Link for the selected text or edit selected Link.</en>
 <de>Erzeugt neuen Link für den ausgewählten Text oder bearbeitet den ausgewählten Link.</de>
 <id>269</id>
+<ro>Creează link nou pentru textul selectat sau editează link selectat.</ro>
 </text>
 <text>
 <en>Undo the last action.</en>
 <de>Letzten Arbeitsschritt rückgängig machen.</de>
 <id>270</id>
+<ro>Anulează ultima acţiune.</ro>
 </text>
 <text>
 <en>Redo the last action.</en>
 <de>Letzten Arbeitsschritt wiederholen.</de>
 <id>271</id>
+<ro>Repetă ultima acţiune.</ro>
 </text>
 <text>
 <en>Insert a custom character.</en>
 <de>Sonderzeichen einfügen.</de>
 <id>272</id>
+<ro>Intordu un caracter special.</ro>
 </text>
 <text>
 <en>Insert text without formating.</en>
 <de>Text ohne Formatierung einfügen.</de>
 <id>273</id>
+<ro>Inserează textul fără formatare.</ro>
 </text>
 <text>
 <en>Insert Custom Character</en>
 <de>Benutzerdefiniertes Zeichen einfügen</de>
 <id>275</id>
+<ro>Inserează caracter special</ro>
 </text>
 <text>
 <en>Insert Plain Text</en>
 <de>"Sauberen" Text einfügen</de>
 <id>276</id>
+<ro>Inserează text fără formatări</ro>
 </text>
 <text>
 <en>Cleaning...</en>
 <de>Reinigen...</de>
 <id>277</id>
+<ro>Se reconciliază...</ro>
 </text>
 <text>
 <en>Password lost</en>
 <de>Passwort vergessen</de>
 <id>278</id>
+<ro>Am uitat parola</ro>
 </text>
 <text>
 <en>Please enter your email address</en>
 <de>Bitte geben Sie Ihre E-Mail Adresse ein</de>
 <id>279</id>
+<ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail</ro>
 </text>
 <text>
 <en>Please type in your password. After clicking the button below</en>
 <de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Button</de>
 <id>280</id>
+<ro>Vă rugăm să introduceţi parola dumneavoastră. După ce faceţi click pe butonul de mai jos</ro>
 </text>
 <text>
 <en>you are logged in automatically and may use the typed in password</en>
 <de>werden Sie automatisch angemeldet und können das eingegebenen Passwort</de>
 <id>281</id>
+<ro> veţi fi logat automat şi veţi putea să folosiţi parola introdusă</ro>
 </text>
 <text>
 <en>for future logins.</en>
 <de>für künftige Anmeldungen verwenden.</de>
 <id>282</id>
+<ro> pentru utilizările viitoare.</ro>
 </text>
 <text>
 <en>Your email address:</en>
 <de>Ihre E-Mail Adresse:</de>
 <id>283</id>
 <mk>Вашата email адреса:</mk>
+<ro>Adresa dumneavoastră de e-mail:</ro>
 </text>
 <text>
 <en>Activate and login account</en>
 <de>Konto aktivieren und anmelden</de>
 <id>284</id>
+<ro>Activare şi login cont</ro>
 </text>
 <text>
 <en>The repeated password is different - please try again.</en>
 <de>Das wiederholte Passwort ist unterschiedlich - bitte versuchen Sie es erneut.</de>
 <id>285</id>
+<ro>Parola repetată este diferită - vă rugăm să mai încercaţi o dată.</ro>
 </text>
 <text>
 <en>An error has occurred</en>
@@ -1016,6 +1000,7 @@ has just been created.</en>
 <ru>Произошла ошибка</ru>
 <id>286</id>
 <mk>Се случи грешка</mk>
+<ro>A intervenit o eroare</ro>
 </text>
 <text>
 <en>Link cannot link to itself</en>
@@ -1026,6 +1011,7 @@ has just been created.</en>
 <en>Add Paragraph</en>
 <de>Absatz hinzufügen</de>
 <id>288</id>
+<ro>Adaugă paragraf</ro>
 </text>
 <text>
 <en>Save</en>
@@ -1036,6 +1022,7 @@ has just been created.</en>
 <en>Cancel</en>
 <de>Abbrechen</de>
 <id>290</id>
+<ro>Renunţă</ro>
 </text>
 <text>
 <en>Save and Back</en>
@@ -1111,6 +1098,7 @@ has just been created.</en>
 <en>Hyperlink</en>
 <de>Hyperlink</de>
 <id>306</id>
+<ro>Hyperlink</ro>
 </text>
 <text>
 <en>Undo (Ctrl+Z)</en>
@@ -1371,11 +1359,13 @@ has just been created.</en>
 <en>The date in this field must be after {0}</en>
 <de>Das Datum in diesem Feld muss nach dem {0} sein</de>
 <id>359</id>
+<ro>Data din acest câmp trebuie să fie după {0}</ro>
 </text>
 <text>
 <en>The date in this field must be before {0}</en>
 <de>Das Datum in diesem Feld muss vor dem {0} sein</de>
 <id>360</id>
+<ro>Data din acest câmp trebuie să fie înainte de {0}</ro>
 </text>
 <text>
 <en>{0} is not a valid date - it must be in the format {1}</en>
@@ -1401,6 +1391,7 @@ has just been created.</en>
 <en>Please enter the URL for the link:</en>
 <de>Bitte geben Sie die Webadresse für den Link ein:</de>
 <id>366</id>
+<ro>Vă rugăm să introduceţi adresa de internet a link-ului:</ro>
 </text>
 <text>
 <en>Bold (Ctrl+B)</en>
@@ -1621,11 +1612,13 @@ has just been created.</en>
 <en>Download</en>
 <de>Datei Herunterladen</de>
 <id>413</id>
+<ro>Descarcă fişierul</ro>
 </text>
 <text>
 <en>Logout</en>
 <de>Abmelden</de>
 <id>414</id>
+<ro>Anulare</ro>
 </text>
 <text>
 <en>Line</en>
@@ -1641,6 +1634,7 @@ has just been created.</en>
 <en>Images</en>
 <de>Bilder</de>
 <id>417</id>
+<ro>Imagini</ro>
 </text>
 <text>
 <en>Links</en>
@@ -1686,11 +1680,13 @@ has just been created.</en>
 <en>Y-m-d</en>
 <de>d.m.Y</de>
 <id>447</id>
+<ro>d.m.Y</ro>
 </text>
 <text>
 <en>Y-m-d H:i</en>
 <de>d.m.Y H:i</de>
 <id>448</id>
+<ro>d.m.Y H:i</ro>
 </text>
 <text>
 <en>no selection</en>
@@ -1712,6 +1708,7 @@ has just been created.</en>
 <en>on</en>
 <de>am</de>
 <id>455</id>
+<ro>în data de</ro>
 </text>
 <text>
 <en>New post in observed thread</en>
@@ -1727,6 +1724,7 @@ has just been created.</en>
 <en>Post</en>
 <de>Beitrag</de>
 <id>465</id>
+<ro>Post</ro>
 </text>
 <text>
 <en>Lost your password?</en>
@@ -1742,16 +1740,7 @@ has just been created.</en>
 <en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
 <de>Bitte bleibt in den Beiträgen bei einem freundlichen Umgangston. Jeder Verfasser haftet für sämtliche von ihm veröffentlichte Beiträge selbst. Beleidigende oder verletzende Beiträge werden von uns ohne Kommentar gelöscht.</de>
 <id>468</id>
-</text>
-<text>
-<en>Created by</en>
-<de>Erstellt von</de>
-<id>470</id>
-</text>
-<text>
-<en>Create a new topic</en>
-<de>Neues Thema erstellen</de>
-<id>471</id>
+<ro>Vă rugăm să scrieţi comentariile într-un ton politicos. Fiecare autor răspunde de conţinutul tuturor comentariilor sale. Comentariile ofensatoare vor fi şterse fără niciun comentariu. </ro>
 </text>
 <text>
 <en>Upload</en>
@@ -1792,21 +1781,25 @@ has just been created.</en>
 <en>Upload File</en>
 <de>Datei hochladen</de>
 <id>485</id>
+<ro>Încarcă fişierul</ro>
 </text>
 <text>
 <en>Delete File</en>
 <de>Datei löschen</de>
 <id>486</id>
+<ro>Şterge fişierul</ro>
 </text>
 <text>
 <en>Uploading file</en>
 <de>Datei wird hochgeladen</de>
 <id>487</id>
+<ro>Se încarcă fişierul</ro>
 </text>
 <text>
 <en>Edit Styles</en>
 <de>Formatvorlagen bearbeiten</de>
 <id>488</id>
+<ro>Editează formatul</ro>
 </text>
 <text>
 <en>Modify and Create Styles.</en>
@@ -1817,6 +1810,7 @@ has just been created.</en>
 <en>File upload</en>
 <de>Datei hochladen</de>
 <id>490</id>
+<ro>Încarcă fişierul</ro>
 </text>
 <text>
 <en>Info</en>
@@ -1827,16 +1821,19 @@ has just been created.</en>
 <en>yyyy-mm-dd</en>
 <de>dd.mm.yyyy</de>
 <id>493</id>
+<ro>dd.mm.yyyy</ro>
 </text>
 <text>
 <en>Margin top</en>
 <de>Abstand oben</de>
 <id>495</id>
+<ro>Margine sus</ro>
 </text>
 <text>
 <en>Margin bottom</en>
 <de>Abstand unten</de>
 <id>496</id>
+<ro>Margine jos</ro>
 </text>
 <text>
 <en>Text Align</en>
@@ -1952,6 +1949,7 @@ has just been created.</en>
 <en>Link Image</en>
 <de>Bild Link</de>
 <id>533</id>
+<ro>Link imagine</ro>
 </text>
 <text>
 <en>Text Image Link</en>
@@ -1962,6 +1960,7 @@ has just been created.</en>
 <en>Links Images</en>
 <de>Bilder Links</de>
 <id>536</id>
+<ro>Imagini stânga</ro>
 </text>
 <text>
 <en>Months</en>
@@ -1972,6 +1971,7 @@ has just been created.</en>
 <en>Categories</en>
 <de>Kategorien</de>
 <id>541</id>
+<ro>Categorii</ro>
 </text>
 <text>
 <en>Request password</en>
@@ -1992,46 +1992,12 @@ has just been created.</en>
 <en>Url</en>
 <de>Internetadresse</de>
 <id>547</id>
+<ro>Adresă web</ro>
 </text>
 <text>
 <en>Alpha</en>
 <de>Zeichen</de>
 <id>548</id>
-</text>
-<text>
-<en>Alpha Numeric</en>
-<de>Zeichen und Zahlen</de>
-<id>549</id>
-</text>
-<text>
-<en>Maximum Value</en>
-<de>Maximum</de>
-<id>550</id>
-</text>
-<text>
-<en>Minimum Value</en>
-<de>Minimum</de>
-<id>551</id>
-</text>
-<text>
-<en>Allow Negative</en>
-<de>Negative Zahlen erlaubt</de>
-<id>552</id>
-</text>
-<text>
-<en>Allow Decimals</en>
-<de>Dezimalzahlen erlaubt</de>
-<id>553</id>
-</text>
-<text>
-<en>Allow Blank</en>
-<de>Leerzeichen erlaubt</de>
-<id>554</id>
-</text>
-<text>
-<en>Values</en>
-<de>Werte</de>
-<id>555</id>
 </text>
 <text>
 <en>Number Field</en>
@@ -2067,6 +2033,7 @@ has just been created.</en>
 <en>Activation link</en>
 <de>Aktivierungslink</de>
 <id>565</id>
+<ro>Link de activare</ro>
 </text>
 <text>
 <en>Additional rights</en>
@@ -2077,21 +2044,13 @@ has just been created.</en>
 <en>Activated</en>
 <de>Aktiviert</de>
 <id>567</id>
-</text>
-<text>
-<en>Template</en>
-<de>Vorlage</de>
-<id>568</id>
-</text>
-<text>
-<en>Variable</en>
-<de>Variable</de>
-<id>570</id>
+<ro>Activat</ro>
 </text>
 <text>
 <en>Html</en>
 <de>HTML</de>
 <id>571</id>
+<ro>HTML</ro>
 </text>
 <text>
 <en>Cannot set Home Page invisible</en>
@@ -2107,6 +2066,7 @@ has just been created.</en>
 <en>Hello</en>
 <de>Hallo</de>
 <id>577</id>
+<ro>Bună ziua</ro>
 </text>
 <text>
 <en>A new entry has been written in your guestbook.</en>
@@ -2147,6 +2107,7 @@ has just been created.</en>
 <en>Your email address at {0} has been changed.</en>
 <de>Ihre Email Adresse auf {0} wurde geändert.</de>
 <id>589</id>
+<ro>Adresa dumneavoastră de e-mail pentru {0} a fost modificată.</ro>
 </text>
 <text>
 <en>Not Found</en>
@@ -2172,6 +2133,7 @@ has just been created.</en>
 <en>Your old email address was {0}, the new one is {1}</en>
 <de>Ihre alte Email Adresse war {0}, die neue ist {1}</de>
 <id>599</id>
+<ro>Vechea dumneavoastră adresă de e-mail a fost {0}, noua adresă este {1}</ro>
 </text>
 <text>
 <en>This email has been generated using the lost password function at {0}</en>
@@ -2192,6 +2154,7 @@ has just been created.</en>
 <en>Activate / Login</en>
 <de>Aktivieren / Einloggen</de>
 <id>604</id>
+<ro>Activare/Logare</ro>
 </text>
 <text>
 <en>Passwords not equal</en>
@@ -2202,6 +2165,7 @@ has just been created.</en>
 <en>Activation link sent to email address.</en>
 <de>Aktivierungslink wurde zur Email-Adresse gesendet.</de>
 <id>607</id>
+<ro>Link-ul de activare a fost trimis la adresa de e-mail.</ro>
 </text>
 <text>
 <en>Error sending the mail.</en>
@@ -2257,16 +2221,19 @@ has just been created.</en>
 <en>Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?</en>
 <de>Aktivierungscode ist ungültig. Vielleicht wurde Ihr Account bereits aktiviert, oder die URL wurde nicht vollständig kopiert, oder Ihr Passwort wurde bereits gesetzt?</de>
 <id>622</id>
+<ro>Codul de activare este invalid. Este posibil ca URL-ul să nu fi fost copiat complet sau contul dumneavoastră să fi fost deja activat sau parola dumneavoastră să fi fost deja setată?</ro>
 </text>
 <text>
 <en>Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.</en>
 <de>Ihr Account ist aktiv und das Passwort wurde bereits gesetzt. {2} {0}Klicken Sie hier{1}, um in den Admin-Bereich zu gelangen.</de>
 <id>623</id>
+<ro>Contul dumneavoastră este activ şi parola a fost deja introdusă. {2} {0}Faceţi click aici{1}, pentru a accesa secţiunea Admin.</ro>
 </text>
 <text>
 <en>en_US</en>
 <de>de_DE</de>
 <id>624</id>
+<ro>ro_RO</ro>
 </text>
 <text>
 <en>Offline hidden Html</en>
@@ -2279,24 +2246,10 @@ has just been created.</en>
 <id>631</id>
 </text>
 <text>
-<en>Forum</en>
-<de>Forum</de>
-<id>632</id>
-</text>
-<text>
-<en>Threads</en>
-<de>Themen</de>
-<id>634</id>
-</text>
-<text>
 <en>Posts</en>
 <de>Beiträge</de>
 <id>635</id>
-</text>
-<text>
-<en>Last post by</en>
-<de>Letzter Beitrag von</de>
-<id>636</id>
+<ro>Posturi</ro>
 </text>
 <text>
 <en>reply</en>
@@ -2304,66 +2257,12 @@ has just been created.</en>
 <de>Antwort</de>
 <de_plural>Antworten</de_plural>
 <id>637</id>
-</text>
-<text>
-<en defailt="1">Reply</en>
-<de>Antworten</de>
-<id>638</id>
-</text>
-<text>
-<en>Forum.Latest Threads</en>
-<de>Forum.Letzte Einträge</de>
-<id>639</id>
+<ro>Răspuns</ro>
 </text>
 <text>
 <en>Comment was successfully reported.</en>
 <de>Der Kommentar wurde erfolgreich gemeldet.</de>
 <id>641</id>
-</text>
-<text>
-<en>Thread closed</en>
-<de>Thema geschlossen</de>
-<id>642</id>
-</text>
-<text>
-<en>Reopen Thread</en>
-<de>Thema öffnen</de>
-<id>643</id>
-</text>
-<text>
-<en>Close Thread</en>
-<de>Thema schließen</de>
-<id>644</id>
-</text>
-<text>
-<en>Move Thread</en>
-<de>Thema verschieben</de>
-<id>645</id>
-</text>
-<text>
-<en>Thread was successfully moved.</en>
-<de>Das Thema wurde erfolgreich verschoben.</de>
-<id>646</id>
-</text>
-<text>
-<en>Moderate Thread</en>
-<de>Thema moderieren</de>
-<id>647</id>
-</text>
-<text>
-<en>Observe Thread</en>
-<de>Thema beobachten</de>
-<id>648</id>
-</text>
-<text>
-<en>Thread was successfully saved.</en>
-<de>Thema wurde erfolgreich gespeichert.</de>
-<id>649</id>
-</text>
-<text>
-<en>new thread</en>
-<de>Neues Thema</de>
-<id>650</id>
 </text>
 <text>
 <en>The form has been submitted successfully.</en>
@@ -2372,6 +2271,7 @@ has just been created.</en>
 <ru>форма успешно отправлена.</ru>
 <id>651</id>
 <ua>Ваш лист було успішно відправлено.</ua>
+<ro>Formularul a fost trimis cu succes.</ro>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -2392,6 +2292,7 @@ has just been created.</en>
 <en>Please enter a reason for reporting this Post</en>
 <de>Bitte geben sie einen Grund an, warum dieser Kommentar gemeldet werden soll</de>
 <id>659</id>
+<ro>Vă rugăm să introduceţi un motiv pentru care raportaţi acest comentariu</ro>
 </text>
 <text>
 <en>A post has been reported</en>
@@ -2457,11 +2358,13 @@ has just been created.</en>
 <en>Guestbook</en>
 <de>Gästebuch</de>
 <id>673</id>
+<ro>Guestbook</ro>
 </text>
 <text>
 <en>Gallery</en>
 <de>Bildergalerie</de>
 <id>674</id>
+<ro>Galerie imagini</ro>
 </text>
 <text>
 <en>Userprofile</en>
@@ -2507,6 +2410,7 @@ has just been created.</en>
 <en>Activate</en>
 <de>aktivieren</de>
 <id>683</id>
+<ro>activează</ro>
 </text>
 <text>
 <en>An account for the address '%value%' doesn't exist</en>
@@ -2515,26 +2419,20 @@ has just been created.</en>
 </text>
 <text>
 <en>Your Account has been created successfully. You will receive an confirmation e-mail soon.</en>
-<de>Ihr Account wurde erfolgreich erstellt.
-Sie erhalten in Kürze eine Email mit einem Aktivierungslink.
-Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.
-</de>
+<de>Ihr Account wurde erfolgreich erstellt.Sie erhalten in Kürze eine Email mit einem Aktivierungslink.Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.</de>
 <id>685</id>
+<ro>Contul dumneavoastră a fost creat cu succes. Veţi primi în scurt timp un e-mail de confirmare.</ro>
 </text>
 <text>
 <en>create account</en>
 <de>Account erstellen</de>
 <id>686</id>
+<ro>Creează cont</ro>
 </text>
 <text>
 <en>edit account</en>
 <de>Speichern</de>
 <id>687</id>
-</text>
-<text>
-<en>My account</en>
-<de>Mein Account</de>
-<id>689</id>
 </text>
 <text>
 <en>My Profile</en>
@@ -2565,6 +2463,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>please click here</en>
 <de>bitte hier klicken</de>
 <id>695</id>
+<ro>vă rugăm să faceţi click aici</ro>
 </text>
 <text>
 <en>Invalid E-Mail or password, please try again.</en>
@@ -2575,6 +2474,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please login</en>
 <de>Bitte loggen Sie sich ein</de>
 <id>697</id>
+<ro>Vă rugăm să vă autentificaţi</ro>
 </text>
 <text>
 <en>You have to login to see the requested page.</en>
@@ -2607,11 +2507,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>703</id>
 </text>
 <text>
-<en>Delete Image</en>
-<de>Bild löschen</de>
-<id>704</id>
-</text>
-<text>
 <en>Show field</en>
 <de>Zeige Feld</de>
 <id>705</id>
@@ -2637,11 +2532,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <es>Por favor, rellene el campo</es>
 <ru>Пожалуйста, заполните поля</ru>
 <id>709</id>
+<ro>Vă rugăm să completaţi câmpul</ro>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
 <de>'%value%' beinhaltet unerlaubte Zeichen</de>
 <id>710</id>
+<ro>'%value%' conţine caractere nepermise</ro>
 </text>
 <text>
 <en>'%value%' is an empty string</en>
@@ -2670,11 +2567,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>'%localPart%' not matched against dot-atom format</en>
 <de>'%localPart%' stimmt nicht mit dem dot-atom Format überein</de>
 <id>715</id>
+<ro>'%localPart%' nu corespunde formatului dot-atom</ro>
 </text>
 <text>
 <en>'%localPart%' not matched against quoted-string format</en>
 <de>'%localPart%'stimmt nicht mit dem quoted-string Format überein</de>
 <id>716</id>
+<ro>'%localPart%' nu corespunde formatului quoted-string</ro>
 </text>
 <text>
 <en>'%localPart%' is not a valid local part for email address '%value%'</en>
@@ -2685,11 +2584,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>'%value%' has not only alphabetic characters</en>
 <de>'%value%' besteht nur aus Buchstaben</de>
 <id>718</id>
+<ro>'%value%' conţine doar litere</ro>
 </text>
 <text>
 <en>Useraccount created</en>
 <de>Account erfolgreich erstellt</de>
 <id>720</id>
+<ro>Cont creat cu succes</ro>
 </text>
 <text>
 <en>lost password</en>
@@ -2705,28 +2606,26 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Account deleted</en>
 <de>Account gelöscht</de>
 <id>723</id>
+<ro>Cont şters</ro>
 </text>
 <text>
 <en>H:i</en>
 <de>H:i</de>
 <id>724</id>
+<ro>H:i</ro>
 </text>
 <text>
 <context>time</context>
 <en>On</en>
 <de>Am</de>
 <id>725</id>
+<ro>În data de</ro>
 </text>
 <text>
 <context>time</context>
 <en>at</en>
 <de>um</de>
 <id>726</id>
-</text>
-<text>
-<en>Link to concerning thread:</en>
-<de>Link zum betreffenden Thread:</de>
-<id>730</id>
 </text>
 <text>
 <en>Edit Post</en>
@@ -2747,16 +2646,19 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Activate Account</en>
 <de>Account aktivieren</de>
 <id>734</id>
+<ro>Activează contul</ro>
 </text>
 <text>
 <en>Data was not sent completely. Please copy the complete address out of the email.</en>
 <de>Daten wurden nicht vollständig gesendet. Bitte kopieren Sie die vollständige Adresse aus der E-Mail.</de>
 <id>735</id>
+<ro>Datele nu au fost trimise complet. Vă rugăm să copiaţi adresa completă din e-mail.</ro>
 </text>
 <text>
 <en>Please type in your {0} email address in the field below.</en>
 <de>Bitte geben sie ihre {0} E-Mail Adresse im Feld darunter ein.</de>
 <id>737</id>
+<ro>Vă rugăm să introduceţi adresa dumneavoastră {0} de e-mail în câmpul de mai jos.</ro>
 </text>
 <text>
 <en>Auto Login</en>
@@ -2777,6 +2679,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please type at least two characters.</en>
 <de>Bitte geben sie mindestens 2 Zeichen ein.</de>
 <id>741</id>
+<ro>Vă rugăm să introduceţi cel puţin 2 caractere.</ro>
 </text>
 <text>
 <en>With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
@@ -2787,11 +2690,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>'%value%' is less than %min% characters long</en>
 <de>'%value%' ist kürzer als %min% Zeichen</de>
 <id>745</id>
+<ro>'%value%' este mai scurtă de %min% caractere</ro>
 </text>
 <text>
 <en>'%value%' is greater than %max% characters long</en>
 <de>'%value%' ist länger als %max% Zeichen</de>
 <id>746</id>
+<ro>'%value%' este mai lungăde %max% caractere</ro>
 </text>
 <text>
 <en>'%value%' appears to be an IP address, but IP addresses are not allowed</en>
@@ -2834,20 +2739,24 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>754</id>
 </text>
 <text>
-<en>Please choose a group, in which the thread should be moved</en>
-<de>Bitte klicken Sie auf die Gruppe, in die das Thema verschoben werden soll</de>
-<id>756</id>
-</text>
-<text>
 <context>decimal separator</context>
 <en>.</en>
 <de>,</de>
 <id>757</id>
+<sl>,</sl>
+<hu>,</hu>
+<bg>,</bg>
+<ua>,</ua>
+<ro>,</ro>
+<es>,</es>
+<mk>,</mk>
+<cz>,</cz>
 </text>
 <text>
 <en>Space</en>
 <de>Abstand</de>
 <id>758</id>
+<ro>Distanţă</ro>
 </text>
 <text>
 <en>Close</en>
@@ -2858,16 +2767,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Link</en>
 <de>Link</de>
 <id>761</id>
-</text>
-<text>
-<en>No entries were found.</en>
-<de>Es konnten keine Einträge gefunden werden.</de>
-<id>762</id>
-</text>
-<text>
-<en>Forum.Forum</en>
-<de>Forum.Forum</de>
-<id>763</id>
 </text>
 <text>
 <en>New entry in your guestbook</en>
@@ -2883,6 +2782,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Forum.User-List</en>
 <de>Forum.Benutzerliste</de>
 <id>767</id>
+<ro>Forum.Listă utilizatori</ro>
 </text>
 <text>
 <en>News.News</en>
@@ -2940,16 +2840,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>778</id>
 </text>
 <text>
-<en>next</en>
-<de>weiter</de>
-<id>780</id>
-</text>
-<text>
-<en>previous</en>
-<de>zurück</de>
-<id>781</id>
-</text>
-<text>
 <en>Amount</en>
 <de>Stück</de>
 <id>782</id>
@@ -2958,6 +2848,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Price</en>
 <de>Preis</de>
 <id>783</id>
+<ro>Preţ</ro>
 </text>
 <text>
 <en>Cart</en>
@@ -2978,6 +2869,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Cart is empty</en>
 <de>Ihr Warenkorb ist leer</de>
 <id>787</id>
+<ro>Coşul dumneavoastră de cumpărături este gol</ro>
 </text>
 <text>
 <en>add to cart</en>
@@ -2993,6 +2885,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Image Positionable</en>
 <de>Bild positionierbar</de>
 <id>790</id>
+<ro>Imaginea poate fi poziţionată</ro>
 </text>
 <text>
 <en>Element</en>
@@ -3023,6 +2916,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>You cart contains {0} products</en>
 <de>Ihr Warenkorb beinhaltet {0} Artikel</de>
 <id>797</id>
+<ro>Coşul dumneavoastră de cumpărături conţine {0} produse</ro>
 </text>
 <text>
 <en>Payment</en>
@@ -3077,6 +2971,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Checkout</en>
 <de>Kasse</de>
 <id>812</id>
+<ro>Casă</ro>
 </text>
 <text>
 <en>From</en>
@@ -3149,6 +3044,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <fr>Monsieur</fr>
 <es>Señor</es>
 <id>829</id>
+<ro>Dl.</ro>
 </text>
 <text>
 <en>Ms.</en>
@@ -3156,6 +3052,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <fr>Madame</fr>
 <es>Señora</es>
 <id>830</id>
+<ro>D-şoară</ro>
 </text>
 <text>
 <context>sex</context>
@@ -3164,6 +3061,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <fr>Civilité</fr>
 <es>Tratamiento</es>
 <id>832</id>
+<ro>Formula de adresare</ro>
 </text>
 <text>
 <en>What type of payment do you wish?</en>
@@ -3179,11 +3077,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please enter your address</en>
 <de>Bitte geben Sie Ihre Adressdaten ein</de>
 <id>837</id>
+<ro>Vă rugăm să introduceţi adresa dumneavoastră</ro>
 </text>
 <text>
 <en>Your cart contains</en>
 <de>Ihr Warenkorb beinhaltet</de>
 <id>838</id>
+<ro>Coşul dumneavoastră de cumpărături conţine</ro>
 </text>
 <text>
 <en>Other comments, questions or suggestions</en>
@@ -3194,11 +3094,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please check your petitions</en>
 <de>Bitte überprüfen Sie Ihre Daten</de>
 <id>840</id>
+<ro>Vă rugăm să vă verificaţi datele</ro>
 </text>
 <text>
 <en>Your Comment</en>
 <de>Ihre Anmerkung</de>
 <id>841</id>
+<ro>Comentariul dumneavoastră</ro>
 </text>
 <text>
 <en>You pay by</en>
@@ -3224,11 +3126,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Link.Extern</en>
 <de>Link.Extern</de>
 <id>856</id>
-</text>
-<text>
-<en>a post in an observed thread has been submitted</en>
-<de>ein Eintrag in einem überwachten Thread wurde vorgebracht</de>
-<id>858</id>
 </text>
 <text>
 <en>If you have lost your password,</en>
@@ -3270,21 +3167,25 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <jp>住所</jp>
 <fr>adresse</fr>
 <it>indirizzo</it>
+<ro>Adrese</ro>
 </text>
 <text>
 <en>Abort</en>
 <de>Abbrechen</de>
 <id>871</id>
+<ro>Renunţă</ro>
 </text>
 <text>
 <en>Image big</en>
 <de>Bild groß</de>
 <id>872</id>
+<ro>Imagine mare</ro>
 </text>
 <text>
 <en>Image small</en>
 <de>Bild klein</de>
 <id>873</id>
+<ro>Imagine mică</ro>
 </text>
 <text>
 <en>Dogear</en>
@@ -3335,6 +3236,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>en</en>
 <de>de</de>
 <id>883</id>
+<ro>ro</ro>
 </text>
 <text>
 <en>Shop</en>
@@ -3357,46 +3259,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>888</id>
 </text>
 <text>
-<en>Priority</en>
-<de>Priorität</de>
-<id>889</id>
-</text>
-<text>
-<en>Estimated time</en>
-<de>veranschlagte Zeit</de>
-<id>890</id>
-</text>
-<text>
-<en>Create date</en>
-<de>Datum erzeugen</de>
-<id>891</id>
-</text>
-<text>
-<en>Deadline</en>
-<de>Deadline</de>
-<id>892</id>
-</text>
-<text>
-<en>Open</en>
-<de>Offen</de>
-<id>893</id>
-</text>
-<text>
-<en>Done</en>
-<de>Erledigt</de>
-<id>894</id>
-</text>
-<text>
-<en>In progress</en>
-<de>In Arbeit</de>
-<id>895</id>
-</text>
-<text>
-<en>Is being tested</en>
-<de>Wird getestet</de>
-<id>896</id>
-</text>
-<text>
 <en>Fax</en>
 <de>Fax</de>
 <fr>Fax</fr>
@@ -3413,11 +3275,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Type</en>
 <de>Typ</de>
 <id>900</id>
-</text>
-<text>
-<en>Todo Details</en>
-<de>Todo Details</de>
-<id>901</id>
 </text>
 <text>
 <en>Contact person</en>
@@ -3438,6 +3295,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Category</en>
 <de>Kategorie</de>
 <id>911</id>
+<ro>Categorie</ro>
 </text>
 <text>
 <en>Domain</en>
@@ -3453,6 +3311,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Size of Target Image</en>
 <de>Größe des Bildes</de>
 <id>915</id>
+<ro>Dimensiunea imaginii</ro>
 </text>
 <text>
 <en>If size does not fit, scale method will be</en>
@@ -3518,6 +3377,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>File successfully created: </en>
 <de>Dateien erfolgreich erzeugt: </de>
 <id>935</id>
+<ro>Fişiere create cu succes:</ro>
 </text>
 <text>
 <en>Headline 1 (h1)</en>
@@ -3558,6 +3418,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Form</en>
 <de>Formular</de>
 <id>943</id>
+<ro>Formular</ro>
 </text>
 <text>
 <en>Bookmark at</en>
@@ -3582,10 +3443,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Amazon.Nodes</en>
 <id>948</id>
+<de>Amazon.Knoten</de>
 </text>
 <text>
 <en>Node-ID</en>
 <id>949</id>
+<de>Knoten-ID</de>
 </text>
 <text>
 <en>product description</en>
@@ -3631,21 +3494,19 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>File size exceeds allowed limit.</en>
 <de>Dateigröße überschreitet das erlaubte Limit.</de>
 <id>960</id>
+<ro>Dimensiunea fişierului depăşeşte dimensiunea permisă.</ro>
 </text>
 <text>
 <en>File is zero bytes and cannot be uploaded.</en>
 <de>Datei hat keine Größe und kann nicht hochgeladen werden.</de>
 <id>961</id>
+<ro>Fişierul are 0 biţi şi nu poate fi încărcat.</ro>
 </text>
 <text>
 <en>File is not an allowed file type.</en>
 <de>Dateityp ist nicht erlaubt.</de>
 <id>962</id>
-</text>
-<text>
-<en>Associate-Tag</en>
-<de>Assoziierender-Tag {0}</de>
-<id>963</id>
+<ro>Tipul fişierului nu este permis.</ro>
 </text>
 <text>
 <en>Node {0}</en>
@@ -3661,6 +3522,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>None</en>
 <de>Kein</de>
 <id>966</id>
+<ro>Absent</ro>
 </text>
 <text>
 <en>Alternative Preview Image</en>
@@ -3676,6 +3538,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Image Texts</en>
 <de>Bildtexte</de>
 <id>970</id>
+<ro>Texte imagini</ro>
 </text>
 <text>
 <en>Alt-Text</en>
@@ -3691,6 +3554,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Image Size</en>
 <de>Bildgröße</de>
 <id>973</id>
+<ro>Dimensiune imagine</ro>
 </text>
 <text>
 <en>Original</en>
@@ -3726,16 +3590,19 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <de>Benutzer löschen</de>
 <en>Delete user</en>
 <id>981</id>
+<ro>Şterge utilizatorul</ro>
 </text>
 <text>
 <de>Benutzer sperren / entsperren</de>
 <en>Lock / unlock user</en>
 <id>982</id>
+<ro>Blochează/deblochează utilizatorul</ro>
 </text>
 <text>
 <de>Benutzer sperren</de>
 <en>Lock user</en>
 <id>983</id>
+<ro>Blochează utilizatorul</ro>
 </text>
 <text>
 <de>Sind Sie sicher dass Sie diesen Benutzer (ent-)sperren möchten?</de>
@@ -3756,6 +3623,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <de>Bild vergrößern</de>
 <en>Enlarge Image</en>
 <id>987</id>
+<ro>Măreşte imaginea</ro>
 </text>
 <text>
 <de>Nur für dieses Web</de>
@@ -3771,11 +3639,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <de>Gesperrt</de>
 <en>Locked</en>
 <id>991</id>
+<ro>Blocat</ro>
 </text>
 <text>
 <de>Account ist gesperrt</de>
 <en>Account is locked</en>
 <id>993</id>
+<ro>Cont blocat</ro>
 </text>
 <text>
 <de>Authentifizierung erfolgreich</de>
@@ -3786,6 +3656,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <de>Benutzer existiert in diesem Web nicht</de>
 <en>User not existent in this web</en>
 <id>995</id>
+<ro>Utilizatorul nu există în acest web</ro>
 </text>
 <text>
 <de>Übergebenes Passwort ist ungültig</de>
@@ -3805,14 +3676,17 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Marquee</en>
 <id>1000</id>
+<de>Marquee</de>
 </text>
 <text>
 <en>Fade</en>
 <id>1001</id>
+<de>Überblenden</de>
 </text>
 <text>
 <en>Latest referer</en>
 <id>1002</id>
+<de>Neuester Referer</de>
 </text>
 <text>
 <en>This entry is classified in:</en>
@@ -3831,6 +3705,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Address</en>
 <de>Adresse</de>
 <id>1005</id>
+<ro>Adresa</ro>
 </text>
 <text>
 <en>Zipcode</en>
@@ -3845,6 +3720,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>EMail</en>
 <id>1008</id>
+<de>E-Mail</de>
 </text>
 <text>
 <en>Commercial register number</en>
@@ -3874,10 +3750,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>IBAN</en>
 <id>1016</id>
+<de>IBAN</de>
 </text>
 <text>
 <en>BIC / SWIFT</en>
 <id>1017</id>
+<de>BIC / SWIFT</de>
 </text>
 <text>
 <en>Job title</en>
@@ -3888,6 +3766,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Agency</en>
 <de>Behörde</de>
 <id>1021</id>
+<ro>Autoritate</ro>
 </text>
 <text>
 <en>Employment specification</en>
@@ -3895,33 +3774,33 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1023</id>
 </text>
 <text>
-<en>Hide webdesign</en>
-<de>Webdesign Verstecken</de>
-<id>1024</id>
-</text>
-<text>
 <en>Disclaimer name</en>
 <de>Haftungsausschluss Name</de>
 <id>1025</id>
+<ro>Disclaimer nume</ro>
 </text>
 <text>
 <en>Disclaimer type</en>
 <de>Haftungsausschluss Typ</de>
 <id>1026</id>
+<ro>Disclaimer tip</ro>
 </text>
 <text>
 <en>Germany</en>
 <de>Deutschland</de>
 <id>1027</id>
+<ro>Germania</ro>
 </text>
 <text>
 <en>Details</en>
 <id>1028</id>
+<de>Details</de>
 </text>
 <text>
 <en>User '%value%' does already exist</en>
 <de>Benutzer '%value%' existiert bereits</de>
 <id>1029</id>
+<ro>Utilizatorul '%value%' există deja</ro>
 </text>
 <text>
 <en>'%value%' does already exist</en>
@@ -3938,6 +3817,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <jp>インプリント</jp>
 <fr>imprimer</fr>
 <it>marchio</it>
+<ro>Copyright.Copyright</ro>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
@@ -3948,6 +3828,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Disclaimer</en>
 <de>Haftungsausschluss</de>
 <id>1045</id>
+<ro>Disclaimer</ro>
 </text>
 <text>
 <en>Purchase tax-identification number</en>
@@ -3963,6 +3844,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Agency accordant §5 ECG</en>
 <de>Behörde gemäß §55 ECG</de>
 <id>1041</id>
+<ro>Autoritate conform legii §55 ECG</ro>
 </text>
 <text>
 <en>Entry at WK Austria</en>
@@ -3970,32 +3852,15 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1042</id>
 </text>
 <text>
-<en>Imprint.Vivid-Planet</en>
-<de>Impressum.Vivid-Planet</de>
-<id>1043</id>
-</text>
-<text>
-<en>Webdesign</en>
-<id>1044</id>
-</text>
-<text>
-<en>IsiWeb</en>
-<id>1046</id>
-</text>
-<text>
 <en>Imprint.Disclaimer</en>
 <de>Impressum.Haftungsausschluss</de>
 <id>1047</id>
+<ro>Copyright.Disclaimer</ro>
 </text>
 <text>
 <en>Clubnumber ZVR</en>
 <de>Vereinsnummer ZVR</de>
 <id>1048</id>
-</text>
-<text>
-<en>Programming</en>
-<de>Programmierung</de>
-<id>1049</id>
 </text>
 <text>
 <en>Bank data</en>
@@ -4010,6 +3875,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>404 - File not found</en>
 <id>1053</id>
+<de>404 - Datei nicht gefunden</de>
 </text>
 <text>
 <en>Sorry, that address</en>
@@ -4050,6 +3916,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>401 - You are not authorized to view this page</en>
 <id>1063</id>
+<de>401 - Sie sind nicht berechtigt diese Seite zu sehen.</de>
 </text>
 <text>
 <en>You do not have permission to view this directory or page using the credentials you supplied</en>
@@ -4059,23 +3926,28 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Client Exception</en>
 <id>1065</id>
+<de>Benutzer Ausnahmen</de>
 </text>
 <text>
 <en>all</en>
 <de>alle</de>
 <id>1066</id>
+<ro>toate</ro>
 </text>
 <text>
 <en>Color hex values must be either 3 or 6 characters.</en>
 <id>1067</id>
+<de>Farb-Hex-Werte müssen entweder 3 oder 6 Zeichen lang sein.</de>
 </text>
 <text>
 <en>Must have a hexidecimal value in the format ABCDEF.</en>
 <id>1068</id>
+<de>Muss ein Hexadezimalwert im Format ABCDEF sein.</de>
 </text>
 <text>
 <en>Link.Intern</en>
 <id>1069</id>
+<de>Link.Intern</de>
 </text>
 <text>
 <en>Target</en>
@@ -4085,14 +3957,17 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>News</en>
 <id>1071</id>
+<de>Neuigkeiten</de>
 </text>
 <text>
 <en>Link.to News</en>
 <id>1072</id>
+<de>Link. zu Neuigkeiten</de>
 </text>
 <text>
 <en>Color values in Hex code without a leading # (e.g. fa5500)</en>
 <id>1073</id>
+<de>Farbwerte in Hex-Code ohne vorangestellte # (z.B. fa5500)</de>
 </text>
 <text>
 <en>No entries found for search term &amp;quot;{0}&amp;quot;.</en>
@@ -4103,35 +3978,43 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Show All</en>
 <de>Alle anzeigen</de>
 <id>1075</id>
+<ro>Afişează toate</ro>
 </text>
 <text>
 <en>User</en>
 <de>Benutzer</de>
 <id>1076</id>
+<ro>Utilizator</ro>
 </text>
 <text>
 <en>Statistics</en>
 <id>1077</id>
+<de>Statistik</de>
 </text>
 <text>
 <en>Logins</en>
 <id>1078</id>
+<de>Logins</de>
 </text>
 <text>
 <en>Last login</en>
 <id>1079</id>
+<de>Letzter Login</de>
 </text>
 <text>
 <en>Superuser</en>
 <id>1080</id>
+<de>Superuser</de>
 </text>
 <text>
 <en>Too many wrong logins.</en>
 <id>1081</id>
+<de>Zu viele falsche Logins.</de>
 </text>
 <text>
 <en>There were too many wrong logins from your connection. Please try again in 5 minutes.</en>
 <id>1082</id>
+<de>Es gab zu viele falsche Loginversuche von Ihrer Verbindung. Bitte versuchen Sie es in 5 Minuten erneut.</de>
 </text>
 <text>
 <en>Text/Image - Alignment</en>
@@ -4139,20 +4022,20 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1520</id>
 </text>
 <text>
-<en>Seitenbaum</en>
-<id>1083</id>
-</text>
-<text>
 <en>Open frontend in a new window</en>
 <id>1084</id>
+<de>Frontend in einem neuen Fenster öffnen.</de>
+<ro>Deschide frontend într-o altă fereastră</ro>
 </text>
 <text>
 <en>Event</en>
 <id>1098</id>
+<de>Veranstaltung</de>
 </text>
 <text>
 <en>Link.to Event</en>
 <id>1099</id>
+<de>Link. zu Veranstaltung</de>
 </text>
 <text>
 <en>Do you really wish to remove this paragraph?</en>
@@ -4162,59 +4045,69 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>visible</en>
 <id>1103</id>
+<de>sichtbar</de>
 </text>
 <text>
 <en>invisible</en>
 <id>1104</id>
+<de>unsichtbar</de>
 </text>
 <text>
 <en>Google Maps</en>
 <id>1105</id>
+<de>Google Maps</de>
 </text>
 <text>
 <en>Imprint.Google-Analytics</en>
 <de>Impressum.Google-Analytics</de>
 <id>1106</id>
+<ro>Copyright.Google-Analytics</ro>
 </text>
 <text>
 <en>Url include</en>
 <id>1108</id>
+<de>Url include</de>
 </text>
 <text>
 <en>There's no row selected</en>
 <id>1109</id>
+<de>Es ist keine Zeile ausgewählt</de>
 </text>
 <text>
 <en>Show locked users too</en>
 <id>1110</id>
+<de>Gesperrte Benutzer auch anzeigen</de>
+<ro>Afişează şi utilizatorii blocaţi</ro>
 </text>
 <text>
 <en>File Upload Cancelled.</en>
 <id>1111</id>
+<de>Datei Upload unterbrochen.</de>
 </text>
 <text>
 <en>Upload Stopped</en>
 <id>1112</id>
+<de>Upload unterbrochen</de>
 </text>
 <text>
 <en>File is zero bytes or cannot be accessed and cannot be uploaded.</en>
 <id>1113</id>
+<de>Die Datei ist entweder Null-Bytes groß oder es kann nicht auf Sie zugegriffen werden und kann deshalb nicht hochgeladen werden.</de>
 </text>
 <text>
 <en>Please choose</en>
 <id>1114</id>
+<de>Bitte wählen</de>
 </text>
 <text>
 <en>Root</en>
 <id>1115</id>
+<de>Wurzel</de>
 </text>
 <text>
 <en>visibility</en>
 <id>1116</id>
-</text>
-<text>
-<en>Edit Product</en>
-<id>1117</id>
+<de>Sichtbarkeit</de>
 </text>
 <text>
 <en>To Checkout</en>
@@ -4234,14 +4127,18 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>PayPal</en>
 <id>1121</id>
+<de>PayPal</de>
 </text>
 <text>
 <en>done</en>
 <id>1122</id>
+<de>fertig</de>
 </text>
 <text>
 <en>Show locked users</en>
 <id>1123</id>
+<de>Gesperrte Benutzer anzeigen</de>
+<ro>Afişează utilizatorii blocaţi</ro>
 </text>
 <text>
 <en>Dear Mr. {0} {1}</en>
@@ -4256,42 +4153,54 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Excel export</en>
 <id>1126</id>
+<de>Excel-Export</de>
 </text>
 <text>
 <en>Your download is ready</en>
 <id>1127</id>
+<de>Ihr Download ist fertig.</de>
+<ro>Download-ul dumneavoastră a fost finalizat.</ro>
 </text>
 <text>
 <en>Please click on the following link to download your Excel file.</en>
 <id>1128</id>
+<de>Bitte klicken Sie auf den folgenden Link um die Excel-Datei herunterzuladen.</de>
 </text>
 <text>
 <en>Excel export file</en>
 <id>1129</id>
+<de>Excel-Export-Datei</de>
 </text>
 <text>
 <en>Progress</en>
 <id>1130</id>
+<de>Fortschritt</de>
+<ro>Progres</ro>
 </text>
 <text>
 <en>Finished</en>
 <id>1131</id>
+<de>Fertig</de>
 </text>
 <text>
 <en>Flash</en>
 <id>1132</id>
+<de>Flash</de>
 </text>
 <text>
 <en>Flash variables</en>
 <id>1134</id>
+<de>Flash Variablen</de>
 </text>
 <text>
 <en>Variable name</en>
 <id>1135</id>
+<de>Variablen Name</de>
 </text>
 <text>
 <en>Mail Texts</en>
 <id>1136</id>
+<de>Mail Texte</de>
 </text>
 <text>
 <en>Dear Mrs. {0} {1}</en>
@@ -4307,11 +4216,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Hello Mr. {0}</en>
 <de>Hallo Herr {0}</de>
 <id>1139</id>
+<ro>Bună ziua stimate domnule {0}</ro>
 </text>
 <text>
 <en>Hello Mrs. {0}</en>
 <de>Hallo Frau {0}</de>
 <id>1140</id>
+<ro>Bună ziua stimată doamnă {0}</ro>
 </text>
 <text>
 <en>From Address</en>
@@ -4327,10 +4238,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Reply Address</en>
 <de>Antwortadresse</de>
 <id>1143</id>
+<ro>Adresa pentru răspuns</ro>
 </text>
 <text>
 <en>HTML</en>
 <id>1144</id>
+<de>HTML</de>
+<ro>HTML</ro>
 </text>
 <text>
 <en>Newsletter Preview</en>
@@ -4346,6 +4260,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>User not found, cannot send testmail.</en>
 <de>Benutzer nicht gefunden. Testmail kann nicht gesendet werden.</de>
 <id>1147</id>
+<ro>Utilizatorul nu poate fi găsit. E-mail-ul de test nu poate fi trimis.</ro>
 </text>
 <text>
 <en>E-Mail successfully sent.</en>
@@ -4377,16 +4292,8 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1153</id>
 <mk>Формат</mk>
 <ua>Формат</ua>
-</text>
-<text>
-<en>Date Sent</en>
-<de>Sendedatum</de>
-<id>1154</id>
-</text>
-<text>
-<en>Can only delete queued recipients</en>
-<de>Es können nur Empfänger entfernt werden, die sich in der Warteschlange befinden</de>
-<id>1155</id>
+<de>Format</de>
+<ro>Format</ro>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -4401,19 +4308,23 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Stop</en>
 <id>1158</id>
+<de>Stopp</de>
 </text>
 <text>
 <en>Pause</en>
 <id>1159</id>
+<de>Pause</de>
 </text>
 <text>
 <en>Start</en>
 <id>1160</id>
+<de>Start</de>
 </text>
 <text>
 <en>Delete All</en>
 <de>Alle löschen</de>
 <id>1161</id>
+<ro>Şterge toate</ro>
 </text>
 <text>
 <en>Are you sure?</en>
@@ -4433,6 +4344,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Mail</en>
 <id>1165</id>
+<de>Mail</de>
 </text>
 <text>
 <en>Recipients</en>
@@ -4447,6 +4359,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Newsletter</en>
 <id>1168</id>
+<de>Newsletter</de>
 </text>
 <text>
 <en>Newsletter stopped, cannot start again.</en>
@@ -4474,18 +4387,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1174</id>
 </text>
 <text>
-<en>{0} receiver not found.</en>
-<en_plural>{0} receivers not found.</en_plural>
-<de>{0} Empfänger nicht gefunden.</de>
-<de_plural>{0} Empfänger nicht gefunden.</de_plural>
-<id>1175</id>
-</text>
-<text>
-<en>{0} errors while sending mail.</en>
-<de>{0} Fehler während des Sendens.</de>
-<id>1176</id>
-</text>
-<text>
 <en>Last mail sent: {0}</en>
 <de>Letzte gesendete Mail: {0}</de>
 <id>1177</id>
@@ -4499,11 +4400,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Address Header</en>
 <de>Adresskopf</de>
 <id>1179</id>
-</text>
-<text>
-<en>Shop Confirmation Mail</en>
-<de>Shop Bestätigungsmail</de>
-<id>1180</id>
+<ro>Antet adresă</ro>
 </text>
 <text>
 <en>Shop Confirmation Text</en>
@@ -4518,10 +4415,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Order at {0}</en>
 <id>1183</id>
+<de>Sortieren nach {0}</de>
 </text>
 <text>
 <en>Texts</en>
 <id>1184</id>
+<de>Texte</de>
 </text>
 <text>
 <en>Useraccount activated</en>
@@ -4552,6 +4451,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Your account at {0}&lt;br /&gt;has just been set active.</en>
 <de>Ihr Konto auf {0}&lt;br /&gt; wurde gerade aktiviert.</de>
 <id>1191</id>
+<ro>Tocmai a fost activat contul&lt;br /&gt; dumneavoastră pentru {0}.</ro>
 </text>
 <text>
 <en>You may now log in to your account.</en>
@@ -4567,6 +4467,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Your account at {0} has just been set active.</en>
 <de>Ihr Konto auf {0} wurde gerade aktiviert.</de>
 <id>1194</id>
+<ro>Tocmai a fost activat contul dumneavoastră pentru {0}.</ro>
 </text>
 <text>
 <en>Dear {0} {1}</en>
@@ -4577,18 +4478,22 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Hello {0} {1}</en>
 <de>Hallo {0} {1}</de>
 <id>1199</id>
+<ro>Bună ziua {0} {1}</ro>
 </text>
 <text>
 <en>CSV export</en>
 <id>1200</id>
+<de>CSV Export</de>
 </text>
 <text>
 <en>Please click on the following link to download your CSV file.</en>
 <id>1201</id>
+<de>Bitte klicken Sie auf den folgenden Link, um Ihre CSV-Datei herunterzuladen.</de>
 </text>
 <text>
 <en>CSV export file</en>
 <id>1202</id>
+<de>CSV-Export-Datei</de>
 </text>
 <text>
 <en>Productlist</en>
@@ -4598,6 +4503,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Max Mustermann...</en>
 <id>1206</id>
+<de>Max Mustermann...</de>
 </text>
 <text>
 <en>Message</en>
@@ -4610,21 +4516,25 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Mr. {0}</en>
 <de>Herr {0}</de>
 <id>1210</id>
+<ro>Domnule {0}</ro>
 </text>
 <text>
 <en>Mrs. {0}</en>
 <de>Frau {0}</de>
 <id>1211</id>
+<ro>Doamnă {0}</ro>
 </text>
 <text>
 <en>Mrs.</en>
 <de>Frau</de>
 <id>1212</id>
+<ro>Dnă</ro>
 </text>
 <text>
 <en>Your message to {0}</en>
 <de>Ihre Mitteilung an {0}</de>
 <id>1213</id>
+<ro>Mesajul dumneavoastră către {0}</ro>
 </text>
 <text>
 <en>You ordered following product</en>
@@ -4636,22 +4546,27 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Rrd Graph</en>
 <id>1215</id>
+<de>Rrd Diagramm</de>
 </text>
 <text>
 <en>Graph</en>
 <id>1216</id>
+<de>Diagramm</de>
 </text>
 <text>
 <en>duration (days)</en>
 <id>1217</id>
+<de>Dauer (Tage)</de>
 </text>
 <text>
 <en>Cache lifetime (minutes)</en>
 <id>1218</id>
+<de>Cache-Alter (Minuten)</de>
 </text>
 <text>
 <en>Kwf Benchmark</en>
 <id>1219</id>
+<de>Kwf Benchmark</de>
 </text>
 <text>
 <en>ago</en>
@@ -4721,6 +4636,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Standard</en>
 <id>1233</id>
+<de>Standard</de>
 </text>
 <text>
 <en>Can only add users to a paused newsletter</en>
@@ -4731,11 +4647,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Unsubscribe Newsletter</en>
 <de>Newsletter abmelden</de>
 <id>1235</id>
-</text>
-<text>
-<en>Edit or send Newsletter</en>
-<de>Newsletter bearbeiten oder senden</de>
-<id>1236</id>
 </text>
 <text>
 <en>You have been successfully unsubscribed from the newsletter.</en>
@@ -4766,6 +4677,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Enquiry</en>
 <de>Anfrage</de>
 <id>1246</id>
+<ro>Solicitare</ro>
 </text>
 <text>
 <en>Subscribe date</en>
@@ -4776,6 +4688,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Active?</en>
 <de>Aktiv?</de>
 <id>1254</id>
+<ro>Activ?</ro>
 </text>
 <text>
 <en>Newsletter Subscriber settings</en>
@@ -4786,6 +4699,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>unsubscribed</en>
 <de>abgemeldet</de>
 <id>1256</id>
+<ro>anulat</ro>
 </text>
 <text>
 <en>not activated</en>
@@ -4796,6 +4710,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>active</en>
 <de>aktiv</de>
 <id>1258</id>
+<ro>activ</ro>
 </text>
 <text>
 <en>Edit subscriber</en>
@@ -4811,6 +4726,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Hello {0}</en>
 <de>Hallo {0}</de>
 <id>1261</id>
+<ro>Bună ziua {0}</ro>
 </text>
 <text>
 <en>You have just been subscribed to the newsletter at {0}.</en>
@@ -4821,11 +4737,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>ACTIVATION LINK</en>
 <de>AKTIVIERUNGSLINK</de>
 <id>1263</id>
+<ro>LINK DE ACTIVARE</ro>
 </text>
 <text>
 <en>Please click here, to confirm your E-Mail address and to receive our newsletters in future.</en>
 <de>Bitte klicken Sie hier, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
 <id>1264</id>
+<ro>Vă rugăm să faceţi click aici pentru a confirma adresa dumneavoastră de e-mail şi pentru a primi pe viitor newsletter-ul nostru.</ro>
 </text>
 <text>
 <en>To unsubscribe anytime from our newsletter, click this link:</en>
@@ -4846,6 +4764,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
 <de>Bitte klicken Sie den folgenden link, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
 <id>1268</id>
+<ro>Vă rugăm să faceţi click pe următorul link pentru a confirma adresa dumneavoastră de e-mail şi pentru a primi pe viitor newsletter-ul nostru.</ro>
 </text>
 <text>
 <en>Subscribe the newsletter</en>
@@ -4854,25 +4773,27 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en>HTML-Format</en>
+<de>HTML-Format</de>
 <ua>HTML-Формат</ua>
 <id>1270</id>
-<ua>HTML-Формат</ua>
 </text>
 <text>
 <en>Text-Format</en>
+<de>Text-Format</de>
 <ua>Текст-Формат</ua>
 <id>1271</id>
-<ua>Текстовий формат</ua>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
 <de>Ihre E-Mail Adresse wurde verifiziert. Sie werden künftig unseren Newsletter erhalten</de>
 <id>1272</id>
+<ro>Adresa dumneavoastră de e-mail a fost confirmată. De acum înainte veţi primi newsletter-ul nostru.</ro>
 </text>
 <text>
 <en>Your data has been saved successfully.</en>
 <de>Ihre Daten wurden erfolgreich gespeichert.</de>
 <id>1273</id>
+<ro>Datele dumneavoastră au fost salvate cu succes.</ro>
 </text>
 <text>
 <en>Create Date</en>
@@ -4913,6 +4834,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Content:</en>
 <de>Inhalt:</de>
 <id>1281</id>
+<ro>Conţinut:</ro>
 </text>
 <text>
 <en>Click this link to activate the post on your website:</en>
@@ -4953,6 +4875,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Active, may be deactivated</en>
 <de>Aktiv, kann deaktiviert werden</de>
 <id>1289</id>
+<ro>Activ, poate fi dezactivat</ro>
 </text>
 <text>
 <en>Inactive, must be activated</en>
@@ -5023,6 +4946,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Internet</en>
 <de>Internet</de>
 <id>1304</id>
+<ro>Internet</ro>
 </text>
 <text>
 <en>Invoice Nr</en>
@@ -5082,17 +5006,15 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1315</id>
 </text>
 <text>
-<en>Dimension: At least width or height must be set higher than 0 when using crop or bestfit.</en>
-<id>1318</id>
-</text>
-<text>
 <en>Width or height must be higher than 0 when using crop or bestfit.</en>
 <id>1319</id>
+<de>Bei der Verwendung von Beschneiden oder BestFit muss die Breite oder Höhe größer als 0 sein.</de>
 </text>
 <text>
 <en>Please fill the marked fields correctly.</en>
 <de>Bitte füllen Sie die markierten Felder korrekt aus.</de>
 <id>1320</id>
+<ro>Vă rugăm să completaţi corect câmpul marcat.</ro>
 </text>
 <text>
 <en>user-defined</en>
@@ -5102,14 +5024,17 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Code Syntax Highlighted</en>
 <id>1322</id>
+<de>Code-Syntax hervorgehoben</de>
 </text>
 <text>
 <en>Code</en>
 <id>1323</id>
+<de>Code</de>
 </text>
 <text>
 <en>Line Numbers</en>
 <id>1324</id>
+<de>Zeilen Nummern</de>
 </text>
 <text>
 <en>Copy</en>
@@ -5129,19 +5054,20 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Cannot move here. View has been reloaded, please try again.</en>
 <id>1328</id>
+<de>Kann nicht verschoben werden. Ansicht wurde neu geladen, bitte versuchen Sie es erneut.</de>
+<ro>Nu poate fi mutat. Layout-ul a fost reîncărcat, vă rugăm să încercaţi din nou.</ro>
 </text>
 <text>
 <en>Cannot move here.</en>
 <id>1329</id>
+<de>Kann nicht verschoben werden.</de>
+<ro>Nu poate fi mutat.</ro>
 </text>
 <text>
 <en>Please enter your E-Mail-Address</en>
 <de>Bitte geben Sie Ihre E-Mail-Adresse ein</de>
 <id>1330</id>
-</text>
-<text>
-<en>Betreff</en>
-<id>1331</id>
+<ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail</ro>
 </text>
 <text>
 <en>To</en>
@@ -5163,11 +5089,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Activation</en>
 <de>Aktivierung</de>
 <id>1335</id>
+<ro>Activare</ro>
 </text>
 <text>
 <en>Please select the E-Mail type you wish to send to the user.</en>
 <de>Bitte wählen Sie den E-Mail Typ aus, den Sie senden möchten.</de>
 <id>1336</id>
+<ro>Vă rugăm să selectaţi tipul de e-mail pe care doriţi să îl trimiteţi.</ro>
 </text>
 <text>
 <en>Send a mail to a user</en>
@@ -5183,11 +5111,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Green</en>
 <de>Grün</de>
 <id>1339</id>
-</text>
-<text>
-<en>How many columns</en>
-<de>Wie viele Spalten</de>
-<id>1340</id>
 </text>
 <text>
 <en>Table style</en>
@@ -5233,31 +5156,37 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Account created.</en>
 <de>Account erstellt.</de>
 <id>1349</id>
+<ro>Cont creat.</ro>
 </text>
 <text>
 <en>Account created by {0}.</en>
 <de>Account erstellt von {0}.</de>
 <id>1350</id>
+<ro>Cont creat de {0}.</ro>
 </text>
 <text>
 <en>Account edited.</en>
 <de>Account bearbeitet.</de>
 <id>1351</id>
+<ro>Cont editat.</ro>
 </text>
 <text>
 <en>Account edited by {0}.</en>
 <de>Account bearbeitet von {0}.</de>
 <id>1352</id>
+<ro>Cont editat de {0}.</ro>
 </text>
 <text>
 <en>Account activated.</en>
 <de>Account aktiviert.</de>
 <id>1353</id>
+<ro>Cont activat.</ro>
 </text>
 <text>
 <en>Account activated by {0}.</en>
 <de>Account aktiviert von {0}.</de>
 <id>1354</id>
+<ro>Cont activat de {0}.</ro>
 </text>
 <text>
 <en>Password set.</en>
@@ -5273,21 +5202,25 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Account deleted e-mail sent.</en>
 <de>Account gelöscht E-Mail gesendet.</de>
 <id>1357</id>
+<ro>Cont şters e-mail trimis.</ro>
 </text>
 <text>
 <en>Account deleted e-mail sent by {0}.</en>
 <de>Account gelöscht E-Mail gesendet von {0}.</de>
 <id>1358</id>
+<ro>Cont şters e-mail trimis de {0}.</ro>
 </text>
 <text>
 <en>Changed mail address e-mail sent.</en>
 <de>Geänderte E-Mail-Adresse E-Mail gesendet.</de>
 <id>1359</id>
+<ro>Adresă de e-mail modificată e-mail trimis.</ro>
 </text>
 <text>
 <en>Changed mail address e-mail sent by {0}.</en>
 <de>Geänderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
 <id>1360</id>
+<ro>Adresă de e-mail modificată e-mail trimis de {0}.</ro>
 </text>
 <text>
 <en>Lost password e-mail sent.</en>
@@ -5303,51 +5236,61 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Activation e-mail sent.</en>
 <de>Aktivierungs E-Mail gesendet.</de>
 <id>1363</id>
+<ro>E-mail de activare trimis.</ro>
 </text>
 <text>
 <en>Activation e-mail sent by {0}.</en>
 <de>Aktivierungs E-Mail gesendet von {0}.</de>
 <id>1364</id>
+<ro>E-mail de activare trimis de {0}.</ro>
 </text>
 <text>
 <en>Global user activation e-mail sent.</en>
 <de>Globaler Benutzer Aktivierungs E-Mail gesendet.</de>
 <id>1365</id>
+<ro>E-mail de activare utilizator general trimis.</ro>
 </text>
 <text>
 <en>Global user activation e-mail sent by {0}.</en>
 <de>Globaler Benutzer Aktivierungs E-Mail gesendet {0}.</de>
 <id>1366</id>
+<ro>E-mail de activare utilizator general trimis {0}.</ro>
 </text>
 <text>
 <en>User locked.</en>
 <de>Benutzer gesperrt.</de>
 <id>1367</id>
+<ro>Utilizator blocat.</ro>
 </text>
 <text>
 <en>User locked by {0}.</en>
 <de>Benutzer gesperrt von {0}.</de>
 <id>1368</id>
+<ro>Utilizator blocat de {0}.</ro>
 </text>
 <text>
 <en>User unlocked.</en>
 <de>Benutzer entsperrt.</de>
 <id>1369</id>
+<ro>Utilizator deblocat.</ro>
 </text>
 <text>
 <en>User unlocked by {0}.</en>
 <de>Benutzer entsperrt von {0}.</de>
 <id>1370</id>
+<ro>Utilizator deblocat de {0}.</ro>
 </text>
 <text>
 <en>User deleted.</en>
 <de>Benutzer gelöscht.</de>
 <id>1371</id>
+<ro>Utilizator şters.</ro>
 </text>
 <text>
 <en>User deleted by {0}.</en>
 <de>Benutzer gelöscht von {0}.</de>
 <id>1372</id>
+<ro>Utilizator şters de {0}.</ro>
 </text>
 <text>
 <en>Wrong login password used.</en>
@@ -5372,10 +5315,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Link.to Component</en>
 <id>1377</id>
-</text>
-<text>
-<en>Moderators</en>
-<id>1378</id>
+<de>Link. zu Komponente</de>
 </text>
 <text>
 <en>Company A-Z</en>
@@ -5385,6 +5325,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Newsletter subscribing</en>
 <id>1380</id>
+<de>Newsletter Anmeldung</de>
 </text>
 <text>
 <en>none</en>
@@ -5400,23 +5341,29 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>hide</en>
 <id>1385</id>
+<de>verbergen</de>
 </text>
 <text>
 <en>You can not {0} this entry as it is used on the following pages:</en>
 <id>1386</id>
+<de>Dieser Eintrag kann nicht wie es auf den folgenden Seiten {0} verwendet werden:</de>
 </text>
 <text>
 <en>Delete Account</en>
 <id>1387</id>
+<de>Konto löschen</de>
 </text>
 <text>
 <en>Your Password</en>
 <id>1388</id>
+<de>Ihr Passwort</de>
+<ro>Parola dumneavoastră</ro>
 </text>
 <text>
 <en>The password was changed successfully</en>
 <de>Das Passwort wurde erfolgreich geändert</de>
 <id>1389</id>
+<ro>Parola a fost schimbată cu succes</ro>
 </text>
 <text>
 <en>Change Password</en>
@@ -5437,6 +5384,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Account - Change Password</en>
 <de>Benutzer - Passwort ändern</de>
 <id>1393</id>
+<ro>Utilizator - Schimbă parola</ro>
 </text>
 <text>
 <en>Link target</en>
@@ -5466,6 +5414,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>on multiple pages, eg. in a footer</en>
 <id>1399</id>
+<de>auf mehreren Seiten, z.B. in einer Fußzeile</de>
 </text>
 <text>
 <en>You are not logged in</en>
@@ -5480,15 +5429,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Meta Tags</en>
 <id>1402</id>
+<de>Meta Tags</de>
 </text>
 <text>
 <en>Keywords</en>
 <id>1403</id>
-</text>
-<text>
-<en>Dimension: At width and height must be set higher than 0 when using deform.</en>
-<de>Dimension: Breite und Höhe muss gesetzt werden, wenn Verzerrung verwendet wird.</de>
-<id>1404</id>
+<de>Schlüsselwörter</de>
 </text>
 <text>
 <en>Read more »</en>
@@ -5501,10 +5447,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
 <de>Bitte fügen Sie die Adresse von YouTube oder Vimeo ein.</de>
 <id>1407</id>
+<ro>Vă rugăm să introduceţi adresa de YouTube sau Vimeo.</ro>
 </text>
 <text>
 <en>URL</en>
 <id>1408</id>
+<de>URL</de>
 </text>
 <text>
 <en>Link.to parent page</en>
@@ -5522,50 +5470,20 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1411</id>
 </text>
 <text>
-<en>Vivid Planet Software GmbH</en>
-<id>1412</id>
-</text>
-<text>
-<en>Internet-Agentur Salzburg</en>
-<id>1413</id>
-</text>
-<text>
-<en>Pfongauerstraße 67</en>
-<id>1414</id>
-</text>
-<text>
-<en>A-5202 Neumarkt a. Wallersee</en>
-<id>1415</id>
-</text>
-<text>
-<en>This {0} is an {1}</en>
-<de>Diese {0} ist ein {1}</de>
-<id>1417</id>
-</text>
-<text>
-<en>isiWEB</en>
-<id>1418</id>
-</text>
-<text>
 <en>hh:mm</en>
 <id>1419</id>
+<de>hh:mm</de>
+<ro>hh:mm</ro>
 </text>
 <text>
 <en>Google Analytics</en>
 <id>1420</id>
-</text>
-<text>
-<en>www.isiweb.at</en>
-<id>1422</id>
-</text>
-<text>
-<en>A product of Vivid Planet Software GmbH</en>
-<de>Ein Produkt der Vivid Planet Software GmbH</de>
-<id>1424</id>
+<de>Google Analytics</de>
 </text>
 <text>
 <en>Typ</en>
 <id>1425</id>
+<de>Typ</de>
 </text>
 <text>
 <en>Document</en>
@@ -5576,11 +5494,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Enquiries</en>
 <de>Anfragen</de>
 <id>1427</id>
+<ro>Solicitări</ro>
 </text>
 <text>
 <en>Categorie</en>
 <de>Kategorie</de>
 <id>1429</id>
+<ro>Categorie</ro>
 </text>
 <text>
 <en>Remember password on this computer</en>
@@ -5593,24 +5513,16 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1431</id>
 </text>
 <text>
-<en>Useradministration</en>
-<de>Benutzerverwaltung</de>
-<id>1432</id>
-</text>
-<text>
-<en>Time</en>
-<de>Zeit</de>
-<id>1433</id>
-</text>
-<text>
 <en>All</en>
 <de>Alle</de>
 <id>1435</id>
+<ro>Toate</ro>
 </text>
 <text>
 <en>Can't delete translated pages.</en>
 <de>Kann übersetzte Seite nicht löschen.</de>
 <id>1436</id>
+<ro>Pagina tradusă nu poate fi ştearsă.</ro>
 </text>
 <text>
 <en>List child page names</en>
@@ -5621,22 +5533,27 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Please choose an option</en>
 <de>Bitte wählen Sie eine Option aus</de>
 <id>1438</id>
+<ro>Vă rugăm să selectaţi o opţiune</ro>
 </text>
 <text>
 <en>No Filedata received.</en>
 <id>1439</id>
+<de>Kein Daten erhalten.</de>
 </text>
 <text>
 <en>Flag</en>
 <id>1441</id>
+<de>Kennzeichen</de>
 </text>
 <text>
 <en>Social Bookmarks</en>
 <id>1442</id>
+<de>Social Bookmarks</de>
 </text>
 <text>
 <en>Network</en>
 <id>1443</id>
+<de>Netzwerk</de>
 </text>
 <text>
 <en>reply</en>
@@ -5645,33 +5562,41 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <de_plural>Antworten</de_plural>
 <context>test</context>
 <id>1444</id>
+<ro>Răspuns</ro>
 </text>
 <text>
 <en>Please mark the checkbox</en>
 <de>Bitte setzen Sie das Häkchen</de>
 <id>1445</id>
+<ro>Vă rugăm să bifaţi</ro>
 </text>
 <text>
 <en>Guestbook Settings</en>
 <id>1447</id>
+<de>Gästebuch Einstellungen</de>
+<ro>Guestbook Setări</ro>
 </text>
 <text>
 <en>Master Image</en>
 <id>1448</id>
+<de>Haupt Bild</de>
 </text>
 <text>
 <en>Own Image</en>
 <id>1449</id>
+<de>Eigenes Bild</de>
 </text>
 <text>
 <en>Column</en>
 <id>1450</id>
+<de>Spalte</de>
 </text>
 <text>
 <en>Please select a value</en>
 <de>Bitte wählen Sie eine Option aus</de>
 <id>1451</id>
 <ua>Будь ласка оберіть один з доступних варіантів</ua>
+<ro>Vă rugăm să selectaţi o opţiune</ro>
 </text>
 <text>
 <en>Link.First Child Page</en>
@@ -5681,14 +5606,17 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Team member data</en>
 <id>1453</id>
+<de>Teammitglied Daten</de>
 </text>
 <text>
 <en>Team member</en>
 <id>1454</id>
+<de>Teammitglied</de>
 </text>
 <text>
 <en>Team</en>
 <id>1455</id>
+<de>Team</de>
 </text>
 <text>
 <en>Own Download</en>
@@ -5696,16 +5624,9 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1456</id>
 </text>
 <text>
-<en>Offset</en>
-<id>1457</id>
-</text>
-<text>
-<en>Format of entry</en>
-<id>1458</id>
-</text>
-<text>
 <en>Not a valid time.  Must be in the format "12:34:00".</en>
 <id>1459</id>
+<de>Kein gültiges Zeitformat. Muss im Format "12:34:00" sein.</de>
 </text>
 <text>
 <en>Amazon.Product</en>
@@ -5715,14 +5636,17 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>ASIN</en>
 <id>1461</id>
+<de>ASIN</de>
 </text>
 <text>
 <en>Show similar videos (YouTube only)</en>
 <id>1462</id>
+<de>Ähnliche Videos zeigen (nur YouTube)</de>
 </text>
 <text>
 <en>vCard</en>
 <id>1463</id>
+<de>vCard</de>
 </text>
 <text>
 <en>Allow fullscreen</en>
@@ -5732,10 +5656,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Start Newsletter sending</en>
 <id>1469</id>
+<de>Newsletter versenden starten</de>
 </text>
 <text>
 <en>The newsletter will be sent in the background. You can leave this page or close the browser window. Start sending?</en>
 <id>1470</id>
+<de>Der Newsletter wird im Hintergrund versendet. Sie können diese Seite verlassen oder das Browserfenster schließen. Versenden starten?</de>
 </text>
 <text>
 <en>Sending</en>
@@ -5756,11 +5682,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Copy Paragraph</en>
 <de>Absatz kopieren</de>
 <id>1474</id>
+<ro>Copiază paragraf</ro>
 </text>
 <text>
 <en>Paste Paragraph</en>
 <de>Absatz einfügen</de>
 <id>1475</id>
+<ro>Introdu paragraf</ro>
 </text>
 <text>
 <en>Clipboard is empty</en>
@@ -5770,28 +5698,23 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Source and target paragraphs are not compatible.</en>
 <id>1477</id>
+<de>Quell- und Ziel-Absätze sind nicht kompatibel.</de>
 </text>
 <text>
 <en>Image caption</en>
 <de>Bildunterschrift</de>
 <id>1478</id>
+<ro>Image caption</ro>
 </text>
 <text>
 <en>Fade images</en>
 <id>1479</id>
-</text>
-<text>
-<en>zwei Bilder</en>
-<id>1481</id>
-</text>
-<text>
-<en>Variant</en>
-<de>Varianten</de>
-<id>1482</id>
+<de>Bilder überblenden</de>
 </text>
 <text>
 <en>Paragraph {0}</en>
 <id>1483</id>
+<de>Absatz {0}</de>
 </text>
 <text>
 <en>Adopt</en>
@@ -5800,19 +5723,23 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Tabs</en>
 <id>1486</id>
+<de>Tabs</de>
 </text>
 <text>
 <en>Tab {0}</en>
 <id>1487</id>
+<de>Tab {0}</de>
 </text>
 <text>
 <en>Tab</en>
 <id>1488</id>
+<de>Tab</de>
 </text>
 <text>
 <en>Years</en>
 <de>Jahre</de>
 <id>1489</id>
+<ro>Ani</ro>
 </text>
 <text>
 <en>Read more</en>
@@ -5824,6 +5751,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Original Category</en>
 <id>1493</id>
+<de>Original-Kategorie</de>
 </text>
 <text>
 <en>Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?</en>
@@ -5859,6 +5787,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>All Visible</en>
 <de>Alle Sichtbar</de>
 <id>1508</id>
+<ro>Toate vizibile</ro>
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
@@ -5871,74 +5800,44 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1510</id>
 </text>
 <text>
-<en>Time recording</en>
-<de>Zeiterfassung</de>
-<id>1512</id>
-</text>
-<text>
-<en>Year</en>
-<de>Jahr</de>
-<id>1513</id>
-</text>
-<text>
-<en>Spent time</en>
-<de>Verbrauchte Zeit</de>
-<id>1514</id>
-</text>
-<text>
-<en>Included time</en>
-<de>Inkludierte Zeit</de>
-<id>1515</id>
-</text>
-<text>
-<en>Year {0}</en>
-<de>{0}. Jahr</de>
-<id>1516</id>
-</text>
-<text>
-<en>Spent time by years</en>
-<de>Verbrauchte Zeite nach Jahren</de>
-<id>1518</id>
-</text>
-<text>
 <en>Original Filename</en>
 <id>1521</id>
+<de>Original Dateiname</de>
 </text>
 <text>
 <en>Headlines</en>
 <id>1522</id>
+<de>Überschriften</de>
 </text>
 <text>
 <en>Headline 1</en>
 <id>1523</id>
+<de>Überschrift 1</de>
 </text>
 <text>
 <en>Headline 2</en>
 <id>1524</id>
+<de>Überschrift 2</de>
 </text>
 <text>
 <en>Original headline 1</en>
 <id>1525</id>
+<de>Original Überschrift 1</de>
 </text>
 <text>
 <en>Original headline 2</en>
 <id>1526</id>
+<de>Original Überschrift 2</de>
 </text>
 <text>
 <en>Left column</en>
 <id>1528</id>
+<de>Linke Spalte</de>
 </text>
 <text>
 <en>Right column</en>
 <id>1529</id>
-</text>
-<text>
-<en>Toolbox</en>
-<id>1533</id>
-</text>
-<text>
-<en>Timer</en>
-<id>1539</id>
+<de>Rechte Spalte</de>
 </text>
 <text>
 <en>Dear Sir or Madam</en>
@@ -5953,15 +5852,18 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Web Image Files</en>
 <id>1551</id>
+<de>Web Bilddateien</de>
 </text>
 <text>
 <en>All Files</en>
 <id>1552</id>
+<de>Alle Dateien</de>
 </text>
 <text>
 <en>Upload Files</en>
 <de>Dateien hochladen</de>
 <id>1553</id>
+<ro>Încarcă fişiere</ro>
 </text>
 <text>
 <en>Uploading files</en>
@@ -5971,62 +5873,76 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>E-Mail Recipient</en>
 <id>1556</id>
+<de>E-Mail Empfänger</de>
 </text>
 <text>
 <en>E-Mail Subject</en>
 <id>1557</id>
+<de>E-Mail Betreff</de>
 </text>
 <text>
 <en>Form.Fieldset</en>
 <id>1558</id>
+<de>Form.Fieldset</de>
+<ro>Form.Fieldset</ro>
 </text>
 <text>
 <en>Required</en>
 <id>1559</id>
+<de>Erforderlich</de>
 </text>
 <text>
 <en>Form.Checkbox</en>
 <id>1560</id>
+<de>Form.Checkbox</de>
 </text>
 <text>
 <en>Box Label</en>
 <id>1561</id>
+<de>Box Bezeichnung</de>
 </text>
 <text>
 <en>Form.Radio</en>
 <id>1562</id>
+<de>Form.Radio</de>
+<ro>Form.Radio</ro>
 </text>
 <text>
 <en>Output Type</en>
 <id>1563</id>
+<de>Ausgabe Typ</de>
 </text>
 <text>
 <en>horizontal</en>
 <id>1564</id>
+<de>Horizontal</de>
 </text>
 <text>
 <en>vertical</en>
 <id>1565</id>
+<de>Vertikal</de>
 </text>
 <text>
 <en>Form.Select</en>
 <id>1566</id>
+<de>Form.Auswahl</de>
 </text>
 <text>
 <en>Form.Textarea</en>
 <id>1567</id>
+<de>Form.Textarea</de>
+<ro>Form.Textarea</ro>
 </text>
 <text>
 <en>Form.Textfield</en>
 <id>1568</id>
+<de>Form.Textfeld</de>
+<ro>Form.Textfield</ro>
 </text>
 <text>
 <en>Alphanumeric</en>
 <id>1569</id>
-</text>
-<text>
-<en>Bezeichnung</en>
-<id>1570</id>
+<de>Alphanumerisch</de>
 </text>
 <text>
 <en>This account has already been activated.</en>
@@ -6045,11 +5961,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Vouchers</en>
 <de>Gutscheine</de>
 <id>1544</id>
+<ro>Vouchere</ro>
 </text>
 <text>
 <en>Voucher Code</en>
 <de>Gutschein Code</de>
 <id>1545</id>
+<ro>Cod voucher</ro>
 </text>
 <text>
 <en>Amount</en>
@@ -6062,6 +5980,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <context>Amount of Money</context>
 <de>Benutzer Betrag</de>
 <id>1547</id>
+<ro>Sumă utilizată</ro>
 </text>
 <text>
 <en>'%value%' code was already used</en>
@@ -6077,6 +5996,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Redeem Voucher</en>
 <de>Gutschein einlösen</de>
 <id>1582</id>
+<ro>Utilizează voucherul</ro>
 </text>
 <text>
 <en>Remaining Amount {0}</en>
@@ -6087,6 +6007,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Your Voucher has been successfully redeemed.</en>
 <de>Ihr Gutschein wurde erfolgreich eingelöst.</de>
 <id>1634</id>
+<ro>Voucher-ul dumneavoastră a fost utilizat.</ro>
 </text>
 <text>
 <en>Set password</en>
@@ -6128,6 +6049,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Your new password has been set.</en>
 <de>Ihr neues Passwort wurde gesetzt.</de>
 <id>1579</id>
+<ro>Noua dumneavoastră parolă a fost salvată.</ro>
 </text>
 <text>
 <en>Can't paste paragraph type '{0}', as it is not avaliable here.</en>
@@ -6137,34 +6059,42 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Show User Menu</en>
 <id>1619</id>
+<de>Benutzermenü anzeigen</de>
 </text>
 <text>
 <en>More about this Topic</en>
 <id>1585</id>
+<de>Mehr zu diesem Thema</de>
 </text>
 <text>
 <en>Routing</en>
 <id>1586</id>
+<de>Routing</de>
 </text>
 <text>
 <en>Flash.Community Video</en>
 <id>1587</id>
+<de>Flash.Community Video</de>
 </text>
 <text>
 <en>Flash.Code</en>
 <id>1591</id>
+<de>Flash.Code</de>
 </text>
 <text>
 <en>Flash.Upload</en>
 <id>1592</id>
+<de>Flash.Upload</de>
 </text>
 <text>
 <en>swf File</en>
 <id>1593</id>
+<de>swf Datei</de>
 </text>
 <text>
 <en>Flash.Media Player</en>
 <id>1594</id>
+<de>Flash.Media Player</de>
 </text>
 <text>
 <en>&lt;strong&gt;Found Results&lt;/strong&gt; (in {0} seconds)</en>
@@ -6174,18 +6104,22 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Social Networks</en>
 <id>1596</id>
+<de>Soziale Netzwerke</de>
 </text>
 <text>
 <en>Authenticate</en>
 <id>1597</id>
+<de>Authentifizieren</de>
 </text>
 <text>
 <en>You are not yet authenticated to {0}. Do you want to authenticate now?</en>
 <id>1598</id>
+<de>Sie sind noch nicht für {0} authentifiziert. Wollen Sie sich jetzt authentifizieren?</de>
 </text>
 <text>
 <en>Please confirm the authentification in the opened popup</en>
 <id>1599</id>
+<de>Bitte bestätigen Sie die Authentifizierung im geöffneten Popup.</de>
 </text>
 <text>
 <en>Success</en>
@@ -6194,30 +6128,32 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Status Update successfully posted.</en>
 <id>1601</id>
+<de>Status Update erfolgreich verbucht.</de>
 </text>
 <text>
 <en>Too many rows to export. Try exporting two times with fewer rows.</en>
 <id>1607</id>
+<de>Zu viele Zeilen zu exportieren. Versuchen Sie den Export in zwei Schritten mit weniger Zeilen.</de>
 </text>
 <text>
 <en>Writing data. Please be patient.</en>
 <id>1608</id>
+<de>Die Daten werden geschrieben. Bitte haben Sie etwas Geduld. </de>
 </text>
 <text>
 <en>Path</en>
 <id>1609</id>
+<de>Pfad</de>
 </text>
 <text>
 <en>Domain and Path</en>
 <id>1610</id>
+<de>Domain und Pfad</de>
 </text>
 <text>
 <en>Source</en>
 <id>1611</id>
-</text>
-<text>
-<en>Redirects</en>
-<id>1613</id>
+<de>Quelle</de>
 </text>
 <text>
 <en>{0}-{1} of about {2}</en>
@@ -6228,11 +6164,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>The Form has been submitted successfully. You will receive an E-Mail with the access link to the protected area.</en>
 <de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in Kürze eine E-Mail mit dem Zugangslink zum geschützten Bereich.</de>
 <id>1615</id>
+<ro>Formularul a fost trimis cu succes. În scurt timp veţi primi un e-mail cu link-ul de acces la secţiunea protejată.</ro>
 </text>
 <text>
 <en>Please enter your E-Mail Address to access this area.</en>
 <de>Bitte geben Sie Ihre E-Mail Adresse ein um Zugang zu diesem Bereich zu erhalten.</de>
 <id>1616</id>
+<ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail pentru a avea acces la această secţiune.</ro>
 </text>
 <text>
 <en>Invalid or expired Link. Please request a new one.</en>
@@ -6242,42 +6180,33 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Information</en>
 <id>1620</id>
+<de>Information</de>
+<ro>Info</ro>
 </text>
 <text>
 <en>Shop.Product: Voucher</en>
 <id>1621</id>
+<de>Shop.Produkt: Gutschein</de>
 </text>
 <text>
 <en>Directory</en>
 <id>1622</id>
+<de>Verzeichnis</de>
 </text>
 <text>
 <en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
 <id>1623</id>
-</text>
-<text>
-<en>Fill out the Form</en>
-<id>1624</id>
-</text>
-<text>
-<en>Click the save button above</en>
-<id>1625</id>
-</text>
-<text>
-<en>If no error pops up, the cache has been cleared sucessfully</en>
-<id>1626</id>
+<de>Aktivierungs-Code ist fehlerhaft. Vielleicht wurde die Adresse falsch aus der E-Mail kopiert?</de>
 </text>
 <text>
 <en>Affected component / part (e.g.: References)</en>
 <id>1627</id>
-</text>
-<text>
-<en>Why do you need to clear the cache? (steps to reproduce / description)</en>
-<id>1628</id>
+<de>Betroffene Komponente / Teil (z.B. Referenzen)</de>
 </text>
 <text>
 <en>Clear Cache</en>
 <id>1629</id>
+<de>Cache löschen</de>
 </text>
 <text>
 <en>Invalid search terms</en>
@@ -6318,11 +6247,6 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1602</id>
 </text>
 <text>
-<en>+20% VAT</en>
-<de>+20% MwSt</de>
-<id>1683</id>
-</text>
-<text>
 <en>Count</en>
 <de>Anzahl</de>
 <id>1572</id>
@@ -6355,111 +6279,64 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Original Position</en>
 <id>1686</id>
+<de>Ursprüngliche Position</de>
 </text>
 <text>
 <en>attached</en>
 <id>1640</id>
+<de>angehängt</de>
 </text>
 <text>
 <en>off</en>
 <id>1641</id>
+<de>Aus</de>
 </text>
 <text>
 <en>Form.File Upload</en>
 <id>1642</id>
+<de>Form.Datei Upload</de>
 </text>
 <text>
 <en>Temporary access</en>
 <id>1644</id>
+<de>Temporärer Zugang</de>
 </text>
 <text>
 <en>Remove Hyperlink</en>
 <id>1645</id>
+<de>Hyperlink entfernen</de>
+<ro>Şzerge hyperlink-ul</ro>
 </text>
 <text>
 <en>Remove the selected link.</en>
 <id>1646</id>
+<de>Ausgewählten Link entfernen.</de>
 </text>
 <text>
 <en>Please enter a search term</en>
 <de>Bitte geben Sie einen Suchbegriff ein</de>
 <id>1647</id>
-</text>
-<text>
-<en>ZIP / City</en>
-<de>PLZ / Ort</de>
-<es>CP / Localidad</es>
-<ru>Почтовый индекс / Город</ru>
-<id>1648</id>
-</text>
-<text>
-<en>You got a requst on {0}</en>
-<de>Es wurde eine Anfrage auf {0} gestellt</de>
-<id>1649</id>
-</text>
-<text>
-<en>This enquiry was sent by</en>
-<de>Die Anfrage wurde gesendet von</de>
-<id>1650</id>
-</text>
-<text>
-<en>http://www.vivid-planet.com</en>
-<id>1651</id>
-</text>
-<text>
-<en>Imprint.Facebook Disclaimer</en>
-<de>Impressum.Facebook Disclaimer</de>
-<id>1652</id>
-</text>
-<text>
-<en>Facebook Social Plugin</en>
-<id>1653</id>
+<ro>Vă rugăm să introduceţi un text pentru căutare</ro>
 </text>
 <text>
 <en>XLS Import</en>
 <id>1658</id>
+<de>XLS Import</de>
 </text>
 <text>
 <en>Upload a file and click "Save" to import.</en>
 <id>1659</id>
-</text>
-<text>
-<en>Adjust columns</en>
-<id>1660</id>
-</text>
-<text>
-<en>Add columns if necessary</en>
-<id>1661</id>
-</text>
-<text>
-<en>Uploaded file is not of type "xls".</en>
-<id>1662</id>
+<de>Datei hochladen und zum importieren auf "Speichern" klicken.</de>
 </text>
 <text>
 <en>Import done</en>
 <id>1663</id>
+<de>Import abgeschlossen</de>
 </text>
 <text>
 <en>The File has been imported successfully.</en>
 <id>1664</id>
-</text>
-<text>
-<en>Newsletter Show in Web</en>
-<id>1669</id>
-</text>
-<text>
-<en>Mandatory field</en>
-<de>Pflichtfeld</de>
-<es>Campo obligatorio</es>
-<ru>Обязательное поле</ru>
-<id>1670</id>
-</text>
-<text>
-<en>Send message</en>
-<de>Nachricht absenden</de>
-<es>Enviar un mensaje</es>
-<ru>Отправить сообщение</ru>
-<id>1671</id>
+<de>Die Datei wurde erfolgreich importiert.</de>
 </text>
 <text>
 <de>Durchsuchen</de>
@@ -6469,44 +6346,56 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Master</en>
 <id>1687</id>
+<de>Master</de>
 </text>
 <text>
 <en>Master URL</en>
 <id>1688</id>
+<de>Master URL</de>
 </text>
 <text>
 <en>Master width</en>
 <id>1689</id>
+<de>Master-Breite</de>
 </text>
 <text>
 <en>Master height</en>
 <id>1690</id>
-</text>
-<text>
-<en>Land</en>
-<id>1691</id>
+<de>Master-Höhe</de>
 </text>
 <text>
 <en>E-Mail Address</en>
 <id>1692</id>
+<de>E-Mail Addresse</de>
 </text>
 <text>
 <en>Predefined Subject for Mail</en>
 <id>1693</id>
+<de>Vordefinierter Betreff für die E-Mail</de>
 </text>
 <text>
 <en>Predefined Text for Mail</en>
 <id>1694</id>
+<de>Vordefinierter Text für die E-Mail</de>
 </text>
 <text>
 <en>Unsubscribe</en>
 <id>1695</id>
+<de>Abmelden</de>
 </text>
 <text>
 <context>thousands separator</context>
 <en>,</en>
 <de>.</de>
 <id>1700</id>
+<sl>.</sl>
+<hu>.</hu>
+<bg>.</bg>
+<ua>.</ua>
+<ro>.</ro>
+<es>.</es>
+<mk>.</mk>
+<cz>.</cz>
 </text>
 <text>
 <en>old</en>
@@ -6519,14 +6408,10 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <id>1702</id>
 </text>
 <text>
-<en>Entry {current} of {total}</en>
-<de>Eintrag {current} von {total}</de>
-<id>1673</id>
-</text>
-<text>
 <en>Guestbook Detail</en>
 <de>Gästebuch Detail</de>
 <id>1674</id>
+<ro>Guestbook Detalii</ro>
 </text>
 <text>
 <en>Set password</en>
@@ -6537,10 +6422,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Data</en>
 <de>Daten</de>
 <id>1676</id>
+<ro>Date</ro>
 </text>
 <text>
 <en>Link.to CommunityVideo</en>
 <id>1677</id>
+<de>Link.to CommunityVideo</de>
 </text>
 <text>
 <en>E-Mail address</en>
@@ -6561,10 +6448,12 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Image text</en>
 <de>Bildtext</de>
 <id>1681</id>
+<ro>Text imagine</ro>
 </text>
 <text>
 <en>No content specified. Please add in Admin -&gt; Texts.</en>
 <id>1682</id>
+<de>Kein Inhalt angegeben. Bitte fügen Sie diesen in Admin -&gt; Texte ein.</de>
 </text>
 <text>
 <en>Hide Label</en>
@@ -6574,6 +6463,8 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Form.Multi Checkbox</en>
 <id>1704</id>
+<de>Form.Multi Checkbox</de>
+<ro>Form.Multi Checkbox</ro>
 </text>
 <text>
 <en>Show check all links</en>
@@ -6588,28 +6479,28 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Filter</en>
 <id>1655</id>
-</text>
-<text>
-<en>The Form has been submitted successfully.</en>
-<id>1656</id>
-<ua>Ваш лист було успішно відправлено.</ua>
+<de>Filter</de>
 </text>
 <text>
 <en>Please choose a file</en>
 <de>Bitte Datei auswählen</de>
 <id>1657</id>
+<ro>Vă rugăm să selectaţi un fişier</ro>
 </text>
 <text>
 <en>This field should only contain letters, numbers, - and _</en>
 <id>1707</id>
+<de>Dieses Feld darf nur Buchstaben, Zahlen, - und _ beinhalten</de>
 </text>
 <text>
 <en>User is currently locked.</en>
 <id>1708</id>
+<de>Benutzer ist momentan gesperrt.</de>
 </text>
 <text>
 <en>Dimension: At least width or height must be set higher than 0.</en>
 <id>1709</id>
+<de>Dimension: Mindest Breite oder Höhe muss größer als 0 sein.</de>
 </text>
 <text>
 <en>Service Unavailable</en>
@@ -6634,90 +6525,112 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Choose Child</en>
 <id>1714</id>
+<de>Unterpunkt wählen</de>
 </text>
 <text>
 <en>full width</en>
 <id>1715</id>
+<de>Volle Breite</de>
 </text>
 <text>
 <en>Paragraphs in Lightbox</en>
 <id>1716</id>
+<de>Absätze in Lightbox</de>
 </text>
 <text>
 <en>Sitemap</en>
 <id>1717</id>
+<de>Sitemap</de>
 </text>
 <text>
 <en>Levels</en>
 <id>1718</id>
+<de>Level</de>
 </text>
 <text>
 <en>Show Parent</en>
 <id>1719</id>
+<de>Übergeordnete anzeigen</de>
 </text>
 <text>
 <en>optional, if not set the title will be autogenerated from the sitename.</en>
 <id>1720</id>
+<de>Optional. Wenn nichts eingetragen ist, wird der Titel aus dem Seitennamen automatisch generiert.</de>
 </text>
 <text>
 <en>Place</en>
 <id>1721</id>
+<de>Ort</de>
 </text>
 <text>
 <en>All Enquiries</en>
 <id>1722</id>
+<de>Alle Anfragen</de>
 </text>
 <text>
 <en>Form.Datefield</en>
 <id>1723</id>
+<de>Form.Datumsfeld</de>
 </text>
 <text>
 <en>Fulltext Search</en>
 <id>1724</id>
+<de>Volltextsuche</de>
 </text>
 <text>
 <en>Preview in web</en>
 <id>1725</id>
+<de>Vorschau im Web</de>
 </text>
 <text>
 <en>Copy all Paragraphs</en>
 <id>1726</id>
+<de>Alle Absätze kopieren</de>
 </text>
 <text>
 <en>Pasting {0}</en>
 <id>1727</id>
+<de>Einfügen {0}</de>
 </text>
 <text>
 <en>Discount</en>
 <id>1728</id>
+<de>Rabatt</de>
 </text>
 <text>
 <en>Tags Translation</en>
 <id>1729</id>
+<de>Tags Übersetzung</de>
 </text>
 <text>
 <en>Original Tag</en>
 <id>1730</id>
+<de>Original Tag</de>
 </text>
 <text>
 <en>File not found.</en>
 <id>1731</id>
+<de>Datei nicht gefunden.</de>
 </text>
 <text>
 <en>Could not read excel</en>
 <id>1732</id>
+<de>Excel kann nicht gelesen werden.</de>
 </text>
 <text>
 <en>Why did you have to clear the cache? (steps to reproduce / description)</en>
 <id>1733</id>
+<de>Warum müssen Sie den Cache löschen? (Schritte zur Reproduktion / Beschreibung)</de>
 </text>
 <text>
 <en>No entries are selected</en>
 <id>1734</id>
+<de>Keine Einträge wurden ausgewählt.</de>
 </text>
 <text>
 <en>clearing cache...</en>
 <id>1735</id>
+<de>Cache löschen ...</de>
 </text>
 <text>
 <en>Copy Page</en>
@@ -6733,6 +6646,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>Ignore</en>
 <id>1739</id>
 <de>Ignorieren</de>
+<ro>Ignoră</ro>
 </text>
 <text>
 <en>'%value%' must be less or equal than '%max%'</en>
@@ -6748,36 +6662,44 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <en>The password is invalid</en>
 <de>Das Passwort ist ungültig</de>
 <id>1742</id>
+<ro>Parola este invalidă</ro>
 </text>
 <text>
 <en>The password must be at least 8 characters long</en>
 <de>Das Passwort muss mindestens 8 Zeichen lang sein</de>
 <id>1743</id>
+<ro>Parola trebuie să fie formată din cel puţin 8 caractere</ro>
 </text>
 <text>
 <en>The password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
 <de>Das passwort muss mindestens aus 3 der folgenden 4 Bedingungen erfüllen: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen</de>
 <id>1744</id>
+<ro>Parola trebuie să fie formată cel puţin din 3 din următoarele 4 tipuri de caractere: litere mici, majuscule, numere şi caractere speciale.</ro>
 </text>
 <text>
 <en>Internal Page</en>
 <id>1745</id>
+<de>Interne Seite</de>
 </text>
 <text>
 <en>Internal Download</en>
 <id>1746</id>
+<de>Interner Download</de>
 </text>
 <text>
 <en>Component-Id</en>
 <id>1747</id>
+<de>Component-Id</de>
 </text>
 <text>
 <en>External Url</en>
 <id>1748</id>
+<de>Externe URL</de>
 </text>
 <text>
 <en>+</en>
 <id>1749</id>
+<de>+</de>
 </text>
 <text>
 <en>Blank</en>
@@ -6787,14 +6709,17 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Start opened</en>
 <id>1751</id>
+<de>Gestartet</de>
 </text>
 <text>
 <en>[%]</en>
 <id>1752</id>
+<de>[%]</de>
 </text>
 <text>
 <en>click rate</en>
 <id>1753</id>
+<de>Klickrate</de>
 </text>
 <text>
 <en>percentage of users which clicked at least one link in newsletter</en>
@@ -6804,6 +6729,8 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Frontend</en>
 <id>1755</id>
+<de>Frontend</de>
+<ro>Frontend</ro>
 </text>
 <text>
 <en>'%value%' does not appear to be a valid date</en>
@@ -6818,10 +6745,13 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Recipient</en>
 <id>1758</id>
+<de>Empfänger</de>
 </text>
 <text>
 <en>IP-Address</en>
 <id>1759</id>
+<de>IP-Adresse</de>
+<ro>Adresă IP</ro>
 </text>
 <text>
 <en>Paragraphs Group</en>
@@ -6831,6 +6761,11 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en>Can't submit order because the cart is empty.</en>
 <id>1761</id>
+<de>Bestellung kann nicht abgesendet werden, weil der Warenkorb leer ist.</de>
+</text>
+<text>
+<en>Link Text</en>
+<id>1762</id>
 </text>
 </trl>
 

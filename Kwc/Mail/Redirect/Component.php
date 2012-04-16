@@ -39,7 +39,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
         $params = explode('_', $inputData['d']);
         if (count($params) < 4) {
-            throw new Kwf_Exception("Too less parameters submitted");
+            throw new Kwf_Exception_Client("Too few parameters submitted");
         }
 
         $params = array(
@@ -55,7 +55,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if ($params['hash'] != $this->_getHash(array(
             $params['redirectId'], $params['recipientId'], $params['recipientModelShortcut']
         ))) {
-            throw new Kwf_Exception("The submitted hash is incorrect.");
+            throw new Kwf_Exception_Client("The submitted hash is incorrect.");
         }
 
         // statistics

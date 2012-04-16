@@ -4,6 +4,6 @@
     </head>
     <body>
         <h1><?= trlKwf('Error') ?></h1>
-        <p><?= $this->exception->getMessage() ?></p>
+        <p><?= $this->message ?></p>
     </body>
 </html>
