@@ -123,4 +123,9 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         );
         return $ret;
     }
+
+    public function getPagePropertiesForm($componentOrParent)
+    {
+        return new Kwc_Root_Category_Trl_GeneratorForm($this);
+    }
 }
