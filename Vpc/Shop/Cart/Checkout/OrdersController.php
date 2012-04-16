@@ -186,13 +186,14 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
                 ->getComponentById($order->checkout_component_id);
             if (!$checkout) throw new Vps_Exception("Can't find checkout component");
             $mail = $checkout->getChildComponent('-'.$order->payment)
-                ->getChildComponent('-shippedMail')
-                ->getComponent();
-            $data = array(
-                'order' => $order,
-                'sumRows' => $checkout->getComponent()->getSumRows($order)
-            );
-            $mail->send($order, $data);
+                ->getChildComponent('-shippedMail');
+            if ($mail) { //mail is optional
+                $data = array(
+                    'order' => $order,
+                    'sumRows' => $checkout->getComponent()->getSumRows($order)
+                );
+                $mail->getComponent()->send($order, $data);
+            }
         }
     }
 }
