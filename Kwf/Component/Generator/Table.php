@@ -247,7 +247,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
                 }
             } else {
                 if (!$this->_getModel()->hasColumn('component')) {
-                    throw new Kwf_Exception("Column component does not exist for a generator in '$this->_class'");
+                    throw new Kwf_Exception("Column component does not exist for a generator '{$this->getGeneratorKey()}' in '$this->_class'");
                 }
                 $select->whereEquals('component', $keys);
             }
