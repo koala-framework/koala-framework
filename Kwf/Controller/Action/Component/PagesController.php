@@ -292,6 +292,10 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         $root = Kwf_Component_Data_Root::getInstance();
         $component = $root->getComponentById($id, array('ignoreVisible' => true));
 
+        if (!$component->generator->getGeneratorFlag('hasHome')) {
+            throw new Kwf_Exception("Generator doesn't have hasHome flag set");
+        }
+
         if (get_class($component) != 'Kwf_Component_Data') {
             //da die data klasse auf Kwf_Component_Data_Home angepasst geändert muss kann das nicht
             //gleichzeitig FirstChildPage oder LinkIntern sein. Daher verbieten.
