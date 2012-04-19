@@ -487,7 +487,9 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
             if (!is_null($target)) {
                 $targetRow = $this->_model->getRow($target);
             }
-            if (is_null($target) || ($targetRow && $targetRow->$parentField != $source)) {
+            if (is_null($target) ||
+                ($targetRow && $targetRow->$parentField != $source && $target != $source)
+            ) {
                 $row->$parentField = $target;
                 if ($this->_hasPosition) {
                     $row->pos = '1';
