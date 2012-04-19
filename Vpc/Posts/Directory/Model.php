@@ -29,22 +29,34 @@ class Vpc_Posts_Directory_Model extends Vps_Model_Db_Proxy
     public function getLastPost($dbId)
     {
         $sel = $this->select()
-            ->whereEquals('component_id', $dbId)
             ->whereEquals('visible', 1)
             ->order('id', 'DESC');
+        if ($this->hasColumn('component_id')) {
+            $sel->whereEquals('component_id', $dbId);
+        }
         return $this->getRow($sel);
     }
 
     public function getNumPosts($dbId)
     {
         $sel = $this->select()
-            ->whereEquals('component_id', $dbId)
             ->whereEquals('visible', 1);
+        if ($this->hasColumn('component_id')) {
+            $sel->whereEquals('component_id', $dbId);
+        }
         return $this->countRows($sel);
     }
 
     public function getNumReplies($dbId)
     {
         return $this->getNumPosts($dbId)-1;
+    }
+
+    public function hasColumn($col)
+    {
+        if ($col == 'component_id') {
+            return in_array($col, $this->getOwnColumns()); // component_id must not be in siblings
+        }
+        return parent::hasColumn($col);
     }
 }

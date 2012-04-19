@@ -7,6 +7,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Component
         $ret = parent::getSettings();
         $ret['generators']['paragraphs']['component'] = array(
             'textImage' => 'Vpc_TextImage_Component',
+            'space' => 'Vpc_Basic_Space_Component',
             'address' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Address_Component',
             'products' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_Component',
             'message' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Message_Component'

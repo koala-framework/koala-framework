@@ -22,9 +22,11 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         foreach ($cc as $k=>$c) {
             $payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
         }
-        $this->_form->add(new Vps_Form_Field_Select('payment', trlVps('Payment')))
-            ->setValues($payments)
-            ->setAllowBlank(false);
+        if (count($payments) > 1) {
+            $this->_form->add(new Vps_Form_Field_Select('payment', trlVps('Payment')))
+                ->setValues($payments)
+                ->setAllowBlank(false);
+        }
 
         $cols = $this->_form->add(new Vps_Form_Container_Columns());
         $col = $cols->add();
@@ -33,9 +35,11 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         $col = $cols->add();
         $col->add(new Vps_Form_Field_ShowField('customer_number', trlVps('Customer Nr')));
 
-        $this->_form->add(new Vps_Form_Field_ShowField('invoice_number', trlVps('Invoice Nr')));
+        if (Vpc_Abstract::getSetting($this->_getParam('class'), 'generateInvoices')) {
+            $this->_form->add(new Vps_Form_Field_ShowField('invoice_number', trlVps('Invoice Nr')));
+            $this->_form->add(new Vps_Form_Field_DateField('invoice_date', trlVps('Invoice Date')));
+        }
 
-        $this->_form->add(new Vps_Form_Field_DateField('invoice_date', trlVps('Invoice Date')));
         $this->_form->add(new Vps_Form_Field_DateField('payed', trlVps('Payed')));
         $this->_form->add(new Vps_Form_Field_ShowField('shipped', trlVps('Shipped')))
             ->setTpl('{value:localizedDate}');
