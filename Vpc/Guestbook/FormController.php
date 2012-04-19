@@ -21,7 +21,10 @@ class Vpc_Guestbook_FormController extends Vps_Controller_Action_Auto_Form
 
     public function _beforeSave($row)
     {
-        if ($this->_getParam('id') == 0 && $this->_getParam('componentId')) {
+        if ($this->_getParam('id') == 0 &&
+            $this->_getParam('componentId') &&
+            $row->getModel()->hasColumn('component_id')
+        ) {
             if (isset($row->component_id)) $row->component_id = $this->_getParam('componentId');
         }
     }
