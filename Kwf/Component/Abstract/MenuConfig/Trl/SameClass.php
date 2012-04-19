@@ -37,7 +37,7 @@ class Kwf_Component_Abstract_MenuConfig_Trl_SameClass extends Kwf_Component_Abst
         }
         if (count($masterComponents) > 1) {
             //already in dropdown
-        } else {
+        } else if (count($masterComponents) == 1) {
             //just one, move into dropdown
             $c = $masterComponents[0];
             $resource = $acl->get('kwc_'.$c->dbId);
