@@ -28,6 +28,7 @@ abstract class Kwf_Component_Abstract_MenuConfig_Abstract
         return Kwc_Abstract::getSetting($this->_class, $name);
     }
 
+    // higher priority means preferred execution
     public function getPriority()
     {
         return 10;
