@@ -265,7 +265,7 @@ class Kwf_Acl extends Zend_Acl
 
     public static function _compareMenuConfig(Kwf_Component_Abstract_MenuConfig_Abstract $a, Kwf_Component_Abstract_MenuConfig_Abstract $b)
     {
-        return ($a->getPriority() > $a->getPriority() ? -1 : 1);
+        return ($a->getPriority() < $a->getPriority() ? -1 : 1);
     }
 
     public function getMenuConfig($user)
