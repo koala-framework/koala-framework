@@ -6,12 +6,11 @@ class Kwc_Shop_Products_Detail_AddToCartGenerator extends Kwf_Component_Generato
         if ($key != $this->getGeneratorKey()) {
             throw new Kwf_Exception("invalid key '$key'");
         }
-        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
-        if (count($generators['addToCart']['component']) <= 1) {
-            return $generators['addToCart']['component']['product'];
+        if (count($this->_settings['component']) <= 1) {
+            return $this->_settings['component']['product'];
         }
         if ($parentData) {
-            foreach ($generators['addToCart']['component'] as $component => $class) {
+            foreach ($this->_settings['component'] as $component => $class) {
                 if ($component == $parentData->row->component) {
                     return $class;
                 }
