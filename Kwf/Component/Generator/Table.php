@@ -130,7 +130,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
     protected function _getParentDataByRow($row, $select)
     {
-        if (isset($row->component_id) && $row->component_id) {
+        if ($row->getModel()->hasColumn('component_id')) {
             $constraints = array('componentClass'=>$this->_class);
             if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
                 $constraints['subroot'] = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
@@ -178,7 +178,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             } else if (count($components) == 0) {
                 return null;
             }
-            throw new Kwf_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
+            throw new Kwf_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' '{$this->getGeneratorKey()}' Generator");
         }
         return $ret;
     }
