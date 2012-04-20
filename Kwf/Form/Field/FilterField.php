@@ -1,6 +1,8 @@
 <?php
 /**
  * Filters a field using another field. Can be used with two Select fields.
+ *
+ * TODO: support for non-remote stores
  */
 class Kwf_Form_Field_FilterField extends Kwf_Form_Field_Abstract
 {
