@@ -62,6 +62,7 @@ Kwf.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
             Kwf.Form.AbstractSelect.superclass.setValue.call(this, value);
             this.value = value;
         }
+        this.fireEvent('changevalue', this.value, this);
     }
 
 });
