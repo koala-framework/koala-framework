@@ -70,9 +70,6 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
     protected function _acceptKey($key, $select, $parentData)
     {
         $components = $this->_settings['component'];
-
-        if (!isset($components[$key])) return false;
-
         if (isset($components[$key]) && !$components[$key]) {
             return false;
         }
