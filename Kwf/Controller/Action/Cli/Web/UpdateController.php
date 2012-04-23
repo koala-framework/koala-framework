@@ -124,9 +124,11 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $doneNames = unserialize($doneNames);
             if (isset($doneNames['start'])) {
                 //UPDATE applicaton/update format
-                if (!isset($doneNames['done'])) $doneNames['done'] = array();
-                foreach (Kwf_Update::getUpdates(0, $doneNames['start']) as $u) {
-                    $doneNames['done'][] = $u->getRevision();
+                if (!isset($doneNames['done'])) {
+                    $doneNames['done'] = array();
+                    foreach (Kwf_Update::getUpdates(0, $doneNames['start']) as $u) {
+                        $doneNames['done'][] = $u->getRevision();
+                    }
                 }
                 $doneNames = $doneNames['done'];
             }
