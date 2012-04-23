@@ -6255,10 +6255,9 @@ has just been created.</en>
 <ro>Guestbook Setări</ro>
 </text>
 <text>
-<en>Master Image</en>
+<en>Original Image</en>
 <id>1448</id>
-<de>Haupt Bild</de>
-<ro>Imagine de tip master</ro>
+<de>Original Bild</de>
 </text>
 <text>
 <en>Own Image</en>
