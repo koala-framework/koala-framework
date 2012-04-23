@@ -25,9 +25,9 @@ class Kwc_Directories_Item_Directory_Trl_AdminModelRow extends Kwf_Model_Proxy_R
         $this->_trlRow->__set($name, $value);
     }
 
-    public function save()
+    protected function _saveWithoutResetDirty()
     {
-        return $this->_trlRow->save();
+        return $this->_trlRow->_saveWithoutResetDirty();
     }
 
     public function delete()
