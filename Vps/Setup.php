@@ -113,7 +113,12 @@ class Vps_Setup
         require_once 'Vps/Trl.php';
 
 
-        ini_set('memory_limit', '128M');
+        $ml = ini_get('memory_limit');
+        if (strtoupper(substr($ml, -1)) == 'M') {
+            if ((int)substr($ml, 0, -1) < 128*1024*1024) {
+                ini_set('memory_limit', '128M');
+            }
+        }
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
