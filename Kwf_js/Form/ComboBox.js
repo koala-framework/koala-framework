@@ -150,7 +150,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
     },
     onLoad : function(store, records, options) {
-        if (!options.blockOnLoad) { //don't call onLoad when loading text to display for setValue because this would expand() if the field has focus 
+        if (!options || !options.blockOnLoad) { //don't call onLoad when loading text to display for setValue because this would expand() if the field has focus
             Kwf.Form.ComboBox.superclass.onLoad.apply(this, arguments);
         }
     },
