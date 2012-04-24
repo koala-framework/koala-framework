@@ -10,19 +10,17 @@ class Kwc_Abstract_Cards_ComponentsController extends Kwf_Controller_Action_Auto
             $subRootComponentId = $this->_getParam('id');
         } else if ($this->_getParam('parent_id')) {
             $subRootComponentId = $this->_getParam('parent_id');
-} else if ($this->_getParam('componentId')) {
-    $subRootComponentId = $this->_getParam('componentId');
+        } else if ($this->_getParam('componentId')) {
+            $subRootComponentId = $this->_getParam('componentId');
         } else {
             throw new Kwf_Exception("componentId, id or parent_id required");
         }
 
         $data = array();
         $gen = Kwc_Abstract::getSetting($this->_getParam('class'), 'generators');
-//         d($gen['child']['component']);
         foreach ($gen['child']['component'] as $name => $class) {
             $admin = Kwc_Admin::getInstance($class);
             $forms = $admin->getCardForms();
-            //d(array_keys($forms));
             foreach ($admin->getVisibleCardForms($subRootComponentId) as $k) {
                 $id = count($forms)==1 ? $name : $name.'_'.$k;
                 $data[] = array(
