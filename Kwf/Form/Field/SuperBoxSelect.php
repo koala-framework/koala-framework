@@ -33,6 +33,7 @@ class Kwf_Form_Field_SuperBoxSelect extends Kwf_Form_Field_ComboBox
 
     private function _getIdsFromPostData($postData)
     {
+        if (!$postData[$this->getFieldName()]) return array();
         return explode(',', $postData[$this->getFieldName()]);
     }
 
