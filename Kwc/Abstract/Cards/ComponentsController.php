@@ -47,8 +47,8 @@ class Kwc_Abstract_Cards_ComponentsController extends Kwf_Controller_Action_Auto
         return parent::_getSelect();
     }
 
-//     protected function _isAllowedComponent()
-//     {
-//         return true;
-//     }
+    protected function _isAllowedComponent()
+    {
+        return true;
+    }
 }
