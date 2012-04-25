@@ -363,7 +363,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $ret['actions']['delete'] = true;
         $ret['actions']['copy'] = true;
         $ret['actions']['visible'] = true;
-        $ret['actions']['makeHome'] = true;
+        if ($this->getGeneratorFlag('hasHome')) {
+            $ret['actions']['makeHome'] = true;
+        }
 
         // Bei Pages muss nach oben gesucht werden, weil Klasse von Generator
         // mit Komponentklasse übereinstimmen muss

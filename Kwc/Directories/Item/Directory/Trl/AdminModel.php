@@ -37,7 +37,6 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
         }
-
         $proxyRowset = $this->_proxyModel->getRows($select);
         return new $this->_rowsetClass(array(
             'rowset' => $proxyRowset,
@@ -47,6 +46,19 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
         ));
     }
 
+    public function getRow($select)
+    {
+        if (is_array($select)) $select = new Kwf_Model_Select($select);
+        $componentId = $this->_getComponentId($select);
+
+        if ($componentId) {
+            $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
+            $select->whereEquals('component_id', $c->chained->dbId);
+        }
+        $proxyRow = $this->_proxyModel->getRow($select);
+        return $this->getRowByProxiedRow($proxyRow, $componentId);
+    }
     public function countRows($where = array())
     {
         $select = $this->select($where);

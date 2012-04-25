@@ -121,6 +121,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             $length = strlen($oldParentId);
             $like = $oldParentId . '_' . $componentId;
             $model = Kwf_Component_Cache::getInstance()->getModel();
+            while ($model instanceof Kwf_Model_Proxy) $model = $model->getProxyModel();
             if ($model instanceof Kwf_Model_Db) {
                 $db = Kwf_Registry::get('db');
                 $newParentId = $db->quote($newParentId);
@@ -135,6 +136,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
                 $model->executeSql($sql);
                 $this->_log("expanded_component_id={$like}%->{$newParentId}");
             } else {
+                $model = Kwf_Component_Cache::getInstance()->getModel();
                 $select = $model->select()->where(
                     new Kwf_Model_Select_Expr_Like('expanded_component_id', $like . '%')
                 );

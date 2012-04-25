@@ -165,7 +165,7 @@ Kwf.contentReadyHandlers = [];
  * Register a function that will be called when content is loaded or shown
  * @param callback function
  * @param scope for callback
- * @options supported are: priority (integer, higher number means it's called after all with lower number)
+ * @options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
  */
 Kwf.onContentReady = function(fn, scope, options) {
     Kwf.contentReadyHandlers.push({

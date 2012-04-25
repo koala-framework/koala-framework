@@ -25,7 +25,7 @@ class Kwc_Abstract_Image_Trl_Form extends Kwc_Abstract_Form //nicht von Kwc_Abst
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')));
         }
 
-        $this->add(new Kwf_Form_Field_ShowField('image', trlKwf('Master Image')))
+        $this->add(new Kwf_Form_Field_ShowField('image', trlKwf('Original Image')))
             ->setData(new Kwc_Abstract_Image_Trl_Form_ImageData());
         $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Own Image')));
         $fs->setCheckboxToggle(true);

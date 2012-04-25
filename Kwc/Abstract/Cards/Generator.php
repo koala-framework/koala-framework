@@ -40,8 +40,10 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
                     $s->where(new Kwf_Model_Select_Expr_Like('component_id', $p->dbId.'%')); //so db can make use of index
                     $s->where(new Kwf_Model_Select_Expr_RegExp('component_id', '^'.$p->dbId.'[-_][^_]+$'));
                 }
-                if ($p = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT)) {
-                    $s->where(new Kwf_Model_Select_Expr_Like('component_id', $p->dbId.'%'));
+                if ($subRoots = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT)) {
+                    foreach ($subRoots as $subRoot) {
+                        $s->where(new Kwf_Model_Select_Expr_Like('component_id', $subRoot->dbId.'%'));
+                    }
                 }
                 $data = $this->_getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
                 $parentData = array();

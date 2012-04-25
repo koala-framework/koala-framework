@@ -93,7 +93,10 @@ class Kwf_Component_Abstract
                 $code = "<?php\nclass $c extends $settings[base]\n{\n";
                 $code .= "    public static function _getYamlConfigFile() { return '$file'; }\n";
                 $code .= "}\n";
-                mkdir(substr($classFile, 0, strrpos($classFile, '/')), 0777, true);
+                $dir = substr($classFile, 0, strrpos($classFile, '/'));
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0777, true);
+                }
                 file_put_contents($classFile, $code);
                 if (!class_exists($c)) {
                     throw new Kwf_Exception("just generated class still does not exist");

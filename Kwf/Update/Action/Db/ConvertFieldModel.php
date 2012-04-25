@@ -6,6 +6,8 @@ class Kwf_Update_Action_Db_ConvertFieldModel extends Kwf_Update_Action_Abstract
 
     public function update()
     {
+        parent::update();
+
         if (!$this->silent) echo "convert fields for $this->table\n";
         foreach (Kwf_Registry::get('db')->query("SELECT id, data FROM $this->table")->fetchAll() as $row) {
             if (!$this->silent) echo ".";

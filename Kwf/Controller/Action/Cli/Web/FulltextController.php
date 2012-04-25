@@ -44,7 +44,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $i = 0;
         foreach ($documents as $doc) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
-            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
+            if ($page && Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
             if (!$page) {
                 if (!$this->_getParam('slient')) {
                     echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";

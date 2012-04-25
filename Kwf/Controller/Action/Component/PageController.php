@@ -12,8 +12,13 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
         if ($row->getModel() instanceof Kwf_Component_Model) {
             $component = $row->getData();
         } else {
-            $component = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($row->parent_id, array('ignoreVisible' => true));
+            if ($row instanceof Kwc_Root_Category_Trl_GeneratorRow) {
+                $component = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentById($row->component_id, array('ignoreVisible' => true));
+            } else {
+                $component = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentById($row->parent_id, array('ignoreVisible' => true));
+            }
         }
         $ret = false;
         while ($component) {
@@ -165,6 +170,8 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
         if (isset($fields['component'])) {
             $fields['component']->setFormsForComponent($formsForComponent);
         }
+
+        $this->_form->setId($this->_getParam('id'));
     }
 
     protected function _beforeValidate(array $postData)
