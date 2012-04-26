@@ -12,6 +12,26 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
                 'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
                 'callback' => 'onRecursiveUrlChanged'
             );
+            $ret[] = array(
+                'class' => null,
+                'event' => 'Kwf_Component_Event_Component_RecursiveRemoved',
+                'callback' => 'onRecursiveRemovedAdded'
+            );
+            $ret[] = array(
+                'class' => null,
+                'event' => 'Kwf_Component_Event_Component_RecursiveAdded',
+                'callback' => 'onRecursiveRemovedAdded'
+            );
+            $ret[] = array(
+                'class' => null,
+                'event' => 'Kwf_Component_Event_Page_Added',
+                'callback' => 'onPageRemovedAdded'
+            );
+            $ret[] = array(
+                'class' => null,
+                'event' => 'Kwf_Component_Event_Page_Removed',
+                'callback' => 'onPageRemovedAdded'
+            );
         }
         return $ret;
     }
@@ -38,6 +58,28 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
                 //TODO: only fire if $dbId is a page
                 $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $dbId));
             }
+        }
+    }
+
+    public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
+            foreach ($this->_getDbIds($childPageId) as $dbId) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $dbId));
+
+                //TODO: only fire if $dbId is a page
+                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $dbId));
+            }
+        }
+    }
+
+    public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
+    {
+        foreach ($this->_getDbIds($event->dbId) as $dbId) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $dbId));
+
+            //TODO: only fire if $dbId is a page
+            $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $dbId));
         }
     }
 
