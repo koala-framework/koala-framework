@@ -21,7 +21,9 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
-        $row->component_id = $this->_getPostsComponent()->dbId;
+        if ($row->getModel()->hasColumn('component_id')) {
+            $row->component_id = $this->_getPostsComponent()->dbId;
+        }
         if (get_class($this) == 'Vpc_Posts_Write_Form_Component') {
             if ($this->getData()->parent->parent->getComponent() instanceof
                 Vpc_User_Detail_Guestbook_Component)
