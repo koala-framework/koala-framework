@@ -7,7 +7,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Component
         $ret = parent::getSettings();
         $ret['generators']['paragraphs']['component'] = array(
             'textImage' => 'Kwc_TextImage_Component',
-            'space' => 'Vpc_Basic_Space_Component',
+            'space' => 'Kwc_Basic_Space_Component',
             'address' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Address_Component',
             'products' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_Component',
             'message' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Message_Component'

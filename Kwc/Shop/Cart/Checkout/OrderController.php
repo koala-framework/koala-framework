@@ -35,7 +35,7 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
         $col = $cols->add();
         $col->add(new Kwf_Form_Field_ShowField('customer_number', trlKwf('Customer Nr')));
 
-        if (Vpc_Abstract::getSetting($this->_getParam('class'), 'generateInvoices')) {
+        if (Kwc_Abstract::getSetting($this->_getParam('class'), 'generateInvoices')) {
             $this->_form->add(new Kwf_Form_Field_ShowField('invoice_number', trlKwf('Invoice Nr')));
             $this->_form->add(new Kwf_Form_Field_DateField('invoice_date', trlKwf('Invoice Date')));
         }
