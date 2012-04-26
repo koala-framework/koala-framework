@@ -64,6 +64,9 @@ abstract class Kwf_Util_PubSubHubbub_AbstractTest extends Kwf_Test_TestCase
         } else {
             $d = "/www/public/library/pshb/";
         }
+        if (!file_exists("{$d}google_appengine/dev_appserver.py")) {
+            $this->markTestSkipped("pshb server not available");
+        }
         $port = Kwf_Util_Tcp::getFreePort(8000, $address);
         $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
                "--port=$port --address=$address --clear_datastore ".

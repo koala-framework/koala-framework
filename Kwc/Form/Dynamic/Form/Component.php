@@ -60,6 +60,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $row->setFrom("noreply@$host");
         $settings = $this->getData()->parent->getComponent()->getMailSettings();
         $row->addTo($settings['recipient']);
+        $row->addCc($settings['recipient_cc']);
         $row->setSubject($settings['subject']);
 
         $msg = '';

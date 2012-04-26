@@ -22,9 +22,11 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
         foreach ($cc as $k=>$c) {
             $payments[$k] = Kwc_Abstract::getSetting($c, 'componentName');
         }
-        $this->_form->add(new Kwf_Form_Field_Select('payment', trlKwf('Payment')))
-            ->setValues($payments)
-            ->setAllowBlank(false);
+        if (count($payments) > 1) {
+            $this->_form->add(new Kwf_Form_Field_Select('payment', trlKwf('Payment')))
+                ->setValues($payments)
+                ->setAllowBlank(false);
+        }
 
         $cols = $this->_form->add(new Kwf_Form_Container_Columns());
         $col = $cols->add();
@@ -33,9 +35,11 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
         $col = $cols->add();
         $col->add(new Kwf_Form_Field_ShowField('customer_number', trlKwf('Customer Nr')));
 
-        $this->_form->add(new Kwf_Form_Field_ShowField('invoice_number', trlKwf('Invoice Nr')));
+        if (Vpc_Abstract::getSetting($this->_getParam('class'), 'generateInvoices')) {
+            $this->_form->add(new Kwf_Form_Field_ShowField('invoice_number', trlKwf('Invoice Nr')));
+            $this->_form->add(new Kwf_Form_Field_DateField('invoice_date', trlKwf('Invoice Date')));
+        }
 
-        $this->_form->add(new Kwf_Form_Field_DateField('invoice_date', trlKwf('Invoice Date')));
         $this->_form->add(new Kwf_Form_Field_DateField('payed', trlKwf('Payed')));
         $this->_form->add(new Kwf_Form_Field_ShowField('shipped', trlKwf('Shipped')))
             ->setTpl('{value:localizedDate}');

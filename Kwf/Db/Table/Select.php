@@ -66,7 +66,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Table_Select
             ) {
                 continue;
             }
-            $searchWords = preg_split('/[\s-+,;]/', $value);
+            $searchWords = preg_split('/[\s-+,;*]/', $value);
             foreach ($searchWords as $searchWord) {
                 $searchWord = trim($searchWord);
                 if (empty($searchWord)) continue;

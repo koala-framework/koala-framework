@@ -19,6 +19,7 @@ class Kwc_Form_Dynamic_Component extends Kwc_Abstract_Composite_Component
         $row = $this->getRow();
         return array(
             'recipient' => $row->recipient,
+            'recipient_cc' => $row->recipient_cc,
             'subject' => $row->subject,
         );
     }

@@ -21,7 +21,9 @@ class Kwc_Posts_Write_Form_Component extends Kwc_Form_Component
 
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
-        $row->component_id = $this->_getPostsComponent()->dbId;
+        if ($row->getModel()->hasColumn('component_id')) {
+            $row->component_id = $this->_getPostsComponent()->dbId;
+        }
         if (get_class($this) == 'Kwc_Posts_Write_Form_Component') {
             if ($this->getData()->parent->parent->getComponent() instanceof
                 Kwc_User_Detail_Guestbook_Component)
