@@ -5071,9 +5071,9 @@ has just been created.</en>
 <ro>Mesajul dumneavoastră către {0}</ro>
 </text>
 <text>
-<en>You ordered following product</en>
+<en>You ordered the following product</en>
 <de>Sie haben folgenden Artikel bestellt</de>
-<en_plural>You ordered following products</en_plural>
+<en_plural>You ordered the following products</en_plural>
 <de_plural>Sie haben folgende Artikel bestellt</de_plural>
 <id>1214</id>
 <ro>Aţi comandat următoarele produse</ro>
