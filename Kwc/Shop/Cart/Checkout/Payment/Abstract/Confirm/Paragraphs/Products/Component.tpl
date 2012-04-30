@@ -1,5 +1,5 @@
 <? if (isset($this->items)) { ?>
-    <p><?=trlpKwf('You ordered following product', 'You ordered following products', count($this->items));?>:</p>
+    <p><?=trlpKwf('You ordered the following product', 'You ordered the following products', count($this->items));?>:</p>
     <table class="tblBoxCart" cellspacing="0" cellpadding="0">
     <?
     $maxAddOrderData = 0;
