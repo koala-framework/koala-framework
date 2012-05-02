@@ -22,8 +22,8 @@ Kwf.Basic.LinkTag.Extern.processLinks = function(root) {
                 };
                 lnk.on('click', function(e, el) {
                     e.stopEvent();
-                    if (el.dom.kwfOpenWindow) {
-                        el.dom.kwfOpenWindow();
+                    if (el.kwfOpenWindow) {
+                        el.kwfOpenWindow();
                     } else {
                         Ext.fly(el).up('a').dom.kwfOpenWindow();
                     }
