@@ -22,7 +22,11 @@ Kwf.Basic.LinkTag.Extern.processLinks = function(root) {
                 };
                 lnk.on('click', function(e, el) {
                     e.stopEvent();
-                    Ext.fly(el).up('a').dom.kwfOpenWindow();
+                    if (el.dom.kwfOpenWindow) {
+                        el.dom.kwfOpenWindow();
+                    } else {
+                        Ext.fly(el).up('a').dom.kwfOpenWindow();
+                    }
                 });
             }
         });
