@@ -147,7 +147,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
 
         tree.on('dblclick', function (o, e) {
             var i = this.contextMenu.items.first();
-            if (i) {
+            if (i && i.handler) {
                 i.handler.call(i.scope, i, e);
             }
         }, this);
