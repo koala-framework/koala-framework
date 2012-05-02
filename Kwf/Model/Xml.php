@@ -264,7 +264,7 @@ class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
         /**
          * put each element on it's own line
          */
-        $string =preg_replace("/>\s*</",">\n<",$string);
+        $string =preg_replace("/>(\f|\n|\t|\v)*</",">\n<",$string);
 
         /**
          * each element to own array
