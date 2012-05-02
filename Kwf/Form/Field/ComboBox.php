@@ -145,13 +145,22 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
                 if (!is_array($i)) {
                     $store['data'][] = array($k, $i);
                 } else {
-                    if (array_key_exists('id', $i)) $id = $i['id'];
-                    elseif (array_key_exists(0, $i)) $id = $i[0];
-                    else throw new Kwf_Exception("id not found");
-                    if (array_key_exists('value', $i)) $value = $i['value'];
-                    else if (array_key_exists(1, $i)) $value = $i[1];
-                    else throw new Kwf_Exception("value not found");
-                    $store['data'][] = array($id, $value);
+                    if ($fields) {
+                        $d = array();
+                        foreach ($fields as $f) {
+                            $d[] = $i[$f];
+                        }
+                    } else {
+                        if (array_key_exists('id', $i)) $id = $i['id'];
+                        elseif (array_key_exists(0, $i)) $id = $i[0];
+                        else throw new Kwf_Exception("id not found");
+                        if (array_key_exists('value', $i)) $value = $i['value'];
+                        else if (array_key_exists(1, $i)) $value = $i[1];
+                        else throw new Kwf_Exception("value not found");
+                        $d = array($id, $value);
+                    }
+
+                    $store['data'][] = $d;
                 }
             }
         }
