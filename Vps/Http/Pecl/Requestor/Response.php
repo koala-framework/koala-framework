@@ -8,7 +8,7 @@ class Vps_Http_Pecl_Requestor_Response implements Vps_Http_Requestor_Response_In
         if ($response->getResponseCode() == 301 || $response->getResponseCode() == 302) {
             //workaround for strange pecl_http bug that breaks requests that redirect to the same url again
             //and for some reason then there is only response message containing in the body the second response message (including http headers)
-            if (preg_match('^HTTP/1\.. [0-9]{3} ', $response->getBody())) {
+            if (preg_match('#^HTTP/1\.. [0-9]{3} #', $response->getBody())) {
                 $r = HttpMessage::factory($response->getBody());
                 if ($r->getType() == HTTP_MSG_RESPONSE) {
                     $response = $r;
