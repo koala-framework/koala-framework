@@ -92,8 +92,6 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
      */
     static public function getInfoWindowHtml($data)
     {
-        $row = $data->getRow();
-        $link = new Kwf_Component_View_Helper_ComponentLink();
-        return $link->componentLink($data);
+        return "<a href=\"$data->url\" rel=\"$data->rel\">$data->name</a>";
     }
 }

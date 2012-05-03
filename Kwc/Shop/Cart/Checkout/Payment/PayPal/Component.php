@@ -8,8 +8,12 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
         $ret['generators']['child']['component']['confirmLink'] = 'Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component';
         $ret['generators']['confirm']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';
         $ret['generators']['confirm']['name'] = trlKwf('done');
+        $ret['generators']['ipn'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Shop_Cart_Checkout_Payment_PayPal_Ipn_Component'
+        );
 
-        $ret['business'] = '';
+        $ret['business'] = ''; // deprecated, use paypalId in config instead
         return $ret;
     }
 

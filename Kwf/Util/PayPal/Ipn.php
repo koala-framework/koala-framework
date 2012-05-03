@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_PayPal_Ipn
 {
-    public function dispatch($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
+    public static function dispatch($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
     {
         $url = '';
         if (isset($_SERVER['REDIRECT_URL'])) {
@@ -9,6 +9,14 @@ class Kwf_Util_PayPal_Ipn
         }
         if ($url != '/paypal_ipn') return;
 
+        self::process($logModel);
+
+        echo 'OK';
+        exit;
+    }
+
+    public static function process($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
+    {
         if (Kwf_Setup::getConfigSection()=='production' || !isset($_GET['dontValidate'])) {
 
             $req = 'cmd=_notify-validate';
@@ -63,8 +71,5 @@ class Kwf_Util_PayPal_Ipn
         } else {
             throw new Kwf_Exception("Ipn validation received something strange: $res");
         }
-
-        echo 'OK';
-        exit;
     }
 }
