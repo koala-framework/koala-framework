@@ -3,15 +3,15 @@
 .webSearchSuccess,
 .webSuccess {
     padding: 10px 10px 5px 10px;
-    background: var(successBg) url('/assets/web/images/stripes.png') repeat left 3px !important;
-    border: 1px solid var(successBorder) !important;
+    background: var(successBg) url('/assets/web/images/stripes.png') repeat left 3px ;
+    border: 1px solid var(successBorder) ;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
 .webSearchSuccess p,
 .webSuccess p {
-    color: var(successText) !important;
+    color: var(successText) ;
     margin-bottom: 5px;
     padding-left: 20px;
     background: url('/assets/web/images/iconTick.png') no-repeat left center;
@@ -20,19 +20,19 @@
 .webFormError {
     padding: 10px 10px 5px 10px;
     background: var(errorBg) url('/assets/web/images/stripes.png') repeat left 3px;
-    border: 1px solid var(errorBorder) !important;
+    border: 1px solid var(errorBorder) ;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
 .webSearchError p,
 .webFormError p {
-    color: var(errorText) !important;
+    color: var(errorText) ;
     margin-bottom: 5px;
     padding-left: 20px;
     background: url('/assets/web/images/iconAlert.png') no-repeat left center;
 }
-.webFormError li { color: var(errorText) !important; }
+.webFormError li { color: var(errorText) ; }
 
 .webSearchHelper p,
 .webForm span.comment {

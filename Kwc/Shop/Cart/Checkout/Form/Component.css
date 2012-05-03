@@ -1,5 +1,5 @@
 .$cssClass label { width: 140px; }
-.$cssClass .kwfFormFieldRadioHorizontal label { float: none !important; margin-left: 0px !important; }
+.$cssClass .kwfFormFieldRadioHorizontal label { float: none; margin-left: 0px; }
 .ext-ie7 .$cssClass .kwfFormFieldRadioHorizontal label { position: relative; top: -5px; }
 .ext-ie7 .$cssClass .kwfFormFieldRadioHorizontal span { margin-left: -13px; }
 .$cssClass .kwfFormFieldRadioHorizontal input { margin-left: 0px; }

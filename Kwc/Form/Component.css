@@ -2,14 +2,14 @@
 .cssClass .kwfFieldError input,
 .cssClass .kwfFieldError textarea {
     color: var(typo);
-    background: var(highlightBg) url('/assets/web/images/stripesDark.png') repeat left 3px !important;
-    border: 1px solid var(highlightBorder) !important;
+    background: var(highlightBg) url('/assets/web/images/stripesDark.png') repeat left 3px ;
+    border: 1px solid var(highlightBorder) ;
 }
 
 .cssClass button {
-    height: auto !important;
+    height: auto ;
     margin: 10px 0px 10px 190px;
-    padding: 5px 10px !important;
+    padding: 5px 10px ;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
     color: var(typo);
@@ -69,8 +69,8 @@
 
 .cssClass input,
 .cssClass textarea {
-    background: var(light) !important;
-    border: 1px solid var(gray) !important;
+    background: var(light) ;
+    border: 1px solid var(gray) ;
     border-radius: 4px;
     behavior: url(/assets/css3pie/pie.htc);
 }
@@ -162,7 +162,7 @@
 .cssClass .kwcFormError {
     border: 1px dashed $mainColor;
     margin-bottom: 20px;
-    padding: 10px 10px 0px 10px !important;
+    padding: 10px 10px 0px 10px ;
 }
 .cssClass .kwcFormError p.error {
     font-weight: bold;
