@@ -4239,8 +4239,8 @@ has just been created.</en>
 <ro>'%value%' există deja</ro>
 </text>
 <text>
-<en>Imprint.Imprint</en>
-<de>Impressum.Impressum</de>
+<en>Imprint</en>
+<de>Impressum</de>
 <id>1032</id>
 <es>imprimir</es>
 <pt>imprimir</pt>
@@ -4248,7 +4248,7 @@ has just been created.</en>
 <jp>インプリント</jp>
 <fr>imprimer</fr>
 <it>marchio</it>
-<ro>Copyright.Copyright</ro>
+<ro>Copyright</ro>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
@@ -4287,8 +4287,8 @@ has just been created.</en>
 <ro>Înregistrare la Camera de Comerţ a Austriei</ro>
 </text>
 <text>
-<en>Imprint.Disclaimer</en>
-<de>Impressum.Haftungsausschluss</de>
+<en>Disclaimer</en>
+<de>Haftungsausschluss</de>
 <id>1047</id>
 <ro>Copyright.Disclaimer</ro>
 </text>
@@ -4528,8 +4528,8 @@ has just been created.</en>
 <ro>Google Maps</ro>
 </text>
 <text>
-<en>Imprint.Google-Analytics</en>
-<de>Impressum.Google-Analytics</de>
+<en>Google-Analytics</en>
+<de>Google-Analytics</de>
 <id>1106</id>
 <ro>Copyright.Google-Analytics</ro>
 </text>
