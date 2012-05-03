@@ -76,11 +76,13 @@ class Kwf_Util_Component
 
     public static function dispatchRender()
     {
-        if ((!isset($_REQUEST['url']) || !$_REQUEST["url"]) && (!isset($_REQUEST['componentId']) || !$_REQUEST['componentId'])) {
+        if ((!isset($_REQUEST['url']) || !$_REQUEST["url"]) && (!isset($_REQUEST['componentId']) || !$_REQUEST['componentId']) && (!isset($_REQUEST['dbId']) || !$_REQUEST['dbId'])) {
             throw new Kwf_Exception_NotFound();
         }
         if (isset($_REQUEST['componentId'])) {
             $data = Kwf_Component_Data_Root::getInstance()->getComponentById($_REQUEST['componentId']);
+        } else if (isset($_REQUEST['dbId'])) {
+            $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($_REQUEST['dbId'], array('limit'=>1));
         } else {
             $url = $_REQUEST['url'];
             $parsedUrl = parse_url($url);

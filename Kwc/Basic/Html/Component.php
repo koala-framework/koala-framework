@@ -62,14 +62,12 @@ class Kwc_Basic_Html_Component extends Kwc_Abstract_Composite_Component
         return strip_tags($this->_getRow()->content);
     }
 
-
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
+        $ret = array();
         $text = strip_tags($this->_getRow()->content);
-
-        $doc->getField('content')->value .= ' '.$text;
-        $doc->getField('normalContent')->value .= ' '.$text;
-
-        return $doc;
+        $ret['content'] = $text;
+        $ret['normalContent'] = $text;
+        return $ret;
     }
 }

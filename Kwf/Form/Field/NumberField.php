@@ -63,7 +63,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     {
         $ret = parent::_getOutputValueFromValues($values);
         if (!$ret) return '';
-        $ret = number_format($ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
+        $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         return $ret;
     }
 

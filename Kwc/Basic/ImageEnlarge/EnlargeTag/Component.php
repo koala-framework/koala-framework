@@ -107,10 +107,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
         }
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
-        //don't call parent, we handle imageCaption ourself
+        $ret = array();
 
+        //don't call parent, we handle imageCaption ourself
         $options = (object)$this->_getOptions();
         $text = '';
         if (isset($options->title) && $options->title) {
@@ -119,9 +120,9 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
         if (isset($options->imageCaption) && $options->imageCaption) {
             $text .= ' '.$options->imageCaption;
         }
-        $doc->getField('content')->value .= ' '.$text;
-        $doc->getField('normalContent')->value .= ' '.$text;
-
-        return $doc;
+        $text = trim($text);
+        $ret['content'] = $text;
+        $ret['normalContent'] = $text;
+        return $ret;
     }
 }

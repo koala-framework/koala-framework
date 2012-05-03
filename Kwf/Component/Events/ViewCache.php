@@ -2,6 +2,7 @@
 class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 {
     private $_updates = array();
+    private $_pageParentChanges = array();
 
     public function getListeners()
     {
@@ -63,6 +64,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onComponentClassPageContentChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Page_ParentChanged',
+            'callback' => 'onPageParentChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Media_Changed',
             'callback' => 'onMediaChanged'
         );
@@ -88,7 +93,14 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
                 } else {
                     $and = array();
                     foreach ($values as $k => $v) {
-                        if (strpos($v, '%') !== false) {
+                        if (substr($v, -1) == '%') {
+                            $v = substr($v, 0, -1);
+                            $and[] = new Kwf_Model_Select_Expr_Or(array(
+                                new Kwf_Model_Select_Expr_Equal($k, $v),
+                                new Kwf_Model_Select_Expr_Like($k, $v.'-%'),
+                                new Kwf_Model_Select_Expr_Like($k, $v.'_%'),
+                            ));
+                        } else if (strpos($v, '%') !== false) {
                             $and[] = new Kwf_Model_Select_Expr_Like($k, $v);
                         } else {
                             $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
@@ -101,70 +113,76 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             Kwf_Component_Cache::getInstance()->deleteViewCache($select);
             $this->_updates = array();
         }
+
+        foreach ($this->_pageParentChanges as $changes) {
+            $oldParentId = $changes['oldParentId'];
+            $newParentId = $changes['newParentId'];
+            $componentId = $changes['componentId'];
+            $length = strlen($oldParentId);
+            $like = $oldParentId . '_' . $componentId;
+            $model = Kwf_Component_Cache::getInstance()->getModel();
+            while ($model instanceof Kwf_Model_Proxy) $model = $model->getProxyModel();
+            if ($model instanceof Kwf_Model_Db) {
+                $db = Kwf_Registry::get('db');
+                $newParentId = $db->quote($newParentId);
+                $where[] = 'expanded_component_id = ' . $db->quote($like);
+                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '-%'));
+                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '_%'));
+                $sql = "UPDATE cache_component
+                    SET expanded_component_id=CONCAT(
+                        $newParentId, SUBSTRING(expanded_component_id, $length)
+                    )
+                    WHERE " . implode(' OR ', $where);
+                $model->executeSql($sql);
+                $this->_log("expanded_component_id={$like}%->{$newParentId}");
+            } else {
+                $model = Kwf_Component_Cache::getInstance()->getModel();
+                $select = $model->select()->where(
+                    new Kwf_Model_Select_Expr_Like('expanded_component_id', $like . '%')
+                );
+                foreach ($model->getRows($select) as $row) {
+                    $oldExpandedId = $row->expanded_component_id;
+                    $newExpandedId = $newParentId . substr($oldExpandedId, $length);
+                    $row->expanded_component_id = $newExpandedId;
+                    $row->save();
+                    $this->_log("expanded_component_id={$oldExpandedId}->{$newExpandedId}");
+                }
+            }
+        }
     }
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
         $this->_updates['db_id'][] = $event->dbId;
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear db_id=$event->dbId type=component", Zend_Log::INFO);
-        }
-    }
-
-    //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
-    //this method returns all child ids needed for deleting recursively
-    private function _getIdsFromRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
-    {
-        $changedComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
-        $ids = array($changedComponent->getPageOrRoot()->componentId);
-        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $c = $changedComponent;
-            while ($c && !$c->isPage && !$c instanceof Kwf_Component_Data_Root && $c->componentClass !== $gen->getClass()) {
-                $c = $c->parent;
-            }
-            if ($c) {
-                $ids = array_merge($ids, $gen->getVisiblePageChildIds($c->dbId));
-            }
-        }
-        return $ids;
+        $this->_log("db_id=$event->dbId type=component");
     }
 
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
     {
-        $log = Kwf_Component_Events_Log::getInstance();
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+        foreach ($this->_getParentComponentsForRecursive($event) as $c) {
             $this->_updates[] = array(
                 'type' => 'component',
-                'component_id' => $id . '%',
+                'expanded_component_id' => $c->getExpandedComponentId() . '%',
                 'component_class' => $event->class
             );
-            if ($log) {
-                $log->log("view cache clear type=component component_id=$id% component_class=$event->class", Zend_Log::INFO);
-            }
+            $this->_log("type=component expanded_component_id={$c->getExpandedComponentId()}% component_class=$event->class");
         }
     }
 
     public function onMasterContentChange(Kwf_Component_Event_Component_MasterContentChanged $event)
     {
         $this->_updates['master-db_id'][] = $event->dbId;
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear db_id=$event->dbId type=master", Zend_Log::INFO);
-        }
+        $this->_log("db_id=$event->dbId type=master");
     }
 
     public function onRecursiveMasterContentChange(Kwf_Component_Event_Component_RecursiveMasterContentChanged $event)
     {
-        $log = Kwf_Component_Events_Log::getInstance();
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+        foreach ($this->_getParentComponentsForRecursive($event) as $component) {
             $this->_updates[] = array(
                 'type' => 'master',
-                'component_id' => $id . '%',
+                'expanded_component_id' => $component->getExpandedComponentId() . '%',
             );
-            if ($log) {
-                $log->log("view cache clear component_id=$id% type=master", Zend_Log::INFO);
-            }
+            $this->_log("type=master expanded_component_id={$component->getExpandedComponentId()}%");
         }
     }
 
@@ -173,10 +191,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         $this->_updates[] = array(
             'type' => 'master',
         );
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear type=master", Zend_Log::INFO);
-        }
+        $this->_log("type=master");
     }
 
     // namechanged and filnamechanged-events
@@ -186,45 +201,42 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'type' => 'componentLink',
             'db_id' => $event->dbId
         );
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear type=componentLink db_id=$event->dbId", Zend_Log::INFO);
-        }
+        $this->_log("type=componentLink db_id=$event->dbId");
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        $log = Kwf_Component_Events_Log::getInstance();
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
+        foreach ($this->_getParentComponentsForRecursive($event) as $component) {
             $this->_updates[] = array(
                 'type' => 'componentLink',
-                'component_id' => $id . '%'
+                'expanded_component_id' => $component->getExpandedComponentId() . '%',
             );
-            if ($log) {
-                $log->log("view cache clear type=componentLink component_id=$id%", Zend_Log::INFO);
-            }
+            $this->_log("type=componentLink expanded_component_id={$component->getExpandedComponentId()}%");
         }
     }
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
+        //the component itself
+        $this->_updates[] = array(
+            //remove all types
+            'component_id' => $event->componentId
+        );
+        $this->_log("component_id=$event->componentId");
+
+        //all child components
         $changedComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
         $changedChildIdPostfix = substr($changedComponent->componentId, strlen($changedComponent->getPageOrRoot()->componentId));
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
-            if (is_numeric($id)) {
-                $pattern = $id . $changedChildIdPostfix . '%';
-            } else {
-                                //plus child pages not generated by CategoryGenerator
-                $pattern = $id . '%' . $changedChildIdPostfix . '%';
+
+        foreach ($this->_getParentComponentsForRecursive($event) as $component) {
+            $pattern = $component->getExpandedComponentId() . '%';
+            if ($changedChildIdPostfix) {
+                $pattern .= $changedChildIdPostfix . '%';
             }
             $this->_updates[] = array(
-                //remove all types
-                'component_id' => $pattern
+                'expanded_component_id' => $pattern,
             );
-            $log = Kwf_Component_Events_Log::getInstance();
-            if ($log) {
-                $log->log("view cache clear component_id=$pattern", Zend_Log::INFO);
-            }
+            $this->_log("expanded_component_id=$pattern");
         }
     }
 
@@ -234,10 +246,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'type' => 'component',
             'component_class' => $event->class
         );
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear type=component component_class=$event->class", Zend_Log::INFO);
-        }
+        $this->_log("type=component component_class=$event->class");
     }
 
     public function onComponentClassPartialsChanged(Kwf_Component_Event_ComponentClass_PartialsChanged $event)
@@ -246,10 +255,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'type' => 'partial',
             'component_class' => $event->class
         );
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear type=partial component_class=$event->class", Zend_Log::INFO);
-        }
+        $this->_log("type=partial component_class=$event->class");
     }
 
     public function onComponentClassPartialChanged(Kwf_Component_Event_ComponentClass_PartialChanged $event)
@@ -259,10 +265,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'component_class' => $event->class,
             'value' => $event->id
         );
-        $log = Kwf_Component_Events_Log::getInstance();
-        if ($log) {
-            $log->log("view cache clear type=partial component_class=$event->class value=$event->id", Zend_Log::INFO);
-        }
+        $this->_log("type=partial component_class=$event->class value=$event->id");
     }
 
     public function onComponentClassPageContentChanged(Kwf_Component_Event_ComponentClassPage_ContentChanged $event)
@@ -272,9 +275,43 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'page_db_id' => $event->pageDbId,
             'component_class' => $event->class
         );
+        $this->_log("type=component page_db_id=$event->pageDbId component_class=$event->class");
+    }
+
+    public function onPageParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
+    {
+        $oldParentId = Kwf_Component_Data_Root::getInstance()->getComponentById(
+            $event->oldParentId, array('ignoreVisible' => true)
+        )->getExpandedComponentId();
+        $newParentId = Kwf_Component_Data_Root::getInstance()->getComponentById(
+            $event->newParentId, array('ignoreVisible' => true)
+        )->getExpandedComponentId();
+        $this->_pageParentChanges[] = array(
+            'oldParentId' => $oldParentId,
+            'newParentId' => $newParentId,
+            'componentId' => $event->componentId
+        );
+    }
+
+    private function _getParentComponentsForRecursive(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $ret = array($c->getPageOrRoot());
+        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
+            while ($c && !$c->isPage && !$c instanceof Kwf_Component_Data_Root && $c->componentClass !== $gen->getClass()) {
+                $c = $c->parent;
+            }
+            if ($c) $ret[] = $c;
+        }
+        return $ret;
+    }
+
+    private function _log($msg)
+    {
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
-            $log->log("view cache clear type=component page_db_id=$event->pageDbId component_class=$event->class", Zend_Log::INFO);
+            $log->log("view cache clear $msg", Zend_Log::INFO);
         }
     }
 

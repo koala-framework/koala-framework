@@ -28,9 +28,10 @@ abstract class Kwf_Component_Abstract_MenuConfig_Abstract
         return Kwc_Abstract::getSetting($this->_class, $name);
     }
 
+    // integer, higher number means it's called after all with lower number, default 0
     public function getPriority()
     {
-        return 10;
+        return 0;
     }
 
     abstract public function addResources(Kwf_Acl $acl);

@@ -50,6 +50,12 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
         }
         $db->query("UPDATE kwc_basic_text SET content =
                 REPLACE(content, 'href=\"$search-', 'href=\"$replace-')");
+        $db->query("UPDATE kwc_basic_text SET content =
+                REPLACE(content, 'href=\"{$search}_', 'href=\"{$replace}_')");
+        $db->query("UPDATE kwc_basic_text SET content =
+                REPLACE(content, 'href=\n  \"$search-', 'href=\n  \"$replace-')");
+        $db->query("UPDATE kwc_basic_text SET content =
+                REPLACE(content, 'href=\n  \"{$search}_', 'href=\n  \"{$replace}_')");
         //TODO: Images
 
     }

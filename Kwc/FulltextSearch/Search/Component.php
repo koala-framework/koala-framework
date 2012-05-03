@@ -22,7 +22,13 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
 
     public function processInput($postData)
     {
-        $index = Kwf_Util_Fulltext::getInstance();
+        $subRoot = $this->getData();
+        while ($subRoot) {
+            if (Kwc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+            $subRoot = $subRoot->parent;
+        }
+        if (!$subRoot) $subRoot = Kwf_Component_Data_Root::getInstance();
+        $index = Kwf_Util_Fulltext::getInstance($subRoot);
 
         if (isset($postData['query']) && is_string($postData['query'])) {
             $queryString = $postData['query'];
@@ -41,17 +47,6 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
         if ($userQuery) {
             $query = new Zend_Search_Lucene_Search_Query_Boolean();
             $query->addSubquery($userQuery, true /* required */);
-
-            $subRoot = $this->getData();
-            while ($subRoot) {
-                if (Kwc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
-                $subRoot = $subRoot->parent;
-            }
-            if ($subRoot) {
-                $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->componentId, 'subroot');
-                $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
-                $query->addSubquery($pathQuery, true /* required */);
-            }
             $this->_beforeFind($query);
             $time = microtime(true);
             try {

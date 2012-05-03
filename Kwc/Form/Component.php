@@ -28,7 +28,10 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Abstract.js';
+        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Above.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
+
+        $ret['useAjaxRequest'] = true;
 
         $ret['flags']['processInput'] = true;
 
@@ -251,7 +254,13 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
         }
 
-        $cachedContent = Kwf_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
+        $page = $this->getData()->getPage();
+        if (!$page) {
+            throw new Kwf_Exception('Form must have an url so it must be on a page but is on "' . $this->getData()->componentId . '". (If component is a box it must not be unique)');
+        }
+        $cachedContent = Kwf_Component_Cache::getInstance()->load(
+            $page->componentId, 'componentLink'
+        );
         if ($cachedContent) {
             $targetPage = unserialize($cachedContent);
             $ret['action'] = $targetPage[0];
@@ -299,6 +308,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if (!$errorStyle) $errorStyle = Kwf_Config::getValue('kwc.form.errorStyle');
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
+            'useAjaxRequest' => $this->_getSetting('useAjaxRequest'),
             'componentId' => $this->getData()->componentId,
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,

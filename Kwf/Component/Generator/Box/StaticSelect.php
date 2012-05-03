@@ -47,7 +47,18 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
         }
+        if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $continue = false;
+            foreach ($select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES) as $componentClass) {
+                if (in_array($componentClass, $this->getChildComponentClasses())) {
+                    $continue = true;
+                }
+            }
+            if (!$continue) return array();
+        }
         $data = $this->_createData($parentData, $this->getGeneratorKey(), $select);
+        if (!$data) return array();
+
         if ($select->hasPart('whereId')) {
             if ('-' . $data->id != $select->getPart('whereId')) return array();
         }

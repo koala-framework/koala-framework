@@ -5,9 +5,6 @@
 class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
 {
     public $fields;
-    private $_model;
-    private $_references;
-    private $_referenceName;
 
     public function __construct($reference = null)
     {
@@ -16,7 +13,7 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         } else if (class_exists($reference) && is_instance_of($reference, 'Zend_Db_Table_Abstract')) {
             $model = new $reference();
         } else {
-            $this->_referenceName = $reference;
+            $this->setReferenceName($reference);
         }
         parent::__construct(is_object($reference) ? get_class($reference) : $reference);
         if (isset($model)) {
@@ -45,20 +42,53 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         }
     }
 
+    /**
+     * Set reference of MultiFields model from parent model
+     *
+     * Normally passed as first constructor argument
+     *
+     * @param string
+     */
+    public function setReferenceName($name)
+    {
+        return $this->setProperty('referenceName', $name);
+    }
+
+    public function getReferenceName()
+    {
+        return $this->getProperty('referenceName');
+    }
+
+    /**
+     * Set model in which child rows are saved.
+     *
+     * Normally automatically set by using the reference passed in constructor
+     *
+     * @param Kwf_Model_Interface
+     */
     public function setModel($model)
     {
-        $this->_model = $model;
+        return $this->setProperty('model', $model);
     }
 
     public function getModel()
     {
-        return $this->_model;
+        return $this->getProperty('model');
     }
 
-    public function setReferences($references)
+    /**
+     * Manually set references required for model
+     *
+     * Normally automatically read from Model references
+     */
+    public function setReferences($select)
     {
-        $this->_references = $references;
-        return $this;
+        return $this->setProperty('references', $select);
+    }
+
+    public function getReferences()
+    {
+        return $this->getProperty('references');
     }
 
     public function getMetaData($model)
@@ -66,8 +96,8 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         $ret = parent::getMetaData($model);
         $ret['multiItems'] = $this->fields->getMetaData($model);
         if (!isset($ret['position'])) {
-            if (isset($this->_referenceName)) {
-                $m = $model->getDependentModel($this->_referenceName);
+            if ($this->getReferenceName()) {
+                $m = $model->getDependentModel($this->getReferenceName());
             } else {
                 $m = $model;
             }
@@ -85,6 +115,21 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         return $this->fields;
     }
 
+    /**
+     * Set select used for getting available rows
+     *
+     * If not set all rows are used
+     */
+    public function setSelect(Kwf_Model_Select $select)
+    {
+        return $this->setProperty('select', $select);
+    }
+
+    public function getSelect()
+    {
+        return $this->getProperty('select');
+    }
+
     protected function _getRowsByRow(Kwf_Model_Row_Interface $row)
     {
         $pk = $row->getModel()->getPrimaryKey();
@@ -92,20 +137,24 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
             //neuer eintrag (noch keine id)
             return array();
         }
-        if (isset($this->_referenceName)) {
-            $select = new Kwf_Model_Select();
-            if ($row->getModel()->getDependentModel($this->_referenceName)->hasColumn('pos')) {
+        if ($this->getReferenceName()) {
+            if ($this->getSelect()) {
+                $select = $this->getSelect();
+            } else {
+                $select = new Kwf_Model_Select();
+            }
+            if ($row->getModel()->getDependentModel($this->getReferenceName())->hasColumn('pos')) {
                 $select->order('pos');
             }
-            $rows = $row->getChildRows($this->_referenceName, $select);
+            $rows = $row->getChildRows($this->getReferenceName(), $select);
         } else {
             $ref = $this->_getReferences($row);
             $where = array();
             foreach (array_keys($ref['columns']) as $k) {
                 $where["{$ref['columns'][$k]} = ?"] = $row->{$ref['refColumns'][$k]};
             }
-            if ($this->_model->hasColumn('pos')) $where['order'] = 'pos';
-            $rows = $this->_model->fetchAll($where);
+            if ($this->getModel()->hasColumn('pos')) $where['order'] = 'pos';
+            $rows = $this->getModel()->fetchAll($where);
         }
         return $rows;
     }
@@ -134,10 +183,10 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
                 if (isset($rowsArray[$i]) && (!isset($rPostData['isNewRow']) || !$rPostData['isNewRow'])) {
                     $r = $rowsArray[$i];
                 } else {
-                    if (isset($this->_referenceName)) {
-                        $r = $row->createChildRow($this->_referenceName);
+                    if ($this->getReferenceName()) {
+                        $r = $row->createChildRow($this->getReferenceName());
                     } else {
-                        $r = $this->_model->createRow();
+                        $r = $this->getModel()->createRow();
                     }
                 }
                 $retRow['id'] = $r->id;
@@ -230,10 +279,10 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         }
 
         foreach ($fieldPostData as $postDataKey=>$rowPostData) {
-            if (isset($this->_referenceName)) {
-                $r = $row->createChildRow($this->_referenceName);
+            if ($this->getReferenceName()) {
+                $r = $row->createChildRow($this->getReferenceName());
             } else {
-                $r = $this->_model->createRow();
+                $r = $this->getModel()->createRow();
             }
             $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true, 'pos'=>$postDataKey+1);
         }
@@ -300,10 +349,10 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
 
     protected function _getReferences($row)
     {
-        if ($this->_references) {
-            return $this->_references;
-        } else if ($this->_model instanceof Kwf_Model_Db && $row instanceof Kwf_Model_Db_Row) {
-            return $this->_model->getTable()
+        if ($this->getReferences()) {
+            return $this->getReferences();
+        } else if ($this->getModel() instanceof Kwf_Model_Db && $row instanceof Kwf_Model_Db_Row) {
+            return $this->getModel()->getTable()
                         ->getReference(get_class($row->getRow()->getTable()));
         } else {
             throw new Kwf_Exception('Couldn\'t read references for Multifields. Either use Kwf_Model_FieldRows/Kwf_Model_Db or set the References by setReferences().');
@@ -317,14 +366,15 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         foreach ($postData['save'] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
+
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);
             }
 
             if ($i['insert']
-                && !isset($this->_referenceName) //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
+                && !$this->getReferenceName() //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
             ) {
-                if ($this->_model instanceof Kwf_Model_FieldRows) {
+                if ($this->getModel() instanceof Kwf_Model_FieldRows) {
                     //nichts zu tun, keine parent_id muss gesetzt werden
                 } else {
                     $ref = $this->_getReferences($row);
@@ -334,6 +384,13 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
                     }
                     $r->save();
                 }
+            }
+            if (!$this->getReferenceName()) {
+                //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
+                $r->save();
+            }
+            foreach ($this->fields as $field) {
+                $field->save($r, $rowPostData);
             }
         }
     }

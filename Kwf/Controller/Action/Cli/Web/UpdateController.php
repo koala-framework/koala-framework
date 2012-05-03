@@ -37,13 +37,14 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $updates = array($update);
             self::_executeUpdates(array($update), self::_getDoneNames(), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
         } else {
-            self::update($this->_getParam('rev'), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
+            self::update($this->_getParam('rev'), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'), $this->_getParam('clear-view-cache'));
         }
         exit;
     }
 
-    public static function update($rev = false, $debug = false, $skipClearCache = false)
+    public static function update($rev = false, $debug = false, $skipClearCache = false, $clearViewCache = false)
     {
+        ini_set('memory_limit', '512M');
         if (!$skipClearCache) {
             Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
         }
@@ -94,6 +95,10 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
         echo " found ".count($updates)."\n\n";
         self::_executeUpdates($updates, $doneNames, $debug, $skipClearCache);
+
+        if (!$skipClearCache && $clearViewCache) {
+            Zend_Registry::get('db')->query("TRUNCATE TABLE cache_component");
+        }
     }
 
     private static function _getDoneNames()
@@ -119,9 +124,11 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $doneNames = unserialize($doneNames);
             if (isset($doneNames['start'])) {
                 //UPDATE applicaton/update format
-                if (!isset($doneNames['done'])) $doneNames['done'] = array();
-                foreach (Kwf_Update::getUpdates(0, $doneNames['start']) as $u) {
-                    $doneNames['done'][] = $u->getRevision();
+                if (!isset($doneNames['done'])) {
+                    $doneNames['done'] = array();
+                    foreach (Kwf_Update::getUpdates(0, $doneNames['start']) as $u) {
+                        $doneNames['done'][] = $u->getRevision();
+                    }
                 }
                 $doneNames = $doneNames['done'];
             }

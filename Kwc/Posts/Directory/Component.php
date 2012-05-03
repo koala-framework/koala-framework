@@ -20,6 +20,8 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
         );
         $ret['generators']['child']['component']['view'] = 'Kwc_Posts_Directory_View_Component';
         $ret['placeholder']['writeText'] = null;
+        $ret['hasGlobalPosts'] = false;
+
         return $ret;
     }
 

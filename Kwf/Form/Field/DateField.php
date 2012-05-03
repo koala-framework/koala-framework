@@ -14,7 +14,6 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
 
     //setHideDatePicker in Frontend only
 
-
     protected function _processLoaded($v)
     {
         if (strlen($v) > 10) {
@@ -26,7 +25,7 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
     protected function _addValidators()
     {
         parent::_addValidators();
-        $this->addValidator(new Zend_Validate_Date());
+        $this->addValidator(new Kwf_Validate_Date(array('outputFormat' => trlKwf('yyyy-mm-dd'))));
     }
 
     protected function _getValueFromPostData($postData)
@@ -41,7 +40,7 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         }
 
         //format das vom frontend kommt
-        if (!strtotime($ret)) return null;
+        if (!strtotime($ret)) return $ret;
         return date('Y-m-d', strtotime($ret));
     }
 
@@ -65,6 +64,11 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         $value = $this->_getOutputValueFromValues($values);
         if (!$value) $value = trlKwf('yyyy-mm-dd');
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+
+        if ($value != trlKwf('yyyy-mm-dd')) {
+            $v = strtotime($value);
+            if ($v) $value = date(trlKwf('Y-m-d'), $v);
+        }
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);

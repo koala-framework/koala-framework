@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_DownloadTag_Trl_Admin extends Kwc_Basic_DownloadTag_Admin
+class Kwc_Basic_DownloadTag_Trl_Admin extends Kwc_Admin
 {
     public function componentToString(Kwf_Component_Data $data)
     {

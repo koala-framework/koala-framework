@@ -17,6 +17,8 @@ class Kwf_Update_Action_Db_RenameField extends Kwf_Update_Action_Db_Abstract
 
     public function update()
     {
+        parent::update();
+
         if (!$this->silent) echo "rename field $this->field in $this->table\n";
         $table = $this->model->getRow($this->table);
         if (!$table) {

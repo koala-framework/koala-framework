@@ -84,6 +84,18 @@ Kwf.clone = function(o) {
     return c;
 };
 
+if (!Ext.isObject) {
+    //TODO Ext4: remove
+    Ext.isObject = (Ext.toString.call(null) === '[object Object]') ?
+    function(value) {
+        // check ownerDocument here as well to exclude DOM nodes
+        return value !== null && value !== undefined && Ext.toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
+    } :
+    function(value) {
+        return Ext.toString.call(value) === '[object Object]';
+    };
+}
+
 Ext.onReady(function()
 {
 //     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
@@ -153,7 +165,7 @@ Kwf.contentReadyHandlers = [];
  * Register a function that will be called when content is loaded or shown
  * @param callback function
  * @param scope for callback
- * @options supported are: priority (integer, higher number means it's called after all with lower number)
+ * @options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
  */
 Kwf.onContentReady = function(fn, scope, options) {
     Kwf.contentReadyHandlers.push({

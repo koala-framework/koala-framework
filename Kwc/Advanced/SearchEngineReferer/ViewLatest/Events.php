@@ -4,11 +4,15 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Events extends Kwc_Abstract_Ev
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $ret[] = array(
-            'class' => 'Kwc_Advanced_SearchEngineReferer_Model',
-            'event' => 'Kwf_Component_Event_Row_Inserted',
-            'callback' => 'onRowInsert'
-        );
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            if (in_array('Kwc_Advanced_SearchEngineReferer_Component', Kwc_Abstract::getParentClasses($class))) {
+                $ret[] = array(
+                    'class' => Kwc_Abstract::getSetting($class, 'childModel'),
+                    'event' => 'Kwf_Component_Event_Row_Inserted',
+                    'callback' => 'onRowInsert'
+                );
+            }
+        }
         return $ret;
     }
 

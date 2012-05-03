@@ -8,9 +8,9 @@ class Kwc_Basic_Text_Cc_Component extends Kwc_Chained_Cc_Component
         return $ret;
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
-        return $this->getData()->chained->getComponent()->modifyFulltextDocument($doc);
+        return $this->getData()->chained->getComponent()->getFulltextContent();
     }
 
     public function getTemplateVars()

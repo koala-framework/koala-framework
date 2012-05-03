@@ -273,6 +273,10 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
     public function validate($row, $postData)
     {
         $ret = parent::validate($row, $postData);
+
+        $dataModel = $row->getModel();
+        if ($dataModel) $this->setDataModel($dataModel);
+
         if (!is_null($this->getAllowBlank()) && !$this->getAllowBlank()) {
             if (!count($this->_getIdsFromPostData($postData))) {
                 $ret[] = array(
@@ -286,6 +290,9 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
 
     public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
+        //TODO remove in later branches?
+        if ($this->getSave() === false || $this->getInternalSave() === false) return;
+
         $dataModel = $row->getModel();
         if ($dataModel) $this->setDataModel($dataModel);
 
@@ -311,7 +318,6 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
             }
         }
 
-        $dataPrimaryKey = $this->getDataModel()->getPrimaryKey();
         foreach ($new as $id) {
             if (in_array($id, $avaliableKeys)) {
                 $i = $row->createChildRow($this->getRelModel());

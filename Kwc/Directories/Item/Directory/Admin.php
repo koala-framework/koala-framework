@@ -25,7 +25,7 @@ class Kwc_Directories_Item_Directory_Admin extends Kwc_Admin
 
     protected function _getPluginParentComponents()
     {
-        return array();
+        return array($this->_class);
     }
 
     public final function getPluginAdmins()

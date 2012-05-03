@@ -20,4 +20,19 @@ class Kwc_Basic_LinkTag_Event_Admin extends Kwc_Basic_LinkTag_News_Admin
         }
         return $ret;
     }
+
+    public function getVisibleCardForms($cardDbId)
+    {
+        $ret = array();
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($cardDbId, array('ignoreVisible'=>true)) as $card) {
+            $news = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsByClass('Kwc_Events_Directory_Component', array('subroot'=>$card));
+            foreach ($news as $new) {
+                if (!in_array($new->dbId, $ret)) {
+                    $ret[] = $new->dbId;
+                }
+            }
+        }
+        return $ret;
+    }
 }

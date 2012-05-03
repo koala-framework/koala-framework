@@ -46,7 +46,7 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         return $return;
     }
 
-    private function _getFileRow()
+    protected function _getFileRow()
     {
         if (!$this->_fileRow) {
             $this->_fileRow = $this->getData()
@@ -68,15 +68,12 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         return $this->_getRow()->infotext;
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
-        $fieldName = $this->getData()->componentId;
-
-        $doc->getField('content')->value .= ' '.$this->_getRow()->infotext;
-
-        $field = Zend_Search_Lucene_Field::UnStored($fieldName, $this->_getRow()->infotext, 'utf-8');
-        $doc->addField($field);
-
-        return $doc;
+        $ret = array();
+        $text = $this->_getRow()->infotext;
+        $ret['content'] = $text;
+        $ret['normalContent'] = $text;
+        return $ret;
     }
 }

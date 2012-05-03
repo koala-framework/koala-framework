@@ -12,7 +12,7 @@ class Kwc_Root_TrlRoot_Master_FlagImage_Component extends Kwc_Abstract_Image_Com
                 'scale' => Kwf_Media_Image::SCALE_BESTFIT
             ),
         );
-        $ret['componentName'] = trlKwf('Flag');
+        $ret['componentName'] = trlcKwf('Flag of a Country', 'Flag');
         return $ret;
     }
 }

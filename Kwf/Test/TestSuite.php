@@ -8,7 +8,8 @@ class Kwf_Test_TestSuite extends PHPUnit_Framework_TestSuite
         if (file_exists('tests')) {
             $classes = $this->_addDirectory('./tests', false);
         } else {
-            $classes = $this->_addDirectory('.', false);
+            //we are inside kwf, only add classes ending with Test
+            $classes = $this->_addDirectory('.', true);
         }
 
         // damit der js test auch im web immer ausgeführt wird

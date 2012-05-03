@@ -240,6 +240,7 @@ abstract class Kwf_Component_Generator_Abstract
         $generatorKeys = self::_getGeneratorKeys($inheritClasses, $componentClass);
 
         //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
+        // attention: if select consists of additional parts they won't be recognized - it might be that the generator is returned although it isn't needed
         if (($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
             $filteredGeneratorKeys = array();
             foreach ($generatorKeys as $g) {

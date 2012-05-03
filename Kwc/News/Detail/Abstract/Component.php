@@ -32,12 +32,10 @@ abstract class Kwc_News_Detail_Abstract_Component extends Kwc_Directories_Item_D
         $new->teaser = $new->row->teaser;
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
-        $field = Zend_Search_Lucene_Field::Keyword('kwcNews', 'kwcNews', 'utf-8');
-        $field->boost = 0.0001;
-        $doc->addField($field);
-
-        return $doc;
+        $ret = array();
+        $ret['type'] = 'news';
+        return $ret;
     }
 }

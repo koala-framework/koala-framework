@@ -35,6 +35,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'component_id' => (string)$component->componentId,
             'db_id' => (string)$component->dbId,
             'page_db_id' => (string)$component->getPageOrRoot()->dbId,
+            'expanded_component_id' => (string)$component->getExpandedComponentId(),
             'component_class' => $component->componentClass,
             'renderer' => $renderer,
             'type' => $type,
@@ -78,7 +79,10 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                     new Kwf_Model_Select_Expr_Higher('expire', time()),
                     new Kwf_Model_Select_Expr_IsNull('expire'),
                 )));
-            $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select);
+            $options = array(
+                'columns' => array('content', 'expire'),
+            );
+            $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select, $options);
             $content = isset($row[0]) ? $row[0]['content'] : null;
             if (isset($row[0])) {
                 $ttl = 0;
@@ -95,14 +99,48 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $model = $this->getModel();
         $log = Kwf_Component_Events_Log::getInstance();
         $cacheIds = array();
-        foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
+        $options = array(
+            'columns' => array('component_id', 'renderer', 'type', 'value'),
+        );
+        $partialIds = array();
+        $deleteIds = array();
+        foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
             if ($log) {
                 $log->log("delete view cache $row[component_id] $row[type] $row[value]", Zend_Log::INFO);
             }
+            $type = $row['type'];
+            $value = $row['value'];
+            $cId = $row['component_id'];
+            if ($type == 'partial' && $value != '') {
+                if (!isset($partialIds[$cId])) $partialIds[$cId] = array();
+                $partialIds[$cId][] = $value;
+            } else if ($value == '') {
+                if (!isset($deleteIds[$type])) $deleteIds[$type] = array();
+                $deleteIds[$type][] = $cId;
+            } else {
+                throw new Kwf_Exception('Should not happen.');
+            }
         }
-        Kwf_Cache_Simple::delete($cacheIds);
-        $model->updateRows(array('deleted' => true), $select);
+        foreach ($partialIds as $componentId => $values) {
+            $select = $model->select();
+            $select->where(new Kwf_Model_Select_Expr_And(array(
+                new Kwf_Model_Select_Expr_Equals('component_id', $componentId),
+                new Kwf_Model_Select_Expr_Equals('type', 'partial'),
+                new Kwf_Model_Select_Expr_Equals('value', $values)
+            )));
+            $model->updateRows(array('deleted' => true), $select);
+        }
+        foreach ($deleteIds as $type => $componentIds) {
+            $select = $model->select();
+            $select->where(new Kwf_Model_Select_Expr_And(array(
+                new Kwf_Model_Select_Expr_Equals('component_id', $componentIds),
+                new Kwf_Model_Select_Expr_Equals('type', $type)
+            )));
+            $model->updateRows(array('deleted' => true), $select);
+        }
+
+        Kwf_Cache_Simple::delete($cacheIds); // APC after MySQL that user still get old cache data while deleting
     }
 
     protected static function _getCacheId($componentId, $renderer, $type, $value)

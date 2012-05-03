@@ -109,6 +109,19 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
             },
             scope: this
         });
+    },
+
+    applyBaseParams: function(baseParams) {
+        if (this.multiFileUploadPanel) {
+            this.multiFileUploadPanel.applyBaseParams(baseParams);
+        }
+        return Kwc.Abstract.List.List.superclass.applyBaseParams.apply(this, arguments);
+    },
+    setBaseParams : function(baseParams) {
+        if (this.multiFileUploadPanel) {
+            this.multiFileUploadPanel.setBaseParams(baseParams);
+        }
+        return Kwc.Abstract.List.List.superclass.setBaseParams.apply(this, arguments);
     }
 });
 Ext.reg('kwc.list.list', Kwc.Abstract.List.List);

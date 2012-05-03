@@ -66,7 +66,6 @@ class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
                     if ($i === null) {
                        unset ($f->$k);
                     } else {
-                        $i =  str_replace('&', '&amp;', $i); //bugfix für php bug, sonst kommt der fehler "unterminated entity reference"
                         $f->$k = $i;
                     }
 
@@ -193,7 +192,7 @@ class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
                 if (file_exists($this->_filepath)){
                     $contents = file_get_contents($this->_filepath);
                 } elseif (isset($this->_rootNode)) {
-                    $contents = "<$this->_rootNode ></$this->_rootNode>";
+                    $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<$this->_rootNode></$this->_rootNode>";
                 } else {
                     throw new Kwf_Exception("Neither a rootnode nor a filepath is set");
                 }
@@ -268,7 +267,7 @@ class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
         /**
          * put each element on it's own line
          */
-        $string =preg_replace("/>\s*</",">\n<",$string);
+        $string =preg_replace("/>(\f|\n|\t|\v)*</",">\n<",$string);
 
         /**
          * each element to own array

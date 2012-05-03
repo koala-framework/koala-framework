@@ -8,9 +8,4 @@ class Kwc_Mail_Image_Mail_Component extends Kwc_Mail_Component
         $ret['ownModel'] = 'Kwc_Mail_Image_Mail_Model';
         return $ret;
     }
-
-    public function getImages()
-    {
-        return $this->_images;
-    }
 }

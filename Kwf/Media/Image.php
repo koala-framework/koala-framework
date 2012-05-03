@@ -6,6 +6,9 @@ class Kwf_Media_Image
     const SCALE_DEFORM = 'deform';
     const SCALE_ORIGINAL = 'original';
 
+    /**
+     * targetSize options: width, height, scale, aspectRatio (if SCALE_CROP and width or height is 0)
+     */
     public static function calculateScaleDimensions($source, $targetSize)
     {
         if (is_string($source)) {
@@ -70,11 +73,19 @@ class Kwf_Media_Image
 
         if ($scale != self::SCALE_ORIGINAL && $scale != self::SCALE_BESTFIT) {
             if ($width == 0) {
-                $width = round($height * ($size[0]/$size[1]));
+                if (isset($targetSize['aspectRatio'])) {
+                    $width = round($height * $targetSize['aspectRatio']);
+                } else {
+                    $width = round($height * ($size[0]/$size[1]));
+                }
                 if ($width <= 0) $width = 1;
             }
             if ($height == 0) {
-                $height = round($width * ($size[1]/$size[0]));
+                if (isset($targetSize['aspectRatio']) && $targetSize['aspectRatio']) {
+                    $height = round($width * $targetSize['aspectRatio']);
+                } else {
+                    $height = round($width * ($size[1]/$size[0]));
+                }
                 if ($height <= 0) $height = 1;
             }
         }

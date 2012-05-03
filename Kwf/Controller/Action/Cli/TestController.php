@@ -177,16 +177,6 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
             echo serialize($reportData);
             echo "===/REPORT===";
         }
-        if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
-            $msg = Kwf_Registry::get('config')->application->name.' Tests ';
-            if ($result->wasSuccessful()) {
-                $msg .= 'erfolgreich ausgeführt';
-            } else {
-                $msg .= 'NICHT erfolgreich ausgeführt';
-            }
-            $msg = str_replace(" ", "\ ", utf8_decode($msg));
-            system("ssh niko \"export DISPLAY=:0 && /usr/bin/kdialog --passivepopup $msg 2\"");
-        }
 
         Kwf_Benchmark::shutDown();
 

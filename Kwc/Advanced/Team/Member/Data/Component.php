@@ -66,13 +66,12 @@ class Kwc_Advanced_Team_Member_Data_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    public function getFulltextContent()
     {
+        $ret = array();
         $text = strip_tags($this->getSearchContent());
-
-        $doc->getField('content')->value .= ' '.$text;
-        $doc->getField('normalContent')->value .= ' '.$text;
-
-        return $doc;
+        $ret['content'] = $text;
+        $ret['normalContent'] = $text;
+        return $ret;
     }
 }

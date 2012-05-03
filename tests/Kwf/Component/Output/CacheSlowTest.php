@@ -35,14 +35,13 @@ class Kwf_Component_Output_CacheSlowTest extends Kwf_Test_TestCase
     {
         $this->_setup('Kwf_Component_Output_C4_Component');
         $this->_root->render();
-
         $model = Kwf_Component_Cache::getInstance()->getModel('cache');
         $row = $model->getRows()->current();
         $content = $row->content;
         $this->_root->render();
         $this->assertEquals($content, $row->content);
         // muss hier gemacht werden, weil TTL nicht funktioniert
-        apc_delete(Kwf_Cache::getUniquePrefix() . '-cc-root/component/');
+        apc_delete(Kwf_Cache::getUniquePrefix() . '-cc-root/component/component/');
         sleep(3);
         $this->_root->render();
         $this->assertNotEquals($content, $row->content);

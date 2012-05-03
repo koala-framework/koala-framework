@@ -69,6 +69,8 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
             } else if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $className, Kwf_Registry::get('userModel')->getAuthedUser())) {
                 //paragraphs vorschau im backend
                 $retValid = self::VALID_DONT_CACHE;
+            } else {
+                return self::ACCESS_DENIED;
             }
         }
         while ($c) {

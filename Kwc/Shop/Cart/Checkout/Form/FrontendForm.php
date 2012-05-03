@@ -7,6 +7,9 @@ class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
     protected function _initFields()
     {
         parent::_initFields();
+
+        $this->setCartEmptyMessage(trlKwfStatic("Can't submit order because the cart is empty."));
+
         $this->add(new Kwf_Form_Field_Panel('intro_text'))
             ->setHtml('<h1>'.trlKwf('Please enter your address').'</h1>')
             ->setHideFieldInBackend(true);
@@ -49,6 +52,13 @@ class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
             ->setWidth(200);
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'cartEmptyMessage';
+        return $ret;
+    }
+
     public function setPayments($payments)
     {
         $this->_payments = $payments;
@@ -71,5 +81,21 @@ class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
             $payments = array_keys($this->_payments);
             $row->payment = $payments[0];
         }
+    }
+
+
+    public function validate($parentRow, array $postData = array())
+    {
+        $ret = parent::validate($parentRow, $postData);
+        $row = $this->getRow($parentRow);
+        if (!count($row->getChildRows('Products'))) {
+            $ret[] = array(
+                'field' => null,
+                'messages' => array(
+                    $this->getCartEmptyMessage()
+                )
+            );
+        }
+        return $ret;
     }
 }

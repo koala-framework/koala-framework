@@ -3,7 +3,8 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component extends Kwc_Shop_C
 {
     public function processInput($data)
     {
-        $data = Kwf_Util_PayPal_Ipn_LogModel::decodeCallback($data['custom']);
+        $custom = isset($data['custom']) ? $data['custom'] : null;
+        $data = Kwf_Util_PayPal_Ipn_LogModel::decodeCallback($custom);
         if ($data) {
             $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($data['data']['orderId']);
             $order->date = date('Y-m-d H:i:s');

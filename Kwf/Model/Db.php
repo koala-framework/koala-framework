@@ -426,8 +426,16 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                                 $quotedValueContains);
             }
             return $field." LIKE ".$quotedValue;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_RegExp) {
+            return $field." REGEXP ".$quotedValue;
         } else if ($expr instanceof Kwf_Model_Select_Expr_StartsWith) {
-            return "LEFT($field, ".strlen($this->_fixStupidQuoteBug($expr->getValue())).") = ".$quotedValue;
+            $v = $expr->getValue();
+            $v = str_replace("_", "\\_", $v);
+            $v = str_replace("%", "\\%", $v);
+            $v .= '%';
+            $v = $this->_fixStupidQuoteBug($v);
+            $v = $this->getTable()->getAdapter()->quote($v);
+            return "$field LIKE $v";
         } else if ($expr instanceof Kwf_Model_Select_Expr_NOT) {
             return "NOT (".$this->_createDbSelectExpression($expr->getExpression(), $dbSelect).")";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Or) {

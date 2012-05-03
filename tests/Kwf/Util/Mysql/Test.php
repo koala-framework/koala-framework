@@ -2,6 +2,7 @@
 /**
  * @group Util
  */
+/* Test disabled because it requires a mysql user with GRANT permissions
 class Kwf_Util_Mysql_Test extends Kwf_Test_TestCase
 {
     public function testGrantFileRight()
@@ -61,3 +62,4 @@ class Kwf_Util_Mysql_Test extends Kwf_Test_TestCase
         }
     }
 }
+*/

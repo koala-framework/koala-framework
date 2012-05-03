@@ -102,9 +102,9 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                         $c = Kwc_Abstract::getFlag($cls, 'menuCategory');
                         $cmps = array();
                         if ($c === true) {
-                            $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls, array('id'=>$cat));
+                            $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls, array('id'=>$cat, 'subRoot'=>$data));
                         } else if ($c == $cat) {
-                            $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls);
+                            $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls, array('subRoot'=>$data));
                         }
                         foreach ($cmps as $i) {
                             foreach ($i->getRecursiveChildComponents(array('componentClass'=>$this->_class)) as $m) {

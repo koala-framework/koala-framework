@@ -37,12 +37,17 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
             ) {
                 $childPagesComponentSelect[Kwf_Component_Select::IGNORE_VISIBLE] = true;
             }
-            $childPages = Kwf_Component_Data_Root::getInstance()
+            $component = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($whereEquals['parent_component_id'], array(
                     Kwf_Component_Select::IGNORE_VISIBLE => true
-                ))
-                ->getPageOrRoot()
-                ->getChildPages($childPagesComponentSelect);
+                ));
+            while ($component) {
+                $component = $component->parent;
+                if ($component->isPage) break;
+                if (!$component->parent) break;
+                if (Kwc_Abstract::getFlag($component->componentClass, 'menuCategory')) break;
+            }
+            $childPages = $component->getChildPages($childPagesComponentSelect);
             foreach ($childPages as $childPage) {
                 if (is_numeric($childPage->dbId)) {
                     $id = $childPage->dbId;

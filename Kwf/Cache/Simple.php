@@ -12,13 +12,19 @@ class Kwf_Cache_Simple
         static $cache;
         if (!isset($cache)) {
             $cache = new Zend_Cache_Core(array(
-                //'backend' => new Kwf_Cache_Backend_Memcached(),
                 'lifetime' => null,
                 'write_control' => false,
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true
             ));
-            $cache->setBackend(new Kwf_Cache_Backend_Memcached());
+            if (extension_loaded('memcache')) {
+                $cache->setBackend(new Kwf_Cache_Backend_Memcached());
+            } else {
+                //fallback to file backend (NOT recommended!)
+                $cache->setBackend(new Kwf_Cache_Backend_File(array(
+                    'cache_dir' => 'cache/simple'
+                )));
+            }
         }
         return $cache;
     }

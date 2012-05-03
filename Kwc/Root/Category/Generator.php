@@ -52,9 +52,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     public function getVisiblePageChildIds($parentId)
     {
         $ret = array();
-        if (!is_numeric($parentId)) {
-            foreach ($this->_pageChilds as $parentId=>$childs) {
-                if (substr($parentId, 0, strlen($parentId)) == $parentId) {
+        if (!is_numeric(substr($parentId, 0, 1))) {
+            foreach ($this->_pageChilds as $pId=>$childs) {
+                if (substr($pId, 0, strlen($pId)) == $parentId) {
                     foreach ($childs as $id) {
                         if ($this->_pageData[$id]['visible']) {
                             $ret[] = $id;
@@ -363,7 +363,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $ret['actions']['delete'] = true;
         $ret['actions']['copy'] = true;
         $ret['actions']['visible'] = true;
-        $ret['actions']['makeHome'] = true;
+        if ($this->getGeneratorFlag('hasHome')) {
+            $ret['actions']['makeHome'] = true;
+        }
 
         // Bei Pages muss nach oben gesucht werden, weil Klasse von Generator
         // mit Komponentklasse übereinstimmen muss
@@ -429,12 +431,12 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $parentTargetId = $parentTarget->componentId;
         unset($source);
         unset($parentTarget);
-        $targetId = $this->_duplicateChildPages($parentSourceId, $parentTargetId, $sourceId, $progressBar);
+        $targetId = $this->_duplicatePageRecursive($parentSourceId, $parentTargetId, $sourceId, $progressBar);
         return Kwf_Component_Data_Root::getInstance()
             ->getComponentById($targetId, array('ignoreVisible'=>true));
     }
 
-    private function _duplicateChildPages($parentSourceId, $parentTargetId, $childId, Zend_ProgressBar $progressBar = null)
+    private function _duplicatePageRecursive($parentSourceId, $parentTargetId, $childId, Zend_ProgressBar $progressBar = null)
     {
         if ($progressBar) $progressBar->next(1, trlKwf("Pasting {0}", $this->_pageData[$childId]['name']));
 
@@ -449,13 +451,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $this->_pageDataLoaded = false; //TODO do this only once
         $this->_loadPageData();
 
-        $source = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($parentSourceId, array('ignoreVisible'=>true))
-            ->getChildComponent(array('id'=>$childId, 'ignoreVisible'=>true));
-        $target = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($parentTargetId, array('ignoreVisible'=>true))
-            ->getChildComponent(array('id'=>$newRow->id, 'ignoreVisible'=>true));
-
+                                                        //ids are numeric, we don't have to use parentSource/parentTarget
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentById($childId, array('ignoreVisible'=>true));
+        $target = Kwf_Component_Data_Root::getInstance()->getComponentById($newRow->id, array('ignoreVisible'=>true));
         if (!$target) {
             throw new Kwf_Exception("didn't find just duplicated component '$newRow->id' below '{$parentTarget->componentId}'");
         }
@@ -491,7 +489,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
         if (isset($this->_pageChilds[$childId])) {
             foreach ($this->_pageChilds[$childId] as $i) {
-                $this->_duplicateChildPages($sourceId, $targetId, $i, $progressBar);
+                if ($i != $targetId) { //no endless recursion id page is pasted below itself
+                    $this->_duplicatePageRecursive($sourceId, $targetId, $i, $progressBar);
+                }
             }
         }
 

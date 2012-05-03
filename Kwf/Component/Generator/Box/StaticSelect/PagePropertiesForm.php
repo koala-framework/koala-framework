@@ -13,7 +13,7 @@ class Kwf_Component_Generator_Box_StaticSelect_PagePropertiesForm extends Kwf_Fo
         $select = $this->add(new Kwf_Form_Field_Select('component', $label));
         $select->setAllowBlank(false);
         $values = array();
-        foreach ($generator->getChildComponentClasses() as $k=>$c) {
+        foreach ($generator->getSetting('component') as $k=>$c) {
             $values[$k] = Kwc_Abstract::getSetting($c, 'componentName');
         }
         $select->setValues($values);
@@ -24,7 +24,7 @@ class Kwf_Component_Generator_Box_StaticSelect_PagePropertiesForm extends Kwf_Fo
     protected function _createMissingRow($id)
     {
         $ret = parent::_createMissingRow($id);
-        $ret->component = array_shift(array_keys($this->_generator->getChildComponentClasses()));
+        $ret->component = array_shift(array_keys($this->_generator->getSetting('component')));
         return $ret;
     }
 }
