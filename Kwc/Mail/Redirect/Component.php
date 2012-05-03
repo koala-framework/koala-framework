@@ -42,11 +42,13 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             throw new Kwf_Exception_Client("Too few parameters submitted");
         }
 
+        $modelClass = $this->_getRecipientModelClass($params[2]);
+        if (!$modelClass) throw new Kwf_Exception_NotFound();
         $params = array(
             'redirectId' => $params[0],
             'recipientId' => $params[1],
             'recipientModelShortcut' => $params[2],
-            'recipientModelClass' => $this->_getRecipientModelClass($params[2]),
+            'recipientModelClass' => $modelClass,
             'hash' => $params[3]
         );
         $this->_params = $params;
@@ -170,7 +172,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
     {
         $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
         if (!isset($recipientSources[$recipientShortcut])) {
-            throw new Kwf_Exception("Source key '$recipientShortcut' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
+            return null;
         }
         return $recipientSources[$recipientShortcut];
     }

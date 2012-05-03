@@ -46,7 +46,7 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         return $return;
     }
 
-    private function _getFileRow()
+    protected function _getFileRow()
     {
         if (!$this->_fileRow) {
             $this->_fileRow = $this->getData()

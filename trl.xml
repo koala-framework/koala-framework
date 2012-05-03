@@ -18,6 +18,7 @@
 <ua>Помилка</ua>
 <ro>Eroare</ro>
 <mk>Грешка</mk>
+<cz>Chyba</cz>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
@@ -384,6 +385,7 @@ has just been created.</en>
 <ro>Titlu</ro>
 <mk>Титула</mk>
 <ua>Титул</ua>
+<hu>Cím</hu>
 </text>
 <text>
 <en>Firstname</en>
@@ -395,6 +397,7 @@ has just been created.</en>
 <ro>Prenume</ro>
 <mk>Име</mk>
 <ua>Ім'я</ua>
+<hu>Keresztnév</hu>
 </text>
 <text>
 <en>Lastname</en>
@@ -406,6 +409,7 @@ has just been created.</en>
 <ro>Nume</ro>
 <mk>Презиме</mk>
 <ua>Прізвище</ua>
+<hu>Vezetéknév</hu>
 </text>
 <text>
 <en>Email</en>
@@ -533,6 +537,7 @@ has just been created.</en>
 <id>165</id>
 <ro>Doamna</ro>
 <ua>Жіноча</ua>
+<hu>Nő</hu>
 </text>
 <text>
 <en>Male</en>
@@ -541,6 +546,7 @@ has just been created.</en>
 <ro>Domnul</ro>
 <mk>Машки</mk>
 <ua>Чоловіча</ua>
+<hu>Férfi</hu>
 </text>
 <text>
 <en>Gender</en>
@@ -549,6 +555,7 @@ has just been created.</en>
 <ro>Formula de adresare</ro>
 <mk>Пол</mk>
 <ua>Стать</ua>
+<hu>Nem</hu>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -5071,9 +5078,9 @@ has just been created.</en>
 <ro>Mesajul dumneavoastră către {0}</ro>
 </text>
 <text>
-<en>You ordered following product</en>
+<en>You ordered the following product</en>
 <de>Sie haben folgenden Artikel bestellt</de>
-<en_plural>You ordered following products</en_plural>
+<en_plural>You ordered the following products</en_plural>
 <de_plural>Sie haben folgende Artikel bestellt</de_plural>
 <id>1214</id>
 <ro>Aţi comandat următoarele produse</ro>
@@ -7004,6 +7011,7 @@ has just been created.</en>
 <de>Keine Ergebnisse gefunden für &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
 <id>1633</id>
 <ro>Nu au fost găsite rezultate pentru &lt;strong&gt;"{0}"&lt;/strong&gt;</ro>
+<hu>Nincs eredmény a &lt;strong&gt;"{0}"&lt;/strong&gt; kifejezésre.</hu>
 </text>
 <text>
 <en>Must not be negative</en>

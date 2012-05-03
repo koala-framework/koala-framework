@@ -184,6 +184,8 @@ class Kwf_Assets_Loader
                 $ret['mimeType'] = 'application/x-woff';
             } else if (substr($file, -4)=='.htc') { // für ie css3
                 $ret['mimeType'] = 'text/x-component';
+            } else if (substr($file, -4)=='.pdf') {
+                $ret['mimeType'] = 'application/pdf';
             } else {
                 throw new Kwf_Assets_NotFoundException("Invalid filetype ($file)");
             }

@@ -1,7 +1,7 @@
 <table width="100%" cellspacing="0" cellpadding="0">
     <tr>
         <td>
-            <?=trlpKwf('You ordered following product', 'You ordered following products', count($this->items));?>:
+            <?=trlpKwf('You ordered the following product', 'You ordered the following products', count($this->items));?>:
         </td>
     </tr>
 </table>
