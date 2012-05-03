@@ -10,7 +10,7 @@ class Kwc_Advanced_CodeSyntaxHighlight_Form extends Kwc_Abstract_Form
             ->setWidth(450);
 
         $values = array();
-        require_once 'geshi.php';
+        require_once Kwf_Config::getValue('externLibraryPath.geshi').'/geshi.php';
         $geshi = new GeSHi();
         foreach (new DirectoryIterator($geshi->language_path) as $i) {
             if ($i->isDir()) continue;

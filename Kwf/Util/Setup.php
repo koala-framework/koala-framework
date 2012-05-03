@@ -103,7 +103,7 @@ class Kwf_Util_Setup
 
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
 
-        $ret .= "set_include_path('".implode(PATH_SEPARATOR, $ip)."');\n";
+        $ret .= "Kwf_Loader::setIncludePath('".implode(PATH_SEPARATOR, $ip)."');\n";
         $ret .= "\n";
         $ret .= "\n";
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
@@ -161,7 +161,7 @@ class Kwf_Util_Setup
         if (Kwf_Config::getValue('debug.firephp') || Kwf_Config::getValue('debug.querylog')) {
             $ret .= "if (php_sapi_name() != 'cli') {\n";
             if (Kwf_Config::getValue('debug.firephp')) {
-                $ret .= "    require_once 'FirePHPCore/FirePHP.class.php';\n";
+                $ret .= "    require_once '".Kwf_Config::getValue('externLibraryPath.firephp')."/FirePHPCore/FirePHP.class.php';\n";
                 $ret .= "    FirePHP::init();\n";
             }
 
