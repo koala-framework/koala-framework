@@ -105,6 +105,9 @@ class Kwf_Assets_Loader
                 $language = $m[4];
                 $assetsType = $m[5];
                 $fileType = $m[6];
+                if ($rootComponent && (!class_exists($rootComponent) || !is_instance_of($rootComponent, 'Kwc_Abstract'))) {
+                    throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
+                }
                 Kwf_Component_Data_Root::setComponentClass($rootComponent);
 
                 if (substr($assetsType, -5) == 'Debug' && !$this->_getConfig()->debug->menu) {
