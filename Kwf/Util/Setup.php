@@ -201,17 +201,6 @@ class Kwf_Util_Setup
         }
         $ret .= "\n";
 
-        if (Kwf_Config::getValue('debug.checkBranch')) {
-            $ret .= "if (is_file('kwf_branch') && trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
-            $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
-            $ret .= "    if (php_sapi_name() != 'cli' || !isset(\$_SERVER['argv'][1]) || !in_array(\$_SERVER['argv'][1], \$validCommands)) {\n";
-            $ret .= "        \$required = trim(file_get_contents('kwf_branch'));\n";
-            $ret .= "        \$kwfBranch = Kwf_Util_Git::kwf()->getActiveBranch();\n";
-            $ret .= "        throw new Kwf_Exception_Client(\"Invalid Kwf branch. Required: '\$required', used: '\".Kwf_Config::getValue('application.kwf.version').\"' (Git branch '\$kwfBranch')\");\n";
-            $ret .= "    }\n";
-            $ret .= "}\n";
-        }
-
         $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";
         $ret .= "    //für swfupload\n";
         $ret .= "    Zend_Session::setId(\$_POST['PHPSESSID']);\n";
