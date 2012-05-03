@@ -19,11 +19,15 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
     {
         $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getCartOrder();
         $total = $this->getData()->parent->parent->getComponent()->getTotal($order);
-        $domain = 'http://'.Kwf_Registry::get('config')->server->domain;
+        $paypalId =  Kwf_Registry::get('config')->paypalId;
+        if (!$paypalId) {
+            $paypalId = Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'business');
+        }
+
         $params = array(
             'charset' => 'utf-8',
             'cmd' => '_xclick',
-            'business' => Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'business'),
+            'business' => $paypalId,
             'lc' => 'AT',
             'item_name' => $this->getData()->parent->getComponent()->getItemName($order),
             //'cbt' => trlKwf('back to ...'), //eigener zurück zu Text könnte so gesetzt werden
@@ -33,9 +37,9 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
             'no_note' => '1',
             'no_shipping' => '1',
             'rm' => '1',
-            'return' => $domain.$this->getData()->parent->getChildComponent('_confirm')->url,
-            'cancel_return' => $domain.$this->getData()->parent->parent->parent->url,
-            'notify_url' => $domain.'/paypal_ipn',
+            'return' => $this->getData()->parent->getChildComponent('_confirm')->getAbsoluteUrl(),
+            'cancel_return' => $this->getData()->parent->parent->parent->getAbsoluteUrl(),
+            'notify_url' => $this->getData()->parent->getChildComponent('_ipn')->getAbsoluteUrl(),
             'bn' => 'PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted',
             'custom' => Kwf_Util_PayPal_Ipn_LogModel::getEncodedCallback(
                             $this->getData()->parent->componentId,

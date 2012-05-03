@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_PayPal_Ipn
 {
-    public function dispatch($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
+    public static function dispatch($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
     {
         $url = '';
         if (isset($_SERVER['REDIRECT_URL'])) {
