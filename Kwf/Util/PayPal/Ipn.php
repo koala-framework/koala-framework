@@ -29,8 +29,8 @@ class Kwf_Util_PayPal_Ipn
                 $req .= "&$key=$value";
             }
 
-            // Post back to PayPal to validate
-            $header  = "POST /cgi-bin/webscr HTTP/1.0\r\n";
+            // post back to PayPal system to validate
+            $header = "POST /cgi-bin/webscr HTTP/1.0\r\n";
             $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
             $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
             if (isset($_POST['test_ipn']) && $_POST['test_ipn']) {
@@ -38,13 +38,16 @@ class Kwf_Util_PayPal_Ipn
             } else {
                 $domain = 'www.paypal.com';
             }
-            $fp = fsockopen($domain, 80);
+            $fp = fsockopen ('ssl://' . $domain, 443, $errno, $errstr, 30);
+
             if (!$fp) {
                 throw new Kwf_Exception("Http error in Ipn validation");
-            }
-            fputs($fp, $header . $req);
-            while (!feof($fp)) {
-                $res = fgets ($fp, 1024);
+            } else {
+                fputs ($fp, $header . $req);
+                while (!feof($fp)) {
+                    $res = fgets ($fp, 1024);
+                }
+                fclose ($fp);
             }
         } else {
             $res = 'VERIFIED';
