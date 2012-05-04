@@ -14,6 +14,7 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
                 Kwf_Test_SeparateDb::setDbFromCookie(); // setzt es nur wenn es das cookie wirklich gibt
 
+                if (!Kwf_Loader::isValidClass($request->getParam('root'))) throw new Kwf_Exception_NotFound("Invalid root component");
                 Kwf_Component_Data_Root::setComponentClass($request->getParam('root'));
 
                 Kwf_Registry::get('acl')->getComponentAcl()->allowComponent('guest', null);

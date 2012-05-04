@@ -67,7 +67,7 @@ class Kwf_Assets_Loader
             $m = explode(':', $m[4]);
             $assetClass = array_shift($m);
             $arguments = $m;
-            if (!class_exists($assetClass) || !is_instance_of($assetClass, 'Kwf_Assets_Dynamic_Interface')) {
+            if (!Kwf_Loader::isValidClass($assetClass) || !is_instance_of($assetClass, 'Kwf_Assets_Dynamic_Interface')) {
                 throw new Kwf_Exception_NotFound();
             }
             $file = new $assetClass($this, $assetsType, $rootComponent, $arguments);
@@ -102,9 +102,13 @@ class Kwf_Assets_Loader
                 }
                 $section = $m[1];
                 $rootComponent = $m[3];
+                if (!Kwf_Loader::isValidClass($rootComponent)) throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
                 $language = $m[4];
                 $assetsType = $m[5];
                 $fileType = $m[6];
+                if ($rootComponent && (!Kwf_Loader::isValidClass($rootComponent) || !is_instance_of($rootComponent, 'Kwc_Abstract'))) {
+                    throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
+                }
                 Kwf_Component_Data_Root::setComponentClass($rootComponent);
 
                 if (substr($assetsType, -5) == 'Debug' && !$this->_getConfig()->debug->menu) {
@@ -120,7 +124,7 @@ class Kwf_Assets_Loader
                         if (substr($file, 0, 8) == 'dynamic/') {
                             $arguments = explode(':', substr($file, 8));
                             $file = array_shift($arguments);
-                            if (!is_instance_of($file, 'Kwf_Assets_Dynamic_Interface')) {
+                            if (!Kwf_Loader::isValidClass($file) || !is_instance_of($file, 'Kwf_Assets_Dynamic_Interface')) {
                                 throw new Kwf_Exception_NotFound();
                             }
                             $file = new $file($this, $assetsType, $rootComponent, $arguments);

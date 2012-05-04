@@ -1,5 +1,4 @@
 <?php
-require_once 'tcpdf.php';
 class Kwf_Pdf_TcPdf extends TCPDF
 {
 

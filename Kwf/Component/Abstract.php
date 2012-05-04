@@ -78,6 +78,7 @@ class Kwf_Component_Abstract
             $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
             if (!file_exists($classFile)) {
                 $input = file_get_contents($file);
+                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
                 $yaml = new sfYamlParser();
                 try {
                     $settings = $yaml->parse($input);
@@ -165,6 +166,7 @@ class Kwf_Component_Abstract
             $settings = call_user_func(array($c, 'getSettings'), $param);
             if (method_exists($c, '_getYamlConfigFile')) {
                 $file = call_user_func(array($c, '_getYamlConfigFile'));
+                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
                 $input = file_get_contents($file);
                 $yaml = new sfYamlParser();
                 try {

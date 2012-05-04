@@ -910,6 +910,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $data = $this->_getExportData(Kwf_Grid_Column::SHOW_IN_XLS, 'xls', 640);
 
+        require_once Kwf_Config::getValue('externLibraryPath.phpexcel').'/PHPExcel.php';
         $xls = new PHPExcel();
         $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
         $xls->getProperties()->setLastModifiedBy("Vivid Planet Software GmbH");
