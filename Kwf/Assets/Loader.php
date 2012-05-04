@@ -102,6 +102,7 @@ class Kwf_Assets_Loader
                 }
                 $section = $m[1];
                 $rootComponent = $m[3];
+                if (!Kwf_Loader::isValidClass($rootComponent)) throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
                 $language = $m[4];
                 $assetsType = $m[5];
                 $fileType = $m[6];
