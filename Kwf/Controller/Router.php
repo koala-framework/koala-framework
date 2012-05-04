@@ -110,12 +110,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                           'module' => 'kwf_controller_action_component',
                           'controller' => 'components',
                           'action' => 'show')));
-        $this->AddRoute('componentjsonshow', new Zend_Controller_Router_Route(
-                    $prefix.'/component/json-show/:class/:componentId',
-                    array('componentId'=>null,
-                          'module' => 'kwf_controller_action_component',
-                          'controller' => 'components',
-                          'action' => 'jsonshow')));
         $this->AddRoute('componentedit', new Zend_Controller_Router_Route(
                     $prefix.'/component/edit/:class/:componentController/:action',
                     array('module' => 'component',
