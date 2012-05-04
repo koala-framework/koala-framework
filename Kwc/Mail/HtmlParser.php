@@ -97,6 +97,9 @@ class Kwc_Mail_HtmlParser
                             } else if ($value != 'left') {
                                 $attributes['align'] = $value;
                             }
+                        } else if ($style == 'text-decoration') {
+                            if (!isset($attributes['style'])) $attributes['style'] = '';
+                            $attributes['style'] = trim($attributes['style'].' '.$style.': '.$value.';');
                         }
                     }
                 }
