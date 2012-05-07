@@ -308,7 +308,7 @@ class Kwf_Util_ClearCache
                 ) {
                     if ($t == 'cache_component') {
                         $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
-                        if ($cnt > 1000) {
+                        if ($cnt > 5000) {
                             if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
                             continue;
                         }
