@@ -711,6 +711,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             } else {
                 return $this->getExprValue($row, $expr->getElse());
             }
+        } else if ($expr instanceof Kwf_Model_Select_Expr_IsNull) {
+            return is_null($row->{$expr->getField()});
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
