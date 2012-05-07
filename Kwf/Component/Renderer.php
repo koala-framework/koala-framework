@@ -24,7 +24,7 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
                 $content = $masterHelper->master($component);
                 if ($this->_enableCache) {
                     Kwf_Component_Cache::getInstance()
-                        ->save($component, $content, 'page', '', true);
+                        ->save($component, $content, 'component', 'master', true);
                 }
             }
             if ($content == Kwf_Component_Cache::NO_CACHE) {
