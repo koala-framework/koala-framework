@@ -645,6 +645,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_String) {
             return $expr->getString();
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Boolean) {
+            return $expr->getValue();
         } else if ($expr instanceof Kwf_Model_Select_Expr_StrPad) {
             $f = $expr->getField();
             if (is_array($row)) {
@@ -713,6 +715,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_IsNull) {
             return is_null($row->{$expr->getField()});
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Not) {
+            return !$this->getExprValue($row, $expr->getExpression());
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"

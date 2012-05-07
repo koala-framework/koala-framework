@@ -503,6 +503,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
             $quotedString = $this->getTable()->getAdapter()->quote($quotedString);
             return $quotedString;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Boolean) {
+            return $expr->getValue() ? 'TRUE': 'FALSE';
         } else if ($expr instanceof Kwf_Model_Select_Expr_Count) {
             $field = $expr->getField();
             if ($field != '*') {
