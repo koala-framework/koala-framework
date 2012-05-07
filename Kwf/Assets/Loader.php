@@ -102,14 +102,16 @@ class Kwf_Assets_Loader
                 }
                 $section = $m[1];
                 $rootComponent = $m[3];
-                if (!Kwf_Loader::isValidClass($rootComponent)) throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
                 $language = $m[4];
                 $assetsType = $m[5];
                 $fileType = $m[6];
-                if ($rootComponent && (!Kwf_Loader::isValidClass($rootComponent) || !is_instance_of($rootComponent, 'Kwc_Abstract'))) {
-                    throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
+                if ($rootComponent) {
+                    if (!Kwf_Loader::isValidClass($rootComponent) || !is_instance_of($rootComponent, 'Kwc_Abstract')) {
+                        throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
+                    } else {
+                        Kwf_Component_Data_Root::setComponentClass($rootComponent);
+                    }
                 }
-                Kwf_Component_Data_Root::setComponentClass($rootComponent);
 
                 if (substr($assetsType, -5) == 'Debug' && !$this->_getConfig()->debug->menu) {
                     throw new Kwf_Exception("Debug Assets are not avaliable as the debug menu is disabled");
