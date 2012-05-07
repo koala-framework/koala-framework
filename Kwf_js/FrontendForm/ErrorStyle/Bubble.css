@@ -2,7 +2,7 @@
 .kwfFieldErrorBubble { 
     position: absolute; 
     border: 2px solid #dddddd; 
-    width: 175px;
+    width: 215px;
     border-radius: 6px;
     background-color: var(mainColor);
     opacity: 0.8;
@@ -18,7 +18,7 @@
     top: -8px;
     content:"";
     display: block;
-    right: 145px;
+    right: 175px;
     position: absolute;
     width: 0;
     z-index:10;
