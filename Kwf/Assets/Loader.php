@@ -70,6 +70,9 @@ class Kwf_Assets_Loader
             if (!Kwf_Loader::isValidClass($assetClass) || !is_instance_of($assetClass, 'Kwf_Assets_Dynamic_Interface')) {
                 throw new Kwf_Exception_NotFound();
             }
+            if ($rootComponent && (!Kwf_Loader::isValidClass($rootComponent) || !is_instance_of($rootComponent, 'Kwc_Abstract'))) {
+                throw new Kwf_Exception_NotFound();
+            }
             $file = new $assetClass($this, $assetsType, $rootComponent, $arguments);
             $ret = array();
             $ret['contents'] = $file->getContents();
