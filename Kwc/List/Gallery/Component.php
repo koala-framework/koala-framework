@@ -27,10 +27,15 @@ class Kwc_List_Gallery_Component extends Kwc_Abstract_List_Component
         }
     }
 
+    protected function _getGalleryColumns()
+    {
+        return $this->_getRow()->columns;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['imagesPerLine'] = $this->_getRow()->columns;
+        $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
         return $ret;
     }
@@ -38,7 +43,7 @@ class Kwc_List_Gallery_Component extends Kwc_Abstract_List_Component
     protected function _getChildContentWidth(Kwf_Component_Data $child)
     {
         $ownWidth = parent::_getChildContentWidth($child);
-        $columns = (int)$this->_getRow()->columns;
+        $columns = (int)$this->_getGalleryColumns();
         if (!$columns) $columns = 1;
         $ownWidth -= ($columns-1) * $this->_getSetting('contentMargin');
         $ret = (int)floor($ownWidth / $columns);
