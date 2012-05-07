@@ -180,7 +180,7 @@ class Kwf_Component_Abstract_Admin
         try {
             return $data->getComponent()->getRow()->__toString();
         } catch (Kwf_Exception $e) {
-            throw new Kwf_Exception("__toString failed for row ".get_class($data->getComponent()->getRow()->getModel()).' you might want to set _toStringField or override componentToString');
+            throw new Kwf_Exception("__toString failed for row ".get_class($data->getComponent()->getRow()->getModel()).' you might want to set _toStringField or override componentToString (component \''.$data->componentClass.'\')');
         }
     }
 
