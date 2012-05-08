@@ -19,6 +19,16 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         return $this->_getRenderPlaceholder($component->componentId, $config);
     }
 
+    /**
+     * Helper method not used in standard rendering process
+     *
+     * Used to render a single partial
+     */
+    public function singlePartial($componentId, $config, $id)
+    {
+        return $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
+    }
+
     public function render($componentId, $config)
     {
         $partialClass = $config['class'];
