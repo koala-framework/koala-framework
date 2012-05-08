@@ -16,6 +16,7 @@ class Vps_View_Helper_StatisticCode
             $ret .= "<script type=\"text/javascript\">\n";
             $ret .= "    try {\n";
             $ret .= "        var pageTracker = _gat._getTracker(\"".$analyticsCode."\");\n";
+            $ret .= "        _gat._anonymizeIp();\n";
             $ret .= "        pageTracker._trackPageview();\n";
             $ret .= "    } catch(err) {}\n";
             $ret .= "</script>\n";
