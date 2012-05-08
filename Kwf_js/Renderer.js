@@ -10,6 +10,17 @@ Ext.util.Format.booleanRtr = function(v, p, record) {
     p.css += ' x-grid3-check-col-td';
     return '<div class="x-grid3-check-col kwf-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
 };
+Ext.util.Format.booleanIcon = function(value, p, record, rowIndex, colIndex, store, column) {
+    if (value) {
+        if (column && column.tooltip) {
+            p.attr += ' ext:qtip="'+column.tooltip+'"';
+        }
+        if (column && column.icon) {
+            return '<div class="x-grid3-check-col" style="background-image:url('+column.icon+')">&#160;</div>';
+        }
+    }
+    return '';
+};
 
 Ext.util.Format.password = function(value)
 {
