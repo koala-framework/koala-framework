@@ -13,7 +13,7 @@ Ext.util.Format.booleanRtr = function(v, p, record) {
 Ext.util.Format.booleanIcon = function(value, p, record, rowIndex, colIndex, store, column) {
     if (value) {
         if (column && column.tooltip) {
-            p.attr += ' ext:qtip="'+column.tooltip+'"';
+            p.attr += ' title="'+column.tooltip+'"';
         }
         if (column && column.icon) {
             return '<div class="x-grid3-check-col" style="background-image:url('+column.icon+')">&#160;</div>';
