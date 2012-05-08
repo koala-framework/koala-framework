@@ -5,7 +5,7 @@ class Vps_Http_Pecl_Requestor_Response implements Vps_Http_Requestor_Response_In
 
     public function __construct(HttpMessage $response = null)
     {
-        if ($response->getResponseCode() == 301 || $response->getResponseCode() == 302) {
+        if ($response && ($response->getResponseCode() == 301 || $response->getResponseCode() == 302)) {
             //workaround for strange pecl_http bug that breaks requests that redirect to the same url again
             //and for some reason then there is only response message containing in the body the second response message (including http headers)
             if (preg_match('#^HTTP/1\.. [0-9]{3} #', $response->getBody())) {
