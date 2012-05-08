@@ -5090,14 +5090,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>News</en>
 <id>1071</id>
-<de>Neuigkeiten</de>
+<de>News</de>
 <ro>Ştiri</ro>
 </text>
 <text>
 <en>Link.to News</en>
 <id>1072</id>
-<de>Link. zu Neuigkeiten</de>
-<ro>Link. spre Ştiri</ro>
+<de>Link.zu News</de>
+<ro>Link.spre Ştiri</ro>
 </text>
 <text>
 <en>Color values in Hex code without a leading # (e.g. fa5500)</en>
