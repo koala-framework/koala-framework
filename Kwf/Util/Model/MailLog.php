@@ -5,9 +5,7 @@ class Kwf_Util_Model_MailLog extends Kwf_Model_Service
 
     public static function isAvailable()
     {
-        if (Kwf_Registry::get('config')->service->maillog
-            && Kwf_Registry::get('config')->service->maillog->url
-        ) {
+        if (Kwf_Config::getValue('service.maillog.url')) {
             return true;
         }
         return false;
