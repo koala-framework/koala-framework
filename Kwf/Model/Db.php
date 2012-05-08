@@ -636,6 +636,27 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
     }
 
+    public function getExprValue($row, $name)
+    {
+        if ($name instanceof Kwf_Model_Select_Expr_Interface) {
+            $expr = $name;
+        } else {
+            $expr = $this->_exprs[$name];
+        }
+        if ($expr instanceof Kwf_Model_Select_Expr_Sql) {
+            $select = $this->select();
+            $select->whereEquals($this->getPrimaryKey(), $row->{$this->getPrimaryKey()});
+            $select->limit(1);
+            $options = array(
+                'columns' => array($name)
+            );
+            $dbSelect = $this->_createDbSelectWithColumns($select, $options);
+            return $dbSelect->query()->fetchColumn();
+        }
+
+        return parent::getExprValue($row, $name);
+    }
+
     //Nur zum Debuggen verwenden!
     public function getSqlForSelect($select)
     {
