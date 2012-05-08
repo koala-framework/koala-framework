@@ -17,7 +17,11 @@
         umfänglich nutzen können. Durch die Nutzung dieser Website erklären Sie
         sich mit der Bearbeitung der über Sie erhobenen Daten durch Google in der
         zuvor beschriebenen Art und Weise und zu dem zuvor benannten Zweck
-        einverstanden.
+        einverstanden. Der Datenerhebung und -speicherung kann jederzeit mit Wirkung 
+        für die Zukunft <a href="https://tools.google.com/dlpage/gaoptout?hl=de" rel="popup_blank">widersprochen</a> 
+        werden. Diese Website verwendet Google Analytics mit der Erweiterung 
+        „_anonymizeIp()“, dadurch werden IP-Adressen nur gekürzt weiterverarbeitet, 
+        um eine direkte Personenbeziehbarkeit auszuschließen.
     </p>
 </div>
 
