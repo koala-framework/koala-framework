@@ -24,9 +24,13 @@ class Kwc_User_Register_Form_Component extends Kwc_Form_Component
 
     protected function _initUserForm()
     {
-        $detailClass = Kwc_Abstract::getChildComponentClass(
-                    $this->getData()->parent->parent->componentClass, 'detail');
-        $forms = Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'forms');
-        $this->_form->addUserForms($detailClass, $forms);
+        if (is_instance_of($this->getData()->parent->parent->componentClass, 'Kwc_User_Directory_Component')) {
+            $detailClass = Kwc_Abstract::getChildComponentClass(
+                        $this->getData()->parent->parent->componentClass, 'detail');
+            $forms = Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'forms');
+            $this->_form->addUserForms($detailClass, $forms);
+        } else {
+            $this->_form->add(new Kwc_User_Detail_General_Form('general', null));
+        }
     }
 }

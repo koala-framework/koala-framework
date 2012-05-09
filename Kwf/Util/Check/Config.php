@@ -28,9 +28,11 @@ class Kwf_Util_Check_Config
         $checks['exif'] = array(
             'name' => 'read EXIF data'
         );
+        /*
         $checks['gd'] = array(
             'name' => 'gd Php extension'
         );
+        */
         $checks['fileinfo'] = array(
             'name' => 'fileinfo Php extension'
         );

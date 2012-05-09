@@ -264,8 +264,8 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
         if ((!options.hideMaskText || options.hideMaskText != true) && this.el) this.el.mask(trlKwf('Saving...'));
 
-        var params = Ext.apply({}, this.getBaseParams());
-        params = Ext.apply(params, this.getForm().getValues());
+        var params = this.getForm().getValues();
+        params = Ext.apply(params, this.getBaseParams());
         for (var i in params) {
             if (typeof params[i] == 'object') {
                 params[i] = Ext.encode(params[i]);
