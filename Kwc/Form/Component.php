@@ -32,6 +32,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
 
         $ret['useAjaxRequest'] = true;
+        $ret['hideFormOnSuccess'] = true; // works only when useAjaxRequest==true
 
         $ret['flags']['processInput'] = true;
 
@@ -309,6 +310,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
             'useAjaxRequest' => $this->_getSetting('useAjaxRequest'),
+            'hideFormOnSuccess' => $this->_getSetting('hideFormOnSuccess'),
             'componentId' => $this->getData()->componentId,
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,

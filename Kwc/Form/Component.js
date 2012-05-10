@@ -116,7 +116,14 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 // show success content
                 if (r.successContent) {
                     var el = this.el.parent().createChild(r.successContent);
-                    this.el.remove();
+                    if (this.hideFormOnSuccess) {
+                        this.el.remove();
+                    } else {
+                        (function(el) {
+                            el.remove();
+                            Kwf.callOnContentReady(this.el.dom);
+                        }).defer(5000, this, [el]);
+                    }
                     Kwf.callOnContentReady(el.dom, {newRender: true});
                 } else if (r.successUrl) {
                     document.location.href = r.successUrl;
