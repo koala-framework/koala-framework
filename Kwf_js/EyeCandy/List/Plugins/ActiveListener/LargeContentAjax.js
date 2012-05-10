@@ -17,6 +17,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         this.largeContent[item.id] = this.largeContainer.createChild({
             html: '<div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div>'
         });
+        this.largeContent[item.id].setHeight(this.largeContainer.getHeight());
         this.largeContent[item.id].enableDisplayMode('block');
         if (!options.visible) {
             this.largeContent[item.id].hide();
@@ -29,6 +30,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             params: { url: item.el.child('a').dom.href },
             url: url,
             success: function(response) {
+
                 var contentEl = this.largeContent[item.id].createChild();
                 this.largeContent[item.id].setStyle('position', 'absolute');
                 this.fetchedItems[item.id] = true;
