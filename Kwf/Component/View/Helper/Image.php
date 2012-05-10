@@ -10,25 +10,28 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
 
     protected function _getImageUrl($image)
     {
-        if (is_string($image)) return parent::_getImageUrl($image);
+        if (is_string($image)) {
+            $url = parent::_getImageUrl($image);
+        } else {
+            if (!$image instanceof Kwf_Component_Data ||
+                !is_instance_of($image->componentClass, 'Kwc_Abstract_Image_Component')
+            ) throw new Kwf_Exception("No Kwc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
 
-        if (!$image instanceof Kwf_Component_Data ||
-            !is_instance_of($image->componentClass, 'Kwc_Abstract_Image_Component')
-        ) throw new Kwf_Exception("No Kwc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
-
-        $url = $image->getComponent()->getImageUrl();
-
+            $url = $image->getComponent()->getImageUrl();
+        }
+        
         if ($this->_getRenderer() instanceof Kwf_View_MailInterface &&
             substr($url, 0, 1) == '/'
         ) {
-            $data = $image;
-            while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
-                $data = $data->parent;
-            }
-            if ($data) {
-                $domain = $data->getComponent()->getDomain();
-            } else {
-                $domain = Kwf_Config::getValue('server.domain');
+            $domain = Kwf_Config::getValue('server.domain');
+            if (!is_string($image)) {
+                $data = $image;
+                while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
+                    $data = $data->parent;
+                }
+                if ($data) {
+                    $domain = $data->getComponent()->getDomain();
+                }
             }
             $url = "http://$domain$url";
         }

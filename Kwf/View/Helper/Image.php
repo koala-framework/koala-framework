@@ -27,12 +27,15 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
 
     private function _getAssetPath($image)
     {
+        if (!$this->_dep) {
+            $loader = new Kwf_Assets_Loader();
+            $this->_dep = $loader->getDependencies();
+        }
         $url = $this->_getImageUrl($image);
-        if (stripos($url, "/assets/") === 0) {
-            if (!$this->_dep) {
-                $loader = new Kwf_Assets_Loader();
-                $this->_dep = $loader->getDependencies();
-            }
+        if (stripos($url, 'http://'.Kwf_Config::getValue('server.domain')."/assets/") === 0) {
+            $url = substr($url, strlen('http://'.Kwf_Config::getValue('server.domain')));
+            return $this->_dep->getAssetPath(substr($url, 8));
+        } else if (stripos($url, "/assets/") === 0) {
             return $this->_dep->getAssetPath(substr($url, 8));
         } else {
             throw new Kwf_Exception("Path does not include '/assets/'. Not implemented yet.");
