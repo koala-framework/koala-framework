@@ -1,4 +1,9 @@
 <?php
+/**
+ * Editable mail that automatically creates entry in Menu for editing itself
+ *
+ * Useful for mails that are deep in the component tree and thus not editable through pages admin.
+ */
 class Kwc_Mail_Editable_Component extends Kwc_Mail_Component
 {
     public static function getSettings()

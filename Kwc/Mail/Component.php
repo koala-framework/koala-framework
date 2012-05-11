@@ -1,4 +1,7 @@
 <?php
+/**
+ * Used for sending editable mails, subject, from etc are stored in model
+ */
 class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
 {
     public static function getSettings()

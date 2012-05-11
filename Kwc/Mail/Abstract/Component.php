@@ -1,4 +1,9 @@
 <?php
+/**
+ * Used for sending mails with coded subject, from etc
+ *
+ * doesn't need a row and isn't editable
+ */
 abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 {
     private $_mailData;
