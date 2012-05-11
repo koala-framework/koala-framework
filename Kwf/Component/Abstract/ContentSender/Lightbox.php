@@ -20,7 +20,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $parent = $parent->parent;
         }
         if (!$parent) {
-            $parent = Kwf_Component_Data_Root::getInstance()->getChildComponent(array('home' => true));
+            $parent = Kwf_Component_Data_Root::getInstance()->getChildComponent(array('home' => true)); //TODO support home under categories, domains and language
         }
 
         //TODO: the proper solution would be to restructure List_Switch so that the page is our parent
