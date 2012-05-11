@@ -2,7 +2,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext.extend(Kwf.EyeCandy.List.Plug
     _hashDelimiter: ':',
 
     init: function() {
-        this._initHistory();
+        Kwf.History.init();
 
         this.list.on('childClick', function(item, ev) {
             ev.stopEvent();
@@ -58,20 +58,6 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext.extend(Kwf.EyeCandy.List.Plug
                     if (this._getItemId(item) == hash) this.list.setActiveItem(item);
                 }, this);
             }, this);
-        }
-    },
-
-    _initHistory: function() {
-        // whyever Ext.History.init() doesn't do this itself...
-        if (!document.getElementById('history-form')) {
-            var form = Ext.DomHelper.append(document.body, {
-                tag: 'form', id: 'history-form', cls: 'x-history-field', children: [
-                    { tag: 'input', type: 'hidden', id: 'x-history-field' },
-                    { tag: 'iframe', id: 'x-history-frame' }
-                ]
-            });
-            Ext.get(form).setDisplayed(false);
-            Ext.History.init();
         }
     }
 });
