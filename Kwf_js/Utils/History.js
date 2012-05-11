@@ -1,3 +1,4 @@
+Ext.ns('Kwf.History');
 Kwf.History.init = function() {
     // whyever Ext.History.init() doesn't do this itself...
     if (!document.getElementById('history-form')) {
