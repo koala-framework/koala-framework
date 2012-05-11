@@ -96,4 +96,29 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         }
         return $ret;
     }
+
+    public function jsonDuplicateAction()
+    {
+        if (!isset($this->_permissions['duplicate']) || !$this->_permissions['duplicate']) {
+            throw new Kwf_Exception("Duplicate is not allowed.");
+        }
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
+
+        $progressBar = null;
+
+        $this->view->data = array('duplicatedIds' => array());
+        ignore_user_abort(true);
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
+        $list = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+        foreach ($ids as $id) {
+            $child = $list->getChildComponent(array('id'=>'-'.$id, 'ignoreVisible'=>true));
+            $newChild = Kwf_Util_Component::duplicate($child, $list, $progressBar);
+            $newChild->row->visible = false;
+            $newChild->row->save();
+            $this->view->data['duplicatedIds'][] = $newChild->id;
+        }
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
+    }
 }
