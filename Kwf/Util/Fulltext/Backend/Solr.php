@@ -7,7 +7,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     private function _getSolrService($subroot)
     {
         static $i = array();
-        if (is_string($subroot)) {
+        if (is_string($subroot) && $subroot) {
             $subrootId = Kwf_Component_Data_Root::getInstance()->getComponentById($subroot)->id;
         } else {
             $subrootId = ''; //valid; no subroots exist
@@ -101,9 +101,10 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
             $contents = $this->getFulltextContentForPage($page, $fulltextComponents);
             unset($fulltextComponents);
             if (!$contents) {
-                if ($debugOutput) echo " [no content]";
+                if ($debugOutput) echo " [no content]\n";
                 return false;
             }
+            if ($debugOutput) echo " [".implode(' ', array_keys($contents))."]\n";
             require_once Kwf_Config::getValue('externLibraryPath.solr').'/Apache/Solr/Document.php';
             $doc = new Apache_Solr_Document();
             foreach ($contents as $field=>$text) {

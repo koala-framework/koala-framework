@@ -35,6 +35,8 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     public function checkForInvalidSubrootAction()
     {
         $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
+
         $documentIds = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocumentIds($subroot);
         $i = 0;
         foreach ($documentIds as $documentId) {
@@ -223,7 +225,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     }
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
                     if (!$page->isPage) continue;
-                    if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page, !$this->_getParam('verbose'))) {
+                    if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page, !!$this->_getParam('verbose'))) {
                         $stats['indexedPages']++;
                     }
                     unset($page);
@@ -373,7 +375,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
             $t = time();
             if (!$this->_getParam('silent')) echo "\n[$subroot] check-pages...\n";
-            $cmd = "php bootstrap.php fulltext check-pages-subroot --componentId=$subroot";
+            $cmd = "php bootstrap.php fulltext check-pages-subroot ";
+            if ($subroot) {
+                $cmd .= "--componentId=$subroot";
+            } else {
+                $cmd .= "--componentId=root";
+            }
             if ($this->_getParam('debug')) $cmd .= " --debug";
             if ($this->_getParam('silent')) $cmd .= " --silent";
             passthru($cmd, $ret);
@@ -404,6 +411,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         ini_set('memory_limit', '256M');
 
         $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
         $documents = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocuments($subroot);
         if ($this->_getParam('debug')) echo "count: ".count($documents)."\n";
         $i = 0;
