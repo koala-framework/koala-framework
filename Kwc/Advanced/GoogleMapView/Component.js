@@ -16,7 +16,7 @@ Kwc.Advanced.GoogleMap.renderMap = function(map) {
         cfg.markers = {
             longitude : cfg.longitude,
             latitude  : cfg.latitude,
-            autoOpenInfoWindow: true
+            autoOpenInfoWindow: cfg.autoOpenInfoWindow
         };
         if (text) cfg.markers.infoHtml = text.dom.innerHTML;
     }
