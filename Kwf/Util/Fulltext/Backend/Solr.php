@@ -104,6 +104,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
                 if ($debugOutput) echo " [no content]";
                 return false;
             }
+            require_once Kwf_Config::getValue('externLibraryPath.solr').'/Apache/Solr/Document.php';
             $doc = new Apache_Solr_Document();
             foreach ($contents as $field=>$text) {
                 if ($text instanceof Kwf_DateTime) {
