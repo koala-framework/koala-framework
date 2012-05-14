@@ -321,14 +321,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             if ($this->_getParam('debug')) echo "changed: $row->page_id\n";
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
             if (!$page) {
-<<<<<<< HEAD
-=======
                 //we don't know the correct subroot, so try deleting from all subroots
                 foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $sr) {
                     $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($sr);
                     Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($sr, $row->page_id);
                 }
->>>>>>> master-solr
                 $row->delete();
                 continue;
             }
