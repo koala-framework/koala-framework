@@ -36,6 +36,7 @@ abstract class Kwc_News_Detail_Abstract_Component extends Kwc_Directories_Item_D
     {
         $ret = array();
         $ret['type'] = 'news';
+        $ret['created'] = new Kwf_DateTime($this->getData()->row->publish_date);
         return $ret;
     }
 }

@@ -1,7 +1,11 @@
 <?php
-class Kwf_Util_Fulltext
+class Kwf_Util_Fulltext_Lucene
 {
     /**
+     * Returns Zend_Search_Lucene instance for given subroot
+     *
+     * every subroot has it's own instance
+     *
      * @param Kwf_Component_Data for this index
      * @return Zend_Search_Lucene_Interface
      */
