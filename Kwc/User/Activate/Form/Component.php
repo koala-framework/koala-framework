@@ -13,6 +13,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         $ret = parent::getSettings();
         $ret['placeholder']['submitButton'] = trlKwf('Activate Account');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Activate_Form_Success_Component';
+        $ret['useAjaxRequest'] = true;
         return $ret;
     }
 
