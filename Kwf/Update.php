@@ -95,6 +95,11 @@ abstract class Kwf_Update
     public static function getUpdateTags()
     {
         $ret = Kwf_Registry::get('config')->server->updateTags->toArray();
+        foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
+            if (Kwc_Abstract::hasSetting($class, 'updateTags')) {
+                $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
+            }
+        }
         return $ret;
     }
 
