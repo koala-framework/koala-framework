@@ -19,6 +19,9 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
                                             trlKwfStatic('Examples: "Hallo Welt" , ? , * , AND , OR');
         $ret['searchParams'] = null; //backend dependent params
         //example: $ret['searchParams'] = array('type'=>'news');
+
+        $ret['flags']['usesFulltext'] = true;
+        $ret['updateTags'][] = 'fulltext';
         return $ret;
     }
 

@@ -88,7 +88,7 @@ class Kwf_Component_Events
                     );
                 }
             }
-            if (is_instance_of($componentClass, 'Kwc_FulltextSearch_Search_Component')) {
+            if (Kwc_Abstract::getFlag($componentClass, 'usesFulltext')) {
                 $hasFulltext = true;
             }
         }
