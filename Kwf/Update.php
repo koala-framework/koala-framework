@@ -92,6 +92,12 @@ abstract class Kwf_Update
         return $ret;
     }
 
+    public static function getUpdateTags()
+    {
+        $ret = Kwf_Registry::get('config')->server->updateTags->toArray();
+        return $ret;
+    }
+
     public static function getUpdates($from, $to)
     {
         $ret = self::getKwcUpdates($from, $to);

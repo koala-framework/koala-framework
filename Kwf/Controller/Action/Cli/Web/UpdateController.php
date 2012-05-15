@@ -223,13 +223,13 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             if ($update->getTags() && !in_array('web', $update->getTags())) {
                 if (!array_intersect(
                     $update->getTags(),
-                    Kwf_Registry::get('config')->server->updateTags->toArray()
+                    Kwf_Update::getUpdateTags()
                 ) && !($update->getTags()==array('db') && get_class($update)=='Kwf_Update_Sql')) {
                     if ($method == 'update') {
                         echo "$method: skipping ".get_class($update);
                         if ($update->getRevision()) echo " (".$update->getRevision().")";
                         echo ", tags '".implode(', ', $update->getTags())."' don't match ";
-                        echo "(".implode(', ', Kwf_Registry::get('config')->server->updateTags->toArray()).")";
+                        echo "(".implode(', ', Kwf_Update::getUpdateTags()).")";
                         echo "\n";
                         flush();
                     }

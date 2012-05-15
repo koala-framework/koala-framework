@@ -30,7 +30,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
         }
 
         $updates = array();
-        foreach (Kwf_Registry::get('config')->server->updateTags as $tag) {
+        foreach (Kwf_Update::getUpdateTags() as $tag) {
             $file = KWF_PATH.'/setup/'.$tag.'.sql';
             if (file_exists($file)) {
                 $update = new Kwf_Update_Sql(0, null);
