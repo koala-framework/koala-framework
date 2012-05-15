@@ -8,7 +8,7 @@
 <ua>Видимий</ua>
 <mk>Видливо</mk>
 <ro>Vizibil</ro>
-<sl>x</sl>
+<sl>Vidno</sl>
 </text>
 <text>
 <en>Error</en>
@@ -19,6 +19,7 @@
 <ro>Eroare</ro>
 <mk>Грешка</mk>
 <cz>Chyba</cz>
+<sl>Napaka</sl>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
@@ -27,6 +28,7 @@
 <ua>Сталася помилка. Будь ласка, спробуйте пізніше.</ua>
 <ro>A intervenit o eroare. Vă rugăm să încercaţi din nou mai târziu.</ro>
 <mk>Се појави грешка. Ве молиме пробајте подоцна.</mk>
+<sl>Prišlo je do napake. Poskusite ponovno kasneje.</sl>
 </text>
 <text>
 <en>Page not found</en>
@@ -35,6 +37,7 @@
 <ua>Сторінка не знайдена</ua>
 <ro>Pagina nu a fost gasită</ro>
 <mk>Страната не е пронајдена</mk>
+<sl>Strani ni bilo možno najti.</sl>
 </text>
 <text>
 <en>Lost password?</en>
@@ -43,6 +46,7 @@
 <ro>Aţi uitat parola?</ro>
 <ua>Забули пароль?</ua>
 <mk>Ја заборавивте лозинката?</mk>
+<sl>Pozabljeno geslo</sl>
 </text>
 <text>
 <en>Login</en>
@@ -51,6 +55,7 @@
 <ua>Логін</ua>
 <ro>Autentificare</ro>
 <mk>Логин</mk>
+<sl>Prijava</sl>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -58,6 +63,7 @@
 <id>14</id>
 <ro>Bună ziua {0}!</ro>
 <mk>Здраво {0}!</mk>
+<sl>Pozdravljeni, {0}!</sl>
 </text>
 <text>
 <en>Your account at {0}
@@ -67,6 +73,7 @@ has just been created.</en>
 <ro>Tocmai a fost creat contul dumneavoastră pentru {0}.</ro>
 <ua>Ваш аккаунт створено</ua>
 <mk>Вашиот акаунт е креиран.</mk>
+<sl>Pravkar ste uspešno ustvarili svoj račun pri {0}.</sl>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
@@ -75,6 +82,7 @@ has just been created.</en>
 <ro>Vă rugăm să folosiţi următorul link pentru a seta parola şi pentru a vă autentifica</ro>
 <ua>Будь ласка, використовуйте це посилання, щоб потрапити на ваш аккаунт</ua>
 <mk>Ве молиме користете го следниот линк за да изберете лозинка и да се најавите</mk>
+<sl>Kliknite na to povezavo, da določite geslo in se prijavite.</sl>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
@@ -83,6 +91,7 @@ has just been created.</en>
 <ro>Acest e-mail a fost generat automat. În cazul în care răspundeţi, mesajul nu va ajunge la niciun destinatar.</ro>
 <ua>Це повідомлення було сформовано автоматично. Якщо Ви відповісте на цей лист, одержувача може не бути</ua>
 <mk>Овој e-mail е генериран автоматски. Ако одговорите на ова порака може да нема примач.</mk>
+<sl>To je avtomatsko generirano e-sporočilo. To sporočilo je bilo generirano avtomatsko, zato nanj ne odgovarjajte.</sl>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
@@ -91,6 +100,7 @@ has just been created.</en>
 <ro>Contul dumneavoastră pentru {0} a fost şters.</ro>
 <ua>Ваш аккаунт видалено</ua>
 <mk>Вашиот акаунт е избришан.</mk>
+<sl>Izbrisali ste svoj račun pri {0}.</sl>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
@@ -99,6 +109,7 @@ has just been created.</en>
 <ro>Vă rugăm să folosiţi acest link pentru a vă schimba parola.</ro>
 <ua>Будь ласка, використайте це посилання, щоб обрати свій новий пароль</ua>
 <mk>Ве молиме користете го следниот линк за да внесете нова лозинка.</mk>
+<sl>Kliknite na naslednjo povezavo, da določite novo geslo.</sl>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -109,6 +120,7 @@ has just been created.</en>
 <ro>Loc de plecare: Cod poştal, Localitate, Stradă</ro>
 <ua>Місце відправки:поштовий код, місто, вулиця</ua>
 <mk>Место на тргнување: Поштенски број, Место, Улица</mk>
+<sl>Kraj odhoda: Poštna številka, kraj, ulica</sl>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -118,6 +130,7 @@ has just been created.</en>
 <ro>Locaţia introdusă nu a putut fi găsită!</ro>
 <ua>Введене місце не було знайдено</ua>
 <mk>Внесенето место не може да се наоѓа!</mk>
+<sl>Vnesenega kraja ni bilo možno najti.</sl>
 </text>
 <text>
 <en>Show Route</en>
@@ -126,6 +139,7 @@ has just been created.</en>
 <id>33</id>
 <ro>Arată ruta</ro>
 <ua>Показати маршрут</ua>
+<sl>Prikaz poti</sl>
 </text>
 <text>
 <en>Suggestions</en>
@@ -134,6 +148,7 @@ has just been created.</en>
 <ro>Sugestii</ro>
 <ua>Пропозиції</ua>
 <mk>Предлози</mk>
+<sl>Predlogi</sl>
 </text>
 <text>
 <en>Coordinates</en>
@@ -142,6 +157,7 @@ has just been created.</en>
 <ro>Coordonate</ro>
 <ua>Координати</ua>
 <mk>Кординати</mk>
+<sl>Koordinate</sl>
 </text>
 <text>
 <en>Zoomlevel</en>
@@ -150,6 +166,7 @@ has just been created.</en>
 <ro>Nivel zoom</ro>
 <ua>Ступінь збільшення</ua>
 <mk>Ниво на зголемување</mk>
+<sl>Stopnja povečave</sl>
 </text>
 <text>
 <en>Width</en>
@@ -158,6 +175,7 @@ has just been created.</en>
 <ro>Lăţime</ro>
 <ua>Ширина</ua>
 <mk>Ширина</mk>
+<sl>Širina</sl>
 </text>
 <text>
 <en>Height</en>
@@ -166,6 +184,7 @@ has just been created.</en>
 <ro>Înălţime</ro>
 <ua>Висота</ua>
 <mk>Висина</mk>
+<sl>Višina</sl>
 </text>
 <text>
 <en>Move + Zoom</en>
@@ -174,6 +193,7 @@ has just been created.</en>
 <ro>Mută + Zoom</ro>
 <ua>Перемістити та збільшити</ua>
 <mk>Премести + Зголеми</mk>
+<sl>Pomikanje + povečava</sl>
 </text>
 <text>
 <en>Move + Zoom (without zoombar)</en>
@@ -182,6 +202,7 @@ has just been created.</en>
 <ro>Mută + Zoom (fără bară de zoom)</ro>
 <ua>Перемістити та збільшити без шкали збільшення</ua>
 <mk>Премести + Зголеми (без барот зазголемување)</mk>
+<sl>Pomikanje + povečava (brez povečevalne skale)</sl>
 </text>
 <text>
 <en>Scale</en>
@@ -190,6 +211,7 @@ has just been created.</en>
 <ro>Scale</ro>
 <ua>Шкала</ua>
 <mk>Скала</mk>
+<sl>Skaliranje</sl>
 </text>
 <text>
 <en>Satelitemap</en>
@@ -198,6 +220,7 @@ has just been created.</en>
 <ro>Hartă satelit</ro>
 <ua>Супутникова карта</ua>
 <mk>Мапа на страната</mk>
+<sl>Satelitska karta</sl>
 </text>
 <text>
 <en>Overviewmap</en>
@@ -205,12 +228,14 @@ has just been created.</en>
 <id>44</id>
 <ro>Overviewmap</ro>
 <ua>Крупномасштабна карта</ua>
+<sl>Pregledna karta</sl>
 </text>
 <text>
 <en>Worldview</en>
 <de>Weltansicht</de>
 <id>45</id>
 <ro>Worldview</ro>
+<sl>Širši prikaz</sl>
 </text>
 <text>
 <en>Detailview</en>
@@ -218,6 +243,7 @@ has just been created.</en>
 <id>46</id>
 <ro>Imagine detaliata</ro>
 <ua>Детальний огляд</ua>
+<sl>Podrobni prikaz</sl>
 </text>
 <text>
 <en>Filename</en>
@@ -226,6 +252,7 @@ has just been created.</en>
 <ro>Denumire fişier</ro>
 <ua>І'мя файлу</ua>
 <mk>Име на фајлот</mk>
+<sl>Ime datoteke</sl>
 </text>
 <text>
 <en>File</en>
@@ -234,6 +261,7 @@ has just been created.</en>
 <ro>Fişier</ro>
 <ua>Файл</ua>
 <mk>Фајл</mk>
+<sl>Datoteka</sl>
 </text>
 <text>
 <en>Content</en>
@@ -242,6 +270,7 @@ has just been created.</en>
 <ro>Conţinut</ro>
 <ua>Зміст</ua>
 <mk>Содржина</mk>
+<sl>Vsebina</sl>
 </text>
 <text>
 <en>Image</en>
@@ -249,6 +278,7 @@ has just been created.</en>
 <id>51</id>
 <ro>Imagine</ro>
 <mk>Слика</mk>
+<sl>Slika</sl>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -256,6 +286,7 @@ has just been created.</en>
 <id>52</id>
 <ro>Măreşte imaginea</ro>
 <mk>Зголеми ја сликата</mk>
+<sl>Povečaj sliko</sl>
 </text>
 <text>
 <en>Comment</en>
@@ -263,6 +294,7 @@ has just been created.</en>
 <id>55</id>
 <ro>Comentariu</ro>
 <mk>Комент</mk>
+<sl>Komentar</sl>
 </text>
 <text>
 <en>Size</en>
@@ -270,6 +302,7 @@ has just been created.</en>
 <id>56</id>
 <ro>Dimensiune</ro>
 <mk>Големина</mk>
+<sl>Velikost</sl>
 </text>
 <text>
 <en>Preview</en>
@@ -277,6 +310,7 @@ has just been created.</en>
 <id>58</id>
 <ro>Preview</ro>
 <mk>Преглед</mk>
+<sl>Predogled</sl>
 </text>
 <text>
 <en>Text</en>
@@ -284,6 +318,7 @@ has just been created.</en>
 <id>59</id>
 <ro>Text</ro>
 <mk>Текст</mk>
+<sl>Besedilo</sl>
 </text>
 <text>
 <en>Position of Image</en>
@@ -291,6 +326,7 @@ has just been created.</en>
 <id>60</id>
 <ro>Poziţia imaginii</ro>
 <mk>Позиција на слика</mk>
+<sl>Položaj slike</sl>
 </text>
 <text>
 <en>Left</en>
@@ -298,6 +334,7 @@ has just been created.</en>
 <id>61</id>
 <ro>Stânga</ro>
 <mk>Лево</mk>
+<sl>Levo</sl>
 </text>
 <text>
 <en>Right</en>
@@ -305,6 +342,7 @@ has just been created.</en>
 <id>62</id>
 <ro>Dreapta</ro>
 <mk>Десно</mk>
+<sl>Desno</sl>
 </text>
 <text>
 <en>Default Value</en>
@@ -313,6 +351,7 @@ has just been created.</en>
 <bg>Стандартна стойност</bg>
 <ro>Valoare implicită</ro>
 <mk>Стандардна вредност</mk>
+<sl>Standardna vrednost</sl>
 </text>
 <text>
 <en>Passwords are different. Please try again.</en>
@@ -320,6 +359,7 @@ has just been created.</en>
 <id>73</id>
 <ro>Parolele sunt diferite. Vă rugam să încercaţi din nou.</ro>
 <mk>Лизинките се различни. Ве молиме пробајте пак.</mk>
+<sl>Gesli se ne ujemata. Poskusite ponovno.</sl>
 </text>
 <text>
 <en>Description</en>
@@ -327,6 +367,7 @@ has just been created.</en>
 <id>79</id>
 <ro>Descriere</ro>
 <mk>Опис</mk>
+<sl>Opis</sl>
 </text>
 <text>
 <en>Submit</en>
@@ -340,6 +381,7 @@ has just been created.</en>
 <it>inviare</it>
 <ro>Trimite</ro>
 <ua>Надіслати</ua>
+<sl>Pošlji</sl>
 </text>
 <text>
 <en>Validator</en>
@@ -347,6 +389,7 @@ has just been created.</en>
 <id>83</id>
 <ro>Validator</ro>
 <mk>Валидатор</mk>
+<sl>Preverjalnik</sl>
 </text>
 <text>
 <en>E-Mail</en>
@@ -357,6 +400,7 @@ has just been created.</en>
 <id>85</id>
 <ro>E-mail</ro>
 <mk>E-Mail</mk>
+<sl>E-naslov</sl>
 </text>
 <text>
 <en>Date</en>
@@ -364,12 +408,14 @@ has just been created.</en>
 <id>86</id>
 <ro>Data</ro>
 <mk>Датум</mk>
+<sl>Datum</sl>
 </text>
 <text>
 <en>at</en>
 <de>um</de>
 <id>93</id>
 <ro>la</ro>
+<sl>ob</sl>
 </text>
 <text>
 <en>Empty</en>
@@ -377,6 +423,7 @@ has just been created.</en>
 <id>95</id>
 <ro>Gol</ro>
 <mk>Празно</mk>
+<sl>Prazno</sl>
 </text>
 <text>
 <en>Title</en>
@@ -386,6 +433,7 @@ has just been created.</en>
 <mk>Титула</mk>
 <ua>Титул</ua>
 <hu>Cím</hu>
+<sl>Naziv</sl>
 </text>
 <text>
 <en>Firstname</en>
@@ -398,6 +446,7 @@ has just been created.</en>
 <mk>Име</mk>
 <ua>Ім'я</ua>
 <hu>Keresztnév</hu>
+<sl>Ime</sl>
 </text>
 <text>
 <en>Lastname</en>
@@ -410,6 +459,7 @@ has just been created.</en>
 <mk>Презиме</mk>
 <ua>Прізвище</ua>
 <hu>Vezetéknév</hu>
+<sl>Priimek</sl>
 </text>
 <text>
 <en>Email</en>
@@ -419,6 +469,7 @@ has just been created.</en>
 <ru>Электронная почта</ru>
 <id>99</id>
 <ro>E-mail</ro>
+<sl>E-naslov</sl>
 </text>
 <text>
 <en>Subject</en>
@@ -426,6 +477,7 @@ has just been created.</en>
 <id>101</id>
 <ro>Subiect</ro>
 <mk>Наслов</mk>
+<sl>Zadeva</sl>
 </text>
 <text>
 <en>Member since</en>
@@ -433,6 +485,7 @@ has just been created.</en>
 <id>107</id>
 <ro>Membru din </ro>
 <mk>Член од</mk>
+<sl>Član od</sl>
 </text>
 <text>
 <en>Click here</en>
@@ -440,6 +493,7 @@ has just been created.</en>
 <id>120</id>
 <ro>Click aici</ro>
 <mk>Клини тука</mk>
+<sl>Klikni tukaj</sl>
 </text>
 <text>
 <en>Name</en>
@@ -447,12 +501,14 @@ has just been created.</en>
 <id>125</id>
 <ro>Nume</ro>
 <mk>Име</mk>
+<sl>Ime in priimek</sl>
 </text>
 <text>
 <en>Latest online</en>
 <de>Zuletzt online</de>
 <id>126</id>
 <ro>Ultimul online</ro>
+<sl>Datum zadnje prijave</sl>
 </text>
 <text>
 <en>Short description</en>
@@ -460,6 +516,7 @@ has just been created.</en>
 <id>128</id>
 <ro>Scurtă descriere</ro>
 <mk>Краток опис</mk>
+<sl>Kratek opis</sl>
 </text>
 <text>
 <en>Signature</en>
@@ -467,6 +524,7 @@ has just been created.</en>
 <id>130</id>
 <ro>Semnătură</ro>
 <mk>Потпис</mk>
+<sl>Podpis</sl>
 </text>
 <text>
 <en>Publish Date</en>
@@ -474,6 +532,7 @@ has just been created.</en>
 <id>135</id>
 <ro>Data publicării</ro>
 <mk>Датум на поставување</mk>
+<sl>Datum objave</sl>
 </text>
 <text>
 <en>Expiry Date</en>
@@ -481,24 +540,28 @@ has just been created.</en>
 <id>136</id>
 <ro>Data expirării</ro>
 <mk>Датум на истекување</mk>
+<sl>Datum poteka objave</sl>
 </text>
 <text>
 <en>Teaser</en>
 <de>Kurztext (Teaser)</de>
 <id>137</id>
 <ro>Teaser</ro>
+<sl>Kratek opis (teaser)</sl>
 </text>
 <text>
 <en>Comment was successfully saved.</en>
 <de>Kommentar wurde erfolgreich gespeichert.</de>
 <id>148</id>
 <ro>Comentariul a fost salvat cu succes.</ro>
+<sl>Komentar je bil uspešno shranjen.</sl>
 </text>
 <text>
 <en>to continue</en>
 <de>um fortzufahren</de>
 <id>149</id>
 <ro>pentru a continua</ro>
+<sl>Nadaljuj</sl>
 </text>
 <text>
 <en>Product</en>
@@ -506,30 +569,35 @@ has just been created.</en>
 <id>150</id>
 <ro>Produs</ro>
 <mk>Производ</mk>
+<sl>Produkt</sl>
 </text>
 <text>
 <en>Activate Useraccount</en>
 <de>Benutzerkonto aktivieren</de>
 <id>159</id>
 <ro>Activare cont utilizator</ro>
+<sl>Aktiviraj uporabniški račun</sl>
 </text>
 <text>
 <en>Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>Bitte geben Sie in beide Felder das gewünschte Passwort für Ihr Benutzerkonto ein</de>
 <id>160</id>
 <ro>Vă rugăm să introduceţi în ambele câmpuri parola pe care doriţi să o utilizaţi pentru contul dumneavoastră</ro>
+<sl>V polji vnesite želeno geslo za dostop do uporabniškega računa.</sl>
 </text>
 <text>
 <en>Your useraccount was successfully activated.</en>
 <de>Ihr Benutzerkonto wurde erfolgreich aktiviert.</de>
 <id>162</id>
 <ro>Contul dumneavoastră de utilizator a fost activat cu succes.</ro>
+<sl>Vaš uporabniški račun je aktiviran.</sl>
 </text>
 <text>
 <en>to get back to the Startpage</en>
 <de>um zur Startseite zurückzukehren</de>
 <id>164</id>
 <ro>pentru a vă întoarce la pagina Acasă</ro>
+<sl>Nazaj na začetno stran</sl>
 </text>
 <text>
 <en>Female</en>
@@ -538,6 +606,7 @@ has just been created.</en>
 <ro>Doamna</ro>
 <ua>Жіноча</ua>
 <hu>Nő</hu>
+<sl>Ženski</sl>
 </text>
 <text>
 <en>Male</en>
@@ -547,6 +616,7 @@ has just been created.</en>
 <mk>Машки</mk>
 <ua>Чоловіча</ua>
 <hu>Férfi</hu>
+<sl>Moški</sl>
 </text>
 <text>
 <en>Gender</en>
@@ -556,12 +626,14 @@ has just been created.</en>
 <mk>Пол</mk>
 <ua>Стать</ua>
 <hu>Nem</hu>
+<sl>Spol</sl>
 </text>
 <text>
 <en>Account - Properties</en>
 <de>Konto - Eigenschaften</de>
 <id>169</id>
 <ro>Cont - Proprietăţi</ro>
+<sl>Račun – lastnosti</sl>
 </text>
 <text>
 <en>The changed data was saved successfully</en>
@@ -569,6 +641,7 @@ has just been created.</en>
 <id>171</id>
 <ro>Informaţiile modificate au fost salvate cu succes</ro>
 <mk>Променетите податоци се зачувани успешно</mk>
+<sl>Spremenjeni podatki so bili uspešno shranjeni.</sl>
 </text>
 <text>
 <en>You don't have enough permissions for this Action</en>
@@ -576,6 +649,7 @@ has just been created.</en>
 <id>182</id>
 <ro>Nu aveţi drepturile necesare pentru această acţiune.</ro>
 <mk>Немате доволно пермисии за ова акција</mk>
+<sl>Nimate zahtevanih pooblastil za to dejanje.</sl>
 </text>
 <text>
 <en>Login failed</en>
@@ -583,18 +657,21 @@ has just been created.</en>
 <id>183</id>
 <ro>Autentificare eşuată</ro>
 <mk>Неуспешно логирање</mk>
+<sl>Prijava ni uspela</sl>
 </text>
 <text>
 <en>Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
 <de>Aktivierungscode ist fehlerhaft. Vielleicht wurde die URL nicht vollständig kopiert?</de>
 <id>184</id>
 <ro>Codul de activare este invalid. Poate că URL-ul nu a fost copiat complet?</ro>
+<sl>Aktivacijska koda ni pravilna. Preverite, ali ste pravilno vnesli celotni URL.</sl>
 </text>
 <text>
 <en>Data not submitted completely.</en>
 <de>Daten wurden nicht vollständig vorgelegt.</de>
 <id>185</id>
 <ro>Datele nu au fost introduse complet.</ro>
+<sl>Ni na voljo vseh podatkov.</sl>
 </text>
 <text>
 <en>Change password</en>
@@ -602,6 +679,7 @@ has just been created.</en>
 <id>190</id>
 <ro>Schimbă parola</ro>
 <mk>Променија лозинката</mk>
+<sl>Spremeni geslo</sl>
 </text>
 <text>
 <en>Repeat password</en>
@@ -609,6 +687,7 @@ has just been created.</en>
 <id>191</id>
 <ro>Rescrieţi parola</ro>
 <mk>Повторија лозинката</mk>
+<sl>Ponovi geslo</sl>
 </text>
 <text>
 <en>First name</en>
@@ -616,6 +695,7 @@ has just been created.</en>
 <id>193</id>
 <ro>Prenume</ro>
 <mk>Име</mk>
+<sl>Ime</sl>
 </text>
 <text>
 <en>Last name</en>
@@ -623,6 +703,7 @@ has just been created.</en>
 <id>194</id>
 <ro>Nume</ro>
 <mk>Презиме</mk>
+<sl>Priimek</sl>
 </text>
 <text>
 <en>Advice</en>
@@ -630,18 +711,21 @@ has just been created.</en>
 <id>195</id>
 <ro>Info</ro>
 <mk>Совет</mk>
+<sl>Informacija</sl>
 </text>
 <text>
 <en>After following actions emails are sent automatically to the respective user:</en>
 <de>Nach Änderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
 <id>196</id>
 <ro>În urma modificării următoarelor câmpuri, se va trimite automat un e-mail la adresa introdusă:</ro>
+<sl>Po spremembi naslednjih polj bo sistem na vpisani e-naslov avtomatsko poslal e-sporočilo:</sl>
 </text>
 <text>
 <en>Create, Delete and E-Mail change</en>
 <de>Hinzufügen, Löschen und E-Mail-Änderungen</de>
 <id>197</id>
 <ro>Creaza, Şterge şi Modificări e-mail</ro>
+<sl>Dodajanje, brisanje in spremembe e-naslova</sl>
 </text>
 <text>
 <en>Rights</en>
@@ -649,6 +733,7 @@ has just been created.</en>
 <id>200</id>
 <ro>Drepturi</ro>
 <mk>Права</mk>
+<sl>Pravice</sl>
 </text>
 <text>
 <en>Edit</en>
@@ -656,6 +741,7 @@ has just been created.</en>
 <id>201</id>
 <ro>Editează</ro>
 <mk>Уреди</mk>
+<sl>Uredi</sl>
 </text>
 <text>
 <en>edit</en>
@@ -663,60 +749,70 @@ has just been created.</en>
 <id>202</id>
 <ro>editează</ro>
 <mk>уреди</mk>
+<sl>Uredi</sl>
 </text>
 <text>
 <en>The file is larger than the maximum upload amount.</en>
 <de>Die Datei übersteigt die maximale Dategröße für Dateiuploads.</de>
 <id>207</id>
 <ro>Dimensiunea fişierului depăşeşte dimensiunea maximă admisă.</ro>
+<sl>Datoteka je prevelika in je zato ni možno naložiti.</sl>
 </text>
 <text>
 <en>The file was not uploaded completely.</en>
 <de>Die Datei wurde nicht vollständig hochgeladen.</de>
 <id>208</id>
 <ro>Fişierul nu a fost încărcat complet.</ro>
+<sl>Datoteka ni bila v celoti naložena.</sl>
 </text>
 <text>
 <en>An account with this email address already exists</en>
 <de>Es besteht bereits ein Konto mit dieser E-Mail Adresse</de>
 <id>214</id>
 <ro>Există deja un cont pentru această adresă de e-mail</ro>
+<sl>Račun s tem e-naslovom že obstaja.</sl>
 </text>
 <text>
 <en>Passwords are different - please try again</en>
 <de>Passwörter sind unterschiedlich - bitte versuchen Sie es erneut</de>
 <id>215</id>
 <ro>Parolele sunt diferite - vă rugam să încercaţi din nou</ro>
+<sl>Gesli se ne ujemata – poskusite ponovno.</sl>
 </text>
 <text>
 <en>Please enter the text you wish to assign.</en>
 <de>Bitte geben Sie den Text ein, welchen Sie zuweisen möchten.</de>
 <id>228</id>
 <ro>Vă rugăm să introduceţi textul pe care doriţi să îl atribuiţi.</ro>
+<sl>Vnesite besedilo, ki ga želite poslati.</sl>
 </text>
 <text>
 <en>Seperate items by a new line.</en>
 <de>Unterteilen Sie Elemente durch eine neue Zeile.</de>
 <id>229</id>
 <ro>Separaţi elementele printr-un rând nou.</ro>
+<sl>Vstavi vrstico za razdelitev elementov.</sl>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
 <de>Speichern ist nicht möglich, bitte füllen Sie alle rot unterstrichenen Felder korrekt aus.</de>
 <id>230</id>
 <ro>Nu se poate salva, vă rugăm să completaţi corect toate câmpurile subliniate cu roşu.</ro>
+<sl>Podatkov ni bilo možno shraniti. Pravilno izpolnite vsa rdeče označena polja.</sl>
 </text>
 <text>
 <en>Do you really want to delete this entry?</en>
 <de>Wollen Sie diesen Eintrag wirklich löschen?</de>
 <id>232</id>
 <ro>Sunteţi sigur că doriţi să ştergeţi acest obiect?</ro>
+<sl>Ali ste prepričani, da želite izbrisati vnos?</sl>
 </text>
 <text>
 <en>Do you want to save the changes?</en>
 <de>Wollen Sie die Änderungen speichern?</de>
 <id>233</id>
 <ro>Doriţi să salvaţi modificările?</ro>
+<sl>Ali želite shraniti spremembe?</sl>
 </text>
 <text>
 <en>Copying...</en>
@@ -724,18 +820,21 @@ has just been created.</en>
 <id>234</id>
 <ro>Copiază...</ro>
 <mk>Се копира...</mk>
+<sl>Kopiram ...</sl>
 </text>
 <text>
 <en>create</en>
 <de>erstellen</de>
 <id>235</id>
 <ro>creează</ro>
+<sl>Ustvari</sl>
 </text>
 <text>
 <en>File successfully created:</en>
 <de>Datei wurde erfolgreich erstellt:</de>
 <id>236</id>
 <ro>Document creat cu succes:</ro>
+<sl>Datoteka je bila uspešno ustvarjena.</sl>
 </text>
 <text>
 <en>Component</en>
@@ -743,6 +842,7 @@ has just been created.</en>
 <id>237</id>
 <ro>Component</ro>
 <mk>Компонента</mk>
+<sl>Komponenta</sl>
 </text>
 <text>
 <en>Add Component</en>
@@ -750,12 +850,14 @@ has just been created.</en>
 <id>238</id>
 <ro>Adaugă component</ro>
 <mk>Додади компонента</mk>
+<sl>Dodaj komponento</sl>
 </text>
 <text>
 <en>Creating...</en>
 <de>Erzeugen...</de>
 <id>239</id>
 <ro>Creeaza...</ro>
+<sl>Ustvarjam ...</sl>
 </text>
 <text>
 <en>Page</en>
@@ -763,6 +865,7 @@ has just been created.</en>
 <id>240</id>
 <ro>Pagina</ro>
 <mk>Страна</mk>
+<sl>Stran</sl>
 </text>
 <text>
 <en>Page properties</en>
@@ -770,12 +873,14 @@ has just been created.</en>
 <id>242</id>
 <ro>Proprietăţile paginii</ro>
 <mk>Својства на страната</mk>
+<sl>Lastnosti strani</sl>
 </text>
 <text>
 <en>Add new child page</en>
 <de>Neue Unterseite hinzufügen</de>
 <id>243</id>
 <ro>Adaugă subpagină</ro>
+<sl>Dodaj novo podstran</sl>
 </text>
 <text>
 <en>Delete Page</en>
@@ -783,12 +888,14 @@ has just been created.</en>
 <id>244</id>
 <ro>Şterge pagina</ro>
 <mk>Избришија страната</mk>
+<sl>Izbriši stran</sl>
 </text>
 <text>
 <en>Show / Hide Page</en>
 <de>Seite ein-/ausblenden</de>
 <id>245</id>
 <ro>Arată/Ascunde pagina</ro>
+<sl>Prikaži/skrij stran</sl>
 </text>
 <text>
 <en>Use as homepage</en>
@@ -796,24 +903,28 @@ has just been created.</en>
 <id>246</id>
 <ro>Foloseşte ca Homepage</ro>
 <mk>Користи како почетна страна</mk>
+<sl>Uporabi kot začetno stran</sl>
 </text>
 <text>
 <en>Expand here</en>
 <de>Hier erweitern</de>
 <id>248</id>
 <ro>Măreşte aici</ro>
+<sl>Razširi tukaj</sl>
 </text>
 <text>
 <en>Collapse here</en>
 <de>Hier schrumpfen</de>
 <id>249</id>
 <ro>Micşorează aici</ro>
+<sl>Skrči tukaj</sl>
 </text>
 <text>
 <en>Open preview</en>
 <de>Vorschau öffnen</de>
 <id>250</id>
 <ro>Deschide preview</ro>
+<sl>Odpri predogled</sl>
 </text>
 <text>
 <en>A Server failure occured.</en>
@@ -821,30 +932,35 @@ has just been created.</en>
 <id>253</id>
 <mk>Се случи грешка на серверот.</mk>
 <ro>A intervenit o eroare de server.</ro>
+<sl>Prišlo je do napake na strežniku.</sl>
 </text>
 <text>
 <en>Error - wrong version</en>
 <de>Fehler - falsche Version.</de>
 <id>254</id>
 <ro>Eroare - versiune eronată.</ro>
+<sl>Napaka – napačna verzija.</sl>
 </text>
 <text>
 <en>Because of an application update the application has to be reloaded.</en>
 <de>Aufgrund eines Updates muss die Anwendung neu geladen werden.</de>
 <id>255</id>
 <ro>Datorită unei actualizări, aplicaţia trebuie reîncărcată.</ro>
+<sl>Zaradi nadgradnje je treba aplikacijo ponovno naložiti.</sl>
 </text>
 <text>
 <en>A connection problem occured.</en>
 <de>Ein Verbindungsfehler ist aufgetreten.</de>
 <id>256</id>
 <ro>A intervenit o eroare de conexiune.</ro>
+<sl>Prišlo je do napake v povezavi.</sl>
 </text>
 <text>
 <en>Select your Position</en>
 <de>Wählen Sie Ihre Position.</de>
 <id>258</id>
 <ro>Selectaţi poziţia dumneavoastră.</ro>
+<sl>Izberite svoj položaj.</sl>
 </text>
 <text>
 <en>enter address</en>
@@ -852,6 +968,7 @@ has just been created.</en>
 <id>259</id>
 <mk>внеси адреса</mk>
 <ro>Introduceţi adresa.</ro>
+<sl>Vnesite naslov.</sl>
 </text>
 <text>
 <en>Example</en>
@@ -859,6 +976,7 @@ has just been created.</en>
 <id>260</id>
 <mk>Пример</mk>
 <ro>Exemplu</ro>
+<sl>Primer</sl>
 </text>
 <text>
 <en>Unknown address</en>
@@ -866,120 +984,140 @@ has just been created.</en>
 <id>261</id>
 <mk>Непозната адреса</mk>
 <ro>Adresă necunoscută.</ro>
+<sl>Naslov je neznan.</sl>
 </text>
 <text>
 <en>Address could not be found</en>
 <de>Adresse kann nicht gefunden werden.</de>
 <id>262</id>
 <ro>Adresa nu poate fi găsită.</ro>
+<sl>Naslova ni bilo možno najti.</sl>
 </text>
 <text>
 <en>Move marker while pressing mousekey.</en>
 <de>Bewegen Sie den Marker mit der Maus.</de>
 <id>263</id>
 <ro>Mişcaţi marker-ul apăsând pe tasta mouse-ului.</ro>
+<sl>Kazalec premaknite z miško.</sl>
 </text>
 <text>
 <en>Latitude</en>
 <de>Breitengrad</de>
 <id>264</id>
 <ro>Latitudine</ro>
+<sl>Geografska širina</sl>
 </text>
 <text>
 <en>Longitude</en>
 <de>Längengrad</de>
 <id>265</id>
 <ro>Longitudine</ro>
+<sl>Geografska dolžina</sl>
 </text>
 <text>
 <en>Insert new image or edit selected image.</en>
 <de>Fügt neues Bild ein oder bearbeitet das ausgewählte Bild.</de>
 <id>267</id>
 <ro>Introdu imagine nouă sau editează imaginea selectată.</ro>
+<sl>Vstavljanje nove slike ali urejanje izbrane slike.</sl>
 </text>
 <text>
 <en>Create new Download for the selected text or edit selected Download.</en>
 <de>Erstellt neuen Download für den ausgewählten Text oder bearbeitet den ausgewählten Download.</de>
 <id>268</id>
 <ro>Creează download nou pentru textul selectat sau editează download selectat.</ro>
+<sl>Ponovni prenos izbranega besedila ali urejanje izbranega prenosa.</sl>
 </text>
 <text>
 <en>Create new Link for the selected text or edit selected Link.</en>
 <de>Erzeugt neuen Link für den ausgewählten Text oder bearbeitet den ausgewählten Link.</de>
 <id>269</id>
 <ro>Creează link nou pentru textul selectat sau editează link selectat.</ro>
+<sl>Ustvarjanje nove povezave za izbrano besedilo ali urejanje izbrane povezave.</sl>
 </text>
 <text>
 <en>Undo the last action.</en>
 <de>Letzten Arbeitsschritt rückgängig machen.</de>
 <id>270</id>
 <ro>Anulează ultima acţiune.</ro>
+<sl>Razveljavi zadnji delovni korak.</sl>
 </text>
 <text>
 <en>Redo the last action.</en>
 <de>Letzten Arbeitsschritt wiederholen.</de>
 <id>271</id>
 <ro>Repetă ultima acţiune.</ro>
+<sl>Ponovi zadnji delovni korak.</sl>
 </text>
 <text>
 <en>Insert a custom character.</en>
 <de>Sonderzeichen einfügen.</de>
 <id>272</id>
 <ro>Intordu un caracter special.</ro>
+<sl>Vstavi posebni znak.</sl>
 </text>
 <text>
 <en>Insert text without formating.</en>
 <de>Text ohne Formatierung einfügen.</de>
 <id>273</id>
 <ro>Inserează textul fără formatare.</ro>
+<sl>Vstavi besedilo brez oblikovanja.</sl>
 </text>
 <text>
 <en>Insert Custom Character</en>
 <de>Benutzerdefiniertes Zeichen einfügen</de>
 <id>275</id>
 <ro>Inserează caracter special</ro>
+<sl>Vstavi prilagojeni znak.</sl>
 </text>
 <text>
 <en>Insert Plain Text</en>
 <de>"Sauberen" Text einfügen</de>
 <id>276</id>
 <ro>Inserează text fără formatări</ro>
+<sl>Vstavi "golo" besedilo.</sl>
 </text>
 <text>
 <en>Cleaning...</en>
 <de>Reinigen...</de>
 <id>277</id>
 <ro>Se reconciliază...</ro>
+<sl>Brišem ...</sl>
 </text>
 <text>
 <en>Password lost</en>
 <de>Passwort vergessen</de>
 <id>278</id>
 <ro>Am uitat parola</ro>
+<sl>Pozabljeno geslo</sl>
 </text>
 <text>
 <en>Please enter your email address</en>
 <de>Bitte geben Sie Ihre E-Mail Adresse ein</de>
 <id>279</id>
 <ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail</ro>
+<sl>Vnesite e-naslov.</sl>
 </text>
 <text>
 <en>Please type in your password. After clicking the button below</en>
 <de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Button</de>
 <id>280</id>
 <ro>Vă rugăm să introduceţi parola dumneavoastră. După ce faceţi click pe butonul de mai jos</ro>
+<sl>Vnesite geslo. Kliknite na spodnji gumb,</sl>
 </text>
 <text>
 <en>you are logged in automatically and may use the typed in password</en>
 <de>werden Sie automatisch angemeldet und können das eingegebenen Passwort</de>
 <id>281</id>
 <ro> veţi fi logat automat şi veţi putea să folosiţi parola introdusă</ro>
+<sl>če želite avtomatsko prijavo. Vneseno geslo lahko</sl>
 </text>
 <text>
 <en>for future logins.</en>
 <de>für künftige Anmeldungen verwenden.</de>
 <id>282</id>
 <ro> pentru login-urile viitoare.</ro>
+<sl>uporabite ob prihodnjih prijavah.</sl>
 </text>
 <text>
 <en>Your email address:</en>
@@ -987,18 +1125,21 @@ has just been created.</en>
 <id>283</id>
 <mk>Вашата email адреса:</mk>
 <ro>Adresa dumneavoastră de e-mail:</ro>
+<sl>Vaš e-naslov:</sl>
 </text>
 <text>
 <en>Activate and login account</en>
 <de>Konto aktivieren und anmelden</de>
 <id>284</id>
 <ro>Activare şi login cont</ro>
+<sl>Aktiviranje računa in prijava</sl>
 </text>
 <text>
 <en>The repeated password is different - please try again.</en>
 <de>Das wiederholte Passwort ist unterschiedlich - bitte versuchen Sie es erneut.</de>
 <id>285</id>
 <ro>Parola repetată este diferită - vă rugăm să mai încercaţi o dată.</ro>
+<sl>Gesli se ne ujemata – poskusite ponovno.</sl>
 </text>
 <text>
 <en>An error has occurred</en>
@@ -1008,816 +1149,952 @@ has just been created.</en>
 <id>286</id>
 <mk>Се случи грешка</mk>
 <ro>A intervenit o eroare</ro>
+<sl>Prišlo je do napake.</sl>
 </text>
 <text>
 <en>Link cannot link to itself</en>
 <de>Link kann nicht auf sich sich selbst verlinken</de>
 <id>287</id>
 <ro>Link-ul nu poate crea legătura cu sine</ro>
+<sl>Povezava ne more voditi do same sebe.</sl>
 </text>
 <text>
 <en>Add Paragraph</en>
 <de>Absatz hinzufügen</de>
 <id>288</id>
 <ro>Adaugă paragraf</ro>
+<sl>Dodaj odstavek</sl>
 </text>
 <text>
 <en>Save</en>
 <de>Speichern</de>
 <id>289</id>
 <ro>Salvează</ro>
+<sl>Shrani</sl>
 </text>
 <text>
 <en>Cancel</en>
 <de>Abbrechen</de>
 <id>290</id>
 <ro>Renunţă</ro>
+<sl>Prekliči</sl>
 </text>
 <text>
 <en>Save and Back</en>
 <de>Speichern und zurück</de>
 <id>291</id>
 <ro>Salvează şi înapoi</ro>
+<sl>Shrani in nazaj</sl>
 </text>
 <text>
 <en>Delete</en>
 <de>Löschen</de>
 <id>292</id>
 <ro>Şterge</ro>
+<sl>Izbriši</sl>
 </text>
 <text>
 <en>delete</en>
 <de>löschen</de>
 <id>293</id>
 <ro>şterge</ro>
+<sl>Izbriši</sl>
 </text>
 <text>
 <en>New Entry</en>
 <de>Neuer Eintrag</de>
 <id>294</id>
 <ro>Intrare nouă</ro>
+<sl>Nov vnos</sl>
 </text>
 <text>
 <en>delete?</en>
 <de>Löschen?</de>
 <id>296</id>
 <ro>Doriţi să ştergeţi?</ro>
+<sl>Izbrišem?</sl>
 </text>
 <text>
 <en>Duplicate</en>
 <de>Duplizieren</de>
 <id>297</id>
 <ro>Duplicare</ro>
+<sl>Podvoji</sl>
 </text>
 <text>
 <en>Print</en>
 <de>Drucken</de>
 <id>298</id>
 <ro>Tipăreşte</ro>
+<sl>Natisni</sl>
 </text>
 <text>
 <en>CSV Export</en>
 <de>CSV Export</de>
 <id>299</id>
 <ro>Export CSV</ro>
+<sl>Izvozi v CSV</sl>
 </text>
 <text>
 <en>Excel Export</en>
 <de>Excel Export</de>
 <id>300</id>
 <ro>Export Excel</ro>
+<sl>Izvozi v Excel</sl>
 </text>
 <text>
 <en>Do you really wish to remove this entry / these entries?</en>
 <de>Wollen Sie diesen Eintrag (diese Einträge) wirklich löschen?</de>
 <id>301</id>
 <ro>Sunteţi sigur că doriţi să ştergeţi această postare (aceste postări)?</ro>
+<sl>Ali ste prepričani, da želite izbrisati vnos(e)?</sl>
 </text>
 <text>
 <en>Add</en>
 <de>Hinzufügen</de>
 <id>302</id>
 <ro>Adaugă</ro>
+<sl>Dodaj</sl>
 </text>
 <text>
 <en>Toggle Visibility</en>
 <de>Sichtbarkeit umschalten</de>
 <id>303</id>
 <ro>Schimbă vizibilitate</ro>
+<sl>Preklopi vidljivost</sl>
 </text>
 <text>
 <en>Search</en>
 <de>Suchen</de>
 <id>304</id>
 <ro>Caută</ro>
+<sl>Išči</sl>
 </text>
 <text>
 <en>Possible Destinations</en>
 <de>Möglicher Bestimmungsort</de>
 <id>305</id>
 <ro>Destinaţii posibile</ro>
+<sl>Možni cilj</sl>
 </text>
 <text>
 <en>Hyperlink</en>
 <de>Hyperlink</de>
 <id>306</id>
 <ro>Hyperlink</ro>
+<sl>hiperpovezava</sl>
 </text>
 <text>
 <en>Undo (Ctrl+Z)</en>
 <de>Rückgängig (Ctrl+Z)</de>
 <id>307</id>
 <ro>Undo (Ctrl+Z)</ro>
+<sl>Razveljavi (Ctrl + Z)</sl>
 </text>
 <text>
 <en>Redo</en>
 <de>Wiederholen</de>
 <id>308</id>
 <ro>Repetă</ro>
+<sl>Ponovi</sl>
 </text>
 <text>
 <en>Character</en>
 <de>Zeichen</de>
 <id>309</id>
 <ro>Caracter</ro>
+<sl>Znak</sl>
 </text>
 <text>
 <en>Loading...</en>
 <de>Laden...</de>
 <id>311</id>
 <ro>Se încarcă</ro>
+<sl>Nalagam ...</sl>
 </text>
 <text>
 <en>{0} selected row(s)</en>
 <de>{0} markierte Zeile(n)</de>
 <id>312</id>
 <ro>{0} rând(uri) selectat(e)</ro>
+<sl>Štev. označenih vrstic: {0}</sl>
 </text>
 <text>
 <en>Close this tab</en>
 <de>Schließt diesen tab</de>
 <id>313</id>
 <ro>Închide acest tab</ro>
+<sl>Zapri zavihek</sl>
 </text>
 <text>
 <en>The value in this field is invalid</en>
 <de>Wert in diesem Feld ist ungültig</de>
 <id>314</id>
 <ro>Valoarea din acest câmp este invalidă</ro>
+<sl>Vrednost v tem polju je neveljavna.</sl>
 </text>
 <text>
 <en>January</en>
 <de>Jänner</de>
 <id>315</id>
 <ro>Ianuarie</ro>
+<sl>Januar</sl>
 </text>
 <text>
 <en>February</en>
 <de>Februar</de>
 <id>316</id>
 <ro>Februarie</ro>
+<sl>Februar</sl>
 </text>
 <text>
 <en>March</en>
 <de>März</de>
 <id>317</id>
 <ro>Martie</ro>
+<sl>Marec</sl>
 </text>
 <text>
 <en>April</en>
 <de>April</de>
 <id>318</id>
 <ro>Aprilie</ro>
+<sl>April</sl>
 </text>
 <text>
 <en>May</en>
 <de>Mai</de>
 <id>319</id>
 <ro>Mai</ro>
+<sl>Maj</sl>
 </text>
 <text>
 <en>June</en>
 <de>Juni</de>
 <id>320</id>
 <ro>Iunie</ro>
+<sl>Junij</sl>
 </text>
 <text>
 <en>July</en>
 <de>Juli</de>
 <id>321</id>
 <ro>Iulie</ro>
+<sl>Julij</sl>
 </text>
 <text>
 <en>August</en>
 <de>August</de>
 <id>322</id>
 <ro>August</ro>
+<sl>Avgust</sl>
 </text>
 <text>
 <en>September</en>
 <de>September</de>
 <id>323</id>
 <ro>Septembrie</ro>
+<sl>September</sl>
 </text>
 <text>
 <en>October</en>
 <de>Oktober</de>
 <id>324</id>
 <ro>Octombrie</ro>
+<sl>Oktober</sl>
 </text>
 <text>
 <en>November</en>
 <de>November</de>
 <id>325</id>
 <ro>Noiembrie</ro>
+<sl>November</sl>
 </text>
 <text>
 <en>December</en>
 <de>Dezember</de>
 <id>326</id>
 <ro>Decembrie</ro>
+<sl>December</sl>
 </text>
 <text>
 <en>Sunday</en>
 <de>Sonntag</de>
 <id>327</id>
 <ro>Duminică</ro>
+<sl>Nedelja</sl>
 </text>
 <text>
 <en>Monday</en>
 <de>Montag</de>
 <id>328</id>
 <ro>Luni</ro>
+<sl>Ponedeljek</sl>
 </text>
 <text>
 <en>Tuesday</en>
 <de>Dienstag</de>
 <id>329</id>
 <ro>Marţi</ro>
+<sl>Torek</sl>
 </text>
 <text>
 <en>Wednesday</en>
 <de>Mittwoch</de>
 <id>330</id>
 <ro>Miercuri</ro>
+<sl>Sreda</sl>
 </text>
 <text>
 <en>Thursday</en>
 <de>Donnerstag</de>
 <id>331</id>
 <ro>Joi</ro>
+<sl>Četrtek</sl>
 </text>
 <text>
 <en>Friday</en>
 <de>Freitag</de>
 <id>332</id>
 <ro>Vineri</ro>
+<sl>Petek</sl>
 </text>
 <text>
 <en>OK</en>
 <de>OK</de>
 <id>333</id>
 <ro>Ok</ro>
+<sl>OK</sl>
 </text>
 <text>
 <en>Yes</en>
 <de>Ja</de>
 <id>334</id>
 <ro>Da</ro>
+<sl>Da</sl>
 </text>
 <text>
 <en>No</en>
 <de>Nein</de>
 <id>335</id>
 <ro>Da</ro>
+<sl>Ne</sl>
 </text>
 <text>
 <en>Today</en>
 <de>Heute</de>
 <id>336</id>
 <ro>Astăzi</ro>
+<sl>Danes</sl>
 </text>
 <text>
 <en>This date is before the minimum date</en>
 <de>Dieses Datum ist vor dem Mindestdatum</de>
 <id>337</id>
 <ro>Această dată este mai devreme decât data minimă</ro>
+<sl>Ta datum je pred najzgodnejšim datumom.</sl>
 </text>
 <text>
 <en>This date is after the maximum date</en>
 <de>Dieses Datum ist nach dem Maximaldatum</de>
 <id>338</id>
 <ro>Această dată este mai târziu decât data maximă</ro>
+<sl>Ta datum je po najpoznejšem datumu.</sl>
 </text>
 <text>
 <en>Next Month (Control+Right)</en>
 <de>nächstes Monat (Control + ➝)</de>
 <id>339</id>
 <ro>luna următoare (Control + ➝)</ro>
+<sl>Naslednji mesec (Ctrl + ➝)</sl>
 </text>
 <text>
 <en>Previous Month (Control+Left)</en>
 <de>letztes Monat (Control + ←)</de>
 <id>340</id>
 <ro>luna anterioară (Control + ←)</ro>
+<sl>Prejšnji mesec (Ctrl + ←)</sl>
 </text>
 <text>
 <en>Choose a month (Control+Up/Down to move years)</en>
 <de>Wählen Sie ein Monat (Control + ↑/↓ um Jahre zu bewegen)</de>
 <id>341</id>
 <ro>Selectaţi o lună (Control + ↑/↓ pentru a mişca anii)</ro>
+<sl>Izberite mesec (Ctrl + ↑/↓ za prejšnje/naslednje leto)</sl>
 </text>
 <text>
 <en>{0} (Spacebar)</en>
 <de>{0} (Leertaste)</de>
 <id>342</id>
 <ro>{0} (Tasta Space)</ro>
+<sl>{0} (preslednica)</sl>
 </text>
 <text>
 <en>m/d/y</en>
 <de>m/t/j</de>
 <id>343</id>
 <ro>l/z/a</ro>
+<sl>m/d/l</sl>
 </text>
 <text>
 <en>of {0}</en>
 <de>von {0}</de>
 <id>344</id>
 <ro>din {0}</ro>
+<sl>od {0}</sl>
 </text>
 <text>
 <en>First Page</en>
 <de>Erste Seite</de>
 <id>345</id>
 <ro>Prima pagină</ro>
+<sl>Prva stran</sl>
 </text>
 <text>
 <en>Previous Page</en>
 <de>Vorige Seite</de>
 <id>346</id>
 <ro>Pagina anterioară</ro>
+<sl>Prejšnja stran</sl>
 </text>
 <text>
 <en>Next Page</en>
 <de>Nächste Seite</de>
 <id>347</id>
 <ro>Pagina următoare</ro>
+<sl>Naslednja stran</sl>
 </text>
 <text>
 <en>Last Page</en>
 <de>Letzte Seite</de>
 <id>348</id>
 <ro>Ultima pagină</ro>
+<sl>Zadnja stran</sl>
 </text>
 <text>
 <en>Refresh</en>
 <de>Neu laden</de>
 <id>349</id>
 <ro>Reîncarcă</ro>
+<sl>Ponovno naloži</sl>
 </text>
 <text>
 <en>Displaying {0} - {1} of {2}</en>
 <de>Zeige {0} - {1} von {2}</de>
 <id>350</id>
 <ro>Afişează {0} - {1} din {2}</ro>
+<sl>Prikaz {0}–{1} od {2}</sl>
 </text>
 <text>
 <en>No data to display</en>
 <de>Keine Daten zur Anzeige vorhanden</de>
 <id>351</id>
 <ro>Nu există date care să poată fi afişate</ro>
+<sl>Podatki za prikaz niso na voljo.</sl>
 </text>
 <text>
 <en>The minimum length for this field is {0}</en>
 <de>Die Mindestlänge für dieses Feld ist {0}</de>
 <id>352</id>
 <ro>Lungimea minimă pentru acest câmp este {0}</ro>
+<sl>Minimalna dolžina tega polja je {0}.</sl>
 </text>
 <text>
 <en>The maximum length for this field is {0}</en>
 <de>Die Maximallänge für dieses Feld ist {0}</de>
 <id>353</id>
 <ro>Lungimea maximă pentru acest câmp este {0}</ro>
+<sl>Maksimalna dolžina tega polja je {0}.</sl>
 </text>
 <text>
 <en>This field is required</en>
 <de>Dieses Feld ist erforderlich</de>
 <id>354</id>
 <ro>Acest câmp este necesar</ro>
+<sl>To polje je potrebno.</sl>
 </text>
 <text>
 <en>The minimum value for this field is {0}</en>
 <de>Der Mindestwert für dieses Feld ist {0}</de>
 <id>355</id>
 <ro>Valoarea minimă pentru acest câmp este {0}</ro>
+<sl>Minimalna vrednost tega polja je {0}.</sl>
 </text>
 <text>
 <en>The maximum value for this field is {0}</en>
 <de>Der Maximalwert für dieses Feld ist {0}</de>
 <id>356</id>
 <ro>Valoarea maximă pentru acest câmp este {0}</ro>
+<sl>Maksimalna vrednost tega polja je {0}.</sl>
 </text>
 <text>
 <en>{0} is not a valid number</en>
 <de>{0} ist keine gültige Nummer.</de>
 <id>357</id>
 <ro>{0} nu este un număr valid.</ro>
+<sl>Št. {0} ni veljavna.</sl>
 </text>
 <text>
 <en>Disabled</en>
 <de>Ausgeblendet</de>
 <id>358</id>
 <ro>Dezactivat</ro>
+<sl>Skrito</sl>
 </text>
 <text>
 <en>The date in this field must be after {0}</en>
 <de>Das Datum in diesem Feld muss nach dem {0} sein</de>
 <id>359</id>
 <ro>Data din acest câmp trebuie să fie după {0}</ro>
+<sl>Datum v tem polju mora biti poznejši od {0}.</sl>
 </text>
 <text>
 <en>The date in this field must be before {0}</en>
 <de>Das Datum in diesem Feld muss vor dem {0} sein</de>
 <id>360</id>
 <ro>Data din acest câmp trebuie să fie înainte de {0}</ro>
+<sl>Datum v tem polju mora biti zgodnejši od {0}.</sl>
 </text>
 <text>
 <en>{0} is not a valid date - it must be in the format {1}</en>
 <de>{0} ist kein gültiges Datum - es muss im Format {1} sein</de>
 <id>361</id>
 <ro>{0} nu este o dată validă - trebuie să aibă formatul {1}</ro>
+<sl>Datum {0} ni veljaven – biti mora v obliki {1}.</sl>
 </text>
 <text>
 <en>This field should be an e-mail address in the format "user@domain.com"</en>
 <de>Dieses Feld sollte eine E-Mail Adresse im Format "user@domain.com" enthalten.</de>
 <id>362</id>
 <ro>Acest câmp trebuie să conţină o adresă de e-mail de forma "user@domain.com".</ro>
+<sl>To polje mora vsebovati e-naslov v obliki "uporabnik@domena.com".</sl>
 </text>
 <text>
 <en>This field should only contain letters and _</en>
 <de>Dieses Feld sollte nur Zeichen und _ enthalten</de>
 <id>364</id>
 <ro>Acest câmp trebuie să conţină doar litere şi _</ro>
+<sl>To polje sme vsebovati samo črke in _.</sl>
 </text>
 <text>
 <en>This field should only contain letters, numbers and _</en>
 <de>Dieses Feld sollte nur Zeichen, Zahlen und _ enthalten</de>
 <id>365</id>
 <ro>Acest câmp trebuie să conţină doar litere, cifre şi _</ro>
+<sl>To polje sme vsebovati samo črke, številke in _.</sl>
 </text>
 <text>
 <en>Please enter the URL for the link:</en>
 <de>Bitte geben Sie die Webadresse für den Link ein:</de>
 <id>366</id>
 <ro>Vă rugăm să introduceţi adresa de internet a link-ului:</ro>
+<sl>Vnesite spletni naslov za povezavo:</sl>
 </text>
 <text>
 <en>Bold (Ctrl+B)</en>
 <de>Fett (Ctrl+B)</de>
 <id>367</id>
 <ro>Bold (Ctrl+B)</ro>
+<sl>Krepko (Ctrl + B)</sl>
 </text>
 <text>
 <en>Make the selected text bold.</en>
 <de>Schreibt den markierten Text fett.</de>
 <id>368</id>
 <ro>Schimbă formatul textului selectat în bold.</ro>
+<sl>Označi izbrano besedilo kot krepko.</sl>
 </text>
 <text>
 <en>Italic (Ctrl+I)</en>
 <de>Kursiv (Ctrl+I)</de>
 <id>369</id>
 <ro>Italic (Ctrl+I)</ro>
+<sl>Ležeče (Ctrl + I)</sl>
 </text>
 <text>
 <en>Make the selected text italic.</en>
 <de>Schreibt den markierten Text kursiv.</de>
 <id>370</id>
 <ro>Schimbă formatul textului selectat în italic.</ro>
+<sl>Označi izbrano besedilo kot poševno.</sl>
 </text>
 <text>
 <en>Underline (Ctrl+U)</en>
 <de>Unterstreichen (Ctrl+U)</de>
 <id>371</id>
 <ro>Subliniază (Ctrl+U)</ro>
+<sl>Podčrtaj (Ctrl + U)</sl>
 </text>
 <text>
 <en>Underline the selected text.</en>
 <de>Unterstreicht den markierten Text.</de>
 <id>372</id>
 <ro>Subliniază textul selectat.</ro>
+<sl>Podčrtaj izbrano besedilo.</sl>
 </text>
 <text>
 <en>Grow Text</en>
 <de>Text vergrößern.</de>
 <id>373</id>
 <ro>Măreşte textul.</ro>
+<sl>Povečaj velikost pisave.</sl>
 </text>
 <text>
 <en>Increase the font size.</en>
 <de>Die Schriftgröße wird vergrößert.</de>
 <id>374</id>
 <ro>Măreşte fontul.</ro>
+<sl>Velikost pisave je povečana.</sl>
 </text>
 <text>
 <en>Shrink Text</en>
 <de>Text verkleinern.</de>
 <id>375</id>
 <ro>Micşorează textul.</ro>
+<sl>Zmanjšaj velikost pisave.</sl>
 </text>
 <text>
 <en>Decrease the font size.</en>
 <de>Die Schriftgröße wird verkleinern.</de>
 <id>376</id>
 <ro>Micşorează fontul.</ro>
+<sl>Velikost pisave je zmanjšana.</sl>
 </text>
 <text>
 <en>Text Highlight Color</en>
 <de>Text-Hervorheben Farbe.</de>
 <id>377</id>
 <ro>Text-Culoare Highlight</ro>
+<sl>Barva označevanja besedila.</sl>
 </text>
 <text>
 <en>Change the background color of the selected text.</en>
 <de>Wechselt die Hintergund-Farbe des markierten Textes.</de>
 <id>378</id>
 <ro>Schimbă culoarea fondului textului selectat.</ro>
+<sl>Podlaga izbranega besedila se obarva.</sl>
 </text>
 <text>
 <en>Font Color</en>
 <de>Schrift Farbe</de>
 <id>379</id>
 <ro>Culoare font</ro>
+<sl>Barva pisave</sl>
 </text>
 <text>
 <en>Change the color of the selected text.</en>
 <de>Wechselt die Farbe des markierten Textes.</de>
 <id>380</id>
 <ro>Schimbă culoarea textului selectat.</ro>
+<sl>Spremeni barvo izbranega besedila.</sl>
 </text>
 <text>
 <en>Align Text Left</en>
 <de>Text links ausrichten.</de>
 <id>381</id>
 <ro>Alinează textul la stânga.</ro>
+<sl>Besedilo poravnaj levo.</sl>
 </text>
 <text>
 <en>Align text to the left.</en>
 <de>Richtet den Text linksbündig aus.</de>
 <id>382</id>
 <ro>Alinează textul la stânga.</ro>
+<sl>Besedilo poravna na levi strani.</sl>
 </text>
 <text>
 <en>Center Text</en>
 <de>Text zentrieren.</de>
 <id>383</id>
 <ro>Centrează textul.</ro>
+<sl>Besedilo poravnaj na sredino.</sl>
 </text>
 <text>
 <en>Center text in the editor.</en>
 <de>Richtet den Text zentriert aus.</de>
 <id>384</id>
 <ro>Centrează textul.</ro>
+<sl>Besedilo poravna na sredino.</sl>
 </text>
 <text>
 <en>Align Text Right</en>
 <de>Text rechts ausrichten.</de>
 <id>385</id>
 <ro>Alinează textul la dreapta.</ro>
+<sl>Besedilo poravnaj desno.</sl>
 </text>
 <text>
 <en>Align text to the right.</en>
 <de>Richtet den Text rechtsbündig aus.</de>
 <id>386</id>
 <ro>Alinează textul la dreapta.</ro>
+<sl>Besedilo poravna na desni strani.</sl>
 </text>
 <text>
 <en>Bullet List</en>
 <de>Aufzählungsliste</de>
 <id>387</id>
 <ro>Listă cu bullet</ro>
+<sl>Označen seznam</sl>
 </text>
 <text>
 <en>Start a bulleted list.</en>
 <de>Eine Nummerierte Liste</de>
 <id>388</id>
 <ro>O listă cu numerotare</ro>
+<sl>Začni oštevilčen seznam.</sl>
 </text>
 <text>
 <en>Numbered List</en>
 <de>Nummerierte Liste</de>
 <id>389</id>
 <ro>Listă cu numerotare</ro>
+<sl>Oštevilčeni seznam</sl>
 </text>
 <text>
 <en>Start a numbered list.</en>
 <de>Eine Aufzählungsliste beginnen.</de>
 <id>390</id>
 <ro>Începe o listă cu numerotare.</ro>
+<sl>Začni označen seznam.</sl>
 </text>
 <text>
 <en>Make the selected text a hyperlink.</en>
 <de>Erzeugt aus dem markierten Text einen Hyperlink.</de>
 <id>391</id>
 <ro>Generează un hyperlink din textul marcat.</ro>
+<sl>Ustvari povezavo iz izbranega besedila.</sl>
 </text>
 <text>
 <en>Source Edit</en>
 <de>Quellcode editieren</de>
 <id>392</id>
 <ro>Editează codul sursă</ro>
+<sl>Uredi izvorno kodo</sl>
 </text>
 <text>
 <en>Switch to source editing mode.</en>
 <de>Schaltet in den Quellcode-Editier Modus.</de>
 <id>393</id>
 <ro>Comută în modul de editare a codului sursă.</ro>
+<sl>Preklopi v način urejevalnika izvorne kode.</sl>
 </text>
 <text>
 <en>Sort Ascending</en>
 <de>Aufsteigend sortieren</de>
 <id>394</id>
 <ro>Aranjează crescător</ro>
+<sl>Razvrsti naraščajoče</sl>
 </text>
 <text>
 <en>Sort Descending</en>
 <de>Absteigend sortieren</de>
 <id>395</id>
 <ro>Aranjează descrescător</ro>
+<sl>Razvrsti padajoče</sl>
 </text>
 <text>
 <en>Lock Column</en>
 <de>Spalten sperren</de>
 <id>396</id>
 <ro>Blochează coloana</ro>
+<sl>Zakleni stolpce</sl>
 </text>
 <text>
 <en>Unlock Column</en>
 <de>Spalten freigeben</de>
 <id>397</id>
 <ro>Deblochează coloana</ro>
+<sl>Odkleni stolpce</sl>
 </text>
 <text>
 <en>Columns</en>
 <de>Spalten</de>
 <id>398</id>
 <ro>Coloane</ro>
+<sl>Stolpci</sl>
 </text>
 <text>
 <en>(None)</en>
 <de>(Kein)</de>
 <id>399</id>
 <ro>(fără)</ro>
+<sl>(brez)</sl>
 </text>
 <text>
 <en>Group By This Field</en>
 <de>Mit diesem Feld gruppieren</de>
 <id>400</id>
 <ro>Grupează după acest câmp</ro>
+<sl>Združi s tem poljem</sl>
 </text>
 <text>
 <en>Show in Groups</en>
 <de>Gruppiert anzeigen</de>
 <id>401</id>
 <ro>Afişează pe grupuri</ro>
+<sl>Prikaži združeno</sl>
 </text>
 <text>
 <en>Value</en>
 <de>Wert</de>
 <id>402</id>
 <ro>Valoare</ro>
+<sl>Vrednost</sl>
 </text>
 <text>
 <en>Drag to resize.</en>
 <de>Ziehen um die Größe zu verändern.</de>
 <id>403</id>
 <ro>Trageţi pentru a modifica dimensiunea.</ro>
+<sl>Povleci za spremembo velikosti.</sl>
 </text>
 <text>
 <en>Drag to resize. Double click to hide.</en>
 <de>Ziehen um die Größe zu verändern. Doppelt klicken um unsichtabr zu machen.</de>
 <id>404</id>
 <ro>Trageţi pentru a modifica dimensiunea. Dublu-click pentru a ascunde.</ro>
+<sl>Povleci za spremembo velikosti. Dvakrat klikni, da se skrije.</sl>
 </text>
 <text>
 <en>Page tree</en>
 <de>Seitenbaum</de>
 <id>406</id>
 <ro>Structura paginii</ro>
+<sl>Kazalo spletne strani</sl>
 </text>
 <text>
 <en>Language</en>
 <de>Sprache</de>
 <id>408</id>
 <ro>Limba</ro>
+<sl>Jezik</sl>
 </text>
 <text>
 <en>lang</en>
 <de>Spr.</de>
 <id>409</id>
 <ro>limba</ro>
+<sl>Jezik</sl>
 </text>
 <text>
 <en>Paragraphs</en>
 <de>Absätze</de>
 <id>411</id>
 <ro>Paragrafe</ro>
+<sl>Odstavki</sl>
 </text>
 <text>
 <en>Code {0} Error Returned</en>
 <de>Code {0} Fehler</de>
 <id>412</id>
 <ro>Code {0} eroare</ro>
+<sl>Koda napake {0}</sl>
 </text>
 <text>
 <en>Download</en>
 <de>Datei Herunterladen</de>
 <id>413</id>
 <ro>Descarcă fişierul</ro>
+<sl>Prenesi datoteko</sl>
 </text>
 <text>
 <en>Logout</en>
 <de>Abmelden</de>
 <id>414</id>
 <ro>Anulare</ro>
+<sl>Odjava</sl>
 </text>
 <text>
 <en>Line</en>
 <de>Linie</de>
 <id>415</id>
 <ro>Linie</ro>
+<sl>Vrsta</sl>
 </text>
 <text>
 <en>Headline</en>
 <de>Überschrift</de>
 <id>416</id>
 <ro>Titlu</ro>
+<sl>Naslov</sl>
 </text>
 <text>
 <en>Images</en>
 <de>Bilder</de>
 <id>417</id>
 <ro>Imagini</ro>
+<sl>Fotografije</sl>
 </text>
 <text>
 <en>Links</en>
 <de>Links</de>
 <id>418</id>
 <ro>Link-uri</ro>
+<sl>Povezave</sl>
 </text>
 <text>
 <en>Reload</en>
 <de>Neu laden</de>
 <id>421</id>
 <ro>Reîncarcă</ro>
+<sl>Ponovno naloži</sl>
 </text>
 <text>
 <en>Login successful</en>
 <de>Erfolgreich eingeloggt</de>
 <id>423</id>
 <ro>V-aţi autentificat cu succes</ro>
+<sl>Prijava je bila uspešna.</sl>
 </text>
 <text>
 <en>to get back to the formular</en>
 <de>um zum Formular zurück zu gelangen</de>
 <id>427</id>
 <ro>pentru a vă întoarce la formular</ro>
+<sl>Nazaj na obrazec</sl>
 </text>
 <text>
 <en>Show Original</en>
 <de>Original zeigen</de>
 <id>439</id>
 <ro>Arată varianta originală</ro>
+<sl>Prikaži original</sl>
 </text>
 <text>
 <en>Assign</en>
 <de>Zuweisen</de>
 <id>440</id>
 <ro>Atribuire</ro>
+<sl>Pošlji</sl>
 </text>
 <text>
 <en>Assign by text input</en>
 <de>Durch Texteingabe zuweisen</de>
 <id>441</id>
 <ro>Atribuire prin introducere text</ro>
+<sl>Pošlji z vnosom besedila</sl>
 </text>
 <text>
 <en>By</en>
 <de>Von</de>
 <id>444</id>
 <ro>De</ro>
+<sl>Od</sl>
 </text>
 <text>
 <en>Y-m-d</en>
 <de>d.m.Y</de>
 <id>447</id>
 <ro>d.m.Y</ro>
+<sl>d.m.l</sl>
 </text>
 <text>
 <en>Y-m-d H:i</en>
 <de>d.m.Y H:i</de>
 <id>448</id>
 <ro>d.m.Y H:i</ro>
+<sl>d.m.l H:i</sl>
 </text>
 <text>
 <en>no selection</en>
@@ -1825,642 +2102,749 @@ has just been created.</en>
 <id>449</id>
 <ua>обрати</ua>
 <ro>lipsă selecţie</ro>
+<sl>Ni izbrano.</sl>
 </text>
 <text>
 <en>add new entry</en>
 <de>neuen Eintrag hinzufügen</de>
 <id>450</id>
 <ro>adaugă obiect nou</ro>
+<sl>Dodaj nov vnos.</sl>
 </text>
 <text>
 <en>An error has occurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es später wieder.</de>
 <id>454</id>
 <ro>A intervenit o eroare. Vă rugăm să încercaţi din nou mai târziu.</ro>
+<sl>Prišlo je do napake. Poskusite ponovno kasneje.</sl>
 </text>
 <text>
 <en>on</en>
 <de>am</de>
 <id>455</id>
 <ro>în data de</ro>
+<sl>dne</sl>
 </text>
 <text>
 <en>New post in observed thread</en>
 <de>Neuer Beitrag in beobachtetem Thema</de>
 <id>459</id>
 <ro>Post nou pentru subiectul urmărit</ro>
+<sl>Nov prispevek v izbrani temi</sl>
 </text>
 <text>
 <en>You will receive an email with a passwort reset link and further instructions.</en>
 <de>Sie erhalten eine E-Mail mit einem Link, mit dem Sie Ihr Passwort zurücksetzen können.</de>
 <id>464</id>
 <ro>Veţi primi un e-mail cu un link cu care puteţi să schimbaţi parola dumneavoastră.</ro>
+<sl>Prejeli boste e-sporočilo s povezavo, preko katere boste lahko določili novo geslo.</sl>
 </text>
 <text>
 <en>Post</en>
 <de>Beitrag</de>
 <id>465</id>
 <ro>Post</ro>
+<sl>Prispevek</sl>
 </text>
 <text>
 <en>Lost your password?</en>
 <de>Passwort vergessen?</de>
 <id>466</id>
 <ro>Aţi uitat parola?</ro>
+<sl>Pozabljeno geslo</sl>
 </text>
 <text>
 <en>User not existent in this web.</en>
 <de>Dieser Benutzer existiert leider nicht.</de>
 <id>467</id>
 <ro>Din păcate acest utilizator nu există.</ro>
+<sl>Ta uporabnik žal ne obstaja.</sl>
 </text>
 <text>
 <en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
 <de>Bitte bleibt in den Beiträgen bei einem freundlichen Umgangston. Jeder Verfasser haftet für sämtliche von ihm veröffentlichte Beiträge selbst. Beleidigende oder verletzende Beiträge werden von uns ohne Kommentar gelöscht.</de>
 <id>468</id>
 <ro>Vă rugăm să formulaţi comentariile într-un ton politicos. Fiecare autor răspunde de conţinutul tuturor comentariilor sale. Comentariile ofensatoare vor fi şterse fără niciun comentariu. </ro>
+<sl>Vaši prispevki naj bodo spoštljivi. Vsak uporabnik sam jamči za vse prispevke, ki jih je objavil. Prispevke, ki bodo vsebovali nespoštljive in žaljive izjave, bomo brez opozorila odstranili.</sl>
 </text>
 <text>
 <en>Upload</en>
 <de>Hochladen</de>
 <id>476</id>
 <ro>Încarcă</ro>
+<sl>Naloži</sl>
 </text>
 <text>
 <en>Add {0}</en>
 <de>{0} hinzufügen</de>
 <id>477</id>
 <ro>adaugă {0}</ro>
+<sl>Dodaj {0}</sl>
 </text>
 <text>
 <en>Edit {0}</en>
 <de>{0} bearbeiten</de>
 <id>478</id>
 <ro>editează {0}</ro>
+<sl>Uredi {0}</sl>
 </text>
 <text>
 <en>Saving...</en>
 <de>Speichern...</de>
 <id>479</id>
 <ro>Salvează...</ro>
+<sl>Shranjujem ...</sl>
 </text>
 <text>
 <en>Deleting...</en>
 <de>Löschen...</de>
 <id>480</id>
 <ro>Şterge...</ro>
+<sl>Brišem ...</sl>
 </text>
 <text>
 <en>Duplicating...</en>
 <de>Duplizieren</de>
 <id>481</id>
 <ro>Duplicare</ro>
+<sl>Podvoji</sl>
 </text>
 <text>
 <en>empty</en>
 <de>leer</de>
 <id>484</id>
 <ro>gol</ro>
+<sl>Prazno</sl>
 </text>
 <text>
 <en>Upload File</en>
 <de>Datei hochladen</de>
 <id>485</id>
 <ro>Încarcă fişierul</ro>
+<sl>Naloži datoteko</sl>
 </text>
 <text>
 <en>Delete File</en>
 <de>Datei löschen</de>
 <id>486</id>
 <ro>Şterge fişierul</ro>
+<sl>Izbriši datoteko</sl>
 </text>
 <text>
 <en>Uploading file</en>
 <de>Datei wird hochgeladen</de>
 <id>487</id>
 <ro>Se încarcă fişierul</ro>
+<sl>Datoteka se nalaga.</sl>
 </text>
 <text>
 <en>Edit Styles</en>
 <de>Formatvorlagen bearbeiten</de>
 <id>488</id>
 <ro>Editează formatul</ro>
+<sl>Uredi oblikovne predloge</sl>
 </text>
 <text>
 <en>Modify and Create Styles.</en>
 <de>Bearbeiten und erzeugen von Formatvorlagen.</de>
 <id>489</id>
 <ro>Modificare şi creare stiluri.</ro>
+<sl>Urejanje in ustvarjanje oblikovnih predlog.</sl>
 </text>
 <text>
 <en>File upload</en>
 <de>Datei hochladen</de>
 <id>490</id>
 <ro>Încarcă fişierul</ro>
+<sl>Naloži datoteko</sl>
 </text>
 <text>
 <en>Info</en>
 <de>Info</de>
 <id>491</id>
 <ro>Info</ro>
+<sl>Informacije</sl>
 </text>
 <text>
 <en>yyyy-mm-dd</en>
 <de>dd.mm.yyyy</de>
 <id>493</id>
 <ro>dd.mm.yyyy</ro>
+<sl>dd.mm.llll</sl>
 </text>
 <text>
 <en>Margin top</en>
 <de>Abstand oben</de>
 <id>495</id>
 <ro>Margine sus</ro>
+<sl>Rob zgoraj</sl>
 </text>
 <text>
 <en>Margin bottom</en>
 <de>Abstand unten</de>
 <id>496</id>
 <ro>Margine jos</ro>
+<sl>Rob spodaj</sl>
 </text>
 <text>
 <en>Text Align</en>
 <de>Textausrichtung</de>
 <id>497</id>
 <ro>Aliniere text</ro>
+<sl>Poravnava besedila</sl>
 </text>
 <text>
 <en>Center</en>
 <de>Zentriert</de>
 <id>498</id>
 <ro>Centrat</ro>
+<sl>Na sredino</sl>
 </text>
 <text>
 <en>Justify</en>
 <de>Blocksatz</de>
 <id>499</id>
 <ro>Aliniere stânga-dreapta</ro>
+<sl>Poravnaj</sl>
 </text>
 <text>
 <en>Tag</en>
 <de>Tag</de>
 <id>500</id>
 <ro>Tag</ro>
+<sl>Značka</sl>
 </text>
 <text>
 <en>Position</en>
 <de>Position</de>
 <id>501</id>
 <ro>Poziţie</ro>
+<sl>Položaj</sl>
 </text>
 <text>
 <en>Default</en>
 <de>Grundeinstellung</de>
 <id>503</id>
 <ro>Setare implicită</ro>
+<sl>Osnovna nastavitev</sl>
 </text>
 <text>
 <en>Normal</en>
 <de>Normal</de>
 <id>504</id>
 <ro>Normal</ro>
+<sl>Običajno</sl>
 </text>
 <text>
 <en>Normal (p)</en>
 <de>Normal (p)</de>
 <id>505</id>
 <ro>Normal (p)</ro>
+<sl>Običajno (p)</sl>
 </text>
 <text>
 <en>Block-Styles</en>
 <de>Absatz-Formatvorlagen</de>
 <id>512</id>
 <ro>Aliniere-Stiluri predefinite</ro>
+<sl>Oblikovne predloge za odstavek</sl>
 </text>
 <text>
 <en>Block</en>
 <de>Absatz</de>
 <id>513</id>
 <ro>Aliniere</ro>
+<sl>Odstavek</sl>
 </text>
 <text>
 <en>Inline-Styles</en>
 <de>Text-Formatvorlagen</de>
 <id>514</id>
 <ro>Text-Stiluri predefinite</ro>
+<sl>Oblikovne predloge za besedilo</sl>
 </text>
 <text>
 <en>Inline</en>
 <de>Textformat</de>
 <id>515</id>
 <ro>Format text</ro>
+<sl>Oblika besedila</sl>
 </text>
 <text>
 <en>Color</en>
 <de>Farbe</de>
 <id>517</id>
 <ro>Culoare</ro>
+<sl>Barva</sl>
 </text>
 <text>
 <en>Font Weight</en>
 <de>Schriftschnitt</de>
 <id>518</id>
 <ro>Caracteristici font</ro>
+<sl>Pisava</sl>
 </text>
 <text>
 <en>Bold</en>
 <de>Fett</de>
 <id>519</id>
 <ro>Bold</ro>
+<sl>Krepko</sl>
 </text>
 <text>
 <en>Bolder</en>
 <de>Fetter</de>
 <id>520</id>
 <ro>Bold mai accentuat</ro>
+<sl>Ultra krepko</sl>
 </text>
 <text>
 <en>Lighter</en>
 <de>Heller</de>
 <id>521</id>
 <ro>Mai deschis la culoare</ro>
+<sl>Ultra svetlo</sl>
 </text>
 <text>
 <en>Font Family</en>
 <de>Schriftart</de>
 <id>522</id>
 <ro>Tip font</ro>
+<sl>Vrsta pisave</sl>
 </text>
 <text>
 <en>Font size</en>
 <de>Schriftgrad</de>
 <id>523</id>
 <ro>Mărime font</ro>
+<sl>Velikost pisave</sl>
 </text>
 <text>
 <en>Additional Styles</en>
 <de>Zusätzliche CSS Einstellungen</de>
 <id>524</id>
 <ro>Setări CSS suplimentare</ro>
+<sl>Dodatne nastavitve CSS</sl>
 </text>
 <text>
 <en>You can't delete master styles</en>
 <de>Master Formatvorlagen können nicht gelöscht werden</de>
 <id>525</id>
 <ro>Stilurile predefinite de tip master nu pot fi şterse</ro>
+<sl>Sistemskih oblikovnih predlog ni možno izbrisati.</sl>
 </text>
 <text>
 <en>Settings</en>
 <de>Einstellungen</de>
 <id>528</id>
 <ro>Setări</ro>
+<sl>Nastavitve </sl>
 </text>
 <text>
 <en>Link Image</en>
 <de>Bild Link</de>
 <id>533</id>
 <ro>Link imagine</ro>
+<sl>Povezava na sliko</sl>
 </text>
 <text>
 <en>Text Image Link</en>
 <de>Text Bild Link</de>
 <id>535</id>
 <ro>Link text imagine</ro>
+<sl>Povezava na besedilo in sliko</sl>
 </text>
 <text>
 <en>Links Images</en>
 <de>Bilder Links</de>
 <id>536</id>
 <ro>Imagini stânga</ro>
+<sl>Povezave na slike</sl>
 </text>
 <text>
 <en>Months</en>
 <de>Monate</de>
 <id>539</id>
 <ro>Luni</ro>
+<sl>Meseci</sl>
 </text>
 <text>
 <en>Categories</en>
 <de>Kategorien</de>
 <id>541</id>
 <ro>Categorii</ro>
+<sl>Kategorije</sl>
 </text>
 <text>
 <en>Request password</en>
 <de>Passwort anfordern</de>
 <id>543</id>
 <ro>Solicitare parolă</ro>
+<sl>Zahtevaj geslo</sl>
 </text>
 <text>
 <en>Label</en>
 <de>Bezeichnung</de>
 <id>545</id>
 <ro>Denumire</ro>
+<sl>Oznaka</sl>
 </text>
 <text>
 <en>Fieldset</en>
 <de>Fieldset</de>
 <id>546</id>
 <ro>Fieldset</ro>
+<sl>Niz polja</sl>
 </text>
 <text>
 <en>Url</en>
 <de>Internetadresse</de>
 <id>547</id>
 <ro>Adresă web</ro>
+<sl>Spletni naslov</sl>
 </text>
 <text>
 <en>Alpha</en>
 <de>Zeichen</de>
 <id>548</id>
 <ro>Caracter</ro>
+<sl>Črke</sl>
 </text>
 <text>
 <en>Number Field</en>
 <de>Zahlenfeld</de>
 <id>556</id>
 <ro>Câmp numeric</ro>
+<sl>Številčno polje</sl>
 </text>
 <text>
 <en>Text Area</en>
 <de>Textfeld (mehrzeilig)</de>
 <id>557</id>
 <ro>Câmp de tip text (pe mai multe rânduri)</ro>
+<sl>Besedilno polje (večvrstično)</sl>
 </text>
 <text>
 <en>Select Field</en>
 <de>Auswahlfeld</de>
 <id>558</id>
 <ro>Câmp de tip selectare</ro>
+<sl>Izbirno polje</sl>
 </text>
 <text>
 <en>Checkbox</en>
 <de>Kontrollkästchen</de>
 <id>559</id>
 <ro>Checkbox</ro>
+<sl>Potrditveno okence</sl>
 </text>
 <text>
 <en>This is not an image.</en>
 <de>Das ist kein Bild.</de>
 <id>560</id>
 <ro>Aceasta nu este o imagine.</ro>
+<sl>To ni slika.</sl>
 </text>
 <text>
 <en>Text Field</en>
 <de>Textfeld</de>
 <id>561</id>
 <ro>Câmp de tip text</ro>
+<sl>Besedilno polje</sl>
 </text>
 <text>
 <en>Activation link</en>
 <de>Aktivierungslink</de>
 <id>565</id>
 <ro>Link de activare</ro>
+<sl>Aktivacijska povezava</sl>
 </text>
 <text>
 <en>Additional rights</en>
 <de>Zusätzliche Rechte</de>
 <id>566</id>
 <ro>Drepturi suplimentare</ro>
+<sl>Dodatne pravice</sl>
 </text>
 <text>
 <en>Activated</en>
 <de>Aktiviert</de>
 <id>567</id>
 <ro>Activat</ro>
+<sl>Aktivirano</sl>
 </text>
 <text>
 <en>Html</en>
 <de>HTML</de>
 <id>571</id>
 <ro>HTML</ro>
+<sl>HTML</sl>
 </text>
 <text>
 <en>Cannot set Home Page invisible</en>
 <de>Die Home-Seite kann nicht auf unsichtbar gesetzt werden</de>
 <id>575</id>
 <ro>Pagina Home nu poate fi făcută invizibilă</ro>
+<sl>Domače strani ni možno skriti.</sl>
 </text>
 <text>
 <en>Can't delete page as there are child pages.</en>
 <de>Die Seite kann nicht gelöscht werden, da es Unterseiten dazu gibt.</de>
 <id>576</id>
 <ro>Pagina nu poate fi ştearsă pentru că are subpagini.</ro>
+<sl>Te strani ni možno izbrisati, ker vsebuje podstrani.</sl>
 </text>
 <text>
 <en>Hello</en>
 <de>Hallo</de>
 <id>577</id>
 <ro>Bună ziua</ro>
+<sl>Pozdravljeni</sl>
 </text>
 <text>
 <en>A new entry has been written in your guestbook.</en>
 <de>Ein neuer Eintrag wurde in Ihr Gästebuch geschrieben.</de>
 <id>581</id>
 <ro>Un comentariu nou a fost scris în guestbook-ul dumneavoastră.</ro>
+<sl>V vašem nabiralniku je nov vnos.</sl>
 </text>
 <text>
 <en>Here is the Link to your profile:</en>
 <de>Das ist der Link um in Ihr Profil zu gelangen:</de>
 <id>582</id>
 <ro>Acesta este link-ul de accesare a profilului dumneavoastră:</ro>
+<sl>To je povezava za dostop do vašega profila:</sl>
 </text>
 <text>
 <en>This is the text that was saved in your guestbook:</en>
 <de>Das ist der Text der in Ihrem Gästebuch gespeichert wurde:</de>
 <id>583</id>
 <ro>Acesta este textul care a fost salvat în guestbook-ul dumneavoastră:</ro>
+<sl>To je besedilo, ki je shranjeno v vašem nabiralniku:</sl>
 </text>
 <text>
 <en>Click here to go directly to your profile</en>
 <de>Klicken Sie bitte hier um direkt zu Ihrem Profil zu gelangen</de>
 <id>584</id>
 <ro>Vă rugăm să faceţi click aici pentru a accesa direct profilul dumneavoastră</ro>
+<sl>Kliknite tukaj za neposredni dostop do svojega profila</sl>
 </text>
 <text>
 <en>If you did not request this email you may just ignore it and use the login as before.</en>
 <de>Sollten Sie diese Email nicht angefordert haben, ignorieren Sie sie bitte und benutzen Ihr Login wie zuvor.</de>
 <id>586</id>
 <ro>Dacă nu aţi solicitat acest e-mail, vă rugăm să-l ignoraţi şi să folosiţi login-ul la fel ca până acum.</ro>
+<sl>Če tega e-sporočila niste zahtevali, ga ne upoštevajte in svoj račun uporabljajte naprej.</sl>
 </text>
 <text>
 <en>Click here to activate and log in to your Account</en>
 <de>Klicken Sie hier, um Ihren Account zu aktivieren und sich einzuloggen</de>
 <id>587</id>
 <ro>Vă rugăm să faceţi click aici pentru a activa contul dumneavoastră şi pentru a vă autentifica</ro>
+<sl>Kliknite tukaj, če želite aktivirati račun in se prijaviti.</sl>
 </text>
 <text>
 <en>If the activationlink does not work, copy the following address and paste it in your browser (it is possible that the address has a line-break, so please be sure to copy everything correctly):</en>
 <de>Wenn der Aktivierungslink nicht funktioniert, kopieren Sie bitte die folgende Adresse und fügen Sie in Ihrem Browser in der Adresszeile ein (es ist möglich, dass die Adresse umbricht, also stellen Sie bitte sicher, dass Sie alles korrekt kopiert haben):</de>
 <id>588</id>
 <ro>În cazul în care link-ul de activare nu funcţionează, vă rugăm să copiaţi următoarea adresă şi să o inseraţi în browser-ul dumneavoastră (este posibil ca adresa să conţină mai multe rânduri, de accea, vă rugăm să aveţi grijă să fie copiat integral):</ro>
+<sl>Če aktivacijska povezava ne deluje, skopirajte naslednji naslov in ga prilepite v naslovno vrstico brskalnika (naslov je lahko v več vrsticah, zato se prepričajte, da ste vse pravilno kopirali):</sl>
 </text>
 <text>
 <en>Your email address at {0} has been changed.</en>
 <de>Ihre Email Adresse auf {0} wurde geändert.</de>
 <id>589</id>
 <ro>Adresa dumneavoastră de e-mail pentru {0} a fost modificată.</ro>
+<sl>Vaš e-naslov na {0} je bil spremenjen.</sl>
 </text>
 <text>
 <en>Not Found</en>
 <de>Nicht gefunden</de>
 <id>591</id>
 <ro>Nu a fost găsit</ro>
+<sl>Iskanega ni bilo možno najti.</sl>
 </text>
 <text>
 <en>The requested URL "{0}" was not found on this server.</en>
 <de>Die Adresse "{0}" konnte nicht gefunden werden.</de>
 <id>592</id>
 <ro>Adresa "{0}" nu a fost găsită.</ro>
+<sl>Naslova "{0}" ni bilo možno najti.</sl>
 </text>
 <text>
 <en>Version</en>
 <de>Version</de>
 <id>593</id>
 <ro>Versiune</ro>
+<sl>Verzija</sl>
 </text>
 <text>
 <en>Password</en>
 <de>Passwort</de>
 <id>594</id>
 <ro>Parola</ro>
+<sl>Geslo</sl>
 </text>
 <text>
 <en>Your old email address was {0}, the new one is {1}</en>
 <de>Ihre alte Email Adresse war {0}, die neue ist {1}</de>
 <id>599</id>
 <ro>Vechea dumneavoastră adresă de e-mail a fost {0}, noua adresă este {1}</ro>
+<sl>Vaš stari e-naslov je bil {0}, novi je {1}.</sl>
 </text>
 <text>
 <en>This email has been generated using the lost password function at {0}</en>
 <de>Diese Email wurde von der Passwort vergessen Funktion auf {0} generiert.</de>
 <id>600</id>
 <ro>Acest e-mail afost generat de funcţia "Aţi uitat parola?" de la {0}.</ro>
+<sl>To e-sporočilo je bilo generirano na osnovi funkcije pozabljenega gesla na {0} .</sl>
 </text>
 <text>
 <en>Click here to choose a new password</en>
 <de>Klicken Sie hier, um ein neues Passwort zu wählen</de>
 <id>601</id>
 <ro>Vă rugăm să faceţi click aici pentru a alege o parolă nouă</ro>
+<sl>Kliknite tukaj, da izberete novo geslo.</sl>
 </text>
 <text>
 <en>Already activated</en>
 <de>Bereits aktiviert</de>
 <id>602</id>
 <ro>Este deja activat</ro>
+<sl>Že aktivirano</sl>
 </text>
 <text>
 <en>Activate / Login</en>
 <de>Aktivieren / Einloggen</de>
 <id>604</id>
 <ro>Activare/Logare</ro>
+<sl>Aktiviranje/prijava</sl>
 </text>
 <text>
 <en>Passwords not equal</en>
 <de>Passwörter unterschiedlich</de>
 <id>605</id>
 <ro>Parolele sunt diferite</ro>
+<sl>Gesli se ne ujemata.</sl>
 </text>
 <text>
 <en>Activation link sent to email address.</en>
 <de>Aktivierungslink wurde zur Email-Adresse gesendet.</de>
 <id>607</id>
 <ro>Link-ul de activare a fost trimis la adresa de e-mail.</ro>
+<sl>Aktivacijska povezava je bila poslana na e-naslov.</sl>
 </text>
 <text>
 <en>Error sending the mail.</en>
 <de>Fehler beim senden der Email.</de>
 <id>608</id>
 <ro>Eroare la trimiterea e-mail-ului.</ro>
+<sl>Napaka pri pošiljanju e-sporočila.</sl>
 </text>
 <text>
 <en>Open in</en>
 <de>Öffnen im</de>
 <id>612</id>
 <ro>Deschide în</ro>
+<sl>Odpri v</sl>
 </text>
 <text>
 <en>Own window</en>
 <de>Selben Fenster</de>
 <id>613</id>
 <ro>Aceeaşi fereastră</ro>
+<sl>tem oknu</sl>
 </text>
 <text>
 <en>New window</en>
 <de>Neuen Fenster</de>
 <id>614</id>
 <ro>Fereastră nouă</ro>
+<sl>novem oknu</sl>
 </text>
 <text>
 <en>Popup</en>
 <de>Popup</de>
 <id>615</id>
 <ro>Popup</ro>
+<sl>Pojavno okno</sl>
 </text>
 <text>
 <en>Linktext</en>
 <de>Linktext</de>
 <id>616</id>
 <ro>Text link</ro>
+<sl>Besedilo povezave</sl>
 </text>
 <text>
 <en>Invalid Password</en>
 <de>Ungültiges Passwort</de>
 <id>617</id>
 <ro>Parolă invalidă</ro>
+<sl>Neveljavno geslo</sl>
 </text>
 <text>
 <en>Bestfit</en>
 <de>Anpassen</de>
 <id>619</id>
 <ro>Adaptare</ro>
+<sl>Prilagodi</sl>
 </text>
 <text>
 <en>Crop</en>
 <de>Abschneiden</de>
 <id>620</id>
 <ro>Taie</ro>
+<sl>Odreži</sl>
 </text>
 <text>
 <en>Deform</en>
 <de>Verformen</de>
 <id>621</id>
 <ro>Deformează</ro>
+<sl>Preoblikuj</sl>
 </text>
 <text>
 <en>Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?</en>
 <de>Aktivierungscode ist ungültig. Vielleicht wurde Ihr Account bereits aktiviert, oder die URL wurde nicht vollständig kopiert, oder Ihr Passwort wurde bereits gesetzt?</de>
 <id>622</id>
 <ro>Codul de activare este invalid. Este posibil ca URL-ul să nu fi fost copiat complet sau contul dumneavoastră să fi fost deja activat sau parola dumneavoastră să fi fost deja setată?</ro>
+<sl>Aktivacijska koda ni veljavna. Morda je bil vaš račun že aktiviran ali niste v celoti kopirali URL ali ste geslo že določili?</sl>
 </text>
 <text>
 <en>Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.</en>
 <de>Ihr Account ist aktiv und das Passwort wurde bereits gesetzt. {2} {0}Klicken Sie hier{1}, um in den Admin-Bereich zu gelangen.</de>
 <id>623</id>
 <ro>Contul dumneavoastră este activ şi parola a fost deja introdusă. {2} {0}Faceţi click aici{1}, pentru a accesa secţiunea Admin.</ro>
+<sl>Vaš račun je aktiven in geslo je bilo že določeno. {2} {0}Kliknite tukaj {1}, da pridete do administratorja.</sl>
 </text>
 <text>
 <en>en_US</en>
 <de>de_DE</de>
 <id>624</id>
 <ro>ro_RO</ro>
+<sl>sl_SL</sl>
 </text>
 <text>
 <en>Offline hidden Html</en>
 <de>Offline verstecktes Html</de>
 <id>630</id>
 <ro>Html ascuns off-line</ro>
+<sl>brez spletne povezave skrit HTML</sl>
 </text>
 <text>
 <en>Feed</en>
 <de>Feed</de>
 <id>631</id>
 <ro>Feed</ro>
+<sl>Vir </sl>
 </text>
 <text>
 <en>Posts</en>
 <de>Beiträge</de>
 <id>635</id>
 <ro>Postări</ro>
+<sl>Prispevki</sl>
 </text>
 <text>
 <en>reply</en>
@@ -2469,12 +2853,15 @@ has just been created.</en>
 <de_plural>Antworten</de_plural>
 <id>637</id>
 <ro>Răspuns</ro>
+<sl_plural>Odgovori</sl_plural>
+<sl>Odgovor</sl>
 </text>
 <text>
 <en>Comment was successfully reported.</en>
 <de>Der Kommentar wurde erfolgreich gemeldet.</de>
 <id>641</id>
 <ro>Comentariul a fost raportat cu succes.</ro>
+<sl>Komentar je bil uspešno prijavljen.</sl>
 </text>
 <text>
 <en>The form has been submitted successfully.</en>
@@ -2484,300 +2871,353 @@ has just been created.</en>
 <id>651</id>
 <ua>Ваш лист було успішно відправлено.</ua>
 <ro>Formularul a fost trimis cu succes.</ro>
+<sl>Obrazec je bil uspešno poslan.</sl>
 </text>
 <text>
 <en>Search engine referer</en>
 <de>Suchmaschinenverweiser</de>
 <id>655</id>
 <ro>Referer motor căutare</ro>
+<sl>Opozorilnik iskalnika </sl>
 </text>
 <text>
 <en>Write</en>
 <de>schreiben</de>
 <id>656</id>
 <ro>scrie</ro>
+<sl>Piši</sl>
 </text>
 <text>
 <en>Open the post or read it directly:</en>
 <de>Kommentar öffnen oder direkt lesen:</de>
 <id>658</id>
 <ro>Deschide şi citeşte direct comentariul:</ro>
+<sl>Odpri komentar in ga takoj preberi:</sl>
 </text>
 <text>
 <en>Please enter a reason for reporting this Post</en>
 <de>Bitte geben sie einen Grund an, warum dieser Kommentar gemeldet werden soll</de>
 <id>659</id>
 <ro>Vă rugăm să introduceţi un motiv pentru care raportaţi acest comentariu</ro>
+<sl>Navedite razlog za prijavo tega komentarja.</sl>
 </text>
 <text>
 <en>A post has been reported</en>
 <de>Ein Kommentar wurde gemeldet</de>
 <id>660</id>
 <ro>A fost raportat un comentariu</ro>
+<sl>Komentar je bil prijavljen.</sl>
 </text>
 <text>
 <en>Open this url to go to the post or read it here:</en>
 <de>Öffnen sie diesem Link um zum Kommentar zu gelangen oder lesen sie ihn hier:</de>
 <id>662</id>
 <ro>Accesaţi acest link pentru a accesa comentariul sau citiţi-l aici:</ro>
+<sl>Odpri to povezavo, da prideš do komentarja, ali ga preberi tukaj:</sl>
 </text>
 <text>
 <en>report</en>
 <de>melden</de>
 <id>663</id>
 <ro>raportează</ro>
+<sl>Prijavi</sl>
 </text>
 <text>
 <en>quote</en>
 <de>zitieren</de>
 <id>664</id>
 <ro>citează</ro>
+<sl>Citiraj</sl>
 </text>
 <text>
 <en>confirmed</en>
 <de>bestätigt</de>
 <id>665</id>
 <ro>confirmat</ro>
+<sl>Potrdi</sl>
 </text>
 <text>
 <en>Comment was successfully deleted.</en>
 <de>Der Eintrag wurde erfolgreich gelöscht.</de>
 <id>666</id>
 <ro>Comentariul a fost şters.</ro>
+<sl>Vnos je bil uspešno izbrisan.</sl>
 </text>
 <text>
 <en>Do you really want to delete this post?</en>
 <de>Wollen Sie den Eintrag wirklich löschen?</de>
 <id>667</id>
 <ro>Sunteţi sigur că doriţi să ştergeţi această postare?</ro>
+<sl>Ali ste prepričani, da želite izbrisati vnos?</sl>
 </text>
 <text>
 <en>&lt;strong&gt;Create Post: &lt;/strong&gt;&lt;br /&gt;Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
 <de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
 <id>668</id>
 <ro>&lt;strong&gt;Creează mesaj: &lt;/strong&gt;&lt;br /&gt;Vă rugăm să introduceţi textul dorit. HTML nu este permis şi va fi filtrat. Link-urile de forma http://... sau www.... vor fi recunoscute automat şi va fi creată legătura automat.</ro>
+<sl>&lt;strong&gt;Napišite sporočilo: &lt;/strong&gt;&lt;br /&gt;Vnesite želeno besedilo. HTML ni dovoljen in bo filtriran. Sistem avtomatsko zazna povezave v obliki http://... ali www.... in vzpostavi povezavo do njih.</sl>
 </text>
 <text>
 <en>Last Posts</en>
 <de>Letzte Aktivitäten</de>
 <id>669</id>
 <ro>Ultimele post-uri</ro>
+<sl>Zadnje aktivnosti</sl>
 </text>
 <text>
 <en>News.Top</en>
 <de>News.Aktuelle</de>
 <id>670</id>
 <ro>Ştiri.Actual</ro>
+<sl>Novice.Aktualne</sl>
 </text>
 <text>
 <en>News.Show categories</en>
 <de>News.Zeige Kategorien</de>
 <id>671</id>
 <ro>Ştiri.Arată categoriile</ro>
+<sl>Novice.Prikaži kategorije</sl>
 </text>
 <text>
 <en>After the activation you are automatically logged in and you could use your account.</en>
 <de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie können Ihr Konto verwenden.</de>
 <id>672</id>
 <ro>După activare veţi fi autentificat automat şi veţi putea utiliza contul dumneavoastră.</ro>
+<sl>Po aktivaciji ste avtomatsko prijavljeni in lahko uporabljate svoj račun.</sl>
 </text>
 <text>
 <en>Guestbook</en>
 <de>Gästebuch</de>
 <id>673</id>
 <ro>Guestbook</ro>
+<sl>Nabiralnik</sl>
 </text>
 <text>
 <en>Gallery</en>
 <de>Bildergalerie</de>
 <id>674</id>
 <ro>Galerie imagini</ro>
+<sl>Galerija slik</sl>
 </text>
 <text>
 <en>Userprofile</en>
 <de>Benutzerprofil</de>
 <id>675</id>
 <ro>Profil utilizator</ro>
+<sl>Uporabniški profil</sl>
 </text>
 <text>
 <en>General</en>
 <de>Allgemein</de>
 <id>676</id>
 <ro>General</ro>
+<sl>Splošno</sl>
 </text>
 <text>
 <en>Avatar</en>
 <de>Profilbild</de>
 <id>677</id>
 <ro>Poză profil</ro>
+<sl>Slika profila</sl>
 </text>
 <text>
 <en>Place of living</en>
 <de>Wohnort</de>
 <id>678</id>
 <ro>Localitatea de domiciliu</ro>
+<sl>Kraj bivanja</sl>
 </text>
 <text>
 <en>Nickname</en>
 <de>Name für Forum</de>
 <id>679</id>
 <ro>Nickname</ro>
+<sl>Ime za forum</sl>
 </text>
 <text>
 <en>Short Description</en>
 <de>Kurze Beschreibung</de>
 <id>680</id>
 <ro>Scurtă descriere</ro>
+<sl>Kratek opis</sl>
 </text>
 <text>
 <en>Register</en>
 <de>Registrieren</de>
 <id>681</id>
 <ro>Înregistrează</ro>
+<sl>Registriraj se</sl>
 </text>
 <text>
 <en>Lost Password</en>
 <de>Passwort vergessen</de>
 <id>682</id>
 <ro>Am uitat parola</ro>
+<sl>Pozabljeno geslo</sl>
 </text>
 <text>
 <en>Activate</en>
 <de>aktivieren</de>
 <id>683</id>
 <ro>activează</ro>
+<sl>Aktiviraj</sl>
 </text>
 <text>
 <en>An account for the address '%value%' doesn't exist</en>
 <de>Es existiert kein Account mit der E-Mail-Adresse '%value%'</de>
 <id>684</id>
 <ro>Nu există niciun cont pentru adresa de e-mail '%value%'</ro>
+<sl>Račun z e-naslovm '%value%' ne obstaja.</sl>
 </text>
 <text>
 <en>Your Account has been created successfully. You will receive an confirmation e-mail soon.</en>
 <de>Ihr Account wurde erfolgreich erstellt.Sie erhalten in Kürze eine Email mit einem Aktivierungslink.Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.</de>
 <id>685</id>
 <ro>Contul dumneavoastră a fost creat cu succes. Veţi primi în scurt timp un e-mail de confirmare.</ro>
+<sl>Vaš račun je bil uspešno ustvarjen.
+V kratkem boste prejeli e-sporočilo z aktivacijsko povezavo.
+Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v prihodnje uporabljali za dostop do svojega računa.
+</sl>
 </text>
 <text>
 <en>create account</en>
 <de>Account erstellen</de>
 <id>686</id>
 <ro>Creează cont</ro>
+<sl>Ustvari račun</sl>
 </text>
 <text>
 <en>edit account</en>
 <de>Speichern</de>
 <id>687</id>
 <ro>Salvează/editează</ro>
+<sl>Shrani</sl>
 </text>
 <text>
 <en>My Profile</en>
 <de>Mein Profil</de>
 <id>690</id>
 <ro>Profilul meu</ro>
+<sl>Mein Profil</sl>
 </text>
 <text>
 <en>Lost password</en>
 <de>Passwort vergessen</de>
 <id>691</id>
 <ro>Am uitat parola</ro>
+<sl>Pozabljeno geslo</sl>
 </text>
 <text>
 <en>Logged In</en>
 <de>Eingeloggt</de>
 <id>692</id>
 <ro>Autentificat</ro>
+<sl>Prijavljen</sl>
 </text>
 <text>
 <en>You have been logged in sucessfully.</en>
 <de>Sie wurden erfolgreich eingeloggt.</de>
 <id>693</id>
 <ro>Aţi fost autentificat cu succes.</ro>
+<sl>Prijava je bila uspešna.</sl>
 </text>
 <text>
 <en>If the needed page doesn't load automatically,</en>
 <de>Falls die Seite nicht automatisch neu geladen wird</de>
 <id>694</id>
 <ro>În cazul în care pagina nu se încarcă automat</ro>
+<sl>Če se stran ne naloži avtomatsko,</sl>
 </text>
 <text>
 <en>please click here</en>
 <de>bitte hier klicken</de>
 <id>695</id>
 <ro>vă rugăm să faceţi click aici</ro>
+<sl>kliknite tukaj</sl>
 </text>
 <text>
 <en>Invalid E-Mail or password, please try again.</en>
 <de>E-Mail oder Passwort falsch, bitte versuchen Sie es nochmal.</de>
 <id>696</id>
 <ro>E-mail sau parolă invalidă, vă rugăm să mai încercaţi încă o dată.</ro>
+<sl>E-naslov ali geslo nista pravilna, poskusite ponovno.</sl>
 </text>
 <text>
 <en>Please login</en>
 <de>Bitte loggen Sie sich ein</de>
 <id>697</id>
 <ro>Vă rugăm să vă autentificaţi</ro>
+<sl>Prijavite se.</sl>
 </text>
 <text>
 <en>You have to login to see the requested page.</en>
 <de>Sie müssen sich einloggen, um die gewünschte Seite zu sehen.</de>
 <id>698</id>
 <ro>Trebuie să vă autentificaţi pentru a vedea pagina dorită.</ro>
+<sl>Za ogled želene strani morate biti prijavljeni.</sl>
 </text>
 <text>
 <en>If you don't have an account, you can</en>
 <de>Sollten Sie noch kein Benutzerkonto besitzen, können Sie</de>
 <id>699</id>
 <ro>Dacă nu deţineţi încă un cont de utilizator, puteţi să</ro>
+<sl>Če še nimate uporabniškega računa, lahko</sl>
 </text>
 <text>
 <en>register here</en>
 <de>kostenlos ein neues Benutzerkonto anlegen</de>
 <id>700</id>
 <ro>vă înregistraţi gratuit aici</ro>
+<sl>brezplačno odprete nov uporabniški račun.</sl>
 </text>
 <text>
 <en>Show</en>
 <de>Zeigen</de>
 <id>701</id>
 <ro>Afişează</ro>
+<sl>Prikaži</sl>
 </text>
 <text>
 <en>This category can't be deleted, because there exist sub-categories in it.</en>
 <de>Diese Kategorie kann nicht entfernt werden, da Unterkategorie existieren.</de>
 <id>702</id>
 <ro>Această categorie nu pote fi ştearsă, deoarece are subcategorii.</ro>
+<sl>Te kategorije ni možno izbrisati, ker vsebuje podkategorije.</sl>
 </text>
 <text>
 <en>Delete Entry</en>
 <de>Eintrag löschen</de>
 <id>703</id>
 <ro>Şterge înregistrarea</ro>
+<sl>Izbriši vnos</sl>
 </text>
 <text>
 <en>Show field</en>
 <de>Zeige Feld</de>
 <id>705</id>
 <ro>Afişează câmpul</ro>
+<sl>Prikaži polje</sl>
 </text>
 <text>
 <en>repeat {0}</en>
 <de>{0} wiederholen</de>
 <id>706</id>
 <ro>repetă {0}</ro>
+<sl>Ponovi {0}</sl>
 </text>
 <text>
 <en>Radio Buttons</en>
 <de>Optionsfelder</de>
 <id>707</id>
 <ro>Câmpuri opţiuni</ro>
+<sl>Opcijska polja</sl>
 </text>
 <text>
 <en>Permissions</en>
 <de>Berechtigungen</de>
 <id>708</id>
 <ro>Drepturi</ro>
+<sl>Pravice</sl>
 </text>
 <text>
 <en>Please fill out the field</en>
@@ -2786,18 +3226,21 @@ has just been created.</en>
 <ru>Пожалуйста, заполните поля</ru>
 <id>709</id>
 <ro>Vă rugăm să completaţi câmpul</ro>
+<sl>Izpolnite polje</sl>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
 <de>'%value%' beinhaltet unerlaubte Zeichen</de>
 <id>710</id>
 <ro>'%value%' conţine caractere nepermise</ro>
+<sl>%value%' vsebuje nedovoljene znake.</sl>
 </text>
 <text>
 <en>'%value%' is an empty string</en>
 <de>'%value%' ist eine leere Zeichenkette</de>
 <id>711</id>
 <ro>'%value%' este un string gol</ro>
+<sl>%value%' je prazen niz znakov.</sl>
 </text>
 <text>
 <en>'%value%' is not a valid email address</en>
@@ -2807,72 +3250,84 @@ has just been created.</en>
 <id>712</id>
 <ua>'%value%' некоректно введена адреса електронної пошти</ua>
 <ro>'%value%' nu este o adresă validă de e-mail.</ro>
+<sl>%value%' ni veljaven e-naslov.</sl>
 </text>
 <text>
 <en>'%hostname%' is not a valid hostname for email address '%value%'</en>
 <de>'%hostname%' ist kein gültiger Hostname</de>
 <id>713</id>
 <ro>'%hostname%' nu este un hostname valid.</ro>
+<sl>%hostname%' ni veljavno ime gostitelja.</sl>
 </text>
 <text>
 <en>'%hostname%' does not appear to have a valid MX record for the email address '%value%'</en>
 <de>'%hostname%' erscheint nicht in einem validen MX record für die E-Mail-Adresse '%value%'</de>
 <id>714</id>
 <ro>'%hostname%' nu apare într-un MX record valid pentru adresa de e-mail '%value%'</ro>
+<sl>%hostname%' ni v obliki veljavnega zapisa MX za e-naslov '%value%'.</sl>
 </text>
 <text>
 <en>'%localPart%' not matched against dot-atom format</en>
 <de>'%localPart%' stimmt nicht mit dem dot-atom Format überein</de>
 <id>715</id>
 <ro>'%localPart%' nu corespunde formatului dot-atom</ro>
+<sl>%localPart%' se ne ujema s formatom dot-atom.</sl>
 </text>
 <text>
 <en>'%localPart%' not matched against quoted-string format</en>
 <de>'%localPart%'stimmt nicht mit dem quoted-string Format überein</de>
 <id>716</id>
 <ro>'%localPart%' nu corespunde formatului quoted-string</ro>
+<sl>%localPart%' se ne ujema s formatom quoted-string.</sl>
 </text>
 <text>
 <en>'%localPart%' is not a valid local part for email address '%value%'</en>
 <de>%localPart%' ist kein valider lokaler Teil für die E-Mail-Adresse '%value%'</de>
 <id>717</id>
 <ro>%localPart%' nu este este o parte locală validă pentru adresa de e-mail '%value%'</ro>
+<sl>%localPart%' ni veljaven lokalni del e-naslova '%value%'.</sl>
 </text>
 <text>
 <en>'%value%' has not only alphabetic characters</en>
 <de>'%value%' besteht nur aus Buchstaben</de>
 <id>718</id>
 <ro>'%value%' conţine doar litere</ro>
+<sl>%value%' je sestavljen samo iz črk.</sl>
 </text>
 <text>
 <en>Useraccount created</en>
 <de>Account erfolgreich erstellt</de>
 <id>720</id>
 <ro>Cont creat cu succes</ro>
+<sl>Račun je bil uspešno ustvarjen.</sl>
 </text>
 <text>
 <en>lost password</en>
 <de>Passwort vergessen</de>
 <id>721</id>
 <ro>Am uitat parola</ro>
+<sl>Pozabljeno geslo</sl>
 </text>
 <text>
 <en>Email changed</en>
 <de>E-Mail-Adresse geändert</de>
 <id>722</id>
 <ro>Adresa de e-mail a fost schimbată</ro>
+<sl>E-naslov je bil spremenjen.</sl>
 </text>
 <text>
 <en>Account deleted</en>
 <de>Account gelöscht</de>
 <id>723</id>
 <ro>Cont şters</ro>
+<sl>Račun je bil izbrisan.</sl>
 </text>
 <text>
 <en>H:i</en>
 <de>H:i</de>
 <id>724</id>
 <ro>H:i</ro>
+<sl>H:i</sl>
 </text>
 <text>
 <context>time</context>
@@ -2880,6 +3335,7 @@ has just been created.</en>
 <de>Am</de>
 <id>725</id>
 <ro>În data de</ro>
+<sl>Dne</sl>
 </text>
 <text>
 <context>time</context>
@@ -2887,132 +3343,154 @@ has just been created.</en>
 <de>um</de>
 <id>726</id>
 <ro>la</ro>
+<sl>ob</sl>
 </text>
 <text>
 <en>Edit Post</en>
 <de>Kommentar bearbeiten</de>
 <id>731</id>
 <ro>Editare comentariu</ro>
+<sl>Uredi komentar</sl>
 </text>
 <text>
 <en>a post has been reported for the following reason:</en>
 <de>Ein Kommentar wurde aus folgenden Gründen gemeldet:</de>
 <id>732</id>
 <ro>A fost raportat un comentariu din următoarele motive:</ro>
+<sl>Razlogi za prijavo komentarja:</sl>
 </text>
 <text>
 <en>You were logged in, automatically</en>
 <de>Sie wurden automatisch eingeloggt</de>
 <id>733</id>
 <ro>Aţi fost autentificat automat</ro>
+<sl>Vaša prijava se je izvedla avtomatsko.</sl>
 </text>
 <text>
 <en>Activate Account</en>
 <de>Account aktivieren</de>
 <id>734</id>
 <ro>Activează contul</ro>
+<sl>Aktiviraj račun</sl>
 </text>
 <text>
 <en>Data was not sent completely. Please copy the complete address out of the email.</en>
 <de>Daten wurden nicht vollständig gesendet. Bitte kopieren Sie die vollständige Adresse aus der E-Mail.</de>
 <id>735</id>
 <ro>Datele nu au fost trimise complet. Vă rugăm să copiaţi adresa completă din e-mail.</ro>
+<sl>Podatki niso bili v celoti poslani. Kopirajte celotni naslov iz e-sporočila.</sl>
 </text>
 <text>
 <en>Please type in your {0} email address in the field below.</en>
 <de>Bitte geben sie ihre {0} E-Mail Adresse im Feld darunter ein.</de>
 <id>737</id>
 <ro>Vă rugăm să introduceţi adresa dumneavoastră {0} de e-mail în câmpul de mai jos.</ro>
+<sl>Vnesite svoj {0} e-naslov v spodnje polje.</sl>
 </text>
 <text>
 <en>Auto Login</en>
 <de>Eingeloggt bleiben</de>
 <id>738</id>
 <ro>Rămâneţi autentificat</ro>
+<sl>Ostani prijavljen</sl>
 </text>
 <text>
 <en>Current category:</en>
 <de>Aktuelle Kategorie:</de>
 <id>739</id>
 <ro>Categorie actuală:</ro>
+<sl>Trenutno izbrana kategorija:</sl>
 </text>
 <text>
 <en>Search term</en>
 <de>Suchbegriff</de>
 <id>740</id>
 <ro>Text căutare</ro>
+<sl>Iskani pojem</sl>
 </text>
 <text>
 <en>Please type at least two characters.</en>
 <de>Bitte geben sie mindestens 2 Zeichen ein.</de>
 <id>741</id>
 <ro>Vă rugăm să introduceţi cel puţin 2 caractere.</ro>
+<sl>Vnesite najmanj 2 znaka.</sl>
 </text>
 <text>
 <en>With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
 <de>Mit einem kostenlosen Benutzerkonto auf "{0}" können Sie aktiv am Forum teilnehmen und eigene Beiträge verfassen. Zusätzlich haben Sie die Möglichkeit, einzelne Diskussionen gezielt zu beobachten und werden per E-Mail über neue Beiträge zum Thema informiert.</de>
 <id>743</id>
 <ro>Cu un cont gratuit pe "{0}", puteţi să participaţi activ la discuţiile forumului şi să scrieţi propriile postări. Mai mult, aveţi posibilitatea de a urmări diferite discuţii, putând fi informat prin e-mail atunci când apar noi postări pentru un anumit subiect.</ro>
+<sl>Z brezplačnim uporabniškim računom na "{0}" lahko aktivno sodelujete na forumu in objavljate lastne prispevke. Poleg tega lahko načrtno spremljate posamezne diskusije in prejemate e-sporočila o novih prispevkih k izbrani temi.</sl>
 </text>
 <text>
 <en>'%value%' is less than %min% characters long</en>
 <de>'%value%' ist kürzer als %min% Zeichen</de>
 <id>745</id>
 <ro>'%value%' are sub %min% caractere</ro>
+<sl>%value%' je krajše od %min% znakov.</sl>
 </text>
 <text>
 <en>'%value%' is greater than %max% characters long</en>
 <de>'%value%' ist länger als %max% Zeichen</de>
 <id>746</id>
 <ro>'%value%' are peste %max% caractere</ro>
+<sl>%value%' je daljše od %max% znakov.</sl>
 </text>
 <text>
 <en>'%value%' appears to be an IP address, but IP addresses are not allowed</en>
 <de>'%value%' scheint eine IP-Adresse zu sein, aber IP-Adressen sind nicht erlaubt</de>
 <id>747</id>
 <ro>'%value%' pare a fi o adresă IP, dar adresele IP nu sunt permise</ro>
+<sl>%value%' je naslov IP. Naslovi IP niso dovoljeni.</sl>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot match TLD against known list</en>
 <de>'%value%' stimmt nicht mit der TLD Liste überein</de>
 <id>748</id>
 <ro>'%value%' nu corespunde listei TLD</ro>
+<sl>%value%' se ne ujema s shemo za TLD.</sl>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position</en>
 <de>'%value%' hat einen Bindestrich (-) an einer ungültigen Position</de>
 <id>749</id>
 <ro>'%value%' conţine o cratimă (-) într-o poziţie invalidă</ro>
+<sl>%value%' vsebuje vezaj (-) na nedovoljenem mestu.</sl>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'</en>
 <de>'%value%' stimmt nicht mit dem Schema für TLD '%tld%' überein</de>
 <id>750</id>
 <ro>'%value%' nu corespunde cu schema pentru TLD '%tld%'</ro>
+<sl>%value%' se ne ujema s shemo TLD '%tld%'.</sl>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot extract TLD part</en>
 <de>'%value%' kann den TLD Teil nicht extrahieren</de>
 <id>751</id>
 <ro>'%value%' nu poate să extragă partea TLD</ro>
+<sl>%value%' ne more ekstrahirati dela TLD.</sl>
 </text>
 <text>
 <en>'%value%' does not match the expected structure for a DNS hostname</en>
 <de>'%value%' hat keine richtige DNS-Hostname Struktur</de>
 <id>752</id>
 <ro>'%value%' nu are o structură corectă DNS-Hostname</ro>
+<sl>%value%' nima pravilne strukture imena gostitelja DNS.</sl>
 </text>
 <text>
 <en>'%value%' does not appear to be a valid local network name</en>
 <de>'%value%' scheint kein gültiger Netzwerkname zu sein</de>
 <id>753</id>
 <ro>'%value%' pare a nu fi o denumire de reţea validă</ro>
+<sl>%value%' ni veljavno ime omrežja.</sl>
 </text>
 <text>
 <en>'%value%' appears to be a local network name but local network names are not allowed</en>
 <de>'%value%' scheint ein lokaler Netzwerkname zu sein, aber lokale Netzwerknamen sind nicht erlaubt.</de>
 <id>754</id>
 <ro>'%value%' pare a fi o denumire de reţea locală, dar denumirile de reţele locale nu sunt permise.</ro>
+<sl>%value%' je lokalno ime omrežja. Lokalna imena omrežij niso dovoljena.</sl>
 </text>
 <text>
 <context>decimal separator</context>
@@ -3033,210 +3511,245 @@ has just been created.</en>
 <de>Abstand</de>
 <id>758</id>
 <ro>Distanţă</ro>
+<sl>Razdalja</sl>
 </text>
 <text>
 <en>Close</en>
 <de>Schließen</de>
 <id>760</id>
 <ro>Închide</ro>
+<sl>Zapri</sl>
 </text>
 <text>
 <en>Link</en>
 <de>Link</de>
 <id>761</id>
 <ro>Link</ro>
+<sl>Povezava</sl>
 </text>
 <text>
 <en>New entry in your guestbook</en>
 <de>Neuer Eintrag in Ihrem Gästebuch</de>
 <id>764</id>
 <ro>Înregistrare nouă în guestbook-ul dumneavoastră</ro>
+<sl>Nov vnos v vašem nabiralniku</sl>
 </text>
 <text>
 <en>Posts.Last Posts</en>
 <de>Einträe-Letzte Einträe</de>
 <id>765</id>
 <ro>Postări.Cele mai noi postări</ro>
+<sl>Vnosi – zadnji vnosi</sl>
 </text>
 <text>
 <en>Forum.User-List</en>
 <de>Forum.Benutzerliste</de>
 <id>767</id>
 <ro>Forum.Listă utilizatori</ro>
+<sl>Forum.Seznam uporabnikov</sl>
 </text>
 <text>
 <en>News.News</en>
 <de>News.News</de>
 <id>768</id>
 <ro>Ştiri.Ştiri</ro>
+<sl>Novice.Novice</sl>
 </text>
 <text>
 <en>Access Denied</en>
 <de>Zugriff verboten</de>
 <id>769</id>
 <ro>Acces refuzat</ro>
+<sl>Dostop ni možen.</sl>
 </text>
 <text>
 <en>You are not allowed to enter this page.</en>
 <de>Sie haben keine Berechtigungen für diese Seite.</de>
 <id>770</id>
 <ro>Nu aveţi drepturi de acces la această pagină.</ro>
+<sl>Nimate pravic za dostop do te strani.</sl>
 </text>
 <text>
 <en>Menu</en>
 <de>Menü</de>
 <id>771</id>
 <ro>Meniu</ro>
+<sl>Meni</sl>
 </text>
 <text>
 <en>Name of Page</en>
 <de>Seitenname</de>
 <id>772</id>
 <ro>Denumire pagină</ro>
+<sl>Ime strani</sl>
 </text>
 <text>
 <en>Pagetype</en>
 <de>Seitentype</de>
 <id>773</id>
 <ro>Tip pagină</ro>
+<sl>Tip strani</sl>
 </text>
 <text>
 <en>Hide in Menu</en>
 <de>In Menü verstecken</de>
 <id>774</id>
 <ro>Ascunde în Meniu</ro>
+<sl>Skrij v meni</sl>
 </text>
 <text>
 <en>save</en>
 <de>speichern</de>
 <id>775</id>
 <ro>salvează</ro>
+<sl>Shrani</sl>
 </text>
 <text>
 <en>coordinates not entered</en>
 <de>keine Koordinaten eingetragen</de>
 <id>776</id>
 <ro>coordonatele nu sunt introduse</ro>
+<sl>Koordinate niso vnesene.</sl>
 </text>
 <text>
 <en>No File uploaded, please select a file.</en>
 <de>Keine Datei wurde hochgeladen, bitte wählen Sie eine aus.</de>
 <id>777</id>
 <ro>Nu este încărcat niciun fişier. Vă rugăm să selectaţi unul.</ro>
+<sl>Ni naloženih datotek, izberite ustrezno datoteko.</sl>
 </text>
 <text>
 <en>Download original image</en>
 <de>Originalbild herunterladen</de>
 <id>778</id>
 <ro>Descarcă imaginea originală</ro>
+<sl>Prenesi originalno sliko</sl>
 </text>
 <text>
 <en>Amount</en>
 <de>Stück</de>
 <id>782</id>
 <ro>bucăţi</ro>
+<sl>Štev. kosov</sl>
 </text>
 <text>
 <en>Price</en>
 <de>Preis</de>
 <id>783</id>
 <ro>Preţ</ro>
+<sl>Cena</sl>
 </text>
 <text>
 <en>Cart</en>
 <de>Warenkorb</de>
 <id>784</id>
 <ro>Coş de cumpărături</ro>
+<sl>Košarica</sl>
 </text>
 <text>
 <en>To cart</en>
 <de>Zum Warenkorb</de>
 <id>785</id>
 <ro>Spre coşul de cumpărături</ro>
+<sl>V košarico</sl>
 </text>
 <text>
 <en>To checkout</en>
 <de>Zur Kasse</de>
 <id>786</id>
 <ro>Spre casă</ro>
+<sl>Na blagajno</sl>
 </text>
 <text>
 <en>Cart is empty</en>
 <de>Ihr Warenkorb ist leer</de>
 <id>787</id>
 <ro>Coşul dumneavoastră de cumpărături este gol</ro>
+<sl>Vaša košarica je prazna.</sl>
 </text>
 <text>
 <en>add to cart</en>
 <de>In den Warenkorb</de>
 <id>788</id>
 <ro>Mută în coşul de cumpărături</ro>
+<sl>Dodaj v košarico.</sl>
 </text>
 <text>
 <en>Detail info</en>
 <de>Detailinfos</de>
 <id>789</id>
 <ro>Detalii</ro>
+<sl>Več informacij</sl>
 </text>
 <text>
 <en>Image Positionable</en>
 <de>Bild positionierbar</de>
 <id>790</id>
 <ro>Imaginea poate fi poziţionată</ro>
+<sl>Nastavljiva slika</sl>
 </text>
 <text>
 <en>Element</en>
 <de>Element</de>
 <id>792</id>
 <ro>Element</ro>
+<sl>Element</sl>
 </text>
 <text>
 <en>Start automatically</en>
 <de>automatisch Starten</de>
 <id>793</id>
 <ro>Start automat</ro>
+<sl>Avtomatski začetek</sl>
 </text>
 <text>
 <en>Loop</en>
 <de>Schleife</de>
 <id>794</id>
 <ro>Loop</ro>
+<sl>Zanka</sl>
 </text>
 <text>
 <en>Shop.Products</en>
 <de>Shop.Produkte</de>
 <id>795</id>
 <ro>Shop.Produse</ro>
+<sl>Trgovina.Produkti</sl>
 </text>
 <text>
 <en>The product has been added to the cart.</en>
 <de>Der Artikel wurde in den Warenkorb gelegt.</de>
 <id>796</id>
 <ro>Produsul a fost adăugat în Coşul de cumpărături.</ro>
+<sl>Artikel je bil dodan v košarico.</sl>
 </text>
 <text>
 <en>You cart contains {0} products</en>
 <de>Ihr Warenkorb beinhaltet {0} Artikel</de>
 <id>797</id>
 <ro>Coşul dumneavoastră de cumpărături conţine {0} produse</ro>
+<sl>Štev. artiklov v vaši košarici: {0}.</sl>
 </text>
 <text>
 <en>Payment</en>
 <de>Zahlungsart</de>
 <id>798</id>
 <ro>Modalitate de plată</ro>
+<sl>Način plačila</sl>
 </text>
 <text>
 <en>Shipping and Handling</en>
 <de>Versandkosten</de>
 <id>801</id>
 <ro>Cheltuieli de expediere</ro>
+<sl>Stroški pošiljanja</sl>
 </text>
 <text>
 <en>Total Amount</en>
 <de>Gesamtbetrag</de>
 <id>802</id>
 <ro>Total</ro>
+<sl>Skupni znesek</sl>
 </text>
 <text>
 <en>Street</en>
@@ -3246,18 +3759,21 @@ has just been created.</en>
 <ru>Улица</ru>
 <id>803</id>
 <ro>Strada</ro>
+<sl>Ulica</sl>
 </text>
 <text>
 <en>ZIP</en>
 <de>PLZ</de>
 <id>804</id>
 <ro>Cod poştal</ro>
+<sl>Poštna št.</sl>
 </text>
 <text>
 <en>City</en>
 <de>Ort</de>
 <id>805</id>
 <ro>Localitate</ro>
+<sl>Kraj</sl>
 </text>
 <text>
 <en>Country</en>
@@ -3267,6 +3783,7 @@ has just been created.</en>
 <ru>Страна</ru>
 <id>806</id>
 <ro>Ţara</ro>
+<sl>Država</sl>
 </text>
 <text>
 <en>Phone</en>
@@ -3276,90 +3793,105 @@ has just been created.</en>
 <ru>телефон</ru>
 <id>807</id>
 <ro>Telefon</ro>
+<sl>Telefon</sl>
 </text>
 <text>
 <en>Checkout</en>
 <de>Kasse</de>
 <id>812</id>
 <ro>Casă</ro>
+<sl>Blagajna</sl>
 </text>
 <text>
 <en>From</en>
 <de>Von</de>
 <id>813</id>
 <ro>De la</ro>
+<sl>Od</sl>
 </text>
 <text>
 <en>To</en>
 <de>Bis</de>
 <id>814</id>
 <ro>Până la</ro>
+<sl>Do</sl>
 </text>
 <text>
 <en>Place (City)</en>
 <de>Ort (Stadt)</de>
 <id>815</id>
 <ro>Localitate</ro>
+<sl>Kraj (mesto)</sl>
 </text>
 <text>
 <en>Events.Top</en>
 <de>Veranstaltungen.Oben</de>
 <id>816</id>
 <ro>Evenimente.Sus</ro>
+<sl>Prireditve.Zgoraj</sl>
 </text>
 <text>
 <en>Events.Events</en>
 <de>Veranstaltungen.Veranstaltungen</de>
 <id>817</id>
 <ro>Evenimente.Evenimente</ro>
+<sl>Prireditve.Prireditve</sl>
 </text>
 <text>
 <en>Start Date</en>
 <de>Beginndatum</de>
 <id>818</id>
 <ro>Data de început</ro>
+<sl>Datum pričetka</sl>
 </text>
 <text>
 <en>End Date</en>
 <de>Enddatum</de>
 <id>819</id>
 <ro>Data de final</ro>
+<sl>Datum zaključka</sl>
 </text>
 <text>
 <en>Events.Show categories</en>
 <de>Veranstaltungen.Kategorien anzeigen</de>
 <id>820</id>
 <ro>Evenimente.Afişare categorii</ro>
+<sl>Prireditve.Prikaži kategorije</sl>
 </text>
 <text>
 <en>Update</en>
 <de>Aktualisieren</de>
 <id>821</id>
 <ro>Actualizare</ro>
+<sl>Posodobi</sl>
 </text>
 <text>
 <en>Send order</en>
 <de>Bestellung abschicken</de>
 <id>822</id>
 <ro>Trimite comanda</ro>
+<sl>Pošlji naročilo</sl>
 </text>
 <text>
 <en>Back to shop</en>
 <de>Zurück zum Shop</de>
 <id>824</id>
 <ro>Înapoi la Shop</ro>
+<sl>Nazaj na trgovino</sl>
 </text>
 <text>
 <en>Back to cart</en>
 <de>Zurück zum Warenkorb</de>
 <id>826</id>
 <ro>Înapoi la Coşul de cumpărături</ro>
+<sl>Nazaj na košarico</sl>
 </text>
 <text>
 <en>Shop.Cart</en>
 <de>Shop.Warenkorb</de>
 <id>828</id>
 <ro>Shop.Coş cumpărături</ro>
+<sl>Trgovina.Košarica</sl>
 </text>
 <text>
 <en>Mr.</en>
@@ -3368,6 +3900,7 @@ has just been created.</en>
 <es>Señor</es>
 <id>829</id>
 <ro>Dl.</ro>
+<sl>Gospod</sl>
 </text>
 <text>
 <en>Ms.</en>
@@ -3376,6 +3909,7 @@ has just been created.</en>
 <es>Señora</es>
 <id>830</id>
 <ro>Dna.</ro>
+<sl>Gospa</sl>
 </text>
 <text>
 <context>sex</context>
@@ -3385,114 +3919,133 @@ has just been created.</en>
 <es>Tratamiento</es>
 <id>832</id>
 <ro>Formula de adresare</ro>
+<sl>Nagovor</sl>
 </text>
 <text>
 <en>What type of payment do you wish?</en>
 <de>Welche Zahlungsart wünschen Sie?</de>
 <id>834</id>
 <ro>Prin ce modalitate doriţi să plătiţi?</ro>
+<sl>Kateri način plačila boste izbrali?</sl>
 </text>
 <text>
 <en>Cash on Delivery Charge</en>
 <de>Nachnahmegebühr</de>
 <id>835</id>
 <ro>Comision Numerar la livrare</ro>
+<sl>Po povzetju</sl>
 </text>
 <text>
 <en>Please enter your address</en>
 <de>Bitte geben Sie Ihre Adressdaten ein</de>
 <id>837</id>
 <ro>Vă rugăm să introduceţi adresa dumneavoastră</ro>
+<sl>Vnesite svoj naslov.</sl>
 </text>
 <text>
 <en>Your cart contains</en>
 <de>Ihr Warenkorb beinhaltet</de>
 <id>838</id>
 <ro>Coşul dumneavoastră de cumpărături conţine</ro>
+<sl>Vsebina vaše košarice</sl>
 </text>
 <text>
 <en>Other comments, questions or suggestions</en>
 <de>Sonstige Bemerkungen, Fragen oder Anregungen</de>
 <id>839</id>
 <ro>Alte observaţii, întrebări sau sugestii</ro>
+<sl>Druge pripombe, vprašanja ali predlogi</sl>
 </text>
 <text>
 <en>Please check your petitions</en>
 <de>Bitte überprüfen Sie Ihre Daten</de>
 <id>840</id>
 <ro>Vă rugăm să vă verificaţi datele</ro>
+<sl>Preverite svoje podatke.</sl>
 </text>
 <text>
 <en>Your Comment</en>
 <de>Ihre Anmerkung</de>
 <id>841</id>
 <ro>Comentariul dumneavoastră</ro>
+<sl>Vaša opomba</sl>
 </text>
 <text>
 <en>You pay by</en>
 <de>Sie zahlen per</de>
 <id>844</id>
 <ro>Plătiţi cu/prin</ro>
+<sl>Vaš način plačila</sl>
 </text>
 <text>
 <en>Ok</en>
 <de>Ok</de>
 <id>851</id>
 <ro>Ok</ro>
+<sl>Potrdi</sl>
 </text>
 <text>
 <en>This field should be a URL in the format "http:/</en>
 <de>Diese Feld sollte eine Url im Format "http:/</de>
 <id>852</id>
 <ro>Acest câmp trebuie să fie un Url de forma "http:/</ro>
+<sl>To polje mora vsebovati URL v obliki "http:/</sl>
 </text>
 <text>
 <en>Do you really want to delete this entry:nn"</en>
 <de>Wollen Sie diesen Eintrag:nn wirklich löschen</de>
 <id>855</id>
 <ro>Sunteţi sigur că doriţi să ştergeţi această postare:nn</ro>
+<sl>Ali ste prepričani, da želite izbrisati ta vnos?</sl>
 </text>
 <text>
 <en>Link.Extern</en>
 <de>Link.Extern</de>
 <id>856</id>
 <ro>Link.Extern</ro>
+<sl>Povezava.Zunanja</sl>
 </text>
 <text>
 <en>If you have lost your password,</en>
 <de>Wenn Sie Ihr Passwort vergessen haben, können Sie</de>
 <id>861</id>
 <ro>Dacă aţi uitat parola, puteţi să</ro>
+<sl>Če ste pozabili geslo, lahko</sl>
 </text>
 <text>
 <en>request a new one here</en>
 <de>hier ein Neues anfordern</de>
 <id>862</id>
 <ro>solicitaţi aici o alta</ro>
+<sl>tukaj oddate zahtevek za novega.</sl>
 </text>
 <text>
 <en>Edit Profile</en>
 <de>Profil bearbeiten</de>
 <id>866</id>
 <ro>Editează profilul</ro>
+<sl>Uredi profil</sl>
 </text>
 <text>
 <en>Retry</en>
 <de>Wiederholen</de>
 <id>867</id>
 <ro>Repetă</ro>
+<sl>Ponovi</sl>
 </text>
 <text>
 <en>Clear</en>
 <de>leeren</de>
 <id>868</id>
 <ro>goleşte</ro>
+<sl>Izbriši</sl>
 </text>
 <text>
 <en>Search Location</en>
 <de>Ort suchen</de>
 <id>869</id>
 <ro>Căutare locaţie</ro>
+<sl>Išči kraj</sl>
 </text>
 <text>
 <en>Adresses</en>
@@ -3505,108 +4058,126 @@ has just been created.</en>
 <fr>adresse</fr>
 <it>indirizzo</it>
 <ro>Adrese</ro>
+<sl>Naslovi</sl>
 </text>
 <text>
 <en>Abort</en>
 <de>Abbrechen</de>
 <id>871</id>
 <ro>Renunţă</ro>
+<sl>Prekliči</sl>
 </text>
 <text>
 <en>Image big</en>
 <de>Bild groß</de>
 <id>872</id>
 <ro>Imagine mare</ro>
+<sl>Velika slika</sl>
 </text>
 <text>
 <en>Image small</en>
 <de>Bild klein</de>
 <id>873</id>
 <ro>Imagine mică</ro>
+<sl>Majhna slika</sl>
 </text>
 <text>
 <en>Dogear</en>
 <de>Eselsohr</de>
 <id>874</id>
 <ro>Semn de carte</ro>
+<sl>Zavihek</sl>
 </text>
 <text>
 <en>Colors</en>
 <de>Farben</de>
 <id>875</id>
 <ro>Culori</ro>
+<sl>Barve</sl>
 </text>
 <text>
 <en>Color small 1</en>
 <de>Farbe klein 1</de>
 <id>876</id>
 <ro>Culoare mic 1</ro>
+<sl>Barva malo 1</sl>
 </text>
 <text>
 <en>Color small 2</en>
 <de>Farbe klein 2</de>
 <id>877</id>
 <ro>Culoare mic 2</ro>
+<sl>Barva malo 2</sl>
 </text>
 <text>
 <en>Color big 1</en>
 <de>Farbe groß 1</de>
 <id>878</id>
 <ro>Culoare mare 1</ro>
+<sl>Barva veliko 1</sl>
 </text>
 <text>
 <en>Color big 2</en>
 <de>Farbe groß 2</de>
 <id>879</id>
 <ro>Culoare mare 2</ro>
+<sl>Barva veliko 2</sl>
 </text>
 <text>
 <en>Dogears</en>
 <de>Eselsohren</de>
 <id>880</id>
 <ro>Semne de carte</ro>
+<sl>Zavihki</sl>
 </text>
 <text>
 <en>Welcome-Image</en>
 <de>Begrüßungsbild</de>
 <id>881</id>
 <ro>Imagine de întâmpinare</ro>
+<sl>Pozdravna slika</sl>
 </text>
 <text>
 <en>Login-Image</en>
 <de>Loginbild</de>
 <id>882</id>
 <ro>Imagine Login</ro>
+<sl>Slika za prijavo</sl>
 </text>
 <text>
 <en>en</en>
 <de>de</de>
 <id>883</id>
 <ro>ro</ro>
+<sl>sl</sl>
 </text>
 <text>
 <en>Shop</en>
 <de>Shop</de>
 <id>885</id>
 <ro>Shop</ro>
+<sl>Trgovina</sl>
 </text>
 <text>
 <en>Products</en>
 <de>Produkte</de>
 <id>886</id>
 <ro>Produse</ro>
+<sl>Produkti</sl>
 </text>
 <text>
 <en>Tags</en>
 <de>Tags</de>
 <id>887</id>
 <ro>Tag-uri</ro>
+<sl>Značke </sl>
 </text>
 <text>
 <en>Status</en>
 <de>Status</de>
 <id>888</id>
 <ro>Status</ro>
+<sl>Status</sl>
 </text>
 <text>
 <en>Fax</en>
@@ -3616,210 +4187,245 @@ has just been created.</en>
 <ru>Факс</ru>
 <id>897</id>
 <ro>Fax</ro>
+<sl>Faks</sl>
 </text>
 <text>
 <en>Website</en>
 <de>Webseite</de>
 <id>898</id>
 <ro>Pagină web</ro>
+<sl>Spletna stran</sl>
 </text>
 <text>
 <en>Type</en>
 <de>Typ</de>
 <id>900</id>
 <ro>Tip</ro>
+<sl>Tip</sl>
 </text>
 <text>
 <en>Contact person</en>
 <de>Kontaktperson</de>
 <id>907</id>
 <ro>Persoană de contact</ro>
+<sl>Kontaktna oseba</sl>
 </text>
 <text>
 <en>test</en>
 <de>test</de>
 <id>909</id>
 <ro>test</ro>
+<sl>Test</sl>
 </text>
 <text>
 <en>foobar</en>
 <de>foobar</de>
 <id>910</id>
 <ro>foobar</ro>
+<sl>Prostor za poljubno spremenljivko</sl>
 </text>
 <text>
 <en>Category</en>
 <de>Kategorie</de>
 <id>911</id>
 <ro>Categorie</ro>
+<sl>Kategorija</sl>
 </text>
 <text>
 <en>Domain</en>
 <de>Domain</de>
 <id>912</id>
 <ro>Domeniu</ro>
+<sl>Domena</sl>
 </text>
 <text>
 <en>Show Component</en>
 <de>Komponente anzeigen</de>
 <id>913</id>
 <ro>Afişează component</ro>
+<sl>Prikaži komponento</sl>
 </text>
 <text>
 <en>Size of Target Image</en>
 <de>Größe des Bildes</de>
 <id>915</id>
 <ro>Dimensiunea imaginii</ro>
+<sl>Velikost slike</sl>
 </text>
 <text>
 <en>If size does not fit, scale method will be</en>
 <de>Falls die Größe des Bildes nicht passt, wird folgende Skalierungsmethode angewendet</de>
 <id>916</id>
 <ro>În cazul în care dimensiunea acestei imagini nu este potrivită, se va folosi următoarea metodă de adaptare a dimensiunii</ro>
+<sl>Če velikost slike ni ustrezna,  bo uporabljena naslednja metoda skaliranja.</sl>
 </text>
 <text>
 <en>Assets Select</en>
 <de>Assets auswählen</de>
 <id>917</id>
 <ro>Alege Assets </ro>
+<sl>Izberi sredstva</sl>
 </text>
 <text>
 <en>Section</en>
 <de>Sektion</de>
 <id>918</id>
 <ro>Secţiune</ro>
+<sl>Odsek</sl>
 </text>
 <text>
 <en>Properties</en>
 <de>Einstellungen</de>
 <id>919</id>
 <ro>Setări</ro>
+<sl>Nastavitve</sl>
 </text>
 <text>
 <en>Context</en>
 <de>Kontext</de>
 <id>923</id>
 <ro>Context</ro>
+<sl>Kontekst</sl>
 </text>
 <text>
 <en>(offline hidden)</en>
 <de>(offline versteckt)</de>
 <id>927</id>
 <ro>(ascuns off-line)</ro>
+<sl>(brez spletne povezave skrito)</sl>
 </text>
 <text>
 <en>Favicon</en>
 <de>Favicon</de>
 <id>928</id>
 <ro>Favicon</ro>
+<sl>Ikona spletne strani</sl>
 </text>
 <text>
 <en>Singular</en>
 <de>Einzahl</de>
 <id>929</id>
 <ro>Singular</ro>
+<sl>Ednina</sl>
 </text>
 <text>
 <en>Plural</en>
 <de>Mehrzahl</de>
 <id>930</id>
 <ro>Plural</ro>
+<sl>Množina</sl>
 </text>
 <text>
 <en>Annotation</en>
 <de>Anmerkung</de>
 <id>931</id>
 <ro>Observaţie</ro>
+<sl>Opomba</sl>
 </text>
 <text>
 <en>Date of birth</en>
 <de>Geburtstag</de>
 <id>932</id>
 <ro>Data naşterii</ro>
+<sl>Datum rojstva</sl>
 </text>
 <text>
 <en>Mobile</en>
 <de>Mobiltelefon</de>
 <id>933</id>
 <ro>Telefon mobil</ro>
+<sl>Mobilni telefon</sl>
 </text>
 <text>
 <en>File successfully created: </en>
 <de>Dateien erfolgreich erzeugt: </de>
 <id>935</id>
 <ro>Fişiere create cu succes:</ro>
+<sl>Datoteke so bile uspešno ustvarjene: </sl>
 </text>
 <text>
 <en>Headline 1 (h1)</en>
 <de>Überschrift 1 (h1)</de>
 <id>936</id>
 <ro>Titlu 1 (h1)</ro>
+<sl>Naslov 1 (h1)</sl>
 </text>
 <text>
 <en>Headline 2 (h2)</en>
 <de>Überschrift 2 (h2)</de>
 <id>937</id>
 <ro>Titlu 2 (h2)</ro>
+<sl>Naslov 2 (h2)</sl>
 </text>
 <text>
 <en>Headline 3 (h3)</en>
 <de>Überschrift 3 (h3)</de>
 <id>938</id>
 <ro>Titlu 3 (h3)</ro>
+<sl>Naslov 3 (h3)</sl>
 </text>
 <text>
 <en>Headline 4 (h4)</en>
 <de>Überschrift 4 (h4)</de>
 <id>939</id>
 <ro>Titlu 4 (h4)</ro>
+<sl>Naslov 4 (h4)</sl>
 </text>
 <text>
 <en>Headline 5 (h5)</en>
 <de>Überschrift 5 (h5)</de>
 <id>940</id>
 <ro>Titlu 5 (h5)</ro>
+<sl>Naslov 5 (h5)</sl>
 </text>
 <text>
 <en>Headline 6 (h6)</en>
 <de>Überschrift 6 (h6)</de>
 <id>941</id>
 <ro>Titlu 6 (h6)</ro>
+<sl>Naslov 6 (h6)</sl>
 </text>
 <text>
 <en>Descriptiontext</en>
 <de>Beschreibungstext</de>
 <id>942</id>
 <ro>Text descriere</ro>
+<sl>Besedilo opisa</sl>
 </text>
 <text>
 <en>Form</en>
 <de>Formular</de>
 <id>943</id>
 <ro>Formular</ro>
+<sl>Obrazec</sl>
 </text>
 <text>
 <en>Bookmark at</en>
 <de>Bookmark für</de>
 <id>944</id>
 <ro>Bookmark pentru</ro>
+<sl>Zaznamek za</sl>
 </text>
 <text>
 <en>Rating</en>
 <de>Bewertung</de>
 <id>945</id>
 <ro>Rating</ro>
+<sl>Ocena</sl>
 </text>
 <text>
 <en>order now at amazon</en>
 <de>Jetzt über Amazon bestellen</de>
 <id>946</id>
 <ro>Comandă acum pe Amazon</ro>
+<sl>Naročite na spletni strani Amazon</sl>
 </text>
 <text>
 <en>more information</en>
 <de>mehr Informationen</de>
 <id>947</id>
 <ro>mai multe informaţii</ro>
+<sl>Več informacij</sl>
 </text>
 <text>
 <en>Amazon.Nodes</en>
@@ -3838,252 +4444,294 @@ has just been created.</en>
 <de>Produktbeschreibung</de>
 <id>952</id>
 <ro>Descriere produs</ro>
+<sl>Opis produkta</sl>
 </text>
 <text>
 <en>customer reviews</en>
 <de>Kundenrezensionen</de>
 <id>953</id>
 <ro>Recenzii clienţi</ro>
+<sl>Ocene strank</sl>
 </text>
 <text>
 <en>similar products</en>
 <de>Ähnliche Produkte</de>
 <id>954</id>
 <ro>Produse similare</ro>
+<sl>Podobni produkti</sl>
 </text>
 <text>
 <en>A http Error occured.</en>
 <de>Ein Fehler ist aufgetreten.</de>
 <id>955</id>
 <ro>A intervenit o eroare.</ro>
+<sl>Prišlo je do napake.</sl>
 </text>
 <text>
 <en>Upload URL string is empty.</en>
 <de>Es wurde keine Upload-Datei angegeben.</de>
 <id>956</id>
 <ro>Nu este introdus niciun fişier pentru încărcare.</ro>
+<sl>Datoteka za nalaganje ni bila izbrana.</sl>
 </text>
 <text>
 <en>IO Error.</en>
 <de>Lese- oder Schreibfehler</de>
 <id>957</id>
 <ro>Eroare de citire sau de scriere</ro>
+<sl>Napaka pri branju ali pisanju</sl>
 </text>
 <text>
 <en>Security Error.</en>
 <de>Sicherheitsfehler.</de>
 <id>958</id>
 <ro>Eroare de securitate</ro>
+<sl>Napaka v varnosti.</sl>
 </text>
 <text>
 <en>The upload limit has been reached.</en>
 <de>Das Upload-Limit wurde erreicht.</de>
 <id>959</id>
 <ro>A fost atinsă limita pentru încărcare.</ro>
+<sl>Dosežena je zgornja meja za nalaganje datotek.</sl>
 </text>
 <text>
 <en>File size exceeds allowed limit.</en>
 <de>Dateigröße überschreitet das erlaubte Limit.</de>
 <id>960</id>
 <ro>Dimensiunea fişierului depăşeşte dimensiunea permisă.</ro>
+<sl>Velikost datoteke presega dovoljeno mejo.</sl>
 </text>
 <text>
 <en>File is zero bytes and cannot be uploaded.</en>
 <de>Datei hat keine Größe und kann nicht hochgeladen werden.</de>
 <id>961</id>
 <ro>Fişierul are 0 biţi şi nu poate fi încărcat.</ro>
+<sl>Velikosti datoteke ni možno razbrati, zato datoteke ni možno naložiti.</sl>
 </text>
 <text>
 <en>File is not an allowed file type.</en>
 <de>Dateityp ist nicht erlaubt.</de>
 <id>962</id>
 <ro>Tipul fişierului nu este permis.</ro>
+<sl>Ta tip datoteke ni dovoljen.</sl>
 </text>
 <text>
 <en>Node {0}</en>
 <de>Knoten {0}</de>
 <id>964</id>
 <ro>Node {0}</ro>
+<sl>Vozel {0}</sl>
 </text>
 <text>
 <en>Upload Error</en>
 <de>Fehler beim Hochladen</de>
 <id>965</id>
 <ro>Eroare la încărcare</ro>
+<sl>Napaka pri nalaganju</sl>
 </text>
 <text>
 <en>None</en>
 <de>Kein</de>
 <id>966</id>
 <ro>Absent</ro>
+<sl>Brez</sl>
 </text>
 <text>
 <en>Alternative Preview Image</en>
 <de>Alternatives Vorschaubild</de>
 <id>968</id>
 <ro>Preview alternativ</ro>
+<sl>Alternativni predogled</sl>
 </text>
 <text>
 <en>Click on Preview Image</en>
 <de>Aktion bei Klick auf Bild</de>
 <id>969</id>
 <ro>Acţiune la click pe imagine</ro>
+<sl>Dejanje ob kliku na sliko</sl>
 </text>
 <text>
 <en>Image Texts</en>
 <de>Bildtexte</de>
 <id>970</id>
 <ro>Texte imagini</ro>
+<sl>Besedila slik</sl>
 </text>
 <text>
 <en>Alt-Text</en>
 <de>Alternativer Text</de>
 <id>971</id>
 <ro>Text alternativ</ro>
+<sl>Alternativno besedilo</sl>
 </text>
 <text>
 <en>Downloads</en>
 <de>Downloads</de>
 <id>972</id>
 <ro>Descărcări</ro>
+<sl>Prenosi</sl>
 </text>
 <text>
 <en>Image Size</en>
 <de>Bildgröße</de>
 <id>973</id>
 <ro>Dimensiune imagine</ro>
+<sl>Velikost slike</sl>
 </text>
 <text>
 <en>Original</en>
 <de>Original</de>
 <id>974</id>
 <ro>Original</ro>
+<sl>Original</sl>
 </text>
 <text>
 <en>Dimension</en>
 <de>Dimension</de>
 <id>975</id>
 <ro>Dimensiune</ro>
+<sl>Dimenzija</sl>
 </text>
 <text>
 <en>Text-Image</en>
 <de>Text-Bild</de>
 <id>976</id>
 <ro>Text-Imagine</ro>
+<sl>Slika z besedilom</sl>
 </text>
 <text>
 <en>Alignment</en>
 <de>Anordnung</de>
 <id>978</id>
 <ro>Aliniere</ro>
+<sl>Razporeditev</sl>
 </text>
 <text>
 <en>Text flows around Image</en>
 <de>Text umfließt Bild</de>
 <id>979</id>
 <ro>Textul poziţionat pe lângă imagine</ro>
+<sl>Besedilo se razporedi okoli slike. </sl>
 </text>
 <text>
 <en>Custom Filename</en>
 <de>benutzerdefinierter Dateiname</de>
 <id>980</id>
 <ro>denumire fişier definită de utilizator</ro>
+<sl>Ime datoteke določi uporabnik.</sl>
 </text>
 <text>
 <de>Benutzer löschen</de>
 <en>Delete user</en>
 <id>981</id>
 <ro>Şterge utilizatorul</ro>
+<sl>Izbriši uporabnika</sl>
 </text>
 <text>
 <de>Benutzer sperren / entsperren</de>
 <en>Lock / unlock user</en>
 <id>982</id>
 <ro>Blochează/deblochează utilizatorul</ro>
+<sl>Blokiraj/deblokiraj uporabnika</sl>
 </text>
 <text>
 <de>Benutzer sperren</de>
 <en>Lock user</en>
 <id>983</id>
 <ro>Blochează utilizatorul</ro>
+<sl>Blokiraj uporabnika</sl>
 </text>
 <text>
 <de>Sind Sie sicher dass Sie diesen Benutzer (ent-)sperren möchten?</de>
 <en>Do you really wish to (un)lock this user?</en>
 <id>984</id>
 <ro>Sunteţi sigur că doriţi să (de)blocaţi acest utilizator?</ro>
+<sl>Ali ste prepričani, da želite deblokirati oz. blokirati tega uporabnika?</sl>
 </text>
 <text>
 <de>Sperre / entsperre...</de>
 <en>Locking / unlocking...</en>
 <id>985</id>
 <ro>Blochează / deblochează...</ro>
+<sl>Blokiram/deblokiram ...</sl>
 </text>
 <text>
 <de>Sind Sie sicher dass Sie diesen Benutzer löschen möchten?</de>
 <en>Do you really wish to delete this user?</en>
 <id>986</id>
 <ro>Sunteţi sigur că doriţi să ştergeţi acest utilizator?</ro>
+<sl>Ali ste prepričani, da želite izbrisati tega uporabnika?</sl>
 </text>
 <text>
 <de>Bild vergrößern</de>
 <en>Enlarge Image</en>
 <id>987</id>
 <ro>Măreşte imaginea</ro>
+<sl>Povečaj sliko</sl>
 </text>
 <text>
 <de>Nur für dieses Web</de>
 <en>Only for this web</en>
 <id>988</id>
 <ro>Exclusiv pentru acest web</ro>
+<sl>Samo za ta spletni naslov</sl>
 </text>
 <text>
 <de>Wenn diese Box aktiv ist kann der Benutzer nur für dieses Web verwendet werden. Wenn Sie den selben Benutzer in einem anderen Web verwenden möchten, dann muss diese Box leer bleiben.</de>
 <en>If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.</en>
 <id>989</id>
 <ro>Dacă acest câmp este bifat, contul poate fi folosit exclusiv pentru acest web. Dacă doriţi să folosiţi acest cont şi pentru alt web, atunci nu bifaţi acest câmp.</ro>
+<sl>Če je to polje označeno, lahko tega uporabnika uporabljate samo na tem spletnem naslovu. Če želite istega uporabnika uporabljati na drugem spletnem naslovu, morate polje pustiti neoznačeno.</sl>
 </text>
 <text>
 <de>Gesperrt</de>
 <en>Locked</en>
 <id>991</id>
 <ro>Blocat</ro>
+<sl>Blokiran</sl>
 </text>
 <text>
 <de>Account ist gesperrt</de>
 <en>Account is locked</en>
 <id>993</id>
 <ro>Cont blocat</ro>
+<sl>Račun je blokiran.</sl>
 </text>
 <text>
 <de>Authentifizierung erfolgreich</de>
 <en>Authentication successful</en>
 <id>994</id>
 <ro>Autentificare realizată cu succes</ro>
+<sl>Avtentifikacija je bila uspešna.</sl>
 </text>
 <text>
 <de>Benutzer existiert in diesem Web nicht</de>
 <en>User not existent in this web</en>
 <id>995</id>
 <ro>Utilizatorul nu există în acest web</ro>
+<sl>Uporabnik na tem spletnem naslovu ne obstaja.</sl>
 </text>
 <text>
 <de>Übergebenes Passwort ist ungültig</de>
 <en>Supplied password is invalid</en>
 <id>996</id>
 <ro>Parola funizată este incorectă</ro>
+<sl>Prevzeto geslo ni veljavno.</sl>
 </text>
 <text>
 <de>Diese Seite wurde zuletzt gefunden von</de>
 <en>This site was latest found by</en>
 <id>997</id>
 <ro>Acestă pagină a fost ultima dată găsită de</ro>
+<sl>To stran je nazadnje našel:</sl>
 </text>
 <text>
 <en>Next</en>
 <de>Weiter</de>
 <id>998</id>
 <ro>Mai departe</ro>
+<sl>Naprej</sl>
 </text>
 <text>
 <en>Marquee</en>
@@ -4108,6 +4756,7 @@ has just been created.</en>
 <de>Dieser Eintrag ist eingeordnet in:</de>
 <id>1003</id>
 <ro>Această înregistrare este încadrată la:</ro>
+<sl>Ta vnos je uvrščen v:</sl>
 </text>
 <text>
 <en>Company</en>
@@ -4117,24 +4766,28 @@ has just been created.</en>
 <ru>Фирма</ru>
 <id>1004</id>
 <ro>Compania</ro>
+<sl>Podjetje</sl>
 </text>
 <text>
 <en>Address</en>
 <de>Adresse</de>
 <id>1005</id>
 <ro>Adresa</ro>
+<sl>Naslov</sl>
 </text>
 <text>
 <en>Zipcode</en>
 <de>PLZ</de>
 <id>1006</id>
 <ro>Cod poştal</ro>
+<sl>Poštna št.</sl>
 </text>
 <text>
 <en>Fon</en>
 <de>Telefon</de>
 <id>1007</id>
 <ro>Telefon</ro>
+<sl>Telefon</sl>
 </text>
 <text>
 <en>EMail</en>
@@ -4147,30 +4800,35 @@ has just been created.</en>
 <de>Firmenbuchnummer</de>
 <id>1009</id>
 <ro>Numărul de înregistrare la Registrul Comerţului</ro>
+<sl>Št. poslovnega registra</sl>
 </text>
 <text>
 <en>Register court</en>
 <de>Firmenbuchgericht</de>
 <id>1010</id>
 <ro>Registrul Comerţului</ro>
+<sl>Pristojno sodišče</sl>
 </text>
 <text>
 <en>Court</en>
 <de>Kammer</de>
 <id>1011</id>
 <ro>Judeţul</ro>
+<sl>Zbornica</sl>
 </text>
 <text>
 <en>Bank code</en>
 <de>BLZ</de>
 <id>1014</id>
 <ro>Cod bancar</ro>
+<sl>BIC</sl>
 </text>
 <text>
 <en>Account number</en>
 <de>Kontonummer</de>
 <id>1015</id>
 <ro>Număr cont</ro>
+<sl>TRR</sl>
 </text>
 <text>
 <en>IBAN</en>
@@ -4189,36 +4847,42 @@ has just been created.</en>
 <de>Berufsbezeichnung</de>
 <id>1020</id>
 <ro>Titlul profesional</ro>
+<sl>Funkcija v podjetju</sl>
 </text>
 <text>
 <en>Agency</en>
 <de>Behörde</de>
 <id>1021</id>
 <ro>Autoritate</ro>
+<sl>Upravni organ</sl>
 </text>
 <text>
 <en>Employment specification</en>
 <de>Berufsrechtliche Vorschriften</de>
 <id>1023</id>
 <ro>Regulament profesional</ro>
+<sl>Pravni predpisi za navedeno funkcijo</sl>
 </text>
 <text>
 <en>Disclaimer name</en>
 <de>Haftungsausschluss Name</de>
 <id>1025</id>
 <ro>Disclaimer nume</ro>
+<sl>Poimenovanje izključitve jamstva</sl>
 </text>
 <text>
 <en>Disclaimer type</en>
 <de>Haftungsausschluss Typ</de>
 <id>1026</id>
 <ro>Disclaimer tip</ro>
+<sl>Tip izključitve jamstva</sl>
 </text>
 <text>
 <en>Germany</en>
 <de>Deutschland</de>
 <id>1027</id>
 <ro>Germania</ro>
+<sl>Nemčija</sl>
 </text>
 <text>
 <en>Details</en>
@@ -4231,12 +4895,14 @@ has just been created.</en>
 <de>Benutzer '%value%' existiert bereits</de>
 <id>1029</id>
 <ro>Utilizatorul '%value%' există deja</ro>
+<sl>Uporabnik '%value%' že obstaja.</sl>
 </text>
 <text>
 <en>'%value%' does already exist</en>
 <de>'%value%' existiert bereits</de>
 <id>1030</id>
 <ro>'%value%' există deja</ro>
+<sl>%value%' že obstaja.</sl>
 </text>
 <text>
 <en>Imprint</en>
@@ -4249,66 +4915,70 @@ has just been created.</en>
 <fr>imprimer</fr>
 <it>marchio</it>
 <ro>Copyright</ro>
+<sl>Impresum.Impresum</sl>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
 <de>Betreiber / Verantwortlicher für den Inhalt</de>
 <id>1033</id>
 <ro>Administrator / Responsabil pentru conţinut</ro>
+<sl>Upravljavec/odgovorna oseba za vsebino</sl>
 </text>
 <text>
 <en>Disclaimer</en>
 <de>Haftungsausschluss</de>
 <id>1045</id>
 <ro>Disclaimer</ro>
+<sl>Izključitev jamstva</sl>
 </text>
 <text>
 <en>Purchase tax-identification number</en>
 <de>Umsatzsteuer-Identifikationsnummer</de>
 <id>1037</id>
 <ro>Cod unic de înregistrare</ro>
+<sl>ID-DDV </sl>
 </text>
 <text>
 <en>DVR-Number</en>
 <de>DVR-Nummer</de>
 <id>1039</id>
 <ro>Cod autorizare prelucrare date personale</ro>
+<sl>Št. DVR</sl>
 </text>
 <text>
 <en>Agency accordant §5 ECG</en>
 <de>Behörde gemäß §55 ECG</de>
 <id>1041</id>
 <ro>Autoritate conform legii §55 ECG</ro>
+<sl>Upravni organ skladno s §55 zakona o elektronskem poslovanju</sl>
 </text>
 <text>
 <en>Entry at WK Austria</en>
 <de>Eintrag bei WK Österreich</de>
 <id>1042</id>
 <ro>Înregistrare la Camera de Comerţ a Austriei</ro>
-</text>
-<text>
-<en>Disclaimer</en>
-<de>Haftungsausschluss</de>
-<id>1047</id>
-<ro>Copyright.Disclaimer</ro>
+<sl>Vpisano pri Gospodarski zbornici Avstrije</sl>
 </text>
 <text>
 <en>Clubnumber ZVR</en>
 <de>Vereinsnummer ZVR</de>
 <id>1048</id>
 <ro>Cod membru ZVR</ro>
+<sl>Št. društva iz centralnega registra društev (ZVR)</sl>
 </text>
 <text>
 <en>Bank data</en>
 <de>Bankverbindung</de>
 <id>1050</id>
 <ro>Informaţii bancare</ro>
+<sl>Podatki o bančnem računu</sl>
 </text>
 <text>
 <en>Show my Profile</en>
 <de>Mein Profil anzeigen</de>
 <id>1051</id>
 <ro>Afişează Profilul meu</ro>
+<sl>Prikaži moj profil</sl>
 </text>
 <text>
 <en>404 - File not found</en>
@@ -4321,24 +4991,28 @@ has just been created.</en>
 <de>Leider ist die eingegebene Adresse</de>
 <id>1054</id>
 <ro>Din păcate, adresa introdusă</ro>
+<sl>Vneseni naslov žal</sl>
 </text>
 <text>
 <en>Go back to main page</en>
 <de>Zurück zur Startseite</de>
 <id>1056</id>
 <ro>Înapoi la Pagina principală</ro>
+<sl>Nazaj na začetno stran</sl>
 </text>
 <text>
 <en>Customer added by {0}</en>
 <de>Kunde hinzugefügt von {0}</de>
 <id>1057</id>
 <ro>Client adăugat de {0}</ro>
+<sl>Stranko je dodal {0}.</sl>
 </text>
 <text>
 <en>does not exist at this site</en>
 <de>auf dieser Seite nicht vorhanden</de>
 <id>1058</id>
 <ro>nu există în această pagină</ro>
+<sl>na tej strani ne obstaja.</sl>
 </text>
 <text>
 <en>Capacity</en>
@@ -4346,18 +5020,21 @@ has just been created.</en>
 <context>career</context>
 <id>1059</id>
 <ro>Funcţie</ro>
+<sl>Funkcija</sl>
 </text>
 <text>
 <en>Note: Most addresses are case sensitive</en>
 <de>Beachten Sie die Groß- und Kleinschreibung</de>
 <id>1061</id>
 <ro>Atenţie la majuscule şi la literele mici</ro>
+<sl>Pri pisanju upoštevajte velike in male črke.</sl>
 </text>
 <text>
 <en>Check the page you are coming from</en>
 <de>Überprüfen Sie die Seite, von der Sie gekommen sind</de>
 <id>1062</id>
 <ro>Verificaţi pagina de la care veniţi</ro>
+<sl>Preverite stran, s katere ste prišli.</sl>
 </text>
 <text>
 <en>401 - You are not authorized to view this page</en>
@@ -4370,6 +5047,7 @@ has just been created.</en>
 <de>Sie haben nicht die Berechtigung auf das Verzeichnis oder die Seite zuzugreifen</de>
 <id>1064</id>
 <ro>Nu aveţi drepturi de acces la această pagină sau la acest fişier.</ro>
+<sl>Nimate pravice za dostop do kazala ali strani.</sl>
 </text>
 <text>
 <en>Client Exception</en>
@@ -4382,6 +5060,7 @@ has just been created.</en>
 <de>alle</de>
 <id>1066</id>
 <ro>toate</ro>
+<sl>Vsi</sl>
 </text>
 <text>
 <en>Color hex values must be either 3 or 6 characters.</en>
@@ -4406,18 +5085,19 @@ has just been created.</en>
 <de>Ziel</de>
 <id>1070</id>
 <ro>Target</ro>
+<sl>Cilj</sl>
 </text>
 <text>
 <en>News</en>
 <id>1071</id>
-<de>Neuigkeiten</de>
+<de>News</de>
 <ro>Ştiri</ro>
 </text>
 <text>
 <en>Link.to News</en>
 <id>1072</id>
-<de>Link. zu Neuigkeiten</de>
-<ro>Link. spre Ştiri</ro>
+<de>Link.zu News</de>
+<ro>Link.spre Ştiri</ro>
 </text>
 <text>
 <en>Color values in Hex code without a leading # (e.g. fa5500)</en>
@@ -4430,18 +5110,21 @@ has just been created.</en>
 <de>Für den Suchbegriff &amp;quot;{0}&amp;quot; wurden keine Einträge gefunden.</de>
 <id>1074</id>
 <ro>Nu au fost găsite înregistrări pentru textul căutat &amp;quot;{0}&amp;quot;.</ro>
+<sl>Sistemi ni našel ustreznih zadetkov za iskani pojem &amp;quot;{0}&amp;quot;.</sl>
 </text>
 <text>
 <en>Show All</en>
 <de>Alle anzeigen</de>
 <id>1075</id>
 <ro>Afişează toate</ro>
+<sl>Prikaži vse</sl>
 </text>
 <text>
 <en>User</en>
 <de>Benutzer</de>
 <id>1076</id>
 <ro>Utilizator</ro>
+<sl>Uporabnik</sl>
 </text>
 <text>
 <en>Statistics</en>
@@ -4484,6 +5167,7 @@ has just been created.</en>
 <de>Text/Bild - Ausrichtung</de>
 <id>1520</id>
 <ro>Text/Imagine - Aliniere</ro>
+<sl>Poravnava besedila/slike</sl>
 </text>
 <text>
 <en>Open frontend in a new window</en>
@@ -4508,6 +5192,7 @@ has just been created.</en>
 <de>Wollen Sie diesen Absatz wirklich löschen?</de>
 <id>1102</id>
 <ro>Sunteţi sigur că doriţi să ştergeţi acest paragraf?</ro>
+<sl>Ali ste prepričani, da želite izbrisati ta odstavek?</sl>
 </text>
 <text>
 <en>visible</en>
@@ -4532,6 +5217,7 @@ has just been created.</en>
 <de>Google-Analytics</de>
 <id>1106</id>
 <ro>Copyright.Google-Analytics</ro>
+<sl>Impresum.Google Analytics</sl>
 </text>
 <text>
 <en>Url include</en>
@@ -4592,18 +5278,21 @@ has just been created.</en>
 <de>Zur Kasse</de>
 <id>1118</id>
 <ro>Spre Casă</ro>
+<sl>Na blagajno</sl>
 </text>
 <text>
 <en>Cash on Delivery</en>
 <de>Nachnahme</de>
 <id>1119</id>
 <ro>Numerar la livrare</ro>
+<sl>Priimek</sl>
 </text>
 <text>
 <en>Pre Payment</en>
 <de>Vorauskasse</de>
 <id>1120</id>
 <ro>Plată avans</ro>
+<sl>Predplačilo</sl>
 </text>
 <text>
 <en>PayPal</en>
@@ -4628,12 +5317,14 @@ has just been created.</en>
 <de>Sehr geehrter Herr {0} {1}</de>
 <id>1124</id>
 <ro>Stimate domnule {0} {1}</ro>
+<sl>Spoštovani gospod {0} {1}</sl>
 </text>
 <text>
 <en>Dear Mrs. {0}</en>
 <de>Sehr geehrte Frau {0}</de>
 <id>1125</id>
 <ro>Stimată doamnă {0}</ro>
+<sl>Spoštovana gospa {0}</sl>
 </text>
 <text>
 <en>Excel export</en>
@@ -4700,42 +5391,49 @@ has just been created.</en>
 <de>Sehr geehrte Frau {0} {1}</de>
 <id>1137</id>
 <ro>Stimată doamnă {0} {1}</ro>
+<sl>Spoštovana gospa {0} {1}</sl>
 </text>
 <text>
 <en>Dear Mr. {0}</en>
 <de>Sehr geehrter Herr {0}</de>
 <id>1138</id>
 <ro>Stimate domnule {0}</ro>
+<sl>Spoštovani gospod {0}</sl>
 </text>
 <text>
 <en>Hello Mr. {0}</en>
 <de>Hallo Herr {0}</de>
 <id>1139</id>
 <ro>Bună ziua stimate domnule {0}</ro>
+<sl>Pozdravljeni, gospod {0}</sl>
 </text>
 <text>
 <en>Hello Mrs. {0}</en>
 <de>Hallo Frau {0}</de>
 <id>1140</id>
 <ro>Bună ziua stimată doamnă {0}</ro>
+<sl>Pozdravljena, gospa {0}</sl>
 </text>
 <text>
 <en>From Address</en>
 <de>Absenderadresse</de>
 <id>1141</id>
 <ro>Adresă expeditor</ro>
+<sl>Naslov pošiljatelja</sl>
 </text>
 <text>
 <en>From Name</en>
 <de>Absendername</de>
 <id>1142</id>
 <ro>Nume expeditor</ro>
+<sl>Ime pošiljatelja</sl>
 </text>
 <text>
 <en>Reply Address</en>
 <de>Antwortadresse</de>
 <id>1143</id>
 <ro>Adresa pentru răspuns</ro>
+<sl>Naslov za odgovor</sl>
 </text>
 <text>
 <en>HTML</en>
@@ -4748,48 +5446,56 @@ has just been created.</en>
 <de>Newsletter Vorschau</de>
 <id>1145</id>
 <ro>Preview Newsletter</ro>
+<sl>Predogled e-novic</sl>
 </text>
 <text>
 <en>Send</en>
 <de>Senden</de>
 <id>1146</id>
 <ro>Trimite</ro>
+<sl>Pošlji</sl>
 </text>
 <text>
 <en>User not found, cannot send testmail.</en>
 <de>Benutzer nicht gefunden. Testmail kann nicht gesendet werden.</de>
 <id>1147</id>
 <ro>Utilizatorul nu poate fi găsit. E-mail-ul de test nu poate fi trimis.</ro>
+<sl>Uporabnika ni bilo možno najti. Testnega sporočila ni možno poslati.</sl>
 </text>
 <text>
 <en>E-Mail successfully sent.</en>
 <de>E-Mail erfolgreich gesendet.</de>
 <id>1148</id>
 <ro>E-mail-ul a fost trimis cu succes.</ro>
+<sl>E-sporočilo je bilo uspešno poslano.</sl>
 </text>
 <text>
 <en>Error while sending E-Mail.</en>
 <de>Fehler während E-Mail Versand.</de>
 <id>1149</id>
 <ro>Eroare la trimiterea e-mail-ului.</ro>
+<sl>Pri pošiljanju e-sporočila je prišlo do napake.</sl>
 </text>
 <text>
 <en>Creation Date</en>
 <de>Erstelldatum</de>
 <id>1150</id>
 <ro>Data creării</ro>
+<sl>Datum izdelave</sl>
 </text>
 <text>
 <en>Save Recipients</en>
 <de>Empfänger speichern</de>
 <id>1151</id>
 <ro>Salvează destinatarul</ro>
+<sl>Shrani prejemnika</sl>
 </text>
 <text>
 <en>{0} recipients added, total {1} recipients.</en>
 <de>{0} Empfänger hinzugefügt, Insgesamt {1} Empfänger.</de>
 <id>1152</id>
 <ro>Au fost adăugaţi {0} destinatari; total {1} destinatari.</ro>
+<sl>Štev. dodanih prejemnikov: {0}, skupaj {1} prejemnikov.</sl>
 </text>
 <text>
 <en>Format</en>
@@ -4804,12 +5510,14 @@ has just been created.</en>
 <de>Newsletter wurde gestoppt. Status kann nicht geändert werden.</de>
 <id>1156</id>
 <ro>Newsletter-ul a fost oprit. Nu mai este posibilă modificarea statusului.</ro>
+<sl>Pošiljanje e-novic je bilo prekinjeno.  Statusa ni možno spremeniti.</sl>
 </text>
 <text>
 <en>Unknown status.</en>
 <de>Unbekannter Status.</de>
 <id>1157</id>
 <ro>Status necunoscut.</ro>
+<sl>Neznan status.</sl>
 </text>
 <text>
 <en>Stop</en>
@@ -4834,24 +5542,28 @@ has just been created.</en>
 <de>Alle löschen</de>
 <id>1161</id>
 <ro>Şterge toate</ro>
+<sl>Izbriši vse</sl>
 </text>
 <text>
 <en>Are you sure?</en>
 <de>Sind Sie sicher?</de>
 <id>1162</id>
 <ro>Sunteţi sigur?</ro>
+<sl>Ali ste prepričani?</sl>
 </text>
 <text>
 <en>Do you really want to delete all receivers with status "queued"?.</en>
 <de>Möchten Sie wirklich alle Empfänger aus der Warteschlange entfernen?.</de>
 <id>1163</id>
 <ro>Doriţi într-adevăr să ştergeţi toţi destinatarii aflaţi în aşteptare?</ro>
+<sl>Ali ste prepričani, da želite izbrisati vse prejemnike v čakalni vrsti?</sl>
 </text>
 <text>
 <en>If you press yes, the mailing will be stopped an can\'t be restarted again.</en>
 <de>Wenn Sie "Ja" wählen, wird das Versenden gestoppt und kann nicht mehr gestartet werden.</de>
 <id>1164</id>
 <ro>Dacă selectaţi "da", expedierea va fi întreruptă şi nu mai poate fi repornită.</ro>
+<sl>Če boste kliknili "Da", se bo pošiljanje prekinilo in ga ne boste mogli ponovno aktivirati.</sl>
 </text>
 <text>
 <en>Mail</en>
@@ -4864,12 +5576,14 @@ has just been created.</en>
 <de>Empfänger</de>
 <id>1166</id>
 <ro>Destinatar</ro>
+<sl>Prejemnik</sl>
 </text>
 <text>
 <en>Mailing</en>
 <de>Versand</de>
 <id>1167</id>
 <ro>Expediere</ro>
+<sl>Pošiljanje</sl>
 </text>
 <text>
 <en>Newsletter</en>
@@ -4882,60 +5596,70 @@ has just been created.</en>
 <de>Newsletter wurde gestoppt und kannst nicht mehr gestartet werden.</de>
 <id>1170</id>
 <ro>Newsletter-ul a fost oprit. Nu mai poate fi repornit.</ro>
+<sl>Pošiljanje e-novic je bilo prekinjeno in ga ni možno ponovno aktivirati.</sl>
 </text>
 <text>
 <en>Newsletter paused.</en>
 <de>Newsletter pausiert.</de>
 <id>1171</id>
 <ro>Pauză Newsletter.</ro>
+<sl>Pošiljanje e-novic začasno prekinjeno. </sl>
 </text>
 <text>
 <en>Newsletter sending.</en>
 <de>Sende Newsletter.</de>
 <id>1172</id>
 <ro>Trimite Newsletter.</ro>
+<sl>Pošlji e-novice.</sl>
 </text>
 <text>
 <en>Newsletter finished.</en>
 <de>Newsletter fertig.</de>
 <id>1173</id>
 <ro>Newsletter finalizat.</ro>
+<sl>Pošiljanje e-novic zaključeno.</sl>
 </text>
 <text>
 <en>Newsletter waiting for start.</en>
 <de>Newsletter wartet auf Startvorgang.</de>
 <id>1174</id>
 <ro>Newsletter în aşteptare start.</ro>
+<sl>E-novice čakajo na začetek pošiljanja.</sl>
 </text>
 <text>
 <en>Last mail sent: {0}</en>
 <de>Letzte gesendete Mail: {0}</de>
 <id>1177</id>
 <ro>Ultimul e-mail trimis: {0}</ro>
+<sl>Zadnje poslano e-sporočilo: {0}</sl>
 </text>
 <text>
 <en>Order Products</en>
 <de>Bestellübersicht</de>
 <id>1178</id>
 <ro>Comenzi</ro>
+<sl>Pregled naročenih produktov</sl>
 </text>
 <text>
 <en>Address Header</en>
 <de>Adresskopf</de>
 <id>1179</id>
 <ro>Antet adresă</ro>
+<sl>Glava z naslovom</sl>
 </text>
 <text>
 <en>Shop Confirmation Text</en>
 <de>Shop Bestätigungstext</de>
 <id>1181</id>
 <ro>Shop text confirmare</ro>
+<sl>Trgovina – potrditveno besedilo</sl>
 </text>
 <text>
 <en>back to ...</en>
 <de>zurück zu ...</de>
 <id>1182</id>
 <ro>înapoi la ...</ro>
+<sl>Nazaj na ...</sl>
 </text>
 <text>
 <en>Order at {0}</en>
@@ -4954,66 +5678,77 @@ has just been created.</en>
 <de>Benutzerkonto aktiviert</de>
 <id>1185</id>
 <ro>Cont activat</ro>
+<sl>Uporabniški račun je aktiviran.</sl>
 </text>
 <text>
 <en>Collecting data</en>
 <de>Sammle Daten</de>
 <id>1187</id>
 <ro>Colectează date</ro>
+<sl>Zberi podatke</sl>
 </text>
 <text>
 <en>Writing data</en>
 <de>Schreibe Daten</de>
 <id>1188</id>
 <ro>Scriere date</ro>
+<sl>Zapiši podatke</sl>
 </text>
 <text>
 <en>You cannot delete your own account.</en>
 <de>Sie können Ihr eigenes Konto nicht löschen.</de>
 <id>1189</id>
 <ro>Nu vă puteţi şterge propriul dumneavoastră cont.</ro>
+<sl>Svojega računa ne morete izbrisati.</sl>
 </text>
 <text>
 <en>You cannot lock your own account.</en>
 <de>Sie können Ihr eigenes Konto nicht sperren.</de>
 <id>1190</id>
 <ro>Nu vă puteţi bloca propriul dumneavoastră cont.</ro>
+<sl>Svojega računa ne morete blokirati.</sl>
 </text>
 <text>
 <en>Your account at {0}&lt;br /&gt;has just been set active.</en>
 <de>Ihr Konto auf {0}&lt;br /&gt; wurde gerade aktiviert.</de>
 <id>1191</id>
 <ro>Tocmai a fost activat contul&lt;br /&gt; dumneavoastră pentru {0}.</ro>
+<sl>Pravkar ste aktivirali svoj račun na {0}&lt;br /&gt;.</sl>
 </text>
 <text>
 <en>You may now log in to your account.</en>
 <de>Sie können sich nun in Ihr Konto einloggen.</de>
 <id>1192</id>
 <ro>Puteţi să accesaţi acum contul dumneavoastră.</ro>
+<sl>Zdaj se lahko prijavite v svoj račun.</sl>
 </text>
 <text>
 <en>If you lost your password, you may use the Lost Password? service.</en>
 <de>Wenn Sie Ihr Passwort vergessen haben, können Sie den "Passwort vergessen?"-Service nutzen.</de>
 <id>1193</id>
 <ro>Dacă aţi uitat parola, puteţi să utilizaţi funcţia Aţi uitat parola?.</ro>
+<sl>Če ste pozabili geslo, lahko kliknete na povezavo "Pozabljeno geslo".</sl>
 </text>
 <text>
 <en>Your account at {0} has just been set active.</en>
 <de>Ihr Konto auf {0} wurde gerade aktiviert.</de>
 <id>1194</id>
 <ro>Tocmai a fost activat contul dumneavoastră pentru {0}.</ro>
+<sl>Pravkar ste aktivirali svoj račun na {0}.</sl>
 </text>
 <text>
 <en>Dear {0} {1}</en>
 <de>Guten Tag {0} {1}</de>
 <id>1195</id>
 <ro>Bună ziua  {0} {1}</ro>
+<sl>Dober dan {0} {1}</sl>
 </text>
 <text>
 <en>Hello {0} {1}</en>
 <de>Hallo {0} {1}</de>
 <id>1199</id>
 <ro>Bună ziua {0} {1}</ro>
+<sl>Pozdravljeni, {0} {1}</sl>
 </text>
 <text>
 <en>CSV export</en>
@@ -5038,6 +5773,7 @@ has just been created.</en>
 <de>Produktliste</de>
 <id>1205</id>
 <ro>Listă produse</ro>
+<sl>Seznam produktov</sl>
 </text>
 <text>
 <en>Max Mustermann...</en>
@@ -5052,30 +5788,35 @@ has just been created.</en>
 <ru>Связь</ru>
 <id>1207</id>
 <ro>Mesaj</ro>
+<sl>Sporočilo</sl>
 </text>
 <text>
 <en>Mr. {0}</en>
 <de>Herr {0}</de>
 <id>1210</id>
 <ro>Domnule {0}</ro>
+<sl>Gospod {0}</sl>
 </text>
 <text>
 <en>Mrs. {0}</en>
 <de>Frau {0}</de>
 <id>1211</id>
 <ro>Doamnă {0}</ro>
+<sl>Gospa {0}</sl>
 </text>
 <text>
 <en>Mrs.</en>
 <de>Frau</de>
 <id>1212</id>
 <ro>Dnă</ro>
+<sl>Gospa</sl>
 </text>
 <text>
 <en>Your message to {0}</en>
 <de>Ihre Mitteilung an {0}</de>
 <id>1213</id>
 <ro>Mesajul dumneavoastră către {0}</ro>
+<sl>Vaše sporočilo za {0}</sl>
 </text>
 <text>
 <en>You ordered the following product</en>
@@ -5084,6 +5825,8 @@ has just been created.</en>
 <de_plural>Sie haben folgende Artikel bestellt</de_plural>
 <id>1214</id>
 <ro>Aţi comandat următoarele produse</ro>
+<sl_plural>Naročili ste naslednje artikle:</sl_plural>
+<sl>Naročili ste naslednji artikel:</sl>
 </text>
 <text>
 <en>Rrd Graph</en>
@@ -5120,78 +5863,91 @@ has just been created.</en>
 <de>ago</de>
 <id>1220</id>
 <ro>ago</ro>
+<sl>prej</sl>
 </text>
 <text>
 <en>from now</en>
 <de>ab jetzt</de>
 <id>1221</id>
 <ro>începând de acum</ro>
+<sl>od zdaj</sl>
 </text>
 <text>
 <en>less than a minute</en>
 <de>weniger als eine Minute</de>
 <id>1222</id>
 <ro>sub un minut</ro>
+<sl>manj kot 1 minuta</sl>
 </text>
 <text>
 <en>about a minute</en>
 <de>zirka eine Minute</de>
 <id>1223</id>
 <ro>aproximativ un minut</ro>
+<sl>pribl. 1 minuta</sl>
 </text>
 <text>
 <en>{0} minutes</en>
 <de>{0} Minuten</de>
 <id>1224</id>
 <ro>{0} minute</ro>
+<sl>{0} minut</sl>
 </text>
 <text>
 <en>about an hour</en>
 <de>zirka eine Stunde</de>
 <id>1225</id>
 <ro>aproximativ o oră</ro>
+<sl>pribl. 1 ura</sl>
 </text>
 <text>
 <en>about {0} hours</en>
 <de>zirka {0} Stunden</de>
 <id>1226</id>
 <ro>aproximativ {0} ore</ro>
+<sl>pribl. {0} ur</sl>
 </text>
 <text>
 <en>a day</en>
 <de>einen Tag</de>
 <id>1227</id>
 <ro>o zi</ro>
+<sl>1 dan</sl>
 </text>
 <text>
 <en>{0} days</en>
 <de>{0} Tage</de>
 <id>1228</id>
 <ro>{0} zile</ro>
+<sl>{0} dni</sl>
 </text>
 <text>
 <en>about a month</en>
 <de>zirka ein Monat</de>
 <id>1229</id>
 <ro>aproximativ o lună</ro>
+<sl>pribl. 1 mesec</sl>
 </text>
 <text>
 <en>{0} months</en>
 <de>{0} Monate</de>
 <id>1230</id>
 <ro>{0} luni</ro>
+<sl>{0} mesecev</sl>
 </text>
 <text>
 <en>about a year</en>
 <de>zirka ein Jahr</de>
 <id>1231</id>
 <ro>aproximativ un an</ro>
+<sl>pribl. 1 leto</sl>
 </text>
 <text>
 <en>{0} years</en>
 <de>{0} Jahre</de>
 <id>1232</id>
 <ro>{0} ani</ro>
+<sl>{0} let</sl>
 </text>
 <text>
 <en>Standard</en>
@@ -5204,150 +5960,175 @@ has just been created.</en>
 <de>Empfänger können nur in einen pausierten Newsletter hinzugefügt werden</de>
 <id>1234</id>
 <ro>Destinatarii pot fi adăugaţi doar unui newsletter aflat pe pauză.</ro>
+<sl>Prejemnike lahko dodajate le, če pošiljanje e-novic začasno prekinete.</sl>
 </text>
 <text>
 <en>Unsubscribe Newsletter</en>
 <de>Newsletter abmelden</de>
 <id>1235</id>
 <ro>Dezabonează newsletter-ul</ro>
+<sl>Odjava od e-novic</sl>
 </text>
 <text>
 <en>You have been successfully unsubscribed from the newsletter.</en>
 <de>Sie wurden erfolgreich vom Newsletter abgemeldet.</de>
 <id>1237</id>
 <ro>Aţi fost dezabonat de la newsletter.</ro>
+<sl>Uspešno ste se odjavili od e-novic.</sl>
 </text>
 <text>
 <en>Unsubscribe newsletter</en>
 <de>Newsletter abmelden</de>
 <id>1238</id>
 <ro>Dezabonează newsletter-ul</ro>
+<sl>Odjava od e-novic</sl>
 </text>
 <text>
 <en>default</en>
 <de>Standard</de>
 <id>1239</id>
 <ro>Standard</ro>
+<sl>Standard</sl>
 </text>
 <text>
 <en>original</en>
 <de>Original</de>
 <id>1240</id>
 <ro>original</ro>
+<sl>Original</sl>
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct.</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, überprüfen Sie die Schreibweise</de>
 <id>1243</id>
 <ro>Dacă aţi introdus dumneavoastră adresa, asiguraţi-vă că este scrisă corect.</ro>
+<sl>Če ste naslov vnesli ročno, preverite zapis.</sl>
 </text>
 <text>
 <en>Enquiry</en>
 <de>Anfrage</de>
 <id>1246</id>
 <ro>Solicitare</ro>
+<sl>Povpraševanje</sl>
 </text>
 <text>
 <en>Subscribe date</en>
 <de>Abonniert am</de>
 <id>1253</id>
 <ro>Abonat în data de</ro>
+<sl>Naročen dne</sl>
 </text>
 <text>
 <en>Active?</en>
 <de>Aktiv?</de>
 <id>1254</id>
 <ro>Activ?</ro>
+<sl>Aktiven?</sl>
 </text>
 <text>
 <en>Newsletter Subscriber settings</en>
 <de>Newsletter Empfänger Einstellungen</de>
 <id>1255</id>
 <ro>Setări destinatar newsletter</ro>
+<sl>E-novice Prejemniki Nastavitve</sl>
 </text>
 <text>
 <en>unsubscribed</en>
 <de>abgemeldet</de>
 <id>1256</id>
 <ro>anulat</ro>
+<sl>Odjavljen</sl>
 </text>
 <text>
 <en>not activated</en>
 <de>nicht aktiviert</de>
 <id>1257</id>
 <ro>neactivat</ro>
+<sl>Ni aktiviran</sl>
 </text>
 <text>
 <en>active</en>
 <de>aktiv</de>
 <id>1258</id>
 <ro>activ</ro>
+<sl>Aktiven</sl>
 </text>
 <text>
 <en>Edit subscriber</en>
 <de>Empfänger bearbeiten</de>
 <id>1259</id>
 <ro>Editează destinatarul</ro>
+<sl>Uredi prejemnika</sl>
 </text>
 <text>
 <en>Newsletter subscription</en>
 <de>Newsletter Abonnement</de>
 <id>1260</id>
 <ro>Abonează newsletter-ul</ro>
+<sl>Prijava na e-novice</sl>
 </text>
 <text>
 <en>Hello {0}</en>
 <de>Hallo {0}</de>
 <id>1261</id>
 <ro>Bună ziua {0}</ro>
+<sl>Pozdravljeni, {0}</sl>
 </text>
 <text>
 <en>You have just been subscribed to the newsletter at {0}.</en>
 <de>Sie wurden so eben als Empfänger des Newsletters bei {0} eingetragen.</de>
 <id>1262</id>
 <ro>Aţi fost abonat pentru newsletter-ul {0}.</ro>
+<sl>Pravkar ste bili vneseni kot prejemnik e-novic pri {0}.</sl>
 </text>
 <text>
 <en>ACTIVATION LINK</en>
 <de>AKTIVIERUNGSLINK</de>
 <id>1263</id>
 <ro>LINK DE ACTIVARE</ro>
+<sl>AKTIVACIJSKA POVEZAVA</sl>
 </text>
 <text>
 <en>Please click here, to confirm your E-Mail address and to receive our newsletters in future.</en>
 <de>Bitte klicken Sie hier, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
 <id>1264</id>
 <ro>Vă rugăm să faceţi click aici pentru a confirma adresa dumneavoastră de e-mail şi pentru a primi pe viitor newsletter-ul nostru.</ro>
+<sl>Kliknite tukaj, da verificirate e-naslov in se prijavite na e-novice.</sl>
 </text>
 <text>
 <en>To unsubscribe anytime from our newsletter, click this link:</en>
 <de>Sie können sich jederzeit vom Newsletter abmelden, indem Sie folgenden Link klicken:</de>
 <id>1265</id>
 <ro>Puteţi să dezabonaţi oricând newsletter-ul, accesând următorul link:</ro>
+<sl>Od e-novic se lahko kadarkoli odjavite tako, da kliknete na naslednjo povezavo:</sl>
 </text>
 <text>
 <en>To change you data or settings, click this link:</en>
 <de>Um Ihre Daten oder Einstellungen zu ändern, klicken Sie den folgenden Link:</de>
 <id>1266</id>
 <ro>Pentru a modifica datele sau setările dumneavoastră faceţi click pe următorul link:</ro>
+<sl>Za spremembo svojih podatkov in nastavitev kliknite na naslednjo povezavo:</sl>
 </text>
 <text>
 <en>Thanks for your subscription!</en>
 <de>Vielen Dank für Ihre Anmeldung!</de>
 <id>1267</id>
 <ro>Mulţumim pentru înscriere!</ro>
+<sl>Hvala, ker ste se prijavili!</sl>
 </text>
 <text>
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
 <de>Bitte klicken Sie den folgenden link, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
 <id>1268</id>
 <ro>Vă rugăm să faceţi click pe următorul link pentru a confirma adresa dumneavoastră de e-mail şi pentru a primi pe viitor newsletter-ul nostru.</ro>
+<sl>Kliknite na naslednjo povezavo, da verificirate e-naslov in se prijavite na e-novice.</sl>
 </text>
 <text>
 <en>Subscribe the newsletter</en>
 <de>Für den Newsletter anmelden</de>
 <id>1269</id>
 <ro>Înregistrare newsletter</ro>
+<sl>Prijava na e-novice</sl>
 </text>
 <text>
 <en>HTML-Format</en>
@@ -5368,246 +6149,287 @@ has just been created.</en>
 <de>Ihre E-Mail Adresse wurde verifiziert. Sie werden künftig unseren Newsletter erhalten</de>
 <id>1272</id>
 <ro>Adresa dumneavoastră de e-mail a fost confirmată. De acum înainte veţi primi newsletter-ul nostru.</ro>
+<sl>Vaš e-naslov je bil uspešno verificiran. Od zdaj naprej boste prejemali naše e-novice.</sl>
 </text>
 <text>
 <en>Your data has been saved successfully.</en>
 <de>Ihre Daten wurden erfolgreich gespeichert.</de>
 <id>1273</id>
 <ro>Datele dumneavoastră au fost salvate cu succes.</ro>
+<sl>Vaši podatki so bili uspešno shranjeni.</sl>
 </text>
 <text>
 <en>Create Date</en>
 <de>Erstellt am</de>
 <id>1274</id>
 <ro>Creat în data de</ro>
+<sl>Ustvarjeno:</sl>
 </text>
 <text>
 <en>Created</en>
 <de>Erstellt</de>
 <id>1275</id>
 <ro>Creat</ro>
+<sl>Ustvarjeno dne</sl>
 </text>
 <text>
 <en>The entry in your guestbook has been acitvated.</en>
 <de>Der Eintrag in Ihrem Gästebuch wurde aktiviert.</de>
 <id>1276</id>
 <ro>A fost activată înregistrarea în guestbook-ul dumneavoastră.</ro>
+<sl>Vnos v vašem nabiralniku je bil aktiviran.</sl>
 </text>
 <text>
 <en>Use this link to get to your guestbook:</en>
 <de>Benutzen Sie diesen Link um zu Ihrem Gästebuch zu gelangen:</de>
 <id>1277</id>
 <ro>Utilizaţi acest link pentru a accesa guestbook-ul dumneavoastră:</ro>
+<sl>Za dostop do svojega nabiralnika uporabite naslednjo povezavo:</sl>
 </text>
 <text>
 <en>This post does not exist anymore.</en>
 <de>Dieser Eintrag existiert nicht mehr.</de>
 <id>1278</id>
 <ro>Această postare nu mai există.</ro>
+<sl>Ta vnos več ne obstaja.</sl>
 </text>
 <text>
 <en>A new post has been written in your Guestbook.</en>
 <de>Ein neuer Eintrag wurde in Ihrem Gästebuch geschrieben.</de>
 <id>1279</id>
 <ro>O nouă postare a fost scrisă în guestbook-ul dumneavoastră.</ro>
+<sl>V vašem nabiralniku je nov vnos.</sl>
 </text>
 <text>
 <en>Written by</en>
 <de>Geschrieben von</de>
 <id>1280</id>
 <ro>Scrisă de</ro>
+<sl>Napisal:</sl>
 </text>
 <text>
 <en>Content:</en>
 <de>Inhalt:</de>
 <id>1281</id>
 <ro>Conţinut:</ro>
+<sl>Vsebina:</sl>
 </text>
 <text>
 <en>Click this link to activate the post on your website:</en>
 <de>Klicken Sie diesen Link, um den Eintrag auf Ihrer Webseite zu aktivieren:</de>
 <id>1282</id>
 <ro>Vă rugăm să faceţi click pe acest link pentru a activa post-ul pe site-ul dumneavoastră:</ro>
+<sl>Za aktivacijo vnosa na svoji spletni strani kliknite na naslednjo povezavo:</sl>
 </text>
 <text>
 <en>If you wish to deactivate the post in your guestbook, click here:</en>
 <de>Wenn Sie diesen Eintrag in Ihrem Gästebuch deaktivieren möchten, klicken Sie bitte hier:</de>
 <id>1283</id>
 <ro>Dacă doriţi să dezactivaţi această postare din guestbook-ul dumneavoastră, faceţi click aici:</ro>
+<sl>Za deaktivacijo tega vnosa v svojem nabiralniku kliknite tukaj:</sl>
 </text>
 <text>
 <en>Click this link to get to your guestbook:</en>
 <de>Klicken Sie hier, um zu Ihrem Gästebuch zu gelangen:</de>
 <id>1284</id>
 <ro>Vă rugăm să faceţi click aici pentru a accesa guestbook-ul dumneavoastră:</ro>
+<sl>Za dostop do svojega nabiralnika kliknite tukaj:</sl>
 </text>
 <text>
 <en>The entry in your guestbook has been deacitvated.</en>
 <de>Der Eintrag in Ihrem Gästebuch wurde deaktiviert.</de>
 <id>1285</id>
 <ro>A fost activată înregistrarea în guestbook-ul dumneavoastră.</ro>
+<sl>Vnos v vašem nabiralniku je bil deaktiviran.</sl>
 </text>
 <text>
 <en>Remind mail receiver</en>
 <de>Hinweismail empfänger</de>
 <id>1286</id>
 <ro>E-mail reminder destinatar</ro>
+<sl>E-sporočilo z navodili za prejemnika</sl>
 </text>
 <text>
 <en>Send no mail</en>
 <de>Keine Mail senden</de>
 <id>1287</id>
 <ro>Nu trimite e-mail</ro>
+<sl>Ne pošlji e-sporočila</sl>
 </text>
 <text>
 <en>Post save type</en>
 <de>Eintragsspeicherung</de>
 <id>1288</id>
 <ro>Salvare postare</ro>
+<sl>Shranjevanje vnosa</sl>
 </text>
 <text>
 <en>Active, may be deactivated</en>
 <de>Aktiv, kann deaktiviert werden</de>
 <id>1289</id>
 <ro>Activ, poate fi dezactivat</ro>
+<sl>Aktiven, lahko ga deaktivirate</sl>
 </text>
 <text>
 <en>Inactive, must be activated</en>
 <de>Inaktiv, muss aktiviert werden</de>
 <id>1290</id>
 <ro>Inactiv, trebuie activat</ro>
+<sl>Neaktiven, morate ga aktivirati</sl>
 </text>
 <text>
 <en>Valid From</en>
 <de>Gültig von</de>
 <id>1291</id>
 <ro>Valid începând din</ro>
+<sl>Veljavno od</sl>
 </text>
 <text>
 <en>Current Price</en>
 <de>Aktueller Preis</de>
 <id>1292</id>
 <ro>Preţ actual</ro>
+<sl>Trenutna cena</sl>
 </text>
 <text>
 <en>Shop Shipped Mail</en>
 <de>Shop Versendet Mail</de>
 <id>1293</id>
 <ro>Shop e-mail trimis</ro>
+<sl>Trgovina – poslana e-sporočila</sl>
 </text>
 <text>
 <en>canceled</en>
 <de>storniert</de>
 <id>1294</id>
 <ro>anulat</ro>
+<sl>Stornirano</sl>
 </text>
 <text>
 <en>Show canceled orders</en>
 <de>Stornierte Bestellungen anzeigen</de>
 <id>1295</id>
 <ro>Afişează comenzile anulate</ro>
+<sl>Prikaži stornirana naročila</sl>
 </text>
 <text>
 <en>shipped</en>
 <de>versendet</de>
 <id>1296</id>
 <ro>expediat</ro>
+<sl>Poslano</sl>
 </text>
 <text>
 <en>Show shipped orders</en>
 <de>Versendete Bestellungen anzeigen</de>
 <id>1297</id>
 <ro>Arată comenzile expediate</ro>
+<sl>Prikaži poslana naročila</sl>
 </text>
 <text>
 <en>Order Nr</en>
 <de>Bestellnr</de>
 <id>1298</id>
 <ro>Nr. comandă</ro>
+<sl>Št. naročila</sl>
 </text>
 <text>
 <en>Payed</en>
 <de>Bezahlt</de>
 <id>1299</id>
 <ro>Plătit</ro>
+<sl>Plačano</sl>
 </text>
 <text>
 <en>Shipped</en>
 <de>Verschickt</de>
 <id>1301</id>
 <ro>Expediat</ro>
+<sl>Odposlano</sl>
 </text>
 <text>
 <en>Order</en>
 <de>Bestellung</de>
 <id>1302</id>
 <ro>Comandă</ro>
+<sl>Naročilo</sl>
 </text>
 <text>
 <en>Origin</en>
 <de>Herkunft</de>
 <id>1303</id>
 <ro>Provenienţă</ro>
+<sl>Izvor</sl>
 </text>
 <text>
 <en>Internet</en>
 <de>Internet</de>
 <id>1304</id>
 <ro>Internet</ro>
+<sl>Internet</sl>
 </text>
 <text>
 <en>Invoice Nr</en>
 <de>Rechnungsnr</de>
 <id>1305</id>
 <ro>Nr. factură</ro>
+<sl>Št. računa</sl>
 </text>
 <text>
 <en>Customer Nr</en>
 <de>Kundennr</de>
 <id>1306</id>
 <ro>Cod client</ro>
+<sl>Št. stranke</sl>
 </text>
 <text>
 <en>Invoice Date</en>
 <de>Rechnungsdatum</de>
 <id>1307</id>
 <ro>Data facturii</ro>
+<sl>Datum računa</sl>
 </text>
 <text>
 <en>Canceled</en>
 <de>Storniert</de>
 <id>1308</id>
 <ro>Anulat</ro>
+<sl>Stornirano</sl>
 </text>
 <text>
 <en>Customer</en>
 <de>Kunde</de>
 <id>1309</id>
 <ro>Client</ro>
+<sl>Stranka</sl>
 </text>
 <text>
 <en>Transfer Form</en>
 <de>Erlagschein</de>
 <id>1310</id>
 <ro>Formular plată</ro>
+<sl>Položnica</sl>
 </text>
 <text>
 <en>Orders</en>
 <de>Bestellungen</de>
 <id>1311</id>
 <ro>Comenzi</ro>
+<sl>Naročila</sl>
 </text>
 <text>
 <en>Folder</en>
 <de>Folder</de>
 <id>1312</id>
 <ro>Fişier</ro>
+<sl>Mapa</sl>
 </text>
 <text>
 <en>Amt</en>
 <de>Stk</de>
 <id>1313</id>
 <ro>buc</ro>
+<sl>Štev. kosov</sl>
 </text>
 <text>
 <en>IN</en>
@@ -5615,6 +6437,7 @@ has just been created.</en>
 <context>Invoice</context>
 <id>1314</id>
 <ro>Fact</ro>
+<sl>RE</sl>
 </text>
 <text>
 <en>SH</en>
@@ -5622,6 +6445,7 @@ has just been created.</en>
 <context>Shipped</context>
 <id>1315</id>
 <ro>SH</ro>
+<sl>Štev. paketov</sl>
 </text>
 <text>
 <en>Width or height must be higher than 0 when using crop or bestfit.</en>
@@ -5634,12 +6458,14 @@ has just been created.</en>
 <de>Bitte füllen Sie die markierten Felder korrekt aus.</de>
 <id>1320</id>
 <ro>Vă rugăm să completaţi corect câmpul marcat.</ro>
+<sl>Pravilno izpolnite označena polja.</sl>
 </text>
 <text>
 <en>user-defined</en>
 <de>Benutzerdefiniert</de>
 <id>1321</id>
 <ro>definit de utilizator</ro>
+<sl>Določi uporabnik</sl>
 </text>
 <text>
 <en>Code Syntax Highlighted</en>
@@ -5664,18 +6490,21 @@ has just been created.</en>
 <de>Kopieren</de>
 <id>1325</id>
 <ro>Copiază</ro>
+<sl>Kopiraj</sl>
 </text>
 <text>
 <en>The following E-Mail addresses were excluded due to the RTR-ECG-Check (see {0})</en>
 <de>Die folgenden E-Mail Adressen wurden aufgrund der RTR-ECG-Überprüfung ausgeschlossen (siehe {0})</de>
 <id>1326</id>
 <ro>Următoarele adrese de e-mail au fost excluse datorită verificării RTR-ECG (vezi {0})</ro>
+<sl>Sistem je na osnovi kontrole ECG družbe RTR izključil naslednje e-naslove (glej {0}):</sl>
 </text>
 <text>
 <en>Column {0}</en>
 <de>Spalte {0}</de>
 <id>1327</id>
 <ro>Coloana {0}</ro>
+<sl>Stolpec {0}</sl>
 </text>
 <text>
 <en>Cannot move here. View has been reloaded, please try again.</en>
@@ -5694,6 +6523,7 @@ has just been created.</en>
 <de>Bitte geben Sie Ihre E-Mail-Adresse ein</de>
 <id>1330</id>
 <ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail</ro>
+<sl>Vnesite svoj e-naslov.</sl>
 </text>
 <text>
 <en>To</en>
@@ -5701,264 +6531,308 @@ has just been created.</en>
 <context>email</context>
 <id>1332</id>
 <ro>Către</ro>
+<sl>Za:</sl>
 </text>
 <text>
 <en>RTR-ECG-Check and saving data: please wait...</en>
 <de>RTR-ECG-Check und Daten speichern: bitte warten...</de>
 <id>1333</id>
 <ro>RTR-ECG-Check şi salvare date: vă rugăm aşteptaţi...</ro>
+<sl>Kontrola ECG družbe RTR in shranjevanje podatkov: počakajte ...</sl>
 </text>
 <text>
 <en>E-Mail type</en>
 <de>E-Mail Typ</de>
 <id>1334</id>
 <ro>Tip e-mail</ro>
+<sl>Tip e-sporočila</sl>
 </text>
 <text>
 <en>Activation</en>
 <de>Aktivierung</de>
 <id>1335</id>
 <ro>Activare</ro>
+<sl>Aktiviranje</sl>
 </text>
 <text>
 <en>Please select the E-Mail type you wish to send to the user.</en>
 <de>Bitte wählen Sie den E-Mail Typ aus, den Sie senden möchten.</de>
 <id>1336</id>
 <ro>Vă rugăm să selectaţi tipul de e-mail pe care doriţi să îl trimiteţi.</ro>
+<sl>Izberite tip e-sporočila, ki ga želite poslati.</sl>
 </text>
 <text>
 <en>Send a mail to a user</en>
 <de>Eine Mail an einen Benutzer senden</de>
 <id>1337</id>
 <ro>Trimite un e-mail către utilizator</ro>
+<sl>Pošlji e-sporočilo izbranemu uporabniku.</sl>
 </text>
 <text>
 <en>Table</en>
 <de>Tabelle</de>
 <id>1338</id>
 <ro>Tabel</ro>
+<sl>Tabela</sl>
 </text>
 <text>
 <en>Green</en>
 <de>Grün</de>
 <id>1339</id>
 <ro>Verde</ro>
+<sl>Zeleno</sl>
 </text>
 <text>
 <en>Table style</en>
 <de>Tabellenstil</de>
 <id>1341</id>
 <ro>Stil tabel</ro>
+<sl>Slog tabele</sl>
 </text>
 <text>
 <en>Style</en>
 <de>Stil</de>
 <id>1342</id>
 <ro>Stil</ro>
+<sl>Slog</sl>
 </text>
 <text>
 <en>Switch display</en>
 <de>Klappbox</de>
 <id>1343</id>
 <ro>Switch display</ro>
+<sl>Spustljivo polje</sl>
 </text>
 <text>
 <en>Link text</en>
 <de>Link Text</de>
 <id>1344</id>
 <ro>Text Link</ro>
+<sl>Besedilo povezave</sl>
 </text>
 <text>
 <en>E-Mails</en>
 <de>E-Mails</de>
 <id>1345</id>
 <ro>E-mail-uri</ro>
+<sl>E-sporočila</sl>
 </text>
 <text>
 <en>Don't send any E-Mail when saving.</en>
 <de>Beim speichern keine E-Mails senden.</de>
 <id>1346</id>
 <ro>Nu trimiteţi e-mail-uri în timpul procesului de salvare.</ro>
+<sl>Med shranjevanjem ne pošiljajte e-sporočil.</sl>
 </text>
 <text>
 <en>Log</en>
 <de>Log</de>
 <id>1347</id>
 <ro>Log</ro>
+<sl>Datoteka z dnevnikom</sl>
 </text>
 <text>
 <en>Comments</en>
 <de>Kommentare</de>
 <id>1348</id>
 <ro>Comentarii</ro>
+<sl>Komentarji</sl>
 </text>
 <text>
 <en>Account created.</en>
 <de>Account erstellt.</de>
 <id>1349</id>
 <ro>Cont creat.</ro>
+<sl>Račun je ustvarjen.</sl>
 </text>
 <text>
 <en>Account created by {0}.</en>
 <de>Account erstellt von {0}.</de>
 <id>1350</id>
 <ro>Cont creat de {0}.</ro>
+<sl>Račun je ustvaril {0}.</sl>
 </text>
 <text>
 <en>Account edited.</en>
 <de>Account bearbeitet.</de>
 <id>1351</id>
 <ro>Cont editat.</ro>
+<sl>Račun je urejen.</sl>
 </text>
 <text>
 <en>Account edited by {0}.</en>
 <de>Account bearbeitet von {0}.</de>
 <id>1352</id>
 <ro>Cont editat de {0}.</ro>
+<sl>Račun je uredil {0}.</sl>
 </text>
 <text>
 <en>Account activated.</en>
 <de>Account aktiviert.</de>
 <id>1353</id>
 <ro>Cont activat.</ro>
+<sl>Račun je aktiviran.</sl>
 </text>
 <text>
 <en>Account activated by {0}.</en>
 <de>Account aktiviert von {0}.</de>
 <id>1354</id>
 <ro>Cont activat de {0}.</ro>
+<sl>Račun je aktiviral {0}.</sl>
 </text>
 <text>
 <en>Password set.</en>
 <de>Passwort gesetzt.</de>
 <id>1355</id>
 <ro>Parolă creată.</ro>
+<sl>Geslo je določeno.</sl>
 </text>
 <text>
 <en>Password set by {0}.</en>
 <de>Passwort gesetzt von {0}.</de>
 <id>1356</id>
 <ro>Parolă creată de {0}.</ro>
+<sl>Geslo je določil {0}.</sl>
 </text>
 <text>
 <en>Account deleted e-mail sent.</en>
 <de>Account gelöscht E-Mail gesendet.</de>
 <id>1357</id>
 <ro>Cont şters e-mail trimis.</ro>
+<sl>Račun je izbrisan in e-sporočilo poslano.</sl>
 </text>
 <text>
 <en>Account deleted e-mail sent by {0}.</en>
 <de>Account gelöscht E-Mail gesendet von {0}.</de>
 <id>1358</id>
 <ro>Cont şters e-mail trimis de {0}.</ro>
+<sl>Račun je izbrisal in e-sporočilo poslal {0}.</sl>
 </text>
 <text>
 <en>Changed mail address e-mail sent.</en>
 <de>Geänderte E-Mail-Adresse E-Mail gesendet.</de>
 <id>1359</id>
 <ro>Adresă de e-mail modificată e-mail trimis.</ro>
+<sl>E-naslov je spremenjen in e-sporočilo poslano.</sl>
 </text>
 <text>
 <en>Changed mail address e-mail sent by {0}.</en>
 <de>Geänderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
 <id>1360</id>
 <ro>Adresă de e-mail modificată e-mail trimis de {0}.</ro>
+<sl>E-naslov je spremenil in e-sporočilo poslal {0}.</sl>
 </text>
 <text>
 <en>Lost password e-mail sent.</en>
 <de>Passwort vergessen E-Mail gesendet.</de>
 <id>1361</id>
 <ro>Parolă uitată e-mail trimis.</ro>
+<sl>E-sporočilo za pozabljeno geslo je poslano.</sl>
 </text>
 <text>
 <en>Lost password e-mail sent by {0}.</en>
 <de>Passwort vergessen E-Mail gesendet von {0}.</de>
 <id>1362</id>
 <ro>Parolă uitată e-mail trimis de {0}.</ro>
+<sl>E-sporočilo za pozabljeno geslo je poslal {0}.</sl>
 </text>
 <text>
 <en>Activation e-mail sent.</en>
 <de>Aktivierungs E-Mail gesendet.</de>
 <id>1363</id>
 <ro>E-mail de activare trimis.</ro>
+<sl>Aktivacijsko e-sporočilo je poslano.</sl>
 </text>
 <text>
 <en>Activation e-mail sent by {0}.</en>
 <de>Aktivierungs E-Mail gesendet von {0}.</de>
 <id>1364</id>
 <ro>E-mail de activare trimis de {0}.</ro>
+<sl>Aktivacijsko e-sporočilo je poslal {0}.</sl>
 </text>
 <text>
 <en>Global user activation e-mail sent.</en>
 <de>Globaler Benutzer Aktivierungs E-Mail gesendet.</de>
 <id>1365</id>
 <ro>E-mail de activare utilizator general trimis.</ro>
+<sl>Aktivacijsko e-sporočilo za globalnega uporabnika je poslano.</sl>
 </text>
 <text>
 <en>Global user activation e-mail sent by {0}.</en>
 <de>Globaler Benutzer Aktivierungs E-Mail gesendet {0}.</de>
 <id>1366</id>
 <ro>E-mail de activare utilizator general trimis {0}.</ro>
+<sl>Aktivacijsko e-sporočilo za globalnega uporabnika je poslal {0}.</sl>
 </text>
 <text>
 <en>User locked.</en>
 <de>Benutzer gesperrt.</de>
 <id>1367</id>
 <ro>Utilizator blocat.</ro>
+<sl>Uporabnik je blokiran.</sl>
 </text>
 <text>
 <en>User locked by {0}.</en>
 <de>Benutzer gesperrt von {0}.</de>
 <id>1368</id>
 <ro>Utilizator blocat de {0}.</ro>
+<sl>Uporabnika je blokiral {0}.</sl>
 </text>
 <text>
 <en>User unlocked.</en>
 <de>Benutzer entsperrt.</de>
 <id>1369</id>
 <ro>Utilizator deblocat.</ro>
+<sl>Uporabnik je deblokiran.</sl>
 </text>
 <text>
 <en>User unlocked by {0}.</en>
 <de>Benutzer entsperrt von {0}.</de>
 <id>1370</id>
 <ro>Utilizator deblocat de {0}.</ro>
+<sl>Uporabnika je deblokiral {0}.</sl>
 </text>
 <text>
 <en>User deleted.</en>
 <de>Benutzer gelöscht.</de>
 <id>1371</id>
 <ro>Utilizator şters.</ro>
+<sl>Uporabnik je izbrisan.</sl>
 </text>
 <text>
 <en>User deleted by {0}.</en>
 <de>Benutzer gelöscht von {0}.</de>
 <id>1372</id>
 <ro>Utilizator şters de {0}.</ro>
+<sl>Uporabnika je izbrisal {0}.</sl>
 </text>
 <text>
 <en>Wrong login password used.</en>
 <de>Falsches Passwort beim Login verwendet.</de>
 <id>1373</id>
 <ro>La autentificare a fost utilizată o parolă greşită.</ro>
+<sl>Pri prijavi je bilo uporabljeno napačno geslo.</sl>
 </text>
 <text>
 <en>Wrong login password used by {0}.</en>
 <de>Falsches Passwort beim Login verwendet von {0}.</de>
 <id>1374</id>
 <ro>La autentificare a fost utilizată o parolă greşită de către {0}.</ro>
+<sl>Pri prijavi je napačno geslo uporabil {0}.</sl>
 </text>
 <text>
 <en>Tried login into locked account.</en>
 <de>Versuch in gesperrten Account einzuloggen.</de>
 <id>1375</id>
 <ro>Încercare de autentificare cu cont blocat.</ro>
+<sl>Poskus prijave v blokiran račun.</sl>
 </text>
 <text>
 <en>{0} tried to login into locked account.</en>
 <de>Versuch in gesperrten Account einzuloggen von {0}.</de>
 <id>1376</id>
 <ro>Încercare de autentificare cu cont blocat de către {0}.</ro>
+<sl>V blokiran račun se je poskušal prijaviti {0}.</sl>
 </text>
 <text>
 <en>Link.to Component</en>
@@ -5971,6 +6845,7 @@ has just been created.</en>
 <de>Firmen A-Z</de>
 <id>1379</id>
 <ro>Companii A-Z.</ro>
+<sl>Podjetja A–Ž</sl>
 </text>
 <text>
 <en>Newsletter subscribing</en>
@@ -5983,6 +6858,7 @@ has just been created.</en>
 <de>kein</de>
 <id>1381</id>
 <ro>absent</ro>
+<sl>Brez</sl>
 </text>
 <text>
 <context>locale</context>
@@ -5990,6 +6866,7 @@ has just been created.</en>
 <de>de_AT.UTF-8, de.UTF-8, de_DE.UTF-8</de>
 <id>1382</id>
 <ro>C</ro>
+<sl>UTF-8</sl>
 </text>
 <text>
 <en>hide</en>
@@ -6020,60 +6897,70 @@ has just been created.</en>
 <de>Das Passwort wurde erfolgreich geändert</de>
 <id>1389</id>
 <ro>Parola a fost schimbată cu succes</ro>
+<sl>Geslo je bilo uspešno spremenjeno.</sl>
 </text>
 <text>
 <en>Change Password</en>
 <de>Passwort ändern</de>
 <id>1390</id>
 <ro>Schimbă parola</ro>
+<sl>Spremeni geslo</sl>
 </text>
 <text>
 <en>Current Password</en>
 <de>Aktuelles Passwort</de>
 <id>1391</id>
 <ro>Parola actuală</ro>
+<sl>Veljavno geslo</sl>
 </text>
 <text>
 <en>New Password</en>
 <de>Neues Passwort</de>
 <id>1392</id>
 <ro>Parolă nouă</ro>
+<sl>Novo geslo</sl>
 </text>
 <text>
 <en>Account - Change Password</en>
 <de>Benutzer - Passwort ändern</de>
 <id>1393</id>
 <ro>Utilizator - Schimbă parola</ro>
+<sl>Uporabnik – sprememba gesla</sl>
 </text>
 <text>
 <en>Link target</en>
 <de>Linkziel</de>
 <id>1394</id>
 <ro>Target link</ro>
+<sl>Cilj povezave</sl>
 </text>
 <text>
 <en>Link type</en>
 <de>Linktyp</de>
 <id>1395</id>
 <ro>Tip link</ro>
+<sl>Tip povezave</sl>
 </text>
 <text>
 <en>List child pages</en>
 <de>Liste der Unterseiten</de>
 <id>1396</id>
 <ro>Lista subpaginilor</ro>
+<sl>Seznam podstrani</sl>
 </text>
 <text>
 <en>Page name</en>
 <de>Seitenname</de>
 <id>1397</id>
 <ro>Denumire pagină</ro>
+<sl>Ime strani</sl>
 </text>
 <text>
 <en>Teaser image</en>
 <de>Teaser Bild</de>
 <id>1398</id>
 <ro>Imagine Teaser</ro>
+<sl>Slika teaserja</sl>
 </text>
 <text>
 <en>on multiple pages, eg. in a footer</en>
@@ -6086,12 +6973,14 @@ has just been created.</en>
 <de>Sie sind nicht eingeloggt</de>
 <id>1400</id>
 <ro>Nu sunteţi autentificat</ro>
+<sl>Niste prijavljeni.</sl>
 </text>
 <text>
 <en>You entered a wrong password</en>
 <de>Sie haben ein falsches Passwort eingegeben</de>
 <id>1401</id>
 <ro>Aţi introdus o parolă incorectă</ro>
+<sl>Vnesli ste napačno geslo.</sl>
 </text>
 <text>
 <en>Meta Tags</en>
@@ -6112,12 +7001,14 @@ has just been created.</en>
 <es>Más »</es>
 <id>1405</id>
 <ro>Citeşte mai departe »</ro>
+<sl>Več »</sl>
 </text>
 <text>
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
 <de>Bitte fügen Sie die Adresse von YouTube oder Vimeo ein.</de>
 <id>1407</id>
 <ro>Vă rugăm să introduceţi adresa de YouTube sau Vimeo.</ro>
+<sl>Vnesite naslov za YouTube ali Vimeo.</sl>
 </text>
 <text>
 <en>URL</en>
@@ -6130,18 +7021,21 @@ has just been created.</en>
 <de>Link.zur übergeordneten Seite</de>
 <id>1409</id>
 <ro>Link.la pagina supraordonată</ro>
+<sl>Povezava.Na nadrejeno stran</sl>
 </text>
 <text>
 <en>« back</en>
 <de>« zurück</de>
 <id>1410</id>
 <ro>« înapoi</ro>
+<sl>« Nazaj</sl>
 </text>
 <text>
 <en>Link to parent page</en>
 <de>Link zur übergeordneten Seite</de>
 <id>1411</id>
 <ro>Link spre pagina supraordonată</ro>
+<sl>Povezava na nadrejeno stran</sl>
 </text>
 <text>
 <en>hh:mm</en>
@@ -6166,54 +7060,63 @@ has just been created.</en>
 <de>Dokument</de>
 <id>1426</id>
 <ro>Document</ro>
+<sl>Dokument</sl>
 </text>
 <text>
 <en>Enquiries</en>
 <de>Anfragen</de>
 <id>1427</id>
 <ro>Solicitări</ro>
+<sl>Povpraševanje</sl>
 </text>
 <text>
 <en>Categorie</en>
 <de>Kategorie</de>
 <id>1429</id>
 <ro>Categorie</ro>
+<sl>Kategorija</sl>
 </text>
 <text>
 <en>Remember password on this computer</en>
 <de>Passwort auf diesem Computer speichern</de>
 <id>1430</id>
 <ro>Salvează parola pe acest computer</ro>
+<sl>Shrani geslo na tem računalniku.</sl>
 </text>
 <text>
 <en>Sent E-Mail again</en>
 <de>Eine E-Mail erneut senden</de>
 <id>1431</id>
 <ro>Retrimite un e-mail</ro>
+<sl>Ponovno pošlji e-sporočilo.</sl>
 </text>
 <text>
 <en>All</en>
 <de>Alle</de>
 <id>1435</id>
 <ro>Toate</ro>
+<sl>Vse</sl>
 </text>
 <text>
 <en>Can't delete translated pages.</en>
 <de>Kann übersetzte Seite nicht löschen.</de>
 <id>1436</id>
 <ro>Pagina tradusă nu poate fi ştearsă.</ro>
+<sl>Prevedene strani ni možno izbrisati.</sl>
 </text>
 <text>
 <en>List child page names</en>
 <de>Liste der Unterseitennamen</de>
 <id>1437</id>
 <ro>Lista denumirilor subpaginilor</ro>
+<sl>Seznam imen podstrani</sl>
 </text>
 <text>
 <en>Please choose an option</en>
 <de>Bitte wählen Sie eine Option aus</de>
 <id>1438</id>
 <ro>Vă rugăm să selectaţi o opţiune</ro>
+<sl>Izberite eno od možnosti</sl>
 </text>
 <text>
 <en>No Filedata received.</en>
@@ -6248,12 +7151,15 @@ has just been created.</en>
 <context>test</context>
 <id>1444</id>
 <ro>Răspuns</ro>
+<sl_plural>Odgovori</sl_plural>
+<sl>Odgovor</sl>
 </text>
 <text>
 <en>Please mark the checkbox</en>
 <de>Bitte setzen Sie das Häkchen</de>
 <id>1445</id>
 <ro>Vă rugăm să bifaţi</ro>
+<sl>Označite s kljukico.</sl>
 </text>
 <text>
 <en>Guestbook Settings</en>
@@ -6284,12 +7190,14 @@ has just been created.</en>
 <id>1451</id>
 <ua>Будь ласка оберіть один з доступних варіантів</ua>
 <ro>Vă rugăm să selectaţi o opţiune</ro>
+<sl>Izberite eno od možnosti</sl>
 </text>
 <text>
 <en>Link.First Child Page</en>
 <de>Link.Erste Unterseite</de>
 <id>1452</id>
 <ro>Link.Prima subpagină</ro>
+<sl>Povezava.Prva podstran</sl>
 </text>
 <text>
 <en>Team member data</en>
@@ -6314,6 +7222,7 @@ has just been created.</en>
 <de>Eigener Download</de>
 <id>1456</id>
 <ro>Download propriu</ro>
+<sl>Lasten prenos</sl>
 </text>
 <text>
 <en>Not a valid time.  Must be in the format "12:34:00".</en>
@@ -6326,6 +7235,7 @@ has just been created.</en>
 <de>Amazon.Produkt</de>
 <id>1460</id>
 <ro>Amazon.Produs</ro>
+<sl>Amazon.Produkt</sl>
 </text>
 <text>
 <en>ASIN</en>
@@ -6350,6 +7260,7 @@ has just been created.</en>
 <de>Vollbild erlauben</de>
 <id>1468</id>
 <ro>Permite fullscreen</ro>
+<sl>Omogoči celozaslonsko sliko</sl>
 </text>
 <text>
 <en>Start Newsletter sending</en>
@@ -6368,36 +7279,42 @@ has just been created.</en>
 <de>Senden</de>
 <id>1471</id>
 <ro>Se trimite</ro>
+<sl>Pošlji</sl>
 </text>
 <text>
 <en>Search: </en>
 <de>Suche: </de>
 <id>1472</id>
 <ro>Căutare:</ro>
+<sl>Išči: </sl>
 </text>
 <text>
 <en>copy/paste</en>
 <de>Kopieren/Verschieben</de>
 <id>1473</id>
 <ro>Copiază/mută</ro>
+<sl>Kopiraj/premakni</sl>
 </text>
 <text>
 <en>Copy Paragraph</en>
 <de>Absatz kopieren</de>
 <id>1474</id>
 <ro>Copiază paragraf</ro>
+<sl>Kopiraj odstavek</sl>
 </text>
 <text>
 <en>Paste Paragraph</en>
 <de>Absatz einfügen</de>
 <id>1475</id>
 <ro>Introdu paragraf</ro>
+<sl>Vstavi odstavek</sl>
 </text>
 <text>
 <en>Clipboard is empty</en>
 <de>Zwischenablage ist leer</de>
 <id>1476</id>
 <ro>Clipboard-ul este gol</ro>
+<sl>Odložišče je prazno</sl>
 </text>
 <text>
 <en>Source and target paragraphs are not compatible.</en>
@@ -6410,6 +7327,7 @@ has just been created.</en>
 <de>Bildunterschrift</de>
 <id>1478</id>
 <ro>Image caption</ro>
+<sl>Podnapis</sl>
 </text>
 <text>
 <en>Fade images</en>
@@ -6422,10 +7340,6 @@ has just been created.</en>
 <id>1483</id>
 <de>Absatz {0}</de>
 <ro>Paragraf {0}</ro>
-</text>
-<text>
-<en>Adopt</en>
-<id>1484</id>
 </text>
 <text>
 <en>Tabs</en>
@@ -6450,6 +7364,7 @@ has just been created.</en>
 <de>Jahre</de>
 <id>1489</id>
 <ro>Ani</ro>
+<sl>Leta</sl>
 </text>
 <text>
 <en>Read more</en>
@@ -6458,6 +7373,7 @@ has just been created.</en>
 <es>Más</es>
 <id>1492</id>
 <ro>Citeşte mai departe</ro>
+<sl>Več</sl>
 </text>
 <text>
 <en>Original Category</en>
@@ -6470,54 +7386,63 @@ has just been created.</en>
 <de>Achtung! Mit dieser Aktion machen Sie die ausgewählte Seite zur Startseite Ihrer Website. Dies hat Auswirkungen auf die gesamte Website. Wollen Sie diese Aktion jetzt durchführen?</de>
 <id>1494</id>
 <ro>Atenţie! Prin această acţiune veţi seta pagina selectată ca pagină de start a website-ului dumneavoastră. Aceasta ar putea afecta întregul website. Doriţi să continuaţi?</ro>
+<sl>Pozor! S klikom boste izbrano stran nastavili kot začetno stran svoje spletne strani. To bo vplivalo na celotno spletno stran. Ali želite izvesti to dejanje?</sl>
 </text>
 <text>
 <en>Zoom properties</en>
 <de>Zoomeinstellungen</de>
 <id>1495</id>
 <ro>Setări zoom</ro>
+<sl>Nastavitve povečave</sl>
 </text>
 <text>
 <en>You can't paste a paragraph into itself.</en>
 <de>Sie können einen Absatz nicht in sich selbst hinein kopieren.</de>
 <id>1496</id>
 <ro>Nu puteţi copia un paragraf în sine însuşi.</ro>
+<sl>Odstavka ni možno kopirati samega vase.</sl>
 </text>
 <text>
 <en>The uploaded file was only partially uploaded.</en>
 <de>Die Datei wurde nur teilweise hochgeladen.</de>
 <id>1497</id>
 <ro>Fişierul a fost încărcat doar parţial.</ro>
+<sl>Datoteka ni bila v celoti naložena.</sl>
 </text>
 <text>
 <en>Fair</en>
 <de>Messe</de>
 <id>1498</id>
 <ro>Salon auto</ro>
+<sl>Izmeri</sl>
 </text>
 <text>
 <en>2 Columns</en>
 <de>2 Spalten</de>
 <id>1505</id>
 <ro>2 Coloane</ro>
+<sl>2 stolpca</sl>
 </text>
 <text>
 <en>All Visible</en>
 <de>Alle Sichtbar</de>
 <id>1508</id>
 <ro>Toate vizibile</ro>
+<sl>Vse vidno</sl>
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
 <de>Möchten Sie wirklich alles auf Sichtbar setzen?</de>
 <id>1509</id>
 <ro>Doriţi într-adevăr să setaţi totul pe Vizibil?</ro>
+<sl>Ali ste prepričani, da želite vse nastaviti na vidno?</sl>
 </text>
 <text>
 <en>Setting visible...</en>
 <de>Sichtbar setzen...</de>
 <id>1510</id>
 <ro>Setează pe vizibil...</ro>
+<sl>Nastavljam na vidno ...</sl>
 </text>
 <text>
 <en>Original Filename</en>
@@ -6572,12 +7497,14 @@ has just been created.</en>
 <de>Sehr geehrte Damen und Herren</de>
 <id>1549</id>
 <ro>Stimate doamne, stimaţi domni</ro>
+<sl>Spoštovani!</sl>
 </text>
 <text>
 <en>Copy of</en>
 <de>Kopie von</de>
 <id>1550</id>
 <ro>Copie</ro>
+<sl>Kopija od</sl>
 </text>
 <text>
 <en>Web Image Files</en>
@@ -6596,12 +7523,14 @@ has just been created.</en>
 <de>Dateien hochladen</de>
 <id>1553</id>
 <ro>Încarcă fişiere</ro>
+<sl>Nalaganje datotek</sl>
 </text>
 <text>
 <en>Uploading files</en>
 <de>Lade Dateien hoch</de>
 <id>1554</id>
 <ro>Încarcă fişiere</ro>
+<sl>Naloži datoteke</sl>
 </text>
 <text>
 <en>E-Mail Recipient</en>
@@ -6692,26 +7621,26 @@ has just been created.</en>
 <de>Dieser Account wurde bereits aktiviert.</de>
 <id>1541</id>
 <ro>Acest cont a fost deja activat.</ro>
+<sl>Ta račun je bil že aktiviran.</sl>
 </text>
 <text>
-<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollständig in den Browser kopiert?</de>
 <id>1542</id>
 <en>Voucher</en>
 <de>Gutschein</de>
-<id>1543</id>
 </text>
 <text>
 <en>Vouchers</en>
 <de>Gutscheine</de>
 <id>1544</id>
 <ro>Vouchere</ro>
+<sl>Kuponi</sl>
 </text>
 <text>
 <en>Voucher Code</en>
 <de>Gutschein Code</de>
 <id>1545</id>
 <ro>Cod voucher</ro>
+<sl>Koda kupona</sl>
 </text>
 <text>
 <en>Amount</en>
@@ -6719,6 +7648,7 @@ has just been created.</en>
 <de>Betrag</de>
 <id>1546</id>
 <ro>Sumă</ro>
+<sl>Znesek</sl>
 </text>
 <text>
 <en>Used Amount</en>
@@ -6726,89 +7656,102 @@ has just been created.</en>
 <de>Benutzer Betrag</de>
 <id>1547</id>
 <ro>Sumă utilizată</ro>
+<sl>Znesek uporabnika</sl>
 </text>
 <text>
 <en>'%value%' code was already used</en>
 <de>'%value%' Code wurde bereits benutzt</de>
 <id>1548</id>
 <ro>Codul '%value%' a fost deja utilizat</ro>
+<sl>%value%' koda je bila že uporabljena.</sl>
 </text>
 <text>
 <en>'%value%' is not a valid voucher code</en>
 <de>'%value%' ist ein ungültiger Gutschein Code</de>
 <id>1581</id>
 <ro>'%value%' este un cod invalid de voucher.</ro>
+<sl>%value%' ni veljavna koda kupona.</sl>
 </text>
 <text>
 <en>Redeem Voucher</en>
 <de>Gutschein einlösen</de>
 <id>1582</id>
 <ro>Utilizează voucherul</ro>
+<sl>Unovči kupon</sl>
 </text>
 <text>
 <en>Remaining Amount {0}</en>
 <de>Restbetrag {0}</de>
 <id>1573</id>
 <ro>Valoare rest {0}</ro>
+<sl>Preostanek {0}</sl>
 </text>
 <text>
 <en>Your Voucher has been successfully redeemed.</en>
 <de>Ihr Gutschein wurde erfolgreich eingelöst.</de>
 <id>1634</id>
 <ro>Voucher-ul dumneavoastră a fost utilizat.</ro>
+<sl>Vaš kupon je bil uspešno unovčen.</sl>
 </text>
 <text>
-<en>Set password</en>
-<de>Passwort setzen</de>
-<id>1543</id>
 <en>Product: Voucher</en>
 <de>Produkt: Gutschein</de>
-<id>1393</id>
+<id>1635</id>
+</text>
+<text>
 <en>No items to display</en>
 <de>Keine Einträge zum anzeigen</de>
 <id>1484</id>
+<sl>Ni vnosov za prikaz</sl>
 </text>
 <text>
 <en>Login:</en>
 <de>Login:</de>
 <id>1485</id>
 <ro>Login:</ro>
+<sl>Prijava:</sl>
 </text>
 <text>
 <en>Set a new password</en>
 <de>Ein neues Passwort setzen</de>
 <id>1575</id>
 <ro>Schimbă parola</ro>
+<sl>Določi novo geslo.</sl>
 </text>
 <text>
 <en>After entering your new password you are automatically logged in.</en>
 <de>Nach eingabe des neuen Passworts werden Sie automatisch eingeloggt.</de>
 <id>1576</id>
 <ro>După introducerea noii parole veţi fi autentificat automat.</ro>
+<sl>Vnosu novega gesla bo sledila avtomatska prijava.</sl>
 </text>
 <text>
 <en>Set new Password</en>
 <de>Neues Passwort setzen</de>
 <id>1577</id>
 <ro>Schimbă parola</ro>
+<sl>Določi novo geslo.</sl>
 </text>
 <text>
 <en>Maybe you have already set your password, or the link was not copied correct out of the email.</en>
 <de>Eventuell haben Sie das Passwort bereits neu gesetzt, oder der Link wurde falsch aus dem E-Mail kopiert.</de>
 <id>1578</id>
 <ro>Este posibil să fi salvat deja parola sau poate link-ul nu a fost copiat corect din e-mail.</ro>
+<sl>Morda ste že določili novo geslo ali pa ste povezavo narobe prekopirali iz e-sporočila.</sl>
 </text>
 <text>
 <en>Your new password has been set.</en>
 <de>Ihr neues Passwort wurde gesetzt.</de>
 <id>1579</id>
 <ro>Noua dumneavoastră parolă a fost salvată.</ro>
+<sl>Novo geslo je bilo določeno.</sl>
 </text>
 <text>
 <en>Can't paste paragraph type '{0}', as it is not avaliable here.</en>
 <de>Absatz vom Typ '{0}' kann nicht eingefügt werden, da er hier nicht verfügbar ist.</de>
 <id>1618</id>
 <ro>Nu poate fi introdus paragraful de tip '{0}', pentru că nu este disponibil aici.</ro>
+<sl>Odstavka tipa '{0}' ni možno vstaviti, ker ga tukaj ni na voljo.</sl>
 </text>
 <text>
 <en>Show User Menu</en>
@@ -6863,6 +7806,7 @@ has just been created.</en>
 <de>&lt;strong&gt;Ergebnisse gefunden&lt;/strong&gt; (in {0} Sekunden)</de>
 <id>1595</id>
 <ro>&lt;strong&gt;Găsit rezultate&lt;/strong&gt; (în {0} secunde)</ro>
+<sl>&lt;strong&gt;Najdeni rezultati&lt;/strong&gt; (v {0} sekundah)</sl>
 </text>
 <text>
 <en>Social Networks</en>
@@ -6891,6 +7835,7 @@ has just been created.</en>
 <text>
 <en>Success</en>
 <id>1600</id>
+<sl>Ne sme biti negativno.</sl>
 </text>
 <text>
 <en>Status Update successfully posted.</en>
@@ -6933,24 +7878,28 @@ has just been created.</en>
 <de>{0}-{1} von zirka {2}</de>
 <id>1614</id>
 <ro>{0}-{1} din circa {2}</ro>
+<sl>{0}–{1} od pribl. {2}</sl>
 </text>
 <text>
 <en>The Form has been submitted successfully. You will receive an E-Mail with the access link to the protected area.</en>
 <de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in Kürze eine E-Mail mit dem Zugangslink zum geschützten Bereich.</de>
 <id>1615</id>
 <ro>Formularul a fost trimis cu succes. În scurt timp veţi primi un e-mail cu link-ul de acces la secţiunea protejată.</ro>
+<sl>Obrazec je bil uspešno poslan. V kratkem boste prejeli e-sporočilo s povezavo za dostop do zaščitenega območja.</sl>
 </text>
 <text>
 <en>Please enter your E-Mail Address to access this area.</en>
 <de>Bitte geben Sie Ihre E-Mail Adresse ein um Zugang zu diesem Bereich zu erhalten.</de>
 <id>1616</id>
 <ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail pentru a avea acces la această secţiune.</ro>
+<sl>Vnesite svoj e-naslov, da boste prejeli dostop do tega območja.</sl>
 </text>
 <text>
 <en>Invalid or expired Link. Please request a new one.</en>
 <de>Ungültiger oder abgelaufener Link. Bitte fordern Sie einen neuen an.</de>
 <id>1617</id>
 <ro>Link invalid sau expirat. Vă rugăm să solicitaţi unul nou.</ro>
+<sl>Neveljavna ali potekla povezava. Zaprosite za novo.</sl>
 </text>
 <text>
 <en>Information</en>
@@ -6993,18 +7942,21 @@ has just been created.</en>
 <de>Ungültige Suchbegriffe</de>
 <id>1630</id>
 <ro>Text căutare invalid</ro>
+<sl>Neveljavni iskani pojmi</sl>
 </text>
 <text>
 <en>Search results can be extended using wildcards.</en>
 <de>Die Suchergebnisse können durch die Verwendung von Wildcards erweitert werden.</de>
 <id>1631</id>
 <ro>Căutarea poate fi extinsă utilizând wildcards.</ro>
+<sl>Število rezultatov iskanja lahko povečate z uporabo nadomestnih znakov.</sl>
 </text>
 <text>
 <en>Examples: "Hallo Welt" , ? , * , AND , OR</en>
 <de>Beispiele: "Hallo Welt" , ? , * , AND , OR</de>
 <id>1632</id>
 <ro>Exemple: "Hallo Welt" , ? , * , AND , OR</ro>
+<sl>Primeri: "Pozdravljen, svet" , ? , * , AND , OR</sl>
 </text>
 <text>
 <en>No results found for &lt;strong&gt;"{0}"&lt;/strong&gt;</en>
@@ -7012,6 +7964,7 @@ has just been created.</en>
 <id>1633</id>
 <ro>Nu au fost găsite rezultate pentru &lt;strong&gt;"{0}"&lt;/strong&gt;</ro>
 <hu>Nincs eredmény a &lt;strong&gt;"{0}"&lt;/strong&gt; kifejezésre.</hu>
+<sl>Rezultatov za &lt;strong&gt;"{0}"&lt;/strong&gt; ni bilo možno najti.</sl>
 </text>
 <text>
 <en>Must not be negative</en>
@@ -7019,55 +7972,62 @@ has just been created.</en>
 <id>1637</id>
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
-<id>1600</id>
 </text>
 <text>
 <en>value of goods</en>
 <de>Warenwert</de>
 <id>1638</id>
 <ro>Valoare produse</ro>
+<sl>Vrednost blaga</sl>
 </text>
 <text>
 <en>net amount</en>
 <de>Nettobetrag</de>
 <id>1602</id>
 <ro>sumă netă</ro>
+<sl>Neto znesek</sl>
 </text>
 <text>
 <en>Count</en>
 <de>Anzahl</de>
 <id>1572</id>
 <ro>Cantitate</ro>
+<sl>Število</sl>
 </text>
 <text>
 <en>Sum</en>
 <de>Summe</de>
 <id>1605</id>
 <ro>Total</ro>
+<sl>Vsota</sl>
 </text>
 <text>
 <en>Back</en>
 <de>Zurück</de>
 <id>1574</id>
 <ro>Înapoi</ro>
+<sl>Nazaj</sl>
 </text>
 <text>
 <en>Shop.ProductList</en>
 <de>Shop.Produktliste</de>
 <id>1606</id>
 <ro>Shop.listă produse</ro>
+<sl>Trgovina. Seznam produktov</sl>
 </text>
 <text>
 <en>Errormessage</en>
 <de>Fehlermeldung</de>
 <id>1639</id>
 <ro>Mesaj de eroare</ro>
+<sl>Obvestilo o napaki</sl>
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, überprüfen Sie die Schreibweise</de>
 <id>1685</id>
 <ro>Dacă aţi introdus dumneavoastră adresa, asiguraţi-vă că este scrisă corect</ro>
+<sl>Če ste naslov vnesli ročno, preverite zapis.</sl>
 </text>
 <text>
 <en>Original Position</en>
@@ -7116,6 +8076,7 @@ has just been created.</en>
 <de>Bitte geben Sie einen Suchbegriff ein</de>
 <id>1647</id>
 <ro>Vă rugăm să introduceţi un text pentru căutare</ro>
+<sl>Vnesite iskani pojem.</sl>
 </text>
 <text>
 <en>XLS Import</en>
@@ -7146,6 +8107,7 @@ has just been created.</en>
 <en>Browse</en>
 <id>1672</id>
 <ro>Caută</ro>
+<sl>Iskanje</sl>
 </text>
 <text>
 <en>Master</en>
@@ -7214,30 +8176,35 @@ has just been created.</en>
 <de>alt</de>
 <id>1701</id>
 <ro>vechi</ro>
+<sl>Staro</sl>
 </text>
 <text>
 <en>Back to overview</en>
 <de>Zurück zur Übersicht</de>
 <id>1702</id>
 <ro>Înapoi la Overview</ro>
+<sl>Nazaj na pregled</sl>
 </text>
 <text>
 <en>Guestbook Detail</en>
 <de>Gästebuch Detail</de>
 <id>1674</id>
 <ro>Guestbook Detalii</ro>
+<sl>Nabiralnik – podrobnosti</sl>
 </text>
 <text>
 <en>Set password</en>
 <de>Passwort setzen</de>
 <id>1675</id>
 <ro>Intordu parola</ro>
+<sl>Določi geslo</sl>
 </text>
 <text>
 <en>Data</en>
 <de>Daten</de>
 <id>1676</id>
 <ro>Date</ro>
+<sl>Podatki</sl>
 </text>
 <text>
 <en>Link.to CommunityVideo</en>
@@ -7250,24 +8217,28 @@ has just been created.</en>
 <de>E-Mail Adresse</de>
 <id>1678</id>
 <ro>Adresă de e-mail</ro>
+<sl>E-naslov</sl>
 </text>
 <text>
 <en>Subject of E-Mail</en>
 <de>Betreff der E-Mail</de>
 <id>1679</id>
 <ro>Subiectul  e-mail-ului</ro>
+<sl>Zadeva e-sporočila</sl>
 </text>
 <text>
 <en>Predefined text of E-Mail</en>
 <de>Vordefinierter Text für die E-Mail</de>
 <id>1680</id>
 <ro>Text predefinit pentru e-mail</ro>
+<sl>Vnaprej določeno besedilo za e-sporočilo</sl>
 </text>
 <text>
 <en>Image text</en>
 <de>Bildtext</de>
 <id>1681</id>
 <ro>Text imagine</ro>
+<sl>Besedilo slike</sl>
 </text>
 <text>
 <en>No content specified. Please add in Admin -&gt; Texts.</en>
@@ -7280,6 +8251,7 @@ has just been created.</en>
 <de>Bezeichnung verstecken</de>
 <id>1703</id>
 <ro>Ascunde denumirea</ro>
+<sl>Skrij oznako</sl>
 </text>
 <text>
 <en>Form.Multi Checkbox</en>
@@ -7292,12 +8264,14 @@ has just been created.</en>
 <de>Zeige alle auswählen Links</de>
 <id>1705</id>
 <ro>Afişează toate link-urile selectate</ro>
+<sl>Prikaži vse izbrane povezave</sl>
 </text>
 <text>
 <en>You can't set {0} as Home</en>
 <de>{0} kann nicht als Home verwendet werden</de>
 <id>1706</id>
 <ro>Nu puteţi să setaţi {0} ca Home.</ro>
+<sl>{0} ni možno nastaviti za domačo stran.</sl>
 </text>
 <text>
 <en>Filter</en>
@@ -7310,6 +8284,7 @@ has just been created.</en>
 <de>Bitte Datei auswählen</de>
 <id>1657</id>
 <ro>Vă rugăm să selectaţi un fişier</ro>
+<sl>Izberite datoteko</sl>
 </text>
 <text>
 <en>This field should only contain letters, numbers, - and _</en>
@@ -7334,24 +8309,28 @@ has just been created.</en>
 <de>Dienst nicht verfügbar</de>
 <id>1710</id>
 <ro>Serviciul nu este disponibil</ro>
+<sl>Storitev ni na voljo.</sl>
 </text>
 <text>
 <en>Temporarily Down for Maintenance</en>
 <de>Vorübergehen wegen Wartungsarbeit nicht verfügbar</de>
 <id>1711</id>
 <ro>Nu este disponibil temporar, datorită unor lucrări de mentenanţă</ro>
+<sl>Stran zaradi vzdrževalnih del začasno ni na voljo.</sl>
 </text>
 <text>
 <en>Normal service will be restored soon.</en>
 <de>Der normale Betrieb wird baldmöglichst wieder hergestellt.</de>
 <id>1712</id>
 <ro>Serviciile obişnuite vor fi disponibile cât mai curând posibil.</ro>
+<sl>Normalno delovanje bo ponovno vzpostavljeno v čim krajšem možnem času.</sl>
 </text>
 <text>
 <en>An error occured while processing the form. Please try to submit again later.</en>
 <de>Ein Fehler beim verarbeiten des Formulars ist aufgetreten. Bitte versuchen sie es nach einer Weile erneut.</de>
 <id>1713</id>
 <ro>A intervenit o eroare la procesarea formularului. Vă rugăm să reîncercaţi puţin mai târziu.</ro>
+<sl>Pri obdelavi obrazca je prišlo do napake. Ponovno poskusite kasneje.</sl>
 </text>
 <text>
 <en>Choose Child</en>
@@ -7490,48 +8469,56 @@ has just been created.</en>
 <id>1736</id>
 <de>Seite kopieren</de>
 <ro>Copiază pagina</ro>
+<sl>Kopiraj stran</sl>
 </text>
 <text>
 <en>Paste Page</en>
 <de>Seite einfügen</de>
 <id>1737</id>
 <ro>Inserează pagina</ro>
+<sl>Vstavi stran</sl>
 </text>
 <text>
 <en>Ignore</en>
 <id>1739</id>
 <de>Ignorieren</de>
 <ro>Ignoră</ro>
+<sl>Prezri</sl>
 </text>
 <text>
 <en>'%value%' must be less or equal than '%max%'</en>
 <de>'%value%' muss kleiner oder gleich '%max%' sein</de>
 <id>1740</id>
 <ro>'%value%' trebuie să fie mai mic sau egal cu '%max%'</ro>
+<sl>%value%' mora biti manjša ali enaka '%max%'.</sl>
 </text>
 <text>
 <en>'%value%' must be greater or equal than '%min%'</en>
 <de>'%value%' muss größer oder gleich '%min%' sein</de>
 <id>1741</id>
 <ro>'%value%' trebuie să fie mai mare sau egal cu '%min%'</ro>
+<sl>%value%' mora biti večja ali enaka '%max%'.</sl>
 </text>
 <text>
 <en>The password is invalid</en>
 <de>Das Passwort ist ungültig</de>
 <id>1742</id>
 <ro>Parola este invalidă</ro>
+<sl>Geslo ni veljavno.</sl>
 </text>
 <text>
 <en>The password must be at least 8 characters long</en>
 <de>Das Passwort muss mindestens 8 Zeichen lang sein</de>
 <id>1743</id>
 <ro>Parola trebuie să fie formată din cel puţin 8 caractere</ro>
+<sl>Geslo mora vsebovati najmanj 8 znakov.</sl>
 </text>
 <text>
 <en>The password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
 <de>Das passwort muss mindestens aus 3 der folgenden 4 Bedingungen erfüllen: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen</de>
 <id>1744</id>
 <ro>Parola trebuie să fie formată cel puţin din 3 din următoarele 4 tipuri de caractere: litere mici, majuscule, numere şi caractere speciale.</ro>
+<sl>Geslo mora izpolnjevati najmanj 3 od naslednjih 4 pogojev: male črke, velike črke, številke in posebni znaki.</sl>
 </text>
 <text>
 <en>Internal Page</en>
@@ -7568,6 +8555,7 @@ has just been created.</en>
 <de>Leer</de>
 <id>1750</id>
 <ro>Gol</ro>
+<sl>Prazno</sl>
 </text>
 <text>
 <en>Start opened</en>
@@ -7592,6 +8580,7 @@ has just been created.</en>
 <de>Prozentsatz der User, die mindenstens einen Link im Newsletter geklickt haben</de>
 <id>1754</id>
 <ro>Procentul de utilizatori care au făut click pe cel puţin un link din newsletter.</ro>
+<sl>Odstotek uporabnikov, ki so kliknili na najmanj eno povezavo v e-novicah</sl>
 </text>
 <text>
 <en>Frontend</en>
@@ -7604,12 +8593,14 @@ has just been created.</en>
 <de>'%value%' hat kein Datumsformat</de>
 <id>1756</id>
 <ro>'%value%' nu are format valid de dată</ro>
+<sl>%value%' nima oblike datuma.</sl>
 </text>
 <text>
 <en>'%value%' does not fit the date format '{0}'</en>
 <de>'%value%' liegt nicht im benötigen Format vor: '{0}'</de>
 <id>1757</id>
 <ro>'%value%' nu are formatul necesar: '{0}'</ro>
+<sl>%value%' ni v zahtevanem formatu: '{0}'</sl>
 </text>
 <text>
 <en>Recipient</en>
@@ -7628,6 +8619,7 @@ has just been created.</en>
 <de>Absatzgruppe</de>
 <id>1760</id>
 <ro>Grup paragrafe</ro>
+<sl>Skupina odstavkov</sl>
 </text>
 <text>
 <en>Can't submit order because the cart is empty.</en>

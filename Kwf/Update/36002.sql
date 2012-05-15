@@ -1,3 +1,4 @@
+#tags: kwc
 ALTER TABLE `cache_component` ADD `expanded_component_id` VARCHAR( 255 ) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `page_db_id` ;
 ALTER TABLE `cache_component` ADD INDEX ( `expanded_component_id` ) ;
 ALTER TABLE `cache_component` CHANGE `page_db_id` `page_db_id` VARCHAR( 255 ) CHARACTER SET ascii COLLATE ascii_bin NOT NULL ;

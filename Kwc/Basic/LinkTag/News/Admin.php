@@ -45,7 +45,7 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
     {
         $ret = array();
         $news = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_News_Directory_Component');
+            ->getComponentsByClass('Kwc_News_Directory_Component', array('ignoreVisible'=>true));
         foreach ($news as $new) {
             if (is_instance_of($new->componentClass, 'Kwc_Events_Directory_Component')) continue;
             $form = Kwc_Abstract_Form::createComponentForm($this->_class, 'child');
@@ -64,7 +64,7 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
         $ret = array();
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($cardDbId, array('ignoreVisible'=>true)) as $card) {
             $news = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsByClass('Kwc_News_Directory_Component', array('subroot'=>$card));
+                ->getComponentsByClass('Kwc_News_Directory_Component', array('subroot'=>$card, 'ignoreVisible'=>true));
             foreach ($news as $new) {
                 if (!in_array($new->dbId, $ret)) {
                     $ret[] = $new->dbId;
