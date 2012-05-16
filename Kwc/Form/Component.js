@@ -116,7 +116,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 // show success content
                 if (r.successContent) {
                     var el = this.el.parent().createChild(r.successContent);
-                    if (this.hideFormOnSuccess) {
+                    if (this.config.hideFormOnSuccess) {
                         this.el.remove();
                     } else {
                         (function(el) {
