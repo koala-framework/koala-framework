@@ -49,7 +49,7 @@ Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 }));
             }
 
-            this.relayEvents(item, ['editcomponent', 'gotComponentConfigs']);
+            this.relayEvents(item, ['editcomponent', 'gotComponentConfigs', 'datachange']);
             this.tabPanel.add(item);
             this.tabItems.push(item);
         }
