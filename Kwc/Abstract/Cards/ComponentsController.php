@@ -19,6 +19,7 @@ class Kwc_Abstract_Cards_ComponentsController extends Kwf_Controller_Action_Auto
         $data = array();
         $gen = Kwc_Abstract::getSetting($this->_getParam('class'), 'generators');
         foreach ($gen['child']['component'] as $name => $class) {
+            if (!$class) continue;
             $admin = Kwc_Admin::getInstance($class);
             $forms = $admin->getCardForms();
             foreach ($admin->getVisibleCardForms($subRootComponentId) as $k) {
