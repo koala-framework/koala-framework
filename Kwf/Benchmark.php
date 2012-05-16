@@ -176,7 +176,7 @@ class Kwf_Benchmark
                 echo "</div>";
             }
         }
-        echo "<table>";
+        echo "<table style=\"font-size: 10px\">";
         echo "<tr><th>ms</th><th>%</th><th>Checkpoint</th></tr>";
         $sum = 0;
         foreach (self::$_checkpoints as $checkpoint) {
@@ -184,9 +184,9 @@ class Kwf_Benchmark
         }
         foreach (self::$_checkpoints as $i=>$checkpoint) {
             echo "<tr>";
-            echo "<th>".round($checkpoint[0]*1000)."</th>";
-            echo "<th>".round(($checkpoint[0]/$sum)*100)."</th>";
-            echo "<th>".$checkpoint[1]."</th>";
+            echo "<td>".round($checkpoint[0]*1000)."</td>";
+            echo "<td>".round(($checkpoint[0]/$sum)*100)."</td>";
+            echo "<td>".$checkpoint[1]."</td>";
             echo "</tr>";
             if (isset(self::$_subCheckpoints[$i])) {
                 $subSum = 0;
@@ -195,9 +195,9 @@ class Kwf_Benchmark
                     $percent = ($subCheckpoint[0]/$sum)*100;
                     if ($percent > 1) {
                         echo "<tr>";
-                        echo "<th>".round($subCheckpoint[0]*1000)."</th>";
-                        echo "<th>".round($percent)."</th>";
-                        echo "<th>&nbsp;&nbsp;".$subCheckpoint[1]."</th>";
+                        echo "<td>".round($subCheckpoint[0]*1000)."</td>";
+                        echo "<td>".round($percent)."</td>";
+                        echo "<td>&nbsp;&nbsp;".$subCheckpoint[1]."</td>";
                         echo "</tr>";
                     }
                 }
