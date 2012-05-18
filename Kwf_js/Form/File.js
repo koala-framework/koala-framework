@@ -176,8 +176,12 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
         if (!Kwf.Utils.Upload.supportsHtml5Upload()) return;
 
+        var w = this.uploadButton.el.getWidth();
+        var h = this.uploadButton.el.getHeight();
+        if (!w) w = 131; //might be 0 if element is hidden
+        if (!h) h = 21;
         var fileInputContainer = this.uploadButtonContainer.createChild({
-            style: 'width: '+this.uploadButton.el.getWidth()+'px; height: '+this.uploadButton.el.getHeight()+'px; top: 0; position: absolute; overflow: hidden;'
+            style: 'width: '+w+'px; height: '+h+'px; top: 0; position: absolute; overflow: hidden;'
         });
 
         var fileInput = fileInputContainer.createChild({
