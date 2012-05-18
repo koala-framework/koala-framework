@@ -270,6 +270,7 @@ class Vps_Media_Image
     private function _processCommonImagickSettings($im)
     {
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->stripImage();
         $im->setCompressionQuality(90);
         $version = $im->getVersion();
         if (isset($version['versionNumber']) && (int)$version['versionNumber'] >= 1632) {
