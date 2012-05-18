@@ -162,11 +162,11 @@ class Vps_Media_Image
             if (class_exists('Imagick')) {
                 $im = new Imagick();
                 $im->readImage($source);
+                $im = self::_processCommonImagickSettings($im);
                 $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
                 $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
                 $im->setImagePage(0, 0, 0, 0);
     //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
-                $im = self::_processCommonImagickSettings($im);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             }
@@ -175,8 +175,8 @@ class Vps_Media_Image
             if (class_exists('Imagick')) {
                 $im = new Imagick();
                 $im->readImage($source);
-                $im->thumbnailImage($size['width'], $size['height']);
                 $im = self::_processCommonImagickSettings($im);
+                $im->thumbnailImage($size['width'], $size['height']);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             } else {
@@ -218,6 +218,21 @@ class Vps_Media_Image
 
     private function _processCommonImagickSettings($im)
     {
+        if ($im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
+            $profiles = $im->getImageProfiles('icc', false);
+            $hasIccProfile = in_array('icc', $profiles);
+            // if it doesnt have a CMYK ICC profile, we add one
+            if ($hasIccProfile === false) {
+                $iccCmyk = file_get_contents(Vps_Registry::get('config')->libraryPath.'/icc/ISOuncoated.icc');
+                $im->profileImage('icc', $iccCmyk);
+                unset($iccCmyk);
+            }
+            // then we add an RGB profile
+            $iccRgb = file_get_contents(Vps_Registry::get('config')->libraryPath.'/icc/sRGB_v4_ICC_preference.icc');
+            $im->profileImage('icc', $iccRgb);
+            unset($iccRgb);
+        }
+
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->setCompressionQuality(80);
         $version = $im->getVersion();
