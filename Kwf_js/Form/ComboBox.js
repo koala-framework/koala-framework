@@ -174,6 +174,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 && this.mode == 'remote'
                 && this.store.proxy //proxy vorhanden (dh. daten können nachgeladen werden)
                 ) {
+            delete this.lastQuery;
             this.store.baseParams[this.queryParam] = this.valueField+':'+v;
             this.store.load({
                 blockOnLoad: true,
