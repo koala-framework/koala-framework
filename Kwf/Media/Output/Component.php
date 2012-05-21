@@ -22,22 +22,27 @@ class Kwf_Media_Output_Component
                 return Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
             }
         }
-
         //$ret can be VALID or VALID_DONT_CACHE at this point
+
+        $plugins = array();
         while ($c) {
             foreach (Kwc_Abstract::getSetting($c->componentClass, 'plugins') as $plugin) {
                 if (is_instance_of($plugin, 'Kwf_Component_Plugin_Interface_Login')) {
-                    $plugin = new $plugin($id);
-                    if ($plugin->isLoggedIn()) {
-                        $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
-                    } else {
-                        $ret = Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
-                        break 2;
-                    }
+                    $plugins[] = $plugin;
                 }
             }
             if ($c->isPage) break;
             $c = $c->parent;
+        }
+
+        foreach ($plugins as $plugin) {
+            $plugin = new $plugin($id);
+            if ($plugin->isLoggedIn()) {
+                $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
+            } else {
+                $ret = Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
+                break;
+            }
         }
         return $ret;
     }
