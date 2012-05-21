@@ -86,6 +86,7 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         } else {
             $ret = $this->{$this->_getPrimaryKey()};
         }
+        parent::_saveWithoutResetDirty(); //siblings nach uns speichern; damit auto-inc id vorhanden
         if ($insert) {
             $this->_afterInsert();
             $this->_model->afterInsert($this);
@@ -94,7 +95,6 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         }
         $this->_afterSave();
 
-        parent::_saveWithoutResetDirty(); //siblings nach uns speichern; damit auto-inc id vorhanden
 
         return $ret;
     }

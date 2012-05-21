@@ -107,13 +107,13 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
         Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->_row->_saveWithoutResetDirty();
         Kwf_Component_ModelObserver::getInstance()->enable();
+        parent::_saveWithoutResetDirty();
         $this->_afterSave();
         if (!$id) {
             $this->_afterInsert();
         } else {
             $this->_afterUpdate();
         }
-        parent::_saveWithoutResetDirty();
         return $ret;
     }
 

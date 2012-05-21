@@ -19,13 +19,13 @@ class Kwf_Model_MirrorCache_Row extends Kwf_Model_Proxy_Row
         $this->_beforeSaveSiblingMaster();
         //DEAKTIVIERT: $ret = $this->_row->save();
           //(neue row wird in Model::synchronizeAndInsertRow eingefügt)
+        return Kwf_Model_Row_Abstract::_saveWithoutResetDirty(); //nicht parent, der würde wida _row->save machen
         $this->_afterSave();
         if (!$id) {
             $this->_afterInsert();
         } else {
             $this->_afterUpdate();
         }
-        return Kwf_Model_Row_Abstract::_saveWithoutResetDirty(); //nicht parent, der würde wida _row->save machen
     }
 
     protected function _beforeInsert()

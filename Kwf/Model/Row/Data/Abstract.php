@@ -122,13 +122,13 @@ class Kwf_Model_Row_Data_Abstract extends Kwf_Model_Row_Abstract
         }
         $this->_cleanData = $this->_data;
 
+        parent::_saveWithoutResetDirty(); //siblings nach uns speichern; damit auto-inc id vorhanden
         if ($update) {
             $this->_afterUpdate();
         } else {
             $this->_afterInsert();
         }
         $this->_afterSave();
-        parent::_saveWithoutResetDirty(); //siblings nach uns speichern; damit auto-inc id vorhanden
 
         return $ret;
     }
