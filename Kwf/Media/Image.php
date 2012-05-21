@@ -299,7 +299,7 @@ class Kwf_Media_Image
 
     private function _processCommonImagickSettings($im)
     {
-        if ($im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
+        if (method_exists($im, 'getImageProfiles') && $im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
             $profiles = $im->getImageProfiles('icc', false);
             $hasIccProfile = in_array('icc', $profiles);
             // if it doesnt have a CMYK ICC profile, we add one
