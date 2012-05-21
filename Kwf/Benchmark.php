@@ -163,7 +163,7 @@ class Kwf_Benchmark
         if (self::$benchmarks && PHP_SAPI != 'cli') {
             echo "<br /><b>Benchmarks:</b><br/>";
             foreach (self::$benchmarks as $i) {
-                echo "<a style=\"display:block;\"href=\"#\" onclick=\"if(this.nextSibling.nextSibling.style.display=='none') { this.open=true; this.nextSibling.nextSibling.style.display='block'; this.nextSibling.style.display=''; } else { this.open=false; this.nextSibling.nextSibling.style.display='none';this.nextSibling.style.display='none'; } return(false); }\"
+                echo "<a style=\"display:block;\" href=\"#\" onclick=\"if(this.nextSibling.nextSibling.style.display=='none') { this.open=true; this.nextSibling.nextSibling.style.display='block'; this.nextSibling.style.display=''; } else { this.open=false; this.nextSibling.nextSibling.style.display='none';this.nextSibling.style.display='none'; } return(false); }\"
                                                             onmouseover=\"if(!this.open) this.nextSibling.style.display=''\"
                                                             onmouseout=\"if(!this.open) this.nextSibling.style.display='none'\">";
                 echo "{$i->identifier} (".round($i->duration, 3)." sec)</a>";
@@ -216,7 +216,7 @@ class Kwf_Benchmark
         foreach ($counter as $k=>$i) {
             if (is_array($i)) {
                 if (PHP_SAPI != 'cli') {
-                    echo "<a style=\"display:block;\"href=\"#\" onclick=\"if(this.nextSibling.style.display=='none') this.nextSibling.style.display='block'; else this.nextSibling.style.display='none';return(false);\">";
+                    echo "<a style=\"display:block;\" href=\"#\" onclick=\"if(this.nextSibling.style.display=='none') this.nextSibling.style.display='block'; else this.nextSibling.style.display='none';return(false);\">";
                     echo "$k: ".count($i)."</a>";
                     echo "<ul style=\"display:none\">";
                     foreach ($i as $j) {
