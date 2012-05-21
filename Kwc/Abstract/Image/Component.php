@@ -263,25 +263,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        if (Kwf_Component_Data_Root::getInstance()->getComponentById($id)) {
-            return self::VALID;
-        }
-        if (Kwf_Component_Data_Root::getShowInvisible()) {
-            //preview im frontend
-            if (Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
-                return self::VALID_DONT_CACHE;
-            }
-        }
-
-        //paragraphs vorschau im backend
-        if (Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
-            $authData = Kwf_Registry::get('userModel')->getAuthedUser();
-            if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
-                return self::VALID_DONT_CACHE;
-            }
-        }
-
-        return self::INVALID;
+        return Kwf_Media_Output_Component::isValid($id);
     }
 
     public static function getMediaOutput($id, $type, $className)

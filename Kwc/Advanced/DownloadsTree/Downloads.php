@@ -16,23 +16,7 @@ class Kwc_Advanced_DownloadsTree_Downloads extends Kwf_Model_Db implements Kwf_M
     public static function isValidMediaOutput($id, $type, $className)
     {
         $componentId = substr($id, 0, strrpos($id, '_'));
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId);
-        if (!$c) return self::INVALID;
-        while($c) {
-            foreach (Kwc_Abstract::getSetting($c->componentClass, 'plugins') as $p) {
-                if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_Login')) {
-                    $p = new $p($c->componentId);
-                    if (!$p->isLoggedIn()) {
-                        return self::ACCESS_DENIED;
-                    } else {
-                        return self::VALID_DONT_CACHE;
-                    }
-                }
-            }
-            if ($c->isPage) break;
-            $c = $c->parent;
-        }
-        return self::VALID;
+        return Kwf_Media_Output_Component::isValid($componentId);
     }
 
     public static function getMediaOutput($id, $type, $className)
