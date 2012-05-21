@@ -27,9 +27,10 @@ class Kwf_Media_Output_Component
                 if (is_instance_of($plugin, 'Kwf_Component_Plugin_Interface_Login')) {
                     $plugin = new $plugin($id);
                     if ($plugin->isLoggedIn()) {
-                        return Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
+                        $retValid = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
                     } else {
-                        return Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
+                        $retValid = Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
+                        break 2;
                     }
                 }
             }
