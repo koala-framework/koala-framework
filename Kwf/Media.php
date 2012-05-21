@@ -97,6 +97,7 @@ class Kwf_Media
                 Kwf_Cache_Simple::add($cacheId, true, 60*60);
             }
         }
+        Zend_Session::writeClose();
         $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
         return $output;
     }
