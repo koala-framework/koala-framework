@@ -52,6 +52,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
+        $ret['useDataUrl'] = false;
         $ret['flags']['hasFulltext'] = true;
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
@@ -152,6 +153,19 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($data) {
             $id = $this->getData()->componentId;
             $type = $this->getImageUrlType();
+            if (Kwc_Abstract::getSetting($this->getData()->componentClass, 'useDataUrl')) {
+                $data = self::getMediaOutput($id, $type, $this->getData()->componentClass);
+                if (isset($data['file'])) {
+                    $c = file_get_contents($data['file']);
+                } else {
+                    $c = $data['contents'];
+                }
+                $base64 = base64_encode($c);
+                if (strlen($base64) < 32*1024) {
+                    $mime = $data['mimeType'];
+                    return "data:$mime;base64,$base64";
+                }
+            }
             return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
         }
         return null;
