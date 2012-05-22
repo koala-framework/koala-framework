@@ -23,6 +23,8 @@ Kwf.FrontendForm.ErrorStyle.Bubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abov
                     field.errorEl.alignTo(field.el.child('textarea'), 'bl');
                 } else if (field.el.child('input')) {
                     field.errorEl.alignTo(field.el.child('input'), 'bl');
+                } else if (field.el.child('select')) {
+                    field.errorEl.alignTo(field.el.child('select'), 'bl');
                 } else {
                     field.errorEl.alignTo(field.el, 'bl');
                 }
