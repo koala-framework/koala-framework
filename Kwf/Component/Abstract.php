@@ -401,7 +401,13 @@ class Kwf_Component_Abstract
     {
         self::$_cacheSettings = array();
         if (!self::$_settings) {
-            $cache = new Kwf_Assets_Cache(array('checkComponentSettings' => false));
+            $cache = new Kwf_Cache_Core(array('checkComponentSettings' => false));
+            $cache->setBackend(new Zend_Cache_Backend_File(array(
+                'cache_dir' => 'cache/component',
+                'cache_file_umask' => 0666,
+                'hashed_directory_umask' => 0777,
+            )));
+
             $cacheId = 'componentSettings'.Kwf_Trl::getInstance()->getTargetLanguage()
                                 .'_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
             self::$_settings = $cache->load($cacheId);
