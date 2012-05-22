@@ -1,0 +1,17 @@
+
+.kwfFieldErrorIconBubble { 
+    position: absolute; 
+    width: 16px; height: 16px;
+    background: url("/assets/silkicons/exclamation.png") no-repeat scroll left center transparent;
+}
+.kwfFieldErrorIconBubble .message {
+    position: absolute; 
+    border: 2px solid #dddddd; 
+    border-radius: 6px;
+    min-width: 100px;
+    background-color: red;
+    z-index: 10000;
+    cursor: default;
+    padding: 5px;
+    color: white;
+}
