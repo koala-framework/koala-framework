@@ -6,6 +6,9 @@ Kwf.FrontendForm.Field = function(fieldEl, form) {
     this.form = form;
     this.initField();
     this.addEvents('change');
+    this.on('change', function(value) {
+        this.form.errorStyle.hideFieldError(this);
+    }, this);
 };
 Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
     initField: function() {
@@ -14,6 +17,9 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
             inp.on('change', function() {
                 this.fireEvent('change', this.getValue());
             }, this);
+            inp.on('keypress', function() {
+                this.fireEvent('change', this.getValue());
+            }, this, { delay: 1 });
         }
     },
     getFieldName: function() {

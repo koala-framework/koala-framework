@@ -19,6 +19,11 @@ Kwf.FrontendForm.ErrorStyle.Abstract.prototype = {
     showErrors: function() {
     },
     hideErrors: function() {
+        this.form.fields.each(function(field) {
+            this.hideFieldError(field);
+        }, this);
+    },
+    hideFieldError: function(field) {
     }
 };
 

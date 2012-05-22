@@ -24,14 +24,10 @@ Kwf.FrontendForm.ErrorStyle.BelowField = Ext.extend(Kwf.FrontendForm.ErrorStyle.
             this._showErrorMessagesAbove(r.errorMessages);
         }
     },
-    hideErrors: function()
+    hideFieldError: function(field)
     {
-        Kwf.FrontendForm.ErrorStyle.BelowField.superclass.hideErrors.call(this);
-
-        this.form.fields.each(function(field) {
-            field.el.removeClass('kwfFieldError');
-            if (field.errorEl) field.errorEl.hide();
-        }, this);
+        field.el.removeClass('kwfFieldError');
+        if (field.errorEl) field.errorEl.hide();
     }
 });
 Kwf.FrontendForm.errorStyles['belowField'] = Kwf.FrontendForm.ErrorStyle.BelowField;

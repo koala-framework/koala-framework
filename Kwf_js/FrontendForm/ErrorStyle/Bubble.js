@@ -42,14 +42,10 @@ Kwf.FrontendForm.ErrorStyle.Bubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abov
             this._showErrorMessagesAbove(r.errorMessages);
         }
     },
-    hideErrors: function()
+    hideFieldError: function(field)
     {
-        Kwf.FrontendForm.ErrorStyle.Bubble.superclass.hideErrors.call(this);
-
-        this.form.fields.each(function(field) {
-            field.el.removeClass('kwfFieldError');
-            if (field.errorEl) field.errorEl.fadeOut();
-        }, this);
+        field.el.removeClass('kwfFieldError');
+        if (field.errorEl) field.errorEl.fadeOut();
     }
 });
 Kwf.FrontendForm.errorStyles['bubble'] = Kwf.FrontendForm.ErrorStyle.Bubble;
