@@ -20,13 +20,11 @@ Kwf.FrontendForm.ErrorStyle.Bubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abov
                     this.fadeOut();
                 }, field.errorEl);
                 if (field instanceof Kwf.FrontendForm.TextArea) {
-                    field.errorEl.alignTo(field.el.child('textarea'), 'r', [-40, 4]);
-                } else if (field instanceof Kwf.FrontendForm.Radio) {
-                    field.errorEl.alignTo(field.el.child('.kwfFormFieldRadio span:last'), 'r', [-30, 6]);
+                    field.errorEl.alignTo(field.el.child('textarea'), 'bl');
                 } else if (field.el.child('input')) {
-                    field.errorEl.alignTo(field.el.child('input'), 'r', [-40, 4]);
+                    field.errorEl.alignTo(field.el.child('input'), 'bl');
                 } else {
-                    field.errorEl.alignTo(field.el, 'r', [-40, 4]);
+                    field.errorEl.alignTo(field.el, 'bl');
                 }
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();
