@@ -208,8 +208,6 @@ class Kwf_Util_ClearCache
         if ($types == 'all') {
             $types = $this->getTypes();
             $refreshTypes = $this->_getRefreshTypes($types);
-        } else if ($types == 'component' && extension_loaded('apc')) {
-            $types = array('component', 'apc');
         } else {
             if (!is_array($types)) {
                 $types = explode(',', $types);
@@ -303,9 +301,7 @@ class Kwf_Util_ClearCache
             if ($server) {
                 if ($output) echo "ignored db:  $t\n";
             } else {
-                if (in_array($t, $types) ||
-                    (in_array('component', $types) && substr($t, 0, 15) == 'cache_component')
-                ) {
+                if (in_array($t, $types)) {
                     if ($t == 'cache_component') {
                         $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
                         if ($cnt > 5000) {

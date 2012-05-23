@@ -3227,6 +3227,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>709</id>
 <ro>Vă rugăm să completaţi câmpul</ro>
 <sl>Izpolnite polje</sl>
+<ua>Необхідно заповнити поле</ua>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -7965,6 +7966,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Nu au fost găsite rezultate pentru &lt;strong&gt;"{0}"&lt;/strong&gt;</ro>
 <hu>Nincs eredmény a &lt;strong&gt;"{0}"&lt;/strong&gt; kifejezésre.</hu>
 <sl>Rezultatov za &lt;strong&gt;"{0}"&lt;/strong&gt; ni bilo možno najti.</sl>
+<ua>Не знайдено результатів по запиту &lt;strong&gt;"{0}"&lt;/strong&gt;</ua>
 </text>
 <text>
 <en>Must not be negative</en>
