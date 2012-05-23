@@ -401,7 +401,12 @@ class Kwf_Component_Abstract
     {
         self::$_cacheSettings = array();
         if (!self::$_settings) {
-            $cache = new Kwf_Cache_Core(array('checkComponentSettings' => false));
+            $cache = new Kwf_Cache_Core(array(
+                'checkComponentSettings' => false,
+                'lifetime' => null,
+                'automatic_serialization' => true,
+                'automatic_cleaning_factor' => 0,
+            ));
             $cache->setBackend(new Zend_Cache_Backend_File(array(
                 'cache_dir' => 'cache/component',
                 'cache_file_umask' => 0666,
