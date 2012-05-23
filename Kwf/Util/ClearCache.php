@@ -128,7 +128,7 @@ class Kwf_Util_ClearCache
 
             Kwf_Component_Events::getAllListeners();
 
-        } else if ($type == 'users') {
+        } else if ($type == 'cache_users') {
 
             Kwf_Registry::get('userModel')->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
 
@@ -189,7 +189,6 @@ class Kwf_Util_ClearCache
         if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
             $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
             if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
-                $refreshTypes[] = 'users';
                 if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
                     $refreshTypes[] = 'users cleanup';
                 }
