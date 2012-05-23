@@ -4,6 +4,7 @@ class Kwf_Component_Events
     protected $_config;
     public static $_indent = 0;
     private static $_listeners;
+    public static $eventsCount = 0;
 
     protected function __construct($config = array())
     {
@@ -173,5 +174,7 @@ class Kwf_Component_Events
         if ($logger) {
             $logger->indent--;
         }
+
+        self::$eventsCount++;
     }
 }
