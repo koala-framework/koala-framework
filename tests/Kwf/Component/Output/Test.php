@@ -2,17 +2,11 @@
 /**
  * @group Component_Output
  */
-class Kwf_Component_Output_Test extends Kwf_Test_TestCase
+class Kwf_Component_Output_Test extends Kwc_TestAbstract
 {
-    public function setUp()
-    {
-        parent::setUp();
-        Kwf_Registry::get('config')->debug->componentCache->disable = true;
-    }
-
     public function testMaster()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_C3_Root_Component');
+        $this->_init('Kwf_Component_Output_C3_Root_Component');
         $root = Kwf_Component_Data_Root::getInstance();
         $view = new Kwf_Component_Renderer();
 
@@ -28,7 +22,8 @@ class Kwf_Component_Output_Test extends Kwf_Test_TestCase
 
     public function testC1()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_C1_Root_Component');
+        $this->_init('Kwf_Component_Output_C1_Root_Component');
+
         $root = Kwf_Component_Data_Root::getInstance();
         $view = new Kwf_Component_Renderer();
 
@@ -44,7 +39,8 @@ class Kwf_Component_Output_Test extends Kwf_Test_TestCase
 
     public function testC3()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_C3_Root_Component');
+        $this->_init('Kwf_Component_Output_C3_Root_Component');
+
         $root = Kwf_Component_Data_Root::getInstance();
         $view = new Kwf_Component_Renderer();
 
@@ -63,7 +59,8 @@ class Kwf_Component_Output_Test extends Kwf_Test_TestCase
 
     public function testPlugin()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_Plugin_Component');
+        $this->_init('Kwf_Component_Output_Plugin_Component');
+
         $root = Kwf_Component_Data_Root::getInstance();
         $view = new Kwf_Component_Renderer();
 
@@ -72,9 +69,10 @@ class Kwf_Component_Output_Test extends Kwf_Test_TestCase
         $this->assertEquals('rootmaster pluginChild rootmasterend', $value);
     }
 
-    public function testPartial()
+    public function testPartialRandom()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_Partial_Random_Component');
+        $this->_init('Kwf_Component_Output_Partial_Random_Component');
+
         $root = Kwf_Component_Data_Root::getInstance();
         $view = new Kwf_Component_Renderer();
 
@@ -82,15 +80,20 @@ class Kwf_Component_Output_Test extends Kwf_Test_TestCase
         $this->assertTrue(in_array($value, array(
             'bar0bar1', 'bar0bar2', 'bar1bar2', 'bar1bar0', 'bar2bar0', 'bar2bar1'
         )));
+    }
 
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_Partial_Paging_Component');
+    public function testPartialPaging()
+    {
+        $this->_init('Kwf_Component_Output_Partial_Paging_Component');
+        $view = new Kwf_Component_Renderer();
         $value = $view->renderMaster(Kwf_Component_Data_Root::getInstance());
         $this->assertEquals('bar2', $value);
     }
 
     public function testDynamic()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_Dynamic_Component');
+        $this->_init('Kwf_Component_Output_Dynamic_Component');
+
         $output = new Kwf_Component_Renderer();
 
         $value = $output->renderMaster(Kwf_Component_Data_Root::getInstance());
@@ -99,7 +102,9 @@ class Kwf_Component_Output_Test extends Kwf_Test_TestCase
 
     public function testComponentLink()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_Link_Component');
+        $this->_init('Kwf_Component_Output_Link_Component');
+        $this->_root->setFilename('');
+
         $output = new Kwf_Component_Renderer();
         $html = $output->renderComponent(Kwf_Component_Data_Root::getInstance());
         $this->assertEquals('<a href="/c1" rel="">C1</a> <a href="/foo?&amp;f1=1#a2" rel="bar" class="Bar">Foo</a>', $html);
@@ -107,7 +112,8 @@ class Kwf_Component_Output_Test extends Kwf_Test_TestCase
 
     public function testHasContent()
     {
-        Kwf_Component_Data_Root::setComponentClass('Kwf_Component_Output_HasContent_Component');
+        $this->_init('Kwf_Component_Output_HasContent_Component');
+
         $output = new Kwf_Component_Renderer();
 
         $value = $output->renderMaster(Kwf_Component_Data_Root::getInstance());
