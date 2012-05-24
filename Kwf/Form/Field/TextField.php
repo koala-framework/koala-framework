@@ -44,29 +44,40 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         return (string)$ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
+    protected function _getInputProperties($values, $fieldNamePostfix, $idPrefix)
     {
         $name = $this->getFieldName();
         $value = $this->_getOutputValueFromValues($values);
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
-        $value = htmlspecialchars($value);
-        $name = htmlspecialchars($name);
+        $ret = array();
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
-            $cls = trim($cls.' kwfClearOnFocus');
+            $cls .= ' kwfClearOnFocus';
         }
         $style = '';
         if ($this->getWidth()) {
-            $style = "style=\"width: ".$this->getWidth()."px\" ";
+            $style .= "width: ".$this->getWidth()."px; ";
         }
-        $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$ret[id]\" ".
-                        "name=\"$name$fieldNamePostfix\" value=\"$value\" ".
-                        $style.
-                        ($cls ? "class=\"$cls\"" : '').
-                        "maxlength=\"{$this->getMaxLength()}\" />";
+        $ret['type'] = $this->getInputType();
+        $ret['name'] = "$name$fieldNamePostfix";
+        $ret['value'] = $value;
+        if ($style) $ret['style'] = trim($style);
+        if ($cls) $ret['cls'] = trim($cls);
+        if ($this->getMaxLength()) $ret['maxlength'] = $this->getMaxLength();
         return $ret;
+    }
+
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
+    {
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+        $prop = $this->_getInputProperties($values, $fieldNamePostfix, $idPrefix);
+        $ret['id'] = $prop['id'];
+        $ret['html'] = "<input";
+        foreach ($prop as $k=>$i) {
+            $ret['html'] .= ' '.htmlspecialchars($k).'="'.htmlspecialchars($i).'"';
+        }
+        $ret['html'] .= " />";
     }
 
     public static function getSettings()
