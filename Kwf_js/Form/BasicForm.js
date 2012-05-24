@@ -43,6 +43,12 @@ Ext.apply(Ext.form.VTypes, {
     alphanumText : trlKwf('This field should only contain letters, numbers, - and _'),
     alphanumMask : /[a-z0-9_\-]/i,
 
+    num:  function(v) {
+        return /^[0-9]+$/.test(v);
+    },
+    numText : trlKwf('This field should only contain numbers'),
+    numMask : /[0-9]/,
+
     time: function(val, field) {
         return /^([0-9]{2}):([0-9]{2}):([0-9]{2})$/i.test(val);
     },
