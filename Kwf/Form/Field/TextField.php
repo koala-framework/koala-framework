@@ -67,6 +67,18 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         if ($style) $ret['style'] = trim($style);
         if ($cls) $ret['cls'] = trim($cls);
         if ($this->getMaxLength()) $ret['maxlength'] = $this->getMaxLength();
+
+        if ($this->getVtype() === 'email') {
+            $ret['type'] = 'email';
+        } else if ($this->getVtype() === 'url') {
+            $ret['type'] = 'url';
+        } else if ($this->getVtype() === 'alpha') {
+            $ret['pattern'] = '/^[a-zA-Z_]+$/';
+        } else if ($this->getVtype() === 'alphanum') {
+            $ret['pattern'] = '/^[a-zA-Z0-9_\-]+$/';
+        } else if ($this->getVtype() === 'num') {
+            $ret['pattern'] = '/^[0-9]+$/';
+        }
         return $ret;
     }
 
