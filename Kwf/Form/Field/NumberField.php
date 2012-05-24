@@ -7,6 +7,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         $this->setXtype('numberfield');
         $this->setDecimalSeparator(trlcKwf('decimal separator', '.'));
         $this->setDecimalPrecision(2);
+        $this->setInputType('number');
     }
     protected function _addValidators()
     {
@@ -58,6 +59,27 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         if (!$ret) return '';
         $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         return $ret;
+    }
+
+    protected function _getInputProperties($values, $fieldNamePostfix, $idPrefix)
+    {
+        $ret = parent::_getInputProperties($values, $fieldNamePostfix, $idPrefix);
+        if ($this->getMaxValue()) {
+            $ret['max'] = $this->getMaxValue();
+        }
+        if ($this->getMinValue()) {
+            $ret['min'] = $this->getMaxValue();
+        }
+        if ($this->getAllowNegative() === false) {
+            if (!isset($ret['min']) || $ret['min'] > 0) {
+                $ret['min'] = 0;
+            }
+        }
+        if ($this->getAllowDecimals() === false) {
+            $ret['step'] = '1';
+        }
+        return $ret;
+
     }
 
     public static function getSettings()
