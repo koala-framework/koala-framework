@@ -67,11 +67,11 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         } else if ($this->getVtype() === 'url') {
             $ret['type'] = 'url';
         } else if ($this->getVtype() === 'alpha') {
-            $ret['pattern'] = '/^[a-zA-Z_]+$/';
+            $ret['pattern'] = '[a-zA-Z_]*';
         } else if ($this->getVtype() === 'alphanum') {
-            $ret['pattern'] = '/^[a-zA-Z0-9_\-]+$/';
+            $ret['pattern'] = '[a-zA-Z0-9_\-]*';
         } else if ($this->getVtype() === 'num') {
-            $ret['pattern'] = '/^[0-9]+$/';
+            $ret['pattern'] = '[0-9]*';
         }
         return $ret;
     }
@@ -86,6 +86,7 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
             $ret['html'] .= ' '.htmlspecialchars($k).'="'.htmlspecialchars($i).'"';
         }
         $ret['html'] .= " />";
+        return $ret;
     }
 
     /**
