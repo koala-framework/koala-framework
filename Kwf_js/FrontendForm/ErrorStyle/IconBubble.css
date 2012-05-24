@@ -12,13 +12,24 @@
     position: absolute; 
     font-size: 12px;
     text-align: center;
-    border: 2px solid #dddddd; 
-    border-radius: 0px 6px 6px 6px;
+    border-radius: 6px 6px 6px 6px;
     min-width: 100px;
     background-color: red;
     cursor: default;
-    padding: 5px;
-    margin-left: 15px;
-    margin-top: 10px;
+    padding: 6px;
+    margin-top: -4px;
+    margin-left: 25px;
     color: white;
+}
+.kwfFieldErrorIconBubble .message:after {
+    border-top: 9px solid transparent;
+    border-right: 10px solid red;
+    border-bottom: 9px solid transparent;
+    content:"";
+    display: block;
+    right: 110px;
+    position: absolute;
+    width: 0;
+    top: 4px;
+    z-index:10;
 }
