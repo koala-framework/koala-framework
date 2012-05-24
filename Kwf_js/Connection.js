@@ -1,3 +1,6 @@
+Ext.fly(window).on('beforeunload', function() {
+    Kwf.Connection.isLeavingPage = true;
+});
 Kwf.Connection = Ext.extend(Ext.data.Connection, {
     _progressData    : { },
 
@@ -364,6 +367,8 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
     },
     kwfJsonFailure: function(response, options)
     {
+        if (Kwf.Connection.isLeavingPage) return; //when user leaves page all requests are stopped. Don't show errors in that case.
+
         options.kwfIsSuccess = false;
 
         errorMsgTitle = trlKwf('Error');
