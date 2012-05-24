@@ -46,8 +46,12 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
         if (!cfg.zoom) {
             cfg.zoom = [ highestLat, highestLng, lowestLat, lowestLng ];
         }
-        cfg.longitude = (lowestLng + highestLng) / 2;
-        cfg.latitude = (lowestLat + highestLat) / 2;
+        if (!cfg.longitude) {
+            cfg.longitude = (lowestLng + highestLng) / 2;
+        }
+        if (!cfg.latitude) {
+            cfg.latitude = (lowestLat + highestLat) / 2;
+        }
     }
 
     cfg.mapContainer = mapContainer;

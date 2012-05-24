@@ -24,6 +24,8 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
             'overview' => 1,
 //             'minimumResolution' => 7, // min zoomstufe wenn nötig
 //             'maximumResolution' => 12, // max zoomstufe wenn nötig
+            //'latitude' => 123, //optional, if not set center of shown cooridnates is used
+            //'longitude' => 123, //optional, if not set center of shown cooridnates is used
         );
         return $ret;
     }
