@@ -14,6 +14,7 @@ class Kwc_Abstract_List_ExtConfigList extends Kwf_Component_Abstract_ExtConfig_A
         $config['contentEditComponents'] = $edit['contentEditComponents'];
         $config['useInsertAdd'] = true;
         $config['listTitle'] = null;
+        $config['editForms'] = array();
         return array(
             'list' => $config
         );

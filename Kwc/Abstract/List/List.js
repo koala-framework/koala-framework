@@ -15,18 +15,27 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
         if (this.useInsertAdd) {
             gridConfig.onAdd = this.onAdd.createDelegate(this); // wg. Scope
         }
+
         this.grid = new Kwf.Auto.GridPanel(gridConfig);
         this.proxyItem = this.grid;
 
+        if (!this.editForms) this.editForms = [];
+
         // Wenn ein Panel direkt, sonst Tabs
         this.editPanels = [];
-        if (this.contentEditComponents.length == 1) {
+        if (this.editForms.length==0 && this.contentEditComponents.length == 1) {
             this.editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
                 this.componentConfigs, this.contentEditComponents[0],
                 {region: 'center', title: null}, this.grid
             ));
             this.childPanel = this.editPanels[0];
         } else {
+            this.editForms.each(function(ef) {
+                ef.baseParams = Kwf.clone(this.getBaseParams());
+                var panel = Ext.ComponentMgr.create(ef);
+                this.grid.addBinding(panel);
+                this.editPanels.push(panel);
+            }, this);
             this.contentEditComponents.each(function(ec) {
                 this.editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
                     this.componentConfigs, ec, {}, this.grid
