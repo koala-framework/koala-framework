@@ -106,6 +106,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         var nextEl = this.largeContent[item.id];
 
         if (this.fetchedItems[item.id]) {
+            //item is already fetched, animate to new height
             nextEl.show();
             var oldHeight = this.largeContainer.getHeight();
             var newHeight = this._getLargeContentHeight(item);
@@ -116,6 +117,15 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             nextEl.hide();
         }
 
+        this._doTransition(item, activeEl, nextEl);
+
+        Kwf.Statistics.count(item.el.child('a').dom.href);
+
+        this.activeItem = item;
+    },
+
+    _doTransition: function(nextItem, activeEl, nextEl)
+    {
         if (this.transition == 'fade') {
             activeEl.dom.style.zIndex = 1;
             nextEl.dom.style.zIndex = 2;
@@ -130,13 +140,13 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             }, this.transitionConfig));
         } else if (this.transition == 'slide') {
             activeEl.slideOut(
-                this.activeItem.listIndex < item.listIndex ? 'l' : 'r',
+                this.activeItem.listIndex < nextItem.listIndex ? 'l' : 'r',
                 Ext.applyIf({
                     remove: false
                 }, this.transitionConfig)
             );
             nextEl.slideIn(
-                this.activeItem.listIndex < item.listIndex ? 'r' : 'l',
+                this.activeItem.listIndex < nextItem.listIndex ? 'r' : 'l',
                 Ext.applyIf({
                     remove: false
                 }, this.transitionConfig)
@@ -146,9 +156,5 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             activeEl.hide();
             nextEl.show();
         }
-
-        Kwf.Statistics.count(item.el.child('a').dom.href);
-
-        this.activeItem = item;
     }
 });
