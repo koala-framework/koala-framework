@@ -30,7 +30,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     {
         $showInvisible = Kwf_Component_Data_Root::getShowInvisible();
 
-        $cacheId = 'procI-'.$data->getPageOrRoot()->componentId;
+        $cacheId = 'procI-'.$data->componentId;
         $success = false;
         if (!$showInvisible) { //don't cache in preview
             $processCached = Kwf_Cache_Simple::fetch($cacheId, $success);
