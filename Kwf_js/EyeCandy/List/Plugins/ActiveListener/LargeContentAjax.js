@@ -97,6 +97,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this.largeContent[item.id].setStyle('position', 'absolute');
             this.largeContainer.setHeight(this._getLargeContentHeight(item));
             this.activeItem = item;
+            this.fetchedItems[item.id] = true;
             return;
         }
 
