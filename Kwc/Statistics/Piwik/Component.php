@@ -39,6 +39,13 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
             return null;
         }
 
+        $domain = Kwc_Root_DomainRoot_Domain_Component::getDomainComponent($this->getData());
+        if ($domain) {
+            $domains = Kwf_Config::getValueArray('kwc.domains');
+            $domain = $domains[$domain->id];
+            if (isset($domain['piwikId'])) return $domain['piwikId'];
+        }
+
         return isset($cfg['piwikId']) ? $cfg['piwikId'] : null;
     }
 
