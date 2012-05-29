@@ -36,45 +36,51 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
                 this.fetchedItems[item.id] = true;
                 contentEl.update(response.responseText);
 
-                if (this.largeContent[item.id].isVisible()) {
+                this._onLoadedItem(item, contentEl, options);
 
-                    var previousHeight = this.largeContainer.getHeight();
-                    var newHeight = this._getLargeContentHeight(item);
-                    this.largeContainer.setHeight(newHeight); //set to new height, not animated
-                    Kwf.callOnContentReady(contentEl.dom, {newRender: true});
-                    contentEl.hide(); //hide after callOnContentReady, will be faded in after images loaded
-                    this.largeContainer.setHeight(previousHeight, false); //set back to previous height, not animated
-                    this.largeContainer.setHeight(newHeight, true); //animate to new height
-
-                    var showContent = function() {
-                        this.largeContent[item.id].child('.loading').remove();
-                        contentEl.fadeIn();
-                        if (options && options.success) {
-                            options.success.call(options.scope || this);
-                        }
-                    };
-
-                    var imagesToLoad = 0;
-                    contentEl.query('img').each(function(imgEl) {
-                        imagesToLoad++;
-                        imgEl.onload = (function() {
-                            imagesToLoad--;
-                            if (imagesToLoad <= 0) showContent.call(this);
-                        }).createDelegate(this);
-                    }, this);
-
-                    if (imagesToLoad == 0) showContent.call(this);
-
-                } else {
-                    this.largeContent[item.id].child('.loading').remove();
-                    this.largeContent[item.id].show();
-                    this.largeContent[item.id].hide();
-                    Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
-                }
             },
             scope: this
         });
 
+    },
+
+    _onLoadedItem: function(item, contentEl, options)
+    {
+        if (this.largeContent[item.id].isVisible()) {
+
+            var previousHeight = this.largeContainer.getHeight();
+            var newHeight = this._getLargeContentHeight(item);
+            this.largeContainer.setHeight(newHeight); //set to new height, not animated
+            Kwf.callOnContentReady(contentEl.dom, {newRender: true});
+            contentEl.hide(); //hide after callOnContentReady, will be faded in after images loaded
+            this.largeContainer.setHeight(previousHeight, false); //set back to previous height, not animated
+            this.largeContainer.setHeight(newHeight, true); //animate to new height
+
+            var showContent = function() {
+                this.largeContent[item.id].child('.loading').remove();
+                contentEl.fadeIn();
+                if (options && options.success) {
+                    options.success.call(options.scope || this);
+                }
+            };
+
+            var imagesToLoad = 0;
+            contentEl.query('img').each(function(imgEl) {
+                imagesToLoad++;
+                imgEl.onload = (function() {
+                    imagesToLoad--;
+                    if (imagesToLoad <= 0) showContent.call(this);
+                }).createDelegate(this);
+            }, this);
+
+            if (imagesToLoad == 0) showContent.call(this);
+
+        } else {
+            this.largeContent[item.id].child('.loading').remove();
+            this.largeContent[item.id].show();
+            this.largeContent[item.id].hide();
+            Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
+        }
     },
 
     _getLargeContentHeight: function(item) {
