@@ -34,6 +34,11 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
     protected function _getIdSite()
     {
         $cfg = Kwf_Config::getValueArray('statistic');
+
+        if (isset($cfg['ignore']) && $cfg['ignore']) {
+            return null;
+        }
+
         return isset($cfg['piwikId']) ? $cfg['piwikId'] : null;
     }
 

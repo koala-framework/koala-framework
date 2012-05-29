@@ -5,6 +5,10 @@ class Kwf_View_Helper_StatisticCode
     {
         $ret  = '';
         $cfg = Kwf_Config::getValueArray('statistic');
+        if (isset($cfg['ignore']) && $cfg['ignore']) {
+            return $ret;
+        }
+
         if (!$analyticsCode) {
             $analyticsCode = isset($cfg['analyticsCode']) ? $cfg['analyticsCode'] : false;
         }
