@@ -4,7 +4,7 @@ class Kwc_User_Detail_General_Component extends Kwc_User_Detail_Abstract_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = ''; //trlKwf('General');
+        $ret['componentName'] = ''; //trlKwfStatic('General');
         return $ret;
     }
 }

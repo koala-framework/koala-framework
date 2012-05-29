@@ -4,7 +4,7 @@ class Kwc_Basic_LinkTag_CommunityVideo_Component extends Kwc_Basic_LinkTag_Light
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Link.to CommunityVideo');
+        $ret['componentName'] = trlKwfStatic('Link.to CommunityVideo');
         $ret['generators']['video']['component'] = 'Kwc_Advanced_CommunityVideo_Component';
         return $ret;
     }

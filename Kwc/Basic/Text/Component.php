@@ -5,7 +5,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
     {
         $ret = array_merge(parent::getSettings(), array(
             'ownModel'          => 'Kwc_Basic_Text_Model',
-            'componentName'     => trlKwf('Text'),
+            'componentName'     => trlKwfStatic('Text'),
             'componentIcon'     => new Kwf_Asset('paragraph_page'),
             'width'             => 550,
             'height'            => 400,

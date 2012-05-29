@@ -13,7 +13,7 @@ class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Guestbook');
+        $ret['componentName'] = trlKwfStatic('Guestbook');
         $ret['generators']['detail']['component'] = 'Kwc_Guestbook_Detail_Component';
         $ret['generators']['write']['component'] = 'Kwc_Guestbook_Write_Component';
         $ret['generators']['child']['component']['mail'] = 'Kwc_Guestbook_Mail_Component';

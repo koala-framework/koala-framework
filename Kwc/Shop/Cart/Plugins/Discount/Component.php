@@ -5,7 +5,7 @@ class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwc_Component_Plugin_Abst
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Discount');
+        $ret['componentName'] = trlKwfStatic('Discount');
         return $ret;
     }
 

@@ -10,7 +10,7 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
             'model' => 'Kwc_Root_CategoryModel'
         );
         $ret['dataClass'] = 'Kwc_Root_DomainRoot_Domain_Data';
-        $ret['componentName'] = trlKwf('Domain');
+        $ret['componentName'] = trlKwfStatic('Domain');
         $ret['flags']['subroot'] = 'domain';
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasDomain'] = true;

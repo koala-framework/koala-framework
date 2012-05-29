@@ -4,7 +4,7 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Google Maps'),
+            'componentName' => trlKwfStatic('Google Maps'),
             'ownModel' => 'Kwc_Advanced_GoogleMap_Model',
             'default' => array(
                 'zoom' => 8,

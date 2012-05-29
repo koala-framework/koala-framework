@@ -4,7 +4,7 @@ class Kwc_Shop_Cart_Checkout_Payment_TransferForm_Component extends Kwc_Shop_Car
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Transfer Form');
+        $ret['componentName'] = trlKwfStatic('Transfer Form');
         return $ret;
     }
 }

@@ -4,7 +4,7 @@ class Kwc_Form_Field_Checkbox_Component extends Kwc_Form_Field_Abstract_Componen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.Checkbox');
+        $ret['componentName'] = trlKwfStatic('Form.Checkbox');
         $ret['componentIcon'] = new Kwf_Asset('textfield'); //TODO besseres icon
         return $ret;
     }

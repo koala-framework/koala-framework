@@ -14,7 +14,7 @@ class Kwc_Shop_Component extends Kwc_Abstract_Composite_Component
             'showInMenu' => true
         );
 
-        $ret['componentName'] = trlKwf('Shop');
+        $ret['componentName'] = trlKwfStatic('Shop');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }

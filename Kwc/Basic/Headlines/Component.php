@@ -4,7 +4,7 @@ class Kwc_Basic_Headlines_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Headlines'),
+            'componentName' => trlKwfStatic('Headlines'),
             'componentIcon' => new Kwf_Asset('text_padding_top'),
             'ownModel'      => 'Kwf_Component_FieldModel',
             'cssClass'      => 'webStandard',

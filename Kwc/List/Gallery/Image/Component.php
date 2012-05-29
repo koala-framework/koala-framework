@@ -4,7 +4,7 @@ class Kwc_List_Gallery_Image_Component extends Kwc_Basic_ImageEnlarge_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Image');
+        $ret['componentName'] = trlKwfStatic('Image');
         $ret['generators']['child']['component']['linkTag'] =
             'Kwc_List_Gallery_Image_LinkTag_Component';
         $ret['imageCaption'] = true;

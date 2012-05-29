@@ -4,7 +4,7 @@ class Kwc_User_Detail_Gallery_Component extends Kwc_Composite_ImagesEnlarge_Comp
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Gallery');
+        $ret['componentName'] = trlKwfStatic('Gallery');
         $ret['showVisible'] = false;
         return $ret;
     }

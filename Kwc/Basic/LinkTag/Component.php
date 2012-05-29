@@ -9,7 +9,7 @@ class Kwc_Basic_LinkTag_Component extends Kwc_Abstract_Cards_Component
     {
         $ret = parent::getSettings();
         $ret['dataClass'] = 'Kwc_Basic_LinkTag_Data';
-        $ret['componentName'] = trlKwf('Link');
+        $ret['componentName'] = trlKwfStatic('Link');
         $ret['componentIcon'] = new Kwf_Asset('page_link');
         $ret['default']['component'] = 'intern';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';

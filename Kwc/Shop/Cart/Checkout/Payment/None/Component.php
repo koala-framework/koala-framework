@@ -4,7 +4,7 @@ class Kwc_Shop_Cart_Checkout_Payment_None_Component extends Kwc_Shop_Cart_Checko
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('None');
+        $ret['componentName'] = trlKwfStatic('None');
         return $ret;
     }
 

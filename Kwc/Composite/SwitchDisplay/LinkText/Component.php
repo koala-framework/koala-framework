@@ -4,7 +4,7 @@ class Kwc_Composite_SwitchDisplay_LinkText_Component extends Kwc_Basic_Textfield
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Link text');
+        $ret['componentName'] = trlKwfStatic('Link text');
         return $ret;
     }
 }

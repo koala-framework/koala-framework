@@ -6,7 +6,7 @@ class Kwc_Misc_RrdGraph_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['componentName'] = trlKwf('Rrd Graph');
+        $ret['componentName'] = trlKwfStatic('Rrd Graph');
         return $ret;
     }
 

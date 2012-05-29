@@ -6,7 +6,7 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         $ret = parent::getSettings();
         $ret['needsParentComponentClass'] = true;
         $ret['generators']['child']['component'] = $parentComponentClass;
-        $ret['componentName'] = trlKwf('Columns');
+        $ret['componentName'] = trlKwfStatic('Columns');
         $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
 
         $ret['extConfig'] = 'Kwc_Columns_ExtConfig';

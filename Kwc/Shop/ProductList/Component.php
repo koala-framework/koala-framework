@@ -6,7 +6,7 @@ class Kwc_Shop_ProductList_Component extends Kwc_Directories_List_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] = 'Kwc_Shop_Products_View_Component';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['componentName'] = trlKwf('Shop.ProductList');
+        $ret['componentName'] = trlKwfStatic('Shop.ProductList');
         $ret['componentIcon'] = new Kwf_Asset('basket');
         return $ret;
     }

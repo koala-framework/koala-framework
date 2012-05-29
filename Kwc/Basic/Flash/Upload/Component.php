@@ -4,7 +4,7 @@ class Kwc_Basic_Flash_Upload_Component extends Kwc_Abstract_Flash_Upload_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Flash.Upload');
+        $ret['componentName'] = trlKwfStatic('Flash.Upload');
         $ret['ownModel'] = 'Kwc_Basic_Flash_Upload_Model';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id_media';

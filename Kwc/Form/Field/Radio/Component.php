@@ -4,7 +4,7 @@ class Kwc_Form_Field_Radio_Component extends Kwc_Form_Field_Select_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.Radio');
+        $ret['componentName'] = trlKwfStatic('Form.Radio');
         return $ret;
     }
 

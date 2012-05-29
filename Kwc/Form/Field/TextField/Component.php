@@ -4,7 +4,7 @@ class Kwc_Form_Field_TextField_Component extends Kwc_Form_Field_Abstract_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.Textfield');
+        $ret['componentName'] = trlKwfStatic('Form.Textfield');
         $ret['componentIcon'] = new Kwf_Asset('textfield');
         return $ret;
     }

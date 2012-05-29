@@ -4,7 +4,7 @@ class Kwc_Form_Container_FieldSet_Component extends Kwc_Form_Container_Abstract_
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.Fieldset');
+        $ret['componentName'] = trlKwfStatic('Form.Fieldset');
         return $ret;
     }
 

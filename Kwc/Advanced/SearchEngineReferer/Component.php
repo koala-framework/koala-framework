@@ -9,7 +9,7 @@ class Kwc_Advanced_SearchEngineReferer_Component extends Kwc_Abstract_Composite_
         );
         $ret['generators']['child']['component']['view'] =
             'Kwc_Advanced_SearchEngineReferer_ViewMyLatest_Component';
-        $ret['componentName'] = trlKwf('Search engine referer');
+        $ret['componentName'] = trlKwfStatic('Search engine referer');
         $ret['childModel'] = 'Kwc_Advanced_SearchEngineReferer_Model';
         $ret['saveReferer'] = true;
         $ret['flags']['processInput'] = true;

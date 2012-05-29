@@ -4,7 +4,7 @@ class Kwc_Misc_UrlInclude_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Url include');
+        $ret['componentName'] = trlKwfStatic('Url include');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;

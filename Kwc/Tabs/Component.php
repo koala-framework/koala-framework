@@ -6,7 +6,7 @@ class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
         $ret = parent::getSettings();
         $ret['needsParentComponentClass'] = true;
         $ret['generators']['child']['component'] = $parentComponentClass;
-        $ret['componentName'] = trlKwf('Tabs');
+        $ret['componentName'] = trlKwfStatic('Tabs');
         $ret['componentIcon'] = new Kwf_Asset('tab.png');
         $ret['cssClass'] = 'webStandard';
         $ret['assets']['dep'][] = 'KwfTabs';

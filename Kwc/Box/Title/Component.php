@@ -4,7 +4,7 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Title');
+        $ret['componentName'] = trlKwfStatic('Title');
         return $ret;
     }
 

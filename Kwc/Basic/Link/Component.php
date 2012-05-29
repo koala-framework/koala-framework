@@ -5,7 +5,7 @@ class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = array_merge(parent::getSettings(), array(
             'ownModel' => 'Kwc_Basic_Link_Model',
-            'componentName' => trlKwf('Link'),
+            'componentName' => trlKwfStatic('Link'),
             'componentIcon' => new Kwf_Asset('page_white_link'),
             'default' => array(),
         ));

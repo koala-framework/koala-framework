@@ -4,7 +4,7 @@ class Kwc_Composite_TextImageLink_Component extends Kwc_Abstract_Composite_Compo
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Text Image Link');
+        $ret['componentName'] = trlKwfStatic('Text Image Link');
         $ret['ownModel'] = 'Kwc_Composite_TextImageLink_Model';
         $ret['generators']['child']['component']['image'] = 'Kwc_Basic_Image_Component';
         $ret['generators']['child']['component']['link'] = 'Kwc_Basic_LinkTag_Component';

@@ -4,7 +4,7 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Social Bookmarks');
+        $ret['componentName'] = trlKwfStatic('Social Bookmarks');
         $ret['ownModel'] = 'Kwc_Advanced_SocialBookmarks_Model';
         $ret['cssClass'] = 'webStandard';
         $ret['iconSet'] = 'Rounded';
