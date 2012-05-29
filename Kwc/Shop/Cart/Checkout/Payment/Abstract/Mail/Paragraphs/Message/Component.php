@@ -5,7 +5,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Message_Component 
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
-        $ret['componentName'] = trlKwf('Message');
+        $ret['componentName'] = trlKwfStatic('Message');
         return $ret;
     }
 

@@ -22,7 +22,7 @@ class Kwc_Root_Category_Component extends Kwc_Abstract
                 $cc->Kwc_Root_Category_Component->toArray()
             );
         }
-        $ret['componentName'] = trlKwf('Category');
+        $ret['componentName'] = trlKwfStatic('Category');
         $ret['flags']['menuCategory'] = true;
         return $ret;
     }

@@ -8,7 +8,7 @@ class Kwc_Basic_ParentContent_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Show Parent');
+        $ret['componentName'] = trlKwfStatic('Show Parent');
         return $ret;
     }
 

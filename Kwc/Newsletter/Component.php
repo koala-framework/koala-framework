@@ -21,7 +21,7 @@ class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Compon
 
         $ret['childModel'] = 'Kwc_Newsletter_Model';
         $ret['flags']['hasResources'] = true;
-        $ret['componentName'] = trlKwf('Newsletter');
+        $ret['componentName'] = trlKwfStatic('Newsletter');
         $ret['componentIcon'] = new Kwf_Asset('email');
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';

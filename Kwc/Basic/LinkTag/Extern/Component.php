@@ -10,7 +10,7 @@ class Kwc_Basic_LinkTag_Extern_Component extends Kwc_Basic_LinkTag_Abstract_Comp
         $ret = array_merge(parent::getSettings(), array(
             'dataClass' => 'Kwc_Basic_LinkTag_Extern_Data',
             'ownModel'     => 'Kwc_Basic_LinkTag_Extern_Model',
-            'componentName' => trlKwf('Link.Extern'),
+            'componentName' => trlKwfStatic('Link.Extern'),
             'hasPopup'      => true, //TODO: bezeichnung von diesem setting ist scheiße
             'openType'      => null, //wenn hasPopup auf false
         ));

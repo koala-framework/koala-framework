@@ -4,7 +4,7 @@ class Kwc_Show_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Show Component');
+        $ret['componentName'] = trlKwfStatic('Show Component');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }

@@ -4,7 +4,7 @@ class Kwc_List_ChildPages_PageNameOnly_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('List child page names');
+        $ret['componentName'] = trlKwfStatic('List child page names');
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }

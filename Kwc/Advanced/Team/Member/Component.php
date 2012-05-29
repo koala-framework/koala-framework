@@ -4,7 +4,7 @@ class Kwc_Advanced_Team_Member_Component extends Kwc_Abstract_Composite_Componen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Team member');
+        $ret['componentName'] = trlKwfStatic('Team member');
 
         $ret['generators']['child']['component']['image'] =
             'Kwc_Advanced_Team_Member_Image_Component';

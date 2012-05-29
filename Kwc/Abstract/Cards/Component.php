@@ -13,7 +13,7 @@ class Kwc_Abstract_Cards_Component extends Kwc_Abstract
         $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Cards/ComboBox.js';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
-        $ret['componentName'] = trlKwf('Choose Child');
+        $ret['componentName'] = trlKwfStatic('Choose Child');
         return $ret;
     }
 

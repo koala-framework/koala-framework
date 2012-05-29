@@ -9,7 +9,7 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Fulltext Search');
+        $ret['componentName'] = trlKwfStatic('Fulltext Search');
         $ret['cssClass'] = 'webStandard';
         $ret['viewCache'] = false;
         $ret['generators']['child']['component']['paging'] = 'Kwc_FulltextSearch_Search_Paging_Component';

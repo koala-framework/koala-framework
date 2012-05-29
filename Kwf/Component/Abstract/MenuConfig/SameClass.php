@@ -5,7 +5,7 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
     {
         $components = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
-        $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
+        $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->_class, 'componentName'));
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
         if (count($components) > 1) {

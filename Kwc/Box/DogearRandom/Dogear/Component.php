@@ -4,7 +4,7 @@ class Kwc_Box_DogearRandom_Dogear_Component extends Kwc_Abstract_Composite_Compo
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Dogear');
+        $ret['componentName'] = trlKwfStatic('Dogear');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
 
         $ret['generators']['child']['component']['image'] = 'Kwc_Box_DogearRandom_Dogear_Image_Component';

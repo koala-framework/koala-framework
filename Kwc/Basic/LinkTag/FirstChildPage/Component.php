@@ -4,7 +4,7 @@ class Kwc_Basic_LinkTag_FirstChildPage_Component extends Kwc_Basic_LinkTag_Abstr
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Link.First Child Page'),
+            'componentName' => trlKwfStatic('Link.First Child Page'),
             'componentIcon' => new Kwf_Asset('page_go'),
             'dataClass' => 'Kwc_Basic_LinkTag_FirstChildPage_Data'
         ));

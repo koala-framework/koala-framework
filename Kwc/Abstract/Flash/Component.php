@@ -4,7 +4,7 @@ abstract class Kwc_Abstract_Flash_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Flash');
+        $ret['componentName'] = trlKwfStatic('Flash');
         $ret['componentIcon'] = new Kwf_Asset('film');
 
         $ret['generators']['placeholder'] = array(

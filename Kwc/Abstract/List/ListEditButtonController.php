@@ -14,7 +14,7 @@ class Kwc_Abstract_List_ListEditButtonController extends Kwc_Abstract_List_Contr
                 $name = $ec['title'];
                 $icon = $ec['icon'];
             } else {
-                $name = Kwc_Abstract::getSetting($ec['componentClass'], 'componentName');
+                $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($ec['componentClass'], 'componentName'));
                 $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
                 $icon = $icon->toString(array('arrow'));
             }

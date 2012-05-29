@@ -9,7 +9,7 @@ class Kwc_Root_LanguageRoot_Language_Component extends Kwc_Abstract
             'component' => 'Kwc_Root_Category_Component',
             'model' => 'Kwc_Root_CategoryModel'
         );
-        $ret['componentName'] = trlKwf('Language');
+        $ret['componentName'] = trlKwfStatic('Language');
         $ret['flags']['subroot'] = 'language';
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;

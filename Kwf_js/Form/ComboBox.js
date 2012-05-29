@@ -180,8 +180,12 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 blockOnLoad: true,
                 params: this.getParams(v),
                 callback: function(r, options, success) {
-                    if (success && this.findRecord(this.valueField, this.value)) {
-                        this.setValue(this.value);
+                    if (success) {
+                        if (this.findRecord(this.valueField, this.value)) {
+                            this.setValue(this.value);
+                        } else {
+                            this.setValue(null);
+                        }
                     }
                 },
                 scope: this

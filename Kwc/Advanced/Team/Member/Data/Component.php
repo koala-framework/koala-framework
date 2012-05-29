@@ -11,7 +11,7 @@ class Kwc_Advanced_Team_Member_Data_Component extends Kwc_Abstract
             'name' => trlKwf('vCard')
         );
 
-        $ret['componentName'] = trlKwf('Team member data');
+        $ret['componentName'] = trlKwfStatic('Team member data');
         $ret['ownModel'] = 'Kwc_Advanced_Team_Member_Data_Model';
 
         $ret['labelSeparator'] = ':';

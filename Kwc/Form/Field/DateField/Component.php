@@ -4,7 +4,7 @@ class Kwc_Form_Field_DateField_Component extends Kwc_Form_Field_Abstract_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.Datefield');
+        $ret['componentName'] = trlKwfStatic('Form.Datefield');
         $ret['componentIcon'] = new Kwf_Asset('date');
         return $ret;
     }

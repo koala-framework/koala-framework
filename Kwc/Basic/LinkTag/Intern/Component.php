@@ -10,7 +10,7 @@ class Kwc_Basic_LinkTag_Intern_Component extends Kwc_Basic_LinkTag_Abstract_Comp
         $ret = array_merge(parent::getSettings(), array(
             'dataClass' => 'Kwc_Basic_LinkTag_Intern_Data',
             'ownModel'     => 'Kwc_Basic_LinkTag_Intern_Model',
-            'componentName' => trlKwf('Link.Intern'),
+            'componentName' => trlKwfStatic('Link.Intern'),
         ));
         $ret['assetsAdmin']['dep'][] = 'KwfPageSelectField';
         return $ret;

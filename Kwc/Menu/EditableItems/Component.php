@@ -11,7 +11,7 @@ class Kwc_Menu_EditableItems_Component extends Kwc_Abstract
         );
         $ret['childModel'] = 'Kwc_Menu_EditableItems_Model';
 
-        $ret['componentName'] = trlKwf('Menu');
+        $ret['componentName'] = trlKwfStatic('Menu');
         $ret['componentIcon'] = new Kwf_Asset('layout');
         $ret['cssClass'] = 'webStandard';
         $ret['assetsAdmin']['dep'][] = 'KwfProxyPanel';

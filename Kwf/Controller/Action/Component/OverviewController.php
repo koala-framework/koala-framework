@@ -32,7 +32,7 @@ class Kwf_Controller_Action_Component_OverviewController extends Kwf_Controller_
         $usedComponents = Kwc_Admin::getAvailableComponents('./Kwc');
         $ret = array();
         foreach ($usedComponents as $c) {
-            $name = Kwc_Abstract::getSetting($c, 'componentName');
+            $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($c, 'componentName'));
             $path = str_replace('_', '/', $c);
             $ret[] = array('class'=>$c,
                            'name'=>$name,

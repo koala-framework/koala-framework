@@ -4,7 +4,7 @@ class Kwc_Composite_Marquee_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Marquee');
+        $ret['componentName'] = trlKwfStatic('Marquee');
         $ret['assets']['dep'][] = 'KwfMarqueeElements';
 
         $ret['selector'] = '> div';

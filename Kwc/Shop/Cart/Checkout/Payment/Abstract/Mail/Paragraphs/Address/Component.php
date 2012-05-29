@@ -5,7 +5,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Address_Component 
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
-        $ret['componentName'] = trlKwf('Address Header');
+        $ret['componentName'] = trlKwfStatic('Address Header');
         $ret['flags']['hasMailVars'] = true;
         return $ret;
     }

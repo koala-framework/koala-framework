@@ -299,7 +299,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (get_class($component) != 'Kwf_Component_Data') {
             //da die data klasse auf Kwf_Component_Data_Home angepasst geändert muss kann das nicht
             //gleichzeitig FirstChildPage oder LinkIntern sein. Daher verbieten.
-            $name = Kwc_Abstract::getSetting($component->componentClass, 'componentName');
+            $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($component->componentClass, 'componentName'));
             throw new Kwf_Exception_Client(trlKwf("You can't set {0} as Home", $name));
         }
 

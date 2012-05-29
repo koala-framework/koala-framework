@@ -7,7 +7,7 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract_Flash_Component
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Flash.Community Video'),
+            'componentName' => trlKwfStatic('Flash.Community Video'),
             'ownModel'     => 'Kwc_Advanced_CommunityVideo_Model',
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));

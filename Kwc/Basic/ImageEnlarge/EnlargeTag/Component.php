@@ -4,7 +4,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Enlarge Image');
+        $ret['componentName'] = trlKwfStatic('Enlarge Image');
         $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
         $ret['imageTitle'] = true;

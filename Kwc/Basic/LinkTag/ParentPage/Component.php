@@ -9,7 +9,7 @@ class Kwc_Basic_LinkTag_ParentPage_Component extends Kwc_Basic_LinkTag_Abstract_
     {
         $ret = parent::getSettings();
         $ret['dataClass'] = 'Kwc_Basic_LinkTag_ParentPage_Data';
-        $ret['componentName'] = trlKwf('Link.to parent page');
+        $ret['componentName'] = trlKwfStatic('Link.to parent page');
         return $ret;
     }
 }

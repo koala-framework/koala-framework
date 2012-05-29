@@ -4,7 +4,7 @@ class Kwf_Component_Generator_Plugin_StatusUpdate_Component extends Kwf_Componen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Social Networks');
+        $ret['componentName'] = trlKwfStatic('Social Networks');
         $ret['extConfig'] = 'Kwf_Component_Generator_Plugin_StatusUpdate_ExtConfig';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwf/Component/Generator/Plugin/StatusUpdate/Panel.js';
         $ret['backends'] = array(

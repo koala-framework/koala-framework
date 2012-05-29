@@ -24,7 +24,7 @@ class Kwc_Form_Dynamic_Admin extends Kwc_Abstract_Composite_Admin
             }
         }
 
-        $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
+        $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->_class, 'componentName'));
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
         foreach ($components as $c) {

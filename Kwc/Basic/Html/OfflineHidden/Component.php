@@ -4,7 +4,7 @@ class Kwc_Basic_Html_OfflineHidden_Component extends Kwc_Basic_Html_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Offline hidden Html');
+        $ret['componentName'] = trlKwfStatic('Offline hidden Html');
         return $ret;
     }
 

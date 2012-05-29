@@ -5,7 +5,7 @@ class Kwc_Shop_Cart_Plugins_Voucher_Redeem_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Shop_Cart_Plugins_Voucher_Redeem_Success_Component';
-        $ret['componentName'] = trlKwf('Shop').'.'.trlKwf('Redeem Voucher');
+        $ret['componentName'] = trlKwfStatic('Shop').'.'.trlKwfStatic('Redeem Voucher');
         $ret['placeholder']['submitButton'] = trlKwf('Redeem Voucher');
         return $ret;
     }

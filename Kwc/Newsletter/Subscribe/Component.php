@@ -11,7 +11,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Newsletter subscribing');
+        $ret['componentName'] = trlKwfStatic('Newsletter subscribing');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Subscribe the newsletter');
         $ret['subscribeType'] = self::CONFIRM_MAIL_ONLY;
         $ret['flags']['hasResources'] = true;

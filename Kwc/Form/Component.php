@@ -13,7 +13,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
-        $ret['componentName'] = trlKwf('Form');
+        $ret['componentName'] = trlKwfStatic('Form');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
         $ret['decorator'] = 'Kwc_Form_Decorator_Label';

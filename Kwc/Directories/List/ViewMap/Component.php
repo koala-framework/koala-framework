@@ -38,7 +38,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
             $ret['options'] = array_merge(
                 $ret['options'],
                 array('markers' => $this->getData()->getChildComponent('_coordinates')->getUrl()),
-                $this->_noMarkersOptions()
+                $this->_noMarkersOptions() //TODO: don't override lat/lng from mapOptions
             );
         }
         return $ret;

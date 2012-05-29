@@ -5,7 +5,7 @@ class Kwc_Box_AssetsSelect_Component extends Kwc_Box_Assets_Component
     {
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['componentName'] = trlKwf('Assets Select');
+        $ret['componentName'] = trlKwfStatic('Assets Select');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'section';
         return $ret;

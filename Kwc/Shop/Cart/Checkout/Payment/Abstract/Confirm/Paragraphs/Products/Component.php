@@ -5,7 +5,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Products_Compon
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
-        $ret['componentName'] = trlKwf('Order Products');
+        $ret['componentName'] = trlKwfStatic('Order Products');
         return $ret;
     }
 
