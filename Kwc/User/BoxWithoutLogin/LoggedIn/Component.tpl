@@ -12,7 +12,7 @@
             <? foreach ($this->links as $l) { ?>
                 <li><?=$this->componentLink($l)?></li>
             <? } ?>
-            <li class="logout"><a href="?logout"><?=trlKwf('Logout')?></a></li>
+            <li class="logout"><a href="<?=$this->logoutLink?>"><?=trlKwf('Logout')?></a></li>
         </ul>
         <div class="clear"></div>
     </div>
