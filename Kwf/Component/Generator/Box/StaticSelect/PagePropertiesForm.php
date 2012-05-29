@@ -14,7 +14,7 @@ class Kwf_Component_Generator_Box_StaticSelect_PagePropertiesForm extends Kwf_Fo
         $select->setAllowBlank(false);
         $values = array();
         foreach ($generator->getSetting('component') as $k=>$c) {
-            $values[$k] = Kwc_Abstract::getSetting($c, 'componentName');
+            $values[$k] = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($c, 'componentName'));
         }
         $select->setValues($values);
         $select->setDefaultValue(array_shift(array_Keys($values)));

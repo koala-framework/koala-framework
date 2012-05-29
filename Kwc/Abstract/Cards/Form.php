@@ -21,7 +21,7 @@ class Kwc_Abstract_Cards_Form extends Kwc_Abstract_Form
             if (!$forms) {
                 //wenns gar keine forms gibt
                 $card = $cards->add();
-                $card->setTitle(Kwc_Abstract::getSetting($class, 'componentName'));
+                $card->setTitle(Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($class, 'componentName')));
                 $card->setName($name);
             }
             foreach ($forms as $k=>$i) {

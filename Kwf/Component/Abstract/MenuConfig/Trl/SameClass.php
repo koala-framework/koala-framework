@@ -10,7 +10,7 @@ class Kwf_Component_Abstract_MenuConfig_Trl_SameClass extends Kwf_Component_Abst
     public function addResources(Kwf_Acl $acl)
     {
         $masterCls = $this->_getSetting('masterComponentClass');
-        $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
+        $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->_class, 'componentName'));
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
 

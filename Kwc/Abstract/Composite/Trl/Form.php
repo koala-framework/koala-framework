@@ -35,7 +35,7 @@ class Kwc_Abstract_Composite_Trl_Form extends Kwc_Abstract_Form
                 if (!$this->_createFieldsets || !Kwc_Abstract::hasSetting($class, 'componentName')) {
                     $this->add($form);
                 } else {
-                    $name = Kwc_Abstract::getSetting($class, 'componentName');
+                    $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($class, 'componentName'));
                     $name = str_replace('.', ' ', $name);
                     $this->add(new Kwf_Form_Container_FieldSet($name))
                         ->setName($key)

@@ -80,7 +80,7 @@ abstract class Kwf_Component_Abstract_ExtConfig_Abstract
             {
                 throw new Kwf_Exception("Component '$this->_class' does have no componentName but must have one for editing");
             }
-            $title = $this->_getSetting('componentName');
+            $title = Kwf_Trl::getInstance()->trlStaticExecute($this->_getSetting('componentName'));
             $pos = strpos($title, '.');
             if ($pos !== false && substr($title, $pos + 1, 1) !== ' ') $title = substr(strrchr($title, '.'), 1);
         }

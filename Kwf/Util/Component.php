@@ -19,7 +19,7 @@ class Kwf_Util_Component
                     if (is_instance_of($c->componentClass, 'Kwc_Root_Abstract')) continue;
                     if (is_instance_of($c->componentClass, 'Kwc_Root_Category_Component')) continue;
                     if (is_instance_of($c->componentClass, 'Kwc_Root_DomainRoot_Domain_Component')) continue;
-                    $n = Kwc_Abstract::getSetting($c->componentClass, 'componentName');
+                    $n = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($c->componentClass, 'componentName'));
                     if ($n) {
                         $t[] = str_replace('.', ' ', $n);
                     }
