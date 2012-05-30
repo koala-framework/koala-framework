@@ -16,15 +16,14 @@ class Kwc_Editable_AdminResource extends Kwf_Acl_Resource_MenuUrl
     }
 }
 
-class Kwc_Editable_Admin extends Kwc_Admin
+class Kwc_Editable_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstract
 {
     public function addResources(Kwf_Acl $acl)
     {
-        parent::addResources($acl);
         if (!$acl->has('kwc_Kwc_Editable')) {
             $acl->add(new Kwc_Editable_AdminResource($this->_class,
                     array('text'=>trlKwf('Texts'), 'icon'=>'page_white_text.png'),
-                    $this->getControllerUrl('Components')), 'kwf_component_root');
+                    Kwc_Admin::getInstance($this->_class)->getControllerUrl('Components')), 'kwf_component_root');
         }
     }
 }

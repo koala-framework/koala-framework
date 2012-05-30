@@ -4,7 +4,7 @@ class Kwc_Editable_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['flags']['hasResources'] = true;
+        $ret['menuConfig'] = 'Kwc_Editable_MenuConfig';
         $ret['generators']['content'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Paragraphs_Component'
