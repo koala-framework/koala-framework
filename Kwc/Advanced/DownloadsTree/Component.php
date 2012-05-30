@@ -40,8 +40,6 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
         $ret['downloadsUrl'] = Kwc_Admin::getInstance(get_class($this))->getControllerUrl('ViewDownloads');
         $ret['width'] = $this->_getSetting('panelWidth');
         $ret['height'] = $this->_getSetting('panelHeight');
-        if (!Kwf_Controller_Front::getInstance() instanceof Kwf_Controller_Front_Component)
-            throw new Kwf_Exception('Front Controller must be instance of Kwf_Controller_Front_Component');
         return $ret;
     }
 
