@@ -191,6 +191,9 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
         $html = str_replace('A'.chr(0xCC).chr(0x88), 'Ä', $html);
         $html = str_replace('O'.chr(0xCC).chr(0x88), 'Ö', $html);
 
+        //delete zero width space, causes problems in Lotus Notes
+        $html = str_replace(chr(0xE2).chr(0x80).chr(0x8B), '', $html);
+
         $config = array(
                     'indent'         => true,
                     'output-xhtml'   => true,
