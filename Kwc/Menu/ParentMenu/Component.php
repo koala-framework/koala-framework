@@ -83,4 +83,9 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
 
         return $ret;
     }
+
+    public function hasContent()
+    {
+        return $this->_getParentContentData()->getComponent()->hasContent();
+    }
 }
