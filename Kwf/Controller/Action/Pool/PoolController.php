@@ -3,7 +3,7 @@ class Kwf_Controller_Action_Pool_PoolController extends Kwf_Controller_Action_Au
 {
     protected $_buttons = array('save', 'add', 'delete');
     protected $_position = 'pos';
-    protected $_tableName = 'Kwf_Dao_Pool';
+    protected $_model = 'Kwf_Util_Model_Pool';
 
     protected function _getPool()
     {
