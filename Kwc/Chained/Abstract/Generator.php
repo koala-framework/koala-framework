@@ -137,7 +137,6 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
             foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
                 $pData = array();
                 if (!$parentData) {
-                    $class = "Kwc_Chained_{$chainedType}_Component";
                     if (!$slaveData) {
                         $chainedData = $component;
                         while ($chainedData) {
@@ -155,11 +154,11 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
                             }
                         }
                         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($slaveDataClass) as $d) {
-                            $chainedComponent = call_user_func(array($class, 'getChainedByMaster'), $component->parent, $d, $parentDataSelect);
+                            $chainedComponent = Kwc_Chained_Abstract_Component::getChainedByMaster($component->parent, $d, $chainedType, $parentDataSelect);
                             if ($chainedComponent) $pData[] = $chainedComponent;
                         }
                     } else {
-                        $chainedComponent = call_user_func(array($class, 'getChainedByMaster'), $component->parent, $slaveData, $parentDataSelect);
+                        $chainedComponent = Kwc_Chained_Abstract_Component::getChainedByMaster($component->parent, $slaveData, $chainedType, $parentDataSelect);
                         if ($chainedComponent) $pData = array($chainedComponent);
                     }
                 } else {
