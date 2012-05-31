@@ -209,4 +209,36 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         }
         return $ret;
     }
+
+
+    private static function _getAllChainedRootsByMaster($master, $chainedType)
+    {
+        $chainedData = $master;
+        while ($chainedData) {
+            if (Kwc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
+                break;
+            }
+            $chainedData = $chainedData->parent;
+        }
+        $slaveDataClass = null;
+        foreach (Kwc_Abstract::getChildComponentClasses($chainedData->parent->componentClass) as $chainedClass) {
+            if ($chainedClass != $chainedData->componentClass &&
+                Kwc_Abstract::getFlag($chainedClass, 'chainedType') == $chainedType
+            ) {
+                $slaveDataClass = substr($chainedClass, 0, strpos($chainedClass, '.'));
+            }
+        }
+        return Kwf_Component_Data_Root::getInstance()->getComponentsByClass($slaveDataClass);
+    }
+
+    public static function getAllChainedByMaster($master, $chainedType, $parentDataSelect = array())
+    {
+        $ret = array();
+        foreach (self::_getAllChainedRootsByMaster($master, $chainedType) as $d) {
+            $chainedComponent = self::getChainedByMaster($master, $d, $chainedType, $parentDataSelect);
+            if ($chainedComponent) $ret[] = $chainedComponent;
+        }
+        return $ret;
+    }
+
 }
