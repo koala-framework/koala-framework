@@ -12,17 +12,4 @@ class Kwc_Paragraphs_Trl_Generator extends Kwc_Chained_Trl_Generator
         }
         return $ret;
     }
-
-    protected function _formatConfig($parentData, $row)
-    {
-        $ret = parent::_formatConfig($parentData, $row);
-        $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
-        $ret['row'] = $this->_getRow($id);
-        if (!$ret['row']) {
-            $m = Kwc_Abstract::createChildModel($this->_class);
-            $ret['row'] = $m->createRow();
-            $ret['row']->component_id = $id;
-        }
-        return $ret;
-    }
 }
