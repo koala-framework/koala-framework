@@ -16,10 +16,5 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public static function getPagesGeneratorComponentClass()
-    {
-        return 'Kwc_Root_Category_Component';
-    }
-
     public abstract function getTargetComponent();
 }
