@@ -36,6 +36,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret['bcc'] = null;
         $ret['returnPath'] = null;
         $ret['subject'] = trlKwf('Automatically sent e-mail');
+        $ret['attachImages'] = false;
 
         return $ret;
     }
@@ -48,6 +49,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
     public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
+        $this->_images = array();
         $this->_mailData = $data;
 
         $mail = new Kwf_Mail();
@@ -74,6 +76,13 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         }
         if ($this->_getSetting('returnPath')) {
             $mail->setReturnPath($this->_getSetting('returnPath'));
+        }
+
+        if ($this->_images) {
+            $mail->setType(Zend_Mime::MULTIPART_RELATED);
+            foreach ($this->_images as $image) {
+                $mail->addAttachment($image);
+            }
         }
 
         $bccs = $this->_getSetting('bcc');
@@ -111,13 +120,16 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
     /**
      * Gibt den personalisierten HTML-Quelltext der Mail zurück
      *
-     * @param bool forMail: ob images als attachment angehängt werden sollen oder nicht
+     * @param bool attachImages: ob images als attachment angehängt werden sollen oder nicht
      */
     public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
         $renderer = new Kwf_Component_Renderer_Mail();
         $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_HTML);
         $renderer->setRecipient($recipient);
+        if ($this->_getSetting('attachImages')) {
+            $renderer->setAttachImages($attachImages);
+        }
         $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);

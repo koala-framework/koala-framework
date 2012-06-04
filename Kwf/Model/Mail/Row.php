@@ -122,6 +122,15 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
 
         $this->sent_mail_content_text = $view->renderText();
         $this->sent_mail_content_html = $view->renderHtml();
+
+        if ($view->getImages()) {
+            $addedImages = array();
+            foreach ($view->getImages() as $image) {
+                if (in_array($image, $addedImages)) continue;
+                $this->_saveAttachmentData($image);
+                $addedImages[] = $image;
+            }
+        }
     }
 
     protected function _beforeInsert()

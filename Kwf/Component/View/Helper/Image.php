@@ -19,7 +19,7 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
 
             $url = $image->getComponent()->getImageUrl();
         }
-        
+
         if ($this->_getRenderer() instanceof Kwf_View_MailInterface &&
             substr($url, 0, 1) == '/'
         ) {
@@ -52,5 +52,10 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
             array($image->componentClass, 'getMediaOutput'),
             array($image->getComponent()->getData()->componentId, null, $image->componentClass)
         );
+    }
+
+    protected function _getMailInterface()
+    {
+        return $this->_getRenderer();
     }
 }
