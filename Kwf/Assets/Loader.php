@@ -263,6 +263,11 @@ class Kwf_Assets_Loader
                         $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
                         $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
                         $cacheData['contents'] = str_replace('.cssClass', '.'.$cssClass, $cacheData['contents']);
+                        if (Kwf_Config::getValue('assetsCacheUrl')) {
+                            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&url=';
+                            $cacheData['contents'] = str_replace('url(\'/assets/', 'url(\''.$url.'assets/', $cacheData['contents']);
+                            $cacheData['contents'] = str_replace('url(/assets/', 'url('.$url.'assets/', $cacheData['contents']);
+                        }
                     }
 
                     if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {
