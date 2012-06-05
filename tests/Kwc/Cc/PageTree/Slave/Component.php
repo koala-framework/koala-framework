@@ -1,5 +1,5 @@
 <?php
-class Kwc_Cc_Composite_Slave_Component extends Kwc_Chained_Start_Component
+class Kwc_Cc_PageTree_Slave_Component extends Kwc_Chained_Start_Component
 {
     public static function getSettings($masterComponentClass)
     {

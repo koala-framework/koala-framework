@@ -1,5 +1,5 @@
 <?php
-class Kwc_Root_TrlRoot_Chained_Component extends Kwc_Abstract
+class Kwc_Root_TrlRoot_Chained_Component extends Kwc_Chained_Start_Component
 {
     public static function getSettings($masterComponentClass)
     {
