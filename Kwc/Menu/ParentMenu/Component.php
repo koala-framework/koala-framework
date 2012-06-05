@@ -8,6 +8,7 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         if (isset($generators['subMenu'])) {
             $ret['generators']['subMenu'] = $generators['subMenu'];
         }
+        $ret['plugins'] = Kwc_Abstract::getSetting($menuComponentClass, 'plugins');
         $ret['menuComponentClass'] = $menuComponentClass;
         return $ret;
     }
