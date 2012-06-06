@@ -1,20 +1,21 @@
 <?php
-class Kwc_Basic_LinkTag_CommunityVideo_Component extends Kwc_Basic_LinkTag_Lightbox_Component
+class Kwc_Basic_LinkTag_CommunityVideo_Component extends Kwc_Basic_LinkTag_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Link.to CommunityVideo');
-        $ret['generators']['video']['component'] = 'Kwc_Advanced_CommunityVideo_Component';
+        $ret['generators']['video'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Basic_LinkTag_CommunityVideo_Lightbox_Component',
+            'name' => trlKwfStatic('Video'),
+        );
+        $ret['dataClass'] = 'Kwc_Basic_LinkTag_CommunityVideo_Data';
         return $ret;
     }
 
-    protected function _getPopupVars($child)
+    public function hasContent()
     {
-        return array(
-            'width' => $child->getComponent()->getRow()->width,
-            'height' => $child->getComponent()->getRow()->height,
-            'url' => $child->getComponent()->getRow()->url
-        );
+        return $this->getData()->getChildComponent('_video')->getComponent()->hasContent();
     }
 }
