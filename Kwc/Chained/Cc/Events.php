@@ -216,9 +216,9 @@ class Kwc_Chained_Cc_Events extends Kwc_Chained_Abstract_Events
         $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType, $select);
         foreach ($chained as $i) {
             $newParent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->newParentId, $select);
-            $newParent = Kwc_Chained_Abstract_Component::getChainedByMaster($i, $newParent, $chainedType, $select);
+            $newParent = Kwc_Chained_Abstract_Component::getChainedByMaster($newParent, $i, $chainedType, $select);
             $oldParent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->oldParentId, $select);
-            $oldParent = Kwc_Chained_Abstract_Component::getChainedByMaster($i, $oldParent, $chainedType, $select);
+            $oldParent = Kwc_Chained_Abstract_Component::getChainedByMaster($oldParent, $i, $chainedType, $select);
             $eventCls = get_class($event);
             $this->fireEvent(
                 new $eventCls($this->_class, $i->componentId, $newParent->componentId, $oldParent->componentId)

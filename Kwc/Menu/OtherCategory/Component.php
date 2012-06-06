@@ -8,7 +8,12 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
         return $ret;
     }
 
-    private function _getMenuData()
+    public function getMenuData()
+    {
+        return $this->_getMenuSource()->getComponent()->getMenuData();
+    }
+
+    private function _getMenuSource()
     {
         $category = Kwc_Abstract::getSetting($this->_getSetting('menuComponentClass'), 'level');
         $categoryData = $this->getData()->parent->parent->getChildComponent('-'.$category);
@@ -21,7 +26,7 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
 
     public function getTemplateVars()
     {
-        $menu = $this->_getMenuData();
+        $menu = $this->_getMenuSource();
         $ret = $menu->getComponent()->getTemplateVars();
         $ret['includeTemplate'] = self::getTemplateFile($menu->componentClass);
         return $ret;
@@ -29,6 +34,6 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
 
     public function hasContent()
     {
-        return $this->_getMenuData()->hasContent();
+        return $this->_getMenuSource()->hasContent();
     }
 }

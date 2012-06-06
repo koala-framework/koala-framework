@@ -14,6 +14,14 @@ class Kwc_Cc_PageTree_Master_Component extends Kwc_Abstract
                 )
             ))
         );
+        $ret['generators']['box'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => array(
+                'mainMenu' => 'Kwc_Cc_PageTree_Master_MainMenu_Component',
+                'bottomMenu' => 'Kwc_Cc_PageTree_Master_BottomMenu_Component'
+            ),
+            'inherit' => true
+        );
         $ret['flags']['chainedType'] = 'Cc';
         return $ret;
     }
