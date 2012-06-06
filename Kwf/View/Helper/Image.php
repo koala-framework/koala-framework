@@ -34,11 +34,7 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
                 $this->_dep = $loader->getDependencies();
             }
             $ret = $this->_dep->getAssetPath(substr($url, 8));
-            if (Kwf_Config::getValue('assetsCacheUrl') && substr($ret, 0, 8) == '/assets/') {
-                return Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id')
-                    .'&section='.Kwf_Setup::getConfigSection()
-                    .'&url='.substr($url, 1);
-            }
+            return $ret;
         } else {
             throw new Kwf_Exception("Path does not include '/assets/'. Not implemented yet.");
         }
@@ -71,6 +67,11 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
             }
         }
 
+        if (Kwf_Config::getValue('assetsCacheUrl') && substr($url, 0, 8) == '/assets/') {
+            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id')
+                .'&section='.Kwf_Setup::getConfigSection()
+                .'&url='.substr($url, 1);
+        }
         $size = $this->_getImageSize($image);
         $attr = '';
         if ($cssClass && is_string($cssClass)) {
