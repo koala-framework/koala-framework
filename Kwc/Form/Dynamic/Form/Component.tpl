@@ -21,7 +21,7 @@ if ($this->showSuccess) {
     ?>
     <? if ($this->form) { ?>
     <div class="webStandard webForm kwcForm">
-    <form action="<?= $this->action ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
+    <form action="<?= htmlspecialchars($this->action) ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
 
         <?=$this->component($this->paragraphs)?>
 
