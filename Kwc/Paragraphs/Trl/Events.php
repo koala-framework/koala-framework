@@ -15,6 +15,11 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
             'event' => 'Kwf_Component_Event_Row_Updated',
             'callback' => 'onMasterRowUpdate'
         );
+        $ret[] = array(
+            'class' => Kwc_Abstract::getSetting($masterComponentClass, 'childModel'),
+            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'callback' => 'onMasterRowDelete'
+        );
         return $ret;
     }
 
@@ -45,6 +50,23 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
                         new Kwf_Component_Event_Component_ContentChanged($this->_class, $c->dbId)
                     );
                 }
+            }
+        }
+    }
+
+    protected function onMasterRowDelete(Kwf_Component_Event_Row_Abstract $event)
+    {
+        $chainedType = 'Trl';
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $c) {
+            $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType);
+            foreach ($chained as $c) {
+                $this->fireEvent(
+                    new Kwf_Component_Event_Component_ContentChanged($this->_class, $c->dbId)
+                );
+                $this->fireEvent(
+                    new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c->dbId)
+                );
             }
         }
     }
