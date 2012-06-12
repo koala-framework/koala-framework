@@ -108,8 +108,11 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
             $this->_pageIds = $ids;
         }
         $ret = array();
-        foreach ($this->_pageIds as $pageId => $dbIds) {
-            if (substr($pageId, 0, strlen($targetId)) == $targetId) {
+        foreach ($this->_pageIds as $targetPageId => $dbIds) {
+            if ($targetPageId == $targetId
+                || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'-'
+                || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'_'
+            ) {
                 $ret = array_merge($ret, $dbIds);
             }
         }
