@@ -23,10 +23,10 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Events extends Kwc_Abstract_Ev
             ->getComponentById($event->row->component_id);
         if ($component) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $component->dbId . '-view'
+                $this->_class, $component->getChildComponent('-view')
             ));
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $component->dbId . '-view'
+                $this->_class, $component->getChildComponent('-view')
             ));
         }
     }

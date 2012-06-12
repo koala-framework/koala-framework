@@ -27,22 +27,26 @@ class Kwc_Box_Tags_RelatedPages_Events extends Kwc_Abstract_Events
         $model = $event->row->getModel();
         $select = $model->select()->whereEquals('tag_id', $event->row->tag_id);
         foreach ($model->getRows($select) as $row) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $row->component_id
-            ));
-            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $row->component_id
-            ));
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $c
+                ));
+                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                    $this->_class, $c
+                ));
+            }
         }
         /* todo events: dirty TagId
         $select = $model->select()->whereEquals('tag_id', $dirtyTagId);
         foreach ($model->getRows($select) as $row) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $row->component_id
-            ));
-            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $row->component_id
-            ));
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $c
+                ));
+                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                    $this->_class, $c
+                ));
+            }
         }
         */
     }

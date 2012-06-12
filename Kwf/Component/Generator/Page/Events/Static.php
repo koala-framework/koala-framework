@@ -1,14 +1,13 @@
 <?php
 class Kwf_Component_Generator_Page_Events_Static extends Kwf_Component_Generator_Events_Static
 {
-    protected function _fireComponentEvent($event, $dbId, $flag)
+    protected function _fireComponentEvent($eventType, Kwf_Component_Event_Component_AbstractFlag $ev)
     {
-        parent::_fireComponentEvent($event, $dbId, $flag);
-        $cls = 'Kwf_Component_Event_Page_'.$event;
+        parent::_fireComponentEvent($eventType, $ev);
+        $cls = 'Kwf_Component_Event_Component_'.$eventType;
         $g = $this->_getGenerator();
-        foreach ($g->getChildComponentClasses() as $k=>$c) {
-            $this->fireEvent(new $cls($c, $dbId.$g->getIdSeparator().$k, $flag));
+        foreach ($ev->component->getChildComponents(array('generator'=>$g->getGeneratorKey())) as $c) {
+            $this->fireEvent(new $cls($c->componentClass, $c, $ev->flag));
         }
-
     }
 }

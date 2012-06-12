@@ -5,11 +5,14 @@
  */
 class Kwf_Component_Event_Component_RecursiveAbstract extends Kwf_Component_Event_Abstract
 {
-    public $componentId;
+    /**
+     * @var Kwf_Component_Data
+     */
+    public $component;
 
-    public function __construct($componentClass, $componentId)
+    public function __construct($componentClass, Kwf_Component_Data $component)
     {
         $this->class = $componentClass;
-        $this->componentId = $componentId;
+        $this->component = $component;
     }
 }

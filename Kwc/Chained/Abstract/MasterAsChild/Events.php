@@ -16,7 +16,7 @@ class Kwc_Chained_Abstract_MasterAsChild_Events extends Kwc_Abstract_Events
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
     {
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, str_replace('-child', '', $event->dbId)
+            $this->_class, $event->component->parent
         ));
     }
 }

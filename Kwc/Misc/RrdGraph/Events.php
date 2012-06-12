@@ -5,7 +5,7 @@ class Kwc_Misc_RrdGraph_Events extends Kwc_Abstract_Events
     {
         parent::_onOwnRowUpdateNotVisible($c, $event);
         $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-            $this->_class, $c->componentId
+            $this->_class, $c
         ));
     }
 }

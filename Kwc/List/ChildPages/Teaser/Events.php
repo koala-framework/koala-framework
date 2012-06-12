@@ -23,8 +23,7 @@ class Kwc_List_ChildPages_Teaser_Events extends Kwc_Abstract_Events
 
     public function onChildHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $ev)
     {
-        $dbId = $ev->getParentDbId();
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $dbId));
+        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $ev->component->parent));
     }
 
     public function onPageAddedOrRemoved(Kwf_Component_Event_Component_Abstract $ev)

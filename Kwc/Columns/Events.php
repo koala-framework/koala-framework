@@ -24,7 +24,7 @@ class Kwc_Columns_Events extends Kwc_Abstract_List_Events
         if ($c && $c->componentClass == $this->_class) {
             if ($event->row->visible) {
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
-                    $this->_class, $event->row->component_id
+                    $this->_class, $c
                 ));
             }
         }
@@ -39,7 +39,7 @@ class Kwc_Columns_Events extends Kwc_Abstract_List_Events
         if ($c && $c->componentClass == $this->_class) {
             if ($event->isDirty('width') || $event->isDirty('visible')) {
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
-                    $this->_class, $event->row->component_id
+                    $this->_class, $c
                 ));
             }
         }
@@ -47,18 +47,17 @@ class Kwc_Columns_Events extends Kwc_Abstract_List_Events
 
     public function onContentWidthChanged(Kwf_Component_Event_Component_ContentWidthChanged $event)
     {
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClassPage_ContentChanged(
-                $this->_class, $c->getPageOrRoot()->dbId
-            ));
-        }
+        $c = $event->component;
+        $this->fireEvent(new Kwf_Component_Event_ComponentClassPage_ContentChanged(
+            $this->_class, $c->getPageOrRoot()
+        ));
     }
 
     public function onRecursiveContentWidthChanged(Kwf_Component_Event_Component_RecursiveContentWidthChanged $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        $c = $event->component;
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
-            $this->_class, $c->componentId
+            $this->_class, $c
         ));
     }
 }

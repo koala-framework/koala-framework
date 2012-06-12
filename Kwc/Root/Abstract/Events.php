@@ -41,62 +41,58 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
 
     public function onBoxHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        $pageId = $event->dbId;
+        $c = $event->component;
         //TODO: it should be possible to find the page using only string opertions which would be faster
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($pageId) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_Component_MasterContentChanged(
-                $this->_class, $c->getPageOrRoot()->dbId
-            ));
+        $this->fireEvent(new Kwf_Component_Event_Component_MasterContentChanged(
+            $this->_class, $c->getPageOrRoot()
+        ));
 
-            $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
-            //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
-            if (isset($boxSubtract[$c->id])) {
-                $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
-                    $this->_class, $c->getPageOrRoot()->dbId
-                ));
-            }
+        $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
+        //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
+        if (isset($boxSubtract[$c->id])) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
+                $this->_class, $c->getPageOrRoot()
+            ));
         }
     }
 
     public function onUniqueBoxHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        $boxId = $event->dbId;
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($boxId) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
-                $this->_class, $c->componentId
-            ));
-
-            $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
-            //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
-            if (isset($boxSubtract[$c->id])) {
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentWidthChanged(
-                    $this->_class, $c->componentId
-                ));
-            }
-        }
-    }
-
-    public function onBoxRecursiveHasContentChanged(Kwf_Component_Event_Component_RecursiveHasContentChanged $event)
-    {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        $c = $event->component;
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
-            $this->_class, $c->componentId
+            $this->_class, $c
         ));
 
         $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
         //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
         if (isset($boxSubtract[$c->id])) {
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentWidthChanged(
-                $this->_class, $c->componentId
+                $this->_class, $c
+            ));
+        }
+    }
+
+    public function onBoxRecursiveHasContentChanged(Kwf_Component_Event_Component_RecursiveHasContentChanged $event)
+    {
+        $c = $event->component;
+        $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
+            $this->_class, $c
+        ));
+
+        $boxSubtract = Kwc_Abstract::getSetting($this->_class, 'contentWidthBoxSubtract');
+        //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
+        if (isset($boxSubtract[$c->id])) {
+            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentWidthChanged(
+                $this->_class, $c
             ));
         }
     }
 
     public function onRecursiveAdded(Kwf_Component_Event_Component_RecursiveAdded $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        $c = $event->component;
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
-            $this->_class, $c->componentId
+            $this->_class, $c
         ));
     }
 }

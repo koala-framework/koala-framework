@@ -28,12 +28,14 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
         if ($event->isDirty('visible')) {
             $id = $event->row->component_id;
             $id = substr($id, 0, strrpos($id, '-'));
-            $this->fireEvent(
-                new Kwf_Component_Event_Component_ContentChanged($this->_class, $id)
-            );
-            $this->fireEvent(
-                new Kwf_Component_Event_Component_HasContentChanged($this->_class, $id)
-            );
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($id) as $c) {
+                $this->fireEvent(
+                    new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
+                );
+                $this->fireEvent(
+                    new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c)
+                );
+            }
         }
     }
 
@@ -47,7 +49,7 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
                 $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType);
                 foreach ($chained as $c) {
                     $this->fireEvent(
-                        new Kwf_Component_Event_Component_ContentChanged($this->_class, $c->dbId)
+                        new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
                     );
                 }
             }
@@ -62,10 +64,10 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
             $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType);
             foreach ($chained as $c) {
                 $this->fireEvent(
-                    new Kwf_Component_Event_Component_ContentChanged($this->_class, $c->dbId)
+                    new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
                 );
                 $this->fireEvent(
-                    new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c->dbId)
+                    new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c)
                 );
             }
         }

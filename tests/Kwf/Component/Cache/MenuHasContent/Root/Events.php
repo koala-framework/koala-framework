@@ -16,6 +16,6 @@ class Kwf_Component_Cache_MenuHasContent_Root_Events extends Kwc_Root_Abstract_E
 
     public function onHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $ev)
     {
-        self::$hasContentChanged[] = $ev->dbId;
+        self::$hasContentChanged[] = $ev->component->dbId;
     }
 }

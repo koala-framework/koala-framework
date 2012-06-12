@@ -212,19 +212,16 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 
     public static function getAllChainedByMaster($master, $chainedType, $parentDataSelect = array())
     {
-        static $classes;
-        if (!isset($classes)) {
-            $cacheId = 'hasChainedBMCls';
-            $classes = Kwf_Cache_Simple::fetch($cacheId);
-            if ($classes === false) {
-                $classes = array();
-                foreach (Kwc_Abstract::getComponentClasses() as $cls) {
-                    if (Kwc_Abstract::getFlag($cls, 'hasAllChainedByMaster')) {
-                        $classes[] = $cls;
-                    }
+        $cacheId = 'hasChainedBMCls-'.Kwf_Component_Data_Root::getComponentClass();
+        $classes = Kwf_Cache_Simple::fetch($cacheId);
+        if ($classes === false) {
+            $classes = array();
+            foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+                if (Kwc_Abstract::getFlag($cls, 'hasAllChainedByMaster')) {
+                    $classes[] = $cls;
                 }
-                Kwf_Cache_Simple::add($cacheId, $classes);
             }
+            Kwf_Cache_Simple::add($cacheId, $classes);
         }
         $ret = array();
         foreach ($classes as $cls) {

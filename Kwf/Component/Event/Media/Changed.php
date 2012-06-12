@@ -5,13 +5,13 @@
  */
 class Kwf_Component_Event_Media_Changed extends Kwf_Component_Event_Abstract
 {
-    public $componentId;
+    public $component;
     public $type;
 
-    public function __construct($componentClass, $componentId, $type = 'default')
+    public function __construct($componentClass, Kwf_Component_Data $component, $type = 'default')
     {
         $this->class = $componentClass;
-        $this->componentId = $componentId;
+        $this->component = $component;
         $this->type = $type;
     }
 }

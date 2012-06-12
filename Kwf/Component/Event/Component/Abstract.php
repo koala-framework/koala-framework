@@ -5,17 +5,14 @@
  */
 abstract class Kwf_Component_Event_Component_Abstract extends Kwf_Component_Event_Abstract
 {
-    public $dbId;
+    /**
+     * @var Kwf_Component_Data
+     */
+    public $component;
 
-    public function __construct($componentClass, $dbId)
+    public function __construct($componentClass, Kwf_Component_Data $component)
     {
         $this->class = $componentClass;
-        $this->dbId = $dbId;
-    }
-
-    public function getParentDbId()
-    {
-        $pos = max(strrpos($this->dbId, '-'), strrpos($this->dbId, '_'));
-        return substr($this->dbId, 0, $pos);
+        $this->component = $component;
     }
 }

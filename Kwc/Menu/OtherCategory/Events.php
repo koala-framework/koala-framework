@@ -29,32 +29,30 @@ class Kwc_Menu_OtherCategory_Events extends Kwc_Abstract_Events
         ));
     }
 
-    private function _getOwnDatas($menuDbId)
+    private function _getOwnDatas($menu)
     {
         $ret = array();
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($menuDbId) as $menu) {
-            if (!$menu->parent->parent) continue;
-            foreach ($menu->parent->parent->getChildComponents(array('flags' => array('menuCategory'=>true))) as $c) {
-                $ret = array_merge($ret, $c->getChildComponents(array('componentClass' => $this->_class)));
-            }
+        if (!$menu->parent->parent) return $ret;
+        foreach ($menu->parent->parent->getChildComponents(array('flags' => array('menuCategory'=>true))) as $c) {
+            $ret = array_merge($ret, $c->getChildComponents(array('componentClass' => $this->_class)));
         }
         return $ret;
     }
 
     public function onMenuContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        foreach ($this->_getOwnDatas($event->dbId) as $c) {
+        foreach ($this->_getOwnDatas($event->component) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $c->dbId
+                $this->_class, $c
             ));
         }
     }
 
     public function onMenuHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        foreach ($this->_getOwnDatas($event->dbId) as $c) {
+        foreach ($this->_getOwnDatas($event->component) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $c->dbId
+                $this->_class, $c
             ));
         }
     }

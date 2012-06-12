@@ -14,13 +14,12 @@ class Kwc_Menu_OtherCategoryChild_Events extends Kwc_Abstract_Events //not Kwc_B
 
     public function onMenuHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $c) {
-            $menu = $c->getParentPageOrRoot()->getChildComponent('-'.$c->id);
-            if ($menu) {
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveHasContentChanged(
-                    $this->_class, $menu->componentId
-                ));
-            }
+        $c = $event->component;
+        $menu = $c->getParentPageOrRoot()->getChildComponent('-'.$c->id);
+        if ($menu) {
+            $this->fireEvent(new Kwf_Component_Event_Component_RecursiveHasContentChanged(
+                $this->_class, $menu
+            ));
         }
     }
 }

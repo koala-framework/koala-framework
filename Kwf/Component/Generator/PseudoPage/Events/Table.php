@@ -29,21 +29,17 @@ class Kwf_Component_Generator_PseudoPage_Events_Table extends Kwf_Component_Gene
             $filenameChanged = $event->isDirty($filenameColumn);
         }
         if ($nameChanged) {
-            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+            foreach ($this->_getComponentsFromRow($event->row) as $c) {
                 $this->fireEvent(new Kwf_Component_Event_Page_NameChanged(
-                    $this->_class, $dbId
+                    $this->_class, $c
                 ));
             }
         }
         if ($filenameChanged) {
-            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
-                $components = Kwf_Component_Data_Root::getInstance()
-                    ->getComponentsByDbId($dbId);
-                foreach ($components as $component) {
-                    $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged(
-                        $this->_class, $component->componentId
-                    ));
-                }
+            foreach ($this->_getComponentsFromRow($event->row) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged(
+                    $this->_class, $c
+                ));
             }
         }
     }

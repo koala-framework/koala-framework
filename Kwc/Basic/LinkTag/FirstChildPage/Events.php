@@ -29,41 +29,34 @@ class Kwc_Basic_LinkTag_FirstChildPage_Events extends Kwc_Abstract_Events
 
     public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        $component = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($event->componentId);
+        $component = $event->component;
 
         if ($component->parent && $component->parent->componentClass == $this->_class) {
             $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
-                $this->_class, $component->parent->dbId
+                $this->_class, $component->parent
             ));
         }
     }
 
     public function onPositionChanged(Kwf_Component_Event_Page_PositionChanged $event)
     {
-        $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByDbId($event->dbId);
-        foreach ($components as $component) {
-            if ($component->row->pos == 1 && $component->parent &&
-                $component->parent->componentClass == $this->_class
-            ) {
-                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
-                    $this->_class, $component->parent->dbId
-                ));
-            }
+        $component = $event->component;
+        if ($component->row->pos == 1 && $component->parent &&
+            $component->parent->componentClass == $this->_class
+        ) {
+            $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
+                $this->_class, $component->parent
+            ));
         }
     }
 
     public function onPageAddedOrRemoved(Kwf_Component_Event_Component_AbstractFlag $event)
     {
-        $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByDbId($event->dbId);
-        foreach ($components as $component) {
-            if ($component->parent && $component->parent->componentClass == $this->_class) {
-                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
-                    $this->_class, $component->parent->dbId
-                ));
-            }
+        $component = $event->component;
+        if ($component->parent && $component->parent->componentClass == $this->_class) {
+            $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
+                $this->_class, $component->parent
+            ));
         }
     }
 }

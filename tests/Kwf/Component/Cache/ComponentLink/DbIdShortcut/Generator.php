@@ -3,6 +3,6 @@ class Kwf_Component_Cache_ComponentLink_DbIdShortcut_Generator extends Kwf_Compo
 {
     protected function _getParentDataByRow($row, $select)
     {
-        return Kwf_Component_Data_Root::getInstance()->getComponentsByClass($this->_class);
+        return Kwf_Component_Data_Root::getInstance();
     }
 }

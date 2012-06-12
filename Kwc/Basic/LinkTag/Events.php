@@ -16,15 +16,12 @@ class Kwc_Basic_LinkTag_Events extends Kwc_Abstract_Cards_Events
 
     public function onChildContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByDbId($event->dbId);
-        foreach ($components as $component) {
-            $parent = $component->parent;
-            if ($parent->componentClass == $this->_class && $parent->isPage) {
-                $this->fireEvent(
-                    new Kwf_Component_Event_Page_UrlChanged($this->_class, $parent->dbId)
-                );
-            }
+        $component = $event->component;
+        $parent = $component->parent;
+        if ($parent->componentClass == $this->_class && $parent->isPage) {
+            $this->fireEvent(
+                new Kwf_Component_Event_Page_UrlChanged($this->_class, $parent)
+            );
         }
     }
 }
