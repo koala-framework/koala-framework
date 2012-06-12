@@ -55,9 +55,9 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
             foreach ($this->_getDbIds($childPageId) as $dbId) {
                 foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
                     $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-
-                    //TODO: only fire if $dbId is a page
-                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                    if ($c->isPage) {
+                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                    }
                 }
             }
         }
@@ -69,9 +69,9 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
             foreach ($this->_getDbIds($childPageId) as $dbId) {
                 foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
                     $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-
-                    //TODO: only fire if $dbId is a page
-                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                    if ($c->isPage) {
+                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                    }
                 }
             }
         }
@@ -82,9 +82,9 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         foreach ($this->_getDbIds($event->component->dbId) as $dbId) {
             foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-
-                //TODO: only fire if $dbId is a page
-                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                if ($c->isPage) {
+                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                }
             }
         }
     }
