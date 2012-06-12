@@ -162,6 +162,7 @@ class Kwf_Component_Events
             $logger->info($event->__toString() . ':');
             $logger->indent++;
         }
+        static $callbackBenchmark = array();
         foreach ($callbacks as $callback) {
             $ev = call_user_func(
                 array($callback['class'], 'getInstance'),
@@ -171,11 +172,28 @@ class Kwf_Component_Events
             if ($logger) {
                 $msg = '-> '.$callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')';
                 $logger->info($msg . ':');
+                $start = microtime(true);
             }
             $ev->{$callback['method']}($event);
+            if ($logger) {
+                if (!isset($callbackBenchmark[$callback['class'] . '::' . $callback['method']])) {
+                    $callbackBenchmark[$callback['class'] . '::' . $callback['method']] = array(
+                        'calls' => 0,
+                        'time' => 0
+                    );
+                }
+                $callbackBenchmark[$callback['class'] . '::' . $callback['method']]['calls']++;
+                $callbackBenchmark[$callback['class'] . '::' . $callback['method']]['time'] += (microtime(true)-$start)*1000; //ATM includes everything which is missleading
+            }
         }
         if ($logger) {
             $logger->indent--;
+            if ($logger->indent == 0) {
+                foreach ($callbackBenchmark as $cb=>$i) {
+                    $logger->info(sprintf("% 3d", $i['calls'])."x ".sprintf("%3d", round($i['time'], 0))." ms: $cb");
+                }
+                $callbackBenchmark = array();
+            }
         }
 
         self::$eventsCount++;
