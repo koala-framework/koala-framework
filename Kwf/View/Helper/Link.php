@@ -43,6 +43,9 @@ class Kwf_View_Helper_Link
             if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
             $cssClass = " class=\"$cssClass\"";
         }
+        if (!empty($config['style'])) {
+            $cssClass .= " style=\"".$config['style']."\"";
+        }
 
         return "<a href=\"".htmlspecialchars($url)."\" rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
     }
