@@ -172,6 +172,10 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
     protected function _processPlaceholder($ret, Kwc_Mail_Recipient_Interface $recipient = null)
     {
+        //replace special unicode chars, causes problems in Lotus Notes
+        $ret = str_replace(chr(0xE2).chr(0x80).chr(0x8B), '', $ret); //zero width space
+        $ret = str_replace('–', '-', $ret);
+
         $plugins = $this->_getSetting('plugins');
         foreach ($plugins as $p) {
             if (is_instance_of($p, 'Kwf_Component_Plugin_View_Abstract')) {
