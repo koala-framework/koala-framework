@@ -72,6 +72,10 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
             substr($url, 0, 1) == '/'
         ) {
             $url = 'http://'.Kwf_Config::getValue('server.domain') . $url;
+        } else if (Kwf_Config::getValue('assetsCacheUrl') && substr($url, 0, 8) == '/assets/') {
+            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id')
+                .'&section='.Kwf_Setup::getConfigSection()
+                .'&url='.substr($url, 1);
         }
 
         $size = $this->_getImageSize($image);

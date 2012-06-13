@@ -243,16 +243,16 @@ class Kwf_Util_Setup
                         $ret .= "\n";
                         $ret .= "        //pattern\n";
                         $ret .= "        if (!\$domainMatches && preg_match('/{$domain['pattern']}/', \$host)) {\n";
-                        $ret .= "            \$redirect = '{$domain['domain']}';\n";
                         $ret .= "            \$domainMatches = true;\n";
-                        $ret .= "        }\n";
-                    }
-                    if (isset($domain['noRedirectPattern'])) {
-                        $ret .= "\n";
-                        $ret .= "        //noRedirectPattern\n";
-                        $ret .= "        if (!\$domainMatches && preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
-                        $ret .= "            \$redirect = false;\n";
-                        $ret .= "            \$domainMatches = true;\n";
+                        if (isset($domain['noRedirectPattern'])) {
+                            $ret .= "\n";
+                            $ret .= "            //noRedirectPattern\n";
+                            $ret .= "            if (!preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
+                            $ret .= "                \$redirect = '{$domain['domain']}';\n";
+                            $ret .= "            }\n";
+                        } else {
+                            $ret .= "            \$redirect = '{$domain['domain']}';\n";
+                        }
                         $ret .= "        }\n";
                     }
                 }

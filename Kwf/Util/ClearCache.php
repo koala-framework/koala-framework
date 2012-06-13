@@ -78,6 +78,9 @@ class Kwf_Util_ClearCache
         $types[] = 'setup';
         $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
+        if (Kwf_Config::getValue('assetsCacheUrl')) {
+            $types[] = 'assetsServer';
+        }
         return $types;
     }
 
@@ -321,6 +324,15 @@ class Kwf_Util_ClearCache
                     $this->_removeDirContents($d, $server);
                 }
                 if ($output) echo "cleared dir: $d cache\n";
+            }
+        }
+        if (in_array('assetsServer', $types)) {
+            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&clear';
+            try {
+                $out = file_get_contents($url);
+                if ($output) echo "cleared:     assetsServer [".$out."]\n";
+            } catch (Exception $e) {
+                if ($output) echo "cleared:     assetsServer [ERROR] ".$e->getMessage()."\n";
             }
         }
     }
