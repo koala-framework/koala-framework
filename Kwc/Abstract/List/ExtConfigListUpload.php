@@ -14,7 +14,7 @@ class Kwc_Abstract_List_ExtConfigListUpload extends Kwc_Abstract_List_ExtConfigL
         if (!$success) {
             $multiFileUpload = false;
             $form = Kwc_Abstract_Form::createChildComponentForm($this->_class, 'child');
-            if ($field = $this->_getFileUploadField($form)) {
+            if ($form && $field = $this->_getFileUploadField($form)) {
                 $multiFileUpload = array(
                     'allowOnlyImages' => $field->getAllowOnlyImages(),
                     'maxResolution' => $field->getMaxResolution(),
