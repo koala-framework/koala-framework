@@ -88,6 +88,10 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         fwrite($this->_lock, getmypid());
     }
 
+    /**
+     * @param string E-Mail address of user
+     * @param string webcode parameter used for Service Model (that can have global users)
+     */
     public function createUserRow($email, $webcode = null)
     {
         return parent::createRow(array('email' => $email));
