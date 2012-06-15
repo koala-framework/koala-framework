@@ -209,7 +209,6 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
             } else if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
-                $p = $p->getPageOrRoot();
                 $select->where(new Kwf_Model_Select_Expr_Or(array(
                     new Kwf_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
                     new Kwf_Model_Select_Expr_Equal('component_id', $p->dbId),
