@@ -30,7 +30,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
 
         $ret = array();
         if (!$parentData) {
-            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
                 throw new Kwf_Exception("this must not happen");
                 $p = $p->getPageOrRoot();
                 $parentData = $p->getRecursiveChildComponents(array(
@@ -41,7 +41,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
                 $parentSelect->copyParts(array(
                     Kwf_Component_Select::WHERE_SUBROOT,
                     Kwf_Component_Select::IGNORE_VISIBLE,
-                    Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE),
+                    Kwf_Component_Select::WHERE_CHILD_OF),
                     $select
                 );
                 $parentData = Kwf_Component_Data_Root::getInstance()

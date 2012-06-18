@@ -81,7 +81,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         Kwf_Benchmark::count('GenTable::getChildData');
         if (is_array($select)) $select = new Kwf_Component_Select($select);
         $ret = array();
-        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE))
+        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF))
                 && !$this->_getModel()->hasColumn('component_id')) {
             $parentDatas = $p->getRecursiveChildComponents(array(
                 'componentClass' => $this->_class
@@ -139,7 +139,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
                 $constraints['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
             }
 
-            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
                 //avoid getComponentsByDbId call when possible
 
                 if ($p->dbId != substr($row->component_id, 0, strlen($p->dbId))) {
@@ -156,7 +156,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
             //streng genommen nicht on same page sondern children of und auf same page
             //siehe Kwf_Component_Generator_RecursiveTable2_RecursiveTest
-            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
                 foreach ($ret as $k=>$i) {
                     $found = false;
                     while ($i) {
@@ -208,7 +208,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         if ($this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
-            } else if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+            } else if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
                 $select->where(new Kwf_Model_Select_Expr_Or(array(
                     new Kwf_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
                     new Kwf_Model_Select_Expr_Equal('component_id', $p->dbId),

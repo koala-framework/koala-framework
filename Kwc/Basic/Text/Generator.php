@@ -28,7 +28,7 @@ class Kwc_Basic_Text_Generator extends Kwf_Component_Generator_Table
             }
             $select->whereEquals('nr', substr($id, 2));
         }
-        if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+        if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
             $select->where(new Kwf_Model_Select_Expr_Or(array(
                 new Kwf_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
                 new Kwf_Model_Select_Expr_Equal('component_id', $p->dbId),

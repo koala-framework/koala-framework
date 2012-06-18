@@ -128,7 +128,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     protected function _getPageIds($parentData, $select)
     {
-        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE))) {
+        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF))) {
             if ($p->getPage()) $p = $p->getPage();
             $parentData = $p;
         }

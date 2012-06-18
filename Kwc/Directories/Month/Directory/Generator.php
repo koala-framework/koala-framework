@@ -6,7 +6,7 @@ class Kwc_Directories_Month_Directory_Generator extends Kwf_Component_Generator_
     public function getChildData($parentData, $select = array())
     {
         $ret = array();
-        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE))
+        if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF))
                 && !$this->_getModel()->hasColumn('component_id')) {
             $parentDatas = $p->getRecursiveChildComponents(array(
                 'componentClass' => $this->_class
@@ -93,7 +93,7 @@ class Kwc_Directories_Month_Directory_Generator extends Kwf_Component_Generator_
             //die parent->componentClass nicht wissen
             //wenn also kein $parentData übergeben stimmt der rückgabewert uU nicht
             if ($this->_getModel()->hasColumn('component_id')) {
-                $page = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
+                $page = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF);
                 if (!$page) {
                     return null;
                 }

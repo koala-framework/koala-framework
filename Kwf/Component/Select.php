@@ -19,7 +19,7 @@ class Kwf_Component_Select extends Kwf_Model_Select
     const WHERE_HOME = 'whereHome';
     const WHERE_PAGE_GENERATOR = 'wherePageGenerator';
     const WHERE_SUBROOT = 'whereSubroot';
-    const WHERE_CHILD_OF_SAME_PAGE = 'whereChildOfSamePage';
+    const WHERE_CHILD_OF = 'whereChildOf';
     const IGNORE_VISIBLE = 'ignoreVisible';
 
     public function __construct($where = array())
@@ -195,9 +195,9 @@ class Kwf_Component_Select extends Kwf_Model_Select
     /**
      * Intern fuer effizientes getRecursiveChildComponents ohne parentData
      **/
-    public function whereChildOfSamePage(Kwf_Component_Data $page)
+    public function whereChildOf(Kwf_Component_Data $page)
     {
-        $this->_parts[self::WHERE_CHILD_OF_SAME_PAGE] = $page;
+        $this->_parts[self::WHERE_CHILD_OF] = $page;
         return $this;
     }
 
@@ -214,7 +214,7 @@ class Kwf_Component_Select extends Kwf_Model_Select
             if ($key == self::WHERE_SUBROOT && !empty($part)) {
                 $part = $part[0]->componentId;
             }
-            if ($key == self::WHERE_CHILD_OF_SAME_PAGE && !empty($part)) {
+            if ($key == self::WHERE_CHILD_OF && !empty($part)) {
                 $part = $part->componentId;
             }
             $parts[$key] = $part;

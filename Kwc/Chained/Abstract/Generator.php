@@ -83,10 +83,10 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
     protected function _getChainedSelect($select)
     {
         $select = clone $select;
-        if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+        if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
             $cd = $this->_getChainedData($p);
             if (!$cd) $cd = $p; // Falls Data ein parent von Komponente mit chainedType ist
-            $select->whereChildOfSamePage($cd);
+            $select->whereChildOf($cd);
         }
         if ($cls = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
             foreach ($cls as &$c) {
@@ -121,7 +121,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
 
         $chainedType = $this->getGeneratorFlag('chainedType');
 
-        $slaveData = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
+        $slaveData = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF);
         while ($slaveData) {
             if (Kwc_Abstract::getFlag($slaveData->componentClass, 'chainedType') == $chainedType) {
                 break;
