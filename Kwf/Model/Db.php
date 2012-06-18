@@ -146,15 +146,15 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $this->_rows[$id];
     }
 
-    private function _formatField($field, Zend_Db_Select $select = null)
+    private function _formatField($field, Zend_Db_Select $select = null, $tableNameAlias = null)
     {
         if ($field instanceof Zend_Db_Expr) return $field->__toString();
 
         if (in_array($field, $this->getOwnColumns())) {
             $f = $this->transformColumnName($field);
-            return $this->_fieldWithTableName($f);
+            return $this->_fieldWithTableName($f, $tableNameAlias);
         }
-        $ret = $this->_formatFieldInternal($field, $select);
+        $ret = $this->_formatFieldInternal($field, $select, $tableNameAlias);
         if (!$ret) {
             throw new Kwf_Exception("Can't find field '$field' in model '".get_class($this)."' (Table '".$this->getTableName()."')");
         }
@@ -162,12 +162,16 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $ret;
     }
 
-    protected function _fieldWithTableName($field)
+    protected function _fieldWithTableName($field, $tableNameAlias = null)
     {
-        return $this->getTableName().'.'.$field;
+        if ($tableNameAlias) {
+            return $tableNameAlias.'.'.$field;
+        } else {
+            return $this->getTableName().'.'.$field;
+        }
     }
 
-    private function _formatFieldInternal($field, $dbSelect)
+    private function _formatFieldInternal($field, $dbSelect, $tableNameAlias)
     {
         $siblingOfModels = $this->_proxyContainerModels;
         $siblingOfModels[] = $this;
@@ -210,10 +214,10 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
         }
 
-        return $this->_formatFieldExpr($field, $dbSelect);
+        return $this->_formatFieldExpr($field, $dbSelect, $tableNameAlias);
     }
 
-    private function _formatFieldExpr($field, $dbSelect)
+    private function _formatFieldExpr($field, $dbSelect, $tableNameAlias = null)
     {
         $expr = false;
 
@@ -227,7 +231,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
         if (!$expr) return false;
 
-        return $this->_createDbSelectExpression($expr, $dbSelect, $depOf);
+        return $this->_createDbSelectExpression($expr, $dbSelect, $depOf, $tableNameAlias);
     }
 
     /**
@@ -361,7 +365,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $ret;
     }
 
-    private function _createDbSelectExpression($expr, $dbSelect, $depOf = null)
+    private function _createDbSelectExpression($expr, $dbSelect, $depOf = null, $tableNameAlias = null)
     {
         // wenn die expr von anderen models kommt (bei ProxyModel), dann
         // brauchen wir das model, dass die expr gesetzt hat (siehe Child oder Parent)
@@ -388,7 +392,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         if ($expr instanceof Kwf_Model_Select_Expr_CompareField_Abstract ||
             $expr instanceof Kwf_Model_Select_Expr_IsNull
         ) {
-            $field = $this->_formatField($expr->getField(), $dbSelect);
+            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
         }
         if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
             if (is_array($quotedValue)) {
@@ -470,18 +474,18 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
                             if ($expression instanceof Kwf_Model_Select_Expr_Interface) {
-                    $sqlExpressions[] = $this->_createDbSelectExpression($expression, $dbSelect);
+                    $sqlExpressions[] = $this->_createDbSelectExpression($expression, $dbSelect, null, $tableNameAlias);
                 } else {
-                    $sqlExpressions[] = $this->_formatField($expression, $dbSelect);
+                    $sqlExpressions[] = $this->_formatField($expression, $dbSelect, $tableNameAlias);
                 }
             }
             return 'CONCAT('.implode(", ", $sqlExpressions).')';
         } else if ($expr instanceof Kwf_Model_Select_Expr_StrPad) {
             $field = $expr->getField();
             if ($field instanceof Kwf_Model_Select_Expr_Interface) {
-                $field = $this->_createDbSelectExpression($field, $dbSelect);
+                $field = $this->_createDbSelectExpression($field, $dbSelect, null, $tableNameAlias);
             } else {
-                $field = $this->_formatField($field, $dbSelect);
+                $field = $this->_formatField($field, $dbSelect, $tableNameAlias);
             }
             if ($expr->getPadType() == Kwf_Model_Select_Expr_StrPad::RIGHT) {
                 $pad = 'RPAD';
@@ -494,9 +498,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_Date_Year) {
             $field = $expr->getField();
             if ($field instanceof Kwf_Model_Select_Expr_Interface) {
-                $field = $this->_createDbSelectExpression($field, $dbSelect);
+                $field = $this->_createDbSelectExpression($field, $dbSelect, null, $tableNameAlias);
             } else {
-                $field = $this->_formatField($field, $dbSelect);
+                $field = $this->_formatField($field, $dbSelect, $tableNameAlias);
             }
             return "YEAR($field)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_String) {
@@ -508,23 +512,23 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_Count) {
             $field = $expr->getField();
             if ($field != '*') {
-                $field = $this->_formatField($field, $dbSelect);
+                $field = $this->_formatField($field, $dbSelect, $tableNameAlias);
             }
             if ($expr->getDistinct()) $field = "DISTINCT $field";
             return "COUNT($field)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Sum) {
-            $field = $this->_formatField($expr->getField(), $dbSelect);
+            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return "SUM($field)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Max) {
-            $field = $this->_formatField($expr->getField(), $dbSelect);
+            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return "MAX($field)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Min) {
-            $field = $this->_formatField($expr->getField(), $dbSelect);
+            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return "MIN($field)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Area) {
-            $lat1 = $this->_formatField('latitude', $dbSelect);
+            $lat1 = $this->_formatField('latitude', $dbSelect, $tableNameAlias);
             $lat2 = $expr->getLatitude();
-            $long1 = $this->_formatField('longitude', $dbSelect);
+            $long1 = $this->_formatField('longitude', $dbSelect, $tableNameAlias);
             $long2 = $expr->getLongitude();
             $radius = $expr->getRadius();
             return "
@@ -603,10 +607,10 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $refDbSelect->from(null, $exprStr);
             return "($refDbSelect)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
-            $field = $this->_formatField($expr->getField(), $dbSelect);
+            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return $field;
         } else if ($expr instanceof Kwf_Model_Select_Expr_PrimaryKey) {
-            $field = $this->_formatField($this->getPrimaryKey(), $dbSelect);
+            $field = $this->_formatField($this->getPrimaryKey(), $dbSelect, $tableNameAlias);
             return $field;
         } else if ($expr instanceof Kwf_Model_Select_Expr_SumFields) {
             $sqlExpressions = array();
@@ -614,9 +618,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 if (is_int($expression)) {
                     $sqlExpressions[] = $expression;
                 } else if (is_string($expression)) {
-                    $sqlExpressions[] = $this->_formatField($expression, $dbSelect);
+                    $sqlExpressions[] = $this->_formatField($expression, $dbSelect, $tableNameAlias);
                 } else if ($expression instanceof Kwf_Model_Select_Expr_Interface) {
-                    $sqlExpressions[] = $this->_createDbSelectExpression($expression, $dbSelect);
+                    $sqlExpressions[] = $this->_createDbSelectExpression($expression, $dbSelect, $tableNameAlias);
                 } else {
                     throw new Kwf_Exception_NotYetImplemented();
                 }
@@ -625,14 +629,28 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_Sql) {
             foreach ($expr->getUsedColumns() as $f) {
                 //mit dem rückgabewert nichts machen, das ist nur zum joinen von sibling models
-                $this->_formatFieldInternal($f, $dbSelect);
+                $this->_formatFieldInternal($f, $dbSelect, $tableNameAlias);
             }
             return '('.$expr->getSql().')';
         } else if ($expr instanceof Kwf_Model_Select_Expr_If) {
-            $if = $this->_createDbSelectExpression($expr->getIf(), $dbSelect);
-            $then = $this->_createDbSelectExpression($expr->getThen(), $dbSelect);
-            $else = $this->_createDbSelectExpression($expr->getElse(), $dbSelect);
+            $if = $this->_createDbSelectExpression($expr->getIf(), $dbSelect, null, $tableNameAlias);
+            $then = $this->_createDbSelectExpression($expr->getThen(), $dbSelect, null, $tableNameAlias);
+            $else = $this->_createDbSelectExpression($expr->getElse(), $dbSelect, null, $tableNameAlias);
             return "IF($if, $then, $else)";
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Position) {
+            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
+            static $positionNum = 0;
+            $alias = ($tableNameAlias ? $tableNameAlias : $this->getTableName()) . '_expr_position'.($positionNum++);
+            $aliasIdField = $this->_formatField($this->getPrimaryKey(), null, $alias);
+            $aliasField = $this->_formatField($expr->getField(), null, $alias);
+            $ret = "SELECT COUNT($aliasIdField)+1 FROM ".$this->getTableName()." $alias
+                WHERE $aliasField > $field";
+            foreach ($expr->getGroupBy() as $g) {
+                $field = $this->_formatField($g, $dbSelect, $tableNameAlias);
+                $aliasField = $this->_formatField($g, null, $alias);
+                $ret .= " AND $field=$aliasField";
+            }
+            return "($ret)";
         } else {
             throw new Kwf_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }

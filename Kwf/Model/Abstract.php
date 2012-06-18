@@ -717,6 +717,14 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return is_null($row->{$expr->getField()});
         } else if ($expr instanceof Kwf_Model_Select_Expr_Not) {
             return !$this->getExprValue($row, $expr->getExpression());
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Position) {
+            $f = $expr->getField();
+            $s = $this->select();
+            foreach ($expr->getGroupBy() as $i) {
+                $s->whereEquals($i, $row->$i);
+            }
+            $s->where(new Kwf_Model_Select_Expr_Higher($f, $row->$f));
+            return $this->countRows($s)+1;
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"

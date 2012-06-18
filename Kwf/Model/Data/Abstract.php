@@ -292,7 +292,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
-            if (!($v && $v > $exprValue)) {
+            if (!(!is_null($v) && $v > $exprValue)) {
                 return false;
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Lower) {
@@ -302,7 +302,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
-            if (!($v && $v < $exprValue)) {
+            if (!(!is_null($v) && $v < $exprValue)) {
                 return false;
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_HigherEqual) {
@@ -312,7 +312,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
-            if (!($v && $v >= $exprValue)) {
+            if (!(!is_null($v) && $v >= $exprValue)) {
                 return false;
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_LowerEqual) {
@@ -322,12 +322,12 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 $exprValue = $exprValue->getTimestamp();
                 $v = strtotime($v);
             }
-            if (!($v && $v <= $exprValue)) {
+            if (!(!is_null($v) && $v <= $exprValue)) {
                 return false;
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_HigherEqualDate) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if ($v) {
+            if (!is_null($v)) {
                 $fieldTime = strtotime($v);
                 $exprTime = strtotime($expr->getValue());
                 if ($fieldTime >= $exprTime) {
@@ -340,7 +340,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_SmallerEqualDate) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if ($v) {
+            if (!is_null($v)) {
                 $fieldTime = strtotime($v);
                 $exprTime = strtotime($expr->getValue());
                 if ($fieldTime <= $exprTime) {
@@ -358,7 +358,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Like) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if ($v) {
+            if (!is_null($v)) {
                 $reg = $expr->getValue();
                 $partsToEscape = array('\\', '(', ')', '_', '*', '.', '^', '$');
                 foreach ($partsToEscape as $part) {
@@ -371,7 +371,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             return false;
         } else if ($expr instanceof Kwf_Model_Select_Expr_RegExp) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if ($v) {
+            if (!is_null($v)) {
                 $reg = $expr->getValue();
                 return preg_match('/'.$reg.'/', $v);
             }
