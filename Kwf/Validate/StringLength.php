@@ -1,5 +1,5 @@
 <?php
-class Kwf_Validate_StringLengt extends Zend_Validate_StringLength
+class Kwf_Validate_StringLength extends Zend_Validate_StringLength
 {
     public function __construct($min = 0, $max = null)
     {
