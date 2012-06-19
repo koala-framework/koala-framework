@@ -5,8 +5,8 @@ class Kwf_Component_Generator_DbIdRecursiveChildComponents_Test extends Kwc_Test
     {
         parent::setUp('Kwf_Component_Generator_DbIdRecursiveChildComponents_Root');
 /*
-    - Page                            ->getChildPages() funktioniert NICHT
-        -* Detail with dbIdShortcut    ->getChildPages() funktioniert korrekt, weil WHERE_CHILD_OF_SAME_PAGE sich so verhält wie WHERE_CHILD_OF
+    - Page
+        -* Detail with dbIdShortcut
           - Table
             -* Item
                 - Page
@@ -25,6 +25,7 @@ class Kwf_Component_Generator_DbIdRecursiveChildComponents_Test extends Kwc_Test
     public function testChildPagesFromDetail()
     {
         $p = $this->_root->getComponentById('root_page-1');
+                          //table + cards
         $this->assertEquals(2+0, count($p->getChildPages()));
 
         $p = $this->_root->getComponentById('root_page-2');
@@ -36,7 +37,6 @@ class Kwf_Component_Generator_DbIdRecursiveChildComponents_Test extends Kwc_Test
 
     public function testChildPagesFromPage()
     {
-        $this->markTestIncomplete();
         $p = $this->_root->getComponentById('root_page');
         $this->assertEquals(3+1, count($p->getChildPages()));
     }

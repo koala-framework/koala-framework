@@ -873,4 +873,36 @@ abstract class Kwf_Component_Generator_Abstract
     {
         return isset($this->_settings[$setting]);
     }
+
+    private function _getPossibleIndirectDbIdShortcutsImpl($class)
+    {
+        $ret = array();
+        $gens = Kwf_Component_Generator_Abstract::getInstances($class);
+        foreach ($gens as $g) {
+            if ($g->hasSetting('dbIdShortcut')) {
+                $ret[] = $g->getSetting('dbIdShortcut');
+            }
+        }
+        foreach (Kwc_Abstract::getChildComponentClasses($class, array('page'=>false)) as $c) {
+            $ret = array_merge($ret, $this->_getPossibleIndirectDbIdShortcutsImpl($c));
+        }
+        return $ret;
+    }
+
+    /**
+     * Helper function that returns the dbIdShortcuts that can be used below a componentClass (only across page)
+     *
+     * Static, fast and cached.
+     */
+    protected function _getPossibleIndirectDbIdShortcuts($class)
+    {
+        $cacheId = '-poss-dbid-sc-'.$this->_class.'-'.$this->getGeneratorKey().'-'.$class;
+        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        if (!$success) {
+            $ret = $this->_getPossibleIndirectDbIdShortcutsImpl($class);
+            Kwf_Cache_Simple::add($cacheId, $ret);
+        }
+        return $ret;
+    }
+
 }
