@@ -12,6 +12,7 @@ Kwf.Auto.Tree.TreeLoadMask = function(el, config){
     this.loader.on('load', this.onLoad, this);
     this.loader.on('loadexception', this.onLoad, this);
     this.removeMask = Ext.value(this.removeMask, false);
+    this.unmasked = false;
 };
 
 Ext.extend(Kwf.Auto.Tree.TreeLoadMask, Ext.LoadMask, {
@@ -21,7 +22,14 @@ Ext.extend(Kwf.Auto.Tree.TreeLoadMask, Ext.LoadMask, {
         this.loader.un('beforeload', this.onBeforeLoad, this);
         this.loader.un('load', this.onLoad, this);
         this.loader.un('loadexception', this.onLoad, this);
-	}
+        this.unmasked = true;
+	},
+    onBeforeLoad : function(){
+        if (!this.unmasked) {
+            Kwf.Auto.Tree.TreeLoadMask.superclass.onBeforeLoad.call(this);
+        }
+    }
+    
 });
 
 Kwf.Auto.Tree.Panel = Ext.extend(Ext.tree.TreePanel, {
