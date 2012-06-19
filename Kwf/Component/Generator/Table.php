@@ -132,6 +132,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
     {
         if ($row->getModel()->hasColumn('component_id')) {
             $constraints = array('componentClass'=>$this->_class);
+
             if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
                 $constraints['subroot'] = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
             }
@@ -140,11 +141,19 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             }
 
             if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
-                //avoid getComponentsByDbId call when possible
+                //avoid getComponentsByDbId call when possible (so operate on strings only)
 
                 if ($p->dbId != substr($row->component_id, 0, strlen($p->dbId))) {
-                    return null; //different dbId
+                    //some child might have a dbIdShortcut
+                    $found = false;
+                    foreach ($this->_getPossibleIndirectDbIdShortcuts($p->componentClass) as $dbIdShortcut) {
+                        if (substr($row->component_id, 0, strlen($dbIdShortcut)) == $dbIdShortcut) {
+                            $found = true;
+                        }
+                    }
+                    if (!$found) return null;
                 }
+
                 $childIdPart = substr($row->component_id, strlen($p->dbId));
                 if (strpos($childIdPart, '_') !== false) {
                     return null; //not a direct child component
@@ -171,6 +180,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
                     }
                 }
             }
+
         } else {
             $components = Kwf_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class, array('ignoreVisible' => true));
             if (count($components) == 1) {
@@ -209,10 +219,16 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
             } else if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
-                $select->where(new Kwf_Model_Select_Expr_Or(array(
+                $ors = array(
                     new Kwf_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
                     new Kwf_Model_Select_Expr_Equal('component_id', $p->dbId),
-                )));
+                );
+
+                foreach ($this->_getPossibleIndirectDbIdShortcuts($p->componentClass) as $dbIdShortcut) {
+                    $ors[] = new Kwf_Model_Select_Expr_StartsWith('component_id', $dbIdShortcut);
+                }
+
+                $select->where(new Kwf_Model_Select_Expr_Or($ors));
             }
         }
 
