@@ -32,12 +32,11 @@ class Kwc_Paragraphs_Events extends Kwc_Abstract_Events
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        foreach(Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->getParentDbId()) as $c) {
-            if ($c->componentClass == $this->_class) {
-                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                    $this->_class, $event->component->parent
-                ));
-            }
+        $c = $event->component;
+        if ($c->componentClass == $this->_class) {
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $event->component->parent
+            ));
         }
     }
 
