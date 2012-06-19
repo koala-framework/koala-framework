@@ -24,13 +24,13 @@ class Kwc_FormStatic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
-        $this->assertTextPresent('Please fill out the field');
+        $this->assertElementPresent('css=.form_email.kwfFieldError');
 
         $this->type('css=#root_form_form_email', 'testmail@vivid');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
-        $this->assertTextPresent('is not a valid email address');
+        $this->assertElementPresent('css=.form_email.kwfFieldError');
 
         $this->type('css=#root_form_form_email', 'test@vivid-planet.com');
         $this->click('css=button');

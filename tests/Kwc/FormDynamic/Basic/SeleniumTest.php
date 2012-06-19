@@ -31,7 +31,6 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->assertElementNotPresent('css=.kwfFieldError #form_root_form-paragraphs-2');
         $this->click('css=button');
         $this->waitForConnections();
-        $this->assertTextPresent('Please fill out');
         $this->assertElementPresent('css=.kwfFieldError #form_root_form-paragraphs-2');
 
         //vtype email
@@ -39,7 +38,6 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->type('css=#form_root_form-paragraphs-3', 'foo');
         $this->click('css=button');
         $this->waitForConnections();
-        $this->assertTextPresent('\'foo\' is not a valid');
         $this->assertElementPresent('css=.kwfFieldError #form_root_form-paragraphs-3');
     }
 
@@ -56,7 +54,6 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         //required
         $this->openKwc('/form2');
         $this->clickAndWait('css=button');
-        $this->assertTextPresent('Please choose a file');
         $this->assertElementPresent('css=.kwfFieldError #form_root_form2-paragraphs-8');
     }
 
@@ -73,7 +70,6 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->openKwc('/form3');
         $this->click('css=button');
         $this->waitForConnections();
-        $this->assertTextPresent('Please choose an option');
         $this->assertElementPresent('css=.kwfFieldError');
         $this->click('css=#form_root_form3-paragraphs-10_root_form3-paragraphs-10_1');
         $this->click('css=button');
