@@ -29,6 +29,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
    -> LÖSUNG (ja, es gibt für alles ein lösung)
       *merken* welche komponenten geändert wurde und wo das settings cache refershen einen fehler lieferte
                und bei jeder anderen komponenten settings änderung die auch refreshen - bis es einmal durch ist
+      -> schwierighkeit: php ist scheiße und parse errors können nicht abgefangen werden :/
 
 - alle verfügaren komponenten klassen
   -> muss gelöscht werden wenn generator geändert
