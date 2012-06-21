@@ -17,7 +17,7 @@ class Kwc_Abstract_Cards_Update_2 extends Kwf_Update
         $replace = array();
         foreach (Kwf_Registry::get('db')->fetchAll('SELECT component_id, component FROM kwc_basic_cards') as $row) {
             $ids[] = $row['component_id'];
-            $search[] = $row['component_id'] . '-link';
+            $search[] = '#^'.preg_quote($row['component_id'] . '-link').'([\\-_].+)?$#';
             $replace[] = $row['component_id'] . '-child';
 
         }
@@ -42,15 +42,15 @@ class Kwc_Abstract_Cards_Update_2 extends Kwf_Update
                 foreach ($ids as $id) {
                     $sql .= " OR $column LIKE ".$db->quote(str_replace('_', '\_', $id.'-link').'%');
                 }
-                file_put_contents('up.sql', "\n\n\n".$sql, FILE_APPEND);
                 foreach ($db->query($sql)->fetchAll() AS $row) {
-                    $newId = str_replace($search, $replace, $row[$column]);
+                    $newId = preg_replace($search, $replace, $row[$column]);
                     $sql = "UPDATE $table SET $column=".$db->quote($newId)." WHERE $column=".$db->quote($row[$column]);
                     echo $sql."\n";
                     $db->query($sql);
                 }
             }
         }
+
         echo "\n\nkwc_basic_text:\n";
         foreach ($search as $k=>$s) {
             $r = $replace[$k];
