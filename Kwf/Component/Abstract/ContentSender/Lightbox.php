@@ -65,6 +65,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $lightboxContent = "<div class=\"$class\">\n".
                 "<div class=\"kwfLightboxInner\" style=\"$style\">\n".
                 "    <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
+                "    <a class=\"closeButton\" href=\"$parent->url\"></a>\n".
                 "    <div class=\"kwfLightboxContent\">\n".
                 "        $lightboxContent\n".
                 "    </div>\n".

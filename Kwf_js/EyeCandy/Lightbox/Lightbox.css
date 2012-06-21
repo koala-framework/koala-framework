@@ -15,7 +15,7 @@
 .ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
 
 .kwfLightbox .lightboxHeader { position: relative; z-index: 102; }
-.kwfLightbox .lightboxHeader .closeButton {
+.kwfLightbox .closeButton {
     position: absolute;
     right: -25px;
     top: -25px;
@@ -24,7 +24,7 @@
     height: 42px;
     background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
 }
-.kwfLightbox .lightboxHeader .closeButton:hover { text-decoration: none; }
+.kwfLightbox .closeButton:hover { text-decoration: none; }
 
 .kwfLightbox .lightboxBody { position: relative; height: 100%; z-index: 101; }
 .kwfLightbox .lightboxBody .nextBtn,

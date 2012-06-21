@@ -123,6 +123,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 this.contentEl = this.innerLightboxEl.createChild({
                     cls: 'kwfLightboxContent'
                 });
+                this.closeButtonEl = this.innerLightboxEl.createChild({
+                    cls: 'closeButton',
+                    tag: 'a',
+                    href: '#'
+                });
 
                 this.style.updateContent(response.responseText);
 
