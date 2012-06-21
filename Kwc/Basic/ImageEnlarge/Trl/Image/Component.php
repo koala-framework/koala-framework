@@ -6,7 +6,7 @@ class Kwc_Basic_ImageEnlarge_Trl_Image_Component
     {
         $c = $this->getData()->parent->getChildComponent('-linkTag');
         if (is_instance_of($c->componentClass, 'Kwc_Basic_LinkTag_Trl_Component')) {
-            $c = $c->getChildComponent('-link');
+            $c = $c->getChildComponent('-child');
         }
         if (is_instance_of($c->componentClass, 'Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component')
             && Kwc_Abstract::getSetting($c->chained->componentClass, 'alternativePreviewImage')

@@ -2,7 +2,7 @@ Ext.ns('Kwc.Statistics.Piwik');
 
 Kwc.Statistics.Piwik.getTracker = function()
 {
-    if (!Kwc.Statistics.Piwik.url || !Kwc.Statistics.Piwik.idSite) return null;
+    if (!Kwc.Statistics.Piwik.url || !Kwc.Statistics.Piwik.idSite || typeof Piwik == 'undefined') return null;
     try {
         return Piwik.getTracker(Kwc.Statistics.Piwik.url, Kwc.Statistics.Piwik.idSite);
     } catch( err ) {

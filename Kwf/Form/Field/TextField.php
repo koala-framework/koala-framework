@@ -31,9 +31,11 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
             $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z_]+$/'));
         } else if ($this->getVtype() === 'alphanum') {
             $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z0-9_\-]+$/'));
+        } else if ($this->getVtype() === 'num') {
+            $this->addValidator(new Zend_Validate_Regex('/^[0-9]+$/'));
         }
         if ($this->getMaxLength()) {
-            $this->addValidator(new Zend_Validate_StringLength(0, $this->getMaxLength()+1));
+            $this->addValidator(new Kwf_Validate_StringLength(0, $this->getMaxLength()));
         }
     }
 
@@ -44,28 +46,52 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         return (string)$ret;
     }
 
-    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
+    protected function _getInputProperties($values, $fieldNamePostfix, $idPrefix)
     {
         $name = $this->getFieldName();
         $value = $this->_getOutputValueFromValues($values);
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
-        $value = htmlspecialchars($value);
-        $name = htmlspecialchars($name);
+        $ret = array();
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
-            $cls = trim($cls.' kwfClearOnFocus');
+            $cls .= ' kwfClearOnFocus';
         }
         $style = '';
         if ($this->getWidth()) {
-            $style = "style=\"width: ".$this->getWidth()."px\" ";
+            $style .= "width: ".$this->getWidth()."px; ";
         }
-        $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$ret[id]\" ".
-                        "name=\"$name$fieldNamePostfix\" value=\"$value\" ".
-                        $style.
-                        ($cls ? "class=\"$cls\"" : '').
-                        "maxlength=\"{$this->getMaxLength()}\" />";
+        $ret['type'] = $this->getInputType();
+        $ret['name'] = "$name$fieldNamePostfix";
+        $ret['value'] = $value;
+        if ($style) $ret['style'] = trim($style);
+        if ($cls) $ret['cls'] = trim($cls);
+        if ($this->getMaxLength()) $ret['maxlength'] = $this->getMaxLength();
+
+        if ($this->getVtype() === 'email') {
+            $ret['type'] = 'email';
+        } else if ($this->getVtype() === 'url') {
+            $ret['type'] = 'url';
+        } else if ($this->getVtype() === 'alpha') {
+            $ret['pattern'] = '[a-zA-Z_]*';
+        } else if ($this->getVtype() === 'alphanum') {
+            $ret['pattern'] = '[a-zA-Z0-9_\-]*';
+        } else if ($this->getVtype() === 'num') {
+            $ret['pattern'] = '[0-9]*';
+        }
+        return $ret;
+    }
+
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
+    {
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+        $prop = $this->_getInputProperties($values, $fieldNamePostfix, $idPrefix);
+        $ret['id'] = $prop['id'];
+        $ret['html'] = "<input";
+        foreach ($prop as $k=>$i) {
+            $ret['html'] .= ' '.htmlspecialchars($k).'="'.htmlspecialchars($i).'"';
+        }
+        $ret['html'] .= " />";
         return $ret;
     }
 

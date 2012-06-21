@@ -39,8 +39,6 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
             ->setData(new Kwc_Newsletter_Detail_UserData('email'));
         $this->_columns->add(new Kwf_Grid_Column('format', trlKwf('Format'), 60))
             ->setData(new Kwc_Newsletter_Detail_UserData('format'));
-        $this->_columns->add(new Kwf_Grid_Column('status', trlKwf('Status'), 60));
-        $this->_columns->add(new Kwf_Grid_Column('sent_date', trlKwf('Date Sent'), 120));
         $this->_columns->add(new Kwf_Grid_Column_Button('show'))
             ->setButtonIcon(new Kwf_Asset('email_open.png'));
     }
@@ -58,24 +56,13 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
             ->whereEquals('newsletter_id', $this->_getNewsletterRow()->id);
         $count = $this->_model->countRows($select);
 
-        $select->where(new Kwf_Model_Select_Expr_Or(array(
-            new Kwf_Model_Select_Expr_Equals('status', 'queued'),
-            new Kwf_Model_Select_Expr_Equals('status', 'userNotFound')
-        )));
+        $select->whereEquals('status', 'queued');
         $count2 = $this->_model->countRows($select);
         $this->_model->deleteRows($select);
         $this->view->message = trlKwf(
             '{0} of {1} queued users deleted.',
             array($count2, $count)
         );
-    }
-
-    protected function _hasPermissions($row, $action)
-    {
-        if ($action == 'delete' && $row->status != 'queued' && $row->status != 'userNotFound') {
-            throw new Kwf_Exception_Client(trlKwf('Can only delete queued recipients'));
-        }
-        return parent::_hasPermissions($row, $action);
     }
 
     private function _getNewsletterRow()

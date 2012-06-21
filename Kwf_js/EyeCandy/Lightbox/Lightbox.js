@@ -29,8 +29,10 @@ Kwf.onContentReady(function(readyEl) {
         l.lightboxEl = lightboxEl;
         l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
         l.initialize();
+        l.contentEl = l.innerLightboxEl.down('.kwfLightboxContent');
         l.style.afterCreateLightboxEl();
         l.style.onShow();
+        l.style.onContentReady();
         el.kwfLightbox = l;
         Kwf.EyeCandy.Lightbox.currentOpen = l;
     });
@@ -97,7 +99,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             params: { url: this.linkEl.dom.href },
             url: url,
             success: function(response, options) {
-                this.contentEl = this.innerLightboxEl.createChild();
+                this.contentEl = this.innerLightboxEl.createChild({
+                    cls: 'kwfLightboxContent'
+                });
 
                 this.style.updateContent(response.responseText);
 

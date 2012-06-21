@@ -235,6 +235,10 @@ class Kwf_Debug
             && (strpos($errfile, '/usr/share/php/') !== false)) {
             return;
         }
+
+        //ignore notice from iconv like "Detected an incomplete multibyte character in input string"
+        if ($errno == E_NOTICE && substr($errstr, 0, 15) == 'iconv_strlen():') return;
+
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 

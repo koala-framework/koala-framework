@@ -64,7 +64,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         if (!$ret) return $ret;
 
         $searchForm = $this->_getSearchForm();
-        if ($searchForm && $this->getPartialClass() != 'Kwf_Component_Partial_Id') {
+        if ($searchForm && $this->getPartialClass($this->getData()->componentClass) != 'Kwf_Component_Partial_Id') {
             throw new Kwf_Exception(get_class($this) . ': if search-form ist used, you also have to use PartialId (use Setting "partialClass")');
         }
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
@@ -167,6 +167,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         } else {
             throw new Kwf_Exception('Unsupported partial type '.get_class($partial));
         }
+        $ret['placeholder'] = $this->_getPlaceholder();
         return $ret;
     }
 

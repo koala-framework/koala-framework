@@ -37,8 +37,23 @@ class Kwc_Directories_Item_Directory_Trl_Controller extends Kwf_Controller_Actio
             ->setButtonIcon('/assets/silkicons/newspaper.png')
             ->setTooltip(trlKwf('Properties'));
 
-        $extConfig = Kwc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
+        if (is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Kwc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $extConfigType = 'extConfig';
+        } else if (is_instance_of(Kwc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Kwc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $extConfigType = 'extConfigControllerIndex';
+        }
+
+        $extConfig = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
+                    ->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
         $extConfig = $extConfig['items'];
+        if (count($extConfig['contentEditComponents']) > 1 && !$this->_getModel()->hasColumn('component')) {
+            throw new Kwf_Exception('If you have more than one detail-component your table has to have a column named "component"');
+        }
+        if (count($extConfig['contentEditComponents']) == 1 && $this->_getModel()->hasColumn('component')) {
+            throw new Kwf_Exception('If you have just one detail-component your table is not allowed to have a column named "component"');
+        }
+
+
         $i=0;
         foreach ($extConfig['contentEditComponents'] as $ec) {
             $name = Kwc_Abstract::getSetting($ec['componentClass'], 'componentName');

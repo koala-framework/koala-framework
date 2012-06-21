@@ -74,12 +74,44 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
     {
         $type = $this->_getParam('type');
         $cc = Kwf_Util_ClearCache::getInstance();
-        if ($type == 'view') {
-            $cc->clearCache('component', false/*output*/, true/*refresh*/);
-        } else if ($type == 'media') {
+        if ($type == 'media') {
             $cc->clearCache('media', false/*output*/, true/*refresh*/);
         } else if ($type == 'assets') {
             $cc->clearCache('assets', false/*output*/, true/*refresh*/);
+        } else if ($type == 'trl') {
+            foreach (glob('cache/model/zend_cache---trl_*') as $f) {
+                unlink($f);
+            }
+            foreach (glob('cache/model/zend_cache---internal-metadatas---trl_*') as $f) {
+                unlink($f);
+            }
+            Kwf_Cache_Simple::clear('trl-');
+        }
+    }
+    public function jsonClearViewCacheAction()
+    {
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('deleted', false);
+        if ($this->_getParam('dbId')) {
+            $select->where(new Kwf_Model_Select_Expr_Like('db_id', $this->_getParam('dbId')));
+        }
+        if ($this->_getParam('id')) {
+            $select->where(new Kwf_Model_Select_Expr_Like('component_id', $this->_getParam('id')));
+        }
+        if ($this->_getParam('expandedId')) {
+            $select->where(new Kwf_Model_Select_Expr_Like('expanded_component_id', $this->_getParam('expandedId')));
+        }
+        if ($this->_getParam('class')) {
+            $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
+        }
+
+        $model = Kwf_Component_Cache::getInstance()->getModel();
+        $this->view->entries = $model->countRows($select);
+        if (!$this->view->entries) {
+            throw new Kwf_Exception_Client("No active view cache entries found; nothing to do.");
+        }
+        if ($this->_getParam('force')) {
+            Kwf_Component_Cache::getInstance()->deleteViewCache($select);
         }
     }
 }

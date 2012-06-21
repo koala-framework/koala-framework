@@ -27,9 +27,10 @@ class Kwc_TextImage_Form extends Kwc_Abstract_Form
         $fs->add(new Kwf_Form_Field_Radio('position', trlKwf('Alignment')))
             ->setValues(array(
                 'left' => trlKwf('Left'),
-                'right' => trlKwf('Right')
+                'right' => trlKwf('Right'),
+                'center' => trlKwf('Center')
             ))
-            ->setWidth(180);
+            ->setWidth(210);
         $fs->add(new Kwf_Form_Field_Checkbox('flow', trlKwf('Text flows around Image')));
     }
 }

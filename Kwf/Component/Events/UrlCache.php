@@ -40,31 +40,19 @@ class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
         }
     }
 
-
-    //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
-    //this method returns all child ids needed for deleting recursively
-    private function _getIdsFromRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
-    {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
-        $c = $c->getPageOrRoot();
-        $ids = array($c->componentId);
-        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $ids = array_merge($ids, $gen->getVisiblePageChildIds($c->dbId));
-        }
-        return $ids;
-    }
-
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
-            $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', str_replace('_', '\\_', $id).'%');
-        }
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($event->componentId, array('ignoreVisible'=>true))
+            ->getPageOrRoot();
+        $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('expanded_page_id', $c->getExpandedComponentId().'%');
     }
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $id) {
-            $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('page_id', str_replace('_', '\\_', $id).'%');
-        }
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($event->componentId, array('ignoreVisible'=>true))
+            ->getPageOrRoot();
+        $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('expanded_page_id', $c->getExpandedComponentId().'%');
     }
 }

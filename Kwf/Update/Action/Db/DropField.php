@@ -13,6 +13,8 @@ class Kwf_Update_Action_Db_DropField extends Kwf_Update_Action_Db_Abstract
 
     public function update()
     {
+        parent::update();
+
         if (!$this->silent) echo "drop field $this->field from $this->table\n";
         $table = $this->model->getRow($this->table);
         $field = $table->getChildRows('Fields', $this->model->select()

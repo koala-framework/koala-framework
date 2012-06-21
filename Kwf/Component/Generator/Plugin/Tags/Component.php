@@ -4,7 +4,7 @@ class Kwf_Component_Generator_Plugin_Tags_Component extends Kwf_Component_Genera
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Tags');
+        $ret['componentName'] = trlKwfStatic('Tags');
         $ret['componentIcon'] = new Kwf_Asset('tag_blue.png');
         $ret['assetsAdmin']['dep'][] = 'KwfAutoAssignGrid';
         $ret['childModel'] = 'Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel';

@@ -4,7 +4,7 @@ class Kwc_Form_Field_File_Component extends Kwc_Form_Field_Abstract_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.File Upload');
+        $ret['componentName'] = trlKwfStatic('Form.File Upload');
         $ret['componentIcon'] = new Kwf_Asset('textfield');
         return $ret;
     }

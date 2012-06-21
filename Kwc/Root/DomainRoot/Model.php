@@ -2,7 +2,7 @@
 class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
 {
     private $_domains;
-    protected $_columns = array('id', 'name', 'domain', 'component', 'pattern');
+    protected $_columns = array('id', 'name', 'domain', 'preview_domain', 'component', 'pattern');
     protected $_toStringField = 'name';
 
     public function __construct($config = array())
@@ -24,6 +24,7 @@ class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
                 'id' => $key,
                 'name' => isset($val['name']) ? $val['name'] : $key,
                 'domain' => $val['domain'],
+                'preview_domain' => isset($val['previewDomain']) ? $val['previewDomain'] : $val['domain'],
                 'component' => $key,
                 'pattern' => $pattern
             );
@@ -35,9 +36,12 @@ class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
     {
         $rows = $this->getRows();
         foreach ($rows as $row) {
-            if ($row->domain == $host) return $row;
+            if ($row->domain == $host || $row->preview_domain == $host) {
+                return $row;
+            }
         }
         $ret = null;
+        //TODO: this always picks the *first* domain that's not always wanted
         foreach ($rows as $row) {
             if (!$ret && !$row->pattern) $ret = $row;
             if ($row->pattern && preg_match('/' . $row->pattern . '/', $host)

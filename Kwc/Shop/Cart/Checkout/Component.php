@@ -20,6 +20,8 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
 
         $ret['shipping'] = 0;
 
+        $ret['generateInvoices'] = true;
+
         $ret['flags']['hasResources'] = true;
 
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';

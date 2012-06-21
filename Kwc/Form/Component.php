@@ -13,7 +13,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
-        $ret['componentName'] = trlKwf('Form');
+        $ret['componentName'] = trlKwfStatic('Form');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
         $ret['decorator'] = 'Kwc_Form_Decorator_Label';
@@ -28,6 +28,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
+
+        $ret['useAjaxRequest'] = true;
 
         $ret['flags']['processInput'] = true;
 
@@ -248,7 +250,13 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
         }
 
-        $cachedContent = Kwf_Component_Cache::getInstance()->load($this->getData()->getPage()->componentId, 'componentLink');
+        $page = $this->getData()->getPage();
+        if (!$page) {
+            throw new Kwf_Exception('Form must have an url so it must be on a page but is on "' . $this->getData()->componentId . '". (If component is a box it must not be unique)');
+        }
+        $cachedContent = Kwf_Component_Cache::getInstance()->load(
+            $page->componentId, 'componentLink'
+        );
         if ($cachedContent) {
             $targetPage = unserialize($cachedContent);
             $ret['action'] = $targetPage[0];
@@ -294,6 +302,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
+            'useAjaxRequest' => $this->_getSetting('useAjaxRequest'),
             'componentId' => $this->getData()->componentId,
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,

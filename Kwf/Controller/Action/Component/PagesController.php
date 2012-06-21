@@ -292,10 +292,14 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         $root = Kwf_Component_Data_Root::getInstance();
         $component = $root->getComponentById($id, array('ignoreVisible' => true));
 
+        if (!$component->generator->getGeneratorFlag('hasHome')) {
+            throw new Kwf_Exception("Generator doesn't have hasHome flag set");
+        }
+
         if (get_class($component) != 'Kwf_Component_Data') {
             //da die data klasse auf Kwf_Component_Data_Home angepasst geändert muss kann das nicht
             //gleichzeitig FirstChildPage oder LinkIntern sein. Daher verbieten.
-            $name = Kwc_Abstract::getSetting($component->componentClass, 'componentName');
+            $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($component->componentClass, 'componentName'));
             throw new Kwf_Exception_Client(trlKwf("You can't set {0} as Home", $name));
         }
 
@@ -371,13 +375,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (!$page) {
             throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
-        if (Kwf_Registry::get('config')->server->previewDomain) {
-            $previewDomain = Kwf_Registry::get('config')->server->previewDomain;
-            $href = 'http://' . $previewDomain . $page->url;
-        } else {
-            $href = $page->url;
-        }
-        header('Location: '.$href);
+        header('Location: '.$page->getAbsolutePreviewUrl());
         exit;
     }
 

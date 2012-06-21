@@ -21,6 +21,8 @@ class Kwf_Update_Action_Db_AddField extends Kwf_Update_Action_Db_Abstract
 
     public function update()
     {
+        parent::update();
+
         if (!$this->silent) echo "add field $this->field to $this->table\n";
         $table = $this->model->getRow($this->table);
         if (!$table) {

@@ -23,7 +23,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
 
     public function indexAction()
     {
-        ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '1024M');
         set_time_limit(0);
 
         $source = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
@@ -55,7 +55,9 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
         static $pageParentIds;
         if (!isset($pageParentIds)) {
             $pageParentIds = array();
-            foreach (Kwf_Registry::get('db')->query("SELECT id, parent_id FROM kwf_pages")->fetchAll() as $row) {
+            $sql = "SELECT id, parent_id FROM kwf_pages";
+            if ($this->_getParam('startId')) $sql .= ' WHERE id>=' . $this->_getParam('startId');
+            foreach (Kwf_Registry::get('db')->query($sql)->fetchAll() as $row) {
                 $pageParentIds[$row['id']] = $row['parent_id'];
             }
         }

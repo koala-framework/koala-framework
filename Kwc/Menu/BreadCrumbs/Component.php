@@ -15,6 +15,11 @@ class Kwc_Menu_BreadCrumbs_Component extends Kwc_Menu_Abstract_Component
         return false;
     }
 
+    public static function getAlternativeComponents($componentClass)
+    {
+        return array();
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

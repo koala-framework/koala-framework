@@ -78,13 +78,15 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
     {
         $ret = parent::getMetaData($model);
 
-        $comboboxData = array();
-        foreach ($this->fields as $card) {
-            if ($card instanceof Kwf_Form_Container_Card) {
-                $comboboxData[$card->getName()] = $card->getTitle();
+        if (!$this->_combobox->getValues()) {
+            $comboboxData = array();
+            foreach ($this->fields as $card) {
+                if ($card instanceof Kwf_Form_Container_Card) {
+                    $comboboxData[$card->getName()] = $card->getTitle();
+                }
             }
+            $this->_combobox->setValues($comboboxData);
         }
-        $this->_combobox->setValues($comboboxData);
 
         $cardItems = $this->fields->getMetaData($model);
         $cardItems = array_values($cardItems);

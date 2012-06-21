@@ -12,13 +12,18 @@ class Kwc_Shop_Cart_Checkout_Form_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        if (!Kwc_Shop_Cart_Orders::getCartOrderId()) {
-            throw new Kwf_Exception_AccessDenied("No Order exists");
-        }
-        $this->_form->setId(Kwc_Shop_Cart_Orders::getCartOrderId());
+        $this->_form->setId(Kwc_Shop_Cart_Orders::getCartOrderId()); //can be null
 
         $this->_form->setPayments($this->_getFrontendPayments());
     }
+
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
+    {
+        parent::_afterInsert($row);
+        //if getCartOrderId was null (tough it should not happen as the cart is empty in that case and the form doesn't validate then)
+        Kwc_Shop_Cart_Orders::setCartOrderId($row->id);
+    }
+
 
     protected function _getFrontendPayments()
     {

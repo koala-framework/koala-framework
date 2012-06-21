@@ -4,7 +4,7 @@ class Kwc_Form_Field_TextArea_Component extends Kwc_Form_Field_TextField_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.Textarea');
+        $ret['componentName'] = trlKwfStatic('Form.Textarea');
         return $ret;
     }
 

@@ -2,7 +2,7 @@
     <div class="lightboxHeader">
         <?=$this->componentLink($this->data->parent, '&nbsp;', 'closeButton')?>
     </div>
-    <div class="lightboxBody">
+    <div class="lightboxBody<? if($this->previous || $this->next) { ?> hasNextOrPrevious<? } ?>">
         <? if($this->previous) { ?>
         <div class="prevBtn">
             <?=$this->componentLink($this->previous, '&nbsp;',  'preload')?>

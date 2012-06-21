@@ -4,7 +4,7 @@ class Kwc_Advanced_Amazon_Nodes_Component extends Kwc_Directories_ItemPage_Direc
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Amazon.Nodes');
+        $ret['componentName'] = trlKwfStatic('Amazon.Nodes');
         $ret['ownModel'] = 'Kwc_Advanced_Amazon_Nodes_FieldModel';
 
         $ret['generators']['detail']['component'] = 'Kwc_Advanced_Amazon_Nodes_Detail_Component';

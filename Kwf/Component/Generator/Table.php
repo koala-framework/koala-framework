@@ -130,7 +130,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
     protected function _getParentDataByRow($row, $select)
     {
-        if (isset($row->component_id) && $row->component_id) {
+        if ($row->getModel()->hasColumn('component_id')) {
             $constraints = array('componentClass'=>$this->_class);
             if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
                 $constraints['subroot'] = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
@@ -138,6 +138,19 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
                 $constraints['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
             }
+
+            if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+                //avoid getComponentsByDbId call when possible
+
+                if ($p->dbId != substr($row->component_id, 0, strlen($p->dbId))) {
+                    return null; //different dbId
+                }
+                $childIdPart = substr($row->component_id, strlen($p->dbId));
+                if (strpos($childIdPart, '_') !== false) {
+                    return null; //not a direct child component
+                }
+            }
+
             $ret = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsByDbId($row->component_id, $constraints);
 
@@ -165,7 +178,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             } else if (count($components) == 0) {
                 return null;
             }
-            throw new Kwf_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
+            throw new Kwf_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' '{$this->getGeneratorKey()}' Generator");
         }
         return $ret;
     }
@@ -234,7 +247,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
                 }
             } else {
                 if (!$this->_getModel()->hasColumn('component')) {
-                    throw new Kwf_Exception("Column component does not exist for a generator in '$this->_class'");
+                    throw new Kwf_Exception("Column component does not exist for a generator '{$this->getGeneratorKey()}' in '$this->_class'");
                 }
                 $select->whereEquals('component', $keys);
             }

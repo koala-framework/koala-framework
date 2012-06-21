@@ -78,6 +78,9 @@ class Kwf_Util_ClearCache
         $types[] = 'setup';
         $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
+        if (Kwf_Config::getValue('assetsCacheUrl')) {
+            $types[] = 'assetsServer';
+        }
         return $types;
     }
 
@@ -129,7 +132,7 @@ class Kwf_Util_ClearCache
 
             Kwf_Component_Events::getAllListeners();
 
-        } else if ($type == 'users') {
+        } else if ($type == 'cache_users') {
 
             Kwf_Registry::get('userModel')->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
 
@@ -190,7 +193,6 @@ class Kwf_Util_ClearCache
         if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
             $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
             if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
-                $refreshTypes[] = 'users';
                 if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
                     $refreshTypes[] = 'users cleanup';
                 }
@@ -209,8 +211,6 @@ class Kwf_Util_ClearCache
         if ($types == 'all') {
             $types = $this->getTypes();
             $refreshTypes = $this->_getRefreshTypes($types);
-        } else if ($types == 'component' && extension_loaded('apc')) {
-            $types = array('component', 'apc');
         } else {
             if (!is_array($types)) {
                 $types = explode(',', $types);
@@ -304,9 +304,14 @@ class Kwf_Util_ClearCache
             if ($server) {
                 if ($output) echo "ignored db:  $t\n";
             } else {
-                if (in_array($t, $types) ||
-                    (in_array('component', $types) && substr($t, 0, 15) == 'cache_component')
-                ) {
+                if (in_array($t, $types)) {
+                    if ($t == 'cache_component') {
+                        $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t")->fetchColumn();
+                        if ($cnt > 1000) {
+                            if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
+                            continue;
+                        }
+                    }
                     Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
                     if ($output) echo "cleared db:  $t\n";
                 }
@@ -320,6 +325,15 @@ class Kwf_Util_ClearCache
                     $this->_removeDirContents($d, $server);
                 }
                 if ($output) echo "cleared dir: $d cache\n";
+            }
+        }
+        if (in_array('assetsServer', $types)) {
+            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&clear';
+            try {
+                $out = file_get_contents($url);
+                if ($output) echo "cleared:     assetsServer [".$out."]\n";
+            } catch (Exception $e) {
+                if ($output) echo "cleared:     assetsServer [ERROR] ".$e->getMessage()."\n";
             }
         }
     }

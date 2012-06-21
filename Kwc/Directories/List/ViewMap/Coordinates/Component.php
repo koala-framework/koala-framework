@@ -13,11 +13,15 @@ class Kwc_Directories_List_ViewMap_Coordinates_Component extends Kwc_Abstract_Aj
         $ret = parent::getTemplateVars();
         $ret['response'] = array();
         $select = new Kwf_Component_Select();
+        $lowestLng = isset($_REQUEST['lowestLng']) ? $_REQUEST['lowestLng'] : null;
+        $lowestLat = isset($_REQUEST['lowestLat']) ? $_REQUEST['lowestLat'] : null;
+        $highestLng = isset($_REQUEST['highestLng']) ? $_REQUEST['highestLng'] : null;
+        $highestLat = isset($_REQUEST['highestLat']) ? $_REQUEST['highestLat'] : null;
         $select->whereGenerator('detail')
-            ->where(new Kwf_Model_Select_Expr_Higher('longitude', $this->_getParam('lowestLng')))
-            ->where(new Kwf_Model_Select_Expr_Higher('latitude', $this->_getParam('lowestLat')))
-            ->where(new Kwf_Model_Select_Expr_Lower('longitude', $this->_getParam('highestLng')))
-            ->where(new Kwf_Model_Select_Expr_Lower('latitude', $this->_getParam('highestLat')))
+            ->where(new Kwf_Model_Select_Expr_Higher('longitude', $lowestLng))
+            ->where(new Kwf_Model_Select_Expr_Higher('latitude', $lowestLat))
+            ->where(new Kwf_Model_Select_Expr_Lower('longitude', $highestLng))
+            ->where(new Kwf_Model_Select_Expr_Lower('latitude', $highestLat))
             ->order('name', 'ASC');
 
         $parentComponentClass = $this->getData()->parent->componentClass;

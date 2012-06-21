@@ -16,6 +16,9 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
     const SYNC_SELECT_TYPE_ALL    = 'all';    // alles neu syncen
     const SYNC_SELECT_TYPE_SELECT = 'select'; // alles was im select steht syncen
 
+    private $_callObserverForRowUpdates = false;
+    private $_observedRows = array();
+
     /**
      * Max sync delay in seconds. Default is to 5 minutes
      */
@@ -31,6 +34,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
         if (isset($config['syncTimeFieldIsUnique'])) $this->_syncTimeFieldIsUnique = $config['syncTimeFieldIsUnique'];
         if (isset($config['maxSyncDelay'])) $this->_maxSyncDelay = $config['maxSyncDelay'];
         if (isset($config['truncateBeforeFullImport'])) $this->_truncateBeforeFullImport = $config['truncateBeforeFullImport'];
+        if (isset($config['callObserverForRowUpdates'])) $this->_callObserverForRowUpdates = $config['callObserverForRowUpdates'];
         parent::__construct($config);
     }
 
@@ -96,6 +100,13 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
     {
         fclose($this->_lockSync);
         $this->_lockSync = null;
+        $observedRows = $this->_observedRows;
+        $this->_observedRows = array();
+        foreach ($observedRows as $action => $rows) {
+            foreach ($rows as $row) {
+                Kwf_Component_ModelObserver::getInstance()->add($action, $row);
+            }
+        }
     }
 
     private function _lockSync($write = false)
@@ -292,7 +303,24 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
                 $options['replace'] = true;
             }
             if ($data) {
+
+                if ($this->_callObserverForRowUpdates) {
+                    $pk = $this->getProxyModel()->getPrimaryKey();
+                    $s = $this->getProxyModel()->select()->order($pk, 'DESC')->limit(1);
+                    $maxRow = $this->getProxyModel()->getRow($s);
+                }
+                
                 $this->getProxyModel()->import($format, $data, $options);
+
+                if ($this->_callObserverForRowUpdates) {
+                    foreach (parent::getRows($select['select']) as $row) {
+                        if (!$maxRow || $row->$pk > $maxRow->$pk) {
+                            $this->_observedRows['insert'][] = $row;
+                        } else {
+                            $this->_observedRows['update'][] = $row;
+                        }
+                    }
+                }
             }
             $importTime = microtime(true)-$start;
 

@@ -1,13 +1,13 @@
 <?php
 class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
 {
-    protected $_fileRow;
+    private $_fileRow;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwc_Basic_Download_Model';
-        $ret['componentName'] = trlKwf('Download');
+        $ret['componentName'] = trlKwfStatic('Download');
         $ret['componentIcon'] = new Kwf_Asset('folder_link');
         $ret['showFilesize'] = true;
         $ret['showIcon'] = true;
@@ -38,10 +38,15 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         } else {
             $return['icon'] = null;
         }
+        if ($parentRow) {
+            $return['extension'] = $parentRow->extension;
+        } else {
+            $return['extension'] = null;
+        }
         return $return;
     }
 
-    private function _getFileRow()
+    protected function _getFileRow()
     {
         if (!$this->_fileRow) {
             $this->_fileRow = $this->getData()

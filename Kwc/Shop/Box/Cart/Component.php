@@ -6,6 +6,8 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
         $ret['cssClass'] = 'webStandard';
+        $ret['assets']['dep'][] = 'ExtConnection';
+        $ret['assets']['files'][] = 'kwf/Kwc/Shop/Box/Cart/Component.js';
         $ret['placeholder']['toCart'] = trlKwf('To cart');
         $ret['placeholder']['toCheckout'] = trlKwf('To Checkout');
         return $ret;
@@ -18,7 +20,7 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
         $ret['order'] = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
         $ret['items'] = $ret['order']->getProductsDataWithProduct();
-        $ret['sumRows'] = $this->_getCart()->getChildComponent('_checkout')
+        $ret['sumRows'] = $this->_getCart()->getChildComponent(array('generator' => 'checkout'))
                                 ->getComponent()->getSumRows($ret['order']);
 
         $ret['links'] = $this->_getLinks();
@@ -34,7 +36,7 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
             'text' => $this->_getPlaceholder('toCart')
         );
         $ret['checkout'] = array(
-            'component' => $this->_getCart()->getChildComponent('_checkout'),
+            'component' => $this->_getCart()->getChildComponent(array('generator' => 'checkout')),
             'text' => $this->_getPlaceholder('toCheckout')
         );
         return $ret;

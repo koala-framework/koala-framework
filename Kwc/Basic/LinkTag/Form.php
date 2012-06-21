@@ -5,13 +5,15 @@ class Kwc_Basic_LinkTag_Form extends Kwc_Abstract_Cards_Form
     {
         parent::_init();
         $cards = $this->fields->first();
+        $gen = Kwc_Abstract::getSetting($this->getClass(), 'generators');
+        $classes = $gen['child']['component'];
         $cards->getCombobox()
-            ->setData(new Kwc_Basic_LinkTag_Form_Data());
+            ->setData(new Kwc_Basic_LinkTag_Form_Data($classes));
         $cards->getCombobox()->getData()->cards = $cards->fields;
     }
 }
 
-class Kwc_Basic_LinkTag_Form_Data extends Kwf_Data_Abstract
+class Kwc_Basic_LinkTag_Form_Data extends Kwf_Data_Table
 {
     public $cards;
     public function load($row)

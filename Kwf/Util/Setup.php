@@ -90,7 +90,7 @@ class Kwf_Util_Setup
 
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
 
-        $ret .= "set_include_path('".implode(PATH_SEPARATOR, $ip)."');\n";
+        $ret .= "Kwf_Loader::setIncludePath('".implode(PATH_SEPARATOR, $ip)."');\n";
         $ret .= "\n";
         $ret .= "\n";
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
@@ -148,7 +148,7 @@ class Kwf_Util_Setup
         if (Kwf_Config::getValue('debug.firephp') || Kwf_Config::getValue('debug.querylog')) {
             $ret .= "if (php_sapi_name() != 'cli') {\n";
             if (Kwf_Config::getValue('debug.firephp')) {
-                $ret .= "    require_once 'FirePHPCore/FirePHP.class.php';\n";
+                $ret .= "    require_once '".Kwf_Config::getValue('externLibraryPath.firephp')."/FirePHPCore/FirePHP.class.php';\n";
                 $ret .= "    FirePHP::init();\n";
             }
 
@@ -234,16 +234,16 @@ class Kwf_Util_Setup
                         $ret .= "\n";
                         $ret .= "        //pattern\n";
                         $ret .= "        if (!\$domainMatches && preg_match('/{$domain['pattern']}/', \$host)) {\n";
-                        $ret .= "            \$redirect = '{$domain['domain']}';\n";
                         $ret .= "            \$domainMatches = true;\n";
-                        $ret .= "        }\n";
-                    }
-                    if (isset($domain['noRedirectPattern'])) {
-                        $ret .= "\n";
-                        $ret .= "        //noRedirectPattern\n";
-                        $ret .= "        if (!\$domainMatches && preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
-                        $ret .= "            \$redirect = false;\n";
-                        $ret .= "            \$domainMatches = true;\n";
+                        if (isset($domain['noRedirectPattern'])) {
+                            $ret .= "\n";
+                            $ret .= "            //noRedirectPattern\n";
+                            $ret .= "            if (!preg_match('/{$domain['noRedirectPattern']}/', \$host)) {\n";
+                            $ret .= "                \$redirect = '{$domain['domain']}';\n";
+                            $ret .= "            }\n";
+                        } else {
+                            $ret .= "            \$redirect = '{$domain['domain']}';\n";
+                        }
                         $ret .= "        }\n";
                     }
                 }
@@ -330,7 +330,8 @@ class Kwf_Util_Setup
             $ret .= "set_time_limit($tl);\n";
         }
 
-        $ret .= "setlocale(LC_ALL, explode(', ', '".trlcKwf('locale', 'C')."'));\n";
+        $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, Kwf_Trl::getInstance()->getWebCodeLanguage());
+        $ret .= "setlocale(LC_ALL, explode(', ', '".$locale."'));\n";
         $ret .= "setlocale(LC_NUMERIC, 'C');\n";
 
         $ret .= "Kwf_Benchmark::checkpoint('setUp');\n";

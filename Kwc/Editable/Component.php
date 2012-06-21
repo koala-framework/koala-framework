@@ -16,7 +16,7 @@ class Kwc_Editable_Component extends Kwc_Abstract
     // Wird hier verwendet: Kwc_Editable_ComponentsModel
     public function getNameForEdit()
     {
-        return Kwc_Abstract::getSetting($this->getData()->componentClass, 'componentName');
+        return Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->componentClass, 'componentName'));
     }
 
     public function getTemplateVars()

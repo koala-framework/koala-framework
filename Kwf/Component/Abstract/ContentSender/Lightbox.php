@@ -13,6 +13,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
 
     private function _getParent()
     {
+        $previous = null;
         $parent = $this->_data->parent;
         while ($parent && !$parent->isPage) {
             $previous = $parent;
@@ -60,8 +61,11 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $options = htmlspecialchars(json_encode($options));
             $lightboxContent = "<div class=\"$class\">\n".
                 "<div class=\"kwfLightboxInner\" style=\"$style\">\n".
-                "<input type=\"hidden\" class=\"options\" value=\"$options\" />".
-                "$lightboxContent\n</div>\n</div>\n";
+                "    <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
+                "    <div class=\"kwfLightboxContent\">\n".
+                "        $lightboxContent\n".
+                "    </div>\n".
+                "</div>\n</div>\n";
             return preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
             return $lightboxContent;

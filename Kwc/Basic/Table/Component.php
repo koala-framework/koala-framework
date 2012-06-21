@@ -8,7 +8,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['dep'][] = 'ExtGridCheckboxSelectionModel';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Table/TableGridPanel.js';
 
-        $ret['componentName'] = trlKwf('Table');
+        $ret['componentName'] = trlKwfStatic('Table');
         $ret['ownModel'] = 'Kwc_Basic_Table_Model';
         $ret['childModel'] = 'Kwc_Basic_Table_ModelData';
 

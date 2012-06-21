@@ -67,7 +67,10 @@ class Kwf_Assets_Loader
             $m = explode(':', $m[4]);
             $assetClass = array_shift($m);
             $arguments = $m;
-            if (!class_exists($assetClass) || !is_instance_of($assetClass, 'Kwf_Assets_Dynamic_Interface')) {
+            if (!Kwf_Loader::isValidClass($assetClass) || !is_instance_of($assetClass, 'Kwf_Assets_Dynamic_Interface')) {
+                throw new Kwf_Exception_NotFound();
+            }
+            if ($rootComponent && (!Kwf_Loader::isValidClass($rootComponent) || !is_instance_of($rootComponent, 'Kwc_Abstract'))) {
                 throw new Kwf_Exception_NotFound();
             }
             $file = new $assetClass($this, $assetsType, $rootComponent, $arguments);
@@ -105,7 +108,13 @@ class Kwf_Assets_Loader
                 $language = $m[4];
                 $assetsType = $m[5];
                 $fileType = $m[6];
-                Kwf_Component_Data_Root::setComponentClass($rootComponent);
+                if ($rootComponent) {
+                    if (!Kwf_Loader::isValidClass($rootComponent) || !is_instance_of($rootComponent, 'Kwc_Abstract')) {
+                        throw new Kwf_Exception_NotFound("Invalid root component '$rootComponent'");
+                    } else {
+                        Kwf_Component_Data_Root::setComponentClass($rootComponent);
+                    }
+                }
 
                 if (substr($assetsType, -5) == 'Debug' && !$this->_getConfig()->debug->menu) {
                     throw new Kwf_Exception("Debug Assets are not avaliable as the debug menu is disabled");
@@ -120,7 +129,7 @@ class Kwf_Assets_Loader
                         if (substr($file, 0, 8) == 'dynamic/') {
                             $arguments = explode(':', substr($file, 8));
                             $file = array_shift($arguments);
-                            if (!is_instance_of($file, 'Kwf_Assets_Dynamic_Interface')) {
+                            if (!Kwf_Loader::isValidClass($file) || !is_instance_of($file, 'Kwf_Assets_Dynamic_Interface')) {
                                 throw new Kwf_Exception_NotFound();
                             }
                             $file = new $file($this, $assetsType, $rootComponent, $arguments);
@@ -182,6 +191,10 @@ class Kwf_Assets_Loader
                 $ret['mimeType'] = 'application/octet-stream';
             } else if (substr($file, -5)=='.woff') { // für Schriften
                 $ret['mimeType'] = 'application/x-woff';
+            } else if (substr($file, -4)=='.htc') { // für ie css3
+                $ret['mimeType'] = 'text/x-component';
+            } else if (substr($file, -4)=='.pdf') {
+                $ret['mimeType'] = 'application/pdf';
             } else {
                 throw new Kwf_Assets_NotFoundException("Invalid filetype ($file)");
             }
@@ -250,6 +263,11 @@ class Kwf_Assets_Loader
                         $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
                         $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
                         $cacheData['contents'] = str_replace('.cssClass', '.'.$cssClass, $cacheData['contents']);
+                        if (Kwf_Config::getValue('assetsCacheUrl')) {
+                            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&url=';
+                            $cacheData['contents'] = str_replace('url(\'/assets/', 'url(\''.$url.'assets/', $cacheData['contents']);
+                            $cacheData['contents'] = str_replace('url(/assets/', 'url('.$url.'assets/', $cacheData['contents']);
+                        }
                     }
 
                     if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {

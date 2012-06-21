@@ -13,6 +13,11 @@ class Kwf_Util_Git
         }
     }
 
+    public function getPath()
+    {
+        return $this->_path;
+    }
+
     public static function setDebugOutput($enable = true)
     {
         self::$_debug = $enable;
@@ -178,6 +183,17 @@ class Kwf_Util_Git
             throw new Kwf_Exception("Command failed: $cmd");
         }
         return $ret;
+    }
+
+    public function systemReturnRetVal($cmd)
+    {
+        $d = getcwd();
+        $cmd = "git ".$cmd;
+        chdir($this->_path);
+        if (self::$_debug) echo $cmd."\n";
+        system($cmd, $retVal);
+        chdir($d);
+        return $retVal;
     }
 
     public function exec($cmd, &$output)

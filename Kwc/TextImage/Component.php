@@ -4,7 +4,7 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Text-Image');
+        $ret['componentName'] = trlKwfStatic('Text-Image');
         $ret['ownModel'] = 'Kwc_TextImage_Model';
         $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
         $ret['generators']['child']['component']['image'] = 'Kwc_TextImage_ImageEnlarge_Component';
@@ -25,9 +25,10 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
             if ($dim && isset($dim['width'])) {
                 $ret['imageWidth'] = $dim['width'];
             }
+            $ret['contentWidth'] = $this->getContentWidth();
             $pos = $row->position;
-            if ($pos == 'alternate') {
-                $pos = 'left'; //TODO
+            if($pos == 'center'){
+                $ret['center'] = ($ret['contentWidth'] - $ret['imageWidth']) / 2;
             }
             $ret['position'] = $pos;
             $ret['propCssClass'] = 'position'.ucfirst($pos);

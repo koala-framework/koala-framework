@@ -406,15 +406,17 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     },
     _setFieldBaseParams: function() {
         if (this.getForm()) {
-            this.getForm().items.each(function(field) {
-            	field.setFormBaseParams(this.getForm().baseParams);
+            this.cascade(function(item) {
+                if (item.setFormBaseParams) {
+                    item.setFormBaseParams(this.getForm().baseParams);
+                }
             }, this);
         }
     },
     setBaseParams : function(baseParams) {
-        this.baseParams = baseParams;
+        this.baseParams = Kwf.clone(baseParams);
         if (this.getForm()) {
-            this.getForm().baseParams = baseParams;
+            this.getForm().baseParams = this.baseParams;
         }
         this._setFieldBaseParams();
     },

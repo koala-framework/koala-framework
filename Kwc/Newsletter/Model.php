@@ -24,12 +24,9 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
             $row = $r->getNextRow($r->id);
             // Wenn Newsletter auf "sending" ist, aber seit mehr als 5 Minuten
             // nichts mehr gesendet wurde, auf "start" stellen
-            if ($r->status == 'sending') {
-                $lastRow = $r->getLastRow($r->id, 'Kwc_Newsletter_QueueModel');
-                if ($lastRow && time() - strtotime($lastRow->sent_date) > 5*60) {
-                    $r->status = 'start';
-                    $r->save();
-                }
+            if ($r->status == 'sending' && time() - strtotime($r->last_sent_date) > 5*60) {
+                $r->status = 'start';
+                $r->save();
             }
             if ($row && ($id == 0 || $row->id < $id) && $r->status=='start') {
                 $nlRow = $r;

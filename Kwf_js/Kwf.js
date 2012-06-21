@@ -152,7 +152,7 @@ Kwf.contentReadyHandlers = [];
  * Register a function that will be called when content is loaded or shown
  * @param callback function
  * @param scope for callback
- * @options supported are: priority (integer, higher number means it's called after all with lower number)
+ * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
  */
 Kwf.onContentReady = function(fn, scope, options) {
     Kwf.contentReadyHandlers.push({
@@ -178,6 +178,35 @@ if (!Kwf.isApp) {
         Kwf.callOnContentReady(document.body, { newRender: true });
     });
 }
+
+/**
+ * Add a callback function that gets called once for every element that appears
+ * in the dom tree
+ *
+ * If ainput type="hidden" is found directly under the element it's value gets passed
+ * as config (json decoded)
+ *
+ * @param element selector
+ * @param callback function
+ * @param scope
+ * @param options see onContentReady options
+ */
+Kwf.onElementReady = function(selector, fn, scope, options) {
+    Kwf.onContentReady(function(addedEl, renderConfig) {
+        if (options && typeof options.newRender == 'boolean' && !options.newRender) return;
+        Ext.query(selector, addedEl).each(function(el) {
+            if (el.initDone) return;
+            el.initDone = true;
+            el = Ext.get(el);
+            var config = {};
+            var configEl = el.child('> input[type="hidden"]')
+            if (configEl) {
+                config = Ext.decode(configEl.getValue());
+            }
+            fn.call(scope, el, config);
+        }, this);
+    }, this, options);
+};
 
 Kwf.include =  function(url, restart)
 {

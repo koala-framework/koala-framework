@@ -7,7 +7,8 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
             !method_exists($component->getComponent(), 'getPartialVars')
         ) throw new Kwf_Exception('Component has to implement Kwf_Component_Partial_Interface');
         $componentClass = $component->componentClass;
-        $partialClass = call_user_func(array($componentClass, 'getPartialClass'), $componentClass);
+        $c = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
+        $partialClass = call_user_func(array($c, 'getPartialClass'), $componentClass);
         if (method_exists($component->getComponent(), 'getPartialParams')) {
             $params = array_merge($component->getComponent()->getPartialParams(), $params);
         }

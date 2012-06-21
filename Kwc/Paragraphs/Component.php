@@ -8,7 +8,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Paragraphs'),
+            'componentName' => trlKwfStatic('Paragraphs'),
             'componentIcon' => new Kwf_Asset('page')
         ));
         $ret['childModel'] = 'Kwc_Paragraphs_Model';

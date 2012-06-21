@@ -4,7 +4,7 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Posts');
+        $ret['componentName'] = trlKwfStatic('Posts');
         $ret['componentIcon'] = new Kwf_Asset('comments');
         $ret['childModel'] = 'Kwc_Posts_Directory_Model';
 
@@ -20,6 +20,8 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
         );
         $ret['generators']['child']['component']['view'] = 'Kwc_Posts_Directory_View_Component';
         $ret['placeholder']['writeText'] = null;
+        $ret['hasGlobalPosts'] = false;
+
         return $ret;
     }
 

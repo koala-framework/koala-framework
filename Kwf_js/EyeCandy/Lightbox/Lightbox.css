@@ -46,14 +46,14 @@
 .kwfLightbox .lightboxBody .nextBtn a:hover {
     background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/next.png);
     background-repeat: no-repeat;
-    background-position: right 100px;
+    background-position: right 50%;
 }
 .kwfLightbox .lightboxBody .nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
 
 .kwfLightbox .lightboxBody .prevBtn a:hover {
     background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/previous.png);
     background-repeat: no-repeat;
-    background-position: left 100px;
+    background-position: left 50%;
 }
 .kwfLightbox .lightboxBody .prevBtn img.previousImgBtn { position: absolute; top: 100px; left: 0px; }
 
@@ -62,7 +62,7 @@
     position: absolute; top: 0; width: 100%; height: 100%;
     background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
     background-repeat: no-repeat;
-	background-position: center center;
+    background-position: center center;
 }
 .kwfLightbox .lightboxBody .image { z-index: 1; }
 .kwfLightbox .lightboxBody .image .centerImage { margin-bottom: -3px; }

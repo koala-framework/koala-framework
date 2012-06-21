@@ -4,7 +4,7 @@ class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Newsletter subscribing');
+        $ret['componentName'] = trlKwfStatic('Newsletter subscribing');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Subscribe the newsletter');
         return $ret;
     }

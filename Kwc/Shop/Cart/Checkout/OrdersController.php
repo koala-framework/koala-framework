@@ -58,30 +58,30 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
             $paymentsFilterData[] = array($k, $payments[$k]);
         }
 
-        $this->_filters = array(
-            'text' => true,
-            'payment' => array(
+        $this->_filters['text'] = true;
+        if (count($payments) > 1) {
+            $this->_filters['payment'] = array(
                 'type'   => 'ComboBox',
                 'text'   => trlKwf('Payment'),
                 'data'   => $paymentsFilterData,
                 'width'  => 100
-            ),
-            'canceled' => array(
-                'type'      => 'Button',
-                'skipWhere' => true,
-                'cls'       => 'x-btn-text-icon',
-                'icon'      => '/assets/silkicons/stop.png',
-                'text'      => trlKwf('canceled'),
-                'tooltip'   => trlKwf('Show canceled orders')
-            ),
-            'shipped' => array(
-                'type'      => 'Button',
-                'skipWhere' => true,
-                'cls'       => 'x-btn-text-icon',
-                'icon'      => '/assets/silkicons/package.png',
-                'text'      => trlKwf('shipped'),
-                'tooltip'   => trlKwf('Show shipped orders')
-            ),
+            );
+        }
+        $this->_filters['canceled'] = array(
+            'type'      => 'Button',
+            'skipWhere' => true,
+            'cls'       => 'x-btn-text-icon',
+            'icon'      => '/assets/silkicons/stop.png',
+            'text'      => trlKwf('canceled'),
+            'tooltip'   => trlKwf('Show canceled orders')
+        );
+        $this->_filters['shipped'] = array(
+            'type'      => 'Button',
+            'skipWhere' => true,
+            'cls'       => 'x-btn-text-icon',
+            'icon'      => '/assets/silkicons/package.png',
+            'text'      => trlKwf('shipped'),
+            'tooltip'   => trlKwf('Show shipped orders')
         );
 
         $this->_columns->add(new Kwf_Grid_Column('order_number', trlKwf('Order Nr'), 50));
@@ -90,7 +90,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
         $this->_columns->add(new Kwf_Grid_Column_Datetime('date', trlKwf('Date')));
         $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('Firstname'), 90));
         $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Lastname'), 90));
-        $this->_columns->add(new Kwf_Grid_Column('country', trlKwf('Land'), 15)); // TODO: Pfusch
+        $this->_columns->add(new Kwf_Grid_Column('country', trlKwf('Country'), 15)); // TODO: Pfusch
         $this->_columns->add(new Kwf_Grid_Column('sum_amount', trlKwf('Amt'), 30))
             ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_SumAmount())
             ->setSortable(false);
@@ -98,11 +98,15 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
             ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_SumPrice())
             ->setSortable(false)
             ->setRenderer('euroMoney');
-        $this->_columns->add(new Kwf_Grid_Column('payment', trlKwf('Payment'), 80))
-            ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_Payment($payments))
-            ->setSortable(false);
+        if (count($payments) > 1) {
+            $this->_columns->add(new Kwf_Grid_Column('payment', trlKwf('Payment'), 80))
+                ->setData(new Kwc_Shop_Cart_Checkout_OrdersController_Payment($payments))
+                ->setSortable(false);
+        }
         $this->_columns->add(new Kwf_Grid_Column_Date('payed', trlKwf('Payed')));
-        $this->_columns->add(new Kwf_Grid_Column_Button('invoice', trlcKwf('Invoice', 'IN')));
+        if (Kwc_Abstract::getSetting($this->_getParam('class'), 'generateInvoices')) {
+            $this->_columns->add(new Kwf_Grid_Column_Button('invoice', trlcKwf('Invoice', 'IN')));
+        }
         $this->_columns->add(new Kwf_Grid_Column_Button('shipped', trlcKwf('Shipped', 'SH')))
             ->setButtonIcon('/assets/silkicons/package_go.png');
 
@@ -182,13 +186,14 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
                 ->getComponentById($order->checkout_component_id);
             if (!$checkout) throw new Kwf_Exception("Can't find checkout component");
             $mail = $checkout->getChildComponent('-'.$order->payment)
-                ->getChildComponent('-shippedMail')
-                ->getComponent();
-            $data = array(
-                'order' => $order,
-                'sumRows' => $checkout->getComponent()->getSumRows($order)
-            );
-            $mail->send($order, $data);
+                ->getChildComponent('-shippedMail');
+            if ($mail) { //mail is optional
+                $data = array(
+                    'order' => $order,
+                    'sumRows' => $checkout->getComponent()->getSumRows($order)
+                );
+                $mail->getComponent()->send($order, $data);
+            }
         }
     }
 }

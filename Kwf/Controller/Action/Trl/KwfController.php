@@ -50,12 +50,21 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
         $config = Zend_Registry::get('config');
         $langs = array();
         if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
+
+        $possibleUserLanguages = array();
         if ($config->languages) {
-            foreach ($config->languages as $lang) {
-                $langs[] = $lang;
+            foreach ($config->languages as $lang=>$name) {
+                $possibleUserLanguages[] = $lang;
             }
-            $langs = array_values(array_unique($langs));
         }
+        $userModel = Kwf_Registry::get('userModel');
+        if (isset($userModel->getAuthedUser()->language) &&
+            $userModel->getAuthedUser()->language &&
+            in_array($userModel->getAuthedUser()->language, $possibleUserLanguages))
+        {
+            $langs[] = $userModel->getAuthedUser()->language;
+        }
+
         if (Kwf_Component_Data_Root::getComponentClass()) {
             $lngClasses = array();
             foreach(Kwc_Abstract::getComponentClasses() as $c) {
@@ -66,7 +75,9 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
             $lngs = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
             foreach ($lngs as $c) {
-                $langs[] = $c->getComponent()->getLanguage();
+                if (Kwf_Registry::get('acl')->getComponentAcl()->isAllowed($userModel->getAuthedUser(), $c)) {
+                    $langs[] = $c->getComponent()->getLanguage();
+                }
             }
         }
         return array_unique($langs);

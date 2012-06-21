@@ -6,7 +6,7 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
     {
         $ret = array_merge(parent::getSettings(), array(
             'ownModel'     => 'Kwc_Basic_DownloadTag_Model',
-            'componentName' => trlKwf('Download'),
+            'componentName' => trlKwfStatic('Download'),
             'componentIcon' => new Kwf_Asset('folder_link'),
         ));
         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Data';
@@ -69,6 +69,8 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
             } else if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $className, Kwf_Registry::get('userModel')->getAuthedUser())) {
                 //paragraphs vorschau im backend
                 $retValid = self::VALID_DONT_CACHE;
+            } else {
+                return self::ACCESS_DENIED;
             }
         }
         while ($c) {

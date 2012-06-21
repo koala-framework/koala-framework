@@ -45,10 +45,18 @@ class Kwc_Shop_Cart_OrderData
         );
     }
 
+    //return false to completely hide shipping
+    protected function _hasShipping($order)
+    {
+        return true;
+    }
+
     public final function getTotal($order)
     {
         $ret = $order->getSubTotal();
-        $ret += $this->_getShipping($order);
+        if ($this->_hasShipping($order)) {
+            $ret += $this->_getShipping($order);
+        }
         foreach ($this->_getAdditionalSumRows($order, $ret) as $r) {
             $ret += $r['amount'];
         }
@@ -96,18 +104,21 @@ class Kwc_Shop_Cart_OrderData
             'text' => trlKwf('+'.(($vat-1 )*100).'% VAT').':',
             'amount' => round($subTotal - $subTotal/$vat, 2)
         );
-        $shipping = $this->_getShipping($order);
-        $vat = 1+Kwc_Abstract::getSetting($this->_class, 'vatRateShipping');
-        $ret[] = array(
-            'class' => 'shippingHandling',
-            'text' => trlKwf('Shipping and Handling').':',
-            'amount' => round($shipping/$vat, 2)
-        );
-        if ($shipping) {
+        $shipping = 0;
+        if ($this->_hasShipping($order)) {
+            $shipping = $this->_getShipping($order);
+            $vat = 1+Kwc_Abstract::getSetting($this->_class, 'vatRateShipping');
             $ret[] = array(
-                'text' => trlKwf('+'.(($vat-1 )*100).'% VAT').':',
-                'amount' => round($shipping - $shipping/$vat, 2)
+                'class' => 'shippingHandling',
+                'text' => trlKwf('Shipping and Handling').':',
+                'amount' => round($shipping/$vat, 2)
             );
+            if ($shipping) {
+                $ret[] = array(
+                    'text' => trlKwf('+'.(($vat-1 )*100).'% VAT').':',
+                    'amount' => round($shipping - $shipping/$vat, 2)
+                );
+            }
         }
         $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
         $ret[] = array(

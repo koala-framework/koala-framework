@@ -4,7 +4,7 @@ class Kwc_Basic_ImageEnlarge_Component extends Kwc_Basic_Image_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Image Enlarge');
+        $ret['componentName'] = trlKwfStatic('Image Enlarge');
         $ret['componentIcon'] = new Kwf_Asset('imageEnlarge');
         $ret['generators']['child']['component']['linkTag'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_Component';
         return $ret;

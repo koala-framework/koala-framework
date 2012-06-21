@@ -39,14 +39,16 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
         $params = explode('_', $inputData['d']);
         if (count($params) < 4) {
-            throw new Kwf_Exception("Too less parameters submitted");
+            throw new Kwf_Exception_Client("Too few parameters submitted");
         }
 
+        $modelClass = $this->_getRecipientModelClass($params[2]);
+        if (!$modelClass) throw new Kwf_Exception_NotFound();
         $params = array(
             'redirectId' => $params[0],
             'recipientId' => $params[1],
             'recipientModelShortcut' => $params[2],
-            'recipientModelClass' => $this->_getRecipientModelClass($params[2]),
+            'recipientModelClass' => $modelClass,
             'hash' => $params[3]
         );
         $this->_params = $params;
@@ -55,7 +57,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if ($params['hash'] != $this->_getHash(array(
             $params['redirectId'], $params['recipientId'], $params['recipientModelShortcut']
         ))) {
-            throw new Kwf_Exception("The submitted hash is incorrect.");
+            throw new Kwf_Exception_Client("The submitted hash is incorrect.");
         }
 
         // statistics
@@ -117,7 +119,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             if (!$recipient) {
                 $mailText = str_replace(
                     $matches[0],
-                    'http://'.Kwf_Registry::get('config')->server->domain.$matches[2],
+                    $matches[2],
                     $mailText
                 );
             } else {
@@ -170,7 +172,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
     {
         $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
         if (!isset($recipientSources[$recipientShortcut])) {
-            throw new Kwf_Exception("Source key '$recipientShortcut' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
+            return null;
         }
         return $recipientSources[$recipientShortcut];
     }

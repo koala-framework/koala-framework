@@ -4,7 +4,7 @@ class Kwc_Advanced_Amazon_Product_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Amazon.Product');
+        $ret['componentName'] = trlKwfStatic('Amazon.Product');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
 
         $ret['associateTag'] = 'kwf-21';

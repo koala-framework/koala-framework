@@ -41,7 +41,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         $affected = false;
         foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
             $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($dbId, array('ignoreVisible' => true, 'limit' => 1));  // not sure whether ignoreVisible is necessary - rething on reimplementation
+                ->getComponentByDbId($dbId, array('ignoreVisible' => true, 'limit' => 1));  // ignoreVisible is necessary to be able to fire Removed events when visibile got false
             if ($c && $c->generator->getClass() == $this->_class) $affected = true;
         }
         if (!$affected) return;
@@ -153,7 +153,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         } else {
             $cls = $this->_getClassFromRow($row);
             $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsByClass($cls, array('id' => $this->_getGenerator()->getIdSeparator().$row->id));
+                ->getComponentsByClass($cls, array('id' => $this->_getGenerator()->getIdSeparator().$row->id, 'ignoreVisible'=>true));  // ignoreVisible is necessary to be able to fire Removed events when visibile got false
             $ret = array();
             foreach ($c as $i) {
                 $ret[] = $i->dbId;

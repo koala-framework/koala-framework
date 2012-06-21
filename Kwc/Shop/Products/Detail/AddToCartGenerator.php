@@ -6,12 +6,11 @@ class Kwc_Shop_Products_Detail_AddToCartGenerator extends Kwf_Component_Generato
         if ($key != $this->getGeneratorKey()) {
             throw new Kwf_Exception("invalid key '$key'");
         }
-        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
-        if (count($generators['addToCart']['component']) <= 1) {
-            return $generators['addToCart']['component']['product'];
+        if (count($this->_settings['component']) <= 1) {
+            return $this->_settings['component']['product'];
         }
         if ($parentData) {
-            foreach ($generators['addToCart']['component'] as $component => $class) {
+            foreach ($this->_settings['component'] as $component => $class) {
                 if ($component == $parentData->row->component) {
                     return $class;
                 }
@@ -52,7 +51,19 @@ class Kwc_Shop_Products_Detail_AddToCartGenerator extends Kwf_Component_Generato
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
         }
-        if (!$this->_acceptKey($this->getGeneratorKey(), $select, $parentData)) {
+        if (count($this->_settings['component']) <= 1) {
+            $key = 'product';
+        } else {
+            $key = $parentData->row->component;
+        }
+        if ($select->hasPart(Kwf_Component_Select::WHERE_ID)) {
+            $value = $select->getPart(Kwf_Component_Select::WHERE_ID);
+            $select->unsetPart(Kwf_Component_Select::WHERE_ID);
+            if ($this->_idSeparator.$this->getGeneratorKey()!= $value) {
+                return array();
+            }
+        }
+        if (!$this->_acceptKey($key, $select, $parentData)) {
             return array();
         }
 

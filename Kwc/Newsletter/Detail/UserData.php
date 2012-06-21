@@ -11,13 +11,10 @@ class Kwc_Newsletter_Detail_UserData extends Kwf_Data_Abstract
     public function load($row)
     {
         $recipient = $row->getRecipient();
-        if (!$recipient) {
-            $row->status = 'userNotFound';
-            $row->save();
-            return '';
-        } else {
+        if ($recipient) {
             $method = 'getMail' . ucfirst($this->_fieldname);
             return $recipient->$method();
         }
+        return '';
     }
 }

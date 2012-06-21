@@ -9,10 +9,15 @@ class Kwf_Component_Generator_Box_Events_StaticSelect extends Kwf_Component_Gene
             'event' => 'Kwf_Component_Event_Row_Updated',
             'callback' => 'onOwnRowUpdate'
         );
+        $ret[] = array(
+            'class' => get_class($this->_getGenerator()->getModel()),
+            'event' => 'Kwf_Component_Event_Row_Inserted', //also listen to inserted events as rows get created lazily (and by default first component is used)
+            'callback' => 'onOwnRowUpdate'
+        );
         return $ret;
     }
 
-    public function onOwnRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onOwnRowUpdate(Kwf_Component_Event_Row_Abstract $event)
     {
         if ($event->isDirty('component')) {
             $id = $event->row->component_id;

@@ -92,7 +92,14 @@ class Kwc_Mail_HtmlParser
                         } else if ($style == 'font-weight' && $value == 'bold') {
                             $appendTags['b'] = array();
                         } else if ($style == 'text-align') {
-                            $appendTags['center'] = array();
+                            if ($value == 'center') {
+                                $appendTags[$value] = array();
+                            } else if ($value != 'left') {
+                                $attributes['align'] = $value;
+                            }
+                        } else if ($style == 'text-decoration') {
+                            if (!isset($attributes['style'])) $attributes['style'] = '';
+                            $attributes['style'] = trim($attributes['style'].' '.$style.': '.$value.';');
                         }
                     }
                 }
@@ -203,7 +210,9 @@ class Kwc_Mail_HtmlParser
             // macht aber normal weiter. wenns zu oft vorkommt, evtl. exception
             // entfernen und ignorieren, oder was andres überlegen :-)
             $errorCode = xml_get_error_code($this->_parser);
-            $ex = new Kwf_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode));
+            $ex = new Kwf_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode).
+                    "in line ".xml_get_current_line_number($this->_parser)." parsed html: ".$html
+                    );
             $ex->logOrThrow();
         }
 

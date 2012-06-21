@@ -4,7 +4,7 @@ class Kwc_Form_Field_Select_Component extends Kwc_Form_Field_Abstract_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Form.Select');
+        $ret['componentName'] = trlKwfStatic('Form.Select');
         $ret['ownModel'] = 'Kwc_Form_Field_Select_Model';
         return $ret;
     }

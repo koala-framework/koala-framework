@@ -11,8 +11,9 @@ class Kwc_Abstract_Cards_Form extends Kwc_Abstract_Form
             ->setDefaultValue(key($classes));
         $cards->getCombobox()
             ->setWidth(250)
-            ->setListWidth(250);
-
+            ->setListWidth(250)
+            ->setXtype('kwc.abstract.cards.combobox')
+            ->setValues(Kwc_Admin::getInstance($this->getClass())->getControllerUrl('Components').'/json-data');
         foreach ($classes as $name => $class) {
             $forms = array();
             $admin = Kwc_Admin::getInstance($class);
@@ -20,7 +21,7 @@ class Kwc_Abstract_Cards_Form extends Kwc_Abstract_Form
             if (!$forms) {
                 //wenns gar keine forms gibt
                 $card = $cards->add();
-                $card->setTitle(Kwc_Abstract::getSetting($class, 'componentName'));
+                $card->setTitle(Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($class, 'componentName')));
                 $card->setName($name);
             }
             foreach ($forms as $k=>$i) {

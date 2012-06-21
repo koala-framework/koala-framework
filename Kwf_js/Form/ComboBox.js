@@ -149,7 +149,11 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             this.store.insert(0, new this.store.recordType(data));
         }
     },
-
+    onLoad : function(store, records, options) {
+        if (!options || !options.blockOnLoad) { //don't call onLoad when loading text to display for setValue because this would expand() if the field has focus
+            Kwf.Form.ComboBox.superclass.onLoad.apply(this, arguments);
+        }
+    },
     setValue : function(v)
     {
         if (v === '') v = null;
@@ -167,12 +171,18 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 && this.mode == 'remote'
                 && this.store.proxy //proxy vorhanden (dh. daten können nachgeladen werden)
                 ) {
+            delete this.lastQuery;
             this.store.baseParams[this.queryParam] = this.valueField+':'+v;
             this.store.load({
+                blockOnLoad: true,
                 params: this.getParams(v),
                 callback: function(r, options, success) {
-                    if (success && this.findRecord(this.valueField, this.value)) {
-                        this.setValue(this.value);
+                    if (success) {
+                        if (this.findRecord(this.valueField, this.value)) {
+                            this.setValue(this.value);
+                        } else {
+                            this.setValue(null);
+                        }
                     }
                 },
                 scope: this

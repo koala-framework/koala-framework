@@ -30,9 +30,14 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
     public function onPageRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
         if ($event->isDirty('parent_id')) {
-            $this->fireEvent(
-                new Kwf_Component_Event_Page_ParentChanged($this->_class, $event->row->id)
-            );
+            $oldParentId = $event->row->getCleanValue('parent_id');
+            if ($oldParentId) {
+                $this->fireEvent(
+                    new Kwf_Component_Event_Page_ParentChanged(
+                        $this->_class, $event->row->id, $event->row->parent_id, $oldParentId
+                    )
+                );
+            }
             $this->fireEvent(
                 new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $event->row->id)
             );

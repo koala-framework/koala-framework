@@ -5,7 +5,7 @@ class Kwc_Composite_ImagesEnlarge_Component extends Kwc_Composite_Images_Compone
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component'] = 'Kwc_Basic_ImageEnlarge_Component';
-        $ret['componentName'] = trlKwf('Gallery').' '.trlKwf('old');
+        $ret['componentName'] = trlKwfStatic('Gallery').' '.trlKwfStatic('old');
         $ret['assets']['dep'][] = 'KwfEnlargeNextPrevious';
         return $ret;
     }

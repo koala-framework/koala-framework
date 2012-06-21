@@ -59,8 +59,6 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     {
         $class = $this->_getParam('component');
         if (array_search($class, $this->_components)) {
-            $admin = Kwc_Admin::getInstance($class);
-            if ($admin) $admin->setup();
             $row = $this->_model->createRow();
             $this->_preforeAddParagraph($row);
             $generators = Kwc_Abstract::getSetting($this->_getParam('class'), 'generators');
@@ -208,13 +206,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!$page) {
             throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
-        if (Kwf_Registry::get('config')->server->previewDomain) {
-            $previewDomain = Kwf_Registry::get('config')->server->previewDomain;
-            $href = 'http://' . $previewDomain . $page->url;
-        } else {
-            $href = $page->url;
-        }
-        header('Location: '.$href);
+        header('Location: '.$page->getAbsolutePreviewUrl());
         exit;
     }
 }

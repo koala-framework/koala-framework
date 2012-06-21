@@ -8,7 +8,7 @@ class Kwc_Basic_Html_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Html'),
+            'componentName' => trlKwfStatic('Html'),
             'componentIcon' => new Kwf_Asset('tag'),
             'ownModel'     => 'Kwc_Basic_Html_Model'
         ));

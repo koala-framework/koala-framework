@@ -64,15 +64,27 @@ abstract class Kwf_Exception_Abstract extends Exception
 
     public function render($ignoreCli = false)
     {
+        $exception = $this->getException();
+        $msg = $exception->__toString();
+        if ($exception instanceof Zend_Db_Adapter_Exception) {
+            try {
+                foreach (Kwf_Registry::get('config')->database as $db) {
+                    $msg = str_replace($db->password, 'xxxxxx', $msg);
+                }
+            } catch (Exception $e) {}
+        }
+
         if (!$ignoreCli && php_sapi_name() == 'cli') {
             $this->log();
-            file_put_contents('php://stderr', $this->getException()->__toString()."\n");
+            file_put_contents('php://stderr', $msg."\n");
             exit(1);
         }
 
+
+
         $view = Kwf_Debug::getView();
-        $view->exception = $this->getException();
-        $view->message = $this->getException()->getMessage();
+        $view->exception = $msg;
+        $view->message = $exception->getMessage();
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
             htmlspecialchars($_SERVER['REQUEST_URI']) : '' ;
         $view->debug = Kwf_Exception::isDebug();
@@ -86,6 +98,7 @@ abstract class Kwf_Exception_Abstract extends Exception
             header('Content-Type: text/html; charset=utf-8');
         }
 
+        while(@ob_end_flush()) {} //end all output buffers to avoid exception output getting into output buffer
         try {
             echo $view->render($template);
         } catch (Exception $e) {
@@ -95,5 +108,6 @@ abstract class Kwf_Exception_Abstract extends Exception
             echo $e->__toString();
             echo '</pre>';
         }
+
    }
 }

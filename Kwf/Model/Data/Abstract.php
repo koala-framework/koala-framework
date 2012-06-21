@@ -366,6 +366,13 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 return preg_match($reg, $v);
             }
             return false;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_RegExp) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
+                $reg = $expr->getValue();
+                return preg_match('/'.$reg.'/', $v);
+            }
+            return false;
         } else if ($expr instanceof Kwf_Model_Select_Expr_StartsWith) {
             $v = $this->_rowValue($expr->getField(), $data);
             if (!($v && substr($v, 0, strlen($expr->getValue()))==$expr->getValue())) {

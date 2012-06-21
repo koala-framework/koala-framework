@@ -129,6 +129,11 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                                             array($this->libraryPath, $kwfPath),
                                             $i);
         }
+        foreach ($this->externLibraryPath as $k=>$i) {
+            $this->externLibraryPath->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
+                                            array($this->libraryPath, $kwfPath),
+                                            $i);
+        }
         foreach ($this->assets->dependencies as $k=>$i) {
             $this->assets->dependencies->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
                                             array($this->libraryPath, $kwfPath),

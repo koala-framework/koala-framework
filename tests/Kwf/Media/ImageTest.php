@@ -94,4 +94,11 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($expectedSize[0], $im->getImageWidth());
         $this->assertEquals($expectedSize[1], $im->getImageHeight());
     }
+
+    public function testScaleDimCropAspectRatio()
+    {
+        $dim = array('width'=>10, 'height'=>0, 'scale' => Kwf_Media_Image::SCALE_CROP, 'aspectRatio'=>3/4);
+        $ret = Kwf_Media_Image::calculateScaleDimensions(array(100, 100), $dim);
+        $this->assertEquals($ret, array('width'=>10, 'height'=>8, 'x'=>0, 'y'=>1, 'resizeWidth'=>10, 'resizeHeight'=>0, 'scale'=>Kwf_Media_Image::SCALE_CROP, 'rotate'=>null));
+    }
 }

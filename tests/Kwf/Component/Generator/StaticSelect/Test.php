@@ -35,4 +35,11 @@ class Kwf_Component_Generator_StaticSelect_Test extends Kwc_TestAbstract
         $this->assertEquals($box->componentId, 'root_page3-box');
         $this->assertEquals($box->componentClass, 'Kwc_Basic_Empty_Component');
     }
+
+    public function testComponentClassConstraint()
+    {
+        $page = $this->_root->getComponentById('root_page1');
+        $box = $page->getChildComponent(array('id' => '-box', 'componentClass' => 'foo'));
+        $this->assertNull($box);
+    }
 }

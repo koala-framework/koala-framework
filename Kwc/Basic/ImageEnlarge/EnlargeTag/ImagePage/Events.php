@@ -18,6 +18,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
 
                     $ret[] = array(
                         'class' => $class,
+                        'event' => 'Kwf_Component_Event_Component_ContentChanged',
+                        'callback' => 'onContentChanged'
+                    );
+
+                    $ret[] = array(
+                        'class' => $class,
                         'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
                         'callback' => 'onClassContentChanged'
                     );
@@ -27,6 +33,13 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
         }
 
         return $ret;
+    }
+
+    public function onContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+            $this->_class, $event->dbId.'_imagePage'
+        ));
     }
 
     public function onClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)

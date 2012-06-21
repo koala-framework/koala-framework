@@ -79,7 +79,7 @@ class Kwf_Media
         $cacheId = 'media-isvalid-'.self::createCacheId($class, $id, $type);
         if (!Kwf_Cache_Simple::fetch($cacheId)) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-            if (!class_exists($classWithoutDot)) throw new Kwf_Exception_NotFound();
+            if (!Kwf_Loader::isValidClass($classWithoutDot)) throw new Kwf_Exception_NotFound();
             $isValid = Kwf_Media_Output_IsValidInterface::VALID;
             if (is_instance_of($classWithoutDot, 'Kwf_Media_Output_IsValidInterface')) {
                 $isValid = call_user_func(array($classWithoutDot, 'isValidMediaOutput'), $id, $type, $class);
@@ -135,7 +135,7 @@ class Kwf_Media
 
         if (!$output) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-            if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Kwf_Media_Output_Interface')) {
+            if (!Kwf_Loader::isValidClass($classWithoutDot) || !is_instance_of($classWithoutDot, 'Kwf_Media_Output_Interface')) {
                 throw new Kwf_Exception_NotFound();
             }
             $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);

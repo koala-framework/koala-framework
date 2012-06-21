@@ -90,6 +90,30 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns component_id with seperate entries from every page in tree
+     *
+     * @example
+     * root
+     *   |-1
+     *     |-2
+     *       |-3
+     * componentId: 3, expandedComponentId: root-1_2_3
+     *
+     * @return string
+     */
+    public function getExpandedComponentId()
+    {
+        $generator = $this->generator;
+        if ($generator instanceof Kwc_Root_Category_Generator) {
+            $separator = '_';
+        } else {
+            $separator = $generator->getIdSeparator();
+        }
+        return $this->parent->getExpandedComponentId() .
+            $separator . $this->id;
+    }
+
+    /**
      * Returns absolute url including domain
      *
      * @return string
@@ -103,7 +127,29 @@ class Kwf_Component_Data
                 return 'http://'.$data->getComponent()->getDomain().$ret;
             }
         } while($data = $data->parent);
-        return 'http://'.Kwf_Config::getValue('server.domain').$url;
+        return 'http://'.Kwf_Config::getValue('server.domain').$ret;
+    }
+
+    /**
+     * Returns absolute url including preview domain
+     *
+     * @return string
+     */
+    public function getAbsolutePreviewUrl()
+    {
+        $ret = $this->url;
+        $data = $this;
+        do {
+            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
+                return 'http://'.$data->getComponent()->getPreviewDomain().$ret;
+            }
+        } while($data = $data->parent);
+
+        if (Kwf_Config::getValue('server.previewDomain')) {
+            return 'http://' . Kwf_Config::getValue('server.previewDomain') . $ret;
+        } else {
+            return 'http://' . Kwf_Config::getValue('server.domain') . $ret;
+        }
     }
 
     public function __get($var)
@@ -301,7 +347,7 @@ class Kwf_Component_Data
         }
 
         foreach ($generators as $g) {
-            if (!$g['static']) {
+            if ($g['type'] == 'notStatic') {
                 $gen = Kwf_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
                 foreach ($gen->getChildData(null, clone $select) as $d) {
                     $add = true;
@@ -323,9 +369,39 @@ class Kwf_Component_Data
             }
         }
 
+        foreach ($generators as $k=>$g) {
+            if ($g['type'] == 'cards') {
+                $lookingForDefault = true;
+                if ($select->hasPart('whereComponentClasses')) {
+                    $gen = Kwf_Component_Generator_Abstract
+                            ::getInstance($g['class'], $g['key'], array(), $g['pluginBaseComponentClass']);
+                    $classes = array_values($gen->getChildComponentClasses());
+                    $defaultCardClass = $classes[0];
+                    if (!in_array($defaultCardClass, $select->getPart('whereComponentClasses'))) {
+                        $lookingForDefault = false;
+                    }
+                }
+                if ($lookingForDefault) {
+                    //we have to look for it like for a static component because it's the default value that might not be in the table
+                    //this is not so efficient
+                    $generators[$k]['type'] = 'static'; //(kind of hackish to change the type here but works for now)
+                } else {
+                    $gen = Kwf_Component_Generator_Abstract
+                        ::getInstance($g['class'], $g['key'], array(), $g['pluginBaseComponentClass']);
+                    foreach ($gen->getChildData(null, clone $select) as $d) {
+                        $ret[] = $d;
+                        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                            return $ret;
+                        }
+                    }
+
+                }
+            }
+        }
+
         $staticGeneratorComponentClasses = array();
         foreach ($generators as $k=>$g) {
-            if ($g['static']) {
+            if ($g['type'] == 'static') {
                 if ($g['pluginBaseComponentClass']) {
                     $staticGeneratorComponentClasses[] = $g['pluginBaseComponentClass'];
                 } else {
@@ -343,7 +419,7 @@ class Kwf_Component_Data
             }
             $pd = $this->getRecursiveChildComponents($pdSelect, $childSelect);
             foreach ($generators as $k=>$g) {
-                if ($g['static']) {
+                if ($g['type'] == 'static') {
                     $parentDatas = array();
                     foreach ($pd as $d) {
                         if ($d->componentClass == $g['class'] || $d->componentClass == $g['pluginBaseComponentClass']) {
@@ -381,8 +457,17 @@ class Kwf_Component_Data
             if (!$componentClass) continue;
             foreach (Kwf_Component_Generator_Abstract::getInstances($componentClass, $select) as $generator) {
                 if ($generator->getChildComponentClasses($select)) {
+                    if ($generator->getGeneratorFlag('static')) {
+                        if ($generator instanceof Kwc_Abstract_Cards_Generator) {
+                            $type = 'cards';
+                        } else {
+                            $type = 'static';
+                        }
+                    } else {
+                        $type = 'notStatic';
+                    }
                     $ret[] = array(
-                        'static' => !!$generator->getGeneratorFlag('static'),
+                        'type' => $type,
                         'class' => $generator->getClass(),
                         'pluginBaseComponentClass' => $generator->getPluginBaseComponentClass(),
                         'key' => $generator->getGeneratorKey()
@@ -946,11 +1031,12 @@ class Kwf_Component_Data
     public function getLanguage()
     {
         if (!isset($this->_languageCache)) { //cache ist vorallem für bei kwfUnserialize nützlich
-            $langData = $this->getLanguageData();
-            if (!$langData) {
-                $this->_languageCache = Kwf_Trl::getInstance()->getWebCodeLanguage();
+            if (Kwc_Abstract::getFlag($this->componentClass, 'hasLanguage')) {
+                $this->_languageCache = $this->getComponent()->getLanguage();
+            } else if ($this->parent) {
+                $this->_languageCache = $this->parent->getLanguage();
             } else {
-                $this->_languageCache = $langData->getComponent()->getLanguage();
+                $this->_languageCache = Kwf_Trl::getInstance()->getWebCodeLanguage();
             }
         }
         return $this->_languageCache;

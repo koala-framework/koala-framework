@@ -52,6 +52,11 @@ class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
                 'name' => 'Google'
             ),
             array(
+                'id' => 'googleplus',
+                'url' => 'https://plusone.google.com/_/+1/confirm?hl=en&url={0}',
+                'name' => 'GooglePlus'
+                ),
+            array(
                 'id' => 'linkarena',
                 'url' => 'http://linkarena.com/bookmarks/addlink/?url={0}',
                 'name' => 'LinkARENA'
