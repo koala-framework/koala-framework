@@ -161,13 +161,15 @@
     margin-bottom: 0px;
 }
 .cssClass .kwcFormError {
-    border: 1px dashed $mainColor;
+    background: var(highlightBg) url('/assets/web/images/stripesDark.png') repeat left 3px ;
+    border: 1px solid var(highlightBorder) ;
     margin-bottom: 20px;
+    margin-right: 40px;
     padding: 10px 10px 0px 10px ;
 }
 .cssClass .kwcFormError p.error {
     font-weight: bold;
-    color: $mainColor;
+    color: black;
 }
 .cssClass span.comment { margin-left: 10px; color: #999; }
 .cssClass .kwfField { clear: both; position: relative; }
