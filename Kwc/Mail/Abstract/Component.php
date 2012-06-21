@@ -121,6 +121,8 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
      * Gibt den personalisierten HTML-Quelltext der Mail zurück
      *
      * @param bool attachImages: ob images als attachment angehängt werden sollen oder nicht
+     *                           (needs to be set to false even if attachImages setting is true
+     *                           when createing the html preview in the backend)
      */
     public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
