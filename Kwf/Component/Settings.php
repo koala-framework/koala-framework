@@ -62,6 +62,7 @@ class Kwf_Component_Settings
             $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
             if (!file_exists($classFile)) {
                 $input = file_get_contents($file);
+                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
                 $yaml = new sfYamlParser();
                 try {
                     $settings = $yaml->parse($input);
@@ -78,7 +79,9 @@ class Kwf_Component_Settings
                 $code .= "    public static function _getYamlConfigFile() { return '$file'; }\n";
                 $code .= "}\n";
                 $dir = substr($classFile, 0, strrpos($classFile, '/'));
-                if (!file_exists($dir)) mkdir($dir, 0777, true);
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0777, true);
+                }
                 file_put_contents($classFile, $code);
                 if (!class_exists($c)) {
                     throw new Kwf_Exception("just generated class still does not exist");
@@ -145,11 +148,10 @@ class Kwf_Component_Settings
         $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
         $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
         if (!isset(self::$_cacheSettings[$c][$param])) {
-            $t = microtime(true);
             $settings = call_user_func(array($c, 'getSettings'), $param);
             if (method_exists($c, '_getYamlConfigFile')) {
-                $t = microtime(true);
                 $file = call_user_func(array($c, '_getYamlConfigFile'));
+                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
                 $input = file_get_contents($file);
                 $yaml = new sfYamlParser();
                 try {
@@ -170,8 +172,6 @@ class Kwf_Component_Settings
                     }
                 }
             }
-
-            $t = microtime(true);
             if (substr($param, 0, 2)=='cs') { //child settings
                 $childSettingsComponentClass = substr($param, 2, strpos($param, '>')-2);
                 $childSettingsKey = substr($param, strpos($param, '>')+1);
@@ -184,7 +184,6 @@ class Kwf_Component_Settings
             if (isset($settings['componentIcon']) && is_string($settings['componentIcon'])) {
                 $settings['componentIcon'] = new Kwf_Asset($settings['componentIcon']);
             }
-
             self::$_cacheSettings[$c][$param] = $settings;
         }
         return self::$_cacheSettings[$c][$param];
