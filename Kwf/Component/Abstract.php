@@ -30,6 +30,11 @@ class Kwf_Component_Abstract
         return Kwf_Component_Settings::hasSetting($class, $setting);
     }
 
+    public final static function getSetting($class, $setting)
+    {
+        return Kwf_Component_Settings::getSetting($class, $setting);
+    }
+
     public final static function getSettingMtime()
     {
         return Kwf_Component_Settings::getSettingMtime();
