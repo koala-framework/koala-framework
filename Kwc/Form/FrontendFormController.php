@@ -11,6 +11,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
         if (!$component) throw new Kwf_Exception_Client('component not found');
         $component = $component->getComponent();
         $postData['doNotRelocate'] = true;
+        $component->preProcessInput($postData);
         $component->processInput($postData);
 
         $errors = $component->getErrors();
