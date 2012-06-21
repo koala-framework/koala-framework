@@ -3,8 +3,6 @@ Kwf.onContentReady(function() {
         if (el.initDone) return;
         el.initDone = true;
         var url = Ext.get(el).child('input.redirectTo').getValue();
-        (function() {
-            location.href = url;
-        }).defer(2500);
+        location.href = url;
     }, this);
 });
