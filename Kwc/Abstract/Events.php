@@ -40,7 +40,6 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
                         $this->_class, $c
                     ));
                     if (Kwc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate')) {
-                        $columns = Kwc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate');
                         if ($event->isDirty(Kwc_Abstract::getSetting($this->_class, 'throwHasContentChangedOnRowColumnsUpdate'))) {
                             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
                                 $this->_class, $c
