@@ -11,7 +11,6 @@ class Kwf_Component_Cache_Chained_Master_Component extends Kwc_Abstract
         );
         $ret['childModel'] = 'Kwf_Component_Cache_Chained_Master_ChildModel';
         $ret['ownModel'] = 'Kwf_Component_Cache_Chained_Master_Model';
-        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 
