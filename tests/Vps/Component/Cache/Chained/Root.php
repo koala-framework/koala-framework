@@ -7,7 +7,7 @@ class Vps_Component_Cache_Chained_Root extends Vpc_Root_TrlRoot_Component
         unset($ret['generators']['title']);
         $ret['generators']['master']['component'] = 'Vps_Component_Cache_Chained_Master_Component';
         $ret['generators']['chained']['component'] = 'Vps_Component_Cache_Chained_Chained_Component.Vps_Component_Cache_Chained_Master_Component';
-        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array(
+        $ret['childModel'] = new Vpc_Trl_RootModel(array(
             'master' => 'Master',
             'slave' => 'Slave'
         ));

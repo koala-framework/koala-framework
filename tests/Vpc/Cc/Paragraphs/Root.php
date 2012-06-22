@@ -17,7 +17,7 @@ class Vpc_Cc_Paragraphs_Root extends Vpc_Root_Abstract
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array(
+        $ret['childModel'] = new Vpc_Trl_RootModel(array(
             'master' => 'master',
             'slave' => 'slave'
         ));

@@ -15,10 +15,11 @@ class Vpc_Cc_RootWithTrl_Master_Component extends Vpc_Abstract
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array(
+        $ret['childModel'] = new Vpc_Trl_RootModel(array(
             'master' => 'master',
             'slave' => 'slave'
         ));
+
         $ret['flags']['chainedType'] = 'Cc';
         return $ret;
     }
