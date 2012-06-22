@@ -30,13 +30,13 @@ class Kwc_Trl_News_Test extends Kwc_TestAbstract
     public function testEn()
     {
         $c = $this->_root->getComponentById('root-en_test');
-        $this->assertContains('/en/test/1_loremen', $c->render());
+        $html = $c->render();
+        $this->assertEquals(1, substr_count($html, 'href='));
+        $this->assertContains('/en/test/1_loremen', $html);
     }
 
     public function testCacheEnOnVisibleChange()
     {
-        $this->markTestIncomplete('eventscache');
-
         $c = $this->_root->getComponentById('root-en_test');
         $html = $c->render(); //cache it
         $this->assertEquals(1, substr_count($html, 'href='));
@@ -50,5 +50,91 @@ class Kwc_Trl_News_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-en_test');
         $html = $c->render();
         $this->assertEquals(0, substr_count($html, 'href='));
+    }
+
+    public function testCacheEnOnDelete()
+    {
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render(); //cache it
+        $this->assertEquals(1, substr_count($html, 'href='));
+
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_News_News_TestModel');
+        $r = $model->getRow(1);
+        $r->delete();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render();
+        $this->assertEquals(0, substr_count($html, 'href='));
+    }
+
+    public function testCacheEnOnChangeTitle()
+    {
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render(); //cache it
+        $this->assertContains('loremen', $html);
+
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_News_News_Trl_TestModel');
+        $r = $model->getRow('root-en_test_1');
+        $r->title = 'foobaren';
+        $r->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render();
+        $this->assertContains('foobaren', $html);
+        $this->markTestIncomplete(); //componentLink cache not cleared
+        $this->assertNotContains('loremen', $html);
+    }
+
+    public function testCacheEnOnChangeDate()
+    {
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render(); //cache it
+        $this->assertContains('2010-03-01', $html);
+
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_News_News_TestModel');
+        $r = $model->getRow('1');
+        $r->publish_date = '2010-03-05';
+        $r->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render();
+        $this->assertContains('2010-03-05', $html);
+    }
+
+    public function testDetailCacheEnOnChangeTitle()
+    {
+        $c = $this->_root->getComponentById('root-en_test_1');
+        $html = $c->render(); //cache it
+        $this->assertContains('loremen', $html);
+
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_News_News_Trl_TestModel');
+        $r = $model->getRow('root-en_test_1');
+        $r->title = 'foobaren';
+        $r->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-en_test_1');
+        $html = $c->render();
+        $this->assertContains('foobaren', $html);
+    }
+
+    public function testDetailCacheEnOnChangeDate()
+    {
+        $c = $this->_root->getComponentById('root-en_test_1');
+        $html = $c->render(); //cache it
+        $this->assertContains('01.03.2010', $html); //strange, why this date format?
+
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_News_News_TestModel');
+        $r = $model->getRow('1');
+        $r->publish_date = '2010-03-05';
+        $r->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-en_test_1');
+        $html = $c->render();
+        $this->assertContains('05.03.2010', $html);
     }
 }

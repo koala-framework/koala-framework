@@ -1,6 +1,8 @@
 <?php
 class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
 {
+    protected $_eventsClass = 'Kwc_Chained_Trl_GeneratorEvents';
+
     public function getGeneratorFlags()
     {
         $ret = parent::getGeneratorFlags();
