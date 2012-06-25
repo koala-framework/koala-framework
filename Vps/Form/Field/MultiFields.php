@@ -270,18 +270,20 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                     break;
                 }
             }
-            if (!$found) {
+            if (!$found && (is_null($this->getAllowDelete()) || $this->getAllowDelete())) {
                 $postData[$this->getFieldName()]['delete'][] = $r;
             }
         }
 
-        foreach ($fieldPostData as $postDataKey=>$rowPostData) {
-            if ($this->getReferenceName()) {
-                $r = $row->createChildRow($this->getReferenceName());
-            } else {
-                $r = $this->getModel()->createRow();
+        if (is_null($this->getAllowAdd()) || $this->getAllowAdd()) {
+            foreach ($fieldPostData as $postDataKey=>$rowPostData) {
+                if ($this->getReferenceName()) {
+                    $r = $row->createChildRow($this->getReferenceName());
+                } else {
+                    $r = $this->getModel()->createRow();
+                }
+                $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true, 'pos'=>$postDataKey+1);
             }
-            $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true, 'pos'=>$postDataKey+1);
         }
 
         foreach ($postData[$this->getFieldName()]['save'] as &$d) {
@@ -400,13 +402,17 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
         $ret = parent::getTemplateVars($values);
         $ret['preHtml'] = '<input type="hidden" name="'.$name.'_num'.$namePostfix.'" value="'.count($value).'" />';
-        $ret['postHtml'] = '<div class="addLayer"><div class="submitWrapper"><span class="beforeButton"></span><span class="button"><button class="submit add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">'.trlVps("New Entry").'</button></span><span class="afterButton"></span></div></div>';
+        if (is_null($this->getAllowAdd()) || $this->getAllowAdd()) {
+            $ret['postHtml'] = '<div class="addLayer"><div class="submitWrapper"><span class="beforeButton"></span><span class="button"><button class="submit add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">'.trlVps("New Entry").'</button></span><span class="afterButton"></span></div></div>';
+        }
 
         $ret['items'] = array();
         foreach ($value as $i=>$rowValues) {
             $ret['items'][] = array('preHtml' => "<div class=\"vpsFormFieldMultiFieldsRow\">\n", 'item' => null);
             $ret['items'] = array_merge($ret['items'], $this->fields->getTemplateVars($rowValues, $namePostfix."[$i]"));
-            $ret['items'][] = array('postHtml' => "</div>\n", 'html' => '<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">'.trlVps("Delete Entry").'</button>', 'item' => null);
+            if (is_null($this->getAllowDelete()) || $this->getAllowDelete()) {
+                $ret['items'][] = array('postHtml' => "</div>\n", 'html' => '<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">'.trlVps("Delete Entry").'</button>', 'item' => null);
+            }
         }
         return $ret;
     }
