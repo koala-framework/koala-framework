@@ -723,7 +723,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             foreach ($expr->getGroupBy() as $i) {
                 $s->whereEquals($i, $row->$i);
             }
-            if ($expr->getDirection() == 'asc') {
+            if ($expr->getDirection() == Kwf_Model_Select_Expr_Position::DIRECTION_ASC) {
                 $s->where(new Kwf_Model_Select_Expr_Lower($f, $row->$f));
             } else {
                 $s->where(new Kwf_Model_Select_Expr_Higher($f, $row->$f));

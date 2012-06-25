@@ -642,7 +642,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $alias = ($tableNameAlias ? $tableNameAlias : $this->getTableName()) . '_expr_position'.($positionNum++);
             $aliasIdField = $this->_formatField($this->getPrimaryKey(), null, $alias);
             $aliasField = $this->_formatField($expr->getField(), null, $alias);
-            if ($expr->getDirection() == 'asc') {
+            if ($expr->getDirection() == Kwf_Model_Select_Expr_Position::DIRECTION_ASC) {
                 $direction = '<';
             } else {
                 $direction = '>';
