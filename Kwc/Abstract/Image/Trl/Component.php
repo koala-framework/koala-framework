@@ -9,6 +9,8 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
             'component' => 'Kwc_Abstract_Image_Trl_Image_Component.'.$masterComponentClass
         );
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
+        $ret['throwHasContentChangedOnMasterRowColumnsUpdate'] = array('kwf_upload_id');
         return $ret;
     }
 

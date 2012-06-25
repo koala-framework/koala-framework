@@ -69,7 +69,6 @@ class Kwc_Trl_Image_Test extends Kwc_TestAbstract
 
     public function testEnClearCache()
     {
-        $this->markTestIncomplete();
         $c = $this->_root->getComponentById('root-en_test1');
         $this->_checkTheSizes($c->render(), 1, 120, 120);
         $row = $this->_root->getComponentById('root-master_test1')->getComponent()->getRow();

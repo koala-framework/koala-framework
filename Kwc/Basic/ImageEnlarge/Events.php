@@ -13,8 +13,7 @@ class Kwc_Basic_ImageEnlarge_Events extends Kwc_Basic_Image_Events
 
     public function onAlternativePreviewChanged(Kwc_Basic_ImageEnlarge_EnlargeTag_AlternativePreviewChangedEvent $event)
     {
-        $component = $event->component;
-        $component = $component->parent;
+        $component = $event->component->parent;
         if (is_instance_of($component->componentClass, 'Kwc_Basic_LinkTag_Component')) {
             $component = $component->parent;
         }
