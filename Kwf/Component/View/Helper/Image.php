@@ -48,10 +48,7 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
     protected function _getImageFileContents($image)
     {
         if (is_string($image)) return parent::_getImageFileContents($image);
-        return call_user_func_array(
-            array($image->componentClass, 'getMediaOutput'),
-            array($image->getComponent()->getData()->componentId, null, $image->componentClass)
-        );
+        return Kwf_Media::getOutput($image->componentClass, $image->componentId, null);
     }
 
     protected function _getMailInterface()

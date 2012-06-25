@@ -7,7 +7,10 @@ class Kwc_NewsletterCategory_Subscribe_RecipientsController extends Kwc_Newslett
         parent::_initColumns();
 
         $model = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_CategoriesModel');
-        $categories = $model->getRows($model->select()->order('pos'));
+        $s = $model->select()
+            ->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'))
+            ->order('pos');
+        $categories = $model->getRows($s);
 
         // filter by category
         $categorySelects = array(array('all', '- '.trlKwf('All').' -'));
