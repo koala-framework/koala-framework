@@ -416,7 +416,8 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
             throw new Kwf_Exception("Making visible/unvisible is not allowed for this row.");
         }
         $this->_changeVisibility($row);
-        $this->view->id = $row->save();
+        $row->save();
+        $this->view->id = $id;
         $this->view->visible = $row->visible == '1';
         if (!isset($this->view->icon)) {
             $this->view->icon = $this->view->visible ?
