@@ -30,4 +30,21 @@ class Kwc_Trl_Text_Test extends Kwc_TestAbstract
         $this->assertEquals($c->componentId, 'root-en_text');
         $this->assertContains('<p>fooen</p>', $c->render());
     }
+
+    public function testEnClearCache()
+    {
+        $c = $this->_root->getComponentById('root-en_text');
+        $this->assertContains('<p>fooen</p>', $c->render());
+
+        $row = $c->getChildComponent('-child')->getComponent()->getRow();
+        $row->content = '<p>xxxy</p>';
+        $row->save();
+        $this->_process();
+
+        $c = $this->_root->getComponentById('root-en_text');
+        $html = $c->render();
+        $html = preg_replace("#\s*#", '', $html);
+        $this->assertNotContains('<p>fooen</p>', $html);
+        $this->assertContains('<p>xxxy</p>', $html);
+    }
 }
