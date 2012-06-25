@@ -1,6 +1,8 @@
 Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     minEntries: 1,
     position: true,
+    allowAdd: true,
+    allowDelete: true,
     initComponent : function() {
         Vps.Form.MultiFields.superclass.initComponent.call(this);
 
@@ -32,10 +34,12 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
         Vps.Form.MultiFields.superclass.onRender.call(this, ct, position);
 
         if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
-            this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
-                multiFieldsPanel: this,
-                renderTo: this.body
-            }, position);
+            if (this.allowAdd) {
+                this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
+                    multiFieldsPanel: this,
+                    renderTo: this.body
+                }, position);
+            }
         }
 
         for (var i = 0; i < this.minEntries; i++) {
@@ -48,10 +52,12 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     {
         var items = [];
         if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
-            var deleteButton = new Vps.Form.MultiFieldsDeleteButton({
-                multiFieldsPanel: this
-            });
-            items.push(deleteButton);
+            if (this.allowDelete) {
+                var deleteButton = new Vps.Form.MultiFieldsDeleteButton({
+                    multiFieldsPanel: this
+                });
+                items.push(deleteButton);
+            }
             if (this.position) {
                 var upButton = new Vps.Form.MultiFieldsUpButton({
                     multiFieldsPanel: this
@@ -310,7 +316,7 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         }
     },
     setValue : function(value) {
-    	var gp = this.multiFieldsPanel;
+        var gp = this.multiFieldsPanel;
         if (!value instanceof Array) throw new 'ohje, value ist kein array - wos mochma do?';
         this._initFields(value.length);
         for (var i = 0; i < gp.groups.length; i++) {
