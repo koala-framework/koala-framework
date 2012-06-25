@@ -642,8 +642,13 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $alias = ($tableNameAlias ? $tableNameAlias : $this->getTableName()) . '_expr_position'.($positionNum++);
             $aliasIdField = $this->_formatField($this->getPrimaryKey(), null, $alias);
             $aliasField = $this->_formatField($expr->getField(), null, $alias);
+            if ($expr->getDirection() == 'asc') {
+                $direction = '<';
+            } else {
+                $direction = '>';
+            }
             $ret = "SELECT COUNT($aliasIdField)+1 FROM ".$this->getTableName()." $alias
-                WHERE $aliasField > $field";
+                WHERE $aliasField $direction $field";
             foreach ($expr->getGroupBy() as $g) {
                 $field = $this->_formatField($g, $dbSelect, $tableNameAlias);
                 $aliasField = $this->_formatField($g, null, $alias);

@@ -9,6 +9,7 @@ class Kwf_Model_DbWithConnection_ExprPosition_Model extends Kwf_Model_Db
 
         $config['exprs'] = array(
             'position' => new Kwf_Model_Select_Expr_Position('points', array('gr')),
+            'positionDir' => new Kwf_Model_Select_Expr_Position('points', array('gr'), 'asc'),
         );
 
         parent::__construct($config);
