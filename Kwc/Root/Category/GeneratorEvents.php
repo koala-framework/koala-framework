@@ -60,9 +60,9 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         $this->_getGenerator()->pageDataChanged();
     }
 
-    protected function _getComponentsFromRow($row)
+    protected function _getComponentsFromRow($row, $select)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row->id, array('ignoreVisible'=>true));
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row->id, $select);
         if (!$c) return array();
         return array($c);
     }
