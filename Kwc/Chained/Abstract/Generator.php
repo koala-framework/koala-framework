@@ -23,7 +23,6 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
             if (!$m) throw new Kwf_Exception("No child model set for '$this->_class'");
             $s = $m->select();
             $s->whereEquals('component_id', $idsToLoad);
-            $visible = array();
             Kwf_Benchmark::count('DirectoryChainedGenerator getRows', count($idsToLoad));
             foreach ($m->getRows($s) as $r) {
                 $this->_rows[$r->component_id] = $r;
