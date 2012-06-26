@@ -83,7 +83,6 @@ class Kwc_Trl_News_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-en_test');
         $html = $c->render();
         $this->assertContains('foobaren', $html);
-        $this->markTestIncomplete(); //componentLink cache not cleared
         $this->assertNotContains('loremen', $html);
     }
 

@@ -1,5 +1,5 @@
 <?php
-abstract class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
+class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
@@ -11,7 +11,9 @@ abstract class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite
         return $ret;
     }
 
-    abstract public static function getItemDirectoryClasses($directoryClass);
+    /*
+    abstract public static function getItemDirectoryClasses($directoryClass)
+    */
 
     public function getItemDirectory()
     {

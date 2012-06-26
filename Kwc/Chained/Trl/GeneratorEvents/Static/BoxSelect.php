@@ -1,0 +1,4 @@
+<?php
+class Kwc_Chained_Trl_GeneratorEvents_Static_BoxSelect extends Kwc_Chained_Trl_GeneratorEvents_Static
+{
+}
