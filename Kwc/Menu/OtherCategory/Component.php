@@ -12,7 +12,7 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
     //used by trl
     public function getMenuData()
     {
-        return $this->_getMenuComponentData()->getComponent()->getMenuData();
+        return $this->_getMenuSource()->getComponent()->getMenuData();
     }
 
     private function _getMenuSource()
