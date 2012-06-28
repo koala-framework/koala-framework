@@ -99,11 +99,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.innerLightboxEl = lightbox.down('.kwfLightboxInner');
 
         var el = this.innerLightboxEl;
+
         if (this.options.width) {
-            el.setWidth(this.options.width + el.getBorderWidth("lr") + el.getPadding("lr"));
+            el.setWidth(parseInt(this.options.width) + el.getBorderWidth("lr") + el.getPadding("lr"));
         }
         if (this.options.height) {
-            el.setHeight(this.options.height + el.getBorderWidth("tb") + el.getPadding("tb"));
+            el.setHeight(parseInt(this.options.height) + el.getBorderWidth("tb") + el.getPadding("tb"));
         }
         this.style.afterCreateLightboxEl();
         this.lightboxEl.hide();

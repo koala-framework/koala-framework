@@ -33,11 +33,12 @@ class Kwf_Form_FieldSet_Frontend_Test extends Kwf_Test_SeleniumTestCase
         $this->click("css=fieldset legend input");
         $this->click("css=button.submit");
         $this->waitForConnections();
-        $this->assertTextPresent(trlKwf('Please fill out the field'));
+        $this->assertElementPresent('css=.foo2.kwfFieldError');
+
         $this->assertTrue($this->isChecked("css=fieldset legend input"));
         $this->click("css=fieldset legend input");
         $this->click("css=button.submit");
         $this->waitForConnections();
-        $this->assertTextNotPresent(trlKwf('Please fill out the field'));
+        $this->assertElementNotPresent('css=.kwfFieldError');
     }
 }

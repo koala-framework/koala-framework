@@ -31,10 +31,11 @@ class Kwf_Component_Generator_PseudoPage_Static extends Kwf_Component_Generator_
                 $ret = $pData->trlStaticExecute($ret);
             }
         }
+        $ret = Kwf_Filter::filterStatic($ret, 'Ascii');
         if (!$ret) {
             $ret = $componentKey;
         }
-        return Kwf_Filter::filterStatic($ret, 'Ascii');
+        return $ret;
     }
 
     protected function _formatConfig($parentData, $componentKey)

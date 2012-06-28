@@ -37,7 +37,8 @@ Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                     componentConfigs: {
                         'Dummy-content': tab
                     },
-                    mainEditComponents: ['Dummy-content']
+                    mainEditComponents: ['Dummy-content'],
+                    baseParams  : b
                 });
             } else {
                 var item = Ext.ComponentMgr.create(Ext.applyIf(tab, {

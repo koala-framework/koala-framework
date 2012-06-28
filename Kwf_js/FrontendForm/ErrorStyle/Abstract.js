@@ -3,7 +3,7 @@ Kwf.FrontendForm.ErrorStyle.Abstract = function(form) {
     this.form = form;
 };
 Kwf.FrontendForm.ErrorStyle.Abstract.prototype = {
-    _showErrorMessagesAbove: function(messages)
+    _showErrorMessagesAbove: function(messages, r)
     {
         var html = '<div class="webStandard kwcFormError webFormError">';
         html += '<p class="error">' + r.errorPlaceholder + ':</p>';

@@ -12,7 +12,7 @@ class Kwc_Paragraphs_Trl_AdminModel extends Kwf_Model_Data_Abstract
                 'id' => $c->chained->row->id,
                 'component_id' => $componentId,
                 'component_class' => $c->componentClass,
-                'component_name' => Kwc_Abstract::getSetting($c->componentClass, 'componentName'),
+                'component_name' => Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($c->componentClass, 'componentName')),
                 'component_icon' => (string)Kwc_Abstract::getSetting($c->componentClass, 'componentIcon'),
                 'row' => $c->row,
                 'visible' => $c->row->visible,

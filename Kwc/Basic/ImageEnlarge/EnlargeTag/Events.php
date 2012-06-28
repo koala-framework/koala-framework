@@ -57,7 +57,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Image_Events
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
     {
         $components = $event->component
-            ->getRecursiveChildComponents(array('componentClass' => $this->_class));
+            ->getRecursiveChildComponents(array('componentClass' => $this->_class, 'ignoreVisible'=>true)); //ignore visible because we need to clear media cache for invisible images too (as it's shown in preview)
         foreach ($components as $component) {
             $this->fireEvent(new Kwf_Component_Event_Media_Changed(
                 $this->_class, $component

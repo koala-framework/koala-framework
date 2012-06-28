@@ -15,10 +15,11 @@ class Kwc_Cc_RootWithTrl_Master_Component extends Kwc_Abstract
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Kwc_Root_TrlRoot_Model(array(
+        $ret['childModel'] = new Kwc_Trl_RootModel(array(
             'master' => 'master',
             'slave' => 'slave'
         ));
+
         $ret['flags']['chainedType'] = 'Cc';
         return $ret;
     }

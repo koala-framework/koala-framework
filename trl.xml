@@ -9,6 +9,7 @@
 <mk>Видливо</mk>
 <ro>Vizibil</ro>
 <sl>Vidno</sl>
+<es>Visible</es>
 </text>
 <text>
 <en>Error</en>
@@ -20,6 +21,7 @@
 <mk>Грешка</mk>
 <cz>Chyba</cz>
 <sl>Napaka</sl>
+<es>Error</es>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
@@ -64,6 +66,7 @@
 <ro>Bună ziua {0}!</ro>
 <mk>Здраво {0}!</mk>
 <sl>Pozdravljeni, {0}!</sl>
+<es>Hola {0}!</es>
 </text>
 <text>
 <en>Your account at {0}
@@ -176,6 +179,7 @@ has just been created.</en>
 <ua>Ширина</ua>
 <mk>Ширина</mk>
 <sl>Širina</sl>
+<es>Ancho</es>
 </text>
 <text>
 <en>Height</en>
@@ -185,6 +189,7 @@ has just been created.</en>
 <ua>Висота</ua>
 <mk>Висина</mk>
 <sl>Višina</sl>
+<es>Altura</es>
 </text>
 <text>
 <en>Move + Zoom</en>
@@ -253,6 +258,7 @@ has just been created.</en>
 <ua>І'мя файлу</ua>
 <mk>Име на фајлот</mk>
 <sl>Ime datoteke</sl>
+<es>Nombre de archivo</es>
 </text>
 <text>
 <en>File</en>
@@ -262,6 +268,7 @@ has just been created.</en>
 <ua>Файл</ua>
 <mk>Фајл</mk>
 <sl>Datoteka</sl>
+<es>Archivo</es>
 </text>
 <text>
 <en>Content</en>
@@ -279,6 +286,7 @@ has just been created.</en>
 <ro>Imagine</ro>
 <mk>Слика</mk>
 <sl>Slika</sl>
+<es>Imagen</es>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -287,6 +295,7 @@ has just been created.</en>
 <ro>Măreşte imaginea</ro>
 <mk>Зголеми ја сликата</mk>
 <sl>Povečaj sliko</sl>
+<es>Imagen extendida</es>
 </text>
 <text>
 <en>Comment</en>
@@ -295,6 +304,7 @@ has just been created.</en>
 <ro>Comentariu</ro>
 <mk>Комент</mk>
 <sl>Komentar</sl>
+<es>Comentario</es>
 </text>
 <text>
 <en>Size</en>
@@ -303,6 +313,7 @@ has just been created.</en>
 <ro>Dimensiune</ro>
 <mk>Големина</mk>
 <sl>Velikost</sl>
+<es>Tamaño</es>
 </text>
 <text>
 <en>Preview</en>
@@ -319,6 +330,7 @@ has just been created.</en>
 <ro>Text</ro>
 <mk>Текст</mk>
 <sl>Besedilo</sl>
+<es>Texto</es>
 </text>
 <text>
 <en>Position of Image</en>
@@ -335,6 +347,7 @@ has just been created.</en>
 <ro>Stânga</ro>
 <mk>Лево</mk>
 <sl>Levo</sl>
+<es>Izquierda</es>
 </text>
 <text>
 <en>Right</en>
@@ -343,6 +356,7 @@ has just been created.</en>
 <ro>Dreapta</ro>
 <mk>Десно</mk>
 <sl>Desno</sl>
+<es>Derecha</es>
 </text>
 <text>
 <en>Default Value</en>
@@ -409,6 +423,7 @@ has just been created.</en>
 <ro>Data</ro>
 <mk>Датум</mk>
 <sl>Datum</sl>
+<es>Fecha</es>
 </text>
 <text>
 <en>at</en>
@@ -416,6 +431,7 @@ has just been created.</en>
 <id>93</id>
 <ro>la</ro>
 <sl>ob</sl>
+<es>en</es>
 </text>
 <text>
 <en>Empty</en>
@@ -424,6 +440,7 @@ has just been created.</en>
 <ro>Gol</ro>
 <mk>Празно</mk>
 <sl>Prazno</sl>
+<es>Vacio</es>
 </text>
 <text>
 <en>Title</en>
@@ -434,6 +451,7 @@ has just been created.</en>
 <ua>Титул</ua>
 <hu>Cím</hu>
 <sl>Naziv</sl>
+<es>Título</es>
 </text>
 <text>
 <en>Firstname</en>
@@ -452,7 +470,7 @@ has just been created.</en>
 <en>Lastname</en>
 <de>Nachname</de>
 <fr>Nom</fr>
-<es>Apellidos</es>
+<es>Apellido</es>
 <ru>Фамилия</ru>
 <id>98</id>
 <ro>Nume</ro>
@@ -502,6 +520,7 @@ has just been created.</en>
 <ro>Nume</ro>
 <mk>Име</mk>
 <sl>Ime in priimek</sl>
+<es>Nombre</es>
 </text>
 <text>
 <en>Latest online</en>
@@ -525,6 +544,7 @@ has just been created.</en>
 <ro>Semnătură</ro>
 <mk>Потпис</mk>
 <sl>Podpis</sl>
+<es>Firma</es>
 </text>
 <text>
 <en>Publish Date</en>
@@ -562,6 +582,7 @@ has just been created.</en>
 <id>149</id>
 <ro>pentru a continua</ro>
 <sl>Nadaljuj</sl>
+<es>para continuar</es>
 </text>
 <text>
 <en>Product</en>
@@ -570,6 +591,7 @@ has just been created.</en>
 <ro>Produs</ro>
 <mk>Производ</mk>
 <sl>Produkt</sl>
+<es>Producto</es>
 </text>
 <text>
 <en>Activate Useraccount</en>
@@ -607,6 +629,7 @@ has just been created.</en>
 <ua>Жіноча</ua>
 <hu>Nő</hu>
 <sl>Ženski</sl>
+<es>Femenino</es>
 </text>
 <text>
 <en>Male</en>
@@ -617,6 +640,7 @@ has just been created.</en>
 <ua>Чоловіча</ua>
 <hu>Férfi</hu>
 <sl>Moški</sl>
+<es>Masculino</es>
 </text>
 <text>
 <en>Gender</en>
@@ -627,6 +651,7 @@ has just been created.</en>
 <ua>Стать</ua>
 <hu>Nem</hu>
 <sl>Spol</sl>
+<es>Género</es>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -696,6 +721,7 @@ has just been created.</en>
 <ro>Prenume</ro>
 <mk>Име</mk>
 <sl>Ime</sl>
+<es>Nombre</es>
 </text>
 <text>
 <en>Last name</en>
@@ -704,6 +730,7 @@ has just been created.</en>
 <ro>Nume</ro>
 <mk>Презиме</mk>
 <sl>Priimek</sl>
+<es>Apellido</es>
 </text>
 <text>
 <en>Advice</en>
@@ -821,6 +848,7 @@ has just been created.</en>
 <ro>Copiază...</ro>
 <mk>Се копира...</mk>
 <sl>Kopiram ...</sl>
+<es>Proceso de copiar...</es>
 </text>
 <text>
 <en>create</en>
@@ -828,6 +856,7 @@ has just been created.</en>
 <id>235</id>
 <ro>creează</ro>
 <sl>Ustvari</sl>
+<es>crear</es>
 </text>
 <text>
 <en>File successfully created:</en>
@@ -866,6 +895,7 @@ has just been created.</en>
 <ro>Pagina</ro>
 <mk>Страна</mk>
 <sl>Stran</sl>
+<es>Página</es>
 </text>
 <text>
 <en>Page properties</en>
@@ -889,6 +919,7 @@ has just been created.</en>
 <ro>Şterge pagina</ro>
 <mk>Избришија страната</mk>
 <sl>Izbriši stran</sl>
+<es>Eliminar la página</es>
 </text>
 <text>
 <en>Show / Hide Page</en>
@@ -969,6 +1000,7 @@ has just been created.</en>
 <mk>внеси адреса</mk>
 <ro>Introduceţi adresa.</ro>
 <sl>Vnesite naslov.</sl>
+<es>Introducir la dirección</es>
 </text>
 <text>
 <en>Example</en>
@@ -977,6 +1009,7 @@ has just been created.</en>
 <mk>Пример</mk>
 <ro>Exemplu</ro>
 <sl>Primer</sl>
+<es>Ejemplo</es>
 </text>
 <text>
 <en>Unknown address</en>
@@ -2439,6 +2472,7 @@ has just been created.</en>
 <id>528</id>
 <ro>Setări</ro>
 <sl>Nastavitve </sl>
+<ua>Налаштування</ua>
 </text>
 <text>
 <en>Link Image</en>
@@ -2600,6 +2634,7 @@ has just been created.</en>
 <id>577</id>
 <ro>Bună ziua</ro>
 <sl>Pozdravljeni</sl>
+<ua>Добрий день</ua>
 </text>
 <text>
 <en>A new entry has been written in your guestbook.</en>
@@ -4917,6 +4952,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <it>marchio</it>
 <ro>Copyright</ro>
 <sl>Impresum.Impresum</sl>
+<ua>Контакти</ua>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
@@ -5969,6 +6005,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1235</id>
 <ro>Dezabonează newsletter-ul</ro>
 <sl>Odjava od e-novic</sl>
+<ua>Відмовитися від розсилки новин</ua>
 </text>
 <text>
 <en>You have been successfully unsubscribed from the newsletter.</en>
@@ -5983,6 +6020,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1238</id>
 <ro>Dezabonează newsletter-ul</ro>
 <sl>Odjava od e-novic</sl>
+<ua>Відмовитися від розсилки новин</ua>
 </text>
 <text>
 <en>default</en>
@@ -6081,6 +6119,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1262</id>
 <ro>Aţi fost abonat pentru newsletter-ul {0}.</ro>
 <sl>Pravkar ste bili vneseni kot prejemnik e-novic pri {0}.</sl>
+<ua>Ви щойно підписалися на автоматичну розсилку новин від {0}.</ua>
 </text>
 <text>
 <en>ACTIVATION LINK</en>
@@ -6102,6 +6141,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1265</id>
 <ro>Puteţi să dezabonaţi oricând newsletter-ul, accesând următorul link:</ro>
 <sl>Od e-novic se lahko kadarkoli odjavite tako, da kliknete na naslednjo povezavo:</sl>
+<ua>Для того, щоб відмовитися від автоматичної розсилки новин, перейдіть за посиланням:</ua>
 </text>
 <text>
 <en>To change you data or settings, click this link:</en>
@@ -6109,6 +6149,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1266</id>
 <ro>Pentru a modifica datele sau setările dumneavoastră faceţi click pe următorul link:</ro>
 <sl>Za spremembo svojih podatkov in nastavitev kliknite na naslednjo povezavo:</sl>
+<ua>Для того, щоб змінити свої данні або налаштування, перейдіть за посилянням: </ua>
 </text>
 <text>
 <en>Thanks for your subscription!</en>
@@ -6116,6 +6157,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1267</id>
 <ro>Mulţumim pentru înscriere!</ro>
 <sl>Hvala, ker ste se prijavili!</sl>
+<ua>Щиро вдячні за Вашу підписку!</ua>
 </text>
 <text>
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
@@ -8158,6 +8200,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1695</id>
 <de>Abmelden</de>
 <ro>Logout</ro>
+<ua>Відмовитися від розсилки</ua>
 </text>
 <text>
 <context>thousands separator</context>
@@ -8516,8 +8559,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Geslo mora vsebovati najmanj 8 znakov.</sl>
 </text>
 <text>
-<en>The password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
-<de>Das passwort muss mindestens aus 3 der folgenden 4 Bedingungen erfüllen: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen</de>
+<en>For security reasons the password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
+<de>Aus Sicherheitsgründen muss das Passwort mindestens 3 der folgenden 4 Zeichentypen beinhalten: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen.</de>
 <id>1744</id>
 <ro>Parola trebuie să fie formată cel puţin din 3 din următoarele 4 tipuri de caractere: litere mici, majuscule, numere şi caractere speciale.</ro>
 <sl>Geslo mora izpolnjevati najmanj 3 od naslednjih 4 pogojev: male črke, velike črke, številke in posebni znaki.</sl>

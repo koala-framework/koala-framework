@@ -4,13 +4,15 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
     public static function getSettings($menuComponentClass)
     {
         $ret = parent::getSettings();
+        $ret['plugins'] = Kwc_Abstract::getSetting($menuComponentClass, 'plugins');
         $ret['menuComponentClass'] = $menuComponentClass;
         return $ret;
     }
 
+    //used by trl
     public function getMenuData()
     {
-        return $this->_getMenuSource()->getComponent()->getMenuData();
+        return $this->_getMenuComponentData()->getComponent()->getMenuData();
     }
 
     private function _getMenuSource()

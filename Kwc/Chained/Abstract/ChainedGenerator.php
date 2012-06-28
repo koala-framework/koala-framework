@@ -14,6 +14,10 @@ class Kwc_Chained_Abstract_ChainedGenerator extends Kwf_Component_Generator_Pseu
             $ret['iconEffects'][] = 'invisible';
         }
         $ret['iconEffects'][] = 'chained';
+
+        if ($this->getModel()->hasColumn('visible')) {
+            $ret['actions']['visible'] = true;
+        }
         return $ret;
     }
 
