@@ -17,7 +17,7 @@ class Kwc_Cc_PageTree_Root extends Kwc_Root_Abstract
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Kwc_Root_TrlRoot_Model(array(
+        $ret['childModel'] = new Kwc_Trl_RootModel(array(
             'master' => 'master',
             'slave' => 'slave'
         ));
