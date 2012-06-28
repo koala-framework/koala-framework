@@ -58,17 +58,17 @@ class Kwc_Directories_Item_Directory_Trl_Events extends Kwc_Chained_Trl_Events
     // master model
     public function onMasterChildRowUpdate(Kwc_Directories_List_EventRowUpdated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowUpdated($this->_class, $event->row));
+        $this->fireEvent(new Kwc_Directories_List_EventRowUpdated($this->_class, $event->itemId));
     }
 
     public function onMasterChildRowInsert(Kwc_Directories_List_EventRowInserted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowInserted($this->_class, $event->row));
+        $this->fireEvent(new Kwc_Directories_List_EventRowInserted($this->_class, $event->itemId));
     }
 
     public function onMasterChildRowDelete(Kwc_Directories_List_EventRowDeleted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowDeleted($this->_class, $event->row));
+        $this->fireEvent(new Kwc_Directories_List_EventRowDeleted($this->_class, $event->itemId));
     }
 
     public function onMasterChildModelUpdated(Kwc_Directories_List_EventModelUpdated $event)
@@ -79,17 +79,29 @@ class Kwc_Directories_Item_Directory_Trl_Events extends Kwc_Chained_Trl_Events
     // trl model (optional)
     public function onChildRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowUpdated($this->_class, $event->row));
+        $dbId = $event->row->component_id;
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbId, array('limit'=>1, 'ignoreVisible'=>true));
+        if ($c) {
+            $this->fireEvent(new Kwc_Directories_List_EventRowUpdated($this->_class, $c->id));
+        }
     }
 
     public function onChildRowInsert(Kwf_Component_Event_Row_Inserted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowInserted($this->_class, $event->row));
+        $dbId = $event->row->component_id;
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbId, array('limit'=>1, 'ignoreVisible'=>true));
+        if ($c) {
+            $this->fireEvent(new Kwc_Directories_List_EventRowInserted($this->_class, $c->id));
+        }
     }
 
     public function onChildRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowDeleted($this->_class, $event->row));
+        $dbId = $event->row->component_id;
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbId, array('limit'=>1, 'ignoreVisible'=>true));
+        if ($c) {
+            $this->fireEvent(new Kwc_Directories_List_EventRowDeleted($this->_class, $c->id));
+        }
     }
 
     public function onChildModelUpdated(Kwf_Component_Event_Model_Updated $event)

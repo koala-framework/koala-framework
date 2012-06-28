@@ -58,8 +58,7 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
             array(strpos($this->_class, '.') ? substr($this->_class, 0, strpos($this->_class, '.')) : $this->_class, 'getPartialClass'), $this->_class
         );
         if (is_instance_of($partialClass, 'Kwf_Component_Partial_Id')) {
-            $id = $event->row->{$event->row->getModel()->getPrimaryKey()};
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $id));
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
         } else {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
         }
