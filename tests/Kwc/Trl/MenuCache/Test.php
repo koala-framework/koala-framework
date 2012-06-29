@@ -70,8 +70,6 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
 
     public function testMenuEnNameChanged()
     {
-        $this->markTestIncomplete();
-
         $c = $this->_root->getComponentById('root-en-main_1-mainMenu');
 
         $html = $c->render();
@@ -110,8 +108,6 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
 
     public function testMenuOtherCategoryEnNameChanged()
     {
-        $this->markTestIncomplete();
-
         $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
         $html = $c->render();
         $this->assertContains('Home en</a>', $html);

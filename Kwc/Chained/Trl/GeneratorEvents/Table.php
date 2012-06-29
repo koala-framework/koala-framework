@@ -45,22 +45,6 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         $cls = 'Kwf_Component_Event_Component_'.$eventType;
         $this->fireEvent(new $cls($c->componentClass, $c, $flag));
     }
-/*
-    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
-    {
-//TODO alle weiteren events wie in TableGenerator und Page etc. (added, filename uvm.)
-        if ($event->row->getModel()->hasColumn('component_id')) {
-            $dbId = $event->row->component_id;
-            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
-                if ($c->generator === $this->_getGenerator()) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_RowUpdated(
-                        $c->componentClass, $c
-                    ));
-                }
-            }
-        }
-    }
-*/
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {

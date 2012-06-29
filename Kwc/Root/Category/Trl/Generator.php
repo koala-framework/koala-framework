@@ -1,6 +1,8 @@
 <?php
 class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
 {
+    protected $_eventsClass = 'Kwc_Root_Category_Trl_GeneratorEvents';
+
     public function getPagesControllerConfig($component)
     {
         $ret = parent::getPagesControllerConfig($component);

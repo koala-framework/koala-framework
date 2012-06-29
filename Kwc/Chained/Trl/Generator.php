@@ -20,6 +20,7 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
 
     public function getEventsClass()
     {
+        if ($this->_eventsClass) return $this->_eventsClass;
         $g = $this->_getChainedGenerator();
         if        ($g instanceof Kwf_Component_Generator_Page_Static) {
             return 'Kwc_Chained_Trl_GeneratorEvents_Static_Page';

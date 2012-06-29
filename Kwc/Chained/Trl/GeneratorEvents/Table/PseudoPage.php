@@ -1,6 +1,8 @@
 <?php
 class Kwc_Chained_Trl_GeneratorEvents_Table_PseudoPage extends Kwc_Chained_Trl_GeneratorEvents_Table
 {
+    protected $_nameColumn;
+
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
         parent::onRowUpdate($event);
@@ -10,7 +12,11 @@ class Kwc_Chained_Trl_GeneratorEvents_Table_PseudoPage extends Kwc_Chained_Trl_G
         $nameChanged = false;
         $filenameChanged = false;
 
-        $nameColumn = $this->_getChainedGenerator()->getSetting('nameColumn');
+        if ($this->_nameColumn) {
+            $nameColumn = $this->_nameColumn;
+        } else {
+            $nameColumn = $this->_getChainedGenerator()->getSetting('nameColumn');
+        }
         if ($nameColumn && $this->_getGenerator()->getModel()->hasColumn($nameColumn)) { //hardcoded column names as in generator
             $nameChanged = $event->isDirty($nameColumn);
         }
