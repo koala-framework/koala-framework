@@ -1,0 +1,4 @@
+<?php
+class Kwc_Chained_Trl_GeneratorEvents_Table_Page extends Kwc_Chained_Trl_GeneratorEvents_Table_PseudoPage
+{
+}

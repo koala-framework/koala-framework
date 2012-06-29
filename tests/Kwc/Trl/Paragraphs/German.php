@@ -9,6 +9,7 @@ class Kwc_Trl_Paragraphs_German extends Kwc_Abstract
             'component' => 'Kwc_Trl_Paragraphs_Paragraphs_Component',
             'name' => 'test',
         );
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 }

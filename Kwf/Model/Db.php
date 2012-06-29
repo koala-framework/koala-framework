@@ -205,15 +205,14 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                         return $m->getTableName().'.'.$field;
                     }
                     if (is_string($field)) {
-                        $ret = $m->_formatFieldInternal($field, $dbSelect);
+                        $ret = $m->_formatFieldInternal($field, $dbSelect, $tableNameAlias);
                     } else {
-                        $ret = $this->_createDbSelectExpression($field, $dbSelect, $m);
+                        $ret = $this->_createDbSelectExpression($field, $dbSelect, $m, $tableNameAlias);
                     }
                     if ($ret) return $ret;
                 }
             }
         }
-
         return $this->_formatFieldExpr($field, $dbSelect, $tableNameAlias);
     }
 
@@ -597,7 +596,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                 $ref = $dbDepOf->getReferenceByModelClass($depOf->getParentModel(), null);
             }
-            $col1 = $dbDepOf->_formatField($ref['column'], null /* select fehlt - welches sollte das sein? */ );
+            $col1 = $dbDepOf->_formatField($ref['column'], null /* select fehlt - welches sollte das sein? */ , $tableNameAlias);
             $col2 = $dbRefM->transformColumnName($dbRefM->getPrimaryKey());
 
             $refSelect->where("$refTableName.$col2=$col1");
@@ -643,8 +642,13 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $alias = ($tableNameAlias ? $tableNameAlias : $this->getTableName()) . '_expr_position'.($positionNum++);
             $aliasIdField = $this->_formatField($this->getPrimaryKey(), null, $alias);
             $aliasField = $this->_formatField($expr->getField(), null, $alias);
+            if ($expr->getDirection() == Kwf_Model_Select_Expr_Position::DIRECTION_ASC) {
+                $direction = '<';
+            } else {
+                $direction = '>';
+            }
             $ret = "SELECT COUNT($aliasIdField)+1 FROM ".$this->getTableName()." $alias
-                WHERE $aliasField > $field";
+                WHERE $aliasField $direction $field";
             foreach ($expr->getGroupBy() as $g) {
                 $field = $this->_formatField($g, $dbSelect, $tableNameAlias);
                 $aliasField = $this->_formatField($g, null, $alias);

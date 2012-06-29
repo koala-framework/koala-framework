@@ -29,7 +29,7 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
             $this->addValidator(new Zend_Validate_Regex('/^[0-9]+$/'));
         }
         if ($this->getMaxLength()) {
-            $this->addValidator(new Zend_Validate_StringLength(0, $this->getMaxLength()+1));
+            $this->addValidator(new Kwf_Validate_StringLength(0, $this->getMaxLength()));
         }
     }
 

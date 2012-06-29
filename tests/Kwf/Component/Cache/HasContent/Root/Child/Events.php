@@ -14,8 +14,10 @@ class Kwf_Component_Cache_HasContent_Root_Child_Events extends Kwf_Component_Abs
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-            $this->_class, $event->row->component_id
-        ));
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $c
+            ));
+        }
     }
 }

@@ -75,6 +75,7 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
                 $currentPageIds[] = $page->getComponentId();
             }
         }
+
         foreach ($ret['menu'] as $k=>$i) {
             if (in_array($i['data']->componentId, $currentPageIds)) {
                 $ret['menu'][$k]['current'] = true;

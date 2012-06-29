@@ -36,23 +36,18 @@ class Kwf_Component_Events
     {
         if (!isset(self::$_listeners)) {
             $cacheId = 'Kwf_Component_Events_listeners'.Kwf_Component_Data_Root::getComponentClass();
-
-            $listeners = Kwf_Cache_Simple::fetch($cacheId);
+            $feOptions = array(
+                'automatic_serialization' => true,
+                'write_control' => false,
+            );
+            $beOptions = array(
+                'cache_dir' => 'cache/events',
+            );
+            $cache = Kwf_Cache::factory('Core', 'File', $feOptions, $beOptions);
+            $listeners = $cache->load($cacheId);
             if (!$listeners) {
-                $feOptions = array(
-                    'automatic_serialization' => true,
-                    'write_control' => false,
-                );
-                $beOptions = array(
-                    'cache_dir' => 'cache/events',
-                );
-                $cache = Kwf_Cache::factory('Core', 'File', $feOptions, $beOptions);
-                $listeners = $cache->load($cacheId);
-                if (!$listeners) {
-                    $listeners = self::_getAllListeners();
-                    $cache->save($listeners, $cacheId);
-                }
-                Kwf_Cache_Simple::add($cacheId, $listeners);
+                $listeners = self::_getAllListeners();
+                $cache->save($listeners, $cacheId);
             }
             self::$_listeners = $listeners;
         }
@@ -145,20 +140,29 @@ class Kwf_Component_Events
             $logger->resetTimer();
         }
 
-        $listeners = self::getAllListeners();
+
         $class = $event->class;
         $eventClass = get_class($event);
-        $callbacks = array();
-        if ($class && isset($listeners[$eventClass][$class])) {
-            $callbacks = $listeners[$eventClass][$class];
+
+        $cacheId = '-ev-lst-'.Kwf_Component_Data_Root::getComponentClass().'-'.$eventClass.'-'.$class;
+        $callbacks = Kwf_Cache_Simple::fetch($cacheId);
+        if ($callbacks === false) {
+            $listeners = self::getAllListeners();
+            $callbacks = array();
+            if ($class && isset($listeners[$eventClass][$class])) {
+                $callbacks = $listeners[$eventClass][$class];
+            }
+            if (isset($listeners[$eventClass]['all'])) {
+                $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
+            }
+            Kwf_Cache_Simple::add($cacheId, $callbacks);
         }
-        if (isset($listeners[$eventClass]['all'])) {
-            $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
-        }
+
         if ($logger) {
             $logger->info($event->__toString() . ':');
             $logger->indent++;
         }
+        static $callbackBenchmark = array();
         foreach ($callbacks as $callback) {
             $ev = call_user_func(
                 array($callback['class'], 'getInstance'),
@@ -168,11 +172,28 @@ class Kwf_Component_Events
             if ($logger) {
                 $msg = '-> '.$callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')';
                 $logger->info($msg . ':');
+                $start = microtime(true);
             }
             $ev->{$callback['method']}($event);
+            if ($logger) {
+                if (!isset($callbackBenchmark[$callback['class'] . '::' . $callback['method']])) {
+                    $callbackBenchmark[$callback['class'] . '::' . $callback['method']] = array(
+                        'calls' => 0,
+                        'time' => 0
+                    );
+                }
+                $callbackBenchmark[$callback['class'] . '::' . $callback['method']]['calls']++;
+                $callbackBenchmark[$callback['class'] . '::' . $callback['method']]['time'] += (microtime(true)-$start)*1000; //ATM includes everything which is missleading
+            }
         }
         if ($logger) {
             $logger->indent--;
+            if ($logger->indent == 0) {
+                foreach ($callbackBenchmark as $cb=>$i) {
+                    $logger->info(sprintf("% 3d", $i['calls'])."x ".sprintf("%3d", round($i['time'], 0))." ms: $cb");
+                }
+                $callbackBenchmark = array();
+            }
         }
 
         self::$eventsCount++;

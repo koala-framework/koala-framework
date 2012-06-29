@@ -80,8 +80,6 @@ class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
 
     public function testTrl()
     {
-        $this->markTestIncomplete();
-
         $root = $this->_root;
         $dir = $root->getChildComponent('_dir');
         $trldir = $root->getChildComponent('_trldir');

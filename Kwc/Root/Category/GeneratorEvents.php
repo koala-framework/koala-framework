@@ -29,23 +29,29 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
 
     public function onPageRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        if ($event->isDirty('parent_id')) {
-            $oldParentId = $event->row->getCleanValue('parent_id');
-            if ($oldParentId) {
+        //getComponentsByDbId is not required because those are sure to be numeric and thus exist only once
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->row->id);
+        if ($c) {
+            if ($event->isDirty('parent_id')) {
+                $oldParentId = $event->row->getCleanValue('parent_id');
+                if ($oldParentId) {
+                    $oldParent = Kwf_Component_Data_Root::getInstance()->getComponentById($oldParentId, array('ignoreVisible'=>true));
+                    $newParent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->row->parent_id, array('ignoreVisible'=>true));
+                    $this->fireEvent(
+                        new Kwf_Component_Event_Page_ParentChanged(
+                            $this->_class, $c, $newParent, $oldParent
+                        )
+                    );
+                }
                 $this->fireEvent(
-                    new Kwf_Component_Event_Page_ParentChanged(
-                        $this->_class, $event->row->id, $event->row->parent_id, $oldParentId
-                    )
+                    new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $c)
                 );
             }
-            $this->fireEvent(
-                new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $event->row->id)
-            );
-        }
-        if ($event->isDirty('hide')) {
-            $this->fireEvent(
-                new Kwf_Component_Event_Page_ShowInMenuChanged($this->_class, $event->row->id)
-            );
+            if ($event->isDirty('hide')) {
+                $this->fireEvent(
+                    new Kwf_Component_Event_Page_ShowInMenuChanged($this->_class, $c)
+                );
+            }
         }
     }
 
@@ -54,8 +60,10 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         $this->_getGenerator()->pageDataChanged();
     }
 
-    protected function _getDbIdsFromRow($row)
+    protected function _getComponentsFromRow($row, $select)
     {
-        return array($row->id);
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row->id, $select);
+        if (!$c) return array();
+        return array($c);
     }
 }

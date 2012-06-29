@@ -6,7 +6,7 @@ class Kwc_List_Gallery_Events extends Kwc_Abstract_List_Events
         parent::_onOwnRowUpdate($c, $event);
         if ($event->isDirty('columns')) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
-                $this->_class, $c->componentId
+                $this->_class, $c
             ));
         }
     }

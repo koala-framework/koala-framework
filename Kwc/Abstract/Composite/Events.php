@@ -16,18 +16,13 @@ class Kwc_Abstract_Composite_Events extends Kwc_Abstract_Events
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        $classes = Kwc_Abstract::getChildComponentClasses($this->_class, 'child');
-        $key = array_search($event->class, $classes);
-        if ($key &&
-            substr($event->dbId, -strlen($key)-1) == '-' . $key &&
-            $event->getParentDbId()
-        ) {
+        if ($event->component->parent->componentClass == $this->_class) {
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $event->getParentDbId()
+                $this->_class, $event->component->parent
             ));
             // TODO: parse template to check if ContentChanged is necessary
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $event->getParentDbId()
+                $this->_class, $event->component->parent
             ));
         }
     }

@@ -24,7 +24,7 @@ class Kwc_Menu_Events extends Kwc_Menu_Abstract_Events
         }
         if (!$previousCount && $newCount || $previousCount && !$newCount) {
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $menu->dbId
+                $this->_class, $menu
             ));
         }
     }

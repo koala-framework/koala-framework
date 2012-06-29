@@ -21,9 +21,9 @@ class Kwf_Component_Event_Component_AbstractFlag extends Kwf_Component_Event_Com
      */
     const FLAG_VISIBILITY_CHANGED = 'visibilityChanged';
 
-    public function __construct($componentClass, $dbId, $flag)
+    public function __construct($componentClass, Kwf_Component_Data $data, $flag)
     {
-        parent::__construct($componentClass, $dbId);
+        parent::__construct($componentClass, $data);
         $this->flag = $flag;
     }
 }

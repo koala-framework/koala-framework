@@ -23,7 +23,6 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
             if (!$m) throw new Kwf_Exception("No child model set for '$this->_class'");
             $s = $m->select();
             $s->whereEquals('component_id', $idsToLoad);
-            $visible = array();
             Kwf_Benchmark::count('DirectoryChainedGenerator getRows', count($idsToLoad));
             foreach ($m->getRows($s) as $r) {
                 $this->_rows[$r->component_id] = $r;
@@ -138,25 +137,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
                 $pData = array();
                 if (!$parentData) {
                     if (!$slaveData) {
-                        $chainedData = $component;
-                        while ($chainedData) {
-                            if (Kwc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
-                                break;
-                            }
-                            $chainedData = $chainedData->parent;
-                        }
-                        $slaveDataClass = null;
-                        foreach (Kwc_Abstract::getChildComponentClasses($chainedData->parent->componentClass) as $chainedClass) {
-                            if ($chainedClass != $chainedData->componentClass &&
-                                Kwc_Abstract::getFlag($chainedClass, 'chainedType') == $chainedType
-                            ) {
-                                $slaveDataClass = substr($chainedClass, 0, strpos($chainedClass, '.'));
-                            }
-                        }
-                        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($slaveDataClass) as $d) {
-                            $chainedComponent = Kwc_Chained_Abstract_Component::getChainedByMaster($component->parent, $d, $chainedType, $parentDataSelect);
-                            if ($chainedComponent) $pData[] = $chainedComponent;
-                        }
+                        $pData = Kwc_Chained_Abstract_Component::getAllChainedByMaster($component->parent, $chainedType, $parentDataSelect);
                     } else {
                         $chainedComponent = Kwc_Chained_Abstract_Component::getChainedByMaster($component->parent, $slaveData, $chainedType, $parentDataSelect);
                         if ($chainedComponent) $pData = array($chainedComponent);

@@ -5,6 +5,9 @@
  */
 class Kwf_Component_Event_Abstract
 {
+    /**
+     * @var string
+     */
     public $class;
 
     public function __construct($class)
@@ -21,6 +24,14 @@ class Kwf_Component_Event_Abstract
 
     protected function _getVarsStringArray()
     {
-        return array_reverse(get_object_vars($this));
+        $ret = array();
+        foreach (array_reverse(get_object_vars($this)) as $i) {
+            if ($i instanceof Kwf_Component_Data) {
+                $ret[] = $i->componentId;
+            } else {
+                $ret[] = (string)$i;
+            }
+        }
+        return $ret;
     }
 }

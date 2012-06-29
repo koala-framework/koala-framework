@@ -35,34 +35,38 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
 
     public function onRowInsertOrDelete(Kwf_Component_Event_Row_Abstract $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-            $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)
+        $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
+            $event->row->component_id, array('ignoreVisible'=>true)
         );
-        if ($c && $c->componentClass == $this->_class) {
-            if ($event->row->visible) {
-                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                    $this->_class, $event->row->component_id
-                ));
-                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                    $this->_class, $event->row->component_id
-                ));
+        foreach ($cmps as $c) {
+            if ($c->componentClass == $this->_class) {
+                if ($event->row->visible) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                        $this->_class, $c
+                    ));
+                    $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                        $this->_class, $c
+                    ));
+                }
             }
         }
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-            $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)
+        $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
+            $event->row->component_id, array('ignoreVisible'=>true)
         );
-        if ($c && $c->componentClass == $this->_class) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $event->row->component_id
-            ));
-            if ($event->isDirty('visible')) {
-                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                    $this->_class, $event->row->component_id
+        foreach ($cmps as $c) {
+            if ($c->componentClass == $this->_class) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $c
                 ));
+                if ($event->isDirty('visible')) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                        $this->_class, $c
+                    ));
+                }
             }
         }
     }
@@ -76,12 +80,11 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        foreach(Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->getParentDbId()) as $c) {
-            if ($c->componentClass == $this->_class) {
-                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                    $this->_class, $event->getParentDbId()
-                ));
-            }
+        $c = $event->component->parent;
+        if ($c->componentClass == $this->_class) {
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $event->component->parent
+            ));
         }
     }
 }

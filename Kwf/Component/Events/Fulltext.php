@@ -34,16 +34,14 @@ class Kwf_Component_Events_Fulltext extends Kwf_Component_Events
             return;
         }
         $m = Kwc_FulltextSearch_MetaModel::getInstance();
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($ev->dbId, array('ignoreVisible'=>true)) as $data) {
-            if ($page = $data->getPage()) {
-                $row = $m->getRow(array('equals'=>array('page_id' => $page->componentId)));
-                if (!$row) {
-                    $row = $m->createRow();
-                    $row->page_id = $page->componentId;
-                }
-                $row->changed_date = date('Y-m-d H:i:s');
-                $row->save();
+        if ($page = $ev->component->getPage()) {
+            $row = $m->getRow(array('equals'=>array('page_id' => $page->componentId)));
+            if (!$row) {
+                $row = $m->createRow();
+                $row->page_id = $page->componentId;
             }
+            $row->changed_date = date('Y-m-d H:i:s');
+            $row->save();
         }
     }
 
@@ -54,24 +52,21 @@ class Kwf_Component_Events_Fulltext extends Kwf_Component_Events
             return;
         }
         $m = Kwc_FulltextSearch_MetaModel::getInstance();
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($ev->dbId, array('ignoreVisible'=>true)) as $data) {
-            if ($page = $data->getPage()) {
-                $row = $m->getRow(array('equals'=>array('page_id' => $page->componentId)));
-                if (!$row) {
-                    $row = $m->createRow();
-                    $row->page_id = $page->componentId;
-                }
-                $row->changed_date = date('Y-m-d H:i:s');
-                $row->save();
+        if ($page = $ev->component->getPage()) {
+            $row = $m->getRow(array('equals'=>array('page_id' => $page->componentId)));
+            if (!$row) {
+                $row = $m->createRow();
+                $row->page_id = $page->componentId;
             }
+            $row->changed_date = date('Y-m-d H:i:s');
+            $row->save();
         }
     }
 
     public function onComponentRecursiveAddedOrRemoved(Kwf_Component_Event_Component_RecursiveAbstract $ev)
     {
         $m = Kwc_FulltextSearch_MetaModel::getInstance();
-        $data = Kwf_Component_Data_Root::getInstance()->getComponentById($ev->componentId, array('ignoreVisible'=>true));
-        if ($page = $data->getPage()) {
+        if ($page = $ev->component->getPage()) {
             $row = $m->getRow($page->componentId);
             if (!$row) {
                 $row = $m->createRow();

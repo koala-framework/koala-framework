@@ -38,7 +38,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
     public function onContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
     {
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $event->dbId.'_imagePage'
+            $this->_class, $event->component->getChildComponent('_imagePage')
         ));
     }
 
@@ -51,12 +51,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
 
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
     {
-        $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($event->componentId, array('ignoreVisible'=>true))
+        $components = $event->component
             ->getChildComponents(array('componentClass' => $this->_class));
         foreach ($components as $component) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $component->dbId
+                $this->_class, $component
             ));
         }
     }

@@ -29,25 +29,24 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         if ($event->isDirty(array('kwf_upload_id', 'width', 'height', 'dimension'))) {
             $type = $c->getComponent()->getImageUrlType();
             $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $c->componentId, $type
+                $this->_class, $c, $type
             ));
         }
     }
 
     public function onContentWidthChanged(Kwf_Component_Event_Component_ContentWidthChanged $event)
     {
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClassPage_ContentChanged(
-                $this->_class, $c->getPageOrRoot()->dbId
-            ));
-        }
+        $c = $event->component;
+        $this->fireEvent(new Kwf_Component_Event_ComponentClassPage_ContentChanged(
+            $this->_class, $c->getPageOrRoot()
+        ));
     }
 
     public function onRecursiveContentWidthChanged(Kwf_Component_Event_Component_RecursiveContentWidthChanged $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        $c = $event->component;
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
-            $this->_class, $c->componentId
+            $this->_class, $c
         ));
     }
 }

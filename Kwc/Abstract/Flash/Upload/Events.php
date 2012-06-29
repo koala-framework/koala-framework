@@ -9,7 +9,7 @@ class Kwc_Abstract_Flash_Upload_Events extends Kwc_Abstract_Events
         );
         if ($event->isDirty($reference['column'])) {
             $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $c->componentId
+                $this->_class, $c
             ));
         }
     }

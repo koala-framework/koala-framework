@@ -28,57 +28,47 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     }
 
     //overridden in Page_Events_Table to fire Page events
-    protected function _fireComponentEvent($event, $row, $flag)
+    protected function _fireComponentEvent($eventType, Kwf_Component_Data $c, $flag)
     {
-        $c = 'Kwf_Component_Event_Component_'.$event;
-        foreach ($this->_getDbIdsFromRow($row) as $dbId) {
-            $this->fireEvent(new $c($this->_getClassFromRow($row), $dbId, $flag));
-        }
+        $cls = 'Kwf_Component_Event_Component_'.$eventType;
+        $this->fireEvent(new $cls($c->componentClass, $c, $flag));
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        $affected = false;
-        foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
-            $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($dbId, array('ignoreVisible' => true, 'limit' => 1));  // ignoreVisible is necessary to be able to fire Removed events when visibile got false
-            if ($c && $c->generator->getClass() == $this->_class) $affected = true;
-        }
-        if (!$affected) return;
-
         $dc = array_flip($event->row->getDirtyColumns());
         if (isset($dc['visible'])) {
             if ($event->row->visible) {
-                $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
+                foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
+                    $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
+                }
             } else {
-                $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
-                foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
-                    $components = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentsByDbId($dbId, array('ignoreVisible' => true));
-                    foreach ($components as $component) {
-                        $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($component->componentClass, $component->componentId));
+                foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {
+                    if ($c->parent->isVisible()) {
+                        $this->_fireComponentEvent('Removed', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
+                        $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($c->componentClass, $c));
                     }
                 }
             }
             unset($dc['visible']);
         }
-        if (isset($dc['pos']) && $event->row->getModel()->hasColumn('visible') && $event->row->visible) {
-            $this->_fireComponentEvent('PositionChanged', $event->row, null);
+        if (isset($dc['pos'])) {
+            foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
+                $this->_fireComponentEvent('PositionChanged', $c, null);
+            }
             unset($dc['pos']);
         }
-        if (isset($dc['component']) && $event->row->getModel()->hasColumn('visible') && $event->row->visible) {
-            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
-                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c->componentId));
-                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c->componentId));
-                }
+        if (isset($dc['component'])) {
+            foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromRow($event->row, true), $c));
+                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromRow($event->row, false), $c));
             }
             unset($dc['component']);
         }
         if (!empty($dc)) {
-            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
+            foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
                 $this->fireEvent(new Kwf_Component_Event_Component_RowUpdated(
-                    $this->_getClassFromRow($event->row), $dbId
+                    $c->componentClass, $c
                 ));
             }
         }
@@ -86,27 +76,15 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
 
     public function onRowAdd(Kwf_Component_Event_Row_Inserted $event)
     {
-        if (!$event->row->getModel()->hasColumn('visible') || $event->row->visible) {
-            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
-                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, array('ignoreVisible' => true)) as $c) {
-                    if ($c && $c->generator->getClass() == $this->_class) {
-                        $this->_fireComponentEvent('Added', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
-                    }
-                }
-            }
+        foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
+            $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
 
     public function onRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
-        if (!$event->row->getModel()->hasColumn('visible') || $event->row->visible) {
-            foreach ($this->_getDbIdsFromRow($event->row) as $dbId) {
-                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, array('ignoreVisible' => true)) as $c) {
-                    if ($c && $c->generator->getClass() == $this->_class) {
-                        $this->_fireComponentEvent('Removed', $event->row, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
-                    }
-                }
-            }
+        foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
+            $this->_fireComponentEvent('Removed', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
 
@@ -141,24 +119,28 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     }
 
     //overrridden in Kwc_Root_Category_GeneratorEvents
-    protected function _getDbIdsFromRow($row)
+    protected function _getComponentsFromRow($row, $select)
     {
         if ($this->_getGenerator()->hasSetting('dbIdShortcut') && $this->_getGenerator()->getSetting('dbIdShortcut')) {
-            return array($this->_getGenerator()->getSetting('dbIdShortcut') .
-                $row->id);
+            $dbId = $this->_getGenerator()->getSetting('dbIdShortcut') .
+                $row->id;
+            $ret = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, $select);
         } else if ($row->getModel()->hasColumn('component_id')) {
-            return array($row->component_id .
+            $dbId = $row->component_id .
                 $this->_getGenerator()->getIdSeparator() .
-                $row->id);
+                $row->id;
+            $ret = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, $select);
         } else {
             $cls = $this->_getClassFromRow($row);
-            $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsByClass($cls, array('id' => $this->_getGenerator()->getIdSeparator().$row->id, 'ignoreVisible'=>true));  // ignoreVisible is necessary to be able to fire Removed events when visibile got false
-            $ret = array();
-            foreach ($c as $i) {
-                $ret[] = $i->dbId;
-            }
-            return $ret;
+            $select['id'] = $this->_getGenerator()->getIdSeparator().$row->id;
+            $ret = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsByClass($cls, $select);
         }
+        foreach ($ret as $k=>$i) {
+            if ($i->generator !== $this->_getGenerator()) {
+                unset($ret[$k]);
+            }
+        }
+        return array_values($ret);
     }
 }

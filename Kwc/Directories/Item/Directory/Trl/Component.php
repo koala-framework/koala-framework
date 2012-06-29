@@ -9,6 +9,11 @@ class Kwc_Directories_Item_Directory_Trl_Component extends Kwc_Directories_List_
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        return array($directoryClass);
+    }
+
     public static function getCacheMetaForView($view)
     {
         return Kwc_Directories_Item_Directory_Cc_Component::getCacheMetaForView($view);

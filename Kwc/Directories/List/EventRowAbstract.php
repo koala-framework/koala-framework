@@ -1,9 +1,10 @@
 <?php
-class Kwc_Directories_List_EventRowAbstract extends Kwf_Component_Event_Row_Abstract
+class Kwc_Directories_List_EventRowAbstract extends Kwf_Component_Event_Abstract
 {
-    public function __construct($class, Kwf_Model_Row_Abstract $row)
+    public $itemId;
+    public function __construct($class, $itemId)
     {
-        $this->class = $class;
-        $this->row = $row;
+        parent::__construct($class);
+        $this->itemId = $itemId;
     }
 }

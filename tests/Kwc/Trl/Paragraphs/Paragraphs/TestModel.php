@@ -8,8 +8,9 @@ class Kwc_Trl_Paragraphs_Paragraphs_TestModel extends Kwc_Paragraphs_Model
             'primaryKey' => 'id',
             'data'=> array(
                 array('id' => 1, 'component_id'=>'root-master_test', 'pos'=>1, 'visible' => 1, 'component' => 'child'),
-                array('id' => 2, 'component_id'=>'root-master_test', 'pos'=>1, 'visible' => 1, 'component' => 'child'),
-                array('id' => 3, 'component_id'=>'root-master_test', 'pos'=>1, 'visible' => 1, 'component' => 'child'),
+                array('id' => 2, 'component_id'=>'root-master_test', 'pos'=>2, 'visible' => 1, 'component' => 'child'),
+                array('id' => 3, 'component_id'=>'root-master_test', 'pos'=>3, 'visible' => 1, 'component' => 'child'),
+                array('id' => 4, 'component_id'=>'root-master_test', 'pos'=>4, 'visible' => 1, 'component' => 'child'),
             )
         ));
         parent::__construct($config);

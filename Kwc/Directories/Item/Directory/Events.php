@@ -30,17 +30,17 @@ class Kwc_Directories_Item_Directory_Events extends Kwc_Abstract_Events
 
     public function onChildRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowUpdated($this->_class, $event->row));
+        $this->fireEvent(new Kwc_Directories_List_EventRowUpdated($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
     }
 
     public function onChildRowInsert(Kwf_Component_Event_Row_Inserted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowInserted($this->_class, $event->row));
+        $this->fireEvent(new Kwc_Directories_List_EventRowInserted($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
     }
 
     public function onChildRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventRowDeleted($this->_class, $event->row));
+        $this->fireEvent(new Kwc_Directories_List_EventRowDeleted($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
     }
 
     public function onChildModelUpdated(Kwf_Component_Event_Model_Updated $event)

@@ -16,10 +16,12 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Kwc_Mail_Ed
         return trlKwf('Shop Confirmation Text') . ' ' . Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
     }
 
-    public function getPlaceholders(Kwc_Shop_Cart_Order $o)
+    public function getPlaceholders(Kwc_Shop_Cart_Order $o = null)
     {
         $ret = parent::getPlaceholders($o);
-        $ret = array_merge($ret, $o->getPlaceholders());
+        if ($o) {
+            $ret = array_merge($ret, $o->getPlaceholders());
+        }
         return $ret;
     }
 }

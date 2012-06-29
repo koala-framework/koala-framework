@@ -102,7 +102,8 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
 
                 this.errorStyle.showErrors({
                     errorFields: r.errorFields,
-                    errorMessages: r.errorMessages
+                    errorMessages: r.errorMessages,
+                    errorPlaceholder: r.errorPlaceholder
                 });
 
                 var hasErrors = false;

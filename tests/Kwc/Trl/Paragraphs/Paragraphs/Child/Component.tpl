@@ -1,1 +1,1 @@
-child
+-- child (de) <?=$this->data->componentId?> --

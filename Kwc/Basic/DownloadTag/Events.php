@@ -6,12 +6,12 @@ class Kwc_Basic_DownloadTag_Events extends Kwc_Abstract_Events
         parent::_onOwnRowUpdateNotVisible($c, $event);
         if ($event->isDirty('kwf_upload_id')) {
             $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $c->componentId
+                $this->_class, $c
             ));
         }
         if ($event->isDirty('filename') || $event->isDirty('kwf_upload_id')) {
             $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
-                $this->_class, $c->dbId
+                $this->_class, $c
             ));
         }
     }

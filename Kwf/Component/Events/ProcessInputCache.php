@@ -26,13 +26,11 @@ class Kwf_Component_Events_ProcessInputCache extends Kwf_Component_Events
     //clear cache used in Kwf_Component_Abstract_ContentSender_Default
     public function onComponentAddedOrRemoved(Kwf_Component_Event_Component_Abstract $event)
     {
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId, array('ignoreVisible'=>true)) as $d) {
-            $cacheId = 'procI-'.$d->getPageOrRoot()->componentId;
-            Kwf_Cache_Simple::delete($cacheId);
-            $log = Kwf_Component_Events_Log::getInstance();
-            if ($log) {
-                $log->log("processInput cache clear componentId=".$d->getPageOrRoot()->componentId, Zend_Log::INFO);
-            }
+        $cacheId = 'procI-'.$event->component->getPageOrRoot()->componentId;
+        Kwf_Cache_Simple::delete($cacheId);
+        $log = Kwf_Component_Events_Log::getInstance();
+        if ($log) {
+            $log->log("processInput cache clear componentId=".$event->component->getPageOrRoot()->componentId, Zend_Log::INFO);
         }
     }
 }

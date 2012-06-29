@@ -32,34 +32,41 @@ class Kwc_Paragraphs_Events extends Kwc_Abstract_Events
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
     {
-        foreach(Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->getParentDbId()) as $c) {
-            if ($c->componentClass == $this->_class) {
-                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                    $this->_class, $event->getParentDbId()
-                ));
-            }
+        $c = $event->component;
+        if ($c->componentClass == $this->_class) {
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $event->component->parent
+            ));
         }
     }
 
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $event->row->component_id
-        ));
-        if ($event->isDirty('visible')) {
-            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-                $this->_class, $event->row->component_id
-            ));
+        foreach(Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $c) {
+            if ($c->componentClass == $this->_class) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $c
+                ));
+                if ($event->isDirty('visible')) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                        $this->_class, $c
+                    ));
+                }
+            }
         }
     }
 
     public function onRowInsertOrDelete(Kwf_Component_Event_Row_Abstract $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $event->row->component_id
-        ));
-        $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
-            $this->_class, $event->row->component_id
-        ));
+        foreach(Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $c) {
+            if ($c->componentClass == $this->_class) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $c
+                ));
+                $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                    $this->_class, $c
+                ));
+            }
+        }
     }
 }

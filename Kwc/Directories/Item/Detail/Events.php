@@ -19,7 +19,7 @@ class Kwc_Directories_Item_Detail_Events extends Kwc_Abstract_Composite_Events
 
     public function onGeneratorRowUpdate(Kwf_Component_Event_Component_RowUpdated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($event->class, $event->dbId));
+        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($event->class, $event->component));
     }
 
     public function onGeneratorModelUpdate(Kwf_Component_Event_Component_ModelUpdated $event)

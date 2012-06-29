@@ -153,8 +153,8 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        $this->_updates['db_id'][] = $event->dbId;
-        $this->_log("db_id=$event->dbId type=component");
+        $this->_updates['db_id'][] = $event->component->dbId;
+        $this->_log("db_id={$event->component->dbId} type=component");
     }
 
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
@@ -171,8 +171,8 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onMasterContentChange(Kwf_Component_Event_Component_MasterContentChanged $event)
     {
-        $this->_updates['master-db_id'][] = $event->dbId;
-        $this->_log("db_id=$event->dbId type=master");
+        $this->_updates['master-db_id'][] = $event->component->dbId;
+        $this->_log("db_id={$event->component->dbId} type=master");
     }
 
     public function onRecursiveMasterContentChange(Kwf_Component_Event_Component_RecursiveMasterContentChanged $event)
@@ -199,9 +199,9 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
-            'db_id' => $event->dbId
+            'db_id' => $event->component->dbId
         );
-        $this->_log("type=componentLink db_id=$event->dbId");
+        $this->_log("type=componentLink db_id={$event->component->dbId}");
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
@@ -220,12 +220,12 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         //the component itself
         $this->_updates[] = array(
             //remove all types
-            'component_id' => $event->componentId
+            'component_id' => $event->component->componentId
         );
-        $this->_log("component_id=$event->componentId");
+        $this->_log("component_id={$event->component->componentId}");
 
         //all child components
-        $changedComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $changedComponent = $event->component;
         $changedChildIdPostfix = substr($changedComponent->componentId, strlen($changedComponent->getPageOrRoot()->componentId));
 
         foreach ($this->_getParentComponentsForRecursive($event) as $component) {
@@ -272,31 +272,26 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     {
         $this->_updates[] = array(
             'type' => 'component',
-            'page_db_id' => $event->pageDbId,
+            'page_db_id' => $event->page->dbId,
             'component_class' => $event->class
         );
-        $this->_log("type=component page_db_id=$event->pageDbId component_class=$event->class");
+        $this->_log("type=component page_db_id={$event->page->dbId} component_class=$event->class");
     }
 
     public function onPageParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
     {
-        $oldParentId = Kwf_Component_Data_Root::getInstance()->getComponentById(
-            $event->oldParentId, array('ignoreVisible' => true)
-        )->getExpandedComponentId();
-        $newParentId = Kwf_Component_Data_Root::getInstance()->getComponentById(
-            $event->newParentId, array('ignoreVisible' => true)
-        )->getExpandedComponentId();
+        $oldParentId = $event->oldParent->getExpandedComponentId();
+        $newParentId = $event->newParent->getExpandedComponentId();
         $this->_pageParentChanges[] = array(
             'oldParentId' => $oldParentId,
             'newParentId' => $newParentId,
-            'componentId' => $event->componentId
+            'componentId' => $event->component->componentId
         );
     }
 
     private function _getParentComponentsForRecursive(Kwf_Component_Event_Component_RecursiveAbstract $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($event->componentId, array('ignoreVisible'=>true));
+        $c = $event->component;
         $ret = array($c->getPageOrRoot());
         foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
             while ($c && !$c->isPage && !$c instanceof Kwf_Component_Data_Root && $c->componentClass !== $gen->getClass()) {
@@ -317,10 +312,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
     {
-        Kwf_Media::clearCache($event->class, $event->componentId, $event->type);
+        Kwf_Media::clearCache($event->class, $event->component->componentId, $event->type);
         $log = Kwf_Component_Events_Log::getInstance();
         if ($log) {
-            $log->log("media cache clear class=$event->class id=$event->componentId type=$event->type", Zend_Log::INFO);
+            $log->log("media cache clear class=$event->class id={$event->component->componentId} type=$event->type", Zend_Log::INFO);
         }
     }
 }

@@ -5,9 +5,9 @@ class Kwf_Component_Cache_Chained_Root extends Kwc_Root_TrlRoot_Component
     {
         $ret = parent::getSettings();
         unset($ret['generators']['title']);
-        $ret['generators']['master']['component'] = 'Kwf_Component_Cache_Chained_Master_Component';
-        $ret['generators']['chained']['component'] = 'Kwf_Component_Cache_Chained_Chained_Component.Kwf_Component_Cache_Chained_Master_Component';
-        $ret['childModel'] = new Kwc_Root_TrlRoot_Model(array(
+        $ret['generators']['master']['component'] = 'Kwf_Component_Cache_Chained_StartMaster_Component';
+        $ret['generators']['chained']['component'] = 'Kwf_Component_Cache_Chained_StartChained_Component.Kwf_Component_Cache_Chained_StartMaster_Component';
+        $ret['childModel'] = new Kwc_Trl_RootModel(array(
             'master' => 'Master',
             'slave' => 'Slave'
         ));

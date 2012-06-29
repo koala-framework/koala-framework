@@ -1,0 +1,4 @@
+<?php
+class Kwc_Chained_Trl_GeneratorEvents_Static_MultiBox extends Kwc_Chained_Trl_GeneratorEvents_Static
+{
+}

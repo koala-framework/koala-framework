@@ -43,8 +43,6 @@ class Kwc_Trl_LinkTag_Test extends Kwc_TestAbstract
 
     public function testCacheEn()
     {
-        $this->markTestIncomplete('eventscache');
-
         $c = $this->_root->getComponentById('root-master_test3');
         $this->assertEquals('', $c->render());
         $c = $this->_root->getComponentById('root-en_test3');
