@@ -18,7 +18,7 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
     {
         if ($this->_renderMaster) {
             if (!$this->_enableCache ||
-                ($content = Kwf_Component_Cache::getInstance()->load($component, 'page')) === null) {
+                ($content = Kwf_Component_Cache::getInstance()->load($component, 'component', 'page')) === null) {
                 $masterHelper = new Kwf_Component_View_Helper_Master();
                 $masterHelper->setRenderer($this);
                 $content = $masterHelper->master($component);
