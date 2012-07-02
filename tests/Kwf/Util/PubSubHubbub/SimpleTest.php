@@ -1,8 +1,10 @@
 <?php
 /**
+ * Test commented out because it's not maintained.
+ * Maybe resurrected later...
+ *
  * @group PubSubHubbub
  * @group slow
- */
 class Kwf_Util_PubSubHubbub_SimpleTest extends Kwf_Util_PubSubHubbub_AbstractTest
 {
     public function testIt()
@@ -31,3 +33,4 @@ class Kwf_Util_PubSubHubbub_SimpleTest extends Kwf_Util_PubSubHubbub_AbstractTes
         //$this->assertEquals(1, substr_count($newC, '<entry>'));
     }
 }
+ */
