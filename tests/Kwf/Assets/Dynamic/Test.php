@@ -6,17 +6,26 @@
  */
 class Kwf_Assets_Dynamic_Test extends Kwf_Test_TestCase
 {
+    private $_checkComponentModificationOriginal;
+
     public function setUp()
     {
         parent::setUp();
         Kwf_Assets_Dynamic_Asset::$file = tempnam('/tmp', 'asset');
         file_put_contents(Kwf_Assets_Dynamic_Asset::$file, 'a { color: red; }');
+
+        $this->_checkComponentModificationOriginal = Kwf_Registry::get('config')->debug->componentCache->checkComponentModification;
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = true;
+        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 
     public function tearDown()
     {
         parent::tearDown();
         unlink(Kwf_Assets_Dynamic_Asset::$file);
+
+        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $this->_checkComponentModificationOriginal;
+        Kwf_Config::deleteValueCache('debug.componentCache.checkComponentModification');
     }
 
     public function testDynamic()
@@ -40,9 +49,6 @@ class Kwf_Assets_Dynamic_Test extends Kwf_Test_TestCase
 
     public function testMTimeFiles()
     {
-        if (!Kwf_Registry::get('config')->debug->componentCache->checkComponentModification) {
-            $this->markTestSkipped();
-        }
         Kwf_Assets_Cache::getInstance()->clean();
         $loader = new Kwf_Assets_Loader();
         $loader->getDependencies()->getMaxFileMTime();
