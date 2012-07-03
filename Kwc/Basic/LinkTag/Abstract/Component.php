@@ -13,7 +13,8 @@ abstract class Kwc_Basic_LinkTag_Abstract_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = array(
-            'data' => $this->getData()
+            'data' => $this->getData(),
+            'cssClass' => self::getCssClass($this),
         );
         return $ret;
     }
