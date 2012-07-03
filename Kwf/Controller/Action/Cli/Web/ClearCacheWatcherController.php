@@ -21,67 +21,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     public function indexAction()
     {
-        /*
-- Komponente Foo: neue unterkomponente einstellen die es noch nicht gibt
-   -> error, settings cache wird nicht aktuallisiert
-   -> unterkomponente wird angelegt gits damit also
-   -> ist aber nicht referenziert; shit!
-   -> LÖSUNG (ja, es gibt für alles ein lösung)
-      *merken* welche komponenten geändert wurde und wo das settings cache refershen einen fehler lieferte
-               und bei jeder anderen komponenten settings änderung die auch refreshen - bis es einmal durch ist
-      -> schwierighkeit: php ist scheiße und parse errors können nicht abgefangen werden :/
-
-- alle verfügaren komponenten klassen
-  -> muss gelöscht werden wenn generator geändert
-  -> apc wird auch gelöscht
-  -> aber der große settings cache wird nicht korrekt aktuallisiert
-     -> es müsste:
-        o neue klasse beim settings cache hinzugefuegt werden
-        o entfernte klasse entfernt werden
-
-x   - assets
-x     o individual js/css file
-x     o all file
-x     o dependencies.ini
-x     o file created/deleted (for .../* dependencies)
-x     o dependencies from components
-      o don't just delete; regenerate (if not done already?)
-x   - component view cache
-x   - component settings
-
-    - component settings depending on other component settings (cc, trl)
-      -> setting wo drin steht wer von was abhängig ist
-      -> ist auch für dieses needsParentComponentClass problematisch
-
-x   - automatically detected component files (Admin, Form etc)
-x   - config cache
-x      o full config (file + apc)
-x      o config value (apc)
-x      o setup.php
-       o slow atm (>3sec)
-x   - generated classes (from yml)
-
-x   - url cache, process input cache
-x     - wenn generator geändert
-
-x   - view cache
-x     -> wenn settings geändert
-
-x   - media
-x     -> bild cache löschen wenn dimensions geändert
-
-    - "real-world" development
-      -> broken component, parse errors etc
-
-    - events
-      -> wenn settings geändert
-
-    - trl
-      -> wenn xml datei geändert
-
-    - Mail.*.tpl (master only)
-
-        */
         $bufferUsecs = 10000;
 
         $watchPaths = array(
@@ -157,7 +96,14 @@ x     -> bild cache löschen wenn dimensions geändert
                     exit;
                 }
                 foreach ($eventsQueue as $event) {
-                    self::_handleEventFork($event);
+                    if (!preg_match('#^([^ ]+) ([A-Z,_]+) ([^ ]+)$#', trim($event), $m)) {
+                        echo "unknown event: $event\n";
+                        continue;
+                    }
+                    $event = $m[2];
+                    $file = $m[1].$m[3];
+                    unset($m);
+                    self::_handleEventFork($file, $event);
                 }
                 $eventsQueue = array();
                 $lastChange = false;
@@ -187,37 +133,58 @@ x     -> bild cache löschen wenn dimensions geändert
         exit;
     }
 
-    private static function _handleEventFork($event)
+    private static $_queue = array();
+
+    private static function _handleEventFork($file, $event)
     {
         $eventStart = microtime(true);
         $pid = pcntl_fork();
         if ($pid == -1) {
             die('Konnte nicht verzweigen');
         } else if ($pid) {
+            self::$_queue = array();
             // Wir sind der Vater
             pcntl_wait($status); //Schützt uns vor Zombie Kindern
+            if (!$status) {
+                self::$_queue = unserialize(file_get_contents('temp/clear-cache-watcher-queue'));
+            }
             //if ($status) exit($status);
         } else {
+            $queue = self::$_queue;
+            self::$_queue = array();
             // Wir sind das Kind
-            self::_handleEvent($event);
+            self::_handleEvent($file, $event);
+            if ($queue) {
+                echo "\nprocess queued events: \n";
+                foreach ($queue as $i) {
+                    //adds it back to queue if still fails
+                    self::_handleEvent($i['file'], $i['event']);
+                }
+            }
+            file_put_contents('temp/clear-cache-watcher-queue', serialize(self::$_queue));
+            if (count(self::$_queue)) {
+                echo "queued events: ".count(self::$_queue)."\n";
+            }
             exit(0);
         }
         echo "forked process finished in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
     }
-
-    private static function _handleEvent($event)
+/*
+    //called as sub process (NOT forked)
+    public function classExistsAction()
     {
-        echo "\n";
-        if (!preg_match('#^([^ ]+) ([A-Z,_]+) ([^ ]+)$#', trim($event), $m)) {
-            echo "unknown event: $event\n";
-            return;
+        $class = $this->_getParam('class');
+        if (@class_exists($class)) {
+            exit(0);
+        } else {
+            exit(1);
         }
-
+    }
+*/
+    private static function _handleEvent($file, $event)
+    {
+        echo "\n$event $file\n";
         $eventStart = microtime(true);
-        $event = $m[2];
-        $file = $m[1].$m[3];
-        echo "$event $file\n";
-        unset($m);
         if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss') {
             echo "asset modified: $event $file\n";
             if ($event == 'MODIFY') {
@@ -323,13 +290,27 @@ x     -> bild cache löschen wenn dimensions geändert
             }
             echo "component $cls\n";
 
+            if (!@class_exists($cls)) {
+                echo "parse error: $cls\n";
+                return;
+            }
+/*
+            $cmd = "php bootstrap.php clear-cache-watcher class-exists --class=$cls";
+            system($cmd, $classExists);
+            if ($classExists != 0) {
+                echo "parse error: $cls\n";
+                self::$_queue[] = array(
+                    'file' => $file,
+                    'event' => $event
+                );
+                return;
+            }
+*/
             $matchingClasses = array();
             try {
-                if (class_exists($cls)) {
-                    foreach (Kwc_Abstract::getComponentClasses() as $c) {
-                        if (is_instance_of($c, $cls)) {
-                            $matchingClasses[] = $c;
-                        }
+                foreach (Kwc_Abstract::getComponentClasses() as $c) {
+                    if (is_instance_of($c, $cls)) {
+                        $matchingClasses[] = $c;
                     }
                 }
             } catch (Exception $e) {}
@@ -416,6 +397,19 @@ x     -> bild cache löschen wenn dimensions geändert
         }
     }
 
+    private static function _getComponentClassesFromGeneratorsSetting($generators)
+    {
+        $ret = array();
+        foreach ($generators as $gen) {
+            $cmpClasses = $gen['component'];
+            if (!is_array($cmpClasses)) $cmpClasses = array($cmpClasses);
+            foreach ($cmpClasses as $cmpClass) {
+                if ($cmpClass) $ret[] = $cmpClass;
+            }
+        }
+        return array_unique($ret);
+    }
+
     private static function _clearComponentSettingsCache($componentClasses, $setting = null)
     {
         Kwf_Component_Abstract::resetSettingsCache();
@@ -431,9 +425,11 @@ x     -> bild cache löschen wenn dimensions geändert
         foreach ($componentClasses as $c) {
             Kwf_Component_Settings::$_rebuildingSettings = true;
             if ($setting) {
+                //a single setting changed
                 $newSettings = $settings[$c];
                 $newSettings[$setting] = Kwc_Abstract::getSetting($c, $setting);
             } else {
+                //all settings might have changed
                 $newSettings = Kwf_Component_Settings::_getSettingsIncludingPreComputed($c);
             }
             Kwf_Component_Settings::$_rebuildingSettings = false;
@@ -445,6 +441,8 @@ x     -> bild cache löschen wenn dimensions geändert
             }
             if ($newSettings['generators'] != $settings[$c]['generators']) {
                 $generatorssChanged = true;
+                $oldChildComponentClasses = self::_getComponentClassesFromGeneratorsSetting($settings[$c]['generators']);
+                $newChildComponentClasses = self::_getComponentClassesFromGeneratorsSetting($newSettings['generators']);
             }
             if (isset($newSettings['dimensions']) && $newSettings['dimensions'] != $settings[$c]['dimensions']) {
                 $dimensionsChanged = true;
@@ -474,6 +472,32 @@ x     -> bild cache löschen wenn dimensions geändert
         if ($generatorssChanged) {
             echo "generators changed...\n";
             $clearCacheSimple[] = 'url-';
+            foreach ($newChildComponentClasses as $cmpClass) {
+                if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
+                    echo "$cmpClass is brand new! (not yet in componentClasses)\n";
+                    Kwf_Component_Settings::$_rebuildingSettings = true;
+                    $settings[$cmpClass] = Kwf_Component_Settings::_getSettingsIncludingPreComputed($cmpClass);
+                    Kwf_Component_Settings::$_rebuildingSettings = false;
+                    $cache->save($settings, $cacheId);
+                    echo "added to component settings...\n";
+                }
+            }
+            $removedComponentClasses = array_diff($oldChildComponentClasses, $newChildComponentClasses);
+            foreach ($removedComponentClasses as $removedCls) {
+                echo "removed component class: $removedCls\n";
+                $stillUsed = false;
+                foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+                    if ($cls != $c && in_array($removedCls, self::_getComponentClassesFromGeneratorsSetting($settings[$cls]['generators']))) {
+                        $stillUsed = true;
+                        break;
+                    }
+                }
+                if (!$stillUsed) {
+                    unset($settings[$removedCls]);
+                    $cache->save($settings, $cacheId);
+                    echo "removed completely from component settings...\n";
+                }
+            }
         }
 
         if ($dimensionsChanged) {
