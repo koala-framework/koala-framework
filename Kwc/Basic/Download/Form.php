@@ -7,7 +7,7 @@ class Kwc_Basic_Download_Form extends Kwc_Abstract_Form
         $form = Kwc_Abstract_Form::createChildComponentForm($class, '-downloadTag');
         $this->add($form);
 
-        $this->add(new Kwf_Form_Field_TextField('infotext', trlKwf('Descriptiontext')))
+        $this->add(new Kwf_Form_Field_TextField('infotext', trlKwf('Description')))
             ->setWidth(300)
             ->setAutoFillWithFilename('filenameWithExt') //um es beim MultiFileUpload zu finde
             ->setHelpText(hlpKwf('kwc_download_linktext'))
