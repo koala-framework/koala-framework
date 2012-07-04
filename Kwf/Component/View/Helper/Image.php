@@ -19,23 +19,6 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
 
             $url = $image->getComponent()->getImageUrl();
         }
-
-        if ($this->_getRenderer() instanceof Kwf_View_MailInterface &&
-            substr($url, 0, 1) == '/'
-        ) {
-            $domain = Kwf_Config::getValue('server.domain');
-            if (!is_string($image)) {
-                $data = $image;
-                while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
-                    $data = $data->parent;
-                }
-                if ($data) {
-                    $domain = $data->getComponent()->getDomain();
-                }
-            }
-            $url = "http://$domain$url";
-        }
-
         return $url;
     }
 

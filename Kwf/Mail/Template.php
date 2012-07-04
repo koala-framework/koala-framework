@@ -184,6 +184,18 @@ class Kwf_Mail_Template
             $this->_mail->setBodyHtml($bodyHtml);
         }
 
+        //hinzufügen von Bilder zur Email
+        if ($this->_view->getImages()) {
+            $this->_mail->setType(Zend_Mime::MULTIPART_RELATED);
+            $addedImages = array();
+            foreach ($this->_view->getImages() as $image) {
+                if (in_array($image, $addedImages)) continue;
+
+                $this->_mail->addAttachment($image);
+                $addedImages[] = $image;
+            }
+        }
+
         if (!($this->getSubject()) && $this->_view->subject) {
             $this->setSubject($this->_view->subject);
         }

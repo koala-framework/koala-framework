@@ -8,6 +8,23 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         $url = (string)$image;
         $url = str_replace(KWF_PATH, '/assets/kwf', $url);
         $url = str_replace(getcwd(), '/assets', $url);
+
+        if ($this->_getMailInterface() instanceof Kwf_View_MailInterface &&
+            substr($url, 0, 1) == '/'
+        ) {
+            $domain = Kwf_Config::getValue('server.domain');
+            if (!is_string($image)) {
+                $data = $image;
+                while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
+                    $data = $data->parent;
+                }
+                if ($data) {
+                    $domain = $data->getComponent()->getDomain();
+                }
+            }
+            $url = "http://$domain$url";
+        }
+
         return $url;
     }
 
@@ -53,7 +70,8 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
 
         $url = $this->_getImageUrl($image);
         if ($url == '') return '';
-        if ($this->_getRenderer() instanceof Kwf_View_MailInterface) {
+
+        if ($this->_getMailInterface() instanceof Kwf_View_MailInterface) {
             if ($this->_getMailInterface()->getAttachImages()) {
                 $contents = $this->_getImageFileContents($image);
                 if (!isset($contents['contents'])) $contents['contents'] = file_get_contents($contents['file']);
