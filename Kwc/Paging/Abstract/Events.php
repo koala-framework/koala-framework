@@ -1,0 +1,26 @@
+<?php
+class Kwc_Paging_Abstract_Events extends Kwc_Abstract_Events
+{
+    public function getListeners()
+    {
+        $ret = parent::getListeners();
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            foreach (Kwc_Abstract::getChildComponentClasses($class) as $childClass) {
+                if ($childClass == $this->_class) {
+                    $ret[] = array(
+                        'class' => $class,
+                        'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
+                        'callback' => 'onParentContentChanged'
+                    );
+                }
+            }
+        }
+        return $ret;
+    }
+
+    public function onParentContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+    }
+}
