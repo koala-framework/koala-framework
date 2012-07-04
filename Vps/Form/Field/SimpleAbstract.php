@@ -43,7 +43,7 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
                 || $this->getAllowBlank() === '0') {
                 $ret = array_merge($ret, $this->_validateNotAllowBlank($data, $name));
             }
-            if ($data) {
+            if (!is_null($data)) {
                 foreach ($this->getValidators() as $v) {
                     if ($v instanceof Vps_Validate_Row_Abstract) {
                         $v->setField($this->getName());
