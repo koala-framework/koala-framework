@@ -12,23 +12,23 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
     {
         parent::_addValidators();
 
-        if ($this->getMaxValue()) {
-            $this->addValidator(new Zend_Validate_LessThan($this->getMaxValue()+0.000001));
-        }
-        if ($this->getMinValue()) {
-            $this->addValidator(new Zend_Validate_GreaterThan($this->getMinValue()-0.000001));
-        }
-        if ($this->getAllowNegative() === false) {
-            $this->addValidator(new Vps_Validate_NotNegative());
-        }
         if ($this->getAllowDecimals() === false) {
-            $this->addValidator(new Vps_Validate_Digits(true));
+            $this->addValidator(new Vps_Validate_Digits());
         } else {
             $l = null;
             if (trlcVps('locale', 'C') != 'C') {
                 $l = Zend_Locale::findLocale(trlcVps('locale', 'C'));
             }
             $this->addValidator(new Zend_Validate_Float($l));
+        }
+        if ($this->getMaxValue()) {
+            $this->addValidator(new Vps_Validate_MaxValue($this->getMaxValue()));
+        }
+        if ($this->getMinValue()) {
+            $this->addValidator(new Vps_Validate_MinValue($this->getMinValue()));
+        }
+        if ($this->getAllowNegative() === false) {
+            $this->addValidator(new Vps_Validate_NotNegative());
         }
     }
 
@@ -45,8 +45,6 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
             if ($this->getDecimalSeparator() != '.') {
                 $postData[$fieldName] = str_replace($this->getDecimalSeparator(), '.', $postData[$fieldName]);
             }
-            $postData[$fieldName] = (float)$postData[$fieldName];
-            $postData[$fieldName] = round($postData[$fieldName], $this->getDecimalPrecision());
         }
         return $postData[$fieldName];
     }
@@ -54,7 +52,9 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
     protected function _getOutputValueFromValues($values)
     {
         $ret = parent::_getOutputValueFromValues($values);
-        $ret = number_format($ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
+        if (is_numeric($ret)) {
+            $ret = number_format($ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
+        }
         return $ret;
     }
 
