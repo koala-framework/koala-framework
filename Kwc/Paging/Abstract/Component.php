@@ -225,19 +225,6 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         );
     }
 
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Kwc_Abstract::getComponentClasses() as $class) {
-            foreach (Kwc_Abstract::getChildComponentClasses($class) as $childClass) {
-                if ($childClass == $componentClass) {
-                    $ret[] = new Kwc_Paging_Abstract_CacheMeta($class);
-                }
-            }
-        }
-        return $ret;
-    }
-
     protected function _getPageLinks($pages, $currentPage)
     {
         $buttonTexts = $this->_getPlaceholder();

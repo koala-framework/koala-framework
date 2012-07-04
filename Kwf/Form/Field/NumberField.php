@@ -30,7 +30,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             $this->addValidator(new Kwf_Validate_NotNegative());
         }
         if ($this->getAllowDecimals() === false) {
-            $this->addValidator(new Kwf_Validate_Digits(true));
+            $this->addValidator(new Kwf_Validate_Digits());
         } else {
             $l = null;
             if (trlcKwf('locale', 'C') != 'C') {
@@ -54,8 +54,6 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             if ($this->getDecimalSeparator() != '.') {
                 $postData[$fieldName] = str_replace($this->getDecimalSeparator(), '.', $postData[$fieldName]);
             }
-            $postData[$fieldName] = (float)$postData[$fieldName];
-            $postData[$fieldName] = round($postData[$fieldName], $this->getDecimalPrecision());
         }
         return $postData[$fieldName];
     }

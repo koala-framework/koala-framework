@@ -17,6 +17,7 @@ class Kwc_Basic_FlashMediaPlayer_Component extends Kwc_Abstract_Flash_Upload_Com
         $ret['url'] = $this->_getSetting('playerPath');
         $ret['width'] = $this->_getRow()->width;
         $ret['height'] = $this->_getRow()->height;
+        $ret['params']['allowfullscreen'] = true;
         return $ret;
     }
 

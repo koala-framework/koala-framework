@@ -17,7 +17,9 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
 
     protected function _getTrlProperties()
     {
-        return array('title');
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'title';
+        return $ret;
     }
 
     /**
