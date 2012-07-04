@@ -473,10 +473,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             $clearCacheSimple[] = 'url-';
             foreach ($newChildComponentClasses as $cmpClass) {
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
-                    echo "$cmpClass is brand new! (not yet in componentClasses)\n";
-                    Kwf_Component_Settings::$_rebuildingSettings = true;
-                    $settings[$cmpClass] = Kwf_Component_Settings::_getSettingsIncludingPreComputed($cmpClass);
-                    Kwf_Component_Settings::$_rebuildingSettings = false;
+                    self::_loadSettingsRecursive($settings, $cmpClass);
                     $cache->save($settings, $cacheId);
                     echo "added to component settings...\n";
                 }
@@ -518,6 +515,19 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         ));
         echo $r['message']."\n";;
         echo "cleared component settings apc cache...\n";
+    }
+
+    private static function _loadSettingsRecursive(&$settings, $cmpClass)
+    {
+        echo "$cmpClass is brand new! (not yet in componentClasses)\n";
+        Kwf_Component_Settings::$_rebuildingSettings = true;
+        $settings[$cmpClass] = Kwf_Component_Settings::_getSettingsIncludingPreComputed($cmpClass);
+        Kwf_Component_Settings::$_rebuildingSettings = false;
+        foreach (self::_getComponentClassesFromGeneratorsSetting($settings[$cmpClass]['generators']) as $c) {
+            if (!isset($settings[$c])) {
+                self::_loadSettingsRecursive($settings, $c);
+            }
+        }
     }
 
     private static function _deleteViewCache(Kwf_Model_Select $s)
