@@ -7,7 +7,7 @@ class Vpc_Basic_Download_Form extends Vpc_Abstract_Form
         $form = Vpc_Abstract_Form::createChildComponentForm($class, '-downloadTag');
         $this->add($form);
 
-        $this->add(new Vps_Form_Field_TextField('infotext', trlVps('Descriptiontext')))
+        $this->add(new Vps_Form_Field_TextField('infotext', trlVps('Description')))
             ->setWidth(300)
             ->setAutoFillWithFilename('filenameWithExt') //um es beim MultiFileUpload zu finde
             ->setHelpText(hlpVps('vpc_download_linktext'))
