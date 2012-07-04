@@ -1,8 +1,7 @@
 <div class="<?=$this->cssClass?>">
    <?php
     if ($this->icon) {
-        $domain = Vps_Registry::get('config')->server->domain;
-        echo "<img src=\"http://{$domain}{$this->icon}\" />";
+        echo $this->image((string)$this->icon);
     }
     echo ' ';
     echo $this->component($this->downloadTag);
