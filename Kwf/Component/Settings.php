@@ -432,8 +432,7 @@ class Kwf_Component_Settings
         self::$_cacheSettings = array();
         if (!self::$_settings) {
             $cache = new Kwf_Assets_Cache(array('checkComponentSettings' => false));
-            $cacheId = 'componentSettings'.Kwf_Trl::getInstance()->getTargetLanguage()
-                                .'_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
+            $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
             self::$_settings = $cache->load($cacheId);
             if (!self::$_settings) {
                 $fullT = microtime(true);

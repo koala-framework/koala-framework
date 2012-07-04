@@ -414,8 +414,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         Kwf_Component_Abstract::resetSettingsCache();
 
-        $cacheId = 'componentSettings'.Kwf_Trl::getInstance()->getTargetLanguage()
-                    .'_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
+        $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
         $cache = new Kwf_Assets_Cache(array('checkComponentSettings' => false));
         $settings = $cache->load($cacheId);
 
