@@ -41,13 +41,10 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
         ) {
             $postData[$fieldName] = null;
         }
-        if (!is_numeric($postData[$fieldName])) $postData[$fieldName] = null;
         if (!is_null($postData[$fieldName])) {
             if ($this->getDecimalSeparator() != '.') {
                 $postData[$fieldName] = str_replace($this->getDecimalSeparator(), '.', $postData[$fieldName]);
             }
-            $postData[$fieldName] = (float)$postData[$fieldName];
-            $postData[$fieldName] = round($postData[$fieldName], $this->getDecimalPrecision());
         }
         return $postData[$fieldName];
     }
