@@ -27,6 +27,13 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return $this;
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'title';
+        return $ret;
+    }
+
     public function validate($row, $postData)
     {
         if ($this->_checkboxHiddenField) {
