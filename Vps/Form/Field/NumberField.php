@@ -12,15 +12,6 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
     {
         parent::_addValidators();
 
-        if ($this->getMaxValue()) {
-            $this->addValidator(new Vps_Validate_MaxValue($this->getMaxValue()));
-        }
-        if ($this->getMinValue()) {
-            $this->addValidator(new Vps_Validate_MinValue($this->getMinValue()));
-        }
-        if ($this->getAllowNegative() === false) {
-            $this->addValidator(new Zend_Validate_GreaterThan(-1));
-        }
         if ($this->getAllowDecimals() === false) {
             $this->addValidator(new Vps_Validate_Digits(true));
         } else {
@@ -29,6 +20,15 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
                 $l = Zend_Locale::findLocale(trlcVps('locale', 'C'));
             }
             $this->addValidator(new Zend_Validate_Float($l));
+        }
+        if ($this->getMaxValue()) {
+            $this->addValidator(new Vps_Validate_MaxValue($this->getMaxValue()));
+        }
+        if ($this->getMinValue()) {
+            $this->addValidator(new Vps_Validate_MinValue($this->getMinValue()));
+        }
+        if ($this->getAllowNegative() === false) {
+            $this->addValidator(new Zend_Validate_GreaterThan(-1));
         }
     }
 
