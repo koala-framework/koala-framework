@@ -475,24 +475,12 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
                     self::_loadSettingsRecursive($settings, $cmpClass);
                     $cache->save($settings, $cacheId);
-                    echo "added to component settings...\n";
                 }
             }
             $removedComponentClasses = array_diff($oldChildComponentClasses, $newChildComponentClasses);
             foreach ($removedComponentClasses as $removedCls) {
-                echo "removed component class: $removedCls\n";
-                $stillUsed = false;
-                foreach (Kwc_Abstract::getComponentClasses() as $cls) {
-                    if ($cls != $c && in_array($removedCls, self::_getComponentClassesFromGeneratorsSetting($settings[$cls]['generators']))) {
-                        $stillUsed = true;
-                        break;
-                    }
-                }
-                if (!$stillUsed) {
-                    unset($settings[$removedCls]);
-                    $cache->save($settings, $cacheId);
-                    echo "removed completely from component settings...\n";
-                }
+                self::_removeSettingsRecursive($settings, $removedCls);
+                $cache->save($settings, $cacheId);
             }
         }
 
@@ -528,6 +516,29 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 self::_loadSettingsRecursive($settings, $c);
             }
         }
+    }
+
+    private static function _removeSettingsRecursive(&$settings, $removedCls)
+    {
+        echo "removed component class: $removedCls\n";
+
+        $stillUsed = false;
+        foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+            if (!isset($settings[$cls])) continue;
+            if ($cls != $removedCls && in_array($removedCls, self::_getComponentClassesFromGeneratorsSetting($settings[$cls]['generators']))) {
+                $stillUsed = true;
+                break;
+            }
+        }
+        if (!$stillUsed) {
+            echo "not used anymore, removed it really\n";
+            $generators = $settings[$removedCls]['generators'];
+            unset($settings[$removedCls]);
+            foreach (self::_getComponentClassesFromGeneratorsSetting($generators) as $c) {
+                self::_removeSettingsRecursive($settings, $c);
+            }
+        }
+
     }
 
     private static function _deleteViewCache(Kwf_Model_Select $s)
