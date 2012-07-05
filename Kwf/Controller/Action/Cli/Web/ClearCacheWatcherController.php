@@ -249,12 +249,10 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 $cacheIds = array();
                 $cacheIds[] = $apcCacheId;
                 $cacheIds[] = $apcCacheId.'mtime';
-                Kwf_Util_Apc::callClearCacheByCli(array(
-                    'cacheIds'=>$cacheIds,
-                    'clearCacheSimple' => array(
-                        'config-',
-                        'configAr-',
-                    )
+
+                self::_clearApcCache($cacheIds, array(
+                    'config-',
+                    'configAr-',
                 ));
                 echo "cleared apc config cache\n";
 
@@ -397,6 +395,20 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         }
     }
 
+    private static function _clearApcCache(array $cacheIds, array $prefix = array())
+    {
+        echo "APC: ";
+        Kwf_Cache_Simple::delete($cacheIds);
+        foreach ($prefix as $p) {
+            Kwf_Cache_Simple::clear($p);
+        }
+        $r = Kwf_Util_Apc::callClearCacheByCli(array(
+            'cacheIds'=>$cacheIds,
+            'clearCacheSimple' => $prefix,
+        ));
+        echo $r['message']."\n";
+    }
+
     private static function _getComponentClassesFromGeneratorsSetting($generators)
     {
         $ret = array();
@@ -470,6 +482,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
         if ($generatorssChanged) {
             echo "generators changed...\n";
+            echo count(Kwc_Abstract::getComponentClasses())." component classes (previously)\n";
             $clearCacheSimple[] = 'url-';
             foreach ($newChildComponentClasses as $cmpClass) {
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
@@ -497,11 +510,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
         }
 
-        echo "APC: ";
-        $r = Kwf_Util_Apc::callClearCacheByCli(array(
-            'clearCacheSimple' => $clearCacheSimple
-        ));
-        echo $r['message']."\n";;
+        self::_clearApcCache(array(), $clearCacheSimple);
         echo "cleared component settings apc cache...\n";
     }
 
