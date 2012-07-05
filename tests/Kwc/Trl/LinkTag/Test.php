@@ -29,7 +29,7 @@ class Kwc_Trl_LinkTag_Test extends Kwc_TestAbstract
         $this->assertEquals('', $c->render());
 
         $c = $this->_root->getComponentById('root-master_test2');
-        $this->assertEquals('<a href="http://www.vivid-planet.com/">', $c->render());
+        $this->assertRegExp('#<a .*?href="http://www.vivid-planet.com/">#', $c->render());
     }
 
     public function testEn()
@@ -38,7 +38,7 @@ class Kwc_Trl_LinkTag_Test extends Kwc_TestAbstract
         //$this->assertEquals('', $c->render());
 
         $c = $this->_root->getComponentById('root-en_test2');
-        $this->assertEquals('<a href="http://www.vivid-planet.com/en">', $c->render());
+        $this->assertRegExp('#<a .*?href="http://www.vivid-planet.com/en">#', $c->render());
     }
 
     public function testCacheEn()
@@ -70,7 +70,7 @@ class Kwc_Trl_LinkTag_Test extends Kwc_TestAbstract
 
         $this->_process();
         $c = $this->_root->getComponentById('root-master_test3');
-        $this->assertEquals('<a href="http://www.test.de/">', $c->render());
+        $this->assertRegExp('#<a .*?href="http://www.test.de/">#', $c->render());
         $c = $this->_root->getComponentById('root-en_test3');
         $this->assertEquals('', $c->render());
 
@@ -82,8 +82,8 @@ class Kwc_Trl_LinkTag_Test extends Kwc_TestAbstract
 
         $this->_process();
         $c = $this->_root->getComponentById('root-master_test3');
-        $this->assertEquals('<a href="http://www.test.de/">', $c->render());
+        $this->assertRegExp('#<a .*?href="http://www.test.de/">#', $c->render());
         $c = $this->_root->getComponentById('root-en_test3');
-        $this->assertEquals('<a href="http://www.test.de/en">', $c->render());
+        $this->assertRegExp('#<a .*?href="http://www.test.de/en">#', $c->render());
     }
 }

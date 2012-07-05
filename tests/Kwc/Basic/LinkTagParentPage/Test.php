@@ -24,6 +24,6 @@ class Kwc_Basic_LinkTagParentPage_Test extends Kwc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1402)->render();
-        $this->assertEquals('<a href="/foo1">', $html);
+        $this->assertRegExp('#<a .*?href="/foo1">#', $html);
     }
 }

@@ -33,7 +33,7 @@ class Kwc_Basic_LinkTagIntern_Test extends Kwc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1300)->render();
-        $this->assertEquals('<a href="/bar">', $html);
+        $this->assertRegExp('#<a .*?href="/bar">#', $html);
     }
 
     public function testEmpty()

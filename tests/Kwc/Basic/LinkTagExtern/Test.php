@@ -26,9 +26,9 @@ class Kwc_Basic_LinkTagExtern_Test extends Kwc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1200)->render();
-        $this->assertEquals('<a href="http://example.com">', $html);
+        $this->assertRegExp('#<a .*?href="http://example.com">#', $html);
 
         $html = $this->_root->getComponentById(1201)->render();
-        $this->assertEquals('<a href="http://example.com" rel="popup_blank">', $html);
+        $this->assertRegExp('#<a .*?href="http://example.com" rel="popup_blank">#', $html);
     }
 }

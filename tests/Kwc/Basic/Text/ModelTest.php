@@ -16,7 +16,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $row = $c->getRow();
         $html = '<p><a href="http://www.vivid-planet.com/">foo</a></p>';
         $html = $row->tidy($html);
-        $this->assertEquals("<p>\n  <a href=\"1003-l1\">foo</a>\n</p>", $html);
+        $this->assertRegExp("#<p>\n  <a href=\"1003-l1\">foo</a>\n</p>#", $html);
 
         $cc = array_values($c->getData()->getChildComponents());
         $this->assertEquals(1, count($cc));
@@ -53,9 +53,9 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 
         $html = $c->getData()->render();
 
-        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"http://www.vivid-planet.com/\">foo</a>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp("#<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
+                    "<p>\n  <a .*?href=\"http://www.vivid-planet.com/\">foo</a>\n</p>".
+                    "</div>#", $html);
 
     }
 
@@ -94,9 +94,9 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals('1001', $row->target);
 
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/kwf/kwctest/Kwc_Basic_Text_Root/foo1\">foo</a>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp("#<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
+                    "<p>\n  <a .*?href=\"/kwf/kwctest/Kwc_Basic_Text_Root/foo1\">foo</a>\n</p>".
+                    "</div>#", $html);
     }
 
     public function testCreatesMailLinkComponentHtml()
@@ -108,9 +108,9 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"mailto:foo(kwfat)example(kwfdot)com\">foo</a>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp("#<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
+                    "<p>\n  <a .*?href=\"mailto:foo\(kwfat\)example\(kwfdot\)com\">foo</a>\n</p>".
+                    "</div>#", $html);
     }
 
     public function testCreatesLinkFromOtherComponentId()
@@ -122,9 +122,9 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $row->save();
 
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"http://vivid.com\">foo</a>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp("#<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
+                    "<p>\n  <a .*?href=\"http://vivid.com\">foo</a>\n</p>".
+                    "</div>#", $html);
     }
 
     public function testCreatesImageComponentx()
@@ -205,7 +205,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 
         $html = $c->getData()->render();
         $this->assertRegExp("#^<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
+                    "<p>\n  <a .*?href=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
                     "</div>$#ms", $html);
     }
 
