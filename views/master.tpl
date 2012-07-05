@@ -4,6 +4,9 @@
     <title><?= $this->applicationName; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    <? if ($this->favicon) { ?>
+    <link rel="shortcut icon" href="<?=htmlspecialchars($this->favicon)?>" />
+    <? } ?>
     <?= $this->partial($this->extTemplate, $this) ?>
   </head>
   <body>
