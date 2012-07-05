@@ -22,7 +22,7 @@ class Kwc_Basic_LinkTagMail_Test extends Kwc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1400)->render();
-        $this->assertEquals('<a href="mailto:example(kwfat)example(kwfdot)com">', $html);
+        $this->assertRegExp('#<a .*?href="mailto:example\(kwfat\)example\(kwfdot\)com">#', $html);
     }
 
     public function testEmpty()

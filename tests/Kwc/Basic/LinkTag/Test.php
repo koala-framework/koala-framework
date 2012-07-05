@@ -33,17 +33,17 @@ class Kwc_Basic_LinkTag_Test extends Kwc_TestAbstract
         $c2 = $c->getChildComponent('-child');
 
         $html = $c2->render();
-        $this->assertEquals('<a href="http://example.com" rel="foo">', $html);
+        $this->assertRegExp('<a .*?href="http://example.com" rel="foo">', $html);
 
         $html = $c->render();
-        $this->assertEquals('<a href="http://example.com" rel="foo">', $html);
+        $this->assertRegExp('<a .*?href="http://example.com" rel="foo">', $html);
     }
 
     public function testCacheChangeType()
     {
         $c = $this->_root->getComponentById('1101');
 
-        $this->assertEquals('<a href="http://example2.com" rel="foo">', $c->render());
+        $this->assertRegExp('<a .*?href="http://example2.com" rel="foo">', $c->render());
 
         $row = $c->getComponent()->getRow();
         $row->component = 'test';
@@ -52,9 +52,9 @@ class Kwc_Basic_LinkTag_Test extends Kwc_TestAbstract
 
         $c = $this->_root->getComponentById('1101');
         $c = $c->getChildComponent('-child');
-        $this->assertEquals('<a href="http://example.com" rel="foo">', $c->render());
+        $this->assertRegExp('<a .*?href="http://example.com" rel="foo">', $c->render());
 
         $c = $this->_root->getComponentById('1101');
-        $this->assertEquals('<a href="http://example.com" rel="foo">', $c->render());
+        $this->assertRegExp('<a .*?href="http://example.com" rel="foo">', $c->render());
     }
 }

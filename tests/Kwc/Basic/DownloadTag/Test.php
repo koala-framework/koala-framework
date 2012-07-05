@@ -40,7 +40,7 @@ class Kwc_Basic_DownloadTag_Test extends Kwc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1700)->render();
-        $this->assertRegExp('#^<a href="/kwf/kwctest/Kwc_Basic_DownloadTag_Root/media/Kwc_Basic_DownloadTag_TestComponent/1700/default/[^/]+/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
+        $this->assertRegExp('#^<a .*?href="/kwf/kwctest/Kwc_Basic_DownloadTag_Root/media/Kwc_Basic_DownloadTag_TestComponent/1700/default/[^/]+/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
     }
 
     public function testEmpty()

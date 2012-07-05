@@ -3,7 +3,7 @@ class Kwf_View_Mail extends Kwf_View implements Kwf_View_MailInterface
 {
     protected $_masterTemplate = null;
     private $_images = array();
-    protected $_attachImages = true;
+    protected $_attachImages = false; // TODO: default value from config (e.g. for user mails)
 
     public function setMasterTemplate($tpl)
     {
