@@ -34,6 +34,7 @@ class Kwf_Component_Generator_PseudoPage_Static extends Kwf_Component_Generator_
         $ret = Kwf_Filter::filterStatic($ret, 'Ascii');
         if (!$ret) {
             $ret = $componentKey;
+            $ret = Kwf_Filter::filterStatic($ret, 'Ascii');
         }
         return $ret;
     }
