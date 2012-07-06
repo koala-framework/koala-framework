@@ -427,10 +427,10 @@ class Kwf_Component_Settings
         self::$_cacheSettings = array();
     }
 
-    public static function &_getSettingsCached()
+    public static function getAllSettingsCache()
     {
-        self::$_cacheSettings = array();
-        if (!self::$_settings) {
+        static $cache;
+        if (!isset($cache)) {
             $cache = new Kwf_Cache_Core(array(
                 'checkComponentSettings' => false,
                 'lifetime' => null,
@@ -442,8 +442,16 @@ class Kwf_Component_Settings
                 'cache_file_umask' => 0666,
                 'hashed_directory_umask' => 0777,
             )));
+        }
+        return $cache;
+    }
+
+    public static function &_getSettingsCached()
+    {
+        self::$_cacheSettings = array();
+        if (!self::$_settings) {
             $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
-            self::$_settings = $cache->load($cacheId);
+            self::$_settings = self::getAllSettingsCache()->load($cacheId);
             if (!self::$_settings) {
                 $fullT = microtime(true);
 
@@ -468,7 +476,7 @@ class Kwf_Component_Settings
                     }
                 }
 
-                $cache->save(self::$_settings, $cacheId);
+                self::getAllSettingsCache()->save(self::$_settings, $cacheId);
             }
         }
         return self::$_settings;

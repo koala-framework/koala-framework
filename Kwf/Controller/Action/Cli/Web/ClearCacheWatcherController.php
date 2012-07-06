@@ -427,8 +427,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         Kwf_Component_Abstract::resetSettingsCache();
 
         $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
-        $cache = new Kwf_Assets_Cache(array('checkComponentSettings' => false));
-        $settings = $cache->load($cacheId);
+        $settings = Kwf_Component_Settings::getAllSettingsCache()->load($cacheId);
 
         $dependenciesChanged = false;
         $generatorssChanged = false;
@@ -461,7 +460,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             $settings[$c] = $newSettings;
         }
 
-        $cache->save($settings, $cacheId);
+        Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
         echo "refreshed component settings cache...\n";
 
         if ($dependenciesChanged) {
@@ -487,13 +486,13 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             foreach ($newChildComponentClasses as $cmpClass) {
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
                     self::_loadSettingsRecursive($settings, $cmpClass);
-                    $cache->save($settings, $cacheId);
+                    Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
                 }
             }
             $removedComponentClasses = array_diff($oldChildComponentClasses, $newChildComponentClasses);
             foreach ($removedComponentClasses as $removedCls) {
                 self::_removeSettingsRecursive($settings, $removedCls);
-                $cache->save($settings, $cacheId);
+                Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
             }
         }
 
