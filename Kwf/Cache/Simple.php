@@ -94,7 +94,15 @@ class Kwf_Cache_Simple
             if (!class_exists('APCIterator')) {
                 apc_clear_cache('user');
             } else {
-                apc_delete_file(new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#'));
+                $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
+                if ($it->getTotalCount() && !$it->current()) {
+                    //APCIterator is borked, delete everything
+                    //see https://bugs.php.net/bug.php?id=59938
+                    apc_clear_cache('user');
+                } else {
+                    //APCIterator seems to work, use it for deletion
+                    apc_delete($it);
+                }
             }
         } else {
             //we can't do any better here :/

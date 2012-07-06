@@ -46,19 +46,6 @@ class Kwf_Util_Setup
 
         $ret = "<?php\n";
 
-        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $masterFiles = Kwf_Registry::get('config')->getMasterFiles();
-            $masterFiles = "array('" . implode("', '", $masterFiles) . "')";
-            $ret .= "foreach($masterFiles as \$f) {\n";
-            $ret .= "    if (filemtime(\$f) > ".time().") {\n";
-            $ret .= "        require_once('".KWF_PATH."/Kwf/Util/Setup.php');\n";
-            $ret .= "        Kwf_Util_Setup::minimalBootstrapAndGenerateFile('$configClass');\n";
-            $ret .= "        return;\n";
-            $ret .= "    }\n";
-            $ret .= "}\n";
-            $ret .= "";
-        }
-
         $preloadClasses = array(
             'Zend_Registry',
             'Kwf_Registry',
@@ -194,12 +181,16 @@ class Kwf_Util_Setup
             }
         }
 
-        if (Kwf_Config::getValue('debug.componentCache.checkComponentModification')) {
-            $masterFiles = Kwf_Registry::get('config')->getMasterFiles();
-            $masterFiles = "array('" . implode("', '", $masterFiles) . "')";
-            $ret .= "Kwf_Config::checkMasterFiles($masterFiles);\n";
+        if (Kwf_Config::getValue('debug.checkBranch')) {
+            $ret .= "if (is_file('kwf_branch') && trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
+            $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
+            $ret .= "    if (php_sapi_name() != 'cli' || !isset(\$_SERVER['argv'][1]) || !in_array(\$_SERVER['argv'][1], \$validCommands)) {\n";
+            $ret .= "        \$required = trim(file_get_contents('kwf_branch'));\n";
+            $ret .= "        \$kwfBranch = Kwf_Util_Git::kwf()->getActiveBranch();\n";
+            $ret .= "        throw new Kwf_Exception_Client(\"Invalid Kwf branch. Required: '\$required', used: '\".Kwf_Config::getValue('application.kwf.version').\"' (Git branch '\$kwfBranch')\");\n";
+            $ret .= "    }\n";
+            $ret .= "}\n";
         }
-        $ret .= "\n";
 
         $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";
         $ret .= "    //für swfupload\n";

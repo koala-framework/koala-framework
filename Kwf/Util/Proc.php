@@ -15,6 +15,11 @@ class Kwf_Util_Proc
         }
     }
 
+    public function __destruct()
+    {
+//         $this->terminate();
+    }
+
     public function pipe($nr)
     {
         return $this->_pipes[$nr];
