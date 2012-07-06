@@ -574,7 +574,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         $model = Kwf_Component_Cache::getInstance()->getModel();
         $cacheIds = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s) as $row) {
-            $cacheIds[] = Kwf_Component_Cache_Mysql::getCacheId($row['component_id'], $row['type'], $row['value']);
+            $cacheIds[] = Kwf_Component_Cache_Mysql::getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
         }
         Kwf_Util_Apc::callClearCacheByCli(array(
             'deleteCacheSimple' => $cacheIds
