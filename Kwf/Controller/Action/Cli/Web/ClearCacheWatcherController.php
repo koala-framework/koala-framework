@@ -512,6 +512,23 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
         self::_clearApcCache(array(), $clearCacheSimple);
         echo "cleared component settings apc cache...\n";
+
+        $dependentComponentClasses = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            if (strpos($c, '.') !== false) {
+                $params = substr($c, strpos($c, '.')+1);
+                foreach ($componentClasses as $i) {
+                    if (strpos($params, $i)!==false) {
+                        $dependentComponentClasses[] = $c;
+                    }
+                }
+            }
+        }
+        if ($dependentComponentClasses) {
+            echo "dependent componentClasses: ".count($dependentComponentClasses)." (Cc, Trl)\n";
+            echo implode(', ', $dependentComponentClasses)."\n";
+            self::_clearComponentSettingsCache($dependentComponentClasses, $setting);
+        }
     }
 
     private static function _loadSettingsRecursive(&$settings, $cmpClass)
