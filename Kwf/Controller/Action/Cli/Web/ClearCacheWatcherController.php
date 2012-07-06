@@ -373,6 +373,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'component');
+                    $s->whereEquals('renderer', 'component');
                     self::_deleteViewCache($s);
                 }
             } else if (self::_endsWith($file, '/Partial.tpl')) {
@@ -384,11 +385,19 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 }
             } else if (self::_endsWith($file, '/Mail.html.tpl')) {
                 if ($event == 'MODIFY') {
-                    //nothing to do atm
+                    $s = new Kwf_Model_Select();
+                    $s->whereEquals('component_class', $matchingClasses);
+                    $s->whereEquals('type', 'component');
+                    $s->whereEquals('renderer', 'mail_html');
+                    self::_deleteViewCache($s);
                 }
             } else if (self::_endsWith($file, '/Mail.txt.tpl')) {
                 if ($event == 'MODIFY') {
-                    //nothing to do atm
+                    $s = new Kwf_Model_Select();
+                    $s->whereEquals('component_class', $matchingClasses);
+                    $s->whereEquals('type', 'component');
+                    $s->whereEquals('renderer', 'mail_txt');
+                    self::_deleteViewCache($s);
                 }
             }
             echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
