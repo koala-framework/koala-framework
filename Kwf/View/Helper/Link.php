@@ -46,7 +46,11 @@ class Kwf_View_Helper_Link
         if (!empty($config['style'])) {
             $cssClass .= " style=\"".$config['style']."\"";
         }
+        $title = '';
+        if(!empty($config['title'])) {
+            $title = 'title="'.$config['title'].'"';
+        }
 
-        return "<a href=\"".htmlspecialchars($url)."\" rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
+        return "<a href=\"".htmlspecialchars($url)."\" $title rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
     }
 }

@@ -4,7 +4,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
     /**
      * @param Kwf_Component_Data target page
      * @param string custom text, if empty component name will be used
-     * @param config array: cssClass, get, anchor, skipAppendLinkText, skipAppendText
+     * @param config array: cssClass, get, anchor, skipAppendLinkText, skipAppendText, title
      */
     public function componentLink(Kwf_Component_Data $target, $text = null, $config = array())
     {
