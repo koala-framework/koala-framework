@@ -11,7 +11,9 @@ class Kwc_Newsletter_Detail_RecipientsController extends Kwc_Newsletter_Subscrib
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        $ret->whereEquals('unsubscribed', false);
+        if ($this->_model->hasColumn('unsubscribed')) {
+            $ret->whereEquals('unsubscribed', false);
+        }
         return $ret;
     }
 }
