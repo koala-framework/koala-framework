@@ -48,9 +48,9 @@ class Kwf_View_Helper_Link
         }
         $title = '';
         if(!empty($config['title'])) {
-            $title = 'title="'.$config['title'].'"';
+            $title = 'title="'.htmlspecialchars($config['title']).'"';
         }
 
-        return "<a href=\"".htmlspecialchars($url)."\" ".htmlspecialchars($title)." rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
+        return "<a href=\"".htmlspecialchars($url)."\" $title rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
     }
 }
