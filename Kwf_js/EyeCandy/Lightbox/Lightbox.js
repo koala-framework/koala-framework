@@ -192,6 +192,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.Statistics.count(this.href);
     },
     close: function() {
+        this.lightboxEl.hide();
+        //so eg. flash component can remove object
+        Kwf.callOnContentReady(this.lightboxEl, {newRender: false});
+        this.lightboxEl.show();
+
         this.style.onClose();
         this.lightboxEl.fadeOut({
             concurrent: true,
