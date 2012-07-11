@@ -3753,8 +3753,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Trgovina.Produkti</sl>
 </text>
 <text>
-<en>The product has been added to the cart.</en>
-<de>Der Artikel wurde in den Warenkorb gelegt.</de>
+<en>The product has been added to the {0}.</en>
+<de>Der Artikel wurde in den {0} gelegt.</de>
 <id>796</id>
 <ro>Produsul a fost adăugat în Coşul de cumpărături.</ro>
 <sl>Artikel je bil dodan v košarico.</sl>
@@ -8676,6 +8676,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Link Text</en>
 <id>1762</id>
 <ro>Link Text</ro>
+</text>
+<text>
+<en>cart</en>
+<de>Warenkorb</de>
+<id>1763</id>
+<ro>Coş de cumpărături</ro>
+<sl>Košarica</sl>
 </text>
 </trl>
 
