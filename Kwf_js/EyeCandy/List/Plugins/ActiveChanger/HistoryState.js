@@ -30,7 +30,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState = Ext.extend(Kwf.EyeCandy.L
             var href = item.el.down('a').dom.href;
             if (!Kwf.Utils.HistoryState.currentState.eyeCandyListActive) {
                 Kwf.Utils.HistoryState.currentState.eyeCandyListActive = href;
-                Kwf.Utils.HistoryState.replaceState(document.title, window.location.href);
+                Kwf.Utils.HistoryState.updateState();
             } else {
                 Kwf.Utils.HistoryState.currentState.eyeCandyListActive = href;
                 Kwf.Utils.HistoryState.pushState(document.title, href);

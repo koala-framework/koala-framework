@@ -28,7 +28,7 @@ Kwf.onContentReady(function(readyEl) {
         var options = Ext.decode(lightboxEl.child('input.options').dom.value);
         var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
         Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
-        Kwf.Utils.HistoryState.replaceState(document.title, window.location.href);
+        Kwf.Utils.HistoryState.updateState();
         lightboxEl.enableDisplayMode('block');
         l.lightboxEl = lightboxEl;
         l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
