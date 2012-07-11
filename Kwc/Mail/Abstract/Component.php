@@ -82,7 +82,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
         $bccs = $this->_getSetting('bcc');
         if ($bccs) {
-            if (!is_array($bccs)) $bccs = array($bcc);
+            if (!is_array($bccs)) $bccs = array($bccs);
             foreach ($bccs as $bcc) {
                 $mail->addBcc($bcc);
             }
