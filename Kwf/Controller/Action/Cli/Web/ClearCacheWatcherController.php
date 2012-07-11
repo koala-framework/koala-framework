@@ -26,8 +26,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         $watchPaths = array(
             getcwd(),
             KWF_PATH,
-            VKWF_PATH,
         );
+        if (defined('VKWF_PATH')) $watchPaths[] = VKWF_PATH;
 
         $ret = array();
         exec('ps ax -o pid,ppid,user,args', $out);
@@ -268,7 +268,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
         if (self::_startsWith($file, getcwd().'/components')
             || self::_startsWith($file, KWF_PATH.'/Kwc')
-            || self::_startsWith($file, VKWF_PATH.'/Vkwc')
+            || (defined('VKWF_PATH') && self::_startsWith($file, VKWF_PATH.'/Vkwc'))
         ) {
             $cls = null;
             foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
@@ -641,7 +641,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType";
                     $cacheId = md5($allFile.$encoding.self::_getHostForCacheId());
-                    echo "remove from assets cache: $cacheId";
+                    echo "remove from assets cache: $cacheId (".$allFile.$encoding.self::_getHostForCacheId().")";
                     if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
                         echo " [DELETED]";
                     }
