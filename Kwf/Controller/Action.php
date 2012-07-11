@@ -89,7 +89,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
     public function postDispatch()
     {
         Kwf_Component_ModelObserver::getInstance()->process();
-        Kwf_Component_Cache::getInstance()->getMetaModel()->writeBuffer();
+        Kwf_Component_Cache::getInstance()->writeBuffer();
     }
 
     protected function _getUserRole()

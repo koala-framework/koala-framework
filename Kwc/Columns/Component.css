@@ -1,2 +1,2 @@
 .cssClass > div.column { float: left; margin-right: 10px; }
-.cssClass > .kwcLast { margin-right: 0px; }
+.cssClass > div.column.kwcLast { margin-right: 0px; }
