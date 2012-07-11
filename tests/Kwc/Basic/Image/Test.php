@@ -48,9 +48,6 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(100, $im->getImageWidth());
         $this->assertEquals(100, $im->getImageHeight());
-        $this->assertContains(Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_UploadsModel')->getUploadDir().'/1', $o['mtimeFiles']);
-        $this->assertContains(KWF_PATH.'/Kwc/Basic/Image/Component.php', $o['mtimeFiles']);
-        $this->assertContains(KWF_PATH.'/tests/Kwc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
         Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 
