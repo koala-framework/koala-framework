@@ -40,15 +40,12 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
 
     public function testGetMediaOutput()
     {
-        $checkCmpMod = Kwf_Registry::get('config')->debug->componentCache->checkComponentModification;
-        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = true;
         $o = Kwc_Basic_Image_Component::getMediaOutput('1600', 'default', 'Kwc_Basic_Image_FixDimensionComponent');
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
         $this->assertEquals(100, $im->getImageWidth());
         $this->assertEquals(100, $im->getImageHeight());
-        Kwf_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 
     public function testHtml()
