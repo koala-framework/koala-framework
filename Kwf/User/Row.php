@@ -219,11 +219,8 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $this->_sendMail('UserDeleted', $subject);
     }
 
-    protected function _sendMail($tpl, $subject, $tplParams = null)
+    protected function _createMail($tpl, $subject, $tplParams = null)
     {
-        if (!$this->email || !$this->_sendMails) {
-            return false;
-        }
         $mailClass = $this->getModel()->getMailClass();
         $mail = new $mailClass($tpl);
         $mail->subject = $subject;
@@ -254,7 +251,15 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->url;
         $mail->lostPasswordUrl = $mail->webUrl.$lostPassUrl.'?code='.$this->id.'-'.
                         $this->getActivationCode();
+        return $mail;
+    }
 
+    protected function _sendMail($tpl, $subject, $tplParams = null)
+    {
+        if (!$this->email || !$this->_sendMails) {
+            return false;
+        }
+        $mail = $this->_createMail($tpl, $subject, $tplParams);
         $ret = $mail->send();
 
         $this->getModel()->writeLog(array(

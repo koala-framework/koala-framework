@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_Setup
 {
-    public static function minimalBootstrapAndGenerateFile($configClass)
+    public static function minimalBootstrapAndGenerateFile()
     {
         if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
         if (file_exists(KWF_PATH.'/include_path')) {
@@ -19,7 +19,6 @@ class Kwf_Util_Setup
         require_once 'Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
 
-        Kwf_Setup::$configClass = $configClass;
         require_once 'Kwf/Registry.php';
         Zend_Registry::setClassName('Kwf_Registry');
 
@@ -29,12 +28,12 @@ class Kwf_Util_Setup
 
         Kwf_Config::checkMasterFiles(Kwf_Registry::get('config')->getMasterFiles());
 
-        file_put_contents('cache/setup.php', self::generateCode($configClass));
+        file_put_contents('cache/setup.php', self::generateCode());
 
         Zend_Registry::_unsetInstance(); //cache/setup.php will call setClassName again
     }
 
-    public static function generateCode($configClass)
+    public static function generateCode()
     {
         $ip = get_include_path();
         $ip = explode(PATH_SEPARATOR, $ip);
@@ -94,8 +93,6 @@ class Kwf_Util_Setup
         $ret .= "\n";
         $ret .= "\n";
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
-        $ret .= "\n";
-        $ret .= "Kwf_Setup::\$configClass = '$configClass';\n";
         $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";

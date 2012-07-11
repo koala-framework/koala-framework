@@ -44,6 +44,11 @@ class Kwf_Controller_Action_User_ChangeuserController extends Kwf_Controller_Act
         if (!$this->_getParam('userId')) {
             throw new Kwf_Exception("userId is required");
         }
+        $select = self::_getSelect();
+        $select->whereEquals('id', $this->_getParam('userId'));
+        if (!$this->_model->getRow($select)) {
+            throw new Kwf_Exception_AccessDenied();
+        }
         $storage = Kwf_Auth::getInstance()->getStorage();
         $loginData = $storage->read();
         if (!isset($loginData['changeUserId'])) {

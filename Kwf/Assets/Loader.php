@@ -300,6 +300,7 @@ class Kwf_Assets_Loader
                             throw new Kwf_Exception("Fx is only possible for images");
                         }
                         $im = new Imagick();
+                        if (substr($file, -4)=='.ico') $im->setFormat('ico'); //required because imagick can't autodetect ico format
                         $im->readImage($this->_getDep()->getAssetPath($file));
                         $fx = explode('_', substr($fx, 3));
                         foreach ($fx as $i) {
@@ -312,7 +313,7 @@ class Kwf_Assets_Loader
                         }
                         $cacheData['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
                         $cacheData['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
-                        $cacheData['contents'] = $im->getImageBlob();;
+                        $cacheData['contents'] = $im->getImagesBlob();;
                         $im->destroy();
                         $cache->save($cacheData, $cacheId);
                     }

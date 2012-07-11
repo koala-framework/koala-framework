@@ -46,4 +46,28 @@ class Kwf_Assets_Effects
             }
         }
     }
+
+    public static function adminIcon(Imagick $im)
+    {
+        while ($im->previousImage()) {
+            $pixels = $im->exportImagePixels(0, 0,
+                $im->getImageWidth(), $im->getImageHeight(),
+                'RGBA',
+                Imagick::PIXEL_CHAR
+            );
+
+            //every forth entry starts a new pixel
+            foreach ($pixels as $k=>$i) {
+                if ($k % 4 == 0) { //first on is red
+                    //set it to 0xEE
+                    $pixels[$k] = 0xEE;
+                }
+            }
+            $im->importImagePixels(0, 0,
+                $im->getImageWidth(), $im->getImageHeight(),
+                'RGBA', Imagick::PIXEL_CHAR,
+                $pixels
+            );
+        }
+    }
 }

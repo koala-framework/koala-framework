@@ -28,10 +28,11 @@ class Kwf_Setup
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
         error_reporting(E_ALL);
+        Kwf_Setup::$configClass = $configClass;
         if (!@include('./cache/setup.php')) {
             if (!file_exists('cache/setup.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
-                Kwf_Util_Setup::minimalBootstrapAndGenerateFile($configClass);
+                Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
             }
             include('cache/setup.php');
         }

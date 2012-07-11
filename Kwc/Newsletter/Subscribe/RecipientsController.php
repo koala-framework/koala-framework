@@ -44,14 +44,20 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
 
         $this->_columns->add(new Kwf_Grid_Column_Button('edit', trlKwf('Edit')));
         $this->_columns->add(new Kwf_Grid_Column('email', trlKwf('Email'), 200));
-        $this->_columns->add(new Kwf_Grid_Column('gender', trlKwf('Gender'), 70))
-            ->setRenderer('genderIcon');
+        if ($this->_model->hasColumn('gender')) {
+            $this->_columns->add(new Kwf_Grid_Column('gender', trlKwf('Gender'), 70))
+                ->setRenderer('genderIcon');
+        }
 
-        $this->_columns->add(new Kwf_Grid_Column('title', trlKwf('Title'), 80));
+        if ($this->_model->hasColumn('title')) {
+            $this->_columns->add(new Kwf_Grid_Column('title', trlKwf('Title'), 80));
+        }
         $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('First name'), 110));
         $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Last name'), 110));
 
-        $this->_columns->add(new Kwf_Grid_Column('subscribe_date', trlKwf('Subscribe date'), 110));
+        if ($this->_model->hasColumn('subscribe_date')) {
+            $this->_columns->add(new Kwf_Grid_Column('subscribe_date', trlKwf('Subscribe date'), 110));
+        }
 
         $this->_columns->add(new Kwf_Grid_Column('is_active', trlKwf('Active?'), 80))
             ->setData(new Kwc_Newsletter_Detail_IsActiveData());
@@ -60,11 +66,13 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        if ($this->_getParam('newsletterComponentId')) {
-            $ret->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'));
-        } else {
-            $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
-            $ret->whereEquals('newsletter_component_id', $c->parent->dbId);
+        if ($this->_model->hasColumn('newsletter_component_id')) {
+            if ($this->_getParam('newsletterComponentId')) {
+                $ret->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'));
+            } else {
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+                $ret->whereEquals('newsletter_component_id', $c->parent->dbId);
+            }
         }
         return $ret;
     }
