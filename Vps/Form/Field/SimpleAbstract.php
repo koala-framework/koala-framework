@@ -58,7 +58,8 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
             // folgende if ist, weils es zB bei einem Date Validator keinen
             // sinn macht zu validieren wenn kein wert da ist. da macht dann
             // nur mehr der NotEmpty sinn
-            if (!$data && !($v instanceof Zend_Validate_NotEmpty)) {
+
+            if ((is_null($data) || $data === '') && !($v instanceof Zend_Validate_NotEmpty)) {
                 continue;
             }
 

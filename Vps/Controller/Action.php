@@ -89,6 +89,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
     public function postDispatch()
     {
         Vps_Component_ModelObserver::getInstance()->process();
+        Vps_Component_Cache::getInstance()->getMetaModel()->writeBuffer();
     }
 
     protected function _getUserRole()
