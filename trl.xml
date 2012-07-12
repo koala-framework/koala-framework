@@ -5,7 +5,7 @@
 <de>Sichtbar</de>
 <id>2</id>
 <bg>видим</bg>
-<ua>Видимий</ua>
+<uk>Видимий</uk>
 <mk>Видливо</mk>
 <ro>Vizibil</ro>
 <sl>Vidno</sl>
@@ -16,7 +16,7 @@
 <de>Fehler</de>
 <id>5</id>
 <bg>Грешка</bg>
-<ua>Помилка</ua>
+<uk>Помилка</uk>
 <ro>Eroare</ro>
 <mk>Грешка</mk>
 <cz>Chyba</cz>
@@ -27,7 +27,7 @@
 <en>An Error ocurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.</de>
 <id>8</id>
-<ua>Сталася помилка. Будь ласка, спробуйте пізніше.</ua>
+<uk>Сталася помилка. Будь ласка, спробуйте пізніше.</uk>
 <ro>A intervenit o eroare. Vă rugăm să încercaţi din nou mai târziu.</ro>
 <mk>Се појави грешка. Ве молиме пробајте подоцна.</mk>
 <sl>Prišlo je do napake. Poskusite ponovno kasneje.</sl>
@@ -36,7 +36,7 @@
 <en>Page not found</en>
 <de>Seite wurde nicht gefunden.</de>
 <id>9</id>
-<ua>Сторінка не знайдена</ua>
+<uk>Сторінка не знайдена</uk>
 <ro>Pagina nu a fost gasită</ro>
 <mk>Страната не е пронајдена</mk>
 <sl>Strani ni bilo možno najti.</sl>
@@ -46,7 +46,7 @@
 <de>Passwort vergessen?</de>
 <id>12</id>
 <ro>Aţi uitat parola?</ro>
-<ua>Забули пароль?</ua>
+<uk>Забули пароль?</uk>
 <mk>Ја заборавивте лозинката?</mk>
 <sl>Pozabljeno geslo</sl>
 </text>
@@ -54,7 +54,7 @@
 <en>Login</en>
 <de>Einloggen</de>
 <id>13</id>
-<ua>Логін</ua>
+<uk>Логін</uk>
 <ro>Autentificare</ro>
 <mk>Логин</mk>
 <sl>Prijava</sl>
@@ -74,7 +74,7 @@ has just been created.</en>
 <de>Ihr Konto bei {0}wurde soeben erstellt.</de>
 <id>15</id>
 <ro>Tocmai a fost creat contul dumneavoastră pentru {0}.</ro>
-<ua>Ваш аккаунт створено</ua>
+<uk>Ваш аккаунт створено</uk>
 <mk>Вашиот акаунт е креиран.</mk>
 <sl>Pravkar ste uspešno ustvarili svoj račun pri {0}.</sl>
 </text>
@@ -83,7 +83,7 @@ has just been created.</en>
 <de>Bitte verwenden Sie diesen Link um sich ein Passwort zu erstellen und einzuloggen.</de>
 <id>16</id>
 <ro>Vă rugăm să folosiţi următorul link pentru a seta parola şi pentru a vă autentifica</ro>
-<ua>Будь ласка, використовуйте це посилання, щоб потрапити на ваш аккаунт</ua>
+<uk>Будь ласка, використовуйте це посилання, щоб потрапити на ваш аккаунт</uk>
 <mk>Ве молиме користете го следниот линк за да изберете лозинка и да се најавите</mk>
 <sl>Kliknite na to povezavo, da določite geslo in se prijavite.</sl>
 </text>
@@ -92,7 +92,7 @@ has just been created.</en>
 <de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empfänger an den eine Antwort gesendet werden kann.</de>
 <id>17</id>
 <ro>Acest e-mail a fost generat automat. În cazul în care răspundeţi, mesajul nu va ajunge la niciun destinatar.</ro>
-<ua>Це повідомлення було сформовано автоматично. Якщо Ви відповісте на цей лист, одержувача може не бути</ua>
+<uk>Це повідомлення було сформовано автоматично. Якщо Ви відповісте на цей лист, одержувача може не бути</uk>
 <mk>Овој e-mail е генериран автоматски. Ако одговорите на ова порака може да нема примач.</mk>
 <sl>To je avtomatsko generirano e-sporočilo. To sporočilo je bilo generirano avtomatsko, zato nanj ne odgovarjajte.</sl>
 </text>
@@ -101,7 +101,7 @@ has just been created.</en>
 <de>Ihr Konto bei {0} wurde gelöscht.</de>
 <id>19</id>
 <ro>Contul dumneavoastră pentru {0} a fost şters.</ro>
-<ua>Ваш аккаунт видалено</ua>
+<uk>Ваш аккаунт видалено</uk>
 <mk>Вашиот акаунт е избришан.</mk>
 <sl>Izbrisali ste svoj račun pri {0}.</sl>
 </text>
@@ -110,7 +110,7 @@ has just been created.</en>
 <de>Bitte verwenden Sie den folgenden Link um sich selbst ein neues Passwort zu erstellen.</de>
 <id>22</id>
 <ro>Vă rugăm să folosiţi acest link pentru a vă schimba parola.</ro>
-<ua>Будь ласка, використайте це посилання, щоб обрати свій новий пароль</ua>
+<uk>Будь ласка, використайте це посилання, щоб обрати свій новий пароль</uk>
 <mk>Ве молиме користете го следниот линк за да внесете нова лозинка.</mk>
 <sl>Kliknite na naslednjo povezavo, da določite novo geslo.</sl>
 </text>
@@ -121,7 +121,7 @@ has just been created.</en>
 <es>Place of departure: zip code, Town, Street</es>
 <id>31</id>
 <ro>Loc de plecare: Cod poştal, Localitate, Stradă</ro>
-<ua>Місце відправки:поштовий код, місто, вулиця</ua>
+<uk>Місце відправки:поштовий код, місто, вулиця</uk>
 <mk>Место на тргнување: Поштенски број, Место, Улица</mk>
 <sl>Kraj odhoda: Poštna številka, kraj, ulica</sl>
 </text>
@@ -131,7 +131,7 @@ has just been created.</en>
 <es>Entered place could not been found!</es>
 <id>32</id>
 <ro>Locaţia introdusă nu a putut fi găsită!</ro>
-<ua>Введене місце не було знайдено</ua>
+<uk>Введене місце не було знайдено</uk>
 <mk>Внесенето место не може да се наоѓа!</mk>
 <sl>Vnesenega kraja ni bilo možno najti.</sl>
 </text>
@@ -141,7 +141,7 @@ has just been created.</en>
 <es>Show Route</es>
 <id>33</id>
 <ro>Arată ruta</ro>
-<ua>Показати маршрут</ua>
+<uk>Показати маршрут</uk>
 <sl>Prikaz poti</sl>
 </text>
 <text>
@@ -149,7 +149,7 @@ has just been created.</en>
 <de>Vorschläge</de>
 <id>34</id>
 <ro>Sugestii</ro>
-<ua>Пропозиції</ua>
+<uk>Пропозиції</uk>
 <mk>Предлози</mk>
 <sl>Predlogi</sl>
 </text>
@@ -158,7 +158,7 @@ has just been created.</en>
 <de>Koordinaten</de>
 <id>35</id>
 <ro>Coordonate</ro>
-<ua>Координати</ua>
+<uk>Координати</uk>
 <mk>Кординати</mk>
 <sl>Koordinate</sl>
 </text>
@@ -167,7 +167,7 @@ has just been created.</en>
 <de>Zoomebene</de>
 <id>36</id>
 <ro>Nivel zoom</ro>
-<ua>Ступінь збільшення</ua>
+<uk>Ступінь збільшення</uk>
 <mk>Ниво на зголемување</mk>
 <sl>Stopnja povečave</sl>
 </text>
@@ -176,7 +176,7 @@ has just been created.</en>
 <de>Breite</de>
 <id>37</id>
 <ro>Lăţime</ro>
-<ua>Ширина</ua>
+<uk>Ширина</uk>
 <mk>Ширина</mk>
 <sl>Širina</sl>
 <es>Ancho</es>
@@ -186,7 +186,7 @@ has just been created.</en>
 <de>Höhe</de>
 <id>38</id>
 <ro>Înălţime</ro>
-<ua>Висота</ua>
+<uk>Висота</uk>
 <mk>Висина</mk>
 <sl>Višina</sl>
 <es>Altura</es>
@@ -196,7 +196,7 @@ has just been created.</en>
 <de>Bewegen + Zoomen</de>
 <id>39</id>
 <ro>Mută + Zoom</ro>
-<ua>Перемістити та збільшити</ua>
+<uk>Перемістити та збільшити</uk>
 <mk>Премести + Зголеми</mk>
 <sl>Pomikanje + povečava</sl>
 </text>
@@ -205,7 +205,7 @@ has just been created.</en>
 <de>Bewegen + Zoomen (ohne Vergrößerungsleiste)</de>
 <id>40</id>
 <ro>Mută + Zoom (fără bară de zoom)</ro>
-<ua>Перемістити та збільшити без шкали збільшення</ua>
+<uk>Перемістити та збільшити без шкали збільшення</uk>
 <mk>Премести + Зголеми (без барот зазголемување)</mk>
 <sl>Pomikanje + povečava (brez povečevalne skale)</sl>
 </text>
@@ -214,7 +214,7 @@ has just been created.</en>
 <de>Skalieren</de>
 <id>42</id>
 <ro>Scale</ro>
-<ua>Шкала</ua>
+<uk>Шкала</uk>
 <mk>Скала</mk>
 <sl>Skaliranje</sl>
 </text>
@@ -223,7 +223,7 @@ has just been created.</en>
 <de>Satellitenkarte</de>
 <id>43</id>
 <ro>Hartă satelit</ro>
-<ua>Супутникова карта</ua>
+<uk>Супутникова карта</uk>
 <mk>Мапа на страната</mk>
 <sl>Satelitska karta</sl>
 </text>
@@ -232,7 +232,7 @@ has just been created.</en>
 <de>Übersichtskarte</de>
 <id>44</id>
 <ro>Overviewmap</ro>
-<ua>Крупномасштабна карта</ua>
+<uk>Крупномасштабна карта</uk>
 <sl>Pregledna karta</sl>
 </text>
 <text>
@@ -247,7 +247,7 @@ has just been created.</en>
 <de>Detailansicht</de>
 <id>46</id>
 <ro>Imagine detaliata</ro>
-<ua>Детальний огляд</ua>
+<uk>Детальний огляд</uk>
 <sl>Podrobni prikaz</sl>
 </text>
 <text>
@@ -255,7 +255,7 @@ has just been created.</en>
 <de>Dateiname</de>
 <id>48</id>
 <ro>Denumire fişier</ro>
-<ua>І'мя файлу</ua>
+<uk>І'мя файлу</uk>
 <mk>Име на фајлот</mk>
 <sl>Ime datoteke</sl>
 <es>Nombre de archivo</es>
@@ -265,7 +265,7 @@ has just been created.</en>
 <de>Datei</de>
 <id>49</id>
 <ro>Fişier</ro>
-<ua>Файл</ua>
+<uk>Файл</uk>
 <mk>Фајл</mk>
 <sl>Datoteka</sl>
 <es>Archivo</es>
@@ -275,7 +275,7 @@ has just been created.</en>
 <de>Inhalt</de>
 <id>50</id>
 <ro>Conţinut</ro>
-<ua>Зміст</ua>
+<uk>Зміст</uk>
 <mk>Содржина</mk>
 <sl>Vsebina</sl>
 </text>
@@ -394,7 +394,7 @@ has just been created.</en>
 <fr>envoyer</fr>
 <it>inviare</it>
 <ro>Trimite</ro>
-<ua>Надіслати</ua>
+<uk>Надіслати</uk>
 <sl>Pošlji</sl>
 </text>
 <text>
@@ -448,7 +448,7 @@ has just been created.</en>
 <id>96</id>
 <ro>Titlu</ro>
 <mk>Титула</mk>
-<ua>Титул</ua>
+<uk>Титул</uk>
 <hu>Cím</hu>
 <sl>Naziv</sl>
 <es>Título</es>
@@ -462,7 +462,7 @@ has just been created.</en>
 <id>97</id>
 <ro>Prenume</ro>
 <mk>Име</mk>
-<ua>Ім'я</ua>
+<uk>Ім'я</uk>
 <hu>Keresztnév</hu>
 <sl>Ime</sl>
 </text>
@@ -475,7 +475,7 @@ has just been created.</en>
 <id>98</id>
 <ro>Nume</ro>
 <mk>Презиме</mk>
-<ua>Прізвище</ua>
+<uk>Прізвище</uk>
 <hu>Vezetéknév</hu>
 <sl>Priimek</sl>
 </text>
@@ -626,7 +626,7 @@ has just been created.</en>
 <de>Weiblich</de>
 <id>165</id>
 <ro>Doamna</ro>
-<ua>Жіноча</ua>
+<uk>Жіноча</uk>
 <hu>Nő</hu>
 <sl>Ženski</sl>
 <es>Femenino</es>
@@ -637,7 +637,7 @@ has just been created.</en>
 <id>166</id>
 <ro>Domnul</ro>
 <mk>Машки</mk>
-<ua>Чоловіча</ua>
+<uk>Чоловіча</uk>
 <hu>Férfi</hu>
 <sl>Moški</sl>
 <es>Masculino</es>
@@ -648,7 +648,7 @@ has just been created.</en>
 <id>167</id>
 <ro>Formula de adresare</ro>
 <mk>Пол</mk>
-<ua>Стать</ua>
+<uk>Стать</uk>
 <hu>Nem</hu>
 <sl>Spol</sl>
 <es>Género</es>
@@ -2133,7 +2133,7 @@ has just been created.</en>
 <en>no selection</en>
 <de>keine Auswahl</de>
 <id>449</id>
-<ua>обрати</ua>
+<uk>обрати</uk>
 <ro>lipsă selecţie</ro>
 <sl>Ni izbrano.</sl>
 </text>
@@ -2472,7 +2472,7 @@ has just been created.</en>
 <id>528</id>
 <ro>Setări</ro>
 <sl>Nastavitve </sl>
-<ua>Налаштування</ua>
+<uk>Налаштування</uk>
 </text>
 <text>
 <en>Link Image</en>
@@ -2634,7 +2634,7 @@ has just been created.</en>
 <id>577</id>
 <ro>Bună ziua</ro>
 <sl>Pozdravljeni</sl>
-<ua>Добрий день</ua>
+<uk>Добрий день</uk>
 </text>
 <text>
 <en>A new entry has been written in your guestbook.</en>
@@ -2904,7 +2904,7 @@ has just been created.</en>
 <es>El formulario es enviado con éxito.</es>
 <ru>форма успешно отправлена.</ru>
 <id>651</id>
-<ua>Ваш лист було успішно відправлено.</ua>
+<uk>Ваш лист було успішно відправлено.</uk>
 <ro>Formularul a fost trimis cu succes.</ro>
 <sl>Obrazec je bil uspešno poslan.</sl>
 </text>
@@ -3262,7 +3262,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>709</id>
 <ro>Vă rugăm să completaţi câmpul</ro>
 <sl>Izpolnite polje</sl>
-<ua>Необхідно заповнити поле</ua>
+<uk>Необхідно заповнити поле</uk>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -3284,7 +3284,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>'%value%' no es una dirección válida de correo electrónico</es>
 <ru>'%value%' не действительный адрес электронной почты</ru>
 <id>712</id>
-<ua>'%value%' некоректно введена адреса електронної пошти</ua>
+<uk>'%value%' некоректно введена адреса електронної пошти</uk>
 <ro>'%value%' nu este o adresă validă de e-mail.</ro>
 <sl>%value%' ni veljaven e-naslov.</sl>
 </text>
@@ -3536,7 +3536,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>,</sl>
 <hu>,</hu>
 <bg>,</bg>
-<ua>,</ua>
+<uk>,</uk>
 <ro>,</ro>
 <es>,</es>
 <mk>,</mk>
@@ -4952,7 +4952,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <it>marchio</it>
 <ro>Copyright</ro>
 <sl>Impresum.Impresum</sl>
-<ua>Контакти</ua>
+<uk>Контакти</uk>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
@@ -5538,7 +5538,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Format</en>
 <id>1153</id>
 <mk>Формат</mk>
-<ua>Формат</ua>
+<uk>Формат</uk>
 <de>Format</de>
 <ro>Format</ro>
 </text>
@@ -6005,7 +6005,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1235</id>
 <ro>Dezabonează newsletter-ul</ro>
 <sl>Odjava od e-novic</sl>
-<ua>Відмовитися від розсилки новин</ua>
+<uk>Відмовитися від розсилки новин</uk>
 </text>
 <text>
 <en>You have been successfully unsubscribed from the newsletter.</en>
@@ -6020,7 +6020,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1238</id>
 <ro>Dezabonează newsletter-ul</ro>
 <sl>Odjava od e-novic</sl>
-<ua>Відмовитися від розсилки новин</ua>
+<uk>Відмовитися від розсилки новин</uk>
 </text>
 <text>
 <en>default</en>
@@ -6119,7 +6119,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1262</id>
 <ro>Aţi fost abonat pentru newsletter-ul {0}.</ro>
 <sl>Pravkar ste bili vneseni kot prejemnik e-novic pri {0}.</sl>
-<ua>Ви щойно підписалися на автоматичну розсилку новин від {0}.</ua>
+<uk>Ви щойно підписалися на автоматичну розсилку новин від {0}.</uk>
 </text>
 <text>
 <en>ACTIVATION LINK</en>
@@ -6141,7 +6141,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1265</id>
 <ro>Puteţi să dezabonaţi oricând newsletter-ul, accesând următorul link:</ro>
 <sl>Od e-novic se lahko kadarkoli odjavite tako, da kliknete na naslednjo povezavo:</sl>
-<ua>Для того, щоб відмовитися від автоматичної розсилки новин, перейдіть за посиланням:</ua>
+<uk>Для того, щоб відмовитися від автоматичної розсилки новин, перейдіть за посиланням:</uk>
 </text>
 <text>
 <en>To change you data or settings, click this link:</en>
@@ -6149,7 +6149,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1266</id>
 <ro>Pentru a modifica datele sau setările dumneavoastră faceţi click pe următorul link:</ro>
 <sl>Za spremembo svojih podatkov in nastavitev kliknite na naslednjo povezavo:</sl>
-<ua>Для того, щоб змінити свої данні або налаштування, перейдіть за посилянням: </ua>
+<uk>Для того, щоб змінити свої данні або налаштування, перейдіть за посилянням: </uk>
 </text>
 <text>
 <en>Thanks for your subscription!</en>
@@ -6157,7 +6157,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1267</id>
 <ro>Mulţumim pentru înscriere!</ro>
 <sl>Hvala, ker ste se prijavili!</sl>
-<ua>Щиро вдячні за Вашу підписку!</ua>
+<uk>Щиро вдячні за Вашу підписку!</uk>
 </text>
 <text>
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
@@ -6176,14 +6176,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>HTML-Format</en>
 <de>HTML-Format</de>
-<ua>HTML-Формат</ua>
+<uk>HTML-Формат</uk>
 <id>1270</id>
 <ro>Format HTML</ro>
 </text>
 <text>
 <en>Text-Format</en>
 <de>Text-Format</de>
-<ua>Текст-Формат</ua>
+<uk>Текст-Формат</uk>
 <id>1271</id>
 <ro>Format Text</ro>
 </text>
@@ -7231,7 +7231,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Please select a value</en>
 <de>Bitte wählen Sie eine Option aus</de>
 <id>1451</id>
-<ua>Будь ласка оберіть один з доступних варіантів</ua>
+<uk>Будь ласка оберіть один з доступних варіантів</uk>
 <ro>Vă rugăm să selectaţi o opţiune</ro>
 <sl>Izberite eno od možnosti</sl>
 </text>
@@ -8008,7 +8008,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Nu au fost găsite rezultate pentru &lt;strong&gt;"{0}"&lt;/strong&gt;</ro>
 <hu>Nincs eredmény a &lt;strong&gt;"{0}"&lt;/strong&gt; kifejezésre.</hu>
 <sl>Rezultatov za &lt;strong&gt;"{0}"&lt;/strong&gt; ni bilo možno najti.</sl>
-<ua>Не знайдено результатів по запиту &lt;strong&gt;"{0}"&lt;/strong&gt;</ua>
+<uk>Не знайдено результатів по запиту &lt;strong&gt;"{0}"&lt;/strong&gt;</uk>
 </text>
 <text>
 <en>Must not be negative</en>
@@ -8200,7 +8200,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1695</id>
 <de>Abmelden</de>
 <ro>Logout</ro>
-<ua>Відмовитися від розсилки</ua>
+<uk>Відмовитися від розсилки</uk>
 </text>
 <text>
 <context>thousands separator</context>
@@ -8210,7 +8210,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>.</sl>
 <hu>.</hu>
 <bg>.</bg>
-<ua>.</ua>
+<uk>.</uk>
 <ro>.</ro>
 <es>.</es>
 <mk>.</mk>
