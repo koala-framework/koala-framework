@@ -1,0 +1,18 @@
+.vpsFormContainerFieldSet div {
+    display: block;
+}
+
+.vpsFormContainerFieldSet .vpsFormContainerFieldSetCollapsed {
+    border-width: 2px 2px 0px 2px;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    margin-bottom: 0px;
+}
+
+.vpsFormContainerFieldSet fieldset {
+    border: 2px groove #EEE;
+}
+
+.vpsFormContainerFieldSet .vpsFormContainerFieldSetCollapsed div {
+    display: none;
+}
