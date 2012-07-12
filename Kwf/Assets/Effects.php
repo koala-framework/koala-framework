@@ -60,7 +60,9 @@ class Kwf_Assets_Effects
             foreach ($pixels as $k=>$i) {
                 if ($k % 4 == 0) { //first on is red
                     //set it to 0xEE
-                    $pixels[$k] = 0xEE;
+                    if ($pixels[$k] < 0xEE) {
+                        $pixels[$k] = 0xEE;
+                    }
                 }
             }
             $im->importImagePixels(0, 0,
