@@ -23,7 +23,7 @@ class Kwc_Directories_Category_ShowCategories_Component extends Kwc_Directories_
     public static function getItemDirectoryClasses($directoryClass)
     {
         $ret = array();
-        $class = self::getSetting($componentClass, 'showDirectoryClass');
+        $class = self::getSetting($directoryClass, 'showDirectoryClass');
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($class) as $component) {
             $ret[] = $component->componentClass;
         }
