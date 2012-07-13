@@ -103,34 +103,14 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             }
         }, this, { buffer: 50 });
 
-//         Kwf.History.init();
-//         Ext.History.on('change', function(token) {
-//             this.onChangeHash(token);
-//         }, this);
-//         this.on('afterlayout', function() {
-//             this.onChangeHash(Ext.History.getToken());
-//         }, this);
+        Kwf.Utils.HistoryState.on('popstate', function() {
+            if (Kwf.Utils.HistoryState.currentState.viewDetail) {
+                this.showDetail(Kwf.Utils.HistoryState.currentState.viewDetail);
+            } else {
+                this.showView();
+            }
+        }, this);
     },
-
-//     onChangeHash: function(token) {
-//         var tokens = [];
-//         if (token) tokens = token.split(':');
-//         for(var i=0; i < tokens.length; ++i) {
-//             var t = tokens[i];
-//             if (t.substr(0, 7) == 'detail=') {
-//                 t = t.substr(7);
-//                 this.showDetail(t);
-//                 return;
-//             }
-//         }
-//         if (tokens.indexOf('top') != -1) {
-//             this.ownerCt.menuEl.select('a').removeClass('current');
-//             this.ownerCt.loadView('top', {});
-//             this.ownerCt.menuEl.select('a.top').addClass('current');
-// 
-//         }
-//         this.showView();
-//     },
 
     loadMore: function() {
         if (!this.store || this.getStore().getCount()<20 || this.loadingMore || this.visibleDetail) return;
@@ -321,10 +301,12 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
     showDetail: function(href)
     {
         if (this.visibleDetail == href) return;
-
         this.visibleDetail = href;
-//         Ext.History.add('detail='+href);
 
+        if (Kwf.Utils.HistoryState.currentState.viewDetail != href) {
+            Kwf.Utils.HistoryState.currentState.viewDetail = href;
+            Kwf.Utils.HistoryState.pushState('TODO', href);
+        }
 
         this.hideDetail();
         //this.el.up('.articlesDirectoryView').removeClass('articlesDirectoryViewHome');
@@ -342,20 +324,22 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 if (!this.detailEl) return;
                 this.detailEl.removeClass('loading');
                 this.detailEl.update(response.responseText);
-                var backLink = this.detailEl.createChild({
-                    tag: 'a',
-                    href: '#',
-                    html: 'Zurück',
-                    cls: 'back'
-                }, this.detailEl.first());
-                backLink.on('click', function(ev) {
-                    ev.stopEvent();
+
+                //TODO don't create back link, but look for back links in detail an do a history.back then
+//                 var backLink = this.detailEl.createChild({
+//                     tag: 'a',
+//                     href: '#',
+//                     html: 'Zurück',
+//                     cls: 'back'
+//                 }, this.detailEl.first());
+//                 backLink.on('click', function(ev) {
+//                     ev.stopEvent();
 //                     if (history.length > 1) {
 //                         history.back(); //behält scroll position bei
 //                     } else {
-                        this.showView();
+//                         this.showView();
 //                     }
-                }, this);
+//                 }, this);
                 Kwf.callOnContentReady(this.detailEl);
 
                 if (this.detailEl.child('.icons .top')) {

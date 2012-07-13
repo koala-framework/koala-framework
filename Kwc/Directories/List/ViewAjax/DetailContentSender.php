@@ -5,7 +5,7 @@ class Kwc_Directories_List_ViewAjax_DetailContentSender extends Kwf_Component_Ab
     {
         return 'ajaxDetail';
     }
-
+/*
     private function _getParent()
     {
         $previous = null;
@@ -35,4 +35,5 @@ class Kwc_Directories_List_ViewAjax_DetailContentSender extends Kwf_Component_Ab
             return $detailContent;
         }
     }
+*/
 }
