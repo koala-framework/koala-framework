@@ -630,7 +630,13 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 //mit dem rückgabewert nichts machen, das ist nur zum joinen von sibling models
                 $this->_formatFieldInternal($f, $dbSelect, $tableNameAlias);
             }
-            return '('.$expr->getSql().')';
+            $sql = $expr->getSql();
+            if (preg_match_all('#expr\{([a-zA-Z0-9_]+)\}#', $sql, $exprs)) {
+                foreach ($exprs[1] as $k => $e) {
+                    $sql = str_replace($exprs[0][$k], $this->_formatField($e, $dbSelect, $tableNameAlias), $sql);
+                }
+            }
+            return '('.$sql.')';
         } else if ($expr instanceof Kwf_Model_Select_Expr_If) {
             $if = $this->_createDbSelectExpression($expr->getIf(), $dbSelect, null, $tableNameAlias);
             $then = $this->_createDbSelectExpression($expr->getThen(), $dbSelect, null, $tableNameAlias);
