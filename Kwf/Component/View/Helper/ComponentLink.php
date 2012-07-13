@@ -52,7 +52,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
         if (!isset($config['skipAppendLinkText']) || !$config['skipAppendLinkText']) {
             foreach ($componentLinkModifiers as $s) {
                 if ($s['type'] == 'appendLinkText') {
-                    $text .= $s['text'];
+                    $text .= '<span class="appendText">'.$s['text'].'</span>';
                 }
             }
         }
@@ -63,7 +63,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
         if (!isset($config['skipAppendText']) || !$config['skipAppendText']) {
             foreach ($componentLinkModifiers as $s) {
                 if ($s['type'] == 'appendText') {
-                   $ret .= $s['text'];
+                   $ret .= '<span class="appendText">'.$s['text'].'</span>';
                } else if ($s['type'] == 'callback') {
                     $ret = call_user_func($s['callback'], $ret, $s['text']);
                 }
