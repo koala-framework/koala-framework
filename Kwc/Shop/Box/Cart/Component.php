@@ -19,7 +19,7 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
 
         $ret['order'] = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
-        $ret['items'] = $ret['order']->getProductsDataWithProduct();
+        $ret['items'] = $ret['order']->getProductsDataWithProduct($this->getData());
         $ret['sumRows'] = $this->_getCart()->getChildComponent(array('generator' => 'checkout'))
                                 ->getComponent()->getSumRows($ret['order']);
 
