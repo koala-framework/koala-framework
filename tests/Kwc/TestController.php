@@ -46,7 +46,9 @@ class Kwc_TestController extends Kwf_Controller_Action
             Kwf_Media_Output::output(Kwf_Media::getOutput($class, $id, $type));
         }
         if ($url == 'kwf/util/kwc/render') {
-            $_REQUEST['url'] = str_replace('/'.$root->filename, '', $_REQUEST['url']);
+            if (isset($_REQUEST['url'])) {
+                $_REQUEST['url'] = str_replace('/'.$root->filename, '', $_REQUEST['url']);
+            }
             Kwf_Util_Component::dispatchRender();
         }
 
