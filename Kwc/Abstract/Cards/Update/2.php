@@ -4,22 +4,19 @@ class Kwc_Abstract_Cards_Update_2 extends Kwf_Update
     public function update()
     {
         if (Kwf_Registry::get('db')->fetchAll('SHOW TABLES LIKE "kwc_basic_linktag"')) {
-            foreach (Kwf_Registry::get('db')->fetchAll('SELECT component_id, component FROM kwc_basic_linktag') as $row) {
-                $sql = "REPLACE INTO kwc_basic_cards SET component_id='{$row['component_id']}', component='{$row['component']}'";
-                Kwf_Registry::get('db')->query($sql);
-                $sql = "DELETE FROM kwc_basic_linktag WHERE component_id='{$row['component_id']}'";
-                Kwf_Registry::get('db')->query($sql);
-            }
+            Kwf_Registry::get('db')->query("REPLACE INTO kwc_basic_cards (SELECT component_id, component FROM kwc_basic_linktag)");
             Kwf_Registry::get('db')->query('DROP TABLE kwc_basic_linktag');
         }
+
         $ids = array();
         $search = array();
         $replace = array();
+        $componentIds = array();
         foreach (Kwf_Registry::get('db')->fetchAll('SELECT component_id, component FROM kwc_basic_cards') as $row) {
+            $componentIds[$row['component_id']] = true;
             $ids[] = $row['component_id'];
-            $search[] = '#^'.preg_quote($row['component_id'] . '-link').'([\\-_].+)?$#';
-            $replace[] = $row['component_id'] . '-child';
-
+            $search[$row['component_id']] = '#^'.preg_quote($row['component_id'] . '-link').'([\\-_].+)?$#';
+            $replace[$row['component_id']] = $row['component_id'] . '-child';
         }
 
         $db = Zend_Registry::get('db');
@@ -37,22 +34,37 @@ class Kwc_Abstract_Cards_Update_2 extends Kwf_Update
                 }
             }
             if ($hasComponentId) {
-                echo "\n\n".$table.":\n";
-                $sql = "SELECT $column FROM $table WHERE 0 ";
-                foreach ($ids as $id) {
-                    $sql .= " OR $column LIKE ".$db->quote(str_replace('_', '\_', $id.'-link').'%');
+                echo "\n".$table;
+                $sql = "SELECT $column FROM $table WHERE $column LIKE '%-link'";
+                $notInList = array();
+                foreach ($db->query($sql) as $row) {
+                    $componentId = substr($row[$column], 0, -5);
+                    if (!isset($componentIds[$componentId])) {
+                        $notInList[] = $row[$column];
+                    }
                 }
-                foreach ($db->query($sql)->fetchAll() AS $row) {
-                    $newId = preg_replace($search, $replace, $row[$column]);
-                    $sql = "UPDATE $table SET $column=".$db->quote($newId)." WHERE $column=".$db->quote($row[$column]);
-                    echo $sql."\n";
-                    $db->query($sql);
+                $sql = "UPDATE $table
+                    SET $column = CONCAT(SUBSTR($column, 1, (length($column) -4)),'child')
+                    WHERE $column LIKE '%-link' AND $column NOT IN ('" . implode("', '", $notInList) . "')";
+                $db->query($sql);
+
+                $sql = "SELECT $column FROM $table WHERE $column NOT LIKE '%-link' AND $column LIKE '%-link%'";
+                foreach ($db->query($sql)->fetchAll() as $row) {
+                    $componentId = $row[$column];
+                    $componentId = substr($componentId, 0, strrpos($componentId, '-link') + 5);
+                    if (isset($componentIds[$componentId])) {
+                        $newId = preg_replace($search, $replace, $row[$column]);
+                        $sql = "UPDATE $table SET $column=".$db->quote($newId)." WHERE $column=".$db->quote($row[$column]);
+                        $db->query($sql);
+                    }
                 }
             }
         }
 
         echo "\n\nkwc_basic_text:\n";
+        $componentIds = array_flip($db->fetchCol("select component_id from kwc_basic_text WHERE content LIKE '%-link%'"));
         foreach ($search as $k=>$s) {
+            if (!isset($componentIds[$k])) continue;
             $r = $replace[$k];
             $db->query("UPDATE kwc_basic_text SET content =
                     REPLACE(content, 'href=\"$s-', 'href=\"$r-') WHERE content LIKE '$s'");
