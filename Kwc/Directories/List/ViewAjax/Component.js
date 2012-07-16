@@ -79,12 +79,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
     initComponent : function()
     {
-        if (this.autoLoad !== false) {
-            this.autoLoad = true;
-        } else {
-            delete this.autoLoad;
-        }
-
         if (!this.tpl) {
             this.tpl = new Ext.XTemplate(
                 '<tpl for=".">',
@@ -132,11 +126,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         });
     },
 
-    doAutoLoad : function()
-    {
-        if (!this.autoLoad) return;
-        this.load();
-    },
     onMetaLoad : function(result) {
         var meta = result.metaData;
         this.metaData = meta;
