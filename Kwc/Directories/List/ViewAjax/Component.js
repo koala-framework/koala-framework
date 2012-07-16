@@ -300,7 +300,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         if (Kwf.Utils.HistoryState.currentState.viewDetail != href) {
             Kwf.Utils.HistoryState.currentState.viewDetail = href;
-            Kwf.Utils.HistoryState.pushState('TODO', href);
+            Kwf.Utils.HistoryState.pushState(document.title, href);
         }
 
         this.hideDetail();
