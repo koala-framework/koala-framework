@@ -28,6 +28,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
     }
     public function indexAction()
     {
+        ini_set('memory_limit', '512M');
         Kwf_Component_ModelObserver::getInstance()->disable();
 
         if ($this->_getParam('class')) {
