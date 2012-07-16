@@ -7,12 +7,18 @@ Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
 
 Ext.ns('Kwc.Directories.List');
 Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
+
+    controllerUrl: null,
+
+    directoryUrl: null, //needed to implement back-link in detail without page load
+
     border: false,
     layout: 'fit',
     cls: 'posts',
     initComponent: function() {
         this.view = new Kwc.Directories.List.ViewAjax.View({
             controllerUrl: this.controllerUrl,
+            directoryUrl: this.directoryUrl,
             baseParams: {
                 componentId: this.componentId
             }
@@ -314,21 +320,19 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 this.detailEl.removeClass('loading');
                 this.detailEl.update(response.responseText);
 
-                //TODO don't create back link, but look for back links in detail an do a history.back then
-//                 var backLink = this.detailEl.createChild({
-//                     tag: 'a',
-//                     href: '#',
-//                     html: 'Zurück',
-//                     cls: 'back'
-//                 }, this.detailEl.first());
-//                 backLink.on('click', function(ev) {
-//                     ev.stopEvent();
-//                     if (history.length > 1) {
-//                         history.back(); //behält scroll position bei
-//                     } else {
-//                         this.showView();
-//                     }
-//                 }, this);
+                this.detailEl.query('a').forEach(function(el) {
+                    if (el.href == location.protocol+'//'+location.host+this.directoryUrl) {
+                        Ext.fly(el).on('click', function(ev) {
+                            ev.stopEvent();
+                            if (history.length > 1) {
+                                history.back(); //keeps scroll position
+                            } else {
+                                this.showView();
+                            }
+                        }, this);
+                    }
+                }, this);
+
                 Kwf.callOnContentReady(this.detailEl);
 
                 if (this.detailEl.child('.icons .top')) {
