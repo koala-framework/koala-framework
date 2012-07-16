@@ -1,14 +1,17 @@
 <?php
 class Kwc_Advanced_GoogleMap_Update_37685 extends Kwf_Update
 {
-    public function postUpdate()
+    public function update()
     {
-        $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_Advanced_GoogleMap_Component');
-        foreach ($components as $c) {
-            $r = $c->getComponent()->getRow();
-            $r->map_type = 'map';
-            $r->save();
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_FieldModel');
+        $select = $model->select()->where(
+            new Kwf_Model_Select_Expr_Like('data', '%coordinates%')
+        );
+        foreach ($model->getRows($select) as $row) {
+            if (isset($row->coordinates) && $row->coordinates) {
+                $row->map_type = 'map';
+                $row->save();
+            }
         }
     }
 }
