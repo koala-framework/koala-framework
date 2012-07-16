@@ -665,7 +665,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $birthDate = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             $referenceYear = $expr->getDate()->format('Y');
             $referenceDate = $expr->getDate()->format();
-            return "($referenceYear-YEAR($birthDate)) - (RIGHT('$referenceDate',5)<RIGHT($birthDate,5))";
+            return "IF($birthDate,($referenceYear-YEAR($birthDate)) - (RIGHT('$referenceDate',5)<RIGHT($birthDate,5)), NULL)";
         } else {
             throw new Kwf_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }

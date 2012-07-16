@@ -16,6 +16,7 @@ class Kwf_Model_DbWithConnection_ExprAge_Test extends Kwf_Test_TestCase
         $this->assertEquals(1, $m->getRow(4)->age);
         $this->assertEquals($expectNYE, $m->getRow(5)->age);
         $this->assertEquals(1, $m->getRow(6)->age);
+        $this->assertEquals(null, $m->getRow(7)->age);
         $m->dropTable();
     }
 
@@ -41,6 +42,7 @@ class Kwf_Model_DbWithConnection_ExprAge_Test extends Kwf_Test_TestCase
         $this->assertEquals(1, $m->getRow(4)->age_ref);
         $this->assertEquals($expectNYE, $m->getRow(5)->age_ref);
         $this->assertEquals($expectNY, $m->getRow(6)->age_ref);
+        $this->assertEquals(null, $m->getRow(7)->age_ref);
         $m->dropTable();
     }
 
@@ -74,6 +76,9 @@ class Kwf_Model_DbWithConnection_ExprAge_Test extends Kwf_Test_TestCase
 
         $s->whereId(6);
         $this->assertEquals(1, $m->getRow($s)->age);
+
+        $s->whereId(7);
+        $this->assertEquals(null, $m->getRow($s)->age);
 
         $m->dropTable();
     }
@@ -116,6 +121,9 @@ class Kwf_Model_DbWithConnection_ExprAge_Test extends Kwf_Test_TestCase
 
         $s->whereId(6);
         $this->assertEquals($expectNY, $m->getRow($s)->age_ref);
+
+        $s->whereId(7);
+        $this->assertEquals(null, $m->getRow($s)->age_ref);
 
         $m->dropTable();
     }

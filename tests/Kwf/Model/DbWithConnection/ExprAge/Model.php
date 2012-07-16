@@ -43,6 +43,8 @@ class Kwf_Model_DbWithConnection_ExprAge_Model extends Kwf_Model_Db
                         (id, birth) VALUES (5, '$newYearsEve')");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, birth) VALUES (6, '$newYear')");
+        Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
+                        (id, birth) VALUES (7, NULL)");
     }
 
     public function dropTable()
