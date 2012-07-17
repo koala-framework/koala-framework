@@ -41,8 +41,9 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
     {
         try {
             if (isset($_SERVER['REQUEST_URI']) && Kwf_Registry::get('db')) {
+                $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
                 $target = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')
-                    ->findRedirectUrl('path', $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST']);
+                    ->findRedirectUrl('path', $_SERVER['REQUEST_URI'], $host);
                 if ($target) {
                     header('Location: '.$target, true, 301);
                     exit;
