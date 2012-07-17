@@ -60,9 +60,13 @@ Ext.extend(Kwf.Auto.Filter.DateRange, Kwf.Auto.Filter.Abstract, {
         var params = {};
         if (this.fieldFrom.getValue()) {
             params[this.paramName+'_from'] = this.fieldFrom.getValue().format('Y-m-d');
+        } else {
+            params[this.paramName+'_from'] = null;
         }
         if (this.fieldTo.getValue()) {
             params[this.paramName+'_to'] = this.fieldTo.getValue().format('Y-m-d');
+        } else {
+            params[this.paramName+'_to'] = null;
         }
         return params;
     }
