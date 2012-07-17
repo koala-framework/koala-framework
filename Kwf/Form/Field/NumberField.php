@@ -8,6 +8,8 @@
  */
 class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
 {
+    private $_floatValidator;
+
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
@@ -15,7 +17,20 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         $this->setDecimalSeparator(trlcKwf('decimal separator', '.'));
         $this->setDecimalPrecision(2);
         $this->setInputType('number');
+
+        $this->_floatValidator = new Zend_Validate_Float();
     }
+
+    public function trlStaticExecute($language = null)
+    {
+        parent::trlStaticExecute($language);
+        $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', Kwf_Trl::SOURCE_KWF, $language);
+        if ($locale != 'C') {
+            $l = Zend_Locale::findLocale($locale);
+            $this->_floatValidator->setLocale($l);
+        }
+    }
+
     protected function _addValidators()
     {
         parent::_addValidators();
@@ -32,28 +47,24 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         if ($this->getAllowDecimals() === false) {
             $this->addValidator(new Kwf_Validate_Digits());
         } else {
-            $l = null;
-            if (trlcKwf('locale', 'C') != 'C') {
-                $l = Zend_Locale::findLocale(trlcKwf('locale', 'C'));
-            }
-            $this->addValidator(new Zend_Validate_Float($l));
+            $this->addValidator($this->_floatValidator);
         }
+    }
+
+    protected function _getValueToSaveFromPostData($postData)
+    {
+        $ret = parent::_getValueToSaveFromPostData($postData);
+        $l = $this->_floatValidator->getLocale();
+        $ret = Zend_Locale_Format::getNumber($ret, array('locale' => $l));
+        return $ret;
     }
 
     protected function _getValueFromPostData($postData)
     {
         $fieldName = $this->getFieldName();
         if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
-        if ($postData[$fieldName] == ''
-            && !(is_int($postData[$fieldName]) && $postData[$fieldName] === 0)
-        ) {
+        if ($postData[$fieldName] === '') {
             $postData[$fieldName] = null;
-        }
-        if (!is_numeric($postData[$fieldName])) $postData[$fieldName] = null;
-        if (!is_null($postData[$fieldName])) {
-            if ($this->getDecimalSeparator() != '.') {
-                $postData[$fieldName] = str_replace($this->getDecimalSeparator(), '.', $postData[$fieldName]);
-            }
         }
         return $postData[$fieldName];
     }

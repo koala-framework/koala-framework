@@ -101,9 +101,14 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
                 }
             }
             if ($save) {
-                $this->getData()->save($row, $this->_getValueFromPostData($postData));
+                $this->getData()->save($row, $this->_getValueToSaveFromPostData($postData));
             }
         }
+    }
+
+    protected function _getValueToSaveFromPostData($postData)
+    {
+        return $this->_getValueFromPostData($postData);
     }
 
     protected function _getValueFromPostData($postData)
