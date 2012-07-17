@@ -22,6 +22,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
             $solr = Kwf_Config::getValueArray('fulltext.solr');
             $path = $solr['path'];
             $path = str_replace('%subroot%', $subrootId, $path);
+            $path = str_replace('%appid%', Kwf_Config::getValue('application.id'), $path);
             $i[$subrootId] = new Kwf_Util_Fulltext_Solr_Service($solr['host'], $solr['port'], $path);
         }
         return $i[$subrootId];
