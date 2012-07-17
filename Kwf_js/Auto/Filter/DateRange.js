@@ -18,33 +18,33 @@ Kwf.Auto.Filter.DateRange = function(config)
     this.paramName = config.paramName;
 
     if (config.button) {
-	    this.toolbarItems.add(new Ext.Button({
-	        text: trlKwf('Search'),
-	        handler: function() {
-	            this.fireEvent('filter', this, this.getParams());
-	        },
-	        scope: this
-	    }));
-	}
+        this.toolbarItems.add(new Ext.Button({
+            text: trlKwf('Search'),
+            handler: function() {
+                this.fireEvent('filter', this, this.getParams());
+            },
+            scope: this
+        }));
+    }
 
-	this.fieldTo.on('menuhidden', reload, this);
+    this.fieldTo.on('menuhidden', reload, this);
 
-	if (!config.button) {
-	    this.fieldTo.on('render', function() {
-	        this.fieldTo.getEl().on('keypress',reload, this, {buffer: 500});
-	    }, this);
+    if (!config.button) {
+        this.fieldTo.on('render', function() {
+            this.fieldTo.getEl().on('keypress',reload, this, {buffer: 500});
+        }, this);
 
-		this.fieldFrom.on('menuhidden', reload , this);
-	    this.fieldFrom.on('render', function() {
-	        this.fieldFrom.getEl().on('keypress', reload, this, {buffer: 500});
-	    }, this);
-	}
+        this.fieldFrom.on('menuhidden', reload , this);
+        this.fieldFrom.on('render', function() {
+            this.fieldFrom.getEl().on('keypress', reload, this, {buffer: 500});
+        }, this);
+    }
 
-	function reload(){
-		if (this.fieldFrom.isValid() && this.fieldTo.isValid()) {
-			this.fireEvent('filter', this, this.getParams());
-		}
-	}
+    function reload(){
+        if (this.fieldFrom.isValid() && this.fieldTo.isValid()) {
+            this.fireEvent('filter', this, this.getParams());
+        }
+    }
 
 
 };
