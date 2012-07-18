@@ -21,6 +21,7 @@ interface Kwf_Model_Row_Interface
 
     //childRows werden beim speichern autom. mitgespeichert
     public function getChildRows($rule, $select = array());
+    public function countChildRows($rule, $select = array());
     public function createChildRow($rule, array $data = array());
 
     public function getParentRow($rule);

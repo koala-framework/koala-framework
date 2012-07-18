@@ -51,6 +51,12 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
         ));
     }
 
+    public function countRows($select = array())
+    {
+        $dataKeys = $this->_getDataKeys($select, null, null, null);
+        return count($dataKeys);
+    }
+
     public function deleteRows($where)
     {
         foreach ($this->getRows($where) as $row) $row->delete();
