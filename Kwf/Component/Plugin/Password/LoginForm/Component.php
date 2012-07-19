@@ -5,6 +5,7 @@ class Kwf_Component_Plugin_Password_LoginForm_Component extends Kwc_Form_Compone
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = false;
+        $ret['useAjaxRequest'] = false;
         return $ret;
     }
 
