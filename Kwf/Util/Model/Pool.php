@@ -11,13 +11,11 @@ class Kwf_Util_Model_Pool extends Kwf_Model_Db_Proxy
         $this->_filters = array('pos' => $filter);
     }
 
-    public function fetchPool($poolname, $order = 'pos')
+    public static function fetchPool($poolname)
     {
         $return = array();
-        $select = $this->select()->whereEquals('pool', $poolname)->order($order);
-        foreach ($this->getRows($select) as $row) {
-            $return[$row->value] = $row->value;
-        }
-        return $return;
+        $pool = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Pool');
+        $select = $pool->select()->whereEquals('pool', $poolname)->order('pos');
+        return $pool->getRows($select);
     }
 }
