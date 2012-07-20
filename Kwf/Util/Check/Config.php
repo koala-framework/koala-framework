@@ -310,7 +310,7 @@ class Kwf_Util_Check_Config
     private static function _memory_limit()
     {
         $m = ini_get('memory_limit');
-        if ((int)$m < 128) throw new Kwf_Exception("need 128M, got $m");
+        if ($m != -1 && (int)$m < 128) throw new Kwf_Exception("need 128M, got $m");
     }
 
     private static function _uploads()
