@@ -236,6 +236,9 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         foreach ($this->_getSiblingRows() as $r) {
             if ($r->_isDirty()) return true;
         }
+        foreach ($this->_childRows as $row) {
+            if ($row->isDirty()) return true;
+        }
         return false;
     }
 
@@ -466,7 +469,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                     $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
                     $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
                 }
-                if ($row->_isDirty()) {
+                if ($row->isDirty()) {
                     $row->save();
                 }
             }
