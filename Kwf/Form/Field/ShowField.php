@@ -24,7 +24,11 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
 
         $ret['html'] = '&nbsp;';
         if (isset($values[$name]) && $values[$name] != '') {
-            $ret['html'] = '<span class="fieldContent">'.$values[$name].'</span>';
+            $v = $values[$name];
+            if ($this->getTpl() == '{value:nl2br}') {
+                $v = nl2br($v);
+            }
+            $ret['html'] = '<span class="fieldContent">'.$v.'</span>';
         }
         return $ret;
     }
