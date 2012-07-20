@@ -64,7 +64,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
             && !$data->isShownInMenu()
         ) {
             //ignore pages not shown in menu
-            continue;
+            return;
         }
 
         $level = 0;
