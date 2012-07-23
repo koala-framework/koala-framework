@@ -6,9 +6,16 @@ class Kwc_NewsletterCategory_Subscribe_RecipientsController extends Kwc_Newslett
         $this->_model = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_Model');
         parent::_initColumns();
 
+        if ($this->_getParam('newsletterComponentId')) {
+            $newsletterComponentId = $this->_getParam('newsletterComponentId');
+        } else {
+            $newsletterComponentId = Kwf_Component_Data_Root::getInstance()
+                ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1))
+                ->parent->dbId;
+        }
         $model = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_CategoriesModel');
         $s = $model->select()
-            ->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'))
+            ->whereEquals('newsletter_component_id', $newsletterComponentId)
             ->order('pos');
         $categories = $model->getRows($s);
 
