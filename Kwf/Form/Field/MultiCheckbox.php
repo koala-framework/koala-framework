@@ -358,4 +358,20 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
         $ret['html'] .= '</div>';
         return $ret;
     }
+
+
+    /**
+     * Set the field from ValuesModel that will be used as box label
+     *
+     * if not set __toString() will be used
+     *
+     * @param string field name
+     * @return $this
+     */
+    public function setValuesBoxLabelField($value)
+    {
+        return $this->setProperty('valuesBoxLabelField', $value);
+    }
+
+    
 }
