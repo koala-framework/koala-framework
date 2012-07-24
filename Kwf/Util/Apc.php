@@ -47,6 +47,7 @@ class Kwf_Util_Apc
             $url2 = "$urlPart$d/kwf/util/apc/clear-cache";
             try {
                 $client->setUri($url2);
+                $client->setParameterPost($params);
                 $response = $client->request();
                 $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
                 $body = $response->getBody();
