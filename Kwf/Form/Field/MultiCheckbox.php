@@ -216,7 +216,7 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
     }
     public function getChildren()
     {
-        return $this->_fields;
+        return $this->_getFields();
     }
 
     public function setPool($pool)
