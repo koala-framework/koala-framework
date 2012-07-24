@@ -14,15 +14,15 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 field.errorEl.child('.message').enableDisplayMode('block');
                 field.errorEl.child('.message').hide();
                 if (field instanceof Kwf.FrontendForm.TextArea) {
-                    field.errorEl.alignTo(field.el.child('textarea'), 'tr', [-20, 4]);
+                    field.errorEl.alignTo(field.el.child('textarea'), 'tr', [-20, 2]);
                 } else if (field instanceof Kwf.FrontendForm.Radio) {
                     field.errorEl.alignTo(field.el.child('.kwfFormFieldRadio span:last'), 'tr', [0, 0]);
                 } else if (field.el.child('input')) {
-                    field.errorEl.alignTo(field.el.child('input'), 'tr', [-20, 4]);
+                    field.errorEl.alignTo(field.el.child('input'), 'tr', [-20, 2]);
                 } else if (field.el.child('select')) {
-                    field.errorEl.alignTo(field.el.child('select'), 'tr', [-20, 4]);
+                    field.errorEl.alignTo(field.el.child('select'), 'tr', [-40, 2]);
                 } else {
-                    field.errorEl.alignTo(field.el, 'r', [-40, 4]);
+                    field.errorEl.alignTo(field.el, 'r', [-40, 2]);
                 }
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();

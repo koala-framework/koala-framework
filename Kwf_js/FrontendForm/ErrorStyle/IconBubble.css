@@ -14,7 +14,7 @@
     text-align: center;
     border-radius: 6px 6px 6px 6px;
     min-width: 100px;
-    background-color: red;
+    background-color: #eb301d;
     cursor: default;
     padding: 6px;
     margin-top: -4px;
@@ -22,9 +22,9 @@
     color: white;
 }
 .kwfFieldErrorIconBubble .message:after {
-    border-top: 9px solid transparent;
-    border-right: 10px solid red;
-    border-bottom: 9px solid transparent;
+    border-top: 8px solid transparent;
+    border-right: 10px solid #eb301d;
+    border-bottom: 8px solid transparent;
     content:"";
     display: block;
     right: 110px;
@@ -32,4 +32,7 @@
     width: 0;
     top: 4px;
     z-index:10;
+}
+.kwfField.kwfFormFieldRadio .kwfFieldErrorIconBubble {
+    top: 0px !important;
 }
