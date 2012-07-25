@@ -69,4 +69,13 @@ class Kwf_Model_Proxy_Rowset implements Kwf_Model_Rowset_Interface
     {
         return $this->getModel()->getTable();
     }
+    public function getIds()
+    {
+        $ret = array();
+        $column = $this->_model->getPrimaryKey();
+        foreach ($this->_rowset as $row) {
+            $ret[] = $row->$column;
+        }
+        return $ret;
+    }
 }
