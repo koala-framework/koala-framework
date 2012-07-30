@@ -12,7 +12,7 @@ class Vps_Controller_Action_Cli_Web_CreateUsersController extends Vps_Controller
     }
     public function indexAction()
     {
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
         $appId = Vps_Registry::get('config')->application->id;
 
         $webModel = new Vps_User_Web_Model();
