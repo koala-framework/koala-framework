@@ -16,13 +16,9 @@ Kwf.onContentReady(function(el) {
                 var view = Kwc.Directories.List.ViewAjax.byComponentId[config.viewComponentId];
                 if (!view) return
                 ev.stopEvent();
-                view.loadView('home', {
+                view.loadViewAndPushState(document.title, a.href, {
                     filterComponentId: config.componentId
                 });
-                if (Kwf.Utils.HistoryState.currentState.viewFilter != config.componentId) {
-                    Kwf.Utils.HistoryState.currentState.viewFilter = config.componentId;
-                    Kwf.Utils.HistoryState.pushState(document.title, a.href);
-                }
                 //TODO mark a as "current"
 
             }, this);
@@ -76,6 +72,15 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.blockReload = true; //for filter changevalue so they won't reload too
 //         this.filter.setValue(null);
         this.blockReload = false;
+    },
+
+    loadViewAndPushState: function(title, href, p)
+    {
+        if (Kwf.Utils.HistoryState.currentState.filterComponentId != p.filterComponentId) {
+            Kwf.Utils.HistoryState.currentState.filterComponentId = p.filterComponentId;
+            Kwf.Utils.HistoryState.pushState(title, href);
+        }
+        this.loadView('home', p);
     },
 
     //TODO remove type parameter
@@ -136,11 +141,11 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             //TODO state should be per componentId (to support multiple view on one page)
             if (Kwf.Utils.HistoryState.currentState.viewDetail) {
                 this.showDetail(Kwf.Utils.HistoryState.currentState.viewDetail);
-            } else if (Kwf.Utils.HistoryState.currentState.viewFilter) {
+            } else if (Kwf.Utils.HistoryState.currentState.filterComponentId) {
                 this.showView();
                 //TODO don't use ownerCt, instead move this whole fn up
                 this.ownerCt.loadView('home', {
-                    filterComponentId: Kwf.Utils.HistoryState.currentState.viewFilter
+                    filterComponentId: Kwf.Utils.HistoryState.currentState.filterComponentId
                 });
                 //TODO mark filter menuitem as current
                 //maybe this whole code has to be somewhere else to access the menuitem
