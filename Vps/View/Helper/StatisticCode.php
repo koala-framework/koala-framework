@@ -5,6 +5,11 @@ class Vps_View_Helper_StatisticCode
     {
         $ret  = '';
         $cfg = Vps_Registry::get('config');
+
+        if ($cfg->vpc->domains) {
+            throw new Vps_Exception('do not use helper statisticCode for webs with domains, use Vpc_Statistics_Piwik_Component as box instead.');
+        }
+
         if (!$analyticsCode) {
             $analyticsCode = $cfg->statistic->analyticsCode;
         }
@@ -21,6 +26,7 @@ class Vps_View_Helper_StatisticCode
             $ret .= "    } catch(err) {}\n";
             $ret .= "</script>\n";
         }
+
         $piwikDomain = $cfg->statistic->piwikDomain;
         $piwikId = $cfg->statistic->piwikId;
         if ($piwikDomain && $piwikId && !$cfg->statistic->ignorePiwikCode) {
@@ -37,6 +43,7 @@ class Vps_View_Helper_StatisticCode
             $ret .= "</script><noscript><p><img src=\"http://$piwikDomain/piwik.php?idsite=$piwikId\" style=\"border:0\" alt=\"\" /></p></noscript>";
             $ret .= "<!-- End Piwik Tracking Code -->";
         }
+
         return $ret;
     }
 }
