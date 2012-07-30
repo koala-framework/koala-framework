@@ -16,9 +16,13 @@ Kwf.onContentReady(function(el) {
                 var view = Kwc.Directories.List.ViewAjax.byComponentId[config.viewComponentId];
                 if (!view) return
                 ev.stopEvent();
-                view.loadViewAndPushState(document.title, a.href, {
+                view.loadView('home', {
                     filterComponentId: config.componentId
                 });
+                if (view._getState().viewFilter != config.componentId) {
+                    view._getState().viewFilter = config.componentId;
+                    Kwf.Utils.HistoryState.pushState(document.title, a.href);
+                }
                 //TODO mark a as "current"
 
             }, this);
@@ -74,13 +78,12 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.blockReload = false;
     },
 
-    loadViewAndPushState: function(title, href, p)
+    _getState: function()
     {
-        if (Kwf.Utils.HistoryState.currentState.filterComponentId != p.filterComponentId) {
-            Kwf.Utils.HistoryState.currentState.filterComponentId = p.filterComponentId;
-            Kwf.Utils.HistoryState.pushState(title, href);
+        if (!Kwf.Utils.HistoryState.currentState[this.componentId]) {
+            Kwf.Utils.HistoryState.currentState[this.componentId] = {};
         }
-        this.loadView('home', p);
+        return Kwf.Utils.HistoryState.currentState[this.componentId];
     },
 
     //TODO remove type parameter
@@ -138,14 +141,13 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }, this, { buffer: 50 });
 
         Kwf.Utils.HistoryState.on('popstate', function() {
-            //TODO state should be per componentId (to support multiple view on one page)
-            if (Kwf.Utils.HistoryState.currentState.viewDetail) {
-                this.showDetail(Kwf.Utils.HistoryState.currentState.viewDetail);
-            } else if (Kwf.Utils.HistoryState.currentState.filterComponentId) {
+            if (this.ownerCt._getState().viewDetail) {
+                this.showDetail(this.ownerCt._getState().viewDetail);
+            } else if (this.ownerCt._getState().viewFilter) {
                 this.showView();
                 //TODO don't use ownerCt, instead move this whole fn up
                 this.ownerCt.loadView('home', {
-                    filterComponentId: Kwf.Utils.HistoryState.currentState.filterComponentId
+                    filterComponentId: this.ownerCt._getState().viewFilter
                 });
                 //TODO mark filter menuitem as current
                 //maybe this whole code has to be somewhere else to access the menuitem
@@ -344,8 +346,8 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         if (this.visibleDetail == href) return;
         this.visibleDetail = href;
 
-        if (Kwf.Utils.HistoryState.currentState.viewDetail != href) {
-            Kwf.Utils.HistoryState.currentState.viewDetail = href;
+        if (this.ownerCt._getState().viewDetail != href) {
+            this.ownerCt._getState().viewDetail = href;
             Kwf.Utils.HistoryState.pushState(document.title, href);
         }
 
