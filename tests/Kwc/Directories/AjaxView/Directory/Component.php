@@ -13,6 +13,7 @@ class Kwc_Directories_AjaxView_Directory_Component extends Kwc_Directories_ItemP
             'name' => 'categories',
             'showInMenu' => true
         );
+        $ret['contentSender'] = 'Kwc_Directories_List_ViewAjax_DirectoryContentSender';
         return $ret;
     }
 }

@@ -58,13 +58,14 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
         if ($this->_getParam('filterComponentId')) {
             $filter = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($this->_getParam('filterComponentId'));
-            $ret = $filter
-                ->getChildComponent('-list') //TODO don't hardcode that here
-                ->getComponent()->getSelect();
+            if (!is_instance_of($filter->componentClass, 'Kwc_Directories_List_Component')) {
+                $filter = $filter->getChildComponent('-list'); //TODO don't hardcode that here
+            }
+            $ret = $filter->getComponent()->getSelect();
         } else {
             $ret = $this->_component->parent->getComponent()->getSelect();
         }
-//         $ret->order('id'); //TODO remove
+        $ret->order('id'); //TODO remove
         return $ret;
     }
 /*
