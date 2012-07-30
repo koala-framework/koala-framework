@@ -51,6 +51,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
         $session = new Zend_Session_Namespace('login_password');
         if (in_array($this->_getLoginPassword(), $pw)) {
             $session->login = true;
+            $this->_afterLogin($session);
             $currentPageUrl = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
             if ($_SERVER['QUERY_STRING'] && isset($_SERVER['QUERY_STRING'])) {
                 $currentPageUrl .= '?'.$_SERVER['QUERY_STRING'];
@@ -59,6 +60,13 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
             die();
         }
         return $session->login;
+    }
+
+    /**
+     * Override to add custom functionality after login
+     */
+    protected function _afterLogin(Zend_Session_Namespace $session)
+    {
     }
 
     public function getTemplateVars()

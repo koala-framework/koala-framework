@@ -1,6 +1,11 @@
 <?php
 class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract_MenuConfig_Abstract
 {
+    protected function _getParentResource(Kwf_Acl $acl)
+    {
+        return 'kwf_component_root';
+    }
+
     public function addResources(Kwf_Acl $acl)
     {
         $components = Kwf_Component_Data_Root::getInstance()
@@ -15,7 +20,7 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
                         $dropdownName, array('text'=>$name, 'icon'=>$icon)
                     );
                 $dropDown->setCollapseIfSingleChild(true);
-                $acl->add($dropDown, 'kwf_component_root');
+                $acl->add($dropDown, $this->_getParentResource($acl));
             }
             foreach ($components as $c) {
                 $t = $c->getTitle();
@@ -34,7 +39,7 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
             $acl->add(
                 new Kwf_Acl_Resource_Component_MenuUrl(
                     $c, array('text'=>$name, 'icon'=>$icon)
-                ), 'kwf_component_root'
+                ), $this->_getParentResource($acl)
             );
         }
     }

@@ -99,10 +99,18 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function deleteAllAction()
     {
-        $subroot = $this->_getParam('subroot');
-        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
-        Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteAll($subroot);
-        echo "deleted ALL documents\n";
+        foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $sr) {
+            $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($sr);
+            if (!$sr) $sr = Kwf_Component_Data_Root::getInstance();
+            echo "deleting ALL documents for subroot $sr->componentId ";
+            try {
+                Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteAll($sr);
+            } catch (Exception $e) {
+                echo "[ERROR {$e->getMessage()}]\n";
+                continue;
+            }
+            echo "[OK]\n";
+        }
         exit;
     }
 
@@ -535,5 +543,18 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             echo "indexed pages: $stats[indexedPages]\n";
         }
         exit;
+    }
+
+    public function startSolrAction()
+    {
+        if (!Kwf_Config::getValue('fulltext.solr.allowStart')) {
+            throw new Kwf_Exception_Client("Solr is not ment to be started manually from cli on this section.");
+        }
+
+        $solrHome = getcwd().'/solr';
+        chdir(Kwf_Config::getValue('externLibraryPath.solrServer'));
+        $cmd = "java -Dsolr.solr.home=$solrHome -jar start.jar";
+        passthru($cmd, $ret);
+        exit($ret);
     }
 }

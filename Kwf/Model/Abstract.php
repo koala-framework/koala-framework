@@ -729,6 +729,17 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 $s->where(new Kwf_Model_Select_Expr_Higher($f, $row->$f));
             }
             return $this->countRows($s)+1;
+        } elseif ($expr instanceof Kwf_Model_Select_Expr_Date_Age) {
+            $f = $expr->getField();
+            if (!$row->$f) return null;
+            $timeFrom = strtotime($row->$f);
+            $timeTo = $expr->getDate()->getTimestamp();
+            $ret = (date('Y', $timeTo) - date('Y', $timeFrom))
+                - intval(
+                    (date('j', $timeTo) < date('j', $timeFrom)) //day of month
+                    && (date('n', $timeTo) <= date('n', $timeFrom)) //month
+                );
+            return $ret;
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
