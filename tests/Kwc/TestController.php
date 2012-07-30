@@ -62,6 +62,9 @@ class Kwc_TestController extends Kwf_Controller_Action
         $contentSender = new $contentSender($data);
         $contentSender->sendContent(true);
 
+        Kwf_Benchmark::shutDown();
+        Kwf_Benchmark::output();
+
 
         $this->_helper->viewRenderer->setNoRender(true);
     }

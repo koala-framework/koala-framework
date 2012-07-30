@@ -5,6 +5,9 @@
         <?=$this->debugData()?>
     </head>
     <body>
+        <div class="menu">
+            <?=$this->component($this->boxes['menu'])?>
+        </div>
         <?
         echo $this->componentWithMaster($this->componentWithMaster);
         ?>

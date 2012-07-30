@@ -7,6 +7,12 @@ class Kwc_Directories_AjaxView_Directory_Component extends Kwc_Directories_ItemP
         $ret['childModel'] = 'Kwc_Directories_AjaxView_Directory_Model';
         $ret['generators']['detail']['component'] = 'Kwc_Directories_AjaxView_Detail_Component';
         $ret['generators']['child']['component']['view'] = 'Kwc_Directories_AjaxView_View_Component';
+        $ret['generators']['categories'] = array(
+            'class' => 'Kwf_Component_Generator_PseudoPage_Static',
+            'component' => 'Kwc_Directories_AjaxView_Category_Directory_Component',
+            'name' => 'categories',
+            'showInMenu' => true
+        );
         return $ret;
     }
 }

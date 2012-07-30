@@ -10,6 +10,13 @@ class Kwc_Directories_AjaxView_Root extends Kwf_Component_NoCategoriesRoot
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Directories_AjaxView_Directory_Component'
         );
+        $ret['generators']['menu'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => array(
+                'menu' => 'Kwc_Directories_AjaxView_Menu_Component',
+            ),
+            'inherit' => true,
+        );
         return $ret;
     }
 }

@@ -5,6 +5,31 @@ Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
     Kwc.Directories.List.ViewAjax.instance = new Kwc.Directories.List.ViewAjax(config);
 });
 
+Kwf.onContentReady(function(el) {
+    Ext.fly(el).query('a').forEach(function(a) {
+        var m = a.rel.match(/kwfViewAjaxFilter({.*?})/)
+        if (m) {
+            if (a.rel.kwfViewAjaxInitDone) return;
+            a.rel.kwfViewAjaxInitDone = true;
+            var config = Ext.decode(m[1]);
+            Ext.fly(a).on('click', function(ev) {
+                var view = Kwc.Directories.List.ViewAjax.byComponentId[config.viewComponentId];
+                if (!view) return
+                ev.stopEvent();
+                view.loadView('home', {
+                    filterComponentId: config.componentId
+                });
+                if (Kwf.Utils.HistoryState.currentState.viewFilter != config.componentId) {
+                    Kwf.Utils.HistoryState.currentState.viewFilter = config.componentId;
+                    Kwf.Utils.HistoryState.pushState(document.title, a.href);
+                }
+                //TODO mark a as "current"
+
+            }, this);
+        }
+    }, this);
+});
+
 Ext.ns('Kwc.Directories.List');
 Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
@@ -16,6 +41,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
     layout: 'fit',
     cls: 'posts',
     initComponent: function() {
+        Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
         this.view = new Kwc.Directories.List.ViewAjax.View({
             controllerUrl: this.controllerUrl,
             directoryUrl: this.directoryUrl,
@@ -52,12 +78,14 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.blockReload = false;
     },
 
+    //TODO remove type parameter
     loadView: function(type, p)
     {
         this.currentMenuItem = type;
 
         var params = Ext.applyIf(p, {
-            query: null
+            query: null,
+            filterComponentId: null
         });
         this.view.applyBaseParams(params);
         this.onMenuItemChanged();
@@ -77,6 +105,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
 });
 
+Kwc.Directories.List.ViewAjax.byComponentId = {};
 
 Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 {
@@ -104,10 +133,22 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }, this, { buffer: 50 });
 
         Kwf.Utils.HistoryState.on('popstate', function() {
+            //TODO state should be per componentId (to support multiple view on one page)
             if (Kwf.Utils.HistoryState.currentState.viewDetail) {
                 this.showDetail(Kwf.Utils.HistoryState.currentState.viewDetail);
+            } else if (Kwf.Utils.HistoryState.currentState.viewFilter) {
+                this.showView();
+                //TODO don't use ownerCt, instead move this whole fn up
+                this.ownerCt.loadView('home', {
+                    filterComponentId: Kwf.Utils.HistoryState.currentState.viewFilter
+                });
+                //TODO mark filter menuitem as current
+                //maybe this whole code has to be somewhere else to access the menuitem
             } else {
                 this.showView();
+                //TODO when going back from detail don't reload view
+                //but do it if going back from filterComponentId
+                this.ownerCt.loadView('home', {});
             }
         }, this);
     },

@@ -54,9 +54,17 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
 
     protected function _getSelect()
     {
-        //TODO use $this->_component->parent->getComponent()->getSelect() ?
-        $ret = parent::_getSelect();
-        $ret->order('id'); //TODO remove
+        //$ret = parent::_getSelect(); what do we lose by not using that?
+        if ($this->_getParam('filterComponentId')) {
+            $filter = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($this->_getParam('filterComponentId'));
+            $ret = $filter
+                ->getChildComponent('-list') //TODO don't hardcode that here
+                ->getComponent()->getSelect();
+        } else {
+            $ret = $this->_component->parent->getComponent()->getSelect();
+        }
+//         $ret->order('id'); //TODO remove
         return $ret;
     }
 /*
