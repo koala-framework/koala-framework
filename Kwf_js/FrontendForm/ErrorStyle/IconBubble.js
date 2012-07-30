@@ -41,7 +41,6 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 }, field);
             }
             field.errorEl.child('.message').update(r.errorFields[fieldName]);
-            //field.errorEl.child('.message').createChild({cls: 'arrow'});
             field.errorEl.clearOpacity();
             field.errorEl.fadeIn({
                 endOpacity: 1 //TODO read from css (but that's hard for IE)
