@@ -8684,5 +8684,55 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Coş de cumpărături</ro>
 <sl>Košarica</sl>
 </text>
+<text>
+<en>This field should only contain numbers</en>
+<id>1764</id>
+</text>
+<text>
+<en>'%value%' contains characters which are not digits; but only digits are allowed</en>
+<id>1765</id>
+</text>
+<text>
+<en>Invalid type given, value should be string, integer or float</en>
+<id>1766</id>
+</text>
+<text>
+<en>Please check your details</en>
+<id>1767</id>
+</text>
+<text>
+<en>Automatically sent e-mail</en>
+<id>1768</id>
+</text>
+<text>
+<en>E-Mail CC</en>
+<id>1769</id>
+</text>
+<text>
+<en>Original  Name</en>
+<id>1770</id>
+</text>
+<text>
+<en>Adopt</en>
+<id>1771</id>
+</text>
+<text>
+<en>Link.to FlashMediaPlayer</en>
+<id>1772</id>
+</text>
+<text>
+<en>Video</en>
+<id>1773</id>
+</text>
+<text>
+<en>Form Properties</en>
+<de>Formular-Eigenschaften</de>
+<id>1774</id>
+</text>
+<text>
+<en>Text on successful submit</en>
+<de>Text nach Abschicken</de>
+<id>1775</id>
+</text>
 </trl>
 
