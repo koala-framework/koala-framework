@@ -11,8 +11,13 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 field.errorEl.createChild({
                     cls: 'message'
                 });
+                field.errorEl.createChild({
+                    cls: 'arrow'
+                });
                 field.errorEl.child('.message').enableDisplayMode('block');
+                field.errorEl.child('.arrow').enableDisplayMode('block');
                 field.errorEl.child('.message').hide();
+                field.errorEl.child('.arrow').hide();
                 if (field instanceof Kwf.FrontendForm.TextArea) {
                     field.errorEl.alignTo(field.el.child('textarea'), 'tr', [-20, 2]);
                 } else if (field instanceof Kwf.FrontendForm.Radio) {
@@ -28,15 +33,18 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 field.errorEl.hide();
                 Kwf.Event.on(field.errorEl, 'mouseEnter', function() {
                     this.errorEl.child('.message').fadeIn({duration: 0.4});
+                    this.errorEl.child('.arrow').fadeIn({duration: 0.4});
                 }, field);
                 Kwf.Event.on(field.errorEl, 'mouseLeave', function() {
                     this.errorEl.child('.message').fadeOut({duration: 0.2});
+                    this.errorEl.child('.arrow').fadeOut({duration: 0.2});
                 }, field);
             }
             field.errorEl.child('.message').update(r.errorFields[fieldName]);
+            //field.errorEl.child('.message').createChild({cls: 'arrow'});
             field.errorEl.clearOpacity();
             field.errorEl.fadeIn({
-                endOpacity: 0.8 //TODO read from css (but that's hard for IE)
+                endOpacity: 1 //TODO read from css (but that's hard for IE)
             });
         }
 
