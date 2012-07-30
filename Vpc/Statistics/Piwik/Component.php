@@ -37,7 +37,6 @@ class Vpc_Statistics_Piwik_Component extends Vpc_Abstract
             if (isset($domain->piwikId)) $ret = $domain->piwikId;
             if (isset($domain->statistik->ignore)) $ignore = $domain->statistik->ignore;
         }
-p($ret);
         if (!$ignore) {
             return $ret;
         }
