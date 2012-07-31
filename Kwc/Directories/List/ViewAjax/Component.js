@@ -33,8 +33,6 @@ Kwf.onContentReady(function(el) {
 
 Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
     config.renderTo = el.down('.viewContainer');
-    config.loadingEl = el.down('.loadingNew'); //TODO remove, create Element in JS
-    config.loadingEl.enableDisplayMode();
     Kwc.Directories.List.ViewAjax.instance = new Kwc.Directories.List.ViewAjax(config);
 });
 
@@ -102,7 +100,9 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
     afterRender: function() {
         Kwc.Directories.List.ViewAjax.superclass.afterRender.call(this);
 
-        this.currentMenuItem = 'home';
+        this.initialLoadingEl = this.el.createChild({cls:'initialLoading'});
+        this.initialLoadingEl.enableDisplayMode();
+
         this.loadView({});
 
         this.onMenuItemChanged();
@@ -296,7 +296,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 params: params,
                 success: function(response, options, r) {
                     this.onMetaLoad(r);
-                    this.ownerCt.loadingEl.hide();
+                    this.ownerCt.initialLoadingEl.hide();
                 },
                 scope: this
             });
