@@ -6920,7 +6920,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>You can not {0} this entry as it is used on the following pages:</en>
 <id>1386</id>
-<de>Dieser Eintrag kann nicht wie es auf den folgenden Seiten {0} verwendet werden:</de>
+<de>Dieser Eintrag kann nicht {0} werden, da er auf den folgenden Seiten verwendet wird:</de>
 <ro>Această înregistrare nu poate fi {0} cum este utilizată la paginile următoare:</ro>
 </text>
 <text>
