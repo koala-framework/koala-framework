@@ -145,6 +145,11 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         return $this->getData()->chained->getComponent()->getPartialCacheVars($nr);
     }
 
+    public function getContentWidth()
+    {
+        return $this->getData()->chained->getComponent()->getContentWidth();
+    }
+
     public static function getStaticCacheMeta($componentClass)
     {
         $sourceComponentClass = substr($componentClass, strpos($componentClass, '.')+1);

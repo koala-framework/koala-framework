@@ -79,6 +79,7 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
     public function onBoxRecursiveHasContentChanged(Kwf_Component_Event_Component_RecursiveHasContentChanged $event)
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        if (!$c) return;
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
             $this->_class, $c->componentId
         ));
@@ -95,6 +96,7 @@ class Kwc_Root_Abstract_Events extends Kwc_Abstract_Events
     public function onRecursiveAdded(Kwf_Component_Event_Component_RecursiveAdded $event)
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
+        if (!$c) return;
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveMasterContentChanged(
             $this->_class, $c->componentId
         ));

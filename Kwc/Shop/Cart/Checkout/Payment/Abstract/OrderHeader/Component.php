@@ -15,7 +15,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component extends Kwc_
         $ret['paymentTypeText'] = null;
         $c = $this->getData()->parent->componentClass;
         if (!is_instance_of($c, 'Kwc_Shop_Cart_Checkout_Payment_None_Component')) {
-            $ret['paymentTypeText'] = Kwc_Abstract::getSetting($c, 'componentName');
+            $ret['paymentTypeText'] = $this->getData()->trlStaticExecute(
+                Kwc_Abstract::getSetting($c, 'componentName')
+            );
         }
         return $ret;
     }
