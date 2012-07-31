@@ -109,12 +109,6 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
     },
 
     onMenuItemChanged: function() {
-        if (this.currentMenuItem != 'home') {
-            this.unreadTopArticles.hide();
-            this.deliveryTimes.hide();
-            this.el.up('.articlesDirectoryView').removeClass('articlesDirectoryViewHome');
-        }
-
         this.filtersVisible = true;
 //         this.filtersEl.show();
 
@@ -130,8 +124,6 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
     loadView: function(p)
     {
-        //this.currentMenuItem = type;
-
         var params = Ext.applyIf(p, {
             query: null,
             filterComponentId: null
