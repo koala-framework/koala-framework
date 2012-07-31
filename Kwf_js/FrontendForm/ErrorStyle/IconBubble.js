@@ -22,6 +22,10 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                     field.errorEl.alignTo(field.el.child('textarea'), 'tr', [-20, 2]);
                 } else if (field instanceof Kwf.FrontendForm.Radio) {
                     field.errorEl.alignTo(field.el.child('.kwfFormFieldRadio span:last'), 'tr', [0, 0]);
+                } else if (field instanceof Kwf.FrontendForm.MultiCheckbox) {
+                    field.errorEl.alignTo(field.el.child('input'), 'tr', [-6, -8]);
+                } else if (field instanceof Kwf.FrontendForm.Checkbox) {
+                    field.errorEl.alignTo(field.el.child('input'), 'tr', [-6, -8]);
                 } else if (field.el.child('input')) {
                     field.errorEl.alignTo(field.el.child('input'), 'tr', [-20, 2]);
                 } else if (field.el.child('select')) {
