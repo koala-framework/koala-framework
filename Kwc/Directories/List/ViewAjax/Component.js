@@ -73,12 +73,10 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             if (this._getState().viewDetail) {
                 this.showDetail(this._getState().viewDetail);
             } else if (this._getState().viewFilter) {
-                this.view.showView();
                 this.loadView({
                     filterComponentId: this._getState().viewFilter
                 });
             } else {
-                this.view.showView();
                 //TODO when going back from detail don't reload view
                 //but do it if going back from filterComponentId
                 this.loadView({});
