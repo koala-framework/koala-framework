@@ -77,8 +77,6 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
                     filterComponentId: this._getState().viewFilter
                 });
             } else {
-                //TODO when going back from detail don't reload view
-                //but do it if going back from filterComponentId
                 this.loadView({});
             }
             if (this._getState().menuLinkId) {
@@ -101,8 +99,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.initialLoadingEl = this.el.createChild({cls:'initialLoading'});
         this.initialLoadingEl.enableDisplayMode();
 
-        this.loadView({});
-
+        this.view.load();
         this.onMenuItemChanged();
     },
 
@@ -126,9 +123,18 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             query: null,
             filterComponentId: null
         });
-        this.view.applyBaseParams(params);
+        var diffFound = false;
+        for(var i in params) {
+            if (params[i] != this.view.getBaseParams()[i]) {
+                diffFound = true;
+                break;
+            }
+        }
+        if (diffFound) {
+            this.view.applyBaseParams(params);
+            this.view.load();
+        }
         this.onMenuItemChanged();
-        this.view.load();
         this.view.showView();
     },
 
