@@ -103,7 +103,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         return $rows[$rule];
     }
 
-    public function _getSiblingRows()
+    protected function _getSiblingRows()
     {
         if (!isset($this->_siblingRows)) {
             $this->_siblingRows = array();

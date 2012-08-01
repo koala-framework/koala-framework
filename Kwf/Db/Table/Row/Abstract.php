@@ -191,14 +191,4 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
             Kwf_Component_ModelObserver::getInstance()->add('delete', $this);
         }
     }
-
-    /**
-     * @deprecated in neuerem kwf haben auch die Kwf_Models dieses feature, das verwenden!
-     * das hier ist nur da weil es bei rssinclude benötigt wurde
-     */
-    public function ___getDirtyColumns()
-    {
-        return array_keys($this->_modifiedFields);
-    }
-
 }
