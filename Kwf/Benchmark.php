@@ -155,8 +155,14 @@ class Kwf_Benchmark
             } else {
                 echo "Memory: ".round(memory_get_usage()/1024)." kb<br />\n";
             }
-            if (Zend_Registry::get('dao') && Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
-                echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
+            if (Zend_Registry::get('dao') && Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db')) {
+                if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+                    echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
+                } else {
+                    echo "DB-Queries: (no profiler used)<br />\n";
+                }
+            } else {
+                echo "DB-Queries: (none)<br />\n";
             }
         }
         self::_outputCounter(self::$_counter);
