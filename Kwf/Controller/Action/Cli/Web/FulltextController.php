@@ -187,12 +187,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
                     if ($this->_getParam('debug')) echo "==> ".$componentId;
                     $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
-                    if ($this->_getParam('debug')) echo " :: $page->url\n";
                     if (!$page) {
                         if ($this->_getParam('debug')) echo "$componentId not found!\n";
                         continue;
                     }
-                    //echo "$page->url\n";
+                    if ($this->_getParam('debug')) echo " :: $page->url\n";
                     if ($this->_getParam('verbose')) echo "getting child pages...";
 
                     $childPages = $page->getChildPseudoPages(
