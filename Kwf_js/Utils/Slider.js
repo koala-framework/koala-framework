@@ -3,7 +3,7 @@
 Ext.Slider.prototype.originalDoSnap = Ext.Slider.prototype.doSnap;
 Ext.Slider.prototype.doSnap = function(value) {
     if (this.maxValue - value < this.increment / 2) {
-        return this.maxValue;
+        return parseInt(this.maxValue);
     }
     return Ext.Slider.prototype.originalDoSnap.call(this, value);
 };
