@@ -32,7 +32,7 @@
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
             document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32"/>');
-            document.write('<?= $this->applicationName ?><br /><span id="loading-msg"><?= $this->data->trlKwf('Loading...') ?></span></div>');
+            document.write('<?= $this->applicationName ?><br /><span id="loading-msg"><?= trlKwf('Loading...') ?></span></div>');
         document.write('</div>');
         var Kwf = {isApp: true};
     </script>

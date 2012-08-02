@@ -3,7 +3,7 @@
         <title>500 Internal Server Error</title>
     </head>
     <body>
-        <h1><?= $this->data->trlKwf('Error') ?></h1>
+        <h1><?= trlKwf('Error') ?></h1>
 
         <?php if ($this->debug) { ?>
             Errortype:<br />
@@ -18,7 +18,7 @@
             <pre><?= $this->query ?></pre>
             <?php } ?>
         <?php } else { ?>
-            <?= $this->data->trlKwf('An Error ocurred. Please try again later.') ?>
+            <?= trlKwf('An Error ocurred. Please try again later.') ?>
         <?php } ?>
         <?php if ($this->debug || isset($_COOKIE['unitTest'])) { ?>
         <? try {
