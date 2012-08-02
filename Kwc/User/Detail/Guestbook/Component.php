@@ -5,7 +5,7 @@ class Kwc_User_Detail_Guestbook_Component extends Kwc_Posts_Directory_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Guestbook');
-        $ret['placeholder']['writeText'] = trlKwf('New Entry');
+        $ret['placeholder']['writeText'] = trlKwfStatic('New Entry');
         return $ret;
     }
 

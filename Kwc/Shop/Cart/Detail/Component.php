@@ -7,7 +7,7 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
         $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Detail_Form_Component';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
-        $ret['placeholder']['product'] = trlKwf('Product').': ';
+        $ret['placeholder']['product'] = trlKwfStatic('Product').': ';
         $ret['placeholder']['unitPrice'] = '';
         return $ret;
     }

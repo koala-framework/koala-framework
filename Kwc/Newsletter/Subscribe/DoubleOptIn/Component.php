@@ -4,7 +4,7 @@ class Kwc_Newsletter_Subscribe_DoubleOptIn_Component extends Kwc_Form_Success_Co
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlKwf('Your E-Mail address has been verified. You will receive our newsletters in future.');
+        $ret['placeholder']['success'] = trlKwfStatic('Your E-Mail address has been verified. You will receive our newsletters in future.');
         return $ret;
     }
 

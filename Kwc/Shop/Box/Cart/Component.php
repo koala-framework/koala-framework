@@ -8,8 +8,8 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
         $ret['cssClass'] = 'webStandard';
         $ret['assets']['dep'][] = 'ExtConnection';
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Box/Cart/Component.js';
-        $ret['placeholder']['toCart'] = trlKwf('To cart');
-        $ret['placeholder']['toCheckout'] = trlKwf('To Checkout');
+        $ret['placeholder']['toCart'] = trlKwfStatic('To cart');
+        $ret['placeholder']['toCheckout'] = trlKwfStatic('To Checkout');
         return $ret;
     }
 

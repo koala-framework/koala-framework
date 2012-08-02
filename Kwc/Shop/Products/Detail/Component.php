@@ -15,7 +15,7 @@ class Kwc_Shop_Products_Detail_Component extends Kwc_Directories_Item_Detail_Com
             'column' => 'component'
         );
         $ret['cssClass'] = 'webStandard';
-        $ret['placeholder']['back'] = trlKwf('Back');
+        $ret['placeholder']['back'] = trlKwfStatic('Back');
         $ret['assetsAdmin']['dep'][] = 'KwfFormDateTimeField';
         $ret['editComponents'] = array('content');
         return $ret;

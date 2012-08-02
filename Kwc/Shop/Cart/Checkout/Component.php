@@ -16,7 +16,7 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
             )
         );
         $ret['cssClass'] = 'webForm webStandard';
-        $ret['placeholder']['backToCart'] = trlKwf('Back to cart');
+        $ret['placeholder']['backToCart'] = trlKwfStatic('Back to cart');
 
         $ret['shipping'] = 0;
 

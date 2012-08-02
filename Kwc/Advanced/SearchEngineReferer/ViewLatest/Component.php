@@ -9,7 +9,7 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Component
     {
         $ret = parent::getSettings();
         $ret['limit'] = 5;
-        $ret['placeholder']['header'] = trlKwf('Latest referer');
+        $ret['placeholder']['header'] = trlKwfStatic('Latest referer');
         return $ret;
     }
 
