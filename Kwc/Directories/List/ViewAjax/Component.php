@@ -25,4 +25,10 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
         );
         return $ret;
     }
+
+    //public for ViewController
+    public final function getSelect()
+    {
+        return $this->_getSelect();
+    }
 }

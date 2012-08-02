@@ -59,6 +59,10 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
         Kwf.Utils.HistoryState.currentState[this.componentId] = {};
 
+        if (!Kwc.Directories.List.ViewAjax.filterLinks[this.componentId]) {
+            Kwc.Directories.List.ViewAjax.filterLinks[this.componentId] = [];
+        }
+
         //set menuLinkId to link that is current, be be able to set current again
         Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
             if (Ext.fly(i).hasClass('current')) {

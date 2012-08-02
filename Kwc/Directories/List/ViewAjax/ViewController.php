@@ -59,22 +59,22 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
             $filter = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($this->_getParam('filterComponentId'));
             if (!is_instance_of($filter->componentClass, 'Kwc_Directories_List_Component')) {
-                $filter = $filter->getChildComponent('-list'); //TODO don't hardcode that here
+                $filter = $filter->getChildComponent('-list')->getChildComponent('-view'); //TODO don't hardcode that here
             }
             $ret = $filter->getComponent()->getSelect();
         } else {
-            $ret = $this->_component->parent->getComponent()->getSelect();
+            $ret = $this->_component->getComponent()->getSelect();
         }
-        $ret->order('id'); //TODO remove
         return $ret;
     }
-/*
+
     //TODO implement correctly?
+    //eventually on a per-detail level
     protected function _isAllowedComponent()
     {
-        return !!Kwf_Model_Abstract::getInstance('Users')->getAuthedUser();
+        return true;
     }
-*/
+
 
     public function jsonDataAction()
     {

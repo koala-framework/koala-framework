@@ -5,7 +5,7 @@ class Kwc_Directories_AjaxView_Category_Detail_Component extends Kwc_Directories
     {
         $ret = parent::getSettings();
         $ret['contentSender'] = 'Kwc_Directories_Category_Detail_AjaxViewContentSender';
-        //$ret['generators']['child']['component']['list'] = 'Kwc_Basic_Empty_Component';
+        $ret['generators']['child']['component']['list'] = 'Kwc_Directories_AjaxView_Category_Detail_List_Component';
         return $ret;
     }
 }
