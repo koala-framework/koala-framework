@@ -4,7 +4,7 @@
         <div class="detail">
             <? if (!empty($this->from['name']) || !empty($this->from['email'])) { ?>
                 <div>
-                    <label><?= trlKwf('From'); ?>:</label>
+                    <label><?= $this->data->trlKwf('From'); ?>:</label>
                     <div>
                         <? if (!empty($this->from['name'])) echo $this->from['name']; ?>
                         <? if (!empty($this->from['email'])) echo '&lt;'.$this->from['email'].'&gt;'; ?>
@@ -26,7 +26,7 @@
             </div>
             <? if ($this->cc) { ?>
                 <div>
-                    <label><?= trlKwf('Copy'); ?>:</label>
+                    <label><?= $this->data->trlKwf('Copy'); ?>:</label>
                     <div>
                     <?php
                         $first = true;
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             <? } ?>
-            <div><label><?= trlKwf('Date'); ?>:</label> <?= $this->dateTime($this->send_date); ?></div>
+            <div><label><?= $this->data->trlKwf('Date'); ?>:</label> <?= $this->dateTime($this->send_date); ?></div>
         </div>
     </div>
 

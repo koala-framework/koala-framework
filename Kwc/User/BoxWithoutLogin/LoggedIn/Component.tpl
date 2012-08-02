@@ -6,13 +6,13 @@
             </li>
             <? if ($this->myProfile) { ?>
             <li class="profile">
-                <?=$this->componentLink($this->myProfile, trlKwf('My Profile'))?>
+                <?=$this->componentLink($this->myProfile, $this->data->trlKwf('My Profile'))?>
             </li>
             <? } ?>
             <? foreach ($this->links as $l) { ?>
                 <li><?=$this->componentLink($l)?></li>
             <? } ?>
-            <li class="logout"><a href="<?=$this->logoutLink?>"><?=trlKwf('Logout')?></a></li>
+            <li class="logout"><a href="<?=$this->logoutLink?>"><?=$this->data->trlKwf('Logout')?></a></li>
         </ul>
         <div class="clear"></div>
     </div>

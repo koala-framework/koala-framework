@@ -1,13 +1,13 @@
 <div class="<?=$this->cssClass?>" id="<?=$this->data->componentId?>">
     <div class="cartList">
-        <h2><?=trlKwf('Cart')?></h2>
+        <h2><?=$this->data->trlKwf('Cart')?></h2>
         <? if (!$this->items) { ?>
-            <p><?=trlKwf('Cart is empty')?></p>
+            <p><?=$this->data->trlKwf('Cart is empty')?></p>
     </div>
         <? } else { ?>
             <div class="countProducts">
                 <p>
-                    <?=trlKwf('You cart contains {0} products','<strong>'.$this->order->getTotalAmount().'</strong>')?>
+                    <?=$this->data->trlKwf('You cart contains {0} products','<strong>'.$this->order->getTotalAmount().'</strong>')?>
                 </p>
             </div>
             <table class="tblBoxCart" cellspacing="0" cellpadding="0">

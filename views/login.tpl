@@ -10,13 +10,13 @@
             <form id="ext-gen34" method="post" class="x-form" action="/kwf/user/login/show-form">
                 <div class="x-panel-mc" style="padding: 10px; height:100%">
                     <div tabindex="-1" class="x-form-item">
-                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= trlKwf('E-Mail') ?>:</label>
+                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= $this->data->trlKwf('E-Mail') ?>:</label>
                         <div style="padding-left: 80px;" id="x-form-el-ext-comp-1004" class="x-form-element">
                             <input type="text" name="username" autocomplete="on" size="20" class="x-form-text x-form-field" style="width: 180px;" />
                         </div>
                     </div>
                     <div tabindex="-1" class="x-form-item">
-                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= trlKwf('Password') ?>:</label>
+                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= $this->data->trlKwf('Password') ?>:</label>
                         <div style="padding-left: 80px;" id="x-form-el-ext-comp-1004" class="x-form-element">
                             <input type="password" name="password" autocomplete="on" size="20" class="x-form-text x-form-field" style="width: 180px;" />
                         </div>
@@ -36,7 +36,7 @@
 
                                 <td class="x-btn-left"></td>
                                 <td class="x-btn-center">
-                                    <button type="submit" class="x-btn-text" id="ext-gen18"><?= trlKwf('Login') ?></button>
+                                    <button type="submit" class="x-btn-text" id="ext-gen18"><?= $this->data->trlKwf('Login') ?></button>
                                 </td>
                                 <td class="x-btn-right"></td>
                             </tr>

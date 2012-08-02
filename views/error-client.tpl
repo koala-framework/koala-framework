@@ -1,9 +1,9 @@
 <html>
     <head>
-        <title><?= trlKwf('Error'); ?></title>
+        <title><?= $this->data->trlKwf('Error'); ?></title>
     </head>
     <body>
-        <h1><?= trlKwf('Error') ?></h1>
+        <h1><?= $this->data->trlKwf('Error') ?></h1>
         <p><?= $this->message ?></p>
     </body>
 </html>

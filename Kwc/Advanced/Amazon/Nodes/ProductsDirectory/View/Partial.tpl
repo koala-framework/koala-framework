@@ -4,6 +4,6 @@
     <? } ?>
     <h1><?=$this->componentLink($this->item);?></h1>
     <h2><?=$this->item->row->author?></h2>
-    <p><?=$this->componentLink($this->item, trlKwf('more information').' »');?></p>
+    <p><?=$this->componentLink($this->item, $this->data->trlKwf('more information').' »');?></p>
     <div class="clear"></div>
 </li>
