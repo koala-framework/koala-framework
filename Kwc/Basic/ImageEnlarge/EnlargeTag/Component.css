@@ -1,4 +1,4 @@
-/* .webZoom {
+.webZoom {
     display: block;
     position: absolute;
     bottom: 8px;
@@ -7,4 +7,4 @@
     height: 15px;
     background-image: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/zoom.png);
     background-repeat: no-repeat;
-} */
+}
