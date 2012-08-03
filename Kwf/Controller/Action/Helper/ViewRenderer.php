@@ -36,11 +36,10 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                     $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 } else {
                     header('Content-Type: text/html');
-//                     echo "<pre>";
-//                     echo htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
-echo htmlspecialchars(Zend_Json::encode($this->view->getOutput()));
-//                     echo "</pre>";
                     Kwf_Benchmark::output();
+                    echo "<pre>";
+                    echo htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
+                    echo "</pre>";
                     $this->setNoRender();
                 }
             } else {
