@@ -439,6 +439,8 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             if (!$newDoc) {
                 //this can happen (if there is no content)
                 Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($subroot, $componentId);
+                $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow($componentId);
+                if ($row) $row->delete();
                 continue;
             }
             if ($newDoc['content'] != $doc['content']) {
