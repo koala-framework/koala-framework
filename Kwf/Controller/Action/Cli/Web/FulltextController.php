@@ -436,6 +436,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
             if (!$page) continue; //should not happen
             $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
+            if (!$newDoc) {
+                //this can happen (if there is no content)
+                Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($subroot, $componentId);
+                continue;
+            }
             if ($newDoc['content'] != $doc['content']) {
                 $stats['diffPages']++;
                 if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
