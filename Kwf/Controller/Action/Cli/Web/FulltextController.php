@@ -418,15 +418,15 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             'indexedPages' => 0,
             'diffPages' => 0,
         );
-        foreach ($documents as $doc) {
-            $doc = $index->getDocument($doc);
+        foreach ($documents as $result) {
+            $doc = $index->getDocument($result);
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
             if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
             if (!$page) continue; //should not happen
             $newDoc = Kwc_FulltextSearch_MetaModel::getInstance()->getDocumentForPage($page);
             if (!$newDoc) {
                 //this can happen (if there is no content)
-                $index->delete($doc->id);
+                $index->delete($result->id);
                 continue;
             }
             if ($newDoc->getField('content')->value != $doc->getField('content')->value) {
