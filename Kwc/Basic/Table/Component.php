@@ -67,11 +67,4 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         }
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getCacheMeta();
-        $ret[] = new Kwf_Component_Cache_Meta_Static_ChildModel();
-        return $ret;
-    }
 }
