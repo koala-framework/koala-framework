@@ -5,7 +5,7 @@ class Kwc_Shop_Cart_Form_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = false;
-        $ret['placeholder']['submitButton'] = trlKwf('Save');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Save');
         return $ret;
     }
     protected function _initForm()

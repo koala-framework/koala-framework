@@ -4,7 +4,7 @@ abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlKwf('add to cart');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('add to cart');
         $ret['generators']['child']['component']['success'] = 'Kwc_Shop_AddToCartAbstract_Success_Component';
         $ret['orderProductData'] = 'Kwc_Shop_AddToCartAbstract_OrderProductData';
         $ret['productTypeText'] = null;
@@ -14,7 +14,7 @@ abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $cart = Kwf_Component_Data_Root::getInstance()->getComponentByClass('Kwc_Shop_Cart_Component', array('ignoreVisible' => true));
+        $cart = Kwf_Component_Data_Root::getInstance()->getComponentByClass('Kwc_Shop_Cart_Component', array('ignoreVisible' => true, 'subroot'=>$this->getData()));
         if (!$cart) throw new Kwf_Exception_Client(trl('Need cart for shop but could not find it. Please add in Admin.'));
         $m = $cart->getComponent()->getChildModel();
         $this->_form->setModel($m);
@@ -24,7 +24,7 @@ abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
     {
         $ret = parent::getTemplateVars();
         if ($this->_form->getId()) {
-            $ret['placeholder']['submitButton'] = trlKwf('Update');
+            $ret['placeholder']['submitButton'] = $this->data->trlKwf('Update');
         }
         return $ret;
     }

@@ -106,7 +106,9 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
             $store['url'] = $data;
         } else if ($this->getFilterField() && !$this->getFilterValue()) {
             $store['data'] = array();
-        } else if ($data instanceof Zend_Db_Table_Abstract || $data instanceof Kwf_Db_Table_Rowset_Abstract
+        } else if ($data instanceof Zend_Db_Table_Abstract
+            || $data instanceof Kwf_Model_Interface
+            || $data instanceof Kwf_Db_Table_Rowset_Abstract
             || $data instanceof Kwf_Model_Rowset_Interface
         ) {
             if ($data instanceof Zend_Db_Table_Abstract) {
@@ -118,6 +120,15 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
                     $select->where($this->getFilterField().' = ?', $this->getFilterValue());
                 }
                 $data = $data->fetchAll($select);
+            } else if ($data instanceof Kwf_Model_Interface) {
+                $select = $this->getSelect();
+                if (!$select) {
+                    $select = $data->select();
+                }
+                if ($this->getFilterField() && $this->getFilterValue()) {
+                    $select->whereEquals($this->getFilterField(), $this->getFilterValue());
+                }
+                $data = $data->getRows($select);
             }
             $store['data'] = array();
             foreach ($data as $row) {

@@ -4,7 +4,7 @@ class Kwc_User_DeleteAccount_Form_Component extends Kwc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlKwf('Delete Account');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Delete Account');
         $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
         return $ret;
     }

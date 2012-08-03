@@ -5,7 +5,7 @@ class Kwc_Shop_Products_Directory_AddToCart_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['flags']['processInput'] = false;
-        $ret['placeholder']['submitButton'] = trlKwf('add to cart');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('add to cart');
         $ret['generators']['child']['component']['success'] = 'Kwc_Shop_AddToCartAbstract_Success_Component';
         return $ret;
     }

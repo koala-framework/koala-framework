@@ -5,7 +5,7 @@ class Kwc_Advanced_SearchEngineReferer_ViewMyLatest_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['header'] = trlKwf('This site was latest found by').':';
+        $ret['placeholder']['header'] = trlKwfStatic('This site was latest found by').':';
         return $ret;
     }
 

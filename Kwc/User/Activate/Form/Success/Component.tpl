@@ -1,10 +1,10 @@
 <div class="<?=$this->cssClass?>">
     <p>
-        <strong><?=trlKwf('Your useraccount was successfully activated.')?></strong>
+        <strong><?=$this->data->trlKwf('Your useraccount was successfully activated.')?></strong>
     </p>
     <p>
-        <?=trlKwf('You were logged in, automatically')?><br />
-        <a href="/"><?=trlKwf('Click here')?></a>, <?=trlKwf('to get back to the Startpage')?>.
+        <?=$this->data->trlKwf('You were logged in, automatically')?><br />
+        <a href="/"><?=$this->data->trlKwf('Click here')?></a>, <?=$this->data->trlKwf('to get back to the Startpage')?>.
 
         <script type="text/javascript">
             window.setTimeout("window.location.href = '/'", 3000);

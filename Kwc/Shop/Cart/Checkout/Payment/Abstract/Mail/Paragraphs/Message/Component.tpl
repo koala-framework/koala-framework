@@ -1,1 +1,1 @@
-<p><?=trlKwf('Message');?></p>
+<p><?=$this->data->trlKwf('Message');?></p>

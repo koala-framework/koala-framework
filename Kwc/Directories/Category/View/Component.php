@@ -21,7 +21,7 @@ class Kwc_Directories_Category_View_Component
     public function getPartialVars($partial, $nr, $info)
     {
         $ret = parent::getPartialVars($partial, $nr, $info);
-        $ret['placeholder'] = $this->_getSetting('placeholder');
+        $ret['placeholder'] = $this->_getPlaceholder();
         $ret['hideCategoriesWithoutEntries'] = $this->_getSetting('hideCategoriesWithoutEntries');
         return $ret;
     }

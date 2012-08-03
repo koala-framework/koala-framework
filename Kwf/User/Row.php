@@ -34,6 +34,25 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return substr(md5($this->password_salt), 0, 10);
     }
 
+    public function getActivationUrl()
+    {
+        $root = Kwf_Component_Data_Root::getInstance();
+        $activateComponent = null;
+        if ($root) {
+            // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
+            // für den Benutzer auswählen
+            // oder man leitet auf eine redirect seite um und schaut auf die
+            // browser accept language
+            $activateComponent = $root
+                ->getComponentByClass('Kwc_User_Activate_Component', array('limit' => 1));
+        }
+        $activateUrl = '/kwf/user/login/activate';
+        if ($activateComponent) $activateUrl = $activateComponent->url;
+        $activationUrl = $activateUrl.'?code='.$this->id.'-'.
+                        $this->getActivationCode();
+        return $activationUrl;
+    }
+
     public function encodePassword($password)
     {
         return md5($password.$this->password_salt);
@@ -231,29 +250,24 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         $mail->userData = $this->toArray();
 
         $root = Kwf_Component_Data_Root::getInstance();
-        $activateComponent = null;
         $lostPasswortComponent = null;
         if ($root) {
             // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
             // für den Benutzer auswählen
             // oder man leitet auf eine redirect seite um und schaut auf die
             // browser accept language
-            $activateComponent = $root
-                ->getComponentByClass('Kwc_User_Activate_Component', array('limit' => 1));
             $lostPasswortComponent = $root
                 ->getComponentByClass('Kwc_User_LostPassword_SetPassword_Component', array('limit' => 1));
         }
-        $activateUrl = $lostPassUrl = '/kwf/user/login/activate';
-        if ($activateComponent) $activateUrl = $activateComponent->url;
-        $mail->activationUrl = $mail->webUrl.$activateUrl.'?code='.$this->id.'-'.
-                        $this->getActivationCode();
-
+        $mail->activationUrl = $mail->webUrl . self::getActivationUrl();
+        $lostPassUrl = '/kwf/user/login/activate';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->url;
         $mail->lostPasswordUrl = $mail->webUrl.$lostPassUrl.'?code='.$this->id.'-'.
                         $this->getActivationCode();
         return $mail;
     }
 
+    
     protected function _sendMail($tpl, $subject, $tplParams = null)
     {
         if (!$this->email || !$this->_sendMails) {

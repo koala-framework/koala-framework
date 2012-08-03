@@ -17,7 +17,7 @@ class Kwf_Util_Fulltext_Lucene
             }
             $subroot = $subroot->parent;
         }
-        if (!$subroot) Kwf_Component_Data_Root::getInstance();
+        if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
 
         static $instance = array();
         if (!isset($instance[$subroot->componentId])) {

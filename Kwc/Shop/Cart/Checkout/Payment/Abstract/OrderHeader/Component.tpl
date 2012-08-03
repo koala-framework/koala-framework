@@ -15,7 +15,7 @@
     <div class="receiverComment">
         <p>
             <? if ($this->order->comment) { ?>
-                <strong><?=trlKwf('Your Comment')?></strong><br />
+                <strong><?=$this->data->trlKwf('Your Comment')?></strong><br />
                 <?=$this->order->comment?>
             <? } ?>
         </p>
@@ -23,7 +23,7 @@
     <? if ($this->paymentTypeText) { ?>
     <div class="orderInfo">
         <p>
-            <?=trlKwf('You pay by')?> <strong><?=$this->paymentTypeText?></strong>.
+            <?=$this->data->trlKwf('You pay by')?> <strong><?=$this->paymentTypeText?></strong>.
         </p>
     </div>
     <? } ?>

@@ -17,13 +17,16 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
 
     private function _getMenuSource()
     {
-        $category = Kwc_Abstract::getSetting($this->_getSetting('menuComponentClass'), 'level');
+        $category = Kwc_Abstract::getSetting($this->_getMenuComponentClass(), 'level');
         $categoryData = $this->getData()->parent->parent->getChildComponent('-'.$category);
         $menu = $categoryData->getChildComponent('-'.$this->getData()->id);
-        if (!is_instance_of($menu->componentClass, 'Kwc_Menu_Abstract_Component')) {
-            throw new Kwf_Exception("got invalid menu component");
-        }
         return $menu;
+    }
+
+    // overwritten by trl
+    protected function _getMenuComponentClass()
+    {
+        return $this->_getSetting('menuComponentClass');
     }
 
     public function getTemplateVars()

@@ -5,7 +5,7 @@ class Kwc_Directories_CategoryTree_Detail_Breadcrumbs_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['currentCategories'] = trlKwf('Current category:');
+        $ret['placeholder']['currentCategories'] = trlKwfStatic('Current category:');
         $ret['placeholder']['categoryTreeRootText'] = null;
         $ret['cssClass'] = 'webStandard';
         return $ret;

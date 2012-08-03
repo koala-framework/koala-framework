@@ -89,19 +89,19 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
     /**
      * Nur verwenden wenn Bestellung noch nicht abgeschlossen
      */
-    public function getProductsDataWithProduct()
+    public function getProductsDataWithProduct(Kwf_Component_Data $subroot)
     {
-        return $this->_getProductsData(true);
+        return $this->_getProductsData($subroot);
     }
     /**
      * Kann immer verwendet werden, auch wenn es add_compoment_id gar nicht mehr gibt
      */
     public function getProductsData()
     {
-        return $this->_getProductsData(false);
+        return $this->_getProductsData(null);
     }
 
-    private function _getProductsData($includeProduct)
+    private function _getProductsData(Kwf_Component_Data $subroot = null)
     {
         $ret = array();
 
@@ -115,9 +115,9 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
                 'amount' => $data->getAmount($i),
                 'text' => $data->getProductText($i),
             );
-            if ($includeProduct) {
+            if ($subroot) {
                 $addComponent = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentByDbId($i->add_component_id);
+                                ->getComponentByDbId($i->add_component_id, array('subroot' => $subroot));
                 $r['product'] = $addComponent->parent;
             }
             $ret[] = (object)$r;

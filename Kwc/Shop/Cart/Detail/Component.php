@@ -7,7 +7,7 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
         $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Detail_Form_Component';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
-        $ret['placeholder']['product'] = trlKwf('Product').': ';
+        $ret['placeholder']['product'] = trlKwfStatic('Product').': ';
         $ret['placeholder']['unitPrice'] = '';
         return $ret;
     }
@@ -23,7 +23,7 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $addCmp = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->getData()->row->add_component_id);
+            ->getComponentByDbId($this->getData()->row->add_component_id, array('subroot'=>$this->getData()));
         $ret['product'] = $addCmp->parent;
         $ret['row'] = $this->getData()->row;
         $ret['price'] = $addCmp->getComponent()->getPrice($ret['row']);
