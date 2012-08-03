@@ -33,9 +33,7 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
                     $c = Kwf_Component_Data_Root::getInstance()
                         ->getComponentByDbId($linkingRow->component_id);
                     //$c kann null sein wenn es nicht online ist
-                    if ($c &&
-                        is_instance_of($c->componentClass, 'Kwc_Basic_LinkTag_News_Component')
-                    ) {
+                    if ($c && $c->componentClass == $this->_class) {
                         $ret[] = $c;
                     }
                 }
