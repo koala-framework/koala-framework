@@ -1,5 +1,5 @@
 <?php
-class Kwc_Newsletter_Detail_StatisticsClicksController extends KWf_Controller_Action_Auto_Grid
+class Kwc_Newsletter_Detail_StatisticsClicksController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('xls');
     protected function _initColumns()

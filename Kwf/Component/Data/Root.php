@@ -135,7 +135,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         $this->_componentsByDbIdCache = null;
         $this->_generatorsForClassesCache = array();
         //Kwf_Component_Generator_Abstract::clearInstances();
-        KWf_Model_Abstract::clearAllRows();
+        Kwf_Model_Abstract::clearAllRows();
 
         if (function_exists('gc_collect_cycles')) gc_collect_cycles();
     }
