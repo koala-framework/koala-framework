@@ -424,6 +424,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
             if (!$page) continue; //should not happen
             $newDoc = Kwc_FulltextSearch_MetaModel::getInstance()->getDocumentForPage($page);
+            if (!$newDoc) {
+                //this can happen (if there is no content)
+                $index->delete($doc->id);
+                continue;
+            }
             if ($newDoc->getField('content')->value != $doc->getField('content')->value) {
                 $stats['diffPages']++;
                 if (Kwc_FulltextSearch_MetaModel::getInstance()->indexPage($page)) {
