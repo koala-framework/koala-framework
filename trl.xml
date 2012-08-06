@@ -8699,31 +8699,31 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Just Zoom</en>
-<id>1520</id>
+<id>1763</id>
 </text>
 <text>
-<en>Landesstra&#xDF;e 23</en>
-<id>1521</id>
+<en>Landesstraße 23</en>
+<id>1764</id>
 </text>
 <text>
 <en>A-5302 Henndorf a. Wallersee</en>
-<id>1522</id>
+<id>1765</id>
 </text>
 <text>
 <en>Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
-<id>1523</id>
+<id>1766</id>
 </text>
 <text>
 <en>Edit Column</en>
-<id>1524</id>
+<id>1767</id>
 </text>
 <text>
 <en>close</en>
-<id>1525</id>
+<id>1768</id>
 </text>
 <text>
 <en>Can't save, please fill all marked fields correctly.</en>
-<id>1526</id>
+<id>1769</id>
 </text>
 <text>
 <en>Properties of selected Page</en>
@@ -8731,11 +8731,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Add new Subpage</en>
-<id>1528</id>
+<id>1770</id>
 </text>
 <text>
 <en>Delete selected Page</en>
-<id>1529</id>
+<id>1771</id>
 </text>
 <text>
 <en>Toggle Visibility of selected Page</en>
@@ -8759,17 +8759,17 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1534</id>
 </text>
 <text>
-<de>'%value%' muss gr&#xF6;&#xDF;er oder gleich sein als '%min%'</de>
+<de>'%value%' muss größer oder gleich sein als '%min%'</de>
 <en>'%value%' must be greater or equal than '%min%'</en>
 <id>1535</id>
 </text>
 <text>
-<de>'%value%' enth&#xE4;lt Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
+<de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
 <en>'%value%' contains characters which are not digits; but only digits are allowed</en>
 <id>1536</id>
 </text>
 <text>
-<de>Ung&#xFC;ltiger Typ angegeben, Wert sollte String, Integer oder Float sein</de>
+<de>Ungültiger Typ angegeben, Wert sollte String, Integer oder Float sein</de>
 <en>Invalid type given, value should be string, integer or float</en>
 <id>1537</id>
 </text>
