@@ -22,14 +22,11 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "JavaScript");
         $this->clickAndWait('link=Php');
 
-        $this->assertElementPresent('link=PHP 5.3 + MySQL 5.1: Der Einstieg in die Programmierung dynamischer Websites');
-        $this->clickAndWait('link=PHP 5.3 + MySQL 5.1: Der Einstieg in die Programmierung dynamischer Websites');
-        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h1", "Der Einstieg");
-        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h2", "Florence Maurice");
+        $this->assertElementPresent('css=li.products a');
+        $this->clickAndWait('css=li.products a');
         $this->assertElementPresent('link='.trlVps('order now at amazon'));
         $href = $this->getAttribute('link='.trlVps('order now at amazon').'@href');
         $this->assertEquals('http://www.amazon.de', substr($href, 0, 20));
-        $this->assertContains('3827327237', $href);
         $this->assertContains('vps-21', $href);
     }
 }
