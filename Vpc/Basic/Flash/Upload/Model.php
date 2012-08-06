@@ -14,7 +14,7 @@ class Vpc_Basic_Flash_Upload_Model extends Vps_Component_FieldModel
         'menu' => 1
     );
 
-    $_rowClass = 'Vpc_Basic_Flash_Upload_Row';
+    protected $_rowClass = 'Vpc_Basic_Flash_Upload_Row';
 
     protected function _init()
     {
