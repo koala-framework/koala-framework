@@ -8754,16 +8754,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1533</id>
 </text>
 <text>
-<de>Benutzer ist momentan gesperrt.</de>
-<en>User is currently locked.</en>
-<id>1534</id>
-</text>
-<text>
-<de>'%value%' muss größer oder gleich sein als '%min%'</de>
-<en>'%value%' must be greater or equal than '%min%'</en>
-<id>1535</id>
-</text>
-<text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
 <en>'%value%' contains characters which are not digits; but only digits are allowed</en>
 <id>1536</id>
@@ -8773,10 +8763,4 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Invalid type given, value should be string, integer or float</en>
 <id>1537</id>
 </text>
-<text>
-<de>'%value%' muss kleiner oder gleich sein als '%max%'</de>
-<en>'%value%' must be less or equal than '%max%'</en>
-<id>1538</id>
-</text>
 </trl>
-
