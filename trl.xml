@@ -8705,14 +8705,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1764</id>
 </text>
 <text>
-<en>'%value%' contains characters which are not digits; but only digits are allowed</en>
-<id>1765</id>
-</text>
-<text>
-<en>Invalid type given, value should be string, integer or float</en>
-<id>1766</id>
-</text>
-<text>
 <en>Please check your details</en>
 <id>1767</id>
 </text>
@@ -8749,6 +8741,74 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Text on successful submit</en>
 <de>Text nach Abschicken</de>
 <id>1775</id>
+<en>Subtotal</en>
+<id>1519</id>
+</text>
+<text>
+<en>Just Zoom</en>
+<id>1776</id>
+</text>
+<text>
+<en>Landesstraße 23</en>
+<id>1777</id>
+</text>
+<text>
+<en>A-5302 Henndorf a. Wallersee</en>
+<id>1778</id>
+</text>
+<text>
+<en>Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
+<id>1779</id>
+</text>
+<text>
+<en>Edit Column</en>
+<id>1780</id>
+</text>
+<text>
+<en>close</en>
+<id>1781</id>
+</text>
+<text>
+<en>Can't save, please fill all marked fields correctly.</en>
+<id>1782</id>
+</text>
+<text>
+<en>Properties of selected Page</en>
+<id>1527</id>
+</text>
+<text>
+<en>Add new Subpage</en>
+<id>1783</id>
+</text>
+<text>
+<en>Delete selected Page</en>
+<id>1784</id>
+</text>
+<text>
+<en>Toggle Visibility of selected Page</en>
+<id>1530</id>
+</text>
+<text>
+<en>Make selected Page Homepage</en>
+<id>1531</id>
+</text>
+<text>
+<en>Open Preview</en>
+<id>1532</id>
+</text>
+<text>
+<en>Web</en>
+<id>1533</id>
+</text>
+<text>
+<de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
+<en>'%value%' contains characters which are not digits; but only digits are allowed</en>
+<id>1536</id>
+</text>
+<text>
+<de>Ungültiger Typ angegeben, Wert sollte String, Integer oder Float sein</de>
+<en>Invalid type given, value should be string, integer or float</en>
+<id>1537</id>
 </text>
 </trl>
 

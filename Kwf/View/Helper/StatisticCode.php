@@ -4,9 +4,14 @@ class Kwf_View_Helper_StatisticCode
     public function statisticCode($analyticsCode = null)
     {
         $ret  = '';
+
         $cfg = Kwf_Config::getValueArray('statistic');
         if (isset($cfg['ignore']) && $cfg['ignore']) {
             return $ret;
+        }
+
+        if (Kwf_Registry::get('config')->kwc->domains) {
+            throw new Kwf_Exception('do not use helper statisticCode for webs with domains, use Kwc_Statistics_Piwik_Component as box instead.');
         }
 
         if (!$analyticsCode) {
@@ -25,6 +30,7 @@ class Kwf_View_Helper_StatisticCode
             $ret .= "    } catch(err) {}\n";
             $ret .= "</script>\n";
         }
+
         $piwikDomain = isset($cfg['piwikDomain']) ? $cfg['piwikDomain'] : false;
         $piwikId = isset($cfg['piwikId']) ? $cfg['piwikId'] : false;
         if ($piwikDomain && $piwikId && !$cfg['ignorePiwikCode']) {
@@ -41,6 +47,7 @@ class Kwf_View_Helper_StatisticCode
             $ret .= "</script><noscript><p><img src=\"http://$piwikDomain/piwik.php?idsite=$piwikId\" style=\"border:0\" alt=\"\" /></p></noscript>";
             $ret .= "<!-- End Piwik Tracking Code -->";
         }
+
         return $ret;
     }
 }
