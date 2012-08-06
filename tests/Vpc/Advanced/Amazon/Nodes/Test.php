@@ -17,29 +17,16 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
 
     public function testIt()
     {
-        $amz = new Vps_Service_Amazon();
-        $result = $amz->itemSearch(array('BrowseNode'=>'166039031', 'SearchIndex'=>'Books', 'AssociateTag'=>'vps-21'));
-        $item = $result->current();
-
         $this->openVpc('/amazon');
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "Php");
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "JavaScript");
         $this->clickAndWait('link=Php');
 
-        $t = $item->Title;
-        if (mb_strlen($t) > 100) {
-            $t = mb_substr($t, 0, 100).'...';
-        }
-
-        $this->assertElementPresent('link='.$t);
-        $this->clickAndWait('link='.$t);
-        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h1", $item->Title);
-        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h2", $item->Author);
-
+        $this->assertElementPresent('css=li.products a');
+        $this->clickAndWait('css=li.products a');
         $this->assertElementPresent('link='.trlVps('order now at amazon'));
         $href = $this->getAttribute('link='.trlVps('order now at amazon').'@href');
         $this->assertEquals('http://www.amazon.de', substr($href, 0, 20));
-        $this->assertContains($item->ASIN, $href);
         $this->assertContains('vps-21', $href);
     }
 }
