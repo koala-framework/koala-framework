@@ -67,6 +67,7 @@
 <mk>Здраво {0}!</mk>
 <sl>Pozdravljeni, {0}!</sl>
 <es>Hola {0}!</es>
+<uk>Добрий день</uk>
 </text>
 <text>
 <en>Your account at {0}
@@ -4441,6 +4442,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>944</id>
 <ro>Bookmark pentru</ro>
 <sl>Zaznamek za</sl>
+<uk>Розмістити на</uk>
 </text>
 <text>
 <en>Rating</en>
@@ -5447,6 +5449,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1139</id>
 <ro>Bună ziua stimate domnule {0}</ro>
 <sl>Pozdravljeni, gospod {0}</sl>
+<uk>Доброго дня пан</uk>
 </text>
 <text>
 <en>Hello Mrs. {0}</en>
@@ -5454,6 +5457,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1140</id>
 <ro>Bună ziua stimată doamnă {0}</ro>
 <sl>Pozdravljena, gospa {0}</sl>
+<uk>Доброго дня пані</uk>
 </text>
 <text>
 <en>From Address</en>
@@ -5790,6 +5794,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1199</id>
 <ro>Bună ziua {0} {1}</ro>
 <sl>Pozdravljeni, {0} {1}</sl>
+<uk>Добрий день</uk>
 </text>
 <text>
 <en>CSV export</en>
@@ -6116,6 +6121,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1261</id>
 <ro>Bună ziua {0}</ro>
 <sl>Pozdravljeni, {0}</sl>
+<uk>Добрий день</uk>
 </text>
 <text>
 <en>You have just been subscribed to the newsletter at {0}.</en>
@@ -6138,6 +6144,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1264</id>
 <ro>Vă rugăm să faceţi click aici pentru a confirma adresa dumneavoastră de e-mail şi pentru a primi pe viitor newsletter-ul nostru.</ro>
 <sl>Kliknite tukaj, da verificirate e-naslov in se prijavite na e-novice.</sl>
+<uk>Будь ласка, натисніть тут, щоб підтвердити Вашу e-mail адресу і отримувати розсилку новин.</uk>
 </text>
 <text>
 <en>To unsubscribe anytime from our newsletter, click this link:</en>
@@ -6169,6 +6176,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1268</id>
 <ro>Vă rugăm să faceţi click pe următorul link pentru a confirma adresa dumneavoastră de e-mail şi pentru a primi pe viitor newsletter-ul nostru.</ro>
 <sl>Kliknite na naslednjo povezavo, da verificirate e-naslov in se prijavite na e-novice.</sl>
+<uk>Будь ласка, перейдіть за посиланням, щоб підтвердити Вашу e-mail адресу і отримувати наш розсилку новин.</uk>
 </text>
 <text>
 <en>Subscribe the newsletter</en>
@@ -6197,6 +6205,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1272</id>
 <ro>Adresa dumneavoastră de e-mail a fost confirmată. De acum înainte veţi primi newsletter-ul nostru.</ro>
 <sl>Vaš e-naslov je bil uspešno verificiran. Od zdaj naprej boste prejemali naše e-novice.</sl>
+<uk>Ваша e-mail адреса перевірена. Ви будете отримувати нашу розсилку новин.</uk>
 </text>
 <text>
 <en>Your data has been saved successfully.</en>
@@ -8404,6 +8413,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1717</id>
 <de>Sitemap</de>
 <ro>Sitemap</ro>
+<sl>Zemljevid strani</sl>
 </text>
 <text>
 <en>Levels</en>
@@ -8470,6 +8480,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1728</id>
 <de>Rabatt</de>
 <ro>Reducere</ro>
+<sl>Popust</sl>
 </text>
 <text>
 <en>Tags Translation</en>
@@ -8656,6 +8667,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1758</id>
 <de>Empfänger</de>
 <ro>Destinatar</ro>
+<sl>Prejemnik</sl>
 </text>
 <text>
 <en>IP-Address</en>
