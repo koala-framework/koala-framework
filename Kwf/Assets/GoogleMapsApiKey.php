@@ -29,8 +29,12 @@ class Kwf_Assets_GoogleMapsApiKey
         }
 
         $hostParts = explode('.', $host);
-        $ret = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
-                        .$hostParts[count($hostParts)-1]; // zB 'com'
+        if (count($hostParts) <= 1) {
+            $ret = $host;
+        } else {
+            $ret = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
+                            .$hostParts[count($hostParts)-1]; // zB 'com'
+        }
         if (in_array($ret, $longDomainEndings)) {
             $ret = $hostParts[count($hostParts)-3].$ret;
         }
