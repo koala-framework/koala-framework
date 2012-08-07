@@ -421,6 +421,10 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             }
             if ($expr->lowerNullAllowed && $ret < 0) $ret = 0;
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_SearchLike) {
+            $e = $expr->getQueryExpr($this);
+            if (!$e) return true;
+            return $this->_checkExpressions($e, $data);
         } else {
             return (bool)$this->getExprValue($data, $expr);
         }

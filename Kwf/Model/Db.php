@@ -655,6 +655,10 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 $ret .= " AND $field=$aliasField";
             }
             return "($ret)";
+        } else if ($expr instanceof Kwf_Model_Select_Expr_SearchLike) {
+            $e = $expr->getQueryExpr($this);
+            if (!$e) return 'TRUE';
+            return $this->_createDbSelectExpression($e, $dbSelect, $depOf, $tableNameAlias);
         } else {
             throw new Kwf_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }

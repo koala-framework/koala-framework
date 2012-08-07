@@ -67,10 +67,11 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         if ($searchForm && $this->getPartialClass($this->getData()->componentClass) != 'Kwf_Component_Partial_Id') {
             throw new Kwf_Exception(get_class($this) . ': if search-form ist used, you also have to use PartialId (use Setting "partialClass")');
         }
+
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
             $values = $searchForm->getComponent()->getFormRow()->toArray();
             unset($values['id']);
-            $ret->searchLike($values, $this->_getSetting('searchQueryFields'));
+            $ret->where(new Kwf_Model_Select_Expr_SearchLike($values, $this->_getSetting('searchQueryFields')));
         }
 
         // Limit-Setting beschränkt Einträge auf bestimmte Anzahl (zB für LiveSearch)
