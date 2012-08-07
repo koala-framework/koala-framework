@@ -10,7 +10,7 @@ Kwf.onContentReady(function(el, param) {
 Ext.ns('Kwc.Form');
 Kwc.Form.Component = function(form)
 {
-    this.addEvents('submitSuccess');
+    this.addEvents('submitSuccess', 'fieldChange');
     this.el = form;
     var config = form.parent().down('.config', true);
     if (!config) return;
@@ -58,6 +58,12 @@ Kwc.Form.Component = function(form)
         }
     }
 
+    this.fields.forEach(function(f) {
+        f.on('change', function() {
+            this.fireEvent('fieldChange', f);
+        }, this);
+    }, this);
+
     this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
 };
 Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
@@ -75,6 +81,13 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 ret = f;
                 return true;
             }
+        }, this);
+        return ret;
+    },
+    getValues: function() {
+        var ret = {};
+        this.fields.each(function(f) {
+            ret[f.getFieldName()] = f.getValue();
         }, this);
         return ret;
     },
