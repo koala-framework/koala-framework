@@ -4,6 +4,7 @@ class Kwc_Directories_AjaxView_View_Component extends Kwc_Directories_List_ViewP
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['generators']['child']['component']['searchForm'] = 'Kwc_Directories_AjaxView_View_SearchForm_Component';
         return $ret;
     }
 

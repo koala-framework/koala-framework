@@ -33,7 +33,10 @@ Kwf.onContentReady(function(el) {
 
 Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
     config.renderTo = el.down('.viewContainer');
+    config.searchForm = el.down('.searchForm');
     Kwc.Directories.List.ViewAjax.instance = new Kwc.Directories.List.ViewAjax(config);
+}, this, {
+    priority: 10 //call *after* initializing kwcForm to have access to searchForm
 });
 
 Ext.ns('Kwc.Directories.List');
@@ -94,6 +97,19 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             }
         }, this);
 
+        if (this.searchForm) {
+            this.searchFormEl = this.searchForm;
+            this.searchFormEl.enableDisplayMode('block');
+            this.searchForm = Kwc.Form.findForm(this.searchForm);
+
+            this.searchForm.el.child('.submitWrapper').remove();
+            this.view.applyBaseParams(this.searchForm.getValues());
+            this.searchForm.on('fieldChange', function(f) {
+                this.view.applyBaseParams(this.searchForm.getValues());
+                this.view.load();
+            }, this, { buffer: 250 });
+        }
+
         Kwc.Directories.List.ViewAjax.superclass.initComponent.call(this);
     },
 
@@ -124,9 +140,11 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
     loadView: function(p)
     {
         var params = Ext.applyIf(p, {
-            query: null,
             filterComponentId: null
         });
+        if (this.searchForm) {
+            Ext.apply(params, this.searchForm.getValues());
+        }
         var diffFound = false;
         for(var i in params) {
             if (params[i] != this.view.getBaseParams()[i]) {
@@ -376,6 +394,8 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         this.hideDetail();
         //this.el.up('.articlesDirectoryView').removeClass('articlesDirectoryViewHome');
         //this.ownerCt.filtersEl.hide();
+        if (this.ownerCt.searchFormEl) this.ownerCt.searchFormEl.hide();
+
         if (this.view) this.view.hide();
         this.detailEl = this.el.createChild({
             cls: 'detail loading'
@@ -420,12 +440,10 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
     showView: function() {
         if (!this.visibleDetail) return;
         this.visibleDetail = null;
-//         Ext.History.add('');
 
         this.hideDetail();
-//         if (this.ownerCt.filtersVisible) {
-//             this.ownerCt.filtersEl.show();
-//         }
+
+        if (this.ownerCt.searchForm) this.ownerCt.searchFormEl.show();
         if (this.view) this.view.show();
 
         this.ownerCt.onMenuItemChanged();

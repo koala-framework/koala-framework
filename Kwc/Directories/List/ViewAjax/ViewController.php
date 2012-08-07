@@ -59,12 +59,21 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
             $filter = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($this->_getParam('filterComponentId'));
             if (!is_instance_of($filter->componentClass, 'Kwc_Directories_List_Component')) {
-                $filter = $filter->getChildComponent('-list')->getChildComponent('-view'); //TODO don't hardcode that here
+                $filter = $filter->getChildComponent('-list'); //TODO don't hardcode that here
             }
-            $ret = $filter->getComponent()->getSelect();
+            $view = $filter->getChildComponent('-view'); //TODO don't hardcode that here
         } else {
-            $ret = $this->_component->getComponent()->getSelect();
+            $view = $this->_component;
         }
+        $view = $view->getComponent();
+        if ($view->hasSearchForm()) {
+            $sf = $view->getSearchForm();
+            $params = $this->getRequest()->getParams();
+            $params[$sf->componentId.'-post'] = true; //post
+            $params[$sf->componentId] = true; //submit
+            $sf->getComponent()->processInput($params); //TODO don't do processInput here in _getSelect()
+        }
+        $ret = $view->getSelect();
         return $ret;
     }
 
