@@ -188,6 +188,53 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 '</tpl>'
             );
         }
+
+        this.store = new Ext.data.Store({
+            proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
+            reader: new Ext.data.JsonReader({
+                totalProperty: 'total',
+                root: 'rows',
+                id: 'id',
+                sucessProperty: 'success',
+                fields: [{
+                    name: 'content'
+                },{
+                    name: 'id'
+                }]
+            }),
+            remoteSort: true,
+            pruneModifiedRecords: true
+        });
+        if (this.baseParams) {
+            this.setBaseParams(this.baseParams);
+            delete this.baseParams;
+        }
+
+        this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
+
+        this.store.on('loadexception', function(proxy, o, response, e) {
+            throw e; //re-throw
+        }, this);
+
+        var viewConfig = {
+            store: this.store,
+            tpl: this.tpl,
+            cls: 'kwfView',
+            itemSelector: 'div.kwfViewAjaxItem',
+            emptyText: trlKwf('no entries found'),
+            singleSelect: false,
+            border: false
+        };
+
+        this.view = new Ext.DataView(viewConfig);
+        this.view.updateIndexes = this.view.updateIndexes.createSequence(function() {
+            Kwf.callOnContentReady(this.view.el);
+        }, this);
+
+        this.view.on('click', this.onItemClick, this);
+
+        this.items = [ this.view ];
+
         Kwc.Directories.List.ViewAjax.View.superclass.initComponent.call(this);
 
         Ext.fly(window).on('scroll', function() {
@@ -220,68 +267,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         });
     },
 
-    onMetaLoad : function(result) {
-        var meta = result.metaData;
-        this.metaData = meta;
-
-        if (!this.store) {
-            var storeConfig = {
-                proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
-                reader: new Ext.data.JsonReader({
-                    totalProperty: meta.totalProperty,
-                    root: meta.root,
-                    id: meta.id,
-                    sucessProperty: meta.successProperty,
-                    fields: meta.fields
-                }),
-                remoteSort: true,
-                sortInfo: meta.sortInfo,
-                pruneModifiedRecords: true
-            };
-            this.store = new Ext.data.Store(storeConfig);
-            if (this.baseParams) {
-                this.setBaseParams(this.baseParams);
-                delete this.baseParams;
-            }
-        }
-
-        this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
-
-        this.store.on('loadexception', function(proxy, o, response, e) {
-            throw e; //re-throw
-        }, this);
-
-        var viewConfig = {
-            store: this.store,
-            tpl: this.tpl,
-            cls: 'kwfView',
-            itemSelector: 'div.kwfViewAjaxItem',
-            emptyText: trlKwf('no entries found'),
-            singleSelect: false,
-            border: false
-        };
-
-        this.view = new Ext.DataView(viewConfig);
-        if (this.visibleDetail) this.view.hide();
-        this.relayEvents(this.view, ['selectionchange', 'beforeselect']);
-        this.view.updateIndexes = this.view.updateIndexes.createSequence(function() {
-            Kwf.callOnContentReady(this.view.el);
-        }, this);
-
-        this.view.on('click', this.onItemClick, this);
-
-        var panel = new Ext.Panel({
-            items: [ this.view],
-            border: false
-        });
-        this.add(panel);
-        this.doLayout();
-
-        if (result.rows) {
-            this.store.loadData(result);
-        }
-    },
-
     getStore : function() {
         return this.store;
     },
@@ -302,35 +287,18 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
     },
 
     load : function(params) {
-        if (!this.controllerUrl) {
-            throw new Error('No controllerUrl specified for AutoGrid.');
-        }
         if (!params) params = {};
-        if (!this.getStore()) {
-            Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
-            if (!this.metaConn) this.metaConn = new Kwf.Connection({ autoAbort: true });
-            this.metaConn.request({
-                url: this.controllerUrl+'/json-data',
-                params: params,
-                success: function(response, options, r) {
-                    this.onMetaLoad(r);
-                    this.ownerCt.initialLoadingEl.hide();
-                },
-                scope: this
-            });
-        } else {
-            if (!params.start) {
-                params.start = 0;
-            }
-            this.el.mask('', 'loading');
-            this.getStore().load({
-                params: params,
-                callback: function() {
-                    this.el.unmask();
-                },
-                scope: this
-            });
+        if (!params.start) {
+            params.start = 0;
         }
+        if (this.el) this.el.mask('', 'loading');
+        this.getStore().load({
+            params: params,
+            callback: function() {
+                if (this.el) this.el.unmask();
+            },
+            scope: this
+        });
     },
 
     getStore : function() {
