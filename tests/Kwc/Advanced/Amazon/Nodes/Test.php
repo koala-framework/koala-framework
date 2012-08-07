@@ -17,29 +17,16 @@ class Kwc_Advanced_Amazon_Nodes_Test extends Kwf_Test_SeleniumTestCase
 
     public function testIt()
     {
-        $amz = new Kwf_Service_Amazon();
-        $result = $amz->itemSearch(array('BrowseNode'=>'166039031', 'SearchIndex'=>'Books', 'AssociateTag'=>'kwf-21'));
-        $item = $result->current();
-
         $this->openKwc('/amazon');
         $this->assertContainsText("css=.kwcAdvancedAmazonNodesTestComponent", "Php");
         $this->assertContainsText("css=.kwcAdvancedAmazonNodesTestComponent", "JavaScript");
         $this->clickAndWait('link=Php');
 
-        $t = $item->Title;
-        if (mb_strlen($t) > 100) {
-            $t = mb_substr($t, 0, 100).'...';
-        }
-
-        $this->assertElementPresent('link='.$t);
-        $this->clickAndWait('link='.$t);
-        $this->assertContainsText("css=.kwcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h1", $item->Title);
-        $this->assertContainsText("css=.kwcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h2", $item->Author);
-
+        $this->assertElementPresent('css=li.products a');
+        $this->clickAndWait('css=li.products a');
         $this->assertElementPresent('link='.trlKwf('order now at amazon'));
         $href = $this->getAttribute('link='.trlKwf('order now at amazon').'@href');
         $this->assertEquals('http://www.amazon.de', substr($href, 0, 20));
-        $this->assertContains($item->ASIN, $href);
         $this->assertContains('vps-21', $href);
     }
 }

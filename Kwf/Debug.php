@@ -263,6 +263,7 @@ class Kwf_Debug
     public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
+        if (defined('E_STRICT') && $errno == E_STRICT) return;
         if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
             && (strpos($errfile, '/usr/share/php/') !== false)) {
             return;

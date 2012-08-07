@@ -8,8 +8,8 @@ class Kwc_TextImage_ImageEnlarge_LinkTag_Component extends Kwc_Basic_LinkTag_Com
         $ret['generators']['child']['component']['download'] = 'Kwc_Basic_DownloadTag_Component';
         $ret['generators']['child']['component'] = array_merge(
             array(
+                'enlarge' => 'Kwc_Basic_ImageEnlarge_EnlargeTag_Component',
                 'none' => 'Kwc_Basic_LinkTag_Empty_Component',
-                'enlarge' => 'Kwc_Basic_ImageEnlarge_EnlargeTag_Component'
             ),
             $ret['generators']['child']['component']
         );
