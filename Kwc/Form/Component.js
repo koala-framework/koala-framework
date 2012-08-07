@@ -1,6 +1,7 @@
 Kwf.onContentReady(function(el, param) {
     if (!param.newRender) return false;
-    Ext.select('.kwcForm', true, el).each(function(form) {
+    Ext.select('.kwcForm > form', true, el).each(function(form) {
+        form = form.parent('.kwcForm', false);
         if (!form.kwcForm) {
             form.kwcForm = new Kwc.Form.Component(form);
         }
