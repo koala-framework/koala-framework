@@ -33,4 +33,11 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
     {
         return $this->_getSelect();
     }
+
+    public function getPartialParams()
+    {
+        $ret = parent::getPartialParams();
+        $ret['tpl'] = '<div class="kwfViewAjaxItem {id}">{content}</div>'."\n";
+        return $ret;
+    }
 }

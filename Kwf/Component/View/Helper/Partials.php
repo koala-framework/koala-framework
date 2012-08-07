@@ -47,7 +47,13 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
                     'number' => $number++,
                 )
             );
-            $ret .= $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
+            $content = $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
+            if (isset($params['tpl'])) {
+                $tpl = $params['tpl'];
+            } else {
+                $tpl = '{content}';
+            }
+            $ret .= str_replace(array('{id}', '{content}'), array($id, $content), $tpl);
         }
         if (empty($ids) && isset($params['noEntriesFound']) && $params['noEntriesFound']) {
             $ret .= '<span class="noEntriesFound">' . $params['noEntriesFound'] . '<span>';

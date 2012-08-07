@@ -61,6 +61,20 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         });
         this.items = [this.view];
 
+        var records = [];
+        this.renderTo.select('.kwfViewAjaxItem').each(function(el) {
+            var id = el.dom.className.match(/kwfViewAjaxItem ([^ ]+)/);
+            if (id) {
+                id = id[1];
+                records.push(new this.view.store.recordType({
+                    id: id,
+                    content: el.dom.innerHTML
+                }));
+            }
+            el.remove();
+        }, this);
+        this.view.store.add(records);
+
         Kwf.Utils.HistoryState.currentState[this.componentId] = {};
 
         if (!Kwc.Directories.List.ViewAjax.filterLinks[this.componentId]) {
@@ -120,7 +134,6 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.initialLoadingEl = this.el.createChild({cls:'initialLoading'});
         this.initialLoadingEl.enableDisplayMode();
 
-        this.view.load();
         this.onMenuItemChanged();
     },
 
@@ -224,7 +237,8 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             itemSelector: 'div.kwfViewAjaxItem',
             emptyText: trlKwf('no entries found'),
             singleSelect: false,
-            border: false
+            border: false,
+            autoHeight: true
         };
 
         this.view = new Ext.DataView(viewConfig);

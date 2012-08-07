@@ -1,1 +1,1 @@
-<li><?=$this->componentLink($this->item);?></li>
+<?=$this->componentLink($this->item);?>
