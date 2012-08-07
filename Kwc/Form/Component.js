@@ -8,6 +8,14 @@ Kwf.onContentReady(function(el, param) {
     });
 });
 Ext.ns('Kwc.Form');
+Kwc.Form.findForm = function(el) {
+    var formEl = el.child('.kwcForm > form');
+    if (formEl) {
+        formEl = formEl.parent('.kwcForm');
+        return formEl.kwcForm;
+    }
+    return null;
+};
 Kwc.Form.Component = function(form)
 {
     this.addEvents('submitSuccess', 'fieldChange');
