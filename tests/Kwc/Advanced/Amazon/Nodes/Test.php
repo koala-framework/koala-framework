@@ -27,6 +27,6 @@ class Kwc_Advanced_Amazon_Nodes_Test extends Kwf_Test_SeleniumTestCase
         $this->assertElementPresent('link='.trlKwf('order now at amazon'));
         $href = $this->getAttribute('link='.trlKwf('order now at amazon').'@href');
         $this->assertEquals('http://www.amazon.de', substr($href, 0, 20));
-        $this->assertContains('kwf-21', $href);
+        $this->assertContains('vps-21', $href);
     }
 }
