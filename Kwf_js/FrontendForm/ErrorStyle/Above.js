@@ -1,7 +1,11 @@
 Kwf.FrontendForm.ErrorStyle.Above = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abstract, {
     showErrors: function(r) {
-        if (r.errorMessages && r.errorMessages.length) {
-            this._showErrorMessagesAbove(r.errorMessages);
+        var errorMessages = r.errorMessages;
+        for (var fieldName in r.errorFields) {
+            errorMessages.push(r.errorFields[fieldName]);
+        }
+        if (errorMessages && errorMessages.length) {
+            this._showErrorMessagesAbove(errorMessages, r);
         }
     },
 

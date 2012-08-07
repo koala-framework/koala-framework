@@ -127,6 +127,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
         } else {
             $ret->where(new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_IsNull('shipped')));
         }
+        $ret->whereEquals('checkout_component_id', $this->_getParam('componentId'));
         return $ret;
     }
 

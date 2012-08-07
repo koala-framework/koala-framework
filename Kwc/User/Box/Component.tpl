@@ -5,10 +5,10 @@
     <?=$this->component($this->login)?>
     <ul>
         <? if ($this->register) { ?>
-        <li><?=$this->componentLink($this->register, trlKwf('Register'))?><?=$this->linkPostfix?></li>
+        <li><?=$this->componentLink($this->register, $this->data->trlKwf('Register'))?><?=$this->linkPostfix?></li>
         <? } ?>
         <? if ($this->lostPassword) { ?>
-        <li><?=$this->componentLink($this->lostPassword, trlKwf('Lost password'))?><?=$this->linkPostfix?></li>
+        <li><?=$this->componentLink($this->lostPassword, $this->data->trlKwf('Lost password'))?><?=$this->linkPostfix?></li>
         <? } ?>
     </ul>
 </div>

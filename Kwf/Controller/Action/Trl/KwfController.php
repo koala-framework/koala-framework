@@ -68,7 +68,7 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
         if (Kwf_Component_Data_Root::getComponentClass()) {
             $lngClasses = array();
             foreach(Kwc_Abstract::getComponentClasses() as $c) {
-                if (KWc_Abstract::getFlag($c, 'hasLanguage')) {
+                if (Kwc_Abstract::getFlag($c, 'hasLanguage')) {
                     $lngClasses[] = $c;
                 }
             }

@@ -10,7 +10,7 @@
             <span class="beforeButton"></span>
             <span class="button">
                 <button class="submit" type="submit" name="<?= $this->form->componentId ?>" value="submit">
-                    <?= trlKwf('Update') ?>
+                    <?= $this->data->trlKwf('Update') ?>
                 </button>
             </span>
             <span class="afterButton"></span>

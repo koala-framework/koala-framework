@@ -11,7 +11,7 @@ class Kwc_Shop_Cart_Detail_Form_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         $addToCart = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->getData()->parent->row->add_component_id);
+            ->getComponentByDbId($this->getData()->parent->row->add_component_id, array('subroot'=>$this->getData()));
         if ($addToCart) {
             $f = $addToCart->getComponent()->getForm();
             $this->_form = clone $f;

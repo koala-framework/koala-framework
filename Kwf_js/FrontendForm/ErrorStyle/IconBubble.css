@@ -5,31 +5,30 @@
     z-index: 1000;
     background: url("/assets/silkicons/exclamation.png") no-repeat scroll left center transparent;
 }
-.kwfFieldErrorIconBubble:hover {
-    opacity: 1 !important;
-}
 .kwfFieldErrorIconBubble .message {
     position: absolute; 
     font-size: 12px;
     text-align: center;
-    border-radius: 6px 6px 6px 6px;
+    border-radius: 5px;
     min-width: 100px;
-    background-color: red;
     cursor: default;
     padding: 6px;
     margin-top: -4px;
     margin-left: 25px;
     color: white;
+    background-color: #eb301d;
 }
-.kwfFieldErrorIconBubble .message:after {
-    border-top: 9px solid transparent;
-    border-right: 10px solid red;
-    border-bottom: 9px solid transparent;
-    content:"";
-    display: block;
-    right: 110px;
+.kwfFieldErrorIconBubble .arrow {
+    border-top: 7px solid transparent;
+    border-right: 7px solid #eb301d;
+    border-bottom: 7px solid transparent;
     position: absolute;
     width: 0;
-    top: 4px;
-    z-index:10;
+    top: 1px;
+    left: 18px;
+    display: block;
+}
+
+.kwfField.kwfFormFieldRadio .kwfFieldErrorIconBubble {
+    top: 0px !important;
 }

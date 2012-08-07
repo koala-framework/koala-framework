@@ -28,15 +28,21 @@ Kwf.onContentReady(function(el, options) {
                         }
                     );
 
+                    var flashVersion = "9";
+
                     flashComponent.so = new swfobject.embedSWF(
                         cfg.data.url, //url
                         flashWrapper.id, //dom
                         cfg.data.width, cfg.data.height,
-                        "9", //min version
+                        flashVersion,
                         "#FFFFFF",
                         cfg.vars,
                         params
                     );
+
+                    if (!swfobject.hasFlashPlayerVersion(flashVersion)) {
+                        Ext.fly(flashComponent).addClass('noFlash');
+                    }
                 }
             }
         }

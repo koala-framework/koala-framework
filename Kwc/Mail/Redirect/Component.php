@@ -138,8 +138,9 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 // Links nicht mehr
 
                 // linkId_userId_userSource_hash
-                $newLink = 'http://'.Kwf_Registry::get('config')->server->domain
-                    .$this->_getRedirectUrl(array($r->id, $recipient->$recipientPrimary, $recipientSource));
+                $newLink = $this->_getRedirectUrl(array(
+                    $r->id, $recipient->$recipientPrimary, $recipientSource
+                ));
                 $mailText = str_replace($matches[0], $newLink, $mailText);
             }
         }
@@ -148,7 +149,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
     protected function _getRedirectUrl(array $parameters)
     {
-        return $this->getData()->getUrl().'?d='
+        return $this->getData()->getAbsoluteUrl().'?d='
             .implode('_', $parameters)
             .'_'.$this->_getHash($parameters);
     }

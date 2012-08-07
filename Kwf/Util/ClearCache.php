@@ -114,7 +114,7 @@ class Kwf_Util_ClearCache
 
             $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
             $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip';
-            $assets = KWf_Registry::get('config')->assets->toArray();
+            $assets = Kwf_Registry::get('config')->assets->toArray();
             $assetTypes = array();
             foreach ($assets as $assetsType => $v) {
                 if ($assetsType == 'dependencies') continue;

@@ -94,14 +94,14 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
     public function getMetaData($model)
     {
         $ret = parent::getMetaData($model);
+        if ($this->getReferenceName()) {
+            $model = $model->getDependentModel($this->getReferenceName());
+        } else {
+            $model = $model;
+        }
         $ret['multiItems'] = $this->fields->getMetaData($model);
         if (!isset($ret['position'])) {
-            if ($this->getReferenceName()) {
-                $m = $model->getDependentModel($this->getReferenceName());
-            } else {
-                $m = $model;
-            }
-            $ret['position'] = $m->hasColumn('pos');
+            $ret['position'] = $model->hasColumn('pos');
         }
         return $ret;
     }
@@ -368,7 +368,6 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         foreach ($postData['save'] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
-
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);
             }
@@ -387,6 +386,7 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
                     $r->save();
                 }
             }
+
             if (!$this->getReferenceName()) {
                 //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
                 $r->save();

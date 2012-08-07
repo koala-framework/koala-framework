@@ -112,6 +112,11 @@ class Kwf_Media
         }
     }
 
+    public static function getOutputWithoutCheckingIsValid($class, $id, $type)
+    {
+        return self::_getOutputWithoutCheckingIsValid($class, $id, $type);
+    }
+
     private static function _getOutputWithoutCheckingIsValid($class, $id, $type)
     {
         $cacheId = self::createCacheId($class, $id, $type);

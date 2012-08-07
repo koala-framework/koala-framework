@@ -99,10 +99,10 @@ class Kwf_Setup
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
         ) {
             if (!isset($_SERVER['HTTP_HOST'])) {
-                throw new Kwf_Exception_NotFound();
+                $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$_SERVER['REDIRECT_URL'];
+            } else {
+                $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
             }
-
-            $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
             Kwf_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();

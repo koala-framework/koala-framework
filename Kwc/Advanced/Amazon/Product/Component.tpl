@@ -7,7 +7,7 @@
     <h5><?=$this->product->author?></h5>
     <p><?=$this->product->formattedPrice?></p>
     <? if(!is_null($this->product->averageRating)) { ?>
-        <p><?=trlKwf('Rating')?>:
+        <p><?=$this->data->trlKwf('Rating')?>:
         <? for($i=0; $i<round($this->product->averageRating); $i++) { ?>
             <?=$this->image('/assets/kwf/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
         <? } ?>
@@ -15,6 +15,6 @@
             <?=$this->image('/assets/kwf/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
         <? } ?></p>
     <? } ?>
-    <a class="order" href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=trlKwf('order now at amazon')?></a>
+    <a class="order" href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=$this->data->trlKwf('order now at amazon')?></a>
     <? } ?>
 </div>

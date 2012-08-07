@@ -1,1 +1,1 @@
-<p><?=trlKwf('Productlist');?></p>
+<p><?=$this->data->trlKwf('Productlist');?></p>

@@ -13,7 +13,8 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component extends Kwc_
 
     public function getNameForEdit()
     {
-        return trlKwf('Shop Shipped Mail') . ' ' . Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
+        return trlKwf('Shop Shipped Mail') . ' '
+            . Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName'));
     }
 
     public function getPlaceholders(Kwc_Shop_Cart_Order $o)

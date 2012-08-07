@@ -5,7 +5,7 @@
     <div class="right">
         <div class="productName"><?=$this->item->row->title;?></div>
         <div class="previewText"><?=$this->component($this->item->previewText);?></div>
-        <div class="detail"><?=$this->componentLink($this->item, trlKwf('Detail info').' ...');?></div>
+        <div class="detail"><?=$this->componentLink($this->item, $this->data->trlKwf('Detail info').' ...');?></div>
     </div>
     <div class="clear"></div>
     <div class="orderStuff">

@@ -17,8 +17,7 @@ class Kwf_Controller_Action_Pool_PoolsController extends Kwf_Controller_Action_A
 
     protected function _fetchData($order, $limit, $start)
     {
-        $table = new Kwf_Dao_Pool();
-        $info = $table->info();
+        $info = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Pool')->getTable()->info();
         $datatype = $info['metadata']['pool']['DATA_TYPE'];
         $datatype = str_replace(array('enum', '(', "'", ')', ' '), '', $datatype);
         $return = array();

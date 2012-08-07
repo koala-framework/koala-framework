@@ -4,7 +4,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlKwf('Login');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Login');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Login_Form_Success_Component';
         return $ret;
     }

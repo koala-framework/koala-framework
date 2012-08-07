@@ -28,4 +28,9 @@ class Kwf_Util_Fulltext_Solr_Service extends Apache_Solr_Service
         $this->setCreateDocuments($createDocs);
         return $ret;
     }
+
+    public function setSearchRequestHandler($path)
+    {
+        $this->_searchUrl = $this->_constructUrl($path);
+    }
 }

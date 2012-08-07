@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass?>">
     <? if ($this->row->disclaimer_type == 'de' && $this->row->disclaimer_name) { ?>
-        <span class="imprintHeadline"><?=trlKwf('Disclaimer');?></span>
+        <span class="imprintHeadline"><?=$this->data->trlKwf('Disclaimer');?></span>
         <div class="kwfSwitchDisplay">
             <p><a href="#" class="switchLink">1. Inhalt des Onlineangebotes</a></p>
             <div class="switchContent"><?=$this->row->disclaimer_name;?> übernimmt keinerlei Gewähr für die Aktualität, Korrektheit, Vollständigkeit oder Qualität der bereitgestellten Informationen. Haftungsansprüche gegen <?=$this->row->disclaimer_name;?>, welche sich auf Schäden materieller oder ideeller Art beziehen, die durch die Nutzung oder Nichtnutzung der dargebotenen Informationen bzw. durch die Nutzung fehlerhafter und unvollständiger Informationen verursacht wurden, sind grundsätzlich ausgeschlossen, sofern seitens <?=$this->row->disclaimer_name;?> kein nachweislich vorsätzliches oder grob fahrlässiges Verschulden vorliegt. Alle Angebote sind freibleibend und unverbindlich. <?=$this->row->disclaimer_name;?> behält es sich ausdrücklich vor, Teile der Seiten oder das gesamte Angebot ohne gesonderte Ankündigung zu verändern, zu ergänzen, zu löschen oder die Veröffentlichung zeitweise oder endgültig einzustellen.</div>

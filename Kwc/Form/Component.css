@@ -17,7 +17,6 @@
     background: var(light);
     border: 1px solid var(gray);
     border-radius: 4px;
-    behavior: url(/assets/css3pie/pie.htc);
 }
 
 .cssClass button:hover { color: var(gray); }
@@ -73,7 +72,6 @@
     border: 1px solid var(gray) ;
     border-radius: 4px;
     position: relative;
-    behavior: url(/assets/css3pie/pie.htc);
 }
 
 .cssClass input.radio {

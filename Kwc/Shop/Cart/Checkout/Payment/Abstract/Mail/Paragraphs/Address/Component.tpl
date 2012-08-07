@@ -1,1 +1,1 @@
-<p><?=trlKwf('Max Mustermann...');?></p>
+<p><?=$this->data->trlKwf('Max Mustermann...');?></p>

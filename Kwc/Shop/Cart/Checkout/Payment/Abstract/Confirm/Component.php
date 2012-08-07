@@ -15,7 +15,8 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Kwc_Edit
 
     public function getNameForEdit()
     {
-        return trlKwf('Shop Confirmation Text') . ' ' . Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
+        return trlKwf('Shop Confirmation Text') . ' '
+            . Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName'));
     }
 
     protected function _getOrder()

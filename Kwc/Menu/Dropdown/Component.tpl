@@ -4,7 +4,7 @@
             <? foreach ($this->menu as $m) { ?>
                 <li class="<?=$m['class'];?>">
                     <?=$this->componentLink($m['data']);?>
-                    <? if (sizeof($m['submenu'])) { ?>
+                    <? if (isset($m['submenu']) && sizeof($m['submenu'])) { ?>
                         <div class="dropdown">
                             <ul>
                                 <? foreach ($m['submenu'] as $sm) { ?>

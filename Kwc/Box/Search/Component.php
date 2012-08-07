@@ -16,9 +16,9 @@ abstract class Kwc_Box_Search_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['dep'][] = 'ExtDelayedTask';
         $ret['assets']['files'][] = 'kwf/Kwc/Box/Search/Component.js';
 
-        $ret['placeholder']['searchButton'] = trlKwf('Search');
-        $ret['placeholder']['clearOnFocus'] = trlKwf('Search term');
-        $ret['placeholder']['initialResultText'] = trlKwf('Please type at least two characters.');
+        $ret['placeholder']['searchButton'] = trlKwfStatic('Search');
+        $ret['placeholder']['clearOnFocus'] = trlKwfStatic('Search term');
+        $ret['placeholder']['initialResultText'] = trlKwfStatic('Please type at least two characters.');
 
         $ret['searchResultBoxAlign'] = 'tl-bl';
         $ret['searchResultBoxFade'] = true;

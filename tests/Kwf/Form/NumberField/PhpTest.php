@@ -4,28 +4,20 @@
  */
 class Kwf_Form_NumberField_PhpTest extends Kwf_Test_TestCase
 {
-    public function testNoSettings()
+    public function testValues()
     {
-        $m1 = new Kwf_Form_NumberField_TestModel();
-        $form = new Kwf_Form();
-        $form->setModel($m1);
-        $form->setId(1);
-        $nrField = $form->add(new Kwf_Form_Field_NumberField('nr', 'Number'));
+        $this->_assertPostedValue(0, 0, 'en');
+        $this->_assertPostedValue(1, 1, 'en');
+        $this->_assertPostedValue('1.3', 1.3, 'en');
+        $this->_assertPostedValue(1.3, 1.3, 'en');
 
-        $post = array(
-            $nrField->getFieldName() => 1
-        );
-        $post = $form->processInput($form->getRow(), $post);
-        $form->validate($form->getRow(), $post);
-        $form->prepareSave(null, $post);
-        $form->save(null, $post);
-        $form->afterSave(null, $post);
+        $this->_assertPostedValue('1,3', 1.3, 'de');
 
-        $testRow = $m1->getRow(1);
-        $this->assertEquals(1, $testRow->nr);
+        $this->_assertPostedValue('1.3', 5, 'de'); //validation fails
+        $this->_assertPostedValue('1,3', 5, 'en'); //validation fails
     }
 
-    public function testValue0()
+    private function _assertPostedValue($postValue, $savedValue, $language)
     {
         $m1 = new Kwf_Form_NumberField_TestModel();
         $form = new Kwf_Form();
@@ -33,15 +25,18 @@ class Kwf_Form_NumberField_PhpTest extends Kwf_Test_TestCase
         $form->setId(1);
         $nrField = $form->add(new Kwf_Form_Field_NumberField('nr', 'Number'));
 
+        $form->trlStaticExecute($language);
+
         $post = array(
-            $nrField->getFieldName() => 0
+            $nrField->getFieldName() => $postValue
         );
         $post = $form->processInput($form->getRow(), $post);
-        $form->validate($form->getRow(), $post);
-        $form->prepareSave(null, $post);
-        $form->save(null, $post);
-        $form->afterSave(null, $post);
+        if (!$form->validate($form->getRow(), $post)) {
+            $form->prepareSave(null, $post);
+            $form->save(null, $post);
+        }
+
         $testRow = $m1->getRow(1);
-        $this->assertEquals(0, $testRow->nr);
+        $this->assertEquals($savedValue, $testRow->nr);
     }
 }

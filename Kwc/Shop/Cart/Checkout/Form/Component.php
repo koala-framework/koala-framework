@@ -5,7 +5,7 @@ class Kwc_Shop_Cart_Checkout_Form_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Shop_Cart_Checkout_Form_Success_Component';
-        $ret['placeholder']['submitButton'] = trlKwf('Next');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Next');
         return $ret;
     }
 

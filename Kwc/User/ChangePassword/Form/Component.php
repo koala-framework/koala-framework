@@ -4,7 +4,7 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlKwf('Change Password');
+        $ret['placeholder']['submitButton'] = trlKwfStatic('Change Password');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_ChangePassword_Form_Success_Component';
         $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
         return $ret;
