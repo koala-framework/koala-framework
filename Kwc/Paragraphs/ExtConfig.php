@@ -5,7 +5,8 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
     {
         $names = explode('.', $name, 2);
         if (count($names) > 1) {
-            $this->_componentNameToArray($names[1], $component, $componentList[$names[0]]);
+            $name = $names[0] . '>>'; // to have a unique key if a component with same name also exists
+            $this->_componentNameToArray($names[1], $component, $componentList[$name]);
         } else {
             $componentList[$name] = $component;
         }
