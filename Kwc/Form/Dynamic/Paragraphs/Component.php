@@ -21,6 +21,7 @@ class Kwc_Form_Dynamic_Paragraphs_Component extends Kwc_Paragraphs_Component
         if (isset($ret['generators']['paragraphs']['component']['form'])) {
             unset($ret['generators']['paragraphs']['component']['form']);
         }
+        $ret['componentName'] = trlKwfStatic('Form-Paragraphs');
         return $ret;
     }
 }
