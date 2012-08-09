@@ -1,6 +1,6 @@
 .cssClass { position: relative; }
-.cssClass a.kwcEnlargeTag { position: relative; display: block; background: none #FFFFFF;}
-.cssClass a.kwcBasicLinkTagIntern { position: relative; display: block; background: none #FFFFFF;}
+.cssClass a.kwcEnlargeTag { position: relative; display: block; }
+.cssClass a.kwcBasicLinkTagIntern { position: relative; display: block; }
 
 .cssClass a img {
     display: block;
