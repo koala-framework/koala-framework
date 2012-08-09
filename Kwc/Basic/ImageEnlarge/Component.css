@@ -6,6 +6,10 @@
     display: block;
 }
 
+.cssClass a {
+    display: block;
+}
+
 .cssClass .outerHoverIcon .innerHoverIcon,
 .cssClass .outerHoverIcon .innerHoverIcon {
     display: block;
@@ -23,7 +27,15 @@
 }
 
 .cssClass a.kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
-    background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkIcon.png) no-repeat 0 0;
+    background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkInternIcon.png) no-repeat 0 0;
+}
+
+.cssClass a.kwcBasicLinkTagExtern .outerHoverIcon .innerHoverIcon {
+    background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkExternIcon.png) no-repeat 0 0;
+}
+
+.cssClass a.kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
+    background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/downloadIcon.png) no-repeat 0 0;
 }
 
 .cssClass a .outerHoverIcon {
