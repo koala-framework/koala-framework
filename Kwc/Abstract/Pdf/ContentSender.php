@@ -3,29 +3,24 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
 {
     protected function _getPdfComponent()
     {
-        return $this->getData()->parent;
+        return $this->_data->parent;
     }
 
     public function sendContent($includeMaster)
     {
-        $output = 'I'; //TODO was passed as parameter, where was that call?
-        $filename = null;
-
-        if ($output == 'I') {
-            $plugins = $this->_data->getPlugins('Kwf_Component_Plugin_Interface_View');
-            if ($plugins) {
-                if (count($plugins) > 1 || !is_instance_of($plugins[0], 'Kwf_Component_Plugin_Password_Component')) {
-                    throw new Kwf_Exception("For pdf only one plugin of type 'Kwf_Component_Plugin_Password_Component' is allowed.");
-                }
-                $p = new $plugins[0]($this->getData()->componentId);
-                if ($p->processOutput('')) {
-                    parent::sendContent($includeMaster);
-                    return false;
-                }
+        $plugins = $this->_data->getPlugins('Kwf_Component_Plugin_Interface_View');
+        if ($plugins) {
+            if (count($plugins) > 1 || !is_instance_of($plugins[0], 'Kwf_Component_Plugin_Password_Component')) {
+                throw new Kwf_Exception("For pdf only one plugin of type 'Kwf_Component_Plugin_Password_Component' is allowed.");
+            }
+            $p = new $plugins[0]($this->_data->componentId);
+            if ($p->processOutput('')) {
+                parent::sendContent($includeMaster);
+                return false;
             }
         }
 
-        $masterClass = Kwc_Admin::getComponentFile(get_class($this), 'PdfMaster', 'php', true);
+        $masterClass = Kwc_Admin::getComponentFile($this->_data->componentClass, 'PdfMaster', 'php', true);
         if (!$masterClass) { $masterClass = 'Kwf_Pdf_TcPdf'; }
         $pdfComponent = $this->_getPdfComponent();
         if ($pdfComponent instanceof Kwf_Component_Data) {
@@ -33,7 +28,7 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
         }
         $pdf = new $masterClass($pdfComponent);
         $pdfComponent->getPdfWriter($pdf)->writeContent();
-        $pdf->output($filename, $output);
+        $pdf->output(null, 'I');
         return true;
     }
 }
