@@ -91,7 +91,6 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                     $entityLoaderWasDisabled = libxml_disable_entity_loader(true);
                     $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
                     libxml_disable_entity_loader($entityLoaderWasDisabled);
-                    $attributes = $xml->attributes();
                     if ($xml === false) {
                         continue;
                     }
@@ -146,7 +145,6 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                     $title = (string)$attributes['title'];
                 }
                 $feeds[(string)$uri] = $title;
-                d($feeds);
             }
         }
         // Return the fetched feeds
