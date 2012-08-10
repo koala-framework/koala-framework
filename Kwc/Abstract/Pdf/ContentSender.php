@@ -6,7 +6,7 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
         return $this->_data->parent;
     }
 
-    public function sendContent($includeMaster)
+    public function sendContent($name = '', $dest = 'I')
     {
         $plugins = $this->_data->getPlugins('Kwf_Component_Plugin_Interface_View');
         if ($plugins) {
@@ -28,7 +28,6 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
         }
         $pdf = new $masterClass($pdfComponent);
         $pdfComponent->getPdfWriter($pdf)->writeContent();
-        $pdf->output(null, 'I');
-        return true;
+        return $pdf->output($name, $dest);
     }
 }
