@@ -37,9 +37,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
 
     public function onContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $event->component->getChildComponent('_imagePage')
-        ));
+        $page = $event->component->getChildComponent('_imagePage');
+        if ($page) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                $this->_class, $page
+            ));
+        }
     }
 
     public function onClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
