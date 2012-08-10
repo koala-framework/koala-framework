@@ -64,7 +64,7 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         return $this->_getView();
     }
 
-    public function image($image, $alt = '', $cssClass = null)
+    public function image($image, $alt = '', $attributes = null)
     {
         if (!$image) return '';
 
@@ -96,15 +96,25 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
                 .'&url='.substr($url, 1);
         }
 
-        $size = $this->_getImageSize($image);
-        $attr = '';
-        if ($cssClass && is_string($cssClass)) {
-            $attr .= ' class="'.$cssClass.'"';
-        } else if (is_array($cssClass)) {
-            foreach ($cssClass as $k=>$i) {
-                $attr .= ' '.$k.'="'.$i.'"';
+        if (is_string($attributes)) {
+            $attributes = array(
+                'class' => $attributes
+            );
+        }
+        if (!isset($attributes['class'])) $attributes['class'] = '';
+
+        if (is_string($image)) {
+            if (file_exists(str_replace('/images/', '/images/dpr2/', $this->_getAssetPath($image)))) {
+                $attributes['class'] .= ' kwfReplaceImageDpr2';
             }
         }
+        $attributes['class'] = trim($attributes['class']);
+
+        $attr = '';
+        foreach ($attributes as $k=>$i) {
+            $attr .= ' '.$k.'="'.$i.'"';
+        }
+        $size = $this->_getImageSize($image);
         return "<img src=\"$url\" width=\"$size[width]\" height=\"$size[height]\" alt=\"$alt\"$attr />";
     }
 }
