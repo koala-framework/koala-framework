@@ -57,6 +57,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
+        $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Image/Component.js';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
     }
@@ -122,6 +123,24 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['image_caption'] = $this->_getRow()->image_caption;
             $ret['showImageCaption'] = $imageCaptionSetting;
         }
+
+        //image src for high device pixel ratio (retina) displays
+        $ret['imageDpr2'] = null;
+        $data = $this->_getImageDataOrEmptyImageData();
+        if ($data) {
+            if (isset($data['image'])) {
+                $sourceSize = array($data['image']->getImageWidth(), $data['image']->getImageHeight());
+            } else {
+                $sourceSize = @getimagesize($data['file']);
+            }
+            $targetSize = $this->getImageDimensions();
+            if ($sourceSize[0] > $targetSize['width']*1.1 || $sourceSize[0] > $targetSize['height']*1.1) {
+                $id = $this->getData()->componentId;
+                $type = 'dpr2-'.$this->getImageUrlType();
+                $ret['imageDpr2'] = Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
+            }
+        }
+
         return $ret;
     }
 
@@ -290,9 +309,21 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return null;
         }
 
-        $dim = $component->getComponent()->_getImageDimensions();
-        if ($dim['width'] == self::CONTENT_WIDTH) {
-            $dim['width'] = $component->getComponent()->getContentWidth();
+        if (substr($type, 0, 5) == 'dpr2-') {
+            //display pixel ratio 2
+            $dim = $component->getComponent()->getImageDimensions(); //take actual image size as base
+            $dim['width'] *= 2;
+            $dim['height'] *= 2;
+            if ($dim['scale'] == Kwf_Media_Image::SCALE_BESTFIT) {
+                //don't cause rounding errors
+                $dim['scale'] = Kwf_Media_Image::SCALE_DEFORM;
+            }
+        } else {
+            //default size; display pixel ratio 1
+            $dim = $component->getComponent()->_getImageDimensions();
+            if ($dim['width'] == self::CONTENT_WIDTH) {
+                $dim['width'] = $component->getComponent()->getContentWidth();
+            }
         }
         $ret = array();
         if (isset($data['image'])) {
