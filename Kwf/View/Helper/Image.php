@@ -96,19 +96,17 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
                 .'&url='.substr($url, 1);
         }
 
-        if (is_string($attributes)) {
-            $attributes = array(
-                'class' => $attributes
-            );
-        }
-        if (!isset($attributes['class'])) $attributes['class'] = '';
-
+        $class = '';
+        if (is_string($attributes)) { $class = $attributes; }
         if (is_string($image)) {
             if (file_exists(str_replace('/images/', '/images/dpr2/', $this->_getAssetPath($image)))) {
-                $attributes['class'] .= ' kwfReplaceImageDpr2';
+                $class .= ' kwfReplaceImageDpr2';
             }
         }
-        $attributes['class'] = trim($attributes['class']);
+        $class = trim($class);
+
+        if (!is_array($attributes)) { $attributes = array(); }
+        if ($class != '') { $attributes['class'] = $class; }
 
         $attr = '';
         foreach ($attributes as $k=>$i) {
