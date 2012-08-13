@@ -10,7 +10,6 @@
     display: block;
 }
 
-.cssClass .outerHoverIcon .innerHoverIcon,
 .cssClass .outerHoverIcon .innerHoverIcon {
     display: block;
     width: 132px;
@@ -68,6 +67,16 @@
     filter: alpha(opacity=90);
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
 }
+
+
+.cssClass a .outerHoverIcon {
+    display: none;
+}
+
+.showHoverIcon.cssClass a .outerHoverIcon {
+    display: block;
+}
+
 
 
 /* .cssClass a .outerHoverIcon {
