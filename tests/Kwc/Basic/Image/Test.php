@@ -52,7 +52,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
     {
         $html = $this->_root->getComponentById(1600)->render();
 
-        $this->assertRegExp('#^\s*<div class="kwcBasicImageFixDimensionComponent">'.
+        $this->assertRegExp('#^\s*<div class="kwcAbstractImage kwcBasicImageFixDimensionComponent".*>'.
             '\s*<img src="/media/Kwc_Basic_Image_FixDimensionComponent/1600/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
             '\s*</div>\s*$#ms', $html);
     }
@@ -63,7 +63,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertFalse($c->hasContent());
 
         $html = $c->render();
-        $this->assertRegExp('#^\s*<div class="kwcBasicImageFixDimensionComponent">\s*</div>\s*$#ms', $html);
+        $this->assertRegExp('#^\s*<div class="kwcAbstractImage kwcBasicImageFixDimensionComponent".*>\s*</div>\s*$#ms', $html);
     }
 
     public function testDimensionSetByRow()

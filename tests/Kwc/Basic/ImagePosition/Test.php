@@ -26,7 +26,7 @@ class Kwc_Basic_ImagePosition_Test extends Kwc_TestAbstract
         $html = $this->_root->getComponentById('1900')->render();
         $this->assertRegExp('#^\s*<div class="kwcBasicImagePosition kwcBasicImagePositionTestComponent">'.
             '\s*<div class="posright">'
-            .'\s*<div class="kwcBasicImagePositionImageTestComponent">'
+            .'\s*<div class="kwcAbstractImage kwcBasicImagePositionImageTestComponent".*>'
             .'\s*<img src="/media/Kwc_Basic_ImagePosition_Image_TestComponent/1900-image/default/[^/]+/[0-9]+/foo.png" width="16" height="16" alt="" />'
             .'\s*</div>\s*</div>'.
             '\s*</div>\s*$#ms', $html);
