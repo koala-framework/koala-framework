@@ -143,10 +143,10 @@ class Kwf_Util_Model_Feed_Test extends Kwf_Test_TestCase
         $this->assertEquals('http://www.prosalzburg.at/news/feed', $feeds[0]);
         */
 
-        $feeds = $m->findFeeds('http://www.orf.at');
-        $this->assertEquals(1, count($feeds));
+        $feeds = $m->findFeeds('http://www.heise.de');
+        $this->assertEquals(2, count($feeds));
         $feeds = array_keys($feeds);
-        $this->assertEquals('http://rss.orf.at/news.xml', $feeds[0]);
+        $this->assertEquals('http://www.heise.de/newsticker/heise-atom.xml', $feeds[0]);
     }
 
     /**
