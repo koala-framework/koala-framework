@@ -65,7 +65,6 @@ class Kwf_Util_Model_Feed_Feeds extends Kwf_Model_Abstract
             throw new Kwf_Exception("invalid status response");
         }
         $contents = $response->getBody();
-
         // Parse the contents for appropriate <link ... /> tags
         @ini_set('track_errors', 1);
         $pattern = '~(<link[^>]+)/?>~i';
@@ -75,7 +74,6 @@ class Kwf_Util_Model_Feed_Feeds extends Kwf_Model_Abstract
             require_once 'Zend/Feed/Exception.php';
             throw new Zend_Feed_Exception("Internal error: $php_errormsg");
         }
-
         // Try to fetch a feed for each link tag that appears to refer to a feed
         $feeds = array();
         if (isset($matches[1]) && count($matches[1]) > 0) {
@@ -89,12 +87,19 @@ class Kwf_Util_Model_Feed_Feeds extends Kwf_Model_Abstract
                 $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
                 libxml_disable_entity_loader($entityLoaderWasDisabled);
                 if ($xml === false) {
-                    continue;
+                    $link = preg_replace('#&(?=[a-z_0-9]+=)#', '&amp;', $link);
+                    $entityLoaderWasDisabled = libxml_disable_entity_loader(true);
+                    $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
+                    libxml_disable_entity_loader($entityLoaderWasDisabled);
+                    if ($xml === false) {
+                        continue;
+                    }
                 }
                 $attributes = $xml->attributes();
                 if (!isset($attributes['rel']) || !@preg_match('~^(?:alternate|service\.feed)~i', $attributes['rel'])) {
                     continue;
                 }
+                
                 $type = false;
                 if (isset($attributes['type'])) {
                     $type = $attributes['type'];

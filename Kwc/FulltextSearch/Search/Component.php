@@ -69,7 +69,8 @@ class Kwc_FulltextSearch_Search_Component extends Kwc_Abstract_Composite_Compone
         $ret['hits'] = $this->_hits;
         $ret['queryTime'] = $this->_time;
         $ret['queryString'] = $this->_queryString;
-        $ret['queryParts'] = preg_split('/[^a-zA-Z0-9äöüÄÖÜß]/', $this->_queryString);
+                                             //Letter Number
+        $ret['queryParts'] = preg_split('/[^\p{L}'. '\p{N}]/u', $this->_queryString);
         $ret['hitCount'] = $this->_numHits;
 
         $limit = $this->getData()->getChildComponent('-paging')->getComponent()->getLimit();

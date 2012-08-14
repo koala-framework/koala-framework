@@ -21,7 +21,7 @@ Kwc.Paragraphs.AddParagraphButton = Ext.extend(Ext.Button, {
                         })
                     );
                 } else {
-                    var item = new Ext.menu.Item({text: i, menu: []});
+                    var item = new Ext.menu.Item({text: i.replace(/\>\>/, ''), menu: []});
                     addToItem.addItem(item);
                     buildMenu.call(this, components[i], addToItem.items.items[addToItem.items.length - 1].menu);
                 }
