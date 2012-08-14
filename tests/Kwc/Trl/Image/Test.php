@@ -113,8 +113,7 @@ class Kwc_Trl_Image_Test extends Kwc_TestAbstract
 
         $this->assertRegExp('#<img.+?src=".+?'.$smallImageNum.'\.jpg.+width="'.$smallWidth.'".+height="'.$smallHeight.'"#ms', $html);
 
-        preg_match('#src="(.+?)"#ms', $html, $matches);
-
+        preg_match('# src="(.+?)"#ms', $html, $matches);
         $smallSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[1]);
 
         $this->assertEquals($smallWidth, $smallSrcSize[0]);
