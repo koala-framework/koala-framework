@@ -66,7 +66,11 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         if ($postData[$fieldName] === '') {
             $postData[$fieldName] = null;
         }
-        return $postData[$fieldName];
+        $ret = $postData[$fieldName];
+        if ($ret) {
+            $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
+        }
+        return $ret;
     }
 
     protected function _getOutputValueFromValues($values)
