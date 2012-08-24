@@ -73,6 +73,9 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         } else if ($this->getVtype() === 'num') {
             $ret['pattern'] = '[0-9]*';
         }
+        if ($this->getAutoComplete() === false) {
+            $ret['autoComplete'] = 'off';
+        }
         return $ret;
     }
 

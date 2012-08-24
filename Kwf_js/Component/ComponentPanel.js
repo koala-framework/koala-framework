@@ -111,7 +111,10 @@ Kwf.Component.ComponentPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             item.on('loaded', function() {
                 //muss hier auch nochmal gemacht werden
                 if (item.getAction && item.getAction('saveBack')) {
-                    if (this.getTopToolbar().items.getCount() > 2) {
+                    var count = this.getTopToolbar().items.getCount();
+                    if (count > 2 && 
+                        this.getTopToolbar().items.items[count-3].xtype == 'splitbutton'
+                    ) {
                         item.getAction('saveBack').show();
                     } else {
                         item.getAction('saveBack').hide();

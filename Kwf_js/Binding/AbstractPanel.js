@@ -106,7 +106,7 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
                 }
                 this._loadBinding(b);
             }, this);
-        } else {
+        } else if (this.activeId != 0) {
             this.bindings.each(function(b) {
                 b.item.disable();
             }, this);
