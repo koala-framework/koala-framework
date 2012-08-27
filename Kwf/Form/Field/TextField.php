@@ -124,4 +124,17 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
     {
         return $this->setProperty('maxLength', $value);
     }
+
+    /**
+     * Disables browser autocompletion for this field.
+     *
+     * Used in Frontend Forms only, in backend it's disabled by Ext always
+     *
+     * @param bool
+     * @return $this
+     */
+    public function setAutoComplete($value)
+    {
+        return $this->setProperty('autoComplete', $value);
+    }
 }
