@@ -27,6 +27,10 @@ class Kwf_Form_Field_Radio extends Kwf_Form_Field_Select
         unset($ret['triggerAction']);
         if (isset($ret['outputType']) && $ret['outputType'] == 'vertical') {
             unset($ret['outputType']);
+            if (!$this->getColumns()) {
+                //set the default value for columns to 1, otherwise the radio buttons would be displayed in a row
+                 $ret['columns'] = 1;
+            }
             $ret['vertical'] = true;
         } else {
             $ret['vertical'] = false;
