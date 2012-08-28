@@ -14,11 +14,18 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('numberfield');
-        $this->setDecimalSeparator(trlcKwf('decimal separator', '.'));
+        $this->setDecimalSeparator(trlcKwfStatic('decimal separator', '.'));
         $this->setDecimalPrecision(2);
         $this->setInputType('number');
 
         $this->_floatValidator = new Zend_Validate_Float();
+    }
+
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'decimalSeparator';
+        return $ret;
     }
 
     public function trlStaticExecute($language = null)
@@ -67,7 +74,8 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             $postData[$fieldName] = null;
         }
         $ret = $postData[$fieldName];
-        if ($ret) {
+        if ($ret && !(isset($postData[$fieldName.'-format']) && $postData[$fieldName.'-format'] == 'fe')) {
+            //ext always sends as 123.23 which we can parse using (float)$ret
             $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         }
         return $ret;
@@ -100,6 +108,13 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         }
         return $ret;
 
+    }
+
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
+    {
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+        $ret['html'] .= "<input type=\"hidden\" name=\"".$this->getFieldName().$fieldNamePostfix."-format\" value=\"fe\" />";
+        return $ret;
     }
 
     /**
