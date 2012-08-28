@@ -397,6 +397,7 @@ has just been created.</en>
 <ro>Trimite</ro>
 <uk>Надіслати</uk>
 <sl>Pošlji</sl>
+<bg>Изпрати</bg>
 </text>
 <text>
 <en>Validator</en>
@@ -466,6 +467,7 @@ has just been created.</en>
 <uk>Ім'я</uk>
 <hu>Keresztnév</hu>
 <sl>Ime</sl>
+<bg>Име</bg>
 </text>
 <text>
 <en>Lastname</en>
@@ -479,6 +481,7 @@ has just been created.</en>
 <uk>Прізвище</uk>
 <hu>Vezetéknév</hu>
 <sl>Priimek</sl>
+<bg>Фамилия</bg>
 </text>
 <text>
 <en>Email</en>
@@ -653,6 +656,7 @@ has just been created.</en>
 <hu>Nem</hu>
 <sl>Spol</sl>
 <es>Género</es>
+<bg>Пол</bg>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -723,6 +727,7 @@ has just been created.</en>
 <mk>Име</mk>
 <sl>Ime</sl>
 <es>Nombre</es>
+<bg>Име</bg>
 </text>
 <text>
 <en>Last name</en>
@@ -732,6 +737,7 @@ has just been created.</en>
 <mk>Презиме</mk>
 <sl>Priimek</sl>
 <es>Apellido</es>
+<bg>Фамилия</bg>
 </text>
 <text>
 <en>Advice</en>
@@ -5549,6 +5555,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Формат</uk>
 <de>Format</de>
 <ro>Format</ro>
+<bg>Формат</bg>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -6191,6 +6198,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>HTML-Формат</uk>
 <id>1270</id>
 <ro>Format HTML</ro>
+<bg>HTML-формат</bg>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6198,6 +6206,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Текст-Формат</uk>
 <id>1271</id>
 <ro>Format Text</ro>
+<bg>Текстов формат</bg>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
