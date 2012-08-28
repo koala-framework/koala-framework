@@ -74,7 +74,10 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             $postData[$fieldName] = null;
         }
         $ret = $postData[$fieldName];
-        if ($ret && !(isset($postData[$fieldName.'-format']) && $postData[$fieldName.'-format'] == 'fe')) {
+        if ($ret &&
+            !(isset($postData[$fieldName.'-format']) && $postData[$fieldName.'-format'] == 'fe') &&
+            $this->getAllowDecimals() !== false
+        ) {
             //ext always sends as 123.23 which we can parse using (float)$ret
             $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         }
