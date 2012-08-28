@@ -113,7 +113,8 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
-        $ret['html'] .= "<input type=\"hidden\" name=\"".$this->getFieldName().$fieldNamePostfix."-format\" value=\"fe\" />";
+        //add additional hidden input field for frontend forms so we know the posted value is from frontend and formatted like current locale
+        $ret['html'] .= "\n<input type=\"hidden\" name=\"".$this->getFieldName().$fieldNamePostfix."-format\" value=\"fe\" />";
         return $ret;
     }
 
