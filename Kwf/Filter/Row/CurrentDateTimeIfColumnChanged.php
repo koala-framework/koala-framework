@@ -15,7 +15,7 @@ class Kwf_Filter_Row_CurrentDateTimeIfColumnChanged extends Kwf_Filter_Row_Curre
     {
         if (!$row->$column) return false;
 
-        $dc = $row->getDirtyColumns;
+        $dc = $row->getDirtyColumns();
         if (!array_intersect($dc, $this->_columns)) {
             return true;
         }
