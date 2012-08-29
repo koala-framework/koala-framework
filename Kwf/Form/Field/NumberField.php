@@ -32,10 +32,9 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     {
         parent::trlStaticExecute($language);
         $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, $language);
-        if ($locale != 'C') {
-            $l = Zend_Locale::findLocale($locale);
-            $this->_floatValidator->setLocale($l);
-        }
+        if ($locale == 'C') $locale = 'en_US';
+        $l = Zend_Locale::findLocale($locale);
+        $this->_floatValidator->setLocale($l);
     }
 
     protected function _addValidators()
