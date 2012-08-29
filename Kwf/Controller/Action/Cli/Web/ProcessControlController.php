@@ -95,8 +95,8 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
                 );
             }
             $files[] = array(
-                'prefix' => "[E/$requiredCmd] ",
-                'file' => "log/$requiredCmd.err",
+                'prefix' => "[E/$requiredCmd[cmd]] ",
+                'file' => "log/$requiredCmd[cmd].err",
                 'initialRead' => 1024
             );
         }
