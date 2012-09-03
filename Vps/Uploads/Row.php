@@ -86,6 +86,12 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
                 $finfo = new finfo(FILEINFO_MIME, $path);
                 $ret = $finfo->buffer($contents);
                 $ret = str_replace('; charset=binary', '', $ret);
+                if($ret == 'application/zip') {
+                    $path = Zend_Registry::get('config')->externLibraryPath->file;
+                    $finfo = new finfo(FILEINFO_MIME, $path);
+                    $ret = $finfo->buffer($contents);
+                    $ret = str_replace('; charset=binary', '', $ret);
+                }
             } else {
                 throw new Vps_Exception("Can't autodetect mimetype, install FileInfo extension");
             }
