@@ -6036,9 +6036,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
 <id>1637</id>
-<en>Must not be negative</en>
-<de>Darf nicht negativ sein</de>
-<id>1600</id>
 </text>
 <text>
 <en>value of goods</en>
@@ -6314,35 +6311,35 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Subtotal</en>
-<id>1519</id>
+<id>1658</id>
 </text>
 <text>
 <en>Just Zoom</en>
-<id>1520</id>
+<id>1659</id>
 </text>
 <text>
 <en>Landesstra&#xDF;e 23</en>
-<id>1521</id>
+<id>1660</id>
 </text>
 <text>
 <en>A-5302 Henndorf a. Wallersee</en>
-<id>1522</id>
+<id>1661</id>
 </text>
 <text>
 <en>Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
-<id>1523</id>
+<id>1662</id>
 </text>
 <text>
 <en>Edit Column</en>
-<id>1524</id>
+<id>1663</id>
 </text>
 <text>
 <en>close</en>
-<id>1525</id>
+<id>1664</id>
 </text>
 <text>
 <en>Can't save, please fill all marked fields correctly.</en>
-<id>1526</id>
+<id>1665</id>
 </text>
 <text>
 <en>Properties of selected Page</en>
@@ -6350,11 +6347,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Add new Subpage</en>
-<id>1528</id>
+<id>1666</id>
 </text>
 <text>
 <en>Delete selected Page</en>
-<id>1529</id>
+<id>1667</id>
 </text>
 <text>
 <en>Toggle Visibility of selected Page</en>
@@ -6370,7 +6367,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Web</en>
-<id>1533</id>
+<id>1668</id>
 </text>
 <text>
 <de>Benutzer ist momentan gesperrt.</de>
@@ -6396,6 +6393,24 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>'%value%' muss kleiner oder gleich sein als '%max%'</de>
 <en>'%value%' must be less or equal than '%max%'</en>
 <id>1538</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname male</context>
+<de>Lieber {0}</de>
+<id>1604</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname female</context>
+<de>Liebe {0}</de>
+<id>1669</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname unknown gender</context>
+<de>Hallo {0}</de>
+<id>1670</id>
 </text>
 </trl>
 
