@@ -6173,7 +6173,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please choose a file</en>
-<de>Bitte Datei auswählen</de>
+<de>Bitte Datei ausw&#xE4;hlen</de>
 <id>1600</id>
 </text>
 <text>
@@ -6260,6 +6260,24 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>'%value%' muss kleiner oder gleich sein als '%max%'</de>
 <en>'%value%' must be less or equal than '%max%'</en>
 <id>1538</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname male</context>
+<de>Lieber {0}</de>
+<id>1604</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname female</context>
+<de>Liebe {0}</de>
+<id>1605</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname unknown gender</context>
+<de>Hallo {0}</de>
+<id>1606</id>
 </text>
 </trl>
 
