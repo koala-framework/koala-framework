@@ -259,9 +259,13 @@ class Kwf_Util_ClearCache
             if ($result['result']) {
                 echo "cleared:     $outputType (".$result['time']."ms) " . $result['message'] . "\n";
             } else {
-                $url = $result['url'];
-                if ($result['url2']) $url .= ' / ' . $result['url2'];
-                echo "error:       $outputType ($url)\n" . $result['message'] . "\n\n";
+                $url = '';
+                if (isset($result['url'])) {
+                    $url = $result['url'];
+                    if ($result['url2']) $url .= ' / ' . $result['url2'];
+                    $url = " ($url)";
+                }
+                echo "error:       $outputType$url\n" . $result['message'] . "\n\n";
             }
         }
     }
