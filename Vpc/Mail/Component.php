@@ -232,10 +232,12 @@ class Vpc_Mail_Component extends Vpc_Abstract
                     $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear Mr. {0}', $replace);
                     $ret['salutation_hello'] = $this->getData()->trlVps('Hello Mr. {0}', $replace);
                     $ret['salutation'] = $this->getData()->trlVps('Mr.');
+                    $ret['salutation_firstname'] = $this->getData()->trlcVps('salutation firstname male', 'Dear {0}', array($recipient->getMailFirstname()));
                 } else if ($recipient->getMailGender() == 'female') {
                     $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear Mrs. {0}', $replace);
                     $ret['salutation_hello'] = $this->getData()->trlVps('Hello Mrs. {0}', $replace);
                     $ret['salutation'] = $this->getData()->trlVps('Mrs.');
+                    $ret['salutation_firstname'] = $this->getData()->trlcVps('salutation firstname female', 'Dear {0}', array($recipient->getMailFirstname()));
                 } else {
                     $replace = array(
                         $recipient->getMailFirstname(),
@@ -247,6 +249,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
                         $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear Sir or Madam');
                     }
                     $ret['salutation_hello'] = trim($this->getData()->trlVps('Hello {0} {1}', $replace));
+                    $ret['salutation_firstname'] = $this->getData()->trlcVps('salutation firstname unknown gender', 'Dear {0}', array($recipient->getMailFirstname()));
                 }
             }
         }
