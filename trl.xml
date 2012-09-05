@@ -6311,31 +6311,31 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Subtotal</en>
-<id>1658</id>
+<id>1703</id>
 </text>
 <text>
 <en>Just Zoom</en>
-<id>1659</id>
+<id>1704</id>
 </text>
 <text>
 <en>Landesstra&#xDF;e 23</en>
-<id>1660</id>
+<id>1705</id>
 </text>
 <text>
 <en>A-5302 Henndorf a. Wallersee</en>
-<id>1661</id>
+<id>1706</id>
 </text>
 <text>
 <en>Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
-<id>1662</id>
+<id>1707</id>
 </text>
 <text>
 <en>Edit Column</en>
-<id>1663</id>
+<id>1708</id>
 </text>
 <text>
 <en>close</en>
-<id>1664</id>
+<id>1709</id>
 </text>
 <text>
 <en>Can't save, please fill all marked fields correctly.</en>
@@ -6404,13 +6404,13 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Dear {0}</en>
 <context>salutation firstname female</context>
 <de>Liebe {0}</de>
-<id>1669</id>
+<id>1710</id>
 </text>
 <text>
 <en>Dear {0}</en>
 <context>salutation firstname unknown gender</context>
 <de>Hallo {0}</de>
-<id>1670</id>
+<id>1711</id>
 </text>
 </trl>
 
