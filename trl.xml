@@ -8036,8 +8036,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
 <id>1637</id>
-<en>Must not be negative</en>
-<de>Darf nicht negativ sein</de>
 </text>
 <text>
 <en>value of goods</en>
@@ -8704,35 +8702,35 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Subtotal</en>
-<id>1519</id>
+<id>1771</id>
 </text>
 <text>
 <en>Just Zoom</en>
-<id>1763</id>
+<id>1772</id>
 </text>
 <text>
 <en>Landesstraße 23</en>
-<id>1764</id>
+<id>1773</id>
 </text>
 <text>
 <en>A-5302 Henndorf a. Wallersee</en>
-<id>1765</id>
+<id>1774</id>
 </text>
 <text>
 <en>Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
-<id>1766</id>
+<id>1775</id>
 </text>
 <text>
 <en>Edit Column</en>
-<id>1767</id>
+<id>1776</id>
 </text>
 <text>
 <en>close</en>
-<id>1768</id>
+<id>1777</id>
 </text>
 <text>
 <en>Can't save, please fill all marked fields correctly.</en>
-<id>1769</id>
+<id>1665</id>
 </text>
 <text>
 <en>Properties of selected Page</en>
@@ -8744,7 +8742,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Delete selected Page</en>
-<id>1771</id>
+<id>1667</id>
 </text>
 <text>
 <en>Toggle Visibility of selected Page</en>
@@ -8760,7 +8758,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Web</en>
-<id>1533</id>
+<id>1668</id>
 </text>
 <text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
@@ -8772,4 +8770,28 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Invalid type given, value should be string, integer or float</en>
 <id>1537</id>
 </text>
+<text>
+<de>'%value%' muss kleiner oder gleich sein als '%max%'</de>
+<en>'%value%' must be less or equal than '%max%'</en>
+<id>1538</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname male</context>
+<de>Lieber {0}</de>
+<id>1604</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname female</context>
+<de>Liebe {0}</de>
+<id>1778</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname unknown gender</context>
+<de>Hallo {0}</de>
+<id>1779</id>
+</text>
 </trl>
+
