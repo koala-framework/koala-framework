@@ -88,6 +88,14 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             }
         }, this);
 
+        if (this.filterComponentId) {
+            Kwf.Utils.HistoryState.currentState[this.componentId].viewFilter = this.filterComponentId;
+            this.view.applyBaseParams({
+                filterComponentId: this.filterComponentId
+            });
+            delete this.filterComponentId;
+        }
+
         Kwf.Utils.HistoryState.updateState();
 
 
