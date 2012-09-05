@@ -74,7 +74,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
 
     public static function getDefaultConfigSection()
     {
-        if (file_exists('application/config_section')) {
+        if (file_exists('config_section')) {
             return trim(file_get_contents('config_section'));
         } else {
             return 'production';
