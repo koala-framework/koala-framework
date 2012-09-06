@@ -145,13 +145,15 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.onMenuItemChanged();
     },
 
-    onMenuItemChanged: function() {
-        this.filtersVisible = true;
-//         this.filtersEl.show();
-
+    onMenuItemChanged: function()
+    {
+        /*
         this.blockReload = true; //for filter changevalue so they won't reload too
-//         this.filter.setValue(null);
+        if (this.searchForm) {
+            this.searchForm.clearValues();
+        }
         this.blockReload = false;
+        */
     },
 
     _getState: function()
@@ -383,8 +385,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }
 
         this.hideDetail();
-        //this.el.up('.articlesDirectoryView').removeClass('articlesDirectoryViewHome');
-        //this.ownerCt.filtersEl.hide();
         if (this.ownerCt.searchFormEl) this.ownerCt.searchFormEl.hide();
 
         if (this.view) this.view.hide();
