@@ -99,6 +99,11 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         }, this);
         return ret;
     },
+    clearValues: function() {
+        this.fields.each(function(f) {
+            f.clearValue();
+        }, this);
+    },
     onSubmit: function(e) {
         if (this.dontUseAjaxRequest) return;
 

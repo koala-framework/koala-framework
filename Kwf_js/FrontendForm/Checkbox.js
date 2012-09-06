@@ -5,6 +5,10 @@ Kwf.FrontendForm.Checkbox = Ext.extend(Kwf.FrontendForm.Field, {
                 this.fireEvent('change', this.getValue());
             }, this);
         }, this);
+    },
+    clearValue: function() {
+        var inp = this.el.child('input');
+        inp.dom.checked = false;
     }
 });
 

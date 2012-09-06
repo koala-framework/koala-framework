@@ -11,6 +11,9 @@ Kwf.FrontendForm.Select = Ext.extend(Kwf.FrontendForm.Field, {
     },
     getValue: function() {
         return this.el.child('select').dom.value;
+    },
+    clearValue: function() {
+        this.el.select('select').dom.value = '';
     }
 });
 
