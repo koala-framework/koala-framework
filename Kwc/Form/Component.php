@@ -153,7 +153,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
             Kwf_Registry::get('db')->commit();
         }
-        if ($this->_posted && !$this->_errors &&
+
+        if ($this->isSaved() && !$this->_errors &&
             $this->getSuccessComponent() && $this->getSuccessComponent()->isPage &&
             (!isset($postData['doNotRelocate']) || !$postData['doNotRelocate'])
         ) {
