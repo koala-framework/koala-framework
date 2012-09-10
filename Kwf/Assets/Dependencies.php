@@ -186,7 +186,7 @@ class Kwf_Assets_Dependencies
         }
 
         //hack: übersetzung immer zuletzt anhängen
-        if ($fileType == 'js') {
+        if ($fileType == 'js' && $files) {
             $files[] = 'kwf/Ext/ext-lang-en.js';
         }
 
