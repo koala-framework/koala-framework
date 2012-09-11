@@ -2,7 +2,7 @@
 .cssClass .kwfFieldError input,
 .cssClass .kwfFieldError textarea {
     color: var(typo);
-    background: var(highlightBg) url('/assets/web/images/stripesDark.png') repeat left 3px ;
+    background: var(highlightBg) url('/assets/kwf/images/stripesDark.png') repeat left 3px ;
     border: 1px solid var(highlightBorder) ;
 }
 
@@ -159,15 +159,24 @@
     margin-bottom: 0px;
 }
 .cssClass .kwcFormError {
-    background: var(highlightBg) url('/assets/web/images/stripesDark.png') repeat left 3px ;
-    border: 1px solid var(highlightBorder) ;
+    padding: 10px 10px 5px 10px;
+    background: var(errorBg) url('/assets/kwf/images/stripes.png') repeat left 3px;
+    border: 1px solid var(errorBorder) ;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
     margin-bottom: 20px;
     margin-right: 40px;
-    padding: 10px 10px 0px 10px ;
 }
 .cssClass .kwcFormError p.error {
-    font-weight: bold;
-    color: black;
+    color: var(errorText) ;
+    margin-bottom: 5px;
+    padding-left: 20px;
+    background: url('/assets/kwf/images/iconAlert.png') no-repeat left center;
+}
+
+.cssClass .kwcFormError ul li {
+    color: var(errorText);
 }
 .cssClass span.comment { margin-left: 10px; color: #999; }
 .cssClass .kwfField { clear: both; position: relative; }
