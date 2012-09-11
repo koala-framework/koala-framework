@@ -10,7 +10,7 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
             $component = Kwc_Chained_Trl_Component::getChainedByMaster($m['data'], $this->getData());
             if ($component) {
                 $m['data'] = $component;
-                $m['text'] = $component->name;
+                $m['text'] = '{name}';
                 $menu[] = $m;
             }
         }
