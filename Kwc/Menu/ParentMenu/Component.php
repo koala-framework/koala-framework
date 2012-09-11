@@ -68,9 +68,9 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         }
     }
 
-    public function getMenuData()
+    public function getMenuData($parentData = null, $select = array())
     {
-        $ret = $this->_getParentContentData()->getComponent()->getMenuData();
+        $ret = $this->_getParentContentData()->getComponent()->getMenuData($parentData, $select);
         $this->_processMenuSetCurrent($ret);
         return $ret;
     }
