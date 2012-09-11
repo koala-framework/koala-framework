@@ -2,8 +2,7 @@
 .cssClass .kwfFieldError input,
 .cssClass .kwfFieldError textarea {
     color: var(typo);
-    background: var(highlightBg) url('/assets/kwf/images/stripesDark.png') repeat left 3px ;
-    border: 1px solid var(highlightBorder) ;
+    border: 1px solid var(errorBorder) ;
 }
 
 .cssClass button {
