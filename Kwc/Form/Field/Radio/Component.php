@@ -16,7 +16,9 @@ class Kwc_Form_Field_Radio_Component extends Kwc_Form_Field_Select_Component
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);
         $values = array();
-        foreach ($this->getRow()->getChildRows('Values') as $i) {
+        $s = new Kwf_Model_Select();
+        $s->order('pos');
+        foreach ($this->getRow()->getChildRows('Values', $s) as $i) {
             $values[$i->value] = $i->value;
         }
         $ret->setValues($values);
