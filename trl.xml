@@ -5624,6 +5624,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1165</id>
 <de>Mail</de>
 <ro>E-mail</ro>
+<sl>Mail</sl>
 </text>
 <text>
 <en>Recipients</en>
@@ -5835,6 +5836,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1206</id>
 <de>Max Mustermann...</de>
 <ro>Ion Ionescu...</ro>
+<sl>Janez Vzorec</sl>
 </text>
 <text>
 <en>Message</en>
