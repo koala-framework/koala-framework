@@ -90,6 +90,7 @@ class Kwc_Mail_HtmlParser
                     foreach ($s['styles'] as $style=>$value) {
                         if ($style == 'font-family') {
                             $appendTags['font']['face'] = $value;
+                        /*
                         } else if ($style == 'font-size') {
                             if (substr($value, -2) == 'px') {
                                 $value = round((int)$value / 6); // TODO: das ist pi mal daumen
@@ -97,6 +98,7 @@ class Kwc_Mail_HtmlParser
                             } else {
                                 $attributes['style'] .= "$style: $value; ";
                             }
+                        */
                         } else if ($style == 'color') {
                             $appendTags['font']['color'] = $value;
                         } else if ($style == 'font-weight' && $value == 'bold') {
