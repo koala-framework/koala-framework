@@ -74,8 +74,12 @@ Kwf.handleError = function(error) {
                 });
             }
         }
-
-        var win = new Ext.Window({
+        if (!Ext.Window) {
+            if (Kwf.Debug.displayErrors) {
+                throw msg;
+            }
+        } else {
+            var win = new Ext.Window({
                 autoCreate : true,
                 title:title,
                 resizable:true,
@@ -105,9 +109,10 @@ Kwf.handleError = function(error) {
                         error.abort.call(error.scope || window);
                         win.close();
                     }
-            }]
-        });
-        win.show();
+                }]
+            });
+            win.show();
+        }
     } else if (Kwf.Debug.displayErrors) {
         Ext.Msg.show({
             title: error.title,
