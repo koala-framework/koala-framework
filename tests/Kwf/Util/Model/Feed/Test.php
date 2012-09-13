@@ -327,7 +327,6 @@ class Kwf_Util_Model_Feed_Test extends Kwf_Test_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->media_image);
     }
-    */
 
     public function testAtomXhmlContent()
     {
@@ -336,6 +335,7 @@ class Kwf_Util_Model_Feed_Test extends Kwf_Test_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->description);
     }
+    */
 
     public function testBug4()
     {
