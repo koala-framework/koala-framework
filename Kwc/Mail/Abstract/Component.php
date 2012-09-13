@@ -227,10 +227,12 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
                     $ret['salutation_polite_notitle'] = $this->getData()->trlKwf('Dear Mr. {0}', $replace);
                     $ret['salutation_hello'] = $this->getData()->trlKwf('Hello Mr. {0}', $replace);
                     $ret['salutation'] = $this->getData()->trlKwf('Mr.');
+                    $ret['salutation_firstname'] = $this->getData()->trlcKwf('salutation firstname male', 'Dear {0}', array($recipient->getMailFirstname()));
                 } else if ($recipient->getMailGender() == 'female') {
                     $ret['salutation_polite_notitle'] = $this->getData()->trlKwf('Dear Mrs. {0}', $replace);
                     $ret['salutation_hello'] = $this->getData()->trlKwf('Hello Mrs. {0}', $replace);
                     $ret['salutation'] = $this->getData()->trlKwf('Mrs.');
+                    $ret['salutation_firstname'] = $this->getData()->trlcKwf('salutation firstname female', 'Dear {0}', array($recipient->getMailFirstname()));
                 } else {
                     $replace = array(
                         $recipient->getMailFirstname(),
@@ -242,6 +244,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
                         $ret['salutation_polite_notitle'] = $this->getData()->trlKwf('Dear Sir or Madam');
                     }
                     $ret['salutation_hello'] = trim($this->getData()->trlKwf('Hello {0} {1}', $replace));
+                    $ret['salutation_firstname'] = $this->getData()->trlcKwf('salutation firstname unknown gender', 'Dear {0}', array($recipient->getMailFirstname()));
                 }
             }
         }

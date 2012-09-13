@@ -56,7 +56,7 @@ class Kwc_Directories_Item_Directory_Trl_Controller extends Kwf_Controller_Actio
 
         $i=0;
         foreach ($extConfig['contentEditComponents'] as $ec) {
-            $name = Kwc_Abstract::getSetting($ec['componentClass'], 'componentName');
+            $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($ec['componentClass'], 'componentName'));
             $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
             $this->_columns->add(new Kwf_Grid_Column_Button('edit_'.$i, ' ', 20))
                 ->setColumnType('editContent')

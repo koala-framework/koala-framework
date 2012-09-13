@@ -17,13 +17,25 @@ class Kwf_Form_NumberField_PhpTest extends Kwf_Test_TestCase
         $this->_assertPostedValue('1,3', 5, 'en', true); //validation fails
     }
 
-    private function _assertPostedValue($postValue, $savedValue, $language, $isFrontend)
+    public function testValuesBackend()
+    {
+        $this->_assertPostedValue('1.3', 1.3, 'de', false);
+        $this->_assertPostedValue('1.3', 1.3, 'en', false);
+    }
+
+    public function testValuesAllowDecimals()
+    {
+        $this->_assertPostedValue('3', 3, 'de', false, false);
+    }
+
+    private function _assertPostedValue($postValue, $savedValue, $language, $isFrontend, $allowDecimals = null)
     {
         $m1 = new Kwf_Form_NumberField_TestModel();
         $form = new Kwf_Form();
         $form->setModel($m1);
         $form->setId(1);
         $nrField = $form->add(new Kwf_Form_Field_NumberField('nr', 'Number'));
+        $nrField->setAllowDecimals($allowDecimals);
 
         $form->trlStaticExecute($language);
 
@@ -44,9 +56,4 @@ class Kwf_Form_NumberField_PhpTest extends Kwf_Test_TestCase
         $this->assertEquals($savedValue, $testRow->nr);
     }
 
-    public function testValuesBackend()
-    {
-        $this->_assertPostedValue('1.3', 1.3, 'de', false);
-        $this->_assertPostedValue('1.3', 1.3, 'en', false);
-    }
 }

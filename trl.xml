@@ -397,6 +397,7 @@ has just been created.</en>
 <ro>Trimite</ro>
 <uk>Надіслати</uk>
 <sl>Pošlji</sl>
+<bg>Изпрати</bg>
 </text>
 <text>
 <en>Validator</en>
@@ -466,6 +467,7 @@ has just been created.</en>
 <uk>Ім'я</uk>
 <hu>Keresztnév</hu>
 <sl>Ime</sl>
+<bg>Име</bg>
 </text>
 <text>
 <en>Lastname</en>
@@ -479,6 +481,7 @@ has just been created.</en>
 <uk>Прізвище</uk>
 <hu>Vezetéknév</hu>
 <sl>Priimek</sl>
+<bg>Фамилия</bg>
 </text>
 <text>
 <en>Email</en>
@@ -631,6 +634,7 @@ has just been created.</en>
 <hu>Nő</hu>
 <sl>Ženski</sl>
 <es>Femenino</es>
+<bg>Жена </bg>
 </text>
 <text>
 <en>Male</en>
@@ -642,6 +646,7 @@ has just been created.</en>
 <hu>Férfi</hu>
 <sl>Moški</sl>
 <es>Masculino</es>
+<bg>Мъж</bg>
 </text>
 <text>
 <en>Gender</en>
@@ -653,6 +658,7 @@ has just been created.</en>
 <hu>Nem</hu>
 <sl>Spol</sl>
 <es>Género</es>
+<bg>Пол</bg>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -723,6 +729,7 @@ has just been created.</en>
 <mk>Име</mk>
 <sl>Ime</sl>
 <es>Nombre</es>
+<bg>Име</bg>
 </text>
 <text>
 <en>Last name</en>
@@ -732,6 +739,7 @@ has just been created.</en>
 <mk>Презиме</mk>
 <sl>Priimek</sl>
 <es>Apellido</es>
+<bg>Фамилия</bg>
 </text>
 <text>
 <en>Advice</en>
@@ -5549,6 +5557,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Формат</uk>
 <de>Format</de>
 <ro>Format</ro>
+<bg>Формат</bg>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -5615,6 +5624,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1165</id>
 <de>Mail</de>
 <ro>E-mail</ro>
+<sl>Mail</sl>
 </text>
 <text>
 <en>Recipients</en>
@@ -5826,6 +5836,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1206</id>
 <de>Max Mustermann...</de>
 <ro>Ion Ionescu...</ro>
+<sl>Janez Vzorec</sl>
 </text>
 <text>
 <en>Message</en>
@@ -6191,6 +6202,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>HTML-Формат</uk>
 <id>1270</id>
 <ro>Format HTML</ro>
+<bg>HTML-формат</bg>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6198,6 +6210,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Текст-Формат</uk>
 <id>1271</id>
 <ro>Format Text</ro>
+<bg>Текстов формат</bg>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -6921,8 +6934,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>C</en>
 <de>de_AT.UTF-8, de.UTF-8, de_DE.UTF-8</de>
 <id>1382</id>
-<ro>C</ro>
-<sl>UTF-8</sl>
+<ro>ro</ro>
+<sl>sl</sl>
 </text>
 <text>
 <en>hide</en>
@@ -8027,8 +8040,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
 <id>1637</id>
-<en>Must not be negative</en>
-<de>Darf nicht negativ sein</de>
 </text>
 <text>
 <en>value of goods</en>
@@ -8743,7 +8754,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Text nach Abschicken</de>
 <id>1775</id>
 <en>Subtotal</en>
-<id>1519</id>
+<id>1771</id>
 </text>
 <text>
 <en>Just Zoom</en>
@@ -8799,7 +8810,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Web</en>
-<id>1533</id>
+<id>1668</id>
 </text>
 <text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
@@ -8810,6 +8821,29 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Ungültiger Typ angegeben, Wert sollte String, Integer oder Float sein</de>
 <en>Invalid type given, value should be string, integer or float</en>
 <id>1537</id>
+</text>
+<text>
+<de>'%value%' muss kleiner oder gleich sein als '%max%'</de>
+<en>'%value%' must be less or equal than '%max%'</en>
+<id>1538</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname male</context>
+<de>Lieber {0}</de>
+<id>1604</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname female</context>
+<de>Liebe {0}</de>
+<id>1785</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname unknown gender</context>
+<de>Hallo {0}</de>
+<id>1786</id>
 </text>
 </trl>
 

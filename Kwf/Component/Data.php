@@ -144,7 +144,7 @@ class Kwf_Component_Data
     }
 
     /**
-     * Returns absolute url including domain
+     * Returns absolute url including domain and protocol (http://)
      *
      * @return string
      */
@@ -161,7 +161,7 @@ class Kwf_Component_Data
     }
 
     /**
-     * Returns absolute url including preview domain
+     * Returns absolute url including preview domain and protocol (http://)
      *
      * @return string
      */

@@ -36,12 +36,12 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();
                 Kwf.Event.on(field.errorEl, 'mouseEnter', function() {
-                    this.errorEl.child('.message').fadeIn({duration: 0.4});
-                    this.errorEl.child('.arrow').fadeIn({duration: 0.4});
+                    this.errorEl.child('.message').stopFx().fadeIn({duration: 0.4});
+                    this.errorEl.child('.arrow').stopFx().fadeIn({duration: 0.4});
                 }, field);
                 Kwf.Event.on(field.errorEl, 'mouseLeave', function() {
-                    this.errorEl.child('.message').fadeOut({duration: 0.2});
-                    this.errorEl.child('.arrow').fadeOut({duration: 0.2});
+                    this.errorEl.child('.message').stopFx().fadeOut({duration: 0.2});
+                    this.errorEl.child('.arrow').stopFx().fadeOut({duration: 0.2});
                 }, field);
             }
             field.errorEl.child('.message').update(r.errorFields[fieldName]);

@@ -49,9 +49,30 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getMenuData()
+    //helper that sets current to current page
+    private function _processMenuSetCurrent(&$ret)
     {
-        return $this->_getParentContentData()->getComponent()->getMenuData();
+        $currentPages = array_reverse($this->_getCurrentPages());
+
+        $currentPageIds = array();
+        foreach ($currentPages as $page) {
+            if (!$page instanceof Kwf_Component_Data_Root) {
+                $currentPageIds[] = $page->getComponentId();
+            }
+        }
+        foreach ($ret as $k=>$i) {
+            if (in_array($i['data']->componentId, $currentPageIds)) {
+                $ret[$k]['current'] = true;
+                $ret[$k]['class'] .= ' current';
+            }
+        }
+    }
+
+    public function getMenuData($parentData = null, $select = array())
+    {
+        $ret = $this->_getParentContentData()->getComponent()->getMenuData($parentData, $select);
+        $this->_processMenuSetCurrent($ret);
+        return $ret;
     }
 
     public function getTemplateVars()
@@ -67,21 +88,7 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
 
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
 
-        $currentPages = array_reverse($this->_getCurrentPages());
-
-        $currentPageIds = array();
-        foreach ($currentPages as $page) {
-            if (!$page instanceof Kwf_Component_Data_Root) {
-                $currentPageIds[] = $page->getComponentId();
-            }
-        }
-
-        foreach ($ret['menu'] as $k=>$i) {
-            if (in_array($i['data']->componentId, $currentPageIds)) {
-                $ret['menu'][$k]['current'] = true;
-                $ret['menu'][$k]['class'] .= ' current';
-            }
-        }
+        $this->_processMenuSetCurrent($ret['menu']);
 
         return $ret;
     }

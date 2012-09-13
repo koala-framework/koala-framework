@@ -14,8 +14,12 @@ class Kwf_Form_Container_Column extends Kwf_Form_Container_Abstract
     public function getTemplateVars($values, $fieldNamePostfix='', $idPrefix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
-        $ret['preHtml'] = ''; // damit ein div ausgegeben wird
-        $ret['postHtml'] = '';
+        $style = '';
+        if ($this->getWidth()) {
+            $style .= 'width: '.$this->getWidth().'px';
+        }
+        $ret['preHtml'] = '<div style="'.$style.'">';
+        $ret['postHtml'] = '</div>';
 
         static $nr; //TODO: das darf so nicht sein -- bei aenderung bitte chris sagen, da css auf $nr basiert
         $nr++;

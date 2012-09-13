@@ -16,11 +16,11 @@
     margin-top: -4px;
     margin-left: 25px;
     color: white;
-    background-color: #eb301d;
+    background-color: var(errorBg);
 }
 .kwfFieldErrorIconBubble .arrow {
     border-top: 7px solid transparent;
-    border-right: 7px solid #eb301d;
+    border-right: 7px solid var(errorBg);
     border-bottom: 7px solid transparent;
     position: absolute;
     width: 0;

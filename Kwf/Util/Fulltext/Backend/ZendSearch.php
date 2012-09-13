@@ -20,7 +20,7 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
         $ret = array();
         foreach ($index->find($query) as $hit) {
-            $ret[] = $hit->componentId();
+            $ret[] = $hit->componentId;
         }
         return $ret;
     }

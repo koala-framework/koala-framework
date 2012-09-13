@@ -4,7 +4,9 @@
         <input class="submit" type="submit" value="<?=$this->data->trlKwf('Search');?>" />
     </form>
     <? if ($this->error) { ?>
-        <p><?=$this->error?></p>
+        <div class="webSearchError">
+            <p><?=$this->error?></p>
+        </div>
     <? } else if ($this->hits) { ?>
         <div class="resultText webSearchSuccess">
             <p>
@@ -28,11 +30,11 @@
         </ul>
         <?=$this->component($this->paging)?>
     <? } else if (trim($this->queryString)) { ?>
-        <div class="resultText webSearchError">
+        <div class="resultText">
             <p><?=$this->data->trlKwf('No results found for <strong>"{0}"</strong>',htmlspecialchars($this->queryString));?></p>
         </div>
     <? } else { ?>
-        <div class="resultText webSearchError">
+        <div class="resultText">
             <p><?=$this->data->trlKwf('Please enter a search term');?></p>
         </div>
     <? } ?>

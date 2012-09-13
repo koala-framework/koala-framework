@@ -333,16 +333,18 @@ class Kwf_Assets_Loader
 
     public static function expandAssetVariables($contents, $section, &$mtimeFiles = array())
     {
-        if (file_exists('assetVariables.ini')) {
-            $mtimeFiles[] = 'assetVariables.ini';
-            static $assetVariables = array();
-            if (!isset($assetVariables[$section])) {
-                $assetVariables[$section] = new Zend_Config_Ini('assetVariables.ini', $section);
+        static $assetVariables = array();
+        if (!isset($assetVariables[$section])) {
+            $assetVariables[$section] = Kwf_Config::getValueArray('assetVariables');
+            if (file_exists('assetVariables.ini')) {
+                $mtimeFiles[] = 'assetVariables.ini';
+                $cfg = new Zend_Config_Ini('assetVariables.ini', $section);
+                $assetVariables[$section] = array_merge($assetVariables[$section], $cfg->toArray());
             }
-            foreach ($assetVariables[$section] as $k=>$i) {
-                $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
-                $contents = str_replace('var('.$k.')', $i, $contents);
-            }
+        }
+        foreach ($assetVariables[$section] as $k=>$i) {
+            $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
+            $contents = str_replace('var('.$k.')', $i, $contents);
         }
         return $contents;
     }

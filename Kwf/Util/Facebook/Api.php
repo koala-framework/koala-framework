@@ -1,0 +1,29 @@
+<?php
+require_once Kwf_Config::getValue('externLibraryPath.facebookPhpSdk').'/src/facebook.php';
+class Kwf_Util_Facebook_Api extends Facebook
+{
+    static private $instance = null;
+
+    static public function getInstance()
+    {
+        if (null === self::$instance) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+
+    public function __construct()
+    {
+        $config = Kwf_Config::getValueArray('kwc.fbAppData');
+        if (!isset($config['appId'])) {
+            throw new Kwf_Exception('kwc.fbAppData.appId has to be set in config');
+        }
+        if (!isset($config['secret'])) {
+            throw new Kwf_Exception('kwc.fbAppData.secret has to be set in config');
+        }
+        $fbConfig['appId'] = $config['appId'];
+        $fbConfig['secret'] = $config['secret'];
+        parent::__construct($fbConfig);
+    }
+    private function __clone(){}
+}

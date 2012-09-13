@@ -884,7 +884,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         foreach (self::$_allInstances as $i) {
             foreach ($i->_rows as $row) {
-                $row->freeMemory();
+                if (is_object($row)) $row->freeMemory();
             }
             $i->_rows = array();
         }

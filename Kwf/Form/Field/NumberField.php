@@ -32,10 +32,9 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     {
         parent::trlStaticExecute($language);
         $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, $language);
-        if ($locale != 'C') {
-            $l = Zend_Locale::findLocale($locale);
-            $this->_floatValidator->setLocale($l);
-        }
+        if ($locale == 'C') $locale = 'en_US';
+        $l = Zend_Locale::findLocale($locale);
+        $this->_floatValidator->setLocale($l);
     }
 
     protected function _addValidators()
@@ -74,7 +73,10 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             $postData[$fieldName] = null;
         }
         $ret = $postData[$fieldName];
-        if ($ret && !(isset($postData[$fieldName.'-format']) && $postData[$fieldName.'-format'] == 'fe')) {
+        if ($ret &&
+            !(isset($postData[$fieldName.'-format']) && $postData[$fieldName.'-format'] == 'fe') &&
+            $this->getAllowDecimals() !== false
+        ) {
             //ext always sends as 123.23 which we can parse using (float)$ret
             $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         }
@@ -113,7 +115,8 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
-        $ret['html'] .= "<input type=\"hidden\" name=\"".$this->getFieldName().$fieldNamePostfix."-format\" value=\"fe\" />";
+        //add additional hidden input field for frontend forms so we know the posted value is from frontend and formatted like current locale
+        $ret['html'] .= "\n<input type=\"hidden\" name=\"".$this->getFieldName().$fieldNamePostfix."-format\" value=\"fe\" />";
         return $ret;
     }
 

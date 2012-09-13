@@ -349,8 +349,18 @@ class Kwf_Util_Check_Config
     private static function _fileinfo_functionality()
     {
         $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
-        if (substr($mime, 0, 9) != 'image/png') {
-            throw new Kwf_Exception("fileinfo returned wrong information");
+        if ($mime != 'image/png') {
+            throw new Kwf_Exception("fileinfo returned wrong information: $mime");
+        }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
+        if ($mime != 'application/msword') {
+            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
+        }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
+        if ($mime != 'application/vnd.oasis.opendocument.text') {
+            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
         }
     }
 
