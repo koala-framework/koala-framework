@@ -82,7 +82,7 @@ class Kwc_Mail_HtmlParser
         );
 
         $appendTags = array();
-        $attributes['style'] = '';
+        if (!isset($attributes['style'])) $attributes['style'] = '';
         foreach ($this->_styles as $s) {
             if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
