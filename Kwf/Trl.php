@@ -676,9 +676,13 @@ class Kwf_Trl
                 ($countMarksDouble == 0 && $countMarksDouble != 0 && $countMarksSingle % 2 == 0)) {
                 if ( in_array($letter, array(',', ' ', ')', '('))) { //ary -> buchstaben für array
                     return false;
-                } else if (in_array($letter, array('.'))) {
+                /*
+                TODO is returns false positives if '.' is used after the trl string (common in JS) example: trl("{0} xx", foo.bar)
+                } else if ($letter == '.') {
+                    d($expression);
                     return array('error' => true, 'error_short' =>self::ERROR_INVALID_CHAR,
                           'message' => $this->_errorMessages[self::ERROR_INVALID_CHAR]);
+                */
                 } else {
 
                     return $this->_checkArguments($this->_getType($expression), $words);
