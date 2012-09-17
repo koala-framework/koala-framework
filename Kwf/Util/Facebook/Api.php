@@ -14,15 +14,17 @@ class Kwf_Util_Facebook_Api extends FacebookZendSession
 
     public function __construct($config = null)
     {
-        $config = Kwf_Config::getValueArray('kwc.fbAppData');
-        if (!isset($config['appId'])) {
-            throw new Kwf_Exception('kwc.fbAppData.appId has to be set in config');
+        if (!$config) {
+            $config = Kwf_Config::getValueArray('kwc.fbAppData');
+            if (!isset($config['appId'])) {
+                throw new Kwf_Exception('kwc.fbAppData.appId has to be set in config');
+            }
+            if (!isset($config['secret'])) {
+                throw new Kwf_Exception('kwc.fbAppData.secret has to be set in config');
+            }
+            $fbConfig['appId'] = $config['appId'];
+            $fbConfig['secret'] = $config['secret'];
         }
-        if (!isset($config['secret'])) {
-            throw new Kwf_Exception('kwc.fbAppData.secret has to be set in config');
-        }
-        $fbConfig['appId'] = $config['appId'];
-        $fbConfig['secret'] = $config['secret'];
         parent::__construct($fbConfig);
     }
     private function __clone(){}
