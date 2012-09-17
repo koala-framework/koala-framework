@@ -1,6 +1,6 @@
 <?php
-require_once Kwf_Config::getValue('externLibraryPath.facebookPhpSdk').'/src/facebook.php';
-class Kwf_Util_Facebook_Api extends Facebook
+require_once Kwf_Config::getValue('externLibraryPath.facebookPhpSdk').'/src/FacebookZendSession.php';
+class Kwf_Util_Facebook_Api extends FacebookZendSession
 {
     static private $instance = null;
 
