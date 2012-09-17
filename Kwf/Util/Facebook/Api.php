@@ -12,7 +12,7 @@ class Kwf_Util_Facebook_Api extends FacebookZendSession
         return self::$instance;
     }
 
-    public function __construct()
+    public function __construct($config = null)
     {
         $config = Kwf_Config::getValueArray('kwc.fbAppData');
         if (!isset($config['appId'])) {
