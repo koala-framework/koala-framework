@@ -71,6 +71,7 @@ class Kwf_Util_Apc
 
     public static function dispatchUtils()
     {
+
         if (empty($_SERVER['PHP_AUTH_USER']) ||
             empty($_SERVER['PHP_AUTH_PW']) ||
             $_SERVER['PHP_AUTH_USER']!='apcutils' ||
@@ -103,9 +104,9 @@ class Kwf_Util_Apc
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
             exit;
-        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/get-counter-value') {
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 31) == '/kwf/util/apc/get-counter-value') {
             $prefix = Kwf_Cache::getUniquePrefix().'bench-';
-            echo apc_fetch($prefix.$this->_getParam('name'));
+            echo apc_fetch($prefix.$_GET['name']);
             exit;
         } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/stats') {
             self::stats();
