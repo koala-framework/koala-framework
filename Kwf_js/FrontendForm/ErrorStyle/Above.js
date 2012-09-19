@@ -3,6 +3,8 @@ Kwf.FrontendForm.ErrorStyle.Above = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abstr
         var errorMessages = r.errorMessages;
         for (var fieldName in r.errorFields) {
             errorMessages.push(r.errorFields[fieldName]);
+            var field = this.form.findField(fieldName);
+            field.el.addClass('kwfFieldError');
         }
         if (errorMessages && errorMessages.length) {
             this._showErrorMessagesAbove(errorMessages, r);
