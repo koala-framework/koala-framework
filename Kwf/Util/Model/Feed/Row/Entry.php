@@ -47,7 +47,13 @@ class Kwf_Util_Model_Feed_Row_Entry extends Kwf_Model_Row_Data_Abstract
             $data['description'] = '';
             foreach ($xml->content as $i) {
                 if (!$data['description'] || $i['type'] == 'html' || $i['type'] == 'xhtml') {
-                    $data['description'] = (string)$i;
+                    foreach ($i->children() as $el) {
+                        $data['description'] .= $el->asXml();
+                    }
+                    $data['description'] = trim($data['description']);
+                    if (!$data['description']) {
+                        $data['description'] = trim((string)$i);
+                    }
                 }
             }
             if (!$data['description']) {
