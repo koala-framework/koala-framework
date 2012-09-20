@@ -10,6 +10,7 @@ class Kwc_Editable_Component extends Kwc_Abstract
             'component' => 'Kwc_Paragraphs_Component'
         );
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Editable/Panel.js';
+        $ret['assetsAdmin']['dep'][] = 'ExtPanel';
         return $ret;
     }
 
