@@ -29,6 +29,7 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         $ret['showArrows'] = true; // whether to show arrows at all or not
         $ret['showPlayPause'] = false; // whether to show a play/pause switcher or not
         $ret['autoPlay'] = false; // whether to start switching the contents automatically. only works if showPlayPause is true
+        $ret['useHistoryState'] = true; // whether to add browser history entry if user navigates inside listŚwitch
         $ret['eyeCandyListClass'] = 'Kwc.List.Switch.Component';
         return $ret;
     }
@@ -49,6 +50,7 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         $ret['options']['showArrows'] = $this->_getSetting('showArrows');
         $ret['options']['showPlayPause'] = $this->_getSetting('showPlayPause');
         $ret['options']['autoPlay'] = $this->_getSetting('autoPlay');
+        $ret['options']['useHistoryState'] = $this->_getSetting('useHistoryState');
         $ret['options']['class'] = $this->_getSetting('eyeCandyListClass');
 
         foreach ($ret['listItems'] as &$item) {
