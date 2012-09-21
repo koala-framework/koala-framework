@@ -46,6 +46,7 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
 
             $newDetailRow = $newDetail->row;
             $newDetailRow->create_date = date('Y-m-d H:i:s');
+            $newDetailRow->last_sent_date = null;
             $newDetailRow->status = null;
             $newDetailRow->save();
 
