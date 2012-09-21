@@ -107,7 +107,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
             if ($log) {
-                $log->log("delete view cache $row[component_id] $row[type] $row[value]", Zend_Log::INFO);
+                $log->log("delete view cache $row[component_id] $row[renderer] $row[type] $row[value]", Zend_Log::INFO);
             }
             $type = $row['type'];
             $value = $row['value'];
