@@ -24,8 +24,6 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
             }),
             new Kwf.EyeCandy.List.Plugins.ActiveChanger.DefaultActiveClass({
             }),
-            new Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState({
-            })
         ];
         if (this.showArrows) {
             this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks({
@@ -35,6 +33,10 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
             this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink({
                 autoPlay: this.autoPlay
             }));
+        }
+        if (this.useHistoryState) {
+            new Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState({
+            })
         }
 
         Kwc.List.Switch.Component.superclass._init.call(this);

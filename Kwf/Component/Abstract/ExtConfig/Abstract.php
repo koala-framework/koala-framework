@@ -147,6 +147,9 @@ abstract class Kwf_Component_Abstract_ExtConfig_Abstract
             $editComponents = Kwc_Abstract::getSetting($componentClass, 'editComponents');
             foreach ($editComponents as $c) {
                 $childGen = Kwf_Component_Generator_Abstract::getInstances($componentClass, array('componentKey'=>$c));
+                if (!$childGen) {
+                    throw new Kwf_Exception("editComponents '$c' doesn't exist in '$componentClass'");
+                }
                 $childGen = $childGen[0];
                 $cls = Kwc_Abstract::getChildComponentClass($componentClass, null, $c);
                 $edit = self::getEditConfigs($cls, $childGen,

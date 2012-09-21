@@ -24,11 +24,29 @@ function p($src, $Type = 'LOG')
     }
     if (is_array($src)) {
         $isToDebug = true;
-        $src = _pArray($src);
-        if (php_sapi_name() == 'cli') {
-            $src = "\n$src";
+        if ($Type == 'TABLE' && php_sapi_name() != 'cli') {
+            $table = '';
+            $i = 0;
+            foreach ($src[1] as $row) {
+                $table .= "<tr>";
+                foreach ($row as $td) {
+                    if ($i==0) {
+                        $table .= "<th>$td</th>";
+                    } else {
+                        $table .= "<td>$td</td>";
+                    }
+                }
+                $table .= "</tr>\n";
+                $i++;
+            }
+            $src = $src[0]."<br />\n<table>\n".$table."</table>\n";
         } else {
-            $src = "<pre>\n$src</pre>";
+            $src = _pArray($src);
+            if (php_sapi_name() == 'cli') {
+                $src = "\n$src";
+            } else {
+                $src = "<pre>\n$src</pre>";
+            }
         }
     }
     if ($isToDebug) {
@@ -46,6 +64,7 @@ function p($src, $Type = 'LOG')
         $bt = debug_backtrace();
         $i = 0;
         if (isset($bt[1]) && isset($bt[1]['function']) && $bt[1]['function'] == 'd') $i = 1;
+        if (isset($bt[$i]) && isset($bt[$i]['function']) && $bt[$i]['function'] == 'bt') $i++;
         echo $bt[$i]['file'].':'.$bt[$i]['line'];
         if (php_sapi_name() != 'cli') echo "<br />";
         echo "\n";

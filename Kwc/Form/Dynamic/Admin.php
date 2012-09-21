@@ -29,7 +29,7 @@ class Kwc_Form_Dynamic_Admin extends Kwc_Abstract_Composite_Admin
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
         foreach ($components as $c) {
             $t = $c->getTitle();
-            if (!$t) $t = $c->getPage()->name;
+            if (!$t && $c->getPage()) $t = $c->getPage()->name;
             if ($domain = $c->getParentByClass('Kwc_Root_DomainRoot_Domain_Component')) {
                 $t .= " - $domain->name";
             }

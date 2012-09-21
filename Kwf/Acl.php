@@ -247,6 +247,7 @@ class Kwf_Acl extends Zend_Acl
     public function loadKwcResources()
     {
         if ($this->_kwcResourcesLoaded) return;
+        $this->_kwcResourcesLoaded = true;
         $menuConfigs = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::getFlag($c, 'hasResources')) {
@@ -260,7 +261,6 @@ class Kwf_Acl extends Zend_Acl
         foreach ($menuConfigs as $cfg) {
             $cfg->addResources($this);
         }
-        $this->_kwcResourcesLoaded = true;
     }
 
     public static function _compareMenuConfig(Kwf_Component_Abstract_MenuConfig_Abstract $a, Kwf_Component_Abstract_MenuConfig_Abstract $b)

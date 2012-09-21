@@ -17,6 +17,18 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
 
     //setHideIfNoValues
 
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+
+        //if hideIfNoValues and there are no values remove empty validator
+        if ($this->getHideIfNoValues() && isset($this->_validators['notEmpty'])) {
+            $store = $this->_getStoreData();
+            if (!$store['data']) {
+                unset($this->_validators['notEmpty']);
+            }
+        }
+    }
 
     public function validate($row, $postData)
     {
@@ -26,10 +38,19 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
 
         if (!$this->getShowNoSelection() && is_null($data)) {
             //regardless of allowBlank a select *always* needs a selection
-            $ret[] = array(
-                'message' => $this->getEmptyText(),
-                'field' => $this
-            );
+            $ignoreEmpty = true;
+            if ($this->getHideIfNoValues()) {
+                $store = $this->_getStoreData();
+                if (!$store['data']) {
+                    $ignoreEmpty = true;
+                }
+            }
+            if (!$ignoreEmpty) {
+                $ret[] = array(
+                    'message' => $this->getEmptyText(),
+                    'field' => $this
+                );
+            }
         }
 
         return $ret;

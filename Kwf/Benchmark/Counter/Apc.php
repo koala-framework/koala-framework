@@ -14,7 +14,8 @@ class Kwf_Benchmark_Counter_Apc implements Kwf_Benchmark_Counter_Interface
     public function getValue($name)
     {
         $d = Kwf_Registry::get('config')->server->domain;
-        $url = "http://$d/kwf/util/apc/get-counter-value?name=".rawurlencode($name);
+        $pwd = Kwf_Util_Apc::getHttpPassword();
+        $url = "http://apcutils:$pwd@$d/kwf/util/apc/get-counter-value?name=".rawurlencode($name);
         return (int)file_get_contents($url);
     }
 

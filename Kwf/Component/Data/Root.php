@@ -283,6 +283,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                 break;
             }
         }
+
         foreach ($idParts as $i=>$idPart) {
             if ($idPart == 'root') {
                 $ret = $this;
@@ -305,8 +306,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                     }
                     $s = new Kwf_Component_Select($s);
                 }
-
                 if ($i == 0 && !$found) { // Muss eine Page sein
+                    $ret = null;
                     $generators = $this->getPageGenerators();
                     foreach ($generators as $generator) {
                         $ret = array_pop($generator->getChildData(null, $s));

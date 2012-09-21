@@ -49,8 +49,11 @@ class Kwc_Directories_Category_Directory_Component extends Kwc_Directories_ItemP
         $rows = $model->getRows($model->select()->whereEquals($itemRef['column'], $item->row->id));
         $item->categories = array();
         foreach ($rows as $row) {
-            $item->categories[] = $item->parent->getChildComponent(array('componentClass'=>$componentClass))
+            $cat = $item->parent->getChildComponent(array('componentClass'=>$componentClass))
                 ->getChildComponent('_'.$row->{$catRef['column']});
+            if ($cat) {
+                $item->categories[] = $cat;
+            }
         }
     }
 
