@@ -252,7 +252,6 @@ function bt($file = false)
                 php_sapi_name().' '.(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '').
                 "\n".$ret;
             file_put_contents('backtrace', $ret, FILE_APPEND);
-            file_put_contents('backtrace', $ret, FILE_APPEND);
         } else {
             echo $ret;
         }
