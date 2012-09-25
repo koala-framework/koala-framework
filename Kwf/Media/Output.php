@@ -31,9 +31,11 @@ class Kwf_Media_Output
         } else if (isset($data['file'])) {
             readfile($data['file']);
         }
-        return array(
+        $ret = array(
             'responseCode' => $data['responseCode'],
         );
+        if (isset($data['encoding'])) $ret['encoding'] = $data['encoding'];
+        return $ret;
     }
 
     public static function output($file)
@@ -132,6 +134,7 @@ class Kwf_Media_Output
                     }
                 }
             }
+            $ret['encoding'] = $encoding;
             $ret['headers'][] = 'Content-Encoding: ' . $encoding;
             $ret['headers'][] = 'Content-Type: ' . $file['mimeType'];
             if (!isset($file['contents']) && isset($file['contentsCallback'])) {
