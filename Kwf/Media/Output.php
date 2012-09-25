@@ -56,6 +56,8 @@ class Kwf_Media_Output
                     throw new Kwf_Exception_NotFound("File '$file[file]' not found.");
                 }
                 if (!isset($file['mtime'])) $file['mtime'] = filemtime($file['file']);
+            } else if (isset($file['contentsCallback'])) {
+                //contents will be fetched on demand thru contentsCallback
             } else {
                 throw new Kwf_Exception_NotFound();
             }
@@ -104,18 +106,45 @@ class Kwf_Media_Output
             if (isset($file['filename']) && $file['filename']) {
                 $ret['headers'][] = 'Content-Disposition: inline; filename="' . $file['filename'] . '"';
             }
+            $encoding = 'none';
             if (isset($file['encoding'])) {
-                $ret['headers'][] = "Content-Encoding: " . $file['encoding'];
+                $encoding = $file['encoding'];
             } else {
-                if (substr($file['mimeType'], 0, 5) == 'text/' && isset($file['contents'])) {
-                    $encoding = self::getEncoding($headers);
-                    $file['contents'] = self::encode($file['contents'], $encoding);
-                } else {
-                    $encoding = 'none';
+                if (substr($file['mimeType'], 0, 5) == 'text/') {
+                    if (isset($file['contents'])) {
+                        $encoding = self::getEncoding($headers);
+                        $file['contents'] = self::encode($file['contents'], $encoding);
+                    } else if (isset($file['contentsCallback'])) {
+                        $encoding = self::getEncoding($headers);
+                        if (isset($file['cache'])) {
+                            $file['contents'] = $file['cache']->load($file['cacheId'].'_'.$encoding);
+                            if ($file['contents']===false) {
+                                $contents = call_user_func($file['contentsCallback'], $file);
+                                $file['contents'] = self::encode($contents, $encoding);
+                                $file['cache']->save($file['contents'], $file['cacheId'].'_'.$encoding);
+                            }
+                        } else {
+                            $contents = call_user_func($file['contentsCallback'], $file);
+                            $file['contents'] = self::encode($contents, $encoding);
+                        }
+                    } else {
+                        //don't encode file (as they are usually large and read using readfile)
+                    }
                 }
-                $ret['headers'][] = "Content-Encoding: " . $encoding;
             }
+            $ret['headers'][] = 'Content-Encoding: ' . $encoding;
             $ret['headers'][] = 'Content-Type: ' . $file['mimeType'];
+            if (!isset($file['contents']) && isset($file['contentsCallback'])) {
+                if (isset($file['cache'])) {
+                    $file['contents'] = $file['cache']->load($file['cacheId'].'_'.$encoding);
+                    if ($file['contents']===false) {
+                        $file['contents'] = call_user_func($file['contentsCallback'], $file);
+                        $file['cache']->save($file['contents'], $file['cacheId'].'_'.$encoding);
+                    }
+                } else {
+                    $file['contents'] = call_user_func($file['contentsCallback'], $file);
+                }
+            }
             if (isset($file['contents'])) {
                 $ret['headers'][] = 'Content-Length: ' . strlen($file['contents']);
                 $ret['contents'] = $file['contents'];
