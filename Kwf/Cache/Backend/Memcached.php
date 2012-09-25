@@ -7,8 +7,8 @@ class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
     {
         if (!isset($options['servers'])) {
             $options['servers'] = array(array(
-                'host' => Kwf_Registry::get('config')->server->memcache->host,
-                'port' => Kwf_Registry::get('config')->server->memcache->port
+                'host' => Kwf_Config::getValue('server.memcache.host'),
+                'port' => Kwf_Config::getValue('server.memcache.port')
             ));
         }
         foreach ($options['servers'] as &$s) {
@@ -175,7 +175,7 @@ class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
     {
         static $cacheIdPrefix;
         if (!isset($cacheIdPrefix)) {
-            $cacheIdPrefix = Zend_Registry::get('config')->application->id;
+            $cacheIdPrefix = Kwf_Config::getValue('application.id');
             if (!$cacheIdPrefix) {
                 throw new Kwf_Exception("application.id has to be set in config");
             }

@@ -13,7 +13,7 @@ class Kwf_Media_Output
         return $encoding;
     }
 
-    public static function output($file)
+    public static function outputWithoutShutdown($file)
     {
         $headers = array();
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) $headers['If-Modified-Since'] = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
@@ -31,6 +31,16 @@ class Kwf_Media_Output
         } else if (isset($data['file'])) {
             readfile($data['file']);
         }
+        $ret = array(
+            'responseCode' => $data['responseCode'],
+        );
+        if (isset($data['encoding'])) $ret['encoding'] = $data['encoding'];
+        return $ret;
+    }
+
+    public static function output($file)
+    {
+        self::outputWithoutShutdown($file);
         Kwf_Benchmark::shutDown();
         exit;
     }
@@ -48,6 +58,8 @@ class Kwf_Media_Output
                     throw new Kwf_Exception_NotFound("File '$file[file]' not found.");
                 }
                 if (!isset($file['mtime'])) $file['mtime'] = filemtime($file['file']);
+            } else if (isset($file['contentsCallback'])) {
+                //contents will be fetched on demand thru contentsCallback
             } else {
                 throw new Kwf_Exception_NotFound();
             }
@@ -70,13 +82,16 @@ class Kwf_Media_Output
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
+            $ret['responseCode'] = 304;
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'Last-Modified: '.$headers['If-Modified-Since'];
         } else if (isset($file['etag']) && isset($headers['If-None-Match']) &&
                 $headers['If-None-Match'] == $file['etag']) {
+            $ret['responseCode'] = 304;
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
+            $ret['responseCode'] = 200;
             if (isset($file['etag'])) {
                 $ret['headers'][] = 'ETag: ' . $file['etag'];
             } else {
@@ -93,18 +108,46 @@ class Kwf_Media_Output
             if (isset($file['filename']) && $file['filename']) {
                 $ret['headers'][] = 'Content-Disposition: inline; filename="' . $file['filename'] . '"';
             }
+            $encoding = 'none';
             if (isset($file['encoding'])) {
-                $ret['headers'][] = "Content-Encoding: " . $file['encoding'];
+                $encoding = $file['encoding'];
             } else {
-                if (substr($file['mimeType'], 0, 5) == 'text/' && isset($file['contents'])) {
-                    $encoding = self::getEncoding($headers);
-                    $file['contents'] = self::encode($file['contents'], $encoding);
-                } else {
-                    $encoding = 'none';
+                if (substr($file['mimeType'], 0, 5) == 'text/') {
+                    if (isset($file['contents'])) {
+                        $encoding = self::getEncoding($headers);
+                        $file['contents'] = self::encode($file['contents'], $encoding);
+                    } else if (isset($file['contentsCallback'])) {
+                        $encoding = self::getEncoding($headers);
+                        if (isset($file['cache'])) {
+                            $file['contents'] = $file['cache']->load($file['cacheId'].'_'.$encoding);
+                            if ($file['contents']===false) {
+                                $contents = call_user_func($file['contentsCallback'], $file);
+                                $file['contents'] = self::encode($contents, $encoding);
+                                $file['cache']->save($file['contents'], $file['cacheId'].'_'.$encoding);
+                            }
+                        } else {
+                            $contents = call_user_func($file['contentsCallback'], $file);
+                            $file['contents'] = self::encode($contents, $encoding);
+                        }
+                    } else {
+                        //don't encode file (as they are usually large and read using readfile)
+                    }
                 }
-                $ret['headers'][] = "Content-Encoding: " . $encoding;
             }
+            $ret['encoding'] = $encoding;
+            $ret['headers'][] = 'Content-Encoding: ' . $encoding;
             $ret['headers'][] = 'Content-Type: ' . $file['mimeType'];
+            if (!isset($file['contents']) && isset($file['contentsCallback'])) {
+                if (isset($file['cache'])) {
+                    $file['contents'] = $file['cache']->load($file['cacheId'].'_'.$encoding);
+                    if ($file['contents']===false) {
+                        $file['contents'] = call_user_func($file['contentsCallback'], $file);
+                        $file['cache']->save($file['contents'], $file['cacheId'].'_'.$encoding);
+                    }
+                } else {
+                    $file['contents'] = call_user_func($file['contentsCallback'], $file);
+                }
+            }
             if (isset($file['contents'])) {
                 $ret['headers'][] = 'Content-Length: ' . strlen($file['contents']);
                 $ret['contents'] = $file['contents'];

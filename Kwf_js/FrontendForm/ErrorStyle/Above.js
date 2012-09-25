@@ -11,11 +11,15 @@ Kwf.FrontendForm.ErrorStyle.Above = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abstr
         }
     },
 
-    hideErrors: function(field)
+    hideErrors: function()
     {
         Kwf.FrontendForm.ErrorStyle.Above.superclass.hideErrors.call(this);
         var error = this.form.el.parent().child('.webFormError');
         if (error) error.remove();
+    },
+
+    hideFieldError: function(field)
+    {
         field.el.removeClass('kwfFieldError');
         if (field.errorEl) field.errorEl.hide();
     }
