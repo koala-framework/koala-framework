@@ -13,7 +13,7 @@ class Kwf_Media_Output
         return $encoding;
     }
 
-    public static function output($file)
+    public static function outputWithoutShutdown($file)
     {
         $headers = array();
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) $headers['If-Modified-Since'] = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
@@ -31,6 +31,11 @@ class Kwf_Media_Output
         } else if (isset($data['file'])) {
             readfile($data['file']);
         }
+    }
+
+    public static function output($file)
+    {
+        self::outputWithoutShutdown($file);
         Kwf_Benchmark::shutDown();
         exit;
     }
