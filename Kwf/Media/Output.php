@@ -31,6 +31,9 @@ class Kwf_Media_Output
         } else if (isset($data['file'])) {
             readfile($data['file']);
         }
+        return array(
+            'responseCode' => $data['responseCode'],
+        );
     }
 
     public static function output($file)
@@ -75,13 +78,16 @@ class Kwf_Media_Output
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
+            $ret['responseCode'] = 304;
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'Last-Modified: '.$headers['If-Modified-Since'];
         } else if (isset($file['etag']) && isset($headers['If-None-Match']) &&
                 $headers['If-None-Match'] == $file['etag']) {
+            $ret['responseCode'] = 304;
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
+            $ret['responseCode'] = 200;
             if (isset($file['etag'])) {
                 $ret['headers'][] = 'ETag: ' . $file['etag'];
             } else {
