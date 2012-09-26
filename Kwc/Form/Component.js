@@ -80,7 +80,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
     onSubmit: function(e) {
         if (this.dontUseAjaxRequest) return;
 
-        var button = this.el.child('.button');
+        var button = this.el.child('.submitWrapper .button');
         button.down('.saving').show();
         button.down('.submit').hide();
 
