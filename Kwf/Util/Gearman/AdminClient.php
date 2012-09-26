@@ -2,18 +2,22 @@
 class Kwf_Util_Gearman_AdminClient
 {
     private $_connection;
-    public function getInstance($server = 'localhost')
+    public function getInstance($serverKey = 'localhost', $group = null)
     {
         static $i;
         if (!isset($i)) {
-            self::checkConnection($server);
+
+            if (!$group) $c = Kwf_Config::getValueArray('server.gearman');
+            else $c = Kwf_Config::getValueArray('server.gearmanGroup.'.$group);
+
             $i = new self();
             $c = Kwf_Registry::get('config')->server->gearman;
-            $server = $c->jobServers->$server;
-            if ($server->tunnelUser) {
+            $server = $c['jobServers'][$serverKey];
+            self::checkConnection($server);
+            if ($server['tunnelUser']) {
                 $i->_connection = fsockopen('localhost', 4730, $errno, $errstr, 30);
             } else {
-                $i->_connection = fsockopen($server->host, $server->port, $errno, $errstr, 30);
+                $i->_connection = fsockopen($server['host'], $server['port'], $errno, $errstr, 30);
             }
             if (!$i->_connection) {
                 throw new Kwf_Exception("Can't connect: $errstr ($errno)");
@@ -22,15 +26,12 @@ class Kwf_Util_Gearman_AdminClient
         return $i;
     }
 
-    public static function checkConnection($server = 'localhost')
+    public static function checkConnection($server)
     {
-        if (is_string($server)) {
-            $server = Kwf_Registry::get('config')->server->gearman->jobServers->$server;
-        }
-        if ($server->tunnelUser) {
+        if (isset($server['tunnelUser']) && $server['tunnelUser']) {
             $fp = @fsockopen('localhost', 4730, $errno, $errstr, 5);
             if (!$fp) {
-                system("ssh $server->tunnelUser@$server->host -L $server->port:localhost:4730 sleep 60 >log/gearman-tunnel.log 2>&1 &");
+                system("ssh $server[tunnelUser]@$server[host] -L $server[port]:localhost:4730 sleep 60 >log/gearman-tunnel.log 2>&1 &");
                 sleep(2);
             } else {
                 fclose($fp);

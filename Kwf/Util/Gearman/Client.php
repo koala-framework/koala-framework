@@ -1,106 +1,111 @@
 <?php
 class Kwf_Util_Gearman_Client extends GearmanClient
 {
-    public static function getInstance()
+    private $_functionPrefix;
+
+    /**
+     * @return self
+     */
+    public static function getInstance($group = null)
     {
-        static $i;
-        if (!isset($i)) {
-            $i = new self();
-            $c = Kwf_Registry::get('config')->server->gearman;
-            foreach ($c->jobServers as $k=>$server) {
+        static $i = array();
+        if (!isset($i[$group])) {
+            $i[$group] = new self();
+
+            if (!$group) $c = Kwf_Config::getValueArray('server.gearman');
+            else $c = Kwf_Config::getValueArray('server.gearmanGroup.'.$group);
+
+            $i[$group]->_functionPrefix = $c['functionPrefix'];
+
+            foreach ($c['jobServers'] as $server) {
                 if ($server) {
                     Kwf_Util_Gearman_AdminClient::checkConnection($server);
-                    if ($server->tunnelUser) {
-                        $i->addServer('localhost', 4730);
+                    if (isset($server['tunnelUser']) && $server['tunnelUser']) {
+                        $i[$group]->addServer('localhost', 4730);
                     } else {
-                        $i->addServer($server->host, $server->port);
+                        $i[$group]->addServer($server['host'], $server['port']);
                     }
                 }
             }
         }
-        return $i;
+        return $i[$group];
     }
 
-    private static function _processFunctionName($fn)
+    private function _processFunctionName($fn)
     {
-        static $prefix;
-        if (!isset($prefix)) {
-            $prefix = Kwf_Registry::get('config')->server->gearman->functionPrefix;
-        }
-        return $prefix.'_'.$fn;
+        return $this->_functionPrefix.'_'.$fn;
     }
 
-    
     public function addTask($function_name, $workload, &$context=null, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::addTask($function_name, $workload, $context, $unique);
     }
 
     public function addTaskBackground($function_name, $workload, &$context=null, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::addTaskBackground($function_name, $workload, $context, $unique);
     }
 
     public function addTaskHigh($function_name, $workload, &$context=null, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::addTaskHigh($function_name, $workload, $context, $unique);
     }
 
     public function addTaskHighBackground($function_name, $workload, &$context=null, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::addTaskHighBackground($function_name, $workload, $context, $unique);
     }
 
     public function addTaskLow($function_name, $workload, &$context=null, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::addTaskLow($function_name, $workload, $context, $unique);
     }
     
     public function addTaskLowBackground($function_name, $workload, &$context=null, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::addTaskLowBackground($function_name, $workload, $context, $unique);
     }
 
     //ACHTUNG immer doKwf statt do verwenden! (do kann leider nicht überschrieben werden)
     public function doKwf($function_name, $workload, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return $this->do($function_name, $workload, $unique);
     }
 
     public function doBackground($function_name, $workload, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::doBackground($function_name, $workload, $unique);
     }
     
     public function doHigh($function_name, $workload, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::doHigh($function_name, $workload, $unique);
     }
 
     public function doHighBackground($function_name, $workload, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::doHighBackground($function_name, $workload, $unique);
     }
 
     public function doLow($function_name, $workload, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::doLow($function_name, $workload, $unique);
     }
 
     public function doLowBackground($function_name, $workload, $unique=null)
     {
-        $function_name = self::_processFunctionName($function_name);
+        $function_name = $this->_processFunctionName($function_name);
         return parent::doLowBackground($function_name, $workload, $unique);
     }
 }
