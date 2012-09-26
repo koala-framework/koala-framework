@@ -36,9 +36,7 @@ class Kwf_Exception extends Kwf_Exception_NoLog
     public function log()
     {
         $body = $this->_getLogBody();
-        $path = 'log/error/' . date('Y-m-d');
-        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
-        return $this->_writeLog($path, $filename, $body);
+        Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'error', $body);
     }
 
     protected function _getLogBody()
