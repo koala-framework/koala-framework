@@ -70,7 +70,7 @@ class Kwf_Util_ClearCache
     {
 
         $types = array('all');
-        if (class_exists('Memcache')) $types[] = 'memcache';
+        if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
         if (extension_loaded('apc')) {
             $types[] = 'optcode';
