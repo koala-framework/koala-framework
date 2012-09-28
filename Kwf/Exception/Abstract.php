@@ -1,8 +1,6 @@
 <?php
 abstract class Kwf_Exception_Abstract extends Exception
 {
-    private $_logFilename;
-
     public abstract function getHeader();
 
     public abstract function log();
@@ -24,37 +22,6 @@ abstract class Kwf_Exception_Abstract extends Exception
     public function getException()
     {
         return $this;
-    }
-
-    protected function _writeLog($path, $filename, $content, $force = false)
-    {
-        if (self::isDebug() && !$force) {
-            return false;
-        }
-        $this->_logFilename = $filename;
-        if (!is_dir($path)) @mkdir($path);
-        try {
-            $fp = fopen("$path/$filename", 'a');
-            fwrite($fp, $content);
-            fclose($fp);
-        } catch(Exception $e) {
-            $to = array();
-            foreach (Kwf_Registry::get('config')->developers as $dev) {
-                if (isset($dev->sendException) && $dev->sendException) {
-                    $to[] = $dev->email;
-                }
-            }
-            mail(implode('; ', $to),
-                'Error while trying to write error file',
-                $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
-                );
-        }
-        return true;
-    }
-
-    public function getLogFilename()
-    {
-        return $this->_logFilename;
     }
 
     protected function _format($part, $text)

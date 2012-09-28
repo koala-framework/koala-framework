@@ -30,11 +30,7 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
         $body .= $this->_format('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '(none)');
         $body .= $this->_format('Time', date('H:i:s'));
 
-        $path = 'log/notfound/' . date('Y-m-d');
-
-        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
-
-        return $this->_writeLog($path, $filename, $body);
+        Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'notfound', $body);
     }
 
     public function render($ignoreCli = false)

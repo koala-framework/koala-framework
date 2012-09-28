@@ -51,10 +51,7 @@ class Kwf_Exception_JavaScript extends Kwf_Exception
         $body .= $this->_format('User', $user);
         $body .= $this->_format('Time', date('H:i:s'));
 
-        $path = 'log/error/' . date('Y-m-d');
+        Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'error', $body);
 
-        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
-
-        return $this->_writeLog($path, $filename, $body, true);
     }
 }
