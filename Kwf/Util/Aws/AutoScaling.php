@@ -19,6 +19,9 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
             $r = $ac->describe_auto_scaling_groups(array(
                 'AutoScalingGroupNames' => $autoScalingGroup,
             ));
+            if (!$r->isOK()) {
+                throw new Kwf_Exception($r->body->asXml());
+            }
             foreach ($r->body->DescribeAutoScalingGroupsResult->AutoScalingGroups->member->Instances->member as $member) {
                 $instanceIds[] = (string)$member->InstanceId;
             }
@@ -27,6 +30,9 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
             $r = $ec2->describe_instances(array(
                 'InstanceId' => $instanceIds
             ));
+            if (!$r->isOK()) {
+                throw new Kwf_Exception($r->body->asXml());
+            }
             $servers = array();
             foreach ($r->body->reservationSet->item as $item) {
                 $dnsName = (string)$item->instancesSet->item->dnsName;
