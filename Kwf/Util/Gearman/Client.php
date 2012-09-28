@@ -12,20 +12,12 @@ class Kwf_Util_Gearman_Client extends GearmanClient
         if (!isset($i[$group])) {
             $i[$group] = new self();
 
-            if (!$group) $c = Kwf_Config::getValueArray('server.gearman');
-            else $c = Kwf_Config::getValueArray('server.gearmanGroup.'.$group);
+            $c = Kwf_Util_Gearman_Servers::getServers($group);
 
             $i[$group]->_functionPrefix = $c['functionPrefix'];
 
             foreach ($c['jobServers'] as $server) {
-                if ($server) {
-                    Kwf_Util_Gearman_AdminClient::checkConnection($server);
-                    if (isset($server['tunnelUser']) && $server['tunnelUser']) {
-                        $i[$group]->addServer('localhost', 4730);
-                    } else {
-                        $i[$group]->addServer($server['host'], $server['port']);
-                    }
-                }
+                $i[$group]->addServer($server['host'], $server['port']);
             }
         }
         return $i[$group];
