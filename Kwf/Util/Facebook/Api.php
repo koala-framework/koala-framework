@@ -36,10 +36,11 @@ class Kwf_Util_Facebook_Api extends Kwf_Util_Facebook_FacebookZendSession
         $opts = self::$CURL_OPTS;
         $configProxy = Kwf_Config::getValueArray('http.proxy');
         if (isset($configProxy['host']) && $configProxy['host']) {
-            $opts['CURLOPT_PROXY'] = $configProxy['host'];
+            $opts[CURLOPT_PROXY] = $configProxy['host'];
+            $opts[CURLOPT_SSL_VERIFYPEER] = false;
         }
         if (isset($configProxy['port']) && $configProxy['port']) {
-            $opts['CURLOPT_PROXYPORT'] = $configProxy['port'];
+            $opts[CURLOPT_PROXYPORT] = $configProxy['port'];
         }
         if ($this->getFileUploadSupport()) {
         $opts[CURLOPT_POSTFIELDS] = $params;
@@ -47,7 +48,6 @@ class Kwf_Util_Facebook_Api extends Kwf_Util_Facebook_FacebookZendSession
         $opts[CURLOPT_POSTFIELDS] = http_build_query($params, null, '&');
         }
         $opts[CURLOPT_URL] = $url;
-
         // disable the 'Expect: 100-continue' behaviour. This causes CURL to wait
         // for 2 seconds if the server does not support this header.
         if (isset($opts[CURLOPT_HTTPHEADER])) {
