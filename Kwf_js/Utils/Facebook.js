@@ -14,6 +14,6 @@ window.fbAsyncInit = function() {
 (function(d){
     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
     js = d.createElement('script'); js.id = id; js.async = true;
-    js.src = "//connect.facebook.net/de_DE/all.js";
+    js.src = "//connect.facebook.net/" + trlcKwf('facebook js-sdk locale', "en_US") + "/all.js";
     d.getElementsByTagName('head')[0].appendChild(js);
 }(document));

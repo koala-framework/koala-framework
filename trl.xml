@@ -8846,5 +8846,18 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Hallo {0}</de>
 <id>1786</id>
 </text>
+<text>
+<en>en_US</en>
+<context>facebook js-sdk locale</context>
+<id>1787</id>
+</text>
+<text>
+<en>Form-Paragraphs</en>
+<id>1788</id>
+</text>
+<text>
+<en>Text on successful submit</en>
+<id>1789</id>
+</text>
 </trl>
 
