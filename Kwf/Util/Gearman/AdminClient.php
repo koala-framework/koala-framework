@@ -1,20 +1,20 @@
 <?php
 class Kwf_Util_Gearman_AdminClient
 {
+    private $_functionPrefix;
     private $_connection;
     public function getInstance($serverKey = 'localhost', $group = null)
     {
         static $i;
         if (!isset($i)) {
 
-            if (!$group) $c = Kwf_Config::getValueArray('server.gearman');
-            else $c = Kwf_Config::getValueArray('server.gearmanGroup.'.$group);
-
             $i = new self();
-            $c = Kwf_Registry::get('config')->server->gearman;
+
+            $c = Kwf_Util_Gearman_Servers::getServers($group);
+            $i->_functionPrefix = $c['functionPrefix'];
             $server = $c['jobServers'][$serverKey];
             self::checkConnection($server);
-            if ($server['tunnelUser']) {
+            if (isset($server['tunnelUser']) && $server['tunnelUser']) {
                 $i->_connection = fsockopen('localhost', 4730, $errno, $errstr, 30);
             } else {
                 $i->_connection = fsockopen($server['host'], $server['port'], $errno, $errstr, 30);
@@ -24,6 +24,16 @@ class Kwf_Util_Gearman_AdminClient
             }
         }
         return $i;
+    }
+
+    public function getInstances($group = null)
+    {
+        $ret[] = array();
+        $servers = Kwf_Util_Gearman_Servers::getServers($group);
+        foreach(array_keys($servers['jobServers']) as $key) {
+            $ret[$key] = self::getInstance($key);
+        }
+        return $ret;
     }
 
     public static function checkConnection($server)
@@ -54,7 +64,7 @@ class Kwf_Util_Gearman_AdminClient
             if (substr($in, -3)=="\n.\n") break;
         }
         $in = substr($in, 0, -3);
-        $prefix = Kwf_Registry::get('config')->server->gearman->functionPrefix.'_';
+        $prefix = $this->_functionPrefix.'_';
         $ret = array();
         foreach (explode("\n", $in) as $line) {
             $line = trim($line);
