@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass?>">
     <?=$this->component($this->linkTag)?>
-        <?=$this->image($this->image, '', $this->imgCssClass)?>
+        <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
     <?if ($this->hasContent($this->linkTag)) {?>
         </a>
     <?}?>

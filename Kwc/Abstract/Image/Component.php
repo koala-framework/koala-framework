@@ -50,6 +50,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
         $ret['imageCaption'] = false;
+        $ret['altText'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['useDataUrl'] = false;
@@ -121,6 +122,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($imageCaptionSetting) {
             $ret['image_caption'] = $this->_getRow()->image_caption;
             $ret['showImageCaption'] = $imageCaptionSetting;
+        }
+        $ret['altText'] = '';
+        if ($this->_getSetting('altText')) {
+            $ret['altText'] = $this->_getRow()->alt_text;
         }
         return $ret;
     }
