@@ -29,9 +29,9 @@ class Kwf_Util_Gearman_AdminClient
     public static function checkConnection($server)
     {
         if (isset($server['tunnelUser']) && $server['tunnelUser']) {
-            $fp = @fsockopen('localhost', 4730, $errno, $errstr, 5);
+            $fp = @fsockopen('localhost', $server['tunnelPort'], $errno, $errstr, 5);
             if (!$fp) {
-                system("ssh $server[tunnelUser]@$server[host] -L $server[port]:localhost:4730 sleep 60 >log/gearman-tunnel.log 2>&1 &");
+                system("ssh $server[tunnelUser]@$server[host] -L $server[tunnelPort]:localhost:$server[port] sleep 60 >log/gearman-tunnel.log 2>&1 &");
                 sleep(2);
             } else {
                 fclose($fp);
