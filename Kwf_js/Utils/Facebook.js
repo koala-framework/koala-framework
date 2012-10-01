@@ -1,4 +1,10 @@
 Ext.namespace('Kwf.Facebook');
+Kwf.FacebookClass = function() {
+    this.addEvents('afterinit');
+};
+Ext.extend(Kwf.FacebookClass, Ext.util.Observable, {
+});
+Kwf.Facebook = new Kwf.FacebookClass();
 Kwf.Facebook.appId = '{Kwf_Util_Facebook_Assets::getAppId()}';
 window.fbAsyncInit = function() {
     FB.init({
@@ -8,7 +14,7 @@ window.fbAsyncInit = function() {
         oauth      : true, // enable OAuth 2.0
         xfbml      : true  // parse XFBML
     });
-// Additional initialization code here
+    Kwf.Facebook.fireEvent('afterinit');
 };
 // Load the SDK Asynchronously
 (function(d){
