@@ -22,6 +22,7 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
             if (!$r->isOK()) {
                 throw new Kwf_Exception($r->body->asXml());
             }
+            $instanceIds = array();
             foreach ($r->body->DescribeAutoScalingGroupsResult->AutoScalingGroups->member->Instances->member as $member) {
                 $instanceIds[] = (string)$member->InstanceId;
             }
@@ -34,9 +35,11 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
                 throw new Kwf_Exception($r->body->asXml());
             }
             $servers = array();
-            foreach ($r->body->reservationSet->item as $item) {
-                $dnsName = (string)$item->instancesSet->item->dnsName;
-                if ($dnsName) $servers[] = $dnsName;
+            foreach ($r->body->reservationSet->item as $reservaionSet) {
+                foreach ($reservaionSet->instancesSet->item as $item) {
+                    $dnsName = (string)$item->dnsName;
+                    if ($dnsName) $servers[] = $dnsName;
+                }
             }
             Kwf_Cache_Simple::add($cacheId, $servers, 60*10);
         }
