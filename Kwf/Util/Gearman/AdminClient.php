@@ -31,7 +31,7 @@ class Kwf_Util_Gearman_AdminClient
         $ret[] = array();
         $servers = Kwf_Util_Gearman_Servers::getServers($group);
         foreach(array_keys($servers['jobServers']) as $key) {
-            $ret[$key] = self::getInstance($key);
+            $ret[$key] = self::getInstance($key, $group);
         }
         return $ret;
     }
