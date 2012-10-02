@@ -31,4 +31,19 @@ class Kwf_Util_Gearman_Servers
         }
         return $ret;
     }
+
+    public static function getGroups()
+    {
+        $groups = Kwf_Config::getValueArray('server.gearmanGroup');
+        $ret = array_keys($groups);
+
+        $noGroup = Kwf_Config::getValueArray('server.gearman');
+        if ($noGroup && $noGroup['jobServers']) {
+            $servers = array_values($noGroup['jobServers']);
+            if ($servers[0]) {
+                $ret[] = null; //no group
+            }
+        }
+        return $ret;
+    }
 }
