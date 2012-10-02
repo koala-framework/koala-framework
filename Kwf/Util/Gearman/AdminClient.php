@@ -5,25 +5,26 @@ class Kwf_Util_Gearman_AdminClient
     private $_connection;
     public function getInstance($serverKey = 'localhost', $group = null)
     {
-        static $i;
-        if (!isset($i)) {
+        static $i = array();
+        $key = $serverKey.'-'.$group;
+        if (!isset($i[$key])) {
 
-            $i = new self();
+            $i[$key] = new self();
 
             $c = Kwf_Util_Gearman_Servers::getServers($group);
-            $i->_functionPrefix = $c['functionPrefix'];
+            $i[$key]->_functionPrefix = $c['functionPrefix'];
             $server = $c['jobServers'][$serverKey];
             self::checkConnection($server);
             if (isset($server['tunnelUser']) && $server['tunnelUser']) {
-                $i->_connection = fsockopen('localhost', 4730, $errno, $errstr, 30);
+                $i[$key]->_connection = fsockopen('localhost', 4730, $errno, $errstr, 30);
             } else {
-                $i->_connection = fsockopen($server['host'], $server['port'], $errno, $errstr, 30);
+                $i[$key]->_connection = fsockopen($server['host'], $server['port'], $errno, $errstr, 30);
             }
-            if (!$i->_connection) {
+            if (!$i[$key]->_connection) {
                 throw new Kwf_Exception("Can't connect: $errstr ($errno)");
             }
         }
-        return $i;
+        return $i[$key];
     }
 
     public function getInstances($group = null)
