@@ -75,6 +75,7 @@ class Vpc_Mail_HtmlParser
         );
 
         $appendTags = array();
+        if (!isset($attributes['style'])) $attributes['style'] = '';
         foreach ($this->_styles as $s) {
             if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
@@ -97,6 +98,8 @@ class Vpc_Mail_HtmlParser
                             } else if ($value != 'left') {
                                 $attributes['align'] = $value;
                             }
+                        } else {
+                            $attributes['style'] .= "$style: $value; ";
                         }
                     }
                 }
