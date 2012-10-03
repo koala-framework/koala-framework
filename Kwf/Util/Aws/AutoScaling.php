@@ -10,7 +10,7 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
         parent::__construct($options);
     }
 
-    private static function _getCacheClusterEndpointsCache()
+    private static function _getInstanceDnsNamesCache()
     {
         static $i;
         if (!$i) {
@@ -24,52 +24,59 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
         return $i;
     }
 
-    private static function _getCacheClusterEndpointsCacheId($cacheClusterId)
+    private static function _getInstanceDnsNamesCacheId($autoScalingGroup)
     {
-        return 'aws_eceps_'.str_replace('-', '_', $autoScalingGroup);
+        return 'aws_as_inst_dns_'.str_replace('-', '_', $autoScalingGroup);
     }
 
-    //uncached, use getCacheClusterEndpointsCached to use cache
-    public static function getCacheClusterEndpoints($cacheClusterId)
+    //uncached, use getInstanceDnsNamesCached to use cache
+    public static function getInstanceDnsNames($autoScalingGroup)
     {
-
-        $ec = new Kwf_Util_Aws_ElastiCache();
-        $r = $ec->describe_cache_clusters(array(
-            'ShowCacheNodeInfo' => true,
-            'CacheClusterId' => $cacheClusterId
+        $ac = new Kwf_Util_Aws_AutoScaling();
+        $r = $ac->describe_auto_scaling_groups(array(
+            'AutoScalingGroupNames' => $autoScalingGroup,
         ));
-        if (!$r->isOk()) {
-            if (isset($r->body->Error->Message)) {
-                throw new Kwf_Exception($r->body->Error->Message);
-            } else {
-                throw new Kwf_Exception("Getting CacheClusters failed");
-            }
+        if (!$r->isOK()) {
+            throw new Kwf_Exception($r->body->asXml());
+        }
+        $instanceIds = array();
+        foreach ($r->body->DescribeAutoScalingGroupsResult->AutoScalingGroups->member->Instances->member as $member) {
+            $instanceIds[] = (string)$member->InstanceId;
+        }
+
+        $ec2 = new Kwf_Util_Aws_Ec2();
+        $r = $ec2->describe_instances(array(
+            'InstanceId' => $instanceIds
+        ));
+        if (!$r->isOK()) {
+            throw new Kwf_Exception($r->body->asXml());
         }
         $servers = array();
-        foreach ($r->body->DescribeCacheClustersResult->CacheClusters->CacheCluster->CacheNodes->CacheNode as $node) {
-            $servers[] = array(
-                'host' => (string)$node->Endpoint->Address,
-                'port' => (int)$node->Endpoint->Port,
-            );
+        foreach ($r->body->reservationSet->item as $reservaionSet) {
+            foreach ($reservaionSet->instancesSet->item as $item) {
+                $dnsName = (string)$item->dnsName;
+                if ($dnsName) $servers[] = $dnsName;
+            }
         }
         return $servers;
     }
 
-    public static function refreshCacheClusterEndpoints($cacheClusterId)
+    public static function refreshInstanceDnsNamesCache($autoScalingGroup)
     {
-        $servers = self::getCacheClusterEndpoints($cacheClusterId);
-        self::_getCacheClusterEndpointsCache()->save($servers, self::_getCacheClusterEndpointsCacheId($cacheClusterId));
+        $servers = self::getInstanceDnsNames($autoScalingGroup);
+        self::_getInstanceDnsNamesCache()->save($servers, self::_getInstanceDnsNamesCacheId($autoScalingGroup));
         return $servers;
     }
 
     //if used you need to refresh this cache yourself
-    public static function getCacheClusterEndpointsCached($cacheClusterId)
+    public static function getCacheClusterEndpointsCached($autoScalingGroup)
     {
-        $cacheId = self::_getCacheClusterEndpointsCacheId($cacheClusterId);
-        $servers = self::_getCacheClusterEndpointsCache()->load($cacheId);
+        $cacheId = self::_getInstanceDnsNamesCacheId($autoScalingGroup);
+        $servers = self::_getInstanceDnsNamesCache()->load($cacheId);
         if ($servers === false) {
-            $servers = self::refreshCacheClusterEndpoints($cacheClusterId);
+            $servers = self::refreshInstanceDnsNamesCache($autoScalingGroup);
         }
         return $servers;
     }
+
 }
