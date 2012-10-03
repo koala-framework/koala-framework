@@ -1576,7 +1576,7 @@ has just been created.</en>
 <de>m/t/j</de>
 <id>343</id>
 <ro>l/z/a</ro>
-<sl>m/d/l</sl>
+<sl>d.m.Y</sl>
 </text>
 <text>
 <en>of {0}</en>
@@ -2129,14 +2129,14 @@ has just been created.</en>
 <de>d.m.Y</de>
 <id>447</id>
 <ro>d.m.Y</ro>
-<sl>d.m.l</sl>
+<sl>d.m.Y</sl>
 </text>
 <text>
 <en>Y-m-d H:i</en>
 <de>d.m.Y H:i</de>
 <id>448</id>
 <ro>d.m.Y H:i</ro>
-<sl>d.m.l H:i</sl>
+<sl>d.m.Y H:i</sl>
 </text>
 <text>
 <en>no selection</en>
