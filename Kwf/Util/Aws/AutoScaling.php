@@ -40,8 +40,10 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
             throw new Kwf_Exception($r->body->asXml());
         }
         $instanceIds = array();
-        foreach ($r->body->DescribeAutoScalingGroupsResult->AutoScalingGroups->member->Instances->member as $member) {
-            $instanceIds[] = (string)$member->InstanceId;
+        if ($r->body->DescribeAutoScalingGroupsResult->AutoScalingGroups->member) {
+            foreach ($r->body->DescribeAutoScalingGroupsResult->AutoScalingGroups->member->Instances->member as $member) {
+                $instanceIds[] = (string)$member->InstanceId;
+            }
         }
 
         $ec2 = new Kwf_Util_Aws_Ec2();
@@ -69,7 +71,7 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
     }
 
     //if used you need to refresh this cache yourself
-    public static function getCacheClusterEndpointsCached($autoScalingGroup)
+    public static function getInstanceDnsNamesCached($autoScalingGroup)
     {
         $cacheId = self::_getInstanceDnsNamesCacheId($autoScalingGroup);
         $servers = self::_getInstanceDnsNamesCache()->load($cacheId);
