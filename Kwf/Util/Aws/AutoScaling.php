@@ -45,6 +45,7 @@ class Kwf_Util_Aws_AutoScaling extends AmazonAS
                 $instanceIds[] = (string)$member->InstanceId;
             }
         }
+        if (!$instanceIds) return array();
 
         $ec2 = new Kwf_Util_Aws_Ec2();
         $r = $ec2->describe_instances(array(
