@@ -120,7 +120,7 @@ class Kwf_Util_Gearman_AdminClient
         $out .= "\n";
         fwrite($this->_connection, $out);
         $in = fgets($this->_connection, 1024);
-        if ($in != "OK\n") {
+        if (trim($in) != "OK") {
             throw new Kwf_Exception("maxqueue command failed: $in");
         }
     }
