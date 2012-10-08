@@ -80,4 +80,48 @@ class Kwf_Util_Gearman_AdminClient
         }
         return $ret;
     }
+
+    public function getWorkers()
+    {
+        $out = "workers\n";
+        fwrite($this->_connection, $out);
+        $in = '';
+        while (!feof($this->_connection)) {
+            $in .= fgets($this->_connection, 1024);
+            if (substr($in, -3)=="\n.\n") break;
+        }
+        $in = substr($in, 0, -3);
+        $prefix = $this->_functionPrefix.'_';
+        $ret = array();
+        foreach (explode("\n", $in) as $line) {
+            $line = trim($line);
+            $line = explode("\t", $line);
+            foreach ($line as $i) {
+                if (preg_match('#(.*) (.*) (.*) : ?(.*)#', $i, $m)) {
+                    $ret[] = array(
+                        'fd' => $m[1],
+                        'ipAddress' => $m[2],
+                        'clientId' => $m[3],
+                        'function' => $m[4]
+                    );
+                } else {
+                    throw new Kwf_Exception("Can't match line");
+                }
+            }
+        }
+        return $ret;
+    }
+
+    public function setMaxQueue($functionName, $queueSize)
+    {
+        $prefix = $this->_functionPrefix.'_';
+        $out = "maxqueue $prefix$functionName";
+        if (!is_null($queueSize)) $out .= "$queueSize";
+        $out .= "\n";
+        fwrite($this->_connection, $out);
+        $in = fgets($this->_connection, 1024);
+        if ($in != "OK\n") {
+            throw new Kwf_Exception("maxqueue command failed: $in");
+        }
+    }
 }
