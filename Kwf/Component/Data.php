@@ -4,6 +4,7 @@
  *
  * @property string $componentId unique componentId of this data
  * @property string $dbId dbId of this data
+ * @property string $componentClass component class of this data
  * @property int $id id of this data, excluding parants
  * @property Kwf_Comonent_Generator_Abstract $generator generator that created this data
  * @property Kwf_Component_Data $parent parent data
