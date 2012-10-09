@@ -29,8 +29,12 @@ class Kwf_Util_Gearman_Servers
         $cachedServers = self::getServersCached($group);
         $validServers = self::_tryConnect($cachedServers);
         if ($cachedServers != $validServers) {
-            self::refreshCache($group);
+            $validServers = self::refreshCache($group);
         }
+        return array(
+            'cached' => $cachedServers,
+            'valid' => $validServers,
+        );
     }
 
     private static function _getServers($group)
