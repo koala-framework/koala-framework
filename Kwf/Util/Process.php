@@ -39,7 +39,7 @@ class Kwf_Util_Process
             $cmd = explode(' ', $cmd);
             if (substr(trim($cmd[0]), -3) != 'php') continue;
             unset($cmd[0]);
-            if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/kwf') continue;
+            if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/vps') continue;
             unset($cmd[1]);
             $cwd = explode(' ', trim(`pwdx $pid`));
             if ($cwd[1] != getcwd()) continue;
@@ -65,8 +65,19 @@ class Kwf_Util_Process
             );
         }
         foreach ($ret as &$r) {
-            if (isset($processesByParent[$r['pid']])) {
-                $r['childPIds'] = $processesByParent[$r['pid']];
+            $pid = $r['pid'];
+            $r['childPIds'] = self::_getChildProcesses($r['pid'], $processesByParent);
+        }
+        return $ret;
+    }
+
+    private static function _getChildProcesses($pid, $processesByParent)
+    {
+        $ret = array();
+        if (isset($processesByParent[$pid])) {
+            $ret = $processesByParent[$pid];
+            foreach ($processesByParent[$pid] as $ppid) {
+                $ret = array_merge($ret, self::_getChildProcesses($ppid, $processesByParent));
             }
         }
         return $ret;

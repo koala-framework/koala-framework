@@ -11,10 +11,10 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
 
     public function insertSubscriptionWithCategory(Kwc_Newsletter_Subscribe_Row $row, $categoryId)
     {
-        $inserted = $this->insertSubscription($row);
+        $exists = $this->_subscriptionExists($row);
 
         $nl2cat = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_SubscriberToCategory');
-        if (!$inserted) {
+        if ($exists) {
             //already subscribed
             $s = new Kwf_Model_Select();
             $s->whereEquals('email', $row->email);
@@ -27,15 +27,22 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
                 ->whereEquals('category_id', $categoryId);
             if ($nl2cat->countRows($s)) {
                 //already subscribed to given category
-                return $inserted;
+                return false;
             }
+        }
+
+        if (!$exists) {
+            $this->_beforeInsert($row);
+            $row->save();
         }
         $nl2CatRow = $nl2cat->createRow();
         $nl2CatRow->subscriber_id = $row->id;
         $nl2CatRow->category_id = $categoryId;
         $nl2CatRow->save();
-
-        return $inserted;
+        if (!$exists) {
+            $this->_afterInsert($row);
+        }
+        return true;
     }
 
     //this method is a big mess and will break soon

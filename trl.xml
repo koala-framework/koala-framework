@@ -1576,7 +1576,7 @@ has just been created.</en>
 <de>m/t/j</de>
 <id>343</id>
 <ro>l/z/a</ro>
-<sl>m/d/l</sl>
+<sl>d.m.Y</sl>
 </text>
 <text>
 <en>of {0}</en>
@@ -2129,14 +2129,14 @@ has just been created.</en>
 <de>d.m.Y</de>
 <id>447</id>
 <ro>d.m.Y</ro>
-<sl>d.m.l</sl>
+<sl>d.m.Y</sl>
 </text>
 <text>
 <en>Y-m-d H:i</en>
 <de>d.m.Y H:i</de>
 <id>448</id>
 <ro>d.m.Y H:i</ro>
-<sl>d.m.l H:i</sl>
+<sl>d.m.Y H:i</sl>
 </text>
 <text>
 <en>no selection</en>
@@ -5649,7 +5649,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Newsletter stopped, cannot start again.</en>
-<de>Newsletter wurde gestoppt und kannst nicht mehr gestartet werden.</de>
+<de>Newsletter wurde gestoppt und kann nicht mehr gestartet werden.</de>
 <id>1170</id>
 <ro>Newsletter-ul a fost oprit. Nu mai poate fi repornit.</ro>
 <sl>Pošiljanje e-novic je bilo prekinjeno in ga ni možno ponovno aktivirati.</sl>
@@ -8845,6 +8845,20 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <context>salutation firstname unknown gender</context>
 <de>Hallo {0}</de>
 <id>1786</id>
+</text>
+<text>
+<en>en_US</en>
+<de>de_DE</de>
+<context>facebook js-sdk locale</context>
+<id>1787</id>
+</text>
+<text>
+<en>Form-Paragraphs</en>
+<id>1788</id>
+</text>
+<text>
+<en>Text on successful submit</en>
+<id>1789</id>
 </text>
 </trl>
 

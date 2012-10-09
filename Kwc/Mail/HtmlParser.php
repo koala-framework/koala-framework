@@ -123,7 +123,7 @@ class Kwc_Mail_HtmlParser
 
         $this->_ret .= "<$tag";
         foreach ($attributes as $n=>$v) {
-            if ($v) $this->_ret .= " $n=\"$v\"";
+            if ($v != "") $this->_ret .= " $n=\"$v\"";
         }
         if (in_array($tag, $this->_noCloseTags)) {
             $this->_ret .= " /";

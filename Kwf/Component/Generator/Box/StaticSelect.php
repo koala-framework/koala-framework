@@ -31,7 +31,7 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
 
         $id = $parentData->dbId.'-'.$this->getGeneratorKey();
         $component = $this->_getModel()->fetchColumnByPrimaryId('component', $id);
-        if (!$component) {
+        if (!$component || !isset($this->_settings['component'][$component])) {
             $cmps = $this->_settings['component'];
             $ret['componentClass'] = array_shift($cmps);
         } else {

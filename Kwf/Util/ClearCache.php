@@ -70,7 +70,7 @@ class Kwf_Util_ClearCache
     {
 
         $types = array('all');
-        if (class_exists('Memcache')) $types[] = 'memcache';
+        if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
         if (extension_loaded('apc')) {
             $types[] = 'optcode';
@@ -310,11 +310,13 @@ class Kwf_Util_ClearCache
             } else {
                 if (in_array($t, $types)) {
                     if ($t == 'cache_component') {
-                        $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
-                        if ($cnt > 5000) {
-                            if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
-                            continue;
-                        }
+                        try {
+                            $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
+                            if ($cnt > 5000) {
+                                if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
+                                continue;
+                            }
+                        } catch (Exception $e) {}
                     }
                     Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
                     if ($output) echo "cleared db:  $t\n";

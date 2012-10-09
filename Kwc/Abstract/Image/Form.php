@@ -43,12 +43,16 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         }
     }
 
-    
+
     protected function _initFieldsCaption()
     {
         // Bildunterschrift
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
+                ->setWidth(300);
+        }
+        if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
+            $this->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
                 ->setWidth(300);
         }
     }

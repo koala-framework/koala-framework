@@ -20,10 +20,6 @@ class Kwf_Exception_AccessDenied extends Kwf_Exception_Abstract
         $body .= $this->_format('_GET', print_r($_GET, true));
         $body .= $this->_format('_POST', print_r($_POST, true));
 
-        $path = 'log/accessdenied/' . date('Y-m-d');
-
-        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
-
-        return $this->_writeLog($path, $filename, $body);
+        Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'accessdenied', $body);
     }
 }

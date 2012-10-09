@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass?>"<? if ($this->imageDpr2) { ?> data-dpr2src="<?=$this->imageDpr2?>"<? } ?>>
     <?=$this->component($this->linkTag)?>
-        <?=$this->image($this->image, '', $this->imgCssClass)?>
+        <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
     <?if ($this->hasContent($this->linkTag)) {?>
         </a>
     <?}?>

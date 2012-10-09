@@ -1,5 +1,5 @@
 <? if ($this->untagged) { ?>
-<div class="untagged">ACHTUNG: ungetaggt</div>
+<div class="untagged"><?=trlKwf('WARNING: untagged')?></div>
 <? } ?>
 <?php if($this->image) { ?>
     <img src="<?= $this->image ?>" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />

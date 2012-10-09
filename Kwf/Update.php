@@ -100,6 +100,9 @@ abstract class Kwf_Update
                 $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
             }
         }
+        if (Kwf_Registry::get('dao')->hasDb()) {
+            $ret[] = 'db';
+        }
         return $ret;
     }
 
@@ -118,7 +121,7 @@ abstract class Kwf_Update
         $u = self::getUpdatesForDir(getcwd() . '/app', $from, $to);
         foreach ($u as $i) $i->_tags[] = 'web';
         $ret = array_merge($ret, $u);
-        
+
         $ret = self::_sortByRevision($ret);
         return $ret;
     }

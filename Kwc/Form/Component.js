@@ -80,7 +80,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
     onSubmit: function(e) {
         if (this.dontUseAjaxRequest) return;
 
-        var button = this.el.child('.button');
+        var button = this.el.child('.submitWrapper .button');
         button.down('.saving').show();
         button.down('.submit').hide();
 
@@ -114,6 +114,11 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     hasErrors = true;
                 }
 
+                if (!r.successUrl) {
+                    button.down('.saving').hide();
+                    button.down('.submit').show();
+                }
+
                 // show success content
                 if (r.successContent) {
                     var el = this.el.parent().createChild(r.successContent);
@@ -128,11 +133,6 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     Kwf.callOnContentReady(el.dom, {newRender: true});
                 } else if (r.successUrl) {
                     document.location.href = r.successUrl;
-                }
-                
-                if (!r.successUrl) {
-                    button.down('.saving').hide();
-                    button.down('.submit').show();
                 }
 
                 if (!hasErrors) {

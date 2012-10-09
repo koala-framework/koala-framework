@@ -1,49 +1,8 @@
 <?php
-/**
- * Copyright 2011 Facebook, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain
- * a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
+require_once Kwf_Config::getValue('externLibraryPath.facebookPhpSdk').'/src/facebook.php';
 
-require_once Kwf_Config::getValue('externLibraryPath.facebookPhpSdk').'/src/base_facebook.php';
-
-/**
- * Extends the BaseFacebook class with the intent of using
- * PHP sessions to store user ids and access tokens.
- */
-class Kwf_Util_Facebook_FacebookZendSession extends BaseFacebook
+class Kwf_Util_Facebook_FacebookZendSession extends Facebook
 {
-  const FBSS_COOKIE_NAME = 'fbss';
-
-  // We can set this to a high number because the main session
-  // expiration will trump this.
-  const FBSS_COOKIE_EXPIRE = 31556926; // 1 year
-
-  // Stores the shared session ID if one is set.
-  protected $sharedSessionID;
-
-  /**
-   * Identical to the parent constructor, except that
-   * we start a PHP session to store the user ID and
-   * access token if during the course of execution
-   * we discover them.
-   *
-   * @param Array $config the application configuration. Additionally
-   * accepts "sharedSession" as a boolean to turn on a secondary
-   * cookie for environments with a shared session (that is, your app
-   * shares the domain with other apps).
-   * @see BaseFacebook::__construct in facebook.php
-   */
   public function __construct($config) {
     $this->session = new Zend_Session_Namespace('facebook');
     parent::__construct($config);
@@ -51,10 +10,6 @@ class Kwf_Util_Facebook_FacebookZendSession extends BaseFacebook
       $this->initSharedSession();
     }
   }
-
-  protected static $kSupportedKeys =
-    array('state', 'code', 'access_token', 'user_id');
-
   protected function initSharedSession() {
     $cookie_name = $this->getSharedSessionCookieName();
     if (isset($_COOKIE[$cookie_name])) {
@@ -90,13 +45,6 @@ class Kwf_Util_Facebook_FacebookZendSession extends BaseFacebook
       // @codeCoverageIgnoreEnd
     }
   }
-
-  /**
-   * Provides the implementations of the inherited abstract
-   * methods.  The implementation uses PHP sessions to maintain
-   * a store for authorization codes, user ids, CSRF states, and
-   * access tokens.
-   */
   protected function setPersistentData($key, $value) {
     if (!in_array($key, self::$kSupportedKeys)) {
       self::errorLog('Unsupported key passed to setPersistentData.');
@@ -126,33 +74,5 @@ class Kwf_Util_Facebook_FacebookZendSession extends BaseFacebook
 
     $session_var_name = $this->constructSessionVariableName($key);
     unset($this->session->$session_var_name);
-  }
-
-  protected function clearAllPersistentData() {
-    foreach (self::$kSupportedKeys as $key) {
-      $this->clearPersistentData($key);
-    }
-    if ($this->sharedSessionID) {
-      $this->deleteSharedSessionCookie();
-    }
-  }
-
-  protected function deleteSharedSessionCookie() {
-    $cookie_name = $this->getSharedSessionCookieName();
-    unset($_COOKIE[$cookie_name]);
-    $base_domain = $this->getBaseDomain();
-    setcookie($cookie_name, '', 1, '/', '.'.$base_domain);
-  }
-
-  protected function getSharedSessionCookieName() {
-    return self::FBSS_COOKIE_NAME . '_' . $this->getAppId();
-  }
-
-  protected function constructSessionVariableName($key) {
-    $parts = array('fb', $this->getAppId(), $key);
-    if ($this->sharedSessionID) {
-      array_unshift($parts, $this->sharedSessionID);
-    }
-    return implode('_', $parts);
   }
 }

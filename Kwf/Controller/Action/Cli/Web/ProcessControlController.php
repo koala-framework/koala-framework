@@ -29,13 +29,15 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
 
     public function stopAction()
     {
-        $this->_stop();
+        $onlyCommandKey = $this->_getParam('command');
+        $this->_stop($onlyCommandKey);
         exit;
     }
 
     public function restartAction()
     {
-        $this->_stop();
+        $onlyCommandKey = $this->_getParam('command');
+        $this->_stop($onlyCommandKey);
         $this->_start();
         exit;
     }
@@ -148,11 +150,16 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
         }
     }
 
-    public function _stop()
+    public function _stop($onlyCommandKey = null)
     {
         $killed = array();
         $processes = Kwf_Util_Process::getRunningWebProcesses();
-        foreach ($this->_commands as $requiredCmd) {
+        foreach ($this->_commands as $commandKey=>$requiredCmd) {
+            if ($onlyCommandKey) {
+                if ($onlyCommandKey != $commandKey) {
+                    continue;
+                }
+            }
             foreach ($processes as $p) {
                 if ($p['cmd'] == $requiredCmd['cmd']) {
                     if (isset($requiredCmd['shutdownFunction'])) {
@@ -165,6 +172,7 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
                         posix_kill($p['pid'], SIGTERM);
                         $killed[] = $p['pid'];
                         foreach ($p['childPIds'] as $pid) {
+                            if (!$this->_getParam('silent')) echo "    kill child process $pid\n";
                             posix_kill($pid, SIGTERM);
                             $killed[] = $pid;
                         }
