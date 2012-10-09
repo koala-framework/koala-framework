@@ -27,6 +27,7 @@ class Kwf_Util_Gearman_Servers
     public static function checkServers($group)
     {
         $cachedServers = self::getServersCached($group);
+        $cachedServers = $cachedServers['jobServers'];
         $validServers = self::_tryConnect($cachedServers);
         if ($cachedServers != $validServers) {
             $validServers = self::refreshCache($group);
