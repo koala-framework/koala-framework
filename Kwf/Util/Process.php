@@ -65,8 +65,19 @@ class Kwf_Util_Process
             );
         }
         foreach ($ret as &$r) {
-            if (isset($processesByParent[$r['pid']])) {
-                $r['childPIds'] = $processesByParent[$r['pid']];
+            $pid = $r['pid'];
+            $r['childPIds'] = self::_getChildProcesses($r['pid'], $processesByParent);
+        }
+        return $ret;
+    }
+
+    private static function _getChildProcesses($pid, $processesByParent)
+    {
+        $ret = array();
+        if (isset($processesByParent[$pid])) {
+            $ret = $processesByParent[$pid];
+            foreach ($processesByParent[$pid] as $ppid) {
+                $ret = array_merge($ret, self::_getChildProcesses($ppid, $processesByParent));
             }
         }
         return $ret;
