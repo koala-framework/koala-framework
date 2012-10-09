@@ -23,7 +23,7 @@ class Kwf_Util_Aws_ElastiCache_CacheClusterEndpoints
     //uncached, use getCached to use cache
     public static function get($cacheClusterId)
     {
-
+        if (!$autoScalingGroup) throw new Kwf_Exception("cacheClusterId is requried");
         $ec = new Kwf_Util_Aws_ElastiCache();
         $r = $ec->describe_cache_clusters(array(
             'ShowCacheNodeInfo' => true,

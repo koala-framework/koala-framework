@@ -1,7 +1,39 @@
 <?php
 class Kwf_Util_Gearman_Servers
 {
-    public static function getServers($group = null)
+    public static function getServersCached($group = null)
+    {
+        $servers = self::_getCache()->load(self::_getCacheId($group));
+        if (!$servers === false) {
+            $servers = self::refreshCache($group);
+        }
+        return $servers;
+    }
+
+    public static function refreshCache($group)
+    {
+        $servers = self::getServersTryConnect($group);
+        self::_getCache()->save($servers, self::_getCacheId($group));
+        return $servers;
+    }
+
+    public static function getServersTryConnect($group = null)
+    {
+        $ret = self::_getServers($group);
+        $ret['jobServers'] = self::_tryConnect($ret['jobServers']);
+        return $ret;
+    }
+
+    public static function checkServers($group)
+    {
+        $cachedServers = self::getServersCached($group);
+        $validServers = self::_tryConnect($cachedServers);
+        if ($cachedServers != $validServers) {
+            self::refreshCache($group);
+        }
+    }
+
+    private static function _getServers($group)
     {
         if (!$group) $c = Kwf_Config::getValueArray('server.gearman');
         else $c = Kwf_Config::getValueArray('server.gearmanGroup.'.$group);
@@ -12,7 +44,7 @@ class Kwf_Util_Gearman_Servers
             if (isset($c['jobServers']) && $c['jobServers']) {
                 throw new Kwf_Exception("Don't use awsAutoScalingGroup and jobServers together");
             }
-            $servers = Kwf_Util_Aws_AutoScaling_InstanceDnsNames::getCached($c['awsAutoScalingGroup']);
+            $servers = Kwf_Util_Aws_AutoScaling_InstanceDnsNames::get($c['awsAutoScalingGroup']);
             foreach ($servers as $s) {
                 $ret['jobServers'][] = array('host'=>$s, 'port'=>4730);
             }
@@ -45,5 +77,40 @@ class Kwf_Util_Gearman_Servers
             }
         }
         return $ret;
+    }
+
+    private static function _tryConnect($jobServers)
+    {
+        foreach ($jobServers as $k=>$i) {
+            $ok = false;
+            try {
+                if (fsockopen($i['host'], $i['port'], $errno, $errstr, 2)) {
+                    $ok = true;
+                }
+            } catch (Exception $e) {}
+            if (!$ok) {
+                unset($jobServers[$k]);
+            }
+        }
+        return array_values($jobServers);
+    }
+
+    private static function _getCache()
+    {
+        static $i;
+        if (!$i) {
+            $i = Kwf_Cache::factory(
+                'Core',
+                'File',
+                array('lifetime' => null, 'automatic_serialization' => true),
+                array('cache_dir' => 'cache/config')
+            );
+        }
+        return $i;
+    }
+
+    private static function _getCacheId($group)
+    {
+        return 'german_inst_'.str_replace('-', '_', $group);
     }
 }
