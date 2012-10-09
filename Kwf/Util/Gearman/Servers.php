@@ -4,7 +4,7 @@ class Kwf_Util_Gearman_Servers
     public static function getServersCached($group = null)
     {
         $servers = self::_getCache()->load(self::_getCacheId($group));
-        if (!$servers === false) {
+        if ($servers === false) {
             $servers = self::refreshCache($group);
         }
         return $servers;
