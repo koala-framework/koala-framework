@@ -59,7 +59,7 @@ class Kwf_Util_Aws_ElastiCache_CacheClusterEndpoints
         $cacheId = self::_getCacheId($cacheClusterId);
         $servers = self::_getCache()->load($cacheId);
         if ($servers === false) {
-            $servers = self::refresh($cacheClusterId);
+            $servers = self::refreshCache($cacheClusterId);
         }
         return $servers;
     }
