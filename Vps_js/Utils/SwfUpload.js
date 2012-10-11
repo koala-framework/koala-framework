@@ -43,8 +43,14 @@ Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
             fileTypesDescription = trlVps('All Files');
         }
 
-        //cookie als post mitschicken
         var params = Vps.clone(this.postParams);
+        
+        //send boolean values as 1/0 as else "false" as string would be sent
+        for (var i in params) {
+            if (typeof params[i] == 'boolean') params[i] = params[i] ? 1 : 0;
+        }
+
+        //cookie als post mitschicken
         var cookies = document.cookie.split(';');
         Ext.each(cookies, function(c) {
             c = c.split('=');
