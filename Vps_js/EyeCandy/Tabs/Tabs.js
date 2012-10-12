@@ -20,7 +20,7 @@ Vps.Tabs = function(el) {
     this.switchEls = Ext.query('.vpsTabsLink', this.el.dom);
     this.contentEls = Ext.query('.vpsTabsContent', this.el.dom);
     this.fxDuration = .5;
-
+    
     this.tabsContents = this.el.createChild({
         tag: 'div', cls: 'vpsTabsContents'
     }, this.el.first());
@@ -30,6 +30,7 @@ Vps.Tabs = function(el) {
 
     for (var i = 0; i < this.contentEls.length; i++) {
         this.tabsContents.appendChild(this.contentEls[i]);
+        Ext.fly(this.contentEls[i]).setStyle('top', '0');       //is required for prettier websiteloading
     }
 
     for (var i = 0; i < this.switchEls.length; i++) {
