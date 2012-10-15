@@ -20,22 +20,12 @@ class Kwf_Util_Gearman_Servers
     public static function getServersTryConnect($group = null)
     {
         $ret = self::_getServers($group);
-        $ret['jobServers'] = self::_tryConnect($ret['jobServers']);
+        $ret['jobServers'] = self::tryConnect($ret['jobServers']);
         return $ret;
     }
 
     public static function checkServers($group)
     {
-        $cachedServers = self::getServersCached($group);
-        $cachedServers = $cachedServers['jobServers'];
-        $validServers = self::_tryConnect($cachedServers);
-        if ($cachedServers != $validServers) {
-            $validServers = self::refreshCache($group);
-        }
-        return array(
-            'cached' => $cachedServers,
-            'valid' => $validServers,
-        );
     }
 
     private static function _getServers($group)
@@ -84,7 +74,7 @@ class Kwf_Util_Gearman_Servers
         return $ret;
     }
 
-    private static function _tryConnect($jobServers)
+    public static function tryConnect($jobServers)
     {
         foreach ($jobServers as $k=>$i) {
             $ok = false;
