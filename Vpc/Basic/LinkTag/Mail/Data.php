@@ -24,7 +24,7 @@ class Vpc_Basic_LinkTag_Mail_Data extends Vps_Component_Data
 
         if ($row->text || $row->subject) $ret .= '?';
         if ($row->subject) $ret .= 'subject='.$row->subject;
-        if ($row->text && $row->subject) $ret .= '&';
+        if ($row->text && $row->subject) $ret .= htmlentities('&');
         if ($row->text) $ret .= 'body='.$row->text;
         return $ret;
     }
