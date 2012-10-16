@@ -40,6 +40,7 @@ class Kwf_Util_Gearman_Servers
                 throw new Kwf_Exception("Don't use awsAutoScalingGroup and jobServers together");
             }
             $servers = Kwf_Util_Aws_AutoScaling_InstanceDnsNames::get($c['awsAutoScalingGroup']);
+            $ret['jobServers'] = array();
             foreach ($servers as $s) {
                 $ret['jobServers'][] = array('host'=>$s, 'port'=>4730);
             }
