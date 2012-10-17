@@ -110,7 +110,11 @@ class Kwc_Mail_HtmlParser
                                 $attributes['align'] = $value;
                             }
                         } else {
-                            $attributes['style'] .= "$style: $value; ";
+                            if (isset($attributes['style'])) {
+                                $attributes['style'] .= "$style: $value; ";
+                            } else {
+                                $attributes['style'] = "$style: $value; ";
+                            }
                         }
                     }
                 }
