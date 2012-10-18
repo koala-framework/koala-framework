@@ -59,8 +59,9 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             $this->_columns->add(new Kwf_Grid_Column('subscribe_date', trlKwf('Subscribe date'), 110));
         }
 
-        $this->_columns->add(new Kwf_Grid_Column('is_active', trlKwf('Active?'), 80))
-            ->setData(new Kwc_Newsletter_Detail_IsActiveData());
+        $this->_columns->add(new Kwf_Grid_Column('activated', trlKwf('Active?'), 80))
+            ->setData(new Kwc_Newsletter_Detail_IsActiveData())
+            ->setType('string');
     }
 
     protected function _getSelect()
