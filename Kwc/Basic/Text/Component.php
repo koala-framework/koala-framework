@@ -125,7 +125,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $content = strip_tags($content);
         // replace every non-word-character, to see if there is real content,
         // or just a bunch of white-spaces
-        $content = preg_replace('/\W*/', '', $content);
+        $content = preg_replace('/\s*/u', '', $content);
         if (!empty($content)) return true;
         return false;
     }
