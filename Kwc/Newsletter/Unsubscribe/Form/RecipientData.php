@@ -1,5 +1,5 @@
 <?php
-class Kwc_Newsletter_Unsubscribe_RecipientData extends Kwf_Data_Abstract
+class Kwc_Newsletter_Unsubscribe_Form_RecipientData extends Kwf_Data_Abstract
 {
     protected $_method;
 
