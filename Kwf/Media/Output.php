@@ -33,6 +33,7 @@ class Kwf_Media_Output
         }
         $ret = array(
             'responseCode' => $data['responseCode'],
+            'contentLength' => $data['contentLength'],
         );
         if (isset($data['encoding'])) $ret['encoding'] = $data['encoding'];
         return $ret;
@@ -83,11 +84,13 @@ class Kwf_Media_Output
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
             $ret['responseCode'] = 304;
+            $ret['contentLength'] = 0;
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'Last-Modified: '.$headers['If-Modified-Since'];
         } else if (isset($file['etag']) && isset($headers['If-None-Match']) &&
                 $headers['If-None-Match'] == $file['etag']) {
             $ret['responseCode'] = 304;
+            $ret['contentLength'] = 0;
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
@@ -149,10 +152,12 @@ class Kwf_Media_Output
                 }
             }
             if (isset($file['contents'])) {
-                $ret['headers'][] = 'Content-Length: ' . strlen($file['contents']);
+                $ret['contentLength'] = strlen($file['contents']);
+                $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
                 $ret['contents'] = $file['contents'];
             } else if (isset($file['file'])) {
-                $ret['headers'][] = 'Content-Length: ' . filesize($file['file']);
+                $ret['contentLength'] = filesize($file['file']);
+                $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
                 $ret['file'] = $file['file'];
             } else {
                 throw new Kwf_Exception("contents not set");

@@ -10,7 +10,7 @@ class Kwf_Util_Gearman_Worker extends GearmanWorker
     {
         $i = new self();
 
-        $c = Kwf_Util_Gearman_Servers::getServers($group);
+        $c = Kwf_Util_Gearman_Servers::getServersTryConnect($group);
 
         $i->_functionPrefix = $c['functionPrefix'];
 

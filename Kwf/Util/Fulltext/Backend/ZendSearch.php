@@ -91,7 +91,7 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
             $query->addSubquery($userQuery, true /* required */);
 
             if (isset($params['type'])) {
-                $pathTerm  = new Zend_Search_Lucene_Index_Term('type', $param['type']);
+                $pathTerm  = new Zend_Search_Lucene_Index_Term($params['type'], 'type');
                 $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
                 $query->addSubquery($pathQuery, true /* required */);
             }

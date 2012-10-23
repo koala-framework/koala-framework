@@ -186,6 +186,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         if (!is_object($select)) {
             $select = $this->select($select);
+        } else {
+            $select = clone $select;
         }
         $select->limit(1);
         return $this->getRows($select)->current();

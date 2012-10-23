@@ -11,7 +11,7 @@ class Kwf_Util_Gearman_AdminClient
 
             $i[$key] = new self();
 
-            $c = Kwf_Util_Gearman_Servers::getServers($group);
+            $c = Kwf_Util_Gearman_Servers::getServersTryConnect($group);
             $i[$key]->_functionPrefix = $c['functionPrefix'];
             $server = $c['jobServers'][$serverKey];
             self::checkConnection($server);
@@ -30,7 +30,7 @@ class Kwf_Util_Gearman_AdminClient
     public function getInstances($group = null)
     {
         $ret[] = array();
-        $servers = Kwf_Util_Gearman_Servers::getServers($group);
+        $servers = Kwf_Util_Gearman_Servers::getServersTryConnect($group);
         foreach(array_keys($servers['jobServers']) as $key) {
             $ret[$key] = self::getInstance($key, $group);
         }

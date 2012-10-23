@@ -1,29 +1,9 @@
 <?php
 class Kwf_Util_Aws_AutoScaling_InstanceDnsNames
 {
-
-    private static function _getCache()
-    {
-        static $i;
-        if (!$i) {
-            $i = Kwf_Cache::factory(
-                'Core',
-                'File',
-                array('lifetime' => null, 'automatic_serialization' => true),
-                array('cache_dir' => 'cache/aws')
-            );
-        }
-        return $i;
-    }
-
-    private static function _getCacheId($autoScalingGroup)
-    {
-        return 'aws_as_inst_dns_'.str_replace('-', '_', $autoScalingGroup);
-    }
-
-    //uncached, use getCached to use cache
     public static function get($autoScalingGroup)
     {
+        if (!$autoScalingGroup) throw new Kwf_Exception("autoScalingGroup is requried");
         $ac = new Kwf_Util_Aws_AutoScaling();
         $r = $ac->describe_auto_scaling_groups(array(
             'AutoScalingGroupNames' => $autoScalingGroup,
@@ -52,24 +32,6 @@ class Kwf_Util_Aws_AutoScaling_InstanceDnsNames
                 $dnsName = (string)$item->dnsName;
                 if ($dnsName) $servers[] = $dnsName;
             }
-        }
-        return $servers;
-    }
-
-    public static function refreshCache($autoScalingGroup)
-    {
-        $servers = self::get($autoScalingGroup);
-        self::_getCache()->save($servers, self::_getCacheId($autoScalingGroup));
-        return $servers;
-    }
-
-    //if used you need to refresh this cache yourself
-    public static function getCached($autoScalingGroup)
-    {
-        $cacheId = self::_getCacheId($autoScalingGroup);
-        $servers = self::_getCache()->load($cacheId);
-        if ($servers === false) {
-            $servers = self::refreshCache($autoScalingGroup);
         }
         return $servers;
     }

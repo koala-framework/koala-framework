@@ -12,10 +12,32 @@ class Kwf_Util_Gearman_Client extends GearmanClient
         if (!isset($i[$group])) {
             $i[$group] = new self();
 
-            $c = Kwf_Util_Gearman_Servers::getServers($group);
+            $c = Kwf_Util_Gearman_Servers::getServersTryConnect($group);
 
             $i[$group]->_functionPrefix = $c['functionPrefix'];
 
+            shuffle($c['jobServers']);
+            foreach ($c['jobServers'] as $server) {
+                $i[$group]->addServer($server['host'], $server['port']);
+            }
+        }
+        return $i[$group];
+    }
+
+    /**
+     * @return self
+     */
+    public static function getInstanceCached($group = null)
+    {
+        static $i = array();
+        if (!isset($i[$group])) {
+            $i[$group] = new self();
+
+            $c = Kwf_Util_Gearman_Servers::getServersCached($group);
+
+            $i[$group]->_functionPrefix = $c['functionPrefix'];
+
+            shuffle($c['jobServers']);
             foreach ($c['jobServers'] as $server) {
                 $i[$group]->addServer($server['host'], $server['port']);
             }
