@@ -1,5 +1,5 @@
 <?php
-class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwc_Component_Plugin_Abstract
+class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwf_Component_Plugin_Abstract
     implements Kwc_Shop_Cart_Plugins_Interface
 {
     public static function getSettings()

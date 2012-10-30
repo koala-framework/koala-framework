@@ -23,7 +23,7 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
             new Kwf.EyeCandy.List.Plugins.ActiveChanger.Click({
             }),
             new Kwf.EyeCandy.List.Plugins.ActiveChanger.DefaultActiveClass({
-            }),
+            })
         ];
         if (this.showArrows) {
             this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks({

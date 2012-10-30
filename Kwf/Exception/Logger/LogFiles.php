@@ -3,10 +3,6 @@ class Kwf_Exception_Logger_LogFiles extends Kwf_Exception_Logger_Abstract
 {
     public function log(Kwf_Exception_Abstract $exception, $type, $content)
     {
-        if (Kwf_Exception::isDebug()) {
-            return false;
-        }
-
         $path = 'log/'.$type.'/' . date('Y-m-d');
         $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 

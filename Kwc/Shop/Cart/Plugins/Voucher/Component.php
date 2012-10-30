@@ -8,6 +8,7 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
         $ret['flags']['hasResources'] = true;
         $ret['componentName'] = trlKwfStatic('Vouchers');
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Shop/Cart/Plugins/Voucher/Panel.js';
+        $ret['extConfig'] = 'Kwc_Shop_Cart_Plugins_Voucher_ExtConfig';
         return $ret;
     }
 

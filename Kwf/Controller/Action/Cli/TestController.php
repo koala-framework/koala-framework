@@ -137,7 +137,10 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
             $resultLogger = new Kwf_Test_ResultLogger(true/*verbose*/);
             $arguments['listeners'][] = $resultLogger;
         }
-        if ($this->_getParam('no-progress')) {
+        if ($this->_getParam('testdox')) {
+            $arguments['printer'] = new PHPUnit_Util_TestDox_ResultPrinter_Text;
+            $arguments['noProgress'] = true;
+        } else if ($this->_getParam('no-progress')) {
             $arguments['noProgress'] = true;
         }
         if ($this->_getParam('disable-debug')) {

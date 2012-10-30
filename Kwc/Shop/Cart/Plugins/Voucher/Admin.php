@@ -12,18 +12,4 @@ class Kwc_Shop_Cart_Plugins_Voucher_Admin extends Kwf_Component_Abstract_Admin
                     array('text'=>trlKwf('Vouchers'), 'icon'=>'application_view_list.png'),
                     $this->getControllerUrl('Vouchers')), 'kwc_shop');
     }
-
-    public function getExtConfig()
-    {
-        $ret = parent::getExtConfig();
-        $ret['grid'] = array(
-            'title' => trlKwf('Vouchers'),
-            'vouchersControllerUrl' => $this->getControllerUrl('Vouchers'),
-            'voucherControllerUrl' => $this->getControllerUrl('Voucher'),
-            'voucherHistoryControllerUrl' => $this->getControllerUrl('VoucherHistory'),
-            'xtype' => 'kwc.shop.cart.plugins.voucher'
-        );
-        return $ret;
-    }
-
 }
