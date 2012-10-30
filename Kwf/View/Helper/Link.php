@@ -48,13 +48,13 @@ class Kwf_View_Helper_Link
         }
         $target = '';
         if (!empty($config['target'])) {
-            $target = 'target="'.htmlspecialchars($config['target']).'"';
+            $target = ' target="'.htmlspecialchars($config['target']).'"';
         }
         $title = '';
         if(!empty($config['title'])) {
             $title = ' title="'.htmlspecialchars($config['title']).'"';
         }
 
-        return "<a href=\"".htmlspecialchars($url)."\"$title $target rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
+        return "<a href=\"".htmlspecialchars($url)."\"$title$target rel=\"".htmlspecialchars($rel)."\"$cssClass>$text</a>";
     }
 }
