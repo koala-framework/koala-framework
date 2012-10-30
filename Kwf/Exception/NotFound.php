@@ -13,6 +13,10 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
 
     public function log()
     {
+        if (Kwf_Exception::isDebug()) {
+            return false;
+        }
+
         $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '(none)';
         $ignore = array(
             '/favicon.ico',

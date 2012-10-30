@@ -35,6 +35,9 @@ class Kwf_Exception extends Kwf_Exception_NoLog
 
     public function log()
     {
+        if (Kwf_Exception::isDebug()) {
+            return false;
+        }
         $body = $this->_getLogBody();
         Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'error', $body);
     }

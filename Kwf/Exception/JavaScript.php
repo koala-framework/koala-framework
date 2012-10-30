@@ -31,6 +31,9 @@ class Kwf_Exception_JavaScript extends Kwf_Exception
 
     public function log()
     {
+        //don't check for Kwf_Exception::isDebug()
+        //because we can't display the error anyway
+
         $user = "guest";
         try {
             if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
