@@ -335,6 +335,12 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        if ($parameters = Kwf_Config::getValueArray('parameterToCookie')) {
+            foreach($parameters as $parameter) {
+                $ret .= "if (isset(\$_GET['".$parameter."'])) setcookie('".$parameter."', \$_GET['".$parameter."'], 0, '/');\n";
+            }
+        }
+
         if ($tl = Kwf_Config::getValue('debug.timeLimit')) {
             $ret .= "set_time_limit($tl);\n";
         }
