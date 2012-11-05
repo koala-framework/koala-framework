@@ -56,7 +56,7 @@ class Kwf_Setup
         if (isset($ret)) return $ret;
 
         $config = Kwf_Config::getValueArray('database');
-        $ret = isset($config['web']);
+        $ret = isset($config['web']) && $config['web']!==false;
         return $ret;
     }
 
