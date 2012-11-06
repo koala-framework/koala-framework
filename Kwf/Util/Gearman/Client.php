@@ -90,7 +90,12 @@ class Kwf_Util_Gearman_Client extends GearmanClient
     public function doKwf($function_name, $workload, $unique=null)
     {
         $function_name = $this->_processFunctionName($function_name);
-        return $this->do($function_name, $workload, $unique);
+        if (method_exists($this, 'doNormal')) {
+            return $this->doNormal($function_name, $workload, $unique);
+        } else {
+            //older versions of gearman extension
+            return $this->do($function_name, $workload, $unique);
+        }
     }
 
     public function doBackground($function_name, $workload, $unique=null)
