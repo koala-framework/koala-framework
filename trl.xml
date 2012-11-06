@@ -8818,5 +8818,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Video</en>
 <id>1786</id>
 </text>
+<text>
+<en>+{0}% VAT</en>
+<de>+{0}% MWSt</de>
+<id>1787</id>
+</text>
 </trl>
+
 
