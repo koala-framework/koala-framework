@@ -56,6 +56,9 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
             if ($_SERVER['QUERY_STRING'] && isset($_SERVER['QUERY_STRING'])) {
                 $currentPageUrl .= '?'.$_SERVER['QUERY_STRING'];
             }
+            if (isset($_POST['save_cookie']) && $_POST['save_cookie']) {
+                $this->_saveCookie();
+            }
             header('Location: '.$currentPageUrl);
             die();
         }
@@ -81,11 +84,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
 
     public function processOutput($output)
     {
-        //TODO: nicht auf $_POST zugreifen sondern loginForm->getFormRow()
         if ($this->isLoggedIn()) {
-            if (isset($_POST['save_cookie']) && $_POST['save_cookie']) {
-                $this->_saveCookie();
-            }
             return $output;
         }
 
