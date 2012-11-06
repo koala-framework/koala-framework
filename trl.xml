@@ -8789,5 +8789,34 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Hallo {0}</de>
 <id>1779</id>
 </text>
+<text>
+<en>This field should only contain numbers</en>
+<id>1780</id>
+</text>
+<text>
+<en>Please check your details</en>
+<de>Bitte überprüfen Sie Ihre Details</de>
+<id>1781</id>
+</text>
+<text>
+<en>Automatically sent e-mail</en>
+<id>1782</id>
+</text>
+<text>
+<en>E-Mail CC</en>
+<id>1783</id>
+</text>
+<text>
+<en>Original  Name</en>
+<id>1784</id>
+</text>
+<text>
+<en>Adopt</en>
+<id>1785</id>
+</text>
+<text>
+<en>Video</en>
+<id>1786</id>
+</text>
 </trl>
 
