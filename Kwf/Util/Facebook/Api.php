@@ -74,7 +74,7 @@ class Kwf_Util_Facebook_Api extends Kwf_Util_Facebook_FacebookZendSession
         // the case, curl will try IPv4 first and if that fails, then it will
         // fall back to IPv6 and the error EHOSTUNREACH is returned by the
         // operating system.
-        if ($result === false && isset(CURLOPT_IPRESOLVE) && empty($opts[CURLOPT_IPRESOLVE])) {
+        if ($result === false && defined('CURLOPT_IPRESOLVE') && empty($opts[CURLOPT_IPRESOLVE])) {
             $matches = array();
             $regex = '/Failed to connect to ([^:].*): Network is unreachable/';
             if (preg_match($regex, curl_error($ch), $matches)) {
