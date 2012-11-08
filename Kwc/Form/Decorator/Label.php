@@ -28,6 +28,9 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
             if ($item['item'] && $item['item']->getAllowBlank()===false) {
                 $class .= ' kwfFieldRequired';
             }
+            if ($item['item'] && $item['item']->getCls()) {
+                $class .= ' '.$item['item']->getCls();
+            }
             if ($item['item']) {
                 $c = get_class($item['item']);
                 $classParts = array();
