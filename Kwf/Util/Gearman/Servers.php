@@ -45,14 +45,14 @@ class Kwf_Util_Gearman_Servers
                 $ret['jobServers'][] = array('host'=>$s, 'port'=>4730);
             }
         } else {
-            foreach ($c['jobServers'] as $server) {
+            foreach ($c['jobServers'] as $key=>$server) {
                 if ($server) {
                     Kwf_Util_Gearman_AdminClient::checkConnection($server);
                     if (isset($server['tunnelUser']) && $server['tunnelUser']) {
-                        $ret['jobServers'][] = array('host'=>'localhost', 'port'=>4730);
+                        $ret['jobServers'][$key] = array('host'=>'localhost', 'port'=>4730);
                     } else {
                         if (!isset($server['port'])) $server['port'] = 4730;
-                        $ret['jobServers'][] = array('host'=>$server['host'], 'port'=>$server['port']);
+                        $ret['jobServers'][$key] = array('host'=>$server['host'], 'port'=>$server['port']);
                     }
                 }
             }
@@ -88,7 +88,7 @@ class Kwf_Util_Gearman_Servers
                 unset($jobServers[$k]);
             }
         }
-        return array_values($jobServers);
+        return $jobServers;
     }
 
     private static function _getCache()
