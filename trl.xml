@@ -8861,5 +8861,15 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Text on successful submit</en>
 <id>1789</id>
 </text>
+<text>
+<en>Invalid type given. The value should be a string or a integer</en>
+<de>Ungültiger Typ angegeben. Der Wert sollte ein String oder ein Integer sein</de>
+<id>1790</id>
+</text>
+<text>
+<en>'%value%' does not appear to be a postal code</en>
+<de>'%value%' scheint keine gültige Postleitzahl zu sein</de>
+<id>1791</id>
+</text>
 </trl>
 
