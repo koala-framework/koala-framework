@@ -325,7 +325,7 @@ class Kwf_Trl
     {
         $ret = $trlStaticData;
 
-        if (preg_match_all('/\*trlserialized-(.+?)-trlserialized\*/m', $trlStaticData, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('/\*trlserialized-(.+?)-trlserialized\*/ms', $trlStaticData, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $k => $match) {
                 $trlStaticData = unserialize($match[1]);
                 if (strtolower(substr($trlStaticData['type'], -3)) == 'kwf') {
