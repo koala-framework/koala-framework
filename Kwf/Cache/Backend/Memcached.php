@@ -184,7 +184,7 @@ class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         return $cacheIdPrefix;
     }
 
-    private function _processId($id)
+    protected function _processId($id)
     {
         $id = md5($this->_getCacheIdPrefix().$id);
         return $id;
