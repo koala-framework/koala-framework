@@ -2,6 +2,8 @@ Kwf.onElementReady('.kwcShopCartCheckoutPaymentPayPalConfirmLink', function(el, 
     var form = el.child('form');
     form.on('submit', function(e) {
         e.preventDefault();
+        el.child('.process').show();
+        form.hide();
         Ext.Ajax.request({
             url: config.controllerUrl,
             params: config.params,
