@@ -149,6 +149,7 @@ class Kwf_Model_CSV extends Kwf_Model_Abstract
                 for ($c=0; $c < $num; $c++) {
                     $data[$i][$columns[$c]] = $rows[$c];
                 }
+                $data[$i]['id'] = $i;
                 if (!$this->_selectData($select, $data[$i])) unset($data[$i]);
                 $i++;
             }
@@ -413,6 +414,6 @@ class Kwf_Model_CSV extends Kwf_Model_Abstract
 
     public function getPrimaryKey()
     {
-
+        return 'id';
     }
 }
