@@ -16,7 +16,7 @@ class Vpc_Root_TrlRoot_Chained_Admin extends Vpc_Abstract_Admin
                 }
             }
             if (!$subRootAboveTrl) {
-                $subRootAboveTrl = Kwf_Component_Data_Root::getInstance();
+                $subRootAboveTrl = Vps_Component_Data_Root::getInstance();
             }
             $d = $source;
             while($d = $d->parent) {
@@ -35,7 +35,7 @@ class Vpc_Root_TrlRoot_Chained_Admin extends Vpc_Abstract_Admin
                 }
             }
             if (!$subRootAboveTrl) {
-                $subRootAboveTrl = Kwf_Component_Data_Root::getInstance();
+                $subRootAboveTrl = Vps_Component_Data_Root::getInstance();
             }
             $d = $new;
             while($d = $d->parent) {
