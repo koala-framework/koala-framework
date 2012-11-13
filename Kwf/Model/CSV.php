@@ -62,6 +62,73 @@ class Kwf_Model_CSV extends Kwf_Model_Abstract
         return $headRow;
     }
 
+    public function export($format, $select = array(), $options = array())
+    {
+        if (!is_object($select)) {
+            if (is_string($select)) $select = array($select);
+            $select = $this->select($select);
+        }
+        $data = array();
+
+        $i = 0;
+        $columns = $this->_getColumnsCharacter();
+        if (($handle = fopen($this->_filename, "r")) !== FALSE) {
+            while (($rows = fgetcsv($handle, 0, $this->_delimiter)) !== FALSE) {
+                $num = count($rows);
+                $array = array();
+                if ($this->_headRow && $i == 0){ $i++; continue; }
+                for ($c=0; $c < $num; $c++) {
+                    $array[$columns[$c]] = $rows[$c];
+                }
+                if (!$this->_selectData($select, $array)){ $i++; continue; }
+                $data[$i]['id'] = $i;
+                if ($options['columns']) {
+                    foreach($options['columns'] as $column) {
+                        $data[$i][$column] = $array[$column];
+                    }
+                }
+                $i++;
+            }
+        }
+
+        if ($order = $select->getPart(Kwf_Model_Select::ORDER)) {
+            $sortParams = array();
+            $sortArray = array();
+            $direction = array();
+            $i = 0;
+            foreach ($order as $o) {
+                foreach ($data as $key => $value) {
+                    $sortArray[$i][$key] = $value[$o['field']];
+                }
+                if ($o['direction'] == 'ASC') {
+                    $direction[$i] = SORT_ASC;
+                } else {
+                    $direction[$i] = SORT_DESC;
+                }
+                $sortParams[] = &$sortArray[$i];
+                $sortParams[] = &$direction[$i];
+                $i++;
+            }
+            $sortParams[] = &$data;
+            call_user_func_array('array_multisort', $sortParams);
+        }
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_OFFSET)) {
+            $limitOffset = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
+            $data = array_slice($data, $limitOffset);
+        }
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
+            $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
+            $data = array_slice($data, 0, $limitCount);
+        }
+
+
+        if ($format == self::FORMAT_ARRAY) {
+            return $data;
+        } else {
+            throw new Kwf_Exception_NotYetImplemented();
+        }
+    }
+
     public function getRows($where = null, $order = null, $limit = null, $start = null)
     {
         if (!is_object($where)) {
