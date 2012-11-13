@@ -29,7 +29,7 @@ class Kwf_Util_Gearman_AdminClient
 
     public function getInstances($group = null)
     {
-        $ret[] = array();
+        $ret = array();
         $servers = Kwf_Util_Gearman_Servers::getServersTryConnect($group);
         foreach(array_keys($servers['jobServers']) as $key) {
             $ret[$key] = self::getInstance($key, $group);

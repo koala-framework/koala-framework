@@ -14,7 +14,9 @@ Kwf.onContentReady(function(readyEl) {
             }
             els[i].kwfLightbox = l;
             Ext.EventManager.addListener(els[i], 'click', function(ev) {
-                this.kwfLightbox.show();
+                this.kwfLightbox.show({
+                    clickTarget: Ext.get(this)
+                });
                 Kwf.Utils.HistoryState.currentState.lightbox = this.href;
                 Kwf.Utils.HistoryState.pushState(document.title, this.href);
                 ev.stopEvent();
@@ -165,10 +167,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             scope: this
         });
     },
-    show: function()
+    show: function(options)
     {
         this.createLightboxEl();
-        this.style.onShow();
+        this.style.onShow(options);
 
         if (!this.closeHref) {
             if (Kwf.EyeCandy.Lightbox.currentOpen) {
@@ -178,7 +180,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             }
         }
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
-            Kwf.EyeCandy.Lightbox.currentOpen.close();
+            var closeOptions = {};
+            if (options.clickTarget) closeOptions.showClickTarget = options.clickTarget;
+            Kwf.EyeCandy.Lightbox.currentOpen.close(closeOptions);
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
 
@@ -194,22 +198,16 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             this.lightboxEl.show();
             this.fetchContent();
         }
+        this.style.afterShow(options);
         Kwf.Statistics.count(this.href);
     },
-    close: function() {
+    close: function(options) {
         this.lightboxEl.hide();
         //so eg. flash component can remove object
         Kwf.callOnContentReady(this.lightboxEl, {newRender: false});
         this.lightboxEl.show();
 
-        this.style.onClose();
-        this.lightboxEl.fadeOut({
-            concurrent: true,
-            callback: function() {
-                this.style.afterClose();
-            },
-            scope: this
-        });
+        this.style.onClose(options);
         this.lightboxEl.removeClass('kwfLightboxOpen');
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
@@ -258,6 +256,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         this.lightbox.contentEl.update(responseText);
     },
     onShow: Ext.emptyFn,
+    afterShow: Ext.emptyFn,
     onClose: Ext.emptyFn,
     afterClose: Ext.emptyFn,
     onContentReady: Ext.emptyFn,
@@ -335,7 +334,14 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     onShow: function() {
         this.mask();
     },
-    onClose: function() {
+    onClose: function(options) {
+        this.lightboxEl.fadeOut({
+            concurrent: true,
+            callback: function() {
+                this.afterClose();
+            },
+            scope: this
+        });
         this.unmask();
     },
     _getCenterXy: function() {

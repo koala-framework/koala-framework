@@ -4451,6 +4451,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Bookmark pentru</ro>
 <sl>Zaznamek za</sl>
 <uk>Розмістити на</uk>
+<cz>Sdílet přes</cz>
 </text>
 <text>
 <en>Rating</en>
@@ -5546,7 +5547,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>{0} recipients added, total {1} recipients.</en>
-<de>{0} Empfänger hinzugefügt, Insgesamt {1} Empfänger.</de>
+<de>{0} Empfänger hinzugefügt, insgesamt {1} Empfänger.</de>
 <id>1152</id>
 <ro>Au fost adăugaţi {0} destinatari; total {1} destinatari.</ro>
 <sl>Štev. dodanih prejemnikov: {0}, skupaj {1} prejemnikov.</sl>
@@ -8854,11 +8855,62 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Form-Paragraphs</en>
+<de>Formularabsätze</de>
 <id>1788</id>
 </text>
 <text>
 <en>Text on successful submit</en>
+<de>Text nach erfolgreichen Abschicken</de>
 <id>1789</id>
+</text>
+<text>
+<en>Invalid type given. The value should be a string or a integer</en>
+<de>Ungültiger Typ angegeben. Der Wert sollte ein String oder ein Integer sein</de>
+<id>1790</id>
+</text>
+<text>
+<en>'%value%' does not appear to be a postal code</en>
+<de>'%value%' scheint keine gültige Postleitzahl zu sein</de>
+<id>1791</id>
+</text>
+<text>
+<en>Alt Text</en>
+<id>1792</id>
+</text>
+<text>
+<en>Add Recipients</en>
+<de>Füge Empfänger hinzu</de>
+<id>1793</id>
+</text>
+<text>
+<en>Adds the currently shown recipients to the newsletter</en>
+<de>Fügt die aktuell angezeigten Empfänger zum Newsletter hinzu</de>
+<id>1794</id>
+</text>
+<text>
+<en>Remove Recipients</en>
+<de>Entferne Empfänger</de>
+<id>1795</id>
+</text>
+<text>
+<en>Removes the currently shown recipients to the newsletter</en>
+<de>Entfernt die aktuell angezeigten Empfänger vom Newsletter</de>
+<id>1796</id>
+</text>
+<text>
+<en>{0} recipients removed, total {1} recipients.</en>
+<de>{0} Empfänger entfernt, insgesamt {1} Empfänger.</de>
+<id>1797</id>
+</text>
+<text>
+<en>Can only remove users from a paused newsletter</en>
+<de>Empfänger können nur von einem pausierten Newsletter entfernt werden</de>
+<id>1798</id>
+</text>
+<text>
+<en>WARNING: untagged</en>
+<de>WARNUNG: ungetaggt</de>
+<id>1799</id>
 </text>
 </trl>
 

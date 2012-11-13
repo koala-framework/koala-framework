@@ -98,7 +98,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             $ret['max'] = $this->getMaxValue();
         }
         if ($this->getMinValue()) {
-            $ret['min'] = $this->getMaxValue();
+            $ret['min'] = $this->getMinValue();
         }
         if ($this->getAllowNegative() === false) {
             if (!isset($ret['min']) || $ret['min'] > 0) {

@@ -306,10 +306,10 @@ class Kwf_Assets_Dependencies
         $files = Kwc_Abstract::getSetting($class, 'componentFiles');
         $componentCssFiles = array();
         foreach (array_merge($files['css'], $files['printcss']) as $f) {
-            if (substr($f, 0, strlen(KWF_PATH)) == KWF_PATH) { //zuerst, da kwf in web liegen kann
+            if (substr($f, 0, strlen(KWF_PATH)+1) == KWF_PATH.'/') { //zuerst, da kwf in web liegen kann
                 //kann nur aus kwf
                 $f = 'kwf'.substr($f, strlen(KWF_PATH));
-            } else if (defined('VKWF_PATH') && substr($f, 0, strlen(VKWF_PATH)) == VKWF_PATH) {
+            } else if (defined('VKWF_PATH') && substr($f, 0, strlen(VKWF_PATH)+1) == VKWF_PATH.'/') {
                 //TODO: this should not be here
                 $f = 'vkwf'.substr($f, strlen(VKWF_PATH));
             } else {
