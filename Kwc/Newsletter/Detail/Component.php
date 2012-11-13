@@ -39,6 +39,21 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         return $model->countRows($select);
     }
 
+    public function removeFromQueue($model = '', $ids = array())
+    {
+        $ret = array();
+        $newsletter = $this->getData()->row;
+        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
+            throw new Kwf_ClientException(trlKwf('Can only remove users from a paused newsletter'));
+        }
+
+        $queueModel = $this->getData()->parent->getComponent()->getChildModel()->getDependentModel('Queue');
+        $select = $queueModel->select()
+            ->whereEquals('recipient_model', $model)
+            ->whereEquals('recipient_id', $ids);
+        $queueModel->deleteRows($select);
+    }
+
     public function importToQueue(Kwf_Model_Abstract $model, Kwf_Model_Select $select)
     {
         $ret = array('rtrExcluded' => array());

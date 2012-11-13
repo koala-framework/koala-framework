@@ -3,6 +3,7 @@ Kwc.Newsletter.Detail.RecipientsPanel = Ext.extend(Kwf.Auto.GridPanel, {
 
     initComponent: function() {
         this.actions.saveRecipients = new Kwc.Newsletter.Detail.RecipientsAction({scope: this});
+        this.actions.removeRecipients = new Kwc.Newsletter.Detail.RemoveRecipientsAction({scope: this});
         if (this.formControllerUrl) {
             this.editDialog = {
                 controllerUrl: this.formControllerUrl,
