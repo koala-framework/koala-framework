@@ -55,6 +55,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.view = new Kwc.Directories.List.ViewAjax.View({
             controllerUrl: this.controllerUrl,
             directoryUrl: this.directoryUrl,
+            directoryComponentId: this.directoryComponentId,
             baseParams: {
                 componentId: this.componentId
             }
@@ -358,12 +359,16 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         var row = this.store.getAt(number);
         var target = Ext.get(ev.getTarget());
         if (target.dom.tagName.toLowerCase() != 'a') target = target.up('a');
-        if (target && target.dom.rel.match(/ajaxDetail/)) {
-            ev.stopEvent();
-            //mehr... Link geklickt
-            //this.showDetail(row.get('id'));
-            this.showDetail(target.dom.href);
-        }
+        if (!target) return;
+        var m = target.dom.rel.match(/kwfDetail([^]+)/);
+        if (!m) return;
+        var config = Ext.decode(m[1]);
+        if (!config.directoryComponentId) return;
+        if (config.directoryComponentId != this.directoryComponentId) return;
+
+        ev.stopEvent();
+        //more... Link clicked
+        this.showDetail(target.dom.href);
     },
 
     hideDetail: function()

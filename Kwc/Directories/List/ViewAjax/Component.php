@@ -30,6 +30,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             'componentId' => $this->getData()->parent->getComponent()->getItemDirectory()->getChildComponent('-view')->componentId,
             'directoryUrl' => $this->getData()->parent->getComponent()->getItemDirectory()->url,
             'filterComponentId' => $this->getData()->parent->componentId,
+            'directoryComponentId' => $this->getData()->parent->getComponent()->getItemDirectory()->componentId,
         );
         return $ret;
     }
