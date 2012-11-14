@@ -63,6 +63,9 @@ class Kwf_Util_Model_Feed_Row_Feed extends Kwf_Model_Row_Data_Abstract
 
         if (!$this->_xml) {
             if (class_exists('tidy')) {
+                //maximum length; simply cut off, tidy will repair it properly
+                $maxLength = 5*1024*1024;
+                if (strlen($str) > $maxLength) $str = substr($str, 0, $maxLength);
                 $c = array(
                         'indent'         => true,
                         'input-xml' => true,
