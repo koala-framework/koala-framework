@@ -2,6 +2,7 @@
 /**
  * @group slow
  * @group seleniuim
+ * http://kwf.niko.vivid/kwf/kwctest/Kwc_Directories_AjaxView_Root/directory
  */
 class Kwc_Directories_AjaxView_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
