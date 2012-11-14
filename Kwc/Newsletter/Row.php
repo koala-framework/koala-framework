@@ -69,13 +69,15 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                 {
                     $countNoUser++;
                 } else {
-                    $result = $this->_sendMail($recipient);
-                    if ($result) {
+                    try {
+                        $result = $this->_sendMail($recipient);
                         $count++;
                         if ($debugOutput) echo '.';
-                    } else {
+                    } catch (Exception $e) {
+                        echo 'Exception in Sending Newsletter with id ' . $this->id . ' with recipient ' . $recipient->getMailEmail();
+                        echo $e->__toString();
                         $countErrors++;
-                        if ($debugOutput) echo 'x';
+                        $result = false;
                     }
                     $this->count_sent++;
                     $this->last_sent_date = date('Y-m-d H:i:s');
