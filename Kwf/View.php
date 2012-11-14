@@ -8,6 +8,9 @@ class Kwf_View extends Zend_View
         $this->addScriptPath('.');
         $this->addScriptPath('');
         $this->addScriptPath(KWF_PATH . '/views');
+        if (defined('VKWF_PATH')) { //HACK
+            $this->addScriptPath(VKWF_PATH . '/views');
+        }
         $this->addScriptPath('views');
         $this->addHelperPath(KWF_PATH . '/Kwf/View/Helper', 'Kwf_View_Helper');
     }
