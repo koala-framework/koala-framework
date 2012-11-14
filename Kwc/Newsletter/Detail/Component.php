@@ -101,13 +101,13 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         }
 
         // check against rtr-ecg list
-        if (count($this->_rtrCheck)) {
+        if (count($emails)) {
             $badKeys = Kwf_Util_RtrList::getBadKeys($emails);
 
             // remove the bad rtr entries from the list
             if ($badKeys) {
                 foreach ($badKeys as $badKey) {
-                    $ret['rtrExcluded'][] = $this->_rtrCheck[$badKey];
+                    $ret['rtrExcluded'][] = $emails[$badKey];
                     unset($import[$badKey]);
                 }
             }
