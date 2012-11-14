@@ -43,6 +43,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         }
 
         // In Schleife senden
+        $logModel = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_QueueLogModel');
         $count = 0; $countErrors = 0; $countNoUser = 0;
         $start = microtime(true);
         do {
@@ -60,29 +61,42 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                 $recipient = $row->getRecipient();
                 if (!$recipient || !$recipient->getMailEmail()) {
                     $countNoUser++;
+                    $status = 'usernotfound';
                 } else if ($recipient instanceof Kwc_Mail_Recipient_UnsubscribableInterface &&
                     $recipient->getMailUnsubscribe())
                 {
                     $countNoUser++;
+                    $status = 'usernotfound';
                 } else if ($recipient instanceof Kwf_Model_Row_Abstract &&
                     $recipient->hasColumn('activated') && !$recipient->activated)
                 {
                     $countNoUser++;
+                    $status = 'usernotfound';
                 } else {
                     try {
-                        $result = $this->_sendMail($recipient);
+                        $this->_sendMail($recipient);
                         $count++;
                         if ($debugOutput) echo '.';
+                        $status = 'sent';
                     } catch (Exception $e) {
                         echo 'Exception in Sending Newsletter with id ' . $this->id . ' with recipient ' . $recipient->getMailEmail();
                         echo $e->__toString();
                         $countErrors++;
-                        $result = false;
+                        $status = 'failed';
                     }
                     $this->count_sent++;
                     $this->last_sent_date = date('Y-m-d H:i:s');
                     $this->save();
                 }
+
+                $logModel->createRow(array(
+                    'newsletter_id' => $row->newsletter_id,
+                    'recipient_model' => $row->recipient_model,
+                    'recipient_id' => $row->recipient_id,
+                    'searchtext' => $row->searchtext,
+                    'status' => $status,
+                    'send_date' => date('Y-m-d H:i:s')
+                ))->save();
 
                 $row->delete();
 
@@ -125,7 +139,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 
     protected function _sendMail($recipient)
     {
-        return $this->getMailComponent()->send($recipient);
+        $this->getMailComponent()->send($recipient);
     }
 
     public function getNextRow()
