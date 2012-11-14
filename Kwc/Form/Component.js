@@ -1,15 +1,24 @@
 Kwf.onContentReady(function(el, param) {
     if (!param.newRender) return false;
-    Ext.select('.kwcForm', true, el).each(function(form) {
+    Ext.select('.kwcForm > form', true, el).each(function(form) {
+        form = form.parent('.kwcForm', false);
         if (!form.kwcForm) {
             form.kwcForm = new Kwc.Form.Component(form);
         }
     });
 });
 Ext.ns('Kwc.Form');
+Kwc.Form.findForm = function(el) {
+    var formEl = el.child('.kwcForm > form');
+    if (formEl) {
+        formEl = formEl.parent('.kwcForm');
+        return formEl.kwcForm;
+    }
+    return null;
+};
 Kwc.Form.Component = function(form)
 {
-    this.addEvents('submitSuccess');
+    this.addEvents('submitSuccess', 'fieldChange');
     this.el = form;
     var config = form.parent().down('.config', true);
     if (!config) return;
@@ -57,6 +66,12 @@ Kwc.Form.Component = function(form)
         }
     }
 
+    this.fields.forEach(function(f) {
+        f.on('change', function() {
+            this.fireEvent('fieldChange', f);
+        }, this);
+    }, this);
+
     this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
 };
 Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
@@ -76,6 +91,18 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             }
         }, this);
         return ret;
+    },
+    getValues: function() {
+        var ret = {};
+        this.fields.each(function(f) {
+            ret[f.getFieldName()] = f.getValue();
+        }, this);
+        return ret;
+    },
+    clearValues: function() {
+        this.fields.each(function(f) {
+            f.clearValue();
+        }, this);
     },
     onSubmit: function(e) {
         if (this.dontUseAjaxRequest) return;

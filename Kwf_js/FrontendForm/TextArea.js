@@ -11,6 +11,9 @@ Kwf.FrontendForm.TextArea = Ext.extend(Kwf.FrontendForm.Field, {
     },
     getValue: function() {
         return this.el.child('textarea').dom.value;
+    },
+    clearValue: function() {
+        this.el.select('textarea').dom.value = '';
     }
 });
 

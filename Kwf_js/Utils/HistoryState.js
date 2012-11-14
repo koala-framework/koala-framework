@@ -2,7 +2,6 @@ Ext.ns('Kwf.Utils');
 Kwf.Utils.HistoryStateAbstract = function() {
     this.addEvents('popstate');
     this.disabled = false; //functionality can be disabled, so it behaves like a browser that doesn't support history states
-    this.initialState = {};
     this.currentState = {};
 };
 Ext.extend(Kwf.Utils.HistoryStateAbstract, Ext.util.Observable, {

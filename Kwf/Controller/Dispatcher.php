@@ -17,6 +17,9 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 if (!Kwf_Loader::isValidClass($request->getParam('root'))) throw new Kwf_Exception_NotFound("Invalid root component");
                 Kwf_Component_Data_Root::setComponentClass($request->getParam('root'));
 
+                $root = Kwf_Component_Data_Root::getInstance();
+                $root->setFilename('kwf/kwctest/'.$request->getParam('root'));
+
                 Kwf_Registry::get('acl')->getComponentAcl()->allowComponent('guest', null);
 
                 //hick hack, für Kwf_Component_Abstract_Admin::getControllerUrl

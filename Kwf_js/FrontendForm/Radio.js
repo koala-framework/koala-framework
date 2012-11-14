@@ -14,6 +14,11 @@ Kwf.FrontendForm.Radio = Ext.extend(Kwf.FrontendForm.Field, {
             }
         }, this);
         return ret;
+    },
+    clearValue: function() {
+        this.el.select('input').each(function(input) {
+            input.dom.checked = false;
+        }, this);
     }
 });
 

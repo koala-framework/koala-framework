@@ -32,6 +32,10 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
         if (!inp) return null;
         return inp.dom.value;
     },
+    clearValue: function() {
+        var inp = this.el.child('input');
+        inp.dom.value = '';
+    },
     hide: function() {
         this.el.hide();
     },

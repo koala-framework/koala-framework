@@ -330,6 +330,35 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         return $this->_model->getPrimaryKey();
     }
 
+    public function countChildRows($rule, $select = array())
+    {
+        if ($rule instanceof Kwf_Model_Abstract) {
+            $m = $rule;
+            $dependentOf = $this->_model;
+        } else {
+            $dependent = $this->_model->getDependentModelWithDependentOf($rule);
+            $m = $dependent['model'];
+            $dependentOf = $dependent['dependentOf'];
+        }
+
+        if ($m instanceof Kwf_Model_RowsSubModel_Interface) {
+            //could be improved
+            return count($m->getRowsByParentRow($this, $select));
+        } else {
+            if (!$select instanceof Kwf_Model_Select) {
+                $select = $m->select($select);
+            } else {
+                $select = clone $select; //nicht select objekt ändern
+            }
+            $ref = $m->getReferenceByModelClass(get_class($dependentOf), isset($dependent['rule']) ? $dependent['rule'] : null);
+            if (!$this->{$this->_getPrimaryKey()}) {
+                return 0;
+            }
+            $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
+            return $m->countRows($select);
+        }
+    }
+
     public function getChildRows($rule, $select = array())
     {
         if ($rule instanceof Kwf_Model_Abstract) {

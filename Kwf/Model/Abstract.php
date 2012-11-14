@@ -616,7 +616,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (!$row instanceof Kwf_Model_Row_Interface) {
                 $row = $this->getRow($row[$this->getPrimaryKey()]);
             }
-            return (bool)count($row->getChildRows($expr->getChild(), $expr->getSelect()));
+            $ret = (bool)$row->countChildRows($expr->getChild(), $expr->getSelect());
+            return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child) {
             if (!$row instanceof Kwf_Model_Row_Interface) {
                 $row = $this->getRow($row[$this->getPrimaryKey()]);
