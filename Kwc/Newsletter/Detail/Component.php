@@ -50,7 +50,8 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         $queueModel = $this->getData()->parent->getComponent()->getChildModel()->getDependentModel('Queue');
         $select = $queueModel->select()
             ->whereEquals('recipient_model', $model)
-            ->whereEquals('recipient_id', $ids);
+            ->whereEquals('recipient_id', $ids)
+            ->whereEquals('newsletter_id', $newsletter->id);
         $queueModel->deleteRows($select);
     }
 
