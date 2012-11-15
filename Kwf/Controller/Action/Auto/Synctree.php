@@ -68,6 +68,9 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
         if (!isset($this->_model)) {
             throw new Kwf_Exception('$_model oder $_modelName not set');
         }
+        if (is_string($this->_model)) {
+            $this->_model = Kwf_Model_Abstract::getInstance($this->_model);
+        }
 
         $this->_filters = new Kwf_Collection();
 
