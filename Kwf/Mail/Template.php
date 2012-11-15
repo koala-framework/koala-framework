@@ -9,8 +9,8 @@ class Kwf_Mail_Template
 
     /**
     * constructing a Kwf_Mail_Template_View and a Kwf_Mail object.
-    * @param $template see Kwf_Mail_Template_View
-    * @param $masterTemplate see Kwf_Mail_Template_View
+    * @param string $template see Kwf_Mail_Template_View
+    * @param string $masterTemplate see Kwf_Mail_Template_View
     */
     public function __construct($template, $masterTemplate = 'Master')
     {

@@ -12,7 +12,7 @@ class Kwf_Mail_Template_View extends Kwf_View_Mail
     *          also possible to use a 'Kwc_Abstract' or 'Kwf_Component_Data'
     *          (This is used when the template destination is in this component-folder).
     *          There are no absolute paths allowed.
-    * @param var $masterTemplate: Default-Value: 'Master'
+    * @param string $masterTemplate
     */
     public function __construct($template, $masterTemplate = 'Master')
     {
