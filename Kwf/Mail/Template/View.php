@@ -5,6 +5,15 @@ class Kwf_Mail_Template_View extends Kwf_View_Mail
     protected $_txtTemplate;
     protected $_htmlTemplate;
 
+    /**
+    * Create a .txt.tpl or .html.tpl file and set $template to the path.
+    * @param string|Kwc_Abstract|Kwf_Component_Data $template: If it's a
+    *          string it should point to the template in /views/mails. It's
+    *          also possible to use a 'Kwc_Abstract' or 'Kwf_Component_Data'
+    *          (This is used when the template destination is in this component-folder).
+    *          There are no absolute paths allowed.
+    * @param var $masterTemplate: Default-Value: 'Master'
+    */
     public function __construct($template, $masterTemplate = 'Master')
     {
         parent::__construct();
