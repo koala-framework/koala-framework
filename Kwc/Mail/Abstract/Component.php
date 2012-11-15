@@ -54,7 +54,10 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
         $mail = new Kwf_Mail();
         $name = $recipient->getMailFirstname() . ' ' . $recipient->getMailLastname();
-        if (!$name == ' ') $name = null;
+        if (!$recipient->getMailFirstname() || !$recipient->getMailLastname()) {
+            //no name at all if we don't have a complete name
+            $name = null;
+        }
         if ($toAddress) {
             $mail->addTo($toAddress, $name);
         } else {

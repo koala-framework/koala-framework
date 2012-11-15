@@ -10,8 +10,13 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
     {
         return array(
             array(
+                'param'=> 'debug',
+                'value'=> false,
+                'valueOptional' => true,
+            ),
+            array(
                 'param'=> 'timeLimit',
-                'value'=> 60,
+                'value'=> 55,
                 'valueOptional' => true,
             ),
             array(
@@ -19,11 +24,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 'value'=> 20,
                 'valueOptional' => true,
             ),
-            array(
-                'param'=> 'debug',
-                'value'=> true,
-                'valueOptional' => true,
-            )
         );
     }
 

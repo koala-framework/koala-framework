@@ -11,13 +11,13 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
 
     public function send($timeLimit = 60, $mailsPerMinute = 20, $debugOutput = false)
     {
-        // Newsletter-ID rausfinden, die den Eintrag in der Queue mit der
-        // kleinsten ID hat, von der wird dann gesendet
+        // select random newsletter to send
         $select = $this->select()
             ->where(new Kwf_Model_Select_Expr_Or(array(
                 new Kwf_Model_Select_Expr_Equal('status', 'start'),
                 new Kwf_Model_Select_Expr_Equal('status', 'sending')
-            )));
+            )))
+            ->order('RAND()');
         $nlRow = null;
         $id = 0;
         foreach ($this->getRows($select) as $r) {
