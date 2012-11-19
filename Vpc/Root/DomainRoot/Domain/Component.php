@@ -29,4 +29,14 @@ class Vpc_Root_DomainRoot_Domain_Component extends Vpc_Abstract
         );
     }
 
+    public static function getDomainComponent(Vps_Component_Data $component)
+    {
+        while ($component && !is_instance_of(
+            $component->componentClass, 'Vpc_Root_DomainRoot_Domain_Component'
+        )) {
+            $component = $component->parent;
+        }
+        return $component;
+    }
+
 }
