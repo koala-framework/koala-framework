@@ -1,5 +1,5 @@
 <?php
-class Kwc_Newsletter_Subscribe_Update_2 extends Kwf_Update
+class Kwc_Newsletter_Subscribe_Update_3 extends Kwf_Update
 {
     public function update()
     {
@@ -7,6 +7,12 @@ class Kwc_Newsletter_Subscribe_Update_2 extends Kwf_Update
 
         //drop unique index (if exists)
         $sql = "ALTER TABLE `kwc_newsletter_subscribers` DROP INDEX `email`";
+        try {
+            $db->query($sql);
+        } catch (Exception $e) {}
+
+        //drop unique index (if exists)
+        $sql = "ALTER TABLE  `kwc_newsletter_subscribers` DROP INDEX  `email_2`";
         try {
             $db->query($sql);
         } catch (Exception $e) {}
