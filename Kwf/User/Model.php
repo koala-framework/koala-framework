@@ -249,6 +249,19 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         }
     }
 
+    public function getAuthedUserId()
+    {
+        if (!Kwf_Setup::hasDb()) return null;
+
+        if (php_sapi_name() == 'cli') return null;
+
+        $loginData = Kwf_Auth::getInstance()->getStorage()->read();
+        if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
+            return null;
+        }
+        return $loginData['userId'];
+    }
+
     public function getAuthedUser()
     {
         if (!Kwf_Setup::hasDb()) return null;
@@ -256,11 +269,10 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         if (php_sapi_name() == 'cli') return null;
 
         if (!$this->_authedUser) {
-            $loginData = Kwf_Auth::getInstance()->getStorage()->read();
-            if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
-                return null;
+            $id = $this->getAuthedUserId();
+            if ($id) {
+                $this->_authedUser = $this->getRow($id);
             }
-            $this->_authedUser = $this->getRow($loginData['userId']);
         }
         return $this->_authedUser;
     }

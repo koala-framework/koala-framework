@@ -128,11 +128,7 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
 
     protected function _beforeInsert()
     {
-        $userModel = Kwf_Registry::get('userModel');
-        $authedUser = $userModel->getAuthedUser();
-        if ($authedUser && $authedUser->id) {
-            $this->by_user_id = $authedUser->id;
-        }
+        $this->by_user_id = Kwf_Registry::get('userModel')->getAuthedUserId();
         if (!$this->create_type) $this->create_type = 'auto';
     }
 }
