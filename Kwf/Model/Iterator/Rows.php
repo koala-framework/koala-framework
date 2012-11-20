@@ -64,4 +64,9 @@ class Kwf_Model_Iterator_Rows implements Kwf_Model_Iterator_ModelIterator_Interf
     {
         return $this->_rowset->valid();
     }
+
+    public function count()
+    {
+        return $this->_model->countRows($this->_select);
+    }
 }
