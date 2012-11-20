@@ -5,6 +5,9 @@ class Kwf_Http_Pecl_Requestor_Response implements Kwf_Http_Requestor_Response_In
 
     public function __construct(HttpMessage $response = null)
     {
+        if ($response && $response->getType() != HTTP_MSG_RESPONSE) {
+            throw new Kwf_Exception("invalid response type");
+        }
         if ($response && ($response->getResponseCode() == 301 || $response->getResponseCode() == 302)) {
             //workaround for strange pecl_http bug that breaks requests that redirect to the same url again
             //and for some reason then there is only response message containing in the body the second response message (including http headers)
