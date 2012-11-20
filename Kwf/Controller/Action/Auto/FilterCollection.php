@@ -26,7 +26,10 @@ class Kwf_Controller_Action_Auto_FilterCollection extends Kwf_Collection
         $filter = new $class();
         if (!is_array($config)) $config = array();
         $config['fieldName'] = $field;
-        foreach ($config as $key => $val) $filter->setProperty($key, $val);
+        foreach ($config as $key => $val) {
+            $method = 'set' . ucfirst($key);
+            $filter->$method($val);
+        }
         return $filter;
     }
 }
