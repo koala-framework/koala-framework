@@ -46,7 +46,7 @@ class Kwf_Validate_Password3of4 extends Zend_Validate_Abstract
         }
 
         // special signs
-        if (preg_match('/[+\-*\/\^°"²³§$%&{(\[)\]=}?\\\\ \'`~#\'_.,;:@]/', $value)) {
+        if (preg_match('/[+\-*\/\^°"²³§$%&{(\[)\]=}?\\\\ \'`~#\'_.,;:@!]/', $value)) {
             $rulesFulfilled++;
         }
 
