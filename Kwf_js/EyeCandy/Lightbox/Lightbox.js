@@ -225,11 +225,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 ev.stopEvent();
             }, this);
         }
-        this.lightboxEl.on('click', function(ev) {
-            if (ev.getTarget() == this.lightboxEl.dom) {
-                this.closeAndPushState();
-            }
-        }, this);
     },
     preloadLinks: function() {
         this.innerLightboxEl.query('a.preload').each(function(el) {
@@ -295,6 +290,11 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
 
 Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
     afterCreateLightboxEl: function() {
+        this.lightbox.lightboxEl.on('click', function(ev) {
+            if (ev.getTarget() == this.lightbox.lightboxEl.dom) {
+                this.lightbox.closeAndPushState();
+            }
+        }, this);
         this._center();
     },
     afterContentShown: function() {
@@ -335,7 +335,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this.mask();
     },
     onClose: function(options) {
-        this.lightboxEl.fadeOut({
+        this.lightbox.lightboxEl.fadeOut({
             concurrent: true,
             callback: function() {
                 this.afterClose();

@@ -83,6 +83,11 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
         $this->getHtmlEditor()->setHeight($height);
         return $this;
     }
+    public function setHtmlEditorWidth($width)
+    {
+        $this->getHtmlEditor()->setWidth($width);
+        return $this;
+    }
 
     public function getHtmlEditor()
     {

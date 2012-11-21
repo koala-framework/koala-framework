@@ -6,6 +6,20 @@
 class Kwf_Model_Tree_Row extends Kwf_Model_Proxy_Row
     implements IteratorAggregate, Kwf_Model_Tree_Row_Interface
 {
+    public function __get($name)
+    {
+        if ($name == 'tree_path') {
+            return $this->getTreePath();
+        }
+        return parent::__get($name);
+    }
+
+    public function __isset($name)
+    {
+        if ($name == 'tree_path') return true;
+        return parent::__isset($name);
+    }
+
     public function getTreePath($separator = ' » ')
     {
         $ret = array();

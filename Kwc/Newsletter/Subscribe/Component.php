@@ -38,6 +38,17 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     {
         $exists = $this->_subscriptionExists($row);
         if (!$exists) {
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('email', $row->email);
+            $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
+            $s->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('unsubscribed', 1),
+                new Kwf_Model_Select_Expr_Equal('activated', 0)
+            )));
+            $deleteRow = $row->getModel()->getRow($s);
+            if ($deleteRow) {
+                $deleteRow->delete();
+            }
             $this->_beforeInsert($row);
             $row->save();
             $this->_afterInsert($row);
@@ -54,7 +65,10 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         $s = new Kwf_Model_Select();
         $s->whereEquals('email', $row->email); //what if the email field is not named email?
         $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
-        $s->whereEquals('unsubscribed', false);
+        $s->where(new Kwf_Model_Select_Expr_Or(array(
+            new Kwf_Model_Select_Expr_Equal('unsubscribed', 1),
+            new Kwf_Model_Select_Expr_Equal('activated', 1)
+        )));
 
         if ($row->getModel()->countRows($s)) {
             //already subscribed, don't save
@@ -74,7 +88,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         } else if ($this->_getSetting('subscribeType') == self::DOUBLE_OPT_IN) {
             // set unsubscribed to not send him a newsletter until he
             // double-opted-in
-            $row->unsubscribed = 1;
+            $row->unsubscribed = 0;
             $row->activated = 0;
         }
         $row->newsletter_component_id = $this->getSubscribeToNewsletterComponent()->dbId;

@@ -1,6 +1,16 @@
 <?php
 class Kwf_Benchmark_Counter_Memcache implements Kwf_Benchmark_Counter_Interface
 {
+    private $_prefix;
+    public function __construct($config = array())
+    {
+        if (isset($config['prefix'])) {
+            $this->_prefix = $config['prefix'];
+        } else {
+            $this->_prefix = Zend_Registry::get('config')->application->id.'-'.Kwf_Setup::getConfigSection().'-bench-';
+        }
+    }
+
     public function getMemcache()
     {
         static $memcache;
@@ -22,14 +32,9 @@ class Kwf_Benchmark_Counter_Memcache implements Kwf_Benchmark_Counter_Interface
     public function increment($name, $value=1)
     {
         $memcache = $this->getMemcache();
-        static $prefix;
-        if (!isset($prefix)) {
-            $prefix = Zend_Registry::get('config')->application->id.'-'.
-                                Kwf_Setup::getConfigSection().'-bench-';
-        }
         try {
-            if (!($ret = $memcache->increment($prefix.$name, $value))) {
-                $ret = $memcache->set($prefix.$name, $value, 0, 0);
+            if (!($ret = $memcache->increment($this->_prefix.$name, $value))) {
+                $ret = $memcache->set($this->_prefix.$name, $value, 0, 0);
             }
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
@@ -45,13 +50,8 @@ class Kwf_Benchmark_Counter_Memcache implements Kwf_Benchmark_Counter_Interface
     public function getValue($name)
     {
         $memcache = $this->getMemcache();
-        static $prefix;
-        if (!isset($prefix)) {
-            $prefix = Zend_Registry::get('config')->application->id.'-'.
-                                Kwf_Setup::getConfigSection().'-bench-';
-        }
         try {
-            return $memcache->get($prefix.$name);
+            return $memcache->get($this->_prefix.$name);
         } catch (ErrorException $e) {
             if ($e->getSeverity() == E_NOTICE) {
                 $e = new Kwf_Exception_Other($e);

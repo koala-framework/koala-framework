@@ -5,10 +5,6 @@ class Kwc_Shop_Products_Directory_Controller extends Kwc_Directories_Item_Direct
 
     protected $_buttons = array('add', 'delete', 'save');
     protected $_position = 'pos';
-    protected $_editDialog = array(
-        'width' =>  620,
-        'height' =>  500
-    );
 
     protected function _initColumns()
     {

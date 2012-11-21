@@ -7,6 +7,11 @@ class Kwf_Mail_Template
     protected $_txtTemplate;
     protected $_htmlTemplate;
 
+    /**
+    * constructing a Kwf_Mail_Template_View and a Kwf_Mail object.
+    * @param string $template see Kwf_Mail_Template_View
+    * @param string $masterTemplate see Kwf_Mail_Template_View
+    */
     public function __construct($template, $masterTemplate = 'Master')
     {
         $this->_view = new Kwf_Mail_Template_View($template, $masterTemplate);
