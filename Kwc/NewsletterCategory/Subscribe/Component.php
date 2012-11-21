@@ -12,14 +12,16 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
     public function insertSubscriptionWithCategory(Kwc_Newsletter_Subscribe_Row $row, $categoryId)
     {
         $exists = $this->_subscriptionExists($row);
-
         $nl2cat = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_SubscriberToCategory');
         if ($exists) {
             //already subscribed
             $s = new Kwf_Model_Select();
             $s->whereEquals('email', $row->email);
             $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
-            $s->whereEquals('unsubscribed', false);
+            $s->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('unsubscribed', 1),
+                new Kwf_Model_Select_Expr_Equal('activated', 1)
+            )));
             $row = $this->getForm()->getModel()->getRow($s);
 
             $s = $nl2cat->select()
@@ -32,6 +34,17 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
         }
 
         if (!$exists) {
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('email', $row->email);
+            $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
+            $s->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('unsubscribed', 1),
+                new Kwf_Model_Select_Expr_Equal('activated', 0)
+            )));
+            $deleteRow = $this->getForm()->getModel()->getRow($s);
+            if ($deleteRow) {
+                $deleteRow->delete();
+            }
             $this->_beforeInsert($row);
             $row->save();
         }
