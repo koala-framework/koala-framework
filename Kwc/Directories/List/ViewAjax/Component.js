@@ -393,9 +393,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         if (this.ownerCt.searchFormEl) this.ownerCt.searchFormEl.hide();
 
         if (this.view) this.view.hide();
-        this.detailEl = this.el.createChild({
-            cls: 'detail loading'
-        });
+        this.detailEl = this.el.parent('.kwfMainContent');
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
         Ext.Ajax.request({
