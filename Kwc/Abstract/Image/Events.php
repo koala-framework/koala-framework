@@ -35,7 +35,7 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
                 $this->_class, $c, 'dpr2-'.$type
             ));
             $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
-                $this->_class, $c->dbId
+                $this->_class, $c
             ));
         }
     }
