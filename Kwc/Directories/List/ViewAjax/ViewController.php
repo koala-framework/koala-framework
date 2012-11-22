@@ -40,7 +40,7 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'));
         if (!$c || $c->componentClass != $this->_getParam('class')) {
-            throw new Kwf_Exception_NotFound();
+//            throw new Kwf_Exception_NotFound();
         }
         $this->_component = $c;
         $this->_model = $c->parent->getComponent()->getItemDirectory()->getComponent()->getChildModel();
@@ -51,6 +51,10 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
             ->setData(new Kwc_Directories_List_ViewAjax_ViewController_ContentData($this->_getParam('componentId')));
     }
 
+    protected function _getOrder($order)
+    {
+        return null;
+    }
 
     protected function _getSelect()
     {

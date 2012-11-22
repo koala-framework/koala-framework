@@ -17,19 +17,22 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-
-        if ($this->getData()->parent->getComponent()->getItemDirectory()->getChildComponent('-view')->componentClass
+        if ($this->getData()->parent
+            ->getComponent()
+            ->getItemDirectory()
+            ->getChildComponent('-view')
+            ->componentClass
             != $this->getData()->componentClass
         ) {
-            throw new Kwf_Exception('Invalid View: must be the same as the one used for the directory itself if using ViewAjax');
+//             throw new Kwf_Exception('Invalid View: must be the same as the one used for the directory itself if using ViewAjax');
         }
 
         $cfg = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->getData()->componentClass);
         $ret['config'] = array(
             'controllerUrl' => $cfg->getControllerUrl('View'),
-            'componentId' => $this->getData()->parent->getComponent()->getItemDirectory()->getChildComponent('-view')->componentId,
+            'directoryViewComponentId' => $this->getData()->parent->getComponent()->getItemDirectory()->getChildComponent('-view')->componentId,
             'directoryUrl' => $this->getData()->parent->getComponent()->getItemDirectory()->url,
-            'filterComponentId' => $this->getData()->parent->componentId,
+            'componentId' => $this->getData()->componentId,
             'directoryComponentId' => $this->getData()->parent->getComponent()->getItemDirectory()->componentId,
         );
         return $ret;
