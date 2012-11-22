@@ -133,7 +133,6 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
                 this.view.load();
             }, this, { buffer: 250 });
         }
-
         Kwc.Directories.List.ViewAjax.superclass.initComponent.call(this);
     },
 
@@ -273,6 +272,13 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }, this, { buffer: 50 });
     },
 
+    afterRender: function() {
+        Kwc.Directories.List.ViewAjax.View.superclass.afterRender.call(this);
+
+        this.kwfMainContent = this.el.parent('.kwfMainContent');
+        this.kwfMainContent.enableDisplayMode('block');
+    },
+
     loadMore: function() {
         if (!this.store || this.getStore().getCount()<20 || this.loadingMore || this.visibleDetail) return;
         this.loadingMore = true;
@@ -392,8 +398,12 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         this.hideDetail();
         if (this.ownerCt.searchFormEl) this.ownerCt.searchFormEl.hide();
 
-        if (this.view) this.view.hide();
-        this.detailEl = this.el.parent('.kwfMainContent');
+        this.kwfMainContent.hide();
+        this.detailEl = this.el.createChild({
+            cls: 'kwfMainContent',
+            tag: 'div',
+            style: 'width: ' + this.kwfMainContent.getStyle('width')
+        }, this.kwfMainContent);
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
         Ext.Ajax.request({
@@ -438,7 +448,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         this.hideDetail();
 
         if (this.ownerCt.searchForm) this.ownerCt.searchFormEl.show();
-        if (this.view) this.view.show();
+        this.kwfMainContent.show();
 
         this.ownerCt.onMenuItemChanged();
     }
