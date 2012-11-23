@@ -366,7 +366,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         var target = Ext.get(ev.getTarget());
         if (target.dom.tagName.toLowerCase() != 'a') target = target.up('a');
         if (!target) return;
-        var m = target.dom.rel.match(/kwfDetail([^]+)/);
+        var m = target.dom.rel.match(/kwfDetail([^ ]+)/);
         if (!m) return;
         var config = Ext.decode(m[1]);
         if (!config.directoryComponentId) return;
