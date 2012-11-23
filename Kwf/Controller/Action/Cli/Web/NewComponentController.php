@@ -1,6 +1,7 @@
 <?php
 class Kwf_Controller_Action_Cli_Web_NewComponentController extends Kwf_Controller_Action_Cli_Abstract
 {
+    protected $_js = false;
     public static function getHelp()
     {
         return "create new component";
@@ -10,6 +11,9 @@ class Kwf_Controller_Action_Cli_Web_NewComponentController extends Kwf_Controlle
     {
         if (!$this->_getParam('name') || is_bool($this->_getParam('name'))) {
             throw new Kwf_Exception_Client("name has to be set!");
+        }
+        if ($this->_getParam('j')) {
+            $this->_js = true;
         }
         $type = $this->_getParam('type');
         if (!$type || is_bool($type)) {
@@ -32,7 +36,7 @@ class Kwf_Controller_Action_Cli_Web_NewComponentController extends Kwf_Controlle
             $filename = 'components/'.$name.'/Component.css';
             file_put_contents($filename, '');
         }
-        if ($this->_getParam('j')) {
+        if ($this->_js) {
             $data = $this->_getJSData($name);
             $filename = 'components/'.$name.'/Component.js';
             file_put_contents($filename, $data);
@@ -47,6 +51,10 @@ class Kwf_Controller_Action_Cli_Web_NewComponentController extends Kwf_Controlle
     }
     protected function _getPHPData($name, $type)
     {
+        $settings = '';
+        if ($this->_js) {
+            $settings .= "        \$ret['assets']['files'][] = 'web/components/$name/Component.js';";
+        }
         $class = str_replace('/', '_', $name);
         $class = $class.'_Component';
         $data = "<?php\n";
@@ -55,6 +63,7 @@ class Kwf_Controller_Action_Cli_Web_NewComponentController extends Kwf_Controlle
         $data .= "    public static function getSettings()\n";
         $data .= "    {\n";
         $data .= "        \$ret = parent::getSettings();\n";
+        $data .= "$settings\n";
         $data .= "        return \$ret;\n";
         $data .= "    }\n";
         $data .= "}\n";
