@@ -21,7 +21,8 @@ Vps.Auto.Filter.ComboBox = function(config)
                 mode: 'local',
                 triggerAction: 'all',
                 editable: false,
-                width: config.width || 200
+                width: config.width || 200,
+                listWidth: config.listWidth
             });
     }
     this.combo.setValue(config['default']);
