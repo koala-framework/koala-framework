@@ -609,9 +609,9 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     /**
      * Hilfsfunktion die von duplicate aufgerufen werden kann
      */
-    protected final function _duplicateDependentModel($newRow, $rule)
+    protected final function _duplicateDependentModel($newRow, $rule, $select = array())
     {
-        $rowset = $this->getChildRows($rule);
+        $rowset = $this->getChildRows($rule, $select);
         foreach ($rowset as $row) {
             $ref = $row->getModel()->getReferenceByModelClass(get_class($this->getModel()), null);
             $data = array();
