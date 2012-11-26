@@ -276,7 +276,9 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         Kwc.Directories.List.ViewAjax.View.superclass.afterRender.call(this);
 
         this.kwfMainContent = this.el.parent('.kwfMainContent');
-        this.kwfMainContent.enableDisplayMode('block');
+        if (this.kwfMainContent) {
+            this.kwfMainContent.enableDisplayMode('block');
+        }
     },
 
     loadMore: function() {
