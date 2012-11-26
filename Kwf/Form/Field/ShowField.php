@@ -28,4 +28,18 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
         }
         return $ret;
     }
+
+    /**
+    * can be used to set a specific renderer
+    *
+    * e.g '{value:date}'
+    * to use the date renderer
+    *
+    * @param string template
+    */
+    public function setTpl($tpl)
+    {
+        $ret = parent::setTpl($tpl);
+        return $ret;
+    }
 }
