@@ -13,7 +13,7 @@ class Kwf_Component_Output_C1_Root_Component extends Kwc_Abstract_Composite_Comp
             'inherit' => true,
             'priority' => 0
         );
-        
+        $ret['contentWidth'] = 600;
         return $ret;
     }
 }

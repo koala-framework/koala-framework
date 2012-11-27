@@ -11,8 +11,8 @@ class Kwf_Component_OutputPlaceholdersPlugin_Test extends Kwc_TestAbstract
 
     public function testCached()
     {
-        $this->assertEquals('xLorem child bar bar Ipsumy', $this->_root->render(true, true));
+        $this->assertRegExp('#x.*Lorem child bar bar Ipsum.*y#s', $this->_root->render(true, true));
 
-        $this->assertEquals('xLorem child bar bar Ipsumy', $this->_root->render(true, true));
+        $this->assertRegExp('#x.*Lorem child bar bar Ipsum.*y#s', $this->_root->render(true, true));
     }
 }

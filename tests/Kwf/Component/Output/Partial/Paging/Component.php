@@ -6,6 +6,7 @@ class Kwf_Component_Output_Partial_Paging_Component extends Kwc_Abstract_Composi
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['paging'] = 'Kwf_Component_Output_Partial_Paging_Paging';
+        $ret['contentWidth'] = 600;
         return $ret;
     }
 

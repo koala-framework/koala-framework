@@ -23,13 +23,13 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
         $this->_setup('Kwf_Component_Output_C3_Root_Component');
         $model = Kwf_Component_Cache::getInstance()->getModel('cache');
         $value = $this->_renderer->renderMaster($this->_root);
-        $this->assertEquals('c3_rootmaster c1_box c3_root', $value);
+        $this->assertRegExp('#c3_rootmaster c1_box .*c3_root.*#s', $value);
 
         //page, master und 2 component
         $this->assertEquals(4, $model->countRows());
 
         $value = $this->_renderer->renderMaster($this->_root);
-        $this->assertEquals('c3_rootmaster c1_box c3_root', $value);
+        $this->assertRegExp('#c3_rootmaster c1_box .*c3_root.*#s', $value);
     }
 
     public function testC3ChildPage()
@@ -38,11 +38,11 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
         $model = Kwf_Component_Cache::getInstance()->getModel('cache');
         $component = $this->_root->getChildComponent('_childpage')->getChildComponent('_childpage');
         $value = $this->_renderer->renderMaster($component);
-        $this->assertEquals('c3_rootmaster c3_box c3_childpagemaster c3_childpage2', $value);
+        $this->assertRegExp('#c3_rootmaster c3_box c3_childpagemaster .*c3_childpage2.*#s', $value);
         $this->assertEquals(4, $model->countRows());
 
         $value = $this->_renderer->renderMaster($component);
-        $this->assertEquals('c3_rootmaster c3_box c3_childpagemaster c3_childpage2', $value);
+        $this->assertRegExp('#c3_rootmaster c3_box c3_childpagemaster .*c3_childpage2.*#s', $value);
     }
 
     public function testC2()
@@ -50,7 +50,7 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
         $this->_setup('Kwf_Component_Output_C2_Root_Component');
         $model = Kwf_Component_Cache::getInstance()->getModel('cache');
         $value = $this->_renderer->renderMaster($this->_root);
-        $this->assertEquals('c2_root c2_child c2_childNoCache ', $value);
+        $this->assertRegExp('#c2_root c2_child c2_childNoCache #s', $value);
 
         //page, master, 2 component und ein {nocache}
         $this->assertEquals(5, $model->countRows());
@@ -61,7 +61,7 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
         $this->_setup('Kwf_Component_Output_C4_Component');
         $model = Kwf_Component_Cache::getInstance()->getModel('cache');
         $value = $this->_renderer->renderMaster($this->_root);
-        $this->assertEquals('c4', substr($value, 0, 2));
+        $this->assertRegExp('#c4 #s', $value);
 
         //page, master und 1 component
         $this->assertEquals(3, $model->countRows());

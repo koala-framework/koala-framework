@@ -8,7 +8,7 @@ class Kwf_Component_Output_C2_Root_Component extends Kwc_Abstract_Composite_Comp
             'child' => 'Kwf_Component_Output_C2_Child_Component',
             'childNoCache' => 'Kwf_Component_Output_C2_ChildNoCache_Component'
         );
-        
+        $ret['contentWidth'] = 600;
         return $ret;
     }
 }

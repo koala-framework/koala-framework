@@ -539,6 +539,9 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             while ($p->parent) $p = $p->parent; //root suchen TODO: wenn mehrere Master-tpl da stoppen
             return $p->getComponent()->_getMasterChildContentWidth($this->getData());
         } else {
+            if (!$this->getData()->parent) {
+                throw new Kwf_Exception("Can't detect contentWidth, use contentWidth setting for '".$this->getData()->componentClass."'");
+            }
             return $this->getData()->parent->getComponent()->_getChildContentWidth($this->getData());
         }
     }

@@ -7,6 +7,7 @@ class Kwf_Component_Output_HasContent_Component extends Kwc_Abstract_Composite_C
         $ret['generators']['child']['component'] = array(
             'child' => 'Kwf_Component_Output_C1_ChildChild_Component'
         );
+        $ret['contentWidth'] = 600;
         return $ret;
     }
 }

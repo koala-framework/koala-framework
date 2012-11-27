@@ -14,6 +14,7 @@ class Kwf_Component_Output_C3_ChildPage_Component extends Kwc_Abstract
             'inherit' => true,
             'priority' => 0
         );
+        $ret['contentWidth'] = 600;
         return $ret;
     }
 }
