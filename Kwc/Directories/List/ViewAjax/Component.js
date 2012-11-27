@@ -202,6 +202,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 {
     layout: 'fit',
     border: false,
+    autoHeight: true,
 
     initComponent : function()
     {
