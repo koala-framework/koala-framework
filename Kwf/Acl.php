@@ -253,7 +253,7 @@ class Kwf_Acl extends Zend_Acl
             if (Kwc_Abstract::getFlag($c, 'hasResources')) {
                 Kwc_Admin::getInstance($c)->addResources($this);
             }
-            if (Kwc_Abstract::hasSetting($c, 'menuConfig')) {
+            if (Kwc_Abstract::hasSetting($c, 'menuConfig') && Kwc_Abstract::getSetting($c, 'menuConfig')) {
                 $menuConfigs[] = Kwf_Component_Abstract_MenuConfig_Abstract::getInstance($c);
             }
         }

@@ -59,8 +59,12 @@ abstract class Kwf_Update_Action_Rrd_Abstract extends Kwf_Update_Action_Abstract
         file_put_contents($file, $c);
         $this->_systemCheckRet("rrdtool restore $file {$this->file}.new");
         if ($this->backup) {
-            $backupDir = '../backup/';
-            if (!file_exists($backupDir)) mkdir($backupDir);
+            if (is_dir('backup/')) {
+                $backupDir = 'backup/';
+            } else {
+                $backupDir = '../backup/';
+                if (!file_exists($backupDir)) mkdir($backupDir);
+            }
             copy($this->file, $backupDir.$this->file.'-update-'.date('Y-m-d_H:i:s_').rand(1000,9999));
         }
         rename($this->file.'.new', $this->file);

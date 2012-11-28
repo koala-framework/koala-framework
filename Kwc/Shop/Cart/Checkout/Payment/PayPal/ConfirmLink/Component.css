@@ -1,1 +1,11 @@
 .$cssClass input { width: auto; }
+
+.cssClass .process {
+    background-image: url(/assets/kwf/Kwc/Form/saving.gif);
+    width: 30px;
+    height: 16px;
+    visibility: hidden;
+    margin-top: -36px;
+    margin-bottom: 16px;
+    margin-left: 36px;
+}

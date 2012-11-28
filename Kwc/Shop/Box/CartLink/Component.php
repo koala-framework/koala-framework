@@ -20,7 +20,10 @@ class Kwc_Shop_Box_CartLink_Component extends Kwc_Abstract
         $ret['links'] = $this->_getLinks();
 
         $ret['hasContent'] = $this->hasContent();
-
+        
+        $ret['totalAmount'] = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
+            ->getCartOrder()->getTotalAmount();
+        
         return $ret;
     }
 

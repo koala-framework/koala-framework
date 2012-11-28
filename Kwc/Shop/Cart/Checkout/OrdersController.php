@@ -54,10 +54,11 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
         $paymentsFilterData = array();
         $payments = array();
         foreach ($cc as $k=>$c) {
-            $payments[$k] = Kwc_Abstract::getSetting($c, 'componentName');
+            $payments[$k] = Kwf_Trl::getInstance()->trlStaticExecute(
+                Kwc_Abstract::getSetting($c, 'componentName')
+            );
             $paymentsFilterData[] = array($k, $payments[$k]);
         }
-
         $this->_filters['text'] = true;
         if (count($payments) > 1) {
             $this->_filters['payment'] = array(

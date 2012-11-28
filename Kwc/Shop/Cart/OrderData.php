@@ -102,7 +102,7 @@ class Kwc_Shop_Cart_OrderData
                 'amount' => round($subTotal/$vat, 2)
             );
             $ret[] = array(
-                'text' => trlKwf('+'.(($vat-1 )*100).'% VAT').':',
+                'text' => trlKwf('+{0}% VAT', ($vat-1 )*100).':',
                 'amount' => round($subTotal - $subTotal/$vat, 2)
             );
         }
@@ -117,7 +117,7 @@ class Kwc_Shop_Cart_OrderData
             );
             if ($shipping) {
                 $ret[] = array(
-                    'text' => trlKwf('+'.(($vat-1 )*100).'% VAT').':',
+                    'text' => trlKwf('+{0}% VAT', ($vat-1 )*100).':',
                     'amount' => round($shipping - $shipping/$vat, 2)
                 );
             }
