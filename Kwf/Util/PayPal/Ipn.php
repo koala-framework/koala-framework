@@ -35,10 +35,12 @@ class Kwf_Util_PayPal_Ipn
             } else {
                 $domain = 'www.paypal.com';
             }
-            $header = "POST /cgi-bin/webscr HTTP/1.0\r\n";
-            $header .= "Host: $domain\r\n";
+            // post back to PayPal system to validate
+            $header .= "POST /cgi-bin/webscr HTTP/1.1\r\n";
             $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-            $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
+            $header .= "Host: $domain\r\n";
+            $header .= "Content-Length: " . strlen($req) . "\r\n";
+            $header .= "Connection: close\r\n\r\n";
             $fp = fsockopen ('ssl://' . $domain, 443, $errno, $errstr, 30);
 
             if (!$fp) {
@@ -54,7 +56,7 @@ class Kwf_Util_PayPal_Ipn
             $res = 'VERIFIED';
         }
 
-        if (strcmp($res, "VERIFIED") == 0) {
+        if (stripos($res, "VERIFIED") !== false) {
             // TODO:
             // Check the payment_status is Completed
             // Check that txn_id has not been previously processed
