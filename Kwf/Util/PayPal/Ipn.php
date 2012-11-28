@@ -36,7 +36,7 @@ class Kwf_Util_PayPal_Ipn
                 $domain = 'www.paypal.com';
             }
             // post back to PayPal system to validate
-            $header .= "POST /cgi-bin/webscr HTTP/1.1\r\n";
+            $header  = "POST /cgi-bin/webscr HTTP/1.1\r\n";
             $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
             $header .= "Host: $domain\r\n";
             $header .= "Content-Length: " . strlen($req) . "\r\n";
