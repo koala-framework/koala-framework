@@ -12,6 +12,11 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Shop_Cart_Checkout_Payment_PayPal_Ipn_Component'
         );
+        $ret['generators']['cancel'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Shop_Cart_Checkout_Payment_PayPal_Cancel_Component',
+            'name' => trlKwf('Cancel')
+        );
 
         $ret['business'] = ''; // deprecated, use paypalId in config instead
         return $ret;

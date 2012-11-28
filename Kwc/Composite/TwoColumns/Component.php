@@ -31,6 +31,4 @@ class Kwc_Composite_TwoColumns_Component extends Kwc_Abstract_Composite_Componen
         $ret = $ret / 2;
         return $ret;
     }
-
-    //TODO: cache meta für breite geändert
 }

@@ -4952,11 +4952,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>%value%' že obstaja.</sl>
 </text>
 <text>
-<id>1031</id>
-<en>Programming</en>
-<de>Programmierung</de>
-</text>
-<text>
 <en>Imprint</en>
 <de>Impressum</de>
 <id>1032</id>
@@ -8912,5 +8907,40 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>WARNUNG: ungetaggt</de>
 <id>1799</id>
 </text>
+<text>
+<en>This field should only contain numbers</en>
+<id>1780</id>
+</text>
+<text>
+<en>Please check your details</en>
+<de>Bitte überprüfen Sie Ihre Details</de>
+<id>1781</id>
+</text>
+<text>
+<en>Automatically sent e-mail</en>
+<id>1782</id>
+</text>
+<text>
+<en>E-Mail CC</en>
+<id>1783</id>
+</text>
+<text>
+<en>Original  Name</en>
+<id>1784</id>
+</text>
+<text>
+<en>Adopt</en>
+<id>1785</id>
+</text>
+<text>
+<en>Video</en>
+<id>1786</id>
+</text>
+<text>
+<en>+{0}% VAT</en>
+<de>+{0}% MWSt</de>
+<id>1787</id>
+</text>
 </trl>
+
 

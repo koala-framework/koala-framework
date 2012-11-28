@@ -4,6 +4,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Checkout/Payment/PayPal/ConfirmLink/Component.js';
         $ret['viewCache'] = false;
         return $ret;
     }
@@ -12,6 +13,14 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
     {
         $ret = parent::getTemplateVars();
         $ret['paypalButton'] = $this->_getPaypalButton();
+        $ret['options'] = array(
+            'controllerUrl' =>
+                Kwc_Admin::getInstance(get_class($this))->getControllerUrl() .
+                '/json-confirm-order',
+            'params' => array(
+                'paymentComponentId' => $this->getData()->parent->componentId
+            )
+        );
         return $ret;
     }
 
@@ -23,6 +32,10 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
         if (!$paypalId) {
             $paypalId = Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'business');
         }
+
+        $custom = Kwf_Util_PayPal_Ipn_LogModel::getEncodedCallback(
+            $this->getData()->parent->componentId, array('orderId' => $order->id)
+        );
 
         $params = array(
             'charset' => 'utf-8',
@@ -37,19 +50,17 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
             'no_note' => '1',
             'no_shipping' => '1',
             'rm' => '1',
-            'return' => $this->getData()->parent->getChildComponent('_confirm')->getAbsoluteUrl(),
-            'cancel_return' => $this->getData()->parent->parent->parent->getAbsoluteUrl(),
-            'notify_url' => $this->getData()->parent->getChildComponent('_ipn')->getAbsoluteUrl(),
+            'return' => $this->getData()->parent->getChildComponent('_confirm')->getAbsoluteUrl() .
+                '?custom=' . urlencode($custom),
+            'cancel_return' => $this->getData()->parent->getChildComponent('_cancel')->getAbsoluteUrl(),
+            'notify_url' => str_replace('.vivid/', '.fb-dev.vivid-planet.com/',
+                $this->getData()->parent->getChildComponent('_ipn')->getAbsoluteUrl()),
             'bn' => 'PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted',
-            'custom' => Kwf_Util_PayPal_Ipn_LogModel::getEncodedCallback(
-                            $this->getData()->parent->componentId,
-                            array(
-                                'orderId' => $order->id
-                            )),
+            'custom' => $custom,
         );
 
         $paypalDomain = Kwf_Registry::get('config')->paypalDomain;
-        $ret = "<form action=\"https://$paypalDomain/cgi-bin/webscr\" method=\"post\">\n";
+        $ret = "<form id=\"paypalButton\" action=\"https://$paypalDomain/cgi-bin/webscr\" method=\"post\">\n";
         foreach ($params as $k=>$i) {
             $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".htmlspecialchars($i)."\">\n";
         }
