@@ -1,8 +1,8 @@
 <?php
 class Kwf_Acl_Resource_Component_Structure extends Zend_Acl_Resource
 {
-    public function __construct($resourceId)
+    public function __construct($componentClass)
     {
-        $this->_resourceId = (string) 'kwc_structure_' . strtolower($resourceId);
+        parent::__construct('kwc_structure_' . $componentClass);
     }
 }
