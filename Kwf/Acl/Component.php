@@ -25,6 +25,14 @@ class Kwf_Acl_Component extends Kwf_Acl
 
         $this->add(new Zend_Acl_Resource('kwf_component_root')); //Komponenten können hier resourcen anhängen
 
+        $this->add(new Zend_Acl_Resource('kwc_structure')); // Create Structure Resource for all classes
+        foreach(Kwc_Abstract::getComponentClasses() as $class) {
+            $this->add(new Kwf_Acl_Resource_Component_Structure($class), 'kwc_structure');
+        }
+
+        $this->allow('admin', 'kwc_structure');
+        $this->allow('superuser', 'kwc_structure');
+
         $this->allow(null, 'kwf_component_web');
         $this->allow(null, 'kwf_component_media');
         $this->allow(null, 'kwf_component_index');
