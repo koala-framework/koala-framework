@@ -32,6 +32,7 @@ Kwf.Form.HtmlEditor.BreadCrumbs = Ext.extend(Ext.util.Observable, {
         var html = [];
         this.getItems().each(function(el) {
             var i = el.tagName.toLowerCase();
+            if (i == 'br') return;
             if (el.className && el.tagName.toLowerCase() != 'body') {
                 i += '.' + el.className;
             }
