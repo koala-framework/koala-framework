@@ -15,10 +15,7 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
         if ($this->getAllowDecimals() === false) {
             $this->addValidator(new Vps_Validate_Digits());
         } else {
-            $l = null;
-            if (trlcVps('locale', 'C') != 'C') {
-                $l = Zend_Locale::findLocale(trlcVps('locale', 'C'));
-            }
+            $l = Zend_Locale::findLocale(trlVps('en_US'));
             $this->addValidator(new Zend_Validate_Float($l));
         }
         if ($this->getMaxValue()) {
