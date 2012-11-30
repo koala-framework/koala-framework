@@ -737,10 +737,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $timeFrom = strtotime($row->$f);
             $timeTo = $expr->getDate()->getTimestamp();
             $ret = (date('Y', $timeTo) - date('Y', $timeFrom))
-                - intval(
-                    (date('j', $timeTo) < date('j', $timeFrom)) //day of month
-                    && (date('n', $timeTo) <= date('n', $timeFrom)) //month
-                );
+                - intval((date('md', $timeTo) < date('md', $timeFrom)));
             return $ret;
         } else {
             throw new Kwf_Exception_NotYetImplemented(
