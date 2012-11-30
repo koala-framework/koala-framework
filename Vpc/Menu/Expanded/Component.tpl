@@ -6,7 +6,7 @@
         <ul class="menu">
             <? foreach ($this->menu as $m) { ?>
                 <li class="<?=$m['class'];?>">
-                    <? if (is_instance_of($m['data']->componentClass, 'Vpc_Basic_LinkTag_FirstChildPage_Component')) { ?>
+                    <? if (is_instance_of($m['data'], 'Vpc_Basic_LinkTag_FirstChildPage_Data')) { ?>
                         <p><?=$m['text'];?></p>
                     <? } else { ?>
                         <?=$this->componentLink($m['data']);?>
