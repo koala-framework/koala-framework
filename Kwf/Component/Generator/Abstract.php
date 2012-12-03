@@ -16,6 +16,8 @@ abstract class Kwf_Component_Generator_Abstract
     private static $instances = array();
     private static $_cachedGeneratorKeys = array();
 
+    protected $_addUrlPart = false;
+
     protected $_eventsClass;
 
     //public static $objectsCount;
@@ -584,6 +586,15 @@ abstract class Kwf_Component_Generator_Abstract
             return $this->_settings['component'][$key];
         }
         return null;
+    }
+
+    public function getAddUrlPart()
+    {
+        if (isset($this->_settings['addUrlPart'])) {
+            return $this->_settings['addUrlPart'];
+        } else {
+            return $this->_addUrlPart;
+        }
     }
 
     abstract public function getChildData($parentData, $select = array());

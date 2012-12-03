@@ -97,6 +97,12 @@ class Kwf_Component_Data
         $filename = '';
         $hadStaticPage = false;
         do {
+
+            if ($hadStaticPage && isset($data->generator) &&
+                !$data->isPseudoPage && $data->generator->getAddUrlPart()
+            ) {
+                $filename = $data->id.($filename ? ':' : '').$filename;
+            }
             if ($data->isPseudoPage || $data->componentId == 'root') {
                 if ($filename && Kwc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
                     $filename = call_user_func(array($data->componentClass, 'getShortcutUrl'), $data->componentClass, $data).($filename ? '/' : '').$filename;
@@ -108,10 +114,6 @@ class Kwf_Component_Data
                     $hadStaticPage = true;
                 } else {
                     $hadStaticPage = false;
-                }
-            } else {
-                if ($hadStaticPage && $data->generator->getGeneratorFlag('table')) {
-                    $filename = $data->id.($filename ? ':' : '').$filename;
                 }
             }
         } while ($data = $data->parent);

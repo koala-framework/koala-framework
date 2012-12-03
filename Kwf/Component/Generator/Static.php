@@ -5,6 +5,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
     protected $_idSeparator = '-';
     protected $_eventsClass = 'Kwf_Component_Generator_Events_Static';
     private $_hasHome = false;
+    protected $_addUrlPart = true;
 
     protected function _init()
     {

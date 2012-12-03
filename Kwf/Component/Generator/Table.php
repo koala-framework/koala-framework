@@ -7,6 +7,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
     protected $_idColumn = 'id';
     protected $_hasNumericIds = true;
     protected $_eventsClass = 'Kwf_Component_Generator_Events_Table';
+    protected $_addUrlPart = true;
 
     final public function getFormattedSelect($parentData)
     {

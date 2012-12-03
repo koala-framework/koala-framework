@@ -11,7 +11,8 @@ class Kwf_Component_Generator_StaticPageUnderTable_Root extends Kwf_Component_No
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwf_Component_Generator_StaticPageUnderTable_Page1_Component',
             'name' => 'page1',
-            'showInMenu' => true
+            'showInMenu' => true,
+            'addUrlPart' => false
         );
         return $ret;
     }
