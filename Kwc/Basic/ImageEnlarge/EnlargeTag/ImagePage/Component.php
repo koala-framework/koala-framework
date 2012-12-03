@@ -7,6 +7,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender';
         $ret['assets']['dep'][] = 'KwfLightbox';
         $ret['cssClass'] = 'webStandard';
+        $ret['showNextPreviousLinks'] = true;
         return $ret;
     }
 
@@ -41,18 +42,21 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         }
 
         //TODO optimize in generator using something like whereNextSiblingOf / wherePreviousSiblingOf
-        $allImages = $parent->getChildComponents(array('componentClass'=>$imageEnlarge->componentClass));
-        $previous = null;
-        foreach ($allImages as $c) {
-            if ($c === $imageEnlarge) {
-                $ret['previous'] = self::_getImagePage($previous, $getChildren);
+        if ($this->_getSetting('showNextPreviousLinks')) {
+            $allImages = $parent->getChildComponents(array('componentClass'=>$imageEnlarge->componentClass));
+            $previous = null;
+            foreach ($allImages as $c) {
+                if ($c === $imageEnlarge) {
+                    $ret['previous'] = self::_getImagePage($previous, $getChildren);
+                }
+                if ($previous === $imageEnlarge) {
+                    $ret['next'] = self::_getImagePage($c, $getChildren);
+                    break;
+                }
+                $previous = $c;
             }
-            if ($previous === $imageEnlarge) {
-                $ret['next'] = self::_getImagePage($c, $getChildren);
-                break;
-            }
-            $previous = $c;
         }
+
         return $ret;
     }
 
