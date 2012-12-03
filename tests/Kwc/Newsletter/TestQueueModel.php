@@ -4,7 +4,7 @@ class Kwc_Newsletter_TestQueueModel extends Kwc_Newsletter_QueueModel
     public function __construct($config = array())
     {
         $config['proxyModel'] = new Kwf_Model_FnF(array(
-            'columns' => array('id', 'newsletter_id', 'recipient_model', 'recipient_id', 'status'),
+            'columns' => array('id', 'newsletter_id', 'recipient_model', 'recipient_id', 'searchtext', 'status'),
             'primaryKey' => 'id',
             'data'=> array(
                 array('id' => 1, 'newsletter_id'=>2, 'recipient_model'=>'Kwc_Newsletter_TestUserModel', 'recipient_id' => 1, 'status' => 'queued'),

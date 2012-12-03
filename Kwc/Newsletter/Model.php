@@ -5,6 +5,7 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
     protected $_rowClass = 'Kwc_Newsletter_Row';
     protected $_dependentModels = array(
         'Queue' => 'Kwc_Newsletter_QueueModel',
+        'QueueLog' => 'Kwc_Newsletter_QueueLogModel',
         'Log' => 'Kwc_Newsletter_LogModel',
         'Mail' => 'Kwc_Mail_Model'
     );
