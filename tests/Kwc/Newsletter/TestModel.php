@@ -3,6 +3,7 @@ class Kwc_Newsletter_TestModel extends Kwc_Newsletter_Model
 {
     protected $_dependentModels = array(
         'Queue' => 'Kwc_Newsletter_TestQueueModel',
+        'QueueLog' => 'Kwf_Model_FnF',
         'Log' => 'Kwc_Newsletter_TestLogModel',
         'Mail' => 'Kwc_Mail_Model'
     );

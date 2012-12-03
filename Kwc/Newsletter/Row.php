@@ -43,7 +43,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         }
 
         // In Schleife senden
-        $logModel = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_QueueLogModel');
+        $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
         $count = 0; $countErrors = 0; $countNoUser = 0;
         $start = microtime(true);
         do {
@@ -89,7 +89,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                     $this->save();
                 }
 
-                $logModel->createRow(array(
+                $queueLogModel->createRow(array(
                     'newsletter_id' => $row->newsletter_id,
                     'recipient_model' => $row->recipient_model,
                     'recipient_id' => $row->recipient_id,
