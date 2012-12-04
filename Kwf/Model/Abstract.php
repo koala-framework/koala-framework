@@ -740,6 +740,22 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $ret = (date('Y', $timeTo) - date('Y', $timeFrom))
                 - intval((date('md', $timeTo) < date('md', $timeFrom)));
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Divide) {
+            $ret = null;
+            foreach ($expr->getExpressions() as $e) {
+                $value = $this->getExprValue($row, $e);
+                if ($ret == null) {
+                    $ret = $value;
+                } else {
+                    if ($value == 0) {
+                        //throw new Kwf_Exception('division by 0 not possible, check you expressions');
+                    } else {
+                        $ret = $ret / $value;
+                    }
+                }
+            }
+            if (!$ret) $ret = 0;
+            return $ret;
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"

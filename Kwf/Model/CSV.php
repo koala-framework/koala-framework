@@ -389,6 +389,21 @@ class Kwf_Model_CSV extends Kwf_Model_Abstract
             }
             if ($expr->lowerNullAllowed && $ret < 0) $ret = 0;
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Divide) {
+            foreach ($expr->getExpressions() as $e) {
+                $value = $this->_checkExpressions($e, $data);
+                if ($ret == null) {
+                    $ret = $value;
+                } else {
+                    if ($value == 0) {
+                        //throw new Kwf_Exception('division by 0 not possible, check you expressions');
+                    } else {
+                        $ret = $ret / $value;
+                    }
+                }
+            }
+            if (!$ret) $ret = 0;
+            return $ret;
         } else {
             return (bool)$this->getExprValue($data, $expr);
         }
