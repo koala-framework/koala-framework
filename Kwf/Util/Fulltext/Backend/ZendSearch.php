@@ -52,9 +52,9 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
     {
         $index = Kwf_Util_Fulltext_Lucene::getInstance($subroot);
 
-        $query = Zend_Search_Lucene_Search_QueryParser::parse($queryStr);
+        $query = Zend_Search_Lucene_Search_QueryParser::parse($query);
 
-        $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryStr);
+        $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($query);
         $query = new Zend_Search_Lucene_Search_Query_Boolean();
         $query->addSubquery($userQuery, true /* required */);
 
