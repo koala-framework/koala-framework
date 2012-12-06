@@ -16,27 +16,27 @@
     height: 130px;
     position: absolute;
     left: 50%;
-    margin-left: -66px;
+    margin-left: -19px;
     top: 50%;
-    margin-top: -65px;
+    margin-top: -19px;
 }
 
 .cssClass a .outerHoverIcon {
-    background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/blackPx.png) repeat 0 0;
+    /* background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/blackPx.png) repeat 0 0; */
     width: 100%;
     height: 100%;
     position: absolute;
     display: block;
-    box-shadow: inset 0 0 10px 5px #050505;
-    -moz-box-shadow: inset 0 0 10px 5px #050505;
+    box-shadow: inset 0 0 16px 1px #eee;
+/*     -moz-box-shadow: inset 0 0 10px 5px #050505;
     -webkit-box-shadow: inset 0 0 14px 5px #050505;
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=5,MakeShadow=true,ShadowOpacity=0.80);
-    -ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=5,MakeShadow=true,ShadowOpacity=0.80)";
+    -ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=5,MakeShadow=true,ShadowOpacity=0.80)"; */
     zoom: 1;
     left: 0;
     top: 0;
     opacity: 0;
-    -moz-transition-property: opacity;
+     -moz-transition-property: opacity;
     -moz-transition-duration: 0.25s;
     -moz-transition-timing-function: ease-in-out;
     -webkit-transition-property: opacity;
