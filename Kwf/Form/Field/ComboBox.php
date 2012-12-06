@@ -164,10 +164,10 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
                     } else {
                         if (array_key_exists('id', $i)) $id = $i['id'];
                         elseif (array_key_exists(0, $i)) $id = $i[0];
-                        else throw new Kwf_Exception("id not found");
+                        else throw new Kwf_Exception("array key 'id' not found");//easier to understand
                         if (array_key_exists('value', $i)) $value = $i['value'];
                         else if (array_key_exists(1, $i)) $value = $i[1];
-                        else throw new Kwf_Exception("value not found");
+                        else throw new Kwf_Exception("array key 'value' not found");//easier to understand
                         $d = array($id, $value);
                     }
 

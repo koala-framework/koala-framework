@@ -13,7 +13,7 @@ class Kwc_Directories_TopChoose_Form extends Kwc_Abstract_Form
         $values = array();
         foreach ($directories as $directory) {
             $title = $directory->getTitle();
-            $name = Kwc_Abstract::getSetting($directory->componentClass, 'componentName');
+            $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($directory->componentClass, 'componentName'));
             if (strpos($name, '.') !== false) $name = substr(strrchr($name, '.'), 1);
             if ($title != $name) $title .= ' - ' . $name;
             $values[$directory->dbId] = $title;

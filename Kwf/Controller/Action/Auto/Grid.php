@@ -325,7 +325,9 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         return $this->_model->countRows($select);
     }
 
-
+    /**
+    * This function is called when CONTROLLER_URL/json-data is called.
+    */
     public function jsonDataAction()
     {
         $limit = null; $start = null; $order = 0;

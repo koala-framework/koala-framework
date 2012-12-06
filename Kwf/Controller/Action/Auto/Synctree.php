@@ -1,4 +1,12 @@
 <?php
+/**
+ * This controller is used to display a tree structure.
+ *
+ * The sync-prefix means that this controller loads all data at once, so children are always loaded.
+ * 
+ *
+ * @package 
+ */
 abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action_Auto_Abstract
 {
     const ADD_LAST = 0;
@@ -8,6 +16,9 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     protected $_table;
     protected $_tableName;
     protected $_model;
+    /**
+    * The model has needs to be a subclass of Kwf_Model_Tree
+    */
     protected $_modelName;
     protected $_filters;
 
@@ -21,6 +32,11 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     );
     protected $_textField = 'name';
     protected $_parentField = 'parent_id';
+    /**
+    * Change this array to your needs.
+    * remove an entry to remove the button.
+    * false to disable the button.
+    */
     protected $_buttons = array(
         'add'       => true,
         'edit'      => false,
@@ -31,13 +47,27 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     protected $_rootText = 'Root';
     protected $_rootVisible = true;
     protected $_hasPosition; // Gibt es ein pos-Feld
+    /**
+    * Use this field to set a controller to add/edit a single entry of this tree
+    * it should look like this:
+    * protected $_editDialog = array(
+    *    'controllerUrl' => 'url',
+    * )
+    * The url should match the entry in Acl.php
+    */
     protected $_editDialog;
     private $_openedNodes = array();
     protected $_addPosition = self::ADD_FIRST;
+    /**
+    * Set this field to true to enable drag and drop for tree-items
+    */
     protected $_enableDD;
     protected $_defaultOrder;
     protected $_rootParentValue = null;
 
+    /**
+    * This method is called when the url is requested without params and sub-paths
+    */
     public function indexAction()
     {
         $this->view->controllerUrl = $this->getRequest()->getPathInfo();
@@ -335,6 +365,10 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
         }
     }
 
+    /**
+    * override this method to handle the output of this view. Just return the
+    * select statement which serves your needs.
+    */
     protected function _getSelect()
     {
         $select = $this->_model->select();

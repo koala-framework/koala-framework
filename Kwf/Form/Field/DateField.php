@@ -1,6 +1,9 @@
 <?php
 /**
  * Text field where only a date input is valid. Datepicker is shown in ExtJS and Frontend
+ * If you want to use this class please add
+ *    Admin.dep[] = ExtFormDateField
+ * to your "dependencies.ini
  *
  * @package Form
  */

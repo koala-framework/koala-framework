@@ -1,5 +1,7 @@
 <?php
 /**
+ * this model is used to handle a tree-structure.
+ *
  * @package Model
  */
 class Kwf_Model_Tree extends Kwf_Model_Db_Proxy
