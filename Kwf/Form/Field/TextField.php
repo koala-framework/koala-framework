@@ -59,7 +59,7 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         $ret['name'] = "$name$fieldNamePostfix";
         $ret['value'] = $value;
         if ($style) $ret['style'] = trim($style);
-        if ($cls) $ret['cls'] = trim($cls);
+        if ($cls) $ret['class'] = trim($cls);
         if ($this->getMaxLength()) $ret['maxlength'] = $this->getMaxLength();
 
         if ($this->getVtype() === 'email') {
