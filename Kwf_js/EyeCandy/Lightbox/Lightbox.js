@@ -218,13 +218,15 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     initialize: function()
     {
-        var closeButton = this.innerLightboxEl.child('.closeButton');
-        if (closeButton) {
-            closeButton.on('click', function(ev) {
-                this.closeAndPushState();
-                ev.stopEvent();
-            }, this);
-        }
+        var closeButtons = this.innerLightboxEl.query('.closeButton');
+        closeButtons.each(function(domEl) {
+            if (domEl) {
+                Ext.get(domEl).on('click', function(ev) {
+                    this.closeAndPushState();
+                    ev.stopEvent();
+                }, this);
+            }
+        }, this);
     },
     preloadLinks: function() {
         this.innerLightboxEl.query('a.preload').each(function(el) {
