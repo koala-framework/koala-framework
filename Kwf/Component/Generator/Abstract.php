@@ -67,6 +67,11 @@ abstract class Kwf_Component_Generator_Abstract
         foreach ($this->_settings['component'] as $k=>$i) {
             if (!$i) unset($this->_settings['component'][$k]);
         }
+
+        if (array_key_exists('addUrlPart', $this->_settings)) {
+            $this->_addUrlPart = (bool)$this->_settings['addUrlPart'];
+            unset($this->_settings['addUrlPart']);
+        }
     }
 
     protected function _getModel()
@@ -590,11 +595,7 @@ abstract class Kwf_Component_Generator_Abstract
 
     public function getAddUrlPart()
     {
-        if (isset($this->_settings['addUrlPart'])) {
-            return $this->_settings['addUrlPart'];
-        } else {
-            return $this->_addUrlPart;
-        }
+        return $this->_addUrlPart;
     }
 
     abstract public function getChildData($parentData, $select = array());
