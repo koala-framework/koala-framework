@@ -58,7 +58,7 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
         }
     }
 
-    public function _beforeSave($row)
+    protected function _beforeSave($row)
     {
         if ($this->_getParam('id') == 0 && $this->_getParam('componentId')) {
             if (isset($row->component_id)) $row->component_id = $this->_getParam('componentId');
