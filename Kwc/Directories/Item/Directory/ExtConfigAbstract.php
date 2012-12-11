@@ -12,7 +12,10 @@ abstract class Kwc_Directories_Item_Directory_ExtConfigAbstract extends Kwf_Comp
 
         $componentPlugins = array();
         foreach ($this->_getAdmin()->getPluginAdmins() as $a) {
-            $componentPlugins[] = $a->getPluginExtConfig();
+            $plugin = $a->getPluginExtConfig();
+            if ($plugin) {
+                $componentPlugins[] = $plugin;
+            }
         }
 
         $config = $this->_getStandardConfig('kwc.directories.item.directory');
