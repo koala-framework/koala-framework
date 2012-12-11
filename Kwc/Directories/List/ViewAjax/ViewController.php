@@ -68,11 +68,11 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
             if (!is_instance_of($filter->componentClass, 'Kwc_Directories_List_Component')) {
                 $filter = $filter->getChildComponent('-list'); //TODO don't hardcode that here
             }
-            $view = $filter->getChildComponent('-view'); //TODO don't hardcode that here
+            $viewData = $filter->getChildComponent('-view'); //TODO don't hardcode that here
         } else {
-            $view = $this->_component;
+            $viewData = $this->_component;
         }
-        $view = $view->getComponent();
+        $view = $viewData->getComponent();
         if ($view->hasSearchForm()) {
             $sf = $view->getSearchForm();
             $params = $this->getRequest()->getParams();
@@ -81,6 +81,14 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
             $sf->getComponent()->processInput($params); //TODO don't do processInput here in _getSelect()
         }
         $ret = $view->getSelect();
+
+        $itemDirectory = $viewData->parent->getComponent()->getItemDirectory();
+        if (is_string($itemDirectory)) {
+            throw new Kwf_Exception_NotYetImplemented();
+        } else {
+            $ret = $itemDirectory->getGenerator('detail')
+                ->formatSelect($itemDirectory, $ret);
+        }
         return $ret;
     }
 

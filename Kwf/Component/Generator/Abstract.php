@@ -577,6 +577,16 @@ abstract class Kwf_Component_Generator_Abstract
         return $select;
     }
 
+    /**
+     * Used by Kwc_Directories_List_ViewAjax_ViewController for format the select properly
+     *
+     * @internal
+     */
+    final public function formatSelect($parentData, $select)
+    {
+        return $this->_formatSelect($parentData, $select);
+    }
+
     public function getIdSeparator()
     {
         return $this->_idSeparator;
