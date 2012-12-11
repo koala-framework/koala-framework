@@ -108,9 +108,9 @@ class Kwf_Grid_Column implements Kwf_Collection_Item_Interface
         return $ret;
     }
 
-    public function load($row, $role)
+    public function load($row, $role, $info)
     {
-        return $this->getData()->load($row);
+        return $this->getData()->load($row, $info);
     }
 
     public function getName() {

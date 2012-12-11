@@ -362,6 +362,16 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $rowSet = $this->_fetchData($order, $limit, $start);
         if (!is_null($rowSet)) {
+            if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date') {
+                //nothing to do, we don't know the total
+            } else if ($this->_paging) {
+                $this->view->total = $this->_fetchCount();
+            } else {
+                $this->view->total = sizeof($rowSet);
+            }
+
+            $number = 0;
+            if ($start) $number = $start;
             $rows = array();
             foreach ($rowSet as $row) {
                 $r = array();
@@ -374,7 +384,10 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                 foreach ($this->_columns as $column) {
                     if ($column instanceof Kwf_Grid_Column_RowNumberer) continue;
                     if ($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_GRID) {
-                        $data = $column->load($row, Kwf_Grid_Column::ROLE_DISPLAY);
+                        $data = $column->load($row, Kwf_Grid_Column::ROLE_DISPLAY, array(
+                                                    'number' => $number,
+                                                    'total' => $this->view->total,
+                                                ));
                         $r[$column->getDataIndex()] = $data;
                     }
                 }
@@ -382,16 +395,10 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                     $r[$primaryKey] = $row->$primaryKey;
                 }
                 $rows[] = $r;
+                $number++;
             }
 
             $this->view->rows = $rows;
-            if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date') {
-                //nix zu tun
-            } else if ($this->_paging) {
-                $this->view->total = $this->_fetchCount();
-            } else {
-                $this->view->total = sizeof($rows);
-            }
         } else {
             $this->view->total = 0;
             $this->view->rows = array();

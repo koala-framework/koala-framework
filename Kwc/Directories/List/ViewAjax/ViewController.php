@@ -8,7 +8,7 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
         parent::__construct();
     }
 
-    public function load($row)
+    public function load($row, $info)
     {
         $config = array(
             'id' => $row->id,
@@ -16,7 +16,10 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
             'params' => array(
                 'componentId' => $this->_componentId,
             ),
-            'info' => array()
+            'info' => array(
+                'total' => $info['total'],
+                'number' => $info['number'],
+            )
         );
         $renderer = new Kwf_Component_Renderer();
         $renderer->setEnableCache(null);
