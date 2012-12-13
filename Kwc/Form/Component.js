@@ -16,6 +16,8 @@ Kwc.Form.findForm = function(el) {
     }
     return null;
 };
+Kwc.Form.formsByComponentId = {};
+
 Kwc.Form.Component = function(form)
 {
     this.addEvents('submitSuccess', 'fieldChange');
@@ -25,6 +27,8 @@ Kwc.Form.Component = function(form)
     config = Ext.decode(config.value);
     if (!config) return;
     this.config = config;
+
+    Kwc.Form.formsByComponentId[this.config.componentId] = this;
 
     this.fields = [];
     form.select('.kwfField', true).each(function(fieldEl) {
@@ -103,6 +107,10 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         this.fields.each(function(f) {
             f.clearValue();
         }, this);
+    },
+    hideSubmit: function() {
+        this.el.child('.submitWrapper').enableDisplayMode();
+        this.el.child('.submitWrapper').hide();
     },
     onSubmit: function(e) {
         if (this.dontUseAjaxRequest) return;

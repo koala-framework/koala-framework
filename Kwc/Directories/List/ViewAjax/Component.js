@@ -34,7 +34,6 @@ Kwf.onContentReady(function(el) {
 Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
     config.renderTo = el.down('.viewContainer');
     el.select('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
-    config.searchForm = el.down('.searchForm');
     Kwc.Directories.List.ViewAjax.instance = new Kwc.Directories.List.ViewAjax(config);
 }, this, {
     priority: 10 //call *after* initializing kwcForm to have access to searchForm
@@ -121,12 +120,10 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             }
         }, this);
 
-        if (this.searchForm) {
-            this.searchFormEl = this.searchForm;
-            this.searchFormEl.enableDisplayMode('block');
-            this.searchForm = Kwc.Form.findForm(this.searchForm);
+        if (this.searchFormComponentId) {
+            this.searchForm = Kwc.Form.formsByComponentId[this.searchFormComponentId];
 
-            this.searchForm.el.child('.submitWrapper').remove();
+            this.searchForm.hideSubmit();
             this.view.applyBaseParams(this.searchForm.getValues());
             this.searchForm.on('fieldChange', function(f) {
                 this.view.applyBaseParams(this.searchForm.getValues());
@@ -399,7 +396,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }
 
         this.hideDetail();
-        if (this.ownerCt.searchFormEl) this.ownerCt.searchFormEl.hide();
 
         this.kwfMainContent.hide();
         this.detailEl = this.el.createChild({
@@ -443,7 +439,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         this.hideDetail();
 
-        if (this.ownerCt.searchForm) this.ownerCt.searchFormEl.show();
         this.kwfMainContent.show();
 
         this.ownerCt.onMenuItemChanged();
