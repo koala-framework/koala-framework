@@ -252,4 +252,9 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
     {
         return $this->getProxyModel()->fetchColumnsByPrimaryId($columns, $id);
     }
+
+    public function afterInsert($row)
+    {
+        $this->getProxyModel()->afterInsert($row);
+    }
 }

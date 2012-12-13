@@ -66,4 +66,6 @@ class Kwf_Model_FnF extends Kwf_Model_Data_Abstract
             $this->$i = $v;
         }
     }
+
+    public function afterInsert($row) {}
 }
