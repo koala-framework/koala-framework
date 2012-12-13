@@ -10,8 +10,9 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
 
     public function load($row, $info)
     {
+        $primaryKeyValue = $row->{$row->getModel()->getPrimaryKey()};
         $config = array(
-            'id' => $row->id,
+            'id' => $primaryKeyValue,
             'class' => 'Kwf_Component_Partial_Id',
             'params' => array(
                 'componentId' => $this->_componentId,
@@ -25,7 +26,7 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
         $renderer->setEnableCache(null);
         $helper = new Kwf_Component_View_Helper_Partials();
         $helper->setRenderer($renderer);
-        $ret = $helper->singlePartial($this->_componentId, $config, $row->id);
+        $ret = $helper->singlePartial($this->_componentId, $config, $primaryKeyValue);
         return $renderer->render($ret);
 
     }
