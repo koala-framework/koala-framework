@@ -10,6 +10,7 @@
 <ro>Vizibil</ro>
 <sl>Vidno</sl>
 <es>Visible</es>
+<ru>Видимый</ru>
 </text>
 <text>
 <en>Error</en>
@@ -22,6 +23,7 @@
 <cz>Chyba</cz>
 <sl>Napaka</sl>
 <es>Error</es>
+<ru>Ошибка</ru>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
@@ -31,6 +33,7 @@
 <ro>A intervenit o eroare. Vă rugăm să încercaţi din nou mai târziu.</ro>
 <mk>Се појави грешка. Ве молиме пробајте подоцна.</mk>
 <sl>Prišlo je do napake. Poskusite ponovno kasneje.</sl>
+<ru>Произошла ошибка. Пожалуйста, повторите снова чуть позже.</ru>
 </text>
 <text>
 <en>Page not found</en>
@@ -40,6 +43,7 @@
 <ro>Pagina nu a fost gasită</ro>
 <mk>Страната не е пронајдена</mk>
 <sl>Strani ni bilo možno najti.</sl>
+<ru>Страница не найдена</ru>
 </text>
 <text>
 <en>Lost password?</en>
@@ -49,6 +53,7 @@
 <uk>Забули пароль?</uk>
 <mk>Ја заборавивте лозинката?</mk>
 <sl>Pozabljeno geslo</sl>
+<ru>Забыли пароль?</ru>
 </text>
 <text>
 <en>Login</en>
@@ -58,6 +63,7 @@
 <ro>Autentificare</ro>
 <mk>Логин</mk>
 <sl>Prijava</sl>
+<ru>Логин</ru>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -68,6 +74,7 @@
 <sl>Pozdravljeni, {0}!</sl>
 <es>Hola {0}!</es>
 <uk>Добрий день</uk>
+<ru>Добрый день {0}!</ru>
 </text>
 <text>
 <en>Your account at {0}
@@ -78,6 +85,8 @@ has just been created.</en>
 <uk>Ваш аккаунт створено</uk>
 <mk>Вашиот акаунт е креиран.</mk>
 <sl>Pravkar ste uspešno ustvarili svoj račun pri {0}.</sl>
+<ru>Ваш аккаунт на {0}
+только что был создан.</ru>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
@@ -87,6 +96,7 @@ has just been created.</en>
 <uk>Будь ласка, використовуйте це посилання, щоб потрапити на ваш аккаунт</uk>
 <mk>Ве молиме користете го следниот линк за да изберете лозинка и да се најавите</mk>
 <sl>Kliknite na to povezavo, da določite geslo in se prijavite.</sl>
+<ru>Пожалуйста, воспользуйтесь следующей ссылкой для выбора пароля и логина</ru>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
@@ -96,6 +106,7 @@ has just been created.</en>
 <uk>Це повідомлення було сформовано автоматично. Якщо Ви відповісте на цей лист, одержувача може не бути</uk>
 <mk>Овој e-mail е генериран автоматски. Ако одговорите на ова порака може да нема примач.</mk>
 <sl>To je avtomatsko generirano e-sporočilo. To sporočilo je bilo generirano avtomatsko, zato nanj ne odgovarjajte.</sl>
+<ru>Этот E-Mail был сгененрирован автоматически. Возможно, получателя не существует.</ru>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
@@ -105,6 +116,7 @@ has just been created.</en>
 <uk>Ваш аккаунт видалено</uk>
 <mk>Вашиот акаунт е избришан.</mk>
 <sl>Izbrisali ste svoj račun pri {0}.</sl>
+<ru>Ваш аккаунт на {0} был удален.</ru>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
@@ -114,6 +126,7 @@ has just been created.</en>
 <uk>Будь ласка, використайте це посилання, щоб обрати свій новий пароль</uk>
 <mk>Ве молиме користете го следниот линк за да внесете нова лозинка.</mk>
 <sl>Kliknite na naslednjo povezavo, da določite novo geslo.</sl>
+<ru>Пожалуйста, воспользуйтесь следующей ссылкой для установки нового пароля.</ru>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -125,6 +138,7 @@ has just been created.</en>
 <uk>Місце відправки:поштовий код, місто, вулиця</uk>
 <mk>Место на тргнување: Поштенски број, Место, Улица</mk>
 <sl>Kraj odhoda: Poštna številka, kraj, ulica</sl>
+<ru>Место вылета: почтовый код, Город, Улица</ru>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -135,6 +149,7 @@ has just been created.</en>
 <uk>Введене місце не було знайдено</uk>
 <mk>Внесенето место не може да се наоѓа!</mk>
 <sl>Vnesenega kraja ni bilo možno najti.</sl>
+<ru>Введенное место не найдено!</ru>
 </text>
 <text>
 <en>Show Route</en>
@@ -144,6 +159,7 @@ has just been created.</en>
 <ro>Arată ruta</ro>
 <uk>Показати маршрут</uk>
 <sl>Prikaz poti</sl>
+<ru>Показать маршрут</ru>
 </text>
 <text>
 <en>Suggestions</en>
@@ -153,6 +169,7 @@ has just been created.</en>
 <uk>Пропозиції</uk>
 <mk>Предлози</mk>
 <sl>Predlogi</sl>
+<ru>Предложения</ru>
 </text>
 <text>
 <en>Coordinates</en>
@@ -162,6 +179,7 @@ has just been created.</en>
 <uk>Координати</uk>
 <mk>Кординати</mk>
 <sl>Koordinate</sl>
+<ru>Координаты</ru>
 </text>
 <text>
 <en>Zoomlevel</en>
@@ -171,6 +189,7 @@ has just been created.</en>
 <uk>Ступінь збільшення</uk>
 <mk>Ниво на зголемување</mk>
 <sl>Stopnja povečave</sl>
+<ru>Уровень приближения</ru>
 </text>
 <text>
 <en>Width</en>
@@ -181,6 +200,7 @@ has just been created.</en>
 <mk>Ширина</mk>
 <sl>Širina</sl>
 <es>Ancho</es>
+<ru>Ширина</ru>
 </text>
 <text>
 <en>Height</en>
@@ -191,6 +211,7 @@ has just been created.</en>
 <mk>Висина</mk>
 <sl>Višina</sl>
 <es>Altura</es>
+<ru>Высота</ru>
 </text>
 <text>
 <en>Move + Zoom</en>
@@ -200,6 +221,7 @@ has just been created.</en>
 <uk>Перемістити та збільшити</uk>
 <mk>Премести + Зголеми</mk>
 <sl>Pomikanje + povečava</sl>
+<ru>Переместить + Увеличить</ru>
 </text>
 <text>
 <en>Move + Zoom (without zoombar)</en>
@@ -209,6 +231,7 @@ has just been created.</en>
 <uk>Перемістити та збільшити без шкали збільшення</uk>
 <mk>Премести + Зголеми (без барот зазголемување)</mk>
 <sl>Pomikanje + povečava (brez povečevalne skale)</sl>
+<ru>Переместить + Увеличить (без шкалы увеличения)</ru>
 </text>
 <text>
 <en>Scale</en>
@@ -218,6 +241,7 @@ has just been created.</en>
 <uk>Шкала</uk>
 <mk>Скала</mk>
 <sl>Skaliranje</sl>
+<ru>Масштаб</ru>
 </text>
 <text>
 <en>Satelitemap</en>
@@ -227,6 +251,7 @@ has just been created.</en>
 <uk>Супутникова карта</uk>
 <mk>Мапа на страната</mk>
 <sl>Satelitska karta</sl>
+<ru>Спутниковая карта</ru>
 </text>
 <text>
 <en>Overviewmap</en>
@@ -235,6 +260,7 @@ has just been created.</en>
 <ro>Overviewmap</ro>
 <uk>Крупномасштабна карта</uk>
 <sl>Pregledna karta</sl>
+<ru>Крупномасштабная карта</ru>
 </text>
 <text>
 <en>Worldview</en>
@@ -242,6 +268,7 @@ has just been created.</en>
 <id>45</id>
 <ro>Worldview</ro>
 <sl>Širši prikaz</sl>
+<ru>Глобальный вид</ru>
 </text>
 <text>
 <en>Detailview</en>
@@ -250,6 +277,7 @@ has just been created.</en>
 <ro>Imagine detaliata</ro>
 <uk>Детальний огляд</uk>
 <sl>Podrobni prikaz</sl>
+<ru>Детальный вид</ru>
 </text>
 <text>
 <en>Filename</en>
@@ -260,6 +288,7 @@ has just been created.</en>
 <mk>Име на фајлот</mk>
 <sl>Ime datoteke</sl>
 <es>Nombre de archivo</es>
+<ru>Имя файла</ru>
 </text>
 <text>
 <en>File</en>
@@ -270,6 +299,7 @@ has just been created.</en>
 <mk>Фајл</mk>
 <sl>Datoteka</sl>
 <es>Archivo</es>
+<ru>Файл</ru>
 </text>
 <text>
 <en>Content</en>
@@ -279,6 +309,7 @@ has just been created.</en>
 <uk>Зміст</uk>
 <mk>Содржина</mk>
 <sl>Vsebina</sl>
+<ru>Содержание</ru>
 </text>
 <text>
 <en>Image</en>
@@ -288,6 +319,7 @@ has just been created.</en>
 <mk>Слика</mk>
 <sl>Slika</sl>
 <es>Imagen</es>
+<ru>Изображение</ru>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -297,6 +329,7 @@ has just been created.</en>
 <mk>Зголеми ја сликата</mk>
 <sl>Povečaj sliko</sl>
 <es>Imagen extendida</es>
+<ru>Увеличить изображение</ru>
 </text>
 <text>
 <en>Comment</en>
@@ -306,6 +339,7 @@ has just been created.</en>
 <mk>Комент</mk>
 <sl>Komentar</sl>
 <es>Comentario</es>
+<ru>Коментарий</ru>
 </text>
 <text>
 <en>Size</en>
@@ -315,6 +349,7 @@ has just been created.</en>
 <mk>Големина</mk>
 <sl>Velikost</sl>
 <es>Tamaño</es>
+<ru>Размер</ru>
 </text>
 <text>
 <en>Preview</en>
@@ -323,6 +358,7 @@ has just been created.</en>
 <ro>Preview</ro>
 <mk>Преглед</mk>
 <sl>Predogled</sl>
+<ru>Предпросмотр</ru>
 </text>
 <text>
 <en>Text</en>
@@ -332,6 +368,7 @@ has just been created.</en>
 <mk>Текст</mk>
 <sl>Besedilo</sl>
 <es>Texto</es>
+<ru>Текст</ru>
 </text>
 <text>
 <en>Position of Image</en>
@@ -340,6 +377,7 @@ has just been created.</en>
 <ro>Poziţia imaginii</ro>
 <mk>Позиција на слика</mk>
 <sl>Položaj slike</sl>
+<ru>Позиция изображения</ru>
 </text>
 <text>
 <en>Left</en>
@@ -349,6 +387,7 @@ has just been created.</en>
 <mk>Лево</mk>
 <sl>Levo</sl>
 <es>Izquierda</es>
+<ru>Лево</ru>
 </text>
 <text>
 <en>Right</en>
@@ -358,6 +397,7 @@ has just been created.</en>
 <mk>Десно</mk>
 <sl>Desno</sl>
 <es>Derecha</es>
+<ru>Право</ru>
 </text>
 <text>
 <en>Default Value</en>
@@ -367,6 +407,7 @@ has just been created.</en>
 <ro>Valoare implicită</ro>
 <mk>Стандардна вредност</mk>
 <sl>Standardna vrednost</sl>
+<ru>Значение поумолчанию</ru>
 </text>
 <text>
 <en>Passwords are different. Please try again.</en>
@@ -375,6 +416,7 @@ has just been created.</en>
 <ro>Parolele sunt diferite. Vă rugam să încercaţi din nou.</ro>
 <mk>Лизинките се различни. Ве молиме пробајте пак.</mk>
 <sl>Gesli se ne ujemata. Poskusite ponovno.</sl>
+<ru>Пароли различаются. Пожалуйста, повторите еще раз.</ru>
 </text>
 <text>
 <en>Description</en>
@@ -383,6 +425,7 @@ has just been created.</en>
 <ro>Descriere</ro>
 <mk>Опис</mk>
 <sl>Opis</sl>
+<ru>Описание</ru>
 </text>
 <text>
 <en>Submit</en>
@@ -390,7 +433,7 @@ has just been created.</en>
 <id>81</id>
 <es>enviar</es>
 <pt>mandar</pt>
-<ru>послать</ru>
+<ru>Готово</ru>
 <jp>伝送する</jp>
 <fr>envoyer</fr>
 <it>inviare</it>
@@ -406,6 +449,7 @@ has just been created.</en>
 <ro>Validator</ro>
 <mk>Валидатор</mk>
 <sl>Preverjalnik</sl>
+<ru>Валидатор</ru>
 </text>
 <text>
 <en>E-Mail</en>
@@ -426,6 +470,7 @@ has just been created.</en>
 <mk>Датум</mk>
 <sl>Datum</sl>
 <es>Fecha</es>
+<ru>Дата</ru>
 </text>
 <text>
 <en>at</en>
@@ -434,6 +479,7 @@ has just been created.</en>
 <ro>la</ro>
 <sl>ob</sl>
 <es>en</es>
+<ru>на</ru>
 </text>
 <text>
 <en>Empty</en>
@@ -443,6 +489,7 @@ has just been created.</en>
 <mk>Празно</mk>
 <sl>Prazno</sl>
 <es>Vacio</es>
+<ru>Пусто</ru>
 </text>
 <text>
 <en>Title</en>
@@ -454,6 +501,7 @@ has just been created.</en>
 <hu>Cím</hu>
 <sl>Naziv</sl>
 <es>Título</es>
+<ru>Название</ru>
 </text>
 <text>
 <en>Firstname</en>
@@ -500,6 +548,7 @@ has just been created.</en>
 <ro>Subiect</ro>
 <mk>Наслов</mk>
 <sl>Zadeva</sl>
+<ru>Тема</ru>
 </text>
 <text>
 <en>Member since</en>
@@ -508,6 +557,7 @@ has just been created.</en>
 <ro>Membru din </ro>
 <mk>Член од</mk>
 <sl>Član od</sl>
+<ru>Учавствует с</ru>
 </text>
 <text>
 <en>Click here</en>
@@ -516,6 +566,7 @@ has just been created.</en>
 <ro>Click aici</ro>
 <mk>Клини тука</mk>
 <sl>Klikni tukaj</sl>
+<ru>Нажми сюда</ru>
 </text>
 <text>
 <en>Name</en>
@@ -525,6 +576,7 @@ has just been created.</en>
 <mk>Име</mk>
 <sl>Ime in priimek</sl>
 <es>Nombre</es>
+<ru>Название</ru>
 </text>
 <text>
 <en>Latest online</en>
@@ -532,6 +584,7 @@ has just been created.</en>
 <id>126</id>
 <ro>Ultimul online</ro>
 <sl>Datum zadnje prijave</sl>
+<ru>Последний раз онлайн</ru>
 </text>
 <text>
 <en>Short description</en>
@@ -540,6 +593,7 @@ has just been created.</en>
 <ro>Scurtă descriere</ro>
 <mk>Краток опис</mk>
 <sl>Kratek opis</sl>
+<ru>Краткое описание</ru>
 </text>
 <text>
 <en>Signature</en>
@@ -549,6 +603,7 @@ has just been created.</en>
 <mk>Потпис</mk>
 <sl>Podpis</sl>
 <es>Firma</es>
+<ru>Подпись</ru>
 </text>
 <text>
 <en>Publish Date</en>
@@ -557,6 +612,7 @@ has just been created.</en>
 <ro>Data publicării</ro>
 <mk>Датум на поставување</mk>
 <sl>Datum objave</sl>
+<ru>Дата публикации</ru>
 </text>
 <text>
 <en>Expiry Date</en>
@@ -565,6 +621,7 @@ has just been created.</en>
 <ro>Data expirării</ro>
 <mk>Датум на истекување</mk>
 <sl>Datum poteka objave</sl>
+<ru>Дата истечения</ru>
 </text>
 <text>
 <en>Teaser</en>
@@ -572,6 +629,7 @@ has just been created.</en>
 <id>137</id>
 <ro>Teaser</ro>
 <sl>Kratek opis (teaser)</sl>
+<ru>Тизер</ru>
 </text>
 <text>
 <en>Comment was successfully saved.</en>
@@ -579,6 +637,7 @@ has just been created.</en>
 <id>148</id>
 <ro>Comentariul a fost salvat cu succes.</ro>
 <sl>Komentar je bil uspešno shranjen.</sl>
+<ru>Коментарий успешно сохранен.</ru>
 </text>
 <text>
 <en>to continue</en>
@@ -587,6 +646,7 @@ has just been created.</en>
 <ro>pentru a continua</ro>
 <sl>Nadaljuj</sl>
 <es>para continuar</es>
+<ru>для продолжения</ru>
 </text>
 <text>
 <en>Product</en>
@@ -596,6 +656,7 @@ has just been created.</en>
 <mk>Производ</mk>
 <sl>Produkt</sl>
 <es>Producto</es>
+<ru>Продукт</ru>
 </text>
 <text>
 <en>Activate Useraccount</en>
@@ -603,6 +664,7 @@ has just been created.</en>
 <id>159</id>
 <ro>Activare cont utilizator</ro>
 <sl>Aktiviraj uporabniški račun</sl>
+<ru>Активировать аккаунт пользователя</ru>
 </text>
 <text>
 <en>Plese enter in both fields the password which you want to use for your useraccount</en>
@@ -610,6 +672,7 @@ has just been created.</en>
 <id>160</id>
 <ro>Vă rugăm să introduceţi în ambele câmpuri parola pe care doriţi să o utilizaţi pentru contul dumneavoastră</ro>
 <sl>V polji vnesite želeno geslo za dostop do uporabniškega računa.</sl>
+<ru>Пожалуйста, введите в оба поля пароль, который вы хотите использовать</ru>
 </text>
 <text>
 <en>Your useraccount was successfully activated.</en>
@@ -617,6 +680,7 @@ has just been created.</en>
 <id>162</id>
 <ro>Contul dumneavoastră de utilizator a fost activat cu succes.</ro>
 <sl>Vaš uporabniški račun je aktiviran.</sl>
+<ru>Ваша учетная запись активирована</ru>
 </text>
 <text>
 <en>to get back to the Startpage</en>
@@ -624,6 +688,7 @@ has just been created.</en>
 <id>164</id>
 <ro>pentru a vă întoarce la pagina Acasă</ro>
 <sl>Nazaj na začetno stran</sl>
+<ru>для перехода на Главную Страницу</ru>
 </text>
 <text>
 <en>Female</en>
@@ -635,6 +700,7 @@ has just been created.</en>
 <sl>Ženski</sl>
 <es>Femenino</es>
 <bg>Жена </bg>
+<ru>Женский</ru>
 </text>
 <text>
 <en>Male</en>
@@ -647,6 +713,7 @@ has just been created.</en>
 <sl>Moški</sl>
 <es>Masculino</es>
 <bg>Мъж</bg>
+<ru>Мужской</ru>
 </text>
 <text>
 <en>Gender</en>
@@ -659,6 +726,7 @@ has just been created.</en>
 <sl>Spol</sl>
 <es>Género</es>
 <bg>Пол</bg>
+<ru>Пол</ru>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -666,6 +734,7 @@ has just been created.</en>
 <id>169</id>
 <ro>Cont - Proprietăţi</ro>
 <sl>Račun – lastnosti</sl>
+<ru>Аккаунт - Свойства</ru>
 </text>
 <text>
 <en>The changed data was saved successfully</en>
@@ -674,6 +743,7 @@ has just been created.</en>
 <ro>Informaţiile modificate au fost salvate cu succes</ro>
 <mk>Променетите податоци се зачувани успешно</mk>
 <sl>Spremenjeni podatki so bili uspešno shranjeni.</sl>
+<ru>Изменения успешно сохранены</ru>
 </text>
 <text>
 <en>You don't have enough permissions for this Action</en>
@@ -682,6 +752,7 @@ has just been created.</en>
 <ro>Nu aveţi drepturile necesare pentru această acţiune.</ro>
 <mk>Немате доволно пермисии за ова акција</mk>
 <sl>Nimate zahtevanih pooblastil za to dejanje.</sl>
+<ru>У вас недостаточно прав для выполнения этого действия.</ru>
 </text>
 <text>
 <en>Login failed</en>
@@ -690,6 +761,7 @@ has just been created.</en>
 <ro>Autentificare eşuată</ro>
 <mk>Неуспешно логирање</mk>
 <sl>Prijava ni uspela</sl>
+<ru>Ошибка входа</ru>
 </text>
 <text>
 <en>Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
@@ -697,6 +769,7 @@ has just been created.</en>
 <id>184</id>
 <ro>Codul de activare este invalid. Poate că URL-ul nu a fost copiat complet?</ro>
 <sl>Aktivacijska koda ni pravilna. Preverite, ali ste pravilno vnesli celotni URL.</sl>
+<ru>Код активации не валидный. Может быть адрес страницы был скопирован не полностью?</ru>
 </text>
 <text>
 <en>Data not submitted completely.</en>
@@ -704,6 +777,7 @@ has just been created.</en>
 <id>185</id>
 <ro>Datele nu au fost introduse complet.</ro>
 <sl>Ni na voljo vseh podatkov.</sl>
+<ru>Данные введены не полностью.</ru>
 </text>
 <text>
 <en>Change password</en>
@@ -712,6 +786,7 @@ has just been created.</en>
 <ro>Schimbă parola</ro>
 <mk>Променија лозинката</mk>
 <sl>Spremeni geslo</sl>
+<ru>Изменить пароль</ru>
 </text>
 <text>
 <en>Repeat password</en>
@@ -720,6 +795,7 @@ has just been created.</en>
 <ro>Rescrieţi parola</ro>
 <mk>Повторија лозинката</mk>
 <sl>Ponovi geslo</sl>
+<ru>Повторить пароль</ru>
 </text>
 <text>
 <en>First name</en>
@@ -730,6 +806,7 @@ has just been created.</en>
 <sl>Ime</sl>
 <es>Nombre</es>
 <bg>Име</bg>
+<ru>Имя</ru>
 </text>
 <text>
 <en>Last name</en>
@@ -740,6 +817,7 @@ has just been created.</en>
 <sl>Priimek</sl>
 <es>Apellido</es>
 <bg>Фамилия</bg>
+<ru>Фамилия</ru>
 </text>
 <text>
 <en>Advice</en>
@@ -748,6 +826,7 @@ has just been created.</en>
 <ro>Info</ro>
 <mk>Совет</mk>
 <sl>Informacija</sl>
+<ru>Рекомендация</ru>
 </text>
 <text>
 <en>After following actions emails are sent automatically to the respective user:</en>
@@ -755,6 +834,7 @@ has just been created.</en>
 <id>196</id>
 <ro>În urma modificării următoarelor câmpuri, se va trimite automat un e-mail la adresa introdusă:</ro>
 <sl>Po spremembi naslednjih polj bo sistem na vpisani e-naslov avtomatsko poslal e-sporočilo:</sl>
+<ru>После следующего действия сообщения будут автоматически отправляться на указанный email пользователя</ru>
 </text>
 <text>
 <en>Create, Delete and E-Mail change</en>
@@ -762,6 +842,7 @@ has just been created.</en>
 <id>197</id>
 <ro>Creaza, Şterge şi Modificări e-mail</ro>
 <sl>Dodajanje, brisanje in spremembe e-naslova</sl>
+<ru>Создать, Удалить и Изменить E-Mail</ru>
 </text>
 <text>
 <en>Rights</en>
@@ -770,6 +851,7 @@ has just been created.</en>
 <ro>Drepturi</ro>
 <mk>Права</mk>
 <sl>Pravice</sl>
+<ru>Права</ru>
 </text>
 <text>
 <en>Edit</en>
@@ -778,6 +860,7 @@ has just been created.</en>
 <ro>Editează</ro>
 <mk>Уреди</mk>
 <sl>Uredi</sl>
+<ru>Изменить</ru>
 </text>
 <text>
 <en>edit</en>
@@ -786,6 +869,7 @@ has just been created.</en>
 <ro>editează</ro>
 <mk>уреди</mk>
 <sl>Uredi</sl>
+<ru>изменить</ru>
 </text>
 <text>
 <en>The file is larger than the maximum upload amount.</en>
@@ -793,6 +877,7 @@ has just been created.</en>
 <id>207</id>
 <ro>Dimensiunea fişierului depăşeşte dimensiunea maximă admisă.</ro>
 <sl>Datoteka je prevelika in je zato ni možno naložiti.</sl>
+<ru>Файл больше максимально допустимого размера.</ru>
 </text>
 <text>
 <en>The file was not uploaded completely.</en>
@@ -800,6 +885,7 @@ has just been created.</en>
 <id>208</id>
 <ro>Fişierul nu a fost încărcat complet.</ro>
 <sl>Datoteka ni bila v celoti naložena.</sl>
+<ru>Файл не был загружен полностью.</ru>
 </text>
 <text>
 <en>An account with this email address already exists</en>
@@ -807,6 +893,7 @@ has just been created.</en>
 <id>214</id>
 <ro>Există deja un cont pentru această adresă de e-mail</ro>
 <sl>Račun s tem e-naslovom že obstaja.</sl>
+<ru>Аккаунт с таким же E-Mail уже существует</ru>
 </text>
 <text>
 <en>Passwords are different - please try again</en>
@@ -814,6 +901,7 @@ has just been created.</en>
 <id>215</id>
 <ro>Parolele sunt diferite - vă rugam să încercaţi din nou</ro>
 <sl>Gesli se ne ujemata – poskusite ponovno.</sl>
+<ru>Пароли различаются - Пожалуйста, повторите еще раз</ru>
 </text>
 <text>
 <en>Please enter the text you wish to assign.</en>
@@ -821,6 +909,7 @@ has just been created.</en>
 <id>228</id>
 <ro>Vă rugăm să introduceţi textul pe care doriţi să îl atribuiţi.</ro>
 <sl>Vnesite besedilo, ki ga želite poslati.</sl>
+<ru>Пожалуйста, введите текст, который вы хотите привязать.</ru>
 </text>
 <text>
 <en>Seperate items by a new line.</en>
@@ -828,6 +917,7 @@ has just been created.</en>
 <id>229</id>
 <ro>Separaţi elementele printr-un rând nou.</ro>
 <sl>Vstavi vrstico za razdelitev elementov.</sl>
+<ru>Новая строка для разделения элементов.</ru>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
@@ -835,6 +925,7 @@ has just been created.</en>
 <id>230</id>
 <ro>Nu se poate salva, vă rugăm să completaţi corect toate câmpurile subliniate cu roşu.</ro>
 <sl>Podatkov ni bilo možno shraniti. Pravilno izpolnite vsa rdeče označena polja.</sl>
+<ru>Невозможно сохранить, пожалуйста, заполните правильно все поля отмеченные красным подчерком.</ru>
 </text>
 <text>
 <en>Do you really want to delete this entry?</en>
@@ -858,6 +949,7 @@ has just been created.</en>
 <mk>Се копира...</mk>
 <sl>Kopiram ...</sl>
 <es>Proceso de copiar...</es>
+<ru>Копирование...</ru>
 </text>
 <text>
 <en>create</en>
@@ -866,6 +958,7 @@ has just been created.</en>
 <ro>creează</ro>
 <sl>Ustvari</sl>
 <es>crear</es>
+<ru>создать</ru>
 </text>
 <text>
 <en>File successfully created:</en>
@@ -881,6 +974,7 @@ has just been created.</en>
 <ro>Component</ro>
 <mk>Компонента</mk>
 <sl>Komponenta</sl>
+<ru>Компонента</ru>
 </text>
 <text>
 <en>Add Component</en>
@@ -889,6 +983,7 @@ has just been created.</en>
 <ro>Adaugă component</ro>
 <mk>Додади компонента</mk>
 <sl>Dodaj komponento</sl>
+<ru>Добавить компоненту</ru>
 </text>
 <text>
 <en>Creating...</en>
@@ -896,6 +991,7 @@ has just been created.</en>
 <id>239</id>
 <ro>Creeaza...</ro>
 <sl>Ustvarjam ...</sl>
+<ru>Создание...</ru>
 </text>
 <text>
 <en>Page</en>
@@ -905,6 +1001,7 @@ has just been created.</en>
 <mk>Страна</mk>
 <sl>Stran</sl>
 <es>Página</es>
+<ru>Страница</ru>
 </text>
 <text>
 <en>Page properties</en>
@@ -913,6 +1010,7 @@ has just been created.</en>
 <ro>Proprietăţile paginii</ro>
 <mk>Својства на страната</mk>
 <sl>Lastnosti strani</sl>
+<ru>Свойства страницы</ru>
 </text>
 <text>
 <en>Add new child page</en>
@@ -951,6 +1049,7 @@ has just been created.</en>
 <id>248</id>
 <ro>Măreşte aici</ro>
 <sl>Razširi tukaj</sl>
+<ru>Развернуть тут</ru>
 </text>
 <text>
 <en>Collapse here</en>
@@ -958,6 +1057,7 @@ has just been created.</en>
 <id>249</id>
 <ro>Micşorează aici</ro>
 <sl>Skrči tukaj</sl>
+<ru>Свернуть тут</ru>
 </text>
 <text>
 <en>Open preview</en>
@@ -965,6 +1065,7 @@ has just been created.</en>
 <id>250</id>
 <ro>Deschide preview</ro>
 <sl>Odpri predogled</sl>
+<ru>Открыть предпросмотр</ru>
 </text>
 <text>
 <en>A Server failure occured.</en>
@@ -973,6 +1074,7 @@ has just been created.</en>
 <mk>Се случи грешка на серверот.</mk>
 <ro>A intervenit o eroare de server.</ro>
 <sl>Prišlo je do napake na strežniku.</sl>
+<ru>Возникла ошибка на сервере.</ru>
 </text>
 <text>
 <en>Error - wrong version</en>
@@ -980,6 +1082,7 @@ has just been created.</en>
 <id>254</id>
 <ro>Eroare - versiune eronată.</ro>
 <sl>Napaka – napačna verzija.</sl>
+<ru>Ошибка - неправильная версия.</ru>
 </text>
 <text>
 <en>Because of an application update the application has to be reloaded.</en>
@@ -994,6 +1097,7 @@ has just been created.</en>
 <id>256</id>
 <ro>A intervenit o eroare de conexiune.</ro>
 <sl>Prišlo je do napake v povezavi.</sl>
+<ru>Ошибка соедиенения.</ru>
 </text>
 <text>
 <en>Select your Position</en>
@@ -1019,6 +1123,7 @@ has just been created.</en>
 <ro>Exemplu</ro>
 <sl>Primer</sl>
 <es>Ejemplo</es>
+<ru>Пример</ru>
 </text>
 <text>
 <en>Unknown address</en>
@@ -1125,6 +1230,7 @@ has just been created.</en>
 <id>277</id>
 <ro>Se reconciliază...</ro>
 <sl>Brišem ...</sl>
+<ru>Очистка...</ru>
 </text>
 <text>
 <en>Password lost</en>
@@ -1132,6 +1238,7 @@ has just been created.</en>
 <id>278</id>
 <ro>Am uitat parola</ro>
 <sl>Pozabljeno geslo</sl>
+<ru>Потерялся пароль</ru>
 </text>
 <text>
 <en>Please enter your email address</en>
@@ -1139,6 +1246,7 @@ has just been created.</en>
 <id>279</id>
 <ro>Vă rugăm să introduceţi adresa dumneavoastră de e-mail</ro>
 <sl>Vnesite e-naslov.</sl>
+<ru>Пожалуйста, введите ваш email адрес</ru>
 </text>
 <text>
 <en>Please type in your password. After clicking the button below</en>
@@ -1213,6 +1321,7 @@ has just been created.</en>
 <id>289</id>
 <ro>Salvează</ro>
 <sl>Shrani</sl>
+<ru>Сохранить</ru>
 </text>
 <text>
 <en>Cancel</en>
@@ -1220,6 +1329,7 @@ has just been created.</en>
 <id>290</id>
 <ro>Renunţă</ro>
 <sl>Prekliči</sl>
+<ru>Отмена</ru>
 </text>
 <text>
 <en>Save and Back</en>
@@ -1227,6 +1337,7 @@ has just been created.</en>
 <id>291</id>
 <ro>Salvează şi înapoi</ro>
 <sl>Shrani in nazaj</sl>
+<ru>Сохранить и Вернуться</ru>
 </text>
 <text>
 <en>Delete</en>
@@ -1234,6 +1345,7 @@ has just been created.</en>
 <id>292</id>
 <ro>Şterge</ro>
 <sl>Izbriši</sl>
+<ru>Удалить</ru>
 </text>
 <text>
 <en>delete</en>
@@ -1241,6 +1353,7 @@ has just been created.</en>
 <id>293</id>
 <ro>şterge</ro>
 <sl>Izbriši</sl>
+<ru>удалить</ru>
 </text>
 <text>
 <en>New Entry</en>
@@ -1248,6 +1361,7 @@ has just been created.</en>
 <id>294</id>
 <ro>Intrare nouă</ro>
 <sl>Nov vnos</sl>
+<ru>Новая запись</ru>
 </text>
 <text>
 <en>delete?</en>
@@ -1255,6 +1369,7 @@ has just been created.</en>
 <id>296</id>
 <ro>Doriţi să ştergeţi?</ro>
 <sl>Izbrišem?</sl>
+<ru>удалить?</ru>
 </text>
 <text>
 <en>Duplicate</en>
@@ -1262,6 +1377,7 @@ has just been created.</en>
 <id>297</id>
 <ro>Duplicare</ro>
 <sl>Podvoji</sl>
+<ru>Копировать</ru>
 </text>
 <text>
 <en>Print</en>
@@ -1269,6 +1385,7 @@ has just been created.</en>
 <id>298</id>
 <ro>Tipăreşte</ro>
 <sl>Natisni</sl>
+<ru>Печать</ru>
 </text>
 <text>
 <en>CSV Export</en>
@@ -1283,6 +1400,7 @@ has just been created.</en>
 <id>300</id>
 <ro>Export Excel</ro>
 <sl>Izvozi v Excel</sl>
+<ru>Экспорт в Excel</ru>
 </text>
 <text>
 <en>Do you really wish to remove this entry / these entries?</en>
@@ -1297,6 +1415,7 @@ has just been created.</en>
 <id>302</id>
 <ro>Adaugă</ro>
 <sl>Dodaj</sl>
+<ru>Добавить</ru>
 </text>
 <text>
 <en>Toggle Visibility</en>
@@ -1311,6 +1430,7 @@ has just been created.</en>
 <id>304</id>
 <ro>Caută</ro>
 <sl>Išči</sl>
+<ru>Поиск</ru>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -1325,6 +1445,7 @@ has just been created.</en>
 <id>306</id>
 <ro>Hyperlink</ro>
 <sl>hiperpovezava</sl>
+<ru>Ссылка</ru>
 </text>
 <text>
 <en>Undo (Ctrl+Z)</en>
@@ -1332,6 +1453,7 @@ has just been created.</en>
 <id>307</id>
 <ro>Undo (Ctrl+Z)</ro>
 <sl>Razveljavi (Ctrl + Z)</sl>
+<ru>Отмена (Ctrl+Z)</ru>
 </text>
 <text>
 <en>Redo</en>
@@ -1339,6 +1461,7 @@ has just been created.</en>
 <id>308</id>
 <ro>Repetă</ro>
 <sl>Ponovi</sl>
+<ru>Восстановить</ru>
 </text>
 <text>
 <en>Character</en>
@@ -1346,6 +1469,7 @@ has just been created.</en>
 <id>309</id>
 <ro>Caracter</ro>
 <sl>Znak</sl>
+<ru>Символ</ru>
 </text>
 <text>
 <en>Loading...</en>
@@ -1353,6 +1477,7 @@ has just been created.</en>
 <id>311</id>
 <ro>Se încarcă</ro>
 <sl>Nalagam ...</sl>
+<ru>Загрузка...</ru>
 </text>
 <text>
 <en>{0} selected row(s)</en>
@@ -1360,6 +1485,7 @@ has just been created.</en>
 <id>312</id>
 <ro>{0} rând(uri) selectat(e)</ro>
 <sl>Štev. označenih vrstic: {0}</sl>
+<ru>выбрано: {0} записей</ru>
 </text>
 <text>
 <en>Close this tab</en>
@@ -1367,6 +1493,7 @@ has just been created.</en>
 <id>313</id>
 <ro>Închide acest tab</ro>
 <sl>Zapri zavihek</sl>
+<ru>Закрыть вкладку</ru>
 </text>
 <text>
 <en>The value in this field is invalid</en>
@@ -1381,6 +1508,7 @@ has just been created.</en>
 <id>315</id>
 <ro>Ianuarie</ro>
 <sl>Januar</sl>
+<ru>Январь</ru>
 </text>
 <text>
 <en>February</en>
@@ -1388,6 +1516,7 @@ has just been created.</en>
 <id>316</id>
 <ro>Februarie</ro>
 <sl>Februar</sl>
+<ru>Февраль</ru>
 </text>
 <text>
 <en>March</en>
@@ -1395,6 +1524,7 @@ has just been created.</en>
 <id>317</id>
 <ro>Martie</ro>
 <sl>Marec</sl>
+<ru>Март</ru>
 </text>
 <text>
 <en>April</en>
@@ -1402,6 +1532,7 @@ has just been created.</en>
 <id>318</id>
 <ro>Aprilie</ro>
 <sl>April</sl>
+<ru>Апрель</ru>
 </text>
 <text>
 <en>May</en>
@@ -1409,6 +1540,7 @@ has just been created.</en>
 <id>319</id>
 <ro>Mai</ro>
 <sl>Maj</sl>
+<ru>Май</ru>
 </text>
 <text>
 <en>June</en>
@@ -1416,6 +1548,7 @@ has just been created.</en>
 <id>320</id>
 <ro>Iunie</ro>
 <sl>Junij</sl>
+<ru>Июнь</ru>
 </text>
 <text>
 <en>July</en>
@@ -1423,6 +1556,7 @@ has just been created.</en>
 <id>321</id>
 <ro>Iulie</ro>
 <sl>Julij</sl>
+<ru>Июль</ru>
 </text>
 <text>
 <en>August</en>
@@ -1430,6 +1564,7 @@ has just been created.</en>
 <id>322</id>
 <ro>August</ro>
 <sl>Avgust</sl>
+<ru>Август</ru>
 </text>
 <text>
 <en>September</en>
@@ -1437,6 +1572,7 @@ has just been created.</en>
 <id>323</id>
 <ro>Septembrie</ro>
 <sl>September</sl>
+<ru>Сентябрь</ru>
 </text>
 <text>
 <en>October</en>
@@ -1444,6 +1580,7 @@ has just been created.</en>
 <id>324</id>
 <ro>Octombrie</ro>
 <sl>Oktober</sl>
+<ru>Октябрь</ru>
 </text>
 <text>
 <en>November</en>
@@ -1451,6 +1588,7 @@ has just been created.</en>
 <id>325</id>
 <ro>Noiembrie</ro>
 <sl>November</sl>
+<ru>Ноябрь</ru>
 </text>
 <text>
 <en>December</en>
@@ -1458,6 +1596,7 @@ has just been created.</en>
 <id>326</id>
 <ro>Decembrie</ro>
 <sl>December</sl>
+<ru>Декабрь</ru>
 </text>
 <text>
 <en>Sunday</en>
@@ -1507,6 +1646,7 @@ has just been created.</en>
 <id>333</id>
 <ro>Ok</ro>
 <sl>OK</sl>
+<ru>ОК</ru>
 </text>
 <text>
 <en>Yes</en>
@@ -1514,6 +1654,7 @@ has just been created.</en>
 <id>334</id>
 <ro>Da</ro>
 <sl>Da</sl>
+<ru>Да</ru>
 </text>
 <text>
 <en>No</en>
@@ -1521,6 +1662,7 @@ has just been created.</en>
 <id>335</id>
 <ro>Da</ro>
 <sl>Ne</sl>
+<ru>Нет</ru>
 </text>
 <text>
 <en>Today</en>
@@ -1528,6 +1670,7 @@ has just been created.</en>
 <id>336</id>
 <ro>Astăzi</ro>
 <sl>Danes</sl>
+<ru>Сегодня</ru>
 </text>
 <text>
 <en>This date is before the minimum date</en>
@@ -1584,6 +1727,7 @@ has just been created.</en>
 <id>344</id>
 <ro>din {0}</ro>
 <sl>od {0}</sl>
+<ru>из {0}</ru>
 </text>
 <text>
 <en>First Page</en>
@@ -1619,6 +1763,7 @@ has just been created.</en>
 <id>349</id>
 <ro>Reîncarcă</ro>
 <sl>Ponovno naloži</sl>
+<ru>Обновить</ru>
 </text>
 <text>
 <en>Displaying {0} - {1} of {2}</en>
@@ -1626,6 +1771,7 @@ has just been created.</en>
 <id>350</id>
 <ro>Afişează {0} - {1} din {2}</ro>
 <sl>Prikaz {0}–{1} od {2}</sl>
+<ru>Показаны {0} - {1} из {2}</ru>
 </text>
 <text>
 <en>No data to display</en>
@@ -1633,6 +1779,7 @@ has just been created.</en>
 <id>351</id>
 <ro>Nu există date care să poată fi afişate</ro>
 <sl>Podatki za prikaz niso na voljo.</sl>
+<ru>Нет данных</ru>
 </text>
 <text>
 <en>The minimum length for this field is {0}</en>
@@ -1654,6 +1801,7 @@ has just been created.</en>
 <id>354</id>
 <ro>Acest câmp este necesar</ro>
 <sl>To polje je potrebno.</sl>
+<ru>Поле является обязательным</ru>
 </text>
 <text>
 <en>The minimum value for this field is {0}</en>
@@ -1682,6 +1830,7 @@ has just been created.</en>
 <id>358</id>
 <ro>Dezactivat</ro>
 <sl>Skrito</sl>
+<ru>Не активно</ru>
 </text>
 <text>
 <en>The date in this field must be after {0}</en>
@@ -1927,6 +2076,7 @@ has just been created.</en>
 <id>394</id>
 <ro>Aranjează crescător</ro>
 <sl>Razvrsti naraščajoče</sl>
+<ru>Сортировать по возрастанию</ru>
 </text>
 <text>
 <en>Sort Descending</en>
@@ -1934,6 +2084,7 @@ has just been created.</en>
 <id>395</id>
 <ro>Aranjează descrescător</ro>
 <sl>Razvrsti padajoče</sl>
+<ru>Сортировать по убыванию</ru>
 </text>
 <text>
 <en>Lock Column</en>
@@ -1955,6 +2106,7 @@ has just been created.</en>
 <id>398</id>
 <ro>Coloane</ro>
 <sl>Stolpci</sl>
+<ru>Колонки</ru>
 </text>
 <text>
 <en>(None)</en>
@@ -1962,6 +2114,7 @@ has just been created.</en>
 <id>399</id>
 <ro>(fără)</ro>
 <sl>(brez)</sl>
+<ru>(Пусто)</ru>
 </text>
 <text>
 <en>Group By This Field</en>
@@ -1983,6 +2136,7 @@ has just been created.</en>
 <id>402</id>
 <ro>Valoare</ro>
 <sl>Vrednost</sl>
+<ru>Значение</ru>
 </text>
 <text>
 <en>Drag to resize.</en>
@@ -2011,6 +2165,7 @@ has just been created.</en>
 <id>408</id>
 <ro>Limba</ro>
 <sl>Jezik</sl>
+<ru>Язык</ru>
 </text>
 <text>
 <en>lang</en>
@@ -2018,6 +2173,7 @@ has just been created.</en>
 <id>409</id>
 <ro>limba</ro>
 <sl>Jezik</sl>
+<ru>язык</ru>
 </text>
 <text>
 <en>Paragraphs</en>
@@ -2039,6 +2195,7 @@ has just been created.</en>
 <id>413</id>
 <ro>Descarcă fişierul</ro>
 <sl>Prenesi datoteko</sl>
+<ru>Загрузить</ru>
 </text>
 <text>
 <en>Logout</en>
@@ -2046,6 +2203,7 @@ has just been created.</en>
 <id>414</id>
 <ro>Anulare</ro>
 <sl>Odjava</sl>
+<ru>Выход</ru>
 </text>
 <text>
 <en>Line</en>
@@ -2081,6 +2239,7 @@ has just been created.</en>
 <id>421</id>
 <ro>Reîncarcă</ro>
 <sl>Ponovno naloži</sl>
+<ru>Обновить</ru>
 </text>
 <text>
 <en>Login successful</en>
@@ -2088,6 +2247,7 @@ has just been created.</en>
 <id>423</id>
 <ro>V-aţi autentificat cu succes</ro>
 <sl>Prijava je bila uspešna.</sl>
+<ru>Успешный вход</ru>
 </text>
 <text>
 <en>to get back to the formular</en>
@@ -2145,6 +2305,7 @@ has just been created.</en>
 <uk>обрати</uk>
 <ro>lipsă selecţie</ro>
 <sl>Ni izbrano.</sl>
+<ru>не выбрано</ru>
 </text>
 <text>
 <en>add new entry</en>
@@ -2194,6 +2355,7 @@ has just been created.</en>
 <id>466</id>
 <ro>Aţi uitat parola?</ro>
 <sl>Pozabljeno geslo</sl>
+<ru>Забыли пароль?</ru>
 </text>
 <text>
 <en>User not existent in this web.</en>
@@ -2236,6 +2398,7 @@ has just been created.</en>
 <id>479</id>
 <ro>Salvează...</ro>
 <sl>Shranjujem ...</sl>
+<ru>Сохранение...</ru>
 </text>
 <text>
 <en>Deleting...</en>
@@ -2243,6 +2406,7 @@ has just been created.</en>
 <id>480</id>
 <ro>Şterge...</ro>
 <sl>Brišem ...</sl>
+<ru>Удаление...</ru>
 </text>
 <text>
 <en>Duplicating...</en>
@@ -2250,6 +2414,7 @@ has just been created.</en>
 <id>481</id>
 <ro>Duplicare</ro>
 <sl>Podvoji</sl>
+<ru>Копирование...</ru>
 </text>
 <text>
 <en>empty</en>
@@ -2257,6 +2422,7 @@ has just been created.</en>
 <id>484</id>
 <ro>gol</ro>
 <sl>Prazno</sl>
+<ru>пусто</ru>
 </text>
 <text>
 <en>Upload File</en>
@@ -2264,6 +2430,7 @@ has just been created.</en>
 <id>485</id>
 <ro>Încarcă fişierul</ro>
 <sl>Naloži datoteko</sl>
+<ru>Загрузить файл</ru>
 </text>
 <text>
 <en>Delete File</en>
@@ -2271,6 +2438,7 @@ has just been created.</en>
 <id>486</id>
 <ro>Şterge fişierul</ro>
 <sl>Izbriši datoteko</sl>
+<ru>Удалить файл</ru>
 </text>
 <text>
 <en>Uploading file</en>
@@ -2306,6 +2474,7 @@ has just been created.</en>
 <id>491</id>
 <ro>Info</ro>
 <sl>Informacije</sl>
+<ru>Информация</ru>
 </text>
 <text>
 <en>yyyy-mm-dd</en>
@@ -2615,6 +2784,7 @@ has just been created.</en>
 <id>567</id>
 <ro>Activat</ro>
 <sl>Aktivirano</sl>
+<ru>Активирован</ru>
 </text>
 <text>
 <en>Html</en>
@@ -3056,6 +3226,7 @@ has just been created.</en>
 <id>676</id>
 <ro>General</ro>
 <sl>Splošno</sl>
+<ru>Общие</ru>
 </text>
 <text>
 <en>Avatar</en>
@@ -3105,6 +3276,7 @@ has just been created.</en>
 <id>683</id>
 <ro>activează</ro>
 <sl>Aktiviraj</sl>
+<ru>Активировать</ru>
 </text>
 <text>
 <en>An account for the address '%value%' doesn't exist</en>
@@ -3819,6 +3991,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>805</id>
 <ro>Localitate</ro>
 <sl>Kraj</sl>
+<ru>Город</ru>
 </text>
 <text>
 <en>Country</en>
@@ -4674,6 +4847,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>981</id>
 <ro>Şterge utilizatorul</ro>
 <sl>Izbriši uporabnika</sl>
+<ru>Удалить пользователя</ru>
 </text>
 <text>
 <de>Benutzer sperren / entsperren</de>
@@ -4681,6 +4855,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>982</id>
 <ro>Blochează/deblochează utilizatorul</ro>
 <sl>Blokiraj/deblokiraj uporabnika</sl>
+<ru>Заблокировать / Разблокировать пользователя</ru>
 </text>
 <text>
 <de>Benutzer sperren</de>
@@ -4737,6 +4912,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>991</id>
 <ro>Blocat</ro>
 <sl>Blokiran</sl>
+<ru>Заблокирован</ru>
 </text>
 <text>
 <de>Account ist gesperrt</de>
@@ -5109,6 +5285,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1066</id>
 <ro>toate</ro>
 <sl>Vsi</sl>
+<ru>все</ru>
 </text>
 <text>
 <en>Color hex values must be either 3 or 6 characters.</en>
@@ -5166,6 +5343,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1075</id>
 <ro>Afişează toate</ro>
 <sl>Prikaži vse</sl>
+<ru>Показать все</ru>
 </text>
 <text>
 <en>User</en>
@@ -5173,18 +5351,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1076</id>
 <ro>Utilizator</ro>
 <sl>Uporabnik</sl>
+<ru>Пользователь</ru>
 </text>
 <text>
 <en>Statistics</en>
 <id>1077</id>
 <de>Statistik</de>
 <ro>Statistică</ro>
+<ru>Статистика</ru>
 </text>
 <text>
 <en>Logins</en>
 <id>1078</id>
 <de>Logins</de>
 <ro>Login-uri</ro>
+<ru>Логины</ru>
 </text>
 <text>
 <en>Last login</en>
@@ -5197,6 +5378,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1080</id>
 <de>Superuser</de>
 <ro>Superuser</ro>
+<ru>Суперпользователь</ru>
 </text>
 <text>
 <en>Too many wrong logins.</en>
@@ -5284,6 +5466,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1110</id>
 <de>Gesperrte Benutzer auch anzeigen</de>
 <ro>Afişează şi utilizatorii blocaţi</ro>
+<ru>Показать заблокированных пользователей тоже</ru>
 </text>
 <text>
 <en>File Upload Cancelled.</en>
@@ -5359,6 +5542,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1123</id>
 <de>Gesperrte Benutzer anzeigen</de>
 <ro>Afişează utilizatorii blocaţi</ro>
+<ru>Показать заблокированных</ru>
 </text>
 <text>
 <en>Dear Mr. {0} {1}</en>
@@ -5594,6 +5778,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1161</id>
 <ro>Şterge toate</ro>
 <sl>Izbriši vse</sl>
+<ru>Удалить все</ru>
 </text>
 <text>
 <en>Are you sure?</en>
@@ -5601,6 +5786,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1162</id>
 <ro>Sunteţi sigur?</ro>
 <sl>Ali ste prepričani?</sl>
+<ru>Вы уверены?</ru>
 </text>
 <text>
 <en>Do you really want to delete all receivers with status "queued"?.</en>
@@ -6080,6 +6266,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1254</id>
 <ro>Activ?</ro>
 <sl>Aktiven?</sl>
+<ru>Активный?</ru>
 </text>
 <text>
 <en>Newsletter Subscriber settings</en>
@@ -6108,6 +6295,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1258</id>
 <ro>activ</ro>
 <sl>Aktiven</sl>
+<ru>активный</ru>
 </text>
 <text>
 <en>Edit subscriber</en>
@@ -6544,6 +6732,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1323</id>
 <de>Code</de>
 <ro>Code</ro>
+<ru>Код</ru>
 </text>
 <text>
 <en>Line Numbers</en>
@@ -6682,6 +6871,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1345</id>
 <ro>E-mail-uri</ro>
 <sl>E-sporočila</sl>
+<ru>Почтовые адреса</ru>
 </text>
 <text>
 <en>Don't send any E-Mail when saving.</en>
@@ -6696,6 +6886,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1347</id>
 <ro>Log</ro>
 <sl>Datoteka z dnevnikom</sl>
+<ru>Лог</ru>
 </text>
 <text>
 <en>Comments</en>
@@ -6703,6 +6894,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1348</id>
 <ro>Comentarii</ro>
 <sl>Komentarji</sl>
+<ru>Комментарии</ru>
 </text>
 <text>
 <en>Account created.</en>
@@ -7162,6 +7354,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1435</id>
 <ro>Toate</ro>
 <sl>Vse</sl>
+<ru>Все</ru>
 </text>
 <text>
 <en>Can't delete translated pages.</en>
@@ -8344,6 +8537,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1655</id>
 <de>Filter</de>
 <ro>Filtru</ro>
+<ru>Фильтр</ru>
 </text>
 <text>
 <en>Please choose a file</en>
@@ -8942,5 +9136,3 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1787</id>
 </text>
 </trl>
-
-
