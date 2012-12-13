@@ -21,6 +21,13 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         $this->_floatValidator = new Zend_Validate_Float();
     }
 
+    public function getMetaData($model)
+    {
+        $ret = parent::getMetaData($model);
+        $ret['inputType'] = 'text';
+        return $ret;
+    }
+
     protected function _getTrlProperties()
     {
         $ret = parent::_getTrlProperties();
