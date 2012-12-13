@@ -432,13 +432,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 }, this);
 
                 Kwf.callOnContentReady(this.detailEl);
-
-                if (this.detailEl.child('.icons .top')) {
-                    if (Articles.UnreadTopArticles.instance && Articles.UnreadTopArticles.instance.view) {
-                        Articles.UnreadTopArticles.instance.view.load();
-                    }
-                    this.ownerCt.updateDynamicData();
-                }
             },
             scope: this
         });
