@@ -48,7 +48,7 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
         }
         $path = trim($path, '/');
         if (is_dir($path)) {
-//             throw new Kwf_Exception_Client('Component already exists!');
+            throw new Kwf_Exception_Client('Component already exists!');
         }
         mkdir($path);
         echo "enter class to extend from [no entry for default]: ";
@@ -167,7 +167,88 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
 
     protected function _createModel()
     {
-        echo "coming soon\n";
+        echo "enter model name: ";
+        $stdin = fopen('php://stdin', 'r');
+        $name = ucfirst(trim(strtolower(fgets($stdin))));
+
+        if (!$name) {
+            throw new Kwf_Exception_Client('model must have a name');
+        }
+        echo "place the model into a component directory? [y/N]: ";
+        $stdin = fopen('php://stdin', 'r');
+        $input = trim(strtolower(fgets($stdin)));
+        if (!($input == '' || $input == 'n')) {
+                echo "enter path of the component: ";
+            $stdin = fopen('php://stdin', 'r');
+            $path = trim(strtolower(fgets($stdin)));
+            $filename = 'components/'.ucfirst($path).'/'.$name.'.php';
+        } else {
+            $filename = 'models/'.$name.'.php';
+        }
+        $childRows = array();
+        $parentRows = array();
+        do {
+            echo "enter a label for a dependent model: ";
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin)));
+            if ($input) {
+                echo "enter the name of the dependent model: ";
+                $stdin = fopen('php://stdin', 'r');
+                $model = trim(strtolower(fgets($stdin)));
+            }
+            if ($input && $model) $childRows[ucfirst($input)] = ucfirst($model);
+        } while ($input && $model);
+        do {
+            echo "enter a label for a referenced model: ";
+            $stdin = fopen('php://stdin', 'r');
+            $label = trim(strtolower(fgets($stdin)));
+            if ($label) {
+                echo "enter the model class for the referenced model: ";
+                $stdin = fopen('php://stdin', 'r');
+                $parent = trim(strtolower(fgets($stdin)));
+            }
+            if ($label && $parent) {
+                echo "enter the column for the referenced model: ";
+                $stdin = fopen('php://stdin', 'r');
+                $column = trim(strtolower(fgets($stdin)));
+            }
+            if ($label && $parent && $column) $parentRows[$label] = array(
+                'modelClass' => ucfirst($parent),
+                'column' => $column
+                );
+        } while ($label && $parent && $column);
+        $tableName = strtolower($name);
+        $table = "    protected \$_table = '$tableName';\n";
+        $referenceMap = '';
+        $dependentModels = '';
+        if ($childRows) {
+            $dependentModels = "    protected \$_dependentModels = array(\n";
+            foreach ($childRows as $k => $cR) {
+                $dependentModels .= "        '$k' => '$cR',\n";
+            }
+            $dependentModels .= "    );\n";
+        }
+        if ($parentRows) {
+            $referenceMap = "    protected \$_referenceMap = array(\n";
+            foreach ($parentRows as $k => $pR) {
+                $modelClass = $pR['modelClass'];
+                $column = $pR['column'];
+                $referenceMap .= "        '$k' => array(\n";
+                $referenceMap .= "            'refModelClass' => '$modelClass',\n";
+                $referenceMap .= "            'column' => '$column',\n";
+                $referenceMap .= "        ),\n";
+            }
+            $referenceMap .= "    );\n";
+
+        }
+        $data = "<?php\n";
+        $data .= "class $name extends Kwf_Model_Db\n";
+        $data .= "{\n";
+        $data .= $table;
+        $data .= $referenceMap;
+        $data .= $dependentModels;
+        $data .= "}\n";
+        file_put_contents($filename, $data);
     }
     protected function _createController()
     {
