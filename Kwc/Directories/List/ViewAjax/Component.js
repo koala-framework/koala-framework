@@ -100,6 +100,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
 
         Kwf.Utils.HistoryState.on('popstate', function() {
+            if (!this._getState()) return;
             if (this._getState().viewDetail) {
                 this.showDetail(this._getState().viewDetail);
             } else if (this._getState().viewFilter) {
