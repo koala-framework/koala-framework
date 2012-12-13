@@ -20,6 +20,8 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
             $this->_createModel();
         } else if ($type == 'controller') {
             $this->_createController();
+        } else {
+            throw new Kwf_Exception_Client('wrong type');
         }
         echo $type." created\n";
         exit;
@@ -187,8 +189,10 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
                 $path .= ucfirst($s).'/';
             }
             $filename = 'components/'.$path.$name.'.php';
+            $className = str_replace('/', '_', $path).$name;
         } else {
             $filename = 'models/'.$name.'.php';
+            $classname = $name;
         }
         $childRows = array();
         $parentRows = array();
@@ -247,7 +251,7 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
 
         }
         $data = "<?php\n";
-        $data .= "class $name extends Kwf_Model_Db\n";
+        $data .= "class $className extends Kwf_Model_Db\n";
         $data .= "{\n";
         $data .= $table;
         $data .= $referenceMap;
@@ -257,6 +261,88 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
     }
     protected function _createController()
     {
-        echo "coming soon\n";
+        echo "enter controller name: ";
+        $stdin = fopen('php://stdin', 'r');
+        $name = ucfirst(trim(strtolower(fgets($stdin))));
+        if (!$name) {
+            throw new Kwf_Exception_Client('controller must have a name');
+        }
+        echo "place the controller into a component directory? [y/N]: ";
+        $stdin = fopen('php://stdin', 'r');
+        $input = trim(strtolower(fgets($stdin)));
+        if (!($input == '' || $input == 'n')) {
+                echo "enter path of the component: ";
+            $stdin = fopen('php://stdin', 'r');
+            $path = trim(strtolower(fgets($stdin)));
+            $split = explode('/', $path);
+            $path = '';
+            foreach ($split as $s) {
+                $path .= ucfirst($s).'/';
+            }
+            $filename = 'components/'.$path.$name.'Controller.php';
+            $className = str_replace('/', '_', $path).$name.'Controller';
+        } else {
+            echo "enter path of the controller: ";
+            $stdin = fopen('php://stdin', 'r');
+            $controllerDirectory = trim(strtolower(fgets($stdin)));
+            $dirName = ucfirst($controllerDirectory);
+            if (!is_dir('controllers')) mkdir('controllers');
+            if (!is_dir('controllers/'.$dirName)) mkdir('controllers/'.$dirName);
+            $filename = 'controllers/'.ucfirst($controllerDirectory).'/'.$name.'Controller.php';
+            $className = ucfirst($controllerDirectory).'_'.$name.'Controller';
+//             $this->_checkControllerDirectory($controllerDirectory);
+        }
+        echo "enter type of the controller [form/grid]: ";
+        $stdin = fopen('php://stdin', 'r');
+        $input = trim(strtolower(fgets($stdin)));
+        if ($input == 'form') {
+            $extends = 'Kwf_Controller_Action_Auto_Form';
+            $initFunction = "    protected function _initFields()\n";
+            $initFunction .= "    {\n";
+            $initFunction .= "    }\n";
+        } else if ($input == 'grid') {
+            $extends = 'Kwf_Controller_Action_Auto_Grid';
+            $initFunction = "    protected function _initColumns()\n";
+            $initFunction .= "    {\n";
+            $initFunction .= "    }\n";
+        } else {
+            $extends = 'Kwf_Controller_Action';
+            $initFunction = '';
+        }
+        echo "enter model name used from the controller: ";
+        $stdin = fopen('php://stdin', 'r');
+        $modelName = trim(strtolower(fgets($stdin)));
+        $modelName = ucfirst($modelName);
+        $model = '';
+        if ($modelName) {
+            $model = "    protected \$_model = '$modelName';\n";
+        }
+        $data = "<?php\n";
+        $data .= "class $className extends $extends\n";
+        $data .= "{\n";
+        $data .= $model;
+        $data .= $initFunction;
+        $data .= "}\n";
+        file_put_contents($filename, $data);
+    }
+    protected function _checkControllerDirectory($directory)
+    {
+        $dir = ucfirst($directory);
+        $bootstrap = file_get_contents('bootstrap.php');
+        $pattern = 'controllers/'.$directory;
+        if (!preg_match("#addcontrollerdirectory\('$pattern#", strtolower($bootstrap))) {
+//             !preg_match('#addControllerDirectory("controllers/'.$directory.'#', $bootstrap)) {
+            echo "didn't found module $directory in bootstrap. Do you want to create it? [Y/n]: ";
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin)));
+            if ($input == '' || $input == 'y' || $input == 'j') {
+                do {
+                    echo "enter a module name for $directory: ";
+                    $stdin = fopen('php://stdin', 'r');
+                    $moduleName = trim(strtolower(fgets($stdin)));
+                } while (!$moduleName);
+                //register the controllerDirectory in bootstrap
+            }
+        }
     }
 }
