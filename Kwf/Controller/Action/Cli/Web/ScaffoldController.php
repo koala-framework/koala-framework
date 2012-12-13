@@ -181,7 +181,12 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
                 echo "enter path of the component: ";
             $stdin = fopen('php://stdin', 'r');
             $path = trim(strtolower(fgets($stdin)));
-            $filename = 'components/'.ucfirst($path).'/'.$name.'.php';
+            $split = explode('/', $path);
+            $path = '';
+            foreach ($split as $s) {
+                $path .= ucfirst($s).'/';
+            }
+            $filename = 'components/'.$path.$name.'.php';
         } else {
             $filename = 'models/'.$name.'.php';
         }
