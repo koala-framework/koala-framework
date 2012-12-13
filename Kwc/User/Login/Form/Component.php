@@ -58,6 +58,10 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 
     protected function _afterLogin(Kwf_User_Row $user)
     {
+        if (!empty($_GET['redirect']) && substr($_GET['redirect'], 0, 1) == '/') {
+            header('Location: ' . $_GET['redirect']);
+            die();
+        }
     }
 
     private function _getAuthenticateResult($identity, $credential)
