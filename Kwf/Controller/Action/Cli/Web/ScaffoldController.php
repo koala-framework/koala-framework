@@ -267,11 +267,12 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
         if (!$name) {
             throw new Kwf_Exception_Client('controller must have a name');
         }
+        $allowedComponent = '';
         echo "place the controller into a component directory? [y/N]: ";
         $stdin = fopen('php://stdin', 'r');
         $input = trim(strtolower(fgets($stdin)));
         if (!($input == '' || $input == 'n')) {
-                echo "enter path of the component: ";
+            echo "enter path of the component: ";
             $stdin = fopen('php://stdin', 'r');
             $path = trim(strtolower(fgets($stdin)));
             $split = explode('/', $path);
@@ -281,6 +282,10 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
             }
             $filename = 'components/'.$path.$name.'Controller.php';
             $className = str_replace('/', '_', $path).$name.'Controller';
+            $allowedComponent = "    protected function _isAllowedComponent()\n";
+            $allowedComponent .= "    {\n";
+            $allowedComponent .= "        return true;\n";
+            $allowedComponent .= "    }\n";
         } else {
             echo "enter path of the controller: ";
             $stdin = fopen('php://stdin', 'r');
@@ -290,17 +295,19 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
             if (!is_dir('controllers/'.$dirName)) mkdir('controllers/'.$dirName);
             $filename = 'controllers/'.ucfirst($controllerDirectory).'/'.$name.'Controller.php';
             $className = ucfirst($controllerDirectory).'_'.$name.'Controller';
-//             $this->_checkControllerDirectory($controllerDirectory);
+            $this->_checkControllerDirectory($controllerDirectory);
         }
         echo "enter type of the controller [form/grid]: ";
         $stdin = fopen('php://stdin', 'r');
         $input = trim(strtolower(fgets($stdin)));
         if ($input == 'form') {
+            $form = true;
             $extends = 'Kwf_Controller_Action_Auto_Form';
             $initFunction = "    protected function _initFields()\n";
             $initFunction .= "    {\n";
             $initFunction .= "    }\n";
         } else if ($input == 'grid') {
+            $form = false;
             $extends = 'Kwf_Controller_Action_Auto_Grid';
             $initFunction = "    protected function _initColumns()\n";
             $initFunction .= "    {\n";
@@ -315,13 +322,18 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
         $modelName = ucfirst($modelName);
         $model = '';
         if ($modelName) {
-            $model = "    protected \$_model = '$modelName';\n";
+            if ($form) {
+                $model = "    protected \$_modelName = '$modelName';\n";
+            } else {
+                $model = "    protected \$_model = '$modelName';\n";
+            }
         }
         $data = "<?php\n";
         $data .= "class $className extends $extends\n";
         $data .= "{\n";
         $data .= $model;
         $data .= $initFunction;
+        $data .= $allowedComponent;
         $data .= "}\n";
         file_put_contents($filename, $data);
     }
@@ -342,6 +354,9 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
                     $moduleName = trim(strtolower(fgets($stdin)));
                 } while (!$moduleName);
                 //register the controllerDirectory in bootstrap
+                $addDirectory = "\$front->addControllerDirectory('controllers/$dir', '$moduleName');";
+                $newBootstrap = preg_replace('#Controller_Front_Component::getInstance\(\);#',"Controller_Front_Component::getInstance();\n$addDirectory\n", $bootstrap);
+                file_put_contents('bootstrap.php', $newBootstrap);
             }
         }
     }
