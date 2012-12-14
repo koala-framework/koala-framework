@@ -124,7 +124,6 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         if (this.searchFormComponentId) {
             this.searchForm = Kwc.Form.formsByComponentId[this.searchFormComponentId];
 
-            this.searchForm.hideSubmit();
             this.view.applyBaseParams(this.searchForm.getValues());
             this.searchForm.on('fieldChange', function(f) {
                 this.view.applyBaseParams(this.searchForm.getValues());
