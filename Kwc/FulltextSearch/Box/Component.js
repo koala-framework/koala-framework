@@ -7,35 +7,46 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
     this.el = el;
     this.config = config;
 
+    Kwf.Utils.HistoryState.on('popstate', function() {
+        if (Kwf.Utils.HistoryState.currentState.searchVisible) {
+            if (this.searchMainContent) {
+                this.showSearch();
+            } else {
+                this.loadSearch();
+            }
+        } else {
+            if (!this.previousMainContent) {
+                //we didn't load the search using ajax, so we don't have a main content to show -> reload
+                location.href = location.href;
+            } else {
+                this.hideSearch();
+            }
+        }
+    }, this);
+
     if (location.protocol+'//'+location.host+location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
+        Kwf.Utils.HistoryState.currentState.searchVisible = true;
         return;
     }
 
     this.searchForm = Kwc.Form.findForm(el);
 
     this.searchForm.on('fieldChange', function(f) {
-        this.loadAndShowSearch();
+        this.loadOrShowSearch();
     }, this, { buffer: 500 });
 
     this.searchForm.on('beforeSubmit', function(f) {
-        this.loadAndShowSearch();
+        this.loadOrShowSearch();
         return false;
     }, this);
 
     Kwf.Utils.HistoryState.currentState.searchVisible = false;
-    Kwf.Utils.HistoryState.on('popstate', function() {
-        if (Kwf.Utils.HistoryState.currentState.searchVisible) {
-            this.showSearch();
-        } else {
-            this.hideSearch();
-        }
-    }, this);
 };
 
 Kwc.FulltextSearch.Box.Component.prototype =
 {
-    loadAndShowSearch: function()
+    loadOrShowSearch: function()
     {
         if (Kwf.Utils.HistoryState.currentState.searchVisible) return;
 
@@ -50,6 +61,11 @@ Kwc.FulltextSearch.Box.Component.prototype =
             return;
         }
 
+        this.loadSearch();
+    },
+
+    loadSearch: function()
+    {
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
 
@@ -80,6 +96,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
             scope: this
         });
     },
+
     hideSearch: function() {
         if (this.searchMainContent) {
             this.searchMainContent.hide();
