@@ -36,6 +36,10 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
         var inp = this.el.child('input');
         inp.dom.value = '';
     },
+    setValue: function(value) {
+        var inp = this.el.child('input');
+        inp.dom.value = value;
+    },
     hide: function() {
         this.el.hide();
     },

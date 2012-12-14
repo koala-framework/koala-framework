@@ -108,6 +108,12 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             f.clearValue();
         }, this);
     },
+    setValues: function(values) {
+        for(var i in values) {
+            var f = this.findField(i);
+            if (f) f.setValue(values[i]);
+        }
+    },
     onSubmit: function(e) {
         if (this.dontUseAjaxRequest) return;
 

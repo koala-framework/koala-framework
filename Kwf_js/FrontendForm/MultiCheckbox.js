@@ -39,6 +39,8 @@ Kwf.FrontendForm.MultiCheckbox = Ext.extend(Kwf.FrontendForm.Field, {
     },
     clearValue: function() {
     },
+    setValue: function() {
+    },
     getFieldName: function() {
         var m = this.el.dom.className.match(/ ([^ ]+) *$/);
         return m[1];

@@ -82,10 +82,21 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             this.searchForm.on('fieldChange', function(f) {
                 this.view.applyBaseParams(this.searchForm.getValues());
                 this.view.load();
+                this.addHistoryEntryDeleayedTask.delay(1000);
             }, this, { buffer: 250 });
+
+            this.addHistoryEntryDeleayedTask = new Ext.DelayedTask(function() {
+                Kwf.Utils.HistoryState.currentState[this.componentId].searchFormValues = this.searchForm.getValues();
+                var url = location.protocol+'//'+location.host+location.pathname+'?'+Ext.urlEncode(this.searchForm.getValues());
+                Kwf.Utils.HistoryState.pushState(document.title, url);
+            }, this);
         }
 
         Kwf.Utils.HistoryState.currentState[this.componentId] = {};
+
+        if (this.searchForm) {
+            Kwf.Utils.HistoryState.currentState[this.componentId].searchFormValues = this.searchForm.getValues();
+        }
 
         if (!Kwc.Directories.List.ViewAjax.filterLinks[this.componentId]) {
             Kwc.Directories.List.ViewAjax.filterLinks[this.componentId] = [];
@@ -111,6 +122,9 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
         Kwf.Utils.HistoryState.on('popstate', function() {
             if (!this._getState()) return;
+            if (this.searchForm) {
+                this.searchForm.setValues(this._getState().searchFormValues);
+            }
             if (this._getState().viewDetail) {
                 this.showDetail(this._getState().viewDetail);
             } else if (this._getState().viewFilter) {

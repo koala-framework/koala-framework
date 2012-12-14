@@ -19,6 +19,15 @@ Kwf.FrontendForm.Radio = Ext.extend(Kwf.FrontendForm.Field, {
         this.el.select('input').each(function(input) {
             input.dom.checked = false;
         }, this);
+    },
+    setValue: function(value) {
+        this.el.select('input').each(function(input) {
+            if (input.dom.value == value) {
+                input.dom.checked = true;
+            } else {
+                input.dom.checked = false;
+            }
+        }, this);
     }
 });
 
