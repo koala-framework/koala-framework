@@ -108,10 +108,6 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             f.clearValue();
         }, this);
     },
-    hideSubmit: function() {
-        this.el.child('.submitWrapper').enableDisplayMode();
-        this.el.child('.submitWrapper').hide();
-    },
     onSubmit: function(e) {
         if (this.dontUseAjaxRequest) return;
 
