@@ -1,0 +1,12 @@
+<?php
+class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item_Directory_Component
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['generators']['detail']['component'] = 'Kwc_FulltextSearch_Search_Detail_Component';
+        $ret['generators']['child']['component']['view'] = 'Kwc_FulltextSearch_Search_ViewAjax_Component';
+        $ret['childModel'] = 'Kwc_FulltextSearch_Search_Directory_Model';
+        return $ret;
+    }
+}

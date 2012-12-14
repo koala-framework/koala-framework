@@ -4,15 +4,31 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['assets']['files'][] = 'kwf/Kwc/FulltextSearch/Box/Component.js';
+        $ret['flags']['processInput'] = true;
         return $ret;
+    }
+
+    public function processInput($postData)
+    {
+        Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Component',
+                                   array('subroot'=>$this->getData()))
+            ->getChildComponent('-view')->getChildComponent('-searchForm')
+            ->getComponent()->processInput($postData);
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['searchPage'] = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_FulltextSearch_Search_Component',
+        $searchPage = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Component',
                                    array('subroot'=>$this->getData()));
+        $ret['searchForm'] = $searchPage->getChildComponent('-view')->getChildComponent('-searchForm');
+        $ret['config'] = array(
+            'searchTitle' => $searchPage->getTitle(),
+            'searchUrl' => $searchPage->getAbsoluteUrl(),
+        );
         return $ret;
     }
 }
