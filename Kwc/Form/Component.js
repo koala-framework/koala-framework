@@ -20,7 +20,7 @@ Kwc.Form.formsByComponentId = {};
 
 Kwc.Form.Component = function(form)
 {
-    this.addEvents('submitSuccess', 'fieldChange');
+    this.addEvents('beforeSubmit', 'submitSuccess', 'fieldChange');
     this.el = form;
     var config = form.parent().down('.config', true);
     if (!config) return;
@@ -121,7 +121,15 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             if (f) f.setValue(values[i]);
         }
     },
-    onSubmit: function(e) {
+
+    onSubmit: function(e)
+    {
+        //return false to cancel submit
+        if (this.fireEvent('beforeSubmit', this, e) === false) {
+            e.stopEvent();
+            return;
+        }
+
         if (this.dontUseAjaxRequest) return;
 
         var button = this.el.child('.submitWrapper .button');
