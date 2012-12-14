@@ -17,18 +17,15 @@ class Kwc_Composite_TwoColumns_Events extends Kwc_Abstract_Composite_Events
 
     public function onContentWidthChanged(Kwf_Component_Event_Component_ContentWidthChanged $event)
     {
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->dbId) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClassPage_ContentChanged(
-                $this->_class, $c->getPageOrRoot()->dbId
-            ));
-        }
+        $this->fireEvent(new Kwf_Component_Event_ComponentClassPage_ContentChanged(
+            $this->_class, $event->component->getPageOrRoot()
+        ));
     }
 
     public function onRecursiveContentWidthChanged(Kwf_Component_Event_Component_RecursiveContentWidthChanged $event)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($event->componentId);
         $this->fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
-            $this->_class, $c->componentId
+            $this->_class, $event->component
         ));
     }
 }
