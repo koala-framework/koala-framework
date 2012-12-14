@@ -26,6 +26,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
 
     if (location.protocol+'//'+location.host+location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
+        this.searchMainContent = Ext.select('.kwfMainContent').first();
         Kwf.Utils.HistoryState.currentState.searchVisible = true;
         return;
     }
@@ -106,6 +107,6 @@ Kwc.FulltextSearch.Box.Component.prototype =
     },
     showSearch: function() {
         this.searchMainContent.show();
-        this.previousMainContent.hide();
+        if (this.previousMainContent) this.previousMainContent.hide();
     }
 };
