@@ -128,7 +128,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             return;
         }
 
-        if (this.dontUseAjaxRequest) return;
+        if (!this.config.useAjaxRequest || this.ajaxRequestSubmitted) return;
 
         var button = this.el.child('.submitWrapper .button');
         button.down('.saving').show();
@@ -145,7 +145,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             form: this.el.down('form'),
             failure: function() {
                 //on failure try a plain old post of the form
-                this.dontUseAjaxRequest = true; //avoid endless recursion
+                this.ajaxRequestSubmitted = true; //avoid endless recursion
                 button.down('.submit').dom.click();
             },
             success: function(response, options, r) {
