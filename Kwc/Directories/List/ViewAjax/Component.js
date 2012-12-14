@@ -79,16 +79,34 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             this.searchForm = Kwc.Form.formsByComponentId[this.searchFormComponentId];
 
             this.view.applyBaseParams(this.searchForm.getValues());
-            this.searchForm.on('fieldChange', function(f) {
-                this.view.applyBaseParams(this.searchForm.getValues());
-                this.view.load();
-                this.addHistoryEntryDeleayedTask.delay(1000);
-            }, this, { buffer: 250 });
 
-            this.addHistoryEntryDeleayedTask = new Ext.DelayedTask(function() {
-                Kwf.Utils.HistoryState.currentState[this.componentId].searchFormValues = this.searchForm.getValues();
-                var url = location.protocol+'//'+location.host+location.pathname+'?'+Ext.urlEncode(this.searchForm.getValues());
-                Kwf.Utils.HistoryState.pushState(document.title, url);
+            this.searchForm.on('fieldChange', function(f) {
+
+                var values = this.searchForm.getValues();
+                var diffFound = false;
+                for(var i in values) {
+                    if (values[i] != this.view.getBaseParams()[i]) {
+                        diffFound = true;
+                        break;
+                    }
+                }
+                if (diffFound) {
+                    this.view.applyBaseParams(values);
+                    this.view.load();
+                    this.addHistoryEntryDeleayedTask.delay(2000);
+                }
+            }, this, { buffer: 500 });
+
+            this.searchForm.on('beforeSubmit', function(f) {
+                var values = this.searchForm.getValues();
+                this.view.applyBaseParams(values);
+                this.view.load();
+                this.pushSearchFormHistoryState();
+                return false;
+            }, this);
+
+            this.addHistoryEntryDeleayedTask = new Ext.util.DelayedTask(function() {
+                this.pushSearchFormHistoryState();
             }, this);
         }
 
@@ -155,6 +173,14 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         this.initialLoadingEl.enableDisplayMode();
 
         this.onMenuItemChanged();
+    },
+
+    pushSearchFormHistoryState: function()
+    {
+        this.addHistoryEntryDeleayedTask.cancel();
+        this._getState().searchFormValues = this.searchForm.getValues();
+        var url = location.protocol+'//'+location.host+this.viewUrl+'?'+Ext.urlEncode(this.searchForm.getValuesIncludingPost());
+        Kwf.Utils.HistoryState.pushState(document.title, url);
     },
 
     onMenuItemChanged: function()
