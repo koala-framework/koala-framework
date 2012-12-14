@@ -63,11 +63,9 @@ Kwc.Form.Component = function(form)
         }, this);
     }
 
-    if (this.config.useAjaxRequest) {
-        var button = form.child('form button.submit');
-        if (button) {
-            button.on('click', this.onSubmit, this);
-        }
+    var button = form.child('form button.submit');
+    if (button) {
+        button.on('click', this.onSubmit, this);
     }
 
     this.fields.forEach(function(f) {
