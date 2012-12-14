@@ -75,6 +75,16 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         }, this);
         this.view.store.add(records);
 
+        if (this.searchFormComponentId) {
+            this.searchForm = Kwc.Form.formsByComponentId[this.searchFormComponentId];
+
+            this.view.applyBaseParams(this.searchForm.getValues());
+            this.searchForm.on('fieldChange', function(f) {
+                this.view.applyBaseParams(this.searchForm.getValues());
+                this.view.load();
+            }, this, { buffer: 250 });
+        }
+
         Kwf.Utils.HistoryState.currentState[this.componentId] = {};
 
         if (!Kwc.Directories.List.ViewAjax.filterLinks[this.componentId]) {
@@ -121,15 +131,6 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             }
         }, this);
 
-        if (this.searchFormComponentId) {
-            this.searchForm = Kwc.Form.formsByComponentId[this.searchFormComponentId];
-
-            this.view.applyBaseParams(this.searchForm.getValues());
-            this.searchForm.on('fieldChange', function(f) {
-                this.view.applyBaseParams(this.searchForm.getValues());
-                this.view.load();
-            }, this, { buffer: 250 });
-        }
         Kwc.Directories.List.ViewAjax.superclass.initComponent.call(this);
     },
 
