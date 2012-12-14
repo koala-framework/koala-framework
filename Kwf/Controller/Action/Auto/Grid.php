@@ -781,7 +781,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
                     if (!is_null($currentColumnHeader)) {
                         $columnsHeader[] = (string)$currentColumnHeader;
-                        $colVal = $column->load($row, Kwf_Grid_Column::ROLE_EXPORT);
+                        $colVal = $column->load($row, Kwf_Grid_Column::ROLE_EXPORT, array());
                         $setTypeTo = 'string';
                         if ($column->getType()) {
                             if ($column->getType() == 'boolean'
