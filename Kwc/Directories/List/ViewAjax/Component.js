@@ -57,9 +57,12 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             directoryComponentId: this.directoryComponentId,
             baseParams: {
                 componentId: this.componentId
-            }
+            },
+            placeholder: this.placeholder
         });
         this.items = [this.view];
+
+        this.renderTo.select('.noEntriesFound').remove(); //view renders own
 
         var records = [];
         this.renderTo.select('.kwfViewAjaxItem').each(function(el) {
@@ -284,7 +287,8 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             tpl: this.tpl,
             cls: 'kwfView',
             itemSelector: 'div.kwfViewAjaxItem',
-            emptyText: trlKwf('no entries found'),
+            emptyText: '<span class="noEntriesFound">'+this.placeholder.noEntriesFound+'</span>',
+            deferEmptyText: false,
             singleSelect: false,
             border: false,
             autoHeight: true

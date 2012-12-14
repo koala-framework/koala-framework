@@ -36,6 +36,9 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             'componentId' => $this->getData()->componentId,
             'directoryComponentId' => $this->getData()->parent->getComponent()->getItemDirectory()->componentId,
             'searchFormComponentId' => $this->_getSearchForm() ? $this->_getSearchForm()->componentId : null,
+            'placeholder' => array(
+                'noEntriesFound' => $this->_getPlaceholder('noEntriesFound')
+            )
         );
         return $ret;
     }
