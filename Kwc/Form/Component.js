@@ -103,6 +103,13 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         }, this);
         return ret;
     },
+    //returns values including parameters required for processInput to be considered as posted
+    getValuesIncludingPost: function() {
+        var ret = this.getValues();
+        ret[this.config.componentId] = true;
+        ret[this.config.componentId+'-post'] = true;
+        return ret;
+    },
     clearValues: function() {
         this.fields.each(function(f) {
             f.clearValue();
