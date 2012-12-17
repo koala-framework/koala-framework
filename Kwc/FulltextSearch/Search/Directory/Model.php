@@ -51,7 +51,6 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
         if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
             throw new Kwf_Exception_NotYetImplemented();
         }
-
         $subroot = Kwf_Component_Data_Root::getInstance(); //TODO dynamic
 
         $res = Kwf_Util_Fulltext_Backend_Abstract::getInstance()
@@ -72,9 +71,20 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
             $select = $where;
         }
 
-        if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
-            if (isset($this->_rows[$id])) {
-                $dataKeys = array($id);
+        $whereId = $select->getPart(Kwf_Model_Select::WHERE_ID);
+        if ($eq = $select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
+            foreach ($eq as $field=>$value) {
+                if ($field == 'id') {
+                    $whereId = $value;
+                } else {
+                    throw new Kwf_Exception_NotYetImplemented();
+                }
+            }
+        }
+
+        if ($whereId) {
+            if (isset($this->_rows[$whereId])) {
+                $dataKeys = array($whereId);
                 return new $this->_rowsetClass(array(
                     'model' => $this,
                     'dataKeys' => $dataKeys
