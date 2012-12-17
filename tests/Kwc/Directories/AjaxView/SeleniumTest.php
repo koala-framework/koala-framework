@@ -18,8 +18,8 @@ class Kwc_Directories_AjaxView_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->assertElementPresent('link=foo1');
         $this->assertElementPresent('link=foo2');
         $this->type('css=input[type=text]', 'foo1');
-        $this->waitForConnections();
         sleep(1);
+        $this->waitForConnections();
         $this->assertElementPresent('link=foo1');
         $this->assertElementNotPresent('link=foo2');
     }
