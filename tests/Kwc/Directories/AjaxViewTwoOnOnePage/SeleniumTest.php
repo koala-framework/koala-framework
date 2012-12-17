@@ -5,7 +5,7 @@
  * http://kwf.niko.vivid/kwf/kwctest/Kwc_Directories_AjaxViewTwoOnOnePage_Root/directory
  * http://kwf.niko.vivid/kwf/kwctest/Kwc_Directories_AjaxViewTwoOnOnePage_Root/test
  */
-class Kwc_Directories_AjaxView_SeleniumTest extends Kwf_Test_SeleniumTestCase
+class Kwc_Directories_AjaxViewTwoOnOnePage_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
     {
