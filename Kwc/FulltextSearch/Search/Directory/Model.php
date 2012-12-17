@@ -48,6 +48,10 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
             }
         }
 
+        if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
+            throw new Kwf_Exception_NotYetImplemented();
+        }
+
         $subroot = Kwf_Component_Data_Root::getInstance(); //TODO dynamic
 
         $res = Kwf_Util_Fulltext_Backend_Abstract::getInstance()
@@ -67,6 +71,17 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
         } else {
             $select = $where;
         }
+
+        if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
+            if (isset($this->_rows[$id])) {
+                $dataKeys = array($id);
+                return new $this->_rowsetClass(array(
+                    'model' => $this,
+                    'dataKeys' => $dataKeys
+                ));
+            }
+        }
+
         $res = $this->_query($select);
 
         $dataKeys = array();
