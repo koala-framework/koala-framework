@@ -217,7 +217,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 self::_clearAssetsAll(substr($file, strrpos($file, '.')+1));
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
-                return;
 
             } else if ($event == 'CREATE' || $event == 'DELETE' || $event == 'MOVED_TO' || $event == 'MOVED_FROM') {
 
@@ -225,7 +224,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 self::_clearAssetsAll(substr($file, strrpos($file, '.')+1));
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
-                return;
+
             } else if (self::_endsWith($file, '/dependencies.ini')) {
                 if ($event == 'MODIFY') {
 
@@ -234,7 +233,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     self::_clearAssetsAll();
 
                     echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
-                    return;
                 }
             }
         } else if (preg_match('#/config([^/]*)?\.ini$#', $file)) { //config.ini, configPoi.ini, config.local.ini (in any directory)
@@ -278,6 +276,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $cls = str_replace('/', '_', substr($file, strlen($ip)+1, -4));
                 }
             }
+
             if (!$cls) {
                 echo "unknown component class?!\n";
                 continue;
