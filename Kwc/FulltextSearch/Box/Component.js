@@ -12,6 +12,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
             if (this.searchMainContent) {
                 this.showSearch();
             } else {
+                this.searchForm.setValues(Kwf.Utils.HistoryState.currentState.searchBoxValues);
                 this.loadSearch();
             }
         } else {
@@ -24,21 +25,23 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
         }
     }, this);
 
+    this.searchForm = Kwc.Form.findForm(el);
+
     if (location.protocol+'//'+location.host+location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
         this.searchMainContent = Ext.select('.kwfMainContent').first();
+        Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
         Kwf.Utils.HistoryState.currentState.searchVisible = true;
         return;
     }
-
-    this.searchForm = Kwc.Form.findForm(el);
+    this.previousSearchFormValues = this.searchForm.getValues();
 
     this.searchForm.on('fieldChange', function(f) {
-        this.loadOrShowSearch();
+        this.doSearch();
     }, this, { buffer: 500 });
 
     this.searchForm.on('beforeSubmit', function(f) {
-        this.loadOrShowSearch();
+        this.doSearch();
         return false;
     }, this);
 
@@ -47,11 +50,22 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
 
 Kwc.FulltextSearch.Box.Component.prototype =
 {
-    loadOrShowSearch: function()
+    doSearch: function()
     {
+        Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
+
         if (Kwf.Utils.HistoryState.currentState.searchVisible) return;
 
-        if (this.previousSearchFormValues == Ext.encode(this.searchForm.getValues())) {
+        var values = this.searchForm.getValues();
+        var diffFound = false;
+        for(var i in values) {
+            if (values[i] != this.previousSearchFormValues[i]) {
+                diffFound = true;
+                break;
+            }
+        }
+
+        if (!diffFound) {
             //don't show search if value didn't change
             return;
         }
@@ -62,18 +76,28 @@ Kwc.FulltextSearch.Box.Component.prototype =
             return;
         }
 
-        this.loadSearch();
+
+        this.loadSearch({
+            success: function() {
+                Kwf.Utils.HistoryState.currentState.searchVisible = true;
+                var ajaxViewEl = this.searchMainContent.child('.kwcDirectoriesListViewAjax');
+                if (ajaxViewEl && ajaxViewEl.kwcViewAjax) {
+                    ajaxViewEl.kwcViewAjax.pushSearchFormHistoryState();
+                }
+            },
+            scope: this
+        });
     },
 
-    loadSearch: function()
+    loadSearch: function(params)
     {
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
 
-        var params = this.searchForm.getValuesIncludingPost();
-        params.url = this.config.searchUrl;
+        var requestParams = this.searchForm.getValuesIncludingPost();
+        requestParams.url = this.config.searchUrl;
         Ext.Ajax.request({
-            params: params,
+            params: requestParams,
             url: url,
             success: function(response, options) {
                 this.previousMainContent = Ext.select('.kwfMainContent').first();
@@ -88,11 +112,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
                 this.searchMainContent.enableDisplayMode('block');
                 Kwf.callOnContentReady(this.searchMainContent);
 
-                Kwf.Utils.HistoryState.currentState.searchVisible = true;
-                var ajaxViewEl = this.searchMainContent.child('.kwcDirectoriesListViewAjax');
-                if (ajaxViewEl && ajaxViewEl.kwcViewAjax) {
-                    ajaxViewEl.kwcViewAjax.pushSearchFormHistoryState();
-                }
+                if (params && params.success) params.success.call(params.scope || this);
             },
             scope: this
         });
@@ -102,7 +122,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
         if (this.searchMainContent) {
             this.searchMainContent.hide();
             this.previousMainContent.show();
-            this.previousSearchFormValues = Ext.encode(this.searchForm.getValues());
+            this.previousSearchFormValues = this.searchForm.getValues();
         }
     },
     showSearch: function() {
