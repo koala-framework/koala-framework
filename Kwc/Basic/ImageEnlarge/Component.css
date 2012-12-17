@@ -1,6 +1,9 @@
 .cssClass { position: relative; }
-.cssClass a.kwcEnlargeTag { position: relative; display: block; }
-.cssClass a.kwcBasicLinkTagIntern { position: relative; display: block; }
+.cssClass a.kwcEnlargeTag,
+.cssClass a.kwcBasicDownloadTag,
+.cssClass a.kwcBasicLinkTagIntern,
+.cssClass a.kwcBasicLinkTagExtern,
+.cssClass a.kwcBasicLinkTagMail { position: relative; display: block; }
 
 .cssClass a img {
     display: block;
@@ -12,8 +15,8 @@
 
 .cssClass .outerHoverIcon .innerHoverIcon {
     display: block;
-    width: 132px;
-    height: 130px;
+    width: 38px;
+    height: 38px;
     position: absolute;
     left: 50%;
     margin-left: -19px;
@@ -86,6 +89,10 @@
 
 .cssClass a.kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
     background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/downloadIcon.png) no-repeat 0 0;
+}
+
+.cssClass a.kwcBasicLinkTagMail .outerHoverIcon .innerHoverIcon {
+    background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/mailIcon.png) no-repeat 0 0;
 }
 
 
