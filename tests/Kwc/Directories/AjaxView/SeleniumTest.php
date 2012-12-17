@@ -61,7 +61,7 @@ class Kwc_Directories_AjaxView_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->openKwc('/directory');
         $this->click('link=foo1');
         $this->waitForConnections();
-        $this->assertContainsText('css=.detail', 'foo1');
+        $this->assertContainsText('css=.kwcDirectoriesAjaxViewDetail', 'foo1');
         $this->assertNotVisible('link=foo1');
         $this->assertNotVisible('link=foo2');
         $this->click('link=back');
