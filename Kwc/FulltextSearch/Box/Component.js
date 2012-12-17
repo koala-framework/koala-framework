@@ -37,6 +37,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
     this.previousSearchFormValues = this.searchForm.getValues();
 
     this.searchForm.on('fieldChange', function(f) {
+        if (f instanceof Kwf.FrontendForm.Field && f.getValue().length < 3) return; //minimum length
         this.doSearch();
     }, this, { buffer: 500 });
 
