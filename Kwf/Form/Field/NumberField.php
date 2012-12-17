@@ -24,7 +24,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     public function getMetaData($model)
     {
         $ret = parent::getMetaData($model);
-        $ret['inputType'] = 'text';
+        $ret['inputType'] = 'text'; //don't use type=number in ExtJs forms as thats not working properly and ExtJS handles the number input anyway correctly
         return $ret;
     }
 
