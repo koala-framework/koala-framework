@@ -10,23 +10,24 @@ Kwf.onContentReady(function(el) {
             Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
 
             Ext.fly(a).on('click', function(ev) {
-                var view = Kwc.Directories.List.ViewAjax.byComponentId[config.viewComponentId];
+                var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.config.viewComponentId];
                 if (!view) return
-                ev.stopEvent();
                 view.loadView({
-                    filterComponentId: config.componentId
+                    filterComponentId: this.config.componentId
                 });
-                if (view._getState().viewFilter != config.componentId) {
-                    view._getState().viewFilter = config.componentId;
+                if (view._getState().viewFilter != this.config.componentId) {
+                    view._getState().viewFilter = this.config.componentId;
                     view._getState().menuLinkId = a.id;
                     Kwf.Utils.HistoryState.pushState(document.title, a.href);
                 }
-                Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].forEach(function(i) {
+                Kwc.Directories.List.ViewAjax.filterLinks[this.config.viewComponentId].forEach(function(i) {
                     Ext.fly(i).removeClass('current');
                 }, this);
                 Ext.fly(a).addClass('current');
 
-            }, this);
+                ev.stopEvent();
+
+            }, {config: config});
         }
     }, this);
 });
@@ -51,6 +52,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
     cls: 'posts',
     initComponent: function() {
         Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
+        Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
         this.view = new Kwc.Directories.List.ViewAjax.View({
             controllerUrl: this.controllerUrl,
             directoryUrl: this.directoryUrl,
@@ -237,6 +239,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 });
 
 Kwc.Directories.List.ViewAjax.byComponentId = {};
+Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId = {};
 Kwc.Directories.List.ViewAjax.filterLinks = {};
 
 Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
