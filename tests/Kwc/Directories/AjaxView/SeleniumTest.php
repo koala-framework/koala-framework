@@ -68,4 +68,17 @@ class Kwc_Directories_AjaxView_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->assertVisible('link=foo1');
         $this->assertVisible('link=foo2');
     }
+
+    public function testFilterReload()
+    {
+        $this->openKwc('/directory');
+        $this->type('css=input[type=text]', 'foo1');
+        $this->click('css=button');
+        $this->waitForConnections();
+        $this->assertElementPresent('link=foo1');
+        $this->assertElementNotPresent('link=foo2');
+        $this->refreshAndWait(); //must keep filter value
+        $this->assertElementPresent('link=foo1');
+        $this->assertElementNotPresent('link=foo2');
+    }
 }
