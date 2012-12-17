@@ -92,7 +92,18 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     echo "more than 100 events (".count($eventsQueue)."), did you switch branches or something?\n";
                     echo "I'm giving up.\n";
                     //TODO: clear-cache and restart clear-cache-watcher
+
+                    $ppid = $proc->getPid();
+                    //use ps to get all the children of this process, and kill them
+                    $pids = preg_split('/\s+/', `ps -o pid --no-heading --ppid $ppid`);
+                    foreach($pids as $pid) {
+                        if(is_numeric($pid)) {
+                            echo "Killing $pid\n";
+                            posix_kill($pid, 9); //9 is the SIGKILL signal
+                        }
+                    }
                     $proc->terminate();
+                    $proc->close(false);
                     exit;
                 }
                 foreach ($eventsQueue as $event) {

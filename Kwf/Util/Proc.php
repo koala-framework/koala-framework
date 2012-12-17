@@ -41,4 +41,15 @@ class Kwf_Util_Proc
         }
         return $ret;
     }
+
+    public function getPid()
+    {
+        $st = $this->getStatus();
+        return $st['pid'];
+    }
+
+    public function getStatus()
+    {
+        return proc_get_status($this->_process);
+    }
 }
