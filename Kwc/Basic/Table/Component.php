@@ -28,7 +28,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         // tableStyles: the key is the table-css-class, the value the name for
         // settings page in backend
         // e.g.: 'green' => trlKwf('Green')
-        $ret['tableStyles'] = array('green' => trlKwf('Green'));
+        $ret['tableStyles'] = array('standard' => trlKwf('Standard'));
         $ret['cssClass'] = 'webStandard';
 
         $ret['extConfig'] = 'Kwc_Basic_Table_ExtConfig';
