@@ -160,7 +160,8 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             $ret['item'] = array_shift($this->_getItems($select));
         } else if ($partial instanceof Kwf_Component_Partial_Paging) {
             if ($partial instanceof Kwf_Component_Partial_Id) {
-                $select = $this->_getSelect()->whereId($nr);
+                $select = new Kwf_Component_Select();
+                $select->whereId($nr);
             } else if ($partial instanceof Kwf_Component_Partial_Paging) {
                 $select = $this->_getSelect()->limit(1, $nr);
             }
