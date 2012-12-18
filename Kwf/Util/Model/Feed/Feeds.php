@@ -88,6 +88,7 @@ class Kwf_Util_Model_Feed_Feeds extends Kwf_Model_Abstract
                 libxml_disable_entity_loader($entityLoaderWasDisabled);
                 if ($xml === false) {
                     $link = preg_replace('#&(?=[a-z_0-9]+=)#', '&amp;', $link);
+                    $link = str_replace('& ', '&amp; ', $link);
                     $entityLoaderWasDisabled = libxml_disable_entity_loader(true);
                     $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
                     libxml_disable_entity_loader($entityLoaderWasDisabled);

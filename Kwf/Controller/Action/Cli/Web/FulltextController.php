@@ -42,6 +42,13 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         foreach ($documentIds as $documentId) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($documentId);
             if ($page && Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
+            $c = $page;
+            while($c && $c = $c->parent) {
+                if (Kwc_Abstract::getFlag($c->componentClass, 'skipFulltextRecursive')) {
+                    $page = null;
+                    break;
+                }
+            }
             if (!$page) {
                 if (!$this->_getParam('slient')) {
                     echo "\n$documentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
@@ -204,6 +211,14 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                     ));
                     if ($this->_getParam('verbose')) echo " done\n";
                     foreach ($childPages as $c) {
+
+                        $i = $c;
+                        do {
+                            if (Kwc_Abstract::getFlag($i->componentClass, 'skipFulltextRecursive')) {
+                                continue 2;
+                            }
+                        } while($i = $i->parent);
+
                         if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
                         $queue[] = $c->componentId;
                         file_put_contents($queueFile, implode("\n", $queue));
@@ -433,6 +448,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
             if (!$page) continue;
             if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
+            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltextRecursive')) $page = null;
             if (!$page) continue; //should not happen
             $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
             if (!$newDoc) {
@@ -514,6 +530,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             ));
             if ($this->_getParam('verbose')) echo " done\n";
             foreach ($childPages as $c) {
+                $i = $c;
+                do {
+                    if (Kwc_Abstract::getFlag($i->componentClass, 'skipFulltextRecursive')) {
+                        continue 2;
+                    }
+                } while($i = $i->parent);
                 if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
                 $queue[] = $c->componentId;
             }
