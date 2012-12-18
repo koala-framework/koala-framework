@@ -109,6 +109,7 @@ class Vpc_Mail_HtmlParser
                 }
             }
         }
+        if (isset($attributes['style']) && $attributes['style'] == '') unset($attributes['style']);
 
         $this->_ret .= "<$tag";
         foreach ($attributes as $n=>$v) {
