@@ -121,6 +121,7 @@ class Kwc_Mail_HtmlParser
                 }
             }
         }
+
         if ($styles) {
             $attributes['style'] = '';
             foreach ($styles as $s=>$v) {
