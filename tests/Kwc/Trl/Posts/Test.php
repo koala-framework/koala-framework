@@ -37,6 +37,6 @@ class Kwc_Trl_Posts_Test extends Kwc_TestAbstract
         $this->assertContains('Content en 1', $src);
         $this->assertContains('Content en 2', $src);
         $this->assertContains('Write', $src);
-        $this->assertContains('/en/test/write', $src);
+        $this->assertContains('/en/test/child:write', $src);
     }
 }
