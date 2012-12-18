@@ -1,14 +1,14 @@
 <?php
-class Vpc_Basic_Flash_Upload_Trl_Component extends Vpc_Chained_Trl_Component
+class Kwc_Basic_Flash_Upload_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['flash'] = array(
-            'class' => 'Vps_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Static',
             'component' => $masterComponentClass
         );
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
 
