@@ -24,16 +24,18 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
 
     public function processInput($parentRow, $postData = array())
     {
-        $id = $this->_getIdByParentRow($parentRow);
-        if ($id === 0 || $id === '0' || is_null($id)) {
-            $email = null;
-            if ($this->getByName('email') && isset($postData[$this->getByName('email')->getFieldName()])) {
-                $email = $postData[$this->getByName('email')->getFieldName()];
-            }
+        if ($this->_model instanceof Kwf_User_Model) {
+            $id = $this->_getIdByParentRow($parentRow);
+            if ($id === 0 || $id === '0' || is_null($id)) {
+                $email = null;
+                if ($this->getByName('email') && isset($postData[$this->getByName('email')->getFieldName()])) {
+                    $email = $postData[$this->getByName('email')->getFieldName()];
+                }
 
-            $this->_newUserRow = $this->_model->createUserRow(
-                $email, null
-            );
+                $this->_newUserRow = $this->_model->createUserRow(
+                    $email, null
+                );
+            }
         }
 
         return parent::processInput($parentRow, $postData);
