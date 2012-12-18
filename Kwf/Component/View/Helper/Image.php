@@ -27,16 +27,4 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
         if (is_string($image)) return parent::_getImageSize($image);
         return $image->getComponent()->getImageDimensions();
     }
-
-    protected function _getImageFileContents($image)
-    {
-        if (is_string($image)) return parent::_getImageFileContents($image);
-        $type = $image->getComponent()->getImageUrlType();
-        return Kwf_Media::getOutputWithoutCheckingIsValid($image->componentClass, $image->componentId, $type);
-    }
-
-    protected function _getMailInterface()
-    {
-        return $this->_getRenderer();
-    }
 }

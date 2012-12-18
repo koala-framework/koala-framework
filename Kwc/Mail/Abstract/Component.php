@@ -7,7 +7,6 @@
 abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 {
     private $_mailData;
-    protected $_images = array();
 
     public static function getSettings()
     {
@@ -49,7 +48,6 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
     public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
-        $this->_images = array();
         $this->_mailData = $data;
 
         $mail = new Kwf_Mail();
@@ -67,7 +65,10 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         if ((!$format && $recipient->getMailFormat() == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) ||
             $format == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
         {
-            $mail->setBodyHtml($this->getHtml($recipient, true));
+            $html = $this->getHtml($recipient);
+            $mail->setDomain($this->getData()->getDomain());
+            $mail->setAttachImages($this->_getSetting('attachImages'));
+            $mail->setBodyHtml($html);
         }
         $mail->setBodyText($this->getText($recipient));
         $mail->setSubject($this->getSubject($recipient));
@@ -81,13 +82,6 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
             $mail->setReturnPath($this->_getSetting('returnPath'));
         }
 
-        if ($this->_images) {
-            $mail->setType(Zend_Mime::MULTIPART_RELATED);
-            foreach ($this->_images as $image) {
-                $mail->addAttachment($image);
-            }
-        }
-
         $bccs = $this->_getSetting('bcc');
         if ($bccs) {
             if (!is_array($bccs)) $bccs = array($bccs);
@@ -95,7 +89,6 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
                 $mail->addBcc($bcc);
             }
         }
-        //TODO: attachments
 
         return $mail;
     }
@@ -122,19 +115,12 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
     /**
      * Gibt den personalisierten HTML-Quelltext der Mail zurück
-     *
-     * @param bool attachImages: ob images als attachment angehängt werden sollen oder nicht
-     *                           (needs to be set to false even if attachImages setting is true
-     *                           when createing the html preview in the backend)
      */
-    public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
+    public function getHtml(Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $renderer = new Kwf_Component_Renderer_Mail();
         $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_HTML);
         $renderer->setRecipient($recipient);
-        if ($this->_getSetting('attachImages')) {
-            $renderer->setAttachImages($attachImages);
-        }
         $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
@@ -252,16 +238,5 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
             }
         }
         return $ret;
-    }
-
-    public function addImage(Zend_Mime_Part $image)
-    {
-        // Bild nur hinzufügen wenn dasselbe nicht bereits hinzugefügt wurde.
-        // wenns das bild schon gibt, hat es eh die gleiche cid
-        $found = false;
-        foreach ($this->_images as $addedImg) {
-            if ($image == $addedImg) $found = true;
-        }
-        if ($found === false) $this->_images[] = $image;
     }
 }

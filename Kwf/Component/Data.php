@@ -147,20 +147,29 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns domain for current component
+     *
+     * @return string
+     */
+    public function getDomain()
+    {
+        $data = $this;
+        do {
+            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
+                return $data->getComponent()->getDomain();
+            }
+        } while($data = $data->parent);
+        return Kwf_Config::getValue('server.domain');
+    }
+
+    /**
      * Returns absolute url including domain and protocol (http://)
      *
      * @return string
      */
     public function getAbsoluteUrl()
     {
-        $ret = $this->url;
-        $data = $this;
-        do {
-            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
-                return 'http://'.$data->getComponent()->getDomain().$ret;
-            }
-        } while($data = $data->parent);
-        return 'http://'.Kwf_Config::getValue('server.domain').$ret;
+        return 'http://'.$this->getDomain().$this->url;
     }
 
     /**

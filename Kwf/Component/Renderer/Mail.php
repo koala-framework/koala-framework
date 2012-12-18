@@ -1,28 +1,11 @@
 <?php
-class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract implements Kwf_View_MailInterface
+class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
 {
     const RENDER_HTML = 'html';
     const RENDER_TXT = 'txt';
 
     private $_renderFormat = self::RENDER_HTML;
     private $_recipient;
-    private $_attachImages = false;
-    private $_images = array();
-
-    public function getAttachImages()
-    {
-        return $this->_attachImages;
-    }
-
-    public function setAttachImages($attachImages)
-    {
-        $this->_attachImages = $attachImages;
-    }
-
-    public function addImage(Zend_Mime_Part $image)
-    {
-        $this->getRenderComponent()->getComponent()->addImage($image);
-    }
 
     public function getRenderFormat()
     {

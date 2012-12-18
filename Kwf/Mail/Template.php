@@ -134,6 +134,12 @@ class Kwf_Mail_Template
         return $this;
     }
 
+    public function setAttachImages($attachImages)
+    {
+        $this->_mail->setAttachImages($attachImages);
+        return $this;
+    }
+
     public function addAttachment(Zend_Mime_Part $attachment)
     {
         $this->_mail->addAttachment($attachment);
@@ -187,18 +193,6 @@ class Kwf_Mail_Template
         $bodyHtml = $this->_getHtmlMailContent();
         if (!is_null($bodyHtml)) {
             $this->_mail->setBodyHtml($bodyHtml);
-        }
-
-        //hinzufügen von Bilder zur Email
-        if ($this->_view->getImages()) {
-            $this->_mail->setType(Zend_Mime::MULTIPART_RELATED);
-            $addedImages = array();
-            foreach ($this->_view->getImages() as $image) {
-                if (in_array($image, $addedImages)) continue;
-
-                $this->_mail->addAttachment($image);
-                $addedImages[] = $image;
-            }
         }
 
         if (!($this->getSubject()) && $this->_view->subject) {

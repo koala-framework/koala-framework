@@ -7,6 +7,8 @@ class Kwf_Mail extends Zend_Mail
     protected $_ownCc = array();
     protected $_ownBcc = array();
     protected $_attachments = array();
+    protected $_attachImages = false;
+    protected $_domain = null;
 
     public function __construct($mustNotBeSet = null)
     {
@@ -69,6 +71,65 @@ class Kwf_Mail extends Zend_Mail
             parent::addTo($email, $name);
         }
         return $this;
+    }
+
+    public function setAttachImages($attachImages)
+    {
+        $this->_attachImages = $attachImages;
+        return $this;
+    }
+
+    public function setDomain($domain)
+    {
+        $this->_domain = $domain;
+        return $this;
+    }
+
+    public function getDomain()
+    {
+        if (!$this->_domain) {
+            $this->_domain = Kwf_Config::getValue('server.domain');
+        }
+        return $this->_domain;
+    }
+
+    public function setBodyHtml($html, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
+    {
+        while (preg_match('/img src=\"\/(.*?)\"/i', $html, $matches)) {
+            $path = '/' . $matches[1];
+            if ($this->_attachImages) {
+                if (substr($path, 0, 6) == '/media') {
+                    $parts = explode('/', substr($path, 1));
+                    $class = $parts[1];
+                    $id = $parts[2];
+                    $type = $parts[3];
+                    $checksum = $parts[4];
+                    $filename = $parts[6];
+                    if ($checksum != Kwf_Media::getChecksum($class, $id, $type, $filename)) {
+                        throw new Kwf_Exception_AccessDenied('Access to file not allowed.');
+                    }
+                    $output = Kwf_Media::getOutputWithoutCheckingIsValid($class, $id, $type);
+                } else {
+                    $loader = new Kwf_Assets_Loader();
+                    $image = $loader->getDependencies()->getAssetPath(substr($path, 8));
+                    $output = $loader->getFileContents($image);
+                }
+
+                $image = new Zend_Mime_Part($output['contents']);
+                $image->type = $output['mimeType'];
+                $image->disposition = Zend_Mime::DISPOSITION_INLINE;
+                $image->encoding = Zend_Mime::ENCODING_BASE64;
+                $image->filename = substr(strrchr($path, '/'), 1);
+                $image->id = md5($path);
+                $this->setType(Zend_Mime::MULTIPART_RELATED);
+                $this->addAttachment($image);
+                $replace = "cid:{$image->id}";
+            } else {
+                $replace = "http://" . $this->getDomain() . $path;
+            }
+            $html = str_replace("src=\"$path\"", "src=\"$replace\"", $html);
+        }
+        parent::setBodyHtml($html, $charset, $encoding);
     }
 
     public function addAttachment(Zend_Mime_Part $attachment)
