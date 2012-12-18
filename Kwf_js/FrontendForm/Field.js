@@ -17,7 +17,7 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
             inp.on('change', function() {
                 this.fireEvent('change', this.getValue());
             }, this);
-            inp.on('keypress', function() {
+            inp.on('keydown', function() {
                 this.fireEvent('change', this.getValue());
             }, this, { delay: 1 });
         }
