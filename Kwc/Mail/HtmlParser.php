@@ -75,6 +75,7 @@ class Kwc_Mail_HtmlParser
         );
 
         $appendTags = array();
+        if (!isset($attributes['style'])) $attributes['style'] = '';
         foreach ($this->_styles as $s) {
             if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
@@ -98,8 +99,9 @@ class Kwc_Mail_HtmlParser
                                 $attributes['align'] = $value;
                             }
                         } else if ($style == 'text-decoration') {
-                            if (!isset($attributes['style'])) $attributes['style'] = '';
                             $attributes['style'] = trim($attributes['style'].' '.$style.': '.$value.';');
+                        } else {
+                            $attributes['style'] .= "$style: $value; ";
                         }
                     }
                 }

@@ -22,7 +22,8 @@ Kwf.Auto.Filter.ComboBox = function(config)
                 triggerAction: 'all',
                 editable: config.editable || false,
                 forceSelection: true,
-                width: config.width || 200
+                width: config.width || 200,
+                listWidth: config.listWidth
             });
     }
     this.combo.setValue(config['default']);
