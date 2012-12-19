@@ -259,7 +259,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
             $lostPasswortComponent = $root
                 ->getComponentByClass('Kwc_User_LostPassword_SetPassword_Component', array('limit' => 1));
         }
-        $mail->activationUrl = $mail->webUrl . self::getActivationUrl();
+        $mail->activationUrl = $mail->webUrl . $this->getActivationUrl();
         $lostPassUrl = '/kwf/user/login/activate';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->url;
         $mail->lostPasswordUrl = $mail->webUrl.$lostPassUrl.'?code='.$this->id.'-'.
@@ -267,7 +267,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $mail;
     }
 
-    
+
     protected function _sendMail($tpl, $subject, $tplParams = null)
     {
         if (!$this->email || !$this->_sendMails) {
