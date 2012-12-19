@@ -29,7 +29,10 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         foreach ($matches[1] as $match) {
             $dynamicConfig = $match;
             $dynamicConfig = $dynamicConfig != '' ? unserialize(base64_decode($dynamicConfig)) : array();
-            $dynamicConfig['info'] = $config['info'];
+            if (!is_array($dynamicConfig['info'])) {
+                $dynamicConfig['info'] = array();
+            }
+            $dynamicConfig['info'] = array_merge($config['info'], $dynamicConfig['info']);
             $dynamicConfig = base64_encode(serialize($dynamicConfig));
             $cachedContent = str_replace($match, $dynamicConfig, $cachedContent);
         }
