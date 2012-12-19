@@ -6,6 +6,9 @@ class Kwf_Benchmark_CounterTest extends Kwf_Test_TestCase
 {
     public function testMemcache()
     {
+        if (!class_exists('Memcache')) {
+            $this->markTestSkipped();
+        }
         $this->_test(new Kwf_Benchmark_Counter_Memcache());
     }
 
