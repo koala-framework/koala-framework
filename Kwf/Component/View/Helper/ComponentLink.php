@@ -71,7 +71,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
                 if ($s['type'] == 'appendText') {
                    $ret .= '<span class="appendText">'.$s['text'].'</span>';
                } else if ($s['type'] == 'callback') {
-                    $ret = call_user_func($s['callback'], $ret, $s['text']);
+                    $ret = call_user_func($s['callback'], $ret, $s['text'], $componentId);
                 }
             }
         }
