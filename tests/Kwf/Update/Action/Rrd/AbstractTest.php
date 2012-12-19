@@ -4,6 +4,10 @@ abstract class Kwf_Update_Action_Rrd_AbstractTest extends Kwf_Test_TestCase
     public function setUp()
     {
         Kwf_Component_Data_Root::setComponentClass(false);
+        if (!`which rrdtool`) {
+            $this->markTestSkipped();
+        }
+
     }
 
     public function tearDown()
