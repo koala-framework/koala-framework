@@ -94,6 +94,17 @@ Kwc.FulltextSearch.Box.Component.prototype =
 
     loadSearch: function(params)
     {
+        this.previousMainContent = Ext.select('.kwfMainContent').first();
+        this.previousMainContent.enableDisplayMode('block');
+        this.previousMainContent.hide();
+        this.loadingContent = this.el.createChild({
+            cls: 'kwfMainContent loadingContent',
+            tag: 'div',
+            style: 'width: ' + this.previousMainContent.getStyle('width'),
+            html: '<div class="loading"></div>'
+        }, this.previousMainContent);
+        this.loadingContent.enableDisplayMode('block');
+
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
 
@@ -103,9 +114,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
             params: requestParams,
             url: url,
             success: function(response, options) {
-                this.previousMainContent = Ext.select('.kwfMainContent').first();
-                this.previousMainContent.enableDisplayMode('block');
-                this.previousMainContent.hide();
+                this.loadingContent.remove();
                 this.searchMainContent = this.el.createChild({
                     cls: 'kwfMainContent',
                     tag: 'div',
