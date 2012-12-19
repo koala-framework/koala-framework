@@ -373,7 +373,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         if (!params.start) {
             params.start = 0;
         }
-        if (this.el) this.el.mask('', 'loading');
+        if (this.el) this.el.mask('<img src="/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif" width="66" height="66" />', 'loading');
         this.getStore().load({
             params: params,
             callback: function() {
@@ -447,11 +447,14 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         this.hideDetail();
 
+        this.classNames = this.el.up('.kwcDirectoriesListViewAjax').dom.className;
+
         this.kwfMainContent.hide();
         this.detailEl = this.el.createChild({
-            cls: 'kwfMainContent',
+            cls: 'kwfMainContent loadingContent ' +this.classNames,
             tag: 'div',
-            style: 'width: ' + this.kwfMainContent.getStyle('width')
+            style: 'width: ' + this.kwfMainContent.getStyle('width'),
+            html: '<div class="loading"></div>'
         }, this.kwfMainContent);
         var url = '/kwf/util/kwc/render';
         if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
@@ -460,7 +463,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             params: { url: href },
             success: function(response, options) {
                 if (!this.detailEl) return;
-                this.detailEl.removeClass('loading');
+                this.detailEl.removeClass('loadingContent '+this.classNames);
                 this.detailEl.update(response.responseText);
 
                 this.detailEl.query('a').forEach(function(el) {
