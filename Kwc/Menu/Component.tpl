@@ -8,6 +8,7 @@
         <ul class="menu">
             <? $i = 0;
             foreach ($this->menu as $m) { ?>
+                <?=$m['preHtml']?>
                 <li class="<?=$m['class'];?>">
                     <?=$this->componentLink($m['data'], $this->linkPrefix.$m['text']);?>
                     <? if ($i < count($this->menu)-1) { ?><?=$this->separator;?><? } ?>
@@ -15,6 +16,7 @@
                         <?=$this->component($this->subMenu);?>
                     <? } ?>
                 </li>
+                <?=$m['postHtml']?>
             <? $i++;
             } ?>
         </ul>

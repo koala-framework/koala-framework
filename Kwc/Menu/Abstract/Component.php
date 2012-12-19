@@ -14,6 +14,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         $ret['showParentPageLink'] = false;
         $ret['level'] = 'main';
         $ret['flags']['hasAlternativeComponent'] = true;
+        $ret['plugins'][] = 'Kwc_Menu_Abstract_HideInvisibleDynamicPlugin';
         return $ret;
     }
 
@@ -179,12 +180,18 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         foreach ($pages as $p) {
             $r = array(
                 'data' => $p,
-                'text' => '{name}'
+                'text' => '{name}',
+                'preHtml' => '',
+                'postHtml' => '',
             );
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
             if ($i == count($pages)-1) { $class[] = 'last'; }
             $r['class'] = implode(' ', $class);
+            if (Kwc_Abstract::getFlag($p->componentClass, 'hasIsVisibleDynamic')) {
+                $r['preHtml'] = '<!-- start '.$p->componentId.' '.$p->componentClass.' -->';
+                $r['postHtml'] = '<!-- end '.$p->componentId.' '.$p->componentClass.' -->';
+            }
             $ret[] = $r;
             $i++;
         }
