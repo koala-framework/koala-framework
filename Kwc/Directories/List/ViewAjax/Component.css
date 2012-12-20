@@ -7,7 +7,6 @@
 .cssClass .ext-el-mask-msg.loading {
     background: white;
     border: 1px solid #dddddd;
-    top: 100px !important;
 }
 
 .cssClass .ext-el-mask-msg.loading div {
