@@ -19,7 +19,7 @@ class Kwc_Directories_Category_Detail_List_Component extends Kwc_Directories_Lis
 
     public static function getItemDirectoryClasses($directoryClass)
     {
-        return self::_getParentItemDirectoryClasses($directoryClass, 3);
+        return self::_getParentItemDirectoryClasses($directoryClass, 2);
     }
 
     protected function _getItemDirectory()
