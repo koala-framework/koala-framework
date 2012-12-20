@@ -58,7 +58,7 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
                     } else {
                         $ret = array_merge(
                             $ret,
-                            self::_getParentItemDirectoryClasses($directoryClass, $steps - 1)
+                            self::_getParentItemDirectoryClasses($class, $steps - 1)
                         );
                     }
                 }
