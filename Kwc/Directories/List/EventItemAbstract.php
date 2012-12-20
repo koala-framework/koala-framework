@@ -1,5 +1,5 @@
 <?php
-class Kwc_Directories_List_EventRowAbstract extends Kwf_Component_Event_Abstract
+class Kwc_Directories_List_EventItemAbstract extends Kwf_Component_Event_Abstract
 {
     public $itemId;
     public function __construct($class, $itemId)

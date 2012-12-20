@@ -16,22 +16,22 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                     foreach ($directoryClasses as $directoryClass) {
                         $ret[] = array(
                             'class' => $directoryClass,
-                            'event' => 'Kwc_Directories_List_EventRowInserted',
+                            'event' => 'Kwc_Directories_List_EventItemInserted',
                             'callback' => 'onDirectoryRowInsert'
                         );
                         $ret[] = array(
                             'class' => $directoryClass,
-                            'event' => 'Kwc_Directories_List_EventRowDeleted',
+                            'event' => 'Kwc_Directories_List_EventItemDeleted',
                             'callback' => 'onDirectoryRowDelete'
                         );
                         $ret[] = array(
                             'class' => $directoryClass,
-                            'event' => 'Kwc_Directories_List_EventRowUpdated',
+                            'event' => 'Kwc_Directories_List_EventItemUpdated',
                             'callback' => 'onDirectoryRowUpdate'
                         );
                         $ret[] = array(
                             'class' => $directoryClass,
-                            'event' => 'Kwc_Directories_List_EventModelUpdated',
+                            'event' => 'Kwc_Directories_List_EventItemsUpdated',
                             'callback' => 'onDirectoryModelUpdate'
                         );
                     }
@@ -41,17 +41,17 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
-    public function onDirectoryRowInsert(Kwc_Directories_List_EventRowInserted $event)
+    public function onDirectoryRowInsert(Kwc_Directories_List_EventItemInserted $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
     }
 
-    public function onDirectoryRowDelete(Kwc_Directories_List_EventRowDeleted $event)
+    public function onDirectoryRowDelete(Kwc_Directories_List_EventItemDeleted $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
     }
 
-    public function onDirectoryRowUpdate(Kwc_Directories_List_EventRowUpdated $event)
+    public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
         $partialClass = call_user_func(
@@ -64,7 +64,7 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         }
     }
 
-    public function onDirectoryModelUpdate(Kwc_Directories_List_EventModelUpdated $event)
+    public function onDirectoryModelUpdate(Kwc_Directories_List_EventItemsUpdated $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
