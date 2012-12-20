@@ -23,7 +23,6 @@ class Kwc_Directories_CategoryTest_Test extends Kwc_TestAbstract
         $cat = $this->_root->getComponentById('root_directory-categories_1');
         $html = $cat->render(null, false);
         $this->assertContains('foo1', $html);
-        $this->markTestIncomplete();
         $this->assertContains('foo2', $html);
     }
 
@@ -41,7 +40,6 @@ class Kwc_Directories_CategoryTest_Test extends Kwc_TestAbstract
         $cat = $this->_root->getComponentById('root_directory-categories_1');
         $html = $cat->render(null, false);
         $this->assertNotContains('foo2', $html);
-        $this->markTestIncomplete();
         $this->assertNotContains('foo1', $html);
     }
 
@@ -62,7 +60,6 @@ class Kwc_Directories_CategoryTest_Test extends Kwc_TestAbstract
         $cat = $this->_root->getComponentById('root_directory-categories_2');
         $html = $cat->render(null, false);
         $this->assertContains('foo2', $html);
-        $this->markTestIncomplete();
         $this->assertContains('foo1', $html);
     }
 }
