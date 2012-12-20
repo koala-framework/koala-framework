@@ -114,8 +114,14 @@ class Kwf_Mail extends Zend_Mail
                     $image = $loader->getDependencies()->getAssetPath(substr($path, 8));
                     $output = $loader->getFileContents($image);
                 }
-
-                $image = new Zend_Mime_Part($output['contents']);
+                if (isset($output['contents'])) {
+                    $contents = $output['contents'];
+                } else if (isset($output['file'])) {
+                    $contents = file_get_contents($output['file']);
+                } else {
+                    throw new Kwf_Exception("didn't image contents");
+                }
+                $image = new Zend_Mime_Part($contents);
                 $image->type = $output['mimeType'];
                 $image->disposition = Zend_Mime::DISPOSITION_INLINE;
                 $image->encoding = Zend_Mime::ENCODING_BASE64;
