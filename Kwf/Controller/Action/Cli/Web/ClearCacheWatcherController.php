@@ -422,7 +422,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             Kwf_Cache_Simple::clear($p);
         }
         $r = Kwf_Util_Apc::callClearCacheByCli(array(
-            'cacheIds'=>$cacheIds,
+            'cacheIds'=>implode(',', $cacheIds),
             'clearCacheSimple' => $prefix,
         ));
         echo $r['message']."\n";
