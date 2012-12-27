@@ -57,6 +57,7 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
         $ret['store'] = $this->_getStoreData();
         if (isset($ret['fields'])) unset($ret['fields']);
         if (isset($ret['values'])) unset($ret['values']);
+        if (isset($ret['select'])) unset($ret['select']);
 
         return $ret;
     }
