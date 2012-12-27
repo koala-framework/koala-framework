@@ -1,6 +1,7 @@
 Kwf.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;
-    Ext.select('.kwcForm', true, readyEl).each(function(form) {
+    Ext.select('.kwcForm > form', true, readyEl).each(function(form) {
+        form = form.parent('.kwcForm', false);
         if (form.shopBoxCartInitDone) return;
         form.shopBoxCartInitDone = true;
         form.kwcForm.on('submitSuccess', function(r) {
