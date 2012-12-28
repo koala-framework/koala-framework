@@ -3,9 +3,8 @@
  * @package Form
  */
 class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
+    implements Kwf_Media_Output_Interface
 {
-    private $_ruleKey;
-
     public function __construct($field_name = null, $field_label = null, $ruleKey = null)
     {
         parent::__construct($field_name, $field_label);
@@ -15,15 +14,43 @@ class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
 
     public function setRuleKey($ruleKey)
     {
-        $this->_ruleKey = $ruleKey;
-        return $this;
+        return $this->setProperty('ruleKey', $ruleKey);
     }
 
     public function load($row)
     {
-        $data = array();
-        $data['imageUrl'] = $row->getRow()->getFileUrl($this->_ruleKey);
-        $data['previewUrl'] = $row->getRow()->getFileUrl($this->_ruleKey, 'thumb');
-        return array($this->getFieldName() => $data);
+        $data = array(
+            'imageUrl' => false,
+            'previewUrl' => false,
+        );
+        $uploadRow = $row->getParentRow($this->getRuleKey());
+        if ($uploadRow) {
+            $data['imageUrl'] = Kwf_Media::getUrl(get_class($this), $uploadRow->id, 'original', $uploadRow);
+            $data['previewUrl'] = Kwf_Media::getUrl(get_class($this), $uploadRow->id, 'preview', $uploadRow);
+        }
+        return array($this->getFieldName() => (object)$data);
+    }
+
+    public static function getMediaOutput($uploadId, $type, $className)
+    {
+        $uploadRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($uploadId);
+        if ($type == 'original') {
+            return array(
+                'file' => $uploadRow->getFileSource(),
+                'mimeType' => $uploadRow->mime_type
+            );
+        } else if ($type == 'preview') {
+            $size = array(
+                'width' => 150,
+                'height' => 200,
+                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+            );
+            return array(
+                'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size),
+                'mimeType' => $uploadRow->mime_type
+            );
+        } else {
+            throw new Kwf_Exception_NotFound();
+        }
     }
 }
