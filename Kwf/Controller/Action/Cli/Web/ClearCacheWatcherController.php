@@ -604,6 +604,10 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     private static function _getHostForCacheId()
     {
         $hostForCacheId = Kwf_Registry::get('config')->server->domain; //TODO all possible hosts
+        if (!$hostForCacheId && file_exists('cache/lastdomain')) {
+            //this file gets written in Kwf_Setup to make it "just work"
+            $hostForCacheId = file_get_contents('cache/lastdomain');
+        }
         if (preg_match('#[^\.]+\.[^\.]+$#', $hostForCacheId, $m)) {
             $hostForCacheId = $m[0];
         }
