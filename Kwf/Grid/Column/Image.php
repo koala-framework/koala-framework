@@ -52,14 +52,17 @@ class Kwf_Grid_Column_Image extends Kwf_Grid_Column
         $ret = null;
         $uploadRow = $row->getParentRow($this->getRuleKey());
         if ($uploadRow) {
+            $width = $this->getWidth()-10;
             $size = array(
-                'width' => 50,
+                'width' => $width,
                 'height' => $this->getMaxHeight(),
                 'scale' => Kwf_Media_Image::SCALE_BESTFIT
             );
             $size = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), $size);
             $ret = array(
-                'previewUrl' => Kwf_Media::getUrl(get_class($this), $uploadRow->id, 'preview-'.$this->getMaxHeight(), $uploadRow),
+                'previewUrl' => Kwf_Media::getUrl(get_class($this), $uploadRow->id,
+                                                  'preview-'.$width.'-'.$this->getMaxHeight(),
+                                                  $uploadRow),
                 'previewHeight' => $size['height'],
                 'previewWidth' => $size['width'],
             );
@@ -81,10 +84,10 @@ class Kwf_Grid_Column_Image extends Kwf_Grid_Column
     public static function getMediaOutput($uploadId, $type, $className)
     {
         $uploadRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($uploadId);
-        if (preg_match('#^preview-(\d+)$#', $type, $m)) {
+        if (preg_match('#^preview-(\d+)-(\d+)$#', $type, $m)) {
             $size = array(
-                'width' => 50,
-                'height' => $m[1],
+                'width' => $m[1],
+                'height' => $m[2],
                 'scale' => Kwf_Media_Image::SCALE_BESTFIT
             );
         } else if ($type == 'hover') {
