@@ -482,16 +482,6 @@ has just been created.</en>
 <ru>на</ru>
 </text>
 <text>
-<en>Empty</en>
-<de>Leer</de>
-<id>95</id>
-<ro>Gol</ro>
-<mk>Празно</mk>
-<sl>Prazno</sl>
-<es>Vacio</es>
-<ru>Пусто</ru>
-</text>
-<text>
 <en>Title</en>
 <de>Titel</de>
 <id>96</id>
@@ -2723,46 +2713,11 @@ has just been created.</en>
 <sl>Črke</sl>
 </text>
 <text>
-<en>Number Field</en>
-<de>Zahlenfeld</de>
-<id>556</id>
-<ro>Câmp numeric</ro>
-<sl>Številčno polje</sl>
-</text>
-<text>
-<en>Text Area</en>
-<de>Textfeld (mehrzeilig)</de>
-<id>557</id>
-<ro>Câmp de tip text (pe mai multe rânduri)</ro>
-<sl>Besedilno polje (večvrstično)</sl>
-</text>
-<text>
-<en>Select Field</en>
-<de>Auswahlfeld</de>
-<id>558</id>
-<ro>Câmp de tip selectare</ro>
-<sl>Izbirno polje</sl>
-</text>
-<text>
-<en>Checkbox</en>
-<de>Kontrollkästchen</de>
-<id>559</id>
-<ro>Checkbox</ro>
-<sl>Potrditveno okence</sl>
-</text>
-<text>
 <en>This is not an image.</en>
 <de>Das ist kein Bild.</de>
 <id>560</id>
 <ro>Aceasta nu este o imagine.</ro>
 <sl>To ni slika.</sl>
-</text>
-<text>
-<en>Text Field</en>
-<de>Textfeld</de>
-<id>561</id>
-<ro>Câmp de tip text</ro>
-<sl>Besedilno polje</sl>
 </text>
 <text>
 <en>Activation link</en>
@@ -3408,25 +3363,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izbriši vnos</sl>
 </text>
 <text>
-<en>Show field</en>
-<de>Zeige Feld</de>
-<id>705</id>
-<ro>Afişează câmpul</ro>
-<sl>Prikaži polje</sl>
-</text>
-<text>
 <en>repeat {0}</en>
 <de>{0} wiederholen</de>
 <id>706</id>
 <ro>repetă {0}</ro>
 <sl>Ponovi {0}</sl>
-</text>
-<text>
-<en>Radio Buttons</en>
-<de>Optionsfelder</de>
-<id>707</id>
-<ro>Câmpuri opţiuni</ro>
-<sl>Opcijska polja</sl>
 </text>
 <text>
 <en>Permissions</en>
@@ -4173,13 +4114,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>839</id>
 <ro>Alte observaţii, întrebări sau sugestii</ro>
 <sl>Druge pripombe, vprašanja ali predlogi</sl>
-</text>
-<text>
-<en>Please check your petitions</en>
-<de>Bitte überprüfen Sie Ihre Daten</de>
-<id>840</id>
-<ro>Vă rugăm să vă verificaţi datele</ro>
-<sl>Preverite svoje podatke.</sl>
 </text>
 <text>
 <en>Your Comment</en>
@@ -5443,13 +5377,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Google Maps</ro>
 </text>
 <text>
-<en>Google-Analytics</en>
-<de>Google-Analytics</de>
-<id>1106</id>
-<ro>Copyright.Google-Analytics</ro>
-<sl>Impresum.Google Analytics</sl>
-</text>
-<text>
 <en>Url include</en>
 <id>1108</id>
 <de>Url include</de>
@@ -5716,13 +5643,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1150</id>
 <ro>Data creării</ro>
 <sl>Datum izdelave</sl>
-</text>
-<text>
-<en>Save Recipients</en>
-<de>Empfänger speichern</de>
-<id>1151</id>
-<ro>Salvează destinatarul</ro>
-<sl>Shrani prejemnika</sl>
 </text>
 <text>
 <en>{0} recipients added, total {1} recipients.</en>
@@ -6787,13 +6707,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1332</id>
 <ro>Către</ro>
 <sl>Za:</sl>
-</text>
-<text>
-<en>RTR-ECG-Check and saving data: please wait...</en>
-<de>RTR-ECG-Check und Daten speichern: bitte warten...</de>
-<id>1333</id>
-<ro>RTR-ECG-Check şi salvare date: vă rugăm aşteptaţi...</ro>
-<sl>Kontrola ECG družbe RTR in shranjevanje podatkov: počakajte ...</sl>
 </text>
 <text>
 <en>E-Mail type</en>
@@ -7953,11 +7866,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vaš kupon je bil uspešno unovčen.</sl>
 </text>
 <text>
-<en>Product: Voucher</en>
-<de>Produkt: Gutschein</de>
-<id>1635</id>
-</text>
-<text>
 <en>No items to display</en>
 <de>Keine Einträge zum anzeigen</de>
 <id>1484</id>
@@ -8061,13 +7969,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Flash.Media Player</ro>
 </text>
 <text>
-<en>&lt;strong&gt;Found Results&lt;/strong&gt; (in {0} seconds)</en>
-<de>&lt;strong&gt;Ergebnisse gefunden&lt;/strong&gt; (in {0} Sekunden)</de>
-<id>1595</id>
-<ro>&lt;strong&gt;Găsit rezultate&lt;/strong&gt; (în {0} secunde)</ro>
-<sl>&lt;strong&gt;Najdeni rezultati&lt;/strong&gt; (v {0} sekundah)</sl>
-</text>
-<text>
 <en>Social Networks</en>
 <id>1596</id>
 <de>Soziale Netzwerke</de>
@@ -8133,13 +8034,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Sursă</ro>
 </text>
 <text>
-<en>{0}-{1} of about {2}</en>
-<de>{0}-{1} von zirka {2}</de>
-<id>1614</id>
-<ro>{0}-{1} din circa {2}</ro>
-<sl>{0}–{1} od pribl. {2}</sl>
-</text>
-<text>
 <en>The Form has been submitted successfully. You will receive an E-Mail with the access link to the protected area.</en>
 <de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in Kürze eine E-Mail mit dem Zugangslink zum geschützten Bereich.</de>
 <id>1615</id>
@@ -8202,29 +8096,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1630</id>
 <ro>Text căutare invalid</ro>
 <sl>Neveljavni iskani pojmi</sl>
-</text>
-<text>
-<en>Search results can be extended using wildcards.</en>
-<de>Die Suchergebnisse können durch die Verwendung von Wildcards erweitert werden.</de>
-<id>1631</id>
-<ro>Căutarea poate fi extinsă utilizând wildcards.</ro>
-<sl>Število rezultatov iskanja lahko povečate z uporabo nadomestnih znakov.</sl>
-</text>
-<text>
-<en>Examples: "Hallo Welt" , ? , * , AND , OR</en>
-<de>Beispiele: "Hallo Welt" , ? , * , AND , OR</de>
-<id>1632</id>
-<ro>Exemple: "Hallo Welt" , ? , * , AND , OR</ro>
-<sl>Primeri: "Pozdravljen, svet" , ? , * , AND , OR</sl>
-</text>
-<text>
-<en>No results found for &lt;strong&gt;"{0}"&lt;/strong&gt;</en>
-<de>Keine Ergebnisse gefunden für &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
-<id>1633</id>
-<ro>Nu au fost găsite rezultate pentru &lt;strong&gt;"{0}"&lt;/strong&gt;</ro>
-<hu>Nincs eredmény a &lt;strong&gt;"{0}"&lt;/strong&gt; kifejezésre.</hu>
-<sl>Rezultatov za &lt;strong&gt;"{0}"&lt;/strong&gt; ni bilo možno najti.</sl>
-<uk>Не знайдено результатів по запиту &lt;strong&gt;"{0}"&lt;/strong&gt;</uk>
 </text>
 <text>
 <en>Must not be negative</en>
@@ -8328,13 +8199,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1646</id>
 <de>Ausgewählten Link entfernen.</de>
 <ro>Şterge link-ul selectat.</ro>
-</text>
-<text>
-<en>Please enter a search term</en>
-<de>Bitte geben Sie einen Suchbegriff ein</de>
-<id>1647</id>
-<ro>Vă rugăm să introduceţi un text pentru căutare</ro>
-<sl>Vnesite iskani pojem.</sl>
 </text>
 <text>
 <en>XLS Import</en>
@@ -8654,12 +8518,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Form.Câmp dată</ro>
 </text>
 <text>
-<en>Fulltext Search</en>
-<id>1724</id>
-<de>Volltextsuche</de>
-<ro>Căutare text integral</ro>
-</text>
-<text>
 <en>Preview in web</en>
 <id>1725</id>
 <de>Vorschau im Web</de>
@@ -8807,12 +8665,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>URL extern</ro>
 </text>
 <text>
-<en>+</en>
-<id>1749</id>
-<de>+</de>
-<ro>+</ro>
-</text>
-<text>
 <en>Blank</en>
 <de>Leer</de>
 <id>1750</id>
@@ -8896,13 +8748,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Link Text</ro>
 </text>
 <text>
-<en>cart</en>
-<de>Warenkorb</de>
-<id>1763</id>
-<ro>Coş de cumpărături</ro>
-<sl>Košarica</sl>
-</text>
-<text>
 <en>This field should only contain numbers</en>
 <id>1764</id>
 </text>
@@ -8948,62 +8793,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1771</id>
 </text>
 <text>
-<en>Just Zoom</en>
-<id>1776</id>
-</text>
-<text>
-<en>Landesstraße 23</en>
-<id>1777</id>
-</text>
-<text>
-<en>A-5302 Henndorf a. Wallersee</en>
-<id>1778</id>
-</text>
-<text>
-<en>Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
-<id>1779</id>
-</text>
-<text>
-<en>Edit Column</en>
-<id>1780</id>
-</text>
-<text>
-<en>close</en>
-<id>1781</id>
-</text>
-<text>
-<en>Can't save, please fill all marked fields correctly.</en>
-<id>1782</id>
-</text>
-<text>
-<en>Properties of selected Page</en>
-<id>1527</id>
-</text>
-<text>
-<en>Add new Subpage</en>
-<id>1783</id>
-</text>
-<text>
-<en>Delete selected Page</en>
-<id>1784</id>
-</text>
-<text>
-<en>Toggle Visibility of selected Page</en>
-<id>1530</id>
-</text>
-<text>
-<en>Make selected Page Homepage</en>
-<id>1531</id>
-</text>
-<text>
-<en>Open Preview</en>
-<id>1532</id>
-</text>
-<text>
-<en>Web</en>
-<id>1668</id>
-</text>
-<text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
 <en>'%value%' contains characters which are not digits; but only digits are allowed</en>
 <id>1536</id>
@@ -9012,11 +8801,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Ungültiger Typ angegeben, Wert sollte String, Integer oder Float sein</de>
 <en>Invalid type given, value should be string, integer or float</en>
 <id>1537</id>
-</text>
-<text>
-<de>'%value%' muss kleiner oder gleich sein als '%max%'</de>
-<en>'%value%' must be less or equal than '%max%'</en>
-<id>1538</id>
 </text>
 <text>
 <en>Dear {0}</en>
@@ -9102,27 +8886,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1799</id>
 </text>
 <text>
-<en>This field should only contain numbers</en>
-<id>1780</id>
-</text>
-<text>
-<en>Please check your details</en>
-<de>Bitte überprüfen Sie Ihre Details</de>
-<id>1781</id>
-</text>
-<text>
-<en>Automatically sent e-mail</en>
-<id>1782</id>
-</text>
-<text>
-<en>E-Mail CC</en>
-<id>1783</id>
-</text>
-<text>
-<en>Original  Name</en>
-<id>1784</id>
-</text>
-<text>
 <en>Adopt</en>
 <id>1785</id>
 </text>
@@ -9135,4 +8898,15 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>+{0}% MWSt</de>
 <id>1787</id>
 </text>
+<text>
+<en>Own Flash</en>
+<de>Eigenes Flash</de>
+<id>1788</id>
+</text>
+<text>
+<en>No entries found</en>
+<de>Keine Einträge gefunden</de>
+<id>1800</id>
+</text>
 </trl>
+

@@ -207,7 +207,22 @@ Ext.util.Format.notEditable = function(v, p)
 Ext.util.Format.image = function(v, p, record){
     if (!v) return '';
     p.css += 'kwf-cell-icon';
-    p.attr += 'style="background-image:url('+v+');"';
+    p.attr += 'style="';
+    var url;
+    if (typeof(v) == 'string') {
+        v = { previewUrl: v };
+    }
+    if (v.previewUrl) p.attr += 'background-image:url('+v.previewUrl+'); ';
+    if (v.previewHeight) p.attr += 'height: '+v.previewHeight+'px; ';
+    p.attr += '"';
+
+    if (v.hoverUrl) {
+        p.attr += ' ext:qtip="&lt;img src=\''+v.hoverUrl+'\' ';
+        if (v.hoverWidth) p.attr += 'width=\''+v.hoverWidth+'\' ';
+        if (v.hoverHeight) p.attr += 'height=\''+v.hoverHeight+'\' ';
+        p.attr += '/&gt;"';
+    }
+
     return '';
 };
 
