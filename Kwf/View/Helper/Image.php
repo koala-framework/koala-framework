@@ -58,11 +58,14 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         if (!is_array($attributes)) { $attributes = array(); }
         if ($class != '') { $attributes['class'] = $class; }
 
+        $size = $this->_getImageSize($image);
+        if (!isset($attributes['widht'])) $attributes['widht'] = $size['width'];
+        if (!isset($attributes['height'])) $attributes['height'] = $size['height'];
+
         $attr = '';
         foreach ($attributes as $k=>$i) {
             $attr .= ' '.$k.'="'.$i.'"';
         }
-        $size = $this->_getImageSize($image);
-        return "<img src=\"$url\" width=\"$size[width]\" height=\"$size[height]\" alt=\"$alt\"$attr />";
+        return "<img src=\"$url\" alt=\"$alt\"$attr />";
     }
 }
