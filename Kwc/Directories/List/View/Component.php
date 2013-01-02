@@ -8,7 +8,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['paging'] = 'Kwc_Paging_Component';
-        $ret['placeholder']['noEntriesFound'] = '';
+        $ret['placeholder']['noEntriesFound'] = trlKwfStatic('No entries found');
         $ret['groupById'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['searchQueryFields'] = '*';
