@@ -5,6 +5,7 @@ class Kwf_Component_Cache_Directory_Root_Directory_View_Component extends Kwc_Di
     {
         $ret = parent::getSettings();
         $ret['partialClass'] = 'Kwf_Component_Partial_Id';
+        $ret['placeholder']['noEntriesFound'] = '';
         return $ret;
     }
 }
