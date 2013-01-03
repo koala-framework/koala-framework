@@ -1,7 +1,7 @@
 Kwf.onElementReady('.kwcFulltextSearchBox', function(el, config) {
     new Kwc.FulltextSearch.Box.Component(el, config);
 }, this, {
-    priority: 10 //call *after* initializing kwcForm to have access to searchForm
+    priority: 0 //call *after* initializing kwcForm to have access to searchForm
 });
 
 Ext.ns('Kwc.FulltextSearch.Box');
