@@ -57,7 +57,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
         }
 
         $url = $targetPage[0];
-        if ($this->_getRenderer() instanceof Kwf_View_MailInterface) {
+        if ($this->_getRenderer() instanceof Kwf_Component_Renderer_Mail) {
             $url = '*redirect*' . $url . '*';
         }
 
