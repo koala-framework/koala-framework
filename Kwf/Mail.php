@@ -95,8 +95,8 @@ class Kwf_Mail extends Zend_Mail
 
     public function setBodyHtml($html, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
     {
-        while (preg_match('/img src=\"\/(.*?)\"/i', $html, $matches)) {
-            $path = '/' . $matches[1];
+        while (preg_match('/(img src|background)=\"\/(.*?)\"/i', $html, $matches)) {
+            $path = '/' . $matches[2];
             if ($this->_attachImages) {
                 if (substr($path, 0, 6) == '/media') {
                     $parts = explode('/', substr($path, 1));
@@ -133,7 +133,7 @@ class Kwf_Mail extends Zend_Mail
             } else {
                 $replace = "http://" . $this->getDomain() . $path;
             }
-            $html = str_replace("src=\"$path\"", "src=\"$replace\"", $html);
+            $html = str_replace($matches[0], "{$matches[1]}=\"$replace\"", $html);
         }
         parent::setBodyHtml($html, $charset, $encoding);
     }
