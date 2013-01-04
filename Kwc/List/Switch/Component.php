@@ -19,6 +19,7 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
             'showInMenu' => false,
         );
         $ret['plugins'] = array(
+            'firstLargeContent' => 'Kwc_List_Switch_FirstLargeContentPlugin',
             'largeContent' => 'Kwc_List_Switch_LargeContentPlugin',
         );
 
