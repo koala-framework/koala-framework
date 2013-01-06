@@ -158,7 +158,10 @@ abstract class Kwf_Update
                 $dirs[$k] = getcwd();
                 continue;
             }
-            if (substr($i, 0, 1)!='/') $dirs[$k] = getcwd().'/'.$i;
+            if (!preg_match('#^(/|\w\:\\\\)#i', $i)) {
+                //relative path, make it absolute
+                $i = getcwd().'/'.$i;
+            }
         }
         $dirs = array_unique($dirs);
         $dirs = array_reverse($dirs);
