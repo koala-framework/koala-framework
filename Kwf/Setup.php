@@ -73,12 +73,33 @@ class Kwf_Setup
         return self::$configSection;
     }
 
+    public static function getRequestPath()
+    {
+        static $requestPath;
+        if (isset($requestPath)) return $requestPath;
+        switch (php_sapi_name()) {
+            case 'apache2handler':
+                $requestPath = $_SERVER['REDIRECT_URL'];
+                break;
+            case 'cli':
+                $requestPath = false;
+                break;
+            case 'cli-server':
+                $requestPath = $_SERVER['SCRIPT_NAME'];
+                break;
+            default:
+                throw new Kwf_Exception("unsupported sapi: ".php_sapi_name());
+        }
+        return $requestPath;
+    }
+
     public static function dispatchKwc()
     {
-        if (!isset($_SERVER['REDIRECT_URL'])) return;
+        $requestPath = self::getRequestPath();
+        if ($requestPath === false) return;
 
         $data = null;
-        $uri = substr($_SERVER['REDIRECT_URL'], 1);
+        $uri = substr($requestPath, 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
         $urlPrefix = Kwf_Config::getValue('kwc.UrlPrefix');
@@ -96,12 +117,12 @@ class Kwf_Setup
         }
 
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf'))
-            && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
+            && (!$urlPrefix || substr($requestPath, 0, strlen($urlPrefix)) == $urlPrefix)
         ) {
             if (!isset($_SERVER['HTTP_HOST'])) {
-                $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$_SERVER['REDIRECT_URL'];
+                $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$requestPath;
             } else {
-                $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
+                $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$requestPath;
             }
 
             Kwf_Trl::getInstance()->setUseUserLanguage(false);
@@ -116,7 +137,7 @@ class Kwf_Setup
                 throw new Kwf_Exception_NotFound();
             }
             if (!$exactMatch) {
-                if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
+                if (rawurldecode($data->url) == $requestPath) {
                     throw new Kwf_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
                 }
                 $url = $data->url;
@@ -140,16 +161,17 @@ class Kwf_Setup
             }
             exit;
 
-        } else if ($_SERVER['REDIRECT_URL'] == '/kwf/util/kwc/render') {
+        } else if ($requestPath == '/kwf/util/kwc/render') {
             Kwf_Util_Component::dispatchRender();
         }
     }
 
     public static function dispatchMedia()
     {
-        if (!isset($_SERVER['REDIRECT_URL'])) return;
+        $requestPath = self::getRequestPath();
+        if ($requestPath === false) return;
 
-        $urlParts = explode('/', substr($_SERVER['REDIRECT_URL'], 1));
+        $urlParts = explode('/', substr($requestPath, 1));
         if (is_array($urlParts) && count($urlParts) == 2 && $urlParts[0] == 'media'
             && $urlParts[1] == 'headline'
         ) {

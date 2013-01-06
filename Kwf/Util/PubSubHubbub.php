@@ -3,11 +3,7 @@ class Kwf_Util_PubSubHubbub
 {
     public static function dispatch()
     {
-        $url = '';
-        if (isset($_SERVER['REDIRECT_URL'])) {
-            $url = $_SERVER['REDIRECT_URL'];
-        }
-        if ($url != '/pshb_cb') return;
+        $url = Kwf_Setup::getRequestPath();
         self::process();
         exit;
     }

@@ -265,10 +265,13 @@ class Kwf_Component_Settings
                     $dirs = explode(PATH_SEPARATOR, get_include_path());
                     foreach ($dirs as $dir) {
                         if ($dir == '.') $dir = getcwd();
-                        if (substr($dir, 0, 1) != '/') $dir = getcwd().'/'.$dir;
+                        if (!preg_match('#^(/|\w\:\\\\)#i', $dir)) {
+                            //relative path, make it absolute
+                            $dir = getcwd().'/'.$dir;
+                        }
                         $path = $dir . '/' . $file;
                         if (is_file($path)) {
-                            if (substr($path, -14) == '/Component.php' || substr($path, -14) == '/Component.yml') {
+                            if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php' || substr($path, -14) == DIRECTORY_SEPARATOR.'Component.yml') {
                                 $ret[substr($path, 0, -14)] = substr($c, 0, -10);
                             } else {
                                 $ret[substr($path, 0, -4)] = $c; //nur .php

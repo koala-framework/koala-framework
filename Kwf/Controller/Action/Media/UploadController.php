@@ -36,10 +36,15 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             }
         } else if (isset($_SERVER['HTTP_X_UPLOAD_NAME'])) {
             $fileData = file_get_contents("php://input");
-            if ($_SERVER['CONTENT_LENGTH'] != $_SERVER['HTTP_X_UPLOAD_SIZE']) {
+            if (isset($_SERVER['CONTENT_LENGTH'])) {
+                $contentLength = $_SERVER['CONTENT_LENGTH'];
+            } else {
+                $contentLength = $_SERVER['HTTP_CONTENT_LENGTH'];
+            }
+            if ($contentLength != $_SERVER['HTTP_X_UPLOAD_SIZE']) {
                 throw new Kwf_Exception("Content-Length doesn't match X-Upload-Size");
             }
-            if ($_SERVER['CONTENT_LENGTH'] != strlen($fileData)) {
+            if ($contentLength != strlen($fileData)) {
                 throw new Kwf_Exception("Content-Length doesn't match uploaded data");
             }
             $name = $_SERVER['HTTP_X_UPLOAD_NAME'];

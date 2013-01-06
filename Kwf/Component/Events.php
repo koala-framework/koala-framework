@@ -27,6 +27,9 @@ class Kwf_Component_Events
         $id = md5(serialize(array($class, $config)));
         static $instances = array();
         if (!isset($instances[$id])) {
+            if (!$class) {
+                throw new Kwf_Exception("No class given");
+            }
             $instances[$id] = new $class($config);
         }
         return $instances[$id];

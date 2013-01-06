@@ -3,10 +3,7 @@ class Kwf_Util_PayPal_Ipn
 {
     public static function dispatch($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
     {
-        $url = '';
-        if (isset($_SERVER['REDIRECT_URL'])) {
-            $url = $_SERVER['REDIRECT_URL'];
-        }
+        $url = Kwf_Setup::getRequestPath();
         if ($url != '/paypal_ipn') return;
 
         self::process($logModel);

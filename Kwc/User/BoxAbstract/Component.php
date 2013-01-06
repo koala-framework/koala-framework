@@ -24,7 +24,7 @@ class Kwc_User_BoxAbstract_Component extends Kwc_Abstract_Composite_Component
             Kwf_Auth::getInstance()->clearIdentity();
             setcookie('feAutologin', '', time() - 3600);
 
-            $url = $_SERVER['REDIRECT_URL'];
+            $url = Kwf_Setup::getRequestPath();
 
             parse_str($_SERVER['QUERY_STRING'], $queryStr);
             unset($queryStr['logout']);

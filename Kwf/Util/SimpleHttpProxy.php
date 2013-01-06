@@ -8,9 +8,9 @@ class Kwf_Util_SimpleHttpProxy
      */
     public static function dispatch($hostnames)
     {
-        if (empty($_SERVER['REDIRECT_URL'])) return;
+        if (Kwf_Setup::getRequestPath()===false) return;
 
-        if (!preg_match('#^/kwf/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
+        if (!preg_match('#^/kwf/proxy/?$#i', Kwf_Setup::getRequestPath())) return;
 
         if (is_string($hostnames)) {
             $hostnames = array($hostnames);
