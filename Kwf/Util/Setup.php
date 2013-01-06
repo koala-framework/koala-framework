@@ -299,7 +299,7 @@ class Kwf_Util_Setup
         }
 
         if (Kwf_Config::getValue('showPlaceholder')) {
-            $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REQUEST_URI']) && substr(\$_SERVER['REQUEST_URI'], 0, 8)!='/assets/' && !Kwf_Component_Data_Root::getShowInvisible()) {\n";
+            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath() && substr(Kwf_Setup::getRequestPath(), 0, 8)!='/assets/' && !Kwf_Component_Data_Root::getShowInvisible()) {\n";
             $ret .= "    $view = new Kwf_View();\n";
             $ret .= "    echo $view->render('placeholder.tpl');\n";
             $ret .= "    exit;\n";
@@ -309,7 +309,7 @@ class Kwf_Util_Setup
 
         if (Kwf_Config::getValue('preLoginUser')) {
             if (Kwf_Config::getValue('preLogin')) {
-                $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REDIRECT_URL'])) {\n";
+                $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
             } else {
                 $ret .= "if (Kwf_Component_Data_Root::getShowInvisible()) {\n";
             }

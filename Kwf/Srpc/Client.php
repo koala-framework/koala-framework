@@ -81,7 +81,7 @@ class Kwf_Srpc_Client
 
     public function __call($method, $args)
     {
-        $log = date('Y-m-d H:i:s')." (start) $this->_serverUrl $method ".(isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '?')."\n";
+        $log = date('Y-m-d H:i:s')." (start) $this->_serverUrl $method ".Kwf_Setup::getRequestPath()."\n";
         file_put_contents('log/srpc-call', $log, FILE_APPEND);
         $start = microtime(true);
         $b = Kwf_Benchmark::start('srpc call', $this->_serverUrl.' '.$method);
@@ -110,7 +110,7 @@ class Kwf_Srpc_Client
 
         $response = $this->_performRequest($params);
 
-        $log = date('Y-m-d H:i:s').' '.round(microtime(true)-$start, 2)."s $this->_serverUrl $method ".(isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '?')."\n";
+        $log = date('Y-m-d H:i:s').' '.round(microtime(true)-$start, 2)."s $this->_serverUrl $method ".Kwf_Setup::getRequestPath()."\n";
         file_put_contents('log/srpc-call', $log, FILE_APPEND);
         if ($b) $b->stop();
 

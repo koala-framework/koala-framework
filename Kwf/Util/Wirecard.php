@@ -3,10 +3,7 @@ class Kwf_Util_Wirecard
 {
     public function dispatch($logModel = 'Kwf_Util_Wirecard_LogModel')
     {
-        $url = '';
-        if (isset($_SERVER['REDIRECT_URL'])) {
-            $url = $_SERVER['REDIRECT_URL'];
-        }
+        $url = Kwf_Setup::getRequestPath();
         if ($url != '/wirecard_confirm') return;
 
         Zend_Registry::get('config')->debug->error->log = true; //log immer aktivieren, da dieser request von wirecard gemacht wird
