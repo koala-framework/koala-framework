@@ -208,7 +208,7 @@ class Kwf_Assets_Loader
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
                 $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
-                    str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file).
+                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file).
                     Kwf_Component_Data_Root::getComponentClass();
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
