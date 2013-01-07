@@ -1,7 +1,6 @@
 <?= trlKwf('Hello {0}!', $this->fullname); ?><br /><br />
 
-<?= trlKwf('Your account at {0}
-has just been created.', '<a href="'.$this->webUrl.'">'.$this->webUrl.'</a>'); ?><br />
+<?= trlKwf('Your account at {0} has just been created.', '<a href="'.$this->webUrl.'">'.$this->webUrl.'</a>'); ?><br />
 <?= trlKwf('Please use the following link to choose yourself a password and to login'); ?><br />
 <a href="<?= $this->activationUrl; ?>"><?= trlKwf('Click here to activate and log in to your Account'); ?></a>.<br /><br />
 
