@@ -174,12 +174,12 @@ class Kwf_Mail_Template
         return null;
     }
 
-    private function _getTextMailContent()
+    protected function _getTextMailContent()
     {
         return $this->_view->renderText();
     }
 
-    private function _getHtmlMailContent()
+    protected function _getHtmlMailContent()
     {
         return $this->_view->renderHtml();
     }
