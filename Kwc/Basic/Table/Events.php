@@ -29,7 +29,7 @@ class Kwc_Basic_Table_Events extends Kwc_Abstract_Composite_Events
         );
         if ($c && $c->componentClass == $this->_class && $c->isVisible()) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $event->row->component_id
+                $this->_class, $c
             ));
         }
     }
