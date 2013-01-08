@@ -127,6 +127,7 @@ Kwf.Menu.Index = Ext.extend(Ext.Toolbar,
         this.add(new Ext.Toolbar.Fill());
 
         this.showUserMenu = new Ext.Button({
+            id: 'userMenu',
             tooltip: trlKwf('Show User Menu'),
             cls: 'x-btn-icon',
             icon: '/assets/silkicons/bullet_arrow_down.png',
