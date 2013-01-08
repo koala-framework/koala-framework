@@ -15,7 +15,7 @@ class Kwf_Auth extends Zend_Auth
                 $storage = self::$_instance->getStorage();
                 $loginData = $storage->read();
 
-                if (!$loginData['userId']) {
+                if (!isset($loginData['userId']) || !$loginData['userId']) {
                     $userModel = Zend_Registry::get('userModel');
 
                     $r = $userModel->getRow($userModel->select()->whereEquals('email', $autologin));
