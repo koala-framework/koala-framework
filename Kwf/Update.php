@@ -195,7 +195,16 @@ abstract class Kwf_Update
                             if (substr($n, 0, 8) == 'library_') continue;
                             $n .= 'Update_'.$nr;
                             $update = self::createUpdate($n, $i->getPathname());
-                            if ($update) $ret[] = $update;
+                            if (!$update) continue;
+                            if ($update->getTags() && !in_array('web', $update->getTags())) {
+                                if (!array_intersect(
+                                    $update->getTags(),
+                                    Kwf_Update::getUpdateTags()
+                                ) && !($update->getTags()==array('db') && get_class($update)=='Kwf_Update_Sql')) {
+                                    continue; //skip
+                                }
+                            }
+                            $ret[] = $update;
                         }
                     }
                 }
