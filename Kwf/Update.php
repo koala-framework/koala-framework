@@ -208,20 +208,6 @@ abstract class Kwf_Update
                         }
                     }
                 }
-                $path = $path . '/Always';
-                if (is_dir($path)) {
-                    foreach (new DirectoryIterator($path) as $i) {
-                        if (!$i->isFile()) continue;
-                        $f = $i->__toString();
-                        $fileType = substr($f, -4);
-                        if ($fileType != '.php') continue;
-                        $f = substr($f, 0, -4);
-                        $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_Always_'.$f;
-                        if (is_instance_of($n, 'Kwf_Update')) {
-                            $ret[] = new $n(null);
-                        }
-                    }
-                }
             }
         }
         $ret = self::_sortByRevision($ret);
