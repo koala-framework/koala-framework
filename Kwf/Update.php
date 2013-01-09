@@ -100,7 +100,7 @@ abstract class Kwf_Update
                 $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
             }
         }
-        if (Kwf_Registry::get('dao')->hasDb()) {
+        if (Kwf_Setup::hasDb()) {
             $ret[] = 'db';
         }
         return $ret;
