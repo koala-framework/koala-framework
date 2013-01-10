@@ -13,7 +13,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Com
         $ret['generators']['confirm'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component',
-            'name' => trlKwf('Send order')
+            'name' => trlKwfStatic('Send order')
         );
 
         $ret['generators']['mail'] = array(
