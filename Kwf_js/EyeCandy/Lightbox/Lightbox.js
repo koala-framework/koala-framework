@@ -377,8 +377,14 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         var xy = this.lightbox.innerLightboxEl.getXY();
         xy[0] = centerXy[0];
         if (centerXy[1] < xy[1]) xy[1] = centerXy[1]; //move up, but not down
+        /*
+        //animation to new position disabled, buggy
         this.lightbox.innerLightboxEl.setXY(xy, true);
         this.lightbox.innerLightboxEl.setSize(originalSize); //set back to previous size for animation
         this.lightbox.innerLightboxEl.setSize(newSize, null, true); //now animate to new size
+        */
+
+        //instead center unanimated
+        this.lightbox.innerLightboxEl.setXY(xy);
     }
 });
