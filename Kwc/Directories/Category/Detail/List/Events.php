@@ -50,8 +50,7 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
     public function onUpdateRow(Kwf_Component_Event_Row_Abstract $ev)
     {
         foreach (call_user_func(array($this->_class, 'getItemDirectoryClasses'), $this->_class) as $dirCls) {
-            $itemId = $ev->row->item_id;
-            $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($dirCls, $itemId));
+            $this->fireEvent(new Kwc_Directories_List_EventRowUpdated($dirCls, $ev->row));
         }
     }
 }
