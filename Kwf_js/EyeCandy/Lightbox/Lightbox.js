@@ -346,11 +346,16 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     _getCenterXy: function() {
         var xy = this.lightbox.innerLightboxEl.getAlignToXY(document, 'c-c');
-        if (xy[1] < 20) xy[1] = 20;
+
+        //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down
+        if (xy[0] < Ext.getBody().getScroll().left+20) xy[0] = Ext.getBody().getScroll().left+20;
+        if (xy[1] < Ext.getBody().getScroll().top+20) xy[1] = Ext.getBody().getScroll().top+20;
+
         return xy;
     },
     _center: function(anim) {
         if (!this.lightbox.lightboxEl.isVisible(true)) return;
+        this.lightbox.innerLightboxEl.setStyle({ top: 0, left: 0 });
         this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
     },
 
