@@ -101,6 +101,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         return $this->_getProductsData(null);
     }
 
+    // if product is not available in sitetree anymore it is deleted (also called by Kwc_Shop_Cart_Component)
     private function _getProductsData(Kwf_Component_Data $subroot = null)
     {
         $ret = array();
@@ -118,7 +119,12 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
             if ($subroot) {
                 $addComponent = Kwf_Component_Data_Root::getInstance()
                                 ->getComponentByDbId($i->add_component_id, array('subroot' => $subroot));
-                $r['product'] = $addComponent->parent;
+                if (!$addComponent) {
+                    $i->delete();
+                    continue;
+                } else {
+                    $r['product'] = $addComponent->parent;
+                }
             }
             $ret[] = (object)$r;
         }

@@ -91,6 +91,14 @@ abstract class Kwf_Component_Renderer_Abstract
             }
             if (is_null($content)) {
                 $content = $helper->render($componentId, $config);
+                foreach ($plugins as $pluginClass) {
+                    $plugin = Kwf_Component_Plugin_View_Abstract::getInstance($pluginClass, $componentId);
+                    if (!$plugin instanceof Kwf_Component_Plugin_Abstract)
+                        throw Kwf_Exception('Plugin must be Instanceof Kwf_Component_Plugin_Abstract');
+                    if ($plugin->getExecutionPoint() == Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE_CACHE) {
+                        $content = $plugin->processOutput($content);
+                    }
+                }
                 if ($saveCache && $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content)) {
                     $statType = 'nocache';
                 } else {

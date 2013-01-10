@@ -1,7 +1,7 @@
 Kwf.onElementReady('.kwcFulltextSearchBox', function(el, config) {
     new Kwc.FulltextSearch.Box.Component(el, config);
 }, this, {
-    priority: 10 //call *after* initializing kwcForm to have access to searchForm
+    priority: 0 //call *after* initializing kwcForm to have access to searchForm
 });
 
 Ext.ns('Kwc.FulltextSearch.Box');
@@ -34,6 +34,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
         this.searchMainContent = Ext.select('.kwfMainContent').first();
         Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
         Kwf.Utils.HistoryState.currentState.searchVisible = true;
+        Kwf.Utils.HistoryState.updateState();
         return;
     }
     this.previousSearchFormValues = this.searchForm.getValues();
@@ -49,6 +50,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
     }, this);
 
     Kwf.Utils.HistoryState.currentState.searchVisible = false;
+    this.previousMainContent = Ext.select('.kwfMainContent').first();
 };
 
 Kwc.FulltextSearch.Box.Component.prototype =

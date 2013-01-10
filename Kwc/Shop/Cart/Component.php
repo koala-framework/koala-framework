@@ -31,9 +31,18 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['contentSender'] = 'Kwc_Shop_Cart_ContentSender';
         $ret['orderData'] = 'Kwc_Shop_Cart_OrderData';
 
+        $ret['flags']['processInput'] = true;
+
         $ret['vatRate'] = 0.2;
         $ret['vatRateShipping'] = 0.2;
         return $ret;
+    }
+
+    public function preProcessInput()
+    {
+        // to remove deleted products from the cart
+        Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
+            ->getCartOrder()->getProductsDataWithProduct($this->getData());
     }
 
     public function getTemplateVars()

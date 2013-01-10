@@ -284,8 +284,10 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
     public function jsonMakeHomeAction()
     {
         $id = $this->_getParam('id');
-        $table = $this->_model->getTable();
-        $row = $table->find($id)->current();
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel')->getRow($id);
+        if (!$row) {
+            throw new Kwf_Exception("didn't find row to set home");
+        }
         if (!$this->_hasPermissions($row, 'makeHome')) {
             throw new Kwf_Exception("Making home this row is not allowed.");
         }
@@ -313,7 +315,10 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         }
 
         if ($row) {
-            $oldRows = $table->fetchAll("is_home=1 AND id!='$id'");
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('is_home', true);
+            $s->whereNotEquals('id', $id);
+            $oldRows = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel')->getRows($s);
             $oldId = $id;
             $oldVisible = false;
             foreach ($oldRows as $oldRow) {
@@ -323,7 +328,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
                         if ($component == $homeComponent) {
                             $oldId = $oldRow->id;
                             $oldVisible = $oldRow->visible;
-                            if (!$this->_hasPermissions($row, 'makeHome')) {
+                            if (!$this->_hasPermissions($oldRow, 'makeHome')) {
                                 throw new Kwf_Exception("Making home this row is not allowed.");
                             }
                             $oldRow->is_home = 0;

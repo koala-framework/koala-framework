@@ -6,7 +6,7 @@ Kwf.onContentReady(function(el, param) {
             form.kwcForm = new Kwc.Form.Component(form);
         }
     });
-});
+}, this, { priority: -10 }); //initialize form very early, as many other components access it
 Ext.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
     var formEl = el.child('.kwcForm > form');

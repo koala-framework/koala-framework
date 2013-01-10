@@ -17,6 +17,8 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
             'from_email' => $sender['address'],
             'from_name' => $sender['name']
         );
+        $ret['editFrom'] = true;
+        $ret['editReplyTo'] = true;
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/PreviewWindow.js';
         $ret['assetsAdmin']['dep'][] = 'ExtWindow';

@@ -1,8 +1,7 @@
 <?= trlKwf('Hello {0}!', $this->fullname); ?>
 
 
-<?= trlKwf('Your account at {0}
-has just been created.', $this->webUrl); ?>
+<?= trlKwf('Your account at {0} has just been created.', $this->webUrl); ?>
 
 <?= trlKwf('Please use the following link to choose yourself a password and to login'); ?>
 

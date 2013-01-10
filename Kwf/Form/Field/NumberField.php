@@ -16,7 +16,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         $this->setXtype('numberfield');
         $this->setDecimalSeparator(trlcKwfStatic('decimal separator', '.'));
         $this->setDecimalPrecision(2);
-        $this->setInputType('number');
+       $this->setInputType('number');
 
         $this->_floatValidator = new Zend_Validate_Float();
     }
@@ -94,7 +94,9 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     {
         $ret = parent::_getOutputValueFromValues($values);
         if (!$ret) return '';
-        $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
+        if ($this->getAllowDecimals() !== false) {
+            $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
+        }
         return $ret;
     }
 
@@ -114,6 +116,13 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         }
         if ($this->getAllowDecimals() === false) {
             $ret['step'] = '1';
+        } else {
+            //browser support for type number with decimals is broken, don't use it
+            $ret['type'] = 'text';
+            //$ret['step'] = 'any';
+            unset($ret['max']);
+            unset($ret['min']);
+            $ret['pattern'] = '\d*'; //instead of type=number; will show number keyboard on iPad
         }
         return $ret;
 

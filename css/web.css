@@ -13,5 +13,5 @@ ul.webListNone,
 
 .webStandard ol,
 .webStandard ul { margin-bottom: 10px; margin-left: 20px; }
-.webStandard li { list-style-type: square; margin-bottom: 5px; }
+.webStandard li { list-style-type: disc; margin-bottom: 5px; }
 

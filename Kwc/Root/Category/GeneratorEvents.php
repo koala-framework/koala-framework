@@ -52,6 +52,11 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
                     new Kwf_Component_Event_Page_ShowInMenuChanged($this->_class, $c)
                 );
             }
+            if ($event->isDirty('is_home')) {
+                $this->fireEvent(
+                    new Kwf_Component_Event_Page_UrlChanged($this->_class, $c)
+                );
+            }
         }
     }
 

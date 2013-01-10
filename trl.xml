@@ -77,20 +77,18 @@
 <ru>Добрый день {0}!</ru>
 </text>
 <text>
-<en>Your account at {0}
-has just been created.</en>
-<de>Ihr Konto bei {0}wurde soeben erstellt.</de>
+<en>Your account at {0} has just been created.</en>
+<de>Ihr Konto bei {0} wurde soeben erstellt.</de>
 <id>15</id>
 <ro>Tocmai a fost creat contul dumneavoastră pentru {0}.</ro>
 <uk>Ваш аккаунт створено</uk>
 <mk>Вашиот акаунт е креиран.</mk>
 <sl>Pravkar ste uspešno ustvarili svoj račun pri {0}.</sl>
-<ru>Ваш аккаунт на {0}
-только что был создан.</ru>
+<ru>Ваш аккаунт на {0} только что был создан.</ru>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
-<de>Bitte verwenden Sie diesen Link um sich ein Passwort zu erstellen und einzuloggen.</de>
+<de>Bitte verwenden Sie diesen Link, um sich ein Passwort zu erstellen und einzuloggen.</de>
 <id>16</id>
 <ro>Vă rugăm să folosiţi următorul link pentru a seta parola şi pentru a vă autentifica</ro>
 <uk>Будь ласка, використовуйте це посилання, щоб потрапити на ваш аккаунт</uk>

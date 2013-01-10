@@ -224,7 +224,9 @@ Kwf.onElementReady = function(selector, fn, scope, options) {
             var config = {};
             var configEl = el.child('> input[type="hidden"]')
             if (configEl) {
-                config = Ext.decode(configEl.getValue());
+                try {
+                    config = Ext.decode(configEl.getValue());
+                } catch (err) {}
             }
             fn.call(scope, el, config);
         }, this);

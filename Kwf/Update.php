@@ -100,7 +100,7 @@ abstract class Kwf_Update
                 $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
             }
         }
-        if (Kwf_Registry::get('dao')->hasDb()) {
+        if (Kwf_Setup::hasDb()) {
             $ret[] = 'db';
         }
         return $ret;
@@ -158,7 +158,10 @@ abstract class Kwf_Update
                 $dirs[$k] = getcwd();
                 continue;
             }
-            if (substr($i, 0, 1)!='/') $dirs[$k] = getcwd().'/'.$i;
+            if (!preg_match('#^(/|\w\:\\\\)#i', $i)) {
+                 //relative path, make it absolute
+                 $dirs[$k] = getcwd().'/'.$i;
+            }
         }
         $dirs = array_unique($dirs);
         $dirs = array_reverse($dirs);
@@ -192,21 +195,16 @@ abstract class Kwf_Update
                             if (substr($n, 0, 8) == 'library_') continue;
                             $n .= 'Update_'.$nr;
                             $update = self::createUpdate($n, $i->getPathname());
-                            if ($update) $ret[] = $update;
-                        }
-                    }
-                }
-                $path = $path . '/Always';
-                if (is_dir($path)) {
-                    foreach (new DirectoryIterator($path) as $i) {
-                        if (!$i->isFile()) continue;
-                        $f = $i->__toString();
-                        $fileType = substr($f, -4);
-                        if ($fileType != '.php') continue;
-                        $f = substr($f, 0, -4);
-                        $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_Always_'.$f;
-                        if (is_instance_of($n, 'Kwf_Update')) {
-                            $ret[] = new $n(null);
+                            if (!$update) continue;
+                            if ($update->getTags() && !in_array('web', $update->getTags())) {
+                                if (!array_intersect(
+                                    $update->getTags(),
+                                    Kwf_Update::getUpdateTags()
+                                ) && !($update->getTags()==array('db') && get_class($update)=='Kwf_Update_Sql')) {
+                                    continue; //skip
+                                }
+                            }
+                            $ret[] = $update;
                         }
                     }
                 }

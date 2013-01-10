@@ -50,33 +50,7 @@ class Kwf_Util_Setup
             'Kwf_Registry',
             'Kwf_Benchmark',
             'Kwf_Loader',
-            'Kwf_Config',
-            'Kwf_Cache_Simple',
-            'Kwf_Debug',
-            'Kwf_Trl',
         );
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            //only load component related classes if it is a component web
-            $preloadClasses[] = 'Kwf_Model_Select';
-            $preloadClasses[] = 'Kwf_Component_Data';
-            $preloadClasses[] = 'Kwf_Component_Data_Root';
-            $preloadClasses[] = 'Kwf_Component_Select';
-            $preloadClasses[] = 'Kwf_Component_Abstract';
-            $preloadClasses[] = 'Kwc_Abstract';
-            $preloadClasses[] = 'Kwc_Paragraphs_Component';
-            $preloadClasses[] = 'Kwf_Component_Renderer_Abstract';
-            $preloadClasses[] = 'Kwf_Component_Renderer';
-            $preloadClasses[] = 'Kwf_Component_Cache';
-            $preloadClasses[] = 'Kwf_Component_Cache_Mysql';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_Abstract';
-            $preloadClasses[] = 'Kwf_Component_View_Renderer';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_Master';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_Component';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_ComponentLink';
-            $preloadClasses[] = 'Kwf_View_Helper_Link';
-            $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
-            $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
-        }
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
@@ -122,8 +96,8 @@ class Kwf_Util_Setup
             $ret .= "Kwf_Benchmark::enable();\n";
         } else {
             $ret .= "if (isset(\$_REQUEST['KWF_BENCHMARK'])) {\n";
-            foreach (Kwf_Config::getValueArray('debug.benchmarkActivatorIp') as $ip) {
-                $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$ip') Kwf_Benchmark::enable();\n";
+            foreach (Kwf_Config::getValueArray('debug.benchmarkActivatorIp') as $activatorIp) {
+                $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$activatorIp') Kwf_Benchmark::enable();\n";
             }
             $ret .= "}\n";
         }
@@ -158,6 +132,45 @@ class Kwf_Util_Setup
             }
             $ret .= "    ob_start();\n";
             $ret .= "}\n";
+        }
+
+        $preloadClasses = array(
+            'Kwf_Loader',
+            'Kwf_Config',
+            'Kwf_Cache_Simple',
+            'Kwf_Debug',
+            'Kwf_Trl',
+        );
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            //only load component related classes if it is a component web
+            $preloadClasses[] = 'Kwf_Model_Select';
+            $preloadClasses[] = 'Kwf_Component_Data';
+            $preloadClasses[] = 'Kwf_Component_Data_Root';
+            $preloadClasses[] = 'Kwf_Component_Select';
+            $preloadClasses[] = 'Kwf_Component_Abstract';
+            $preloadClasses[] = 'Kwc_Abstract';
+            $preloadClasses[] = 'Kwc_Paragraphs_Component';
+            $preloadClasses[] = 'Kwf_Component_Renderer_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Renderer';
+            $preloadClasses[] = 'Kwf_Component_Cache';
+            $preloadClasses[] = 'Kwf_Component_Cache_Mysql';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Abstract';
+            $preloadClasses[] = 'Kwf_Component_View_Renderer';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Master';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Component';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_ComponentLink';
+            $preloadClasses[] = 'Kwf_View_Helper_Link';
+            $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
+        }
+        foreach ($preloadClasses as $cls) {
+            foreach ($ip as $path) {
+                $file = $path.'/'.str_replace('_', '/', $cls).'.php';
+                if (file_exists($file)) {
+                    $ret .= "require_once('".$file."');\n";
+                    break;
+                }
+            }
         }
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
@@ -286,7 +299,7 @@ class Kwf_Util_Setup
         }
 
         if (Kwf_Config::getValue('showPlaceholder')) {
-            $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REQUEST_URI']) && substr(\$_SERVER['REQUEST_URI'], 0, 8)!='/assets/' && !Kwf_Component_Data_Root::getShowInvisible()) {\n";
+            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath() && substr(Kwf_Setup::getRequestPath(), 0, 8)!='/assets/' && !Kwf_Component_Data_Root::getShowInvisible()) {\n";
             $ret .= "    $view = new Kwf_View();\n";
             $ret .= "    echo $view->render('placeholder.tpl');\n";
             $ret .= "    exit;\n";
@@ -296,7 +309,7 @@ class Kwf_Util_Setup
 
         if (Kwf_Config::getValue('preLoginUser')) {
             if (Kwf_Config::getValue('preLogin')) {
-                $ret .= "if (php_sapi_name() != 'cli' && isset(\$_SERVER['REDIRECT_URL'])) {\n";
+                $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
             } else {
                 $ret .= "if (Kwf_Component_Data_Root::getShowInvisible()) {\n";
             }
