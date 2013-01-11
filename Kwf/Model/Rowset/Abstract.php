@@ -95,11 +95,37 @@ class Kwf_Model_Rowset_Abstract implements Kwf_Model_Rowset_Interface, Serializa
     {
         $position = (int) $position;
         if ($position < 0 || $position > $this->count()) {
-            require_once 'Zend/Db/Table/Rowset/Exception.php';
-            throw new Zend_Db_Table_Rowset_Exception("Illegal index $position");
+            throw new Kwf_Exception("Illegal index $position");
         }
         $this->_pointer = $position;
         return $this;
+    }
+
+    public function offsetExists($offset)
+    {
+        if ($offset < 0 || $offset >= $this->count()) {
+            return false;
+        }
+        return true;
+    }
+
+    public function offsetGet($offset)
+    {
+        $offset = (int) $offset;
+        if ($offset < 0 || $offset >= $this->count()) {
+            throw new Kwf_Exception("Illegal index $offset");
+        }
+        $this->_pointer = $offset;
+
+        return $this->current();
+    }
+
+    public function offsetSet($offset, $value)
+    {
+    }
+
+    public function offsetUnset($offset)
+    {
     }
 
     public function getModel()

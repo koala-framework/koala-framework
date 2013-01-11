@@ -53,6 +53,25 @@ class Kwf_Model_Proxy_Rowset implements Kwf_Model_Rowset_Interface
         $this->_rowset->seek($position);
         return $this;
     }
+
+    public function offsetExists($offset)
+    {
+        return $this->_rowset->offsetExists($offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->_rowset->offsetGet($offset);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+    }
+
+    public function offsetUnset($offset)
+    {
+    }
+
     public function getRowset()
     {
         return $this->_rowset;
@@ -69,4 +88,5 @@ class Kwf_Model_Proxy_Rowset implements Kwf_Model_Rowset_Interface
     {
         return $this->getModel()->getTable();
     }
+
 }
