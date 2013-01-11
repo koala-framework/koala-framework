@@ -70,6 +70,7 @@ class Kwf_Benchmark_BufferedFileCounter
 
     public function getValues()
     {
+        if (!file_exists($this->_file)) return array();
         $fp = fopen($this->_file, "r");
         if (flock($fp, LOCK_SH)) {
             $writeFeedCounters = stream_get_contents($fp);
