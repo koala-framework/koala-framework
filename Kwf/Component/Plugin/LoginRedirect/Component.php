@@ -19,7 +19,7 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
         if (!$this->isLoggedIn()) {
             $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
             $loginComponent = $this->getLoginComponent();
-            if (!$loginComponent) throw new KWf_Exception('No login component found');
+            if (!$loginComponent) throw new Kwf_Exception('No login component found');
             $url = $loginComponent->url;
             if ($component->url != '/') {
                 $url .= '?redirect=' . urlencode($component->url);
