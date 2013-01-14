@@ -169,7 +169,8 @@ class Kwf_Component_Data
      */
     public function getAbsoluteUrl()
     {
-        return 'http://'.$this->getDomain().$this->url;
+        $protocol = Kwf_Config::getValue('server.https') ? 'https' : 'http';
+        return $protocol . '://'.$this->getDomain().$this->url;
     }
 
     /**
