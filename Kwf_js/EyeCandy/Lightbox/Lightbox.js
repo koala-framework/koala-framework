@@ -179,9 +179,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 this.closeHref = window.location.href;
             }
         }
+
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
             var closeOptions = {};
-            if (options.clickTarget) closeOptions.showClickTarget = options.clickTarget;
+            if (options && options.clickTarget) {
+                closeOptions.showClickTarget = options.clickTarget;
+            }
             Kwf.EyeCandy.Lightbox.currentOpen.close(closeOptions);
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
