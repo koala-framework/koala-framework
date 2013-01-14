@@ -238,7 +238,7 @@ Kwf._componentEventHandlers = {};
 Kwf.fireComponentEvent = function(evName) {
     if (Kwf._componentEventHandlers[evName]) {
         var args = arguments;
-        args.shift();
+        Array.prototype.shift.call(args);
         Kwf._componentEventHandlers[evName].forEach(function(i) {
             i.cb.apply(i.scope || window, args);
         }, this);
