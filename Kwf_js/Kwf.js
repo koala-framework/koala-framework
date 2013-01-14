@@ -228,6 +228,38 @@ Kwf.onElementReady = function(selector, fn, scope, options) {
     }, this, options);
 };
 
+Kwf._componentEventHandlers = {};
+/**
+ * Fires a component event, used in frontend.
+ *
+ * @param string event name
+ * @param parameters[...] pass to event handler
+ */
+Kwf.fireComponentEvent = function(evName) {
+    if (Kwf._componentEventHandlers[evName]) {
+        var args = arguments;
+        args.shift();
+        Kwf._componentEventHandlers[evName].forEach(function(i) {
+            i.cb.apply(i.scope || window, args);
+        }, this);
+    }
+};
+
+/**
+ * Adds event listener to a component event, used in frontend.
+ *
+ * @param string event name
+ * @param callback function
+ * @param scope
+ */
+Kwf.onComponentEvent = function(evName, cb, scope) {
+    if (!Kwf._componentEventHandlers[evName]) Kwf._componentEventHandlers[evName] = [];
+    Kwf._componentEventHandlers[evName].push({
+        cb: cb,
+        scope: scope
+    });
+};
+
 Kwf.include =  function(url, restart)
 {
     if (url.substr(-4) == '.css') {
