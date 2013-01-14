@@ -212,9 +212,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        delete Kwf.Utils.HistoryState.currentState.lightbox;
-        Kwf.Utils.HistoryState.pushState(document.title, this.closeHref);
-        this.close();
+        //delete Kwf.Utils.HistoryState.currentState.lightbox;
+        //Kwf.Utils.HistoryState.pushState(document.title, this.closeHref);
+        //this.close();
+        history.back();
     },
     initialize: function()
     {
