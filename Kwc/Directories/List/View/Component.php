@@ -69,15 +69,22 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         }
 
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
-            $values = $searchForm->getComponent()->getFormRow()->toArray();
-            unset($values['id']);
-            $ret->where(new Kwf_Model_Select_Expr_SearchLike($values, $this->_getSetting('searchQueryFields')));
+            $ret = $this->_getSearchSelect($ret, $searchForm->getComponent()->getFormRow());
         }
 
         // Limit-Setting beschränkt Einträge auf bestimmte Anzahl (zB für LiveSearch)
         if ($this->_hasSetting('limit')) {
             $ret->limit($this->_getSetting('limit'));
         }
+        return $ret;
+    }
+
+    // rewrite this function if you want a specific search form select
+    protected function _getSearchSelect($ret, $searchRow)
+    {
+        $values = $searchRow->toArray();
+        unset($values['id']);
+        $ret->where(new Kwf_Model_Select_Expr_SearchLike($values, $this->_getSetting('searchQueryFields')));
         return $ret;
     }
 
