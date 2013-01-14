@@ -222,8 +222,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         var closeButtons = this.innerLightboxEl.select('.closeButton');
         closeButtons.each(function(el) {
             el.on('click', function(ev) {
-                this.closeAndPushState();
                 ev.stopEvent();
+                this.closeAndPushState();
             }, this);
         }, this);
     },
