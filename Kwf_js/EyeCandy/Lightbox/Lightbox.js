@@ -218,9 +218,16 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         //delete Kwf.Utils.HistoryState.currentState.lightbox;
         //Kwf.Utils.HistoryState.pushState(document.title, this.closeHref);
         //this.close();
-        while (Kwf.Utils.HistoryState.currentState.lightbox) {
-            history.back();
-        }
+        history.back();
+        var closeLightbox = (function() {
+            //check if there is still a lightbox open
+            //has to be defered because closing happens in 'popstate' event which is async in IE
+            if (Kwf.Utils.HistoryState.currentState.lightbox) {
+                history.back();
+                closeLightbox.defer(1, this);
+            }
+        });
+        closeLightbox.defer(1, this);
     },
     initialize: function()
     {
