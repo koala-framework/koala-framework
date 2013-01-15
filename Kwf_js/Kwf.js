@@ -237,8 +237,10 @@ Kwf._componentEventHandlers = {};
  */
 Kwf.fireComponentEvent = function(evName) {
     if (Kwf._componentEventHandlers[evName]) {
-        var args = arguments;
-        Array.prototype.shift.call(args);
+        var args = [];
+        for (var i=1; i<arguments.length; i++) { //remove first
+            args.push(arguments[i]);
+        }
         Kwf._componentEventHandlers[evName].forEach(function(i) {
             i.cb.apply(i.scope || window, args);
         }, this);
