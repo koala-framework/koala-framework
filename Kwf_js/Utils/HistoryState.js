@@ -5,12 +5,23 @@ Kwf.Utils.HistoryStateAbstract = function() {
     this.currentState = {};
 };
 Ext.extend(Kwf.Utils.HistoryStateAbstract, Ext.util.Observable, {
+    /**
+     * Number of entries in the history of the current page
+     **/
+    entries: 0,
+    pushState: Ext.emptyFn,
+    updateState: Ext.emptyFn,
+    /**
+     * Replace the current state, don't use is possible as it will do a new page request in non-html5-browsers
+     **/
+    replaceState: Ext.emptyFn
 });
 
 Kwf.Utils.HistoryStateHtml5 = function() {
     Kwf.Utils.HistoryStateHtml5.superclass.constructor.call(this);
     Ext.EventManager.on(window, 'popstate', function(event) {
         if (this.disabled) return;
+        this.entries--;
         if (event.browserEvent.state) {
             this.currentState = event.browserEvent.state;
         } else {
@@ -23,10 +34,15 @@ Ext.extend(Kwf.Utils.HistoryStateHtml5, Kwf.Utils.HistoryStateAbstract, {
     pushState: function(title, href) {
         if (this.disabled) return;
         window.history.pushState(this.currentState, title, href);
+        this.entries++;
     },
     updateState: function() {
         if (this.disabled) return;
         window.history.replaceState(this.currentState, document.title, window.location.href);
+    },
+    replaceState: function(title, href) {
+        if (this.disabled) return;
+        window.history.replaceState(this.currentState, title, href);
     }
 });
 
@@ -45,6 +61,7 @@ Kwf.Utils.HistoryStateHash = function() {
             if (this.states[token]) {
                 this.currentState = Kwf.clone(this.states[token]);
                 this.fireEvent('popstate');
+                this.entries--;
             }
         }, this);
         Kwf.onContentReady(function() {
@@ -77,6 +94,7 @@ Ext.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {
                 Ext.History.add(href, false);
             }
         }
+        this.entries++;
     },
     updateState: function() {
         if (this.disabled) return;
@@ -84,6 +102,10 @@ Ext.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {
         var token = Ext.History.getToken();
         if (token == null) token = location.pathname + location.search;
         this.states[token] = Kwf.clone(this.currentState);
+    },
+    replaceState: function(title, href) {
+        if (this.disabled) return;
+        location.replace(href); //this will trigger a page load
     }
 });
 if (window.history.pushState) {
