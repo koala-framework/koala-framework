@@ -51,6 +51,13 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             handler : this.onAdd,
             scope   : this
         });
+        this.actions.xls = new Ext.Action({
+            text    : trlKwf('Excel Export'),
+            icon    : '/assets/silkicons/page_excel.png',
+            cls     : 'x-btn-text-icon',
+            handler : this.onXls,
+            scope: this
+        });
 
         Kwf.Auto.FormPanel.superclass.initComponent.call(this);
 
@@ -394,6 +401,35 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             }
         }
     },
+
+    onXls : function() {
+        Ext.Ajax.request({
+            url : this.controllerUrl+'/json-xls',
+            params  : this.getForm().baseParams,
+            timeout: 600000, // 10 minutes
+            progress: true,
+            progressTitle : trlKwf('Excel export'),
+            success: function(response, opt, r) {
+                if (Ext.isIE) {
+                    Ext.Msg.show({
+                        title: trlKwf('Your download is ready'),
+                        msg: trlKwf('Please click on the following link to download your Excel file.')
+                            +'<br /><br />'
+                            +'<a class="xlsExportLink" href="'+this.controllerUrl+'/download-xls-file?downloadkey='+r.downloadkey+'" target="_blank">'
+                            +trlKwf('CSV export file')+'</a>',
+                        icon: Ext.Msg.INFO,
+                        buttons: { ok: trlKwf('Close') }
+                    });
+                } else {
+                    Ext.getBody().createChild({
+                        html: '<iframe width="0" height="0" src="'+this.controllerUrl+'/download-xls-file?downloadkey='+r.downloadkey+'"></iframe>'
+                    });
+                }
+            },
+            scope: this
+        });
+    },
+                                
     findField: function(id) {
         return this.getForm().findField(id);
     },
