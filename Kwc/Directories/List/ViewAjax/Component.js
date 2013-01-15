@@ -468,6 +468,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 if (!this.detailEl) return;
                 this.detailEl.removeClass('loadingContent '+this.classNames);
                 this.detailEl.update(response.responseText);
+                Kwf.Statistics.count(href);
 
                 this.detailEl.query('a').forEach(function(el) {
                     if (el.href == location.protocol+'//'+location.host+this.directoryUrl) {
