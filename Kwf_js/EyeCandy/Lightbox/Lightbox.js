@@ -328,6 +328,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     onShow: function() {
         this.mask();
     },
+    afterShow: function() {
+        this._center();
+    },
     onClose: function(options) {
         this.lightbox.lightboxEl.fadeOut({
             concurrent: true,
