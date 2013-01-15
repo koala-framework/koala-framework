@@ -58,6 +58,11 @@ Kwf.Utils.HistoryStateHash = function() {
         }
         Ext.History.on('change', function(token) {
             if (!token) token = location.pathname + location.search;
+            if (token == this.ignoreNextChange) {
+                //changed because we just added to history -> ignore
+                this.ignoreNextChange = null;
+                return;
+            }
             if (this.states[token]) {
                 this.currentState = Kwf.clone(this.states[token]);
                 this.fireEvent('popstate');
@@ -70,6 +75,7 @@ Kwf.Utils.HistoryStateHash = function() {
     }
 };
 Ext.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {
+    ignoreNextChange: null,
     pushState: function(title, href) {
         if (this.disabled) return;
         if (Ext.isIE6 || Ext.isIE7) {
@@ -93,6 +99,7 @@ Ext.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {
             } else {
                 Ext.History.add(href, false);
             }
+            this.ignoreNextChange = href;
         }
         this.entries++;
     },
