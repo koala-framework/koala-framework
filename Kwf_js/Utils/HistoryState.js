@@ -55,6 +55,11 @@ Kwf.Utils.HistoryStateHash = function() {
 Ext.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {
     pushState: function(title, href) {
         if (this.disabled) return;
+        if (Ext.isIE6 || Ext.isIE7) {
+            //don't use history state at all, simply open the new url
+            location.href = href;
+            return;
+        }
 
         var prefix = location.protocol+'//'+location.host;
         if (href.substr(0, prefix.length) == prefix) {
