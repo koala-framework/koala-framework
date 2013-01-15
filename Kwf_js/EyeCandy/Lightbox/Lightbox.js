@@ -215,19 +215,23 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        //delete Kwf.Utils.HistoryState.currentState.lightbox;
-        //Kwf.Utils.HistoryState.pushState(document.title, this.closeHref);
-        //this.close();
-        history.back();
-        var closeLightbox = (function() {
-            //check if there is still a lightbox open
-            //has to be defered because closing happens in 'popstate' event which is async in IE
-            if (Kwf.Utils.HistoryState.currentState.lightbox) {
-                history.back();
-                closeLightbox.defer(1, this);
-            }
-        });
-        closeLightbox.defer(1, this);
+        if (Kwf.Utils.HistoryState.entries > 0) {
+            history.back();
+            var closeLightbox = (function() {
+                //check if there is still a lightbox open
+                //has to be defered because closing happens in 'popstate' event which is async in IE
+                if (Kwf.Utils.HistoryState.currentState.lightbox) {
+                    history.back();
+                    closeLightbox.defer(1, this);
+                }
+            });
+            closeLightbox.defer(1, this);
+        } else {
+            delete Kwf.Utils.HistoryState.currentState.lightbox;
+            Kwf.Utils.HistoryState.replaceState(document.title, this.closeHref);
+            //location.replace(this.closeHref);
+            this.close();
+        }
     },
     initialize: function()
     {
