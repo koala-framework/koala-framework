@@ -63,7 +63,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         } else {
             $userId = (int)$code[0];
             $code = $code[1];
-            $userModel = Zend_Registry::get('userModel');
+            $userModel = Zend_Registry::get('userModel')->getKwfModel();
             $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
             if (!$this->_user) {
                 $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
@@ -93,7 +93,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         }
     }
 
-    protected function _afterLogin(Kwf_User_Row $user)
+    protected function _afterLogin(Kwf_Model_Row_Abstract $user)
     {
     }
 }
