@@ -10,8 +10,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
     {
         Kwf_Util_Https::ensureHttps();
 
-        if (!$this instanceof Kwf_Controller_Action_Error_ErrorController
-                && $this->_getParam('application_max_assets_mtime')
+        if ($this->_getParam('application_max_assets_mtime')
                 && $this->getHelper('ViewRenderer')->isJson()) {
             $l = new Kwf_Assets_Loader();
             if ($l->getDependencies()->getMaxFileMTime()!= $this->_getParam('application_max_assets_mtime')) {
