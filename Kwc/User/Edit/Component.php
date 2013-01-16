@@ -17,12 +17,14 @@ class Kwc_User_Edit_Component extends Kwc_Abstract_Composite_Component
         $ret['authedUser'] = Kwf_Registry::get('userModel')->getAuthedUser();
         $ret['userProfile'] = false;
         if ($ret['authedUser']) {
-            $ret['userProfile'] = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByClass(
+            $root = Kwf_Component_Data_Root::getInstance();
+            if ($root->getComponentByClass('Kwc_User_Directory_Component', array('subroot' => $this->getData()))) {
+                $ret['userProfile'] = $root->getComponentByClass(
                     'Kwc_User_Directory_Component',
                     array('subroot' => $this->getData())
                 )
                 ->getChildComponent('_' .  $ret['authedUser']->id);
+            }
         }
         return $ret;
     }
