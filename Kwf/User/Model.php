@@ -1,5 +1,5 @@
 <?php
-class Kwf_User_Model extends Kwf_Model_RowCache
+class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterface
 {
     protected $_rowClass = 'Kwf_User_Row';
     protected $_authedUser;
@@ -75,7 +75,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         }
         $this->_lock = fopen("temp/create-user.lock", "w");
 
-        $startTime = microtime(true); 
+        $startTime = microtime(true);
         while(true) {
             if (flock($this->_lock, LOCK_EX | LOCK_NB)) {
                 break;
