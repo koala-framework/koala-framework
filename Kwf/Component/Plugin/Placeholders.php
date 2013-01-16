@@ -1,7 +1,7 @@
 <?php
 class Kwf_Component_Plugin_Placeholders extends Kwf_Component_Plugin_View_Abstract
 {
-    public function getExecutionPoint()
+    public static function getExecutionPoint()
     {
         return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
     }

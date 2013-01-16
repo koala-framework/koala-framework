@@ -48,18 +48,29 @@ abstract class Kwf_Component_Renderer_Abstract
         $pluginNr = 0;
         $helpers = array();
 
-        // {cc type: componentId(value)[plugins] config}
-        while (preg_match('/{cc ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?(\[[^}]+\])?( [^}]*)}/i', $ret, $matches)) {
+        //                  {cc type    : componentId (value)      {plugins}    config}
+        while (preg_match('/{cc ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?({[^}]+})?( [^}]*)}/i', $ret, $matches)) {
             if ($benchmarkEnabled) $startTime = microtime(true);
             $type = $matches[1];
             $componentId = trim($matches[2]);
             $value = (string)trim($matches[3]); // Bei Partial partialId oder bei master component_id zu der das master gehört
             if ($value) $value = substr($value, 1, -1);
-            $plugins = trim($matches[4]);
-            if ($plugins) $plugins = explode(' ', substr($plugins, 1, -1));
+            $plugins = json_decode($matches[4], true);
             if (!$plugins) $plugins = array();
             $config = trim($matches[5]);
             $config = $config != '' ? unserialize(base64_decode($config)) : array();
+
+            if (isset($plugins['replace'])) {
+                foreach ($plugins['replace'] as $pluginClass) {
+                    $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
+                    $content = $plugin->replaceOutput(null);
+                    if ($content !== false) {
+                        if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' plugin', microtime(true)-$startTime);
+                        $ret = str_replace($matches[0], $content, $ret);
+                        continue 2;
+                    }
+                }
+            }
 
             $statId = $componentId;
             if ($value) $statId .= " ($value)";
@@ -91,11 +102,9 @@ abstract class Kwf_Component_Renderer_Abstract
             }
             if (is_null($content)) {
                 $content = $helper->render($componentId, $config);
-                foreach ($plugins as $pluginClass) {
-                    $plugin = Kwf_Component_Plugin_View_Abstract::getInstance($pluginClass, $componentId);
-                    if (!$plugin instanceof Kwf_Component_Plugin_Abstract)
-                        throw Kwf_Exception('Plugin must be Instanceof Kwf_Component_Plugin_Abstract');
-                    if ($plugin->getExecutionPoint() == Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE_CACHE) {
+                if (isset($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE_CACHE])) {
+                    foreach ($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE_CACHE] as $pluginClass) {
+                        $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                         $content = $plugin->processOutput($content);
                     }
                 }
@@ -107,13 +116,15 @@ abstract class Kwf_Component_Renderer_Abstract
             }
             $content = $helper->renderCached($content, $componentId, $config);
 
-            foreach ($plugins as $pluginClass) {
-                $plugin = Kwf_Component_Plugin_View_Abstract::getInstance($pluginClass, $componentId);
-                if (!$plugin instanceof Kwf_Component_Plugin_Abstract)
-                    throw Kwf_Exception('Plugin must be Instanceof Kwf_Component_Plugin_Abstract');
-                if ($plugin->getExecutionPoint() == Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
+            if (isset($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE])) {
+                foreach ($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE] as $pluginClass) {
+                    $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                     $content = $plugin->processOutput($content);
-                } else if ($plugin->getExecutionPoint() == Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER) {
+                }
+            }
+
+            if (isset($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER])) {
+                foreach ($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER] as $pluginClass) {
                     $pluginNr++;
                     $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
                 }
@@ -126,7 +137,7 @@ abstract class Kwf_Component_Renderer_Abstract
         }
         while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/s', $ret, $matches)) {
             $pluginClass = $matches[2];
-            $plugin = Kwf_Component_Plugin_View_Abstract::getInstance($pluginClass, $matches[3]);
+            $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $matches[3]);
             $content = $plugin->processOutput($matches[4]);
             $ret = str_replace($matches[0], $content, $ret);
         }

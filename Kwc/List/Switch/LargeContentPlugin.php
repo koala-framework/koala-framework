@@ -3,7 +3,7 @@ class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_View_Abstr
 {
     protected $_currentItem;
 
-    public function getExecutionPoint()
+    public static function getExecutionPoint()
     {
         return Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE;
     }

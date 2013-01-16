@@ -4,8 +4,9 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
     public function component(Kwf_Component_Data $component = null)
     {
         if (!$component) return '';
+        $plugins = self::_getGroupedViewPlugins($component->componentClass);
         return $this->_getRenderPlaceholder(
-            $component->componentId, array(), null, 'component', $component->getPlugins('Kwf_Component_Plugin_Interface_View')
+            $component->componentId, array(), null, 'component', $plugins
         );
     }
 

@@ -28,7 +28,7 @@ class Kwf_Component_Output_Plugin_Plugin_Component extends Kwf_Component_Plugin_
         }
     }
 
-    public function getExecutionPoint()
+    public static function getExecutionPoint()
     {
         return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
     }
