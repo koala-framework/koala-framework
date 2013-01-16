@@ -1,6 +1,6 @@
 <?php
-class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_View_Abstract
-    implements Kwf_Component_Plugin_Interface_Login
+class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_Login
 {
     public static function getSettings()
     {
@@ -9,12 +9,7 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
         return $ret;
     }
 
-    public function getExecutionPoint()
-    {
-        return Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE;
-    }
-
-    public function processOutput($output)
+    public function replaceOutput()
     {
         if (!$this->isLoggedIn()) {
             $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
@@ -27,7 +22,7 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
             header('Location: ' . $url);
             exit;
         }
-        return parent::processOutput($output);
+        return false;
     }
 
     public function getLoginComponent()

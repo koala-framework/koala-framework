@@ -1,7 +1,8 @@
 <?php
-class Kwf_Component_Plugin_HideFromBots extends Kwf_Component_Plugin_View_Abstract
+class Kwf_Component_Plugin_HideFromBots extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewReplace
 {
-    public function processOutput($output)
+    public function replaceOutput()
     {
         $bots = array(
         'AdsBot-Google',
@@ -62,7 +63,7 @@ class Kwf_Component_Plugin_HideFromBots extends Kwf_Component_Plugin_View_Abstra
             }
         }
         if (!$isBot) {
-            return $output;
+            return false;
         }
         return '';
     }

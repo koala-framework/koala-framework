@@ -1,6 +1,6 @@
 <?php
-class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_Abstract
-    implements Kwf_Component_Plugin_Interface_Login
+class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_ViewReplace
 {
     public static function getSettings()
     {
@@ -82,10 +82,10 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
         return $templateVars;
     }
 
-    public function processOutput($output)
+    public function replaceOutput()
     {
         if ($this->isLoggedIn()) {
-            return $output;
+            return false;
         }
 
         $template = Kwc_Admin::getComponentFile($this, 'Component', 'tpl');
