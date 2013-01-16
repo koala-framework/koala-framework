@@ -13,7 +13,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
 
     public function preDispatch()
     {
-        $this->_model = Zend_Registry::get('userModel');
+        $this->_model = Zend_Registry::get('userModel')->getKwfModel();
         parent::preDispatch();
     }
 
@@ -149,7 +149,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
             throw new Kwf_Exception("Wrong parameters submitted");
         }
 
-        $userModel = Kwf_Registry::get('userModel');
+        $userModel = Kwf_Registry::get('userModel')->getKwfModel();
         $row = $userModel->getRow($userId);
         if (!$row) {
             throw new Kwf_Exception("User row not found");

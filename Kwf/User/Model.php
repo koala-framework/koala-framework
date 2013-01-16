@@ -277,6 +277,11 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         return $this->_authedUser;
     }
 
+    public function getAuthedKwfUser()
+    {
+        return $this->getAuthedUser();
+    }
+
     public function clearAuthedUser()
     {
         $this->_authedUser = null;
@@ -336,4 +341,8 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         return $this->_noLogColumns;
     }
 
+    public function getKwfModel()
+    {
+        return $this;
+    }
 }
