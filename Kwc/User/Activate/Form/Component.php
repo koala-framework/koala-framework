@@ -89,7 +89,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
             $this->_user->save();
             $auth = Kwf_Auth::getInstance();
             $auth->getStorage()->write(array('userId' => $this->_user->id));
-            $this->_afterLogin(Kwf_Registry::get('userModel')->getAuthedUser());
+            $this->_afterLogin(Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser());
         }
     }
 
