@@ -40,7 +40,7 @@ class Kwf_Controller_Action_User_LogController extends Kwf_Controller_Action_Aut
         }
         if (!$roles) return false;
 
-        $userModel = Kwf_Registry::get('userModel');
+        $userModel = Kwf_Registry::get('userModel')->getKwfModel();
         $userRow = $userModel->getRow($userId);
 
         if (!$userRow || !array_key_exists($userRow->role, $roles)) {
