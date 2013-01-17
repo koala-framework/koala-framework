@@ -4,7 +4,7 @@ abstract class Kwf_Component_Plugin_Abstract extends Kwf_Component_Abstract
     protected $_componentId;
     static private $_instances = array();
 
-    public function __construct($componentId)
+    public function __construct($componentId = null)
     {
         $this->_componentId = $componentId;
         parent::__construct($componentId);
