@@ -1,6 +1,6 @@
 <?php
 class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_Abstract
-    implements Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_Login
+    implements Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_SkipProcessInput
 {
     public static function getSettings()
     {
@@ -41,5 +41,10 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
             return true;
         }
         return false;
+    }
+
+    public function skipProcessInput()
+    {
+        return !$this->isLoggedIn();
     }
 }

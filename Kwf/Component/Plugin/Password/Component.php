@@ -1,6 +1,6 @@
 <?php
 class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstract
-    implements Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_ViewReplace
+    implements Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_SkipProcessInput
 {
     public static function getSettings()
     {
@@ -94,5 +94,10 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
         $view = new Kwf_Component_View($renderer);
         $view->assign($this->getTemplateVars());
         return $renderer->render($view->render($template));
+    }
+
+    public function skipProcessInput()
+    {
+        return !$this->isLoggedIn();
     }
 }

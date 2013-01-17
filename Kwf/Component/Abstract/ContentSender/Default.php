@@ -33,24 +33,61 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         $cacheId = 'procI-'.$data->componentId;
         $success = false;
         if (!$showInvisible) { //don't cache in preview
-            $processCached = Kwf_Cache_Simple::fetch($cacheId, $success);
+            $cacheContents = Kwf_Cache_Simple::fetch($cacheId, $success);
             //cache is cleared in Kwf_Component_Events_ProcessInputCache
         }
+        $success = false;
         if (!$success) {
-            $process = self::_findProcessInputComponents($data);
+            $datas = array();
+            foreach (self::_findProcessInputComponents($data) as $p) {
+                $plugins = array();
+                $c = $p;
+                do {
+                    foreach ($c->getPlugins('Kwf_Component_Plugin_Interface_SkipProcessInput') as $i) {
+                        $plugins[] = array(
+                            'pluginClass' => $i,
+                            'componentId' => $c->componentId
+                        );
+                    }
+                    $c = $c->parent;
+                } while(!$c->isPage);
+                $datas[] = array(
+                    'data' => $p,
+                    'plugins' => $plugins,
+                );
+            }
             if (!$showInvisible) {
-                $datas = array();
-                foreach ($process as $p) {
-                    $datas[] = $p->kwfSerialize();
+                $cacheContents = array();
+                foreach ($datas as $p) {
+                    $cacheContents[] = array(
+                        'data' => $p['data']->kwfSerialize(),
+                        'plugins' => $p['plugins'],
+                    );
                 }
-                Kwf_Cache_Simple::add($cacheId, $datas);
+                Kwf_Cache_Simple::add($cacheId, $cacheContents);
             }
         } else {
-            $process = array();
-            foreach ($processCached as $d) {
-                $process[] = Kwf_Component_Data::kwfUnserialize($d);
+            $datas = array();
+            foreach ($cacheContents as $d) {
+                $datas[] = array(
+                    'data' => Kwf_Component_Data::kwfUnserialize($d['data']),
+                    'plugins' => $d['plugins'],
+                );
             }
         }
+        //ask SkipProcessInput plugins if it should be skipped
+        //evaluated every time
+        $process = array();
+        foreach ($datas as $d) {
+            foreach ($d['plugins'] as $p) {
+                $p = Kwf_Component_Plugin_Abstract::getInstance($p['pluginClass'], $p['componentId']);
+                if ($p->skipProcessInput()) {
+                    continue 2;
+                }
+            }
+            $process[] = $d['data'];
+        }
+
         return $process;
     }
 
