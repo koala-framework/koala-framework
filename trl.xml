@@ -8670,16 +8670,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1770</id>
 </text>
 <text>
-<en>Adopt</en>
-<id>1771</id>
-</text>
-<text>
 <en>Link.to FlashMediaPlayer</en>
 <id>1772</id>
-</text>
-<text>
-<en>Video</en>
-<id>1773</id>
 </text>
 <text>
 <en>Form Properties</en>
@@ -8782,34 +8774,27 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1798</id>
 </text>
 <text>
-<<<<<<< HEAD
 <en>WARNING: untagged</en>
 <de>WARNUNG: ungetaggt</de>
 <id>1799</id>
-=======
-<en>Dear {0}</en>
-<context>salutation firstname male</context>
-<de>Lieber {0}</de>
-<id>1604</id>
-<sl>Dragi {0}</sl>
->>>>>>> 5acc615... Uebersetzungen hinzugefuegt
 </text>
 <text>
 <en>Adopt</en>
-<id>1785</id>
+<id>1800</id>
 </text>
 <text>
 <en>Video</en>
-<id>1786</id>
+<id>1801</id>
 </text>
 <text>
 <en>+{0}% VAT</en>
 <de>+{0}% MWSt</de>
-<id>1787</id>
+<id>1802</id>
 </text>
 <text>
 <en>Own Flash</en>
 <de>Eigenes Flash</de>
-<id>1788</id>
+<id>1803</id>
 </text>
 </trl>
+
