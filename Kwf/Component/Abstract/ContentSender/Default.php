@@ -36,7 +36,6 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             $cacheContents = Kwf_Cache_Simple::fetch($cacheId, $success);
             //cache is cleared in Kwf_Component_Events_ProcessInputCache
         }
-        $success = false;
         if (!$success) {
             $datas = array();
             foreach (self::_findProcessInputComponents($data) as $p) {
