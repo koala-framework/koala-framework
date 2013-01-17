@@ -1,11 +1,28 @@
 <?php
 abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abstract
 {
+    protected static function _getGroupedViewPlugins($componentClass)
+    {
+        $plugins = array();
+        foreach (Kwc_Abstract::getSetting($componentClass, 'plugins') as $p) {
+            if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeCache')) {
+                $plugins['beforeCache'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeChildRender')) {
+                $plugins['before'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewAfterChildRender')) {
+                $plugins['after'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewReplace')) {
+                $plugins['replace'][] = $p;
+            }
+        }
+        return $plugins;
+    }
+    
     protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $type = null, $plugins = array())
     {
         if (!$type) $type = $this->_getType();
         if (!is_null($value)) $componentId .= '(' . $value . ')';
-        if ($plugins) $componentId .= '[' . implode(' ', $plugins) . ']';
+        if ($plugins) $componentId .= json_encode((object)$plugins);
         $config = base64_encode(serialize($config));
         return '{cc ' . "$type: $componentId $config" . '}';
     }

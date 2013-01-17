@@ -1,6 +1,6 @@
 <?php
-class Kwf_Component_Plugin_AccessByMail_Component extends Kwf_Component_Plugin_View_Abstract
-    implements Kwf_Component_Plugin_Interface_Login
+class Kwf_Component_Plugin_AccessByMail_Component extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_SkipProcessInput
 {
     public static function getSettings()
     {
@@ -25,10 +25,10 @@ class Kwf_Component_Plugin_AccessByMail_Component extends Kwf_Component_Plugin_V
         return $ret;
     }
 
-    public function processOutput($output)
+    public function replaceOutput()
     {
         if ($this->isLoggedIn()) {
-            return $output;
+            return false;
         }
 
         $form = Kwf_Component_Data_Root::getInstance()
@@ -41,5 +41,10 @@ class Kwf_Component_Plugin_AccessByMail_Component extends Kwf_Component_Plugin_V
         $view = new Kwf_Component_View();
         $view->assign($templateVars);
         return $view->render($template);
+    }
+
+    public function skipProcessInput()
+    {
+        return !$this->isLoggedIn();
     }
 }
