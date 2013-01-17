@@ -9,6 +9,14 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    public function _getBaseParams()
+    {
+        $ret = parent::_getBaseParams();
+        if (!empty($_GET['redirect'])) $ret['redirect'] = $_GET['redirect'];
+        return $ret;
+
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -58,10 +66,6 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 
     protected function _afterLogin(Kwf_Model_Row_Interface $user)
     {
-        if (!empty($_GET['redirect']) && substr($_GET['redirect'], 0, 1) == '/') {
-            header('Location: ' . $_GET['redirect']);
-            die();
-        }
     }
 
     private function _getAuthenticateResult($identity, $credential)
