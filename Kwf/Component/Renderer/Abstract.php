@@ -63,7 +63,7 @@ abstract class Kwf_Component_Renderer_Abstract
             if (isset($plugins['replace'])) {
                 foreach ($plugins['replace'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
-                    $content = $plugin->replaceOutput(null);
+                    $content = $plugin->replaceOutput();
                     if ($content !== false) {
                         if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' plugin', microtime(true)-$startTime);
                         $ret = str_replace($matches[0], $content, $ret);
