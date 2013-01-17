@@ -102,8 +102,8 @@ abstract class Kwf_Component_Renderer_Abstract
             }
             if (is_null($content)) {
                 $content = $helper->render($componentId, $config);
-                if (isset($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE_CACHE])) {
-                    foreach ($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE_CACHE] as $pluginClass) {
+                if (isset($plugins['beforeCache'])) {
+                    foreach ($plugins['beforeCache'] as $pluginClass) {
                         $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                         $content = $plugin->processOutput($content);
                     }
@@ -116,15 +116,15 @@ abstract class Kwf_Component_Renderer_Abstract
             }
             $content = $helper->renderCached($content, $componentId, $config);
 
-            if (isset($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE])) {
-                foreach ($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE] as $pluginClass) {
+            if (isset($plugins['before'])) {
+                foreach ($plugins['before'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                     $content = $plugin->processOutput($content);
                 }
             }
 
-            if (isset($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER])) {
-                foreach ($plugins[Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER] as $pluginClass) {
+            if (isset($plugins['after'])) {
+                foreach ($plugins['after'] as $pluginClass) {
                     $pluginNr++;
                     $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
                 }

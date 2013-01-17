@@ -1,11 +1,7 @@
 <?php
-class Kwc_List_Switch_FirstLargeContentPlugin extends Kwf_Component_Plugin_View_Abstract
+class Kwc_List_Switch_FirstLargeContentPlugin extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewBeforeCache
 {
-    public static function getExecutionPoint()
-    {
-        return Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE_CACHE;
-    }
-
     public function processOutput($output)
     {
         $child = Kwf_Component_Data_Root::getInstance()

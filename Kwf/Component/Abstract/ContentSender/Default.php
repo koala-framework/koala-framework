@@ -50,7 +50,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                         );
                     }
                     $c = $c->parent;
-                } while(!$c->isPage);
+                } while($c && !$c->isPage);
                 $datas[] = array(
                     'data' => $p,
                     'plugins' => $plugins,

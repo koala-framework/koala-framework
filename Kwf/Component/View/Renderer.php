@@ -5,9 +5,12 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
     {
         $plugins = array();
         foreach (Kwc_Abstract::getSetting($componentClass, 'plugins') as $p) {
-            if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_View')) {
-                $executionPoint = call_user_func(array($p, 'getExecutionPoint'));
-                $plugins[$executionPoint][] = $p;
+            if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeCache')) {
+                $plugins['beforeCache'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeChildRender')) {
+                $plugins['before'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewAfterChildRender')) {
+                $plugins['after'][] = $p;
             } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewReplace')) {
                 $plugins['replace'][] = $p;
             }

@@ -1,5 +1,6 @@
 <?php
-class Kwf_Component_Output_Plugin_PluginAfter extends Kwf_Component_Output_Plugin_Plugin
+class Kwf_Component_Output_Plugin_PluginAfter extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewAfterChildRender
 {
     public function processOutput($output)
     {
@@ -11,9 +12,4 @@ class Kwf_Component_Output_Plugin_PluginAfter extends Kwf_Component_Output_Plugi
             return "afterPlugin($output)";
         }
     }
-    public function getExecutionPoint()
-    {
-        return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
-    }
 }
-?>

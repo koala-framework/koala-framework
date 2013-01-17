@@ -23,7 +23,7 @@ class Kwc_List_Switch_ItemPage_ContentSender extends Kwf_Component_Abstract_Cont
             ->getChildComponent('-large');
 
         if ($includeMaster) {
-            $plugin = Kwf_Component_Plugin_View_Abstract
+            $plugin = Kwf_Component_Plugin_Abstract
                 ::getInstance('Kwc_List_Switch_LargeContentPlugin', $this->_data->parent->componentId);
             $plugin->setCurrentItem($largeContent);
 

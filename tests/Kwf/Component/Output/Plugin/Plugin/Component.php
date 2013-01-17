@@ -1,5 +1,6 @@
 <?php
-class Kwf_Component_Output_Plugin_Plugin_Component extends Kwf_Component_Plugin_View_Abstract
+class Kwf_Component_Output_Plugin_Plugin_Component extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewAfterChildRender
 {
     public static function getSettings()
     {
@@ -27,10 +28,4 @@ class Kwf_Component_Output_Plugin_Plugin_Component extends Kwf_Component_Plugin_
             return $renderer->render($view->render($template));
         }
     }
-
-    public static function getExecutionPoint()
-    {
-        return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
-    }
 }
-?>

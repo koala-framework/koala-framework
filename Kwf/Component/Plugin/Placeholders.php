@@ -1,11 +1,7 @@
 <?php
-class Kwf_Component_Plugin_Placeholders extends Kwf_Component_Plugin_View_Abstract
+class Kwf_Component_Plugin_Placeholders extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewAfterChildRender
 {
-    public static function getExecutionPoint()
-    {
-        return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
-    }
-
     protected function _getPlaceholders()
     {
         return Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)
