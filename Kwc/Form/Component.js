@@ -139,9 +139,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         Ext.Ajax.request({
             url: this.config.controllerUrl + '/json-save',
             ignoreErrors: true,
-            params: {
-                componentId: this.config.componentId
-            },
+            params: this.config.baseParams,
             form: this.el.down('form'),
             failure: function() {
                 //on failure try a plain old post of the form
