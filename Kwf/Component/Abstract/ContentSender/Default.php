@@ -117,16 +117,23 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
 
     protected static function _callProcessInput($process)
     {
+        static $benchmarkEnabled;
+        if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
+
         $postData = self::_getRequestWithFiles();
         foreach ($process as $i) {
             Kwf_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
+                $startTime = microtime(true);
                 $i->getComponent()->preProcessInput($postData);
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($i->componentId.' preProcessInput', microtime(true)-$startTime);
             }
         }
         foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'processInput')) {
+                $startTime = microtime(true);
                 $i->getComponent()->processInput($postData);
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($i->componentId, microtime(true)-$startTime);
             }
         }
         if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
@@ -155,7 +162,9 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     public function sendContent($includeMaster)
     {
         header('Content-Type: text/html; charset=utf-8');
+        $startTime = microtime(true);
         $process = $this->_getProcessInputComponents($includeMaster);
+        Kwf_Benchmark::subCheckpoint('getProcessInputComponents', microtime(true)-$startTime);
         self::_callProcessInput($process);
         Kwf_Benchmark::checkpoint('processInput');
         echo $this->_render($includeMaster);
