@@ -195,15 +195,19 @@ class Kwf_Benchmark
             echo "<td>".$checkpoint[1]."</td>";
             echo "</tr>";
             if (isset(self::$_subCheckpoints[$i])) {
-                $subSum = 0;
-                foreach (self::$_subCheckpoints[$i] as $subCheckpoint) {
-                    $subSum += $subCheckpoint[0];
-                    $percent = ($subCheckpoint[0]/$sum)*100;
+                $subCheckpoints = array();
+                foreach (self::$_subCheckpoints[$i] as $cp) {
+                    $subCheckpoints[0][] = $cp[0];
+                    $subCheckpoints[1][] = $cp[1];
+                }
+                array_multisort($subCheckpoints[0], SORT_DESC, SORT_NUMERIC, $subCheckpoints[1]);
+                foreach (array_keys($subCheckpoints[0]) as $k) {
+                    $percent = ($subCheckpoints[0][$k]/$sum)*100;
                     if ($percent > 1) {
                         echo "<tr>";
-                        echo "<td>".round($subCheckpoint[0]*1000)."</td>";
+                        echo "<td>".round($subCheckpoints[0][$k]*1000)."</td>";
                         echo "<td>".round($percent)."</td>";
-                        echo "<td>&nbsp;&nbsp;".$subCheckpoint[1]."</td>";
+                        echo "<td>&nbsp;&nbsp;".$subCheckpoints[1][$k]."</td>";
                         echo "</tr>";
                     }
                 }
