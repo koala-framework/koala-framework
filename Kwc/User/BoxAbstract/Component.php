@@ -11,7 +11,7 @@ class Kwc_User_BoxAbstract_Component extends Kwc_Abstract_Composite_Component
     public function preProcessInput($postData)
     {
         if (isset($postData['feAutologin'])
-            && !Kwf_Registry::get('userModel')->getAuthedUser()
+            && !Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser()
         ) {
             $feAutologin = explode('.', $postData['feAutologin']);
             if (count($feAutologin) ==2 ) {
@@ -50,14 +50,6 @@ class Kwc_User_BoxAbstract_Component extends Kwc_Abstract_Composite_Component
 
         $auth = Kwf_Auth::getInstance();
         $auth->clearIdentity();
-        $result = $auth->authenticate($adapter);
-
-        if ($result->isValid()) {
-            $auth->getStorage()->write(array(
-                'userId' => $adapter->getUserId()
-            ));
-        }
-
-        return $result;
+        return $auth->authenticate($adapter);
     }
 }

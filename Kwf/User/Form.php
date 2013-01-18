@@ -34,7 +34,7 @@ class Kwf_User_Form extends Kwf_Form
         }
 
         $config = Zend_Registry::get('config');
-        $authedUser = Kwf_Registry::get('userModel')->getAuthedKwfUser();
+        $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
         if (isset($authedUser->language) && $config->languages){
             $data = array();
             foreach ($config->languages as $key => $value){

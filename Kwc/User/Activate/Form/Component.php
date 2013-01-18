@@ -77,19 +77,8 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
             }
         }
 
-        Kwf_Auth::getInstance()->clearIdentity();
-
         if ($this->_user && $this->isSaved()) {
-            $this->_user->setPassword($this->_form->getRow()->password);
-            if (!$this->_user->logins) {
-                $this->_user->logins = 0;
-            }
-            $this->_user->logins += 1;
-            $this->_user->last_login = date('Y-m-d H:i:s');
-            $this->_user->save();
-            $auth = Kwf_Auth::getInstance();
-            $auth->getStorage()->write(array('userId' => $this->_user->id));
-            $this->_afterLogin(Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser());
+            $userModel->setPassword($this->_user, $this->_form->getRow()->password);
         }
     }
 

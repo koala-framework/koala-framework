@@ -189,15 +189,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $auth = Kwf_Auth::getInstance();
         $adapter->setIdentity($username);
         $adapter->setCredential($password);
-        $result = $auth->authenticate($adapter);
-
-        if ($result->isValid()) {
-            $loginData = array();
-            $loginData['userId'] = $adapter->getUserId();
-            $auth->getStorage()->write($loginData);
-        }
-
-        return $result;
+        return $auth->authenticate($adapter);
     }
 
     public function jsonLostPasswordAction()

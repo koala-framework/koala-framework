@@ -37,7 +37,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
     {
         // TODO: Kopie von Kwc_User_BoxAbstract_Component wie anderes auf dieser Seite
         if (isset($postData['feAutologin'])
-            && !Kwf_Registry::get('userModel')->getAuthedUser()
+            && !Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser()
         ) {
             list($cookieId, $cookieMd5) = explode('.', $postData['feAutologin']);
             if (!empty($cookieId) && !empty($cookieMd5)) {
@@ -53,7 +53,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         $result = $this->_getAuthenticateResult($row->email, $row->password);
 
         if ($result->isValid()) {
-            $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+            $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
             if ($row->auto_login) {
                 $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
                 setcookie('feAutologin', $cookieValue, time() + (100*24*60*60));
@@ -64,7 +64,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         }
     }
 
-    protected function _afterLogin(Kwf_Model_Row_Interface $user)
+    protected function _afterLogin(Kwf_User_Row $user)
     {
     }
 
@@ -76,14 +76,6 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 
         $auth = Kwf_Auth::getInstance();
         $auth->clearIdentity();
-        $result = $auth->authenticate($adapter);
-
-        if ($result->isValid()) {
-            $auth->getStorage()->write(array(
-                'userId' => $adapter->getUserId()
-            ));
-        }
-
-        return $result;
+        return $auth->authenticate($adapter);
     }
 }

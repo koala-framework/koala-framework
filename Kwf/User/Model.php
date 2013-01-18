@@ -157,6 +157,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
                         'messages'           => array(trlKwf('Account is locked'))
                     );
                 }
+                Kwf_Auth::getInstance()->getStorage()->write(array(
+                    'userId' => $row->id
+                ));
 
                 return array(
                     'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
@@ -198,6 +201,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
                 $this->_realLoginModifyRow($row);
             }
 
+            Kwf_Auth::getInstance()->getStorage()->write(array(
+                'userId' => $row->id
+            ));
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
                 'identity'           => $identity,
@@ -249,6 +255,16 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         }
     }
 
+    public function setPassword($user, $password)
+    {
+        Kwf_Auth::getInstance()->clearIdentity();
+        $user->setPassword($password);
+        $this->_realLoginModifyRow($user);
+        $auth = Kwf_Auth::getInstance();
+        $auth->getStorage()->write(array('userId' => $user->id));
+        return null;
+    }
+
     public function getAuthedUserId()
     {
         if (!Kwf_Setup::hasDb()) return null;
@@ -275,11 +291,6 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
             }
         }
         return $this->_authedUser;
-    }
-
-    public function getAuthedKwfUser()
-    {
-        return $this->getAuthedUser();
     }
 
     public function clearAuthedUser()
@@ -317,6 +328,17 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
             $role = 'guest';
         }
         return $role;
+    }
+
+    public function changeUser($user)
+    {
+        $storage = Kwf_Auth::getInstance()->getStorage();
+        $loginData = $storage->read();
+        if (!isset($loginData['changeUserId'])) {
+            $loginData['changeUserId'] = $loginData['userId'];
+        }
+        $loginData['userId'] = $user->id;
+        $storage->write($loginData);
     }
 
     public function synchronize($overrideMaxSyncDelay = Kwf_Model_MirrorCache::SYNC_AFTER_DELAY)
