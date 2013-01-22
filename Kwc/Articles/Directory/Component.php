@@ -14,6 +14,8 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
         //config for admin button above
         $ret['extConfigControllerIndex'] = 'Kwc_Directories_Item_Directory_ExtConfigTabs';
 
+        $ret['menuConfig'] = 'Kwc_Articles_Directory_MenuConfig';
+
         $ret['contentSender'] = 'Kwc_Articles_Directory_ContentSender';
         return $ret;
     }
