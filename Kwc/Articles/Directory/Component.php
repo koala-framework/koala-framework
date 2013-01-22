@@ -8,6 +8,9 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
 
         $ret['childModel'] = 'Kwc_Articles_Directory_Model';
 
+        //not allowed to process in pageTree
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+
         $ret['contentSender'] = 'Kwc_Articles_Directory_ContentSender';
         return $ret;
     }
