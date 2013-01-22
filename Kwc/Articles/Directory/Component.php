@@ -21,4 +21,11 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
         $ret['contentSender'] = 'Kwc_Articles_Directory_ContentSender';
         return $ret;
     }
+
+    public function getSelect()
+    {
+        $ret = parent::getSelect();
+        $ret->whereEquals('autheduser_visible', 1);
+        return $ret;
+    }
 }
