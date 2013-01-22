@@ -9,6 +9,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
         'Categories' => 'Kwc_Articles_Directory_ToCategoryModel',
         'Favourites' => 'Kwc_Articles_Directory_FavouritesModel',
         'Views' => 'Kwc_Articles_Directory_ViewsModel',
+        'TagSuggestions' => 'Kwc_Articles_Directory_TagSuggestionsModel',
         'Feedbacks' => 'Kwc_Articles_Directory_FeedbacksModel'
     );
      protected $_referenceMap = array(
