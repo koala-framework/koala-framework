@@ -31,5 +31,13 @@ class Kwc_Articles_Directory_MenuConfig extends Kwf_Component_Abstract_MenuConfi
             ),
             'settings'
         );
+
+        $acl->add(new Kwf_Acl_Resource_ComponentClass_MenuUrl(
+            'kwc_article_tag-suggestions', array('text'=>trlKwf('New tags'), 'icon'=>'tag_blue_edit'),
+            Kwc_Admin::getInstance($this->_class)->getControllerUrl('TagSuggestions'),
+            $this->_class
+            ),
+            'kwf_component_root'
+        );
     }
 }
