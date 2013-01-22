@@ -7,7 +7,8 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
     protected $_dependentModels = array(
         'ArticleToTag' => 'Kwc_Articles_Directory_ToTagModel',
         'Categories' => 'Kwc_Articles_Directory_ToCategoryModel',
-        'Favourites' => 'Kwc_Articles_Directory_FavouritesModel'
+        'Favourites' => 'Kwc_Articles_Directory_FavouritesModel',
+        'Views' => 'Kwc_Articles_Directory_ViewsModel'
     );
      protected $_referenceMap = array(
          'Author' => 'author_id->Kwc_Articles_Directory_AuthorsModel',
@@ -26,6 +27,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
                 $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Boolean(true);
             }
             $this->_exprs['autheduser_is_favourite'] = new Kwf_Model_Select_Expr_Child_Contains('Favourites', $s);
+            $this->_exprs['autheduser_read'] = new Kwf_Model_Select_Expr_Child_Contains('Views', $s);
         } else {
             $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Boolean(false);
         }
