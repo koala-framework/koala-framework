@@ -11,6 +11,6 @@ ALTER TABLE `kwc_article_to_tag` ADD FOREIGN KEY ( `article_id` ) REFERENCES `kw
 `id`
 ) ON DELETE CASCADE ;
 
-ALTER TABLE `kwc_article_to_tag` ADD FOREIGN KEY ( `tag_id` ) REFERENCES `kwc_tags` (
+ALTER TABLE `kwc_article_to_tag` ADD FOREIGN KEY ( `tag_id` ) REFERENCES `kwc_article_tags` (
 `id`
 ) ON DELETE CASCADE ;
