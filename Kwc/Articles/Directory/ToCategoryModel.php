@@ -16,5 +16,6 @@ class Kwc_Articles_Directory_ToCategoryModel extends Kwf_Model_Db
         $this->_exprs['category_count_used'] = new Kwf_Model_Select_Expr_Parent('Category', 'count_used');
         $this->_exprs['article_title'] = new Kwf_Model_Select_Expr_Parent('Article', 'title');
         $this->_exprs['article_visible'] = new Kwf_Model_Select_Expr_Parent('Article', 'visible');
+        $this->_exprs['article_autheduser_visible'] = new Kwf_Model_Select_Expr_Parent('Article', 'autheduser_visible');
     }
 }

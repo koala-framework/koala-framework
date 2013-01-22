@@ -19,5 +19,9 @@ class Kwc_Articles_Directory_CategoriesModel extends Kwf_Model_Tree
     {
         parent::_init();
         $this->_exprs['count_used'] = new Kwf_Model_Select_Expr_Child_Count('Categories');
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('article_visible', true);
+        $s->whereEquals('article_autheduser_visible', true);
+        $this->_exprs['count_article_autheduser_visible'] = new Kwf_Model_Select_Expr_Child_Count('Categories', $s);
     }
 }

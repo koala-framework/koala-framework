@@ -16,5 +16,6 @@ class Kwc_Articles_Directory_ToTagModel extends Kwf_Model_Db
         $this->_exprs['tag_count_used'] = new Kwf_Model_Select_Expr_Parent('Tag', 'count_used');
         $this->_exprs['article_title'] = new Kwf_Model_Select_Expr_Parent('Article', 'title');
         $this->_exprs['article_visible'] = new Kwf_Model_Select_Expr_Parent('Article', 'visible');
+        $this->_exprs['article_autheduser_visible'] = new Kwf_Model_Select_Expr_Parent('Article', 'autheduser_visible');
     }
 }
