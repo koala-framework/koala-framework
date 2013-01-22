@@ -22,5 +22,14 @@ class Kwc_Articles_Directory_MenuConfig extends Kwf_Component_Abstract_MenuConfi
             ),
             'settings'
         );
+
+        $acl->add(
+            new Kwf_Acl_Resource_ComponentClass_MenuUrl(
+                'kwc_article_tags', array('text'=>trlKwf('Tags'), 'icon'=>'tag_blue_edit'),
+                Kwc_Admin::getInstance($this->_class)->getControllerUrl('Tags').'?type=tag',
+                $this->_class
+            ),
+            'settings'
+        );
     }
 }
