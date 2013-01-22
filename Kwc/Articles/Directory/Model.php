@@ -8,7 +8,8 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
         'ArticleToTag' => 'Kwc_Articles_Directory_ToTagModel',
         'Categories' => 'Kwc_Articles_Directory_ToCategoryModel',
         'Favourites' => 'Kwc_Articles_Directory_FavouritesModel',
-        'Views' => 'Kwc_Articles_Directory_ViewsModel'
+        'Views' => 'Kwc_Articles_Directory_ViewsModel',
+        'Feedbacks' => 'Kwc_Articles_Directory_FeedbacksModel'
     );
      protected $_referenceMap = array(
          'Author' => 'author_id->Kwc_Articles_Directory_AuthorsModel',
@@ -33,6 +34,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
         }
 
         $this->_exprs['date_year'] = new Kwf_Model_Select_Expr_Date_Year('date');
+        $this->_exprs['count_feedbacks'] = new Kwf_Model_Select_Expr_Child_Count('Feedbacks');
         $this->_exprs['is_top_and_not_expired'] = new Kwf_Model_Select_Expr_And(array(
             new Kwf_Model_Select_Expr_Field('is_top'),
             new Kwf_Model_Select_Expr_Or(array(
