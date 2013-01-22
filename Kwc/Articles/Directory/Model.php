@@ -5,6 +5,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
     protected $_toStringField = 'title';
 
     protected $_dependentModels = array(
+        'ArticleToTag' => 'Kwc_Articles_Directory_ToTagModel',
         'Categories' => 'Kwc_Articles_Directory_ToCategoryModel'
     );
      protected $_referenceMap = array(
