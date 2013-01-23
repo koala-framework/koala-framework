@@ -36,9 +36,7 @@ class Kwc_Chained_Trl_Events extends Kwc_Chained_Abstract_Events
             $select = array('ignoreVisible'=>true);
             $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType, $select);
             foreach ($chained as $i) {
-                if ($i->componentClass != $this->_class) {
-                    throw new Kwf_Exception('getAllChainedByMaster returned incorrect component');
-                }
+                if ($i->componentClass != $this->_class) { continue; }
                 if (Kwc_Abstract::hasSetting($this->_class, 'throwContentChangedOnOwnMasterModelUpdate')) {
                     $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                         $this->_class, $i
