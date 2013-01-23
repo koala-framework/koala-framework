@@ -16,6 +16,8 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
             'name' => trlKwf('Feedback')
         );
 
+        $ret['cssClass'] = 'webStandard';
+
         $ret['flags']['hasFulltext'] = true;
         $ret['flags']['processInput'] = true;
 
@@ -29,6 +31,17 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
     public function processInput($input)
     {
         $this->getData()->row->markRead();
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['config'] = array(
+            'isTopArticle' => ($this->getData()->getRow()->is_top) ? 1 : 0
+        );
+        $ret['feedback'] = $this->getData()->getChildComponent('_feedback');
+        $ret['author'] = $this->getData()->row->getParentRow('Author');
+        return $ret;
     }
 
     public function getFulltextContent()
