@@ -37,4 +37,11 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
         return $ret;
     }
 
+    public static function modifyItemData(Kwf_Component_Data $item)
+    {
+        $item->categories = array();
+        foreach ($item->row->getChildRows('Categories') as $category) {
+            $item->categories[] = $category->getParentRow('Category')->name;
+        }
+    }
 }
