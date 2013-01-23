@@ -16,6 +16,7 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
             'name' => trlKwf('Feedback')
         );
 
+        $ret['flags']['hasFulltext'] = true;
         $ret['flags']['processInput'] = true;
 
         $ret['editComponents'] = array('content', 'questionsAnswers', 'feedback');
@@ -26,4 +27,14 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
     {
         $this->getData()->row->markRead();
     }
+
+    public function getFulltextContent()
+    {
+        $ret = array();
+        $ret['type'] = 'kwc_article';
+        $ret['created'] = new Kwf_DateTime($this->getData()->row->date);
+        $ret['only_intern'] = (bool)$this->getData()->row->only_intern;
+        return $ret;
+    }
+
 }
