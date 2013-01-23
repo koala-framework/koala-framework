@@ -20,6 +20,9 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
         $ret['flags']['processInput'] = true;
 
         $ret['editComponents'] = array('content', 'questionsAnswers', 'feedback');
+
+        $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
+        $ret['assetsAdmin']['dep'][] = 'KwfFormSuperBoxSelect';
         return $ret;
     }
 
