@@ -16,7 +16,14 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
             'name' => trlKwf('Feedback')
         );
 
+        $ret['flags']['processInput'] = true;
+
         $ret['editComponents'] = array('content', 'questionsAnswers', 'feedback');
         return $ret;
+    }
+
+    public function processInput($input)
+    {
+        $this->getData()->row->markRead();
     }
 }
