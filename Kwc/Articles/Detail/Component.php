@@ -8,7 +8,13 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Articles_Detail_PreviewImage_Component';
         $ret['generators']['child']['component']['favor'] = 'Kwc_Articles_Detail_Favor_Component';
 
-        $ret['editComponents'] = array('content');
+        $ret['generators']['feedback'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Articles_Detail_Feedback_Component',
+            'name' => trlKwf('Feedback')
+        );
+
+        $ret['editComponents'] = array('content', 'feedback');
         return $ret;
     }
 }
