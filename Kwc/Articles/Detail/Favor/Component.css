@@ -1,0 +1,10 @@
+.cssClass a {
+    background: url("/assets/kwf/Kwc/Articles/Detail/Favor/starDark.png") no-repeat scroll left center transparent;
+    text-indent: -4000px;
+    display: block;
+    position: relative;
+}
+
+.cssClass.isFavourite a {
+    background: url("/assets/kwf/Kwc/Articles/Detail/Favor/star.png") no-repeat scroll left center transparent;
+}
