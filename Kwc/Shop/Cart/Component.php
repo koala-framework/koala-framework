@@ -50,6 +50,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret = parent::getTemplateVars();
         $ret['countProducts'] = $this->getData()->countChildComponents(array('generator'=>'detail'));
         $ret['checkout'] = $this->getData()->getChildComponent('_checkout');
+        $ret['shop'] = $this->getData()->getParentPage();
         return $ret;
     }
 

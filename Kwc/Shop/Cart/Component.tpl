@@ -4,7 +4,7 @@
         <?=$this->component($this->view)?>
         <div class="clear"></div>
         <div class="back">
-            <?=$this->componentLink($this->data->getParentPage(), $this->placeholder['backToShop']);?>
+            <?=$this->componentLink($this->shop, $this->placeholder['backToShop']);?>
         </div>
         <div class="submitWrapper">
             <span class="beforeButton"></span>
