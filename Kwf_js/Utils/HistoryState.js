@@ -47,6 +47,7 @@ Ext.extend(Kwf.Utils.HistoryStateHtml5, Kwf.Utils.HistoryStateAbstract, {
 });
 
 Kwf.Utils.HistoryStateHash = function() {
+    this.disabled = this.disabled || window != top;
     Kwf.Utils.HistoryStateHtml5.superclass.constructor.call(this);
     this.states = {};
     if (!this.disabled) {
