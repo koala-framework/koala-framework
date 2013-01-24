@@ -10,8 +10,10 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
         $ret = array();
         if (array_key_exists($this->getFieldName(), $postData)) {
             $ret[$this->getFieldName()] = $postData[$this->getFieldName()];
-        } else if ($row) {
-            $ret[$this->getFieldName()] = $this->getData()->load($row);
+        } else {
+            if ($this->getSave() !== false && $row) {
+                $ret[$this->getFieldName()] = $this->getData()->load($row);
+            }
         }
         if (!isset($ret[$this->getFieldName()]) || is_null($ret[$this->getFieldName()])) {
             $ret[$this->getFieldName()] = $this->getDefaultValue();
