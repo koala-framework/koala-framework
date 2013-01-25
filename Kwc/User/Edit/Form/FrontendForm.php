@@ -6,7 +6,7 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
     protected function _init()
     {
         parent::_init();
-        $this->setModel(Zend_Registry::get('userModel'));
+        $this->setModel(Zend_Registry::get('userModel')->getKwfModel());
     }
 
     public function getRow($parentRow = null)

@@ -13,7 +13,7 @@ class Kwc_User_Edit_Form_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $user = Kwf_Registry::get('userModel')->getAuthedUser();
+        $user = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
         if ($user) {
             $this->_form->setId($user->id);
         }
