@@ -37,7 +37,7 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
             return false;
         }
 
-        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
         if ($authedUser->id != $userId || $authedUser->id != $row->id) {
             return false;
         }

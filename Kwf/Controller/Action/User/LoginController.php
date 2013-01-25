@@ -90,7 +90,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $activationCode = $this->_getParam('code');
         list($userId, $code) = explode('-', $activationCode, 2);
 
-        $users = Zend_Registry::get('userModel');
+        $users = Zend_Registry::get('userModel')->getKwfModel();
         $row = $users->getRow($userId);
 
         $config = array(
@@ -126,7 +126,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_ClientException(trlKwf('Data not submitted completely.'));
         }
 
-        $users = Zend_Registry::get('userModel');
+        $users = Zend_Registry::get('userModel')->getKwfModel();
         $row = $users->getRow($userId);
 
         if (!$row) {
@@ -199,7 +199,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_Exception_Client(trlKwf("Please enter your E-Mail-Address"));
         }
 
-        $users = Zend_Registry::get('userModel');
+        $users = Zend_Registry::get('userModel')->getKwfModel();
         $result = $users->lostPassword($email);
 
         $this->view->message = $result;
