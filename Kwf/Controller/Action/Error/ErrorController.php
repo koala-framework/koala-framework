@@ -1,6 +1,11 @@
 <?php
 class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
 {
+    public function preDispatch()
+    {
+        //don't call parent, we don't need to check acl
+    }
+
     public function errorAction()
     {
         $errors = $this->getRequest()->getParam('error_handler');

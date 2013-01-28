@@ -439,6 +439,7 @@
 <uk>Надіслати</uk>
 <sl>Pošlji</sl>
 <bg>Изпрати</bg>
+<hu>Küldés</hu>
 </text>
 <text>
 <en>Validator</en>
@@ -689,6 +690,7 @@
 <es>Femenino</es>
 <bg>Жена </bg>
 <ru>Женский</ru>
+<mk>Женски</mk>
 </text>
 <text>
 <en>Male</en>
@@ -2294,6 +2296,7 @@
 <ro>lipsă selecţie</ro>
 <sl>Ni izbrano.</sl>
 <ru>не выбрано</ru>
+<hu>kérjük válasszon</hu>
 </text>
 <text>
 <en>add new entry</en>
@@ -3039,6 +3042,7 @@
 <uk>Ваш лист було успішно відправлено.</uk>
 <ro>Formularul a fost trimis cu succes.</ro>
 <sl>Obrazec je bil uspešno poslan.</sl>
+<hu>Az űrlapot sikeresen elküldtük</hu>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -3383,6 +3387,9 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Vă rugăm să completaţi câmpul</ro>
 <sl>Izpolnite polje</sl>
 <uk>Необхідно заповнити поле</uk>
+<mk>Во молиме внесете текст во полето</mk>
+<hu>Kérjük töltse ki a mezőt</hu>
+<bg>Во молиме внесете текст во полето</bg>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -4578,6 +4585,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>947</id>
 <ro>mai multe informaţii</ro>
 <sl>Več informacij</sl>
+<mk>повеќе информации</mk>
 </text>
 <text>
 <en>Amazon.Nodes</en>
@@ -5070,7 +5078,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <fr>imprimer</fr>
 <it>marchio</it>
 <ro>Copyright</ro>
-<sl>Impresum.Impresum</sl>
+<sl>Impresum</sl>
 <uk>Контакти</uk>
 </text>
 <text>
@@ -5416,6 +5424,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1114</id>
 <de>Bitte wählen</de>
 <ro>Vă rugăm să selectaţi</ro>
+<mk>Ве молиме одберете</mk>
 </text>
 <text>
 <en>Root</en>
@@ -5599,6 +5608,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1144</id>
 <de>HTML</de>
 <ro>HTML</ro>
+<sl>HTML</sl>
 </text>
 <text>
 <en>Newsletter Preview</en>
@@ -5657,6 +5667,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Format</de>
 <ro>Format</ro>
 <bg>Формат</bg>
+<sl>format</sl>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -5822,12 +5833,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1183</id>
 <de>Sortieren nach {0}</de>
 <ro>Aranjează după {0}</ro>
+<sl>Razvrstiti po {0}</sl>
 </text>
 <text>
 <en>Texts</en>
 <id>1184</id>
 <de>Texte</de>
 <ro>Texte</ro>
+<sl>Tekst</sl>
 </text>
 <text>
 <en>Useraccount activated</en>
@@ -6003,6 +6016,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1217</id>
 <de>Dauer (Tage)</de>
 <ro>durată (zile)</ro>
+<sl>trajanje (dnevi)</sl>
 </text>
 <text>
 <en>Cache lifetime (minutes)</en>
@@ -6306,6 +6320,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1270</id>
 <ro>Format HTML</ro>
 <bg>HTML-формат</bg>
+<mk>HTML-Формат</mk>
+<sl>HTML-format</sl>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6314,6 +6330,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1271</id>
 <ro>Format Text</ro>
 <bg>Текстов формат</bg>
+<mk>Текст-Формат</mk>
+<sl>tekstovni format</sl>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -7060,6 +7078,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1388</id>
 <de>Ihr Passwort</de>
 <ro>Parola dumneavoastră</ro>
+<sl>Vaše geslo</sl>
 </text>
 <text>
 <en>The password was changed successfully</en>
@@ -7287,6 +7306,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1438</id>
 <ro>Vă rugăm să selectaţi o opţiune</ro>
 <sl>Izberite eno od možnosti</sl>
+<mk>Ве молиме изберете опција</mk>
+<bg>Ве молиме изберете опција</bg>
 </text>
 <text>
 <en>No Filedata received.</en>
@@ -7300,6 +7321,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1441</id>
 <de>Flagge</de>
 <ro>Marcat</ro>
+<sl>Zastava</sl>
 </text>
 <text>
 <en>Social Bookmarks</en>
@@ -7341,12 +7363,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Original Image</en>
 <id>1448</id>
 <de>Original Bild</de>
+<sl>Originalna slika</sl>
 </text>
 <text>
 <en>Own Image</en>
 <id>1449</id>
 <de>Eigenes Bild</de>
 <ro>Imagine proprie</ro>
+<sl>Lastna slika</sl>
 </text>
 <text>
 <en>Column</en>
@@ -7707,12 +7731,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1556</id>
 <de>E-Mail Empfänger</de>
 <ro>Destinatar e-mail</ro>
+<sl>Prejemnik e-pošte</sl>
 </text>
 <text>
 <en>E-Mail Subject</en>
 <id>1557</id>
 <de>E-Mail Betreff</de>
 <ro>Subiect e-mail</ro>
+<sl>Predmet e-pošte </sl>
 </text>
 <text>
 <en>Form.Fieldset</en>
@@ -7971,6 +7997,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1596</id>
 <de>Soziale Netzwerke</de>
 <ro>Reţele sociale</ro>
+<sl>Socialna omrežja</sl>
 </text>
 <text>
 <en>Authenticate</en>
@@ -8057,6 +8084,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1620</id>
 <de>Information</de>
 <ro>Info</ro>
+<mk>Информации</mk>
+<sl>Informacije</sl>
 </text>
 <text>
 <en>Shop.Product: Voucher</en>
@@ -8502,6 +8531,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1721</id>
 <de>Ort</de>
 <ro>Localitate</ro>
+<sl>Kraj</sl>
 </text>
 <text>
 <en>All Enquiries</en>
@@ -8663,6 +8693,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>URL extern</ro>
 </text>
 <text>
+<en>+</en>
+<id>1749</id>
+<de>+</de>
+<ro>+</ro>
+<sl>+</sl>
+</text>
+<text>
 <en>Blank</en>
 <de>Leer</de>
 <id>1750</id>
@@ -8767,16 +8804,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1770</id>
 </text>
 <text>
-<en>Adopt</en>
-<id>1771</id>
-</text>
-<text>
 <en>Link.to FlashMediaPlayer</en>
 <id>1772</id>
-</text>
-<text>
-<en>Video</en>
-<id>1773</id>
 </text>
 <text>
 <en>Form Properties</en>
@@ -8885,26 +8914,26 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Adopt</en>
-<id>1785</id>
+<id>1800</id>
 </text>
 <text>
 <en>Video</en>
-<id>1786</id>
+<id>1801</id>
 </text>
 <text>
 <en>+{0}% VAT</en>
 <de>+{0}% MWSt</de>
-<id>1787</id>
+<id>1802</id>
 </text>
 <text>
 <en>Own Flash</en>
 <de>Eigenes Flash</de>
-<id>1788</id>
+<id>1803</id>
 </text>
 <text>
 <en>No entries found</en>
 <de>Keine Einträge gefunden</de>
-<id>1800</id>
+<id>1804</id>
 </text>
 </trl>
 
