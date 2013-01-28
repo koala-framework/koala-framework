@@ -13,10 +13,10 @@ Kwf.FrontendForm.Select = Ext.extend(Kwf.FrontendForm.Field, {
         return this.el.child('select').dom.value;
     },
     clearValue: function() {
-        this.el.select('select').dom.value = '';
+        this.el.child('select').dom.value = '';
     },
     setValue: function(value) {
-        this.el.select('select').dom.value = value;
+        this.el.child('select').dom.value = value;
     }
 });
 
