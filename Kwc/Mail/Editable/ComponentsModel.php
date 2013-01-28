@@ -10,7 +10,7 @@ class Kwc_Mail_Editable_ComponentsModel extends Kwf_Model_Data_Abstract
             $a = Kwc_Admin::getInstance($c->componentClass);
             $data[] = array(
                 'id' => $c->dbId,
-                'name' => $c->getComponent()->getNameForEdit(),
+                'name' => Kwf_Trl::getInstance()->trlStaticExecute($c->getComponent()->getNameForEdit()),
                 'settings_controller_url' => $a->getControllerUrl(),
                 'content_component_class' => $c->getChildComponent('-content')->componentClass,
             );
