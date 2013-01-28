@@ -22,6 +22,7 @@ class Kwf_Util_Facebook_Api extends Kwf_Util_Facebook_FacebookZendSession
         }
         $fbConfig['appId'] = $config['appId'];
         $fbConfig['secret'] = $config['secret'];
+        header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
         parent::__construct($fbConfig);
     }
     private function __clone(){}
