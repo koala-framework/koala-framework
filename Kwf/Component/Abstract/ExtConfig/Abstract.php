@@ -105,7 +105,11 @@ abstract class Kwf_Component_Abstract_ExtConfig_Abstract
             'contentEditComponents' => array(),
         );
         if (is_null($idTemplate)) {
-            $idTemplate = '{componentId}'.$gen->getIdSeparator().'{0}';
+            if ($gen->hasSetting('dbIdShortcut')) {
+                $idTemplate = $gen->getSetting('dbIdShortcut') . '{0}';
+            } else {
+                $idTemplate = '{componentId}'.$gen->getIdSeparator().'{0}';
+            }
         }
         $cfg = Kwc_Admin::getInstance($componentClass)->getExtConfig();
         foreach ($cfg as $k=>$c) {
