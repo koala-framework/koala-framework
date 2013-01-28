@@ -25,7 +25,7 @@ class Kwf_Controller_Action_User_ChangeuserController extends Kwf_Controller_Act
 
     public function init()
     {
-        $this->_model = Zend_Registry::get('userModel')->getKwfModel();
+        $this->_model = Zend_Registry::get('userModel');
     }
 
     protected function _initColumns()
