@@ -47,14 +47,4 @@ class Kwc_Shop_Products_Detail_Form extends Kwf_Form
     {
         return $this->_fieldSet;
     }
-
-    protected function _beforeInsert($row)
-    {
-        parent::_beforeInsert($row);
-        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
-        if (count($generators['addToCart']['component']) == 1 && $row->getModel()->hasColumn('component')) {
-            reset($generators['addToCart']['component']);
-            $row->component = key($generators['addToCart']['component']);
-        }
-    }
 }
