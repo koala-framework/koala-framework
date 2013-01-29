@@ -222,7 +222,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if ($componentKey) $constraints['componentKey'] = $componentKey;
         $classes = array_values(self::getChildComponentClasses($class, $constraints));
         if (!isset($classes[0])) {
-            throw new Kwf_Exception("childComponentClass '$componentKey' for generator '$generator' not set for '$class'");
+            if (!$componentKey) {
+                throw new Kwf_Exception("no component for generator '$generator' not set for '$class'");
+            } else {
+                throw new Kwf_Exception("childComponentClass '$componentKey' for generator '$generator' not set for '$class'");
+            }
         }
         return $classes[0];
     }
