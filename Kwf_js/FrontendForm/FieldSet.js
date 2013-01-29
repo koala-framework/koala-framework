@@ -2,16 +2,18 @@ Kwf.onContentReady(function()
 {
     Ext.select('div.kwfFormContainerFieldSet').each(function(fs) {
         var c = fs.child('fieldset > legend > input');
-        if (!c.dom.checked) {
-            c.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
-        }
-        c.on('click', function() {
-            if (this.dom.checked) {
-                this.up('fieldset').removeClass('kwfFormContainerFieldSetCollapsed');
-            } else {
-                this.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
+        if (c) {
+            if (!c.dom.checked) {
+                c.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
             }
-        }, c);
+            c.on('click', function() {
+                if (this.dom.checked) {
+                    this.up('fieldset').removeClass('kwfFormContainerFieldSetCollapsed');
+                } else {
+                    this.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
+                }
+            }, c);
+        }
     });
 });
 
@@ -36,10 +38,12 @@ Kwf.FrontendForm.FieldSet = Ext.extend(Kwf.FrontendForm.Field, {
     },
     clearValue: function() {
         var inp = this.el.child('fieldset > legend > input');
+        if (!inp) return;
         inp.dom.value = '';
     },
     setValue: function(value) {
         var inp = this.el.child('fieldset > legend > input');
+        if (!inp) return;
         inp.dom.value = value;
     }
 });
