@@ -8,11 +8,8 @@ class Kwc_Shop_Products_Detail_Component extends Kwc_Directories_Item_Detail_Com
         $ret['generators']['child']['component']['image'] = 'Kwc_Basic_Image_Component';
         $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
         $ret['generators']['addToCart'] = array(
-            'class' => 'Kwc_Shop_Products_Detail_AddToCartGenerator',
-            'component' => array(
-                'product' => 'Kwc_Shop_AddToCart_Component' // Hier kann man mehrere angeben
-            ),
-            'column' => 'component'
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Shop_AddToCart_Component'
         );
         $ret['cssClass'] = 'webStandard';
         $ret['placeholder']['back'] = trlKwfStatic('Back');
