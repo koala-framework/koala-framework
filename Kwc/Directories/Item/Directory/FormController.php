@@ -42,7 +42,7 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
             foreach ($forms as $key => $form) {
                 $card = $cards->add();
                 $card->add($form);
-                $card->setTitle(Kwc_Abstract::getSetting($form->getClass(), 'componentName'));
+                $card->setTitle(Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($form->getClass(), 'componentName')));
                 $card->setName($key);
                 $card->setNamePrefix($key);
             }
