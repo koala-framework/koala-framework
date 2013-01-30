@@ -24,7 +24,8 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
             'fadeEvery'          => 7,
             'easingFadeOut'      => 'easeIn',
             'easingFadeIn'       => 'easeIn',
-            'startRandom'        => true
+            'startRandom'        => true,
+            'autoStart'          => true
         );
 
         return $ret;
