@@ -33,8 +33,10 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
             }
         }
         $componentLinkModifiers = array();
-        if (Kwc_Abstract::getFlag($targetPage->componentClass, 'hasComponentLinkModifiers')) {
-            $componentLinkModifiers = $targetPage->getComponent()->getComponentLinkModifiers();
+        if (!isset($config['skipComponentLinkModifiers']) || !$config['skipComponentLinkModifiers']) {
+            if (Kwc_Abstract::getFlag($targetPage->componentClass, 'hasComponentLinkModifiers')) {
+                $componentLinkModifiers = $targetPage->getComponent()->getComponentLinkModifiers();
+            }
         }
         return serialize(array($targetPage->url, $targetPage->rel, $targetPage->name, $componentLinkModifiers));
     }
