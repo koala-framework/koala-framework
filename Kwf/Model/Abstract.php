@@ -756,6 +756,31 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
             if (!$ret) $ret = 0;
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Equals) {
+            return ($row->{$expr->getField()} == $expr->getValue());
+        } else if ($expr instanceof Kwf_Model_Select_Expr_And) {
+            foreach ($expr->getExpressions() as $e) {
+                if (!$this->getExprValue($row, $e)) { return false; }
+            }
+            return true;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Or) {
+            foreach ($expr->getExpressions() as $e) {
+                $value = $this->getExprValue($row, $e);
+                if ($this->getExprValue($row, $e)) { return true; }
+            }
+            return false;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_LowerEqual) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} <= $value);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_HigherEqual) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} >= $value);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Lower) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} < $value);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Higher) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} > $value);
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
