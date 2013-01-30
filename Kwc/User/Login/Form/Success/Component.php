@@ -25,7 +25,7 @@ class Kwc_User_Login_Form_Success_Component extends Kwc_Form_Success_Component
         if (!empty($_REQUEST['redirect']) && substr($_REQUEST['redirect'], 0, 1) == '/') {
             return $_REQUEST['redirect'];
         }
-        if (is_instance_of($this->getData()->getPage()->componentClass, 'Kwc_User_Login_Component')) {
+        if (is_instance_of($this->getData()->getPage()->componentClass, 'Kwc_User_Login_Component') || is_instance_of($this->getData()->getPage()->componentClass, 'Kwc_User_Login_Trl_Component')) {
             $user = Kwf_Registry::get('userModel')->getAuthedUser();
             $userDir = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByClass(
