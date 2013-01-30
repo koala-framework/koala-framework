@@ -6,7 +6,7 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
 {
     public $fields;
 
-    public function __construct($reference = null)
+    public function __construct($reference = null, $fieldname = null)
     {
         if (is_object($reference)) {
             $model = $reference;
@@ -15,7 +15,10 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         } else {
             $this->setReferenceName($reference);
         }
-        parent::__construct(is_object($reference) ? get_class($reference) : $reference);
+        if (!$fieldname) {
+            $fieldname = is_object($reference) ? get_class($reference) : $reference;
+        }
+        parent::__construct($fieldname);
         if (isset($model)) {
             if (!($model instanceof Kwf_Model_Interface)) {
                 $model = new Kwf_Model_Db(array(
