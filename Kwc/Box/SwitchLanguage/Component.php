@@ -7,6 +7,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         $ret['cssClass'] = 'webStandard';
         $ret['separator'] = ' / ';
         $ret['showCurrent'] = true;
+        $ret['plugins'] = array('Kwc_Box_SwitchLanguage_Plugin');
         return $ret;
     }
 
@@ -67,22 +68,6 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         }
         if ($this->_getSetting('showCurrent') && count($ret['languages']) == 1) {
             $ret['languages'] = array();
-        }
-        return $ret;
-    }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = Kwc_Menu_Abstract_Component::getStaticCacheMeta($componentClass);
-        foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
-            foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
-                if (is_instance_of($generator['class'], 'Kwc_Chained_Abstract_ChainedGenerator')) {
-                    $generator = current(Kwf_Component_Generator_Abstract::getInstances(
-                        $componentClass, array('generator' => $key))
-                    );
-                    $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel());
-                }
-            }
         }
         return $ret;
     }
