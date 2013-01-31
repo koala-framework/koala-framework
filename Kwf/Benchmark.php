@@ -139,7 +139,7 @@ class Kwf_Benchmark
         self::disable();
         self::$_logEnabled = false;
         if (PHP_SAPI != 'cli') {
-            echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1000;width:200px;opacity:0.5" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">';
+            echo '<div class="benchmarkBox" style="text-align:left;position:absolute;top:0;right:0;z-index:1000;width:200px;opacity:0.5" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">';
             echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
             $t = microtime(true) - self::$startTime;
             if ($t < 1) {
