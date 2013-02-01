@@ -6,6 +6,7 @@ class Kwc_Paragraphs_Trl_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abst
         $config = $this->_getStandardConfig('kwc.paragraphs');
         $config['showDelete'] = false;
         $config['showPosition'] = false;
+        $config['needsComponentPanel'] = true;
         return array(
             'paragraphs' => $config
         );
