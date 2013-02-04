@@ -185,7 +185,8 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
             $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType, $select);
             foreach ($chained as $i) {
                 if ($i->generator !== $this->_getGenerator()) {
-                    throw new Kwf_Exception("Got chained component with other generator");
+                    //can happen if two components use same model
+                    continue;
                 }
             }
             $ret = array_merge($ret, $chained);
