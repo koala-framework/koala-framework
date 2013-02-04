@@ -10,7 +10,7 @@ class Kwc_Events_Category_ShowCategories_Archive_Component extends Kwc_Directori
 
     public static function getItemDirectoryClasses($directoryClass)
     {
-        $classes = self::_getParentItemDirectoryClasses($directoryClass, 1);
+        $classes = self::_getParentItemDirectoryClasses($directoryClass, 0);
         $ret = array();
         foreach ($classes as $class) {
             $ret = array_merge($ret, call_user_func(array($class, 'getItemDirectoryClasses'), $class));
