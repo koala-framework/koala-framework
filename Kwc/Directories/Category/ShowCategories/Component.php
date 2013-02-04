@@ -35,7 +35,10 @@ class Kwc_Directories_Category_ShowCategories_Component extends Kwc_Directories_
         $categories = $this->_getCategories();
         if (count($categories)) {
             $componentId = $categories->current()->getParentRow('Category')->component_id;
-            return Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId)->parent;
+            $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId);
+            if ($component) {
+                return $component->parent;
+            }
         }
         return null;
     }
