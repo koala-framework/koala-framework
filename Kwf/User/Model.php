@@ -94,7 +94,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
      */
     public function createUserRow($email, $webcode = null)
     {
-        return parent::createRow(array('email' => $email));
+        $row = parent::createRow(array('email' => $email));
+        $this->_resetPermissions($row);
+        return $row;
     }
 
     /**

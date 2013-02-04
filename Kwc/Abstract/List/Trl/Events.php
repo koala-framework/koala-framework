@@ -26,12 +26,17 @@ class Kwc_Abstract_List_Trl_Events extends Kwc_Abstract_Events
     public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
     {
         if ($event->isDirty('visible')) {
+            //component_id is the child component id, not as in master the list component id
             $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
-                $event->row->component_id
+                $event->row->component_id, array('ignoreVisible'=>true)
             );
             foreach ($cmps as $c) {
+                $c = $c->parent;
                 if ($c->componentClass == $this->_class) {
                     $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                        $this->_class, $c
+                    ));
+                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                         $this->_class, $c
                     ));
                 }
