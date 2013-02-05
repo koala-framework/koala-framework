@@ -1,29 +1,43 @@
 <?php
 class Kwc_Menu_ParentMenu_Events extends Kwc_Abstract_Events
 {
+    protected $_menuComponentClass;
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_initSettings();
+    }
+
+    //overwritten in Kwc_Menu_ParentMenu_Trl_Events
+    protected function _initSettings()
+    {
+        $this->_menuComponentClass = $menuLevel = Kwc_Abstract::getSetting($this->_class, 'menuComponentClass');
+    }
+
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $menuClass = Kwc_Abstract::getSetting($this->_class, 'menuComponentClass');
 
         $ret[] = array(
-            'class' => $menuClass,
+            'class' => $this->_menuComponentClass,
             'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
             'callback' => 'onMenuComponentClassContentChanged'
         );
 
         $ret[] = array(
-            'class' => $menuClass,
+            'class' => $this->_menuComponentClass,
             'event' => 'Kwf_Component_Event_Component_ContentChanged',
             'callback' => 'onMenuContentChanged'
         );
         $ret[] = array(
-            'class' => $menuClass,
+            'class' => $this->_menuComponentClass,
             'event' => 'Kwf_Component_Event_Component_HasContentChanged',
             'callback' => 'onMenuHasContentChanged'
         );
 
-        $alternativeComponents = call_user_func(array($menuClass, 'getAlternativeComponents'), $menuClass);
+        $c = $this->_menuComponentClass;
+        $alternativeComponents = call_user_func(array(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c, 'getAlternativeComponents'), $this->_menuComponentClass);
         $ret[] = array(
             'class' => $alternativeComponents['otherCategory'],
             'event' => 'Kwf_Component_Event_Component_ContentChanged',

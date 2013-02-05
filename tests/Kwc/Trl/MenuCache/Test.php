@@ -122,4 +122,123 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $html = $c->render();
         $this->assertContains('Homex en</a>', $html);
     }
+
+    public function testMenuOtherCategoryEnShow()
+    {
+        $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
+        $html = $c->render();
+        $this->assertNotContains('Test7 en</a>', $html);
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = true;
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertContains('Test7 en</a>', $html);
+    }
+
+    public function testMenuOtherCategoryEnHide()
+    {
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = true;
+        $row->save();
+
+        $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
+        $html = $c->render();
+        $this->assertContains('Test7 en</a>', $html);
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = false;
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertNotContains('Test7 en</a>', $html);
+    }
+
+    public function testParentMenuEnShow()
+    {
+        $c = $this->_root->getComponentById('root-en-main_1-mainMenu');
+        $html = $c->render();
+        $this->assertNotContains('Test7 en</a>', $html);
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = true;
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertContains('Test7 en</a>', $html);
+    }
+
+    public function testParentMenuEnHide()
+    {
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = true;
+        $row->save();
+
+        $c = $this->_root->getComponentById('root-en-main_1-mainMenu');
+
+        $html = $c->render();
+        $this->assertContains('Test7 en</a>', $html);
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = false;
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertNotContains('Test7 en</a>', $html);
+    }
+
+    public function testMenuEnShow()
+    {
+        $c = $this->_root->getComponentById('root-en-main-mainMenu');
+        $html = $c->render();
+        $this->assertNotContains('Test7 en</a>', $html);
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = true;
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertContains('Test7 en</a>', $html);
+    }
+
+    public function testMenuEnHide()
+    {
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = true;
+        $row->save();
+
+        $c = $this->_root->getComponentById('root-en-main-mainMenu');
+
+        $html = $c->render();
+        $this->assertContains('Test7 en</a>', $html);
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
+            ->getRow('root-en-main_7');
+        $row->visible = false;
+        $row->save();
+
+        $this->_process();
+
+        $html = $c->render();
+        $this->assertNotContains('Test7 en</a>', $html);
+    }
 }

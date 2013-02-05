@@ -1,9 +1,14 @@
 <?php
 class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
 {
-    public function getTemplateVars()
+    public static function getSettings($masterComponentClass)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getSettings($masterComponentClass);
+        return $ret;
+    }
+
+    public function getMenuData()
+    {
         $menu = array();
         $masterMenu = $this->getData()->chained->getComponent()->getMenuData(null, array('ignoreVisible'=>true));
         foreach ($masterMenu as $m) {
@@ -14,7 +19,13 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
                 $menu[] = $m;
             }
         }
-        $ret['menu'] = $menu;
+        return $menu;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['menu'] = $this->getMenuData();
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
         return $ret;
     }

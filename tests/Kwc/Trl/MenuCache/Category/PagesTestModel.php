@@ -15,5 +15,8 @@ class Kwc_Trl_MenuCache_Category_PagesTestModel extends Kwf_Model_FnF
                   'parent_id'=>'root-master-bottom', 'component'=>'test', 'is_home'=>false, 'hide'=>false),
             array('id'=>6, 'pos'=>1, 'visible'=>true, 'name'=>'Test6', 'filename' => 'test6',
                   'parent_id'=>5, 'component'=>'test', 'is_home'=>false, 'hide'=>false),
+
+            array('id'=>7, 'pos'=>2, 'visible'=>false, 'name'=>'Test7', 'filename' => 'test7',
+                  'parent_id'=>'root-master-main', 'component'=>'test', 'is_home'=>false, 'hide'=>false),
     );
 }

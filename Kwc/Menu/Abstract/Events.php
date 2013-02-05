@@ -3,6 +3,20 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 {
     protected $_numLevels = 1; //overridden in Menu_Expanded
 
+    protected $_level; //level setting of menu
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_initSettings();
+    }
+
+    //overwritten in Kwc_Menu_Trl_Events
+    protected function _initSettings()
+    {
+        $this->_level = $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
+    }
+
     public function getListeners()
     {
         $ret = parent::getListeners();
@@ -56,7 +70,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 
     public function onPageChanged(Kwf_Component_Event_Component_Abstract $event)
     {
-        $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
+        $menuLevel = $this->_level;
 
         $data = $event->component;
 
