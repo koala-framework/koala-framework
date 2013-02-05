@@ -54,7 +54,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
 
         if (isset($dc['visible'])) {
             if ($event->row->visible) {
-                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
+                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, array('ignoreVisible'=>true)) as $c) {
                     if ($c->generator === $this->_getGenerator()) {
                         $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
                     }
