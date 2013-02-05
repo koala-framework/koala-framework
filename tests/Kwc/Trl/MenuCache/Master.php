@@ -15,6 +15,13 @@ class Kwc_Trl_MenuCache_Master extends Kwc_Root_TrlRoot_Master_Component
                 )
             ))
         );
+        $ret['generators']['box'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => array(
+                'mainMenu' => 'Kwc_Trl_MenuCache_MainMenu_Component'
+            ),
+            'inherit' => true
+        );
         return $ret;
     }
 }
