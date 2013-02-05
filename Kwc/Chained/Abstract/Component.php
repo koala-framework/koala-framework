@@ -1,6 +1,15 @@
 <?php
 abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 {
+    public static function getChainedComponentClass($masterComponentClass, $prefix)
+    {
+        $cmp = $masterComponentClass;
+        $cmp = Kwc_Admin::getComponentClass($cmp, "{$prefix}_Component");
+        if (!$cmp) $cmp = "Kwc_Chained_{$prefix}_Component";
+        $cmp .= '.'.$masterComponentClass;
+        return $cmp;
+    }
+
     public static function getChainedSettings($settings, $masterComponentClass, $prefix = 'Cc', $copySettings = array(), $copyFlags = array())
     {
         $ret = $settings;
@@ -13,11 +22,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         if (Kwc_Abstract::getFlag($masterComponentClass, 'hasAlternativeComponent')) {
             $alternativeComponents = call_user_func(array($masterComponentClass, 'getAlternativeComponents'), $masterComponentClass);
             foreach ($alternativeComponents as $acKey => $alternativeComponent) {
-                $cmp = $alternativeComponent;
-                $cmp = Kwc_Admin::getComponentClass($cmp, "{$prefix}_Component");
-                if (!$cmp) $cmp = "Kwc_Chained_{$prefix}_Component";
-                $cmp .= '.'.$alternativeComponent;
-                $ret['alternativeComponents'][$acKey] = $cmp;
+                $ret['alternativeComponents'][$acKey] = self::getChainedComponentClass($alternativeComponent, $prefix);
             }
         }
 
@@ -49,20 +54,14 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         foreach ($g['component'] as &$c) {
             if (!$c) continue;
             $masterC = $c;
-            $c = Kwc_Admin::getComponentClass($c, "{$prefix}_Component");
-            if (!$c) $c = "Kwc_Chained_{$prefix}_Component";
-            $c .= '.'.$masterC;
+            $c = self::getChainedComponentClass($c, $prefix);
             $g['masterComponentsMap'][$masterC] = $c;
 
             // Für jede Unterkomponente mit einer AlternativeComponent muss es auch einen Eintrag in der masterComponentsMap geben
             if (Kwc_Abstract::getFlag($masterC, 'hasAlternativeComponent')) {
                 $alternativeComponents = call_user_func(array($masterC, 'getAlternativeComponents'), $masterC);
                 foreach ($alternativeComponents as $alternativeComponent) {
-                    $cmp = $alternativeComponent;
-                    $cmp = Kwc_Admin::getComponentClass($cmp, "{$prefix}_Component");
-                    if (!$cmp) $cmp = "Kwc_Chained_{$prefix}_Component";
-                    $cmp .= '.'.$alternativeComponent;
-                    $g['masterComponentsMap'][$alternativeComponent] = $cmp;
+                    $g['masterComponentsMap'][$alternativeComponent] = self::getChainedComponentClass($alternativeComponent, $prefix);
                 }
             }
         }
