@@ -121,6 +121,9 @@ class Kwf_Setup
                 }
                 $url = $data->url;
                 if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) $url .= '?' . $_SERVER['QUERY_STRING'];
+                if (!$url) { // e.g. firstChildPageData without child pages
+                    throw new Kwf_Exception_NotFound();
+                }
                 header('Location: ' . $url);
                 exit;
             }
