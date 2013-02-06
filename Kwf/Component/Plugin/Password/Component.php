@@ -50,6 +50,8 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
         $msg = '';
         $session = new Zend_Session_Namespace('login_password');
         if (in_array($this->_getLoginPassword(), $pw)) {
+            //this should not happen in herer (we are in isLoggedIn)
+            //instead this should be in processInput of the LoginForm, just as Plugin_Login does it
             $session->login = true;
             $this->_afterLogin($session);
             $currentPageUrl = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
@@ -98,6 +100,8 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
 
     public function skipProcessInput()
     {
-        return !$this->isLoggedIn();
+        //!$this->isLoggedIn() would be correct here, but that makes a redirect on login which we don't want
+        $session = new Zend_Session_Namespace('login_password');
+        return (bool)$session->login;
     }
 }
