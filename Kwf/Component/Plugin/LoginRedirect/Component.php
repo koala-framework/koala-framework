@@ -27,7 +27,9 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
 
     public function getLoginComponent()
     {
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentByClass('Kwc_User_Login_Component');
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
+        $component = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass(array('Kwc_User_Login_Component', 'Kwc_User_Login_Trl_Component'), array('subroot'=>$c));
         return $component;
     }
 
