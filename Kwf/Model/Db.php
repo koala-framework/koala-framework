@@ -476,6 +476,13 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             $sql = implode(" / ", $sqlExpressions);
             return $sql;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Multiply) {
+            $sqlExpressions = array();
+            foreach ($expr->getExpressions() as $expression) {
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
+            }
+            $sql = implode(" * ", $sqlExpressions);
+            return $sql;
         } else if ($expr instanceof Kwf_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {

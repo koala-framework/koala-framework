@@ -404,6 +404,18 @@ class Kwf_Model_CSV extends Kwf_Model_Abstract
             }
             if (!$ret) $ret = 0;
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Multiply) {
+            $ret = null;
+            foreach ($expr->getExpressions() as $e) {
+                $value = $this->getExprValue($row, $e);
+                if ($ret == null) {
+                    $ret = $value;
+                } else {
+                    $ret *= $value;
+                }
+            }
+            if (!$ret) $ret = 0;
+            return $ret;
         } else {
             return (bool)$this->getExprValue($data, $expr);
         }
