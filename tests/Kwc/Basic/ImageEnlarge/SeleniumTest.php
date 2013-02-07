@@ -24,7 +24,7 @@ class Kwc_Basic_ImageEnlarge_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->assertElementPresent('css=.kwfLightbox div.image');
         $this->assertElementPresent('css=.kwfLightbox div.image img');
         $this->click('css=.kwfLightbox a.closeButton');
-        sleep(1);
+        sleep(3);
         $this->assertNotVisible('css=.kwfLightbox');
     }
 

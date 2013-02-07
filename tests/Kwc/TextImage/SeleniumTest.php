@@ -25,7 +25,7 @@ class Kwc_TextImage_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->assertVisible('css=.kwfLightbox');
         $this->assertElementPresent('css=.kwfLightbox div.image img');
         $this->click('css=.kwfLightbox a.closeButton');
-        sleep(1);
+        sleep(3);
         $this->assertNotVisible('css=.kwfLightbox');
     }
 
