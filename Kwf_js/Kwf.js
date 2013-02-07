@@ -134,25 +134,30 @@ Kwf.log = function(msg) {
     Kwf.debugDiv.innerHTML += msg+'<br />';
 };
 
-//wird gesetzt in Kwf.Connection
+//set in Kwf.Connection
 Kwf.requestSentSinceLastKeepAlive = false;
-Kwf.keepAlive = function() {
+
+Kwf.keepAlive = function() { //can be overridden
+    Ext.Ajax.request({
+        url: '/kwf/user/login/json-keep-alive',
+        ignoreErrors: true
+    });
+};
+
+Kwf._keepAlive = function() {
     if (!Kwf.requestSentSinceLastKeepAlive) {
-        Ext.Ajax.request({
-            url: '/kwf/user/login/json-keep-alive',
-            ignoreErrors: true
-        });
+        Kwf.keepAlive();
     } else {
         Kwf.requestSentSinceLastKeepAlive = false;
     }
-    Kwf.keepAlive.defer(1000 * 60 * 5);
+    Kwf._keepAlive.defer(1000 * 60 * 5);
 };
 
-Kwf.keepAliveActivated = false;
+Kwf._keepAliveActivated = false;
 Kwf.activateKeepAlive = function() {
-    if (Kwf.keepAliveActivated) return;
-    Kwf.keepAliveActivated = true;
-    Kwf.keepAlive.defer(1000 * 60 * 5);
+    if (Kwf._keepAliveActivated) return;
+    Kwf._keepAliveActivated = true;
+    Kwf._keepAlive.defer(1000 * 60 * 5);
 };
 
 if (Kwf.isApp) {
