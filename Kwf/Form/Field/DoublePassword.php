@@ -14,9 +14,23 @@ class Kwf_Form_Field_DoublePassword extends Kwf_Form_Field_Abstract
         if ($validatorClass) {
             $this->_passwordField1->addValidator(new $validatorClass());
         }
-        $this->_passwordField2 = new Kwf_Form_Field_Password($fieldName.'_repeat', trlKwf('repeat {0}', $fieldLabel));
+        $this->_passwordField2 = new Kwf_Form_Field_Password($fieldName.'_repeat', trlKwfStatic('Repeat {0}'));
         $this->_passwordField2->setSave(false);
         parent::__construct(null, null);
+    }
+
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+        $this->addValidator(new Kwf_Form_Field_DoublePasswordValidator(), 'samePassword');
+    }
+
+    public function trlStaticExecute($language = null)
+    {
+        parent::trlStaticExecute($language);
+        $label1 = $this->_passwordField1->getFieldLabel();
+        $label2 = $this->_passwordField2->getFieldLabel();
+        $this->_passwordField2->setFieldLabel(str_replace('{0}', $label1, $label2));
     }
 
     public function __clone()
@@ -39,13 +53,16 @@ class Kwf_Form_Field_DoublePassword extends Kwf_Form_Field_Abstract
     public function validate($row, $postData)
     {
         $ret = parent::validate($row, $postData);
-        if ($postData[$this->_passwordField1->getFieldName()] !=
-                            $postData[$this->_passwordField2->getFieldName()])
-        {
-            $ret[] = array(
-                'message' => trlKwf("Passwords are different. Please try again."),
-                'field' => $this->_passwordField1
-            );
+        if (isset($this->_validators['samePassword'])) {
+            $password1 = $postData[$this->_passwordField1->getFieldName()];
+            $password2 = $postData[$this->_passwordField2->getFieldName()];
+            $validator = $this->_validators['samePassword'];
+            if (!$validator->isValid(array($password1, $password2))) {
+                $ret[] = array(
+                    'messages' => $validator->getMessages(),
+                    'field' => $this->_passwordField1
+                );
+            }
         }
         return $ret;
     }
@@ -59,3 +76,21 @@ class Kwf_Form_Field_DoublePassword extends Kwf_Form_Field_Abstract
     }
 
 }
+
+class Kwf_Form_Field_DoublePasswordValidator extends Zend_Validate_Abstract
+{
+    public function __construct($options = array())
+    {
+        $this->_messageTemplates['invalid'] = trlKwfStatic("Passwords are different. Please try again.");
+    }
+
+    public function isValid($passwords)
+    {
+        if ($passwords[0] != $passwords[1]) {
+            $this->_error('invalid');
+            return false;
+        }
+        return true;
+    }
+}
+

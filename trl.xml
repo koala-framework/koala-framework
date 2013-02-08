@@ -3365,7 +3365,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izbriši vnos</sl>
 </text>
 <text>
-<en>repeat {0}</en>
+<en>Repeat {0}</en>
 <de>{0} wiederholen</de>
 <id>706</id>
 <ro>repetă {0}</ro>
