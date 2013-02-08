@@ -3,8 +3,6 @@ class Kwc_Basic_Table_ImportController extends Kwf_Controller_Action_Auto_Import
 {
     protected function _import($excel)
     {
-        $settingsRow = Kwf_Model_Abstract::getInstance('Kwc_Basic_Table_Model')
-            ->getRow($this->_getParam('componentId'));
         $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Table_ModelData');
 
         $xlsRows = $excel->toArray();
@@ -32,7 +30,7 @@ class Kwc_Basic_Table_ImportController extends Kwf_Controller_Action_Auto_Import
             // durchlaufen und importieren
             for ($r=0; $r<=$importRows; $r++) {
                 $newRow = $model->createRow();
-                $newRow->component_id = $settingsRow->component_id;
+                $newRow->component_id = $this->_getParam('componentId');
                 $newRow->css_style = null;
                 $newRow->visible = 1;
 
