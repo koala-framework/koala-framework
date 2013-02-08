@@ -15,6 +15,6 @@ class Kwc_Posts_Detail_Report_FrontendForm extends Kwc_Abstract_FrontendForm
     {
         $row->addTo(Kwc_Abstract::getSetting($this->getClass(), 'reportMail'));
         $row->setFrom('Report-Component');
-        $row->subject = trlKwf('A post has been reported');
+        $row->subject = trlKwfStatic('A post has been reported');
     }
 }

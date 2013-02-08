@@ -11,43 +11,43 @@ class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
         $this->setCartEmptyMessage(trlKwfStatic("Can't submit order because the cart is empty."));
 
         $this->add(new Kwf_Form_Field_Panel('intro_text'))
-            ->setHtml('<h1>'.trlKwf('Please enter your address').'</h1>')
+            ->setHtml('<h1>'.trlKwfStatic('Please enter your address').'</h1>')
             ->setHideFieldInBackend(true);
-        $this->add(new Kwf_Form_Field_Radio('sex', trlcKwf('sex', 'Title')))
+        $this->add(new Kwf_Form_Field_Radio('sex', trlcKwfStatic('sex', 'Title')))
             ->setValues(array(
-                'male'   => trlKwf('Mr.'),
-                'female' => trlKwf('Ms.')
+                'male'   => trlKwfStatic('Mr.'),
+                'female' => trlKwfStatic('Ms.')
             ))
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')));
-        $this->add(new Kwf_Form_Field_TextField('firstname', trlKwf('First name')))
+        $this->add(new Kwf_Form_Field_TextField('title', trlKwfStatic('Title')));
+        $this->add(new Kwf_Form_Field_TextField('firstname', trlKwfStatic('First name')))
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_TextField('lastname', trlKwf('Last name')))
+        $this->add(new Kwf_Form_Field_TextField('lastname', trlKwfStatic('Last name')))
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_TextField('street', trlKwf('Street')))
+        $this->add(new Kwf_Form_Field_TextField('street', trlKwfStatic('Street')))
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_TextField('zip', trlKwf('ZIP')))
+        $this->add(new Kwf_Form_Field_TextField('zip', trlKwfStatic('ZIP')))
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_TextField('city', trlKwf('City')))
+        $this->add(new Kwf_Form_Field_TextField('city', trlKwfStatic('City')))
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_SelectCountry('country', trlKwf('Country')))
+        $this->add(new Kwf_Form_Field_SelectCountry('country', trlKwfStatic('Country')))
             ->setDefaultValue('AT')
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_TextField('email', trlKwf('E-Mail')))
+        $this->add(new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
             ->setVtype('email')
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_TextField('phone', trlKwf('Phone')));
+        $this->add(new Kwf_Form_Field_TextField('phone', trlKwfStatic('Phone')));
 
         $this->add(new Kwf_Form_Field_Panel('payment_text'))
-            ->setHtml('<p class="formText">'.trlKwf('What type of payment do you wish?').'</p>')
+            ->setHtml('<p class="formText">'.trlKwfStatic('What type of payment do you wish?').'</p>')
             ->setHideFieldWhenOnePayment(true)
             ->setHideFieldInBackend(true);
-        $this->add(new Kwf_Form_Field_Radio('payment', trlKwf('Payment')))
+        $this->add(new Kwf_Form_Field_Radio('payment', trlKwfStatic('Payment')))
             ->setHideFieldInBackend(true)
             ->setHideFieldWhenOnePayment(true)
             ->setAllowBlank(false);
 
-        $this->add(new Kwf_Form_Field_TextArea('comment', trlKwf('Other comments, questions or suggestions')))
+        $this->add(new Kwf_Form_Field_TextArea('comment', trlKwfStatic('Other comments, questions or suggestions')))
             ->setHeight(80)
             ->setWidth(200);
     }

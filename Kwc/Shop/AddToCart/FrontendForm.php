@@ -6,7 +6,7 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Kwf_Form_Field_Select('amount', trlKwf('Amount')))
+        $this->add(new Kwf_Form_Field_Select('amount', trlKwfStatic('Amount')))
             ->setAllowBlank(false)
             ->setValues($this->_getAmountValues())
             ->setEditable(true);
