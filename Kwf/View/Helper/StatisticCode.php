@@ -19,15 +19,18 @@ class Kwf_View_Helper_StatisticCode
         }
         if ($analyticsCode && !$cfg['ignoreAnalyticsCode']) {
             $ret .= "<script type=\"text/javascript\">\n";
-            $ret .= "    var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\n";
-            $ret .= "    document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\n";
-            $ret .= "</script>\n";
-            $ret .= "<script type=\"text/javascript\">\n";
-            $ret .= "    try {\n";
-            $ret .= "        var pageTracker = _gat._getTracker(\"".$analyticsCode."\");\n";
-            $ret .= "        _gat._anonymizeIp();\n";
-            $ret .= "        pageTracker._trackPageview();\n";
-            $ret .= "    } catch(err) {}\n";
+            $ret .= "\n";
+            $ret .= "    var _gaq = _gaq || [];\n";
+            $ret .= "    _gaq.push(['_setAccount', '".$analyticsCode."']);\n";
+            $ret .= "    _gaq.push (['_gat._anonymizeIp']);\n";
+            $ret .= "    _gaq.push(['_trackPageview']);\n";
+            $ret .= "\n";
+            $ret .= "    (function() {\n";
+            $ret .= "        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n";
+            $ret .= "        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n";
+            $ret .= "        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n";
+            $ret .= "    })();\n";
+            $ret .= "\n";
             $ret .= "</script>\n";
         }
 
