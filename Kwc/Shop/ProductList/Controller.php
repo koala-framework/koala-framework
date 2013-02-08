@@ -8,16 +8,15 @@ class Kwc_Shop_ProductList_Controller extends Kwf_Controller_Action_Auto_Kwc_For
         $productTypes = array();
         $productsModel = array();
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
-            if (is_instance_of($class, 'Kwc_Shop_Products_Detail_Component')) {
-                $generators = Kwc_Abstract::getSetting($class, 'generators');
-                foreach ($generators['addToCart']['component'] as $key => $c) {
-                    $productTypes[$key] = Kwc_Abstract::getSetting($c, 'productTypeText');
-                }
-            }
             if (is_instance_of($class, 'Kwc_Shop_Products_Directory_Component')) {
                 $productsModel = Kwf_Model_Abstract::getInstance(
                     Kwc_Abstract::getSetting($class, 'childModel')
                 );
+                $generators = Kwc_Abstract::getSetting($class, 'generators');
+                foreach ($generators['detail']['component'] as $key => $c) {
+                    $productTypes[$key] = Kwf_Trl::getInstance()
+                        ->trlStaticExecute(Kwc_Abstract::getSetting($c, 'componentName'));
+                }
             }
         }
 
