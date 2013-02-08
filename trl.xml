@@ -8662,7 +8662,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Geslo mora vsebovati najmanj 8 znakov.</sl>
 </text>
 <text>
-<en>For security reasons the password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
+<en>Due to security reasons the password must contain 3 out of the following 4 character types: small letters, capital letters, numbers and special signs</en>
 <de>Aus Sicherheitsgründen muss das Passwort mindestens 3 der folgenden 4 Zeichentypen beinhalten: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen</de>
 <id>1744</id>
 <ro>Parola trebuie să fie formată cel puţin din 3 din următoarele 4 tipuri de caractere: litere mici, majuscule, numere şi caractere speciale</ro>
