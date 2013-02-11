@@ -631,7 +631,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $parent = $row->getParentRow($expr->getParent());
             if (!$parent) return null;
             $field = $expr->getField();
-            return $parent->$field;
+            if (is_string($field)) {
+                return $parent->$field;
+            } else {
+                return $this->getExprValue($parent, $field);
+            }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Concat) {
             $ret = '';
             foreach ($expr->getExpressions() as $e) {
