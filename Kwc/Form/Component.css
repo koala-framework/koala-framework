@@ -5,6 +5,13 @@
     border: 1px solid var(errorBorder) ;
 }
 
+.cssClass .kwfFieldError input:hover,
+.cssClass .kwfFieldError textarea:hover,
+.cssClass .kwfFieldError input:focus,
+.cssClass .kwfFieldError textarea:focus {
+    border: 1px solid var(errorBorder) ;
+}
+
 .cssClass button {
     height: auto ;
     padding: 5px 10px ;
@@ -95,13 +102,13 @@
     position: relative;
 }
 
-.kwcForm input:hover,
-.kwcForm textarea:hover {
+.cssClass input:hover,
+.cssClass textarea:hover {
     border: 1px solid #b9b9b9;
     border-top-color: #a0a0a0;
 }
-.kwcForm input:focus,
-.kwcForm textarea:focus {
+.cssClass input:focus,
+.cssClass textarea:focus {
     border: 1px solid #aac2e9;
     box-shadow: inset 0px 2px 4px #ddd;
 }
