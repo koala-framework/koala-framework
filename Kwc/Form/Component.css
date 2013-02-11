@@ -84,14 +84,26 @@
     font-size: 11px;
     color: var(typo);
     line-height: 18px;
+    outline: none;
 }
 
 .cssClass input,
 .cssClass textarea {
     background: var(light) ;
-    border: 1px solid var(gray) ;
-    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    border-top-color: #c0c0c0;
     position: relative;
+}
+
+.kwcForm input:hover,
+.kwcForm textarea:hover {
+    border: 1px solid #b9b9b9;
+    border-top-color: #a0a0a0;
+}
+.kwcForm input:focus,
+.kwcForm textarea:focus {
+    border: 1px solid #aac2e9;
+    box-shadow: inset 0px 2px 4px #ddd;
 }
 
 .cssClass input.radio {
