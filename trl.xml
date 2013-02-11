@@ -4879,6 +4879,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1028</id>
 <de>Details</de>
 <ro>Detalii</ro>
+<sl>Podrobnosti</sl>
 </text>
 <text>
 <en>User '%value%' does already exist</en>
@@ -5083,6 +5084,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1071</id>
 <de>News</de>
 <ro>Ştiri</ro>
+<sl>Novice</sl>
 </text>
 <text>
 <en>Link.to News</en>
@@ -5190,12 +5192,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1103</id>
 <de>sichtbar</de>
 <ro>vizibil</ro>
+<sl>vidno</sl>
 </text>
 <text>
 <en>invisible</en>
 <id>1104</id>
 <de>unsichtbar</de>
 <ro>invizibil</ro>
+<sl>skrito</sl>
 </text>
 <text>
 <en>Google Maps</en>
@@ -5214,6 +5218,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1109</id>
 <de>Es ist keine Zeile ausgewählt</de>
 <ro>Nu este selectat niciun rând</ro>
+<sl>Nobena vrsta ni izbrana</sl>
 </text>
 <text>
 <en>Show locked users too</en>
@@ -5245,6 +5250,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Bitte wählen</de>
 <ro>Vă rugăm să selectaţi</ro>
 <mk>Ве молиме одберете</mk>
+<sl>Prosimo izberite</sl>
 </text>
 <text>
 <en>Root</en>
@@ -5290,6 +5296,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1122</id>
 <de>fertig</de>
 <ro>finalizat</ro>
+<sl>končano</sl>
 </text>
 <text>
 <en>Show locked users</en>
@@ -5574,6 +5581,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1168</id>
 <de>Newsletter</de>
 <ro>Newsletter</ro>
+<sl>Novice</sl>
 </text>
 <text>
 <en>Newsletter stopped, cannot start again.</en>
@@ -5943,6 +5951,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1233</id>
 <de>Standard</de>
 <ro>Standard</ro>
+<sl>Standardno</sl>
 </text>
 <text>
 <en>Can only add users to a paused newsletter</en>
@@ -6883,6 +6892,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1385</id>
 <de>verbergen</de>
 <ro>ascunde</ro>
+<sl>skrij</sl>
 </text>
 <text>
 <en>You can not {0} this entry as it is used on the following pages:</en>
@@ -7065,6 +7075,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1425</id>
 <de>Typ</de>
 <ro>Tip</ro>
+<sl>Tip</sl>
 </text>
 <text>
 <en>Document</en>
@@ -7199,6 +7210,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1450</id>
 <de>Spalte</de>
 <ro>Coloană</ro>
+<sl>Stolpec</sl>
 </text>
 <text>
 <en>Please select a value</en>
@@ -7283,6 +7295,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1469</id>
 <de>Newsletter versenden starten</de>
 <ro>Start trimitere Newsletter</ro>
+<sl>Pošiljanje novice</sl>
 </text>
 <text>
 <en>The newsletter will be sent in the background. You can leave this page or close the browser window. Start sending?</en>
@@ -7603,12 +7616,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1564</id>
 <de>Horizontal</de>
 <ro>orizontal</ro>
+<sl>Vodoravno</sl>
 </text>
 <text>
 <en>vertical</en>
 <id>1565</id>
 <de>Vertikal</de>
 <ro>vertical</ro>
+<sl>Navpično</sl>
 </text>
 <text>
 <en>Form.Select</en>
@@ -7987,6 +8002,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
 <id>1637</id>
+<sl>Ne sme biti negativno</sl>
 </text>
 <text>
 <en>value of goods</en>
@@ -8153,6 +8169,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1692</id>
 <de>E-Mail Addresse</de>
 <ro>Adresă de e-mail</ro>
+<sl>E-mail naslov</sl>
 </text>
 <text>
 <en>Predefined Subject for Mail</en>
@@ -8582,12 +8599,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1751</id>
 <de>Gestartet</de>
 <ro>Pornit</ro>
+<sl>Zaženi</sl>
 </text>
 <text>
 <en>[%]</en>
 <id>1752</id>
 <de>[%]</de>
 <ro>[%]</ro>
+<sl>[%]</sl>
 </text>
 <text>
 <en>click rate</en>
@@ -8711,12 +8730,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <context>salutation firstname female</context>
 <de>Liebe {0}</de>
 <id>1785</id>
+<sl>Dragi {0}</sl>
 </text>
 <text>
 <en>Dear {0}</en>
 <context>salutation firstname unknown gender</context>
 <de>Hallo {0}</de>
 <id>1786</id>
+<sl>Pozdravljeni, {0} </sl>
 </text>
 <text>
 <en>en_US</en>
