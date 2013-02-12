@@ -164,7 +164,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             }
             if ($s->componentClass != $targetCls) {
                 if (Kwc_Abstract::hasSetting($s->componentClass, 'componentName')) {
-                    $name = Kwc_Abstract::getSetting($s->componentClass, 'componentName');
+                    $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($s->componentClass, 'componentName'));
                     $errorMsg = trlKwf("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
                 } else {
                     $errorMsg = trlKwf('Source and target paragraphs are not compatible.');
