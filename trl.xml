@@ -8935,5 +8935,174 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge gefunden</de>
 <id>1804</id>
 </text>
+<text>
+<en>Invalid type given, value should be string or integer</en>
+<de>ungültig, Wert muss ein Zeichen oder eine ganze Zahl sein</de>
+<id>1805</id>
+</text>
+<text>
+<en>'%value%' does not appear to be an integer</en>
+<de>'%value%' ist keine ganze Zahl</de>
+<id>1806</id>
+</text>
+<text>
+<en>Publication</en>
+<de>Veröffentlichung</de>
+<id>1807</id>
+</text>
+<text>
+<en>VI-Nr</en>
+<de>VI-Nr</de>
+<id>1808</id>
+</text>
+<text>
+<en>Contraction</en>
+<de>Kontraktion</de>
+<id>1809</id>
+</text>
+<text>
+<en>Feedback E-Mail</en>
+<de>Feedback E-Mail</de>
+<id>1810</id>
+</text>
+<text>
+<en>Authors</en>
+<de>Autoren</de>
+<id>1811</id>
+</text>
+<text>
+<en>New tags</en>
+<de>Neue Tags</de>
+<id>1812</id>
+</text>
+<text>
+<en>Articles</en>
+<de>Artikel</de>
+<id>1813</id>
+</text>
+<text>
+<en>E-Mail priority</en>
+<de>E-Mail Priorität</de>
+<id>1814</id>
+</text>
+<text>
+<en>Author</en>
+<de>Autor</de>
+<id>1815</id>
+</text>
+<text>
+<en>Please use this format -&gt; Year / Month</en>
+<de>Bitte nutzen Sie dieses Format -&gt; Jahr / Monat</de>
+<id>1816</id>
+</text>
+<text>
+<en>VI-Number</en>
+<de>VI-Nummer</de>
+<id>1817</id>
+</text>
+<text>
+<en>Hot topic</en>
+<de>Gefragtes Thema</de>
+<id>1818</id>
+</text>
+<text>
+<en>Required reading</en>
+<de>Lesen erforderlich</de>
+<id>1819</id>
+</text>
+<text>
+<en>Only intern</en>
+<de>Nur intern</de>
+<id>1820</id>
+</text>
+<text>
+<en>uses</en>
+<de>Häufigkeit</de>
+<id>1821</id>
+</text>
+<text>
+<en>delete favorite</en>
+<de>Favorit löschen</de>
+<id>1822</id>
+</text>
+<text>
+<en>save as favorite</en>
+<de>Als Favorit speichern</de>
+<id>1823</id>
+</text>
+<text>
+<en>Thumbnail</en>
+<de>Vorschaubild</de>
+<id>1824</id>
+</text>
+<text>
+<en>Question</en>
+<de>Frage</de>
+<id>1825</id>
+</text>
+<text>
+<en>Answer</en>
+<de>Antwort</de>
+<id>1826</id>
+</text>
+<text>
+<en>Questions and answers</en>
+<de>Fragen und Antworten</de>
+<id>1827</id>
+</text>
+<text>
+<en>Enter tag...</en>
+<de>Bestätigungsfrage eintragen...</de>
+<id>1828</id>
+</text>
+<text>
+<en>Please enter a tag.</en>
+<de>Bitte tragen Sie eine Bestätigungsfrage ein</de>
+<id>1829</id>
+</text>
+<text>
+<en>Feedback</en>
+<de>Feedback</de>
+<id>1830</id>
+</text>
+<text>
+<en>Top-Article</en>
+<de>Top-Artikel</de>
+<id>1831</id>
+</text>
+<text>
+<en>Feedback for article</en>
+<de>Feedback für Artikel</de>
+<id>1832</id>
+</text>
+<text>
+<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
+<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt? Senden Sie uns dazu Ihr Feedback!</de>
+<id>1833</id>
+</text>
+<text>
+<en>Write your feedback!</en>
+<de>Feedback schreiben!</de>
+<id>1834</id>
+</text>
+<text>
+<en>Feedback from</en>
+<de>Feedback von</de>
+<id>1835</id>
+</text>
+<text>
+<en>to article</en>
+<de>zu Artikel</de>
+<id>1836</id>
+</text>
+<text>
+<en>Feedback to article </en>
+<de>Feedback zu Artikel </de>
+<id>1837</id>
+</text>
+<text>
+<en>Plese enter in both fields the password which you want to use for your useraccount</en>
+<de>Bitte tragen Sie in beide Felder das Passwort ein, das Sie für Ihren Zugang verwenden wollen/de>
+<id>1838</id>
+</text>
 </trl>
-
