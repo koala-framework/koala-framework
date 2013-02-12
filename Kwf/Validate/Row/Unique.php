@@ -10,7 +10,7 @@ class Kwf_Validate_Row_Unique extends Kwf_Validate_Row_Abstract
 
     public function __construct()
     {
-        $this->_messageTemplates[self::NOT_UNIQUE] = trlKwf("'%value%' does already exist");
+        $this->_messageTemplates[self::NOT_UNIQUE] = trlKwfStatic("'%value%' does already exist");
     }
 
     public function addSelectExpr(Kwf_Model_Select_Expr_Interface $expr)

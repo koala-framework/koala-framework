@@ -6,7 +6,7 @@ class Kwf_Validate_MaxValue extends Zend_Validate_LessThan
 {
     public function __construct($max)
     {
-        $this->_messageTemplates[self::NOT_LESS] = trlKwf("'%value%' must be less or equal than '%max%'");
+        $this->_messageTemplates[self::NOT_LESS] = trlKwfStatic("'%value%' must be less or equal than '%max%'");
         parent::__construct($max);
     }
 

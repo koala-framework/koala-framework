@@ -8,7 +8,7 @@ class Kwf_Validate_NotNegative extends Zend_Validate_Abstract
 
     public function __construct()
     {
-        $this->_messageTemplates[self::NEGATIVE] = trlKwf("Must not be negative");
+        $this->_messageTemplates[self::NEGATIVE] = trlKwfStatic("Must not be negative");
     }
 
     public function isValid($value)
