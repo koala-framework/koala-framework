@@ -33,10 +33,6 @@
     margin-left: 1px;
 }
 
-.cssClass .form_housenumber,
-.cssClass .form_city {
-    clear: none;
-}
 .cssClass form .kwfField label,
 .cssClass form .kwfField span.fieldContent {
     line-height: 20px;
