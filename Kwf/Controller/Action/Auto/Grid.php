@@ -1000,7 +1000,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $file = array(
             'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xls'),
-            'mimeType' => 'application/octet-stream',
+            'mimeType' => 'application/msexcel',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
         );
         Kwf_Media_Output::output($file);
