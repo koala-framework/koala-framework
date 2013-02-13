@@ -366,23 +366,32 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getReference($rule)
     {
-        if (!isset($this->_referenceMap[$rule])) {
-            throw new Kwf_Exception("Reference '$rule' for model '".get_class($this)."' not set, set are '".implode(', ', array_keys($this->_referenceMap))."'");
-        }
-        $ret = $this->_referenceMap[$rule];
-        if (is_string($ret)) {
-            if ($ret === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
-            } else {
-                if (strpos($ret, '->') === false) {
-                    throw new Kwf_Exception("Reference '$rule' for model '".get_class($this)."' is a string but doesn't contain ->");
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $m) {
+            if (isset($m->_referenceMap[$rule])) {
+                $ret = $m->_referenceMap[$rule];
+                if (is_string($ret)) {
+                    if ($ret === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                    } else {
+                        if (strpos($ret, '->') === false) {
+                            throw new Kwf_Exception("Reference '$rule' for model '".get_class($m)."' is a string but doesn't contain ->");
+                        }
+                        $ret = array(
+                            'refModelClass' => substr($ret, strpos($ret, '->')+2),
+                            'column' => substr($ret, 0, strpos($ret, '->')),
+                        );
+                    }
                 }
-                $ret = array(
-                    'refModelClass' => substr($ret, strpos($ret, '->')+2),
-                    'column' => substr($ret, 0, strpos($ret, '->')),
-                );
+                return $ret;
             }
         }
-        return $ret;
+
+        $keys = array();
+        foreach ($models as $m) {
+            $keys = array_merge($keys, array_keys($m->_referenceMap));
+        }
+        throw new Kwf_Exception("Reference '$rule' for model '".get_class($this)."' not set, set are '".implode(', ', $keys)."'");
     }
 
     public function getReferencedModel($rule)

@@ -21,6 +21,8 @@ class Kwf_Model_DbWithConnection_ProxyReferences_ParentModel extends Kwf_Model_D
         Kwf_Registry::get('db')->query("TRUNCATE TABLE {$this->_tableName}");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, foo) VALUES (1, 5)");
+        Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
+                        (id, foo) VALUES (2, 6)");
     }
 
     public function dropTable()

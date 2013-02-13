@@ -33,12 +33,12 @@ class Kwf_Model_DbWithConnection_ProxyReferences_Test extends Kwf_Test_TestCase
                             new Kwf_Model_Select_Expr_Equal('foo2', 3)));
         $select = new Kwf_Model_Select();
         $select->where(new Kwf_Model_Select_Expr_Parent('Parent',
-                            new Kwf_Model_Select_Expr_Child_Contains('Child'), $childSelect));
-        $this->markTestIncomplete();
+                            new Kwf_Model_Select_Expr_Child_Contains('Childs'), $childSelect));
         $rows = $this->_modelChild->getRows($select);
-        $this->assertEquals(count($rows), 1);
+        $this->markTestIncomplete();
+        $this->assertEquals(count($rows), 3);
         foreach ($rows as $row) {
-            $this->assertEquals($row->foo, 5);
+            $this->assertEquals($row->getParentRow('Parent2')->foo2, 3);
         }
     }
 
@@ -47,11 +47,10 @@ class Kwf_Model_DbWithConnection_ProxyReferences_Test extends Kwf_Test_TestCase
         $select = new Kwf_Model_Select();
         $select->where(new Kwf_Model_Select_Expr_Parent('Parent',
                             new Kwf_Model_Select_Expr_Equal('foo', 5)));
-        $this->markTestIncomplete();
         $rows = $this->_modelChild->getRows($select);
-        $this->assertEquals(count($rows), 1);
+        $this->assertEquals(count($rows), 3);
         foreach ($rows as $row) {
-            $this->assertEquals($row->foo, 5);
+            $this->assertEquals($row->getParentRow('Parent')->foo, 5);
         }
     }
 }

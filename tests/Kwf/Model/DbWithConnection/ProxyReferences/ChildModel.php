@@ -30,6 +30,8 @@ class Kwf_Model_DbWithConnection_ProxyReferences_ChildModel extends Kwf_Model_Db
                         (id, parent_id, parent2_id, bar) VALUES (2, 1, 1, 6)");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, parent_id, parent2_id, bar) VALUES (3, 1, 1, 7)");
+        Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
+                        (id, parent_id, parent2_id, bar) VALUES (4, 2, 2, 7)");
     }
 
     public function dropTable()
