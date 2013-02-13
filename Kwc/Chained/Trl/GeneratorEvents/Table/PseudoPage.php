@@ -52,7 +52,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table_PseudoPage extends Kwc_Chained_Trl_G
         $nameChanged = false;
         $filenameChanged = false;
 
-        if (!$this->_getGenerator()->getModel()->hasColumn('name')) { //does trl have own name?
+        if ($this->_getGenerator()->getModel() && !$this->_getGenerator()->getModel()->hasColumn('name')) { //does trl have own name?
             $nameColumn = $this->_getChainedGenerator()->getNameColumn();
             if (!$nameColumn) {
                 $nameColumn = $event->row->getModel()->getToStringField();
@@ -69,7 +69,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table_PseudoPage extends Kwc_Chained_Trl_G
                 $nameChanged = $event->isDirty($nameColumn);
             }
         }
-        if (!$this->_getGenerator()->getModel()->hasColumn('filename')) { //does trl have own filename?
+        if ($this->_getGenerator()->getModel() && !$this->_getGenerator()->getModel()->hasColumn('filename')) { //does trl have own filename?
             $filenameColumn = $this->_getChainedGenerator()->getFilenameColumn();
             if (!$filenameColumn) {
                 $filenameChanged = $nameChanged;
