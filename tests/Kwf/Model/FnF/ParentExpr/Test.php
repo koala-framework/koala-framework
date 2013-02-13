@@ -23,9 +23,9 @@ class Kwf_Model_FnF_ParentExpr_Test extends Kwf_Test_TestCase
                         new Kwf_Model_Select_Expr_Child_Contains('Childs', $select)));
 
         $rows = $modelChild->getRows($selectParent);
-        $this->assertEquals(1, count($rows));
+        $this->assertEquals(2, count($rows));
         foreach ($rows as $row) {
-            $this->assertGreaterThan(1, $row->bar);
+            $this->assertEquals(1, $row->getParentRow('Parent')->id);
         }
     }
 
