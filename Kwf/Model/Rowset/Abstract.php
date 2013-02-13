@@ -137,4 +137,14 @@ class Kwf_Model_Rowset_Abstract implements Kwf_Model_Rowset_Interface, Serializa
     {
         return $this->getModel()->getTable();
     }
+
+    public function toDebug()
+    {
+        $i = get_class($this).': '.count($this).' rows';
+        $ret = print_r($this->toArray(), true);
+        $ret = preg_replace('#^Array#', $i, $ret);
+        $ret .= "Model: ".get_class($this->getModel());
+        $ret = "<pre>$ret</pre>";
+        return $ret;
+    }
 }
