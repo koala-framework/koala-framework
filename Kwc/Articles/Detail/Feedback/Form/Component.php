@@ -5,7 +5,7 @@ class Kwc_Articles_Detail_Feedback_Form_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwf('Feedback');
-        $ret['extConfig'] = 'Kwc_Articles_Detail_Feedback_Form_ExtConfig';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Grid';
         return $ret;
     }
 
