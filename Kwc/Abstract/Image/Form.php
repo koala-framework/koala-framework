@@ -4,6 +4,16 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
     protected function _initFields()
     {
         $this->_initFieldsUpload();
+
+        // Height, Width
+        // add always if multiple dimensions (even if useParentImage)
+        $dimensions = Kwc_Abstract::getSetting($this->getClass(), 'dimensions');
+        if (count($dimensions) > 1) {
+            $this->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
+                ->setAllowBlank(false)
+                ->setDimensions($dimensions);
+        }
+
         $this->_initFieldsCaption();
 
         parent::_initFields();
@@ -32,14 +42,6 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             $helptext = trlKwf('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['height'] . 'px';
             $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
             $this->getByName('Image')->setHelpText($helptext);
-        }
-
-        // Höhe, Breite
-        $dimensions = Kwc_Abstract::getSetting($this->getClass(), 'dimensions');
-        if (count($dimensions) > 1) {
-            $this->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
-                ->setAllowBlank(false)
-                ->setDimensions($dimensions);
         }
     }
 
