@@ -139,6 +139,9 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
         if ($validatorClass) {
             $validator = new $validatorClass();
+            $validator->setTranslator(
+                new Kwf_Trl_ZendAdapter(Kwf_Trl::getInstance()->getTargetLanguage())
+            );
             if (!$validator->isValid($password)) {
                 throw new Kwf_ClientException(implode('<br />', $validator->getMessages()));
             }
