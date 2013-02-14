@@ -1,7 +1,7 @@
 <?php
 class Kwc_Articles_Detail_Feedback_Form_Controller extends Kwf_Controller_Action_Auto_Grid
 {
-    protected $_model = 'Kwc_Articles_Directory_FeedbacksModel';
+    protected $_model = 'Kwc_Articles_Detail_Feedback_Model';
     protected $_buttons = array();
 
     protected function _initColumns()

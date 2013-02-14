@@ -1,7 +1,7 @@
 <?php
 class Kwc_Articles_Detail_Feedback_Form_FrontendForm extends Kwf_Form
 {
-    protected $_model = 'Kwc_Articles_Directory_FeedbacksModel';
+    protected $_model = 'Kwc_Articles_Detail_Feedback_Model';
 
     protected function _initFields()
     {

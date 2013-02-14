@@ -11,7 +11,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
         'Favourites' => 'Kwc_Articles_Detail_Favor_Model',
         'Views' => 'Kwc_Articles_Directory_ViewsModel',
         'TagSuggestions' => 'Kwc_Articles_Directory_TagSuggestionsModel',
-        'Feedbacks' => 'Kwc_Articles_Directory_FeedbacksModel'
+        'Feedbacks' => 'Kwc_Articles_Detail_Feedback_Model'
     );
      protected $_referenceMap = array(
          'Author' => 'author_id->Kwc_Articles_Directory_AuthorsModel',
