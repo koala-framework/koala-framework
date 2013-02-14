@@ -1,0 +1,29 @@
+.cssClass {
+    position: relative;
+}
+
+.cssClass a {
+    background: url("/assets/kwf/Kwc/Favourites/starDark.png") no-repeat scroll left center transparent;
+    text-indent: -4000px;
+    display: block;
+    position: relative;
+}
+
+.cssClass.isFavourite a {
+    background: url("/assets/kwf/Kwc/Favourites/star.png") no-repeat scroll left center transparent;
+}
+
+.cssClass .switchContent {
+    background: #CED0D1;
+    position: absolute;
+    display: none;
+    top: -2px;
+    left: 25px;
+    padding: 5px 10px 5px 10px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    z-index: 12px;
+}
