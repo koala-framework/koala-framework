@@ -7,7 +7,7 @@ class Kwc_Articles_Detail_Favor_Controller extends Kwf_Controller_Action
         if ($authedUser) {
             $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'));
             $article = $component = $component->parent->row;
-            $model = Kwf_Model_Abstract::getInstance('Kwc_Articles_Directory_FavouritesModel');
+            $model = Kwf_Model_Abstract::getInstance('Kwc_Articles_Detail_Favor_Model');
             $select = new Kwf_Model_Select();
             $select->whereEquals('user_id', $authedUser->id);
             $select->whereEquals('article_id', $article->id);

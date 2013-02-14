@@ -8,7 +8,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
     protected $_dependentModels = array(
         'ArticleToTag' => 'Kwc_Articles_Directory_ToTagModel',
         'Categories' => 'Kwc_Articles_Directory_ToCategoryModel',
-        'Favourites' => 'Kwc_Articles_Directory_FavouritesModel',
+        'Favourites' => 'Kwc_Articles_Detail_Favor_Model',
         'Views' => 'Kwc_Articles_Directory_ViewsModel',
         'TagSuggestions' => 'Kwc_Articles_Directory_TagSuggestionsModel',
         'Feedbacks' => 'Kwc_Articles_Directory_FeedbacksModel'

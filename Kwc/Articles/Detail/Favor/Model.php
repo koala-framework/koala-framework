@@ -1,5 +1,5 @@
 <?php
-class Kwc_Articles_Directory_FavouritesModel extends Kwf_Model_Db
+class Kwc_Articles_Detail_Favor_Model extends Kwf_Model_Db
 {
     protected $_table = 'kwc_article_favourites';
 
