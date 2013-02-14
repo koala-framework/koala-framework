@@ -203,7 +203,6 @@ class Kwf_Form extends Kwf_Form_NonTableForm
     protected final function _rowIsParentRow($parentRow)
     {
         $id = $this->_getIdByParentRow($parentRow);
-
         if ($parentRow && !$parentRow->{$parentRow->getModel()->getPrimaryKey()}) {
             //remember _createdRows, because once it is saved it will have an id and we can't compare it to $id anymore
             $this->_createdRows[] = $parentRow;
@@ -217,8 +216,6 @@ class Kwf_Form extends Kwf_Form_NonTableForm
             if (!$id && in_array($parentRow, $this->_createdRows, true)) {
                 return true;
             }
-
-            return true;
         }
         return false;
     }
