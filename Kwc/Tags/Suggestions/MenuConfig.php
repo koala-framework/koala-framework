@@ -1,0 +1,14 @@
+<?php
+class Kwc_Tags_Suggestions_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstract
+{
+    public function addResources(Kwf_Acl $acl)
+    {
+        $acl->add(new Kwf_Acl_Resource_ComponentClass_MenuUrl(
+            'kwc_tags_suggestions', array('text'=>trlKwf('New tags'), 'icon'=>'tag_blue_edit'),
+            Kwc_Admin::getInstance($this->_class)->getControllerUrl('Grid'),
+            $this->_class
+            ),
+            'kwf_component_root'
+        );
+    }
+}
