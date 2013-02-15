@@ -1,10 +1,10 @@
 <?php
-class Kwc_Box_Favourites_Component extends Kwc_Abstract
+class Kwc_Favourites_Box_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'web/components/Box/Favourites/Component.js';
+        $ret['assets']['files'][] = 'web/components/Favourites/Box/Component.js';
         $ret['favouritesPageComponent'] = 'KWC_FAVOURITES_PAGE'; //TODO set to kwc-favourites-page
         $ret['viewCache'] = false;
         $ret['placeholder']['linkText'] = trlStatic('FAVORITEN ({0})');
