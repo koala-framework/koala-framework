@@ -7,6 +7,8 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $ret['viewCache'] = false;
         $ret['assets']['files'][] = 'kwf/Kwc/Favourites/Component.js';
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
+        $ret['placeholder']['saveFavourite'] = trlStatic('save as favourite');
+        $ret['placeholder']['deleteFavourite'] = trlStatic('delete favourite');
         return $ret;
     }
 
@@ -19,14 +21,16 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $select->whereEquals('component_id', $this->getData()->dbId);
         $select->whereEquals('user_id', $authedUser->id);
         $row = Kwf_Model_Abstract::getInstance('Kwc_Favourites_Model')->countRows($select);
-        $ret['favouriteText'] = trlKwf('save as favourite');
+        $ret['favouriteText'] = $this->_getPlaceholder('saveFavourite');
         if ($row) {
-            $ret['favouriteText'] = trlKwf('delete favourite');
+            $ret['favouriteText'] = $this->_getPlaceholder('deleteFavourite');
             $ret['cssClass'] .= ' isFavourite';
         }
         $ret['config'] = array(
             'componentId' => $this->getData()->dbId,
-            'controllerUrl' => Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl()
+            'controllerUrl' => Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl(),
+            'deleteFavourite' => $this->_getPlaceholder('deleteFavourite'),
+            'saveFavourite' => $this->_getPlaceholder('saveFavourite')
         );
         return $ret;
     }
