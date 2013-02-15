@@ -91,10 +91,8 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
                 $ret['row'] = $m->createRow();
                 $ret['row']->component_id = $id;
             }
-            /* should not be necessary but I don't know if it's needed somewhere
         } else {
-            $ret['row'] = $ret['chained']->row;
-            */
+            unset($ret['row']);
         }
 
         //TODO: nicht mit settings direkt arbeiten, besser das echte generator objekt holen

@@ -10,13 +10,13 @@ class Kwc_Shop_Cart_Detail_Form_Component extends Kwc_Form_Component
 
     protected function _initForm()
     {
-        $addToCart = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->getData()->parent->row->add_component_id, array('subroot'=>$this->getData()));
+        $addToCart = $this->getData()->parent->getComponent()->getAddToCartForm();
         if ($addToCart) {
             $f = $addToCart->getComponent()->getForm();
             $this->_form = clone $f;
-            $this->_form->setName('order'.$this->getData()->parent->row->id);
-            $this->_form->setId($this->getData()->parent->row->id);
+            $productRow = $this->getData()->parent->getComponent()->getOrderProductRow();
+            $this->_form->setName('order'.$productRow->id);
+            $this->_form->setId($productRow->id);
         }
     }
 }

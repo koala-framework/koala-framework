@@ -11,7 +11,7 @@
             <tr class="products<?=($i%2==1 ? ' row1' : ' row2');?>">
                 <td class="product"><?=$item->text?></td>
                 <? foreach($item->additionalOrderData as $d) { ?>
-                    <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
+                    <td class="<?=$d['class']?>"><?=$this->data->trlStaticExecute($d['name'])?>: <?=$d['value']?></td>
                 <? } ?>
                 <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>"><?=$this->money($item->price)?></td>
             </tr>
@@ -32,7 +32,7 @@
                 <table class="tblCheckoutPrice" cellspacing="0" cellpadding="0">
                     <? foreach ($this->sumRows as $row) { ?>
                         <tr<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
-                            <td><?=$row['text']?></td>
+                            <td><?=$this->data->trlStaticExecute($row['text'])?></td>
                             <td class="price"><?=$this->money($row['amount'],'')?></td>
                         </tr>
                     <? } ?>

@@ -38,6 +38,11 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         return $ret;
     }
 
+    public function getOrderProductsModel()
+    {
+        return $this->getChildModel();
+    }
+
     public function preProcessInput()
     {
         // to remove deleted products from the cart
@@ -58,5 +63,15 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
     {
         return Kwc_Shop_Cart_OrderData::getInstance($this->getData()->componentClass)
                     ->getShopCartPlugins();
+    }
+    
+    public function getForms()
+    {
+        $ret = array();
+        foreach ($this->getData()->getChildComponents(array('generator'=>'detail')) as $c) {
+            $ret[] = $c->getChildComponent('-form')
+                ->getComponent()->getForm();
+        }
+        return $ret;
     }
 }

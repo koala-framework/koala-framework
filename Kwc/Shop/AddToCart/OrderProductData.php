@@ -22,7 +22,7 @@ class Kwc_Shop_AddToCart_OrderProductData extends Kwc_Shop_AddToCartAbstract_Ord
         $ret = parent::getAdditionalOrderData($row);
         $ret[] = array(
             'class' => 'amount',
-            'name' => trlKwf('Amount'),
+            'name' => trlKwfStatic('Amount'),
             'value' => $row->amount
         );
         return $ret;
@@ -51,7 +51,7 @@ class Kwc_Shop_AddToCart_OrderProductData extends Kwc_Shop_AddToCartAbstract_Ord
                 $product->__toString().' ('.$product->current_price.' €)'
             );
         }
-        $form->prepend(new Kwf_Form_Field_Select('shop_product_price_id', trlKwf('Product')))
+        $form->prepend(new Kwf_Form_Field_Select('shop_product_price_id', trlKwfStatic('Product')))
             ->setValues($data)
             ->setAllowBlank(false);
     }
