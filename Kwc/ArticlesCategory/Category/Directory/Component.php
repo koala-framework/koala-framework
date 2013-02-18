@@ -1,0 +1,11 @@
+<?php
+class Kwc_ArticlesCategory_Category_Directory_Component extends Kwc_Articles_Category_Directory_Component
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['categoryToItemModelName'] = 'Kwc_ArticlesCategory_Category_Directory_ArticlesToCategoriesModel';
+        $ret['generators']['detail']['component'] = 'Kwc_ArticlesCategory_Category_Detail_Component';
+        return $ret;
+    }
+}
