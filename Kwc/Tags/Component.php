@@ -9,6 +9,7 @@ class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
         $ret['generators']['child']['component']['suggestions'] = 'Kwc_Tags_Suggestions_Component';
         $ret['menuConfig'] = 'Kwc_Tags_MenuConfig';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Grid';
+        $ret['assetsAdmin']['dep'][] = 'KwfFormSuperBoxSelect';
         return $ret;
     }
 
