@@ -5,7 +5,7 @@ class Kwc_Favourites_Box_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['assets']['files'][] = 'kwf/Kwc/Favourites/Box/Component.js';
-        $ret['favouritesComponent'] = null; //TODO set to kwc-favourites-page
+        $ret['favouritesPageComponentClass'] = null; //TODO set to kwc-favourites-page
         $ret['viewCache'] = false;
         $ret['placeholder']['linkText'] = trlStatic('FAVORITEN ({0})');
         return $ret;
@@ -24,7 +24,7 @@ class Kwc_Favourites_Box_Component extends Kwc_Abstract
                             $this->_getPlaceholder('linkText'));
         }
         $class = Kwc_Abstract::getSetting($this->getData()->getComponentClass(),
-                         'favouritesComponent');
+                         'favouritesPageComponentClass');
         if (!$class) {
             throw new Kwf_Exception('Set favouritesComponent (favourites-page) in getSettings');
         }
