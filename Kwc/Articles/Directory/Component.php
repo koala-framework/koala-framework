@@ -7,7 +7,7 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
         $ret['generators']['child']['component']['view'] = 'Kwc_Articles_Directory_View_Component';
         $ret['generators']['detail']['class'] = 'Kwc_Articles_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Kwc_Articles_Detail_Component';
-        $ret['generators']['detail']['dbIdShortcut'] = 'kwc_article_';
+        $ret['generators']['detail']['dbIdShortcut'] = 'article_';
 
         $ret['childModel'] = 'Kwc_Articles_Directory_Model';
 

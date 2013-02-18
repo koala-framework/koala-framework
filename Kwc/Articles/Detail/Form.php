@@ -35,7 +35,7 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
             ->setWidth(70)
             ->addValidator($v);
 
-        $this->add(Kwc_Abstract_Form::createComponentFormByDbIdTemplate('kwc_article_{0}-previewImage', 'previewImage'));
+        $this->add(Kwc_Abstract_Form::createComponentFormByDbIdTemplate('article_{0}-previewImage', 'previewImage'));
 
         $this->add(new Kwf_Form_Field_Checkbox('is_top', trlKwf('Hot-topic')));
         $this->add(new Kwf_Form_Field_Checkbox('read_required', trlKwf('Required reading')));
