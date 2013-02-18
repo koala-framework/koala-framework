@@ -17,7 +17,7 @@ class Kwc_Feedback_Form_Controller extends Kwf_Controller_Action_Auto_Grid
     {
         $ret = parent::_getSelect();
         $componentId = $this->_getParam('componentId');
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId);
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId, array('ignoreVisible' => true));
         if(isset($component->parent->chained)) {
             $component = $component->parent->chained;
         }
