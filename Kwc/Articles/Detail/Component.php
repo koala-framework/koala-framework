@@ -6,25 +6,15 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['content'] = 'Kwc_Articles_Detail_Paragraphs_Component';
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Articles_Detail_PreviewImage_Component';
-        $ret['generators']['child']['component']['questionsAnswers'] = 'Kwc_Articles_Detail_QuestionsAnswers_Component';
-        $ret['generators']['child']['component']['tags'] = 'Kwc_Articles_Detail_Tags_Component';
-        $ret['generators']['child']['component']['favor'] = 'Kwc_Favourites_Component';
-
-        $ret['generators']['feedback'] = array(
-            'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Articles_Detail_Feedback_Component',
-            'name' => trlKwf('Feedback')
-        );
 
         $ret['cssClass'] = 'webStandard';
 
         $ret['flags']['hasFulltext'] = true;
         $ret['flags']['processInput'] = true;
 
-        $ret['editComponents'] = array('content', 'questionsAnswers', 'feedback');
+        $ret['editComponents'] = array('content');
 
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
-        $ret['assetsAdmin']['dep'][] = 'KwfFormSuperBoxSelect';
         return $ret;
     }
 
@@ -55,9 +45,5 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
 
     public static function modifyItemData(Kwf_Component_Data $item)
     {
-        $item->categories = array();
-        foreach ($item->row->getChildRows('Categories') as $category) {
-            $item->categories[] = $category->getParentRow('Category')->name;
-        }
     }
 }

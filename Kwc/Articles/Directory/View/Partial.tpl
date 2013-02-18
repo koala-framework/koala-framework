@@ -1,7 +1,4 @@
 <div class="item">
-    <div class="categories">
-        <?=implode(' | ', $this->item->categories)?>
-    </div>
     <div class="previewImage">
         <?=$this->componentLink($this->item, $this->component($this->item->getChildComponent('-previewImage')))?>
     </div>
