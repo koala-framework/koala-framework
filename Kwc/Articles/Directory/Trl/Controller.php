@@ -1,5 +1,5 @@
 <?php
-class Kwc_Articles_Directory_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
+class Kwc_Articles_Directory_Trl_Controller extends Kwc_Directories_Item_Directory_Trl_Controller
 {
     protected $_buttons = array('save', 'add');
     protected $_paging = 25;

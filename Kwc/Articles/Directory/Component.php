@@ -19,7 +19,8 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
 
         $ret['menuConfig'] = 'Kwc_Articles_Directory_MenuConfig';
 
-        $ret['componentName'] = trlKwf('Articles');
+        $ret['componentName'] = trlKwf('Articles.Articles');
+        $ret['componentIcon'] = new Kwf_Asset('newspaper');
 
         $ret['contentSender'] = 'Kwc_Articles_Directory_ContentSender';
         return $ret;

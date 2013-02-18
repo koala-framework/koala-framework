@@ -29,7 +29,7 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
         $ret['config'] = array(
             'isTopArticle' => ($this->getData()->getRow()->is_top) ? 1 : 0
         );
-        $ret['feedback'] = $this->getData()->getChildComponent('_feedback');
+        $ret['title'] = $this->getData()->row->title;
         $ret['author'] = $this->getData()->row->getParentRow('Author');
         return $ret;
     }
@@ -45,5 +45,8 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
 
     public static function modifyItemData(Kwf_Component_Data $item)
     {
+        $item->title = $item->row->title;
+        $item->teaser = $item->row->teaser;
+        $item->date = $item->row->date;
     }
 }
