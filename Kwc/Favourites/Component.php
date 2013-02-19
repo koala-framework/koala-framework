@@ -31,40 +31,34 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         return $ret;
     }
 
+    /**
+     * returns a list of all visible favourite componentIds
+     */
     public static function getFavouriteComponentIds()
     {
         $ret = array();
-        $user = Kwf_Model_Abstract::getInstance('Users')->getAuthedUser();
+        $user = Kwf_Registry::get('userModel')->getAuthedUser();
         if ($user) {
-            $cacheUser = 'favCIds'.$user->id;
-            $ret = Kwf_Cache_Simple::fetch($cacheUser, $success);
+            $cacheIdUser = 'favCIds'.$user->id;
+            $ret = Kwf_Cache_Simple::fetch($cacheIdUser, $success);
             if (!$success) {
-                $model = Kwf_Model_Abstract::getInstance('Kwc_Favourites_Model');
+                // get all favourites related to user
                 $select = new Kwf_Model_Select();
                 $select->whereEquals('user_id', $user->id);
-                $favourites = $model->getRows($select);
+                $favouritesModel = Kwf_Model_Abstract::getInstance('Kwc_Favourites_Model');
+                $favourites = $favouritesModel->getRows($select);
                 $componentIds = array();
                 foreach ($favourites as $favourite) {
                     $component = Kwf_Component_Data_Root::getInstance()
                         ->getComponentById($favourite->component_id);
+                    // check if component is visible and existent
                     if ($component) {
-                        $cacheComponent = 'favUIds'.$favourite->component_id;
-                        $userIds = Kwf_Cache_Simple::fetch($cacheComponent, $success);
-                        if (!$success) {
-                            $model = Kwf_Model_Abstract::getInstance('Kwc_Favourites_Model');
-                            $select = new Kwf_Model_Select();
-                            $select->whereEquals('component_id', $favourite->component_id);
-                            $users = $model->getRows($select);
-                            $userIds = array();
-                            foreach ($users as $user) {
-                                $userIds[] = $user->user_id;
-                            }
-                            Kwf_Cache_Simple::add($cacheComponent, $userIds);
-                        }
+                        // if component is visible create list of users related to component
                         $componentIds[] = $component->componentId;
                     }
                 }
-                Kwf_Cache_Simple::add($cacheUser, $componentIds);
+                // cache relation of visible components to user
+                Kwf_Cache_Simple::add($cacheIdUser, $componentIds);
                 $ret = $componentIds;
             }
         }

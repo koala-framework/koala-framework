@@ -25,9 +25,11 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
     public function onComponentRemove(Kwf_Component_Event_Component_Removed $event)
     {
         $componentId = $event->component->componentId;
-        $cacheComponent = 'favUIds'.$componentId;
-        $userIds = Kwf_Cache_Simple::fetch($cacheComponent);
-        Kwf_Cache_Simple::delete($cacheComponent);
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Favourites_Model');
+        $select = new Kwf_Model_Select();
+        $select->where(new Kwf_Model_Select_Expr_Equal('component_id', $componentId));
+        $options = array('columns' => array('user_id'));
+        $userIds = $model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options);
         if ($userIds) {
             foreach ($userIds as $userId) {
                 $componentIds = Kwf_Cache_Simple::fetch('favCIds'.$userId, $success);
@@ -48,15 +50,7 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
     public function onFavouriteInserted(Kwf_Component_Event_Row_Abstract $event)
     {
         $favourite = $event->row;
-        $cacheIdComponent = 'favUIds'.$favourite->component_id;
         $cacheIdUser = 'favCIds'.$favourite->user_id;
-        $cacheComponent = Kwf_Cache_Simple::fetch($cacheIdComponent, $success);
-        if ($success) {
-            Kwf_Cache_Simple::delete($cacheIdComponent);
-            $cacheComponent[] = $favourite->component_id;
-            Kwf_Cache_Simple::add($cacheIdComponent, $cacheComponent);
-        }
-
         $cacheUser = Kwf_Cache_Simple::fetch($cacheIdUser, $success);
         if ($success) {
             Kwf_Cache_Simple::delete($cacheIdUser);
@@ -68,16 +62,7 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
     public function onFavouriteRemove(Kwf_Component_Event_Row_Abstract $event)
     {
         $favourite = $event->row;
-        $cacheIdComponent = 'favUIds'.$favourite->component_id;
         $cacheIdUser = 'favCIds'.$favourite->user_id;
-        $cacheComponent = Kwf_Cache_Simple::fetch($cacheIdComponent, $success);
-        if ($success) {
-            Kwf_Cache_Simple::delete($cacheIdComponent);
-            $key = array_search($favourite->user_id, $cacheComponent);
-            unset($cacheComponent[$key]);
-            Kwf_Cache_Simple::add($cacheIdComponent, $cacheComponent);
-        }
-
         $cacheUser = Kwf_Cache_Simple::fetch($cacheIdUser, $success);
         if ($success) {
             Kwf_Cache_Simple::delete($cacheIdUser);
