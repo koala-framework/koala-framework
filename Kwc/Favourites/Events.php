@@ -10,12 +10,12 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
             'callback' => 'onComponentRemove'
         );
         $ret[] = array(
-            'class' => 'Kwc_Favourites_Model',
+            'class' => Kwc_Abstract::getSetting($this->_class, 'favouritesModel'),
             'event' => 'Kwf_Component_Event_Row_Deleted',
             'callback' => 'onFavouriteRemove'
         );
         $ret[] = array(
-            'class' => 'Kwc_Favourites_Model',
+            'class' => Kwc_Abstract::getSetting($this->_class, 'favouritesModel'),
             'event' => 'Kwf_Component_Event_Row_Inserted',
             'callback' => 'onFavouriteInserted'
         );
@@ -25,7 +25,8 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
     public function onComponentRemove(Kwf_Component_Event_Component_Removed $event)
     {
         $componentId = $event->component->componentId;
-        $model = Kwf_Model_Abstract::getInstance('Kwf_Favourites_Model');
+        $model = Kwf_Model_Abstract::getInstance(Kwc_Abstract::
+                        getSetting($this->_class, 'favouritesModel'));
         $select = new Kwf_Model_Select();
         $select->where(new Kwf_Model_Select_Expr_Equal('component_id', $componentId));
         $options = array('columns' => array('user_id'));

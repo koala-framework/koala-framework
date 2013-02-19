@@ -9,6 +9,7 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
         $ret['placeholder']['saveFavourite'] = trlKwfStatic('save as favourite');
         $ret['placeholder']['deleteFavourite'] = trlKwfStatic('delete favourite');
+        $ret['favouritesModel'] = 'Kwc_Favourites_Model';
         return $ret;
     }
 
@@ -18,7 +19,8 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
         if (!$authedUser) throw new Kwf_Exception('not logged in');
         $ret['favouriteText'] = $this->_getPlaceholder('saveFavourite');
-        if (in_array($this->getData()->componentId, self::getFavouriteComponentIds())) {
+        $favouritesModel = Kwc_Abstract::getSetting($this->getData()->componentClass, 'favouritesModel');
+        if (in_array($this->getData()->componentId, self::getFavouriteComponentIds($favouritesModel))) {
             $ret['favouriteText'] = $this->_getPlaceholder('deleteFavourite');
             $ret['cssClass'] .= ' isFavourite';
         }
@@ -34,7 +36,7 @@ class Kwc_Favourites_Component extends Kwc_Abstract
     /**
      * returns a list of all visible favourite componentIds
      */
-    public static function getFavouriteComponentIds()
+    public static function getFavouriteComponentIds($favouritesModel)
     {
         $ret = array();
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
@@ -45,7 +47,7 @@ class Kwc_Favourites_Component extends Kwc_Abstract
                 // get all favourites related to user
                 $select = new Kwf_Model_Select();
                 $select->whereEquals('user_id', $user->id);
-                $favouritesModel = Kwf_Model_Abstract::getInstance('Kwc_Favourites_Model');
+                $favouritesModel = Kwf_Model_Abstract::getInstance($favouritesModel);
                 $favourites = $favouritesModel->getRows($select);
                 $componentIds = array();
                 foreach ($favourites as $favourite) {

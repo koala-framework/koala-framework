@@ -5,7 +5,8 @@ class Kwc_Favourites_Controller extends Kwf_Controller_Action
     {
         $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
         if ($authedUser) {
-            $model = Kwf_Model_Abstract::getInstance('Kwc_Favourites_Model');
+            $modelClass = Kwc_Abstract::getSetting($this->_getParam('class'), 'favouritesModel');
+            $model = Kwf_Model_Abstract::getInstance($modelClass);
             $select = new Kwf_Model_Select();
             $select->whereEquals('user_id', $authedUser->id);
             $select->whereEquals('component_id', $this->_getParam('componentId'));

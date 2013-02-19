@@ -18,16 +18,18 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
         return array(
             array(
                 'type' => 'callback',
-                'callback' => array(get_class($this), 'modifyComponentLink')
+                'callback' => array(get_class($this), 'modifyComponentLink'),
+                'favouritesModel' => Kwc_Abstract::
+                            getSetting($this->getData()->componentClass, 'favouritesModel'),
             )
         );
     }
 
-    public static function modifyComponentLink($ret, $componentId)
+    public static function modifyComponentLink($ret, $componentId, $settings)
     {
         return $ret .
-            '<div class="cnt">' .
-            count(Kwc_Favourites_Component::getFavouriteComponentIds()) .
+            '<div class="kwcFavouritesPageComponentFavouritesCount">' .
+            count(Kwc_Favourites_Component::getFavouriteComponentIds($settings['favouritesModel'])) .
             '</div>';
     }
 
@@ -36,7 +38,8 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars();
         $user = Kwf_Model_Abstract::getInstance('Users')->getAuthedUser();
         if($user) {
-            $lessonsFavouritesModel = Kwf_Model_Abstract::getInstance('Kwc_Favourites_Model');
+            $lessonsFavouritesModel = Kwf_Model_Abstract::getInstance(Kwc_Abstract::
+                            getSetting($this->getData()->componentClass, 'favouritesModel'));
             $selectFavourites = $lessonsFavouritesModel->select()
                                         ->whereEquals('user_id', $user->id);
             $favourites = $lessonsFavouritesModel->getRows($selectFavourites);
