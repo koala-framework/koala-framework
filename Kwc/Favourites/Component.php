@@ -23,7 +23,7 @@ class Kwc_Favourites_Component extends Kwc_Abstract
             $ret['cssClass'] .= ' isFavourite';
         }
         $ret['config'] = array(
-            'componentId' => $this->getData()->dbId,
+            'componentId' => $this->getData()->componentId,
             'controllerUrl' => Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl(),
             'deleteFavourite' => $this->_getPlaceholder('deleteFavourite'),
             'saveFavourite' => $this->_getPlaceholder('saveFavourite')
