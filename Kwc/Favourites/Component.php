@@ -7,8 +7,8 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $ret['viewCache'] = false;
         $ret['assets']['files'][] = 'kwf/Kwc/Favourites/Component.js';
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
-        $ret['placeholder']['saveFavourite'] = trlKwf('save as favourite');
-        $ret['placeholder']['deleteFavourite'] = trlKwf('delete favourite');
+        $ret['placeholder']['saveFavourite'] = trlKwfStatic('save as favourite');
+        $ret['placeholder']['deleteFavourite'] = trlKwfStatic('delete favourite');
         return $ret;
     }
 
