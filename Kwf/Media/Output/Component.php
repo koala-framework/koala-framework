@@ -15,9 +15,9 @@ class Kwf_Media_Output_Component
             $ret = Kwf_Media_Output_IsValidInterface::VALID;
         } else {
             $ret = Kwf_Media_Output_IsValidInterface::VALID;
-            $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id);
+            $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id);
             if (!$c) {
-                $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
                 if (!$c) return Kwf_Media_Output_IsValidInterface::INVALID;
                 if (Kwf_Component_Data_Root::getShowInvisible()) {
                     //preview im frontend

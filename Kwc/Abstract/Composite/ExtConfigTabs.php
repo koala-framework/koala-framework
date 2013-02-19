@@ -7,6 +7,7 @@ class Kwc_Abstract_Composite_ExtConfigTabs extends Kwf_Component_Abstract_ExtCon
 
         $config = $this->_getStandardConfig('kwf.tabpanel', null);
         $config['activeTab'] = 0;
+        $titles = array();
         foreach ($classes as $id=>$cls) {
             $c = array_values(Kwc_Admin::getInstance($cls)->getExtConfig());
             foreach ($c as $i) {
@@ -15,8 +16,12 @@ class Kwc_Abstract_Composite_ExtConfigTabs extends Kwf_Component_Abstract_ExtCon
                 if (isset($i['componentIdSuffix'])) {
                     $componentIdSuffix .= $i['componentIdSuffix'];
                 }
+                $i['componentIdSuffix'] = $componentIdSuffix;
+                if (!isset($titles[$i['title']])) { $titles[$i['title']] = 0; }
+                if ($titles[$i['title']]++ > 0) {
+                    $i['title'] .= ' ' . $titles[$i['title']];
+                }
                 $config['tabs'][$i['title']] = $i;
-                $config['tabs'][$i['title']]['componentIdSuffix'] = $componentIdSuffix;
             }
         }
         return array('tabs' => $config);

@@ -4,12 +4,12 @@ Kwf.onContentReady(function(el) {
         el.initDone = true;
         el = Ext.get(el);
         var switchContent = el.child('.switchContent');
-        el.hasClass('isFavourite') ? switchContent.update(trlKwf('delete favourite')) : switchContent.update(trlKwf('save as favourite'));
         var config = Ext.decode(el.child('input').dom.value);
+        el.hasClass('isFavourite') ? switchContent.update(config.deleteFavourite) : switchContent.update(config.saveFavourite);
         el.child('a').on('click', function(ev) {
             ev.stopEvent();
             el.toggleClass('isFavourite');
-            el.hasClass('isFavourite') ? switchContent.update(trlKwf('delete favourite')) : switchContent.update(trlKwf('save as favourite'));
+            el.hasClass('isFavourite') ? switchContent.update(config.deleteFavourite) : switchContent.update(config.saveFavourite);
             el.addClass('loading');
             Ext.Ajax.request({
                 url: config.controllerUrl+'/json-favourite',

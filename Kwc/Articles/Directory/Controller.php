@@ -1,7 +1,6 @@
 <?php
 class Kwc_Articles_Directory_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 {
-    protected $_hasComponentId = false;
     protected $_buttons = array('save', 'add');
     protected $_paging = 25;
     protected $_filters = array('text'=>true);

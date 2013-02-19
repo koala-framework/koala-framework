@@ -84,6 +84,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
         //find category + level the changed page is in
         $level = 0;
         $categoryData = $data;
+
         while ($categoryData && !Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory')) {
             if ($categoryData->isPage) $level++;
             $categoryData = $categoryData->parent;
@@ -109,7 +110,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
         } else {
             //category menu level
 
-            if (!$categoryData) continue;
+            if (!$categoryData) return;
 
             //$cat is the category id of changed page
             $cat = Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory');

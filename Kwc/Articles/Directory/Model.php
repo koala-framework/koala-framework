@@ -6,10 +6,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
     protected $_rowClass = 'Kwc_Articles_Directory_Row';
 
     protected $_dependentModels = array(
-        'ArticleToTag' => 'Kwc_Articles_Directory_ToTagModel',
-        'Categories' => 'Kwc_Articles_Directory_ToCategoryModel',
-        'Views' => 'Kwc_Articles_Directory_ViewsModel',
-        'TagSuggestions' => 'Kwc_Articles_Directory_TagSuggestionsModel'
+        'Views' => 'Kwc_Articles_Directory_ViewsModel'
     );
      protected $_referenceMap = array(
          'Author' => 'author_id->Kwc_Articles_Directory_AuthorsModel',

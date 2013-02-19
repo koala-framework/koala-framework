@@ -1,6 +1,8 @@
 <?php
 abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 {
+    private $_pdfWriter;
+
     public static function getChainedComponentClass($masterComponentClass, $prefix)
     {
         $cmp = $masterComponentClass;
@@ -148,6 +150,15 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
     public function getContentWidth()
     {
         return $this->getData()->chained->getComponent()->getContentWidth();
+    }
+
+    public function getPdfWriter($pdf)
+    {
+        if (!isset($this->_pdfWriter)) {
+            $class = Kwc_Admin::getComponentFile($this->getData()->chained->componentClass, 'Pdf', 'php', true);
+            $this->_pdfWriter = new $class($this, $pdf);
+        }
+        return $this->_pdfWriter;
     }
 
     public static function getStaticCacheMeta($componentClass)

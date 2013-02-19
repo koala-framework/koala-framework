@@ -7,22 +7,36 @@
 
 .cssClass button {
     height: auto ;
-    margin: 10px 0px 10px 190px;
     padding: 5px 10px ;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: var(typo);
+    font-size: 12px;
+    color: white;
     line-height: 18px;
-    background: var(light);
-    border: 1px solid var(gray);
+    background: -moz-linear-gradient(top, #5bdf55, #26a31e);
+    background: -webkit-gradient(linear, left top, left bottom, from(#5bdf55), to(#26a31e));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bdf55', endColorstr='#26a31e');
+    border: 1px solid #09c900;
     border-radius: 4px;
+    box-shadow: 1px 2px 2px #555;
 }
 
-.cssClass button:hover { color: var(gray); }
+.cssClass button:hover {
+    cursor: pointer;
+}
+
+.cssClass button:active {
+    cursor: pointer;
+    padding: 6px 11px ;
+    border: none;
+    box-shadow: inset 1px 1px 2px #555;
+    margin-top: 1px;
+    margin-left: 1px;
+}
 
 .cssClass form .kwfField label,
 .cssClass form .kwfField span.fieldContent {
     line-height: 20px;
+    clear: both;
 }
 .cssClass .kwfButtonFlat button {
     font-weight: bold;
@@ -43,11 +57,19 @@
 .cssClass .submitWrapper .afterButton {
     float: left;
 }
+.cssClass .submitWrapper .button {
+    position: relative;
+}
 .cssClass .submitWrapper .saving {
-    background-image: url(/assets/kwf/Kwc/Form/saving.gif);
-    width: 30px;
-    height: 16px;
-    visibility: hidden
+    background-image: url(/assets/kwf/Kwc/Form/loading.gif);
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    visibility: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -12px;
+    margin-top: 4px;
 }
 .cssClass input,
 .cssClass textarea,
@@ -79,14 +101,12 @@
     background: none;
     margin-left: 5px;
     margin-top: 3px;
-    float: left;
 }
 .ext-ie6 .cssClass form .kwfFormFieldCheckbox label {
     margin-right: 0px;
 }
 .cssClass form .kwfFormFieldCheckbox label {
     margin-right: 15px;
-    width: 150px;
 }
 .cssClass label {
     float: left;
@@ -97,9 +117,7 @@
     font-size: 11px;
     color: var(typo);
     line-height: 18px;
-    clear: none;
 }
-.cssClass label.boxLabel { text-align: left; margin-left: 15px;}
 .cssClass .kwfFieldRequired label { font-weight: normal; }
 .webForm .kwfFieldRequired label .requiredSign { display: none; }
 .cssClass .kwfFieldRequired span label { font-weight: normal; }
