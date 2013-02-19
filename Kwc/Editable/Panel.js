@@ -5,7 +5,7 @@ Kwc.Editable.Panel = Ext.extend(Ext.Panel, {
         var componentsGrid = new Kwf.Auto.GridPanel({
             controllerUrl: this.componentsControllerUrl,
             region: 'west',
-            width: 200
+            width: 300
         });
 
         var content = new Kwf.Component.ComponentPanel({

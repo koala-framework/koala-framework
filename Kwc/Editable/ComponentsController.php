@@ -23,7 +23,7 @@ class Kwc_Editable_ComponentsController extends Kwf_Controller_Action_Auto_Grid
     protected function _initColumns()
     {
         parent::_initColumns();
-        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Name'), 190));
+        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Name'), 290));
         $this->_columns->add(new Kwf_Grid_Column('edit_components'))
             ->setData(new Kwc_Editable_ComponentsController_EditComponentsData());
     }
