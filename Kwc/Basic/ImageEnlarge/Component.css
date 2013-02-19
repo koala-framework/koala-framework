@@ -79,6 +79,10 @@
     background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/enlargeIcon.png) no-repeat 0 0;
 }
 
+body.ext-ie8 .cssClass a.kwcEnlargeTag .outerHoverIcon .innerHoverIcon {
+    background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/enlargeIconIE8.png) no-repeat 0 0;
+}
+
 .cssClass a.kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
     background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkInternIcon.png) no-repeat 0 0;
 }
