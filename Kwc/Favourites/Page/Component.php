@@ -16,7 +16,7 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
         return array(
             array(
                 'type' => 'callback',
-                'callback' => array('Kwc_Favourites_Page_Component', 'modifyComponentLink')
+                'callback' => array(get_class($this), 'modifyComponentLink')
             )
         );
     }
