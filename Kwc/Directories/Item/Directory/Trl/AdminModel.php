@@ -48,7 +48,21 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
 
     public function getRow($select)
     {
-        if (is_array($select)) $select = new Kwf_Model_Select($select);
+        if (!is_object($select)) $select = new Kwf_Model_Select($select);
+
+        $id = null;
+        if ($select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
+            foreach ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) as $k=>$i) {
+                if ($k == 'id') $id = $i;
+            }
+        }
+        if ($id) {
+            $c = Kwf_Component_Data_Root::getInstance()
+                ->getComponentByDbId($id, array('ignoreVisible'=>true));
+            $proxyRow = $this->_proxyModel->getRow($c->chained->id);
+            return $this->getRowByProxiedRow($proxyRow, $c->parent->dbId);
+        }
+
         $componentId = $this->_getComponentId($select);
 
         if ($componentId) {
