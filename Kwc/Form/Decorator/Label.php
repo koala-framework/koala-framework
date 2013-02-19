@@ -64,8 +64,10 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                 }
                 if ($item['item']->getFieldLabel()) {
                     $preHtml .= $item['item']->getLabelSeparator();
+                } else {
+                    $preHtml .= '&nbsp;';
                 }
-                $preHtml .= '&nbsp;</label>';
+                $preHtml .= '</label>';
             }
             $postHtml = '';
             if ($item['item'] && $item['item']->getComment()) {
