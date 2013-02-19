@@ -7,7 +7,26 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
         $ret['componentName'] = trlStatic('Favourites');
         $ret['viewCache'] = false;
         $ret['flags']['skipFulltextRecursive'] = true;
+        $ret['flags']['hasComponentLinkModifiers'] = true;
         return $ret;
+    }
+
+    public function getComponentLinkModifiers()
+    {
+        return array(
+            array(
+                'type' => 'callback',
+                'callback' => array('Kwc_Favourites_Page_Component', 'modifyComponentLink')
+            )
+        );
+    }
+
+    public static function modifyComponentLink($ret, $componentId)
+    {
+        return $ret .
+            '<div class="cnt">' .
+            count(Kwc_Favourites_Component::getFavouriteComponentIds()) .
+            '</div>';
     }
 
     public function getTemplateVars()
