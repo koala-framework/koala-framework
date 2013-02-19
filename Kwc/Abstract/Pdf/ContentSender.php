@@ -15,8 +15,7 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
 
     public function outputPdf($name = '', $dest = 'I')
     {
-        $masterClass = Kwc_Admin::getComponentFile($this->_data->componentClass, 'PdfMaster', 'php', true);
-        if (!$masterClass) { $masterClass = 'Kwf_Pdf_TcPdf'; }
+        $masterClass = $this->_getMasterClass($this->_data);
         $pdfComponent = $this->_getPdfComponent();
         if ($pdfComponent instanceof Kwf_Component_Data) {
             $pdfComponent = $pdfComponent->getComponent();
@@ -24,6 +23,13 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
         $pdf = new $masterClass($pdfComponent);
         $pdfComponent->getPdfWriter($pdf)->writeContent();
         return $pdf->output($name, $dest);
+    }
+
+    protected function _getMasterClass($component)
+    {
+        $masterClass = Kwc_Admin::getComponentFile($component->componentClass, 'PdfMaster', 'php', true);
+        if (!$masterClass) { $masterClass = 'Kwf_Pdf_TcPdf'; }
+        return $masterClass;
     }
 
     protected function checkAllowed()
