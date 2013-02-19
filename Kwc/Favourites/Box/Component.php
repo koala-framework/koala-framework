@@ -1,13 +1,6 @@
 <?php
 class Kwc_Favourites_Box_Component extends Kwc_Abstract
 {
-    public static function getSettings()
-    {
-        $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'kwf/Kwc/Favourites/Box/Component.js';
-        return $ret;
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
