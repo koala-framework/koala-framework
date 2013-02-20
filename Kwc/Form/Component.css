@@ -36,7 +36,6 @@
 .cssClass form .kwfField label,
 .cssClass form .kwfField span.fieldContent {
     line-height: 20px;
-    clear: both;
 }
 .cssClass .kwfButtonFlat button {
     font-weight: bold;
@@ -80,6 +79,7 @@
     font-size: 11px;
     color: var(typo);
     line-height: 18px;
+    float: left;
 }
 
 .cssClass input,
