@@ -36,7 +36,7 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $user = Kwf_Model_Abstract::getInstance('Users')->getAuthedUser();
+        $user = Kwf_Registry::get('userModel')->getAuthedUser();
         if($user) {
             $lessonsFavouritesModel = Kwf_Model_Abstract::getInstance(Kwc_Abstract::
                             getSetting($this->getData()->componentClass, 'favouritesModel'));
