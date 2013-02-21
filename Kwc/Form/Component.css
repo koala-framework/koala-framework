@@ -60,16 +60,21 @@
     position: relative;
 }
 .cssClass .submitWrapper .saving {
-    background-image: url(/assets/kwf/Kwc/Form/loading.gif);
-    background-size: 24px 24px;
     width: 24px;
     height: 24px;
     visibility: hidden;
     position: absolute;
     left: 50%;
+    top: 50%;
+    margin-top: -12px;
     margin-left: -12px;
-    margin-top: 4px;
 }
+
+.cssClass .submitWrapper .saving .loading {
+    width: 100%;
+    height: 100%;
+}
+
 .cssClass input,
 .cssClass textarea,
 .cssClass select {
