@@ -6,6 +6,7 @@ abstract class Kwc_Feedback_Form_Component extends Kwc_Form_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwf('Feedback');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Grid';
+        $ret['placeholder']['closeButtonText'] = trlKwfStatic('Cancel');
         return $ret;
     }
 
@@ -22,6 +23,17 @@ abstract class Kwc_Feedback_Form_Component extends Kwc_Form_Component
         $row->component_id = $this->getData()->dbId;
         $row->user_id = Kwf_Registry::get('userModel')->getAuthedUser()->id;
         $row->date = date('Y-m-d H:i:s', time());
+    }
+
+    protected function _initForm()
+    {
+        parent::_initForm();
+        $this->_form->add(new Kwf_Form_Field_Static('<div class="footer"></div>'))    //makes the seperation(for styling) easier
+            ->setCls('footer');
+        $closeText = $this->_getPlaceholder('closeButtonText');
+        $closeButton = '<a class="closeButton">' . $closeText . '</a><div class="clear"></div>';    //Cancel Button
+        $this->_form->add(new Kwf_Form_Field_Static($closeButton))
+            ->setCls('cancel');
     }
 
     // return an array with key email and name
