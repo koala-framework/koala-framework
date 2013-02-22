@@ -10,6 +10,9 @@ Ext.util.Format.booleanRtr = function(v, p, record) {
     p.css += ' x-grid3-check-col-td';
     return '<div class="x-grid3-check-col kwf-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
 };
+Ext.util.Format.booleanText = function(v, p, record) {
+    return v ? trlKwf('Yes') : trlKwf('No');
+};
 Ext.util.Format.booleanIcon = function(value, p, record, rowIndex, colIndex, store, column) {
     if (value) {
         if (column && column.tooltip) {
