@@ -42,10 +42,12 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         } else {
             $this->view->image = false;
         }
-        if (Kwf_Util_Git::web()->getActiveBranch() != 'production'
-            || Kwf_Util_Git::kwf()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id
-        ) {
-            $this->view->untagged = true;
+        if (Kwf_Registry::get('config')->allowUntagged === true) {
+            if (Kwf_Util_Git::web()->getActiveBranch() != 'production'
+                || Kwf_Util_Git::kwf()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id
+            ) {
+                $this->view->untagged = true;
+            }
         }
         $this->view->application = Zend_Registry::get('config')->application->toArray();
         $this->_helper->viewRenderer->setRender('loginheader');
