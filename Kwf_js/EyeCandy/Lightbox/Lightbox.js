@@ -217,7 +217,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     closeAndPushState: function() {
         if (Kwf.Utils.HistoryState.entries > 0) {
             history.back();
+            var previousEntries = Kwf.Utils.HistoryState.entries;
             var closeLightbox = (function() {
+                //didn't change yet, wait a bit longer
+                if (previousEntries == Kwf.Utils.HistoryState.entries) {
+                    closeLightbox.defer(10, this);
+                    return;
+                }
                 //check if there is still a lightbox open
                 //has to be defered because closing happens in 'popstate' event which is async in IE
                 if (Kwf.Utils.HistoryState.currentState.lightbox) {
