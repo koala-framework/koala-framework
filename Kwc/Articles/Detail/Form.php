@@ -47,6 +47,7 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
         }
         $this->add(new Kwf_Form_Field_Select('priority', trlKwf('Priority')))
             ->setAllowBlank(false)
-            ->setValues($priority);
+            ->setValues($priority)
+            ->setHelpText(trlKwfStatic('For sorting articles if they have same date'));
      }
 }
