@@ -46,6 +46,7 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
             $priority[$i] = $i;
         }
         $this->add(new Kwf_Form_Field_Select('priority', trlKwf('Priority')))
+            ->setAllowBlank(false)
             ->setValues($priority);
      }
 }
