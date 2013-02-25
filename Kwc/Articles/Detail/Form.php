@@ -40,5 +40,12 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
         $this->add(new Kwf_Form_Field_Checkbox('is_top', trlKwf('Hot-topic')));
         $this->add(new Kwf_Form_Field_Checkbox('read_required', trlKwf('Required reading')));
         $this->add(new Kwf_Form_Field_Checkbox('only_intern', trlKwf('Only intern')));
+
+        $priority = array();
+        for ($i = 1; $i <= 10; $i++) {
+            $priority[$i] = $i;
+        }
+        $this->add(new Kwf_Form_Field_Select('priority', trlKwf('Priority')))
+            ->setValues($priority);
      }
 }
