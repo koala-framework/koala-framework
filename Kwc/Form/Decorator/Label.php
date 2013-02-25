@@ -46,13 +46,13 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                 $class .= ' '.$item['item']->getFieldName();
             }
             $preHtml = '<div class="'.$class.'">';
-            if ($item['item'] && !$item['item']->getHideLabel()) {
+            if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getFieldLabel()) {
                 $preHtml .= '<label for="'
                     .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName()).'"'
                     .($item['item']->getLabelWidth() ? ' style="width:'.$item['item']->getLabelWidth().'px"' : '')
                 .'>';
                 $preHtml .= $item['item']->getFieldLabel();
-                if ($item['item']->getAllowBlank()===false && $item['item']->getFieldLabel()) {
+                if ($item['item']->getAllowBlank()===false) {
                     /* TODO: wenn wir hier einmal andere Zeichen benötigen oder an einer anderen
                      * Position, dann machen wir eine reine CSS-Lösung:
                      * für alles ausser <IE8 .foo:after { content: '*'; }
