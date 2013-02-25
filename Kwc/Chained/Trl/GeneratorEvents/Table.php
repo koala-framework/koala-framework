@@ -97,9 +97,10 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
             unset($dc['pos']);
         }
         if (isset($dc['component'])) {
+            $classes = $this->_getGenerator()->getChildComponentClasses();
             foreach ($this->_getComponentsFromMasterRow($event->row, array('ignoreVisible'=>false)) as $c) {
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($this->_getClassFromMasterRow($event->row, true), $c));
-                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($this->_getClassFromMasterRow($event->row, false), $c));
+                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($classes[$event->row->component], $c));
+                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($classes[$event->row->component], $c));
             }
             unset($dc['component']);
         }
