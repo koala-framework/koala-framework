@@ -26,7 +26,7 @@ if ($this->showSuccess) {
         <div class="submitWrapper <?=$this->buttonClass?>">
             <div class="beforeButton"></div>
             <div class="button">
-                <div class="saving"><?=$this->image($this->placeholder['loadingImage'], '', 'loading')?></div>
+                <div class="saving"></div>
                 <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit">
                     <span><?= $this->placeholder['submitButton'] ?></span>
                 </button>

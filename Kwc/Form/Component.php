@@ -16,7 +16,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['componentName'] = trlKwfStatic('Form');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
-        $ret['placeholder']['loadingImage'] = '/assets/kwf/Kwc/Form/loading.gif';
         $ret['decorator'] = 'Kwc_Form_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
