@@ -9,8 +9,9 @@ class Kwc_Favourites_BoxTest extends Kwc_TestAbstract
         Kwf_Registry::get('config')->user->model = 'Kwc_Favourites_UserModel';
 
         //unset existing userModel instance to get new one
-        $reg = Kwf_Registry::getInstance();
-        $reg['userModel'] = Kwf_Model_Abstract::getInstance('Kwc_Favourites_UserModel');
+        $reg = Kwf_Registry::getInstance()->set('userModel',
+            Kwf_Model_Abstract::getInstance('Kwc_Favourites_UserModel')
+        );
     }
 
     public function tearDown()
