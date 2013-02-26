@@ -10,8 +10,6 @@ class Kwc_List_Gallery_Component extends Kwc_Abstract_List_Component
         $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
         $ret['cssClass'] = 'webStandard';
 
-        $ret['ownModel'] = 'Kwf_Component_FieldModel';
-
         $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';
 
         $ret['contentMargin'] = 10;
