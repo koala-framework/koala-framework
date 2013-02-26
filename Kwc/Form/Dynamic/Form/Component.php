@@ -76,9 +76,9 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
                     }
                 } else if ($f instanceof Kwf_Form_Field_Checkbox) {
                     if ($row->{$f->getName()}) {
-                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlKwf('on')."\n";
+                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlKwf('Yes')."\n";
                     } else {
-                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlKwf('off')."\n";
+                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlKwf('No')."\n";
                     }
                 } else if ($f instanceof Kwf_Form_Field_MultiCheckbox) {
                     $values = array();
