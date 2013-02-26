@@ -216,8 +216,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     closeAndPushState: function() {
         if (Kwf.Utils.HistoryState.entries > 0) {
-            history.back();
             var previousEntries = Kwf.Utils.HistoryState.entries;
+            history.back();
             var closeLightbox = (function() {
                 //didn't change yet, wait a bit longer
                 if (previousEntries == Kwf.Utils.HistoryState.entries) {
