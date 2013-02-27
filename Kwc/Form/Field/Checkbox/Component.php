@@ -29,9 +29,9 @@ class Kwc_Form_Field_Checkbox_Component extends Kwc_Form_Field_Abstract_Componen
         }
         if ($label) {
             if ($row->{$this->getFormField()->getName()}) {
-                $message = $label.': '.trlKwf('Yes');
+                $message = $label.': '.$this->getData()->trlKwf('Yes');
             } else {
-                $message = $label.': '.trlKwf('No');
+                $message = $label.': '.$this->getData()->trlKwf('No');
             }
         }
         return $message;

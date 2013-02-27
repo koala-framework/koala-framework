@@ -25,7 +25,8 @@ class Kwc_Form_Field_File_Component extends Kwc_Form_Field_Abstract_Component
         if ($uploadRow) {
             $row->addAttachment($uploadRow);
             $message = $this->getFormField()->getFieldLabel()
-                .": {$uploadRow->filename}.{$uploadRow->extension} ".trlKwf('attached');
+                .": {$uploadRow->filename}.{$uploadRow->extension} "
+                        .$this->getData()->trlKwf('attached');
         }
         return $message;
     }
