@@ -66,7 +66,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $msg = '';
         foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
             $f = $c->getComponent()->getFormField();
-            if ($f->getName() && ($this->getFieldLabel() || $f instanceof Kwf_Form_Field_Checkbox)) {
+            if ($f->getName() && ($f->getFieldLabel() || $f instanceof Kwf_Form_Field_Checkbox)) {
                 if ($f instanceof Kwf_Form_Field_File) {
                     $uploadRow = $row->getParentRow($f->getName());
                     if ($uploadRow) {
