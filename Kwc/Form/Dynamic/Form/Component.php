@@ -68,7 +68,10 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
             ->getChildComponent('-paragraphs')
             ->getRecursiveChildComponents(array('flags'=>array('formField'=>true)));
         foreach ($formFieldComponents as $c) {
-            $msg .= $c->getComponent()->getSubmitMessage($row)."\n";
+            $message = $c->getComponent()->getSubmitMessage($row);
+            if ($message) {
+                $msg .= $message."\n";
+            }
         }
         $row->sent_mail_content_text = $msg;
 
