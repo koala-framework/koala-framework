@@ -4,7 +4,10 @@ class Kwc_Articles_Directory_Controller extends Kwf_Controller_Action_Auto_Kwc_G
     protected $_buttons = array('save', 'add');
     protected $_paging = 25;
     protected $_filters = array('text'=>true);
-    protected $_defaultOrder = array('field'=>'date', 'direction'=>'DESC');
+    protected $_defaultOrder = array(
+        array('field'=>'date', 'direction'=>'DESC'),
+        array('field'=>'priority', 'direction'=>'DESC')
+    );
 
     protected function _initColumns()
     {
