@@ -62,4 +62,20 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
         }
         return $this->_formField;
     }
+
+    /**
+     * This function is used to return a human-readable string for this field
+     * depending on submited data.
+     * @param Kwc_Form_Dynamic_Form_MailRow $row
+     * @return string
+     */
+    public function getSubmitMessage($row)
+    {
+        $message = '';
+        if ($this->getFormField()->getFieldLabel()) {
+            $message = $this->getFormField()->getFieldLabel().': '
+                        .$row->{$this->getFormField()->getName()};
+        }
+        return $message;
+    }
 }

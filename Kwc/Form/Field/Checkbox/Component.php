@@ -19,4 +19,21 @@ class Kwc_Form_Field_Checkbox_Component extends Kwc_Form_Field_Abstract_Componen
         $ret->setHideLabel($this->getRow()->hide_label);
         return $ret;
     }
+
+    public function getSubmitMessage($row)
+    {
+        $message = '';
+        $label = $this->getFormField()->getFieldLabel();
+        if (!$label) {
+            $label = $this->getFormField()->getBoxLabel();
+        }
+        if ($label) {
+            if ($row->{$this->getFormField()->getName()}) {
+                $message = $label.': '.trlKwf('Yes');
+            } else {
+                $message = $label.': '.trlKwf('No');
+            }
+        }
+        return $message;
+    }
 }

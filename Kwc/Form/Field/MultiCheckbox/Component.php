@@ -28,4 +28,25 @@ class Kwc_Form_Field_MultiCheckbox_Component extends Kwc_Form_Field_Abstract_Com
         $ret->setValues($values);
         return $ret;
     }
+
+    public function getSubmitMessage($row)
+    {
+        $message = '';
+        $values = array();
+        foreach ($row->getChildRows($this->getFormField()->getName()) as $r) {
+            if (substr($r->value_id, 0, strlen($this->getFormField()->getName()))
+                     == $this->getFormField()->getName()) {
+                $values[] = $r->value_id;
+            }
+        }
+        $valuesText = array();
+        foreach ($this->getFormField()->getValues() as $k=>$i) {
+            if (in_array($k, $values)) {
+                $valuesText[] = $i;
+            }
+        }
+        $message = $this->getFormField()->getFieldLabel().': '.implode(', ', $valuesText);
+
+        return $message;
+    }
 }

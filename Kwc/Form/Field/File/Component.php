@@ -17,4 +17,16 @@ class Kwc_Form_Field_File_Component extends Kwc_Form_Field_Abstract_Component
         $ret->setHideLabel($this->getRow()->hide_label);
         return $ret;
     }
+
+    public function getSubmitMessage($row)
+    {
+        $message = '';
+        $uploadRow = $row->getParentRow($this->getFormField()->getName());
+        if ($uploadRow) {
+            $row->addAttachment($uploadRow);
+            $message = $this->getFormField()->getFieldLabel()
+                .": {$uploadRow->filename}.{$uploadRow->extension} ".trlKwf('attached');
+        }
+        return $message;
+    }
 }

@@ -64,48 +64,12 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $row->addCc($settings['recipient_cc']);
         $row->setSubject($settings['subject']);
         $msg = '';
-        foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
-            $f = $c->getComponent()->getFormField();
-            if ($f->getName() && ($f->getFieldLabel() || $f instanceof Kwf_Form_Field_Checkbox)) {
-                if ($f instanceof Kwf_Form_Field_File) {
-                    $uploadRow = $row->getParentRow($f->getName());
-                    if ($uploadRow) {
-                        $row->addAttachment($uploadRow);
-                        $msg .= $f->getFieldLabel().": {$uploadRow->filename}.{$uploadRow->extension} ".trlKwf('attached')."\n";
-                    }
-                } else if ($f instanceof Kwf_Form_Field_Checkbox) {
-                    $label = $f->getFieldLabel();
-                    if (!$label) {
-                        $label = $f->getBoxLabel();
-                    }
-                    if ($label) {
-                        if ($row->{$f->getName()}) {
-                            $msg .= $label.': '.$this->getData()->trlKwf('Yes')."\n";
-                        } else {
-                            $msg .= $label.': '.$this->getData()->trlKwf('No')."\n";
-                        }
-                    }
-                } else if ($f instanceof Kwf_Form_Field_MultiCheckbox) {
-                    $values = array();
-                    foreach ($row->getChildRows($f->getName()) as $r) {
-                        if (substr($r->value_id, 0, strlen($f->getName())) == $f->getName()) {
-                            $values[] = $r->value_id;
-                        }
-                    }
-                    $valuesText = array();
-                    foreach ($f->getValues() as $k=>$i) {
-                        if (in_array($k, $values)) {
-                            $valuesText[] = $i;
-                        }
-                    }
-                    $msg .= $f->getFieldLabel().': '.implode(', ', $valuesText)."\n";
-
-                } else {
-                    $msg .= $f->getFieldLabel().': '.$row->{$f->getName()}."\n";
-                }
-            }
+        $formFieldComponents = $this->getData()->parent
+            ->getChildComponent('-paragraphs')
+            ->getRecursiveChildComponents(array('flags'=>array('formField'=>true)));
+        foreach ($formFieldComponents as $c) {
+            $msg .= $c->getComponent()->getSubmitMessage($row)."\n";
         }
-
         $row->sent_mail_content_text = $msg;
 
         $row->sendMail(); //manuell aufrufen weils beim speichern nicht automatisch gemacht wird (da da der content nocht nicht vorhanden ist)
