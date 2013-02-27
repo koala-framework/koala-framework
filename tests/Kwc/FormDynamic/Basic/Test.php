@@ -29,7 +29,7 @@ class Kwc_FormDynamic_Basic_Test extends Kwc_TestAbstract
 
         $text = $row->sent_mail_content_text;
         $this->assertContains('Required: asdfasdf', $text);
-        $this->assertContains('Check: off', $text);
-        $this->assertContains('CheckDefault: on', $text);
+        $this->assertContains('Check: No', $text);
+        $this->assertContains('CheckDefault: Yes', $text);
     }
 }
