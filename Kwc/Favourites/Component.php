@@ -7,7 +7,6 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $ret['viewCache'] = false;
         $ret['assets']['files'][] = 'kwf/Kwc/Favourites/Component.js';
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
-        $ret['assets']['dep'][] = 'KwfTestCore';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'ExtConnection';
 
