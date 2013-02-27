@@ -123,11 +123,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                     $queryFields = array();
                     foreach ($this->_columns as $column) {
                         $index = $column->getDataIndex();
-                        if ($info = $this->_getTableInfo()) {
-                            if (!isset($info['metadata'][$index])) continue;
-                        } else if ($this->_model) {
-                            if (!in_array($index, $this->_model->getColumns())) continue;
-                        }
+                        if (!in_array($index, $this->_model->getColumns())) continue;
                         $queryFields[] = $index;
                     }
                 }
@@ -861,7 +857,17 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $csvRows = array();
             foreach ($data as $row => $cols) {
                 $cols = str_replace('"', '""', $cols);
-                $csvRows[] = '"'. implode('";"', $cols) .'"';
+                //check if charset is forced in config
+                $importCols = array();
+                if (Kwf_Registry::get('config')->csvWindowsCharset) {
+                    foreach ($cols as $col) {
+                        $col = mb_convert_encoding($col, 'Windows-1252', 'UTF-8');
+                        $importCols[] = $col;
+                    }
+                } else {
+                    $importCols = $cols;
+                }
+                $csvRows[] = '"'. implode('";"', $importCols) .'"';
                 $this->_progressBar->next(1, trlKwf('Writing data'));
             }
 
@@ -1004,7 +1010,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $file = array(
             'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xls'),
-            'mimeType' => 'application/octet-stream',
+            'mimeType' => 'application/msexcel',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
         );
         Kwf_Media_Output::output($file);

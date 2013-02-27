@@ -6,13 +6,13 @@ class Kwc_User_Login_Form_FrontendForm extends Kwf_Form
         parent::_init();
         $this->_model = new Kwf_Model_FnF();
 
-        $this->add(new Kwf_Form_Field_TextField('email', trlKwf('E-Mail')))
+        $this->add(new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
                     ->setVtype('email')
                     ->setAllowBlank(false);
 
-        $this->add(new Kwf_Form_Field_Password('password', trlKwf('Password')))
+        $this->add(new Kwf_Form_Field_Password('password', trlKwfStatic('Password')))
                     ->setAllowBlank(false);
 
-        $this->add(new Kwf_Form_Field_Checkbox('auto_login', trlKwf('Auto Login')));
+        $this->add(new Kwf_Form_Field_Checkbox('auto_login', trlKwfStatic('Auto Login')));
     }
 }

@@ -11,9 +11,11 @@ class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
         return $ret;
     }
 
-    /*
-    abstract public static function getItemDirectoryClasses($directoryClass)
-    */
+    public static function getItemDirectoryClasses($directoryClass)
+    {
+        //TODO
+        return array();
+    }
 
     public function getItemDirectory()
     {

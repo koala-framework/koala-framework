@@ -10,11 +10,13 @@ class Kwf_Form_Container_FieldSet_Hidden extends Kwf_Form_Field_Hidden
         return 'hidden';
     }
 
-    protected function _getValueFromPostData($postData)
+    public function processInput($row, $postData)
     {
         $fieldName = $this->getFieldName();
-        if (!isset($postData[$fieldName])) $postData[$fieldName] = $this->getDefaultValue();
-        return (bool)$postData[$fieldName];
+        if (isset($postData[$fieldName.'-post'])) {
+            $postData[$fieldName] = (int)isset($postData[$fieldName]);
+        }
+        return $postData;
     }
 
     protected function _processLoaded($value)

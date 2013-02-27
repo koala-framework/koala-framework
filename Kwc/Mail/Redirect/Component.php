@@ -2,6 +2,7 @@
 class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 {
     protected $_params = array();
+    protected $_redirectRow = null;
 
     public static function getSettings()
     {
@@ -15,7 +16,10 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
     public final function getRedirectRow()
     {
-        return $this->_getRedirectRow();
+        if (!$this->_redirectRow) {
+            $this->_redirectRow = $this->_getRedirectRow();
+        }
+        return $this->_redirectRow;
     }
 
     protected function _getRedirectRow()
@@ -84,7 +88,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $statRow->save();
         }
 
-        $r = $this->_getRedirectRow();
+        $r = $this->getRedirectRow();
         if ($r->type == 'showcomponent') {
             $recipientRow = Kwf_Model_Abstract::getInstance($params['recipientModelClass'])
                 ->getRow($params['recipientId']);

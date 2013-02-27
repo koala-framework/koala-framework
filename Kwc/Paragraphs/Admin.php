@@ -1,9 +1,9 @@
 <?php
 class Kwc_Paragraphs_Admin extends Kwc_Admin
 {
-    public function gridColumns()
+    public function componentToString($c)
     {
-        return array();
+        return Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($c->componentClass, 'componentName'));
     }
 
     //gibts nimma

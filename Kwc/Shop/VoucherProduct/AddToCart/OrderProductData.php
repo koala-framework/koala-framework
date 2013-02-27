@@ -3,7 +3,7 @@ class Kwc_Shop_VoucherProduct_AddToCart_OrderProductData extends Kwc_Shop_AddToC
 {
     public function getPrice($orderProduct)
     {
-        return $orderProduct->amount;
+        return $orderProduct->value;
     }
 
     public function getAmount($orderProduct)

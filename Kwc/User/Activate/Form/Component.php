@@ -63,7 +63,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         } else {
             $userId = (int)$code[0];
             $code = $code[1];
-            $userModel = Zend_Registry::get('userModel');
+            $userModel = Zend_Registry::get('userModel')->getKwfModel();
             $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
             if (!$this->_user) {
                 $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
@@ -77,23 +77,13 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
             }
         }
 
-        Kwf_Auth::getInstance()->clearIdentity();
-
         if ($this->_user && $this->isSaved()) {
-            $this->_user->setPassword($this->_form->getRow()->password);
-            if (!$this->_user->logins) {
-                $this->_user->logins = 0;
-            }
-            $this->_user->logins += 1;
-            $this->_user->last_login = date('Y-m-d H:i:s');
-            $this->_user->save();
-            $auth = Kwf_Auth::getInstance();
-            $auth->getStorage()->write(array('userId' => $this->_user->id));
+            $userModel->setPassword($this->_user, $this->_form->getRow()->password);
             $this->_afterLogin(Kwf_Registry::get('userModel')->getAuthedUser());
         }
     }
 
-    protected function _afterLogin(Kwf_User_Row $user)
+    protected function _afterLogin(Kwf_Model_Row_Abstract $user)
     {
     }
 }

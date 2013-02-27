@@ -90,6 +90,7 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
                 $ret['preHtml'] .= "<input type=\"checkbox\" name=\"$n\" ";
                 if ($value) $ret['preHtml'] .= 'checked="checked" ';
                 $ret['preHtml'] .= "/>";
+                $ret['preHtml'] .= "<input type=\"hidden\" name=\"$n-post\" value=\"1\" />";
             }
             $ret['preHtml'] .= " {$this->getTitle()}</legend>";
         }

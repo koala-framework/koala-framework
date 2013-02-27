@@ -303,6 +303,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             );
         }
 
+        $baseParams = $this->_getBaseParams();
+        $baseParams['componentId'] = $this->getData()->componentId;
+
         $fieldConfig = array();
         $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_RecursiveFormFields($this->_form->fields));
         foreach ($iterator as $field) {
@@ -318,9 +321,20 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,
             'errorStyle' => $errorStyle,
+            'baseParams' => $baseParams
         );
 
         return $ret;
+    }
+
+    /**
+     * Return base params that will be sent with Ajax request. Won't be used for fallback POST request.
+     *
+     * @return array
+     */
+    protected function _getBaseParams()
+    {
+        return array();
     }
 
     // used by Kwc_Form_FrontendFormController

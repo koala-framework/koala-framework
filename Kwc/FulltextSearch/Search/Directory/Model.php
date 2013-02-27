@@ -36,14 +36,26 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
         $limitOffset = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
 
         $queryString = '';
-        if ($select->getPart(KWf_Model_Select::WHERE_EXPRESSION)) {
-            foreach ($select->getPart(KWf_Model_Select::WHERE_EXPRESSION) as $exp) {
+        $params = array();
+        if ($select->getPart(Kwf_Model_Select::WHERE_EXPRESSION)) {
+            foreach ($select->getPart(Kwf_Model_Select::WHERE_EXPRESSION) as $exp) {
                 if ($exp instanceof Kwf_Model_Select_Expr_SearchLike) {
                     foreach ($exp->getSearchValues() as $field=>$value) {
                         if ($field == 'query') {
                             $queryString = $value;
                         }
                     }
+                }
+            }
+        }
+        if ($select->getPart(Kwf_Model_Select::WHERE_NOT_EQUALS)) {
+            foreach ($select->getPart(Kwf_Model_Select::WHERE_NOT_EQUALS) as $field=>$value) {
+                if (isset($params['fq'])) {
+                    //if more than one fields should be queried they are apended with +
+                    $params['fq'] .= '+'.'-'.$field.':'.$value;
+                } else {
+                    //format is: -field:value for negation
+                    $params['fq'] = '-'.$field.':'.$value;
                 }
             }
         }
@@ -54,7 +66,7 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
         $subroot = Kwf_Component_Data_Root::getInstance(); //TODO dynamic
 
         $res = Kwf_Util_Fulltext_Backend_Abstract::getInstance()
-            ->userSearch($subroot, $queryString, $limitOffset, $limitCount, array());
+            ->userSearch($subroot, $queryString, $limitOffset, $limitCount, $params);
 
         if ($res['error']) {
             throw new Kwf_Exception("Fulltext error: ".$res['error']);

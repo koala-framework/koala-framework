@@ -23,9 +23,9 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             $view->assign($vars);
             return $view->render($this->_getRenderer()->getTemplate($component, 'Master'));
         } else if ($last['type'] == 'component') {
-            $plugins = $component->getPlugins();
+            $plugins = self::_getGroupedViewPlugins($component->componentClass);
             return '<div class="kwfMainContent" style="width: ' . $component->getComponent()->getContentWidth() . 'px">' . "\n    " .
-                $this->_getRenderPlaceholder($component->componentId, array(), null, 'component', $plugins) . "\n" . 
+                $this->_getRenderPlaceholder($component->componentId, array(), null, 'component', $plugins) . "\n" .
                 '</div>' . "\n";
         } else {
             throw new Kwf_Exception("invalid type");

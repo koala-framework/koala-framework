@@ -30,9 +30,8 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
 
     public function processInput(array $postData)
     {
-        // Wenn es eine Search-Form gibt und diese nicht unter der eigenen Page
-        // liegt, manuell processen - das Flag muss allerdings manuell gesetzt
-        // werden!
+        // if search-form exists and it doesn't exists as under this page,
+        // process it manually - the flag must be set manually!
         $searchForm = $this->_getSearchForm();
         if ($searchForm && !$searchForm->getComponent()->isProcessed()) {
             $searchForm->getComponent()->processInput($postData);
@@ -69,15 +68,22 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         }
 
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
-            $values = $searchForm->getComponent()->getFormRow()->toArray();
-            unset($values['id']);
-            $ret->where(new Kwf_Model_Select_Expr_SearchLike($values, $this->_getSetting('searchQueryFields')));
+            $ret = $this->_getSearchSelect($ret, $searchForm->getComponent()->getFormRow());
         }
 
-        // Limit-Setting beschränkt Einträge auf bestimmte Anzahl (zB für LiveSearch)
+        // setting to limit the count of entries (for example LiveSearch)
         if ($this->_hasSetting('limit')) {
             $ret->limit($this->_getSetting('limit'));
         }
+        return $ret;
+    }
+
+    // rewrite this function if you want a specific search form select
+    protected function _getSearchSelect($ret, $searchRow)
+    {
+        $values = $searchRow->toArray();
+        unset($values['id']);
+        $ret->where(new Kwf_Model_Select_Expr_SearchLike($values, $this->_getSetting('searchQueryFields')));
         return $ret;
     }
 
@@ -138,7 +144,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         return $ret;
     }
 
-    // für helper partialPaging
+    // for helper partialPaging
     public function getPartialParams()
     {
         $paging = $this->_getPagingComponent();
@@ -194,8 +200,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         return $ret;
     }
 
-    // Liefert zurück, ob es noch nicht ausgegebene Elemente gibt, falls
-    // das Setting Limit gesetzt wurde
+    // if setting limit is set, it will return hidden elements with paging
     public function moreItemsAvailable()
     {
         $select = $this->_getSelect();
@@ -234,11 +239,12 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             $callClass = substr($dirClass, 0, strpos($dirClass, '.'));
         }
 
-        // Das Directory fragen, weil nur das weiß, welches Meta/Pattern benötigt wird
+        // ask the directory which meta/pattern is required, because only
+        // the directory know this
         $ret = call_user_func(array($callClass, 'getCacheMetaForView'), $this->getData());
 
-        // View ist bei Trl auch die Gleiche, deshalb hier Partial-Meta dazugeben
-        // mit dem Generator-Model, weil das ist das Model mit den Daten für die View
+        // trl view is the same, therefore add partial-meta to generator-model,
+        // because this is the model with the data for the view
         if (is_string($dir)) {
             $dirs = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($dir);
         } else {

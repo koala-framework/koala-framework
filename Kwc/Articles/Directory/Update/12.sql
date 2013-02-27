@@ -1,0 +1,1 @@
+ALTER TABLE  `kwc_articles` ADD  `component_id` VARCHAR( 200 ) NOT NULL AFTER  `id`;

@@ -1,5 +1,5 @@
 <?php
-class Kwf_User_Model extends Kwf_Model_RowCache
+class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterface
 {
     protected $_rowClass = 'Kwf_User_Row';
     protected $_authedUser;
@@ -75,7 +75,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         }
         $this->_lock = fopen("temp/create-user.lock", "w");
 
-        $startTime = microtime(true); 
+        $startTime = microtime(true);
         while(true) {
             if (flock($this->_lock, LOCK_EX | LOCK_NB)) {
                 break;
@@ -94,7 +94,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
      */
     public function createUserRow($email, $webcode = null)
     {
-        return parent::createRow(array('email' => $email));
+        $row = parent::createRow(array('email' => $email));
+        $this->_resetPermissions($row);
+        return $row;
     }
 
     /**
@@ -157,6 +159,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
                         'messages'           => array(trlKwf('Account is locked'))
                     );
                 }
+                Kwf_Auth::getInstance()->getStorage()->write(array(
+                    'userId' => $row->id
+                ));
 
                 return array(
                     'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
@@ -198,6 +203,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
                 $this->_realLoginModifyRow($row);
             }
 
+            Kwf_Auth::getInstance()->getStorage()->write(array(
+                'userId' => $row->id
+            ));
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
                 'identity'           => $identity,
@@ -247,6 +255,16 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             return trlKwf('Error sending the mail.');
         }
+    }
+
+    public function setPassword($user, $password)
+    {
+        Kwf_Auth::getInstance()->clearIdentity();
+        $user->setPassword($password);
+        $this->_realLoginModifyRow($user);
+        $auth = Kwf_Auth::getInstance();
+        $auth->getStorage()->write(array('userId' => $user->id));
+        return null;
     }
 
     public function getAuthedUserId()
@@ -314,6 +332,17 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         return $role;
     }
 
+    public function changeUser($user)
+    {
+        $storage = Kwf_Auth::getInstance()->getStorage();
+        $loginData = $storage->read();
+        if (!isset($loginData['changeUserId'])) {
+            $loginData['changeUserId'] = $loginData['userId'];
+        }
+        $loginData['userId'] = $user->id;
+        $storage->write($loginData);
+    }
+
     public function synchronize($overrideMaxSyncDelay = Kwf_Model_MirrorCache::SYNC_AFTER_DELAY)
     {
         //NOOP, implemented in Service_Model
@@ -336,4 +365,8 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         return $this->_noLogColumns;
     }
 
+    public function getKwfModel()
+    {
+        return $this;
+    }
 }

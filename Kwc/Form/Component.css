@@ -40,14 +40,9 @@
     margin-left: 1px;
 }
 
-.cssClass .form_housenumber,
-.cssClass .form_city {
-    clear: none;
-}
 .cssClass form .kwfField label,
 .cssClass form .kwfField span.fieldContent {
     line-height: 20px;
-    clear: both;
 }
 .cssClass .kwfButtonFlat button {
     font-weight: bold;
@@ -72,16 +67,17 @@
     position: relative;
 }
 .cssClass .submitWrapper .saving {
-    background-image: url(/assets/kwf/Kwc/Form/loading.gif);
-    background-size: 24px 24px;
     width: 24px;
     height: 24px;
+    background-image: url(/assets/kwf/Kwc/Form/loading.gif);
     visibility: hidden;
     position: absolute;
     left: 50%;
+    top: 50%;
+    margin-top: -12px;
     margin-left: -12px;
-    margin-top: 4px;
 }
+
 .cssClass input,
 .cssClass textarea,
 .cssClass select {
@@ -92,6 +88,7 @@
     color: var(typo);
     line-height: 18px;
     outline: none;
+    float: left;
 }
 
 .cssClass input,

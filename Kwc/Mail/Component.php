@@ -22,9 +22,6 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/PreviewWindow.js';
         $ret['assetsAdmin']['dep'][] = 'ExtWindow';
-        $ret['mailPlugins'] = array(
-            'placeholders' => 'Kwc_Mail_PlaceholdersPlugin',
-        );
         $ret['ownModel'] = 'Kwc_Mail_Model';
         $ret['componentName'] = 'Mail';
 

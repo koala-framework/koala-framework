@@ -169,7 +169,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
         $plugins = $this->_getSetting('plugins');
         foreach ($plugins as $p) {
-            if (is_instance_of($p, 'Kwf_Component_Plugin_View_Abstract')) {
+            if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewAfterChildRender')) {
                 $p = new $p($this->getData()->componentId);
                 $ret = $p->processMailOutput($ret, $recipient);
             }

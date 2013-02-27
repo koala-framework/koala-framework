@@ -7,6 +7,7 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
     protected $_modelName = 'Kwc_Newsletter_QueueModel';
     protected $_queryFields = array('searchtext');
     protected $_sortable = false;
+    private $_newsletterRow;
 
     public function preDispatch()
     {
@@ -67,9 +68,11 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
 
     private function _getNewsletterRow()
     {
-        $newsletterId = (int)substr(strrchr($this->_getParam('componentId'), '_'), 1);
-        $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model');
-        return $model->getRow($newsletterId);
+        if (!$this->_newsletterRow) {
+            $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'));
+            $this->_newsletterRow = $component->row;
+        }
+        return $this->_newsletterRow;
     }
 
     public function jsonChangeStatusAction()

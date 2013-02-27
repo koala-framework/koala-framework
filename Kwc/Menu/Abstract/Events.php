@@ -3,6 +3,20 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 {
     protected $_numLevels = 1; //overridden in Menu_Expanded
 
+    protected $_level; //level setting of menu
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_initSettings();
+    }
+
+    //overwritten in Kwc_Menu_Trl_Events
+    protected function _initSettings()
+    {
+        $this->_level = $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
+    }
+
     public function getListeners()
     {
         $ret = parent::getListeners();
@@ -56,7 +70,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 
     public function onPageChanged(Kwf_Component_Event_Component_Abstract $event)
     {
-        $menuLevel = Kwc_Abstract::getSetting($this->_class, 'level');
+        $menuLevel = $this->_level;
 
         $data = $event->component;
 
@@ -67,13 +81,17 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
             return;
         }
 
+        //find category + level the changed page is in
         $level = 0;
         $categoryData = $data;
+
         while ($categoryData && !Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory')) {
             if ($categoryData->isPage) $level++;
             $categoryData = $categoryData->parent;
         }
+
         if (is_int($menuLevel)) {
+            //numeric menu level
             if ($level+1 >= $menuLevel && $level+1 <= $menuLevel+$this->_numLevels) {
                 $l = $level + 1;
                 while ($data) {
@@ -90,25 +108,36 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                 }
             }
         } else {
-            if (!$categoryData) continue;
+            //category menu level
+
+            if (!$categoryData) return;
+
+            //$cat is the category id of changed page
             $cat = Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory');
             if ($cat) {
                 if ($cat === true) $cat = $categoryData->id;
             }
+
             if ($cat === $menuLevel && $level >= 1 && $level <= $this->_numLevels) {
+                //this menu shows this changed and not in a lower level
                 $s = array(
                     'subroot' => $data
                 );
-                foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+                foreach (Kwc_Abstract::getComponentClasses() as $cls) { //get all categories
                     $c = Kwc_Abstract::getFlag($cls, 'menuCategory');
                     $cmps = array();
+                    //get category that changed
                     if ($c === true) {
                         $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls, array('id'=>$cat, 'subRoot'=>$data));
                     } else if ($c == $cat) {
                         $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($cls, array('subRoot'=>$data));
+                    } else {
+                        continue;
                     }
                     foreach ($cmps as $i) {
+                        //get menu that changed
                         foreach ($i->getRecursiveChildComponents(array('componentClass'=>$this->_class)) as $m) {
+                            //do what needs to be done if menu item changed
                             $this->_onMenuChanged($event, $m);
                         }
                     }

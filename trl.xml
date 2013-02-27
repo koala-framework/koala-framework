@@ -439,6 +439,7 @@
 <uk>Надіслати</uk>
 <sl>Pošlji</sl>
 <bg>Изпрати</bg>
+<hu>Küldés</hu>
 </text>
 <text>
 <en>Validator</en>
@@ -655,7 +656,7 @@
 <ru>Активировать аккаунт пользователя</ru>
 </text>
 <text>
-<en>Plese enter in both fields the password which you want to use for your useraccount</en>
+<en>Please enter in both fields the password which you want to use for your useraccount</en>
 <de>Bitte geben Sie in beide Felder das gewünschte Passwort für Ihr Benutzerkonto ein</de>
 <id>160</id>
 <ro>Vă rugăm să introduceţi în ambele câmpuri parola pe care doriţi să o utilizaţi pentru contul dumneavoastră</ro>
@@ -689,6 +690,7 @@
 <es>Femenino</es>
 <bg>Жена </bg>
 <ru>Женский</ru>
+<mk>Женски</mk>
 </text>
 <text>
 <en>Male</en>
@@ -2294,6 +2296,7 @@
 <ro>lipsă selecţie</ro>
 <sl>Ni izbrano.</sl>
 <ru>не выбрано</ru>
+<hu>kérjük válasszon</hu>
 </text>
 <text>
 <en>add new entry</en>
@@ -3039,6 +3042,7 @@
 <uk>Ваш лист було успішно відправлено.</uk>
 <ro>Formularul a fost trimis cu succes.</ro>
 <sl>Obrazec je bil uspešno poslan.</sl>
+<hu>Az űrlapot sikeresen elküldtük</hu>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -3361,7 +3365,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izbriši vnos</sl>
 </text>
 <text>
-<en>repeat {0}</en>
+<en>Repeat {0}</en>
 <de>{0} wiederholen</de>
 <id>706</id>
 <ro>repetă {0}</ro>
@@ -3383,6 +3387,9 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Vă rugăm să completaţi câmpul</ro>
 <sl>Izpolnite polje</sl>
 <uk>Необхідно заповнити поле</uk>
+<mk>Во молиме внесете текст во полето</mk>
+<hu>Kérjük töltse ki a mezőt</hu>
+<bg>Во молиме внесете текст во полето</bg>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -4578,6 +4585,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>947</id>
 <ro>mai multe informaţii</ro>
 <sl>Več informacij</sl>
+<mk>повеќе информации</mk>
 </text>
 <text>
 <en>Amazon.Nodes</en>
@@ -5044,6 +5052,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1028</id>
 <de>Details</de>
 <ro>Detalii</ro>
+<sl>Podrobnosti</sl>
 </text>
 <text>
 <en>User '%value%' does already exist</en>
@@ -5070,7 +5079,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <fr>imprimer</fr>
 <it>marchio</it>
 <ro>Copyright</ro>
-<sl>Impresum.Impresum</sl>
+<sl>Impresum</sl>
 <uk>Контакти</uk>
 </text>
 <text>
@@ -5249,6 +5258,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1071</id>
 <de>News</de>
 <ro>Ştiri</ro>
+<sl>Novice</sl>
 </text>
 <text>
 <en>Link.to News</en>
@@ -5361,12 +5371,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1103</id>
 <de>sichtbar</de>
 <ro>vizibil</ro>
+<sl>vidno</sl>
 </text>
 <text>
 <en>invisible</en>
 <id>1104</id>
 <de>unsichtbar</de>
 <ro>invizibil</ro>
+<sl>skrito</sl>
 </text>
 <text>
 <en>Google Maps</en>
@@ -5385,6 +5397,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1109</id>
 <de>Es ist keine Zeile ausgewählt</de>
 <ro>Nu este selectat niciun rând</ro>
+<sl>Nobena vrsta ni izbrana</sl>
 </text>
 <text>
 <en>Show locked users too</en>
@@ -5416,6 +5429,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1114</id>
 <de>Bitte wählen</de>
 <ro>Vă rugăm să selectaţi</ro>
+<mk>Ве молиме одберете</mk>
+<sl>Prosimo izberite</sl>
 </text>
 <text>
 <en>Root</en>
@@ -5461,6 +5476,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1122</id>
 <de>fertig</de>
 <ro>finalizat</ro>
+<sl>končano</sl>
 </text>
 <text>
 <en>Show locked users</en>
@@ -5599,6 +5615,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1144</id>
 <de>HTML</de>
 <ro>HTML</ro>
+<sl>HTML</sl>
 </text>
 <text>
 <en>Newsletter Preview</en>
@@ -5657,6 +5674,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Format</de>
 <ro>Format</ro>
 <bg>Формат</bg>
+<sl>format</sl>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -5746,6 +5764,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1168</id>
 <de>Newsletter</de>
 <ro>Newsletter</ro>
+<sl>Novice</sl>
 </text>
 <text>
 <en>Newsletter stopped, cannot start again.</en>
@@ -5822,12 +5841,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1183</id>
 <de>Sortieren nach {0}</de>
 <ro>Aranjează după {0}</ro>
+<sl>Razvrstiti po {0}</sl>
 </text>
 <text>
 <en>Texts</en>
 <id>1184</id>
 <de>Texte</de>
 <ro>Texte</ro>
+<sl>Tekst</sl>
 </text>
 <text>
 <en>Useraccount activated</en>
@@ -6003,6 +6024,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1217</id>
 <de>Dauer (Tage)</de>
 <ro>durată (zile)</ro>
+<sl>trajanje (dnevi)</sl>
 </text>
 <text>
 <en>Cache lifetime (minutes)</en>
@@ -6112,6 +6134,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1233</id>
 <de>Standard</de>
 <ro>Standard</ro>
+<sl>Standardno</sl>
 </text>
 <text>
 <en>Can only add users to a paused newsletter</en>
@@ -6306,6 +6329,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1270</id>
 <ro>Format HTML</ro>
 <bg>HTML-формат</bg>
+<mk>HTML-Формат</mk>
+<sl>HTML-format</sl>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6314,6 +6339,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1271</id>
 <ro>Format Text</ro>
 <bg>Текстов формат</bg>
+<mk>Текст-Формат</mk>
+<sl>tekstovni format</sl>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -7034,14 +7061,20 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>C</en>
 <de>de_AT.UTF-8, de.UTF-8, de_DE.UTF-8</de>
 <id>1382</id>
+<bg>bg</bg>
+<uk>uk</uk>
 <ro>ro</ro>
+<mk>mk</mk>
+<cz>cz</cz>
 <sl>sl</sl>
+<es>es</es>
 </text>
 <text>
 <en>hide</en>
 <id>1385</id>
 <de>verbergen</de>
 <ro>ascunde</ro>
+<sl>skrij</sl>
 </text>
 <text>
 <en>You can not {0} this entry as it is used on the following pages:</en>
@@ -7060,6 +7093,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1388</id>
 <de>Ihr Passwort</de>
 <ro>Parola dumneavoastră</ro>
+<sl>Vaše geslo</sl>
 </text>
 <text>
 <en>The password was changed successfully</en>
@@ -7223,6 +7257,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1425</id>
 <de>Typ</de>
 <ro>Tip</ro>
+<sl>Tip</sl>
 </text>
 <text>
 <en>Document</en>
@@ -7287,6 +7322,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1438</id>
 <ro>Vă rugăm să selectaţi o opţiune</ro>
 <sl>Izberite eno od možnosti</sl>
+<mk>Ве молиме изберете опција</mk>
+<bg>Ве молиме изберете опција</bg>
 </text>
 <text>
 <en>No Filedata received.</en>
@@ -7300,6 +7337,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1441</id>
 <de>Flagge</de>
 <ro>Marcat</ro>
+<sl>Zastava</sl>
 </text>
 <text>
 <en>Social Bookmarks</en>
@@ -7341,18 +7379,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Original Image</en>
 <id>1448</id>
 <de>Original Bild</de>
+<sl>Originalna slika</sl>
 </text>
 <text>
 <en>Own Image</en>
 <id>1449</id>
 <de>Eigenes Bild</de>
 <ro>Imagine proprie</ro>
+<sl>Lastna slika</sl>
 </text>
 <text>
 <en>Column</en>
 <id>1450</id>
 <de>Spalte</de>
 <ro>Coloană</ro>
+<sl>Stolpec</sl>
 </text>
 <text>
 <en>Please select a value</en>
@@ -7437,6 +7478,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1469</id>
 <de>Newsletter versenden starten</de>
 <ro>Start trimitere Newsletter</ro>
+<sl>Pošiljanje novice</sl>
 </text>
 <text>
 <en>The newsletter will be sent in the background. You can leave this page or close the browser window. Start sending?</en>
@@ -7707,12 +7749,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1556</id>
 <de>E-Mail Empfänger</de>
 <ro>Destinatar e-mail</ro>
+<sl>Prejemnik e-pošte</sl>
 </text>
 <text>
 <en>E-Mail Subject</en>
 <id>1557</id>
 <de>E-Mail Betreff</de>
 <ro>Subiect e-mail</ro>
+<sl>Predmet e-pošte </sl>
 </text>
 <text>
 <en>Form.Fieldset</en>
@@ -7755,12 +7799,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1564</id>
 <de>Horizontal</de>
 <ro>orizontal</ro>
+<sl>Vodoravno</sl>
 </text>
 <text>
 <en>vertical</en>
 <id>1565</id>
 <de>Vertikal</de>
 <ro>vertical</ro>
+<sl>Navpično</sl>
 </text>
 <text>
 <en>Form.Select</en>
@@ -7971,6 +8017,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1596</id>
 <de>Soziale Netzwerke</de>
 <ro>Reţele sociale</ro>
+<sl>Socialna omrežja</sl>
 </text>
 <text>
 <en>Authenticate</en>
@@ -8057,6 +8104,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1620</id>
 <de>Information</de>
 <ro>Info</ro>
+<mk>Информации</mk>
+<sl>Informacije</sl>
 </text>
 <text>
 <en>Shop.Product: Voucher</en>
@@ -8099,6 +8148,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
 <id>1637</id>
+<sl>Ne sme biti negativno</sl>
 </text>
 <text>
 <en>value of goods</en>
@@ -8258,6 +8308,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1692</id>
 <de>E-Mail Addresse</de>
 <ro>Adresă de e-mail</ro>
+<sl>E-mail naslov</sl>
 </text>
 <text>
 <en>Predefined Subject for Mail</en>
@@ -8502,6 +8553,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1721</id>
 <de>Ort</de>
 <ro>Localitate</ro>
+<sl>Kraj</sl>
 </text>
 <text>
 <en>All Enquiries</en>
@@ -8632,11 +8684,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Geslo mora vsebovati najmanj 8 znakov.</sl>
 </text>
 <text>
-<en>For security reasons the password must contain 3 out of the following 4 character types: Small letters, capital letters, numbers and special signs</en>
-<de>Aus Sicherheitsgründen muss das Passwort mindestens 3 der folgenden 4 Zeichentypen beinhalten: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen.</de>
+<en>Due to security reasons the password must contain 3 out of the following 4 character types: small letters, capital letters, numbers and special signs</en>
+<de>Aus Sicherheitsgründen muss das Passwort mindestens 3 der folgenden 4 Zeichentypen beinhalten: Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen</de>
 <id>1744</id>
-<ro>Parola trebuie să fie formată cel puţin din 3 din următoarele 4 tipuri de caractere: litere mici, majuscule, numere şi caractere speciale.</ro>
-<sl>Geslo mora izpolnjevati najmanj 3 od naslednjih 4 pogojev: male črke, velike črke, številke in posebni znaki.</sl>
+<ro>Parola trebuie să fie formată cel puţin din 3 din următoarele 4 tipuri de caractere: litere mici, majuscule, numere şi caractere speciale</ro>
+<sl>Geslo mora izpolnjevati najmanj 3 od naslednjih 4 pogojev: male črke, velike črke, številke in posebni znaki</sl>
 </text>
 <text>
 <en>Internal Page</en>
@@ -8663,6 +8715,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>URL extern</ro>
 </text>
 <text>
+<en>+</en>
+<id>1749</id>
+<de>+</de>
+<ro>+</ro>
+<sl>+</sl>
+</text>
+<text>
 <en>Blank</en>
 <de>Leer</de>
 <id>1750</id>
@@ -8674,12 +8733,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1751</id>
 <de>Gestartet</de>
 <ro>Pornit</ro>
+<sl>Zaženi</sl>
 </text>
 <text>
 <en>[%]</en>
 <id>1752</id>
 <de>[%]</de>
 <ro>[%]</ro>
+<sl>[%]</sl>
 </text>
 <text>
 <en>click rate</en>
@@ -8767,16 +8828,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1770</id>
 </text>
 <text>
-<en>Adopt</en>
-<id>1771</id>
-</text>
-<text>
 <en>Link.to FlashMediaPlayer</en>
 <id>1772</id>
-</text>
-<text>
-<en>Video</en>
-<id>1773</id>
 </text>
 <text>
 <en>Form Properties</en>
@@ -8811,12 +8864,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <context>salutation firstname female</context>
 <de>Liebe {0}</de>
 <id>1785</id>
+<sl>Dragi {0}</sl>
 </text>
 <text>
 <en>Dear {0}</en>
 <context>salutation firstname unknown gender</context>
 <de>Hallo {0}</de>
 <id>1786</id>
+<sl>Pozdravljeni, {0} </sl>
 </text>
 <text>
 <en>en_US</en>
@@ -8885,26 +8940,195 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Adopt</en>
-<id>1785</id>
+<id>1800</id>
 </text>
 <text>
 <en>Video</en>
-<id>1786</id>
+<id>1801</id>
 </text>
 <text>
 <en>+{0}% VAT</en>
 <de>+{0}% MWSt</de>
-<id>1787</id>
+<id>1802</id>
 </text>
 <text>
 <en>Own Flash</en>
 <de>Eigenes Flash</de>
-<id>1788</id>
+<id>1803</id>
 </text>
 <text>
 <en>No entries found</en>
 <de>Keine Einträge gefunden</de>
-<id>1800</id>
+<id>1804</id>
+</text>
+<text>
+<en>Invalid type given, value should be string or integer</en>
+<de>ungültig, Wert muss ein Zeichen oder eine ganze Zahl sein</de>
+<id>1805</id>
+</text>
+<text>
+<en>'%value%' does not appear to be an integer</en>
+<de>'%value%' ist keine ganze Zahl</de>
+<id>1806</id>
+</text>
+<text>
+<en>Publication</en>
+<de>Veröffentlichung</de>
+<id>1807</id>
+</text>
+<text>
+<en>VI-Nr</en>
+<de>VI-Nr</de>
+<id>1808</id>
+</text>
+<text>
+<en>Contraction</en>
+<de>Kontraktion</de>
+<id>1809</id>
+</text>
+<text>
+<en>Feedback E-Mail</en>
+<de>Feedback E-Mail</de>
+<id>1810</id>
+</text>
+<text>
+<en>Authors</en>
+<de>Autoren</de>
+<id>1811</id>
+</text>
+<text>
+<en>New tags</en>
+<de>Neue Tags</de>
+<id>1812</id>
+</text>
+<text>
+<en>Articles</en>
+<de>Artikel</de>
+<id>1813</id>
+</text>
+<text>
+<en>E-Mail priority</en>
+<de>E-Mail Priorität</de>
+<id>1814</id>
+</text>
+<text>
+<en>Author</en>
+<de>Autor</de>
+<id>1815</id>
+</text>
+<text>
+<en>Please use this format -&gt; Year / Month</en>
+<de>Bitte nutzen Sie dieses Format -&gt; Jahr / Monat</de>
+<id>1816</id>
+</text>
+<text>
+<en>VI-Number</en>
+<de>VI-Nummer</de>
+<id>1817</id>
+</text>
+<text>
+<en>Hot topic</en>
+<de>Gefragtes Thema</de>
+<id>1818</id>
+</text>
+<text>
+<en>Required reading</en>
+<de>Lesen erforderlich</de>
+<id>1819</id>
+</text>
+<text>
+<en>Only intern</en>
+<de>Nur intern</de>
+<id>1820</id>
+</text>
+<text>
+<en>uses</en>
+<de>Häufigkeit</de>
+<id>1821</id>
+</text>
+<text>
+<en>delete favorite</en>
+<de>Favorit löschen</de>
+<id>1822</id>
+</text>
+<text>
+<en>save as favorite</en>
+<de>Als Favorit speichern</de>
+<id>1823</id>
+</text>
+<text>
+<en>Thumbnail</en>
+<de>Vorschaubild</de>
+<id>1824</id>
+</text>
+<text>
+<en>Question</en>
+<de>Frage</de>
+<id>1825</id>
+</text>
+<text>
+<en>Answer</en>
+<de>Antwort</de>
+<id>1826</id>
+</text>
+<text>
+<en>Questions and answers</en>
+<de>Fragen und Antworten</de>
+<id>1827</id>
+</text>
+<text>
+<en>Enter tag...</en>
+<de>Bestätigungsfrage eintragen...</de>
+<id>1828</id>
+</text>
+<text>
+<en>Please enter a tag.</en>
+<de>Bitte tragen Sie eine Bestätigungsfrage ein</de>
+<id>1829</id>
+</text>
+<text>
+<en>Feedback</en>
+<de>Feedback</de>
+<id>1830</id>
+</text>
+<text>
+<en>Top-Article</en>
+<de>Top-Artikel</de>
+<id>1831</id>
+</text>
+<text>
+<en>Feedback for article</en>
+<de>Feedback für Artikel</de>
+<id>1832</id>
+</text>
+<text>
+<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
+<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt? Senden Sie uns dazu Ihr Feedback!</de>
+<id>1833</id>
+</text>
+<text>
+<en>Write your feedback!</en>
+<de>Feedback schreiben!</de>
+<id>1834</id>
+</text>
+<text>
+<en>Feedback from</en>
+<de>Feedback von</de>
+<id>1835</id>
+</text>
+<text>
+<en>to article</en>
+<de>zu Artikel</de>
+<id>1836</id>
+</text>
+<text>
+<en>Feedback to article </en>
+<de>Feedback zu Artikel </de>
+<id>1837</id>
+</text>
+<text>
+<en>Plese enter in both fields the password which you want to use for your useraccount</en>
+<de>Bitte tragen Sie in beide Felder das Passwort ein, das Sie für Ihren Zugang verwenden wollen</de>
+<id>1838</id>
 </text>
 </trl>
-

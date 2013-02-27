@@ -34,6 +34,7 @@ class Kwf_Util_Maintenance
     {
         if (Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
             if (file_exists('bootstrap.php.backup')) {
+                unlink('bootstrap.php');
                 rename('bootstrap.php.backup', 'bootstrap.php');
                 if ($output) echo "\nrestored bootstrap.php\n";
             }

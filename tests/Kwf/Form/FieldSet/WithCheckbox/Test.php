@@ -57,6 +57,7 @@ class Kwf_Form_FieldSet_WithCheckbox_Test extends Kwf_Test_TestCase
 
         $post = array(
             'fs' => true,
+            'fs-post' => true,
             'text' => 'foo',
         );
         $post = $form->processInput($form->getRow(), $post);
@@ -66,7 +67,7 @@ class Kwf_Form_FieldSet_WithCheckbox_Test extends Kwf_Test_TestCase
         $form->afterSave(null, $post);
 
         $row = $form->getModel()->getRow(array());
-        $this->assertEquals(true, $row->fs);
+        $this->assertEquals(true, (bool)$row->fs);
         $this->assertEquals('foo', $row->text);
     }
 

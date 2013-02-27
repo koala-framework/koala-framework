@@ -20,4 +20,9 @@ class Kwf_Component_Plugin_Login_Component extends Kwf_Component_Plugin_Password
         }
         return false;
     }
+
+    public function skipProcessInput()
+    {
+        return !$this->isLoggedIn();
+    }
 }

@@ -17,28 +17,9 @@ class Kwc_Shop_Products_Detail_Form extends Kwf_Form
         $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Data')));
         $this->_fieldSet = $fs;
         $fs->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')));
-
-        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
-        if (count($generators['addToCart']['component']) > 1) {
-            $this->_cards = $fs->add(new Kwf_Form_Container_Cards('component', trlKwf('Type')));
-            $this->_cards->setAllowBlank(false);
-            foreach ($generators['addToCart']['component'] as $component=>$class) {
-                if (is_instance_of($class, 'Kwc_Shop_AddToCartAbstract_Component')) {
-                    $card = $this->_cards->add();
-                    $card->setName($component);
-                    $card->setTitle(Kwc_Abstract::getSetting($class, 'productTypeText'));
-
-                    $form = Kwc_Abstract_Form::createComponentForm($class);
-                    if ($form) {
-                        $form->setIdTemplate('{0}');
-                        $card->add($form);
-                    }
-                }
-            }
-        }
-
         $fs->add(new Kwf_Form_Field_Checkbox('visible', trlKwf('Visible')));
-        $fs->add(Kwc_Abstract_Form::createComponentForm('shopProducts_{0}-image'));
+
+        $fs->add(Kwc_Abstract_Form::createChildComponentForm($this->getClass(), 'image'));
 
         $mf = $this->add(new Kwf_Form_Field_MultiFields('Prices'));
         $mf->setModel(Kwf_Model_Abstract::getInstance('Kwc_Shop_ProductPrices'));
@@ -49,7 +30,7 @@ class Kwc_Shop_Products_Detail_Form extends Kwf_Form
             $fs->add(new Kwf_Form_Field_DateTimeField('valid_from', trlKwf('Valid From')))
                 ->setAllowBlank(false);
 
-        $this->add(Kwc_Abstract_Form::createComponentForm('shopProducts_{0}-text'));
+        $this->add(Kwc_Abstract_Form::createChildComponentForm($this->getClass(), 'text'));
     }
 
     public function setModel($model)
@@ -65,15 +46,5 @@ class Kwc_Shop_Products_Detail_Form extends Kwf_Form
     protected function _getFieldSet()
     {
         return $this->_fieldSet;
-    }
-
-    protected function _beforeInsert($row)
-    {
-        parent::_beforeInsert($row);
-        $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
-        if (count($generators['addToCart']['component']) == 1 && $row->getModel()->hasColumn('component')) {
-            reset($generators['addToCart']['component']);
-            $row->component = key($generators['addToCart']['component']);
-        }
     }
 }

@@ -11,7 +11,7 @@ class Kwc_Shop_AddToCartAbstract_Success_Component extends Kwc_Form_Success_Comp
     {
         $ret = parent::getTemplateVars();
         $ret['cart'] = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_Shop_Cart_Component', array('ignoreVisible' => true));
+            ->getComponentByClass('Kwc_Shop_Cart_Component', array('ignoreVisible' => true, 'subroot'=>$this->getData()));
         return $ret;
     }
 }

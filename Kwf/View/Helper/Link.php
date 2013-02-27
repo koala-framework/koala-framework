@@ -33,7 +33,10 @@ class Kwf_View_Helper_Link
 
         if (!empty($config['get'])) {
             $url .= '?';
-            foreach ($config['get'] as $key => $val) $url .= "&$key=$val";
+            foreach ($config['get'] as $key => $val) {
+                $url .= "&$key";
+                if ($val) { $url .= "=$val"; }
+            }
         }
 
         if (!empty($config['anchor'])) $url .= "#".$config['anchor'];

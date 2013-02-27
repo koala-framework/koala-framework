@@ -122,7 +122,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             //$ret['step'] = 'any';
             unset($ret['max']);
             unset($ret['min']);
-            $ret['pattern'] = '\d*'; //instead of type=number; will show number keyboard on iPad
+            $ret['pattern'] = '\d*'.preg_quote($this->getDecimalSeparator()).'\d*'; //instead of type=number; will however NOT show number keyboard on iPad
         }
         return $ret;
 

@@ -42,10 +42,13 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         } else {
             $this->view->image = false;
         }
-        if (Kwf_Util_Git::web()->getActiveBranch() != 'production'
-            || Kwf_Util_Git::kwf()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id
-        ) {
-            $this->view->untagged = true;
+        if (Kwf_Registry::get('config')->allowUntagged === true) {
+            if (file_exists('.git') && Kwf_Util_Git::web()->getActiveBranch() != 'production') {
+                $this->view->untagged = true;
+            }
+            if (file_exists(KWF_PATH.'/.git') && Kwf_Util_Git::kwf()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id) {
+                $this->view->untagged = true;
+            }
         }
         $this->view->application = Zend_Registry::get('config')->application->toArray();
         $this->_helper->viewRenderer->setRender('loginheader');
@@ -90,7 +93,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $activationCode = $this->_getParam('code');
         list($userId, $code) = explode('-', $activationCode, 2);
 
-        $users = Zend_Registry::get('userModel');
+        $users = Zend_Registry::get('userModel')->getKwfModel();
         $row = $users->getRow($userId);
 
         $config = array(
@@ -126,7 +129,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_ClientException(trlKwf('Data not submitted completely.'));
         }
 
-        $users = Zend_Registry::get('userModel');
+        $users = Zend_Registry::get('userModel')->getKwfModel();
         $row = $users->getRow($userId);
 
         if (!$row) {
@@ -138,6 +141,9 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
         if ($validatorClass) {
             $validator = new $validatorClass();
+            $validator->setTranslator(
+                new Kwf_Trl_ZendAdapter(Kwf_Trl::getInstance()->getTargetLanguage())
+            );
             if (!$validator->isValid($password)) {
                 throw new Kwf_ClientException(implode('<br />', $validator->getMessages()));
             }
@@ -189,15 +195,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $auth = Kwf_Auth::getInstance();
         $adapter->setIdentity($username);
         $adapter->setCredential($password);
-        $result = $auth->authenticate($adapter);
-
-        if ($result->isValid()) {
-            $loginData = array();
-            $loginData['userId'] = $adapter->getUserId();
-            $auth->getStorage()->write($loginData);
-        }
-
-        return $result;
+        return $auth->authenticate($adapter);
     }
 
     public function jsonLostPasswordAction()
@@ -207,7 +205,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_Exception_Client(trlKwf("Please enter your E-Mail-Address"));
         }
 
-        $users = Zend_Registry::get('userModel');
+        $users = Zend_Registry::get('userModel')->getKwfModel();
         $result = $users->lostPassword($email);
 
         $this->view->message = $result;

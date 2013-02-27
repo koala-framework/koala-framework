@@ -1,5 +1,6 @@
 <?php
-class Kwc_Menu_Abstract_HideInvisibleDynamicPlugin extends Kwf_Component_Plugin_View_Abstract
+class Kwc_Menu_Abstract_HideInvisibleDynamicPlugin extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewBeforeChildRender
 {
     public function processOutput($output)
     {

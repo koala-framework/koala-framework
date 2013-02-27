@@ -2,6 +2,8 @@
 class Kwf_Util_ProgressBar_Adapter_Cache extends Zend_ProgressBar_Adapter
 {
     private $_progressNum = null;
+    private $_lastWrittenPercent = null;
+    private $_lastWrittenTime = null;
 
     public function __construct($cfg = array())
     {
@@ -57,17 +59,31 @@ class Kwf_Util_ProgressBar_Adapter_Cache extends Zend_ProgressBar_Adapter
     // the following methods must be overwritten
     public function notify($current, $max, $percent, $timeTaken, $timeRemaining, $text)
     {
-        $arguments = array(
-            'current'       => $current,
-            'max'           => $max,
-            'percent'       => ($percent * 100),
-            'timeTaken'     => $timeTaken,
-            'timeRemaining' => $timeRemaining,
-            'text'          => $text,
-            'finished'      => false
-        );
-
-        $this->_saveStatus($arguments);
+        //lastWrittenPercent and lastWrittenTime are used to prevent performance issues if
+        //many progresses are written. (the filesystem access at nfs can slow that down)
+        //we just update the progressbar if the percentage increases and
+        //the last request was at least 500ms ago
+        if (!$this->_lastWrittenPercent) {
+            $this->_lastWrittenPercent = (int)($percent*100);
+        }
+        if (!$this->_lastWrittenTime) {
+            $this->_lastWrittenTime = microtime(true);
+        }
+        if ($this->_lastWrittenPercent < (int)($percent*100)
+            && $this->_lastWrittenTime+0.5 <= microtime(true)) {
+            $arguments = array(
+                'current'       => $current,
+                'max'           => $max,
+                'percent'       => ($percent * 100),
+                'timeTaken'     => $timeTaken,
+                'timeRemaining' => $timeRemaining,
+                'text'          => $text,
+                'finished'      => false
+            );
+            $this->_saveStatus($arguments);
+            $this->_lastWrittenPercent = (int)($percent*100);
+            $this->_lastWrittenTime = microtime(true);
+        }
     }
 
     public function finish()

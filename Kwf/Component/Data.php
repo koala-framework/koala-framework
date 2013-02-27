@@ -169,7 +169,8 @@ class Kwf_Component_Data
      */
     public function getAbsoluteUrl()
     {
-        return 'http://'.$this->getDomain().$this->url;
+        $protocol = Kwf_Config::getValue('server.https') ? 'https' : 'http';
+        return $protocol . '://'.$this->getDomain().$this->url;
     }
 
     /**
@@ -1148,7 +1149,16 @@ class Kwf_Component_Data
         $ret = array();
         $plugins = Kwc_Abstract::getSetting($this->componentClass, 'plugins');
         foreach ($plugins as $p) {
-            if (!$interface || is_instance_of($p, $interface)) {
+            if (is_array($interface)) {
+                foreach ($interface as $i) {
+                    if (is_instance_of($p, $i)) {
+                        $ret[] = $p;
+                        break;
+                    }
+                }
+            } else if (!$interface) {
+                $ret[] = $p;
+            } else if (is_instance_of($p, $interface)) {
                 $ret[] = $p;
             }
         }

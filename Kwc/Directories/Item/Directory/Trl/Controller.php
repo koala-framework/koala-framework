@@ -46,10 +46,10 @@ class Kwc_Directories_Item_Directory_Trl_Controller extends Kwf_Controller_Actio
         $extConfig = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
                     ->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
         $extConfig = $extConfig['items'];
-        if (count($extConfig['contentEditComponents']) > 1 && !$this->_getModel()->hasColumn('component')) {
+        if (count($extConfig['countDetailClasses']) > 1 && !$this->_getModel()->hasColumn('component')) {
             throw new Kwf_Exception('If you have more than one detail-component your table has to have a column named "component"');
         }
-        if (count($extConfig['contentEditComponents']) == 1 && $this->_getModel()->hasColumn('component')) {
+        if (count($extConfig['countDetailClasses']) == 1 && $this->_getModel()->hasColumn('component')) {
             throw new Kwf_Exception('If you have just one detail-component your table is not allowed to have a column named "component"');
         }
 
@@ -73,7 +73,9 @@ class Kwc_Directories_Item_Directory_Trl_Controller extends Kwf_Controller_Actio
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        $ret->whereEquals('component_id', $this->_getParam('componentId'));
+        if ($this->_model->getProxyModel()->hasColumn('component_id')) {
+            $ret->whereEquals('component_id', $this->_getParam('componentId'));
+        }
         return $ret;
     }
 

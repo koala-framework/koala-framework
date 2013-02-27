@@ -1,12 +1,8 @@
 <?php
-class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_View_Abstract
+class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewBeforeChildRender
 {
     protected $_currentItem;
-
-    public function getExecutionPoint()
-    {
-        return Kwf_Component_Plugin_Interface_View::EXECUTE_BEFORE;
-    }
 
     public function processOutput($output)
     {

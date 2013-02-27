@@ -71,7 +71,7 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
     {
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
-        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
 
         // alle erlaubten haupt-rollen in variable
         $roles = array();

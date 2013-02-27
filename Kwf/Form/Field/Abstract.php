@@ -64,7 +64,7 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
 
     protected function _getTrlProperties()
     {
-        return array('fieldLabel');
+        return array('fieldLabel', 'helpText');
     }
 
     public function trlStaticExecute($language = null)

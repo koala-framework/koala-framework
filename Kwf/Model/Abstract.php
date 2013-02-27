@@ -366,23 +366,32 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getReference($rule)
     {
-        if (!isset($this->_referenceMap[$rule])) {
-            throw new Kwf_Exception("Reference '$rule' for model '".get_class($this)."' not set, set are '".implode(', ', array_keys($this->_referenceMap))."'");
-        }
-        $ret = $this->_referenceMap[$rule];
-        if (is_string($ret)) {
-            if ($ret === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
-            } else {
-                if (strpos($ret, '->') === false) {
-                    throw new Kwf_Exception("Reference '$rule' for model '".get_class($this)."' is a string but doesn't contain ->");
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $m) {
+            if (isset($m->_referenceMap[$rule])) {
+                $ret = $m->_referenceMap[$rule];
+                if (is_string($ret)) {
+                    if ($ret === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                    } else {
+                        if (strpos($ret, '->') === false) {
+                            throw new Kwf_Exception("Reference '$rule' for model '".get_class($m)."' is a string but doesn't contain ->");
+                        }
+                        $ret = array(
+                            'refModelClass' => substr($ret, strpos($ret, '->')+2),
+                            'column' => substr($ret, 0, strpos($ret, '->')),
+                        );
+                    }
                 }
-                $ret = array(
-                    'refModelClass' => substr($ret, strpos($ret, '->')+2),
-                    'column' => substr($ret, 0, strpos($ret, '->')),
-                );
+                return $ret;
             }
         }
-        return $ret;
+
+        $keys = array();
+        foreach ($models as $m) {
+            $keys = array_merge($keys, array_keys($m->_referenceMap));
+        }
+        throw new Kwf_Exception("Reference '$rule' for model '".get_class($this)."' not set, set are '".implode(', ', $keys)."'");
     }
 
     public function getReferencedModel($rule)
@@ -631,7 +640,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $parent = $row->getParentRow($expr->getParent());
             if (!$parent) return null;
             $field = $expr->getField();
-            return $parent->$field;
+            if (is_string($field)) {
+                return $parent->$field;
+            } else {
+                return $this->getExprValue($parent, $field);
+            }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Concat) {
             $ret = '';
             foreach ($expr->getExpressions() as $e) {
@@ -756,6 +769,43 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
             if (!$ret) $ret = 0;
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Multiply) {
+            $ret = null;
+            foreach ($expr->getExpressions() as $e) {
+                $value = $this->getExprValue($row, $e);
+                if ($ret == null) {
+                    $ret = $value;
+                } else {
+                    $ret *= $value;
+                }
+            }
+            if (!$ret) $ret = 0;
+            return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Equals) {
+            return ($row->{$expr->getField()} == $expr->getValue());
+        } else if ($expr instanceof Kwf_Model_Select_Expr_And) {
+            foreach ($expr->getExpressions() as $e) {
+                if (!$this->getExprValue($row, $e)) { return false; }
+            }
+            return true;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Or) {
+            foreach ($expr->getExpressions() as $e) {
+                $value = $this->getExprValue($row, $e);
+                if ($this->getExprValue($row, $e)) { return true; }
+            }
+            return false;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_LowerEqual) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} <= $value);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_HigherEqual) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} >= $value);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Lower) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} < $value);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Higher) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} > $value);
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"

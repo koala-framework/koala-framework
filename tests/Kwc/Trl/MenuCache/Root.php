@@ -5,13 +5,6 @@ class Kwc_Trl_MenuCache_Root extends Kwc_Root_TrlRoot_Component
     {
         $ret = parent::getSettings();
         unset($ret['generators']['title']);
-        $ret['generators']['box'] = array(
-            'class' => 'Kwf_Component_Generator_Box_Static',
-            'component' => array(
-                'mainMenu' => 'Kwc_Trl_MenuCache_MainMenu_Component'
-            ),
-            'inherit' => true
-        );
         $ret['childModel'] = new Kwc_Trl_RootModel(array(
             'de' => 'Deutsch',
             'en' => 'English'

@@ -9,6 +9,14 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    public function _getBaseParams()
+    {
+        $ret = parent::_getBaseParams();
+        if (!empty($_GET['redirect'])) $ret['redirect'] = $_GET['redirect'];
+        return $ret;
+
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -29,7 +37,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
     {
         // TODO: Kopie von Kwc_User_BoxAbstract_Component wie anderes auf dieser Seite
         if (isset($postData['feAutologin'])
-            && !Kwf_Registry::get('userModel')->getAuthedUser()
+            && !Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser()
         ) {
             list($cookieId, $cookieMd5) = explode('.', $postData['feAutologin']);
             if (!empty($cookieId) && !empty($cookieMd5)) {
@@ -45,23 +53,19 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         $result = $this->_getAuthenticateResult($row->email, $row->password);
 
         if ($result->isValid()) {
-            $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+            $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
             if ($row->auto_login) {
                 $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
                 setcookie('feAutologin', $cookieValue, time() + (100*24*60*60));
             }
             $this->_afterLogin($authedUser);
         } else {
-            $this->_errors[] = array('message' => trlKwf('Invalid E-Mail or password, please try again.'));
+            $this->_errors[] = array('message' => $this->getData()->trlKwf('Invalid E-Mail or password, please try again.'));
         }
     }
 
     protected function _afterLogin(Kwf_User_Row $user)
     {
-        if (!empty($_GET['redirect']) && substr($_GET['redirect'], 0, 1) == '/') {
-            header('Location: ' . $_GET['redirect']);
-            die();
-        }
     }
 
     private function _getAuthenticateResult($identity, $credential)
@@ -72,14 +76,6 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 
         $auth = Kwf_Auth::getInstance();
         $auth->clearIdentity();
-        $result = $auth->authenticate($adapter);
-
-        if ($result->isValid()) {
-            $auth->getStorage()->write(array(
-                'userId' => $adapter->getUserId()
-            ));
-        }
-
-        return $result;
+        return $auth->authenticate($adapter);
     }
 }

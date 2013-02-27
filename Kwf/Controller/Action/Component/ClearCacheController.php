@@ -91,7 +91,6 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
     public function jsonClearViewCacheAction()
     {
         $select = new Kwf_Model_Select();
-        $select->whereEquals('deleted', false);
         if ($this->_getParam('dbId')) {
             $select->where(new Kwf_Model_Select_Expr_Like('db_id', $this->_getParam('dbId')));
         }

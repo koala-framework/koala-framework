@@ -476,6 +476,13 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             $sql = implode(" / ", $sqlExpressions);
             return $sql;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Multiply) {
+            $sqlExpressions = array();
+            foreach ($expr->getExpressions() as $expression) {
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
+            }
+            $sql = implode(" * ", $sqlExpressions);
+            return $sql;
         } else if ($expr instanceof Kwf_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
@@ -608,7 +615,12 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
             $refSelect->where("$refTableName.$col2=$col1");
             $refDbSelect = $dbRefM->createDbSelect($refSelect);
-            $exprStr = $dbRefM->_formatField($expr->getField(), $refDbSelect);
+            $f = $expr->getField();
+            if (is_string($f)) {
+                $exprStr = $dbRefM->_formatField($f, $refDbSelect);
+            } else {
+                $exprStr = new Zend_Db_Expr($dbRefM->_createDbSelectExpression($f, $refDbSelect, null, null));
+            }
             $refDbSelect->reset(Zend_Db_Select::COLUMNS);
             $refDbSelect->from(null, $exprStr);
             return "($refDbSelect)";

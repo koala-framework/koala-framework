@@ -10,7 +10,7 @@ class Kwf_View_Helper_Money
     public function money($amount)
     {
         $component = null;
-        if ($this->_view && $this->_view->data && $this->_view->data instanceof Kwf_Component_Data) {
+        if (isset($this->_view) && $this->_view && $this->_view->data && $this->_view->data instanceof Kwf_Component_Data) {
             $component = $this->_view->data;
         }
 

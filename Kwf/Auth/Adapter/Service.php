@@ -46,7 +46,7 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
             );
         }
 
-        $users = Zend_Registry::get('userModel');
+        $users = Zend_Registry::get('userModel')->getKwfModel();
         $result = $users->login($this->_identity, $this->_credential);
 
         if (isset($result['userId'])) {

@@ -13,7 +13,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
 
     public function preDispatch()
     {
-        $this->_model = Zend_Registry::get('userModel');
+        $this->_model = Zend_Registry::get('userModel')->getKwfModel();
         parent::preDispatch();
     }
 
@@ -91,7 +91,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
-        $ownUserRow = Kwf_Registry::get('userModel')->getAuthedUser();
+        $ownUserRow = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
         if (in_array($ownUserRow->id, $ids)) {
             throw new Kwf_ClientException(trlKwf("You cannot delete your own account."));
         }
@@ -117,7 +117,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
-        $ownUserRow = Kwf_Registry::get('userModel')->getAuthedUser();
+        $ownUserRow = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
         if (in_array($ownUserRow->id, $ids)) {
             throw new Kwf_ClientException(trlKwf("You cannot lock your own account."));
         }
@@ -149,7 +149,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
             throw new Kwf_Exception("Wrong parameters submitted");
         }
 
-        $userModel = Kwf_Registry::get('userModel');
+        $userModel = Kwf_Registry::get('userModel')->getKwfModel();
         $row = $userModel->getRow($userId);
         if (!$row) {
             throw new Kwf_Exception("User row not found");

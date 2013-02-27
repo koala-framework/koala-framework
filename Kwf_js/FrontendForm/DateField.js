@@ -25,6 +25,7 @@ Kwf.FrontendForm.DateField = Ext.extend(Kwf.FrontendForm.Field, {
             });
             this.menu.on('select', function(menu, value) {
                 this.el.child('input').dom.value = value.format(trlKwf('Y-m-d'));
+                this.fireEvent('change', this.el.child('input').dom.value);
             }, this);
         }
         var value = Date.parseDate(this.getValue(), trlKwf('Y-m-d'));

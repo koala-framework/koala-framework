@@ -41,14 +41,14 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
     }
 
     abstract protected function _getItemDirectory();
-    abstract public static function getItemDirectoryClasses($directoryClass);
+    abstract public static function getItemDirectoryClasses($componentClass);
 
-    protected static function _getParentItemDirectoryClasses($directoryClass, $steps = null)
+    protected static function _getParentItemDirectoryClasses($componentClass, $steps = null)
     {
         $ret = array();
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             foreach (Kwc_Abstract::getChildComponentClasses($class) as $childClass) {
-                if ($childClass == $directoryClass) {
+                if ($childClass == $componentClass) {
                     if ($steps === 0) {
                         $ret[] = $class;
                     } else if (is_null($steps)) {

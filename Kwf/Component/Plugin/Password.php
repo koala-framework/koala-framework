@@ -2,11 +2,12 @@
 /**
  * @deprecated use Kwf_Component_Plugin_Password_Component instead
  */
-class Kwf_Component_Plugin_Password extends Kwf_Component_Plugin_View_Abstract
+class Kwf_Component_Plugin_Password extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewReplace
 {
     protected $_password = 'planet';
 
-    public function processOutput($output)
+    public function replaceOutput($output)
     {
         if (!is_array($this->_password)) $this->_password = array($this->_password);
 
@@ -19,7 +20,7 @@ class Kwf_Component_Plugin_Password extends Kwf_Component_Plugin_View_Abstract
                 $msg = trlKwf('Invalid Password');
             }
         }
-        if ($session->login) return $output;
+        if ($session->login) return false;
 
         return '<form action="" method="post">
         '.$msg.'

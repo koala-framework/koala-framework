@@ -179,9 +179,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 this.closeHref = window.location.href;
             }
         }
+
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
             var closeOptions = {};
-            if (options.clickTarget) closeOptions.showClickTarget = options.clickTarget;
+            if (options && options.clickTarget) {
+                closeOptions.showClickTarget = options.clickTarget;
+            }
             Kwf.EyeCandy.Lightbox.currentOpen.close(closeOptions);
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
@@ -212,17 +215,37 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        delete Kwf.Utils.HistoryState.currentState.lightbox;
-        Kwf.Utils.HistoryState.pushState(document.title, this.closeHref);
-        this.close();
+        if (Kwf.Utils.HistoryState.entries > 0) {
+            var previousEntries = Kwf.Utils.HistoryState.entries;
+            history.back();
+            var closeLightbox = (function() {
+                //didn't change yet, wait a bit longer
+                if (previousEntries == Kwf.Utils.HistoryState.entries) {
+                    closeLightbox.defer(10, this);
+                    return;
+                }
+                //check if there is still a lightbox open
+                //has to be defered because closing happens in 'popstate' event which is async in IE
+                if (Kwf.Utils.HistoryState.currentState.lightbox) {
+                    history.back();
+                    closeLightbox.defer(1, this);
+                }
+            });
+            closeLightbox.defer(1, this);
+        } else {
+            delete Kwf.Utils.HistoryState.currentState.lightbox;
+            Kwf.Utils.HistoryState.replaceState(document.title, this.closeHref);
+            //location.replace(this.closeHref);
+            this.close();
+        }
     },
     initialize: function()
     {
         var closeButtons = this.innerLightboxEl.select('.closeButton');
         closeButtons.each(function(el) {
             el.on('click', function(ev) {
-                this.closeAndPushState();
                 ev.stopEvent();
+                this.closeAndPushState();
             }, this);
         }, this);
     },
@@ -295,14 +318,13 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
                 this.lightbox.closeAndPushState();
             }
         }, this);
-        this._center();
+        this._center(false);
     },
     afterContentShown: function() {
-        this._center();
+        this._center(false);
     },
     updateContent: function(responseText) {
         var isVisible = this.lightbox.lightboxEl.isVisible();
-
         this.lightbox.lightboxEl.show(); //to mesaure
 
         var originalSize = this.lightbox.innerLightboxEl.getSize();
@@ -334,6 +356,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     onShow: function() {
         this.mask();
     },
+    afterShow: function() {
+        this._center();
+    },
     onClose: function(options) {
         this.lightbox.lightboxEl.fadeOut({
             concurrent: true,
@@ -355,7 +380,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     _center: function(anim) {
         if (!this.lightbox.lightboxEl.isVisible(true)) return;
-        this.lightbox.innerLightboxEl.setStyle({ top: 0, left: 0 });
         this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
     },
 

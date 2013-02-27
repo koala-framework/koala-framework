@@ -18,7 +18,7 @@ class Kwc_User_DeleteAccount_Form_Component extends Kwc_Form_Component
     protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
         parent::_afterSave($row);
-        $user = Kwf_Registry::get('userModel')->getAuthedUser();
+        $user = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
         $user->deleted = 1;
         $user->save();
 

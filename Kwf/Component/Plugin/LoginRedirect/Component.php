@@ -1,0 +1,52 @@
+<?php
+class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_SkipProcessInput
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['validUserRoles'] = null;
+        return $ret;
+    }
+
+    public function replaceOutput()
+    {
+        if (!$this->isLoggedIn()) {
+            $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
+            $loginComponent = $this->getLoginComponent();
+            if (!$loginComponent) throw new Kwf_Exception('No login component found');
+            $url = $loginComponent->url;
+            if ($component->url != '/') {
+                $url .= '?redirect=' . urlencode($component->url);
+            }
+            header('Location: ' . $url);
+            exit;
+        }
+        return false;
+    }
+
+    public function getLoginComponent()
+    {
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
+        $component = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass(array('Kwc_User_Login_Component', 'Kwc_User_Login_Trl_Component'), array('subroot'=>$c));
+        return $component;
+    }
+
+    public function isLoggedIn()
+    {
+        if (!Zend_Session::sessionExists() && !Kwf_Config::getValue('autologin')) return false;
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        if (is_null($user)) return false;
+        if (!$this->_getSetting('validUserRoles')) return true;
+        if (in_array($user->role, $this->_getSetting('validUserRoles'))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function skipProcessInput()
+    {
+        return !$this->isLoggedIn();
+    }
+}

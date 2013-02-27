@@ -6,6 +6,14 @@
  */
 class Kwc_Menu_OtherCategory_Trl_Component extends Kwc_Menu_OtherCategory_Component
 {
+    public static function getSettings($masterComponentClass)
+    {
+        $menuComponentClass = Kwc_Abstract::getSetting($masterComponentClass, 'menuComponentClass');
+        $ret = parent::getSettings($menuComponentClass);
+        $ret['masterComponentClass'] = $masterComponentClass;
+        return $ret;
+    }
+
     protected function _getMenuComponentClass()
     {
         return Kwc_Abstract::getSetting(

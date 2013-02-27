@@ -23,7 +23,7 @@ class Kwf_Controller_Action_Component_ShowComponentController extends Kwf_Contro
                     'flags' => array('processInput' => true)
                 ));
         if (Kwf_Component_Abstract::getFlag($c->componentClass, 'processInput')) {
-            $process[] = $this->getData();
+            $process[] = $c;
         }
         $postData = array();
         foreach ($process as $i) {

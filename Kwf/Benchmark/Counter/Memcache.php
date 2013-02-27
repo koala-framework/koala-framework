@@ -1,6 +1,7 @@
 <?php
 class Kwf_Benchmark_Counter_Memcache implements Kwf_Benchmark_Counter_Interface
 {
+    private $_memcache;
     private $_prefix;
     public function __construct($config = array())
     {
@@ -9,10 +10,15 @@ class Kwf_Benchmark_Counter_Memcache implements Kwf_Benchmark_Counter_Interface
         } else {
             $this->_prefix = Zend_Registry::get('config')->application->id.'-'.Kwf_Setup::getConfigSection().'-bench-';
         }
+        if (isset($config['memcache'])) {
+            $this->_memcache = $config['memcache'];
+        }
     }
 
     public function getMemcache()
     {
+        if ($this->_memcache) return $this->_memcache;
+
         static $memcache;
         if (!isset($memcache)) {
             $memcache = new Memcache;

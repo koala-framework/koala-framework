@@ -9,7 +9,6 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
     public function indexAction()
     {
         $select = new Kwf_Model_Select();
-        $select->whereEquals('deleted', false);
         if ($this->_getParam('all')) {
         }
         if ($this->_getParam('dbId')) {

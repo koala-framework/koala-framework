@@ -1,8 +1,6 @@
 <?php
-
 class Kwf_Auth extends Zend_Auth
 {
-
     // Kopiert von Zend_Auth und abgeändert
     public static function getInstance()
     {
@@ -33,6 +31,13 @@ class Kwf_Auth extends Zend_Auth
         return self::$_instance;
     }
 
+    // do not user parent authenticate to prevent writing the identity into the storage
+    // this is completely done by user model
+    public function authenticate(Zend_Auth_Adapter_Interface $adapter)
+    {
+        return $adapter->authenticate();
+    }
+
     public function clearIdentity()
     {
         $ret = parent::clearIdentity();
@@ -40,6 +45,4 @@ class Kwf_Auth extends Zend_Auth
         if ($userModel) $userModel->clearAuthedUser();
         return $ret;
     }
-
-
 }

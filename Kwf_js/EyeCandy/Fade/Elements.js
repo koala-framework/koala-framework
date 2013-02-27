@@ -21,7 +21,9 @@ Kwf.onContentReady(function()
         config.selectorRoot = c;
 
         extWrapperEl.fadeElementsObject = new Kwf.Fade.Elements(config);
-        extWrapperEl.fadeElementsObject.start();
+        if (config.autoStart == undefined || config.autoStart) {
+            extWrapperEl.fadeElementsObject.start();
+        }
     });
 });
 

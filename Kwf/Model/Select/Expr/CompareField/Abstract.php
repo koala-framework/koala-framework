@@ -22,12 +22,23 @@ abstract class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_
         return $this->_value;
     }
 
-	public function validate()
-	{
-		if (!$this->_field) {
-			throw new Kwf_Exception("No Field-Value set for '"+get_class($this)+"'");
-		}
-	}
+    public function getFormattedValue()
+    {
+        $ret = $this->getValue();
+        if ($ret instanceof Kwf_DateTime) {
+            $ret = $ret->format('Y-m-d H:i:s');
+        } else if ($ret instanceof Kwf_Date) {
+            $ret = $ret->format('Y-m-d');
+        }
+        return $ret;
+    }
+
+    public function validate()
+    {
+        if (!$this->_field) {
+            throw new Kwf_Exception("No Field-Value set for '"+get_class($this)+"'");
+        }
+    }
 
     public function getResultType()
     {

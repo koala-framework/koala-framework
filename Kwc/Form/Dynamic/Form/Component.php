@@ -63,11 +63,10 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $row->addTo($settings['recipient']);
         $row->addCc($settings['recipient_cc']);
         $row->setSubject($settings['subject']);
-
         $msg = '';
         foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
             $f = $c->getComponent()->getFormField();
-            if ($f->getName() && $f->getFieldLabel()) {
+            if ($f->getName() && ($f->getFieldLabel() || $f instanceof Kwf_Form_Field_Checkbox)) {
                 if ($f instanceof Kwf_Form_Field_File) {
                     $uploadRow = $row->getParentRow($f->getName());
                     if ($uploadRow) {
@@ -75,10 +74,16 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
                         $msg .= $f->getFieldLabel().": {$uploadRow->filename}.{$uploadRow->extension} ".trlKwf('attached')."\n";
                     }
                 } else if ($f instanceof Kwf_Form_Field_Checkbox) {
-                    if ($row->{$f->getName()}) {
-                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlKwf('on')."\n";
-                    } else {
-                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlKwf('off')."\n";
+                    $label = $f->getFieldLabel();
+                    if (!$label) {
+                        $label = $f->getBoxLabel();
+                    }
+                    if ($label) {
+                        if ($row->{$f->getName()}) {
+                            $msg .= $label.': '.$this->getData()->trlKwf('Yes')."\n";
+                        } else {
+                            $msg .= $label.': '.$this->getData()->trlKwf('No')."\n";
+                        }
                     }
                 } else if ($f instanceof Kwf_Form_Field_MultiCheckbox) {
                     $values = array();

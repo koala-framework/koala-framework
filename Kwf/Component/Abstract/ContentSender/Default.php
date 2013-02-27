@@ -33,24 +33,60 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         $cacheId = 'procI-'.$data->componentId;
         $success = false;
         if (!$showInvisible) { //don't cache in preview
-            $processCached = Kwf_Cache_Simple::fetch($cacheId, $success);
+            $cacheContents = Kwf_Cache_Simple::fetch($cacheId, $success);
             //cache is cleared in Kwf_Component_Events_ProcessInputCache
         }
         if (!$success) {
-            $process = self::_findProcessInputComponents($data);
+            $datas = array();
+            foreach (self::_findProcessInputComponents($data) as $p) {
+                $plugins = array();
+                $c = $p;
+                do {
+                    foreach ($c->getPlugins('Kwf_Component_Plugin_Interface_SkipProcessInput') as $i) {
+                        $plugins[] = array(
+                            'pluginClass' => $i,
+                            'componentId' => $c->componentId
+                        );
+                    }
+                    $c = $c->parent;
+                } while($c && !$c->isPage);
+                $datas[] = array(
+                    'data' => $p,
+                    'plugins' => $plugins,
+                );
+            }
             if (!$showInvisible) {
-                $datas = array();
-                foreach ($process as $p) {
-                    $datas[] = $p->kwfSerialize();
+                $cacheContents = array();
+                foreach ($datas as $p) {
+                    $cacheContents[] = array(
+                        'data' => $p['data']->kwfSerialize(),
+                        'plugins' => $p['plugins'],
+                    );
                 }
-                Kwf_Cache_Simple::add($cacheId, $datas);
+                Kwf_Cache_Simple::add($cacheId, $cacheContents);
             }
         } else {
-            $process = array();
-            foreach ($processCached as $d) {
-                $process[] = Kwf_Component_Data::kwfUnserialize($d);
+            $datas = array();
+            foreach ($cacheContents as $d) {
+                $datas[] = array(
+                    'data' => Kwf_Component_Data::kwfUnserialize($d['data']),
+                    'plugins' => $d['plugins'],
+                );
             }
         }
+        //ask SkipProcessInput plugins if it should be skipped
+        //evaluated every time
+        $process = array();
+        foreach ($datas as $d) {
+            foreach ($d['plugins'] as $p) {
+                $p = Kwf_Component_Plugin_Abstract::getInstance($p['pluginClass'], $p['componentId']);
+                if ($p->skipProcessInput()) {
+                    continue 2;
+                }
+            }
+            $process[] = $d['data'];
+        }
+
         return $process;
     }
 
@@ -81,16 +117,23 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
 
     protected static function _callProcessInput($process)
     {
+        static $benchmarkEnabled;
+        if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
+
         $postData = self::_getRequestWithFiles();
         foreach ($process as $i) {
             Kwf_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
+                $startTime = microtime(true);
                 $i->getComponent()->preProcessInput($postData);
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($i->componentId.' preProcessInput', microtime(true)-$startTime);
             }
         }
         foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'processInput')) {
+                $startTime = microtime(true);
                 $i->getComponent()->processInput($postData);
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($i->componentId, microtime(true)-$startTime);
             }
         }
         if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
@@ -119,7 +162,9 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     public function sendContent($includeMaster)
     {
         header('Content-Type: text/html; charset=utf-8');
+        $startTime = microtime(true);
         $process = $this->_getProcessInputComponents($includeMaster);
+        Kwf_Benchmark::subCheckpoint('getProcessInputComponents', microtime(true)-$startTime);
         self::_callProcessInput($process);
         Kwf_Benchmark::checkpoint('processInput');
         echo $this->_render($includeMaster);

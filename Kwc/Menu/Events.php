@@ -1,6 +1,15 @@
 <?php
 class Kwc_Menu_Events extends Kwc_Menu_Abstract_Events
 {
+    protected $_emptyIfSingleEntry;
+
+    //overwritten in Kwc_Menu_Trl_Events
+    protected function _initSettings()
+    {
+        parent::_initSettings();
+        $this->_emptyIfSingleEntry = $menuLevel = Kwc_Abstract::getSetting($this->_class, 'emptyIfSingleEntry');
+    }
+
     //fire HasContentChanged here because hasContent is implemented in this component
     protected function _onMenuChanged(Kwf_Component_Event_Component_Abstract $event, Kwf_Component_Data $menu)
     {
@@ -14,7 +23,7 @@ class Kwc_Menu_Events extends Kwc_Menu_Abstract_Events
             $newCount--;
         }
 
-        if (Kwc_Abstract::getSetting($this->_class, 'emptyIfSingleEntry')) $newCount--; //check with one less
+        if ($this->_emptyIfSingleEntry) $newCount--; //check with one less
 
         $previousCount = $newCount;
         if ($event instanceof Kwf_Component_Event_Page_Added) {

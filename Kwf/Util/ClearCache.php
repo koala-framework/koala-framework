@@ -134,7 +134,7 @@ class Kwf_Util_ClearCache
 
         } else if ($type == 'cache_users') {
 
-            Kwf_Registry::get('userModel')->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
+            Kwf_Registry::get('userModel')->getKwfModel()->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
 
         } else if ($type == 'users cleanup') {
 

@@ -6,7 +6,7 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Kwf_Form_Field_Select('amount', trlKwf('Amount')))
+        $this->add(new Kwf_Form_Field_Select('amount', trlKwfStatic('Amount')))
             ->setAllowBlank(false)
             ->setValues($this->_getAmountValues())
             ->setEditable(true);
@@ -29,7 +29,20 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
     protected function _beforeInsert(&$row)
     {
         $select = $this->_getCheckProductRowExistsSelect($row);
-        $existingRow = $row->getModel()->getRow($select);
+        $existingRow = null;
+        foreach ($row->getModel()->getRows($select) as $i) {
+            $match = true;
+            foreach ($row->getSiblingRow(0)->toArray() as $key => $val) {
+                if ($key != 'amount' && $i->$key != $row->$key) {
+                    $match = false;
+                    break;
+                }
+            }
+            if ($match) {
+                $existingRow = $i;
+                break;
+            }
+        }
         if ($existingRow) {
             $existingRow->amount += $row->amount;
             $row = $existingRow;
@@ -43,9 +56,6 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
             ->whereEquals('shop_product_price_id', $row->shop_product_price_id)
             ->whereEquals('add_component_id', $row->add_component_id)
             ->whereEquals('add_component_class', $row->add_component_class);
-        foreach ($row->getSiblingRow(0)->toArray() as $key => $val) {
-            $select->whereEquals($key, $val);
-        }
         return $select;
     }
 }

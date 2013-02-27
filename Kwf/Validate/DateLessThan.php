@@ -31,7 +31,7 @@ class Kwf_Validate_DateLessThan extends Zend_Validate_Abstract
         if (!is_numeric($max)) $max = strtotime($max);
         if (!$max) throw new Kwf_Exception("Invalid max date");
         $this->_max = $max;
-        $this->_maxDate = date(trlKwf('Y-m-d'), $max);
+        $this->_maxDate = date(trlKwfStatic('Y-m-d'), $max);
         return $this;
     }
 
@@ -39,7 +39,7 @@ class Kwf_Validate_DateLessThan extends Zend_Validate_Abstract
     {
         $value = strtotime($value);
         if ($value) {
-            $this->_setValue(date(trlKwf('Y-m-d'), $value));
+            $this->_setValue(date(trlKwfStatic('Y-m-d'), $value));
             if ($this->_max <= $value) {
                 $this->_error(self::NOT_LESS);
                 return false;

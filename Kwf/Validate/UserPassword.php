@@ -9,8 +9,8 @@ class Kwf_Validate_UserPassword extends Zend_Validate_Abstract
 
     public function __construct()
     {
-        $this->_messageTemplates[self::NOT_LOGGEDIN] = trlKwf("You are not logged in");
-        $this->_messageTemplates[self::INVALID_PASSWORD] = trlKwf("You entered a wrong password");
+        $this->_messageTemplates[self::NOT_LOGGEDIN] = trlKwfStatic("You are not logged in");
+        $this->_messageTemplates[self::INVALID_PASSWORD] = trlKwfStatic("You entered a wrong password");
     }
 
     public function isValid($value)

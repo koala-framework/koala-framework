@@ -27,13 +27,14 @@ class Kwf_Model_Select_Expr_Parent implements Kwf_Model_Select_Expr_Interface
     public function validate()
     {
         if (!$this->_field) {
-            throw new Kwf_Exception("No Field set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No Field set for '".get_class($this)."'");
         }
-        if (!is_string($this->_field)) {
-            throw new Kwf_Exception("Field must be of type string in '"+get_class($this)+"'");
+        if (!is_string($this->_field) && !($this->_field instanceof Kwf_Model_Select_Expr_Interface)) {
+            throw new Kwf_Exception("Field must be of type string or Kwf_Model_Select_Expr_Interface
+                             in '".get_class($this)."'");
         }
         if (!$this->_parent) {
-            throw new Kwf_Exception("No parent rule set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No parent rule set for '".get_class($this)."'");
         }
     }
 
