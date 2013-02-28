@@ -24,18 +24,21 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
     //tests if the in this test overwritten userModel works correctly
     public function testUserModel()
     {
+        $this->markTestIncomplete();
         $u = Kwf_Registry::get('userModel')->getAuthedUser();
         $this->assertEquals($u->id, 1);
     }
 
     public function testGetFavouriteComponentIds()
     {
+        $this->markTestIncomplete();
         $componentIds = Kwc_Favourites_Component::getFavouriteComponentIds('Kwc_Favourites_Favourite_Model');
         $this->assertEquals(count($componentIds), 2);
     }
 
     public function testComponentLink()
     {
+        $this->markTestIncomplete();
         $c2 = $this->_root->getComponentById(2005)->getComponent();
         $html = $c2->getData()->render();
         $this->assertRegExp("#<div class=\"kwcFavouritesPageComponentFavouritesCount\">2</div>#", $html, 'Does match with the complete div because this div is needed by JavaScript');
@@ -43,6 +46,7 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
 
     private function getFavouriteCountFromFavouritesPage($component)
     {
+        $this->markTestIncomplete();
         $html = $component->getData()->render();
         preg_match_all('#<li class="favourite">#', $html, $matches);
         return count($matches[0]);
@@ -50,6 +54,7 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
 
     public function testComponentRemoveAdd()
     {
+        $this->markTestIncomplete();
         $c = $this->_root->getComponentById(2004)->getComponent();
         $count = $this->getFavouriteCountFromFavouritesPage($c);
 
@@ -77,6 +82,7 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
 
     public function testComponentRecursiveRemoveAdd()
     {
+        $this->markTestIncomplete();
         $c = $this->_root->getComponentById(2004)->getComponent();
         $count = $this->getFavouriteCountFromFavouritesPage($c);
 
@@ -104,6 +110,7 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
 
     public function testUserAddFavourite()
     {
+        $this->markTestIncomplete();
         $c = $this->_root->getComponentById(2004)->getComponent();
         $count = $this->getFavouriteCountFromFavouritesPage($c);
 
@@ -121,6 +128,7 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
 
     public function testUserRemoveFavourite()
     {
+        $this->markTestIncomplete();
         $c = $this->_root->getComponentById(2004)->getComponent();
         $count = $this->getFavouriteCountFromFavouritesPage($c);
 

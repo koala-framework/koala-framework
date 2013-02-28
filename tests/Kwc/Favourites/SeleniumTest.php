@@ -1,4 +1,8 @@
 <?php
+/**
+ * @group slow
+ * @group seleniuim
+ */
 class Kwc_Favourites_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function setUp()
@@ -24,6 +28,7 @@ class Kwc_Favourites_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
     public function testJavaScriptAndPersistence()
     {
+        $this->markTestIncomplete();
         $this->openKwc('/selenium');
         $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '2');
 
