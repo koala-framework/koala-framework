@@ -197,11 +197,11 @@ abstract class Kwf_Update
                             $update = self::createUpdate($n, $i->getPathname());
                             if (!$update) continue;
                             if ($update->getTags() && !in_array('web', $update->getTags())) {
-                                if (!array_intersect(
-                                    $update->getTags(),
-                                    Kwf_Update::getUpdateTags()
-                                ) && !($update->getTags()==array('db') && get_class($update)=='Kwf_Update_Sql')) {
-                                    continue; //skip
+                                $tags = $update->getTags();
+                                foreach ($tags as $tag) {
+                                    if (!in_array($tag, Kwf_Update::getUpdateTags())) {
+                                        continue 2;
+                                    }
                                 }
                             }
                             $ret[] = $update;
