@@ -1,56 +1,19 @@
 <?php
-class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Action_Auto_Tree
+class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Action_Component_PagesAbstractController
 {
-    protected $_textField = 'name';
-    protected $_rootVisible = false;
-    protected $_buttons = array();
-    protected $_hasPosition = true;
-    protected $_modelName = 'Kwf_Component_Model';
-
     private $_componentConfigs = array();
 
-    protected function _init()
+    protected function _getNodeConfig($component)
     {
-        $this->_filters->add(new Kwf_Controller_Action_Auto_Filter_Text())
-            ->setQueryFields(array('name'));
-    }
-
-    public function indexAction()
-    {
-        $this->view->xtype = 'kwf.component.pages';
-    }
-
-    protected function _formatNode($row)
-    {
-        $component = $row->getData();
-        $data = parent::_formatNode($row);
-        $data['uiProvider'] = 'Kwf.Component.PagesNode';
-
         $user = Zend_Registry::get('userModel')->getAuthedUser();
         $acl = Kwf_Registry::get('acl')->getComponentAcl();
-
-        $nodeConfig = self::getNodeConfig($component, $user, $acl, $this->_componentConfigs);
-        if (is_null($nodeConfig)) return null;
-        $data = array_merge($data, $nodeConfig);
-
-        if (!$data['expanded']) {
-            $openedNodes = $this->_saveSessionNodeOpened(null, null);
-            if ($data['disabled'] && !array_key_exists($row->id, $openedNodes)) {
-                $data['expanded'] = true;
-            }
-        }
-
-        if ($data['loadChildren'] || $data['expanded'] || $data['disabled']) {
-            $data['children'] = $this->_formatNodes($component->componentId);
-        }
-
-        return $data;
+        return self::getNodeConfig($component, $user, $acl, $this->_componentConfigs);
     }
 
     //public static zum testen
     public static function getNodeConfig($component, $user, $acl, array &$componentConfigs = array())
     {
-        $data = array();
+        $data = parent::getNodeConfig($component);
         $enabled = $acl->isAllowed($user, $component);
         if (!$enabled && !$component instanceof Kwf_Component_Data_Root/*root nicht überprüfen, die wird immar angezeigt*/) {
             $allowedComponents = $acl->getAllowedRecursiveChildComponents($user);
@@ -90,26 +53,10 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             $editComponents = array($component);
         }
 
-        $data['actions'] = array();
-        $data['allowDrop'] = false;
         $data['disabled'] = !$enabled;
 
-        if ($component->componentId == 'root') { // Root hat keinen Generator
-            $data['bIcon'] = new Kwf_Asset('world');
-            $data['bIcon'] = $data['bIcon']->__toString();
-            $data['expanded'] = true;
-            $data['loadChildren'] = true;
-            $data['editControllerComponentId'] = 'root';
-        } else {
-            $config = $component->generator->getPagesControllerConfig($component);
-            $data = array_merge($data, $config);
-            if (!$enabled) $data['iconEffects'][] = 'forbidden';
-            $icon = $data['icon'];
-            if (is_string($icon)) {
-                $icon = new Kwf_Asset($icon);
-            }
-            $data['bIcon'] = $icon->toString($data['iconEffects']);
-            if (isset($data['icon'])) unset($data['icon']);
+        if ($component->componentId != 'root' && !$enabled) {
+            $data['iconEffects'][] = 'forbidden';
         }
 
         if (!$acl->isAllowed($user, $component)) {
@@ -124,7 +71,6 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             $data['allowDrag'] = false;
         }
 
-
         //wenn *unter* der seite eine page möglich ist (pageGenerator vorhanden) dann
         //hinzufügen + drop erlauben
         //das kann nicht im Generator ermittelt werden, der macht nur sich selbst
@@ -138,9 +84,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
                 $data['allowDrop'] = true;
             }
         }
-
         $data['actions']['preview'] = (bool)$component->isPage;
-
 
         //default werte
         $data['actions'] = array_merge(array(
@@ -151,10 +95,6 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             'makeHome' => false,
             'add' => false,
         ), $data['actions']);
-        $data = array_merge(array(
-            'allowDrag' => false,
-            'allowDrop' => false
-        ), $data);
 
         $data['editComponents'] = self::_getAllEditComponents($editComponents, $user, $acl, $componentConfigs);
 
@@ -175,13 +115,6 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             }
         }
         return $ec;
-    }
-
-    protected function _getParentId($row)
-    {
-        $parent = $row->parent;
-        if (!$parent) return null;
-        return $parent->componentId;
     }
 
     private static function _formatEditComponents($componentClass, Kwf_Component_Data $component, $configType, &$componentConfigs)
