@@ -5,12 +5,14 @@
  */
 class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
+    protected $presetModel;
     public function setUp()
     {
         parent::setUp();
         Kwf_Component_Data_Root::setComponentClass('Kwc_FavouritesSelenium_Root');
 
         //use custom user model
+        $this->presetModel = Kwf_Registry::get('config')->user->model;
         Kwf_Registry::get('config')->user->model = 'Kwc_FavouritesSelenium_UserModel';
 
         //unset existing userModel instance to get new one
@@ -24,6 +26,7 @@ class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
         parent::tearDown();
         Kwf_Registry::getInstance()->offsetUnset('config'); //re-reads config, undoes changes to config done above
         Kwf_Registry::getInstance()->offsetUnset('userModel');
+        Kwf_Registry::get('config')->user->model = $this->presetModel;
     }
 
     public function testJavaScriptAndPersistence()
