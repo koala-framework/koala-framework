@@ -854,17 +854,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $csvRows = array();
             foreach ($data as $row => $cols) {
                 $cols = str_replace('"', '""', $cols);
-                //check if charset is forced in config
-                $importCols = array();
-                if (Kwf_Registry::get('config')->csvWindowsCharset) {
-                    foreach ($cols as $col) {
-                        $col = mb_convert_encoding($col, 'Windows-1252', 'UTF-8');
-                        $importCols[] = $col;
-                    }
-                } else {
-                    $importCols = $cols;
-                }
-                $csvRows[] = '"'. implode('";"', $importCols) .'"';
+                $csvRows[] = '"'. implode('";"', $cols) .'"';
                 $this->_progressBar->next(1, trlKwf('Writing data'));
             }
 
