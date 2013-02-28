@@ -5,7 +5,7 @@ class Kwc_Box_HomeLink_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['cssClass'] = 'webStandard';
-        $ret['placeholder']['linkText'] = trlKwf('Home');
+        $ret['placeholder']['linkText'] = trlKwfStatic('Home');
         return $ret;
     }
 
