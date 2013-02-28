@@ -21,7 +21,6 @@ class Kwc_Favourites_Root extends Kwf_Component_NoCategoriesRoot
         $ret['generators']['page']['component']['favourites'] = 'Kwc_Favourites_Favourite_Component';
         $ret['generators']['page']['component']['favouritesBox'] = 'Kwc_Favourites_Box_Component';
         $ret['generators']['page']['component']['favouritesPage'] = 'Kwc_Favourites_Page_TestComponent';
-        $ret['generators']['page']['component']['selenium'] = 'Kwc_Favourites_Selenium_Component';
 
         unset($ret['generators']['title']);
         return $ret;
