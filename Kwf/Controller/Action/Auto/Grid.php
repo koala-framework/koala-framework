@@ -14,6 +14,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
     protected $_querySeparator; // deprecated, set in filterConfig
     protected $_sortable = true; //ob felder vom user sortiert werden können
     protected $_position;
+    protected $_csvExportCharset = 'UTF-8';
 
     protected $_primaryKey;
     /**
@@ -854,7 +855,16 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $csvRows = array();
             foreach ($data as $row => $cols) {
                 $cols = str_replace('"', '""', $cols);
-                $csvRows[] = '"'. implode('";"', $cols) .'"';
+                $importCols = array();
+                if ($this->_csvExportCharset != 'UTF-8') {
+                    foreach ($cols as $col) {
+                        $col = mb_convert_encoding($col, $this->_csvExportCharset, 'UTF-8');
+                        $importCols[] = $col;
+                    }
+                } else {
+                    $importCols = $cols;
+                }
+                $csvRows[] = '"'. implode('";"', $importCols) .'"';
                 $this->_progressBar->next(1, trlKwf('Writing data'));
             }
 
