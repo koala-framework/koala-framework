@@ -1,6 +1,11 @@
 <?php
-class Kwc_FulltextSearch_Search_Update_3 extends Kwf_Update
+class Kwf_Update_38002 extends Kwf_Update
 {
+    public function getTags()
+    {
+        return array('fulltext');
+    }
+
     public function update()
     {
         echo "\n\nremoving fulltext index, you need to rebuild manually\n";
