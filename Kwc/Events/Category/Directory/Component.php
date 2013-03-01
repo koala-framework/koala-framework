@@ -1,5 +1,5 @@
 <?php
-class Kwc_Events_Category_Directory_Component extends Kwc_NewsCategory_Component
+class Kwc_Events_Category_Directory_Component extends Kwc_News_Category_Directory_Component
 {
     public static function getSettings()
     {
