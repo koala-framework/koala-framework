@@ -35,8 +35,8 @@ class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
             || $this->getAllowBlank() === '0'
         ) {
             $v = new Kwf_Validate_NotEmptyNotZero();
-            if ($this->getEmptyMessage()) {
-                $v->setMessage(Kwf_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
+            if ($this->getBlankText()) {
+                $v->setMessage(Kwf_Validate_NotEmpty::IS_EMPTY, $this->getBlankText());
             }
             $this->addValidator($v, 'notEmpty');
         }
