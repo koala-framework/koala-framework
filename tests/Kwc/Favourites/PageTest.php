@@ -1,11 +1,13 @@
 <?php
 class Kwc_Favourites_PageTest extends Kwc_TestAbstract
 {
+    private $_previousUserModel;
     public function setUp()
     {
         parent::setUp('Kwc_Favourites_Root');
 
         //use custom user model
+        $this->_previousUserModel = Kwf_Registry::get('config')->user->model;
         Kwf_Registry::get('config')->user->model = 'Kwc_Favourites_UserModel';
 
         //unset existing userModel instance to get new one
@@ -17,7 +19,7 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
     public function tearDown()
     {
         parent::tearDown();
-        Kwf_Registry::getInstance()->offsetUnset('config'); //re-reads config, undoes changes to config done above
+        Kwf_Registry::get('config')->user->model = $this->_previousUserModel;
         Kwf_Registry::getInstance()->offsetUnset('userModel');
     }
 
