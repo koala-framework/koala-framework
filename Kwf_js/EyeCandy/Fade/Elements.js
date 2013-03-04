@@ -32,17 +32,19 @@ Ext.namespace("Kwf.Fade");
 Kwf.Fade.Elements = function(cfg) {
     this.selector = cfg.selector;
 
+    this.animationType = 'fade';
     this.elementAccessDirect = false; // optional: displays direct acces links to each image
     this.elementAccessPlayPause = false; // optional: displayes play / pause button
     this.elementAccessLinks = false; // optional, deprecated: displays both of above
     this.elementAccessNextPrevious = false;
     this.selectorRoot = document;
     this.fadeDuration = 1.5;
-    this.easingFadeOut = 'easeIn';
+    this.easingFadeOut = 'easeIn'; //TODO change names to fit every animation
     this.easingFadeIn = 'easeIn';
     this.fadeEvery = 7;
     this.startRandom = true;
 
+    if (typeof cfg.animationType != 'undefined') this.animationType = cfg.animationType;
     if (typeof cfg.elementAccessPlayPause != 'undefined') this.elementAccessPlayPause = cfg.elementAccessPlayPause;
     if (typeof cfg.elementAccessDirect != 'undefined') this.elementAccessDirect = cfg.elementAccessDirect;
     if (typeof cfg.elementAccessLinks != 'undefined' && cfg.elementAccessLinks) {
@@ -124,11 +126,32 @@ Kwf.Fade.Elements.prototype = {
             this._timeoutId = this.doFade.defer(this._getDeferTime(), this);
             return;
         }
-
-        activeEl.fadeOut({ endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true });
-
         var nextEl = Ext.get(this.fadeElements[this.next]);
-        nextEl.fadeIn({ endOpacity: 1.0, easing: this.easingFadeIn, duration: this.fadeDuration, useDisplay: true });
+        if(this.animationType == 'slide') { //TODO implement different animation-types
+            // order of slideIn and slideOut is important because else there is one
+            // pixel margin between the leaving and comming element
+            nextEl.slideIn('r', { endOpacity: 1.0, easing: this.easingFadeIn, duration: this.fadeDuration, useDisplay: true,
+                callback: function () {
+                    Kwf.fireComponentEvent('componentSlideIn', nextEl.parent(), nextEl);
+                }
+            });
+            activeEl.slideOut('l', { endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true,
+                callback: function() {
+                    Kwf.fireComponentEvent('componentSlideOut', activeEl.parent(), activeEl);
+                }
+            });
+        } else {
+            activeEl.fadeOut({ endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true,
+                callback: function() {
+                    Kwf.fireComponentEvent('componentFadeOut', activeEl.parent(), activeEl);
+                }
+            });
+            nextEl.fadeIn({ endOpacity: 1.0, easing: this.easingFadeIn, duration: this.fadeDuration, useDisplay: true,
+                callback: function () {
+                    Kwf.fireComponentEvent('componentFadeIn', nextEl.parent(), nextEl);
+                }
+            });
+        }
 
         if (this.elementAccessDirect) {
             if (this._elementAccessLinkEls[this.active].hasClass('elementAccessLinkActive')) {
