@@ -80,6 +80,18 @@ class Kwf_Media_Output
             $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
             $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
             $ret['headers'][] = 'Pragma: public';
+        } else {
+            // According to following link it's not possible in IE<9 to download
+            // any file with Pragma set to "no-cache" or order of Cache-Control other
+            // than "no-store, no-cache" when using a SSL connection.
+            // http://blogs.msdn.com/b/ieinternals/archive/2009/10/02/internet-explorer-cannot-download-over-https-when-no-cache.aspx
+
+            // The order of Cache-Control is correct in default-implementation so
+            // it's only required to reset Pragma to nothing.
+
+            // The definition of Pragma can be found here (http://www.ietf.org/rfc/rfc2616.txt)
+            // at chapter 14.32
+            $ret['headers'][] = 'Pragma:';
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
