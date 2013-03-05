@@ -12,8 +12,8 @@ class Kwc_Shop_Cart_Form_Component extends Kwc_Form_Component
     {
         $this->_form = new Kwf_Form();
         $this->_form->setModel(new Kwf_Model_FnF());
-        foreach ($this->getData()->parent->getChildComponents(array('generator'=>'detail')) as $c) {
-            $this->_form->add($c->getChildComponent('-form')->getComponent()->getForm());
+        foreach ($this->getData()->parent->getComponent()->getForms() as $form) {
+            $this->_form->add($form);
         }
         parent::_initForm();
     }

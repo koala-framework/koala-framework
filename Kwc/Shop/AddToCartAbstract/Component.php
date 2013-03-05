@@ -14,9 +14,13 @@ abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $cart = Kwf_Component_Data_Root::getInstance()->getComponentByClass('Kwc_Shop_Cart_Component', array('ignoreVisible' => true, 'subroot'=>$this->getData()));
+        $cart = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass(
+                array('Kwc_Shop_Cart_Component', 'Kwc_Shop_Cart_Trl_Component'),
+                array('subroot'=>$this->getData())
+            );
         if (!$cart) throw new Kwf_Exception_Client(trl('Need cart for shop but could not find it. Please add in Admin.'));
-        $m = $cart->getComponent()->getChildModel();
+        $m = $cart->getComponent()->getOrderProductsModel();
         $this->_form->setModel($m);
     }
 

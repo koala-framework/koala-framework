@@ -12,4 +12,9 @@ class Kwc_Shop_Cart_Generator extends Kwf_Component_Generator_Table
 
         return $ret;
     }
+
+    protected function _getParentDataByRow($row, $select)
+    {
+        return Kwf_Component_Data_Root::getInstance()->getComponentByClass($this->_class, array('limit'=>1));
+    }
 }

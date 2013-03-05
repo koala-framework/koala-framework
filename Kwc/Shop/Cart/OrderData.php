@@ -92,17 +92,17 @@ class Kwc_Shop_Cart_OrderData
         $subTotal = $order->getSubTotal();
         $ret[] = array(
             'class' => 'valueOfGoods',
-            'text' => trlKwf('value of goods').':',
+            'text' => trlKwfStatic('value of goods').':',
             'amount' => $subTotal
         );
         if (Kwc_Abstract::getSetting($this->_class, 'vatRate')) {
             $vat = 1+Kwc_Abstract::getSetting($this->_class, 'vatRate');
             $ret[] = array(
-                'text' => trlKwf('net amount').':',
+                'text' => trlKwfStatic('net amount').':',
                 'amount' => round($subTotal/$vat, 2)
             );
             $ret[] = array(
-                'text' => trlKwf('+{0}% VAT', ($vat-1 )*100).':',
+                'text' => trlKwfStatic('+{0}% VAT', ($vat-1 )*100).':',
                 'amount' => round($subTotal - $subTotal/$vat, 2)
             );
         }
@@ -112,12 +112,12 @@ class Kwc_Shop_Cart_OrderData
             $vat = 1+Kwc_Abstract::getSetting($this->_class, 'vatRateShipping');
             $ret[] = array(
                 'class' => 'shippingHandling',
-                'text' => trlKwf('Shipping and Handling').':',
+                'text' => trlKwfStatic('Shipping and Handling').':',
                 'amount' => round($shipping/$vat, 2)
             );
             if ($shipping) {
                 $ret[] = array(
-                    'text' => trlKwf('+{0}% VAT', ($vat-1 )*100).':',
+                    'text' => trlKwfStatic('+{0}% VAT', ($vat-1 )*100).':',
                     'amount' => round($shipping - $shipping/$vat, 2)
                 );
             }
@@ -125,7 +125,7 @@ class Kwc_Shop_Cart_OrderData
         $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
         $ret[] = array(
             'class' => 'totalAmount',
-            'text' => trlKwf('Total Amount').':',
+            'text' => trlKwfStatic('Total Amount').':',
             'amount' => $this->getTotal($order)
         );
         return $ret;

@@ -14,6 +14,7 @@ class Kwf_Data_Trl_OriginalComponent extends Kwf_Data_Abstract
     {
         $pk = $row->getModel()->getPrimaryKey();
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->$pk, array('ignoreVisible'=>true));
+        if (!$c) return null;
         if (!empty($this->_overrideFieldname)) {
             $fieldname = $this->_overrideFieldname;
         } else {

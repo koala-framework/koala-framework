@@ -12,8 +12,7 @@ class Kwc_Shop_Cart_Checkout_Form_Success_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
         $row = $this->getData()->parent->getComponent()->getFormRow();
-        $ret['payment'] = $this->getData()->parent->parent
-                                ->getChildComponent('-'.$row->payment);
+        $ret['payment'] = $this->getData()->parent->parent->getComponent()->getPayment($row);
         return $ret;
     }
 }
