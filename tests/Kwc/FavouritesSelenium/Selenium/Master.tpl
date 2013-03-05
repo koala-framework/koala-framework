@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->assets('Kwc_Favourites:Test')?>
+        <?=$this->assets('Kwc_FavouritesSelenium:Test')?>
         <?=$this->debugData()?>
     </head>
     <body>

@@ -63,7 +63,15 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
         if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
             throw new Kwf_Exception_NotYetImplemented();
         }
-        $subroot = Kwf_Component_Data_Root::getInstance(); //TODO dynamic
+
+        $subroot = Kwf_Component_Data_Root::getInstance();
+        if ($select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
+            foreach ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) as $field=>$value) {
+                if ($field == 'subroot') {
+                    $subroot = $value;
+                }
+            }
+        }
 
         $res = Kwf_Util_Fulltext_Backend_Abstract::getInstance()
             ->userSearch($subroot, $queryString, $limitOffset, $limitCount, $params);
@@ -88,7 +96,7 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
             foreach ($eq as $field=>$value) {
                 if ($field == 'id') {
                     $whereId = $value;
-                } else {
+                } else if ($field != 'subroot') {
                     throw new Kwf_Exception_NotYetImplemented();
                 }
             }

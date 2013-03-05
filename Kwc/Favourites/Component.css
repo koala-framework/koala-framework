@@ -4,7 +4,6 @@
 
 .cssClass a {
     background: url("/assets/kwf/Kwc/Favourites/starDark.png") no-repeat scroll left center transparent;
-    text-indent: -4000px;
     display: block;
     position: relative;
 }

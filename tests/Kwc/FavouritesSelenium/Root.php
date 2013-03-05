@@ -1,5 +1,5 @@
 <?php
-class Kwc_Favourites_Root extends Kwf_Component_NoCategoriesRoot
+class Kwc_FavouritesSelenium_Root extends Kwf_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
@@ -14,13 +14,14 @@ class Kwc_Favourites_Root extends Kwf_Component_NoCategoriesRoot
          * root -> 2004 [favouritesPage]
          * root -> 2005 [favouritesBox]
          */
-        $ret['generators']['page']['model'] = 'Kwc_Favourites_Root_PagesModel';
+        $ret['generators']['page']['model'] = 'Kwc_FavouritesSelenium_Root_PagesModel';
         $ret['generators']['page']['component'] = array();
         $ret['generators']['page']['component']['paragraphs'] = 'Kwc_Basic_Empty_Component';
-        $ret['generators']['page']['component']['favouritesParentStatic'] = 'Kwc_Favourites_ParentStaticFavourite_Component';
-        $ret['generators']['page']['component']['favourites'] = 'Kwc_Favourites_Favourite_Component';
+        $ret['generators']['page']['component']['favouritesParentStatic'] = 'Kwc_FavouritesSelenium_ParentStaticFavourite_Component';
+        $ret['generators']['page']['component']['favourites'] = 'Kwc_FavouritesSelenium_Favourite_Component';
         $ret['generators']['page']['component']['favouritesBox'] = 'Kwc_Favourites_Box_Component';
-        $ret['generators']['page']['component']['favouritesPage'] = 'Kwc_Favourites_Page_TestComponent';
+        $ret['generators']['page']['component']['favouritesPage'] = 'Kwc_FavouritesSelenium_Page_TestComponent';
+        $ret['generators']['page']['component']['selenium'] = 'Kwc_FavouritesSelenium_Selenium_Component';
 
         unset($ret['generators']['title']);
         return $ret;

@@ -148,7 +148,7 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
         if ($create['js']['config']) {
             $config .= ', config';
         }
-        $class = str_replace('/', '', $name);
+        $class = strtolower(str_replace('/', '', $name));
         $data = "Kwf.onElementReady('.$class', function(el$config) {\n";
         $data .= "});";
         $filename = 'components/'.$name.'/Component.js';
