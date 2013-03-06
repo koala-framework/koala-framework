@@ -12,10 +12,10 @@ class Kwc_User_BoxWithoutLogin_IsLoggedInPlugin_Component extends Kwf_Component_
         return $ret;
     }
 
-    public function processOutput($output)
+    public function replaceOutput()
     {
         if (!$this->isLoggedIn()) {
-            return $output;
+            return false;
         }
         $loggedIn = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_componentId, array('ignoreVisible' => true))
