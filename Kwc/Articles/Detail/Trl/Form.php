@@ -1,10 +1,10 @@
 <?php
 class Kwc_Articles_Detail_Trl_Form extends Kwf_Form
 {
-    public function __construct($directoryClass = null)
+    public function __construct($name, $detailClass = null)
     {
-        $this->setDirectoryClass($directoryClass);
-        parent::__construct('details');
+        $this->setClass($detailClass);
+        parent::__construct($name);
     }
 
     protected function _initFields()
@@ -30,7 +30,6 @@ class Kwc_Articles_Detail_Trl_Form extends Kwf_Form
             ->setData(new Kwc_Articles_Detail_Trl_Data('author_id'));
         $this->add(new Kwf_Form_Field_ShowField('original_vi_nr', trlKwf('VI-Number')))
             ->setData(new Kwf_Data_Trl_OriginalComponentFromData('vi_nr'));
-        $detail = Kwc_Abstract::getChildComponentClass($this->getDirectoryClass(), 'detail');
-        $this->add(Kwc_Abstract_Form::createChildComponentForm($detail, '-previewImage'));
+        $this->add(Kwc_Abstract_Form::createChildComponentForm($this->getClass(), '-previewImage'));
      }
 }
