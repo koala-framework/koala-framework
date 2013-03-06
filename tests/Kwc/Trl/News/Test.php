@@ -124,7 +124,7 @@ class Kwc_Trl_News_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById('root-en_test_1');
         $html = $c->render(); //cache it
-        $this->assertContains('01.03.2010', $html); //strange, why this date format?
+        $this->assertContains('2010-03-01', $html);
 
         $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_News_News_TestModel');
         $r = $model->getRow('1');
@@ -134,6 +134,6 @@ class Kwc_Trl_News_Test extends Kwc_TestAbstract
         $this->_process();
         $c = $this->_root->getComponentById('root-en_test_1');
         $html = $c->render();
-        $this->assertContains('05.03.2010', $html);
+        $this->assertContains('2010-03-05', $html);
     }
 }
