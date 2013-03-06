@@ -484,7 +484,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                     }
                 }, this);
 
-                Kwf.callOnContentReady(this.detailEl);
+                Kwf.callOnContentReady(this.detailEl, {newRender: true});
             },
             scope: this
         });
