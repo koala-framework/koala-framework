@@ -10,10 +10,10 @@ class Kwf_View_Helper_Date
     public function date($date, $format = null)
     {
         if (!$format) {
-            if (isset($this->_view) && $this->_view->item && $this->_view->item instanceof Kwf_Component_Data) {
-                $format = $this->_view->item->trlKwf('Y-m-d');
-            } else if (isset($this->_view) && $this->_view->data && $this->_view->data instanceof Kwf_Component_Data) {
+            if (isset($this->_view) && $this->_view->data && $this->_view->data instanceof Kwf_Component_Data) {
                 $format = $this->_view->data->trlKwf('Y-m-d');
+            } else if (isset($this->_view) && $this->_view->item && $this->_view->item instanceof Kwf_Component_Data) {
+                $format = $this->_view->item->trlKwf('Y-m-d');
             } else {
                 $format = trlKwf('Y-m-d');
             }
