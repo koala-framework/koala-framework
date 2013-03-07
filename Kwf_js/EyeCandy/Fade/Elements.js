@@ -236,8 +236,16 @@ Kwf.Fade.Elements.prototype = {
                 template += '<a class="elementAccessNext" href="#"></a>\n';
             }
 
-            this.template = new Ext.XTemplate(template);
-            this.template.append(this.selectorRoot);
+            if (this._template) {
+                if (typeof(this._template)=='string') {
+                    this._template = new Ext.XTemplate(this._template);
+                } else if (!(this._template instanceof Ext.XTemplate)) {
+                    throw trlKwf('Template has to be an Ext.XTemplate');
+                }
+            } else {
+                this._template = new Ext.XTemplate(template);
+            }
+            this._template.append(this.selectorRoot);
 
             var elementAccessLinks = Ext.get(this.selectorRoot).select('a.elementAccessLink', true);
             if (elementAccessLinks) {
