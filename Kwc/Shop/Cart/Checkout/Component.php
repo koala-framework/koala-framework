@@ -39,4 +39,14 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
     {
         return Kwc_Shop_Cart_OrderData::getInstance($this->getData()->parent->componentClass)->getSumRows($order);
     }
+
+    public function getPayments()
+    {
+        return Kwc_Abstract::getChildComponentClasses($this->getData()->componentClass, 'payment');
+    }
+
+    public function getPayment($order)
+    {
+        return $this->getData()->getChildComponent('-'.$order->payment);
+    }
 }

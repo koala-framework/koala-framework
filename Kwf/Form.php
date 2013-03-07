@@ -258,24 +258,21 @@ class Kwf_Form extends Kwf_Form_NonTableForm
             $this->_rows[$key] = $this->_model->createRow();
             return $this->_rows[$key];
         } else if ($id) {
-            $rowset = $this->_model->find($id);
+            $s = new Kwf_Model_Select();
+            $s->whereEquals($this->_model->getPrimaryKey(), $id);
+            $row = $this->_model->getRow($s);
         }
 
-        if (!$rowset) {
-            return null;
-        } else {
-            if (count($rowset)== 0) {
-                if ($this->getCreateMissingRow()) { //für Kwf_Form_AddForm
-                    $this->_rows[$key] = $this->_createMissingRow($id);
-                } else {
-                    throw new Kwf_Exception('No database-entry found.');
-                }
-            } else if (count($rowset) > 1) {
-                throw new Kwf_Exception('More than one database-entry found.');
+        if (!$row) {
+            if ($this->getCreateMissingRow()) { //für Kwf_Form_AddForm
+                $this->_rows[$key] = $this->_createMissingRow($id);
             } else {
-                $this->_rows[$key] = $rowset->current();
+                throw new Kwf_Exception('No database-entry found.');
             }
+        } else {
+            $this->_rows[$key] = $row;
         }
+
         return $this->_rows[$key];
     }
 

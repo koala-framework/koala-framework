@@ -1,10 +1,10 @@
 <?php
 class Kwc_Articles_Detail_Form extends Kwf_Form
 {
-    public function __construct($directoryClass = null)
+    public function __construct($name, $detailClass = null)
     {
-        $this->setDirectoryClass($directoryClass);
-        parent::__construct('details');
+        $this->setClass($detailClass);
+        parent::__construct($name);
     }
 
     protected function _initFields()

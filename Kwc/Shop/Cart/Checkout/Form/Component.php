@@ -30,7 +30,7 @@ class Kwc_Shop_Cart_Checkout_Form_Component extends Kwc_Form_Component
         $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
                             ->getCartOrder();
         $totalAmount = $this->getData()->parent->getComponent()->getTotal($order);
-        $cc = Kwc_Abstract::getChildComponentClasses($this->getData()->parent->componentClass, 'payment');
+        $cc = $this->getData()->parent->getComponent()->getPayments();
         $ret = array();
         foreach ($cc as $k=>$c) {
             if ($totalAmount <= 0) {

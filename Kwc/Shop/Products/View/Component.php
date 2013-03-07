@@ -11,8 +11,9 @@ class Kwc_Shop_Products_View_Component extends Kwc_Shop_Products_ViewWithoutAddT
     public function getPartialVars($partial, $nr, $info)
     {
         $ret = parent::getPartialVars($partial, $nr, $info);
+        $ret['item']->addToCart = null;
         $ret['item']->addToCart = $this->getData()->parent->getComponent()
-            ->getItemDirectory()->getChildComponent('-'.$ret['item']->row->id);
+            ->getItemDirectory()->getChildComponent('-'.$ret['item']->id);
         return $ret;
     }
 
@@ -21,7 +22,7 @@ class Kwc_Shop_Products_View_Component extends Kwc_Shop_Products_ViewWithoutAddT
         parent::processInput($postData);
         foreach ($this->getItems() as $i) {
             $addToCart = $this->getData()->parent->getComponent()
-                ->getItemDirectory()->getChildComponent('-'.$i->row->id);
+                ->getItemDirectory()->getChildComponent('-'.$i->id);
             $addToCart->getComponent()->processInput($postData);
         }
     }

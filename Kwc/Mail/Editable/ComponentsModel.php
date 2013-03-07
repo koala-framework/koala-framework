@@ -5,7 +5,7 @@ class Kwc_Mail_Editable_ComponentsModel extends Kwf_Model_Data_Abstract
     {
         $data = array();
         $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_Mail_Editable_Component');
+            ->getComponentsByClass(array('Kwc_Mail_Editable_Component', 'Kwc_Mail_Editable_Trl_Component'));
         foreach ($components as $c) {
             $a = Kwc_Admin::getInstance($c->componentClass);
             $data[] = array(

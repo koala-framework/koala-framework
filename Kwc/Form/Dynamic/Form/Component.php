@@ -58,6 +58,9 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
+        if (substr($host, 0, 4) == 'www.') {
+            $host = substr($host, 4);
+        }
         $row->setFrom("noreply@$host");
         $settings = $this->getData()->parent->getComponent()->getMailSettings();
         $row->addTo($settings['recipient']);
@@ -75,6 +78,12 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         }
         $row->sent_mail_content_text = $msg;
 
+        $this->_beforeSendMail($row);
+
         $row->sendMail(); //manuell aufrufen weils beim speichern nicht automatisch gemacht wird (da da der content nocht nicht vorhanden ist)
+    }
+
+    protected function _beforeSendMail(Kwf_Model_Row_Interface $row)
+    {
     }
 }

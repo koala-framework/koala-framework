@@ -31,13 +31,14 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
     protected function _getLinks()
     {
         $ret = array();
+        $placeholder = $this->_getSetting('placeholder');
         $ret['cart'] = array(
             'component' => $this->_getCart(),
-            'text' => $this->_getPlaceholder('toCart')
+            'text' => $placeholder['toCart']
         );
         $ret['checkout'] = array(
             'component' => $this->_getCart()->getChildComponent(array('generator' => 'checkout')),
-            'text' => $this->_getPlaceholder('toCheckout')
+            'text' => $placeholder['toCheckout']
         );
         return $ret;
     }
@@ -45,8 +46,8 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
     private function _getCart()
     {
         return Kwf_Component_Data_Root::getInstance()->getComponentByClass(
-            'Kwc_Shop_Cart_Component',
-            array('subroot' => $this->getData())
+            array('Kwc_Shop_Cart_Component', 'Kwc_Shop_Cart_Trl_Component'),
+            array('ignoreVisible' => true, 'subroot' => $this->getData())
         );
     }
     public function hasContent()

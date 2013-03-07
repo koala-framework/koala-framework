@@ -6,7 +6,7 @@ class Kwc_Shop_Products_Directory_Admin extends Kwc_Directories_Item_Directory_A
         $detail = Kwc_Abstract::getChildComponentClass($this->_class, 'detail');
         return array($detail, $this->_class);
     }
-
+/*
     public function addResources(Kwf_Acl $acl)
     {
         parent::addResources($acl);
@@ -23,4 +23,5 @@ class Kwc_Shop_Products_Directory_Admin extends Kwc_Directories_Item_Directory_A
                 $acl->add(new Kwf_Acl_Resource_ComponentClass($c), 'kwc_'.$this->_class);
             }
     }
+*/
 }

@@ -44,6 +44,7 @@
 <mk>Страната не е пронајдена</mk>
 <sl>Strani ni bilo možno najti.</sl>
 <ru>Страница не найдена</ru>
+<bg>Страницата не беше намерена.</bg>
 </text>
 <text>
 <en>Lost password?</en>
@@ -8858,6 +8859,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <context>salutation firstname male</context>
 <de>Lieber {0}</de>
 <id>1604</id>
+<sl>Dragi {0}</sl>
 </text>
 <text>
 <en>Dear {0}</en>

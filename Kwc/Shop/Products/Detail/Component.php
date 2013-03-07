@@ -22,12 +22,24 @@ class Kwc_Shop_Products_Detail_Component extends Kwc_Directories_Item_Detail_Com
     {
         $item->previewImage = $item->getChildComponent('-image');
         $item->previewText = $item->getChildComponent('-text');
+        $item->currentPrice = $item->row->current_price;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['addToCart'] = $this->getData()->getChildComponent('-addToCart');
+        $ret['currentPrice'] = $this->getData()->row->current_price;
         return $ret;
+    }
+
+    public function getAddToCartForm()
+    {
+        return $this->getData()->getChildComponent('-addToCart');
+    }
+
+    public function getProductRow()
+    {
+        return $this->getData()->row;
     }
 }

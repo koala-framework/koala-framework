@@ -5,7 +5,7 @@ class Kwc_Editable_ComponentsModel extends Kwf_Model_Data_Abstract
     {
         $data = array();
         $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_Editable_Component');
+            ->getComponentsByClass(array('Kwc_Editable_Component', 'Kwc_Editable_Trl_Component'));
         foreach ($components as $c) {
             $data[] = array(
                 'id' => $c->dbId,

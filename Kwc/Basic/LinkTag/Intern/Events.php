@@ -52,7 +52,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
         foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            foreach ($this->_getDbIds($childPageId) as $dbId) {
+            foreach ($this->_getDbIds($childPageId, true) as $dbId) {
                 foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
                     $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
                     if ($c->isPage) {
@@ -66,7 +66,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
     {
         foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            foreach ($this->_getDbIds($childPageId) as $dbId) {
+            foreach ($this->_getDbIds($childPageId, true) as $dbId) {
                 foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
                     $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
                     if ($c->isPage) {
@@ -79,7 +79,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
 
     public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
     {
-        foreach ($this->_getDbIds($event->component->dbId) as $dbId) {
+        foreach ($this->_getDbIds($event->component->dbId, false) as $dbId) {
             foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
                 if ($c->isPage) {
@@ -95,7 +95,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         $this->_pageIds = null;
     }
 
-    private function _getDbIds($targetId)
+    private function _getDbIds($targetId, $includeSubpages = true)
     {
         if (!$this->_pageIds) {
             $ids = array();
@@ -109,11 +109,17 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         }
         $ret = array();
         foreach ($this->_pageIds as $targetPageId => $dbIds) {
-            if ($targetPageId == $targetId
-                || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'-'
-                || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'_'
-            ) {
-                $ret = array_merge($ret, $dbIds);
+            if ($includeSubpages) {
+                if ((string)$targetPageId == (string)$targetId
+                    || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'-'
+                    || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'_'
+                ) {
+                    $ret = array_merge($ret, $dbIds);
+                }
+            } else {
+                if ((string)$targetPageId === (string)$targetId) {
+                    $ret = array_merge($ret, $dbIds);
+                }
             }
         }
         return $ret;
