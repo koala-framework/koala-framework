@@ -107,7 +107,7 @@ Kwf.Fade.Elements = function(cfg) {
 
     // create the element access link if needed
     if ((this.elementAccessDirect || this.elementAccessPlayPause || this.elementAccessNextPrevious) && i >= 1) {
-        this._createElementAccessLinks(this.active);
+        this._createElementAccessLinks();
     }
 };
 
@@ -204,7 +204,7 @@ Kwf.Fade.Elements.prototype = {
         }
     },
 
-    _createElementAccessLinks: function(activeLinkIndex) {
+    _createElementAccessLinks: function() {
         // accessLinks and play / pause button if there are at least 2 images
         if (this.fadeElements.length >= 2) {
             var template = '';
@@ -252,7 +252,7 @@ Kwf.Fade.Elements.prototype = {
                 this._elementAccessLinkEls = Ext.get(this.selectorRoot).query('a.elementAccessLink');
                 var j = 0;
                 elementAccessLinks.each(function(link) {
-                    if (activeLinkIndex==j) link.addClass('elementAccessLinkActive');
+                    if (this.active==j) link.addClass('elementAccessLinkActive');
                     link.on('click', function(ev, el, opt) {
                         ev.stopEvent();
 
