@@ -5,6 +5,7 @@ Kwf.onContentReady(function()
         var extWrapperEl = Ext.get(c);
         if (extWrapperEl.fadeElementsObject) return; // nur einmal initialisieren
 
+        var fadeClass = Ext.query('.fadeClass', c)[0].value;
         var selector = Ext.query('.fadeSelector', c)[0].value;
         var config = Ext.query('.fadeConfig', c); // optional
         if (config && config[0]) {
@@ -20,7 +21,13 @@ Kwf.onContentReady(function()
         config.selector = selector;
         config.selectorRoot = c;
 
-        extWrapperEl.fadeElementsObject = new Kwf.Fade.Elements(config);
+        var cls = Kwf.Fade.Elements;
+        if (fadeClass) {
+            cls = eval(fadeClass);
+            delete fadeClass;
+        }
+
+        extWrapperEl.fadeElementsObject = new cls(config);
         if (config.autoStart == undefined || config.autoStart) {
             extWrapperEl.fadeElementsObject.start();
         }
