@@ -16,8 +16,12 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
     {
         parent::preDispatch();
         $this->_commands = Kwf_Registry::get('config')->processControl->toArray();
-        foreach ($this->_commands as &$c) {
-            if (!isset($c['count'])) $c['count'] = 1;
+        foreach ($this->_commands as $k=>$c) {
+            if (!$c) {
+                unset($this->_commands[$k]);
+                continue;
+            }
+            if (!isset($c['count'])) $this->_commands[$k]['count'] = 1;
         }
     }
 
