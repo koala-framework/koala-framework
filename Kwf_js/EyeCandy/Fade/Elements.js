@@ -119,6 +119,7 @@ Kwf.Fade.Elements.prototype = {
     _timeoutId: null,
     _playPause: 'play',
     _playPauseButton: null,
+    _template: null,
 
     start: function() {
         if (this.fadeElements.length <= 1) return;
@@ -161,10 +162,10 @@ Kwf.Fade.Elements.prototype = {
         }
 
         if (this.elementAccessDirect) {
-            if (this._elementAccessLinkEls[this.active].hasClass('elementAccessLinkActive')) {
-                this._elementAccessLinkEls[this.active].removeClass('elementAccessLinkActive');
+            if (Ext.get(this._elementAccessLinkEls[this.active]).hasClass('elementAccessLinkActive')) {
+                Ext.get(this._elementAccessLinkEls[this.active]).removeClass('elementAccessLinkActive');
             }
-            this._elementAccessLinkEls[this.next].addClass('elementAccessLinkActive');
+            Ext.get(this._elementAccessLinkEls[this.next]).addClass('elementAccessLinkActive');
         }
 
         this.active = this.next;
@@ -206,21 +207,45 @@ Kwf.Fade.Elements.prototype = {
     _createElementAccessLinks: function(activeLinkIndex) {
         // accessLinks and play / pause button if there are at least 2 images
         if (this.fadeElements.length >= 2) {
+            var template = '';
             if (this.elementAccessDirect || this.elementAccessPlayPause) {
-                var ul = Ext.get(this.selectorRoot).createChild({ tag: 'ul', cls: 'elementAccessLinks' });
+                template += '<ul class="elementAccessLinks">\n';
             }
 
             if (this.elementAccessDirect) {
-                var j = 0;
                 Ext.each(this.fadeElements, function(e) {
-                    var a = ul.createChild({ tag: 'li' })
-                        .createChild({
-                            tag: 'a',
-                            cls: 'elementAccessLink'+(activeLinkIndex==j ? ' elementAccessLinkActive' : ''),
-                            html: '',
-                            href: '#'
-                        });
-                    a.on('click', function(ev, el, opt) {
+                    template += '<li>';
+                        template += '<a class="elementAccessLink" href="#"></a>';
+                    template += '</li>\n';
+                }, this);
+            }
+
+            if (this.elementAccessPlayPause) {
+                template += '<li>';
+                    template += '<a class="elementAccessPlayPauseButton elementAccessPause" href="#">&nbsp;</a>';
+                template += '</li>\n';
+            }
+
+            if (this.elementAccessDirect || this.elementAccessPlayPause) {
+                template += '</ul>\n';
+            }
+
+            if (this.elementAccessNextPrevious) {
+                template += '<a class="elementAccessPrevious" href="#"></a>\n';
+
+                template += '<a class="elementAccessNext" href="#"></a>\n';
+            }
+
+            this.template = new Ext.XTemplate(template);
+            this.template.append(this.selectorRoot);
+
+            var elementAccessLinks = Ext.get(this.selectorRoot).select('a.elementAccessLink', true);
+            if (elementAccessLinks) {
+                this._elementAccessLinkEls = Ext.get(this.selectorRoot).query('a.elementAccessLink');
+                var j = 0;
+                elementAccessLinks.each(function(link) {
+                    if (activeLinkIndex==j) link.addClass('elementAccessLinkActive');
+                    link.on('click', function(ev, el, opt) {
                         ev.stopEvent();
 
                         if (this._timeoutId) {
@@ -231,20 +256,13 @@ Kwf.Fade.Elements.prototype = {
                         if (this.elementAccessPlayPause) this.pause();
 
                     }, this, { activateIdx: j });
-                    this._elementAccessLinkEls.push(a);
                     j += 1;
                 }, this);
             }
 
-            if (this.elementAccessPlayPause) {
-                this._playPauseButton = ul.createChild({ tag: 'li' })
-                    .createChild({
-                        tag: 'a',
-                        cls: 'elementAccessPlayPauseButton elementAccessPause',
-                        html: '&nbsp;',
-                        href: '#'
-                    });
-                this._playPauseButton.on('click', function(ev, el, opt) {
+            var playPauseButton = Ext.get(this.selectorRoot).child('a.elementAccessPlayPauseButton');
+            if (playPauseButton) {
+                playPauseButton.on('click', function(ev, el, opt) {
                     ev.stopEvent();
 
                     if (this._playPause == 'play') {
@@ -255,10 +273,8 @@ Kwf.Fade.Elements.prototype = {
                 }, this);
             }
 
-            if (this.elementAccessNextPrevious) {
-                var prevButton = Ext.get(this.selectorRoot).createChild({
-                    tag: 'a', cls: 'elementAccessPrevious', html: '', href: '#'
-                });
+            var prevButton = Ext.get(this.selectorRoot).child('a.elementAccessPrevious');
+            if (prevButton) {
                 prevButton.on('click', function(ev, el, opt) {
                     ev.stopEvent();
 
@@ -271,10 +287,10 @@ Kwf.Fade.Elements.prototype = {
                     this.doFade();
                     if (this.elementAccessPlayPause) this.pause();
                 }, this);
+            }
 
-                var nextButton = Ext.get(this.selectorRoot).createChild({
-                    tag: 'a', cls: 'elementAccessNext', html: '', href: '#'
-                });
+            var nextButton = Ext.get(this.selectorRoot).child('a.elementAccessNext');
+            if (nextButton) {
                 nextButton.on('click', function(ev, el, opt) {
                     ev.stopEvent();
 
