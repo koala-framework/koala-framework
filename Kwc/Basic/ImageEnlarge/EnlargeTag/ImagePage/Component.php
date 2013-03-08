@@ -37,11 +37,19 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
             //it's in an List_Switch with ImageEnlarge as large component (we have to go up one more level)
             $getChildren = array('-'.$imageEnlarge->id);
             $imageEnlarge = $imageEnlarge->parent;
-            $parent = $parent->parent;
         }
 
+        $ret = array_merge($ret, self::getPreviousAndNextImagePage($imageEnlarge, $getChildren));
+        return $ret;
+    }
+
+    public static function getPreviousAndNextImagePage($imageEnlarge, $getChildren, $ignoreVisible = false)
+    {
+        $ret = array();
         //TODO optimize in generator using something like whereNextSiblingOf / wherePreviousSiblingOf
-        $allImages = $parent->getChildComponents(array('componentClass'=>$imageEnlarge->componentClass));
+        $allImages = $imageEnlarge->parent->getChildComponents(array(
+            'componentClass' => $imageEnlarge->componentClass, 'ignoreVisible' => $ignoreVisible
+        ));
         $previous = null;
         foreach ($allImages as $c) {
             if ($c === $imageEnlarge) {
