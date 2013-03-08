@@ -51,6 +51,7 @@ Kwf.Fade.Elements = function(cfg) {
     this.fadeEvery = 7;
     this.startRandom = true;
 
+    if (typeof cfg.template != 'undefined') this._template = cfg.template;
     if (typeof cfg.animationType != 'undefined') this.animationType = cfg.animationType;
     if (typeof cfg.elementAccessPlayPause != 'undefined') this.elementAccessPlayPause = cfg.elementAccessPlayPause;
     if (typeof cfg.elementAccessDirect != 'undefined') this.elementAccessDirect = cfg.elementAccessDirect;
