@@ -28,8 +28,6 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
             'autoStart'          => true
         );
 
-        $ret['fadeClass'] = 'Kwf.Fade.Elements';
-
         return $ret;
     }
 
@@ -39,7 +37,6 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
         $ret['selector'] = $this->_getSetting('selector');
         $ret['textSelector'] = $this->_getSetting('textSelector');
         $ret['fadeConfig'] = $this->_getSetting('fadeConfig');
-        $ret['fadeClass'] = $this->_getSetting('fadeClass');
         return $ret;
     }
 }
