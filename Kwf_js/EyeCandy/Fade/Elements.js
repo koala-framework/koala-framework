@@ -209,43 +209,53 @@ Kwf.Fade.Elements.prototype = {
         if (this.fadeElements.length >= 2) {
             var template = '';
             if (this.elementAccessDirect || this.elementAccessPlayPause) {
-                template += '<ul class="elementAccessLinks">\n';
+                template += '<ul class="elementAccessLinks">';
             }
 
             if (this.elementAccessDirect) {
-                Ext.each(this.fadeElements, function(e) {
-                    template += '<li>';
-                        template += '<a class="elementAccessLink" href="#"></a>';
-                    template += '</li>\n';
-                }, this);
+                template += '<tpl for="elementAccessLinks">' +
+                    '<li>' +
+                        '<a class="elementAccessLink" href="#"></a>' +
+                    '</li>' +
+                '</tpl>';
             }
 
             if (this.elementAccessPlayPause) {
-                template += '<li>';
-                    template += '<a class="elementAccessPlayPauseButton elementAccessPause" href="#">&nbsp;</a>';
-                template += '</li>\n';
+                template += '<li>' +
+                    '<a class="elementAccessPlayPauseButton elementAccessPause" href="#">&nbsp;</a>' +
+                '</li>';
             }
 
             if (this.elementAccessDirect || this.elementAccessPlayPause) {
-                template += '</ul>\n';
+                template += '</ul>';
             }
 
             if (this.elementAccessNextPrevious) {
-                template += '<a class="elementAccessPrevious" href="#"></a>\n';
-
-                template += '<a class="elementAccessNext" href="#"></a>\n';
+                template += '<a class="elementAccessPrevious" href="#"></a>' +
+                '<a class="elementAccessNext" href="#"></a>';
             }
 
             if (this._template) {
                 if (typeof(this._template)=='string') {
                     this._template = new Ext.XTemplate(this._template);
                 } else if (!(this._template instanceof Ext.XTemplate)) {
-                    throw trlKwf('Template has to be an Ext.XTemplate');
+                    throw 'Template has to be an Ext.XTemplate';
                 }
             } else {
                 this._template = new Ext.XTemplate(template);
             }
-            this._template.append(this.selectorRoot);
+
+            var data = {
+                elementAccessLinks: []
+            };
+            var i = 1;
+            Ext.each(this.fadeElements, function() {
+                data['elementAccessLinks'].push({
+                    link: i
+                });
+                i += 1;
+            }, this);
+            this._template.append(this.selectorRoot, data);
 
             var elementAccessLinks = Ext.get(this.selectorRoot).select('a.elementAccessLink', true);
             if (elementAccessLinks) {
