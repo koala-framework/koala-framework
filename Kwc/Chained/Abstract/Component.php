@@ -229,7 +229,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
     public static function getAllChainedByMaster($master, $chainedType, $parentDataSelect = array())
     {
         $cacheId = 'hasChainedBMCls-'.Kwf_Component_Data_Root::getComponentClass();
-        $classes = Kwf_Cache_Simple::fetch($cacheId);
+        $classes = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($classes === false) {
             $classes = array();
             foreach (Kwc_Abstract::getComponentClasses() as $cls) {
@@ -237,7 +237,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
                     $classes[] = $cls;
                 }
             }
-            Kwf_Cache_Simple::add($cacheId, $classes);
+            Kwf_Cache_SimpleStatic::add($cacheId, $classes);
         }
         $ret = array();
         foreach ($classes as $cls) {

@@ -289,10 +289,10 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['message'] = null;
 
         $cacheId = 'kwcFormCu-'.get_class($this);
-        $controllerUrl = Kwf_Cache_Simple::fetch($cacheId);
+        $controllerUrl = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if (!$controllerUrl) {
             $controllerUrl = Kwc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm');
-            Kwf_Cache_Simple::add($cacheId, $controllerUrl);
+            Kwf_Cache_SimpleStatic::add($cacheId, $controllerUrl);
         }
         $hideForValue = array();
         foreach ($this->_form->getHideForValue() as $v) {

@@ -335,7 +335,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
 
         $cacheId = $this->componentClass . '_pageGenerators';
 
-        $generators = Kwf_Cache_Simple::fetch($cacheId);
+        $generators = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if (!$generators) {
             $generators = array();
             foreach (Kwc_Abstract::getComponentClasses() as $class) {
@@ -348,7 +348,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                     }
                 }
             }
-            Kwf_Cache_Simple::add($cacheId, $generators);
+            Kwf_Cache_SimpleStatic::add($cacheId, $generators);
         }
 
         $this->_pageGenerators = array();
@@ -545,7 +545,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
 
         $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
-        } else if (($generators = Kwf_Cache_Simple::fetch($cacheId)) !== false) {
+        } else if (($generators = Kwf_Cache_SimpleStatic::fetch($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Kwf_Component_Generator_Abstract::getInstance($g[0], $g[1]);
@@ -568,7 +568,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                 }
             }
             $generators = array_values($generators);
-            Kwf_Cache_Simple::add($cacheId, $generators);
+            Kwf_Cache_SimpleStatic::add($cacheId, $generators);
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Kwf_Component_Generator_Abstract::getInstance($g[0], $g[1]);
