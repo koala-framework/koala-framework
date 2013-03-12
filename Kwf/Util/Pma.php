@@ -4,7 +4,7 @@ class Kwf_Util_Pma
     public static function dispatch()
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
-        if (substr($_SERVER['REDIRECT_URL'], 0, 9) != '/kwf/pma/') return;
+        if (substr($_SERVER['REDIRECT_URL'], 0, 9) != '/kwf/pma/' && $_SERVER['REDIRECT_URL'] != '/kwf/pma') return;
 
         global $dbh,$last_sth,$last_sql,$reccount,$out_message,$SQLq,$SHOW_T;
         global $DB,$sqldr,$is_sht,$xurl;

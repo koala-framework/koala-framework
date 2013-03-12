@@ -351,7 +351,7 @@ class Kwf_Util_Setup
 
 
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/'\n";
+        $ret .= "    (substr(\$_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || \$_SERVER['REQUEST_URI'] == '/kwf/pma')\n";
         $ret .= ") {\n";
         $ret .= "    Kwf_Util_Pma::dispatch();\n";
         $ret .= "}\n";
