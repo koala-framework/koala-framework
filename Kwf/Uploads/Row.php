@@ -11,7 +11,6 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
 
     public function writeFile($contents, $filename, $extension, $mimeType = null)
     {
-        $this->_deleteFile();
         $this->filename = $filename;
         $this->extension = $extension;
         $mimeType = self::detectMimeType($mimeType, $contents);
