@@ -5,7 +5,7 @@ Kwf.onContentReady(function()
         var extWrapperEl = Ext.get(c);
         if (extWrapperEl.fadeElementsObject) return; // nur einmal initialisieren
 
-        var fadeClass = Ext.query('.fadeClass', c)[0].value;
+        var fadeClass = Ext.query('.fadeClass', c);
         var selector = Ext.query('.fadeSelector', c)[0].value;
         var config = Ext.query('.fadeConfig', c); // optional
         if (config && config[0]) {
@@ -22,8 +22,8 @@ Kwf.onContentReady(function()
         config.selectorRoot = c;
 
         var cls = Kwf.Fade.Elements;
-        if (fadeClass) {
-            cls = eval(fadeClass);
+        if (fadeClass.length) {
+            cls = eval(fadeClass[0].value);
             delete fadeClass;
         }
 
