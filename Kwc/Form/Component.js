@@ -121,7 +121,9 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
 
                 // show success content
                 if (r.successContent) {
-                    var el = this.el.parent().createChild(r.successContent);
+                    var el = this.el.parent().createChild({
+                        html: r.successContent
+                    });
                     if (this.config.hideFormOnSuccess) {
                         this.el.remove();
                     } else {
@@ -130,7 +132,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                             Kwf.callOnContentReady(this.el.dom);
                         }).defer(5000, this, [el]);
                     }
-                    if(el) Kwf.callOnContentReady(el.dom, {newRender: true});
+                    Kwf.callOnContentReady(el.dom, {newRender: true});
                 } else if (r.successUrl) {
                     document.location.href = r.successUrl;
                 }
