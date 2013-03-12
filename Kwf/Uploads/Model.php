@@ -5,6 +5,15 @@ class Kwf_Uploads_Model extends Kwf_Model_Db_Proxy
     protected $_rowClass = 'Kwf_Uploads_Row';
     private $_uploadDir;
 
+    protected function _init()
+    {
+        parent::_init();
+
+        if (Kwf_Config::getValue('aws.uploadsBucket')) {
+            $this->_rowClass = 'Kwf_Util_Aws_Uploads_S3Row';
+        }
+    }
+
     public function setUploadDir($dir)
     {
         $this->_uploadDir = $dir;

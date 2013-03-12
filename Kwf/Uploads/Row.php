@@ -9,6 +9,11 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         }
     }
 
+    protected function _putFileContents($contents)
+    {
+        file_put_contents($this->getFileSource(), $contents);
+    }
+
     public function writeFile($contents, $filename, $extension, $mimeType = null)
     {
         $this->filename = $filename;
@@ -16,7 +21,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $mimeType = self::detectMimeType($mimeType, $contents);
         $this->mime_type = $mimeType;
         $this->save();
-        file_put_contents($this->getFileSource(), $contents);
+        $this->_putFileContents($contents);
         return $this;
     }
 
