@@ -7,15 +7,6 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         if ($filename && is_file($filename)) {
             unlink($filename);
         }
-        $this->_deleteCache();
-    }
-
-    protected function _deleteCache()
-    {
-        //TODO
-//         if ($this->id) {
-//             $this->_recursiveRemoveDirectory(self::getUploadDir() . '/cache/' . $this->id);
-//         }
     }
 
     public function writeFile($contents, $filename, $extension, $mimeType = null)
