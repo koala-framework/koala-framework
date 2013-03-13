@@ -4,6 +4,8 @@
  *
  * If available it uses apc user cache direclty (highly recommended!!), else it falls
  * back to Zend_Cache using a memcache backend.
+ *
+ * If aws.simpleCacheCluster is set Aws ElastiCache will be used.
  */
 class Kwf_Cache_Simple
 {
@@ -11,24 +13,37 @@ class Kwf_Cache_Simple
     {
         static $cache;
         if (!isset($cache)) {
-            if (extension_loaded('apc')) {
-                $cache = false;
-            } else {
+            if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
                 $cache = new Zend_Cache_Core(array(
                     'lifetime' => null,
                     'write_control' => false,
                     'automatic_cleaning_factor' => 0,
                     'automatic_serialization' => true
                 ));
-                if (extension_loaded('memcache')) {
-                    $cache->setBackend(new Kwf_Cache_Backend_Memcached());
+                $cache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
+                    'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
+                )));
+            } else {
+                if (extension_loaded('apc')) {
+                    $cache = false;
                 } else {
-                    //fallback to file backend (NOT recommended!)
-                    $cache->setBackend(new Kwf_Cache_Backend_File(array(
-                        'cache_dir' => 'cache/simple'
-                    )));
+                    $cache = new Zend_Cache_Core(array(
+                        'lifetime' => null,
+                        'write_control' => false,
+                        'automatic_cleaning_factor' => 0,
+                        'automatic_serialization' => true
+                    ));
+                    if (extension_loaded('memcache')) {
+                        $cache->setBackend(new Kwf_Cache_Backend_Memcached());
+                    } else {
+                        //fallback to file backend (NOT recommended!)
+                        $cache->setBackend(new Kwf_Cache_Backend_File(array(
+                            'cache_dir' => 'cache/simple'
+                        )));
+                    }
                 }
             }
+
         }
         return $cache;
     }
@@ -119,6 +134,9 @@ class Kwf_Cache_Simple
             }
         } else {
             //we can't do any better here :/
+            if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
+                throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
+            }
             $cache->clean();
         }
     }
