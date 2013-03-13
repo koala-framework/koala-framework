@@ -118,7 +118,7 @@ Kwf.Fade.Elements.prototype = {
         this._timeoutId = this.doFade.defer(this._getDeferTime(), this);
     },
 
-    doFade: function() {
+    doFade: function(direction) {
         if (this.fadeElements.length <= 1) return;
 
         var activeEl = Ext.get(this.fadeElements[this.active]);
@@ -130,12 +130,16 @@ Kwf.Fade.Elements.prototype = {
         if(this.animationType == 'slide') { //TODO implement different animation-types
             // order of slideIn and slideOut is important because else there is one
             // pixel margin between the leaving and comming element
-            nextEl.slideIn('r', { endOpacity: 1.0, easing: this.easingFadeIn, duration: this.fadeDuration, useDisplay: true,
+            var dir = 'r';
+            if (direction) {
+                dir = direction.substring(0,1);
+            }
+            nextEl.slideIn(dir, { endOpacity: 1.0, easing: this.easingFadeIn, duration: this.fadeDuration, useDisplay: true,
                 callback: function () {
                     Kwf.fireComponentEvent('componentSlideIn', nextEl.parent(), nextEl);
                 }
             });
-            activeEl.slideOut('l', { endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true,
+            activeEl.slideOut(dir, { endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true,
                 callback: function() {
                     Kwf.fireComponentEvent('componentSlideOut', activeEl.parent(), activeEl);
                 }
@@ -261,7 +265,7 @@ Kwf.Fade.Elements.prototype = {
                     if (nextIdx < 0) nextIdx = this.fadeElements.length-1;
 
                     this.next = nextIdx;
-                    this.doFade();
+                    this.doFade('left');
                     if (this.elementAccessPlayPause) this.pause();
                 }, this);
 
@@ -277,7 +281,7 @@ Kwf.Fade.Elements.prototype = {
                     if (nextIdx >= this.fadeElements.length) nextIdx = 0;
 
                     this.next = nextIdx;
-                    this.doFade();
+                    this.doFade('right');
                     if (this.elementAccessPlayPause) this.pause();
                 }, this);
             }
