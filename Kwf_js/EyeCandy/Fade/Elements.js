@@ -128,18 +128,30 @@ Kwf.Fade.Elements.prototype = {
         }
         var nextEl = Ext.get(this.fadeElements[this.next]);
         if(this.animationType == 'slide') { //TODO implement different animation-types
-            // order of slideIn and slideOut is important because else there is one
-            // pixel margin between the leaving and comming element
+            // set default direction
             var dir = 'r';
-            if (direction) {
+            if (direction) { // get direction if set
                 dir = direction.substring(0,1);
             }
+            // determine opposite direction depending on given direction
+            var dirOpposite = '';
+            if (dir == 'r') {
+                dirOpposite = 'l';
+            } else if (dir == 'l') {
+                dirOpposite = 'r';
+            } else if (dir == 't') {
+                dirOpposite = 'b';
+            } else if (dir == 'b') {
+                dirOpposite = 't';
+            }
+            // order of slideIn and slideOut is important because else there is one
+            // pixel margin between the leaving and comming element
             nextEl.slideIn(dir, { endOpacity: 1.0, easing: this.easingFadeIn, duration: this.fadeDuration, useDisplay: true,
                 callback: function () {
                     Kwf.fireComponentEvent('componentSlideIn', nextEl.parent(), nextEl);
                 }
             });
-            activeEl.slideOut(dir, { endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true,
+            activeEl.slideOut(dirOpposite, { endOpacity: .0, easing: this.easingFadeOut, duration: this.fadeDuration, useDisplay: true,
                 callback: function() {
                     Kwf.fireComponentEvent('componentSlideOut', activeEl.parent(), activeEl);
                 }
