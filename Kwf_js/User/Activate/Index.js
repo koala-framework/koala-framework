@@ -6,7 +6,7 @@ Kwf.User.Activate.Index = Ext.extend(Ext.Panel,
         Kwf.User.Activate.Index.superclass.initComponent.call(this);
         if (this.errorMsg != '') {
             Ext.Msg.show({
-                title: 'Error',
+                title: trlKwf('Error'),
                 msg: this.errorMsg,
                 buttons: Ext.Msg.OK
             });

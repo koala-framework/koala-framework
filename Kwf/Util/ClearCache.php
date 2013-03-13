@@ -184,6 +184,9 @@ class Kwf_Util_ClearCache
         ) {
             $refreshTypes[] = 'events';
         }
+        if (in_array('cache_users', $types)) {
+            $refreshTypes[] = 'cache_users';
+        }
 
         try {
             $db = Kwf_Registry::get('db');
