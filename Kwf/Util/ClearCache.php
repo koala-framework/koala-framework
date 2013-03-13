@@ -92,7 +92,7 @@ class Kwf_Util_ClearCache
         if ($type == 'setup') {
 
             file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
-            Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup.php'));
+            Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup.php'), Kwf_Util_Apc::SILENT);
 
         } else if ($type == 'config') {
 
@@ -258,22 +258,9 @@ class Kwf_Util_ClearCache
     {
     }
 
-    private function _callApcUtil($type, $outputType, $output)
+    private function _callApcUtil($type, $output)
     {
-        $result = Kwf_Util_Apc::callClearCacheByCli(array('type' => $type));
-        if ($output) {
-            if ($result['result']) {
-                echo "cleared:     $outputType (".$result['time']."ms) " . $result['message'] . "\n";
-            } else {
-                $url = '';
-                if (isset($result['url'])) {
-                    $url = $result['url'];
-                    if ($result['url2']) $url .= ' / ' . $result['url2'];
-                    $url = " ($url)";
-                }
-                echo "error:       $outputType$url\n" . $result['message'] . "\n\n";
-            }
-        }
+        Kwf_Util_Apc::callClearCacheByCli(array('type' => $type), $output ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT);
     }
 
     protected function _clearCache(array $types, $output, $server)
@@ -300,14 +287,14 @@ class Kwf_Util_ClearCache
             if ($server) {
                 if ($output) echo "ignored:     apc\n";
             } else {
-                $this->_callApcUtil('user', 'apc', $output);
+                $this->_callApcUtil('user', $output);
             }
         }
         if (in_array('optcode', $types)) {
             if ($server) {
                 if ($output) echo "ignored:     optcode\n";
             } else {
-                $this->_callApcUtil('file', 'optcode', $output);
+                $this->_callApcUtil('file', $output);
             }
         }
         if (in_array('setup', $types)) {

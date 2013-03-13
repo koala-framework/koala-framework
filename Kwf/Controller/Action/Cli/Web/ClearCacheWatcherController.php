@@ -421,11 +421,10 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         foreach ($prefix as $p) {
             Kwf_Cache_Simple::clear($p);
         }
-        $r = Kwf_Util_Apc::callClearCacheByCli(array(
+        Kwf_Util_Apc::callClearCacheByCli(array(
             'cacheIds'=>implode(',', $cacheIds),
             'clearCacheSimple' => $prefix,
-        ));
-        echo $r['message']."\n";
+        ), Kwf_Util_Apc::VERBOSE);
     }
 
     private static function _getComponentClassesFromGeneratorsSetting($generators)
@@ -596,7 +595,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         }
         Kwf_Util_Apc::callClearCacheByCli(array(
             'deleteCacheSimple' => $cacheIds
-        ));
+        ), Kwf_Util_Apc::SILENT);
         $model->updateRows(array('deleted' => true), $s);
         echo "deleted ".count($cacheIds)." view cache entries\n";
     }

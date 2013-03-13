@@ -3,6 +3,9 @@
 //direkt in der cli ist das leider nicht möglich, da der speicher im webserver liegt
 class Kwf_Util_Apc
 {
+    const SILENT = 'silent';
+    const VERBOSE = 'verbose';
+
     public static function getHttpPassword()
     {
         $file = 'cache/apcutilspass';
@@ -12,7 +15,7 @@ class Kwf_Util_Apc
         return file_get_contents($file);
     }
 
-    public static function callClearCacheByCli($params)
+    public static function callClearCacheByCli($params, $verbosity)
     {
         $config = Kwf_Registry::get('config');
         $d = $config->server->domain;
@@ -59,14 +62,23 @@ class Kwf_Util_Apc
                 $result = false;
             }
         }
-        return array(
-            'result' => $result,
-            'message' => $body,
-            'time' => round((microtime(true)-$s)*1000),
-            'url' => $url,
-            'url2' => isset($url2) ? $url2 : null,
-            'params' => $params
-        );
+        if ($verbosity == self::VERBOSE) {
+            $outputType = '';
+            if (isset($param['type']) && $param['type'] == 'user') {
+                $outputType = 'apc user';
+            } else if (isset($param['type']) && $param['type'] == 'file') {
+                $outputType = 'optcode';
+            }
+            $time = round((microtime(true)-$s)*1000);
+            if ($result) {
+                echo "cleared:     $outputType ({$time}ms) $body\n";
+            } else {
+                $outputUrl = $url;
+                if (isset($url2)) $outputUrl .= " / $url2";
+                $outputUrl = " ($outputUrl)";
+                echo "error:       $outputType $outputUrl\n$body\n\n";
+            }
+        }
     }
 
     public static function dispatchUtils()
