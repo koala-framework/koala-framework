@@ -193,8 +193,23 @@ class Kwf_Mail extends Zend_Mail
             $r->save();
         }
 
-        if ($this->getReturnPath() && !$transport) {
-            $transport = new Zend_Mail_Transport_Sendmail('-f ' . $this->getReturnPath());
+        if (!$transport) {
+            if (Kwf_Config::getValue('email.smtp.host')) {
+                $transport = new Zend_Mail_Transport_Smtp(
+                    Kwf_Config::getValue('email.smtp.host'),
+                    array(
+                        'auth' => Kwf_Config::getValue('email.smtp.auth'),
+                        'username' => Kwf_Config::getValue('email.smtp.username'),
+                        'password' => Kwf_Config::getValue('email.smtp.password'),
+                    )
+                );
+            } else {
+                if ($this->getReturnPath()) {
+                    $transport = new Zend_Mail_Transport_Sendmail('-f ' . $this->getReturnPath());
+                } else {
+                    // default transport
+                }
+            }
         }
 
         return parent::send($transport);
