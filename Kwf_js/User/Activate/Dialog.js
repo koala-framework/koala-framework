@@ -6,7 +6,7 @@ Kwf.User.Activate.Dialog = Ext.extend(Ext.Window,
         this.height = 160;
         this.width = 310;
         this.modal = true;
-        this.title = 'Account activation';
+        this.title = trlKwf('Account activation');
         this.resizable = false;
         this.closable = true;
         Kwf.User.Activate.Dialog.superclass.initComponent.call(this);
