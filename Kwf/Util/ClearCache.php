@@ -70,6 +70,9 @@ class Kwf_Util_ClearCache
     {
 
         $types = array('all');
+        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
+            $types[] = 'elastiCache';
+        }
         if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
         if (extension_loaded('apc')) {
@@ -275,6 +278,12 @@ class Kwf_Util_ClearCache
 
     protected function _clearCache(array $types, $output, $server)
     {
+        if (in_array('elastiCache', $types)) {
+            //namespace used in Kwf_Cache_Simple
+            $cache = Kwf_Cache_Simple::getZendCache();
+            $mc = $cache->getBackend()->getMemcache();
+            $mc->increment('cache_namespace');
+        }
         if (in_array('memcache', $types)) {
             if ($server) {
                 if ($output) echo "ignored:     memcache\n";

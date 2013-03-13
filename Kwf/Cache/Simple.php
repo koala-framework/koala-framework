@@ -23,6 +23,14 @@ class Kwf_Cache_Simple
                 $cache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
                     'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
                 )));
+
+                //namespace is incremented in Kwf_Util_ClearCache
+                $v = $cache->load('cache_namespace');
+                if (!$v) {
+                    $v = time();
+                    $cache->save($v, 'cache_namespace');
+                }
+                $cache->setOption('cache_id_prefix', $v);
             } else {
                 if (extension_loaded('apc')) {
                     $cache = false;
