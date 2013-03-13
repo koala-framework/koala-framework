@@ -55,7 +55,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $cacheId = $this->_getCacheId($component->componentId, $renderer, $type, $value);
         $ttl = 0;
         if ($settings['lifetime']) $ttl = $settings['lifetime'];
-        Kwf_Cache_Simple::add($cacheId, $content, $ttl);
+        Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
 
         return true;
     }
@@ -66,7 +66,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $componentId = $componentId->componentId;
         }
         $cacheId = $this->_getCacheId($componentId, $renderer, $type, $value);
-        $content = Kwf_Cache_Simple::fetch($cacheId);
+        $content = Kwf_Component_Cache_Memory::getInstance()->load($cacheId);
         if ($content === false) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
@@ -87,7 +87,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             if (isset($row[0])) {
                 $ttl = 0;
                 if ($row[0]['expire']) $ttl = $row[0]['expire']-time();
-                Kwf_Cache_Simple::add($cacheId, $content, $ttl);
+                Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
             }
         }
         return $content;
@@ -140,7 +140,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $model->updateRows(array('deleted' => true), $select);
         }
 
-        Kwf_Cache_Simple::delete($cacheIds); // APC after MySQL that user still get old cache data while deleting
+        foreach ($cacheIds as $cacheId) {
+            Kwf_Component_Cache_Memory::getInstance()->remove($cacheId);
+        }
 
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
     }
