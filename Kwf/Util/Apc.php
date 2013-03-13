@@ -8,11 +8,16 @@ class Kwf_Util_Apc
 
     public static function getHttpPassword()
     {
-        $file = 'cache/apcutilspass';
-        if (!file_exists($file)) {
-            file_put_contents($file, time().rand(100000, 1000000));
+        if ($ret = Kwf_Config::getSetting('apcUtilsPass')) {
+            //optional, required if multiple webservers
+            return $ret;
+        } else {
+            $file = 'cache/apcutilspass';
+            if (!file_exists($file)) {
+                file_put_contents($file, time().rand(100000, 1000000));
+            }
+            return file_get_contents($file);
         }
-        return file_get_contents($file);
     }
 
     public static function callClearCacheByCli($params, $verbosity)
