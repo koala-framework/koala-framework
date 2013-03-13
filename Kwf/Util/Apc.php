@@ -25,61 +25,106 @@ class Kwf_Util_Apc
         }
 
         $config = Kwf_Registry::get('config');
-        $d = $config->server->domain;
-        if (!$d && file_exists('cache/lastdomain')) {
-            //this file gets written in Kwf_Setup to make it "just work"
-            $d = file_get_contents('cache/lastdomain');
-        }
-        if (!$d) {
-            if ($verbosity == self::VERBOSE) {
-                echo "error:       $outputType: domain not set\n";
+
+        if (!$config->server->aws) {
+            $d = $config->server->domain;
+            if (!$d && file_exists('cache/lastdomain')) {
+                //this file gets written in Kwf_Setup to make it "just work"
+                $d = file_get_contents('cache/lastdomain');
             }
-            return;
-        }
-        $s = microtime(true);
-        $pwd = Kwf_Util_Apc::getHttpPassword();
-        $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
-        $url = "$urlPart$d/kwf/util/apc/clear-cache";
+            if (!$d) {
+                if ($verbosity == self::VERBOSE) {
+                    echo "error:       $outputType: domain not set\n";
+                }
+                return;
+            }
 
-        $client = new Zend_Http_Client();
-        $client->setMethod(Zend_Http_Client::POST);
-        $client->setParameterPost($params);
-        $client->setConfig(array(
-            'timeout' => 60,
-            'keepalive' => true
-        ));
+            $domains = array(
+                array(
+                    'domain' => $d,
+                )
+            );
+            if ($config->server->noRedirectPattern) {
+                $domains[0]['alternative'] = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
+            }
+        } else {
+            $ec2 = new Kwf_Util_Aws_Ec2();
+            $r = $ec2->describe_instances(array(
+                'Filter' => array(
+                    array(
+                        'Name' => 'tag:application.id',
+                        'Value' => $config->application->id,
+                    ),
+                    array(
+                        'Name' => 'tag:config_section',
+                        'Value' => Kwf_Setup::getConfigSection(),
+                    )
+                )
+            ));
+            if (!$r->isOK()) {
+                throw new Kwf_Exception($r->body->asXml());
+            }
 
-        $client->setUri($url);
-        $body = 'could not reach web per http';
-        try {
-            $response = $client->request();
-            $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
-            $body = $response->getBody();
-        } catch (Exception $e) {
-            $result = false;
+            $domains = array();
+            foreach ($r->body->reservationSet->item as $resItem) {
+                foreach ($resItem->instancesSet->item as $item) {
+                    $dnsName = (string)$item->dnsName;
+                    if ($dnsName) {
+                        $domains[] = array(
+                            'domain'=>$dnsName,
+                        );
+                    }
+                }
+            }
+
         }
-        if (!$result && $config->server->noRedirectPattern) {
-            $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-            $url2 = "$urlPart$d/kwf/util/apc/clear-cache";
+
+        foreach ($domains as $d) {
+            $s = microtime(true);
+            $pwd = Kwf_Util_Apc::getHttpPassword();
+            $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
+            $url = "$urlPart$d[domain]/kwf/util/apc/clear-cache";
+
+            $client = new Zend_Http_Client();
+            $client->setMethod(Zend_Http_Client::POST);
+            $client->setParameterPost($params);
+            $client->setConfig(array(
+                'timeout' => 60,
+                'keepalive' => true
+            ));
+
+            $client->setUri($url);
+            $body = 'could not reach web per http';
             try {
-                $client->setUri($url2);
-                $client->setParameterPost($params);
                 $response = $client->request();
                 $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
                 $body = $response->getBody();
             } catch (Exception $e) {
                 $result = false;
             }
-        }
-        if ($verbosity == self::VERBOSE) {
-            $time = round((microtime(true)-$s)*1000);
-            if ($result) {
-                echo "cleared:     $outputType ({$time}ms) $body\n";
-            } else {
+            $url2 = null;
+            if (!$result && isset($d['alternative'])) {
+                $url2 = "$urlPart$d[alternative]/kwf/util/apc/clear-cache";
+                try {
+                    $client->setUri($url2);
+                    $client->setParameterPost($params);
+                    $response = $client->request();
+                    $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
+                    $body = $response->getBody();
+                } catch (Exception $e) {
+                    $result = false;
+                }
+            }
+            if ($verbosity == self::VERBOSE) {
                 $outputUrl = $url;
-                if (isset($url2)) $outputUrl .= " / $url2";
+                if ($url2) $outputUrl .= " / $url2";
                 $outputUrl = " ($outputUrl)";
-                echo "error:       $outputType $outputUrl\n$body\n\n";
+                $time = round((microtime(true)-$s)*1000);
+                if ($result) {
+                    echo "cleared:     $outputType $outputUrl\n    ({$time}ms) $body\n";
+                } else {
+                    echo "error:       $outputType $outputUrl\n    $body\n\n";
+                }
             }
         }
     }
