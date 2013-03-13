@@ -249,6 +249,62 @@ class Kwf_Util_ClearCache
             $this->_refreshCache($types, $output, $server);
         }
 
+        if (Kwf_Config::getValue('server.aws')) {
+            $otherHostsTypes = $this->getCacheDirs();
+            //add other types
+            $otherHostsTypes[] = 'config';
+            $otherHostsTypes[] = 'setup';
+            $otherHostsTypes[] = 'assets';
+            $otherHostsTypes[] = 'component';
+            $otherHostsTypes[] = 'events';
+            $otherHostsTypes[] = 'trl';
+            $otherHostsTypes = array_unique($otherHostsTypes);
+            if (in_array('all', $types)) {
+                //use all of $otherHostsTypes
+            } else {
+                $otherHostsTypes = array_intersect($otherHostsTypes, $types);
+            }
+            $ec2 = new Kwf_Util_Aws_Ec2();
+            $r = $ec2->describe_instances(array(
+                'Filter' => array(
+                    array(
+                        'Name' => 'tag:application.id',
+                        'Value' => Kwf_Config::getValue('application.id'),
+                    ),
+                    array(
+                        'Name' => 'tag:config_section',
+                        'Value' => Kwf_Setup::getConfigSection(),
+                    )
+                )
+            ));
+            if (!$r->isOK()) {
+                throw new Kwf_Exception($r->body->asXml());
+            }
+
+            $domains = array();
+            foreach ($r->body->reservationSet->item as $resItem) {
+                foreach ($resItem->instancesSet->item as $item) {
+                    $dnsName = (string)$item->dnsName;
+                    if ($dnsName) {
+                        $domains[] = array(
+                            'domain'=>$dnsName,
+                        );
+                    }
+                }
+            }
+            foreach ($domains as $domain) {
+                if ($output) {
+                    echo "executing clear-cache on $domain:\n";
+                }
+                $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes);
+                $cmd = "ssh $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
+                passthru($cmd);
+                if ($output) {
+                    echo "\n";
+                }
+            }
+        }
+
         Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
 
         Kwf_Component_ModelObserver::getInstance()->enable();
