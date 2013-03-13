@@ -125,7 +125,8 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                         html: r.successContent
                     });
                     if (this.config.hideFormOnSuccess) {
-                        this.el.remove();
+                        this.el.enableDisplayMode('block');
+                        this.el.hide();
                     } else {
                         (function(el) {
                             el.remove();
