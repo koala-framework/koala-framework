@@ -17,16 +17,25 @@ class Kwf_Util_Apc
 
     public static function callClearCacheByCli($params, $verbosity)
     {
+        $outputType = '';
+        if (isset($param['type']) && $param['type'] == 'user') {
+            $outputType = 'apc user';
+        } else if (isset($param['type']) && $param['type'] == 'file') {
+            $outputType = 'optcode';
+        }
+
         $config = Kwf_Registry::get('config');
         $d = $config->server->domain;
         if (!$d && file_exists('cache/lastdomain')) {
             //this file gets written in Kwf_Setup to make it "just work"
             $d = file_get_contents('cache/lastdomain');
         }
-        if (!$d) return array(
-            'result' => false,
-            'message' => 'domain not set'
-        );
+        if (!$d) {
+            if ($verbosity == self::VERBOSE) {
+                echo "error:       $outputType: domain not set\n";
+            }
+            return;
+        }
         $s = microtime(true);
         $pwd = Kwf_Util_Apc::getHttpPassword();
         $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
@@ -63,12 +72,6 @@ class Kwf_Util_Apc
             }
         }
         if ($verbosity == self::VERBOSE) {
-            $outputType = '';
-            if (isset($param['type']) && $param['type'] == 'user') {
-                $outputType = 'apc user';
-            } else if (isset($param['type']) && $param['type'] == 'file') {
-                $outputType = 'optcode';
-            }
             $time = round((microtime(true)-$s)*1000);
             if ($result) {
                 echo "cleared:     $outputType ({$time}ms) $body\n";
