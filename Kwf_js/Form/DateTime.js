@@ -75,9 +75,13 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
      */
     ,timeValidator:null
     /**
-     * @cfg {Number} timeWidth Width of time field in pixels (defaults to 100)
+     * @cfg {Number} timeWidth Width of time field in pixels (defaults to 50)
      */
-    ,timeWidth:100
+    ,timeWidth:50
+    /**
+     * @cfg {Number} dateWidth Width of date field in pixels (defaults to 90)
+     */
+    ,dateWidth:90
     /**
      * @cfg {String} dateFormat Format of DateField. Can be localized. (defaults to 'm/y/d')
      */
@@ -116,7 +120,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
         var dateConfig = Ext.apply({}, {
              id:this.id + '-date'
             ,format:this.dateFormat || Ext.form.DateField.prototype.format
-            ,width:this.timeWidth
+            ,width:this.dateWidth
             ,selectOnFocus:this.selectOnFocus
             ,validator:this.dateValidator
             ,listeners:{
