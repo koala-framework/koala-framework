@@ -149,7 +149,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     protected static function _getCacheId($componentId, $renderer, $type, $value)
     {
-        return "cc-$componentId/$renderer/$type/$value";
+        return "cc_".str_replace('-', '__', $componentId)."_{$renderer}_{$type}_{$value}";
     }
 
     public static function getCacheId($componentId, $renderer, $type, $value)
