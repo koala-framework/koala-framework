@@ -5,7 +5,7 @@ class Kwf_Util_Hash
     {
         $salt = Kwf_Cache_SimpleStatic::fetch('hashpp-');
         if (!$salt) {
-            if ($salt = Kwf_Config::getSetting('hashPrivatePart')) {
+            if ($salt = Kwf_Config::getValue('hashPrivatePart')) {
                 //defined in config, required if multiple webservers should share the same salt
             } else {
                 $hashFile = 'cache/hashprivatepart';
