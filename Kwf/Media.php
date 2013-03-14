@@ -169,7 +169,6 @@ class Kwf_Media
                 $cacheData = $output;
                 if (isset($cacheData['contents']) && strlen($cacheData['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
-                    //TODO lifetime isn't respected for this file
                     file_put_contents('cache/media/'.$cacheId, $cacheData['contents']);
                     unset($cacheData['contents']);
                 }
