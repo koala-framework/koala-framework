@@ -207,7 +207,7 @@ class Kwf_Util_ClearCache
         return $refreshTypes;
     }
 
-    public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
+    public final function clearCache($types = 'all', $output = false, $refresh = true)
     {
         Kwf_Component_ModelObserver::getInstance()->disable();
 
@@ -224,7 +224,7 @@ class Kwf_Util_ClearCache
             $refreshTypes = $types;
         }
 
-        $this->_clearCache($types, $output, $server);
+        $this->_clearCache($types, $output);
 
         if ($refresh) {
             if ($output) echo "\n";
@@ -246,7 +246,7 @@ class Kwf_Util_ClearCache
                 }
             }
 
-            $this->_refreshCache($types, $output, $server);
+            $this->_refreshCache($types, $output);
         }
 
         if (Kwf_Config::getValue('server.aws')) {
@@ -283,7 +283,7 @@ class Kwf_Util_ClearCache
         Kwf_Component_ModelObserver::getInstance()->enable();
     }
 
-    protected function _refreshCache($types, $output, $server)
+    protected function _refreshCache($types, $output)
     {
     }
 
@@ -292,7 +292,7 @@ class Kwf_Util_ClearCache
         Kwf_Util_Apc::callClearCacheByCli(array('type' => $type), $output ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT);
     }
 
-    protected function _clearCache(array $types, $output, $server)
+    protected function _clearCache(array $types, $output)
     {
         if (in_array('elastiCache', $types)) {
             //namespace used in Kwf_Cache_Simple
@@ -301,30 +301,18 @@ class Kwf_Util_ClearCache
             $mc->increment('cache_namespace');
         }
         if (in_array('memcache', $types)) {
-            if ($server) {
-                if ($output) echo "ignored:     memcache\n";
-            } else {
-                $cache = Kwf_Cache::factory('Core', 'Memcached', array(
-                    'lifetime'=>null,
-                    'automatic_cleaning_factor' => false,
-                    'automatic_serialization'=>true));
-                $cache->clean();
-                if ($output) echo "cleared:     memcache\n";
-            }
+            $cache = Kwf_Cache::factory('Core', 'Memcached', array(
+                'lifetime'=>null,
+                'automatic_cleaning_factor' => false,
+                'automatic_serialization'=>true));
+            $cache->clean();
+            if ($output) echo "cleared:     memcache\n";
         }
         if (in_array('apc', $types)) {
-            if ($server) {
-                if ($output) echo "ignored:     apc\n";
-            } else {
-                $this->_callApcUtil('user', $output);
-            }
+            $this->_callApcUtil('user', $output);
         }
         if (in_array('optcode', $types)) {
-            if ($server) {
-                if ($output) echo "ignored:     optcode\n";
-            } else {
-                $this->_callApcUtil('file', $output);
-            }
+            $this->_callApcUtil('file', $output);
         }
         if (in_array('setup', $types)) {
             if (file_exists('cache/setup.php')) {
@@ -333,30 +321,26 @@ class Kwf_Util_ClearCache
             }
         }
         foreach ($this->getDbCacheTables() as $t) {
-            if ($server) {
-                if ($output) echo "ignored db:  $t\n";
-            } else {
-                if (in_array($t, $types)) {
-                    if ($t == 'cache_component') {
-                        try {
-                            $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
-                            if ($cnt > 5000) {
-                                if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
-                                continue;
-                            }
-                        } catch (Exception $e) {}
-                    }
-                    Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
-                    if ($output) echo "cleared db:  $t\n";
+            if (in_array($t, $types)) {
+                if ($t == 'cache_component') {
+                    try {
+                        $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
+                        if ($cnt > 5000) {
+                            if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
+                            continue;
+                        }
+                    } catch (Exception $e) {}
                 }
+                Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
+                if ($output) echo "cleared db:  $t\n";
             }
         }
         foreach ($this->getCacheDirs() as $d) {
             if (in_array($d, $types)) {
                 if (is_dir("cache/$d")) {
-                    $this->_removeDirContents("cache/$d", $server);
+                    $this->_removeDirContents("cache/$d");
                 } else if (is_dir($d)) {
-                    $this->_removeDirContents($d, $server);
+                    $this->_removeDirContents($d);
                 }
                 if ($output) echo "cleared dir: $d cache\n";
             }
@@ -372,25 +356,15 @@ class Kwf_Util_ClearCache
         }
     }
 
-    private function _removeDirContents($path, $server)
+    private function _removeDirContents($path)
     {
-        if ($server) {
-            $cmd = "clear-cache-dir --path=$path";
-            $cmd = "sshvps $server->user@$server->host $server->dir $cmd";
-            $cmd = "sudo -u vps $cmd";
-            passthru($cmd, $ret);
-            if ($ret != 0) {
-                throw new Kwf_ClientException("Clearing remote cache '$path' failed");
-            }
-        } else {
-            $dir = new DirectoryIterator($path);
-            foreach ($dir as $fileinfo) {
-                if ($fileinfo->isFile() && $fileinfo->getFilename() != '.gitignore' && substr($fileinfo->getFilename(), 0, 4) != '.nfs') {
-                    unlink($fileinfo->getPathName());
-                } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
-                    $this->_removeDirContents($fileinfo->getPathName(), $server);
-                    @rmdir($fileinfo->getPathName());
-                }
+        $dir = new DirectoryIterator($path);
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isFile() && $fileinfo->getFilename() != '.gitignore' && substr($fileinfo->getFilename(), 0, 4) != '.nfs') {
+                unlink($fileinfo->getPathName());
+            } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
+                $this->_removeDirContents($fileinfo->getPathName());
+                @rmdir($fileinfo->getPathName());
             }
         }
     }
