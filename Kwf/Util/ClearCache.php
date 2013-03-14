@@ -281,11 +281,12 @@ class Kwf_Util_ClearCache
                 throw new Kwf_Exception($r->body->asXml());
             }
 
+            $ownHostname = file_get_contents('http://169.254.169.254/latest/meta-data/public-hostname');
             $domains = array();
             foreach ($r->body->reservationSet->item as $resItem) {
                 foreach ($resItem->instancesSet->item as $item) {
                     $dnsName = (string)$item->dnsName;
-                    if ($dnsName) {
+                    if ($dnsName && $dnsName != $ownHostname) {
                         $domains[] = array(
                             'domain'=>$dnsName,
                         );
