@@ -7,7 +7,7 @@ class Kwf_Util_Maintenance
             throw new Kwf_Exception("maintenance bootstrap already written");
         }
         $offlineBootstrap  = "<?php\n";
-        $offlineBootstrap .= "if (isset(\$_SERVER['REDIRECT_URL']) && substr(\$_SERVER['REDIRECT_URL'], 0, 14) == '/kwf/util/apc/') {\n";
+        $offlineBootstrap .= "if (isset(\$_SERVER['REDIRECT_URL']) && substr(\$_SERVER['REDIRECT_URL'], 0, 14) == '/kwf/util/apc/' && php_sapi_name() != 'cli') {\n";
         $offlineBootstrap .= "    require('bootstrap.php.backup');\n";
         $offlineBootstrap .= "} else {\n";
         $offlineBootstrap .= "    header(\"HTTP/1.0 503 Service Unavailable\");\n";
