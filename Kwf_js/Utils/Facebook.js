@@ -1,8 +1,17 @@
 Ext.namespace('Kwf.Facebook');
 Kwf.FacebookClass = function() {
-    this.addEvents('afterinit');
+    this.addEvents('afterinit'); //deprecated
+    this._onReadyCallbacks = [];
 };
 Ext.extend(Kwf.FacebookClass, Ext.util.Observable, {
+    isReady: false,
+    onReady: function(callback, scope) {
+        if (this.isReady) {
+            callback.call(scope || window);
+        } else {
+            this._onReadyCallbacks.push({ callback: callback, scope: scope });
+        }
+    }
 });
 Kwf.Facebook = new Kwf.FacebookClass();
 Kwf.Facebook.appId = '{Kwf_Util_Facebook_Assets::getAppId()}';
@@ -14,7 +23,11 @@ window.fbAsyncInit = function() {
         oauth      : true, // enable OAuth 2.0
         xfbml      : true  // parse XFBML
     });
-    Kwf.Facebook.fireEvent('afterinit');
+    Kwf.Facebook.isReady = true;
+    Kwf.Facebook.fireEvent('afterinit'); //deprecated
+    Kwf.Facebook._onReadyCallbacks.each(function(i) {
+        i.callback.call(i.callback.scope || window);
+    });
 };
 // Load the SDK Asynchronously
 (function(d){
