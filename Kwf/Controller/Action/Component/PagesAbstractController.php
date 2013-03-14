@@ -63,8 +63,6 @@ abstract class Kwf_Controller_Action_Component_PagesAbstractController extends K
             $data = $component->generator->getPagesControllerConfig($component);
         }
         $data['disabled'] = false;
-        $data['allowDrag'] = false;
-        $data['allowDrop'] = false;
         return $data;
     }
 
