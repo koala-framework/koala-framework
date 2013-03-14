@@ -41,6 +41,28 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
                 if ($success->isPage) {
                     $this->view->successUrl = $success->url;
                 } else {
+                    $process = $success
+                        ->getRecursiveChildComponents(array(
+                                'page' => false,
+                                'flags' => array('processInput' => true)
+                            ));
+                    if (Kwf_Component_Abstract::getFlag($success->componentClass, 'processInput')) {
+                        $process[] = $success;
+                    }
+                    $postData = array(); //empty because there can't be anything as we didn't display the success yet
+                    foreach ($process as $i) {
+                        if (method_exists($i->getComponent(), 'preProcessInput')) {
+                            $i->getComponent()->preProcessInput($postData);
+                        }
+                    }
+                    foreach ($process as $i) {
+                        if (method_exists($i->getComponent(), 'processInput')) {
+                            $i->getComponent()->processInput($postData);
+                        }
+                    }
+                    if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+                        Kwf_Component_ModelObserver::getInstance()->process(false);
+                    }
                     $renderer = new Kwf_Component_Renderer();
                     $this->view->successContent = $renderer->renderComponent($success);
                 }

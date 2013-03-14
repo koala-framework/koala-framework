@@ -34,6 +34,7 @@ Ext.apply(Ext.form.VTypes, {
     email:  function(v) {
         return /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/.test(v);
     },
+    emailMask : /[a-z0-9_\.\-@+]/i, //include +
 
     //Ersetzt alles außer a-z, 0-9 - durch _. So wie Kwf_Filter_Ascii
     //standard-ext implementierung überschrieben um den - zu erlauben
