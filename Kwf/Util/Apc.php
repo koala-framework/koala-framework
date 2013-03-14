@@ -8,7 +8,7 @@ class Kwf_Util_Apc
 
     public static function getHttpPassword()
     {
-        if ($ret = Kwf_Config::getSetting('apcUtilsPass')) {
+        if ($ret = Kwf_Config::getValue('apcUtilsPass')) {
             //optional, required if multiple webservers
             return $ret;
         } else {
