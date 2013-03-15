@@ -1,11 +1,7 @@
 <?php
-class Kwc_Advanced_DyamicContent_Plugin extends Kwf_Component_Plugin_View_Abstract
+class Kwc_Advanced_DyamicContent_Plugin extends Kwf_Component_Plugin_Abstract
+    implements Kwf_Component_Plugin_Interface_ViewAfterChildRender
 {
-    public function getExecutionPoint()
-    {
-        return Kwf_Component_Plugin_Interface_View::EXECUTE_AFTER;
-    }
-
     public function processOutput($output)
     {
         if (!preg_match('#{dynamicContent ([^}]*)}#', $output, $m)) {
