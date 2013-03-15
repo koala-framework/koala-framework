@@ -66,7 +66,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
             $componentId = $event->row->component_id . '-' . $event->row->id;
             $component = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible' => true));
-            if (!in_array($component->componentClass, Kwc_Abstract::getParentClasses('Kwc_Basic_Image_Component'))) {
+            if (!is_instance_of($component->componentClass, 'Kwc_Basic_Image_Component')) {
                 return; // because event is also triggered by non-image lists
             }
             // get previous and next items and delete the cache for them
