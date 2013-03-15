@@ -35,7 +35,7 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
 
     protected function _getOptions()
     {
-        $ret['componentId'] = $this->getData()->componentId;
+        $ret['componentId'] = $this->getData()->dbId;
         $ret['projectsUrl'] = Kwc_Admin::getInstance(get_class($this))->getControllerUrl('ViewProjects');
         $ret['downloadsUrl'] = Kwc_Admin::getInstance(get_class($this))->getControllerUrl('ViewDownloads');
         $ret['width'] = $this->_getSetting('panelWidth');
@@ -47,7 +47,7 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
     {
         $projects = Kwf_Model_Abstract::getInstance($this->_getSetting('projectsModel'));
         $select = $projects->select()
-            ->whereEquals('component_id', $this->getData()->componentId);
+            ->whereEquals('component_id', $this->getData()->dbId);
         $downloads = Kwf_Model_Abstract::getInstance($this->_getSetting('downloadsModel'));
         foreach ($projects->getRows($select) as $project) {
             $select = $downloads->select()
