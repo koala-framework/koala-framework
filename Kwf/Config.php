@@ -62,31 +62,11 @@ class Kwf_Config
     }
 
     /**
-     * @internal
+     * @deprected
      *
-     * Only works if Kwf_Cache_Simple uses apc
-     */
-    public static function clearValueCache()
-    {
-        Kwf_Cache_Simple::clear('config-');
-        Kwf_Cache_Simple::clear('configAr-');
-    }
-
-    /**
-     * TODO: masterFiles should not be optional, but is for now because of old cached setup.php files
-     * @param string[] array of absolute paths to config master files (required)
+     * method still there because it's called in generated cache/setup.php files
      */
     public static function checkMasterFiles($masterFiles = null)
     {
-        if (!is_null($masterFiles)) return;
-
-        require_once 'Kwf/Config/Web.php';
-        $mtime = Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection());
-        foreach ($masterFiles as $f) {
-            if (filemtime($f) > $mtime) {
-                Kwf_Config::clearValueCache();
-                break;
-            }
-        }
     }
 }
