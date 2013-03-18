@@ -5,7 +5,7 @@ class Kwf_Update_Sql extends Kwf_Update
     public function update()
     {
         $dbConfig = Zend_Registry::get('db')->getConfig();
-        $mysqlOptions = "--host={$dbConfig['host']} --user={$dbConfig['username']} --password={$dbConfig['password']} {$dbConfig['dbname']} ";
+        $mysqlOptions = "--host=".escapeshellarg($dbConfig['host'])." --user=".escapeshellarg($dbConfig['username'])." --password=".escapeshellarg($dbConfig['password'])." ".escapeshellarg($dbConfig['dbname'])." ";
         $mysqlBinary = 'mysql';
 
         exec("which $mysqlBinary >/dev/null 2>&1", $out, $ret);
