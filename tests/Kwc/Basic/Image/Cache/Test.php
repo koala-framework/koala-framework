@@ -19,9 +19,61 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
         $this->assertNotContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
 
         // check testModel row with no upload_id
+        $this->_addImage(1);
+        $this->_process();
+        $html = $this->_root->render();
+        $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
+        $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
+        $this->assertNotContains('/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent', $html);
+
+        // check uploaded
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel');
+        $row = $model->getRow('root-1');
+        $row->kwf_upload_id = 1;
+        $row->dimension = 'original';
+        $row->save();
+
+        $this->_process();
+        $html = $this->_root->render();
+
+        $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
+        $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
+        $this->assertRegExp("#/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/[^/]+/[0-9]+/foo.png#ms", $html);
+    }
+
+    public function testNextPreviousLinks()
+    {
+        // Add 1 image and check that there is no link in lightbox
+        $this->_addImage(1);
+        $this->_process();
+        $html = $this->_root->getChildComponent('-1')->getChildComponent('-linkTag')
+            ->getChildComponent('_imagePage')->render();
+        $this->assertNotContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent"', $html);
+
+        // Add second image, there should be a next link in first image lightbox
+        $this->_addImage(2);
+        $this->_process();
+        $this->_process();
+        $html = $this->_root->getChildComponent('-1')->getChildComponent('-linkTag')
+            ->getChildComponent('_imagePage')->render();
+        $this->assertContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent/2:image"', $html);
+
+        // Hide second image, next link in first image lightbox should disappear
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_Cache_Root_ListModel');
+        $row = $model->getRow(2);
+        $row->visible = 0;
+        $row->save();
+        $this->_process();
+        $html = $this->_root->getChildComponent('-1')->getChildComponent('-linkTag')
+            ->getChildComponent('_imagePage')->render();
+        $this->assertNotContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent"', $html);
+    }
+
+    private function _addImage($id)
+    {
         $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_Cache_Root_ListModel');
         $row = $model->createRow(array(
-            'id' => 1,
+            'id' => $id,
             'component_id'=>'root',
             'pos'=>1,
             'visible' => 1
@@ -30,7 +82,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
 
         $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel');
         $row = $model->createRow(array(
-            'component_id'=>'root-1',
+            'component_id'=>'root-' . $id,
             'filename' => null,
             'comment' => null,
             'width' => null,
@@ -41,7 +93,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
         ));
         $row->save();
         $row2 = $model->createRow(array(
-            'component_id'=>'root-1-linkTag',
+            'component_id'=>'root-' . $id . '-linkTag',
             'filename' => null,
             'comment' => null,
             'width' => null,
@@ -53,23 +105,5 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
             'title' => ''
         ));
         $row2->save();
-
-        $this->_process();
-        $html = $this->_root->render();
-        $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
-        $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
-        $this->assertNotContains('/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent', $html);
-
-        // check uploaded
-        $row->kwf_upload_id = 1;
-        $row->dimension = 'original';
-        $row->save();
-
-        $this->_process();
-        $html = $this->_root->render();
-
-        $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
-        $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
-        $this->assertRegExp("#/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/[^/]+/[0-9]+/foo.png#ms", $html);
     }
 }
