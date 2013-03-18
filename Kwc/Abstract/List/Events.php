@@ -47,6 +47,12 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
                     $this->_class, $event->row->component_id
                 ));
             }
+            $dbId = $event->row->component_id . '-' . $event->row->id;
+            if ($event instanceof Kwf_Component_Event_Row_Inserted) {
+                $this->fireEvent(new Kwc_Abstract_List_EventItemInserted($this->_class, $dbId));
+            } else if ($event instanceof Kwf_Component_Event_Row_Deleted) {
+                $this->fireEvent(new Kwc_Abstract_List_EventItemDeleted($this->_class, $dbId));
+            }
         }
     }
 
@@ -59,19 +65,24 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                 $this->_class, $event->row->component_id
             ));
+            $dbId = $event->row->component_id . '-' . $event->row->id;
             if ($event->isDirty('visible')) {
                 $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
                     $this->_class, $event->row->component_id
                 ));
+                if ($event->row->visible) {
+                    $this->fireEvent(new Kwc_Abstract_List_EventItemInserted($this->_class, $dbId));
+                } else {
+                    $this->fireEvent(new Kwc_Abstract_List_EventItemDeleted($this->_class, $dbId));
+                }
             }
+            $this->fireEvent(new Kwc_Abstract_List_EventItemUpdated($this->_class, $dbId));
         }
     }
 
     public function onModelUpdate(Kwf_Component_Event_Model_Updated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
-        ));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
     }
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
