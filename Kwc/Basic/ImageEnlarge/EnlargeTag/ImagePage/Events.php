@@ -62,7 +62,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
         foreach ($result as $r) {
             if (!$r) continue;
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $r->componentId
+                $this->_class, $r->dbId
             ));
         }
     }
