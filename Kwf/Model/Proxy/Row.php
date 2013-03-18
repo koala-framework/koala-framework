@@ -67,6 +67,8 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
 
     protected function _resetDirty()
     {
+        parent::_resetDirty();
+        $this->_row->_resetDirty();
     }
 
     protected function _isDirty()
