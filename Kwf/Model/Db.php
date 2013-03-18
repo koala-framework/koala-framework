@@ -1164,6 +1164,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             return;
         }
+        $data = array_values($data);
         $fields = array_keys($data[0]);
         if (isset($options['replace']) && $options['replace']) {
             $sqlTableAndColumns = 'REPLACE';
