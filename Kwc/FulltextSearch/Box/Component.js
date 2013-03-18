@@ -46,7 +46,11 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
 
     this.searchForm.on('beforeSubmit', function(f) {
         this.doSearch();
-        return false;
+        if (!this.config.useLiveSearch) { // fires event to submit value
+            return true;
+        } else {
+            return false;
+        }
     }, this);
 
     Kwf.Utils.HistoryState.currentState.searchVisible = false;
@@ -57,6 +61,10 @@ Kwc.FulltextSearch.Box.Component.prototype =
 {
     doSearch: function()
     {
+        if (!this.config.useLiveSearch) {
+            return;
+        }
+
         Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
 
         if (Kwf.Utils.HistoryState.currentState.searchVisible) return;

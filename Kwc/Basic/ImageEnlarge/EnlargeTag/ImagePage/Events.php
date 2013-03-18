@@ -71,7 +71,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
             }
             // get previous and next items and delete the cache for them
             $result = call_user_func(
-                array($this->_class, 'getPreviousAndNextImagePage'), $component, array(), true
+                array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $component, array(), true
             );
             foreach ($result as $r) {
                 if (!$r) continue;
