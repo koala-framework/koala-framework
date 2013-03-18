@@ -51,17 +51,19 @@ class Kwf_Config
     }
 
     /**
-     * Delete the config cache for one variable. Needed for some tests.
+     * @internal
      *
-     * Only works if Kwf_Cache_Simple uses apc
+     * Delete the config cache for one variable. Needed for some tests.
      */
     public static function deleteValueCache($var)
     {
-        Kwf_Cache_Simple::delete('config-'.$var);
-        Kwf_Cache_Simple::delete('configAr-'.$var);
+        Kwf_Cache_SimpleStatic::_delete('config-'.$var);
+        Kwf_Cache_SimpleStatic::_delete('configAr-'.$var);
     }
 
     /**
+     * @internal
+     *
      * Only works if Kwf_Cache_Simple uses apc
      */
     public static function clearValueCache()

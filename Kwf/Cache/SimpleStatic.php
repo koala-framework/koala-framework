@@ -63,4 +63,33 @@ class Kwf_Cache_SimpleStatic
             return self::_getZendCache()->save($data, self::_processId($cacheId), array(), $ttl);
         }
     }
+
+    /**
+     * Delete static cache, don't use except in unittests
+     *
+     * @internal
+     */
+    public static function _delete($cacheIds)
+    {
+        if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
+
+        $cache = self::_getZendCache();
+        $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+        $ret = true;
+        $ids = array();
+        foreach ($cacheIds as $cacheId) {
+            if (!$cache) {
+                $r = apc_delete($prefix.$cacheId);
+                $ids[] = $prefix.$cacheId;
+            } else {
+                $r = $cache->remove(self::_processId($cacheId));
+            }
+            if (!$r) $ret = false;
+        }
+        if (!$cache && php_sapi_name() == 'cli' && $ids) {
+            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+            if (!$result['result']) $ret = false;
+        }
+        return $ret;
+    }
 }
