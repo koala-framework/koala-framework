@@ -33,22 +33,16 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
             }
             foreach ($imageEnlargeClasses as $imageEnlargeClass) {
                 // TODO: does not cover "List_Switch with ImageEnlarge as large component (we have to go up one more level)"
-                // TODO: listens to all lists with the same model
                 foreach ($this->_getCreatingClasses($imageEnlargeClass, 'Kwc_Abstract_List_Component') as $c) {
                     $ret[] = array(
-                        'class' => Kwc_Abstract::getSetting($c, 'childModel'),
-                        'event' => 'Kwf_Component_Event_Row_Inserted',
-                        'callback' => 'onListRowChange'
+                        'class' => $c,
+                        'event' => 'Kwc_Abstract_List_EventItemDeleted',
+                        'callback' => 'onListItemChange'
                     );
                     $ret[] = array(
-                        'class' => Kwc_Abstract::getSetting($c, 'childModel'),
-                        'event' => 'Kwf_Component_Event_Row_Deleted',
-                        'callback' => 'onListRowChange'
-                    );
-                    $ret[] = array(
-                        'class' => Kwc_Abstract::getSetting($c, 'childModel'),
-                        'event' => 'Kwf_Component_Event_Row_Updated',
-                        'callback' => 'onListRowChange'
+                        'class' => $c,
+                        'event' => 'Kwc_Abstract_List_EventItemInserted',
+                        'callback' => 'onListItemChange'
                     );
                 }
             }
@@ -56,29 +50,17 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
         return $ret;
     }
 
-    public function onListRowChange(Kwf_Component_Event_Row_Abstract $event)
+    public function onListItemChange(Kwf_Component_Event_Component_Abstract $event)
     {
-        if ($event->isDirty('visible') || $event->isDirty('pos') ||
-            $event instanceof Kwf_Component_Event_Row_Inserted ||
-            $event instanceof Kwf_Component_Event_Row_Deleted
-        ) {
-            // get list item
-            $componentId = $event->row->component_id . '-' . $event->row->id;
-            $component = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($componentId, array('ignoreVisible' => true));
-            if (!in_array($component->componentClass, Kwc_Abstract::getParentClasses('Kwc_Basic_Image_Component'))) {
-                return; // because event is also triggered by non-image lists
-            }
-            // get previous and next items and delete the cache for them
-            $result = call_user_func(
-                array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $component, array(), true
-            );
-            foreach ($result as $r) {
-                if (!$r) continue;
-                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                    $this->_class, $r
-                ));
-            }
+        // get previous and next items and delete the cache for them
+        $result = call_user_func(
+            array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $event->component, array(), true
+        );
+        foreach ($result as $r) {
+            if (!$r) continue;
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                $this->_class, $r
+            ));
         }
     }
 
