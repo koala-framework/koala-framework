@@ -15,6 +15,7 @@ class Kwf_Component_ModelObserver
     private $_processed = array();
     private $_disabled = 0; // wird zB. beim Import in Proxy ausgeschaltet
     private $_enableProcess = true; // für Unit Tests
+    private $_modelEventFired = false;
 
     public static function getInstance()
     {
@@ -95,6 +96,7 @@ class Kwf_Component_ModelObserver
         } else {
             Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Model_Updated($model));
         }
+        $this->_modelEventFired = true;
     }
 /*
     protected function _processCache($source)
@@ -148,7 +150,9 @@ class Kwf_Component_ModelObserver
 */
     public function process()
     {
-        Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Row_UpdatesFinished());
+        if ($this->_modelEventFired) {
+            Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Row_UpdatesFinished());
+        }
 
         // Suchindex
         if (class_exists('Kwf_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein

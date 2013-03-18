@@ -68,6 +68,7 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
             $news = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsByClass('Kwc_News_Directory_Component', array('subroot'=>$card, 'ignoreVisible'=>true));
             foreach ($news as $new) {
+                if (is_instance_of($new->componentClass, 'Kwc_Events_Directory_Component')) continue;
                 if (!in_array($new->dbId, $ret)) {
                     $ret[] = $new->dbId;
                 }

@@ -16,7 +16,12 @@ class Kwc_Advanced_DownloadsTree_Downloads extends Kwf_Model_Db implements Kwf_M
     public static function isValidMediaOutput($id, $type, $className)
     {
         $componentId = substr($id, 0, strrpos($id, '_'));
-        return Kwf_Media_Output_Component::isValid($componentId);
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId);
+        if ($component) {
+            return Kwf_Media_Output_Component::isValid($component->componentId);
+        } else {
+            return Kwf_Media_Output_IsValidInterface::INVALID;
+        }
     }
 
     public static function getMediaOutput($id, $type, $className)

@@ -391,7 +391,12 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         if ($expr instanceof Kwf_Model_Select_Expr_CompareField_Abstract ||
             $expr instanceof Kwf_Model_Select_Expr_IsNull
         ) {
-            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
+            $field = $expr->getField();
+            if ($field instanceof Kwf_Model_Select_Expr_Interface) {
+                $field = $this->_createDbSelectExpression($field, $dbSelect);
+            } else {
+                $field = $this->_formatField($field, $dbSelect, $tableNameAlias);
+            }
         }
         if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
             if (is_array($quotedValue)) {
@@ -1159,6 +1164,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             return;
         }
+        $data = array_values($data);
         $fields = array_keys($data[0]);
         if (isset($options['replace']) && $options['replace']) {
             $sqlTableAndColumns = 'REPLACE';

@@ -23,6 +23,6 @@ class Kwf_Component_Plugin_Login_Component extends Kwf_Component_Plugin_Password
 
     public function skipProcessInput()
     {
-        return !$this->isLoggedIn();
+        return $this->isLoggedIn();
     }
 }

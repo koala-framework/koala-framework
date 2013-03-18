@@ -45,6 +45,12 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
                         $this->_class, $c
                     ));
                 }
+                $child = $c->getChildComponent(array('id' => '-' . $event->row->id, 'ignoreVisible' => true));
+                if ($event instanceof Kwf_Component_Event_Row_Inserted) {
+                    $this->fireEvent(new Kwc_Abstract_List_EventItemInserted($this->_class, $child));
+                } else if ($event instanceof Kwf_Component_Event_Row_Deleted) {
+                    $this->fireEvent(new Kwc_Abstract_List_EventItemDeleted($this->_class, $child));
+                }
             }
         }
     }
@@ -53,6 +59,7 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
     {
         foreach ($this->_getComponentsByRow($event->row) as $c) {
             if ($c->componentClass == $this->_class) {
+                $child = $c->getChildComponent(array('id' => '-' . $event->row->id, 'ignoreVisible' => true));
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                     $this->_class, $c
                 ));
@@ -60,6 +67,11 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
                     $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
                         $this->_class, $c
                     ));
+                    if ($event->row->visible) {
+                        $this->fireEvent(new Kwc_Abstract_List_EventItemInserted($this->_class, $child));
+                    } else {
+                        $this->fireEvent(new Kwc_Abstract_List_EventItemDeleted($this->_class, $child));
+                    }
                 }
             }
         }
@@ -74,9 +86,7 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
 
     public function onModelUpdate(Kwf_Component_Event_Model_Updated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
-        ));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
     }
 
     public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
