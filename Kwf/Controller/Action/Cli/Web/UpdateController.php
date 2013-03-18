@@ -104,16 +104,29 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
 
     private static function _getDoneNames()
     {
-        if (!file_exists('update')) {
-            $doneNames = array();
-            foreach (Kwf_Update::getUpdates(0, 9999999) as $u) {
-                $doneNames[] = $u->getUniqueName();
-            }
-            file_put_contents('update', serialize($doneNames));
-            echo "No update revision found, assuming up-to-date\n";
-            exit;
+        $db = Kwf_Registry::get('db');
+        try {
+            $q = $db->query("SELECT data FROM kwf_update");
+        } catch (Exception $e) {
         }
-        $doneNames = file_get_contents('update');
+        $doneNames = false;
+        if (isset($q)) {
+            $doneNames = $q->fetchColumn();
+        }
+        if (!$doneNames) {
+            //fallback for older versions, uploade used to be a file
+            if (!file_exists('update')) {
+                $doneNames = array();
+                foreach (Kwf_Update::getUpdates(0, 9999999) as $u) {
+                    $doneNames[] = $u->getUniqueName();
+                }
+                $db->query("UPDATE kwf_update SET data=?", serialize($doneNames));
+                echo "No update revision found, assuming up-to-date\n";
+                exit;
+            }
+            $doneNames = file_get_contents('update');
+        }
+
         if (is_numeric(trim($doneNames))) {
             //UPDATE applicaton/update format
             $r = trim($doneNames);
@@ -206,7 +219,11 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                     $doneNames[] = $u->getUniqueName();
                 }
             }
-            file_put_contents('update', serialize($doneNames));
+            Kwf_Registry::get('db')->query("UPDATE kwf_update SET data=?", serialize($doneNames));
+            if (file_exists('update')) {
+                //move away old update file to avoid confusion
+                rename('update', 'update.backup');
+            }
             echo "\n\033[32mupdate finished\033[0m\n";
 
             Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
