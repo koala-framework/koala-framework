@@ -40,15 +40,16 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
             $imageEnlarge = $imageEnlarge->parent;
         }
 
-        $ret = array_merge($ret, self::getPreviousAndNextImagePage($imageEnlarge, $getChildren));
+        $ret = array_merge($ret, self::getPreviousAndNextImagePage($this->getData()->componentClass, $imageEnlarge, $getChildren));
         return $ret;
     }
 
-    public static function getPreviousAndNextImagePage($imageEnlarge, $getChildren, $ignoreVisible = false)
+    public static function getPreviousAndNextImagePage($componentClass, $imageEnlarge, $getChildren, $ignoreVisible = false)
     {
         $ret = array();
+        $parent = $imageEnlarge->parent;
         //TODO optimize in generator using something like whereNextSiblingOf / wherePreviousSiblingOf
-        if ($this->_getSetting('showNextPreviousLinks')) {
+        if (Kwc_Abstract::getSetting($componentClass, 'showNextPreviousLinks')) {
             $allImages = $parent->getChildComponents(
                 array('componentClass'=>$imageEnlarge->componentClass, 'ignoreVisible' => $ignoreVisible)
             );
