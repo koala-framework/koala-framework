@@ -156,7 +156,7 @@ class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
             $select->order($fieldname);
             $rows = $row->getModel()->getRows($select);
             foreach ($rows as $r) {
-                if (in_array($fieldname, $r->getDirtyColumns())) {
+                if ($r !== $row && in_array($fieldname, $r->getDirtyColumns())) {
                     $dirty = true;
                     break;
                 }
