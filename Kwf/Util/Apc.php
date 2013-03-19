@@ -23,9 +23,9 @@ class Kwf_Util_Apc
     public static function callClearCacheByCli($params, $verbosity, $options = array())
     {
         $outputType = '';
-        if (isset($param['type']) && $param['type'] == 'user') {
+        if (isset($params['type']) && $params['type'] == 'user') {
             $outputType = 'apc user';
-        } else if (isset($param['type']) && $param['type'] == 'file') {
+        } else if (isset($params['type']) && $params['type'] == 'file') {
             $outputType = 'optcode';
         }
 
