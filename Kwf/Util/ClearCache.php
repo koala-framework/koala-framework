@@ -222,6 +222,9 @@ class Kwf_Util_ClearCache
                 $types = explode(',', $types);
             }
             $refreshTypes = $types;
+            if (in_array('skip-others', $refreshTypes)) {
+                unset($refreshTypes[array_search('skip-others', $refreshTypes)]);
+            }
         }
 
         $this->_clearCache($types, $output);
