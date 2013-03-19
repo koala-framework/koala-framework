@@ -249,7 +249,7 @@ class Kwf_Util_ClearCache
             $this->_refreshCache($types, $output);
         }
 
-        if (Kwf_Config::getValue('server.aws')) {
+        if (Kwf_Config::getValue('server.aws') && !in_array('skip-others', $types)) {
             $otherHostsTypes = $this->getCacheDirs();
             //add other types
             $otherHostsTypes[] = 'config';
@@ -265,6 +265,7 @@ class Kwf_Util_ClearCache
                 $otherHostsTypes = array_intersect($otherHostsTypes, $types);
             }
             if ($otherHostsTypes) {
+                $otherHostsTypes[] = 'skip-others';
                 $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
                 foreach ($domains as $domain) {
                     if ($output) {
