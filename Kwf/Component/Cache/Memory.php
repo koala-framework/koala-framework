@@ -32,10 +32,10 @@ class Kwf_Component_Cache_Memory extends Zend_Cache_Core
             )));
             //do *not* use cache_namespace for this cache (we don't want to delete it on clear-cache)
         } else {
-            if (extension_loaded('apc')) {
+            if (!Kwf_Config::getValue('server.memcache.host') && extension_loaded('apc')) {
                 $this->setBackend(new Kwf_Cache_Backend_Apc());
             } else {
-                if (extension_loaded('memcache')) {
+                if (Kwf_Config::getValue('server.memcache.host')) {
                     $this->setBackend(new Kwf_Cache_Backend_Memcached(array(
                         'compression' => true,
                     )));

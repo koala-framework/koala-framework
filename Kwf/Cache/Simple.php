@@ -52,7 +52,6 @@ class Kwf_Cache_Simple
                     }
                 }
             }
-
         }
         return $cache;
     }
