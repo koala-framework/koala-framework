@@ -30,6 +30,6 @@ class Kwf_Util_Aws_Ec2_InstanceDnsNames
                 }
             }
         }
-        return $domains;
+        return array_unique($domains);
     }
 }
