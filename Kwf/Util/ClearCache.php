@@ -264,16 +264,18 @@ class Kwf_Util_ClearCache
             } else {
                 $otherHostsTypes = array_intersect($otherHostsTypes, $types);
             }
-            $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
-            foreach ($domains as $domain) {
-                if ($output) {
-                    echo "executing clear-cache on $domain:\n";
-                }
-                $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes);
-                $cmd = "ssh $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
-                passthru($cmd);
-                if ($output) {
-                    echo "\n";
+            if ($otherHostsTypes) {
+                $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
+                foreach ($domains as $domain) {
+                    if ($output) {
+                        echo "executing clear-cache on $domain:\n";
+                    }
+                    $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes);
+                    $cmd = "ssh -o 'StrictHostKeyChecking no' $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
+                    passthru($cmd);
+                    if ($output) {
+                        echo "\n";
+                    }
                 }
             }
         }
