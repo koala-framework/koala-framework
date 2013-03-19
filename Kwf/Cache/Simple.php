@@ -33,7 +33,7 @@ class Kwf_Cache_Simple
                 }
                 $cache->setOption('cache_id_prefix', $v);
             } else {
-                if (extension_loaded('apc')) {
+                if (!Kwf_Config::getValue('server.memcache.host') && extension_loaded('apc')) {
                     $cache = false;
                 } else {
                     $cache = new Zend_Cache_Core(array(
@@ -42,7 +42,7 @@ class Kwf_Cache_Simple
                         'automatic_cleaning_factor' => 0,
                         'automatic_serialization' => true
                     ));
-                    if (extension_loaded('memcache')) {
+                    if (Kwf_Config::getValue('server.memcache.host')) {
                         $cache->setBackend(new Kwf_Cache_Backend_Memcached());
                     } else {
                         //fallback to file backend (NOT recommended!)
