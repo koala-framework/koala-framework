@@ -8,7 +8,11 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
 
     public function indexAction()
     {
-        Kwf_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true);
+        $options = array();
+        if ($this->_getParam()) {
+            $options['skipOtherServers'] = true;
+        }
+        Kwf_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true, true, $options);
         exit;
     }
 

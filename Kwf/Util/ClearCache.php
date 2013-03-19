@@ -207,7 +207,7 @@ class Kwf_Util_ClearCache
         return $refreshTypes;
     }
 
-    public final function clearCache($types = 'all', $output = false, $refresh = true)
+    public final function clearCache($types = 'all', $output = false, $refresh = true, $options = array())
     {
         Kwf_Component_ModelObserver::getInstance()->disable();
 
@@ -222,9 +222,6 @@ class Kwf_Util_ClearCache
                 $types = explode(',', $types);
             }
             $refreshTypes = $types;
-            if (in_array('skip-others', $refreshTypes)) {
-                unset($refreshTypes[array_search('skip-others', $refreshTypes)]);
-            }
         }
 
         $this->_clearCache($types, $output);
@@ -252,7 +249,8 @@ class Kwf_Util_ClearCache
             $this->_refreshCache($types, $output);
         }
 
-        if (Kwf_Config::getValue('server.aws') && !in_array('skip-others', $types)) {
+        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
+        if (Kwf_Config::getValue('server.aws') && !$skipOtherServers) {
             $otherHostsTypes = $this->getCacheDirs();
             //add other types
             $otherHostsTypes[] = 'config';
@@ -268,13 +266,12 @@ class Kwf_Util_ClearCache
                 $otherHostsTypes = array_intersect($otherHostsTypes, $types);
             }
             if ($otherHostsTypes) {
-                $otherHostsTypes[] = 'skip-others';
                 $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
                 foreach ($domains as $domain) {
                     if ($output) {
                         echo "executing clear-cache on $domain:\n";
                     }
-                    $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes);
+                    $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes).' --skip-other-servers';
                     $cmd = "ssh -o 'StrictHostKeyChecking no' $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
                     passthru($cmd);
                     if ($output) {
