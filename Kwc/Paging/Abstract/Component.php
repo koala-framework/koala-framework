@@ -179,19 +179,6 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function limitSelect(Kwf_Model_Select $select)
-    {
-        $limit = $this->getLimit();
-        if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
-            //wenn schon ein limit gesetzt
-            $existingLimitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
-            if ($existingLimitCount < $limit['limit']) {
-                return;
-            }
-        }
-        $select->limit($limit);
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -207,13 +194,19 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         return $this->_getSetting('pagesize');
     }
 
-    public function getPartialParams()
+    public function getPartialParams($select = null)
     {
+        $pagesize = $this->_getPageSize();
+        if ($select && $select->hasPart('limitCount') &&
+            $select->getPart('limitCount') <= $pagesize
+        ) {
+            $pagesize = $select->getPart('limitCount');
+        }
         return array(
             'class' => get_class($this),
             'paramName' => $this->_getParamName(),
             'pages' => $this->_getPages(),
-            'pagesize' => $this->_getPageSize()
+            'pagesize' => $pagesize
         );
     }
 
