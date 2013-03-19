@@ -13,7 +13,7 @@ class Kwf_Component_Settings
     public static function hasSettings($class)
     {
         $cacheId = 'hasSettings-'.$class;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -21,7 +21,7 @@ class Kwf_Component_Settings
         //& für performance
         $s =& self::_getSettingsCached();
         $ret = isset($s[$class]);
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 
@@ -36,7 +36,7 @@ class Kwf_Component_Settings
         }
 
         $cacheId = 'has-'.$class.'-'.$setting;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -47,7 +47,7 @@ class Kwf_Component_Settings
             throw new Kwf_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses. Requested setting: $setting");
         }
         $ret = array_key_exists($setting, $s[$class]);
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 
@@ -380,7 +380,7 @@ class Kwf_Component_Settings
         }
 
         $cacheId = 'cs-'.$class.'-'.$setting;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -402,7 +402,7 @@ class Kwf_Component_Settings
                 throw $e;
             }
         }
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 
@@ -411,14 +411,14 @@ class Kwf_Component_Settings
         if (!Kwf_Config::getValue('kwc.rootComponent')) return 0;
 
         $cacheId = 'settingsMtime';
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
 
         $s =& self::_getSettingsCached();
         $ret = $s['mtime'];
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 
@@ -490,7 +490,7 @@ class Kwf_Component_Settings
         if (!$root) return array();
         if (!self::$_rebuildingSettings) {
             $cacheId = 'componentClasses-'.Kwf_Component_Data_Root::getComponentClass();
-            $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+            $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
             if ($success) {
                 return $ret;
             }
@@ -499,7 +499,7 @@ class Kwf_Component_Settings
             unset($ret[array_search('mtime', $ret)]);
             unset($ret[array_search('mtimeFiles', $ret)]);
             $ret = array_values($ret);
-            Kwf_Cache_Simple::add($cacheId, $ret);
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
             return $ret;
         }
         $componentClasses = array($root);
@@ -510,7 +510,7 @@ class Kwf_Component_Settings
     static public function getFlag($class, $flag)
     {
         $cacheId = 'flag-'.$class.'-'.$flag;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -521,7 +521,7 @@ class Kwf_Component_Settings
         } else {
             $ret = $flags[$flag];
         }
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 

@@ -33,7 +33,7 @@ class Kwf_Util_Aws_Uploads_S3Row extends Kwf_Uploads_Row
             )
         );
         if (!$r->isOk()) {
-            throw new Kwf_Exception($r->body->asXml());
+            throw new Kwf_Exception($r->body);
         }
         $this->_deleteCache();
     }
@@ -54,7 +54,9 @@ class Kwf_Util_Aws_Uploads_S3Row extends Kwf_Uploads_Row
                 )
             );
             if (!$r->isOk()) {
-                throw new Kwf_Exception($r->body);
+                $body = file_get_contents($cacheFile);
+                unlink($cacheFile);
+                throw new Kwf_Exception($body);
             }
         }
         return $cacheFile;

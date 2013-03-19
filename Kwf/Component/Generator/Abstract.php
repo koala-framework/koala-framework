@@ -282,7 +282,7 @@ abstract class Kwf_Component_Generator_Abstract
         if (isset(self::$_cachedGeneratorKeys[$cacheId])) {
             return self::$_cachedGeneratorKeys[$cacheId];
         }
-        $ret = Kwf_Cache_Simple::fetch('genInst-'.$cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch('genInst-'.$cacheId, $success);
         if ($success) {
             self::$_cachedGeneratorKeys[$cacheId] = $ret;
             return $ret;
@@ -356,7 +356,7 @@ abstract class Kwf_Component_Generator_Abstract
                 'childComponentIds' => $g->getStaticChildComponentIds()
             );
         }
-        Kwf_Cache_Simple::add('genInst-'.$cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add('genInst-'.$cacheId, $ret);
 
         self::$_cachedGeneratorKeys[$cacheId] = $ret;
         return $ret;
@@ -516,7 +516,7 @@ abstract class Kwf_Component_Generator_Abstract
     public function getChildComponentClasses($select = array())
     {
         $cacheId = 'childComponentClasses-'.$this->_class.'-'.$this->_settings['generator'];
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if (!$success) {
             $ret = $this->_settings['component'];
             foreach ($ret as $c) {
@@ -527,7 +527,7 @@ abstract class Kwf_Component_Generator_Abstract
                     }
                 }
             }
-            Kwf_Cache_Simple::add($cacheId, $ret);
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         }
 
         if ($select === array() ||
@@ -925,11 +925,11 @@ abstract class Kwf_Component_Generator_Abstract
     protected function _getPossibleIndirectDbIdShortcuts($class)
     {
         $cacheId = '-poss-dbid-sc-'.$this->_class.'-'.$this->getGeneratorKey().'-'.$class;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if (!$success) {
             $ret = $this->_getPossibleIndirectDbIdShortcutsImpl($class);
             $ret = array_unique($ret);
-            Kwf_Cache_Simple::add($cacheId, $ret);
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         }
         return $ret;
     }

@@ -4,7 +4,7 @@ class Kwf_Config
     public static function getValueArray($var)
     {
         $cacheId = 'configAr-'.$var;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -19,7 +19,7 @@ class Kwf_Config
             $ret = array();
         }
 
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
 
         return $ret;
     }
@@ -27,7 +27,7 @@ class Kwf_Config
     public static function getValue($var)
     {
         $cacheId = 'config-'.$var;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -45,41 +45,28 @@ class Kwf_Config
             throw new Kwf_Exception("this would return an object, use getValueArray instead");
         }
 
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
 
         return $ret;
     }
 
     /**
+     * @internal
+     *
      * Delete the config cache for one variable. Needed for some tests.
      */
     public static function deleteValueCache($var)
     {
-        Kwf_Cache_Simple::delete('config-'.$var);
-        Kwf_Cache_Simple::delete('configAr-'.$var);
-    }
-
-    public static function clearValueCache()
-    {
-        Kwf_Cache_Simple::clear('config-');
-        Kwf_Cache_Simple::clear('configAr-');
+        Kwf_Cache_SimpleStatic::_delete('config-'.$var);
+        Kwf_Cache_SimpleStatic::_delete('configAr-'.$var);
     }
 
     /**
-     * TODO: masterFiles should not be optional, but is for now because of old cached setup.php files
-     * @param string[] array of absolute paths to config master files (required)
+     * @deprected
+     *
+     * method still there because it's called in generated cache/setup.php files
      */
     public static function checkMasterFiles($masterFiles = null)
     {
-        if (!is_null($masterFiles)) return;
-
-        require_once 'Kwf/Config/Web.php';
-        $mtime = Kwf_Config_Web::getInstanceMtime(Kwf_Setup::getConfigSection());
-        foreach ($masterFiles as $f) {
-            if (filemtime($f) > $mtime) {
-                Kwf_Config::clearValueCache();
-                break;
-            }
-        }
     }
 }

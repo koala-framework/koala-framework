@@ -439,7 +439,7 @@ class Kwf_Trl
         else $target = $this->getTargetLanguage();
 
         $cacheId = 'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -452,7 +452,7 @@ class Kwf_Trl
         } else {
             $ret = $needle;
         }
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 
@@ -463,7 +463,7 @@ class Kwf_Trl
         else $target = $this->getTargetLanguage();
 
         $cacheId = 'trlp-'.$source.'-'.$target.'-'.$plural.'-'.$context;
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -476,7 +476,7 @@ class Kwf_Trl
         } else {
             $ret = $plural;
         }
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 

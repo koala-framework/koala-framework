@@ -177,7 +177,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             Kwf_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
         }
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             $ccc[$class.$cacheId] = $ret;
             Kwf_Benchmark::count('iccc cache semi-hit');
@@ -199,7 +199,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         }
         $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
 
-        Kwf_Cache_Simple::add($currentCacheId, $ccc[$class.$cacheId]);
+        Kwf_Cache_SimpleStatic::add($currentCacheId, $ccc[$class.$cacheId]);
         return $ccc[$class.$cacheId];
 
     }
@@ -458,7 +458,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
         static $prefix;
         $cacheId = 'cclsbpc-'.implode('-', $class);
-        $ret = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;
         }
@@ -475,7 +475,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
                 }
             }
         }
-        Kwf_Cache_Simple::add($cacheId, $ret);
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }
 

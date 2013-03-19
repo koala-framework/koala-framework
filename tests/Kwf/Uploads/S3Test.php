@@ -7,12 +7,12 @@ class Kwf_Uploads_S3Test extends Kwf_Test_TestCase
             $this->markTestIncomplete();
         }
         Kwf_Registry::get('config')->aws->uploadsBucket = 'kwf-test';
-        Kwf_Config::clearValueCache('aws.uploadsBucket');
+        Kwf_Config::deleteValueCache('aws.uploadsBucket');
     }
     public function tearDown()
     {
         Kwf_Registry::get('config')->aws->uploadsBucket = null;
-        KWf_Config::clearValueCache('aws.uploadsBucket');
+        KWf_Config::deleteValueCache('aws.uploadsBucket');
     }
 
     public function testIt()

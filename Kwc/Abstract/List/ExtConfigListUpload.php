@@ -10,7 +10,7 @@ class Kwc_Abstract_List_ExtConfigListUpload extends Kwc_Abstract_List_ExtConfigL
         $ret = parent::_getConfig();
 
         $cacheId = 'extConfig_multiFileUpload_'.$this->_class;
-        $multiFileUpload = Kwf_Cache_Simple::fetch($cacheId, $success);
+        $multiFileUpload = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if (!$success) {
             $multiFileUpload = false;
             $form = Kwc_Abstract_Form::createChildComponentForm($this->_class, 'child');
@@ -22,7 +22,7 @@ class Kwc_Abstract_List_ExtConfigListUpload extends Kwc_Abstract_List_ExtConfigL
                     'fileSizeLimit' => $field->getFileSizeLimit(),
                 );
             }
-            Kwf_Cache_Simple::add($cacheId, $multiFileUpload);
+            Kwf_Cache_SimpleStatic::add($cacheId, $multiFileUpload);
         }
         $ret['list']['multiFileUpload'] = $multiFileUpload;
         return $ret;

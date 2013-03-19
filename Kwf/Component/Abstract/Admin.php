@@ -197,15 +197,15 @@ class Kwf_Component_Abstract_Admin
     {
         $ret = array();
 
-        $cache = Kwf_Cache::factory('Core', 'Apc', array('automatic_serialization'=>true, 'lifetime'=>null));
-        if (!$componentsWithDependsOnRow = $cache->load('componentsWithDependsOnRow')) {
+        $cacheId = 'componentsWithDependsOnRow';
+        if (!$componentsWithDependsOnRow = Kwf_Cache_SimpleStatic::fetch($cacheId)) {
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
                 $a = Kwc_Admin::getInstance($c);
                 if ($a instanceof Kwf_Component_Abstract_Admin_Interface_DependsOnRow) {
                     $componentsWithDependsOnRow[] = $c;
                 }
             }
-            $cache->save($componentsWithDependsOnRow, 'componentsWithDependsOnRow');
+            Kwf_Cache_SimpleStatic::add($cacheId, $componentsWithDependsOnRow);
         }
         foreach ($componentsWithDependsOnRow as $c) {
             $ret[] = Kwc_Admin::getInstance($c);

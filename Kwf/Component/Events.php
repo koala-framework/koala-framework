@@ -148,7 +148,7 @@ class Kwf_Component_Events
         $eventClass = get_class($event);
 
         $cacheId = '-ev-lst-'.Kwf_Component_Data_Root::getComponentClass().'-'.$eventClass.'-'.$class;
-        $callbacks = Kwf_Cache_Simple::fetch($cacheId);
+        $callbacks = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($callbacks === false) {
             $listeners = self::getAllListeners();
             $callbacks = array();
@@ -158,7 +158,7 @@ class Kwf_Component_Events
             if (isset($listeners[$eventClass]['all'])) {
                 $callbacks = array_merge($callbacks, $listeners[$eventClass]['all']);
             }
-            Kwf_Cache_Simple::add($cacheId, $callbacks);
+            Kwf_Cache_SimpleStatic::add($cacheId, $callbacks);
         }
 
         if ($logger) {
