@@ -224,7 +224,7 @@ class Kwf_Util_ClearCache
             $refreshTypes = $types;
         }
 
-        $this->_clearCache($types, $output);
+        $this->_clearCache($types, $output, $options);
 
         if ($refresh) {
             if ($output) echo "\n";
@@ -290,12 +290,12 @@ class Kwf_Util_ClearCache
     {
     }
 
-    private function _callApcUtil($type, $output)
+    private function _callApcUtil($type, $output, $options)
     {
-        Kwf_Util_Apc::callClearCacheByCli(array('type' => $type), $output ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT);
+        Kwf_Util_Apc::callClearCacheByCli(array('type' => $type), $output ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT, $options);
     }
 
-    protected function _clearCache(array $types, $output)
+    protected function _clearCache(array $types, $output, $options)
     {
         if (in_array('elastiCache', $types)) {
             //namespace used in Kwf_Cache_Simple
@@ -314,10 +314,10 @@ class Kwf_Util_ClearCache
             if ($output) echo "cleared:     memcache\n";
         }
         if (in_array('apc', $types)) {
-            $this->_callApcUtil('user', $output);
+            $this->_callApcUtil('user', $output, $options);
         }
         if (in_array('optcode', $types)) {
-            $this->_callApcUtil('file', $output);
+            $this->_callApcUtil('file', $output, $options);
         }
         if (in_array('setup', $types)) {
             if (file_exists('cache/setup.php')) {

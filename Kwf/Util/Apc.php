@@ -20,7 +20,7 @@ class Kwf_Util_Apc
         }
     }
 
-    public static function callClearCacheByCli($params, $verbosity)
+    public static function callClearCacheByCli($params, $verbosity, $options = array())
     {
         $outputType = '';
         if (isset($param['type']) && $param['type'] == 'user') {
@@ -29,9 +29,11 @@ class Kwf_Util_Apc
             $outputType = 'optcode';
         }
 
+        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
+
         $config = Kwf_Registry::get('config');
 
-        if (!$config->server->aws) {
+        if (!$config->server->aws || $skipOtherServers) {
             $d = $config->server->domain;
             if (!$d && file_exists('cache/lastdomain')) {
                 //this file gets written in Kwf_Setup to make it "just work"
