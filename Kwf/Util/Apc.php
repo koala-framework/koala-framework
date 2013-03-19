@@ -83,7 +83,6 @@ class Kwf_Util_Apc
                     }
                 }
             }
-            $domains = array_unique($domains);
         }
 
         foreach ($domains as $d) {
