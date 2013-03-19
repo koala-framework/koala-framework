@@ -9,6 +9,8 @@ class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
     public function setUp()
     {
         parent::setUp();
+        Kwf_Util_Apc::callClearCacheByCli(array('type'=>'user'));
+
         Kwf_Component_Data_Root::setComponentClass('Kwc_FavouritesSelenium_Root');
 
         //use custom user model
