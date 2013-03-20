@@ -6,6 +6,7 @@ class Kwc_User_BoxWithoutLogin_Component extends Kwc_User_BoxAbstract_Component
         $ret = parent::getSettings();
         $ret['showLostPassword'] = true;
         $ret['showLoginLink'] = true;
+        $ret['showRegisterLink'] = true;
         $ret['plugins'][] = 'Kwc_User_BoxWithoutLogin_IsLoggedInPlugin_Component';
         $ret['generators']['child']['component']['loggedIn'] = 'Kwc_User_BoxWithoutLogin_LoggedIn_Component';
         $ret['linkPostfix'] = '';
@@ -14,11 +15,13 @@ class Kwc_User_BoxWithoutLogin_Component extends Kwc_User_BoxAbstract_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['register'] = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentByClass(
-                            'Kwc_User_Register_Component',
-                            array('subroot' => $this->getData())
-                        );
+        if ($this->_getSetting('showRegisterLink')) {
+            $ret['register'] = Kwf_Component_Data_Root::getInstance()
+                            ->getComponentByClass(
+                                'Kwc_User_Register_Component',
+                                array('subroot' => $this->getData())
+                            );
+        }
         if ($this->_getSetting('showLostPassword')) {
             $ret['lostPassword'] = Kwf_Component_Data_Root::getInstance()
                             ->getComponentByClass(
