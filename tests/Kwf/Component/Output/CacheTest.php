@@ -16,6 +16,10 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
         $this->_renderer->setEnableCache(true);
         Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
         apc_clear_cache('user');
+        Kwf_Cache::factory('Core', 'Memcached', array(
+            'lifetime'=>null,
+            'automatic_cleaning_factor' => false,
+            'automatic_serialization'=>true))->clean();
     }
 
     public function testC3()

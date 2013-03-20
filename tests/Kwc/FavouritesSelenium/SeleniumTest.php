@@ -10,6 +10,10 @@ class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         parent::setUp();
         Kwf_Util_Apc::callClearCacheByCli(array('type'=>'user'));
+        Kwf_Cache::factory('Core', 'Memcached', array(
+            'lifetime'=>null,
+            'automatic_cleaning_factor' => false,
+            'automatic_serialization'=>true))->clean();
 
         Kwf_Component_Data_Root::setComponentClass('Kwc_FavouritesSelenium_Root');
 
