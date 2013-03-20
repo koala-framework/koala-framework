@@ -72,7 +72,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
     private function _getImageEnlargeComponentData()
     {
         $d = $this->getData();
-        while (!is_instance_of($d->componentClass, 'Kwc_Basic_ImageEnlarge_Component')) {
+        while (!is_instance_of($d->componentClass, 'Kwc_Basic_Image_Component')) {
             $d = $d->parent;
         }
         return $d;
