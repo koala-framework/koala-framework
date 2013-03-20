@@ -106,15 +106,25 @@ class Kwf_Benchmark_Rrd extends Kwf_Util_Rrd_File
         $load = explode(' ', $load);
         $values[] = $load[0];
 
-        $counter = new Kwf_Benchmark_Counter_Memcache();
-        $memcache = $counter->getMemcache();
-        $memcacheStats = $memcache->getStats();
-        $values[] = $memcacheStats['bytes_read'];
-        $values[] = $memcacheStats['bytes_written'];
-        $values[] = $memcacheStats['get_hits'];
-        $values[] = $memcacheStats['get_misses'];
-        foreach ($this->_getFieldNames() as $field) {
-            $values[] = $this->_getMemcacheValue($field);
+        if (Kwf_Registry::get('config')->server->memcache->host) {
+            $counter = new Kwf_Benchmark_Counter_Memcache();
+            $memcache = $counter->getMemcache();
+            $memcacheStats = $memcache->getStats();
+            $values[] = $memcacheStats['bytes_read'];
+            $values[] = $memcacheStats['bytes_written'];
+            $values[] = $memcacheStats['get_hits'];
+            $values[] = $memcacheStats['get_misses'];
+            foreach ($this->_getFieldNames() as $field) {
+                $values[] = $this->_getMemcacheValue($field);
+            }
+        } else {
+            $values[] = 'U';
+            $values[] = 'U';
+            $values[] = 'U';
+            $values[] = 'U';
+            foreach ($this->_getFieldNames() as $field) {
+                $values[] = 'U';
+            }
         }
 
         $cnt = array(
