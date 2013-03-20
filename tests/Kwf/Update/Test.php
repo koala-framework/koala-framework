@@ -4,6 +4,16 @@
  */
 class Kwf_Update_Test extends Kwf_Test_TestCase
 {
+    public function setUp()
+    {
+        $this->_updateTagsValue= Kwf_Registry::get('config')->server->updateTags;
+    }
+
+    public function tearDown()
+    {
+        Kwf_Registry::get('config')->server->updateTags = $this->_updateTagsValue;
+    }
+
     public function testUpdate()
     {
         $actions = array();
@@ -58,6 +68,9 @@ class Kwf_Update_Test extends Kwf_Test_TestCase
 
     public function testGetUpdatesSql()
     {
+        Kwf_Registry::get('config')->server->updateTags = array(
+            'db'
+        );
         $updates = Kwf_Update::getUpdatesForDir('Kwf/Update/UpdateSql', 1, 1100);
         $this->assertEquals(1, count($updates));
         $this->assertEquals(100, $updates[0]->getRevision());
