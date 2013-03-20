@@ -161,10 +161,17 @@ class Kwf_Benchmark_Rrd extends Kwf_Util_Rrd_File
         }
         $values = array_merge($values, array_values($cnt));
 
-        $values[] = $memcacheStats['bytes'];
-        $values[] = $memcacheStats['curr_items'];
-        $values[] = $memcacheStats['curr_connections'];
-        $values[] = $memcacheStats['limit_maxbytes'];
+        if (Kwf_Registry::get('config')->server->memcache->host) {
+            $values[] = $memcacheStats['bytes'];
+            $values[] = $memcacheStats['curr_items'];
+            $values[] = $memcacheStats['curr_connections'];
+            $values[] = $memcacheStats['limit_maxbytes'];
+        } else {
+            $values[] = 'U';
+            $values[] = 'U';
+            $values[] = 'U';
+            $values[] = 'U';
+        }
         return $values;
     }
 
