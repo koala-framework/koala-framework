@@ -3,7 +3,7 @@ class Kwc_Posts_Detail_Edit_Form_Component extends Kwc_Posts_Write_Form_Componen
 {
     protected function _getPostsComponent()
     {
-        return $this->_getPostComponent();
+        return $this->_getPostComponent()->parent;
     }
 
     protected function _getPostComponent()
