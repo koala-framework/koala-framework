@@ -131,8 +131,8 @@ abstract class Kwf_Component_Renderer_Abstract
                 }
             }
             $content = $helper->renderCached($content, $componentId, $config); /* content is rendered.
-                                                                    content can be from cache or generated,
-                                                                    manipulated and saved in cache*/
+                                                                    content can be directly from cache or generated,
+                                                                    manipulated and saved in cache */
 
             if (isset($plugins['before'])) {
                 foreach ($plugins['before'] as $pluginClass) {
