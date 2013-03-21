@@ -123,7 +123,6 @@ class Kwf_Assets_Loader
                 $cacheData  = array();
 
                 $cacheData['contents'] = '';
-                $cacheData['mtimeFiles'] = array();
                 foreach ($this->_getDep()->getAssetFiles($assetsType, $fileType, $section, $rootComponent) as $file) {
                     if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
                         if (substr($file, 0, 8) == 'dynamic/') {
@@ -136,7 +135,6 @@ class Kwf_Assets_Loader
                             if (!$file->getIncludeInAll()) continue;
                             $c = array();
                             $c['contents'] = $file->getContents();
-                            $c['mtimeFiles'] = $file->getMTimeFiles();
                         } else {
                             try {
                                 $c = $this->getFileContents($file, $language);
@@ -145,7 +143,6 @@ class Kwf_Assets_Loader
                             }
                         }
                         $cacheData['contents'] .=  $c['contents']."\n";
-                        $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'], $c['mtimeFiles']);
                     }
                 }
                 $cacheData['contents'] = $this->pack($cacheData['contents'], $fileType);
@@ -158,7 +155,7 @@ class Kwf_Assets_Loader
                 }
                 $cache->save($cacheData, $cacheId);
             }
-            $ret['mtime'] = $cacheData['mtime'];
+            $ret['mtime'] = time();
             $ret['contents'] = $cacheData['contents'];
             $ret['mimeType'] = $cacheData['mimeType'];
             $ret['encoding'] = $encoding;
@@ -287,8 +284,7 @@ class Kwf_Assets_Loader
                     $cache->save($cacheData, $cacheId);
                 }
                 $ret['contents'] = $cacheData['contents'];
-                $ret['mtime'] = $cacheData['mtime'];
-                $ret['mtimeFiles'] = $cacheData['mtimeFiles'];
+                $ret['mtime'] = time();
 
             } else {
                 $fx = substr($file, 0, strpos($file, '/'));
@@ -318,11 +314,9 @@ class Kwf_Assets_Loader
                         $cache->save($cacheData, $cacheId);
                     }
                     $ret['contents'] = $cacheData['contents'];
-                    $ret['mtime'] = $cacheData['mtime'];
-                    $ret['mtimeFiles'] = $cacheData['mtimeFiles'];
+                    $ret['mtime'] = time();
                 } else {
-                    $ret['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
-                    $ret['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
+                    $ret['mtime'] = time();
                     $ret['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
                 }
             }
