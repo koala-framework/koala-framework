@@ -1,13 +1,10 @@
 <?php
 class Kwf_Component_Plugin_Interface_UseViewCache_Component extends Kwc_Abstract
-    implements Kwf_Component_Plugin_Interface_UseViewCache
 {
-    public static $useViewCache = true;
-
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['plugins'] = array('Kwf_Component_Plugin_Interface_UseViewCache_Component');
+        $ret['plugins'] = array('Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component');
         return $ret;
     }
 
@@ -16,10 +13,5 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars($renderer);
         $ret['time'] = microtime(true);
         return $ret;
-    }
-
-    public function useViewCache()
-    {
-        return Kwf_Component_Plugin_Interface_UseViewCache_Component::$useViewCache;
     }
 }
