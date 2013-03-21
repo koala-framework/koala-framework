@@ -64,6 +64,20 @@ class Kwf_Util_Setup
         $ret .= "Kwf_Benchmark::\$startTime = microtime(true);\n";
         $ret .= "\n";
 
+        //only replace configured value to avoid spoofing
+        //required eg. behind load balancers
+        if (Kwf_Config::getValue('server.replaceVars.remoteAddr')) {
+            $a = Kwf_Config::getValue('server.replaceVars.remoteAddr');
+            $ret .= "\nif (isset(\$_SERVER['$a'])) \$_SERVER['REMOTE_ADDR'] = \$_SERVER['$a'];\n";
+        }
+
+        //try different values, if one spoofs this this is no security issue
+        $ret .= "if (isset(\$_SERVER['HTTP_SSL_SESSION_ID'])) \$_SERVER['HTTPS'] = 'on';\n";
+        $ret .= "if (isset(\$_SERVER['HTTP_SESSION_ID_TAG'])) \$_SERVER['HTTPS'] = 'on';\n";
+        $ret .= "if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {\n";
+        $ret .= "    \$_SERVER['HTTPS'] = 'on';\n";
+        $ret .= "}\n";
+
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
 
         $ret .= "Kwf_Loader::setIncludePath('".implode(PATH_SEPARATOR, $ip)."');\n";
