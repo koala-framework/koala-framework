@@ -106,8 +106,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 }
                 if ($content == Kwf_Component_Cache::NO_CACHE) { //if loaded cache was NO_CACHE or cache disabled content is set to null => has to be rendered
                     $content = null;
-                    //If NO_CACHE was cached or cache is disabled no cache should be saved, except $useViewCache is true
-                    $saveCache = ($useViewCache ? true : false);
+                    $saveCache = false;
                 }
             }
             if (is_null($content)) {
