@@ -210,6 +210,11 @@ class Kwf_Util_Setup
         $ret .= "    Zend_Session::setId(\$_POST['PHPSESSID']);\n";
         $ret .= "}\n";
 
+        //store session data in memcache if avaliable
+        if (Kwf_Config::getValue('server.memcache.host')) {
+            $ret .= "\nKwf_Util_SessionHandler::init();\n";
+        }
+
         /*
         if (isset($_COOKIE['unitTest'])) {
             //$config->debug->benchmark = false;
