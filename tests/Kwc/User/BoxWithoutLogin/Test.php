@@ -36,7 +36,6 @@ class Kwc_User_BoxWithoutLogin_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentByClass('Kwc_User_BoxWithoutLogin_Box_Component');
         $html = str_replace("\n", '', $c->render());
-        p($html);
         $this->assertRegExp("#.*bh@vivid-planet\.com.*<a href=\"/\?logout\">Logout</a>.*#", $html, 'Should contain the users data and a logout link');
     }
 

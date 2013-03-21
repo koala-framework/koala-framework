@@ -8,6 +8,7 @@ class Kwc_User_BoxWithoutLogin_Component extends Kwc_User_BoxAbstract_Component
         $ret['showLoginLink'] = true;
         $ret['showRegisterLink'] = true;
         $ret['plugins'][] = 'Kwc_User_BoxWithoutLogin_IsLoggedInPlugin_Component';
+        $ret['plugins'][] = 'Kwc_User_BoxWithoutLogin_AppendChildComponentPlugin';
         $ret['generators']['child']['component']['loggedIn'] = 'Kwc_User_BoxWithoutLogin_LoggedIn_Component';
         $ret['linkPostfix'] = '';
         return $ret;
