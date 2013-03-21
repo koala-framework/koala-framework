@@ -14,21 +14,22 @@ class Kwf_Component_Output_CacheSlowTest extends Kwf_Test_TestCase
         $this->_root = Kwf_Component_Data_Root::getInstance();
 
         Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
-        apc_clear_cache('user');
+        Kwf_Cache::factory('Core', 'Memcached', array(
+            'lifetime'=>null,
+            'automatic_cleaning_factor' => false,
+            'automatic_serialization'=>true))->clean();
+
 
         Kwf_Registry::get('config')->debug->componentCache->disable = false;
         Kwf_Config::deleteValueCache('debug.componentCache.disable');
     }
 
-    /*
-     * Funktioniert nicht, weil TTL innerhalb eines Requests nicht berücksichtigt wird
-     */
     public function testApcCli()
     {
-        apc_store('foo', 'bar', 1);
-        $this->assertEquals(apc_fetch('foo'), 'bar');
-        //sleep(2);
-        //$this->assertNull(apc_fetch('foo'));
+        Kwf_Cache_Simple::add('foo', 'bar', 1);
+        $this->assertEquals(Kwf_Cache_Simple::fetch('foo'), 'bar');
+        sleep(2);
+        $this->assertFalse(Kwf_Cache_Simple::fetch('foo'));
     }
 
     public function testC4()
@@ -40,8 +41,6 @@ class Kwf_Component_Output_CacheSlowTest extends Kwf_Test_TestCase
         $content = $row->content;
         $this->_root->render();
         $this->assertEquals($content, $row->content);
-        // muss hier gemacht werden, weil TTL nicht funktioniert
-        apc_delete(Kwf_Cache::getUniquePrefix() . '-cc-root/component/component/');
         sleep(3);
         $this->_root->render();
         $this->assertNotEquals($content, $row->content);
