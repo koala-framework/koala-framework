@@ -85,25 +85,35 @@ abstract class Kwf_Component_Renderer_Abstract
                 $helper = $helpers[$type];
             }
 
-            $statType = null;
+            $useViewCache = true;
+            if (isset($plugins['useCache'])) {
+                foreach ($plugins['useCache'] as $pluginClass) {
+                    $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
+                    // if one of the plugins return false no cache is used
+                    $useViewCache = $plugin->useViewCache() && $useViewCache;
+                }
+            }
+
+            $statType = null; //for statistic: holds where the content comes from. If it was load from cache, created and cached or has disabled viewCache
             $content = null;
             $saveCache = false; //disable cache saving completely in preview
             if ($this->_enableCache) {
                 $saveCache = true;
                 $content = Kwf_Component_Cache::NO_CACHE;
-                if ($helper->enableCache()) {
+                if ($helper->enableCache() && $useViewCache) { //checks if cache is enabled, loading from cache
                     $content = Kwf_Component_Cache::getInstance()->load($componentId, $this->_getCacheName(), $type, $value);
-                    $statType = 'cache';
+                    $statType = 'cache'; //for statistic: was cached
                 }
-                if ($content == Kwf_Component_Cache::NO_CACHE) {
+                if ($content == Kwf_Component_Cache::NO_CACHE) { //if loaded cache was NO_CACHE or cache disabled content is set to null => has to be rendered
                     $content = null;
-                    $saveCache = false;
+                    //If NO_CACHE was cached or cache is disabled no cache should be saved, except $useViewCache is true
+                    $saveCache = ($useViewCache ? true : false);
                 }
             }
             if (is_null($content)) {
-                $content = $helper->render($componentId, $config);
+                $content = $helper->render($componentId, $config); //Component default gets rendered
                 if (isset($plugins['beforeCache'])) {
-                    foreach ($plugins['beforeCache'] as $pluginClass) {
+                    foreach ($plugins['beforeCache'] as $pluginClass) { //Plugins get possibility to manipulate html
                         $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                         $content = $plugin->processOutput($content);
                     }
@@ -113,10 +123,10 @@ abstract class Kwf_Component_Renderer_Abstract
                     $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content);
                     $statType = 'nocache'; //for statistic: was not cached
                 } else {
-                    $statType = 'noviewcache';
+                    $statType = 'noviewcache'; //for statistic: view cache is disabled
                 }
             }
-            $content = $helper->renderCached($content, $componentId, $config);
+            $content = $helper->renderCached($content, $componentId, $config); //content is rendered. content can be from cache or generated, manipulated and saved in cache
 
             if (isset($plugins['before'])) {
                 foreach ($plugins['before'] as $pluginClass) {
