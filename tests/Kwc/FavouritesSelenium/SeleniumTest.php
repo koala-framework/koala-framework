@@ -9,7 +9,8 @@ class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
     public function setUp()
     {
         parent::setUp();
-        Kwf_Util_Apc::callClearCacheByCli(array('type'=>'user'));
+
+        //clear view cache
         Kwf_Cache::factory('Core', 'Memcached', array(
             'lifetime'=>null,
             'automatic_cleaning_factor' => false,
