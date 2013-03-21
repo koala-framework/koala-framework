@@ -11,7 +11,8 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Component extends Kwc_Abstract
     public function getTemplateVars($renderer)
     {
         $ret = parent::getTemplateVars($renderer);
-        $ret['time'] = microtime(true);
+        static $num = 0;
+        $ret['num'] = $num++;
         return $ret;
     }
 }

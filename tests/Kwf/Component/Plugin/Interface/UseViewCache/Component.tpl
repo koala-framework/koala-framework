@@ -1,1 +1,1 @@
-<?=$this->time;?>
+<?=$this->num;?>
