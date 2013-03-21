@@ -108,8 +108,10 @@ abstract class Kwf_Component_Renderer_Abstract
                         $content = $plugin->processOutput($content);
                     }
                 }
-                if ($saveCache && $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content)) {
-                    $statType = 'nocache';
+                if ($saveCache) {
+                    //save rendered contents into view cache
+                    $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content);
+                    $statType = 'nocache'; //for statistic: was not cached
                 } else {
                     $statType = 'noviewcache';
                 }
