@@ -19,8 +19,8 @@ class Kwc_Box_OpenGraph_Image_Component extends Kwc_Abstract_Image_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $protocol = Kwf_Config::getValue('server.https') ? 'https' : 'http';
-        $domain = Kwf_Component_Data_Root::getInstance()->getDomain();
+        $protocol = 'http';
+        $domain = $this->getData()->getDomain();
         $imageUrl = $this->getImageUrl();
         $ret['imageUrl'] = '';
         if ($imageUrl) {
