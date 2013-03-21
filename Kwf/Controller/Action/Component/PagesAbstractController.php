@@ -59,6 +59,9 @@ abstract class Kwf_Controller_Action_Component_PagesAbstractController extends K
             $data['expanded'] = true;
             $data['loadChildren'] = true;
             $data['editControllerComponentId'] = 'root';
+            $data['allowDrag'] = false;
+            $data['allowDrop'] = false;
+            $data['actions'] = array();
         } else {
             $data = $component->generator->getPagesControllerConfig($component);
         }
