@@ -58,13 +58,18 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         $currentPageIds = array();
         foreach ($currentPages as $page) {
             if (!$page instanceof Kwf_Component_Data_Root) {
-                $currentPageIds[] = $page->getComponentId();
+                $currentPageIds[] = $page->componentId;
+                $selected = $page->componentId; //the last one is selected
             }
         }
         foreach ($ret as $k=>$i) {
             if (in_array($i['data']->componentId, $currentPageIds)) {
                 $ret[$k]['current'] = true;
                 $ret[$k]['class'] .= ' current';
+                if ($selected == $i['data']->componentId) {
+                    $ret[$k]['selected'] = true;
+                    $ret[$k]['class'] .= ' selected';
+                }
             }
         }
     }
