@@ -255,7 +255,6 @@ class Kwf_Util_ClearCache
             //add other types
             $otherHostsTypes[] = 'config';
             $otherHostsTypes[] = 'setup';
-            $otherHostsTypes[] = 'assets';
             $otherHostsTypes[] = 'component';
             $otherHostsTypes[] = 'events';
             $otherHostsTypes[] = 'trl';
