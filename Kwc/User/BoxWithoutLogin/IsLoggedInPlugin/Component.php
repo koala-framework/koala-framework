@@ -22,8 +22,7 @@ class Kwc_User_BoxWithoutLogin_IsLoggedInPlugin_Component extends Kwf_Component_
     private function _isLoggedIn()
     {
         if (!Zend_Session::sessionExists() && !Kwf_Config::getValue('autologin')) return false;
-        $user = Zend_Registry::get('userModel')->getAuthedUser();
-        if (is_null($user)) return false;
+        if (!Zend_Registry::get('userModel')->hasAuthedUser()) return false;
         return true;
     }
 }
