@@ -211,7 +211,7 @@ class Kwf_Util_Setup
         $ret .= "}\n";
 
         //store session data in memcache if avaliable
-        if (Kwf_Config::getValue('server.memcache.host')) {
+        if (Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) {
             $ret .= "\nKwf_Util_SessionHandler::init();\n";
         }
 
