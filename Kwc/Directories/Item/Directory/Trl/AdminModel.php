@@ -63,10 +63,9 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
             //only id passed, in detail form controller
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($id, array('ignoreVisible'=>true));
-            $id = $c->id;
-            $componentId = $c->chained->parent->dbId;
-        }
-        if ($componentId && $id) {
+            $select->whereEquals('component_id', $c->parent->chained->dbId);
+            $select->whereEquals('id', $c->id);
+        } else if ($componentId && $id) {
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
