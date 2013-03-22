@@ -267,6 +267,11 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         return null;
     }
 
+    public function hasAuthedUser()
+    {
+        return (bool)$this->getAuthedUserId();
+    }
+
     public function getAuthedUserId()
     {
         if (!Kwf_Setup::hasDb()) return null;

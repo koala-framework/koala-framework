@@ -147,12 +147,13 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
     // for helper partialPaging
     public function getPartialParams()
     {
+        $select = $this->_getSelect();
         $paging = $this->_getPagingComponent();
         $ret = array();
         $ret['componentId'] = $this->getData()->componentId;
-        $ret['count'] = $this->getPagingCount();
+        $ret['count'] = $this->getPagingCount($select);
         if ($paging) {
-            $ret = array_merge($ret, $paging->getComponent()->getPartialParams());
+            $ret = array_merge($ret, $paging->getComponent()->getPartialParams($select));
         }
         $ret['noEntriesFound'] = $this->_getPlaceholder('noEntriesFound');
         return $ret;

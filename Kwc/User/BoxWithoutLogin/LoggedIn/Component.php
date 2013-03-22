@@ -29,7 +29,7 @@ class Kwc_User_BoxWithoutLogin_LoggedIn_Component extends Kwc_Abstract
 
         $ret['links'] = $this->_getLinks();
         $ret['linkPostfix'] = $this->_getSetting('linkPostfix');
-        $ret['logoutLink'] = $_SERVER['REQUEST_URI'];
+        $ret['logoutLink'] = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
         if (strpos($ret['logoutLink'], '?')=== false ) {
             $ret['logoutLink'] .= '?logout';
         } else {

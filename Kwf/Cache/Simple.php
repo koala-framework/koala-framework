@@ -113,7 +113,7 @@ class Kwf_Cache_Simple
             if (!$r) $ret = false;
         }
         if (!$cache && php_sapi_name() == 'cli' && $ids) {
-            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)), Kwf_Util_Apc::SILENT);
             if (!$result['result']) $ret = false;
         }
         return $ret;

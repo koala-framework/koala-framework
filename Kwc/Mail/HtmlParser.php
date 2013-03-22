@@ -86,6 +86,11 @@ class Kwc_Mail_HtmlParser
         foreach ($this->_styles as $s) {
             if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
+                if (isset($s['appendTags'])) {
+                    foreach ($s['appendTags'] as $t => $v) {
+                        $appendTags[$t] = $v;
+                    }
+                }
                 if (isset($s['styles'])) {
                     foreach ($s['styles'] as $style=>$value) {
                         if ($style == 'font-family') {

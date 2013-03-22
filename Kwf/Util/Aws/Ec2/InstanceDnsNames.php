@@ -26,12 +26,10 @@ class Kwf_Util_Aws_Ec2_InstanceDnsNames
             foreach ($resItem->instancesSet->item as $item) {
                 $dnsName = (string)$item->dnsName;
                 if ($dnsName && $dnsName != $ownHostname) {
-                    $domains[] = array(
-                        'domain'=>$dnsName,
-                    );
+                    $domains[] = $dnsName;
                 }
             }
         }
-        return $domains;
+        return array_unique($domains);
     }
 }

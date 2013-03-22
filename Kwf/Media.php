@@ -124,8 +124,8 @@ class Kwf_Media
         if ($output && !isset($output['file']) && !isset($output['contents'])) {
             //scaled image is not cached in apc as it might be larger - load from disk
             $output['file'] = 'cache/media/'.$cacheId;
-            if (!file_exists($output['file'])) $output = false;
         }
+        if (isset($output['file']) && !file_exists($output['file'])) $output = false;
 
         if ($output && isset($output['mtimeFiles'])) {
             foreach ($output['mtimeFiles'] as $f) {

@@ -8,6 +8,10 @@ class Kwf_Model_RowCache_Test extends Kwf_Test_TestCase
     public function setUp()
     {
         apc_clear_cache('user');
+        Kwf_Cache::factory('Core', 'Memcached', array(
+            'lifetime'=>null,
+            'automatic_cleaning_factor' => false,
+            'automatic_serialization'=>true))->clean();
         parent::setUp();
     }
 

@@ -18,7 +18,10 @@ class Kwf_Assets_Cache extends Kwf_Cache_Core
     {
         static $cache;
         if (!isset($cache)) {
-            $cache = new self();
+            $cache = Kwf_Cache_Simple::getZendCache();
+            if (!$cache) {
+                $cache = new self();
+            }
         }
         return $cache;
     }

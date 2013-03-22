@@ -207,7 +207,7 @@ class Kwf_Util_ClearCache
         return $refreshTypes;
     }
 
-    public final function clearCache($types = 'all', $output = false, $refresh = true)
+    public final function clearCache($types = 'all', $output = false, $refresh = true, $options = array())
     {
         Kwf_Component_ModelObserver::getInstance()->disable();
 
@@ -224,7 +224,7 @@ class Kwf_Util_ClearCache
             $refreshTypes = $types;
         }
 
-        $this->_clearCache($types, $output);
+        $this->_clearCache($types, $output, $options);
 
         if ($refresh) {
             if ($output) echo "\n";
@@ -249,12 +249,12 @@ class Kwf_Util_ClearCache
             $this->_refreshCache($types, $output);
         }
 
-        if (Kwf_Config::getValue('server.aws')) {
+        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
+        if (Kwf_Config::getValue('server.aws') && !$skipOtherServers) {
             $otherHostsTypes = $this->getCacheDirs();
             //add other types
             $otherHostsTypes[] = 'config';
             $otherHostsTypes[] = 'setup';
-            $otherHostsTypes[] = 'assets';
             $otherHostsTypes[] = 'component';
             $otherHostsTypes[] = 'events';
             $otherHostsTypes[] = 'trl';
@@ -264,16 +264,18 @@ class Kwf_Util_ClearCache
             } else {
                 $otherHostsTypes = array_intersect($otherHostsTypes, $types);
             }
-            $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
-            foreach ($domains as $domain) {
-                if ($output) {
-                    echo "executing clear-cache on $domain:\n";
-                }
-                $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes);
-                $cmd = "ssh $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
-                passthru($cmd);
-                if ($output) {
-                    echo "\n";
+            if ($otherHostsTypes) {
+                $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
+                foreach ($domains as $domain) {
+                    if ($output) {
+                        echo "executing clear-cache on $domain:\n";
+                    }
+                    $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes).' --skip-other-servers';
+                    $cmd = "ssh -o 'StrictHostKeyChecking no' $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
+                    passthru($cmd);
+                    if ($output) {
+                        echo "\n";
+                    }
                 }
             }
         }
@@ -287,12 +289,12 @@ class Kwf_Util_ClearCache
     {
     }
 
-    private function _callApcUtil($type, $output)
+    private function _callApcUtil($type, $output, $options)
     {
-        Kwf_Util_Apc::callClearCacheByCli(array('type' => $type), $output ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT);
+        Kwf_Util_Apc::callClearCacheByCli(array('type' => $type), $output ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT, $options);
     }
 
-    protected function _clearCache(array $types, $output)
+    protected function _clearCache(array $types, $output, $options)
     {
         if (in_array('elastiCache', $types)) {
             //namespace used in Kwf_Cache_Simple
@@ -311,10 +313,10 @@ class Kwf_Util_ClearCache
             if ($output) echo "cleared:     memcache\n";
         }
         if (in_array('apc', $types)) {
-            $this->_callApcUtil('user', $output);
+            $this->_callApcUtil('user', $output, $options);
         }
         if (in_array('optcode', $types)) {
-            $this->_callApcUtil('file', $output);
+            $this->_callApcUtil('file', $output, $options);
         }
         if (in_array('setup', $types)) {
             if (file_exists('cache/setup.php')) {

@@ -73,7 +73,11 @@ class Kwf_Cache_SimpleStatic
     {
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
 
-        $cache = self::_getZendCache();
+        if (extension_loaded('apc')) {
+            $cache = false;
+        } else {
+            $cache = self::_getZendCache();
+        }
         $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
         $ret = true;
         $ids = array();
@@ -87,7 +91,7 @@ class Kwf_Cache_SimpleStatic
             if (!$r) $ret = false;
         }
         if (!$cache && php_sapi_name() == 'cli' && $ids) {
-            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)), Kwf_Util_Apc::SILENT);
             if (!$result['result']) $ret = false;
         }
         return $ret;

@@ -1,9 +1,6 @@
 <?php
 abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
 {
-    private $_currentPages;
-    private $_config;
-
     public static function getSettings()
     {
         $ret = parent::getSettings();

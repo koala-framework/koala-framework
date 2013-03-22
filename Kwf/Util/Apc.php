@@ -20,18 +20,20 @@ class Kwf_Util_Apc
         }
     }
 
-    public static function callClearCacheByCli($params, $verbosity)
+    public static function callClearCacheByCli($params, $verbosity, $options = array())
     {
         $outputType = '';
-        if (isset($param['type']) && $param['type'] == 'user') {
+        if (isset($params['type']) && $params['type'] == 'user') {
             $outputType = 'apc user';
-        } else if (isset($param['type']) && $param['type'] == 'file') {
+        } else if (isset($params['type']) && $params['type'] == 'file') {
             $outputType = 'optcode';
         }
 
+        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
+
         $config = Kwf_Registry::get('config');
 
-        if (!$config->server->aws) {
+        if (!$config->server->aws || $skipOtherServers) {
             $d = $config->server->domain;
             if (!$d && file_exists('cache/lastdomain')) {
                 //this file gets written in Kwf_Setup to make it "just work"
@@ -81,7 +83,6 @@ class Kwf_Util_Apc
                     }
                 }
             }
-
         }
 
         foreach ($domains as $d) {
