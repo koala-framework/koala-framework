@@ -8,19 +8,21 @@ class Kwc_TestController extends Kwf_Controller_Action
 {
     public function indexAction()
     {
-        Zend_Registry::get('config')->debug->componentCache->disable = true;
+//         Zend_Registry::get('config')->debug->componentCache->disable = true;
         Zend_Registry::set('db', false);
         Kwf_Test_SeparateDb::setDbFromCookie(); // setzt es nur wenn es das cookie wirklich gibt
 
         //FnF models setzen damit tests nicht in echte tabellen schreiben
         Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
 
+        /*
         if (class_exists('APCIterator')) {
             $prefix = Kwf_Cache::getUniquePrefix();
             apc_delete_file(new APCIterator('user', '#^'.$prefix.'#'));
         } else {
             apc_clear_cache('user');
         }
+        */
         Kwf_Component_Data_Root::setComponentClass($this->_getParam('root'));
         Zend_Registry::set('testRootComponentClass', $this->_getParam('root'));
         $root = Kwf_Component_Data_Root::getInstance();
