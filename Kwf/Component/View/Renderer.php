@@ -13,11 +13,13 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
                 $plugins['after'][] = $p;
             } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewReplace')) {
                 $plugins['replace'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_UseViewCache')) {
+                $plugins['useCache'][] = $p;
             }
         }
         return $plugins;
     }
-    
+
     protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $type = null, $plugins = array())
     {
         if (!$type) $type = $this->_getType();
