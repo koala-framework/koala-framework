@@ -28,4 +28,9 @@ class Kwc_User_BoxWithoutLogin_UserModel extends Kwf_User_Model
     {
         $this->_authedUserId = $id;
     }
+
+    public function hasAuthedUser()
+    {
+        return (bool)$this->_authedUserId;
+    }
 }
