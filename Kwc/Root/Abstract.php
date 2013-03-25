@@ -68,9 +68,13 @@ class Kwc_Root_Abstract extends Kwc_Abstract
     protected function _getMasterChildContentWidth(Kwf_Component_Data $sourcePage)
     {
         $ret = $this->_getSetting('contentWidth');
+        $boxes = array();
+        foreach ($sourcePage->getChildBoxes() as $box) {
+            $boxes[$box->box] = $box;
+        }
         foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
-            //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
-            $c = $sourcePage->getChildComponent('-'.$box);
+            if (!isset($boxes[$box])) continue;
+            $c = $boxes[$box];
             if ($c && $c->hasContent()) {
                 $ret -= $width;
             }
