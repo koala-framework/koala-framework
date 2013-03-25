@@ -84,4 +84,15 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Abstract_Image_Tr
             }
         }
     }
+
+    //gets called when own row gets updated, weather component is visible or not
+    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    {
+        //don't call parent, as it would fire Media_Changed which we don't need in that case (as our own image in the alternative preview image)
+        if ($event->isDirty(array('own_image'))) {
+            $this->fireEvent(new Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_AlternativePreviewChangedEvent(
+                $this->_class, $c
+            ));
+        }
+    }
 }

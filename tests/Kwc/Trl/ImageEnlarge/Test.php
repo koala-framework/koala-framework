@@ -201,11 +201,23 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
     }
 
+    /**
+     * root
+     *  master
+     *    test1 (has image)
+     *      enlargeTag
+     *  en
+     *    test1  (<- must display 6 after upload)
+     *      enlargeTag (gets own_image set)
+     *        image    (gets image uploaded)
+     *      image
+     */
     public function testEnClearCacheAddOwnPreviewImage()
     {
         $c = $this->_root->getComponentById('root-en_test1');
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
+        //change own_image setting plus image
         $row = $c->getChildComponent('-linkTag')->getComponent()->getRow();
         $row->own_image = 1;
         $row->save();
@@ -214,6 +226,27 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $row->save();
         $this->_process();
         $this->_checkTheSizes($c->render(), 1, 560, 560, 6, 65, 120);
+
+        //change only the image
+        $row = $c->getChildComponent('-linkTag')->getChildComponent('-image')->getComponent()->getRow();
+        $row->kwf_upload_id = '1';
+        $row->save();
+        $this->_process();
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+
+        //change the image back again
+        $row = $c->getChildComponent('-linkTag')->getChildComponent('-image')->getComponent()->getRow();
+        $row->kwf_upload_id = '6';
+        $row->save();
+        $this->_process();
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 6, 65, 120);
+
+        //change own_image back to false, without changing kwf_upload_id
+        $row = $c->getChildComponent('-linkTag')->getComponent()->getRow();
+        $row->own_image = 0;
+        $row->save();
+        $this->_process();
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
     }
 
     public function testEnClearCacheChangeMasterImage()
@@ -247,9 +280,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         // nicht das FnF-Cache Model dieses Request schreiben kann
         preg_match_all('/.*\/media\/([\w\.]+)\/([\w\-]+)\/(\w+)\/.*/', $html, $matches);
         foreach ($matches[0] as $key => $m) {
-            $class = $matches[1][$key];
-            $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-            call_user_func(array($classWithoutDot, 'getMediaOutput'), $matches[2][$key], $matches[3][$key], $class);
+            Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
         preg_match('#^.*?<a.+?&quot;width&quot;:(\d+),&quot;height&quot;:(\d+).+?<img.+?src=".+?(\d+)\.jpg.+width="(\d+)".+height="(\d+)".+$#ms', $html, $matches);
         $this->assertEquals($matches[1], $largeWidth);
@@ -259,7 +290,6 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals($matches[5], $smallHeight);
 
         preg_match('#href="(.+?)".*?src="(.+?)"#ms', $html, $matches);
-
         $smallSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[2]);
         $this->assertEquals($smallWidth, $smallSrcSize[0]);
         $this->assertEquals($smallHeight, $smallSrcSize[1]);
