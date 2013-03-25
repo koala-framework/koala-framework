@@ -88,7 +88,7 @@ class Kwc_Favourites_BoxTest extends Kwc_TestAbstract
         $row->visible = 0;
         $row->save();
         $this->_process();
-//         $this->markTestIncomplete();
+
         // RecursiveRemove isn't handled correctly and RecusiveAdd is never fired this way
         $c = $this->_root->getComponentById(2005)->getComponent();
         $countAfter = $this->getFavouriteCountFromBox($c);
