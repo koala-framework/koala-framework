@@ -395,10 +395,11 @@ class Kwf_Component_Data
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
         $cacheId = 'recCCGen-'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $generators = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+
         if (!$success) {
             //get (statically=fast and cached) all generators that could create the component we are looking for
             $generators = $this->_getRecursiveGenerators(
-                        Kwc_Abstract::getChildComponentClasses($this, $childSelect),
+                        Kwc_Abstract::getChildComponentClasses($this, $childSelect), //all classes $this could create that match $childSelect
                         $genSelect, $childSelect, $selectHash);
             Kwf_Cache_SimpleStatic::add($cacheId, $generators);
         }
