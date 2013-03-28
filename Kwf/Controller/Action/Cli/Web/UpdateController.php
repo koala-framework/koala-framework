@@ -32,7 +32,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         Kwf_Component_ModelObserver::getInstance()->disable();
 
         if ($this->_getParam('class')) {
-            $update = Kwf_Update::createUpdate($this->_getParam('class'));
+            $update = Kwf_Util_Update_Helper::createUpdate($this->_getParam('class'));
             if (!$update) { echo 'could not create update.'; exit; }
 
             $updates = array($update);
@@ -87,7 +87,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             }
         }
         echo "Looking for update-scripts from revision $from to {$to}...";
-        $updates = Kwf_Update::getUpdates($from, $to);
+        $updates = Kwf_Util_Update_Helper::getUpdates($from, $to);
         $doneNames = self::_getDoneNames();
         foreach ($updates as $k=>$u) {
             if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
@@ -117,7 +117,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             //fallback for older versions, uploade used to be a file
             if (!file_exists('update')) {
                 $doneNames = array();
-                foreach (Kwf_Update::getUpdates(0, 9999999) as $u) {
+                foreach (Kwf_Util_Update_Helper::getUpdates(0, 9999999) as $u) {
                     $doneNames[] = $u->getUniqueName();
                 }
                 $db->query("UPDATE kwf_update SET data=?", serialize($doneNames));
@@ -131,7 +131,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             //UPDATE applicaton/update format
             $r = trim($doneNames);
             $doneNames = array();
-            foreach (Kwf_Update::getUpdates(0, $r) as $u) {
+            foreach (Kwf_Util_Update_Helper::getUpdates(0, $r) as $u) {
                 $doneNames[] = $u->getUniqueName();
             }
         } else {
@@ -140,7 +140,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                 //UPDATE applicaton/update format
                 if (!isset($doneNames['done'])) {
                     $doneNames['done'] = array();
-                    foreach (Kwf_Update::getUpdates(0, $doneNames['start']) as $u) {
+                    foreach (Kwf_Util_Update_Helper::getUpdates(0, $doneNames['start']) as $u) {
                         $doneNames['done'][] = $u->getRevision();
                     }
                 }
@@ -154,7 +154,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                     static $allUpdates;
                     if (!isset($allUpdates)) {
                         $allUpdates = array();
-                        foreach (Kwf_Update::getUpdates(0, 9999999) as $u) {
+                        foreach (Kwf_Util_Update_Helper::getUpdates(0, 9999999) as $u) {
                             if (!isset($allUpdates[$u->getRevision()])) $allUpdates[$u->getRevision()] = array();
                             $allUpdates[$u->getRevision()][] = $u;
                         }
