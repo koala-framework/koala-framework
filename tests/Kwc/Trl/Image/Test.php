@@ -14,8 +14,6 @@ class Kwc_Trl_Image_Test extends Kwc_TestAbstract
     {
         parent::setUp('Kwc_Trl_Image_Root');
 
-        $this->markTestIncomplete("properly fixed in 3.3");
-
         //master image
         Kwf_Model_Abstract::getInstance('Kwc_Trl_Image_Image_TestModel')
             ->getProxyModel()->setData(array(

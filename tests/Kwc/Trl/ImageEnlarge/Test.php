@@ -20,8 +20,6 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
     {
         parent::setUp('Kwc_Trl_ImageEnlarge_Root');
 
-        $this->markTestIncomplete("properly fixed in 3.3");
-
         //master image
         Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_TestModel')
             ->getProxyModel()->setData(array(
@@ -296,8 +294,13 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals($smallWidth, $smallSrcSize[0]);
         $this->assertEquals($smallHeight, $smallSrcSize[1]);
 
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getPageByUrl('http://'.Kwf_Registry::get('testDomain').str_replace('/kwf/kwctest/'.Kwf_Component_Data_Root::getComponentClass(), '', $matches[1]), '');
+        $c->render(true, true); //first render in-process so we find the cache entry when doing a clear-cache
+
+        //then render "real" thru http
         $largeHtml = file_get_contents('http://'.Kwf_Registry::get('testDomain').$matches[1]);
-        preg_match('#class="kwfLightbox.*?<img .*?src="(.*?)"#s', $largeHtml, $matches);
+        preg_match('#class="lightboxBody.*?<img .*?src="(.*?)"#s', $largeHtml, $matches);
         $this->assertRegExp('#'.$largeImageNum.'\.jpg#', $matches[1]);
         $largeSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[1]);
         $this->assertEquals($largeWidth, $largeSrcSize[0]);
