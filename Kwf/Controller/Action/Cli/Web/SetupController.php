@@ -43,17 +43,17 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
             $update->update();
         }
 
-        if (!file_exists('update')) copy(KWF_PATH.'/setup/update', 'update');
-
-        Kwf_Controller_Action_Cli_Web_UpdateController::update();
-
+        $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates(0, 9999999));
 
         $file = 'setup/setup.sql'; //initial setup for web
         if (file_exists($file)) {
             $update = new Kwf_Update_Sql(0, null);
             $update->sql = file_get_contents($file);
-            $update->update();
+            $updates[] = $update;
         }
+
+        $doneNames = array();
+        Kwf_Util_Update_Helper::executeUpdates($updates, $doneNames);
 
         echo "\n\nSetup finished.\nThank you for using Koala Framework.\n";
         exit;

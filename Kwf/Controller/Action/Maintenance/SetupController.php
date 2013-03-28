@@ -53,16 +53,18 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             $update->update();
         }
 
-        if (!file_exists('update')) copy(KWF_PATH.'/setup/update', 'update');
-
-        Kwf_Controller_Action_Cli_Web_UpdateController::update();
+        $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates(0, 9999999));
 
         $file = 'setup/setup.sql'; //initial setup for web
         if (file_exists($file)) {
             $update = new Kwf_Update_Sql(0, null);
             $update->sql = file_get_contents($file);
-            $update->update();
+            $updates[] = $update;
         }
+
+        $doneNames = array();
+        Kwf_Util_Update_Helper::executeUpdates($updates, $doneNames);
+
     }
 
     public function jsonCheckDbAction()

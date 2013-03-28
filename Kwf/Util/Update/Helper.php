@@ -174,4 +174,115 @@ class Kwf_Util_Update_Helper
         }
         return $ret;
     }
+
+    public static function executeUpdates($updates, $doneNames, $debug=false, $skipClearCache=false)
+    {
+        if (self::_executeUpdate($updates, 'checkSettings', $debug, $skipClearCache)) {
+
+            Kwf_Util_Maintenance::writeMaintenanceBootstrap();
+
+            self::_executeUpdate($updates, 'preUpdate', $debug, $skipClearCache);
+            self::_executeUpdate($updates, 'update', $debug, $skipClearCache);
+            self::_executeUpdate($updates, 'postUpdate', $debug, $skipClearCache);
+            if (!$skipClearCache) {
+                echo "\n";
+                Kwf_Util_ClearCache::getInstance()->clearCache('all', true);
+                echo "\n";
+            }
+            self::_executeUpdate($updates, 'postClearCache', $debug, $skipClearCache);
+            foreach ($updates as $k=>$u) {
+                if (!in_array($u->getRevision(), $doneNames)) {
+                    $doneNames[] = $u->getUniqueName();
+                }
+            }
+            Kwf_Registry::get('db')->query("UPDATE kwf_update SET data=?", serialize($doneNames));
+            if (file_exists('update')) {
+                //move away old update file to avoid confusion
+                rename('update', 'update.backup');
+            }
+            echo "\n\033[32mupdate finished\033[0m\n";
+
+            Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
+
+        } else {
+            echo "\nupdate stopped\n";
+        }
+        return $doneNames;
+    }
+
+    private static function _executeUpdate($updates, $method, $debug = false, $skipClearCache = false)
+    {
+        $ret = true;
+        foreach ($updates as $update) {
+            if ($method != 'checkSettings') {
+                if ($method != 'postClearCache' && !$skipClearCache) {
+                    Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
+                }
+                Kwf_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
+                Kwf_Component_Generator_Abstract::clearInstances();
+                Kwf_Component_Data_Root::reset();
+                if ($method == 'update') {
+                    echo "\nexecuting $method ".$update->getUniqueName();
+                    echo "... ";
+                    flush();
+                }
+            }
+            $e = false;
+            if (in_array('db', $update->getTags())) {
+                $databases = Kwf_Registry::get('config')->server->databases->toArray();
+            } else {
+                $databases = array('web');
+            }
+            foreach ($databases as $db) {
+                if (!$db) continue;
+                if ($method == 'update') {
+                    echo $db.' ';
+                    flush();
+                }
+                try {
+                    if (Kwf_Registry::get('dao')) {
+                        $db = Kwf_Registry::get('dao')->getDb($db);
+                    } else {
+                        $db = null;
+                    }
+                } catch (Exception $e) {
+                    if ($method == 'update') {
+                        echo "skipping, invalid db\n";
+                        flush();
+                    }
+                    continue;
+                }
+                Kwf_Registry::set('db', $db);
+                try {
+                    $res = $update->$method();
+                } catch (Exception $e) {
+                    if ($debug) throw $e;
+                    if ($method == 'checkSettings') {
+                        echo get_class($update);
+                    }
+                    echo "\n\033[31mError:\033[0m\n";
+                    echo $e->getMessage()."\n\n";
+                    flush();
+                    $ret = false;
+                }
+                if (!$e) {
+                    if ($res) {
+                        print_r($res);
+                    }
+                }
+
+                //reset to default database
+                $db = null;
+                try {
+                    if (Kwf_Registry::get('dao')) $db = Kwf_Registry::get('dao')->getDb();
+                } catch (Exception $e) {}
+                Kwf_Registry::set('db', $db);
+            }
+            if ($method == 'update' && $ret) {
+                echo "\033[32 OK \033[0m\n";
+            }
+            flush();
+        }
+        return $ret;
+    }
 }
