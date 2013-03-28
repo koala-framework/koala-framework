@@ -57,6 +57,10 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/kwf/util/:controller/:action',
                     array('module'     => 'kwf_controller_action_util',
                           'action'     =>'index')));
+        $this->AddRoute('kwfmaintenance', new Zend_Controller_Router_Route(
+                    '/kwf/maintenance/:controller/:action',
+                    array('module'     => 'kwf_controller_action_maintenance',
+                          'action'     =>'index')));
 
         if (Kwf_Registry::get('config')->includepath->kwfTests) {
             //für selenium-tests von sachen die im kwf liegen

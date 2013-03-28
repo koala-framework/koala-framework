@@ -13,10 +13,36 @@ class Kwf_Util_Check_Config
             }
             $quiet = isset($_GET['quiet']);
         }
-        Kwf_Util_Check_Config::check($quiet);
+        self::_check($quiet);
     }
 
-    public function check($quiet = false)
+    public static function getCheckResults()
+    {
+        $ret = array();
+        $checks = self::_getChecks();
+        foreach ($checks as $k=>$i) {
+            $success = true;
+            $message = '';
+            try {
+                call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
+            } catch (Exception $e) {
+                $message = $e->getMessage();
+                $success = false;
+            }
+            $ret[] = array(
+                'checkText' => $i['name'],
+                'success' => $success,
+                'message' => $message,
+            );
+        }
+//         if (php_sapi_name()!= 'cli') {
+//             passthru("php bootstrap.php check-config silent 2>&1", $ret);
+//             if ($ret) echo "\nFAILED CLI";
+//         }
+        return $ret;
+    }
+
+    private static function _getChecks()
     {
         $checks = array();
         $checks['php'] = array(
@@ -95,7 +121,12 @@ class Kwf_Util_Check_Config
         $checks['apc'] = array(
             'name' => 'apc'
         );
+        return $checks;
+    }
 
+    public static function _check($quiet = false)
+    {
+        $checks = self::_getChecks();
         if ($quiet) {
             foreach ($checks as $k=>$i) {
                 try {

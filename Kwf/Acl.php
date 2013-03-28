@@ -34,6 +34,9 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_media_upload'));
         $this->add(new Zend_Acl_Resource('kwf_test'));
+        $this->add(new Zend_Acl_Resource('kwf_maintenance_setup'));
+        $this->add(new Zend_Acl_Resource('kwf_maintenance_update'));
+        $this->add(new Zend_Acl_Resource('kwf_maintenance_clear-cache'));
         $this->add(new Zend_Acl_Resource('edit_role'));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_admin', 'admin'), 'edit_role');
 
@@ -71,6 +74,9 @@ class Kwf_Acl extends Zend_Acl
         $this->allow(null, 'kwf_spam_set');
         $this->allow(null, 'kwf_debug_session-restart');
         $this->allow(null, 'kwf_test');
+        $this->allow(null, 'kwf_maintenance_setup'); //allow for everyone, as there are no users yet during setup
+        $this->allow('admin', 'kwf_maintenance_update');
+        $this->allow('admin', 'kwf_maintenance_clear-cache');
     }
 
     public function isAllowed($role = null, $resource = null, $privilege = null)
