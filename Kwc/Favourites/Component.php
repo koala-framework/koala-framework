@@ -42,14 +42,14 @@ class Kwc_Favourites_Component extends Kwc_Abstract
     public static function getFavouriteComponentIds($favouritesModel)
     {
         $ret = array();
-        $user = Kwf_Registry::get('userModel')->getAuthedUser();
-        if ($user) {
-            $cacheIdUser = 'favCIds'.$user->id;
+        $userId = Kwf_Registry::get('userModel')->getAuthedUserId();
+        if ($userId) {
+            $cacheIdUser = 'favCIds'.$userId;
             $ret = Kwf_Cache_Simple::fetch($cacheIdUser, $success);
             if (!$success) {
                 // get all favourites related to user
                 $select = new Kwf_Model_Select();
-                $select->whereEquals('user_id', $user->id);
+                $select->whereEquals('user_id', $userId);
                 $favouritesModel = Kwf_Model_Abstract::getInstance($favouritesModel);
                 $favourites = $favouritesModel->getRows($select);
                 $componentIds = array();

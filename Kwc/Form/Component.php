@@ -17,8 +17,15 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
         $ret['decorator'] = 'Kwc_Form_Decorator_Label';
-        $ret['viewCache'] = false;
+        $ret['viewCache'] = true;
         $ret['method'] = 'post';
+
+        $plugins = array('Kwc_Form_UseViewCachePlugin');
+        if (isset($ret['plugins'])) {
+            $ret['plugins'] = array_merge($ret['plugins'], $plugins);
+        } else {
+            $ret['plugins'] = $plugins;
+        }
 
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtElement';
