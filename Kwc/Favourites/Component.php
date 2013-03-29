@@ -19,8 +19,6 @@ class Kwc_Favourites_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
-        if (!$authedUser) throw new Kwf_Exception('not logged in');
         $ret['favouriteText'] = $this->_getPlaceholder('saveFavourite');
         $favouritesModel = Kwc_Abstract::getSetting($this->getData()->componentClass, 'favouritesModel');
         if (in_array($this->getData()->componentId, self::getFavouriteComponentIds($favouritesModel))) {
