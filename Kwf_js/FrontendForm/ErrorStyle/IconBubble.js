@@ -27,7 +27,12 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 } else if (field instanceof Kwf.FrontendForm.Checkbox) {
                     field.errorEl.alignTo(field.el.child('input'), 'tr', [-6, -8]);
                 } else if (field.el.child('input')) {
-                    field.errorEl.alignTo(field.el.child('input'), 'tr', [-20, 2]);
+                    if (field.el.child('input').getWidth() < 40) {
+                        field.errorEl.alignTo(field.el.child('input'), 'tr', [-10, 2]);
+                    } else {
+                        field.errorEl.alignTo(field.el.child('input'), 'tr', [-20, 2]);
+                        
+                    }
                 } else if (field.el.child('select')) {
                     field.errorEl.alignTo(field.el.child('select'), 'tr', [-40, 2]);
                 } else {
