@@ -86,7 +86,7 @@ class Kwc_Shop_Cart_OrderData
         return $ret;
     }
 
-    public final function getSumRows($order)
+    public function getSumRows($order)
     {
         $ret = array();
         $subTotal = $order->getSubTotal();
