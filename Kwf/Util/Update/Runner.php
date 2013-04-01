@@ -60,7 +60,17 @@ class Kwf_Util_Update_Runner
      */
     public function checkUpdatesSettings()
     {
-        return $this->_executeUpdatesAction('checkSettings');
+        $ret = true;
+        foreach ($this->_updates as $update) {
+            $e = false;
+            try {
+                $update->checkSettings();
+            } catch (Exception $e) {
+                throw $e; //no special handling for now, maybe something better should be done
+                $ret = false;
+            }
+        }
+        return $ret;
     }
 
     //TODO eventually move maintenance?
@@ -94,14 +104,13 @@ class Kwf_Util_Update_Runner
     {
         $ret = true;
         foreach ($this->_updates as $update) {
-            if ($method != 'checkSettings') {
-                if ($method != 'postClearCache' && !$this->_skipClearCache) {
-                    Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
-                }
-                Kwf_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
-                Kwf_Component_Generator_Abstract::clearInstances();
-                Kwf_Component_Data_Root::reset();
+            if ($method != 'postClearCache' && !$this->_skipClearCache) {
+                Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
             }
+            Kwf_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
+            Kwf_Component_Generator_Abstract::clearInstances();
+            Kwf_Component_Data_Root::reset();
+
             if ($this->_progressBar && $method == 'update') {
                 $this->_progressBar->next(1, $update->getUniqueName());
             }
@@ -115,9 +124,6 @@ class Kwf_Util_Update_Runner
             } catch (Exception $e) {
                 if (!$this->_verbose) ob_end_clean();
                 if ($this->_debug) throw $e;
-                if ($method == 'checkSettings') {
-                    echo get_class($update);
-                }
                 echo "\n\033[31mError:\033[0m\n";
                 echo $e->getMessage()."\n\n";
                 flush();
