@@ -31,32 +31,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         ini_set('memory_limit', '512M');
         Kwf_Component_ModelObserver::getInstance()->disable();
 
-        if ($this->_getParam('class')) {
-            $update = Kwf_Util_Update_Helper::createUpdate($this->_getParam('class'));
-            if (!$update) { echo 'could not create update.'; exit; }
-
-            $runner = new Kwf_Util_Update_Runner(array($update));
-            $runner->setEnableDebug($this->_getParam('debug'));
-            $runner->setSkipClearCache($this->_getParam('skip-clear-cache'));
-            $runner->executeUpdates(self::_getDoneNames());
-        } else {
-            $this->_update();
-        }
-        exit;
-    }
-
-    private function _update()
-    {
-        $rev = $this->_getParam('rev');
-        $debug = $this->_getParam('debug');
-        $skipClearCache = $this->_getParam('skip-clear-cache');
-
-        ini_set('memory_limit', '512M');
-        if (!$skipClearCache) {
-            Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
-        }
-        echo "Update\n";
-
+        //try to update old-style db config
         if (file_exists('config.db.ini')) {
             $db = file_get_contents('config.db.ini');
             if (file_exists('config.local.ini')) {
@@ -73,34 +48,49 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             unlink('config.db.ini');
         }
 
-        $from = 1;
-        $to = 9999999;
-        if ($rev) {
-            $ex = explode(':', $rev, 2);
-            $ex1 = $ex[0];
-            if (!isset($ex[1])) {
-                $ex2 = null;
-            } else {
-                $ex2 = $ex[1];
-            }
-            $from = $ex1;
-            if (!$ex2) {
-                $to = $from + 1;
-            } else if ($ex1 == $ex2) {
-                $to = $ex2 + 1;
-            } else {
-                $to = $ex2;
-            }
-        }
-        echo "Looking for update-scripts from revision $from to {$to}...";
-        $updates = Kwf_Util_Update_Helper::getUpdates($from, $to);
+
         $doneNames = self::_getDoneNames();
-        foreach ($updates as $k=>$u) {
-            if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
-                unset($updates[$k]);
+
+        if ($this->_getParam('class')) {
+            $update = Kwf_Util_Update_Helper::createUpdate($this->_getParam('class'));
+            if (!$update) { echo 'could not create update.'; exit(1); }
+            $updates = array($update);
+        } else {
+            $rev = $this->_getParam('rev');
+            $skipClearCache = $this->_getParam('skip-clear-cache');
+
+            if (!$skipClearCache) {
+                Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
             }
+
+            $from = 1;
+            $to = 9999999;
+            if ($rev) {
+                $ex = explode(':', $rev, 2);
+                $ex1 = $ex[0];
+                if (!isset($ex[1])) {
+                    $ex2 = null;
+                } else {
+                    $ex2 = $ex[1];
+                }
+                $from = $ex1;
+                if (!$ex2) {
+                    $to = $from + 1;
+                } else if ($ex1 == $ex2) {
+                    $to = $ex2 + 1;
+                } else {
+                    $to = $ex2;
+                }
+            }
+            echo "Looking for update-scripts from revision $from to {$to}...";
+            $updates = Kwf_Util_Update_Helper::getUpdates($from, $to);
+            foreach ($updates as $k=>$u) {
+                if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
+                    unset($updates[$k]);
+                }
+            }
+            echo " found ".count($updates)."\n\n";
         }
-        echo " found ".count($updates)."\n\n";
 
         $progressSteps = count($updates);
         $c = new Zend_ProgressBar_Adapter_Console();
@@ -113,7 +103,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         $runner = new Kwf_Util_Update_Runner($updates);
         $runner->setProgressBar($progress);
         $runner->setVerbose(true);
-        $runner->setEnableDebug($debug);
+        $runner->setEnableDebug($this->_getParam('debug'));
         $runner->setSkipClearCache($skipClearCache);
         if (!$runner->checkUpdatesSettings()) {
             echo "\ncheckSettings failed, update stopped\n";
@@ -132,8 +122,10 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
                 echo $error['name'].": \n";
                 echo $error['message']."\n\n";
             }
+            exit(1);
         } else {
-            echo "\nAll update scripts successfully executed.\n";
+            echo "\n".count($updates)." update script(s) successfully executed.\n";
+            exit(0);
         }
     }
 
