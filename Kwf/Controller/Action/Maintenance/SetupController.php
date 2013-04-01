@@ -57,14 +57,10 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         }
 
 
-        $progressSteps = count($updates);
-        $progress = new Zend_ProgressBar(
-            new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
-                0, $progressSteps
-        );
-
+        $c = new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum'));
 
         $runner = new Kwf_Util_Update_Runner($updates);
+        $progress = new Zend_ProgressBar($c, 0, $runner->getProgressSteps());
         $runner->setProgressBar($progress);
         if (!$runner->checkUpdatesSettings()) {
             throw new Kwf_Exception_Client("checkSettings failed, setup stopped");

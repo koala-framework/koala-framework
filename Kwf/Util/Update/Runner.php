@@ -45,6 +45,18 @@ class Kwf_Util_Update_Runner
     public function setProgressBar(Zend_ProgressBar $progressBar)
     {
         $this->_progressBar = $progressBar;
+        foreach ($this->_updates as $u) {
+            $u->setProgressBar($progressBar);
+        }
+    }
+
+    public function getProgressSteps()
+    {
+        $ret = 0;
+        foreach ($this->_updates as $u) {
+            $ret += $u->getProgressSteps();
+        }
+        return $ret;
     }
 
     public function getErrors()

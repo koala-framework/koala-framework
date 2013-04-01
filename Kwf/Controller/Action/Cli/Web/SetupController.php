@@ -48,16 +48,14 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
             $updates[] = $update;
         }
 
-        //TODO update scripts should have possibility for multiple steps
-        $progressSteps = count($updates);
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
         $c->setTextWidth(50);
-        $progress = new Zend_ProgressBar($c, 0, $progressSteps);
 
         $runner = new Kwf_Util_Update_Runner($updates);
+        $progress = new Zend_ProgressBar($c, 0, $runner->getProgressSteps());
         $runner->setProgressBar($progress);
         if (!$runner->checkUpdatesSettings()) {
             echo "\ncheckSettings failed, setup stopped\n";

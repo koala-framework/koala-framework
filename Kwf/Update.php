@@ -6,6 +6,8 @@ abstract class Kwf_Update
     protected $_actions = array();
     protected $_revision;
     protected $_uniqueName;
+    
+    protected $_progressBar = null;
 
     public function __construct($revision, $uniqueName)
     {
@@ -90,5 +92,15 @@ abstract class Kwf_Update
             }
         }
         return $ret;
+    }
+
+    public function getProgressSteps()
+    {
+        return 1;
+    }
+
+    public function setProgressBar(Zend_ProgressBar $progressBar = null)
+    {
+        $this->_progressBar = $progressBar;
     }
 }
