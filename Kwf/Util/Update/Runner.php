@@ -107,8 +107,13 @@ class Kwf_Util_Update_Runner
             }
             $e = false;
             try {
+                if (!$this->_verbose) {
+                    ob_start(); //update script should not output anything, if it still does discard it
+                }
                 $update->$method();
+                if (!$this->_verbose) ob_end_clean();
             } catch (Exception $e) {
+                if (!$this->_verbose) ob_end_clean();
                 if ($this->_debug) throw $e;
                 if ($method == 'checkSettings') {
                     echo get_class($update);
