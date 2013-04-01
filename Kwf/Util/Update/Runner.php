@@ -101,7 +101,7 @@ class Kwf_Util_Update_Runner
             }
             $e = false;
             try {
-                $res = $update->$method();
+                $update->$method();
             } catch (Exception $e) {
                 if ($this->_debug) throw $e;
                 if ($method == 'checkSettings') {
@@ -113,12 +113,9 @@ class Kwf_Util_Update_Runner
                 $ret = false;
             }
             if (!$e) {
-                if ($res) {
-                    print_r($res);
+                if ($method == 'update') {
+                    echo "\033[32 OK \033[0m\n";
                 }
-            }
-            if ($method == 'update' && $ret) {
-                echo "\033[32 OK \033[0m\n";
             }
             flush();
         }
