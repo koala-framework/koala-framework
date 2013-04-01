@@ -100,55 +100,22 @@ class Kwf_Util_Update_Runner
                 }
             }
             $e = false;
-            if (in_array('db', $update->getTags())) {
-                $databases = Kwf_Registry::get('config')->server->databases->toArray();
-            } else {
-                $databases = array('web');
+            try {
+                $res = $update->$method();
+            } catch (Exception $e) {
+                if ($this->_debug) throw $e;
+                if ($method == 'checkSettings') {
+                    echo get_class($update);
+                }
+                echo "\n\033[31mError:\033[0m\n";
+                echo $e->getMessage()."\n\n";
+                flush();
+                $ret = false;
             }
-            foreach ($databases as $db) {
-                if (!$db) continue;
-                if ($method == 'update') {
-                    echo $db.' ';
-                    flush();
+            if (!$e) {
+                if ($res) {
+                    print_r($res);
                 }
-                try {
-                    if (Kwf_Registry::get('dao')) {
-                        $db = Kwf_Registry::get('dao')->getDb($db);
-                    } else {
-                        $db = null;
-                    }
-                } catch (Exception $e) {
-                    if ($method == 'update') {
-                        echo "skipping, invalid db\n";
-                        flush();
-                    }
-                    continue;
-                }
-                Kwf_Registry::set('db', $db);
-                try {
-                    $res = $update->$method();
-                } catch (Exception $e) {
-                    if ($this->_debug) throw $e;
-                    if ($method == 'checkSettings') {
-                        echo get_class($update);
-                    }
-                    echo "\n\033[31mError:\033[0m\n";
-                    echo $e->getMessage()."\n\n";
-                    flush();
-                    $ret = false;
-                }
-                if (!$e) {
-                    if ($res) {
-                        print_r($res);
-                    }
-                }
-
-                //reset to default database
-                $db = null;
-                try {
-                    if (Kwf_Registry::get('dao')) $db = Kwf_Registry::get('dao')->getDb();
-                } catch (Exception $e) {}
-                Kwf_Registry::set('db', $db);
             }
             if ($method == 'update' && $ret) {
                 echo "\033[32 OK \033[0m\n";
