@@ -7,6 +7,7 @@ class Kwf_Util_Update_Runner
     private $_updates;
     private $_debug = false;
     private $_skipClearCache = false;
+    private $_verbose = false;
 
     public function __construct($updates)
     {
@@ -26,6 +27,14 @@ class Kwf_Util_Update_Runner
     public function setEnableDebug($v)
     {
         $this->_debug = (bool)$v;
+    }
+
+    /**
+     * If verbose is enabled output is echoed while executing update scripts
+     */
+    public function setVerbose($v)
+    {
+        $this->_verbose = (bool)$v;
     }
 
     public function writeExecutedUpdates($doneNames)
@@ -59,15 +68,14 @@ class Kwf_Util_Update_Runner
         $this->_executeUpdatesAction('update');
         $this->_executeUpdatesAction('postUpdate');
         if (!$this->_skipClearCache) {
-            echo "\n";
-            Kwf_Util_ClearCache::getInstance()->clearCache('all', true);
-            echo "\n";
+            if ($this->_verbose) echo "\n";
+            Kwf_Util_ClearCache::getInstance()->clearCache('all', !$this->_verbose);
+            if ($this->_verbose) echo "\n";
         }
         $this->_executeUpdatesAction('postClearCache');
         foreach ($this->_updates as $k=>$u) {
             $doneNames[] = $u->getUniqueName();
         }
-        echo "\n\033[32mupdate finished\033[0m\n";
 
         Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
 

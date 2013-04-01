@@ -102,12 +102,14 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
         echo " found ".count($updates)."\n\n";
         $runner = new Kwf_Util_Update_Runner($updates);
+        $runner->setVerbose(true);
         $runner->setEnableDebug($debug);
         $runner->setSkipClearCache($skipClearCache);
         if (!$runner->checkUpdatesSettings()) {
             echo "\ncheckSettings failed, update stopped\n";
         } else {
             $executedUpdates = $runner->executeUpdates();
+            echo "\n\033[32mupdate finished\033[0m\n";
             $doneNames = array_unique(array_merge($doneNames, $executedUpdates));
             $runner->writeExecutedUpdates($doneNames);
         }
