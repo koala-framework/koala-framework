@@ -177,13 +177,4 @@ class Kwf_Util_Update_Helper
         }
         return $ret;
     }
-
-    //TODO remove this method and port all users to runner
-    public static function executeUpdates($updates, $doneNames, $debug=false, $skipClearCache=false)
-    {
-        $runner = new Kwf_Util_Update_Runner($updates);
-        $runner->setEnableDebug($debug);
-        $runner->setSkipClearCache($skipClearCache);
-        return $runner->executeUpdates($doneNames);
-    }
 }

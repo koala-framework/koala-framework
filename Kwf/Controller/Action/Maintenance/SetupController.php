@@ -63,7 +63,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         }
 
         $doneNames = array();
-        Kwf_Util_Update_Helper::executeUpdates($updates, $doneNames);
+        $runner = new Kwf_Util_Update_Runner($updates);
+        $runner->executeUpdates($doneNames);
 
     }
 
