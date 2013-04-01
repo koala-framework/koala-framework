@@ -101,11 +101,6 @@ class Kwf_Util_Update_Runner
                 Kwf_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
                 Kwf_Component_Generator_Abstract::clearInstances();
                 Kwf_Component_Data_Root::reset();
-                if ($method == 'update') {
-                    echo "\nexecuting $method ".$update->getUniqueName();
-                    echo "... ";
-                    flush();
-                }
             }
             if ($this->_progressBar && $method == 'update') {
                 $this->_progressBar->next(1, $update->getUniqueName());
@@ -123,12 +118,6 @@ class Kwf_Util_Update_Runner
                 flush();
                 $ret = false;
             }
-            if (!$e) {
-                if ($method == 'update') {
-                    echo "\033[32 OK \033[0m\n";
-                }
-            }
-            flush();
         }
         return $ret;
     }
