@@ -123,6 +123,18 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $doneNames = array_unique(array_merge($doneNames, $executedUpdates));
             $runner->writeExecutedUpdates($doneNames);
         }
+
+        $errors = $runner->getErrors();
+        if ($errors) {
+            echo "\n\n================\n";
+            echo count($errors)." update script(s) failed:\n";
+            foreach ($errors as $error) {
+                echo $error['name'].": \n";
+                echo $error['message']."\n\n";
+            }
+        } else {
+            echo "\nAll update scripts successfully executed.\n";
+        }
     }
 
     private static function _getDoneNames()

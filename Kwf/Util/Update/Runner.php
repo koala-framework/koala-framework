@@ -12,6 +12,7 @@ class Kwf_Util_Update_Runner
      * @var Zend_ProgressBar
      */
     private $_progressBar = null;
+    private $_errors = array();
 
     public function __construct($updates)
     {
@@ -45,6 +46,12 @@ class Kwf_Util_Update_Runner
     {
         $this->_progressBar = $progressBar;
     }
+
+    public function getErrors()
+    {
+        return $this->_errors;
+    }
+
     public function writeExecutedUpdates($doneNames)
     {
         Kwf_Registry::get('db')->query("UPDATE kwf_update SET data=?", serialize($doneNames));
@@ -75,7 +82,6 @@ class Kwf_Util_Update_Runner
 
     //TODO eventually move maintenance?
     //TODO support a progess bar, including progress steps for a single update script
-    //TODO don't output anything (use output buffer for eventual output in update scripts??)
     public function executeUpdates()
     {
         $doneNames = array();
@@ -124,9 +130,15 @@ class Kwf_Util_Update_Runner
             } catch (Exception $e) {
                 if (!$this->_verbose) ob_end_clean();
                 if ($this->_debug) throw $e;
-                echo "\n\033[31mError:\033[0m\n";
-                echo $e->getMessage()."\n\n";
-                flush();
+                $this->_errors[] = array(
+                    'name' => $update->getUniqueName(),
+                    'message' => $e->getMessage()
+                );
+                if ($this->_verbose) {
+                    echo "\n\033[31mError:\033[0m\n";
+                    echo $e->getMessage()."\n\n";
+                    flush();
+                }
                 $ret = false;
             }
         }

@@ -71,6 +71,16 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         }
         $doneNames = $runner->executeUpdates();
         $runner->writeExecutedUpdates($doneNames);
+ 
+        $errors = $runner->getErrors();
+        if ($errors) {
+            $errMsg = count($errors)." setup script(s) failed:\n";
+            foreach ($errors as $error) {
+                $errMsg .= $error['name'].": \n";
+                $errMsg .= $error['message']."\n\n";
+            }
+            throw new Kwf_Exception_Client(nl2br($errMsg));
+        }
     }
 
     public function jsonCheckDbAction()

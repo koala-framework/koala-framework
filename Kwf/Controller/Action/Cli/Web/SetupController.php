@@ -66,8 +66,17 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
         $doneNames = $runner->executeUpdates();
         $runner->writeExecutedUpdates($doneNames);
 
-
-        echo "\n\nSetup finished.\nThank you for using Koala Framework.\n";
+        $errors = $runner->getErrors();
+        if ($errors) {
+            echo "\n\n================\n";
+            echo count($errors)." setup script(s) failed:\n";
+            foreach ($errors as $error) {
+                echo $error['name'].": \n";
+                echo $error['message']."\n\n";
+            }
+        } else {
+            echo "\n\nSetup finished.\nThank you for using Koala Framework.\n";
+        }
         exit;
     }
 }
