@@ -37,7 +37,15 @@ class Kwf_Util_Update_Runner
         }
     }
 
-    //TODO move checkSettings into own method
+    /**
+     * Executes checkSettings method for all update scripts which should check if everything
+     * is set up correctly to execute the update script
+     */
+    public function checkUpdatesSettings()
+    {
+        return $this->_executeUpdatesAction('checkSettings');
+    }
+
     //TODO eventually move maintenance?
     //TODO support a progess bar, including progress steps for a single update script
     //TODO don't output anything (use output buffer for eventual output in update scripts??)
@@ -45,29 +53,24 @@ class Kwf_Util_Update_Runner
     {
         $doneNames = array();
 
-        if ($this->_executeUpdatesAction('checkSettings')) {
+        Kwf_Util_Maintenance::writeMaintenanceBootstrap();
 
-            Kwf_Util_Maintenance::writeMaintenanceBootstrap();
-
-            $this->_executeUpdatesAction('preUpdate');
-            $this->_executeUpdatesAction('update');
-            $this->_executeUpdatesAction('postUpdate');
-            if (!$this->_skipClearCache) {
-                echo "\n";
-                Kwf_Util_ClearCache::getInstance()->clearCache('all', true);
-                echo "\n";
-            }
-            $this->_executeUpdatesAction('postClearCache');
-            foreach ($this->_updates as $k=>$u) {
-                $doneNames[] = $u->getUniqueName();
-            }
-            echo "\n\033[32mupdate finished\033[0m\n";
-
-            Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
-
-        } else {
-            echo "\nupdate stopped\n";
+        $this->_executeUpdatesAction('preUpdate');
+        $this->_executeUpdatesAction('update');
+        $this->_executeUpdatesAction('postUpdate');
+        if (!$this->_skipClearCache) {
+            echo "\n";
+            Kwf_Util_ClearCache::getInstance()->clearCache('all', true);
+            echo "\n";
         }
+        $this->_executeUpdatesAction('postClearCache');
+        foreach ($this->_updates as $k=>$u) {
+            $doneNames[] = $u->getUniqueName();
+        }
+        echo "\n\033[32mupdate finished\033[0m\n";
+
+        Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
+
         return $doneNames;
     }
 

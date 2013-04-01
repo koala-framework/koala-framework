@@ -63,6 +63,10 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
         //TODO actually use $progress
 
         $runner = new Kwf_Util_Update_Runner($updates);
+        if (!$runner->checkUpdatesSettings()) {
+            echo "\ncheckSettings failed, setup stopped\n";
+            exit;
+        }
         $doneNames = $runner->executeUpdates();
         $runner->writeExecutedUpdates($doneNames);
 
