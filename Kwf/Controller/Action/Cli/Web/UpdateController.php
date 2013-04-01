@@ -40,13 +40,18 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $runner->setSkipClearCache($this->_getParam('skip-clear-cache'));
             $runner->executeUpdates(self::_getDoneNames());
         } else {
-            self::update($this->_getParam('rev'), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'), $this->_getParam('clear-view-cache'));
+            $this->_update();
         }
         exit;
     }
 
-    public static function update($rev = false, $debug = false, $skipClearCache = false, $clearViewCache = false)
+    private function _update()
     {
+        $rev = $this->_getParam('rev');
+        $debug = $this->_getParam('debug');
+        $skipClearCache = $this->_getParam('skip-clear-cache');
+        $clearViewCache = $this->_getParam('clear-view-cache');
+
         ini_set('memory_limit', '512M');
         if (!$skipClearCache) {
             Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
