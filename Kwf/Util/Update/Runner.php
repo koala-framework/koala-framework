@@ -27,7 +27,7 @@ class Kwf_Util_Update_Runner
     {
         $this->_debug = (bool)$v;
     }
-
+    
     //TODO remove doneNames paramter, just return executed scripts
     //TODO move writing kwf_update somewhere else
     //TODO move checkSettings into own method
@@ -36,19 +36,19 @@ class Kwf_Util_Update_Runner
     //TODO don't output anything (use output buffer for eventual output in update scripts??)
     public function executeUpdates($doneNames)
     {
-        if ($this->_executeUpdate('checkSettings')) {
+        if ($this->_executeUpdatesAction('checkSettings')) {
 
             Kwf_Util_Maintenance::writeMaintenanceBootstrap();
 
-            $this->_executeUpdate('preUpdate');
-            $this->_executeUpdate('update');
-            $this->_executeUpdate('postUpdate');
+            $this->_executeUpdatesAction('preUpdate');
+            $this->_executeUpdatesAction('update');
+            $this->_executeUpdatesAction('postUpdate');
             if (!$this->_skipClearCache) {
                 echo "\n";
                 Kwf_Util_ClearCache::getInstance()->clearCache('all', true);
                 echo "\n";
             }
-            $this->_executeUpdate('postClearCache');
+            $this->_executeUpdatesAction('postClearCache');
             foreach ($this->_updates as $k=>$u) {
                 if (!in_array($u->getRevision(), $doneNames)) {
                     $doneNames[] = $u->getUniqueName();
@@ -69,7 +69,7 @@ class Kwf_Util_Update_Runner
         return $doneNames;
     }
 
-    private function _executeUpdate($method)
+    private function _executeUpdatesAction($method)
     {
         $ret = true;
         foreach ($this->_updates as $update) {
