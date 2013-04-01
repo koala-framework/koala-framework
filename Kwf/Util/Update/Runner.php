@@ -27,15 +27,24 @@ class Kwf_Util_Update_Runner
     {
         $this->_debug = (bool)$v;
     }
-    
-    //TODO remove doneNames paramter, just return executed scripts
-    //TODO move writing kwf_update somewhere else
+
+    public function writeExecutedUpdates($doneNames)
+    {
+        Kwf_Registry::get('db')->query("UPDATE kwf_update SET data=?", serialize($doneNames));
+        if (file_exists('update')) {
+            //move away old update file to avoid confusion
+            rename('update', 'update.backup');
+        }
+    }
+
     //TODO move checkSettings into own method
     //TODO eventually move maintenance?
     //TODO support a progess bar, including progress steps for a single update script
     //TODO don't output anything (use output buffer for eventual output in update scripts??)
-    public function executeUpdates($doneNames)
+    public function executeUpdates()
     {
+        $doneNames = array();
+
         if ($this->_executeUpdatesAction('checkSettings')) {
 
             Kwf_Util_Maintenance::writeMaintenanceBootstrap();
@@ -50,14 +59,7 @@ class Kwf_Util_Update_Runner
             }
             $this->_executeUpdatesAction('postClearCache');
             foreach ($this->_updates as $k=>$u) {
-                if (!in_array($u->getRevision(), $doneNames)) {
-                    $doneNames[] = $u->getUniqueName();
-                }
-            }
-            Kwf_Registry::get('db')->query("UPDATE kwf_update SET data=?", serialize($doneNames));
-            if (file_exists('update')) {
-                //move away old update file to avoid confusion
-                rename('update', 'update.backup');
+                $doneNames[] = $u->getUniqueName();
             }
             echo "\n\033[32mupdate finished\033[0m\n";
 

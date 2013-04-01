@@ -62,9 +62,9 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
         $progress = new Zend_ProgressBar($c, 0, $progressSteps);
         //TODO actually use $progress
 
-        $doneNames = array();
         $runner = new Kwf_Util_Update_Runner($updates);
-        $runner->executeUpdates($doneNames);
+        $doneNames = $runner->executeUpdates();
+        $runner->writeExecutedUpdates($doneNames);
 
 
         echo "\n\nSetup finished.\nThank you for using Koala Framework.\n";

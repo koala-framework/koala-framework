@@ -62,10 +62,9 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             $updates[] = $update;
         }
 
-        $doneNames = array();
         $runner = new Kwf_Util_Update_Runner($updates);
-        $runner->executeUpdates($doneNames);
-
+        $doneNames = $runner->executeUpdates();
+        $runner->writeExecutedUpdates($doneNames);
     }
 
     public function jsonCheckDbAction()

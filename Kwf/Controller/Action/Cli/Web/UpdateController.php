@@ -104,7 +104,9 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         $runner = new Kwf_Util_Update_Runner($updates);
         $runner->setEnableDebug($debug);
         $runner->setSkipClearCache($skipClearCache);
-        $runner->executeUpdates($doneNames);
+        $executedUpdates = $runner->executeUpdates();
+        $doneNames = array_unique(array_merge($doneNames, $executedUpdates));
+        $runner->writeExecutedUpdates($doneNames);
     }
 
     private static function _getDoneNames()
