@@ -50,7 +50,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         $rev = $this->_getParam('rev');
         $debug = $this->_getParam('debug');
         $skipClearCache = $this->_getParam('skip-clear-cache');
-        $clearViewCache = $this->_getParam('clear-view-cache');
 
         ini_set('memory_limit', '512M');
         if (!$skipClearCache) {
@@ -106,10 +105,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         $runner->setEnableDebug($debug);
         $runner->setSkipClearCache($skipClearCache);
         $runner->executeUpdates($doneNames);
-
-        if (!$skipClearCache && $clearViewCache) {
-            Zend_Registry::get('db')->query("TRUNCATE TABLE cache_component");
-        }
     }
 
     private static function _getDoneNames()
