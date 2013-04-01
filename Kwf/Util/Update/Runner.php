@@ -8,6 +8,10 @@ class Kwf_Util_Update_Runner
     private $_debug = false;
     private $_skipClearCache = false;
     private $_verbose = false;
+    /**
+     * @var Zend_ProgressBar
+     */
+    private $_progressBar = null;
 
     public function __construct($updates)
     {
@@ -37,6 +41,10 @@ class Kwf_Util_Update_Runner
         $this->_verbose = (bool)$v;
     }
 
+    public function setProgressBar(Zend_ProgressBar $progressBar)
+    {
+        $this->_progressBar = $progressBar;
+    }
     public function writeExecutedUpdates($doneNames)
     {
         Kwf_Registry::get('db')->query("UPDATE kwf_update SET data=?", serialize($doneNames));
@@ -98,6 +106,9 @@ class Kwf_Util_Update_Runner
                     echo "... ";
                     flush();
                 }
+            }
+            if ($this->_progressBar && $method == 'update') {
+                $this->_progressBar->next(1, $update->getUniqueName());
             }
             $e = false;
             try {

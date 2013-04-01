@@ -37,8 +37,6 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         file_put_contents('config.local.ini', $cfg);
 
 
-        //TODO add progress bar
-
         $updates = array();
         foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
             $file = KWF_PATH.'/setup/'.$tag.'.sql';
@@ -47,10 +45,6 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
                 $update->sql = file_get_contents($file);
                 $updates[] = $update;
             }
-        }
-
-        foreach ($updates as $update) {
-            $update->update();
         }
 
         $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates(0, 9999999));
@@ -62,7 +56,16 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             $updates[] = $update;
         }
 
+
+        $progressSteps = count($updates);
+        $progress = new Zend_ProgressBar(
+            new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+                0, $progressSteps
+        );
+
+
         $runner = new Kwf_Util_Update_Runner($updates);
+        $runner->setProgressBar($progress);
         if (!$runner->checkUpdatesSettings()) {
             throw new Kwf_Exception_Client("checkSettings failed, setup stopped");
         }

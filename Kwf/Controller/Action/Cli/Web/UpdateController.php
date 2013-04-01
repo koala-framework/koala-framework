@@ -101,7 +101,17 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             }
         }
         echo " found ".count($updates)."\n\n";
+
+        $progressSteps = count($updates);
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+        $c->setTextWidth(50);
+        $progress = new Zend_ProgressBar($c, 0, $progressSteps);
+
         $runner = new Kwf_Util_Update_Runner($updates);
+        $runner->setProgressBar($progress);
         $runner->setVerbose(true);
         $runner->setEnableDebug($debug);
         $runner->setSkipClearCache($skipClearCache);
