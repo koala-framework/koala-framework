@@ -1,6 +1,7 @@
 <?php
 class Kwf_Update_36008 extends Kwf_Update
 {
+    protected $_tags = array('kwc');
     public function update()
     {
         echo "Deleting view cache...";
