@@ -46,8 +46,10 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
     public function preProcessInput()
     {
         // to remove deleted products from the cart
-        Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
-            ->getCartOrder()->getProductsDataWithProduct($this->getData());
+        Kwf_Model_Abstract::getInstance($this->_getSetting('childModel'))
+            ->getReferencedModel('Order')
+            ->getCartOrder()
+            ->getProductsDataWithProduct($this->getData());
     }
 
     public function getTemplateVars()
