@@ -21,6 +21,18 @@ abstract class Kwf_Update
         return $this->_tags;
     }
 
+    public function setTags($tags)
+    {
+        $this->_tags = $tags;
+        return $this;
+    }
+
+    public function appendTag($tag)
+    {
+        $this->_tags[] = $tag;
+        return $this;
+    }
+
     public function getRevision()
     {
         return $this->_revision;

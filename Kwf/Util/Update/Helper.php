@@ -34,7 +34,7 @@ class Kwf_Util_Update_Helper
         }
 
         $u = self::getUpdatesForDir(getcwd() . '/app', $from, $to);
-        foreach ($u as $i) $i->_tags[] = 'web';
+        foreach ($u as $i) $i->appendTag('web');
         $ret = array_merge($ret, $u);
 
         $ret = self::_sortByRevision($ret);
@@ -150,9 +150,9 @@ class Kwf_Util_Update_Helper
             $update = new Kwf_Update_Sql($nr, $class);
             $update->sql = file_get_contents($filename);
             if (preg_match("#\\#\\s*tags:(.*)#", $update->sql, $m)) {
-                $update->_tags = explode(' ', trim($m[1]));
+                $update->setTags(explode(' ', trim($m[1])));
             }
-            $update->_tags[] = 'db';
+            $update->appendTag('db');
         } else {
             if (is_instance_of($class, 'Kwf_Update')) {
                 $update = new $class($nr, $class);
