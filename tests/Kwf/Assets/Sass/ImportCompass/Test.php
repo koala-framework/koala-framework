@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Sass
+ */
 class Kwf_Assets_Sass_ImportCompass_Test extends Kwf_Test_TestCase
 {
     public function testIt()

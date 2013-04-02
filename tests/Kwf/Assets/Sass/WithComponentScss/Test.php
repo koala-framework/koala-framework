@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Sass
+ */
 class Kwf_Assets_Sass_WithComponentScss_Test extends Kwf_Test_TestCase
 {
     public function testIt()
