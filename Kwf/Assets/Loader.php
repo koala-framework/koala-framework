@@ -244,6 +244,9 @@ class Kwf_Assets_Loader
                         if (substr($cssClass, -4) == '.css') {
                             $cssClass = substr($cssClass, 0, -4);
                         }
+                        if (substr($cssClass, -5) == '.scss') {
+                            $cssClass = substr($cssClass, 0, -5);
+                        }
                         if (substr($cssClass, -9) == '.printcss') {
                             $cssClass = substr($cssClass, 0, -9);
                         }
