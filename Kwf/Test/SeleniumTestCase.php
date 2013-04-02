@@ -42,7 +42,11 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             throw new Kwf_Exception("testServerConfig not set");
         }
 
-        Kwf_Util_Apc::callClearCacheByCli(array('type'=>'user'));
+        Kwf_Util_Apc::callClearCacheByCli(array('type'=>'user'), Kwf_Util_Apc::SILENT);
+        Kwf_Cache::factory('Core', 'Memcached', array(
+            'lifetime'=>null,
+            'automatic_cleaning_factor' => false,
+            'automatic_serialization'=>true))->clean();
 
         $d = $this->_domain;
         if (!$d) {
