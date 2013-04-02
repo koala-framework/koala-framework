@@ -92,13 +92,9 @@ class Kwf_Util_Update_Runner
         return $ret;
     }
 
-    //TODO eventually move maintenance?
-    //TODO support a progess bar, including progress steps for a single update script
     public function executeUpdates()
     {
         $doneNames = array();
-
-        Kwf_Util_Maintenance::writeMaintenanceBootstrap();
 
         $this->_executeUpdatesAction('preUpdate');
         $this->_executeUpdatesAction('update');
@@ -112,8 +108,6 @@ class Kwf_Util_Update_Runner
         foreach ($this->_updates as $k=>$u) {
             $doneNames[] = $u->getUniqueName();
         }
-
-        Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
 
         return $doneNames;
     }
