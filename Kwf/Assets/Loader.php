@@ -260,18 +260,20 @@ class Kwf_Assets_Loader
                             $cacheData['contents'] = str_replace('url(/assets/', 'url('.$url.'assets/', $cacheData['contents']);
                         }
 
-                        $options = array(
-                            'style' => 'compact',
-                            'cache' => false,
-                            'syntax' => 'scss',
-                            'debug' => true,
-                            'debug_info' => false,
-                            'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
-                            'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass')),
-                            'extensions' => array('Compass')
-                        );
-                        $parser = new Kwf_Util_SassParser($options);
-                        $cacheData['contents'] = $parser->toCss($cacheData['contents'], false);
+                        if (substr($file, -5)=='.scss') {
+                            $options = array(
+                                'style' => 'compact',
+                                'cache' => false,
+                                'syntax' => 'scss',
+                                'debug' => true,
+                                'debug_info' => false,
+                                'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
+                                'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy')),
+                                'extensions' => array('Compass', 'Susy')
+                            );
+                            $parser = new Kwf_Util_SassParser($options);
+                            $cacheData['contents'] = $parser->toCss($cacheData['contents'], false);
+                        }
                     }
 
                     if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {
