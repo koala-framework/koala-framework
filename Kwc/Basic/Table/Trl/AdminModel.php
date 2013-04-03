@@ -2,6 +2,7 @@
 class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
 {
     protected $_rowClass = 'Kwc_Basic_Table_Trl_AdminRow';
+    protected $_rowsetClass = 'Kwc_Basic_Table_Trl_AdminModelRowset';
     protected $_trlModel;
 
     public function __construct($config)
@@ -11,6 +12,9 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
         parent::__construct($config);
     }
 
+    /**
+     * Extracts the component id from select
+     */
     protected function _getComponentId($select)
     {
         $componentId = null;
@@ -24,49 +28,34 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
         return $componentId;
     }
 
+    /**
+     * returns the related trl-row
+     */
     protected function _getTrlRow($proxiedRow, $componentId)
     {
+        $row = $proxiedRow;
         $proxyId = $proxiedRow->id;
         $select = $this->_trlModel->select()
             ->whereEquals('component_id', $componentId)
-            ->whereEquals('id', $proxyId);
+            ->whereEquals('master_id', $proxyId);
         $trlRow = $this->_trlModel->getRows($select)->current();
-        if (!$trlRow) {
-            $trlRow = $this->_trlModel->createRow();
-            $trlRow->id = $proxyId;
-            $trlRow->component_id = $componentId;
+        if ($trlRow) {
+            $row = $trlRow;
         }
-        return $trlRow;
+        return $row;
     }
 
+    /**
+     * Should return the specified row, componentId and id have to be defined
+     */
     public function getRow($select)
     {
-        if (!is_object($select)) $select = new Kwf_Model_Select($select);
-
-        $id = null;
-        if ($select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
-            foreach ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) as $k=>$i) {
-                if ($k == 'id') $id = $i;
-            }
-        }
-        if ($id) {
-            $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('ignoreVisible'=>true));
-            $proxyRow = $this->_proxyModel->getRow($c->chained->id);
-            return $this->getRowByProxiedRow($proxyRow, $c->parent->dbId);
-        }
-
-        $componentId = $this->_getComponentId($select);
-
-        if ($componentId) {
-            $c = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
-            $select->whereEquals('component_id', $c->chained->dbId);
-        }
-        $proxyRow = $this->_proxyModel->getRow($select);
-        return $this->getRowByProxiedRow($proxyRow, $componentId);
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
+    /**
+     * Returns rows, including trl
+     */
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         $select = $this->select($where, $order, $limit, $start);
@@ -86,6 +75,9 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
         ));
     }
 
+    /**
+     * Returns count of master-rows
+     */
     public function countRows($where = array())
     {
         $select = $this->select($where);
@@ -100,9 +92,12 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
         return $this->_proxyModel->countRows($select);
     }
 
+    /**
+     * gets the trl-row and adds it to the row
+     */
     public function getRowByProxiedRow($proxiedRow, $componentId)
     {
-        $id = $proxiedRow->getInternalId().$componentId;
+        $id = $proxiedRow->getInternalId();
         if (!isset($this->_rows[$id])) {
             $trlRow = $this->_getTrlRow($proxiedRow, $componentId);
             $this->_rows[$id] = new $this->_rowClass(array(
