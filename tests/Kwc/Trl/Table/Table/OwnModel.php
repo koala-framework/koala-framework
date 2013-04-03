@@ -1,9 +1,15 @@
 <?php
-class Kwc_Trl_Table_OwnModel extends Kwf_Model_FnF
+class Kwc_Trl_Table_Table_OwnModel extends Kwf_Model_FnF
 {
     protected $_dependentModels = array(
-        'tableData' => 'Kwc_Trl_Table_MasterModel'
+        'tableData' => 'Kwc_Trl_Table_Table_MasterModel'
     );
+
+    protected function _init()
+    {
+        $this->_siblingModels[] = new Kwf_Model_Field(array('fieldName'=>'data'));
+        parent::_init();
+    }
 
     public function __construct($config = array())
     {
