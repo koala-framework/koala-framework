@@ -29,9 +29,10 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
     {
         $chained = $this->getData()->chained;
         $tableModelClass = Kwc_Abstract::getSetting($chained->componentClass, 'childModel');
+        $trlModelClass = $this->_getSetting('childModel');
         return new Kwc_Basic_Table_Trl_AdminModel(array(
             'proxyModel' => new $tableModelClass(),
-            'trlModel' => new Kwc_Basic_Table_Trl_DataModel(array(
+            'trlModel' => new $trlModelClass(array(
                 'columnCount' => $chained->getComponent()->getColumnCount())
             )
         ));
