@@ -271,8 +271,8 @@ class Kwf_Assets_Loader
                                 'debug' => true,
                                 'debug_info' => false,
                                 'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
-                                'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy')),
-                                'extensions' => array('Compass', 'Susy')
+                                'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
+                                'extensions' => array('Compass', 'Susy', 'Kwf')
                             );
                             $parser = new Kwf_Util_SassParser($options);
                             $cacheData['contents'] = $parser->toCss($cacheData['contents'], false);
