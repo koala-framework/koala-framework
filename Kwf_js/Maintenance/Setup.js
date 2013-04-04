@@ -156,6 +156,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         Ext.Ajax.request({
             url: '/kwf/maintenance/setup/json-install',
             params: params,
+            progress: true,
             success: function() {
                 this.cards.getLayout().setActiveItem(this.stepFinished);
                 this.steps.setCurrentStep('finished');
