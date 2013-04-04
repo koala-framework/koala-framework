@@ -296,7 +296,8 @@ class Kwf_Util_ClearCache
 
     protected function _clearCache(array $types, $output, $options)
     {
-        if (in_array('elastiCache', $types)) {
+        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
+        if (in_array('elastiCache', $types) && !$skipOtherServers) {
             //namespace used in Kwf_Cache_Simple
             $cache = Kwf_Cache_Simple::getZendCache();
             $mc = $cache->getBackend()->getMemcache();

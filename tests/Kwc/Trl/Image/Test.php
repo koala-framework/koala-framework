@@ -107,9 +107,7 @@ class Kwc_Trl_Image_Test extends Kwc_TestAbstract
         // muss so gemacht werden, weil der request über getimagesize weiter unten
         // nicht das FnF-Cache Model dieses Request schreiben kann
         preg_match('/.*\/media\/([\w\.]+)\/([\w\-]+)\/(\w+)\/.*/', $html, $matches);
-        $class = $matches[1];
-        $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        call_user_func(array($classWithoutDot, 'getMediaOutput'), $matches[2], $matches[3], $class);
+        Kwf_Media::getOutput($matches[1], $matches[2], $matches[3]);
 
         $this->assertRegExp('#<img.+?src=".+?'.$smallImageNum.'\.jpg.+width="'.$smallWidth.'".+height="'.$smallHeight.'"#ms', $html);
 

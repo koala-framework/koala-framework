@@ -28,6 +28,7 @@ class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_A
         foreach ($detailClasses as $key => $detailClass) {
             $form = Kwc_Abstract_Form::createComponentForm($detailClass, $key);
             $form->setIdTemplate($this->_getParam('componentId').'_{0}');
+            $form->setCreateMissingRow(true);
             $form->setModel(Kwc_Abstract::createChildModel($class));
             $forms[$key] = $form;
         }

@@ -17,7 +17,7 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
         if (!$order instanceof Kwc_Shop_Cart_Order) return array();
         if (!$order->voucher_code) return array();
 
-        $text = trlKwf('Voucher');
+        $text = trlKwfStatic('Voucher');
         if ($order->voucher_amount) {
             $amount = -(float)$order->voucher_amount;
         } else {
@@ -31,7 +31,7 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
             $amount = -min($total, $row->amount - $row->used_amount);
             $remainingAmount = $row->amount - $row->used_amount + $amount;
             if ($remainingAmount > 0) {
-                $text .= ' ('.trlKwf('Remaining Amount {0}', Kwf_View_Helper_Money::money($remainingAmount)).')';
+                $text .= ' ('.trlKwfStatic('Remaining Amount {0}', Kwf_View_Helper_Money::money($remainingAmount)).')';
             }
         }
 
@@ -71,9 +71,9 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
 
     public function alterBackendOrderForm(Kwf_Form $form)
     {
-        $fs = $form->add(new Kwf_Form_Container_FieldSet(trlKwf('Voucher')));
-        $fs->add(new Kwf_Form_Field_TextField('voucher_code', trlKwf('Code')));
-        $fs->add(new Kwf_Form_Field_NumberField('voucher_amount', trlcKwf('Amount of Money', 'Amount')))
+        $fs = $form->add(new Kwf_Form_Container_FieldSet(trlKwfStatic('Voucher')));
+        $fs->add(new Kwf_Form_Field_TextField('voucher_code', trlKwfStatic('Code')));
+        $fs->add(new Kwf_Form_Field_NumberField('voucher_amount', trlKwfStatic('Amount of Money', 'Amount')))
             ->setComment('€')
             ->setWidth(50);
     }

@@ -36,12 +36,12 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $user = Kwf_Registry::get('userModel')->getAuthedUser();
-        if($user) {
+        $userId = Kwf_Registry::get('userModel')->getAuthedUserId();
+        if($userId) {
             $lessonsFavouritesModel = Kwf_Model_Abstract::getInstance(Kwc_Abstract::
                             getSetting($this->getData()->componentClass, 'favouritesModel'));
             $selectFavourites = $lessonsFavouritesModel->select()
-                                        ->whereEquals('user_id', $user->id);
+                                        ->whereEquals('user_id', $userId);
             $favourites = $lessonsFavouritesModel->getRows($selectFavourites);
             $components = array();
             foreach ($favourites as $favourite) {

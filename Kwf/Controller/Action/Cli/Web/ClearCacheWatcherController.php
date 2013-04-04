@@ -21,7 +21,14 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     public function indexAction()
     {
-        $bufferUsecs = 10000;
+        if (Kwf_Component_Cache_Memory::getInstance()->getBackend() instanceof Zend_Cache_Backend_Apc) {
+            throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with component cache memory apc backend");
+        }
+        if (!Kwf_Cache_Simple::getZendCache()) { //false means apc cache
+            throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with simple cache apc backend");
+        }
+
+        $bufferUsecs = 200*1000;
 
         $watchPaths = array(
             getcwd(),
@@ -106,15 +113,43 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $proc->close(false);
                     exit;
                 }
-                foreach ($eventsQueue as $event) {
+                foreach ($eventsQueue as $k=>$event) {
                     if (!preg_match('#^([^ ]+) ([A-Z,_]+) ([^ ]+)$#', trim($event), $m)) {
                         echo "unknown event: $event\n";
                         continue;
                     }
-                    $event = $m[2];
-                    $file = $m[1].$m[3];
+                    $eventsQueue[$k] = array(
+                        'event' => $m[2],
+                        'file' => $m[1].$m[3],
+                    );
                     unset($m);
-                    self::_handleEventFork($file, $event);
+                }
+
+                // compress the following into into one event:
+                // CREATE web.scssdx1493.new
+                // MODIFY web.scssdx1493.new
+                // MOVED_FROM web.scssdx1493.new
+                // MOVED_TO web.scss
+                $eventsQueue = array_values($eventsQueue);
+                foreach ($eventsQueue as $k=>$event) {
+                    $f = $eventsQueue[$k]['file'];
+                    if ($event['event'] == 'MOVED_TO' && $k >= 3) {
+                        if ($eventsQueue[$k-1]['event'] == 'MOVED_FROM'
+                            && $eventsQueue[$k-2]['event'] == 'MODIFY'
+                            && $eventsQueue[$k-3]['event'] == 'CREATE'
+                            && substr($eventsQueue[$k-1]['file'], 0, strlen($f)) == $f
+                            && substr($eventsQueue[$k-2]['file'], 0, strlen($f)) == $f
+                            && substr($eventsQueue[$k-3]['file'], 0, strlen($f)) == $f
+                        ) {
+                            unset($eventsQueue[$k-1]);
+                            unset($eventsQueue[$k-2]);
+                            unset($eventsQueue[$k-3]);
+                            $eventsQueue[$k]['event'] = 'MODIFY';
+                        }
+                    }
+                }
+                foreach ($eventsQueue as $event) {
+                    self::_handleEventFork($event['file'], $event['event']);
                 }
                 $eventsQueue = array();
                 $lastChange = false;
@@ -196,7 +231,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         echo "\n$event $file\n";
         $eventStart = microtime(true);
-        if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss') {
+        if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss' || substr($file, -5)=='.scss') {
             echo "asset modified: $event $file\n";
             if ($event == 'MODIFY') {
                 $found = false;
@@ -225,7 +260,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 }
                 echo "\n";
 
-                self::_clearAssetsAll(substr($file, strrpos($file, '.')+1));
+                $assetsType = substr($file, strrpos($file, '.')+1);
+                if ($assetsType == 'scss') $assetsType = 'css';
+                self::_clearAssetsAll($assetsType);
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
@@ -233,7 +270,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 self::_clearAssetsDependencies();
 
-                self::_clearAssetsAll(substr($file, strrpos($file, '.')+1));
+                $assetsType = substr($file, strrpos($file, '.')+1);
+                if ($assetsType == 'scss') $assetsType = 'css';
+                self::_clearAssetsAll($assetsType);
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
             } else if (self::_endsWith($file, '/dependencies.ini')) {
@@ -331,6 +370,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                        self::_endsWith($file, '/FrontendForm.php') ||
                        self::_endsWith($file, '/Form.php') ||
                        self::_endsWith($file, '/Component.css') ||
+                       self::_endsWith($file, '/Component.scss') ||
                        self::_endsWith($file, '/Component.printcss')
             ) {
                 if ($event == 'CREATE' || $event == 'DELETE') {
@@ -368,7 +408,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     }
                     echo "\n";
                 }
-            } else if (self::_endsWith($file, '/Component.css')) {
+            } else if (self::_endsWith($file, '/Component.css') || self::_endsWith($file, '/Component.scss') || self::_endsWith($file, '/Component.printcss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above
             } else if (self::_endsWith($file, '/Master.tpl')) {
@@ -513,9 +553,13 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
             }
         }
+        echo "cleared component settings apc cache...\n";
+        self::_clearApcCache(array(), $clearCacheSimple);
+
 
         if ($dimensionsChanged) {
             echo "dimensions changed...\n";
+            $clearCacheSimple = array();
             foreach ($componentClasses as $c) {
                 $idPrefix = str_replace(array('.', '>'), array('___', '____'), $c) . '_';
                 $clearCacheSimple[] = 'media-output-'.$idPrefix;
@@ -525,10 +569,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     unlink($f);
                 }
             }
+            Kwf_Cache_Simple::delete($clearCacheSimple);
+            echo "cleared media cache...\n";
         }
-
-        self::_clearApcCache(array(), $clearCacheSimple);
-        echo "cleared component settings apc cache...\n";
 
         $dependentComponentClasses = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
@@ -586,18 +629,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     private static function _deleteViewCache(Kwf_Model_Select $s)
     {
-        $s->whereEquals('deleted', false);
-
-        $model = Kwf_Component_Cache::getInstance()->getModel();
-        $cacheIds = array();
-        foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s) as $row) {
-            $cacheIds[] = Kwf_Component_Cache_Mysql::getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
-        }
-        Kwf_Util_Apc::callClearCacheByCli(array(
-            'deleteCacheSimple' => $cacheIds
-        ), Kwf_Util_Apc::SILENT);
-        $model->updateRows(array('deleted' => true), $s);
-        echo "deleted ".count($cacheIds)." view cache entries\n";
+        $countDeleted = Kwf_Component_Cache::getInstance()->deleteViewCache($s);
+        echo "deleted ".$countDeleted." view cache entries\n";
     }
 
     private static function _getHostForCacheId()

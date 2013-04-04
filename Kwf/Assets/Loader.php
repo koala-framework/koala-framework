@@ -166,7 +166,7 @@ class Kwf_Assets_Loader
                 $ret['mimeType'] = 'image/png';
             } else if (substr($file, -4)=='.jpg') {
                 $ret['mimeType'] = 'image/jpeg';
-            } else if (substr($file, -4)=='.css') {
+            } else if (substr($file, -4)=='.css' || substr($file, -5)=='.scss') {
                 $ret['mimeType'] = 'text/css; charset=utf-8';
             } else if (substr($file, -9)=='.printcss') {
                 $ret['mimeType'] = 'text/css; charset=utf-8';
@@ -244,6 +244,9 @@ class Kwf_Assets_Loader
                         if (substr($cssClass, -4) == '.css') {
                             $cssClass = substr($cssClass, 0, -4);
                         }
+                        if (substr($cssClass, -5) == '.scss') {
+                            $cssClass = substr($cssClass, 0, -5);
+                        }
                         if (substr($cssClass, -9) == '.printcss') {
                             $cssClass = substr($cssClass, 0, -9);
                         }
@@ -258,6 +261,21 @@ class Kwf_Assets_Loader
                             $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&url=';
                             $cacheData['contents'] = str_replace('url(\'/assets/', 'url(\''.$url.'assets/', $cacheData['contents']);
                             $cacheData['contents'] = str_replace('url(/assets/', 'url('.$url.'assets/', $cacheData['contents']);
+                        }
+
+                        if (substr($file, -5)=='.scss') {
+                            $options = array(
+                                'style' => 'compact',
+                                'cache' => false,
+                                'syntax' => 'scss',
+                                'debug' => true,
+                                'debug_info' => false,
+                                'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
+                                'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
+                                'extensions' => array('Compass', 'Susy', 'Kwf')
+                            );
+                            $parser = new Kwf_Util_SassParser($options);
+                            $cacheData['contents'] = $parser->toCss($cacheData['contents'], false);
                         }
                     }
 

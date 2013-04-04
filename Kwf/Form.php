@@ -267,7 +267,7 @@ class Kwf_Form extends Kwf_Form_NonTableForm
             if ($this->getCreateMissingRow()) { //für Kwf_Form_AddForm
                 $this->_rows[$key] = $this->_createMissingRow($id);
             } else {
-                throw new Kwf_Exception('No database-entry found.');
+                throw new Kwf_Exception("No database-entry found for id '$id' in model ".get_class($this->_model));
             }
         } else {
             $this->_rows[$key] = $row;

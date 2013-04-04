@@ -23,6 +23,7 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
+    //gets called when own row gets updated, weather component is visible or not
     protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdateNotVisible($c, $event);

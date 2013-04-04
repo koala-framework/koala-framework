@@ -173,7 +173,7 @@ class Kwf_Assets_Dependencies
                         $files[] = $file;
                     }
                 } else {
-                    if ((is_string($file) && substr($file, -strlen($fileType)-1) == '.'.$fileType)) {
+                    if ((is_string($file) && substr($file, -strlen($fileType)-1) == '.'.$fileType) || substr($file, -strlen($fileType)-2) == '.scss') {
                         if (is_string($file) && substr($file, -strlen($fileType)-1) == " $fileType") {
                             //wenn asset hinten mit " js" aufhört das js abschneiden
                             //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
@@ -305,7 +305,7 @@ class Kwf_Assets_Dependencies
         //alle css-dateien der vererbungshierache includieren
         $files = Kwc_Abstract::getSetting($class, 'componentFiles');
         $componentCssFiles = array();
-        foreach (array_merge($files['css'], $files['printcss']) as $f) {
+        foreach (array_merge($files['css'], $files['printcss'], $files['scss']) as $f) {
             if (substr($f, 0, strlen(KWF_PATH)+1) == KWF_PATH.'/') { //zuerst, da kwf in web liegen kann
                 //kann nur aus kwf
                 $f = 'kwf'.substr($f, strlen(KWF_PATH));

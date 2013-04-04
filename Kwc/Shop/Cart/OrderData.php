@@ -86,7 +86,7 @@ class Kwc_Shop_Cart_OrderData
         return $ret;
     }
 
-    public final function getSumRows($order)
+    public function getSumRows($order)
     {
         $ret = array();
         $subTotal = $order->getSubTotal();
@@ -115,7 +115,7 @@ class Kwc_Shop_Cart_OrderData
                 'text' => trlKwfStatic('Shipping and Handling').':',
                 'amount' => round($shipping/$vat, 2)
             );
-            if ($shipping) {
+            if (Kwc_Abstract::getSetting($this->_class, 'vatRateShipping')) {
                 $ret[] = array(
                     'text' => trlKwfStatic('+{0}% VAT', ($vat-1 )*100).':',
                     'amount' => round($shipping - $shipping/$vat, 2)
