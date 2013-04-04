@@ -21,7 +21,14 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     public function indexAction()
     {
-        $bufferUsecs = 10000;
+        if (Kwf_Component_Cache_Memory::getInstance()->getBackend() instanceof Zend_Cache_Backend_Apc) {
+            throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with component cache memory apc backend");
+        }
+        if (!Kwf_Cache_Simple::getZendCache()) { //false means apc cache
+            throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with simple cache apc backend");
+        }
+
+        $bufferUsecs = 200*1000;
 
         $watchPaths = array(
             getcwd(),
@@ -123,9 +130,10 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 // MODIFY web.scssdx1493.new
                 // MOVED_FROM web.scssdx1493.new
                 // MOVED_TO web.scss
+                $eventsQueue = array_values($eventsQueue);
                 foreach ($eventsQueue as $k=>$event) {
                     $f = $eventsQueue[$k]['file'];
-                    if ($event['event'] == 'MOVED_TO' && $k > 2) {
+                    if ($event['event'] == 'MOVED_TO' && $k >= 3) {
                         if ($eventsQueue[$k-1]['event'] == 'MOVED_FROM'
                             && $eventsQueue[$k-2]['event'] == 'MODIFY'
                             && $eventsQueue[$k-3]['event'] == 'CREATE'
@@ -545,9 +553,13 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
             }
         }
+        echo "cleared component settings apc cache...\n";
+        self::_clearApcCache(array(), $clearCacheSimple);
+
 
         if ($dimensionsChanged) {
             echo "dimensions changed...\n";
+            $clearCacheSimple = array();
             foreach ($componentClasses as $c) {
                 $idPrefix = str_replace(array('.', '>'), array('___', '____'), $c) . '_';
                 $clearCacheSimple[] = 'media-output-'.$idPrefix;
@@ -557,10 +569,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     unlink($f);
                 }
             }
+            Kwf_Cache_Simple::delete($clearCacheSimple);
+            echo "cleared media cache...\n";
         }
-
-        self::_clearApcCache(array(), $clearCacheSimple);
-        echo "cleared component settings apc cache...\n";
 
         $dependentComponentClasses = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
@@ -618,18 +629,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     private static function _deleteViewCache(Kwf_Model_Select $s)
     {
-        $s->whereEquals('deleted', false);
-
-        $model = Kwf_Component_Cache::getInstance()->getModel();
-        $cacheIds = array();
-        foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s) as $row) {
-            $cacheIds[] = Kwf_Component_Cache_Mysql::getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
-        }
-        Kwf_Util_Apc::callClearCacheByCli(array(
-            'deleteCacheSimple' => $cacheIds
-        ), Kwf_Util_Apc::SILENT);
-        $model->updateRows(array('deleted' => true), $s);
-        echo "deleted ".count($cacheIds)." view cache entries\n";
+        $countDeleted = Kwf_Component_Cache::getInstance()->deleteViewCache($s);
+        echo "deleted ".$countDeleted." view cache entries\n";
     }
 
     private static function _getHostForCacheId()

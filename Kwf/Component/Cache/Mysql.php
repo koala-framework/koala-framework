@@ -145,6 +145,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         }
 
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
+        
+        return count($cacheIds);
     }
 
     protected static function _getCacheId($componentId, $renderer, $type, $value)
