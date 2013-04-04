@@ -223,7 +223,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         echo "\n$event $file\n";
         $eventStart = microtime(true);
-        if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss') {
+        if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss' || substr($file, -5)=='.scss') {
             echo "asset modified: $event $file\n";
             if ($event == 'MODIFY') {
                 $found = false;
@@ -252,7 +252,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 }
                 echo "\n";
 
-                self::_clearAssetsAll(substr($file, strrpos($file, '.')+1));
+                $assetsType = substr($file, strrpos($file, '.')+1);
+                if ($assetsType == 'scss') $assetsType = 'css';
+                self::_clearAssetsAll($assetsType);
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
@@ -260,7 +262,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 self::_clearAssetsDependencies();
 
-                self::_clearAssetsAll(substr($file, strrpos($file, '.')+1));
+                $assetsType = substr($file, strrpos($file, '.')+1);
+                if ($assetsType == 'scss') $assetsType = 'css';
+                self::_clearAssetsAll($assetsType);
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
             } else if (self::_endsWith($file, '/dependencies.ini')) {
@@ -358,6 +362,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                        self::_endsWith($file, '/FrontendForm.php') ||
                        self::_endsWith($file, '/Form.php') ||
                        self::_endsWith($file, '/Component.css') ||
+                       self::_endsWith($file, '/Component.scss') ||
                        self::_endsWith($file, '/Component.printcss')
             ) {
                 if ($event == 'CREATE' || $event == 'DELETE') {
@@ -395,7 +400,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     }
                     echo "\n";
                 }
-            } else if (self::_endsWith($file, '/Component.css')) {
+            } else if (self::_endsWith($file, '/Component.css') || self::_endsWith($file, '/Component.scss') || self::_endsWith($file, '/Component.printcss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above
             } else if (self::_endsWith($file, '/Master.tpl')) {
