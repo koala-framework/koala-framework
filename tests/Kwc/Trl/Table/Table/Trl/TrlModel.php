@@ -9,11 +9,12 @@ class Kwc_Trl_Table_Table_Trl_TrlModel extends Kwf_Model_FnF
 
     public function __construct($config = array())
     {
-        $config['columns'] = array('id', 'component_id', 'data', 'master_id');
+        $config['columns'] = array('id', 'component_id', 'data', 'master_id', 'visible');
         $config['namespace'] = 'table_trl_model';
         $config['primaryKey'] = 'id';
         $config['data'] = array(
-            array('id'=>1, 'component_id'=>'root-en_table', 'data'=>'{"css_style":null,"column1":"Abc","column3":"234","column4":"","column5":"","column6":"","column7":"","column8":"","column9":"","column10":"","column11":"","column12":"","column13":"","column14":"","column15":"","column16":"","column17":"","column18":"","column19":"","column20":"","column21":"","column22":"","column23":"","column24":"","column25":"","column26":""}', 'master_id'=>2),
+            array('id'=>2, 'visible'=>1, 'component_id'=>'root-en_table', 'master_id'=>1 , 'data'=>'[]'),
+            array('id'=>1, 'visible'=>1, 'component_id'=>'root-en_table', 'data'=>'{"css_style":null,"column1":"Abc","column3":"234","column4":"","column5":"","column6":"","column7":"","column8":"","column9":"","column10":"","column11":"","column12":"","column13":"","column14":"","column15":"","column16":"","column17":"","column18":"","column19":"","column20":"","column21":"","column22":"","column23":"","column24":"","column25":"","column26":""}', 'master_id'=>2),
         );
         parent::__construct($config);
     }
