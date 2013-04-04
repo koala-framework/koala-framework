@@ -101,7 +101,7 @@ class Kwf_Util_Update_Runner
         $this->_executeUpdatesAction('postUpdate');
         if (!$this->_skipClearCache) {
             if ($this->_verbose) echo "\n";
-            Kwf_Util_ClearCache::getInstance()->clearCache('all', !$this->_verbose);
+            Kwf_Util_ClearCache::getInstance()->clearCache('all', !$this->_verbose, true, array('skipMaintenanceBootstrap'=>true));
             if ($this->_verbose) echo "\n";
         }
         $this->_executeUpdatesAction('postClearCache');
@@ -117,7 +117,7 @@ class Kwf_Util_Update_Runner
         $ret = true;
         foreach ($this->_updates as $update) {
             if ($method != 'postClearCache' && !$this->_skipClearCache) {
-                Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
+                Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false, array('skipMaintenanceBootstrap'=>true));
             }
             Kwf_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
             Kwf_Component_Generator_Abstract::clearInstances();

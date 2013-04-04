@@ -207,11 +207,19 @@ class Kwf_Util_ClearCache
         return $refreshTypes;
     }
 
+    /**
+     * @param string types of caches that should be cleared
+     * @param bool if output should shown (for cli)
+     * @param bool if caches should be refreshed (warmed up)
+     * @param array possible options: skipMaintenanceBootstrap, skipOtherServers
+     */
     public final function clearCache($types = 'all', $output = false, $refresh = true, $options = array())
     {
         Kwf_Component_ModelObserver::getInstance()->disable();
 
-        Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
+        if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
+            Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
+        }
 
         $refreshTypes = array();
         if ($types == 'all') {
@@ -280,7 +288,9 @@ class Kwf_Util_ClearCache
             }
         }
 
-        Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
+        if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
+            Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
+        }
 
         Kwf_Component_ModelObserver::getInstance()->enable();
     }
