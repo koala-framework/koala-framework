@@ -11,14 +11,31 @@ class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
 
     public function __get($name)
     {
-        $value = null;
-        if ($this->_trlRow) {
-            $value = $this->_trlRow->$name;
+        $ret = null;
+        if ($this->_trlRow->hasColumn($name)) {
+            $ret = $this->_trlRow->$name;
         }
-        if (!$value) {
-            $value = parent::__get($name);
+        if ($name != 'visible' && !$ret) {
+            $ret = parent::__get($name);
         }
-        return $value;
+        return $ret;
+    }
+
+    public function __set($name, $value)
+    {
+        if ($this->_row->$name != $value) {
+            $this->_trlRow->__set($name, $value);
+        }
+    }
+
+    protected function _saveWithoutResetDirty()
+    {
+        return $this->_trlRow->_saveWithoutResetDirty();
+    }
+
+    public function delete()
+    {
+        throw new Kwf_Exception("Not possible");
     }
 
     public function toArray()

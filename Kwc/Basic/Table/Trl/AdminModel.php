@@ -54,6 +54,11 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
         $trlRow = $this->_trlModel->getRows($select)->current();
         if ($trlRow) {
             $row = $trlRow;
+        } else {
+            $row = $this->_trlModel->createRow();
+            $row->master_id = $proxyId;
+            $row->component_id = $componentId;
+            $row->save();
         }
         return $row;
     }
