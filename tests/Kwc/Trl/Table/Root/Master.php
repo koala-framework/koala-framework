@@ -1,5 +1,5 @@
 <?php
-class Kwc_Trl_Table_Root_German extends Kwc_Abstract
+class Kwc_Trl_Table_Root_Master extends Kwc_Abstract
 {
     public static function getSettings()
     {

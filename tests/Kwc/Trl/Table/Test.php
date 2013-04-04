@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Table
+ */
 class Kwc_Trl_Table_Test extends Kwc_TestAbstract
 {
     public function setUp()
