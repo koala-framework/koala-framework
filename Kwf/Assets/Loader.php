@@ -169,6 +169,10 @@ class Kwf_Assets_Loader
                 $ret['mimeType'] = 'image/png';
             } else if (substr($file, -4)=='.jpg') {
                 $ret['mimeType'] = 'image/jpeg';
+            } else if (substr($file, -4)=='.mp4') {
+                $ret['mimeType'] = 'video/mp4';
+            } else if (substr($file, -5)=='.webm') {
+                $ret['mimeType'] = 'video/webm';
             } else if (substr($file, -4)=='.css') {
                 $ret['mimeType'] = 'text/css; charset=utf-8';
             } else if (substr($file, -9)=='.printcss') {

@@ -18,6 +18,7 @@ class Kwf_Media_Output
         $headers = array();
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) $headers['If-Modified-Since'] = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
         if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) $headers['If-None-Match'] = $_SERVER['HTTP_IF_NONE_MATCH'];
+        if (isset($_SERVER['HTTP_RANGE'])) $headers['Range'] = $_SERVER['HTTP_RANGE'];
         $data = self::getOutputData($file, $headers);
         foreach ($data['headers'] as $h) {
             if (is_array($h)) {
@@ -106,7 +107,13 @@ class Kwf_Media_Output
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
-            $ret['responseCode'] = 200;
+            $ret['headers'][] = 'Accept-Ranges: bytes';
+            if (isset($headers['Range'])) {
+                $ret['responseCode'] = 206;
+                $ret['headers'][] = array('Partial Content', true, 206);
+            } else {
+                $ret['responseCode'] = 200;
+            }
             if (isset($file['etag'])) {
                 $ret['headers'][] = 'ETag: ' . $file['etag'];
             } else {
@@ -114,7 +121,6 @@ class Kwf_Media_Output
                 $ret['headers'][] = 'ETag: tag';
             }
             if (isset($file['mtime'] )) $ret['headers'][] = 'Last-Modified: ' . $lastModifiedString;
-            $ret['headers'][] = 'Accept-Ranges: none';
             if (isset($file['downloadFilename']) && $file['downloadFilename'] &&
                 substr($file['mimeType'], 0, 6) != 'image/'
             ) {
@@ -164,13 +170,36 @@ class Kwf_Media_Output
                 }
             }
             if (isset($file['contents'])) {
-                $ret['contentLength'] = strlen($file['contents']);
-                $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
-                $ret['contents'] = $file['contents'];
+                if (isset($headers['Range'])) {
+                    if (!preg_match('#bytes#', $headers['Range'])) {
+                        throw new Kwf_Exception('wrong Range-Type');
+                    }
+                    $range = explode('=', $headers['Range']);
+                    $range = explode('-', $range[1]);
+                    $ret['contents'] = substr($file['contents'], $range[0], $range[1]+1);
+                    $ret['contentLength'] = strlen($ret['contents']);
+                    $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
+                    $ret['headers'][] = 'Content-Range: bytes ' . $range[0] . '-'
+                        . $range[1] . '/' . strlen($file['contents']);
+                } else {
+                    $ret['contentLength'] = strlen($file['contents']);
+                    $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
+                    $ret['contents'] = $file['contents'];
+                }
             } else if (isset($file['file'])) {
-                $ret['contentLength'] = filesize($file['file']);
-                $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
-                $ret['file'] = $file['file'];
+                if (isset($headers['Range'])) {
+                    $range = explode('=', $headers['Range']);
+                    $range = explode('-', $range[1]);
+                    $ret['contents'] = self::getPartialFileContent($file['file'], $range);
+                    $ret['contentLength'] = strlen($ret['contents']);
+                    $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
+                    $ret['headers'][] = 'Content-Range: bytes ' . $range[0] . '-'
+                        . $range[1] . '/' . filesize($file['file']);
+                } else {
+                    $ret['contentLength'] = filesize($file['file']);
+                    $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
+                    $ret['file'] = $file['file'];
+                }
             } else {
                 throw new Kwf_Exception("contents not set");
             }
@@ -185,6 +214,21 @@ class Kwf_Media_Output
         } else {
             return $contents;
         }
+    }
+
+    // returns the partial content from a file
+    // parts of the function are taken https://github.com/pomle/php-serveFilePartial/blob/master/ServeFilePartial.inc.php
+    public static function getPartialFileContent($file, $range)
+    {
+        $length = $range[1]-$range[0]+1;
+
+        if( !$handle = fopen($file, 'r') )
+            throw new Kwf_Exception(sprintf("Could not get handle for file %s", $file));
+        if( fseek($handle, $range[0], SEEK_SET) == -1 )
+            throw new Kwf_Exception(sprintf("Could not seek to byte offset {$rage[0]}"));
+
+        $ret = fread($handle, $length);
+        return $ret;
     }
 
 }
