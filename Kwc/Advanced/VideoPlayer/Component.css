@@ -1,4 +1,4 @@
-.mejs-container {
+.cssClass .mejs-container {
     position: relative;
     background: #000;
     font-family: Helvetica, Arial;
@@ -7,11 +7,11 @@
     text-indent: 0;
 }
 
-.me-plugin {
+.cssClass .me-plugin {
     position: absolute;
 }
 
-.mejs-embed, .mejs-embed body {
+.cssClass .mejs-embed, .mejs-embed body {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -20,7 +20,7 @@
     overflow: hidden;
 }
 
-.mejs-container-fullscreen {
+.cssClass .mejs-container-fullscreen {
     position: fixed;
     left: 0;
     top: 0;
@@ -29,45 +29,45 @@
     overflow: hidden;
     z-index: 1000;
 }
-.mejs-container-fullscreen .mejs-mediaelement,
-.mejs-container-fullscreen video {
+.cssClass .mejs-container-fullscreen .mejs-mediaelement,
+.cssClass .mejs-container-fullscreen video {
     width: 100%;
     height: 100%;
 }
 
 /* Start: LAYERS */
-.mejs-background {
+.cssClass .mejs-background {
     position: absolute;
     top: 0;
     left: 0;
 }
-.mejs-mediaelement {
+.cssClass .mejs-mediaelement {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 }
-.mejs-poster {
+.cssClass .mejs-poster {
     position: absolute;
     top: 0;
     left: 0;
 }
-.mejs-poster img {
+.cssClass .mejs-poster img {
     border: 0;
     padding: 0;
     border: 0;
     display: block;
 }
-.mejs-overlay {
+.cssClass .mejs-overlay {
     position: absolute;
     top: 0;
     left: 0;
 }
-.mejs-overlay-play {
+.cssClass .mejs-overlay-play {
     cursor: pointer;
 }
-.mejs-overlay-button {
+.cssClass .mejs-overlay-button {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -76,13 +76,13 @@
     margin: -50px 0 0 -50px;
     background: url(/assets/mediaelement/src/css/bigplay.svg) no-repeat;
 }
-.no-svg .mejs-overlay-button {
+.cssClass .no-svg .mejs-overlay-button {
     background-image: url(/assets/mediaelement/src/css/bigplay.png);
 }
-.mejs-overlay:hover .mejs-overlay-button {
+.cssClass .mejs-overlay:hover .mejs-overlay-button {
     background-position: 0 -100px ;
 }
-.mejs-overlay-loading {
+.cssClass .mejs-overlay-loading {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -99,7 +99,7 @@
     background: -ms-linear-gradient(top, rgba(50,50,50,0.9), rgba(0,0,0,0.9));
     background: linear-gradient(rgba(50,50,50,0.9), rgba(0,0,0,0.9));
 }
-.mejs-overlay-loading span {
+.cssClass .mejs-overlay-loading span {
     display: block;
     width: 80px;
     height: 80px;
@@ -109,7 +109,7 @@
 /* End: LAYERS */
 
 /* Start: CONTROL BAR */
-.mejs-container .mejs-controls {
+.cssClass .mejs-container .mejs-controls {
     position: absolute;
     background: none;
     list-style-type: none;
@@ -128,7 +128,7 @@
     height: 30px;
     width: 100%;
 }
-.mejs-container .mejs-controls  div {
+.cssClass .mejs-container .mejs-controls  div {
     list-style-type: none;
     background-image: none;
     display: block;
@@ -144,7 +144,7 @@
     border: 0;
 }
 
-.mejs-controls .mejs-button button {
+.cssClass .mejs-controls .mejs-button button {
     cursor: pointer;
     display: block;
     font-size: 0;
@@ -159,19 +159,19 @@
     background: transparent url(/assets/mediaelement/src/css/controls.svg) no-repeat;
 }
 
-.no-svg .mejs-controls .mejs-button button {
+.cssClass .no-svg .mejs-controls .mejs-button button {
     background-image: url(/assets/mediaelement/src/css/controls.png);
 }
 
 /* :focus for accessibility */
-.mejs-controls .mejs-button button:focus {
+.cssClass .mejs-controls .mejs-button button:focus {
     outline: solid 1px yellow;
 }
 
 /* End: CONTROL BAR */
 
 /* Start: Time (current / duration) */
-.mejs-container .mejs-controls .mejs-time {
+.cssClass .mejs-container .mejs-controls .mejs-time {
     color: #fff;
     display: block;
     height: 17px;
@@ -184,7 +184,7 @@
     -webkit-box-sizing: content-box;
     box-sizing: content-box;
 }
-.mejs-container .mejs-controls .mejs-time span {
+.cssClass .mejs-container .mejs-controls .mejs-time span {
     font-size: 11px;
     color: #fff;
     line-height: 12px;
@@ -197,27 +197,27 @@
 
 
 /* Start: Play/pause */
-.mejs-controls .mejs-play button {
+.cssClass .mejs-controls .mejs-play button {
     background-position: 0 0;
 }
-.mejs-controls .mejs-pause button {
+.cssClass .mejs-controls .mejs-pause button {
     background-position: 0 -16px;
 }
 /* End: Play/pause */
 
 
 /* Stop */
-.mejs-controls .mejs-stop button {
+.cssClass .mejs-controls .mejs-stop button {
     background-position: -112px 0;
 }
 /* End: Play/pause */
 
 /* Start: Progress bar */
-.mejs-controls div.mejs-time-rail {
+.cssClass .mejs-controls div.mejs-time-rail {
     width: 200px;
     padding-top: 5px;
 }
-.mejs-controls .mejs-time-rail span {
+.cssClass .mejs-controls .mejs-time-rail span {
     display: block;
     position: absolute;
     width: 180px;
@@ -227,7 +227,7 @@
     border-radius: 2px;
     cursor: pointer;
 }
-.mejs-controls .mejs-time-rail .mejs-time-total {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-total {
     margin: 5px;
     background: #333;
     background: rgba(50,50,50,0.8);
@@ -238,7 +238,7 @@
     background: -ms-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
     background: linear-gradient(rgba(30,30,30,0.8), rgba(60,60,60,0.8));
 }
-.mejs-controls .mejs-time-rail .mejs-time-buffering {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-buffering {
     width: 100%;
     background-image: -o-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -263,7 +263,7 @@
 @-o-keyframes buffering-stripes { from {background-position: 0 0;} to {background-position: 30px 0;} }
 @keyframes buffering-stripes { from {background-position: 0 0;} to {background-position: 30px 0;} }
 
-.mejs-controls .mejs-time-rail .mejs-time-loaded {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-loaded {
     background: #3caac8;
     background: rgba(60,170,200,0.8);
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(44,124,145,0.8)), to(rgba(78,183,212,0.8)));
@@ -274,7 +274,7 @@
     background: linear-gradient(rgba(44,124,145,0.8), rgba(78,183,212,0.8));
     width: 0;
 }
-.mejs-controls .mejs-time-rail .mejs-time-current {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-current {
     width: 0;
     background: #fff;
     background: rgba(255,255,255,0.8);
@@ -286,7 +286,7 @@
     background: linear-gradient(rgba(255,255,255,0.9), rgba(200,200,200,0.8));
 }
 
-.mejs-controls .mejs-time-rail .mejs-time-handle {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-handle {
     display: none;
     position: absolute;
     margin: 0;
@@ -301,7 +301,7 @@
     text-align: center;
 }
 
-.mejs-controls .mejs-time-rail .mejs-time-float {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-float {
     position: absolute;
     display: none;
     background: #eee;
@@ -314,7 +314,7 @@
     color: #111;
 }
 
-.mejs-controls .mejs-time-rail .mejs-time-float-current {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-float-current {
     margin: 2px;
     width: 30px;
     display: block;
@@ -322,7 +322,7 @@
     left: 0;
 }
 
-.mejs-controls .mejs-time-rail .mejs-time-float-corner {
+.cssClass .mejs-controls .mejs-time-rail .mejs-time-float-corner {
     position: absolute;
     display: block;
     width: 0;
@@ -337,15 +337,15 @@
     left: 13px;
 }
 
-.mejs-long-video .mejs-controls .mejs-time-rail .mejs-time-float {
+.cssClass .mejs-long-video .mejs-controls .mejs-time-rail .mejs-time-float {
     width: 48px;
 }
 
-.mejs-long-video .mejs-controls .mejs-time-rail .mejs-time-float-current {
+.cssClass .mejs-long-video .mejs-controls .mejs-time-rail .mejs-time-float-current {
     width: 44px;
 }
 
-.mejs-long-video .mejs-controls .mejs-time-rail .mejs-time-float-corner {
+.cssClass .mejs-long-video .mejs-controls .mejs-time-rail .mejs-time-float-corner {
     left: 18px;
 }
 
@@ -359,32 +359,32 @@
 /* End: Progress bar */
 
 /* Start: Fullscreen */
-.mejs-controls .mejs-fullscreen-button button {
+.cssClass .mejs-controls .mejs-fullscreen-button button {
     background-position: -32px 0;
 }
-.mejs-controls .mejs-unfullscreen button {
+.cssClass .mejs-controls .mejs-unfullscreen button {
     background-position: -32px -16px;
 }
 /* End: Fullscreen */
 
 
 /* Start: Mute/Volume */
-.mejs-controls .mejs-volume-button {
+.cssClass .mejs-controls .mejs-volume-button {
 }
 
-.mejs-controls .mejs-mute button {
+.cssClass .mejs-controls .mejs-mute button {
     background-position: -16px -16px;
 }
 
-.mejs-controls .mejs-unmute button {
+.cssClass .mejs-controls .mejs-unmute button {
     background-position: -16px 0;
 }
 
-.mejs-controls .mejs-volume-button {
+.cssClass .mejs-controls .mejs-volume-button {
     position: relative;
 }
 
-.mejs-controls .mejs-volume-button .mejs-volume-slider {
+.cssClass .mejs-controls .mejs-volume-button .mejs-volume-slider {
     display: none;
     height: 115px;
     width: 25px;
@@ -399,7 +399,7 @@
     position: absolute;
     margin: 0;
 }
-.mejs-controls .mejs-volume-button:hover {
+.cssClass .mejs-controls .mejs-volume-button:hover {
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
     border-radius: 0 0 4px 4px;
@@ -410,7 +410,7 @@
 }
 */
 
-.mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-total {
+.cssClass .mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-total {
     position: absolute;
     left: 11px;
     top: 8px;
@@ -421,7 +421,7 @@
     margin: 0;
 }
 
-.mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-current {
+.cssClass .mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-current {
     position: absolute;
     left: 11px;
     top: 8px;
@@ -432,7 +432,7 @@
     margin: 0;
 }
 
-.mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-handle {
+.cssClass .mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-handle {
     position: absolute;
     left: 4px;
     top: -3px;
@@ -450,13 +450,13 @@
 
 /* horizontal version */
 
-.mejs-controls div.mejs-horizontal-volume-slider {
+.cssClass .mejs-controls div.mejs-horizontal-volume-slider {
     height: 26px;
     width: 60px;
     position: relative;
 }
 
-.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total {
+.cssClass .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total {
     position: absolute;
     left: 0;
     top: 11px;
@@ -481,7 +481,7 @@
 
 }
 
-.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current {
+.cssClass .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current {
     position: absolute;
     left: 0;
     top: 11px;
@@ -507,7 +507,7 @@
 }
 
 
-.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-handle {
+.cssClass .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-handle {
     display: none;
 }
 
@@ -517,14 +517,14 @@
 
 
 /* Start: TRACK (Captions and Chapters) */
-.mejs-controls .mejs-captions-button {
+.cssClass .mejs-controls .mejs-captions-button {
     position: relative;
 }
 
-.mejs-controls .mejs-captions-button button {
+.cssClass .mejs-controls .mejs-captions-button button {
     background-position: -48px 0;
 }
-.mejs-controls .mejs-captions-button .mejs-captions-selector {
+.cssClass .mejs-controls .mejs-captions-button .mejs-captions-selector {
     visibility: hidden;
     position: absolute;
     bottom: 26px;
@@ -546,14 +546,14 @@
 }
 */
 
-.mejs-controls .mejs-captions-button .mejs-captions-selector ul {
+.cssClass .mejs-controls .mejs-captions-button .mejs-captions-selector ul {
     margin: 0;
     padding: 0;
     display: block;
     list-style-type: none !important;
     overflow: hidden;
 }
-.mejs-controls .mejs-captions-button .mejs-captions-selector ul li {
+.cssClass .mejs-controls .mejs-captions-button .mejs-captions-selector ul li {
     margin: 0 0 6px 0;
     padding: 0;
     list-style-type: none !important;
@@ -561,12 +561,12 @@
     color: #fff;
     overflow: hidden;
 }
-.mejs-controls .mejs-captions-button .mejs-captions-selector ul li input {
+.cssClass .mejs-controls .mejs-captions-button .mejs-captions-selector ul li input {
     clear: both;
     float: left;
     margin: 3px 3px 0 5px;
 }
-.mejs-controls .mejs-captions-button .mejs-captions-selector ul li label {
+.cssClass .mejs-controls .mejs-captions-button .mejs-captions-selector ul li label {
     width: 100px;
     float: left;
     padding: 4px 0 0 0;
@@ -575,13 +575,13 @@
     font-size: 10px;
 }
 
-.mejs-controls .mejs-captions-button .mejs-captions-translations {
+.cssClass .mejs-controls .mejs-captions-button .mejs-captions-translations {
     font-size: 10px;
     margin: 0 0 5px 0;
 }
 
 
-.mejs-chapters {
+.cssClass .mejs-chapters {
     position: absolute;
     top: 0;
     left: 0;
@@ -589,7 +589,7 @@
     width: 10000px;
     z-index: 1;
 }
-.mejs-chapters .mejs-chapter {
+.cssClass .mejs-chapters .mejs-chapter {
     position: absolute;
     float: left;
     background: #222;
@@ -604,7 +604,7 @@
     overflow: hidden;
     border: 0;
 }
-.mejs-chapters .mejs-chapter .mejs-chapter-block {
+.cssClass .mejs-chapters .mejs-chapter .mejs-chapter-block {
     font-size: 11px;
     color: #fff;
     padding: 5px;
@@ -613,11 +613,11 @@
     border-bottom: solid 1px #333;
     cursor: pointer;
 }
-.mejs-chapters .mejs-chapter .mejs-chapter-block-last {
+.cssClass .mejs-chapters .mejs-chapter .mejs-chapter-block-last {
     border-right: none;
 }
 
-.mejs-chapters .mejs-chapter .mejs-chapter-block:hover {
+.cssClass .mejs-chapters .mejs-chapter .mejs-chapter-block:hover {
     /*background: #333;*/
     background: #666;
     background: rgba(102,102,102, 0.7);
@@ -629,7 +629,7 @@
     background: linear-gradient(rgba(102,102,102,0.7), rgba(50,50,50,0.6));
     filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, startColorstr=#666666,endColorstr=#323232);
 }
-.mejs-chapters .mejs-chapter .mejs-chapter-block .ch-title {
+.cssClass .mejs-chapters .mejs-chapter .mejs-chapter-block .ch-title {
     font-size: 12px;
     font-weight: bold;
     display: block;
@@ -638,7 +638,7 @@
     margin: 0 0 3px 0;
     line-height: 12px;
 }
-.mejs-chapters .mejs-chapter .mejs-chapter-block .ch-timespan {
+.cssClass .mejs-chapters .mejs-chapter .mejs-chapter-block .ch-timespan {
     font-size: 12px;
     line-height: 12px;
     margin: 3px 0 4px 0;
@@ -648,7 +648,7 @@
 }
 
 
-.mejs-captions-layer {
+.cssClass .mejs-captions-layer {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -658,27 +658,27 @@
     font-size: 12px;
     color: #fff;
 }
-.mejs-captions-layer  a {
+.cssClass .mejs-captions-layer  a {
     color: #fff;
     text-decoration: underline;
 }
-.mejs-captions-layer[lang=ar] {
+.cssClass .mejs-captions-layer[lang=ar] {
     font-size: 20px;
     font-weight: normal;
 }
 
-.mejs-captions-position {
+.cssClass .mejs-captions-position {
     position: absolute;
     width: 100%;
     bottom: 15px;
     left: 0;
 }
 
-.mejs-captions-position-hover {
+.cssClass .mejs-captions-position-hover {
     bottom: 45px;
 }
 
-.mejs-captions-text {
+.cssClass .mejs-captions-text {
     padding: 3px 5px;
     background: url(/assets/mediaelement/src/css/background.png);
     background: rgba(20, 20, 20, 0.8);
@@ -688,18 +688,18 @@
 
 
 
-.mejs-clear {
+.cssClass .mejs-clear {
     clear: both;
 }
 
 /* Start: ERROR */
-.me-cannotplay {
+.cssClass .me-cannotplay {
 }
-.me-cannotplay a {
+.cssClass .me-cannotplay a {
     color: #fff;
     font-weight: bold;
 }
-.me-cannotplay span {
+.cssClass .me-cannotplay span {
     padding: 15px;
     display: block;
 }
@@ -707,33 +707,33 @@
 
 
 /* Start: Loop */
-.mejs-controls .mejs-loop-off button {
+.cssClass .mejs-controls .mejs-loop-off button {
     background-position: -64px -16px;
 }
-.mejs-controls .mejs-loop-on button {
+.cssClass .mejs-controls .mejs-loop-on button {
     background-position: -64px 0;
 }
 /* End: Loop */
 
 /* Start: backlight */
-.mejs-controls .mejs-backlight-off button {
+.cssClass .mejs-controls .mejs-backlight-off button {
     background-position: -80px -16px;
 }
-.mejs-controls .mejs-backlight-on button {
+.cssClass .mejs-controls .mejs-backlight-on button {
     background-position: -80px 0;
 }
 /* End: backlight */
 
 
 /* Start: picture controls */
-.mejs-controls .mejs-picturecontrols-button {
+.cssClass .mejs-controls .mejs-picturecontrols-button {
     background-position: -96px 0;
 }
 /* End: picture controls */
 
 
 /* context menu */
-.mejs-contextmenu {
+.cssClass .mejs-contextmenu {
     position: absolute;
     width: 150px;
     padding: 10px;
@@ -744,35 +744,35 @@
     border: solid 1px #999;
     z-index: 1001; /* make sure it shows on fullscreen */
 }
-.mejs-contextmenu .mejs-contextmenu-separator {
+.cssClass .mejs-contextmenu .mejs-contextmenu-separator {
     height: 1px;
     font-size: 0;
     margin: 5px 6px;
     background: #333;
 }
 
-.mejs-contextmenu .mejs-contextmenu-item {
+.cssClass .mejs-contextmenu .mejs-contextmenu-item {
     font-family: Helvetica, Arial;
     font-size: 12px;
     padding: 4px 6px;
     cursor: pointer;
     color: #333;
 }
-.mejs-contextmenu .mejs-contextmenu-item:hover {
+.cssClass .mejs-contextmenu .mejs-contextmenu-item:hover {
     background: #2C7C91;
     color: #fff;
 }
 
 
 /* Start: SourceChooser */
-.mejs-controls .mejs-sourcechooser-button {
+.cssClass .mejs-controls .mejs-sourcechooser-button {
     position: relative;
 }
 
-.mejs-controls .mejs-sourcechooser-button button {
+.cssClass .mejs-controls .mejs-sourcechooser-button button {
     background-position: -128px 0;
 }
-.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector {
+.cssClass .mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector {
     visibility: hidden;
     position: absolute;
     bottom: 26px;
@@ -789,14 +789,14 @@
     border-radius: 0;
 }
 
-.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul {
+.cssClass .mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul {
     margin: 0;
     padding: 0;
     display: block;
     list-style-type: none !important;
     overflow: hidden;
 }
-.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li {
+.cssClass .mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li {
     margin: 0 0 6px 0;
     padding: 0;
     list-style-type: none !important;
@@ -804,12 +804,12 @@
     color: #fff;
     overflow: hidden;
 }
-.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li input {
+.cssClass .mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li input {
     clear: both;
     float: left;
     margin: 3px 3px 0 5px;
 }
-.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li label {
+.cssClass .mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li label {
     width: 100px;
     float: left;
     padding: 4px 0 0 0;
@@ -821,7 +821,7 @@
 
 
 /* Start: Postroll */
-.mejs-postroll-layer {
+.cssClass .mejs-postroll-layer {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -832,11 +832,11 @@
     z-index: 1000;
     overflow: hidden;
 }
-.mejs-postroll-layer-content {
+.cssClass .mejs-postroll-layer-content {
     width: 100%;
     height: 100%;
 }
-.mejs-postroll-close {
+.cssClass .mejs-postroll-close {
     position: absolute;
     right: 0;
     top: 0;
