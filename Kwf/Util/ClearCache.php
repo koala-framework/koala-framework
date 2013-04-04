@@ -96,14 +96,7 @@ class Kwf_Util_ClearCache
 
         } else if ($type == 'config') {
 
-            $configClass = Kwf_Setup::$configClass;
-            $config = new $configClass(Kwf_Setup::getConfigSection());
-            $cacheId = 'config_'.str_replace('-', '_', Kwf_Setup::getConfigSection());
-            Kwf_Config_Cache::getInstance()->save($config, $cacheId);
-
-            Kwf_Config_Web::clearInstances();
-            Kwf_Registry::set('config', $config);
-            Kwf_Registry::set('configMtime', Kwf_Config_Cache::getInstance()->test($cacheId));
+            Kwf_Config_Web::reload();
 
         } else if ($type == 'component') {
 

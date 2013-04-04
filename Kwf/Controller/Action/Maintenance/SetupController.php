@@ -39,6 +39,9 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         $cfg .= "debug.error.log = ".(!$this->_getParam('display_errors') ? 'true' : 'false')."\n";
         file_put_contents('config.local.ini', $cfg);
 
+        //re-create config to load changed config.local.ini
+        Kwf_Config::deleteValueCache('database');
+        Kwf_Config_Web::reload();
 
         $updates = array();
         foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
