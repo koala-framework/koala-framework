@@ -106,15 +106,42 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $proc->close(false);
                     exit;
                 }
-                foreach ($eventsQueue as $event) {
+                foreach ($eventsQueue as $k=>$event) {
                     if (!preg_match('#^([^ ]+) ([A-Z,_]+) ([^ ]+)$#', trim($event), $m)) {
                         echo "unknown event: $event\n";
                         continue;
                     }
-                    $event = $m[2];
-                    $file = $m[1].$m[3];
+                    $eventsQueue[$k] = array(
+                        'event' => $m[2],
+                        'file' => $m[1].$m[3],
+                    );
                     unset($m);
-                    self::_handleEventFork($file, $event);
+                }
+
+                // compress the following into into one event:
+                // CREATE web.scssdx1493.new
+                // MODIFY web.scssdx1493.new
+                // MOVED_FROM web.scssdx1493.new
+                // MOVED_TO web.scss
+                foreach ($eventsQueue as $k=>$event) {
+                    $f = $eventsQueue[$k]['file'];
+                    if ($event['event'] == 'MOVED_TO' && $k > 2) {
+                        if ($eventsQueue[$k-1]['event'] == 'MOVED_FROM'
+                            && $eventsQueue[$k-2]['event'] == 'MODIFY'
+                            && $eventsQueue[$k-3]['event'] == 'CREATE'
+                            && substr($eventsQueue[$k-1]['file'], 0, strlen($f)) == $f
+                            && substr($eventsQueue[$k-2]['file'], 0, strlen($f)) == $f
+                            && substr($eventsQueue[$k-3]['file'], 0, strlen($f)) == $f
+                        ) {
+                            unset($eventsQueue[$k-1]);
+                            unset($eventsQueue[$k-2]);
+                            unset($eventsQueue[$k-3]);
+                            $eventsQueue[$k]['event'] = 'MODIFY';
+                        }
+                    }
+                }
+                foreach ($eventsQueue as $event) {
+                    self::_handleEventFork($event['file'], $event['event']);
                 }
                 $eventsQueue = array();
                 $lastChange = false;
