@@ -12,9 +12,33 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'componentIcon' => new Kwf_Asset('images'),
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
-//         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Data';
         $ret['assets']['files'][] = 'kwf/Kwc/Advanced/VideoPlayer/Component.js';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
+
+        $ret['video'] = array(
+            'defaultVideoWidth' =>  480,
+            'defaultVideoHeight' => 270,
+            'videoWidth' => -1,
+            'videoHeight' => -1,
+            'audioWidth' => 400,
+            'audioHeight' => 30,
+            'startVolume' => 0.8,
+            'loop' => false,
+            'enableAutosize' => true,
+            'features' => array(
+                'playpause','progress','current','duration','tracks','volume','fullscreen'
+                ),
+            'alwaysShowControls' => false,
+            'iPadUseNativeControls' => false,
+            'iPhoneUseNativeControls' => false,
+            'AndroidUseNativeControls' => false,
+            'alwaysShowHours' => false,
+            'showTimecodeFrameCount' => false,
+            'framesPerSecond' => 25,
+            'enableKeyboard' => true,
+            'pauseOtherPlayers' => true,
+            'keyActions' => array()
+        );
         return $ret;
     }
 
@@ -25,6 +49,9 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             $this->getData()->componentId, 'webm', 'test.webm');
         $ret['mp4Source'] = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, 'mp4', 'test.mp4');
+        $ret['oggSource'] = Kwf_Media::getUrl($this->getData()->componentClass,
+            $this->getData()->componentId, 'ogg', 'test.ogg');
+        $ret['config'] = Kwc_Abstract::getSetting($this->getData()->componentClass, 'video');
         return $ret;
     }
 
@@ -41,6 +68,8 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             $uploadRow = $row->getParentRow('FileWebm');
         } else if ($type == 'mp4') {
             $uploadRow = $row->getParentRow('FileMp4');
+        } else if ($type == 'ogg') {
+            $uploadRow = $row->getParentRow('FileOgg');
         }
         if (!$uploadRow) return null;
         return array(
