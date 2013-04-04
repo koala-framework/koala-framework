@@ -15,7 +15,11 @@ class Kwc_Basic_Table_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $this->_columns->add(new Kwf_Grid_Column('pos'));
         $this->_columns->add(new Kwf_Grid_Column_Visible());
         for ($i = 1; $i <= $this->_getComponent()->chained->getComponent()->getColumnCount(); $i++) {
+            $this->_columns->add(new Kwf_Grid_Column("column$i"."data"))
+                ->setData(new Kwc_Basic_Table_Trl_ControllerIsTrlData("column$i"));
+
             $this->_columns->add(new Kwf_Grid_Column("column$i", $this->_getColumnLetterByIndex($i-1), 150))
+                ->setRenderer('tableTrl')
                 ->setEditor(new Kwf_Form_Field_TextField());
         }
     }
@@ -40,5 +44,19 @@ class Kwc_Basic_Table_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $row = $this->_model->createRow();
         }
         return $row;
+    }
+}
+
+class Kwc_Basic_Table_Trl_ControllerIsTrlData extends Kwf_Data_Abstract
+{
+    protected $_column;
+    public function __construct($column)
+    {
+        $this->_column = $column;
+    }
+
+    public function load($row)
+    {
+        return $row->hasTrl($this->_column);
     }
 }

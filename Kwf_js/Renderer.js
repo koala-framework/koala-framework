@@ -233,3 +233,12 @@ Ext.util.Format.clickableLink = function(v, p, record){
     if (!v) return '';
     return '<a href="'+v+'" target="_blank">'+v+'</a>';
 };
+
+Ext.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, column){
+    if (record.data[column.dataIndex+'data']) {
+        p.attr += 'style="background-color:#f00;"';
+    } else {
+        p.attr += 'style="background-color:#0f0;"';
+    }
+    return v;
+};

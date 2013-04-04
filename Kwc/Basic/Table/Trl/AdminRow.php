@@ -30,6 +30,15 @@ class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
         }
     }
 
+    public function hasTrl($name)
+    {
+        if ($this->_trlRow && $this->_trlRow->$name) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     protected function _saveWithoutResetDirty()
     {
         return $this->_trlRow->_saveWithoutResetDirty();
