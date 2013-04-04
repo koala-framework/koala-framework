@@ -7,6 +7,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         //TODO check if not already installed, like in Cli/SetupController
     }
 
+    //TODO add installation step for creating user
     public function indexAction()
     {
         $this->view->kwfVersion = Kwf_Config::getValue('application.kwf.name') . ' ' . trlKwf('Version') . ' ' . Kwf_Config::getValue('application.kwf.version');
@@ -20,8 +21,10 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
     public function jsonCheckRequirementsAction()
     {
         //TODO add progress bar
-        //TODO add "warning" response
-        //TODO check for config.local.ini being writeable
+        //TODO add "warning" response (+plus additional info output)
+        //TODO check for config.local.ini being writeable and does not yet exist (or is empty)
+        //TODO check for web running in root of domain
+        //TODO alternative for maintenance mode: current one needs write perm on bootstrap.php plus sucks across multiple servers
         $this->view->checks = Kwf_Util_Check_Config::getCheckResults();
     }
 
