@@ -31,20 +31,23 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                         field.errorEl.alignTo(field.el.child('input'), 'tr', [-10, 2]);
                     } else {
                         field.errorEl.alignTo(field.el.child('input'), 'tr', [-20, 2]);
-                        
                     }
                 } else if (field.el.child('select')) {
-                    field.errorEl.alignTo(field.el.child('select'), 'tr', [-40, 2]);
+                    if (field.el.child('select').getWidth() < 60) {
+                        field.errorEl.alignTo(field.el.child('select'), 'tr', [-8, 2]);
+                    } else {
+                        field.errorEl.alignTo(field.el.child('select'), 'tr', [-35, 2]);
+                    }
                 } else {
                     field.errorEl.alignTo(field.el, 'r', [-40, 2]);
                 }
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();
-                Kwf.Event.on(field.errorEl, 'mouseEnter', function() {
+                Kwf.Event.on(Ext.get(field.el), 'mouseEnter', function() {
                     this.errorEl.child('.message').stopFx().fadeIn({duration: 0.4});
                     this.errorEl.child('.arrow').stopFx().fadeIn({duration: 0.4});
                 }, field);
-                Kwf.Event.on(field.errorEl, 'mouseLeave', function() {
+                Kwf.Event.on(Ext.get(field.el), 'mouseLeave', function() {
                     this.errorEl.child('.message').stopFx().fadeOut({duration: 0.2});
                     this.errorEl.child('.arrow').stopFx().fadeOut({duration: 0.2});
                 }, field);

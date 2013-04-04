@@ -1,6 +1,10 @@
 .cssClass .kwfFieldError label { color: var(typo); }
 .cssClass .kwfFieldError input,
-.cssClass .kwfFieldError textarea {
+.cssClass .kwfFieldError input:hover,
+.cssClass .kwfFieldError input:focus,
+.cssClass .kwfFieldError textarea,
+.cssClass .kwfFieldError textarea:hover,
+.cssClass .kwfFieldError textarea:focus {
     color: var(typo);
     border: 1px solid var(errorBorder) ;
 }
