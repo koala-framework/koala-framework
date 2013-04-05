@@ -217,8 +217,7 @@ class Kwf_Media_Output
     }
 
     // returns the partial content from a file
-    // parts of the function are taken https://github.com/pomle/php-serveFilePartial/blob/master/ServeFilePartial.inc.php
-    public static function getPartialFileContent($file, $range)
+    protected function getPartialFileContent($file, $range)
     {
         $length = $range[1]-$range[0]+1;
 
