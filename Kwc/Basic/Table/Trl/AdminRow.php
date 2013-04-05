@@ -11,6 +11,15 @@ class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
 
     public function __get($name)
     {
+        $ret = '';
+        if ($this->_trlRow->hasColumn($name)) {
+            $ret = $this->_trlRow->$name;
+        }
+        return $ret;
+    }
+
+    public function getFrontend($name)
+    {
         $ret = null;
         if ($this->_trlRow->hasColumn($name)) {
             $ret = $this->_trlRow->$name;
@@ -25,10 +34,17 @@ class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
     {
         if ($name == 'visible') {
             $this->_trlRow->__set($name, $value);
-        } else if ($this->_row->$name != $value) {
-            $this->_trlRow->__set($name, $value);
         } else {
-            $this->_trlRow->__set($name, '');
+            $this->_trlRow->__set($name, $value);
+        }
+    }
+
+    public function getMaster($name)
+    {
+        if (!$this->hasTrl($name)) {
+            return parent::__get($name);
+        } else {
+            return '';
         }
     }
 

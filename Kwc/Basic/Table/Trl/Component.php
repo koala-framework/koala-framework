@@ -18,9 +18,17 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
             ->whereEquals('visible', 1)
             ->order('pos')
         );
+
         $ret['dataRows'] = array();
         foreach ($rows as $row) {
-            if ($row->visible) $ret['dataRows'][] = $row;
+            if ($row->visible) {
+                $rowData = array();
+                $rowData['css_style'] = $row->css_style;
+                for ($i = 1; $i <= $ret['columnCount']; $i++) {
+                    $rowData['column'.$i] = $row->getFrontend('column'.$i);
+                }
+                $ret['dataRows'][] = $rowData;
+            }
         }
         return $ret;
     }
