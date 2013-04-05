@@ -46,11 +46,11 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
     {
         $ret = parent::getTemplateVars();
         $ret['webmSource'] = Kwf_Media::getUrl($this->getData()->componentClass,
-            $this->getData()->componentId, 'webm', 'test.webm');
+            $this->getData()->componentId, 'webm', 'video.webm');
         $ret['mp4Source'] = Kwf_Media::getUrl($this->getData()->componentClass,
-            $this->getData()->componentId, 'mp4', 'test.mp4');
+            $this->getData()->componentId, 'mp4', 'video.mp4');
         $ret['oggSource'] = Kwf_Media::getUrl($this->getData()->componentClass,
-            $this->getData()->componentId, 'ogg', 'test.ogg');
+            $this->getData()->componentId, 'ogg', 'video.ogg');
         $ret['config'] = Kwc_Abstract::getSetting($this->getData()->componentClass, 'video');
         return $ret;
     }
