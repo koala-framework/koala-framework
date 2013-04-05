@@ -44,8 +44,16 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $dataSelect = new Kwf_Model_Select();
         $dataSelect->whereEquals('visible', 1);
         $dataSelect->order('pos', 'ASC');
-        $ret['dataRows'] = $this->_getRow()->getChildRows('tableData', $dataSelect);
-
+        $ret['dataRows'] = array();
+        $rows = $this->_getRow()->getChildRows('tableData', $dataSelect);
+        foreach ($rows as $row) {
+            $rowData = array();
+            $rowData['css_style'] = $row->css_style;
+            for ($i = 1; $i <= $ret['columnCount']; $i++) {
+                $rowData['column'.$i] = $row->{'column'.$i};
+            }
+            $ret['dataRows'][] = $rowData;
+        }
         $ret['rowStyles'] = $this->_getSetting('rowStyles');
         return $ret;
     }

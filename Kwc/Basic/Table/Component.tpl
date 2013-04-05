@@ -10,7 +10,7 @@
                         }
                     }
                 ?>
-                    <<?=$tag;?> class="col<?= $i; ?><? if($i==1) echo' first';?><? if($i==$this->columnCount) echo' last';?>"><?= $this->toHtmlLink($dr->{'column'.$i}); ?></<?=$tag;?>>
+                    <<?=$tag;?> class="col<?= $i; ?><? if($i==1) echo' first';?><? if($i==$this->columnCount) echo' last';?>"><?= $this->toHtmlLink($dr['column'.$i]); ?></<?=$tag;?>>
                 <? } ?>
             </tr>
         <? } ?>
