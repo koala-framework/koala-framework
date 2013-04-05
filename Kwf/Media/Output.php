@@ -190,7 +190,7 @@ class Kwf_Media_Output
                 if (isset($headers['Range'])) {
                     $range = explode('=', $headers['Range']);
                     $range = explode('-', $range[1]);
-                    $ret['contents'] = self::getPartialFileContent($file['file'], $range);
+                    $ret['contents'] = self::_getPartialFileContent($file['file'], $range);
                     $ret['contentLength'] = strlen($ret['contents']);
                     $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
                     $ret['headers'][] = 'Content-Range: bytes ' . $range[0] . '-'
@@ -217,7 +217,7 @@ class Kwf_Media_Output
     }
 
     // returns the partial content from a file
-    protected function getPartialFileContent($file, $range)
+    private static function _getPartialFileContent($file, $range)
     {
         $length = $range[1]-$range[0]+1;
 
