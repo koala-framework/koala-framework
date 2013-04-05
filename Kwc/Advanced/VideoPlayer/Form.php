@@ -6,7 +6,6 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
     public function __construct($name, $class, $id = null)
     {
         parent::__construct($name, $class, $id);
-//         $this->setXtype('Kwc.Basic.DownloadTag');
         $this->fields->add(new Kwf_Form_Field_File('FileMp4', trlKwf('File (mp4)')))
             ->setDirectory('AdvancedVideoPlayer')
             ->setAllowOnlyImages(false);
