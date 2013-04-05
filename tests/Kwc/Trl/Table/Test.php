@@ -24,9 +24,11 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $count = 0;
         foreach ($rows as $row) {
             if ($count == 0) {
-                $this->assertEquals($row->column1, 'Abc');
+                $this->assertEquals($row->getFrontend('column1'), 'Abc');
+                $this->assertEquals($row->column1, '');
             } else if ($count == 1) {
                 $this->assertEquals($row->column1, 'Abc');
+                $this->assertEquals($row->getFrontend('column1'), 'Abc');
             }
             $count++;
         }
@@ -49,24 +51,24 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $masterModel = Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_MasterModel');
         $masterRow = $masterModel->getRow($id);
         //check if changed trl-column different than master-column
-        $this->assertNotEquals($row->column2, $masterRow->column2);
+        $this->assertNotEquals($row->getFrontend('column2'), $masterRow->column2);
         //check if other trl-column equal than master-column
-        $this->assertEquals($row->column3, $masterRow->column3);
+        $this->assertEquals($row->getFrontend('column3'), $masterRow->column3);
 
         $trlRow = $model->getRow($select);
         //check if changed trl-column is really saved
-        $this->assertEquals($row->column2, $trlRow->column2);
+        $this->assertEquals($row->getFrontend('column2'), $trlRow->getFrontend('column2'));
         //check if other trl-column are really unchanged
-        $this->assertEquals($row->column3, $trlRow->column3);
+        $this->assertEquals($row->getFrontend('column3'), $trlRow->getFrontend('column3'));
 
         $masterRow->column3 = 123;
         $masterRow->save();
         $trlRow2 = $model->getRow($select);
         //check if changed trl-column is still changed
-        $this->assertEquals($trlRow2->column2, $trlRow->column2);
-        $this->assertNotEquals($trlRow2->column2, $masterRow->column2);
+        $this->assertEquals($trlRow2->getFrontend('column2'), $trlRow->getFrontend('column2'));
+        $this->assertNotEquals($trlRow2->getFrontend('column2'), $masterRow->column2);
         //check if unchanged trl-column always same to master
-        $this->assertEquals($masterRow->column3, $trlRow2->column3);
+        $this->assertEquals($masterRow->column3, $trlRow2->getFrontend('column3'));
     }
 
     public function testTrlTableRender()
