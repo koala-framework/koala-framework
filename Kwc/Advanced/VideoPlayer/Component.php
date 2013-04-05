@@ -66,13 +66,13 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         $row = $component->getComponent()->getRow();
         if ($type == 'webm') {
             $uploadRow = $row->getParentRow('FileWebm');
-            $mimeType = 'webm';
+            $mimeType = 'video/webm';
         } else if ($type == 'mp4') {
             $uploadRow = $row->getParentRow('FileMp4');
-            $mimeType = 'mp4';
+            $mimeType = 'video/mp4';
         } else if ($type == 'ogg') {
             $uploadRow = $row->getParentRow('FileOgg');
-            $mimeType = 'ogg';
+            $mimeType = 'video/ogg';
         }
         if (!$uploadRow) return null;
         return array(
