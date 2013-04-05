@@ -75,7 +75,7 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
             $select = new Kwf_Model_Select();
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($componentId, array('ignoreVisible'=>true));
-            $select->whereEquals('component_id', $c->chained->componentId);
+            $select->whereEquals('component_id', $c->chained->dbId);
             $select->whereEquals('id', $id);
             $proxyRow = $this->_proxyModel->getRow($select);
             return $this->getRowByProxiedRow($proxyRow, $componentId);
@@ -94,7 +94,7 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
         if ($componentId) { // get master-component-id
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($componentId, array('ignoreVisible'=>true));
-            $select->whereEquals('component_id', $c->chained->componentId);
+            $select->whereEquals('component_id', $c->chained->dbId);
         }
         $proxyRowset = $this->_proxyModel->getRows($select);
         return new $this->_rowsetClass(array(
@@ -116,7 +116,7 @@ class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
         if ($componentId) {
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($componentId, array('ignoreVisible'=>true));
-            $select->whereEquals('component_id', $c->chained->componentId);
+            $select->whereEquals('component_id', $c->chained->dbId);
         }
 
         return $this->_proxyModel->countRows($select);
