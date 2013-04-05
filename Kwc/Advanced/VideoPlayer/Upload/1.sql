@@ -1,10 +1,7 @@
 CREATE TABLE IF NOT EXISTS `kwc_advanced_video_player` (
   `component_id` varchar(255) NOT NULL,
-  `mp4_filename` varchar(255) NOT NULL,
   `mp4_kwf_upload_id` int(11) DEFAULT NULL,
-  `ogg_filename` varchar(255) NOT NULL,
   `ogg_kwf_upload_id` int(11) DEFAULT NULL,
-  `webm_filename` varchar(255) NOT NULL,
   `webm_kwf_upload_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`component_id`),
   KEY `webm_kwf_upload_id` (`webm_kwf_upload_id`),
