@@ -27,6 +27,8 @@ class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
             $this->_trlRow->__set($name, $value);
         } else if ($this->_row->$name != $value) {
             $this->_trlRow->__set($name, $value);
+        } else {
+            $this->_trlRow->__set($name, '');
         }
     }
 
