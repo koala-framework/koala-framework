@@ -57,6 +57,6 @@ class Kwc_Basic_Table_Trl_ControllerIsTrlData extends Kwf_Data_Abstract
 
     public function load($row)
     {
-        return $row->hasTrl($this->_column);
+        return $row->getMaster($this->_column);
     }
 }
