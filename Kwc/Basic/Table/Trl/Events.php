@@ -25,16 +25,19 @@ class Kwc_Basic_Table_Trl_Events extends Kwc_Chained_Trl_Events
 
     public function onOwnRowEvent(Kwf_Component_Event_Row_Abstract $event)
     {
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+        $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
             $event->row->component_id, array('ignoreVisible'=>true)
         );
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $component
-        ));
+        foreach ($components as $component) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                $this->_class, $component
+            ));
+        }
     }
 
     public function onMasterContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
     {
+        parent::onMasterContentChanged($event);
         $components = Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->component, 'Trl');
         foreach ($components as $component) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
