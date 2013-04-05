@@ -229,6 +229,11 @@ class Kwf_Assets_Loader
                     ) {
                         //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
                         $cacheData['contents'] = str_replace('../images/', '/assets/ext/resources/images/', $cacheData['contents']);
+                    } else if ((substr($file, 0, strlen($section)+14)==$section.'-mediaelement/' || substr($file, 0, 13)=='mediaelement/')
+                        && substr($ret['mimeType'], 0, 5) == 'text/'
+                    ) {
+                        //hack to get the correct paths for the mediaelement pictures
+                        $cacheData['contents'] = str_replace('url(', 'url(/assets/mediaelement/build/', $cacheData['contents']);
                     }
 
                     $cacheData['contents'] = self::expandAssetVariables($cacheData['contents'], $section, $cacheData['mtimeFiles']);
