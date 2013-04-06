@@ -3,6 +3,7 @@ php:
   - "5.3"
 before_script:
   - git clone git://github.com/vivid-planet/library.git
+  - echo "library/zend/%vesion%" > include_path
 script: "php bootstrap.php test --exclude-group=slow"
 notificaitons:
   irc: "irc.freenode.org#kwf"
