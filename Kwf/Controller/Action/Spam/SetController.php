@@ -19,7 +19,7 @@ class Kwf_Controller_Action_Spam_SetController extends Kwf_Controller_Action
     /**
      * Public only for testing!!!
      */
-    public static function sendSpammedMail($id, $key)
+    public static function sendSpammedMail($id, $key, $tranport = null)
     {
         $row = Kwf_Model_Abstract::getInstance('Kwf_Model_Mail')->getRow($id);
         if (!$row) return false;
@@ -30,7 +30,7 @@ class Kwf_Controller_Action_Spam_SetController extends Kwf_Controller_Action
 
         if (!$row->mail_sent) {
             $row->is_spam = 0;
-            $row->sendMail(); // setzt mail_sent auf 1 und speichert
+            $row->sendMail($tranport); // setzt mail_sent auf 1 und speichert
             return true;
         }
         return false;

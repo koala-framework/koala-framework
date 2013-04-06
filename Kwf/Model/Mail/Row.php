@@ -32,7 +32,7 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
         return $this->_additionalMailVarsRow;
     }
 
-    public function sendMail()
+    public function sendMail($transport = null)
     {
         if ($this->mail_sent) {
             throw new Kwf_Exception("'sendMail' may only be called once");
@@ -94,7 +94,7 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
                 $mail->addAttachment($attachment);
             }
         }
-        $mail->send();
+        $mail->send($transport);
 
         $this->mail_sent = 1;
         $this->save();
