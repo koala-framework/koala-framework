@@ -99,5 +99,14 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         } catch (Exception $e) {
             throw new Kwf_Exception_Client($e->getMessage());
         }
+
+        try {
+            $tables = $db->fetchCol("SHOW TABLES");
+        } catch (Exception $e) {
+            throw new Kwf_Exception_Client("Fetching Tables failed: ".$e->getMessage());
+        }
+        if ($tables) {
+            throw new Kwf_Exception_Client("Database not empty, incomplete kwf installation or other application already exists in this database.");
+        }
     }
 }
