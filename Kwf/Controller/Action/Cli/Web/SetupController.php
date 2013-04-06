@@ -29,6 +29,18 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
             throw new Kwf_Exception_Client("Connection to database failed: ".$e->getMessage());
         }
 
+        try {
+            $tables = Kwf_Registry::get('db')->fetchCol("SHOW TABLES");
+        } catch (Exception $e) {
+            throw new Kwf_Exception_Client("Fetching Tables failed: ".$e->getMessage());
+        }
+        if (in_array('kwf_update', $tables)) {
+            throw new Kwf_Exception_Client("Application seems to be set up already. (kwf_update table exists)");
+        }
+        if ($tables) {
+            throw new Kwf_Exception_Client("Database not empty, incomplete kwf installation or other application already exists in this database.");
+        }
+
         $updates = array();
         foreach (Kwf_Update::getUpdateTags() as $tag) {
             $file = KWF_PATH.'/setup/'.$tag.'.sql';
