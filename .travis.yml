@@ -17,7 +17,7 @@ before_script:
   - echo "server.domain = localhost" >> tests/config.local.ini
   - chmod a+w tests/cache/*
   - chmod a+w tests/temp
-  - php bootstrap.php
+  - php -d include_path=. bootstrap.php
 script: "php bootstrap.php test --exclude-group=slow"
 notificaitons:
   irc: "irc.freenode.org#kwf"
