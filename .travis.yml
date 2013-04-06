@@ -2,18 +2,17 @@ language: php
 php:
   - "5.3"
 before_script:
+  - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - php --info
   - git clone git://github.com/vivid-planet/library.git
   - mysql -e 'create database kwf_test;'
-  - pwd
-  - ls -l
-  - php --info
   - echo "`pwd`/library/zend/%version%" > include_path
   - echo "[production]" > tests/config.local.ini
   - echo "database.web.username = root" >> tests/config.local.ini
   - echo "database.web.host = localhost" >> tests/config.local.ini
   - echo "database.web.dbname = kwf_test" >> tests/config.local.ini
   - echo "server.domain = localhost" >> tests/config.local.ini
-  - ls library/zend
+  - chmod a+w cache/*
   - php bootstrap.php
 script: "php bootstrap.php test --exclude-group=slow"
 notificaitons:
