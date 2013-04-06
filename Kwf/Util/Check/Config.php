@@ -86,12 +86,6 @@ class Kwf_Util_Check_Config
         $checks['root_write'] = array(
             'name' => 'root write permissions'
         );
-        $checks['imagick_functionality_1'] = array(
-            'name' => 'imagick functionality 1'
-        );
-        $checks['imagick_functionality_2'] = array(
-            'name' => 'imagick functionality 2'
-        );
         $checks['memory_limit'] = array(
             'name' => 'memory_limit'
         );
@@ -181,6 +175,22 @@ class Kwf_Util_Check_Config
         if (!class_exists('Imagick')) {
             throw new Kwf_Exception("Extension 'imagick' is not loaded");
         }
+
+        $im = new Imagick();
+        $im->readImage(dirname(__FILE__).'/Config/testImage.jpg');
+        $im->scaleImage(10, 10);
+        $im->setImagePage(0, 0, 0, 0);
+        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->getImageBlob();
+        $im->destroy();
+
+        $im = new Imagick();
+        $im->readImage(dirname(__FILE__).'/Config/testImage.png');
+        $im->scaleImage(10, 10);
+        $im->setImagePage(0, 0, 0, 0);
+        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->getImageBlob();
+        $im->destroy();
     }
 
     private static function _exif()
@@ -240,7 +250,7 @@ class Kwf_Util_Check_Config
 
     private static function _db_connection()
     {
-        Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
+//         Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
     }
     private static function _git()
     {
@@ -308,34 +318,6 @@ class Kwf_Util_Check_Config
             //needed for moving bootstrap.php when doing clear-cache from webinterface
             throw new Kwf_Exception("root (".getcwd().") is not writeable");
         }
-    }
-
-    private static function _imagick_functionality_1()
-    {
-        if (!class_exists('Imagick', false)) {
-            throw new Kwf_Exception("Imagick class doesn't exist");
-        }
-        $im = new Imagick();
-        $im->readImage(dirname(__FILE__).'/Config/testImage.jpg');
-        $im->scaleImage(10, 10);
-        $im->setImagePage(0, 0, 0, 0);
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-        $im->getImageBlob();
-        $im->destroy();
-    }
-
-    private static function _imagick_functionality_2()
-    {
-        if (!class_exists('Imagick', false)) {
-            throw new Kwf_Exception("Imagick class doesn't exist");
-        }
-        $im = new Imagick();
-        $im->readImage(dirname(__FILE__).'/Config/testImage.png');
-        $im->scaleImage(10, 10);
-        $im->setImagePage(0, 0, 0, 0);
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-        $im->getImageBlob();
-        $im->destroy();
     }
 
     private static function _memory_limit()
