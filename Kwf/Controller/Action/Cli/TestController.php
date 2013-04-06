@@ -146,6 +146,11 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
         if ($this->_getParam('disable-debug')) {
             Kwf_Debug::disable();
         }
+        
+        echo get_include_path()."\n";
+
+        include('PHPUnit/Util/Filter.php');
+        p(get_class_methods('PHPUnit_Util_Filter'));
 
         //nur temporär deaktiviert, damit ich selenium-verbindungs-probleme besser debuggen kann
         PHPUnit_Util_Filter::setFilter(false);
