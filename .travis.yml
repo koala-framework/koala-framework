@@ -15,6 +15,7 @@ before_script:
   - echo "database.web.host = localhost" >> tests/config.local.ini
   - echo "database.web.dbname = kwf_test" >> tests/config.local.ini
   - echo "server.domain = localhost" >> tests/config.local.ini
+  - echo "libraryPath = `pwd`/library" >> tests/config.local.ini
   - chmod a+w tests/cache/*
   - chmod a+w tests/temp
 script: "php -d include_path=. bootstrap.php test --exclude-group=slow"
