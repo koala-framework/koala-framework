@@ -10,6 +10,7 @@ before_script:
   - echo "`pwd`/library/zend/%version%" > include_path
   - echo "[production]" > tests/config.local.ini
   - echo "database.web.username = root" >> tests/config.local.ini
+  - echo "database.web.password = " >> tests/config.local.ini
   - echo "database.web.host = localhost" >> tests/config.local.ini
   - echo "database.web.dbname = kwf_test" >> tests/config.local.ini
   - echo "server.domain = localhost" >> tests/config.local.ini
