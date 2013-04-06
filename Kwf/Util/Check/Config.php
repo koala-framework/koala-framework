@@ -74,17 +74,8 @@ class Kwf_Util_Check_Config
         $checks['system'] = array(
             'name' => 'executing system commands'
         );
-        $checks['log_write'] = array(
-            'name' => 'log write permissions'
-        );
-        $checks['temp_write'] = array(
-            'name' => 'temp write permissions'
-        );
-        $checks['cache_write'] = array(
-            'name' => 'cache write permissions'
-        );
-        $checks['root_write'] = array(
-            'name' => 'root write permissions'
+        $checks['write_perm'] = array(
+            'name' => 'write permissions'
         );
         $checks['memory_limit'] = array(
             'name' => 'memory_limit'
@@ -108,9 +99,6 @@ class Kwf_Util_Check_Config
         );
         $checks['setlocale'] = array(
             'name' => 'setlocale'
-        );
-        $checks['fileinfo_functionality'] = array(
-            'name' => 'fileinfo functionality'
         );
         $checks['apc'] = array(
             'name' => 'apc'
@@ -212,6 +200,21 @@ class Kwf_Util_Check_Config
         if (!function_exists('finfo_file')) {
             throw new Kwf_Exception("Extension 'fileinfo' is not loaded");
         }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
+        if ($mime != 'image/png') {
+            throw new Kwf_Exception("fileinfo returned wrong information: $mime");
+        }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
+        if ($mime != 'application/msword') {
+            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
+        }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
+        if ($mime != 'application/vnd.oasis.opendocument.text') {
+            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
+        }
     }
 
     private static function _simplexml()
@@ -250,8 +253,11 @@ class Kwf_Util_Check_Config
 
     private static function _db_connection()
     {
-//         Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
+        if (Kwf_Registry::get('db')) {
+            Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
+        }
     }
+
     private static function _git()
     {
         $gitVersion = exec("git --version", $out, $ret);
@@ -267,8 +273,9 @@ class Kwf_Util_Check_Config
         }
     }
 
-    private static function _log_write()
+    private static function _write_perm()
     {
+        //log folders
         if (file_exists('log/error/test-config-check')) {
             if (file_exists('log/error/test-config-check/test.log')) {
                 unlink('log/error/test-config-check/test.log');
@@ -282,20 +289,16 @@ class Kwf_Util_Check_Config
         }
         unlink('log/error/test-config-check/test.log');
         rmdir('log/error/test-config-check');
-    }
 
-    private static function _temp_write()
-    {
+        //temp folder
         if (!is_writeable('temp')) {
             throw new Kwf_Exception("temp is not writeable");
         }
         if (file_exists('temp/checkconfig-test')) unlink('temp/checkconfig-test');
         touch('temp/checkconfig-test');
         unlink('temp/checkconfig-test');
-    }
 
-    private static function _cache_write()
-    {
+        //cache folders
         $dirs = array('cache');
         foreach (glob('cache/*') as $d) {
             if (is_dir($d)) {
@@ -309,14 +312,6 @@ class Kwf_Util_Check_Config
             if (file_exists($d.'/checkconfig-test')) unlink($d.'/checkconfig-test');
             touch($d.'/checkconfig-test');
             unlink($d.'/checkconfig-test');
-        }
-    }
-
-    private static function _root_write()
-    {
-        if (!is_writeable(getcwd())) {
-            //needed for moving bootstrap.php when doing clear-cache from webinterface
-            throw new Kwf_Exception("root (".getcwd().") is not writeable");
         }
     }
 
@@ -356,24 +351,6 @@ class Kwf_Util_Check_Config
             setlocale(LC_ALL, $locales);
         } else {
             setlocale(LC_ALL, $locale);
-        }
-    }
-
-    private static function _fileinfo_functionality()
-    {
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
-        if ($mime != 'image/png') {
-            throw new Kwf_Exception("fileinfo returned wrong information: $mime");
-        }
-
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
-        if ($mime != 'application/msword') {
-            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
-        }
-
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
-        if ($mime != 'application/vnd.oasis.opendocument.text') {
-            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
         }
     }
 
