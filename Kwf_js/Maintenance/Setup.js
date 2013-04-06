@@ -51,6 +51,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         this.stepDatabase = new Ext.FormPanel({
             border: false,
             bodyStyle: "padding: 10px;",
+            cls: 'kwfSetupForm',
             items: [{
                 xtype: 'textfield',
                 name: 'db_username',
@@ -60,7 +61,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
                 xtype: 'textfield',
                 name: 'db_password',
                 fieldLabel: 'Password',
-                type: 'password'
+                inputType: 'password'
             }, {
                 xtype: 'textfield',
                 name: 'db_dbname',
@@ -96,6 +97,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         this.stepConfig = new Ext.FormPanel({
             border: false,
             bodyStyle: "padding: 10px;",
+            cls: 'kwfSetupForm',
             items: [{
                 xtype: 'checkbox',
                 name: 'display_errors',
@@ -105,6 +107,45 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
                 text: 'Continue',
                 handler: function() {
                     if (!this.stepConfig.getForm().isValid()) return;
+                    this.cards.getLayout().setActiveItem(this.stepAdminAccount);
+                    this.steps.setCurrentStep('adminAccount');
+                },
+                scope: this
+            }]
+        });
+
+        //admin account
+        this.stepAdminAccount = new Ext.FormPanel({
+            border: false,
+            bodyStyle: "padding: 10px;",
+            cls: 'kwfSetupForm',
+            items: [{
+                xtype: 'textfield',
+                vtype: 'email',
+                name: 'admin_email',
+                fieldLabel: 'E-Mail',
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
+                name: 'admin_password',
+                fieldLabel: 'Password',
+                inputType: 'password',
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
+                name: 'admin_password2',
+                fieldLabel: 'Password repeat',
+                inputType: 'password',
+                allowBlank: false
+            }],
+            buttons: [{
+                text: 'Continue',
+                handler: function() {
+                    if (!this.stepAdminAccount.getForm().isValid()) return;
+                    if (this.stepAdminAccount.getForm().findField('admin_password').getValue() != this.stepAdminAccount.getForm().findField('admin_password2').getValue()) {
+                         Ext.Msg.alert('Error', 'Passwords don\'t match');
+                        return;
+                    }
                     this._startInstallation();
                 },
                 scope: this
@@ -113,12 +154,18 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
 
         //install
         this.stepInstall = new Ext.Panel({
-            html: '... installing ...'
+            border: false,
+            cls: 'kwfSetupInstalling',
+            bodyStyle: "padding: 10px;",
+            html: 'Installing...'
         });
 
         //finished
         this.stepFinished = new Ext.Panel({
-            html: '... finished ...'
+            border: false,
+            cls: 'kwfSetupFinished',
+            bodyStyle: "padding: 10px;",
+            html: '<h1>Installation Finished!</h1><p>Installing '+this.appVersion+' finished.</p><p><a href="/">» Proceed to your site</a></p><p>Thank you for using Koala Framework.</p>'
         });
 
         this.cards = new Ext.Panel({
@@ -130,6 +177,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
                 this.stepRequirements,
                 this.stepDatabase,
                 this.stepConfig,
+                this.stepAdminAccount,
                 this.stepInstall,
                 this.stepFinished
             ]
@@ -153,6 +201,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         var params = {};
         Ext.apply(params, this.stepDatabase.getForm().getValues());
         Ext.apply(params, this.stepConfig.getForm().getValues());
+        Ext.apply(params, this.stepAdminAccount.getForm().getValues());
         Ext.Ajax.request({
             url: '/kwf/maintenance/setup/json-install',
             params: params,

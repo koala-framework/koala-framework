@@ -11,8 +11,8 @@
 .kwfSetupSteps li span.num { padding: 5px; border: 1px solid black; border-radius: 5px; }
 .kwfSetupSteps li.current { font-weight: bold; }
 
-.kwfSetupWelcome h1 { margin: 10px }
-.kwfSetupWelcome p { margin: 10px }
+.kwfSetupWelcome h1, .kwfSetupFinished h1 { margin: 10px }
+.kwfSetupWelcome p, .kwfSetupFinished p { margin: 10px }
 
 .kwfSetupRequirements li { margin: 5px; border: 3px solid black; padding: 2px; }
 .kwfSetupRequirements li.success { border-color: green; }

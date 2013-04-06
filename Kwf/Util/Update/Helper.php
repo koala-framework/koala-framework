@@ -15,7 +15,7 @@ class Kwf_Util_Update_Helper
                 $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
             }
         }
-        if (Kwf_Setup::hasDb()) {
+        if (Kwf_Registry::get('db')) {
             $ret[] = 'db';
         }
         return $ret;

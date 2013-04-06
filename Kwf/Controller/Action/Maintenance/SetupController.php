@@ -3,7 +3,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
 {
     public function preDispatch()
     {
-        parent::preDispatch();
+        //don't call parent, no acl required
 
         if (file_exists('update')) {
             //for pre 3.3 webs, update file got replaced by kwf_update table
@@ -35,7 +35,6 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         }
     }
 
-    //TODO add installation step for creating user
     public function indexAction()
     {
         $this->view->kwfVersion = Kwf_Config::getValue('application.kwf.name') . ' ' . trlKwf('Version') . ' ' . Kwf_Config::getValue('application.kwf.version');
@@ -70,6 +69,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         //re-create config to load changed config.local.ini
         Kwf_Config::deleteValueCache('database');
         Kwf_Config_Web::reload();
+        Zend_Registry::getInstance()->offsetUnset('db');
+        Zend_Registry::getInstance()->offsetSet('dao', new Kwf_Dao());
 
         $updates = array();
         foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
@@ -90,6 +91,17 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             $updates[] = $update;
         }
 
+        $update = new Kwf_Update_Sql(0, null);
+        $db = Kwf_Registry::get('db');
+        mt_srand((double)microtime()*1000000);
+        $passwordSalt = substr(md5(uniqid(mt_rand(), true)), 0, 10);
+        $update->sql = "TRUNCATE TABLE kwf_users;\n";
+        $update->sql .= "INSERT INTO kwf_users SET
+            role='admin',
+            email=".$db->quote($this->_getParam('admin_email')).",
+            password=".$db->quote(md5($this->_getParam('admin_password').$passwordSalt)).",
+            password_salt=".$db->quote($passwordSalt).";\n";
+        $updates[] = $update;
 
         $c = new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum'));
 

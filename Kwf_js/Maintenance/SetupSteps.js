@@ -45,10 +45,14 @@ Kwf.Maintenance.SetupSteps = Ext.extend(Ext.Panel, {
                     text: 'Config'
                 }, {
                     num: 5,
+                    step: 'adminAccount',
+                    text: 'Admin Account'
+                }, {
+                    num: 6,
                     step: 'install',
                     text: 'Installation'
                 }, {
-                    num: 6,
+                    num: 7,
                     step: 'finished',
                     text: 'Finished'
                 }
