@@ -4,7 +4,35 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
     public function preDispatch()
     {
         parent::preDispatch();
-        //TODO check if not already installed, like in Cli/SetupController
+
+        if (file_exists('update')) {
+            //for pre 3.3 webs, update file got replaced by kwf_update table
+            throw new Kwf_Exception_Client("Application seems to be set up already. (update file exists)");
+        }
+
+        if (file_exists('config.local.ini')) {
+            throw new Kwf_Exception_Client("Application seems to be set up already. (config.local.ini file exists)");
+        }
+
+        $db = null;
+        try {
+            $db = Kwf_Registry::get('db');
+        } catch (Exception $e) {
+        }
+
+        if ($db) {
+            try {
+                $tables = Kwf_Registry::get('db')->fetchCol("SHOW TABLES");
+            } catch (Exception $e) {
+                throw new Kwf_Exception_Client("Fetching Tables failed: ".$e->getMessage());
+            }
+            if (in_array('kwf_update', $tables)) {
+                throw new Kwf_Exception_Client("Application seems to be set up already. (kwf_update table exists)");
+            }
+            if ($tables) {
+                throw new Kwf_Exception_Client("Database not empty, incomplete kwf installation or other application already exists in this database.");
+            }
+        }
     }
 
     //TODO add installation step for creating user
