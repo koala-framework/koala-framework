@@ -14,7 +14,9 @@ class Kwf_Util_Setup
         } else {
             die ('zend not found');
         }
-        set_include_path(get_include_path(). PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
+
+        //reset include path, don't use anything from php.ini
+        set_include_path('.' . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
 
         require_once 'Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
