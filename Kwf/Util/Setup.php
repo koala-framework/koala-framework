@@ -14,7 +14,9 @@ class Kwf_Util_Setup
         } else {
             die ('zend not found');
         }
-        set_include_path(get_include_path(). PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
+
+        //reset include path, don't use anything from php.ini
+        set_include_path('.' . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
 
         require_once 'Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
@@ -221,7 +223,7 @@ class Kwf_Util_Setup
 
         //store session data in memcache if avaliable
         if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
-            $ret .= "\nKwf_Util_SessionHandler::init();\n";
+            $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
         $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";

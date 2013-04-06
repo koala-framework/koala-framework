@@ -1,0 +1,22 @@
+language: php
+php:
+  - "5.3"
+before_script:
+  - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - printf "\n" | pecl install imagick
+  - echo "short_open_tag = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - php --info
+  - git clone git://github.com/vivid-planet/library.git
+  - mysql --user=root -e "CREATE USER 'test'@'localhost' IDENTIFIED BY 'test';"
+  - mysql --user=root -e "GRANT ALL PRIVILEGES ON * . * TO 'test'@'localhost';"
+  - echo "`pwd`/library/zend/%version%" > include_path
+  - echo "[production]" > tests/config.local.ini
+  - echo "server.domain = localhost" >> tests/config.local.ini
+  - echo "libraryPath = `pwd`/library" >> tests/config.local.ini
+  - chmod a+w tests/cache/*
+  - chmod a+w tests/temp
+script: "php bootstrap.php test --exclude-group=slow"
+notificaitons:
+  irc: "irc.freenode.org#kwf"
+
