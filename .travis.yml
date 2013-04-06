@@ -4,7 +4,7 @@ php:
 before_script:
   - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - pecl install imagick
+  - printf "\n" | pecl install imagick
   - echo "extension = imagick.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "short_open_tag = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - php --info
