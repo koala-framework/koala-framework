@@ -10,7 +10,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             throw new Kwf_Exception_Client("Application seems to be set up already. (update file exists)");
         }
 
-        if (file_exists('config.local.ini')) {
+        if (file_exists('config.local.ini') && filesize('config.local.ini') > 0) {
             throw new Kwf_Exception_Client("Application seems to be set up already. (config.local.ini file exists)");
         }
 
@@ -30,7 +30,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
                 throw new Kwf_Exception_Client("Application seems to be set up already. (kwf_update table exists)");
             }
             if ($tables) {
-                throw new Kwf_Exception_Client("Database not empty, incomplete kwf installation or other application already exists in this database.");
+                throw new Kwf_Exception_Client("Database not empty, kwf installation or other application already exists in this database.");
             }
         }
     }

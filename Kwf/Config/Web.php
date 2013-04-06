@@ -213,7 +213,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
         $this->_masterFiles[] = $webPath.'/config.ini';
         self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));
-        if (file_exists($webPath.'/config.local.ini')) {
+        if (file_exists($webPath.'/config.local.ini') && filesize($webPath.'/config.local.ini')) {
             $webSection = $this->_getWebSection($section, $webPath.'/config.local.ini');
             $this->_masterFiles[] = $webPath.'/config.local.ini';
             self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.local.ini', $webSection));
