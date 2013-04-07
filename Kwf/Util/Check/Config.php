@@ -58,11 +58,6 @@ class Kwf_Util_Check_Config
         $checks['exif'] = array(
             'name' => 'read EXIF data'
         );
-        /*
-        $checks['gd'] = array(
-            'name' => 'gd Php extension'
-        );
-        */
         $checks['fileinfo'] = array(
             'name' => 'fileinfo Php extension'
         );
@@ -170,7 +165,16 @@ class Kwf_Util_Check_Config
     {
         //if (!extension_loaded('imagick')) {
         if (!class_exists('Imagick')) {
-            throw new Kwf_Exception("Extension 'imagick' is not loaded");
+            if (!extension_loaded('gd')) {
+                return array(
+                    'status' => self::RESULT_FAILED,
+                    'message' => "Extension 'imagick' is not loaded. Fallback extension 'gd' is also not loaded."
+                );
+            }
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Extension 'imagick' is not loaded. 'gd' is used as fallback."
+            );
         }
 
         $im = new Imagick();
@@ -188,6 +192,7 @@ class Kwf_Util_Check_Config
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->getImageBlob();
         $im->destroy();
+
         return array(
             'status' => self::RESULT_OK,
         );
@@ -196,17 +201,10 @@ class Kwf_Util_Check_Config
     private static function _exif()
     {
         if (!function_exists('exif_read_data')) {
-            throw new Kwf_Exception("Function exif_read_data is not available");
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
-    private static function _gd()
-    {
-        if (!extension_loaded('gd')) {
-            throw new Kwf_Exception("Extension 'gd' is not loaded");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Function exif_read_data is not available, rotating images according to exif data won't be possible"
+            );
         }
         return array(
             'status' => self::RESULT_OK,
@@ -251,7 +249,10 @@ class Kwf_Util_Check_Config
     private static function _tidy()
     {
         if (!extension_loaded('tidy')) {
-            throw new Kwf_Exception("Extension 'tidy' is not loaded");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Extension 'tidy' is not loaded."
+            );
         }
         return array(
             'status' => self::RESULT_OK,
@@ -301,7 +302,10 @@ class Kwf_Util_Check_Config
     {
         $gitVersion = exec("git --version", $out, $ret);
         if ($ret) {
-            throw new Kwf_Exception("Git command failed");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Git command is not available."
+            );
         }
         if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
             throw new Kwf_Exception("Invalid git --version response");
@@ -327,14 +331,20 @@ class Kwf_Util_Check_Config
         mkdir('log/error/test-config-check');
         file_put_contents('log/error/test-config-check/test.log', 'blah');
         if (file_get_contents('log/error/test-config-check/test.log') != 'blah') {
-            throw new Kwf_Exception("reading test log failed");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "reading test log failed"
+            );
         }
         unlink('log/error/test-config-check/test.log');
         rmdir('log/error/test-config-check');
 
         //temp folder
         if (!is_writeable('temp')) {
-            throw new Kwf_Exception("temp is not writeable");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "temp is not writeable"
+            );
         }
         if (file_exists('temp/checkconfig-test')) unlink('temp/checkconfig-test');
         touch('temp/checkconfig-test');
@@ -349,7 +359,10 @@ class Kwf_Util_Check_Config
         }
         foreach ($dirs as $d) {
             if (!is_writeable($d)) {
-                throw new Kwf_Exception("$d is not writeable");
+                return array(
+                    'status' => self::RESULT_FAILED,
+                    'message' => "$d is not writeable"
+                );
             }
             if (file_exists($d.'/checkconfig-test')) unlink($d.'/checkconfig-test');
             touch($d.'/checkconfig-test');
@@ -374,10 +387,16 @@ class Kwf_Util_Check_Config
         $m = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
         $dir = $m->getUploadDir();
         if (!file_exists($dir)) {
-             throw new Kwf_Exception("Path for uploads does not eixst");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "Uploads path '$dir' does not exist"
+            );
         }
         if (!is_writable($dir)) {
-            throw new Kwf_Exception("Path for uploads is not writeable");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "Uploads path '$dir' is not writeable"
+            );
         }
         return array(
             'status' => self::RESULT_OK,
@@ -411,7 +430,10 @@ class Kwf_Util_Check_Config
     private static function _apc()
     {
         if (!extension_loaded('apc')) {
-            throw new Kwf_Exception("apc extension not loaded");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Extension 'apc' not loaded"
+            );
         }
 
         if (php_sapi_name() == 'cli') {
@@ -422,7 +444,10 @@ class Kwf_Util_Check_Config
 
         $info = apc_sma_info(false);
         if ($info['num_seg'] * $info['seg_size'] < 128*1000*1000) {
-            throw new Kwf_Exception("apc memory size < 128");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "apc memory size is < 128MB"
+            );
         }
         $value = uniqid();
         if (!apc_store('foobar', $value)) {
@@ -450,7 +475,10 @@ class Kwf_Util_Check_Config
         if (php_sapi_name()!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
             && get_magic_quotes_gpc()
         ) {
-            throw new Kwf_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini"
+            );
         }
         return array(
             'status' => self::RESULT_OK,

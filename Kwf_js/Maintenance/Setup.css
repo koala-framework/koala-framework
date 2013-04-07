@@ -15,7 +15,7 @@
 .kwfSetupWelcome p, .kwfSetupFinished p { margin: 10px }
 
 .kwfSetupRequirements li { margin: 5px; border: 3px solid black; padding: 2px; }
-.kwfSetupRequirements li.success { border-color: green; }
-.kwfSetupRequirements li.failure { border-color: red; }
-.kwfSetupRequirements li.notice { border-color: yellow; }
+.kwfSetupRequirements li.ok { border-color: green; }
+.kwfSetupRequirements li.failed { border-color: red; }
+.kwfSetupRequirements li.warning { border-color: yellow; }
 

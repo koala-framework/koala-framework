@@ -7,7 +7,7 @@ Kwf.Maintenance.SetupRequirements = Ext.extend(Ext.Panel, {
         this.resultTemplate = new Ext.XTemplate(
             '<ul>',
             '<tpl for="checks">',
-            '<li class="<tpl if="success">success</tpl><tpl if="!success">failure</tpl>">',
+            '<li class="{status}">',
                 '{checkText}',
                 '<tpl if="message">:<br />{message}</tpl>',
             '</li>',
