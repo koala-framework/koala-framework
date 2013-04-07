@@ -5,7 +5,7 @@ class Kwf_Util_Check_Config
     {
         Kwf_Loader::registerAutoload();
         if (php_sapi_name() == 'cli') {
-            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
+            $quiet = isset($_SERVER['argv'][2]) && trim($_SERVER['argv'][2]) == 'quiet';
         } else {
             if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
                 header('WWW-Authenticate: Basic realm="Check Config"');
@@ -30,13 +30,13 @@ class Kwf_Util_Check_Config
                 $success = false;
             }
             $ret[] = array(
-                'checkText' => $i['name'],
+                'checkText' => php_sapi_name().' '.$i['name'],
                 'success' => $success,
                 'message' => $message,
             );
         }
 //         if (php_sapi_name()!= 'cli') {
-//             passthru("php bootstrap.php check-config silent 2>&1", $ret);
+//             passthru("php bootstrap.php check-config quiet 2>&1", $ret);
 //             if ($ret) echo "\nFAILED CLI";
 //         }
         return $ret;
@@ -106,39 +106,33 @@ class Kwf_Util_Check_Config
         return $checks;
     }
 
-    public static function _check($quiet = false)
+    private static function _check($quiet = false)
     {
-        $checks = self::_getChecks();
+        $results = self::getCheckResults();
         if ($quiet) {
-            foreach ($checks as $k=>$i) {
-                try {
-                    call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
-                } catch (Exception $e) {
-                    echo "\nERROR: " . $e->getMessage();
+            foreach ($results as $i) {
+                if (!$i['success']) {
+                    echo "\nERROR: ".$i['checkText'].' '.$i['message'];
                 }
             }
             if (php_sapi_name()!= 'cli') {
-                passthru("php bootstrap.php check-config silent 2>&1", $ret);
+                passthru("php bootstrap.php check-config quiet 2>&1", $ret);
                 if ($ret) echo "\nFAILED CLI";
             }
         } else {
-            if (php_sapi_name()!= 'cli') {
-                echo "<h3>Test Webserver...\n</h3>";
-            }
-            foreach ($checks as $k=>$i) {
+            foreach ($results as $i) {
                 echo "<p style=\"margin:0;\">";
-                echo $i['name'].': ';
-                try {
-                    call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
+                echo $i['checkText'].': ';
+                if ($i['success']) {
                     echo "<span style=\"background-color:green\">OK</span>";
-                } catch (Exception $e) {
-                    echo "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
+                } else {
+                    echo "<span style=\"background-color:red\">FAILED:</span>";
                 }
+                echo $i['message'];
                 echo "</p>";
             }
 
             if (php_sapi_name()!= 'cli') {
-                echo "<h3>Test Cli...\n</h3>";
                 passthru("php bootstrap.php check-config 2>&1", $ret);
                 if ($ret) {
                     echo "<span style=\"background-color:red\">FAILED CLI: $ret</span>";
