@@ -47,7 +47,6 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
     
     public function jsonCheckRequirementsAction()
     {
-        //TODO add progress bar
         //TODO add "warning" response (+plus additional info output)
         //TODO check for config.local.ini being writeable and does not yet exist (or is empty)
         //TODO check for web running in root of domain

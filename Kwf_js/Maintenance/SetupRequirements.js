@@ -33,7 +33,7 @@ Kwf.Maintenance.SetupRequirements = Ext.extend(Ext.Panel, {
     refresh: function() {
         Ext.Ajax.request({
             url: '/kwf/maintenance/setup/json-check-requirements',
-            progress: true,
+            mask: this.body,
             success: function(response, options, result) {
                 this.resultTemplate.overwrite(this.body, result);
             },
