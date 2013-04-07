@@ -47,11 +47,21 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
     
     public function jsonCheckRequirementsAction()
     {
-        //TODO add "warning" response (+plus additional info output)
-        //TODO check for config.local.ini being writeable and does not yet exist (or is empty)
         //TODO check for web running in root of domain
         //TODO alternative for maintenance mode: current one needs write perm on bootstrap.php plus sucks across multiple servers
         $this->view->checks = Kwf_Util_Check_Config::getCheckResults();
+        if (!is_writable('config.local.ini')) {
+            $this->view->checks[] = array(
+                'checkText' => 'config.local.ini writeable',
+                'status' => Kwf_Util_Check_Config::RESULT_FAILED,
+                'message' => 'config.local.ini must be writeable during installation',
+            );
+        } else {
+            $this->view->checks[] = array(
+                'checkText' => 'config.local.ini writeable',
+                'status' => Kwf_Util_Check_Config::RESULT_OK,
+            );
+        }
     }
 
     public function jsonInstallAction()
