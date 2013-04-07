@@ -1,6 +1,10 @@
 <?php
 class Kwf_Util_Check_Config
 {
+    const RESULT_OK = 'ok';
+    const RESULT_FAILED = 'failed';
+    const RESULT_WARNING = 'warning';
+
     public static function dispatch()
     {
         Kwf_Loader::registerAutoload();
@@ -21,18 +25,18 @@ class Kwf_Util_Check_Config
         $ret = array();
         $checks = self::_getChecks();
         foreach ($checks as $k=>$i) {
-            $success = true;
-            $message = '';
             try {
-                call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
+                $result = call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
             } catch (Exception $e) {
-                $message = $e->getMessage();
-                $success = false;
+                $result = array(
+                    'status' => self::RESULT_FAILED,
+                    'message' => $e->getMessage(),
+                );
             }
             $ret[] = array(
-                'checkText' => php_sapi_name().' '.$i['name'],
-                'success' => $success,
-                'message' => $message,
+                'checkText' => str_replace('apache2handler', 'apache2', php_sapi_name()).' '.$i['name'],
+                'status' => $result['status'],
+                'message' => isset($result['message']) ? $result['message'] : '',
             );
         }
 //         if (php_sapi_name()!= 'cli') {
@@ -111,8 +115,10 @@ class Kwf_Util_Check_Config
         $results = self::getCheckResults();
         if ($quiet) {
             foreach ($results as $i) {
-                if (!$i['success']) {
-                    echo "\nERROR: ".$i['checkText'].' '.$i['message'];
+                if ($i['status'] == self::RESULT_FAILED) {
+                    echo "\nFAILED: ".$i['checkText'].' '.$i['message'];
+                } else if ($i['status'] == self::RESULT_WARNING) {
+                    echo "\nWARNING: ".$i['checkText'].' '.$i['message'];
                 }
             }
             if (php_sapi_name()!= 'cli') {
@@ -123,12 +129,18 @@ class Kwf_Util_Check_Config
             foreach ($results as $i) {
                 echo "<p style=\"margin:0;\">";
                 echo $i['checkText'].': ';
-                if ($i['success']) {
+                if ($i['status'] == self::RESULT_OK) {
                     echo "<span style=\"background-color:green\">OK</span>";
+                } else if ($i['status'] == self::RESULT_WARNING) {
+                    echo "<span style=\"background-color:yellow\">WARNING</span>";
+                } else if ($i['status'] == self::RESULT_FAILED) {
+                    echo "<span style=\"background-color:red\">FAILED</span>";
                 } else {
-                    echo "<span style=\"background-color:red\">FAILED:</span>";
+                    throw new Kwf_Exception("Unknown result");
                 }
-                echo $i['message'];
+                if ($i['message']) {
+                    echo ': '.$i['message'];
+                }
                 echo "</p>";
             }
 
@@ -149,6 +161,9 @@ class Kwf_Util_Check_Config
         if (version_compare(PHP_VERSION, '5.1.6') < 0) {
             throw new Kwf_Exception("Php version '".PHP_VERSION."' is too old");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _imagick()
@@ -173,6 +188,9 @@ class Kwf_Util_Check_Config
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->getImageBlob();
         $im->destroy();
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _exif()
@@ -180,6 +198,9 @@ class Kwf_Util_Check_Config
         if (!function_exists('exif_read_data')) {
             throw new Kwf_Exception("Function exif_read_data is not available");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _gd()
@@ -187,6 +208,9 @@ class Kwf_Util_Check_Config
         if (!extension_loaded('gd')) {
             throw new Kwf_Exception("Extension 'gd' is not loaded");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _fileinfo()
@@ -209,6 +233,9 @@ class Kwf_Util_Check_Config
         if ($mime != 'application/vnd.oasis.opendocument.text') {
             throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _simplexml()
@@ -216,6 +243,9 @@ class Kwf_Util_Check_Config
         if (!class_exists('SimpleXMLElement')) {
             throw new Kwf_Exception("Extension 'simplexml' is not loaded");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _tidy()
@@ -223,6 +253,9 @@ class Kwf_Util_Check_Config
         if (!extension_loaded('tidy')) {
             throw new Kwf_Exception("Extension 'tidy' is not loaded");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _pdo_mysql()
@@ -230,6 +263,9 @@ class Kwf_Util_Check_Config
         if (!extension_loaded('pdo_mysql')) {
             throw new Kwf_Exception("Extension 'pdo_mysql' is not loaded");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _system()
@@ -238,11 +274,17 @@ class Kwf_Util_Check_Config
         if (!$out) {
             throw new Kwf_Exception("executing 'ls' returned nothing");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _setup_kwf()
     {
         Kwf_Registry::get('config');
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _db_connection()
@@ -250,6 +292,9 @@ class Kwf_Util_Check_Config
         if (Kwf_Registry::get('db')) {
             Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _git()
@@ -265,6 +310,9 @@ class Kwf_Util_Check_Config
         if (version_compare($gitVersion, "1.5.0") < 0) {
             throw new Kwf_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _write_perm()
@@ -307,12 +355,18 @@ class Kwf_Util_Check_Config
             touch($d.'/checkconfig-test');
             unlink($d.'/checkconfig-test');
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _memory_limit()
     {
         $m = ini_get('memory_limit');
         if ($m != -1 && (int)$m < 128) throw new Kwf_Exception("need 128M, got $m");
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _uploads()
@@ -325,6 +379,9 @@ class Kwf_Util_Check_Config
         if (!is_writable($dir)) {
             throw new Kwf_Exception("Path for uploads is not writeable");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _setlocale()
@@ -346,6 +403,9 @@ class Kwf_Util_Check_Config
         } else {
             setlocale(LC_ALL, $locale);
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _apc()
@@ -380,6 +440,9 @@ class Kwf_Util_Check_Config
         if (!apc_delete('foobar')) {
             throw new Kwf_Exception("apc_delete returned false");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _magic_quotes_gpc()
@@ -389,5 +452,8 @@ class Kwf_Util_Check_Config
         ) {
             throw new Kwf_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 }
