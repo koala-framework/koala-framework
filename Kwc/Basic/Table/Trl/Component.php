@@ -23,9 +23,9 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
         foreach ($rows as $row) {
             if ($row->visible) {
                 $rowData = array();
-                $rowData['cssStyle'] = $row->getFrontend('css_style');
+                $rowData['cssStyle'] = $row->getFrontendValue('css_style');
                 for ($i = 1; $i <= $ret['columnCount']; $i++) {
-                    $rowData['data']['column'.$i] = array('value'=>$row->getFrontend('column'.$i), 'cssClass'=>'');
+                    $rowData['data']['column'.$i] = array('value'=>$row->getFrontendValue('column'.$i), 'cssClass'=>'');
                 }
                 $ret['dataRows'][] = $rowData;
             }

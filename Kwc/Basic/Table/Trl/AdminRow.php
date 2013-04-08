@@ -18,7 +18,7 @@ class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
         return $ret;
     }
 
-    public function getFrontend($name)
+    public function getFrontendValue($name)
     {
         $ret = null;
         if ($this->_trlRow->hasColumn($name)) {
