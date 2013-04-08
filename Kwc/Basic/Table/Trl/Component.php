@@ -23,13 +23,15 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
         foreach ($rows as $row) {
             if ($row->visible) {
                 $rowData = array();
-                $rowData['cssStyle'] = $row->cssStyle;
+                $rowData['cssStyle'] = $row->getFrontend('css_style');
                 for ($i = 1; $i <= $ret['columnCount']; $i++) {
-                    $rowData['column'.$i] = $row->getFrontend('column'.$i);
+                    $rowData['data']['column'.$i] = array('value'=>$row->getFrontend('column'.$i), 'cssClass'=>'');
                 }
                 $ret['dataRows'][] = $rowData;
             }
         }
+        $rowStyles = $this->getSetting($this->getData()->chained->componentClass, 'rowStyles');
+        $ret['dataRows'] = Kwc_Basic_Table_Component::addDefaultCssClasses($ret['dataRows'], $rowStyles);
         return $ret;
     }
 
