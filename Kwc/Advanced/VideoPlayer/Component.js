@@ -1,5 +1,7 @@
 Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
     $(el.dom).children('video').mediaelementplayer({
+        //custom path to flash
+        flashName: '/assets/mediaelement/build/flashmediaelement.swf',
         // if the <video width> is not specified, this is the default
         defaultVideoWidth: config.defaultVideoWidth,
         // if the <video height> is not specified, this is the default
