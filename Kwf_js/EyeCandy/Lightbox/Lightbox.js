@@ -227,6 +227,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 //check if there is still a lightbox open
                 //has to be defered because closing happens in 'popstate' event which is async in IE
                 if (Kwf.Utils.HistoryState.currentState.lightbox) {
+                    previousEntries = Kwf.Utils.HistoryState.entries;
                     history.back();
                     closeLightbox.defer(1, this);
                 }
