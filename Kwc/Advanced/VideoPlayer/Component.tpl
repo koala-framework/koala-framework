@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass?>">
 <input type="hidden" class="config" value="<?=htmlspecialchars(json_encode($this->config))?>">
-<video width="360" height="203" id="player2" controls="controls">
+<video width="<?=$this->config['videoWidth']?>" height="<?=$this->config['videoHeight']?>" id="player2" controls="controls">
     <?if ($this->mp4Source) {?>
         <source src="<?=$this->mp4Source?>" type="video/mp4" title="mp4">
     <?}?>

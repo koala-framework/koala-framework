@@ -37,8 +37,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'framesPerSecond' => 25,
             'enableKeyboard' => true,
             'pauseOtherPlayers' => true,
-            'keyActions' => array(),
-            'autoPlay' => false
+            'keyActions' => array()
         );
         return $ret;
     }
@@ -53,6 +52,17 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         $ret['oggSource'] = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, 'ogg', 'video.ogg');
         $ret['config'] = Kwc_Abstract::getSetting($this->getData()->componentClass, 'video');
+        $row = $this->getRow();
+        if ($row->video_width) {
+            $ret['config']['videoWidth'] = $row->video_width;
+        }
+        if ($row->video_height) {
+            $ret['config']['videoHeight'] = $row->video_height;
+        }
+        $ret['config']['autoPlay'] = $row->auto_play;
+        if ($row->loop) {
+            $ret['config']['loop'] = true;
+        }
         return $ret;
     }
 
