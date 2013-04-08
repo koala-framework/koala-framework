@@ -37,7 +37,8 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'framesPerSecond' => 25,
             'enableKeyboard' => true,
             'pauseOtherPlayers' => true,
-            'keyActions' => array()
+            'keyActions' => array(),
+            'autoPlay' => false
         );
         return $ret;
     }
@@ -59,7 +60,9 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         if ($row->video_height) {
             $ret['config']['videoHeight'] = $row->video_height;
         }
-        $ret['config']['autoPlay'] = $row->auto_play;
+        if ($row->auto_play) {
+            $ret['config']['autoPlay'] = true;
+        }
         if ($row->loop) {
             $ret['config']['loop'] = true;
         }
