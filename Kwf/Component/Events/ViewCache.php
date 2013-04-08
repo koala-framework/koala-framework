@@ -149,6 +149,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
                 }
             }
         }
+        $this->_pageParentChanges = array();
     }
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
