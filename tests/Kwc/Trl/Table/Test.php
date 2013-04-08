@@ -39,7 +39,7 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $id = 1;
         $select = new Kwf_Model_Select();
         $select->whereEquals('component_id', 'root-en_table');
-        $select->whereEquals('id', $id);
+        $select->whereEquals('master_id', $id);
         $row = $model->getRow($select);
         $row->column2 = 4312;
         $row->save();
@@ -80,22 +80,28 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $this->assertRegExp("#.*<td class=\"col3 last\">234</td>.*#", $html2);
     }
 
-    public function testHtmlChangedAfterTrlDataInserted()
+    public function insertDefaultEntriesForGermanAndReturnModel()
     {
-        $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
-        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
-
         $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table');
         $model = $component->getComponent()->getChildModel();
 
         $id = 1;
         $select = new Kwf_Model_Select();
         $select->whereEquals('component_id', 'root-de_table');
-        $select->whereEquals('id', $id);
+        $select->whereEquals('master_id', $id);
         $row = $model->getRow($select);
         $row->column2 = 4312;
         $row->visible = 1;
         $row->save();
+        return $model;
+    }
+
+    public function testHtmlChangedAfterTrlDataInserted()
+    {
+        $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
+
+        $this->insertDefaultEntriesForGermanAndReturnModel();
 
         //check cache after create trl-data
         $this->_process();
@@ -109,21 +115,15 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
 
     public function testHtmlChangedAfterTrlDataChanged()
     {
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table');
-        $model = $component->getComponent()->getChildModel();
-
-        $id = 1;
-        $select = new Kwf_Model_Select();
-        $select->whereEquals('component_id', 'root-de_table');
-        $select->whereEquals('id', $id);
-        $row = $model->getRow($select);
-        $row->column2 = 4312;
-        $row->visible = 1;
-        $row->save();
+        $model = $this->insertDefaultEntriesForGermanAndReturnModel();
 
         $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
         $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
 
+        $id = 1;
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('component_id', 'root-de_table');
+        $select->whereEquals('master_id', $id);
         $row = $model->getRow($select);
         $row->column2 = 'abcdef';
         $row->save();
@@ -140,15 +140,7 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
     public function testHtmlChangedAfterMasterDataChanged()
     {
         $id = 1;
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table');
-        $model = $component->getComponent()->getChildModel();
-        $select = new Kwf_Model_Select();
-        $select->whereEquals('component_id', 'root-de_table');
-        $select->whereEquals('id', $id);
-        $row = $model->getRow($select);
-        $row->column2 = 4312;
-        $row->visible = 1;
-        $row->save();
+        $model = $this->insertDefaultEntriesForGermanAndReturnModel();
 
         $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
         $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
@@ -182,7 +174,7 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $id = 1;
         $select = new Kwf_Model_Select();
         $select->whereEquals('component_id', 'root-de_table');
-        $select->whereEquals('id', $id);
+        $select->whereEquals('master_id', $id);
         $row = $model->getRow($select);
         $row->column2 = 4312;
         $row->visible = 1;
