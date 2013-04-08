@@ -45,11 +45,4 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
             'trlModel' => Kwf_Model_Abstract::getInstance($trlModelClass)
         ));
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getCacheMeta();
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Basic_Table_Trl_DataModel');
-        return $ret;
-    }
 }
