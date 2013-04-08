@@ -16,7 +16,6 @@ class Kwc_Trl_Table_Table_MasterModel extends Kwf_Model_FnF
     public function __construct($config = array())
     {
         $config['columns'] = array();
-        $config['namespace'] = 'table_trl_model';
         $config['primaryKey'] = 'id';
         $config['data'] = array(
             array('id'=>1, 'component_id'=>'root-master_table', 'pos'=>0, 'visible'=>1, 'column1'=>'Abc', 'column2'=>'1234', 'column3'=>'234'),

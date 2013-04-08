@@ -13,7 +13,6 @@ class Kwc_Trl_Table_Table_OwnModel extends Kwf_Model_FnF
     public function __construct($config = array())
     {
         $config['columns'] = array();
-        $config['namespace'] = 'trl_table_model';
         $config['primaryKey'] = 'component_id';
         $config['data'] = array(
             array('component_id'=>'root-master_table', 'table_style'=>'standard'),
