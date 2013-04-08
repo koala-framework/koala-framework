@@ -24,6 +24,23 @@ class Kwc_Basic_Table_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         }
     }
 
+    protected function _getRowById($id)
+    {
+        if ($id) {
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('master_id', $id);
+            $componentId = $this->_getParam('componentId');
+            $s->whereEquals('component_id', $componentId);
+            $row = $this->_model->getRow($s);
+        } else {
+            if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
+                throw new Kwf_Exception("Add is not allowed.");
+            }
+            $row = $this->_model->createRow();
+        }
+        return $row;
+    }
+
     private function _getComponent()
     {
         return Kwf_Component_Data_Root::getInstance()

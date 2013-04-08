@@ -34,7 +34,7 @@ class Kwc_Basic_Table_Trl_Model extends Kwf_Model_Proxy
         if ($select) {
             if ($select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
                 foreach ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) as $k=>$i) {
-                    if ($k == 'id') $id = $i;
+                    if ($k == 'master_id') $id = $i;
                 }
             }
         }
@@ -70,7 +70,6 @@ class Kwc_Basic_Table_Trl_Model extends Kwf_Model_Proxy
     {
         $componentId = $this->_getComponentId($select);
         $id = $this->_getId($select);
-
         if ($componentId && $id) {
             $select = new Kwf_Model_Select();
             $c = Kwf_Component_Data_Root::getInstance()
