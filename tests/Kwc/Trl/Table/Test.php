@@ -11,10 +11,8 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
 
     public function testMasterReplaceModel()
     {
-        $model = new Kwc_Basic_Table_Trl_Model(array(
-            'proxyModel' => Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_MasterModel'),
-            'trlModel' => Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_Trl_TrlModel'))
-        );
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-en_table');
+        $model = $component->getComponent()->getChildModel();
         $select = new Kwf_Model_Select();
         $select->whereEquals('component_id', 'root-en_table');
         $count = $model->countRows();
@@ -36,10 +34,8 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
 
     public function testSaveTrl()
     {
-        $model = new Kwc_Basic_Table_Trl_Model(array(
-            'proxyModel' => Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_MasterModel'),
-            'trlModel' => Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_Trl_TrlModel'))
-        );
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-en_table');
+        $model = $component->getComponent()->getChildModel();
         $id = 1;
         $select = new Kwf_Model_Select();
         $select->whereEquals('component_id', 'root-en_table');
@@ -74,25 +70,24 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
     public function testTrlTableRender()
     {
         $components = Kwf_Component_Data_Root::getInstance()->getChildComponents();
-        $html = $components['root-master']->getChildComponent('_table')->render();
-        $html2 = $components['root-en']->getChildComponent('_table')->render();
+        $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-en_table')->render();
         $this->assertNotEquals($html, $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html);
+        $this->assertRegExp("#.*<td class=\"col2\">1234</td>.*#", $html);
+        $this->assertRegExp("#.*<td class=\"col3 last\">1234</td>.*#", $html);
         $this->assertRegExp("#.*<td class=\"col2\">4321</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col3 last\">234</td>.*#", $html2);
     }
 
-    public function testTrlTableCache()
+    public function testHtmlChangedAfterTrlDataInserted()
     {
-        $components = Kwf_Component_Data_Root::getInstance()->getChildComponents();
-        $html = $components['root-master']->getChildComponent('_table')->render();
-        $html2 = $components['root-de']->getChildComponent('_table')->render();
-        preg_match_all("#.*<td class=\"col1\">.*</td>.*#", $html2, $matches);
-        $this->assertEquals(count($matches[0]), 0);
+        $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
 
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table');
+        $model = $component->getComponent()->getChildModel();
 
-        $model = new Kwc_Trl_Table_Table_Trl_TestAdminModel(array(
-            'proxyModel' => Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_MasterModel'),
-            'trlModel' => Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_Trl_TrlModel'))
-        );
         $id = 1;
         $select = new Kwf_Model_Select();
         $select->whereEquals('component_id', 'root-de_table');
@@ -104,7 +99,98 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
 
         //check cache after create trl-data
         $this->_process();
-        $html2 = $components['root-de']->getChildComponent('_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
+        preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
+        $this->assertEquals(count($matches[0]), 1);
+        //check for 4312-value and first master-data
+        $this->assertRegExp("#.*<td class=\"col2\">4312</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html2);
+    }
+
+    public function testHtmlChangedAfterTrlDataChanged()
+    {
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table');
+        $model = $component->getComponent()->getChildModel();
+
+        $id = 1;
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('component_id', 'root-de_table');
+        $select->whereEquals('id', $id);
+        $row = $model->getRow($select);
+        $row->column2 = 4312;
+        $row->visible = 1;
+        $row->save();
+
+        $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
+
+        $row = $model->getRow($select);
+        $row->column2 = 'abcdef';
+        $row->save();
+        //check cache after trl-data change
+        $this->_process();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
+        preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
+        $this->assertEquals(count($matches[0]), 1);
+        //check for abcdef-value and first master-data
+        $this->assertRegExp("#.*<td class=\"col2\">abcdef</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html2);
+    }
+
+    public function testHtmlChangedAfterMasterDataChanged()
+    {
+        $id = 1;
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table');
+        $model = $component->getComponent()->getChildModel();
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('component_id', 'root-de_table');
+        $select->whereEquals('id', $id);
+        $row = $model->getRow($select);
+        $row->column2 = 4312;
+        $row->visible = 1;
+        $row->save();
+
+        $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
+
+        $masterModel = Kwf_Model_Abstract::getInstance('Kwc_Trl_Table_Table_MasterModel');
+        $masterRow = $masterModel->getRow($id);
+        $masterRow->column3 = 123;
+        $masterRow->save();
+        //check cache after master-data change
+        $this->_process();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
+        preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
+        $this->assertEquals(count($matches[0]), 1);
+        //check for 4312-value and first master-data and changed master-data
+        $this->assertRegExp("#.*<td class=\"col2\">4312</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col3 last\">123</td>.*#", $html2);
+    }
+
+    public function testTrlTableCache()
+    {
+        $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
+        preg_match_all("#.*<td class=\"col1\">.*</td>.*#", $html2, $matches);
+        $this->assertEquals(count($matches[0]), 0);
+
+
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table');
+        $model = $component->getComponent()->getChildModel();
+
+        $id = 1;
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('component_id', 'root-de_table');
+        $select->whereEquals('id', $id);
+        $row = $model->getRow($select);
+        $row->column2 = 4312;
+        $row->visible = 1;
+        $row->save();
+
+        //check cache after create trl-data
+        $this->_process();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
         preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
         $this->assertEquals(count($matches[0]), 1);
         //check for 4312-value and first master-data
@@ -117,7 +203,7 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $masterRow->save();
         //check cache after master-data change
         $this->_process();
-        $html2 = $components['root-de']->getChildComponent('_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
         preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
         $this->assertEquals(count($matches[0]), 1);
         //check for 4312-value and first master-data and changed master-data
@@ -131,7 +217,7 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $row->save();
         //check cache after trl-data change
         $this->_process();
-        $html2 = $components['root-de']->getChildComponent('_table')->render();
+        $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
         preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
         $this->assertEquals(count($matches[0]), 1);
         //check for abcdef-value and first master-data
