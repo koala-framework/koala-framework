@@ -39,6 +39,12 @@ Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
         // when this player starts, it will pause other players
         pauseOtherPlayers: config.pauseOtherPlayers,
         // array of keyboard commands
-        keyActions: config.keyActions
+        keyActions: config.keyActions,
+
+        success: function (mediaElement, domObject) {
+            if (config.autoPlay) {
+                mediaElement.play();
+            }
+        }
     });
 });

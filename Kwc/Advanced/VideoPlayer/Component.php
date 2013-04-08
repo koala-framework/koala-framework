@@ -37,7 +37,8 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'framesPerSecond' => 25,
             'enableKeyboard' => true,
             'pauseOtherPlayers' => true,
-            'keyActions' => array()
+            'keyActions' => array(),
+            'autoPlay' => false
         );
         return $ret;
     }
