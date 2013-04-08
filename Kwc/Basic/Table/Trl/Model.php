@@ -1,8 +1,8 @@
 <?php
-class Kwc_Basic_Table_Trl_AdminModel extends Kwf_Model_Proxy
+class Kwc_Basic_Table_Trl_Model extends Kwf_Model_Proxy
 {
-    protected $_rowClass = 'Kwc_Basic_Table_Trl_AdminRow';
-    protected $_rowsetClass = 'Kwc_Basic_Table_Trl_AdminModelRowset';
+    protected $_rowClass = 'Kwc_Basic_Table_Trl_Row';
+    protected $_rowsetClass = 'Kwc_Basic_Table_Trl_ModelRowset';
     protected $_trlModel;
 
     public function __construct($config)

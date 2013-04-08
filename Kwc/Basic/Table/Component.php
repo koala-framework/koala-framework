@@ -70,12 +70,17 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
                 $dataItem['htmlTag'] = $rowStyles[$dataItem['cssStyle']]['tag'];
             }
             for ($i = 1; $i < count($dataItem['data'])+1; $i++) {
+                if (empty($dataItem['data']['column'.$i]['cssClass'])) {
+                    $dataItem['data']['column'.$i]['cssClass'] .= 'col'.$i;
+                } else {
+                    $dataItem['data']['column'.$i]['cssClass'] .= ' col'.$i;
+                }
+
                 if ($i == 1) {
                     $dataItem['data']['column'.$i]['cssClass'] .= ' first';
                 } else if ($i == count($dataItem['data'])) {
                     $dataItem['data']['column'.$i]['cssClass'] .= ' last';
                 }
-                $dataItem['data']['column'.$i]['cssClass'] .= ' col'.$i;
             }
             $ret[] = $dataItem;
             $count++;

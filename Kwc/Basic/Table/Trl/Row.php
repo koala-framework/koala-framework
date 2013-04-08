@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
+class Kwc_Basic_Table_Trl_Row extends Kwf_Model_Proxy_Row
 {
     protected $_trlRow;
 

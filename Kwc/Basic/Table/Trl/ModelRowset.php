@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Table_Trl_AdminModelRowset extends Kwf_Model_Proxy_Rowset
+class Kwc_Basic_Table_Trl_ModelRowset extends Kwf_Model_Proxy_Rowset
 {
     public function __construct(array $config)
     {
