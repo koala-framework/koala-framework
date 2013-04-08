@@ -190,6 +190,9 @@ class Kwf_Media_Output
                 if (isset($headers['Range'])) {
                     $range = explode('=', $headers['Range']);
                     $range = explode('-', $range[1]);
+                    if (!$range[1]) {
+                        $range[1] = filesize($file['file'])-1;
+                    }
                     $ret['contents'] = self::_getPartialFileContent($file['file'], $range);
                     $ret['contentLength'] = strlen($ret['contents']);
                     $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
