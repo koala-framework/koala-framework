@@ -60,6 +60,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             $this->view->checks[] = array(
                 'checkText' => 'config.local.ini writeable',
                 'status' => Kwf_Util_Check_Config::RESULT_OK,
+                'message' => ''
             );
         }
     }
