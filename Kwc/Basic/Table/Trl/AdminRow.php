@@ -39,7 +39,7 @@ class Kwc_Basic_Table_Trl_AdminRow extends Kwf_Model_Proxy_Row
         }
     }
 
-    public function getMaster($name)
+    public function getMasterValueIfNoTrl($name)
     {
         if (!$this->hasTrl($name)) {
             return parent::__get($name);
