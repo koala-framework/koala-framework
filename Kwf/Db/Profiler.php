@@ -16,6 +16,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
         $writer->setFormatter(new Zend_Log_Formatter_Simple("%message%\n"));
         $this->_logger = new Zend_Log($writer);
 
+        /*
         foreach (new DirectoryIterator('/tmp') as $item) {
             if (substr($item->getFilename(), 0, 9) == 'querylog.') {
                 $time = (int)(substr($item->getFilename(), 9, -2));
@@ -24,6 +25,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
                 }
             }
         }
+        */
     }
 
     public function getLogger()
@@ -106,7 +108,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
                 $this->_sumTime += $this->_lastQuery->getElapsedSecs();
                 $this->_logger->debug('Sum: '.$this->_sumTime);
             }
-
+            /*
             $d = array();
             $d['query'] = $this->_lastQuery->getQuery();
             $d['backtrace'] = $this->_lastQuery->getBacktrace();
@@ -117,6 +119,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
             $f = fopen($filename, 'a');
             fwrite($f, "\nquerylog\n".serialize($d));
             fclose($f);
+            */
 
         } else {
             throw new Kwf_Exception('Query not found');
