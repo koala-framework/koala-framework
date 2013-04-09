@@ -12,6 +12,9 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
     {
         if (isset($config['proxyModel'])) $config['proxyModel'] = Kwf_Model_Abstract::getInstance($config['proxyModel']);
         if (isset($config['trlModel'])) $this->_trlModel = Kwf_Model_Abstract::getInstance($config['trlModel']);
+        if (!$this->_trlModel) {
+            throw new Kwf_Exception('Kwc_Directories_Item_Directory_Trl needs to be set a child model.');
+        }
         parent::__construct($config);
     }
 
