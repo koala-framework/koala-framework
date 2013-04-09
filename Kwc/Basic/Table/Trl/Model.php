@@ -69,15 +69,21 @@ class Kwc_Basic_Table_Trl_Model extends Kwf_Model_Proxy
     public function getRow($select)
     {
         $componentId = $this->_getComponentId($select);
-        $id = $this->_getId($select);
-        if ($componentId && $id) {
+        $masterId = $this->_getId($select);
+        if ($componentId && $masterId) {
             $select = new Kwf_Model_Select();
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
-            $select->whereEquals('id', $id);
+            $select->whereEquals('id', $masterId);
             $proxyRow = $this->_proxyModel->getRow($select);
             return $this->getRowByProxiedRow($proxyRow, $componentId);
+        } else {
+            $trlRow = $this->_trlModel->getRow($select);
+            $masterSelect = new Kwf_Model_Select();
+            $masterSelect->whereId($trlRow->master_id);
+            $masterRow = $this->_proxyModel->getRow($masterSelect);
+            return $this->getRowByProxiedRow($masterRow, $trlRow->component_id);
         }
         throw new Kwf_Exception_NotYetImplemented();
     }
