@@ -72,10 +72,7 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
-
-            $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('ignoreVisible'=>true));
-            $select->whereEquals('id', $c->id);
+            $select->whereEquals('id', $id);
         } else {
             throw new Kwf_Exception("invalid select");
         }
