@@ -46,12 +46,41 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['webmSource'] = Kwf_Media::getUrl($this->getData()->componentClass,
-            $this->getData()->componentId, 'webm', 'video.webm');
-        $ret['mp4Source'] = Kwf_Media::getUrl($this->getData()->componentClass,
+        $ret['sources'] = array();
+
+        //mp4
+        $url = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, 'mp4', 'video.mp4');
-        $ret['oggSource'] = Kwf_Media::getUrl($this->getData()->componentClass,
+        if ($url) {
+            $ret['sources'][] = array(
+                'src' => $url,
+                'type' => 'video/mp4',
+                'title' => 'mp4',
+            );
+        }
+
+        //webm
+        $url = Kwf_Media::getUrl($this->getData()->componentClass,
+            $this->getData()->componentId, 'webm', 'video.webm');
+        if ($url) {
+            $ret['sources'][] = array(
+                'src' => $url,
+                'type' => 'video/webm',
+                'title' => 'webm',
+            );
+        }
+
+        //ogg
+        $url = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, 'ogg', 'video.ogg');
+        if ($url) {
+            $ret['sources'][] = array(
+                'src' => $url,
+                'type' => 'video/ogg',
+                'title' => 'ogg',
+            );
+        }
+
         $ret['config'] = Kwc_Abstract::getSetting($this->getData()->componentClass, 'video');
         $row = $this->getRow();
         if ($row->video_width) {
