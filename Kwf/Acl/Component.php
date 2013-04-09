@@ -22,6 +22,7 @@ class Kwf_Acl_Component extends Kwf_Acl
                                 'kwf_component_pages'); // für /component/show
             $this->add(new Zend_Acl_Resource('kwf_component'),
                                 'kwf_component_pages'); // für /component/edit
+            $this->add(new Zend_Acl_Resource('kwf_component_preview'), 'kwf_component_pages');
 
         $this->add(new Zend_Acl_Resource('kwf_component_root')); //Komponenten können hier resourcen anhängen
 

@@ -1,0 +1,48 @@
+.kwfComponentPreview {
+    display: block;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    transition: all 1s;
+    height: 100%;
+    height: calc(100%-3em);
+}
+
+.kwfComponentPreviewIframe {
+    background-color: white;
+    display: block;
+    border:none;
+    margin:0 auto;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    transition: all 1s;
+}
+
+.kwfComponentPreview.desktop .kwfComponentPreviewIframe {
+    width:100%;
+    height: 100%;
+}
+
+.kwfComponentPreview.smartphonePortrait .kwfComponentPreviewIframe {
+    width: 335px;
+    height: 371px;
+}
+
+.kwfComponentPreview.smartphoneLandscape .kwfComponentPreviewIframe {
+    width: 495px;
+    height: 211px;
+}
+
+.kwfComponentPreview.tabletPortrait .kwfComponentPreviewIframe {
+    width: 783px;
+    height: 1039px;
+}
+
+.kwfComponentPreview.tabletLandscape .kwfComponentPreviewIframe {
+    width: 1039px;
+    height: 783px;
+}
+
+.kwfComponentPreview.notebook .kwfComponentPreviewIframe {
+    width: 1381px;
+    height: 783px;
+}
