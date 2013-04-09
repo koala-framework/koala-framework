@@ -58,6 +58,9 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
+    /**
+     * used from Kwc_Basic_Table_Trl_Component
+     */
     public static function addDefaultCssClasses($dataArray, $rowStyles)
     {
         $count = 0;
