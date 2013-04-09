@@ -68,6 +68,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         foreach ($dataArray as $dataItem) {
             if (!isset($dataItem['cssStyle'])) {
                 $dataItem['cssClass'] = $count%2 == 0 ? 'odd' : 'even';
+                $dataItem['htmlTag'] = 'td';
             } else {
                 $dataItem['cssClass'] = $dataItem['cssStyle']. ' ' . ($count%2 == 0 ? 'odd' : 'even');
                 $dataItem['htmlTag'] = $rowStyles[$dataItem['cssStyle']]['tag'];
