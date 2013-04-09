@@ -233,3 +233,13 @@ Ext.util.Format.clickableLink = function(v, p, record){
     if (!v) return '';
     return '<a href="'+v+'" target="_blank">'+v+'</a>';
 };
+
+Ext.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, column){
+    if (!v || v == '') {
+        v = record.data[column.dataIndex+'data'];
+        p.attr += 'style="background: url(/assets/silkicons/link.png) no-repeat right center; border: 1px solid #b4e889; padding-right: 20px;"';
+    } else {
+        p.attr += 'style="background: url(/assets/silkicons/link_break.png) no-repeat right center; border: 1px solid #f16565; padding-right: 20px;"';
+    }
+    return v;
+};
