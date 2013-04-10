@@ -15,7 +15,7 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             $vars['componentWithMaster'] = $componentWithMaster;
             $vars['cssClass'] = Kwc_Abstract::getCssClass($component->componentClass);
             $vars['boxes'] = array();
-            foreach ($innerComponent->getChildBoxes() as $box) {
+            foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
                 $vars['boxes'][$box->box] = $box;
             }
 

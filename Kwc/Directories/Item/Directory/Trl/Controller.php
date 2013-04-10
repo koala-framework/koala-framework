@@ -54,13 +54,14 @@ class Kwc_Directories_Item_Directory_Trl_Controller extends Kwf_Controller_Actio
         foreach ($extConfig['contentEditComponents'] as $ec) {
             $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($ec['componentClass'], 'componentName'));
             $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
-            $this->_columns->add(new Kwf_Grid_Column_Button('edit_'.$i, ' ', 20))
+            $this->_columns->add(new Kwc_Directories_Item_Directory_Trl_ControllerEditButton('edit_'.$i, ' ', 20))
                 ->setColumnType('editContent')
                 ->setEditComponentClass($ec['componentClass'])
+                ->setEditComponent($ec['component'])
                 ->setEditType($ec['type'])
                 ->setEditIdTemplate($ec['idTemplate'])
                 ->setEditComponentIdSuffix($ec['componentIdSuffix'])
-                ->setButtonIcon((string)$icon)
+                ->setButtonIcon($icon->toString(array('arrow')))
                 ->setTooltip(trlKwf('Edit {0}', $name));
             $i++;
         }
