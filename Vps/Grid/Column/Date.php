@@ -1,7 +1,7 @@
 <?php
 class Vps_Grid_Column_Date extends Vps_Grid_Column
 {
-    public function __construct($dataIndex = null, $header = null, $width = 70)
+    public function __construct($dataIndex = null, $header = null, $width = 80)
     {
         if (is_null($header)) $header = trlVps('Date');
         parent::__construct($dataIndex, $header, $width);

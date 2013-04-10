@@ -255,7 +255,12 @@ class Vps_Component_Data
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
-                foreach ($gen->getChildData(null, clone $select) as $d) {
+                $s = clone $select;
+                if (!$noSubPages) {
+                    //unset limit as we may have filter away results
+                    $s->unsetPart('limitCount');
+                }
+                foreach ($gen->getChildData(null, $s) as $d) {
                     $add = true;
                     if (!$noSubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
                         $add = false;
