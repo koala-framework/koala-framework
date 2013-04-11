@@ -3,10 +3,11 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
     autoScroll: true,
     initComponent: function() {
         this.previewMode = false;
+        if (decodeURIComponent(this.getParam('url')).indexOf('preview=true') !== -1) this.previewMode = true;
         this.classNames = ['desktop', 'notebook', 'smartphonePortrait', 'smartphoneLandscape', 'tabletPortrait', 'tabletLandscape'];
         this.tbar = [];
 
-        var kwfComponentPreviewUrl = new Ext.form.TextField({
+        this.kwfComponentPreviewUrl = new Ext.form.TextField({
             name: 'kwfComponentPreviewUrl',
             cls: 'kwfComponentPreviewUrl',
             width: 400,
@@ -15,15 +16,21 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
                 keypress: function(el, ev) {
                     if (ev.keyCode == 13) {
                         var regExp = /(http|https):\/\//;
-                        var url = Ext.getBody().child('.kwfComponentPreviewUrl').dom.value;
+                        var url = el.getValue();
                         if (!regExp.test(url)) url = 'http://' + url;
+                        if (url.indexOf('preview=true') === -1) {
+                            this.previewMode = false;
+                        } else {
+                            this.previewMode = true;
+                        }
                         Ext.getBody().child('.kwfComponentPreviewIframe').dom.src = url;
                     }
-                }
+                },
+                scope: this
             },
             scope: this
         }, this);
-        this.tbar.add(kwfComponentPreviewUrl);
+        this.tbar.add(this.kwfComponentPreviewUrl);
 
         var buttonGroup = [
             new Ext.Button({
@@ -104,14 +111,28 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             cls: 'x-btn-text',
             enableToggle: true,
             text: 'Preview Modus',
+            pressed: this.previewMode,
             listeners: {
                 toggle: function(button, pressed) {
                     this.previewMode = pressed;
-                    window.frames['kwfComponentPreviewIframe'].location.reload();
-                }
-            },
-            scope: this
+                    var iframeUrl = window.frames['kwfComponentPreviewIframe'].location.href;
+                    if (iframeUrl.indexOf(window.location.host)) {
+                        if (this.previewMode) {
+                            iframeUrl = this.buildPreviewLink(iframeUrl);
+                        } else {
+                            if (iframeUrl.indexOf('preview=true') !== -1) {
+                                iframeUrl = iframeUrl.slice(0, iframeUrl.indexOf('preview=true')-1);
+                            }
+                        }
+                    }
+                    Ext.getBody().child('.kwfComponentPreviewIframe').dom.src = iframeUrl;
+                },
+                scope: this
+            }
         }, this);
+
+        this.tbar.add('->');
+        this.tbar.add(previewButton);
 
         var reloadButton = new Ext.Button({
             cls: 'x-btn-icon',
@@ -122,8 +143,6 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             scope: this
         }, this);
 
-        this.tbar.add('->');
-        this.tbar.add(previewButton);
         this.tbar.add(reloadButton);
         Kwf.Component.Preview.superclass.initComponent.call(this);
     },
@@ -133,8 +152,13 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             tag: 'div',
             cls: 'kwfComponentPreview desktop'
         });
-        var iframeUrl = window.location.protocol + '//' + window.location.host + "/";
-        var kwfComponentPreviewIframe = kwfComponentPreview.createChild({
+        var kwfComponentPreviewDevice = kwfComponentPreview.createChild({
+            tag: 'div',
+            cls: 'device'
+        });
+        var iframeUrl = window.location.protocol + '//' + window.location.host;
+        if (this.getParam('url')) iframeUrl += decodeURIComponent(this.getParam('url'));
+        var kwfComponentPreviewIframe = kwfComponentPreviewDevice.createChild({
             tag: 'iframe',
             name: 'kwfComponentPreviewIframe',
             src: iframeUrl,
@@ -149,9 +173,17 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
 
             this.addPreviewAttribute(iframeWindow, this.previewMode);
 
-            Ext.getBody().child('.kwfComponentPreviewUrl').set({
-                value: iframeWindow.location.href
-            }, this);
+            var textfieldValue = iframeWindow.location.href;
+            if (textfieldValue.indexOf(window.location.host)) {
+                if (this.previewMode) {
+                    textfieldValue = this.buildPreviewLink(textfieldValue);
+                } else {
+                    if (textfieldValue.indexOf('preview=true') !== -1) {
+                        textfieldValue = textfieldValue.slice(0, textfieldValue.indexOf('preview=true')-1);
+                    }
+                }
+            }
+            this.kwfComponentPreviewUrl.setValue(textfieldValue);
         }, this);
         Kwf.Component.Preview.superclass.afterRender.call(this);
     },
@@ -160,13 +192,27 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
         var iframeBody = Ext.get(iframeWindow.document.body);
         iframeBody.select('a', true).each(function(a) {
             if (a.dom.href.indexOf(window.location.host) !== -1 && previewMode) { // intern
-                var separator = '?';
-                if (a.dom.href.indexOf('?') !== -1) separator = '&';
-                var link = a.dom.href;
-                if (a.dom.href.indexOf('preview=true') === -1) link += separator + 'preview=true';
+                var link = this.buildPreviewLink(a.dom.href);
                 a.set({ href: link });
             }
         }, this);
+    },
+
+    buildPreviewLink: function(link) {
+        var separator = '?';
+        if (link.indexOf('?') !== -1) separator = '&';
+        if (link.indexOf('preview=true') === -1) link += separator + 'preview=true';
+        return link;
+    },
+
+    getParam: function(param) {
+        var query = window.location.search.substring(1);
+        var params = query.split("&");
+        for (var i=0; i<params.length; i++) {
+            var pair = params[i].split("=");
+            if (pair[0] == param) return pair[1];
+        }
+        return false;
     }
 });
 Ext.reg('kwf.component.preview', Kwf.Component.Preview);
