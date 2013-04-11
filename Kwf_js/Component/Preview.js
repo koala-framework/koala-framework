@@ -165,15 +165,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             cls: 'kwfComponentPreviewIframe'
         });
         kwfComponentPreviewIframe.on('load', function() {
-            var iframeWindow = window.frames['kwfComponentPreviewIframe'];
-
-            iframeWindow.Kwf.onContentReady(function() {
-                this.addPreviewAttribute(iframeWindow, this.previewMode);
-            }, this);
-
-            this.addPreviewAttribute(iframeWindow, this.previewMode);
-
-            var textfieldValue = iframeWindow.location.href;
+            var textfieldValue = window.frames['kwfComponentPreviewIframe'].location.href;
             if (textfieldValue.indexOf(window.location.host)) {
                 if (this.previewMode) {
                     textfieldValue = this.buildPreviewLink(textfieldValue);
@@ -186,16 +178,6 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             this.kwfComponentPreviewUrl.setValue(textfieldValue);
         }, this);
         Kwf.Component.Preview.superclass.afterRender.call(this);
-    },
-
-    addPreviewAttribute: function(iframeWindow, previewMode) {
-        var iframeBody = Ext.get(iframeWindow.document.body);
-        iframeBody.select('a', true).each(function(a) {
-            if (a.dom.href.indexOf(window.location.host) !== -1 && previewMode) { // intern
-                var link = this.buildPreviewLink(a.dom.href);
-                a.set({ href: link });
-            }
-        }, this);
     },
 
     buildPreviewLink: function(link) {
