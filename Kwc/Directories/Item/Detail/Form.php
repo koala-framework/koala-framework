@@ -10,18 +10,19 @@ class Kwc_Directories_Item_Detail_Form extends Kwf_Form
 
     protected function _createChildComponentForm($id, $name = null)
     {
-        if (substr($id, 0, 1)=='-' || substr($id, 0, 1)=='_') {
-            $id = substr($id, 1);
+        if (substr($id, 0, 1)!='-' && substr($id, 0, 1)!='_') {
+            throw new Kwf_Exception("'-' or '_' is missing in id");
         }
-        if (!$name) $name = $id;
-        $idTemplate = '{0}';
+        if (!$name) $name = substr($id, 1);
+        $idTemplate = '{0}'.$id;
 
         $childComponentClass = null;
         $detailClass = $this->getClass();
         foreach (Kwc_Abstract::getSetting($detailClass, 'generators') as $generatorKey => $generatorData) {
             $generator = Kwf_Component_Generator_Abstract::getInstance($detailClass, $generatorKey);
-            if ($childComponentClass = $generator->getComponentByKey($id)) {
-                $idTemplate .= $generator->getIdSeparator() . $id;
+            if ($generator->getIdSeparator() != substr($id, 0, 1)) continue;
+            $childComponentClass = $generator->getComponentByKey($id);
+            if ($childComponentClass) {
                 break;
             }
         }

@@ -13,7 +13,7 @@ class Kwc_Shop_Products_Detail_Form extends Kwc_Directories_Item_Detail_Form
         $fs->add(new Kwf_Form_Field_TextField('title', trlKwf('Title')));
         $fs->add(new Kwf_Form_Field_Checkbox('visible', trlKwf('Visible')));
 
-        $fs->add($this->_createChildComponentForm('image'));
+        $fs->add($this->_createChildComponentForm('-image'));
 
         $mf = $this->add(new Kwf_Form_Field_MultiFields('Prices'));
         $mf->setModel(Kwf_Model_Abstract::getInstance('Kwc_Shop_ProductPrices'));
@@ -24,7 +24,7 @@ class Kwc_Shop_Products_Detail_Form extends Kwc_Directories_Item_Detail_Form
             $fs->add(new Kwf_Form_Field_DateTimeField('valid_from', trlKwf('Valid From')))
                 ->setAllowBlank(false);
 
-        $this->add($this->_createChildComponentForm('text'));
+        $this->add($this->_createChildComponentForm('-text'));
     }
 
     public function setModel($model)
