@@ -210,7 +210,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!$page) {
             throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
-        header('Location: '.$page->getAbsolutePreviewUrl());
+        header('Location: '.$page->getPreviewUrl());
         exit;
     }
 }
