@@ -24,7 +24,8 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
         $detailClasses = Kwc_Abstract::getChildComponentClasses($class, 'detail');
         $forms = array();
         foreach ($detailClasses as $key => $detailClass) {
-            $form = Kwc_Abstract_Form::createComponentForm($detailClass, $class);
+            $formClass = Kwc_Admin::getComponentClass($detailClass, 'Form');
+            $form = new $formClass($key, $detailClass, $class);
             $form->setIdTemplate('{0}');
             $form->setModel(Kwc_Abstract::createChildModel($class));
             $forms[$key] = $form;
