@@ -180,7 +180,7 @@ class Kwf_Component_Data
      */
     public function getPreviewUrl()
     {
-        return '/admin/component/preview/?url='.urlencode($this.getAbsoluteUrl().'?preview=true');
+        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?preview');
     }
 
     public function __get($var)
