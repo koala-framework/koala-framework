@@ -355,7 +355,7 @@ class Kwf_Util_Setup
         $ret .= "if (isset(\$_GET['preview'])) {\n";
         $ret .= "    \$role = Kwf_Registry::get('userModel')->getAuthedUserRole();\n";
         $ret .= "    if (!Kwf_Registry::get('acl')->isAllowed(\$role, 'kwf_component_preview', 'view')) {\n";
-        $ret .= "        header('Location: /admin/component/preview/redirect/?url='.urlencode((Kwf_Config::getValue('server.https') ? 'https' : 'http').'://'.Kwf_Config::getValue('server.domain').\$_SERVER['REQUEST_URI']));\n";
+        $ret .= "        header('Location: /admin/component/preview/redirect/?url='.urlencode(\$_SERVER['REQUEST_URI']));\n";
         $ret .= "        exit;\n";
         $ret .= "    }\n";
         $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";

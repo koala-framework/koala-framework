@@ -9,7 +9,8 @@ class Kwf_Controller_Action_Component_PreviewController extends Kwf_Controller_A
     public function redirectAction()
     {
         if (!$this->_getParam('url')) throw new Kwf_Exception('No redirect url param found');
-        header('Location: ' . urldecode($this->_getParam('url')));
+        if (substr($this->_getParam('url'), 0, 1) !== '/') throw new Kwf_Exception('Invalid Url');
+        header('Location: ' . $this->_getParam('url'));
         exit;
     }
 }
