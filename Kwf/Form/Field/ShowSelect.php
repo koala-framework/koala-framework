@@ -14,8 +14,7 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
             ) {
                 foreach ($data as $row) {
                     if ($row->id == $ret[$this->getName()]) {
-                        $toStringField = $data->getModel()->getToStringField();
-                        $ret[$this->getName()] = $row->$toStringField;
+                        $ret[$this->getName()] = $row->__toString();
                     }
                 }
             } else if (is_array($data)) {
@@ -27,8 +26,7 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
                 if ($referenceField = $this->getReferenceField()) {
                     $ret[$this->getName()] = $row->getParentRow($reference)->$referenceField;
                 } else {
-                    $toStringField = $row->getParentRow($reference)->getModel()->getToStringField();
-                    $ret[$this->getName()] = $row->getParentRow($reference)->$toStringField;
+                    $ret[$this->getName()] = $row->getParentRow($reference)->__toString();
                 }
             }
         }
