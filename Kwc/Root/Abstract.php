@@ -29,11 +29,9 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             //for easy setup of examples just ignore the domain (as we don't have anything to compare to anyway)
             return $parsedUrl['path'];
         }
-        $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host']
-            || Kwf_Config::getValue('server.previewDomain') == $parsedUrl['host'];
+        $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'];
         if (!$b && isset($parsedUrl['port'])) {
-            $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port']
-                || Kwf_Config::getValue('server.previewDomain') == $parsedUrl['host'].':'.$parsedUrl['port'];
+            $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port'];
         }
         if (!$b) {
             $p =  Kwf_Config::getValue('server.noRedirectPattern');

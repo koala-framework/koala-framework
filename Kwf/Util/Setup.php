@@ -194,22 +194,6 @@ class Kwf_Util_Setup
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
 
-        if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
-            foreach ($domains as $domain) {
-                if (isset($domain['previewDomain'])) {
-                    $ret .= "if (\$host == '".$domain['previewDomain']."') {\n";
-                    $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
-                    $ret .= "}\n";
-                }
-            }
-        } else {
-            if (Kwf_Config::getValue('server.previewDomain')) {
-                $ret .= "if (\$host == '".Kwf_Config::getValue('server.previewDomain')."') {\n";
-                $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
-                $ret .= "}\n";
-            }
-        }
-
         if (Kwf_Config::getValue('debug.checkBranch')) {
             $ret .= "if (is_file('kwf_branch') && trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
             $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
@@ -258,9 +242,6 @@ class Kwf_Util_Setup
                 $ret .= "    \$domainMatches = false;\n";
                 foreach ($domains as $domain) {
                     $ret .= "    if ('{$domain['domain']}' == \$host) \$domainMatches = true;\n";
-                    if (isset($domain['previewDomain'])) {
-                        $ret .= "    if ('{$domain['previewDomain']}' == \$host) \$domainMatches = true;\n";
-                    }
                 }
                 $ret .= "    if (!\$domainMatches) {\n";
                 foreach ($domains as $domain) {
@@ -294,11 +275,6 @@ class Kwf_Util_Setup
                     } else {
                         $ret .= "        \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
                     }
-                    if (Kwf_Config::getValue('server.previewDomain')) {
-                        $ret .= "    if (\$host == '".Kwf_Config::getValue('server.previewDomain')."') {\n";
-                        $ret .= "        \$redirect = false;\n";
-                        $ret .= "    }\n";
-                    }
                 $ret .= "    }\n";
             }
             $ret .= "    if (\$redirect) {\n";
@@ -320,7 +296,7 @@ class Kwf_Util_Setup
         }
 
         if (Kwf_Config::getValue('showPlaceholder')) {
-            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath() && substr(Kwf_Setup::getRequestPath(), 0, 8)!='/assets/' && !Kwf_Component_Data_Root::getShowInvisible()) {\n";
+            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath() && substr(Kwf_Setup::getRequestPath(), 0, 8)!='/assets/') {\n";
             $ret .= "    $view = new Kwf_View();\n";
             $ret .= "    echo $view->render('placeholder.tpl');\n";
             $ret .= "    exit;\n";
@@ -328,12 +304,8 @@ class Kwf_Util_Setup
         }
 
 
-        if (Kwf_Config::getValue('preLoginUser')) {
-            if (Kwf_Config::getValue('preLogin')) {
-                $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
-            } else {
-                $ret .= "if (Kwf_Component_Data_Root::getShowInvisible()) {\n";
-            }
+        if (Kwf_Config::getValue('preLogin')) {
+            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
             $ret .= "    \$ignore = false;\n";
             foreach (Kwf_Config::getValueArray('preLoginIgnore') as $i) {
                 $ret .= "    if (substr(\$_SERVER['REDIRECT_URL'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";
@@ -353,7 +325,6 @@ class Kwf_Util_Setup
             $ret .= "           || \$_SERVER['PHP_AUTH_PW']!='".Kwf_Config::getValue('preLoginPassword')."')\n";
             $ret .= "    ) {\n";
             $ret .= "        \$realm = 'Testserver';\n";
-            $ret .= "        if (Kwf_Component_Data_Root::getShowInvisible()) \$realm = 'Preview';\n";
             $ret .= "        header('WWW-Authenticate: Basic realm=\"'.\$realm.'\"');\n";
             $ret .= "        throw new Kwf_Exception_AccessDenied();\n";
             $ret .= "    }\n";
