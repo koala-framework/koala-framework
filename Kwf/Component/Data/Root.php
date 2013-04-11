@@ -91,7 +91,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     }
 
     /**
-     * Returns true if invisible items should be shown, true if app is opened in previewDomain
+     * Returns true if invisible items should be shown, true if app is opened in with preview param
      *
      * @return bool
      */

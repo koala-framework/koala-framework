@@ -22,11 +22,6 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
         return $this->getData()->row->domain;
     }
 
-    public function getPreviewDomain()
-    {
-        return $this->getData()->row->preview_domain;
-    }
-
     public static function getComponentForHost($host)
     {
         $root = Kwf_Component_Data_Root::getInstance();

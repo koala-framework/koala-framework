@@ -178,21 +178,9 @@ class Kwf_Component_Data
      *
      * @return string
      */
-    public function getAbsolutePreviewUrl()
+    public function getPreviewUrl()
     {
-        $ret = $this->url;
-        $data = $this;
-        do {
-            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
-                return 'http://'.$data->getComponent()->getPreviewDomain().$ret;
-            }
-        } while($data = $data->parent);
-
-        if (Kwf_Config::getValue('server.previewDomain')) {
-            return 'http://' . Kwf_Config::getValue('server.previewDomain') . $ret;
-        } else {
-            return 'http://' . Kwf_Config::getValue('server.domain') . $ret;
-        }
+        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?preview');
     }
 
     public function __get($var)

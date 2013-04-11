@@ -5,16 +5,31 @@
     transition: all 1s;
     height: 100%;
     height: calc(100%-3em);
+    overflow-x: hidden;
+}
+
+.kwfComponentPreview .device {
+    margin: 0 auto;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    transition: all 1s;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .kwfComponentPreviewIframe {
     background-color: white;
     display: block;
     border:none;
-    margin:0 auto;
     -webkit-transition: all 1s;
     -moz-transition: all 1s;
     transition: all 1s;
+}
+
+.kwfComponentPreview.desktop .device {
+    width: 100%;
+    height: 100%;
 }
 
 .kwfComponentPreview.desktop .kwfComponentPreviewIframe {
@@ -22,14 +37,35 @@
     height: 100%;
 }
 
+.kwfComponentPreview.smartphonePortrait .device {
+    width: 352px;
+    height: 677px;
+    background: url("/assets/kwf/images/devices/iPhonePortrait.jpg") no-repeat left top;
+    padding: 121px 0px 0px 31px;
+}
+
 .kwfComponentPreview.smartphonePortrait .kwfComponentPreviewIframe {
-    width: 335px;
-    height: 371px;
+    width: 291px;
+    height: 434px;
+}
+
+.kwfComponentPreview.smartphoneLandscape .device {
+    width: 676px;
+    height: 351px;
+    background: url("/assets/kwf/images/devices/iPhoneLandscape.jpg") no-repeat left top;
+    padding: 30px 0px 0px 122px;
 }
 
 .kwfComponentPreview.smartphoneLandscape .kwfComponentPreviewIframe {
-    width: 495px;
-    height: 211px;
+    width: 434px;
+    height: 291px;
+}
+
+.kwfComponentPreview.tabletPortrait .device {
+    width: 1025px;
+    height: 1312px;
+    background: url("/assets/kwf/images/devices/iPadPortrait.jpg") no-repeat left top;
+    padding: 136px 0px 0px 118px;
 }
 
 .kwfComponentPreview.tabletPortrait .kwfComponentPreviewIframe {
@@ -37,12 +73,25 @@
     height: 1039px;
 }
 
+.kwfComponentPreview.tabletLandscape .device {
+    width: 1313px;
+    height: 1026px;
+    background: url("/assets/kwf/images/devices/iPadLandscape.jpg") no-repeat left top;
+    padding: 123px 0px 0px 135px;
+}
+
 .kwfComponentPreview.tabletLandscape .kwfComponentPreviewIframe {
     width: 1039px;
+    height: 783px;
+}
+
+.kwfComponentPreview.notebook .device {
+    width: 1381px;
     height: 783px;
 }
 
 .kwfComponentPreview.notebook .kwfComponentPreviewIframe {
     width: 1381px;
     height: 783px;
+    border: 10px solid #000;
 }
