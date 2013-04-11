@@ -352,6 +352,15 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Util_Pma::dispatch();\n";
         $ret .= "}\n";
 
+        $ret .= "if (isset(\$_GET['preview']) && (\$_GET['preview'] === 'true' || \$_GET['preview'] === true)) {\n";
+        $ret .= "    \$role = Kwf_Registry::get('userModel')->getAuthedUserRole();\n";
+        $ret .= "    if (!Kwf_Registry::get('acl')->isAllowed(\$role, 'kwf_component_preview', 'view')) {\n";
+        $ret .= "        header('Location: '.(Kwf_Config::getValue('server.https') ? 'https' : 'http').'://'.Kwf_Config::getValue('server.domain').'/admin/component/preview/redirect/?url='.urlencode((Kwf_Config::getValue('server.https') ? 'https' : 'http').'://'.Kwf_Config::getValue('server.domain').\$_SERVER['REQUEST_URI']));\n";
+        $ret .= "        exit;\n";
+        $ret .= "    }\n";
+        $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
+        $ret .= "}\n";
+
         $ret .= "Kwf_Benchmark::checkpoint('setUp');\n";
         $ret .= "\n";
 
