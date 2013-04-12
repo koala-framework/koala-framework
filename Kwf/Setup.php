@@ -24,17 +24,18 @@ class Kwf_Setup
 {
     public static $configClass;
     public static $configSection;
+    const CACHE_SETUP_VERSION = 1; //increase version if incompatible changes to generated file are made
 
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
         error_reporting(E_ALL);
         Kwf_Setup::$configClass = $configClass;
-        if (!@include('./cache/setup.php')) {
+        if (!@include('./cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
             if (!file_exists('cache/setup.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
                 Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
             }
-            include('cache/setup.php');
+            include('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
     }
 
