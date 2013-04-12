@@ -66,7 +66,7 @@ class Kwf_Config
     }
 
     /**
-     * TODO: masterFiles should not be optional, but is for now because of old cached setup.php files
+     * TODO: masterFiles should not be optional, but is for now because of old cached setup?.php files
      * @param string[] array of absolute paths to config master files (required)
      */
     public static function checkMasterFiles($masterFiles = null)
