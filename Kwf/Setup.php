@@ -31,7 +31,7 @@ class Kwf_Setup
         error_reporting(E_ALL);
         Kwf_Setup::$configClass = $configClass;
         if (!@include('./cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
-            if (!file_exists('cache/setup.php')) {
+            if (!file_exists('cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
                 Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
             }
