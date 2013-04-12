@@ -3,14 +3,18 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
 {
     private function _canCreateUsIndirectly($class)
     {
+        static $cache = array();
+        if (isset($cache[$class])) return $cache[$class];
         foreach (Kwc_Abstract::getChildComponentClasses($class) as $c) {
             if ($c == $this->_class) {
+                $cache[$class] = true;
                 return true;
             }
             if ($this->_canCreateUsIndirectly($c)) {
                 return true;
             }
         }
+        $cache[$class] = false;
         return false;
     }
 
