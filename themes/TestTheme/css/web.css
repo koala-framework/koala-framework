@@ -1,0 +1,11 @@
+html {
+    overflow-y: scroll;
+}
+
+#page #outerHeader #header,
+#page #outerContent #content,
+#page #outerFooter #footer { width: 900px; margin: 0px auto; text-align: left; }
+
+.webListNone ul { margin: 0px; }
+.webListNone,
+.webListNone li { margin-bottom: 0px; }
