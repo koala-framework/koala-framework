@@ -24,7 +24,7 @@ class Kwf_Setup
 {
     public static $configClass;
     public static $configSection;
-    const CACHE_SETUP_VERSION = 1; //increase version if incompatible changes to generated file are made
+    const CACHE_SETUP_VERSION = 2; //increase version if incompatible changes to generated file are made
 
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
