@@ -28,7 +28,7 @@ class Kwf_Util_Setup
 
         Kwf_Config::checkMasterFiles(Kwf_Registry::get('config')->getMasterFiles());
 
-        file_put_contents('cache/setup.php', self::generateCode());
+        file_put_contents('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php', self::generateCode());
 
         Zend_Registry::_unsetInstance(); //cache/setup.php will call setClassName again
     }
