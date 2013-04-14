@@ -87,6 +87,9 @@ class Kwf_Setup
             case 'cli-server':
                 $requestPath = $_SERVER['SCRIPT_NAME'];
                 break;
+            case 'cgi-fcgi':
+                $requestPath = $_SERVER['REDIRECT_URL'];
+                break;
             default:
                 throw new Kwf_Exception("unsupported sapi: ".php_sapi_name());
         }
