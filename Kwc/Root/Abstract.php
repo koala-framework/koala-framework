@@ -43,10 +43,15 @@ class Kwc_Root_Abstract extends Kwc_Abstract
         return $parsedUrl['path'];
     }
 
-    public function getPageByUrl($path, $acceptLangauge)
+    public function getPageByUrl($path, $acceptLanguage)
+    {
+        return self::getChildPageByPath($this->getData(), $path);
+    }
+
+    public static function getChildPageByPath($component, $path)
     {
         if ($path == '') {
-            $ret = $this->getData()->getChildPage(array('home' => true), array());
+            $ret = $component->getChildPage(array('home' => true), array());
         } else {
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
                 if (Kwc_Abstract::getFlag($c, 'shortcutUrl')) {
@@ -54,7 +59,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract
                     if ($ret) return $ret;
                 }
             }
-            $ret = $this->getData()->getChildPageByPath($path);
+            $ret = $component->getChildPageByPath($path);
         }
 
         if ($ret && !$ret->isPage && Kwf_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
