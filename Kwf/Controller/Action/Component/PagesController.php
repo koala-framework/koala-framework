@@ -390,7 +390,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
         $icon = new Kwf_Asset($config['icon']);
         $this->view->icon = $icon->toString($config['iconEffects']);
-        if ($row->getData()->isHome) {
+        if (isset($row->getData()->isHome) && $row->getData()->isHome) {
             throw new Kwf_ClientException(trlKwf('Cannot set Home Page invisible'));
         }
         if (!$row->visible) {
