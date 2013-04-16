@@ -49,7 +49,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 
-    public function getSubTotal()
+    public final function getSubTotal()
     {
         return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getSubTotal($this);
     }
@@ -64,7 +64,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         return $ret;
     }
 
-    public function getTotal()
+    public final function getTotal()
     {
         return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getTotal($this);
     }
@@ -84,7 +84,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
     /**
      * Nur verwenden wenn Bestellung noch nicht abgeschlossen
      */
-    public function getProductsDataWithProduct(Kwf_Component_Data $subroot)
+    public final function getProductsDataWithProduct(Kwf_Component_Data $subroot)
     {
         return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getProductsData($this, $subroot);
     }
@@ -92,7 +92,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
     /**
      * Kann immer verwendet werden, auch wenn es add_compoment_id gar nicht mehr gibt
      */
-    public function getProductsData()
+    public final function getProductsData()
     {
         return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getProductsData($this, null);
     }
