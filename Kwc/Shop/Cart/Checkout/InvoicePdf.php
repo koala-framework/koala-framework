@@ -39,8 +39,7 @@ class Kwc_Shop_Cart_Checkout_InvoicePdf extends Kwf_Pdf_TcPdf
             $this->MultiCell(35, 0, $moneyHelper->money($item->price), 0, 'R');
         }
 
-        $orderData = Kwc_Shop_Cart_OrderData::getInstance($order->cart_component_class);
-        foreach ($orderData->getSumRows($order) as $addSumRow) {
+        foreach ($order->getSumRows() as $addSumRow) {
             if(isset($addSumRow['class']) && $addSumRow['class']=='totalAmount'){
                 $this->MultiCell(0, 0, $data->trlStaticExecute($addSumRow['text'])." ".$moneyHelper->money($addSumRow['amount']), 0, 'L');
             }

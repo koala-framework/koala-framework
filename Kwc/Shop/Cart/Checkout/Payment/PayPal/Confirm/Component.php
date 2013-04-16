@@ -6,7 +6,8 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component extends Kwc_Shop_C
         $custom = isset($data['custom']) ? $data['custom'] : null;
         $data = Kwf_Util_PayPal_Ipn_LogModel::decodeCallback($custom);
         if ($data) {
-            $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($data['data']['orderId']);
+            $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->parent->componentClass, 'childModel'))
+                ->getReferencedModel('Order')->getRow($data['data']['orderId']);
             if ($order->status == 'cart') {
                 $order->payment_component_id = $this->getData()->parent->componentId;
                 $order->checkout_component_id = $this->getData()->parent->parent->componentId;

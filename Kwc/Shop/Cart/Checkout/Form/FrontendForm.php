@@ -1,7 +1,6 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
 {
-    protected $_modelName = 'Kwc_Shop_Cart_Orders';
     private $_payments;
 
     protected function _initFields()
