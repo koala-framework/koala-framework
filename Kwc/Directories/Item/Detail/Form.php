@@ -21,7 +21,7 @@ class Kwc_Directories_Item_Detail_Form extends Kwf_Form
         foreach (Kwc_Abstract::getSetting($detailClass, 'generators') as $generatorKey => $generatorData) {
             $generator = Kwf_Component_Generator_Abstract::getInstance($detailClass, $generatorKey);
             if ($generator->getIdSeparator() != substr($id, 0, 1)) continue;
-            $childComponentClass = $generator->getComponentByKey($id);
+            $childComponentClass = $generator->getComponentByKey(substr($id, 1));
             if ($childComponentClass) {
                 break;
             }
