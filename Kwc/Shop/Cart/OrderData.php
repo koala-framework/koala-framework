@@ -51,6 +51,16 @@ class Kwc_Shop_Cart_OrderData
         return true;
     }
 
+    public function getSubTotal($order)
+    {
+        $ret = 0;
+        foreach ($order->getChildRows('Products') as $op) {
+            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
+            $ret += $data->getPrice($op);
+        }
+        return $ret;
+    }
+
     public final function getTotal($order)
     {
         $ret = $order->getSubTotal();
