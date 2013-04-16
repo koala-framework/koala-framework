@@ -22,7 +22,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderData
     }
 
     //da kann zB eine Nachnahmegebühr zurückgegeben werden
-    //darf nur von Kwc_Shop_Cart_OrderData::getAdditionalSumRows() aufgerufen werden!
+    //darf nur von Kwc_Shop_Cart_Order::getAdditionalSumRows() aufgerufen werden!
     public function getAdditionalSumRows(Kwc_Shop_Cart_Order $order)
     {
         return array();

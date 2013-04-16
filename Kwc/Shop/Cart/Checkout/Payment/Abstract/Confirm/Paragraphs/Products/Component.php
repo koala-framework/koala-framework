@@ -11,7 +11,8 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Products_Compon
 
     protected function _getOrder()
     {
-        $ret = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getCartOrder();
+        $ret = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getCartOrder();
         if (!$ret || !$ret->data) {
             return null;
         }

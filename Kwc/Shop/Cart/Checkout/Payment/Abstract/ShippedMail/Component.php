@@ -5,10 +5,15 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component extends Kwc_
     {
         $ret = parent::getSettings();
         $ret['generators']['content']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Paragraphs_Component';
-        $ret['recipientSources'] = array(
-            'ord' => 'Kwc_Shop_Cart_Orders'
-        );
         return $ret;
+    }
+
+    public function getRecipientSources()
+    {
+        return array(
+            'ord' => get_class(Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+                ->getReferencedModel('Order'))
+        );
     }
 
     public function getNameForEdit()

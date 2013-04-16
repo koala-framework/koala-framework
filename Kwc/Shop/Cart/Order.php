@@ -69,9 +69,31 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         return $ret;
     }
 
+    //kann überschrieben werden um shipping zB abhängig von bestellmenge zu machen
+    protected function _getShipping()
+    {
+        return Kwc_Abstract::getSetting(
+            Kwc_Abstract::getChildComponentClass($this->getModel()->getCartComponentClass(), 'checkout'),
+            'shipping'
+        );
+    }
+
+    //return false to completely hide shipping
+    protected function _hasShipping()
+    {
+        return true;
+    }
+
     public function getTotal()
     {
-        return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getTotal($this);
+        $ret = $this->getSubTotal();
+        if ($this->_hasShipping($this)) {
+            $ret += $this->_getShipping($this);
+        }
+        foreach ($this->_getAdditionalSumRows($ret) as $r) {
+            $ret += $r['amount'];
+        }
+        return $ret;
     }
 
     public function getSalutation()
@@ -140,12 +162,76 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         $ret['total'] = $m->money($this->getTotal());
         $ret['orderNumber'] = $this->order_number;
 
-        $plugins = Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)
-                    ->getShopCartPlugins();
+        $plugins = $this->getModel()->getShopCartPlugins();
         foreach ($plugins as $plugin) {
             $ret = array_merge($ret, $plugin->getPlaceholders($this));
         }
         return $ret;
+    }
 
+    //kann überschrieben werden um zeilen für alle payments zu ändern
+    protected function _getAdditionalSumRows($total)
+    {
+        $ret = array();
+        $payments = Kwc_Abstract::getChildComponentClasses(
+            Kwc_Abstract::getChildComponentClass($this->getModel()->getCartComponentClass(), 'checkout'), 'payment');
+        if (isset($payments[$this->payment])) {
+            $rows = Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderData
+                ::getInstance($payments[$this->payment])
+                ->getAdditionalSumRows($this);
+            foreach ($rows as $r) $total += $r['amount'];
+            $ret = array_merge($ret, $rows);
+        }
+        foreach ($this->getModel()->getShopCartPlugins() as $p) {
+            $rows = $p->getAdditionalSumRows($this, $total);
+            foreach ($rows as $r) $total += $r['amount'];
+            $ret = array_merge($ret, $rows);
+        }
+        return $ret;
+    }
+
+    public function getSumRows()
+    {
+        $ret = array();
+        $subTotal = $this->getSubTotal();
+        $ret[] = array(
+            'class' => 'valueOfGoods',
+            'text' => trlKwfStatic('value of goods').':',
+            'amount' => $subTotal
+        );
+        if (Kwc_Abstract::getSetting($this->getModel()->getCartComponentClass(), 'vatRate')) {
+            $vat = 1+Kwc_Abstract::getSetting($this->getModel()->getCartComponentClass(), 'vatRate');
+            $ret[] = array(
+                'text' => trlKwfStatic('net amount').':',
+                'amount' => round($subTotal/$vat, 2)
+            );
+            $ret[] = array(
+                'text' => trlKwfStatic('+{0}% VAT', ($vat-1 )*100).':',
+                'amount' => round($subTotal - $subTotal/$vat, 2)
+            );
+        }
+        $shipping = 0;
+        if ($this->_hasShipping($this)) {
+            $shipping = $this->_getShipping($this);
+            $vat = 1+Kwc_Abstract::getSetting($this->getModel()->getCartComponentClass(), 'vatRateShipping');
+            $ret[] = array(
+                'class' => 'shippingHandling',
+                'text' => trlKwfStatic('Shipping and Handling').':',
+                'amount' => round($shipping/$vat, 2)
+            );
+            if (Kwc_Abstract::getSetting($this->getModel()->getCartComponentClass(), 'vatRateShipping')) {
+                $ret[] = array(
+                    'text' => trlKwfStatic('+{0}% VAT', ($vat-1 )*100).':',
+                    'amount' => round($shipping - $shipping/$vat, 2)
+                );
+            }
+        }
+        $ret = array_merge($ret, $this->_getAdditionalSumRows($subTotal+$shipping));
+        $ret[] = array(
+            'class' => 'totalAmount',
+            'text' => trlKwfStatic('Total Amount').':',
+            'amount' => $this->getTotal($this)
+        );
+        return $ret;
     }
 }
