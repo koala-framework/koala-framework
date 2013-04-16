@@ -116,9 +116,6 @@ class Kwf_Util_Update_Runner
     {
         $ret = true;
         foreach ($this->_updates as $update) {
-            if ($method != 'postClearCache' && !$this->_skipClearCache) {
-                Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false, array('skipMaintenanceBootstrap'=>true));
-            }
             Kwf_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
             Kwf_Component_Generator_Abstract::clearInstances();
             Kwf_Component_Data_Root::reset();
