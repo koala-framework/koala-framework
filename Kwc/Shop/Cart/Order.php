@@ -91,46 +91,15 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
      */
     public function getProductsDataWithProduct(Kwf_Component_Data $subroot)
     {
-        return $this->_getProductsData($subroot);
+        return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getProductsData($this, $subroot);
     }
+
     /**
      * Kann immer verwendet werden, auch wenn es add_compoment_id gar nicht mehr gibt
      */
     public function getProductsData()
     {
-        return $this->_getProductsData(null);
-    }
-
-    // if product is not available in sitetree anymore it is deleted (also called by Kwc_Shop_Cart_Component)
-    private function _getProductsData(Kwf_Component_Data $subroot = null)
-    {
-        $ret = array();
-
-        $items = $this->getChildRows('Products');
-        $ret = array();
-
-        foreach ($items as $i) {
-            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
-            $r = array(
-                'additionalOrderData' => $data->getAdditionalOrderData($i),
-                'price' => $data->getPrice($i),
-                'amount' => $data->getAmount($i),
-                'text' => $data->getProductText($i),
-            );
-            if ($subroot) {
-                $addComponent = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentByDbId($i->add_component_id/*, array('subroot' => $subroot)*/);
-                if (!$addComponent) {
-                    //product doesn't exist anymore, also delete from cart
-                    $i->delete();
-                    continue;
-                } else {
-                    $r['product'] = $addComponent->parent;
-                }
-            }
-            $ret[] = (object)$r;
-        }
-        return $ret;
+        return Kwc_Shop_Cart_OrderData::getInstance($this->cart_component_class)->getProductsData($this, null);
     }
 
     public function getPlaceholders()

@@ -130,4 +130,36 @@ class Kwc_Shop_Cart_OrderData
         );
         return $ret;
     }
+
+    // if product is not available in sitetree anymore it is deleted (also called by Kwc_Shop_Cart_Component)
+    public function getProductsData($order, Kwf_Component_Data $subroot = null)
+    {
+        $ret = array();
+
+        $items = $order->getChildRows('Products');
+        $ret = array();
+
+        foreach ($items as $i) {
+            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
+            $r = array(
+                'additionalOrderData' => $data->getAdditionalOrderData($i),
+                'price' => $data->getPrice($i),
+                'amount' => $data->getAmount($i),
+                'text' => $data->getProductText($i),
+            );
+            if ($subroot) {
+                $addComponent = Kwf_Component_Data_Root::getInstance()
+                                ->getComponentByDbId($i->add_component_id/*, array('subroot' => $subroot)*/);
+                if (!$addComponent) {
+                    //product doesn't exist anymore, also delete from cart
+                    $i->delete();
+                    continue;
+                } else {
+                    $r['product'] = $addComponent->parent;
+                }
+            }
+            $ret[] = (object)$r;
+        }
+        return $ret;
+    }
 }
