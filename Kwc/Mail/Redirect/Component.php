@@ -111,10 +111,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             } else {
                 throw new Kwf_Exception('Only models or tables are supported.');
             }
-            $recipientSource = self::getRecipientModelShortcut(
-                $this->getData()->parent->componentClass,
-                $class
-            );
+            $recipientSource = $this->getRecipientModelShortcut($class);
 
             $m = $this->getChildModel();
         }
@@ -158,8 +155,9 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             .'_'.$this->_getHash($parameters);
     }
 
-    public static function getRecipientModelShortcut($recipientSourcesComponentClass, $recipientModelClass)
+    public function getRecipientModelShortcut($recipientModelClass)
     {
+        $recipientSourcesComponentClass = $this->getData()->parent->componentClass;
         $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
         if (!in_array($recipientModelClass, $recipientSources)) {
             throw new Kwf_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
@@ -173,20 +171,13 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         return $recipientSource[0];
     }
 
-    public static function getRecipientModelClass($recipientSourcesComponentClass, $recipientShortcut)
+    protected function _getRecipientModelClass($recipientShortcut)
     {
-        $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
+        $recipientSources = Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'recipientSources');
         if (!isset($recipientSources[$recipientShortcut])) {
             return null;
         }
         return $recipientSources[$recipientShortcut];
-    }
-
-    protected function _getRecipientModelClass($recipientShortcut)
-    {
-        return self::getRecipientModelClass(
-            $this->getData()->parent->componentClass, $recipientShortcut
-        );
     }
 
     private function _getHash(array $hashData)
