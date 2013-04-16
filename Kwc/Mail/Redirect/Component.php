@@ -157,15 +157,14 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
     public function getRecipientModelShortcut($recipientModelClass)
     {
-        $recipientSourcesComponentClass = $this->getData()->parent->componentClass;
-        $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
+        $recipientSources = $this->getData()->parent->getComponent()->getRecipientSources();
         if (!in_array($recipientModelClass, $recipientSources)) {
-            throw new Kwf_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
+            throw new Kwf_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '{$this->getData()->parent->componentClass}'");
         }
 
         $recipientSource = array_keys($recipientSources, $recipientModelClass);
         if (count($recipientSource) >= 2) {
-            throw new Kwf_Exception("'$recipientModelClass' exists ".count($recipientSource)." times in setting 'recipientSources' in '$recipientSourcesComponentClass'. It may only have 1 shortcut.");
+            throw new Kwf_Exception("'$recipientModelClass' exists ".count($recipientSource)." times in setting 'recipientSources' in '{$this->getData()->parent->componentClass}'. It may only have 1 shortcut.");
         }
 
         return $recipientSource[0];
@@ -173,7 +172,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
     protected function _getRecipientModelClass($recipientShortcut)
     {
-        $recipientSources = Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'recipientSources');
+        $recipientSources = $this->getData()->parent->getComponent()->getRecipientSources();
         if (!isset($recipientSources[$recipientShortcut])) {
             return null;
         }

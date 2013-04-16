@@ -40,6 +40,12 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
+    //override for dynamic recipient sources
+    public function getRecipientSources()
+    {
+        return $this->_getSetting('recipientSources');
+    }
+
     public function getHtmlStyles()
     {
         $ret = $this->_getSetting('mailHtmlStyles');
