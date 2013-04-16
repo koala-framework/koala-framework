@@ -35,7 +35,9 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 } else if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
                     $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 } else {
-                    header('Content-Type: text/html');
+                    if (!headers_sent()) {
+                        header('Content-Type: text/html');
+                    }
                     Kwf_Benchmark::output();
                     echo "<pre>";
                     echo htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
