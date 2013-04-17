@@ -21,6 +21,7 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
     public function getLanguage()
     {
         $domains = Kwf_Config::getValueArray('kwc.domains');
+        if (!isset($domains[$this->getData()->id]['language'])) return Kwf_Trl::getInstance()->getWebCodeLanguage();
         return $domains[$this->getData()->id]['language'];
     }
 
