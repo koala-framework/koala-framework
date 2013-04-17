@@ -24,12 +24,14 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Products_Compon
         $ret = parent::getTemplateVars();
 
         $order = $this->_getOrder();
+        $ret['order'] = $order;
         if ($order) {
             $ret['items'] = $order->getProductsData();
             $c = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component');
             $ret['sumRows'] = $c->getComponent()->getSumRows($order);
         }
+
+        $ret['tableFooterText'] = '';
         return $ret;
     }
-
 }

@@ -39,6 +39,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_A
         }
 
         $ret['sumRows'] = $this->_getSumRows($this->_getOrder());
+
+        $ret['tableFooterText'] = '';
+        $ret['footerText'] = '';
         return $ret;
     }
 

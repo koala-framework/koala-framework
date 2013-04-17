@@ -26,6 +26,11 @@
                 <div class="clear"></div>
             </li>
         <? } ?>
+        <? if ($this->tableFooterText) { ?>
+            <li class="footer">
+                <?=$this->tableFooterText?>
+            </li>
+        <? } ?>
     </ul>
 <? } else { ?>
     <p><?=$this->data->trlKwf('Productlist');?></p>
