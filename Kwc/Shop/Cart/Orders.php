@@ -6,6 +6,8 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
     protected $_siblingModels = array('Kwc_Shop_Cart_Checkout_Model');
     protected $_dependentModels = array('Products'=>'Kwc_Shop_Cart_OrderProducts');
     private static $_cartOrderId; //order-id falls sie in der session schon ge-resetted wurde
+    
+    protected $_cartComponentClass;
 
     protected function _init()
     {
@@ -16,6 +18,41 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
         $this->_exprs['customer_number'] = new Kwf_Model_Select_Expr_SumFields(
             array('number', 1100)
         );
+    }
+
+    public function getCartComponentClass()
+    {
+        if ($this->_cartComponentClass) return $this->_cartComponentClass;
+        $cacheId = 'kwc-shop-cart-default-cc';
+        if (!$ret = Kwf_Cache_SimpleStatic::fetch($cacheId)) {
+            $classes = array();
+            foreach (Kwc_Abstract::getComponentClasses() as $c) {
+                if (is_instance_of($c, 'Kwc_Shop_Cart_Component')) {
+                    $classes[] = $c;
+                }
+            }
+            if (count($classes) != 1) {
+                throw new Kwf_Exception("Not exactly one Kwc_Shop_Cart_Component found, set _cartComponentClass manually");
+            }
+            $ret = $classes[0];
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+            $this->_cartComponentClass = $ret;
+        }
+        return $ret;
+    }
+
+    public final function getShopCartPlugins()
+    {
+        if (!isset($this->_chartPlugins)) {
+            $this->_chartPlugins = array();
+            $plugins = Kwc_Abstract::getSetting($this->getCartComponentClass(), 'plugins');
+            foreach ($plugins as $plugin) {
+                if (is_instance_of($plugin, 'Kwc_Shop_Cart_Plugins_Interface')) {
+                    $this->_chartPlugins[] = new $plugin();
+                }
+            }
+        }
+        return $this->_chartPlugins;
     }
 
     public function getCartOrderAndSave()

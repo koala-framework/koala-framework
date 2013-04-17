@@ -24,7 +24,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component extends Kwc_
 
     protected function _getOrder()
     {
-        return Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
-                            ->getCartOrder();
+        return Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getCartOrder();
     }
 }

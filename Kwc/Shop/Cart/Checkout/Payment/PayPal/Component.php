@@ -35,8 +35,8 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
     public function processIpn(Kwf_Util_PayPal_Ipn_LogModel_Row $row, $param)
     {
         if ($row->txn_type == 'web_accept') {
-            $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
-                ->getRow($param['orderId']);
+            $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->componentClass, 'childModel'))
+                ->getReferencedModel('Order')->getRow($param['orderId']);
             if (!$order) {
                 throw new Kwf_Exception("Order not found!");
             }

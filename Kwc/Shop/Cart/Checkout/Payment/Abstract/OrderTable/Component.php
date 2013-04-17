@@ -39,13 +39,16 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_A
         }
 
         $ret['sumRows'] = $this->_getSumRows($this->_getOrder());
+
+        $ret['tableFooterText'] = '';
+        $ret['footerText'] = '';
         return $ret;
     }
 
     protected function _getOrder()
     {
-        return Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
-                            ->getCartOrder();
+        return Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getCartOrder();
     }
 
     protected function _getSumRows($order)
