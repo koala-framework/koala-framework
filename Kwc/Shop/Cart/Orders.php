@@ -36,6 +36,7 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
             }
             $ret = $classes[0];
             Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+            $this->_cartComponentClass = $ret;
         }
         return $ret;
     }
