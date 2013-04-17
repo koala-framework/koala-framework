@@ -32,7 +32,7 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
                 }
             }
             if (count($classes) != 1) {
-                throw new Kwf_Exception("Not exaclty one Kwc_Shop_Cart_Component found, set _cartComponentClass manually");
+                throw new Kwf_Exception("Not exactly one Kwc_Shop_Cart_Component found, set _cartComponentClass manually");
             }
             $ret = $classes[0];
             Kwf_Cache_SimpleStatic::add($cacheId, $ret);
