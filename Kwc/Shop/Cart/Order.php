@@ -49,12 +49,18 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 
+    //override to implement eg. excl. vat prices for the whole order
+    protected function _getProductPrice($orderProduct)
+    {
+        $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($orderProduct->add_component_class);
+        return $data->getPrice($orderProduct);
+    }
+
     public function getSubTotal()
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
-            $ret += $data->getPrice($op);
+            $ret += $this->_getProductPrice($op);
         }
         return $ret;
     }
@@ -135,7 +141,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
             $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
             $r = array(
                 'additionalOrderData' => $data->getAdditionalOrderData($i),
-                'price' => $data->getPrice($i),
+                'price' => $this->_getProductPrice($i),
                 'amount' => $data->getAmount($i),
                 'text' => $data->getProductText($i),
             );
