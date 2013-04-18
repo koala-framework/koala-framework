@@ -13,6 +13,7 @@ class Kwc_Form_Field_File_Component extends Kwc_Form_Field_Abstract_Component
     {
         $ret = new Kwf_Form_Field_File($this->getData()->componentId);
         $ret->setFieldLabel($this->getRow()->field_label);
+        if ($this->getRow()->label_width) $ret->setLabelWidth($this->getRow()->label_width);
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);
         return $ret;
