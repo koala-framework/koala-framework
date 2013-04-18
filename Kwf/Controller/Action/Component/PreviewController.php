@@ -3,6 +3,7 @@ class Kwf_Controller_Action_Component_PreviewController extends Kwf_Controller_A
 {
     public function indexAction()
     {
+        $this->view->config = Kwf_Registry::get('config')->preview->toArray();
         $this->view->xtype = 'kwf.component.preview';
     }
 
