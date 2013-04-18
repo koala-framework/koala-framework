@@ -14,6 +14,8 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         ));
         $ret['assets']['files'][] = 'kwf/Kwc/Advanced/VideoPlayer/Component.js';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
+        $ret['assets']['dep'][] = 'jQuery';
+        $ret['assets']['dep'][] = 'mediaelement';
 
         $ret['video'] = array(
             'defaultVideoWidth' =>  480,
