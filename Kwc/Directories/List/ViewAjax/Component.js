@@ -89,8 +89,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             this.view.applyBaseParams(this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(f) {
-
-                if (f instanceof Kwf.FrontendForm.Field && f.getValue().length < 3) return; //minimum length
+                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < 3) return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
