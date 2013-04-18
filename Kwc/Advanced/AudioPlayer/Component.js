@@ -2,10 +2,10 @@ Kwf.onElementReady('.kwcAdvancedAudioPlayer', function(el, config) {
     $(el.dom).children('audio').mediaelementplayer({
         //custom path to flash
         flashName: '/assets/mediaelement/build/flashmediaelement.swf',
-        // if the <video width> is not specified, this is the default
-        defaultVideoWidth: config.defaultVideoWidth,
-        // if the <video height> is not specified, this is the default
-        defaultVideoHeight: config.defaultVideoHeight,
+        // if the <audio width> is not specified, this is the default
+        defaultAudioWidth: config.defaultAudioWidth,
+        // if the <audio height> is not specified, this is the default
+        defaultAudioHeight: config.defaultAudioHeight,
         // width of audio player
         audioWidth: config.audioWidth,
         // height of audio player
@@ -18,7 +18,7 @@ Kwf.onElementReady('.kwcAdvancedAudioPlayer', function(el, config) {
         enableAutosize: config.enableAutosize,
         // the order of controls you want on the control bar (and other plugins below)
         features: config.features,
-        // Hide controls when playing and mouse is not over the video
+        // Hide controls when playing and mouse is not over the audio
         alwaysShowControls: config.alwaysShowControls,
         // force iPad's native controls
         iPadUseNativeControls: config.iPadUseNativeControls,
@@ -45,4 +45,4 @@ Kwf.onElementReady('.kwcAdvancedAudioPlayer', function(el, config) {
             }
         }
     });
-});
+}, this, { checkVisibility: true });
