@@ -14,17 +14,15 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
             'normal'
         ];
 
-        this.plugins = [
-            new Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax({
-                largeContainerSelector: '.listSwitchLargeContent',
-                transition: this.transition.type,
-                transitionConfig: this.transition
-            }),
-            new Kwf.EyeCandy.List.Plugins.ActiveChanger.Click({
-            }),
-            new Kwf.EyeCandy.List.Plugins.ActiveChanger.DefaultActiveClass({
-            })
-        ];
+        if (!this.plugins) this.plugins = [];
+
+        this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax({
+            largeContainerSelector: '.listSwitchLargeContent',
+            transition: this.transition.type,
+            transitionConfig: this.transition
+        }));
+        this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.Click({}));
+        this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.DefaultActiveClass({}));
         if (this.showArrows) {
             this.plugins.push(new Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks({
             }));
