@@ -10,26 +10,27 @@
                     <?=$this->data->trlKwf('You cart contains {0} products','<strong>'.$this->order->getTotalAmount().'</strong>')?>
                 </p>
             </div>
-            <table class="tblBoxCart" cellspacing="0" cellpadding="0">
+            <div class="tblBoxCart" cellspacing="0" cellpadding="0">
             <?
             $c=1;
             $j=count($this->items);
             foreach ($this->items as $item) { ?>
-                <tr class="products<?=($c%2==0 ? ' row2' : ' row1');?>">
-                    <td class="product"><?=$this->componentLink($item->product, $item->text)?></td>
+                <ul class="products<?=($c%2==0 ? ' row2' : ' row1');?>">
+                    <li class="product"><?=$this->componentLink($item->product, $item->text)?></li>
                     <? foreach($item->additionalOrderData as $d) { ?>
-                        <td class="<?=$d['class']?>"><?=$this->data->trlStaticExecute($d['name'])?>: <?=$d['value']?></td>
+                        <li class="<?=$d['class']?>"><?=$this->data->trlStaticExecute($d['name'])?>: <?=$d['value']?></li>
                     <? } ?>
-                    <td class="price"><?=$this->money($item->price)?></td>
-                </tr>
-                <tr class="<?=($c==$j ? 'lastline' : 'line');?>">
-                    <td colspan="<?=(4+count($item->additionalOrderData))?>">
+                    <li class="price"><?=$this->money($item->price)?></li>
+                    <div class="clear"></div>
+                </ul>
+                <ul class="<?=($c==$j ? 'lastline' : 'line');?>">
+                    <li colspan="<?=(4+count($item->additionalOrderData))?>">
                         <div class="line"></div>
-                    </td>
-                </tr>
+                    </li>
+                </ul>
                 <? $c++;
             } ?>
-            </table>
+            </div>
             <ul class="moneyInfo webListNone">
                 <? foreach ($this->sumRows as $row) { ?>
                     <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
