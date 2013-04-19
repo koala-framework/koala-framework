@@ -12,7 +12,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
     }
 
     //für Component und Row
-    public function getContentParts($content = null)
+    public function getContentParts($content = null, $ignoreLinksWithClass = null)
     {
         $classes = $this->_classes;
 
