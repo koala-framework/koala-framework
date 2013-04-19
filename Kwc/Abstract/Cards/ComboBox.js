@@ -5,8 +5,9 @@ Kwc.Abstract.Cards.ComboBox = Ext.extend(Kwf.Form.ComboBox, {
     },
 
     doQuery : function(q, forceAll){
-        this.store.baseParams.id = this.findParentByType('kwf.autoform').getBaseParams().id;
-        this.store.baseParams.parent_id = this.findParentByType('kwf.autoform').getBaseParams().parent_id;
+        var form = this.findParentBy(function(p) { return (p instanceof Kwf.Auto.FormPanel); });
+        this.store.baseParams.id = form.getBaseParams().id;
+        this.store.baseParams.parent_id = form.getBaseParams().parent_id;
         delete this.lastQuery;
         return Kwc.Abstract.Cards.ComboBox.superclass.doQuery.apply(this, arguments);
     }
