@@ -7,16 +7,15 @@ Kwf.Auto.Filter.ComboBox = function(config)
     } else {
         var record = Ext.data.Record.create(['id', 'name', 'displayname']);
         var filterData = config.data;
-        for (var i in filterData) {
+        Ext.each(filterData, function(item, i){
             filterData[i][2] = filterData[i][1];
-            if (filterData[i][1]) {
-                var a = [];
-                while (filterData[i][1].substr(a.length, 1) == ' ') {
-                    a.push('&nbsp;');
-                }
-                filterData[i][1] = a.join('') + filterData[i][1].substr(a.length);
+            filterData[i][1] = filterData[i][1].toString();
+            var a = [];
+            while (filterData[i][1].substr(a.length, 1) == ' ') {
+                a.push('&nbsp;');
             }
-        }
+            filterData[i][1] = a.join('') + filterData[i][1].substr(a.length);
+        });
         var filterStore = new Ext.data.Store({
             reader: new Ext.data.ArrayReader({}, record),
             data: filterData
