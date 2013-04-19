@@ -12,6 +12,7 @@ class Kwc_Form_Field_Radio_Component extends Kwc_Form_Field_Select_Component
     {
         $ret = new Kwf_Form_Field_Radio($this->getData()->componentId);
         $ret->setFieldLabel($this->getRow()->field_label);
+        if ($this->getRow()->label_width) $ret->setLabelWidth($this->getRow()->label_width);
         $ret->setOutputType($this->getRow()->output_type);
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);

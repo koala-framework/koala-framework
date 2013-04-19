@@ -3,14 +3,18 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Image_Events
 {
     private function _canCreateUsIndirectly($class)
     {
+        static $cache = array();
+        if (isset($cache[$class])) return $cache[$class];
         foreach (Kwc_Abstract::getChildComponentClasses($class, array('generatorFlags'=>array('static'=>true))) as $c) {
             if ($c == $this->_class) {
+                $cache[$class] = true;
                 return true;
             }
             if ($this->_canCreateUsIndirectly($c)) {
                 return true;
             }
         }
+        $cache[$class] = false;
         return false;
     }
 

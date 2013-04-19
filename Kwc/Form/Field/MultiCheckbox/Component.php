@@ -17,6 +17,7 @@ class Kwc_Form_Field_MultiCheckbox_Component extends Kwc_Form_Field_Abstract_Com
         );
         $ret->setName($this->getData()->componentId);
         $ret->setFieldLabel($this->getRow()->field_label);
+        if ($this->getRow()->label_width) $ret->setLabelWidth($this->getRow()->label_width);
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);
         $ret->setShowCheckAllLinks($this->getRow()->show_check_all_links);
