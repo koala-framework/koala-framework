@@ -107,13 +107,19 @@ class Kwf_Media_Output
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
-            $ret['headers'][] = 'Accept-Ranges: bytes';
-            if (isset($headers['Range'])) {
-                $ret['responseCode'] = 206;
-                $ret['headers'][] = array('Partial Content', true, 206);
+            if (substr($file['mimeType'], 0, 12) != 'application/') {
+                $ret['headers'][] = 'Accept-Ranges: bytes';
+                if (isset($headers['Range'])) {
+                    $ret['responseCode'] = 206;
+                    $ret['headers'][] = array('Partial Content', true, 206);
+                } else {
+                    $ret['responseCode'] = 200;
+                }
             } else {
+                $ret['headers'][] = 'Accept-Ranges: none';
                 $ret['responseCode'] = 200;
             }
+
             if (isset($file['etag'])) {
                 $ret['headers'][] = 'ETag: ' . $file['etag'];
             } else {
