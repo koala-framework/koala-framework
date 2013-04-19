@@ -21,8 +21,7 @@ class Kwc_Directories_List_ViewMap_Coordinates_Component extends Kwc_Abstract_Aj
             ->where(new Kwf_Model_Select_Expr_Higher('longitude', $lowestLng))
             ->where(new Kwf_Model_Select_Expr_Higher('latitude', $lowestLat))
             ->where(new Kwf_Model_Select_Expr_Lower('longitude', $highestLng))
-            ->where(new Kwf_Model_Select_Expr_Lower('latitude', $highestLat))
-            ->order('name', 'ASC');
+            ->where(new Kwf_Model_Select_Expr_Lower('latitude', $highestLat));
 
         $parentComponentClass = $this->getData()->parent->componentClass;
         $itemDirectory = $this->getData()->parent->parent->getComponent()->getItemDirectory();
