@@ -100,6 +100,36 @@ class Kwc_Basic_Text_ModelContentTest extends Kwc_TestAbstract
                         ), 'foo</a></p>'), $parts);
     }
 
+    public function testContentPartsInvalidLinkWithIgnoreClass()
+    {
+        $c = $this->_root->getComponentById(1003)->getComponent();
+        $row = $c->getRow();
+        $parts = $row->getContentParts('<p><a class="ignore" href="http://www.vivid-planet.com/">foo</a></p>', 'ignore');
+        $this->assertEquals(array('<p>', '<a class="ignore" href="http://www.vivid-planet.com/">', 'foo</a></p>'), $parts);
+
+        $parts = $row->getContentParts('<p><a class="ignore" href="mailto:foo@bar.com">foo</a></p>', 'ignore');
+        $this->assertEquals(array('<p>', '<a class="ignore" href="mailto:foo@bar.com">', 'foo</a></p>'), $parts);
+    }
+
+    public function testContentPartsInvalidLinkWithIncorrectIgnoreClass()
+    {
+        $c = $this->_root->getComponentById(1003)->getComponent();
+        $row = $c->getRow();
+        $parts = $row->getContentParts('<p><a class="ignore" href="http://www.vivid-planet.com/">foo</a></p>', 'otherIgnore');
+        $this->assertEquals(array('<p>', array(
+                            'type' => 'invalidLink',
+                            'href' => 'http://www.vivid-planet.com/',
+                            'html' => '<a class="ignore" href="http://www.vivid-planet.com/">',
+                        ), 'foo</a></p>'), $parts);
+
+        $parts = $row->getContentParts('<p><a class="ignore" href="mailto:foo@bar.com">foo</a></p>', 'otherIgnore');
+        $this->assertEquals(array('<p>', array(
+                            'type' => 'invalidLink',
+                            'href' => 'mailto:foo@bar.com',
+                            'html' => '<a class="ignore" href="mailto:foo@bar.com">',
+                        ), 'foo</a></p>'), $parts);
+    }
+
     public function testContentPartsValidLink()
     {
         $c = $this->_root->getComponentById(1003)->getComponent();
