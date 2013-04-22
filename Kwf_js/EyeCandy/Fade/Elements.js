@@ -127,6 +127,9 @@ Kwf.Fade.Elements.prototype = {
             return;
         }
         var nextEl = Ext.get(this.fadeElements[this.next]);
+        if (activeEl.id == nextEl.id) {
+            return;
+        }
         if(this.animationType == 'slide') { //TODO implement different animation-types
             // set default direction
             var dir = 'r';
