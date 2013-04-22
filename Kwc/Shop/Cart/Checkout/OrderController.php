@@ -63,6 +63,7 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
             }
         }
         $customerForm->fields['email']->setAllowBlank(true);
+        $customerForm->setAllowEmptyCart(true);
 
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             $g = Kwc_Abstract::getSetting($c, 'generators');
