@@ -198,6 +198,12 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
             $dataKeys = array_slice($dataKeys, 0, $limitCount);
         }
+
+        if ($select->hasPart(Kwf_Model_Select::UNION)) {
+            foreach ($select->getPart(Kwf_Model_Select::UNION) as $unionSel) {
+                $dataKeys = array_merge($dataKeys, $this->_selectDataKeys($unionSel, $inData));
+            }
+        }
         return $dataKeys;
     }
 
