@@ -49,6 +49,19 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 
+    //override in addToCart
+    public final function getProductText($orderProduct)
+    {
+        $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($orderProduct->add_component_class);
+        return $data->getProductText($orderProduct);
+    }
+
+    //override _getProductPrice
+    public final function getProductPrice($orderProduct)
+    {
+        return $this->_getProductPrice($orderProduct);
+    }
+
     //override to implement eg. excl. vat prices for the whole order
     protected function _getProductPrice($orderProduct)
     {

@@ -33,8 +33,8 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_A
                 'product' => $addComponent->parent,
                 'row' => $i,
                 'additionalOrderData' => $additionalOrderData,
-                'price' => $addComponent->getComponent()->getPrice($i),
-                'text' => $addComponent->getComponent()->getProductText($i),
+                'price' => $i->getProductPrice(),
+                'text' => $i->getProductText(),
             );
         }
 
