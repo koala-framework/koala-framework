@@ -11,7 +11,15 @@
     <body class="frontend">
         <div id="page">
             <div id="outerHeader">
-                <div id="header">&nbsp;</div>
+                <div id="header">
+                    <div id="searchBox">
+                        <?=$this->component($this->boxes['searchBox']);?>
+                    </div>
+                    <div id="title">
+                        <h1>Lorem Ipsum</h1>
+                        <h2>Dolor Sit Amet</h2>
+                    </div>
+                </div>
             </div>
             <div id="outerContent">
                 <div id="content">

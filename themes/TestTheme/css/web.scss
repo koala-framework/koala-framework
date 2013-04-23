@@ -1,0 +1,55 @@
+@import "susy";
+@import "compass/utilities/general/clearfix";
+
+html {
+    overflow-y: scroll;
+}
+
+
+body.frontend {
+    background-color: #ccc;
+}
+
+#page {
+    background-color: #eee;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+$total-columns  : 2;
+$column-width   : 450px;
+$gutter-width   : 0;
+$grid-padding   : 0;
+
+#page {
+    #header {
+        @include pie-clearfix;
+        @include container;
+
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background-color: #fff;
+        padding: 20px;
+
+        #title {
+            @include span-columns(1, $total-columns);
+            h1 {
+                font-size: 25px;
+                color: #111;
+                font-weight: bold;
+            }
+            h2 {
+                font-size: 15px;
+                color: #7a7a7a;
+                font-weight: normal;
+            }
+        }
+        #searchBox {
+            @include span-columns(1 omega, $total-columns);
+        }
+    }
+}
+
+.webListNone ul { margin: 0px; }
+.webListNone,
+.webListNone li { margin-bottom: 0px; }

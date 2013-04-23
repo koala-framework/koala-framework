@@ -40,6 +40,19 @@ class TestTheme_Component extends Kwf_Component_Theme_Abstract
             'inherit' => true,
         );
 
+        $ret['generators']['searchBox'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'TestTheme_FulltextSearch_Box_Component',
+            'unique' => true,
+            'inherit' => true
+        );
+
+        $ret['generators']['search'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'TestTheme_FulltextSearch_Search_Directory_Component',
+            'name' => trlStatic('Suche')
+        );
+
         $ret['editComponents'] = array('title', 'metaTags', 'openGraph');
 
         $ret['contentWidth'] = 800;
@@ -47,7 +60,8 @@ class TestTheme_Component extends Kwf_Component_Theme_Abstract
             'subMenu' => 200
         );
 
-        $ret['assets']['files'][] = 'kwf/themes/TestTheme/css/*';
+        $ret['assets']['files'][] = 'kwf/themes/TestTheme/css/master.css';
+        $ret['assets']['files'][] = 'kwf/themes/TestTheme/css/web.scss';
 
         return $ret;
     }
