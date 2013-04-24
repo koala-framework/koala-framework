@@ -89,6 +89,7 @@ class Kwf_Util_ClearCache
 
     private function _refresh($type, $output)
     {
+        ini_set('memory_limit', '256M');
         if ($type == 'setup') {
 
             file_put_contents('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));

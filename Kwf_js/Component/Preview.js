@@ -32,6 +32,51 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
         }, this);
         this.tbar.add(this.kwfComponentPreviewUrl);
 
+        if (this.config.responsive) {
+            this.addResponsiveButtons();
+        }
+        
+        var previewButton = new Ext.Button({
+            cls: 'x-btn-text',
+            enableToggle: true,
+            text: 'Preview Modus',
+            pressed: this.previewMode,
+            listeners: {
+                toggle: function(button, pressed) {
+                    this.previewMode = pressed;
+                    var iframeUrl = window.frames['kwfComponentPreviewIframe'].location.href;
+                    if (iframeUrl.indexOf(window.location.host)) {
+                        if (this.previewMode) {
+                            iframeUrl = this.buildPreviewLink(iframeUrl);
+                        } else {
+                            if (iframeUrl.indexOf('preview') !== -1) {
+                                iframeUrl = iframeUrl.slice(0, iframeUrl.indexOf('preview')-1);
+                            }
+                        }
+                    }
+                    Ext.getBody().child('.kwfComponentPreviewIframe').dom.src = iframeUrl;
+                },
+                scope: this
+            }
+        }, this);
+
+        this.tbar.add('->');
+        this.tbar.add(previewButton);
+
+        var reloadButton = new Ext.Button({
+            cls: 'x-btn-icon',
+            icon: '/assets/silkicons/arrow_rotate_clockwise.png',
+            handler: function() {
+                window.frames['kwfComponentPreviewIframe'].location.reload();
+            },
+            scope: this
+        }, this);
+
+        this.tbar.add(reloadButton);
+        Kwf.Component.Preview.superclass.initComponent.call(this);
+    },
+    
+    addResponsiveButtons: function() {
         var buttonGroup = [
             new Ext.Button({
                 cls: 'x-btn-text',
@@ -106,45 +151,6 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             }, this);
             this.tbar.add(extButton);
         }, this);
-
-        var previewButton = new Ext.Button({
-            cls: 'x-btn-text',
-            enableToggle: true,
-            text: 'Preview Modus',
-            pressed: this.previewMode,
-            listeners: {
-                toggle: function(button, pressed) {
-                    this.previewMode = pressed;
-                    var iframeUrl = window.frames['kwfComponentPreviewIframe'].location.href;
-                    if (iframeUrl.indexOf(window.location.host)) {
-                        if (this.previewMode) {
-                            iframeUrl = this.buildPreviewLink(iframeUrl);
-                        } else {
-                            if (iframeUrl.indexOf('preview') !== -1) {
-                                iframeUrl = iframeUrl.slice(0, iframeUrl.indexOf('preview')-1);
-                            }
-                        }
-                    }
-                    Ext.getBody().child('.kwfComponentPreviewIframe').dom.src = iframeUrl;
-                },
-                scope: this
-            }
-        }, this);
-
-        this.tbar.add('->');
-        this.tbar.add(previewButton);
-
-        var reloadButton = new Ext.Button({
-            cls: 'x-btn-icon',
-            icon: '/assets/silkicons/arrow_rotate_clockwise.png',
-            handler: function() {
-                window.frames['kwfComponentPreviewIframe'].location.reload();
-            },
-            scope: this
-        }, this);
-
-        this.tbar.add(reloadButton);
-        Kwf.Component.Preview.superclass.initComponent.call(this);
     },
 
     afterRender: function() {

@@ -21,32 +21,36 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
             }, this);
         }
 
-        var editPanels = [];
+        this.initEditPanels();
+
+        this.tabs = new Ext.TabPanel({
+            region: 'center',
+            activeTab: 0,
+            items: this.editPanels
+        });
+        this.proxyItem = this.grid;
+        this.items = [this.grid, this.tabs];
+
+        Kwc.Directories.Item.Directory.TabsPanel.superclass.initComponent.call(this);
+    },
+
+    initEditPanels: function() {
+        this.editPanels = [];
         if (!this.hideDetailsController) {
-            this.detailsForm = Ext.ComponentMgr.create({
+            this.detailsForm = Ext.ComponentMgr.create(Ext.applyIf({
                 xtype: this.detailsXtype,
                 controllerUrl: this.detailsControllerUrl,
                 title: trlKwf('Details')
-            });
+            }, this.details));
             this.grid.addBinding(this.detailsForm);
-            editPanels.push(this.detailsForm);
+            this.editPanels.push(this.detailsForm);
         }
 
         this.contentEditComponents.each(function(ec) {
-            editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
+            this.editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
                 this.componentConfigs, ec, {}, this.grid
             ));
         }, this);
-
-        var tabs = new Ext.TabPanel({
-            region: 'center',
-            activeTab: 0,
-            items: editPanels
-        });
-        this.proxyItem = this.grid;
-        this.items = [this.grid, tabs];
-
-        Kwc.Directories.Item.Directory.TabsPanel.superclass.initComponent.call(this);
     },
     applyBaseParams: function(baseParams) {
         if (baseParams.id) delete baseParams.id;

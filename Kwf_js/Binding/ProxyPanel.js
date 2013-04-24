@@ -51,5 +51,11 @@ Kwf.Binding.ProxyPanel = Ext.extend(Kwf.Binding.AbstractPanel,
     },
     getAutoLoad: function() {
         return this.proxyItem.getAutoLoad.apply(this.proxyItem, arguments);
+    },
+    getSupportsAdd : function() {
+        return this.proxyItem.getSupportsAdd.apply(this.proxyItem, arguments);
+    },
+    onAdd : function() {
+        return this.proxyItem.onAdd.apply(this.proxyItem, arguments);
     }
 });

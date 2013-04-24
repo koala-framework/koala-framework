@@ -1,0 +1,4 @@
+<?php
+class Kwc_FulltextSearch_Search_Directory_Trl_Component extends Kwc_Chained_Trl_MasterAsChild_Component
+{
+}

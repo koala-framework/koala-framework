@@ -26,7 +26,9 @@ class Kwc_Root_CategoryGenerator extends Kwf_Component_Generator_Table
         if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
             $subroot = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
             $component = $subroot[0];
-            while ($component->parent->componentId != 'root') $component = $component->parent;
+            while (!Kwc_Abstract::getFlag($component->componentClass, 'subroot')) {
+                $component = $component->parent;
+            }
             if ($component->componentClass == $this->getClass()) {
                 return $component;
             }
@@ -43,7 +45,9 @@ class Kwc_Root_CategoryGenerator extends Kwf_Component_Generator_Table
             //im prinzip gleicher code wie in _GetParentDataByRow wenn return null gemacht wird, aber das hier wird früher gemacht
             $subroot = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
             $component = $subroot[0];
-            while ($component->parent->componentId != 'root') $component = $component->parent;
+            while (!Kwc_Abstract::getFlag($component->componentClass, 'subroot')) {
+                $component = $component->parent;
+            }
             if ($component->componentClass != $this->getClass()) {
                 Kwf_Benchmark::count('GenTable::getChildData skipped');
                 return array();

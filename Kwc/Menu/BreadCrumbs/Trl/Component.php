@@ -6,7 +6,7 @@ class Kwc_Menu_BreadCrumbs_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
         $ret = parent::getTemplateVars();
         $links = array();
         foreach ($ret['links'] as $m) {
-            $links[] = $this->_getChainedComponent($m);
+            $links[] = self::getChainedByMaster($m, $this->getData());
         }
         $ret['links'] = $links;
         return $ret;

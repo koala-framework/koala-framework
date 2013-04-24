@@ -3,10 +3,12 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
 {
     protected $_buttons = array('save');
     protected $_permissions = array('save', 'add');
-    protected $_modelName = 'Kwc_Shop_Cart_Orders';
 
     protected function _initFields()
     {
+        $this->_form->setModel(Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'))->parent->componentClass, 'childModel'))
+            ->getReferencedModel('Order'));
+
         $this->_form->add(new Kwf_Form_Field_ComboBoxText('origin', trlKwf('Origin')))
             ->setValues(array(
                 //TODO: im web einstellbar machen, pool oder so
@@ -52,6 +54,7 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
         $formClass = Kwc_Admin::getComponentClass($formComponent, 'FrontendForm');
         $customerForm = new $formClass('form', $formComponent);
         $customerForm->setIdTemplate('{0}');
+        $customerForm->setModel($this->_form->getModel());
         $fs->add($customerForm);
         unset($customerForm->fields['payment']);
         foreach ($customerForm->fields as $f) {
@@ -60,6 +63,7 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
             }
         }
         $customerForm->fields['email']->setAllowBlank(true);
+        $customerForm->setAllowEmptyCart(true);
 
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             $g = Kwc_Abstract::getSetting($c, 'generators');

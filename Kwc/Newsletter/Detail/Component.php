@@ -64,12 +64,8 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         }
 
         // check if the necessary modelShortcut is set in 'mail' childComponent
-        $generators = $this->_getSetting('generators');
         // this function checks if everything neccessary is set
-        Kwc_Mail_Redirect_Component::getRecipientModelShortcut(
-            $generators['mail']['component'],
-            get_class($model)
-        );
+        $this->getData()->getChildComponent('-mail')->getChildComponent('-redirect')->getComponent()->getRecipientModelShortcut(get_class($model));
 
         if (!$model->hasColumnMappings('Kwc_Mail_Recipient_Mapping')) {
             throw new Kwf_Exception('Model "' . get_class($model) . '" has to implement column mapping "Kwc_Mail_Recipient_Mapping"');
