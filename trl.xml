@@ -447,6 +447,7 @@ has just been created.</en>
 <hu>Cím</hu>
 <sl>Naziv</sl>
 <es>Título</es>
+<sq>Titulli</sq>
 </text>
 <text>
 <en>Firstname</en>
@@ -461,6 +462,7 @@ has just been created.</en>
 <hu>Keresztnév</hu>
 <sl>Ime</sl>
 <bg>Име</bg>
+<sq>Emri</sq>
 </text>
 <text>
 <en>Lastname</en>
@@ -475,6 +477,7 @@ has just been created.</en>
 <hu>Vezetéknév</hu>
 <sl>Priimek</sl>
 <bg>Фамилия</bg>
+<sq>Mbiemri</sq>
 </text>
 <text>
 <en>Email</en>
@@ -629,6 +632,7 @@ has just been created.</en>
 <es>Femenino</es>
 <bg>Жена </bg>
 <mk>Женски</mk>
+<sq>Femërore</sq>
 </text>
 <text>
 <en>Male</en>
@@ -641,6 +645,7 @@ has just been created.</en>
 <sl>Moški</sl>
 <es>Masculino</es>
 <bg>Мъж</bg>
+<sq>Mashkullore</sq>
 </text>
 <text>
 <en>Gender</en>
@@ -653,6 +658,7 @@ has just been created.</en>
 <sl>Spol</sl>
 <es>Género</es>
 <bg>Пол</bg>
+<sq>Gjinia</sq>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -724,6 +730,7 @@ has just been created.</en>
 <sl>Ime</sl>
 <es>Nombre</es>
 <bg>Име</bg>
+<sq>Emri</sq>
 </text>
 <text>
 <en>Last name</en>
@@ -734,6 +741,7 @@ has just been created.</en>
 <sl>Priimek</sl>
 <es>Apellido</es>
 <bg>Фамилия</bg>
+<sq>Mbiemri</sq>
 </text>
 <text>
 <en>Advice</en>
@@ -2413,6 +2421,7 @@ has just been created.</en>
 <id>517</id>
 <ro>Culoare</ro>
 <sl>Barva</sl>
+<es>Color</es>
 </text>
 <text>
 <en>Font Weight</en>
@@ -4082,6 +4091,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>875</id>
 <ro>Culori</ro>
 <sl>Barve</sl>
+<es>Colores</es>
 </text>
 <text>
 <en>Color small 1</en>
