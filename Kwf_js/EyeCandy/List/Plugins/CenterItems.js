@@ -17,6 +17,7 @@ Kwf.EyeCandy.List.Plugins.CenterItems = Ext.extend(Kwf.EyeCandy.List.Plugins.Abs
 
         if (listItemWrapper) {
             if (this.substractOffset) paddingLeft -= this.substractOffset;
+            if (paddingLeft < 0) paddingLeft = 0;
             listItemWrapper.setStyle('padding-left', paddingLeft+'px');
             this.list.el.setWidth(fullWidth);
         }
