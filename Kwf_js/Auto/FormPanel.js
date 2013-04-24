@@ -357,7 +357,6 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     },
     onAdd : function(options) {
         var cb = function() {
-            this.enable();
             if (this.deleteButton) this.deleteButton.disable();
             this.getAction('delete').disable();
             this.applyBaseParams({id: 0});
