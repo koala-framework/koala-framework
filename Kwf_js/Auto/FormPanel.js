@@ -440,6 +440,10 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
                 return false;
             }
         }, this);
+    },
+
+    getSupportsAdd : function() {
+        return true;
     }
 });
 

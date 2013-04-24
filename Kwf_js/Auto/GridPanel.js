@@ -731,7 +731,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             //im ersten form-binding hinzufügen
             var foundForm = false;
             this.bindings.each(function(b) {
-                if (b.item instanceof Kwf.Auto.FormPanel) {
+                if (b.item.getSupportsAdd()) {
                     b.item.onAdd();
                     foundForm = true;
                     return false;
