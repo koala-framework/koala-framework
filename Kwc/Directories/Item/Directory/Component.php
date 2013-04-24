@@ -31,40 +31,4 @@ abstract class Kwc_Directories_Item_Directory_Component extends Kwc_Directories_
     {
         return $this->getData();
     }
-
-    public static function getCacheMetaForView($view)
-    {
-        $ret = array();
-
-        $dir = $view->parent->getComponent()->getItemDirectory();
-        if (is_string($dir)) {
-            $dirs = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($dir);
-        } else {
-            $dirs = array($dir);
-        }
-        foreach ($dirs as $dir) {
-            $generators = Kwf_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
-            if (!isset($generators[0])) {
-                throw new Kwf_Exception("can't find detail generator"); //oder darf das auftreten?
-                continue;
-            }
-            $generator = $generators[0];
-            $pattern = null;
-            if ($generator->getModel()->hasColumn('component_id')) {
-                //wenns eine component_id gibt und die view unter dem directory liegt können wir genauer löschen
-                $c = $view->parent;
-                if ($c && $c->componentId == $dir->componentId) {
-                    $pattern = '{component_id}-view';
-                } else {
-                    while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
-                    if ($c) {
-                        $pattern = '{component_id}%-view'; // Falls Directory ein parent ist, kann man mit diesem Pattern löschen, sonst nicht
-                    }
-                }
-            }
-            $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
-        }
-        return $ret;
-    }
-
 }
