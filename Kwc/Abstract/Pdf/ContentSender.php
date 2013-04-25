@@ -1,19 +1,17 @@
 <?php
-class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSender_Abstract
+class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSender_Download
 {
     protected function _getPdfComponent()
     {
         return $this->_data->parent;
     }
 
-    public function sendContent($includeMaster)
-    {
-        if ($this->checkAllowed()) {
-            $this->outputPdf();
-        }
-    }
-
     public function outputPdf($name = '', $dest = 'I')
+    {
+        return $this->sendDownload($name, $dest);
+    }
+    
+    public function sendDownload($name = '', $dest = 'I')
     {
         $masterClass = $this->_getMasterClass($this->_data);
         $pdfComponent = $this->_getPdfComponent();
@@ -30,18 +28,5 @@ class Kwc_Abstract_Pdf_ContentSender extends Kwf_Component_Abstract_ContentSende
         $masterClass = Kwc_Admin::getComponentFile($component->componentClass, 'PdfMaster', 'php', true);
         if (!$masterClass) { $masterClass = 'Kwf_Pdf_TcPdf'; }
         return $masterClass;
-    }
-
-    protected function checkAllowed()
-    {
-        $valid = Kwf_Media_Output_Component::isValid($this->_data->componentId);
-        if ($valid == Kwf_Media_Output_IsValidInterface::ACCESS_DENIED) { // send non pdf content to show login-plugin
-            $contentSender = new Kwf_Component_Abstract_ContentSender_Default($this->_data);
-            $contentSender->sendContent(true);
-            return false;
-        } else if ($valid == Kwf_Media_Output_IsValidInterface::INVALID) {
-            throw new Kwf_Exception_NotFound();
-        }
-        return $valid;
     }
 }
