@@ -9114,8 +9114,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1832</id>
 </text>
 <text>
-<en>Do you have any questions, wishes or suggestions about this product?<br />Send us your feedback!</en>
-<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?<br />Senden Sie uns dazu Ihr Feedback!</de>
+<en>Do you have any questions, wishes or suggestions about this product?<br/>Send us your feedback!</en>
+<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?<br/>Senden Sie uns dazu Ihr Feedback!</de>
 <id>1833</id>
 </text>
 <text>
@@ -9148,4 +9148,118 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Account aktivierung</de>
 <id>1839</id>
 </text>
+<text>
+<en>Home</en>
+<id>1840</id>
+</text>
+<text>
+<en>Open Graph</en>
+<id>1841</id>
+</text>
+<text>
+<en>Amount of Money</en>
+<id>1842</id>
+</text>
+<text>
+<en>Mp3 File</en>
+<id>1843</id>
+</text>
+<text>
+<en>Width (px)</en>
+<id>1844</id>
+</text>
+<text>
+<en>Height (px)</en>
+<id>1845</id>
+</text>
+<text>
+<en>Repeat</en>
+<id>1846</id>
+</text>
+<text>
+<en>Auto play</en>
+<id>1847</id>
+</text>
+<text>
+<en>Audio</en>
+<id>1848</id>
+</text>
+<text>
+<en>Files</en>
+<id>1849</id>
+</text>
+<text>
+<en>Mp4 file</en>
+<id>1850</id>
+</text>
+<text>
+<en>Ogg File</en>
+<id>1851</id>
+</text>
+<text>
+<en>Webm file (optional)</en>
+<id>1852</id>
+</text>
+<text>
+<en>Articles.Show categories</en>
+<id>1853</id>
+</text>
+<text>
+<en>Articles.Articles</en>
+<id>1854</id>
+</text>
+<text>
+<en>Hot-topic</en>
+<id>1855</id>
+</text>
+<text>
+<en>Priority</en>
+<id>1856</id>
+</text>
+<text>
+<en>For sorting articles if they have same date</en>
+<id>1857</id>
+</text>
+<text>
+<en>Original Subject</en>
+<id>1858</id>
+</text>
+<text>
+<en>Large Image</en>
+<id>1859</id>
+</text>
+<text>
+<en>Favourites</en>
+<id>1860</id>
+</text>
+<text>
+<en>save as favourite</en>
+<id>1861</id>
+</text>
+<text>
+<en>delete favourite</en>
+<id>1862</id>
+</text>
+<text>
+<en>Label Width</en>
+<id>1863</id>
+</text>
+<text>
+<en>to page</en>
+<id>1864</id>
+</text>
+<text>
+<en>Feedback to page </en>
+<id>1865</id>
+</text>
+<text>
+<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
+<id>1866</id>
+</text>
+<text>
+<en>Download all images</en>
+<de>Alle Bilder herunterladen</de>
+<id>1867</id>
+</text>
 </trl>
+
