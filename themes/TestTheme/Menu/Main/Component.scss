@@ -1,0 +1,35 @@
+@import "compass/css3/images";
+
+.testThemeMenuMain {
+    @include background(linear-gradient(#585858, #3d3d3d));
+    
+    ul {
+        height: 42px;
+    }
+
+    li {
+        height: 42px;
+        border-right: 1px solid #444;
+        float: left;
+        display: block;
+        font-size: 14px;
+        
+        &.last {
+            border-right: none;
+        }
+
+        a {
+            height: 42px;
+            padding: 0 10px;
+            display: block;
+            line-height: 3em;
+            color: #eee;
+
+            &:hover {
+                color: #373737;
+                @include background(linear-gradient(#f9f9f9, #e5e5e5));
+            }
+        }
+    }
+}
+

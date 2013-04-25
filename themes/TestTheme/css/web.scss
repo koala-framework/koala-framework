@@ -11,16 +11,14 @@ body.frontend {
 }
 
 #page {
-    background-color: #eee;
     border-radius: 5px;
-    padding: 20px;
+    padding-top: 20px;
 }
 
 $total-columns  : 2;
-$column-width   : 200px;
+$column-width   : 1024px / 4;
 $gutter-width   : 0px;
 $grid-padding   : 0px;
-$break          : 4;
 
 #page {
     #header {
@@ -29,12 +27,13 @@ $break          : 4;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
         background-color: #fff;
-        padding: 20px;
+        padding-top: 30px;
+        padding-bottom: 20px;
 
         #title {
-            @include span-columns(2 omega, $total-columns);
+            @include span-columns(2 omega);
             h1 {
-                font-size: 25px;
+                font-size: 30px;
                 color: #111;
                 font-weight: bold;
             }
@@ -45,16 +44,44 @@ $break          : 4;
             }
         }
         #searchBox {
-            @include span-columns(2 omega, $total-columns);
+            @include span-columns(2 omega);
         }
-        
-        @include at-breakpoint($break) {
+
+        @include at-breakpoint(4) {
             @include set-container-width;
             #title {
-                @include prefix(1, $break);
+                padding-left: 30px;
+                @include span-columns(2);
             }
             #searchBox {
-                @include span-columns(2 omega, $break);
+                @include span-columns(1 omega);
+            }
+        }
+    }
+    
+    #mainMenu {
+        @include container;
+        @include at-breakpoint(4) {
+            @include set-container-width;
+        }
+    }
+
+    #content {
+        background-color: #eee;
+        @include container;
+
+        #innerContent {
+            @include span-columns(2);
+            margin: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        @include at-breakpoint(4) {
+            @include set-container-width;
+            #innerContent {
+                @include span-columns(3);
             }
         }
     }
