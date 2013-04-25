@@ -22,8 +22,8 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
             } else {
                 $c = $this->_itemDirectory->componentClass;
             }
-            if (!is_instance_of($c, 'Kwc_Directories_Item_Directory_Component')) {
-                throw new Kwf_Exception("_getItemDirectory must return an Kwc_Directories_Item_Directory_Component data object or class-name, '{$c}' given; componentClass is ".get_class($this));
+            if (!is_instance_of($c, 'Kwc_Directories_Item_DirectoryNoAdmin_Component')) {
+                throw new Kwf_Exception("_getItemDirectory must return an Kwc_Directories_Item_DirectoryNoAdmin_Component data object or class-name, '{$c}' given; componentClass is ".get_class($this));
             }
         }
         return $this->_itemDirectory;
