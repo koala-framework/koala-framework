@@ -12,7 +12,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
     {
         parent::__construct($enable);
 
-        $writer = new Zend_Log_Writer_Stream('querylog', 'w');
+        $writer = new Zend_Log_Writer_Stream(APP_PATH . '/querylog', 'w');
         $writer->setFormatter(new Zend_Log_Formatter_Simple("%message%\n"));
         $this->_logger = new Zend_Log($writer);
 
@@ -61,7 +61,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
         }
 
         $this->_lastQuery = new Kwf_Db_Profiler_Query($queryText, $queryType);
-    
+
 
         $this->_count++;
         self::$_staticCount++;
@@ -84,7 +84,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
     public function queryEnd($queryId)
     {
         if ($queryId == $this->_count) {
-        
+
             // Ensure that the query profile has not already ended
             if ($this->_lastQuery->hasEnded()) {
                 require_once 'Zend/Db/Profiler/Exception.php';
