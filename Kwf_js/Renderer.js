@@ -234,6 +234,11 @@ Ext.util.Format.clickableLink = function(v, p, record){
     return '<a href="'+v+'" target="_blank">'+v+'</a>';
 };
 
+Ext.util.Format.clickableMailLink = function(v, p, record){
+    if (!v) return '';
+    return '<a href="mailto:'+v+'" target="_blank">'+v+'</a>';
+};
+
 Ext.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, column){
     if (!v || v == '') {
         v = record.data[column.dataIndex+'data'];
