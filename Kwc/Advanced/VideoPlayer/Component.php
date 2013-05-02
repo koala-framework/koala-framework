@@ -51,8 +51,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         $ret['sources'] = array();
 
         //mp4
-        $url = Kwf_Media::getUrl($this->getData()->componentClass,
-            $this->getData()->componentId, 'mp4', 'video.mp4');
+        $url = $this->_getVideoUrl('mp4');
         if ($url) {
             $ret['sources'][] = array(
                 'src' => $url,
@@ -62,8 +61,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         }
 
         //webm
-        $url = Kwf_Media::getUrl($this->getData()->componentClass,
-            $this->getData()->componentId, 'webm', 'video.webm');
+        $url = $this->_getVideoUrl('webm');
         if ($url) {
             $ret['sources'][] = array(
                 'src' => $url,
@@ -73,8 +71,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         }
 
         //ogg
-        $url = Kwf_Media::getUrl($this->getData()->componentClass,
-            $this->getData()->componentId, 'ogg', 'video.ogg');
+        $url = $this->_getVideoUrl('ogg');
         if ($url) {
             $ret['sources'][] = array(
                 'src' => $url,
@@ -82,14 +79,18 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
                 'title' => 'ogg',
             );
         }
-
+        $videoSetting = $this->getSetting($this->getData()->getComponentClass(), 'video');
         $ret['config'] = Kwc_Abstract::getSetting($this->getData()->componentClass, 'video');
         $row = $this->getRow();
         if ($row->video_width) {
             $ret['config']['videoWidth'] = $row->video_width;
+        } else {
+            $ret['config']['videoWidth'] = $videoSetting['defaultVideoWidth'];
         }
         if ($row->video_height) {
             $ret['config']['videoHeight'] = $row->video_height;
+        } else {
+            $ret['config']['videoHeight'] = $videoSetting['defaultVideoHeight'];
         }
         if ($row->auto_play) {
             $ret['config']['autoPlay'] = true;
@@ -124,5 +125,11 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'file'=>$uploadRow->getFileSource(),
             'mimeType' => $mimeType
         );
+    }
+
+    protected function _getVideoUrl($format = 'mp4')
+    {
+        return Kwf_Media::getUrl($this->getData()->componentClass,
+            $this->getData()->componentId, $format, 'video.'.$format);
     }
 }
