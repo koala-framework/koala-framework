@@ -73,7 +73,6 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $row->save();
         $this->_process();
 
-        $this->markTestIncomplete();
         $this->_assert(
             '1800',
             array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
