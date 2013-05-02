@@ -77,7 +77,6 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     public function onRowUpdatesFinished(Kwf_Component_Event_Row_UpdatesFinished $event)
     {
         if ($this->_updates) {
-            $select = new Kwf_Model_Select();
             $or = array();
             foreach ($this->_updates as $key => $values) {
                 if ($key === 'db_id') {
@@ -109,7 +108,14 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
                     $or[] = new Kwf_Model_Select_Expr_And($and);
                 }
             }
-            $select->where(new Kwf_Model_Select_Expr_Or($or));
+            $select = new Kwf_Model_Select();
+            $select->where($or[0]);
+            unset($or[0]);
+            foreach ($or as $i) {
+                $s = new Kwf_Model_Select();
+                $s->where($i);
+                $select->union($s);
+            }
             Kwf_Component_Cache::getInstance()->deleteViewCache($select);
             $this->_updates = array();
         }

@@ -78,13 +78,13 @@ Kwf.Form.GoogleMapWindow = Ext.extend(Ext.Window,
             this.map.addControl(new GMapTypeControl());
             this.map.addControl(new GOverviewMapControl());
 
-            var point = new GLatLng(47.9534, 13.2448);
+            var point = new GLatLng(47.8904081, 13.1834356);
             this.marker = new GMarker(point, {draggable: true});
             //TODO falscher startort
             if (this.markerpoint_x) {
                 this.setMarkerPoint(this.markerpoint_y+';'+this.markerpoint_x);
             } else {
-                this.setMarkerPoint ('47.9534;13.2448');
+                this.setMarkerPoint ('47.8904081;13.1834356');
             }
 
             GEvent.addListener(this.marker, 'click',     this.showLatLng.createDelegate(this));
@@ -93,7 +93,7 @@ Kwf.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         }, this);
     },
     addressPrompt:function(){
-        Ext.Msg.prompt(trlKwf('enter address'), trlKwf('Example')+': Pfongauerstraße 67, 5202 Neumarkt am Wallersee', function(btn, text){
+        Ext.Msg.prompt(trlKwf('enter address'), trlKwf('Example')+': Landesstraße 23, 5302 Henndorf am Wallersee', function(btn, text){
             if (btn == 'ok' && text != ''){
                 this.geoCodeLookup(text);
             }

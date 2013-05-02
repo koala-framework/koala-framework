@@ -215,4 +215,21 @@ class Kwf_Model_DbWithConnection_ImportExport_Test extends Kwf_Test_TestCase
         $r = $im->getRows();
         $this->assertEquals(5, count($r));
     }
+    
+    public function testUnion()
+    {
+        $model = new Kwf_Model_DbWithConnection_ImportExport_Model(array(
+            "table" => $this->_tableName
+        ));
+
+        $s1 = new Kwf_Model_Select();
+        $s1->whereEquals('id', 1);
+
+        $s2 = new Kwf_Model_Select();
+        $s2->whereEquals('id', 2);
+        $s1->union($s2);
+
+        $this->assertEquals(count($model->export(Kwf_Model_Interface::FORMAT_ARRAY, $s1)), 2);
+        $this->assertEquals(count($model->getRows($s1)), 2);
+    }
 }

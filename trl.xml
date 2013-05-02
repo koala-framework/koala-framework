@@ -492,6 +492,7 @@
 <sl>Naziv</sl>
 <es>Título</es>
 <ru>Название</ru>
+<sq>Titulli</sq>
 </text>
 <text>
 <en>Firstname</en>
@@ -506,6 +507,7 @@
 <hu>Keresztnév</hu>
 <sl>Ime</sl>
 <bg>Име</bg>
+<sq>Emri</sq>
 </text>
 <text>
 <en>Lastname</en>
@@ -520,6 +522,7 @@
 <hu>Vezetéknév</hu>
 <sl>Priimek</sl>
 <bg>Фамилия</bg>
+<sq>Mbiemri</sq>
 </text>
 <text>
 <en>Email</en>
@@ -692,6 +695,7 @@
 <bg>Жена </bg>
 <ru>Женский</ru>
 <mk>Женски</mk>
+<sq>Femërore</sq>
 </text>
 <text>
 <en>Male</en>
@@ -705,6 +709,7 @@
 <es>Masculino</es>
 <bg>Мъж</bg>
 <ru>Мужской</ru>
+<sq>Mashkullore</sq>
 </text>
 <text>
 <en>Gender</en>
@@ -718,6 +723,7 @@
 <es>Género</es>
 <bg>Пол</bg>
 <ru>Пол</ru>
+<sq>Gjinia</sq>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -798,6 +804,7 @@
 <es>Nombre</es>
 <bg>Име</bg>
 <ru>Имя</ru>
+<sq>Emri</sq>
 </text>
 <text>
 <en>Last name</en>
@@ -809,6 +816,7 @@
 <es>Apellido</es>
 <bg>Фамилия</bg>
 <ru>Фамилия</ru>
+<sq>Mbiemri</sq>
 </text>
 <text>
 <en>Advice</en>
@@ -2579,6 +2587,7 @@
 <id>517</id>
 <ro>Culoare</ro>
 <sl>Barva</sl>
+<es>Color</es>
 </text>
 <text>
 <en>Font Weight</en>
@@ -4252,6 +4261,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>875</id>
 <ro>Culori</ro>
 <sl>Barve</sl>
+<es>Colores</es>
 </text>
 <text>
 <en>Color small 1</en>
