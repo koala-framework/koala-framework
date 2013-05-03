@@ -32,10 +32,12 @@ class Kwc_Shop_AddToCart_OrderProductData extends Kwc_Shop_AddToCartAbstract_Ord
     {
         $component = null;
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
-            if (is_instance_of($c, 'Kwc_Shop_Products_Detail_Component')) {
-                $generators = Kwc_Abstract::getSetting($c, 'generators');
-                foreach ($generators['addToCart']['component'] as $key => $class) {
-                    if ($class == $this->_class) $component = $key;
+            if (is_instance_of($c, 'Kwc_Shop_Products_Directory_Component')) {
+                $detailClasses = Kwc_Abstract::getChildComponentClasses($c, 'detail');
+                foreach ($detailClasses as $key=>$class) {
+                    if (Kwc_Abstract::getChildComponentClass($class, 'addToCart') == $this->_class) {
+                        $component = $key;
+                    }
                 }
             }
         }

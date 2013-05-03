@@ -313,7 +313,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (!$page) {
             throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
-        header('Location: '.$page->getAbsolutePreviewUrl());
+        header('Location: '.$page->getPreviewUrl());
         exit;
     }
 
@@ -323,7 +323,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
         $icon = new Kwf_Asset($config['icon']);
         $this->view->icon = $icon->toString($config['iconEffects']);
-        if ($row->getData()->isHome) {
+        if (isset($row->getData()->isHome) && $row->getData()->isHome) {
             throw new Kwf_ClientException(trlKwf('Cannot set Home Page invisible'));
         }
         if (!$row->visible) {

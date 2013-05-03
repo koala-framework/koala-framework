@@ -179,7 +179,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 foreach (array_unique($keys) as $key) {
                     if (isset($this->_pageComponentParent[$key])) {
                         foreach ($this->_pageComponentParent[$key] as $pId => $ids) {
-                            if (substr($pId, 0, strlen($parentId)) == $parentId) {
+                            if ($parentId == $pId || substr($pId, 0, strlen($parentId)+1) == $parentId.'-') {
                                 $pageIds = array_merge($pageIds, $ids);
                             }
                         }

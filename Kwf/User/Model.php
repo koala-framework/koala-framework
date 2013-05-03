@@ -17,6 +17,20 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
     private $_lock = null;
 
     protected $_noLogColumns = array();
+    protected $_columnMappings = array(
+        'Kwc_Mail_Recipient_Mapping' => array(
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => 'email',
+            'format' => 'email_format'
+        ),
+        'Kwc_Mail_Recipient_GenderMapping' => array(
+            'gender' => 'email_gender'
+        ),
+        'Kwc_Mail_Recipient_TitleMapping' => array(
+            'title' => 'title'
+        ),
+    );
 
     public function getUniqueIdentifier()
     {

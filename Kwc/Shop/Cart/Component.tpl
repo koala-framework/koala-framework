@@ -6,16 +6,19 @@
         <div class="back">
             <?=$this->componentLink($this->shop, $this->placeholder['backToShop']);?>
         </div>
-        <div class="submitWrapper">
-            <span class="beforeButton"></span>
-            <span class="button">
+
+        <div class="submitWrapper <?=$this->buttonClass?>">
+            <div class="beforeButton"></div>
+            <div class="button">
+                <div class="saving"></div>
                 <button class="submit" type="submit" name="<?= $this->form->componentId ?>" value="submit">
-                    <?= $this->data->trlKwf('Update') ?>
+                    <span><?= $this->data->trlKwf('Update') ?></span>
                 </button>
-            </span>
-            <span class="afterButton"></span>
+            </div>
+            <div class="afterButton"></div>
             <div class="clear"></div>
         </div>
+
         <? if($this->countProducts) { ?>
             <div class="checkout">
                 <?=$this->componentLink($this->checkout, $this->placeholder['checkout'])?>

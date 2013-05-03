@@ -15,6 +15,8 @@ class Kwc_Abstract_Image_Trl_Image_Component extends Kwc_Abstract_Image_Componen
             )
         );
 
+        $ret['masterImageComponentClass'] = $masterImageComponentClass;
+
         return $ret;
     }
 

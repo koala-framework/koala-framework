@@ -213,7 +213,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
                 }
             }
         }
-        if (!$subrootReached) return $masterData;
+        if (!$subrootReached) return null;
         $ret = $chainedData;
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);

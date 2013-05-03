@@ -1,0 +1,1 @@
+ALTER TABLE `kwc_basic_table_data_trl` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;

@@ -86,7 +86,7 @@ class Kwc_Favourites_PageTest extends Kwc_TestAbstract
         $row->visible = 0;
         $row->save();
         $this->_process();
-//         $this->markTestIncomplete();
+
         // RecursiveRemove isn't handled correctly and RecusiveAdd is never fired this way
         $c = $this->_root->getComponentById(2004)->getComponent();
         $countAfter = $this->getFavouriteCountFromFavouritesPage($c);

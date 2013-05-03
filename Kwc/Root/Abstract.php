@@ -29,11 +29,9 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             //for easy setup of examples just ignore the domain (as we don't have anything to compare to anyway)
             return $parsedUrl['path'];
         }
-        $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host']
-            || Kwf_Config::getValue('server.previewDomain') == $parsedUrl['host'];
+        $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'];
         if (!$b && isset($parsedUrl['port'])) {
-            $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port']
-                || Kwf_Config::getValue('server.previewDomain') == $parsedUrl['host'].':'.$parsedUrl['port'];
+            $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port'];
         }
         if (!$b) {
             $p =  Kwf_Config::getValue('server.noRedirectPattern');
@@ -45,10 +43,15 @@ class Kwc_Root_Abstract extends Kwc_Abstract
         return $parsedUrl['path'];
     }
 
-    public function getPageByUrl($path, $acceptLangauge)
+    public function getPageByUrl($path, $acceptLanguage)
+    {
+        return self::getChildPageByPath($this->getData(), $path);
+    }
+
+    public static function getChildPageByPath($component, $path)
     {
         if ($path == '') {
-            $ret = $this->getData()->getChildPage(array('home' => true), array());
+            $ret = $component->getChildPage(array('home' => true), array());
         } else {
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
                 if (Kwc_Abstract::getFlag($c, 'shortcutUrl')) {
@@ -56,7 +59,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract
                     if ($ret) return $ret;
                 }
             }
-            $ret = $this->getData()->getChildPageByPath($path);
+            $ret = $component->getChildPageByPath($path);
         }
 
         if ($ret && !$ret->isPage && Kwf_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
@@ -68,9 +71,13 @@ class Kwc_Root_Abstract extends Kwc_Abstract
     protected function _getMasterChildContentWidth(Kwf_Component_Data $sourcePage)
     {
         $ret = $this->_getSetting('contentWidth');
+        $boxes = array();
+        foreach ($sourcePage->getChildBoxes() as $box) {
+            $boxes[$box->box] = $box;
+        }
         foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
-            //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
-            $c = $sourcePage->getChildComponent('-'.$box);
+            if (!isset($boxes[$box])) continue;
+            $c = $boxes[$box];
             if ($c && $c->hasContent()) {
                 $ret -= $width;
             }

@@ -501,7 +501,9 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
     protected function _getRowById($id)
     {
         if ($id) {
-            $row = $this->_model->find($id)->current();
+            $s = new Kwf_Model_Select();
+            $s->whereId($id);
+            $row = $this->_model->getRow($s);
         } else {
             if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                 throw new Kwf_Exception("Add is not allowed.");

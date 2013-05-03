@@ -10,4 +10,14 @@ class Kwc_Shop_Cart_OrderProduct extends Kwf_Model_Db_Row
             $e->logOrThrow();
         }
     }
+
+    public final function getProductPrice()
+    {
+        return $this->getParentRow('Order')->getProductPrice($this);
+    }
+
+    public final function getProductText()
+    {
+        return $this->getParentRow('Order')->getProductText($this);
+    }
 }

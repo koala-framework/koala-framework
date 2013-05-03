@@ -28,7 +28,7 @@ class Kwc_Shop_VoucherProduct_AddToCart_OrderProductData extends Kwc_Shop_AddToC
     {
         //gutschein erstellen
         $row = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Plugins_Voucher_Vouchers')->createRow();
-        $row->amount = $orderProduct->amount;
+        $row->amount = $orderProduct->value;
         $row->date = date('Y-m-d H:i:s');
         $row->comment = trlKwf('Order').' '.$orderProduct->getParentRow('Order')->order_number;
         $row->save();

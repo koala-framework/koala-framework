@@ -7,7 +7,9 @@ class Kwc_Shop_Cart_Checkout_ProductData_Info extends Kwf_Data_Abstract
         $parts = array();
         foreach ($data->getAdditionalOrderData($row) as $data) {
             if ($data['class'] == 'amount') continue;
-            $parts[] = $data['name'] . ': ' . $data['value'];
+            $i = $data['name'] . ': ' . $data['value'];
+            $i = Kwf_Trl::getInstance()->trlStaticExecute($i);
+            $parts[] = $i;
         }
         return implode(', ', $parts);
     }

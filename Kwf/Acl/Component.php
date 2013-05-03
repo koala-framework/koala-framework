@@ -6,7 +6,9 @@ class Kwf_Acl_Component extends Kwf_Acl
         parent::__construct();
 
         $this->addRole(new Kwf_Acl_Role('superuser', trlKwf('Superuser')));
+        $this->addRole(new Kwf_Acl_Role('preview', trlKwf('Preview')));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_superuser', 'superuser'), 'edit_role');
+        $this->add(new Kwf_Acl_Resource_EditRole('edit_role_preview', 'preview'), 'edit_role');
 
         $this->add(new Zend_Acl_Resource('kwf_debug_class-tree'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_component_web'));
@@ -22,6 +24,7 @@ class Kwf_Acl_Component extends Kwf_Acl
                                 'kwf_component_pages'); // für /component/show
             $this->add(new Zend_Acl_Resource('kwf_component'),
                                 'kwf_component_pages'); // für /component/edit
+            $this->add(new Zend_Acl_Resource('kwf_component_preview'), 'kwf_component_pages');
 
         $this->add(new Zend_Acl_Resource('kwf_component_root')); //Komponenten können hier resourcen anhängen
 
@@ -39,12 +42,14 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->allow('admin', 'kwf_component');
         $this->allow('superuser', 'kwf_component');
         $this->allow('superuser', 'edit_role_superuser');
+        $this->allow('superuser', 'edit_role_preview');
 
         $this->allow('admin', 'kwf_component_show-component');
         $this->allow('admin', 'kwf_component_pages');
         $this->allow('admin', 'kwf_component_benchmark');
         $this->allow('superuser', 'kwf_component_show-component');
         $this->allow('superuser', 'kwf_component_pages');
+        $this->allow('preview', 'kwf_component_preview');
 
         $this->allow(null, 'kwf_component_root');
 

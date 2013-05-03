@@ -806,6 +806,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         } else if ($expr instanceof Kwf_Model_Select_Expr_Higher) {
             $value = $expr->getFormattedValue();
             return (!$value || $row->{$expr->getField()} > $value);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
+            $value = $expr->getFormattedValue();
+            return (!$value || $row->{$expr->getField()} == $value);
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"

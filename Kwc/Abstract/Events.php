@@ -19,10 +19,12 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
         return $ret;
     }
 
+    //gets called when own row gets updated and component is visible
     protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
     }
 
+    //gets called when own row gets updated, weather component is visible or not
     protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
     }

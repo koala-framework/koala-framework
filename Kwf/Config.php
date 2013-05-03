@@ -60,13 +60,4 @@ class Kwf_Config
         Kwf_Cache_SimpleStatic::_delete('config-'.$var);
         Kwf_Cache_SimpleStatic::_delete('configAr-'.$var);
     }
-
-    /**
-     * @deprected
-     *
-     * method still there because it's called in generated cache/setup.php files
-     */
-    public static function checkMasterFiles($masterFiles = null)
-    {
-    }
 }

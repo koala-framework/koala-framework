@@ -111,10 +111,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             } else {
                 throw new Kwf_Exception('Only models or tables are supported.');
             }
-            $recipientSource = self::getRecipientModelShortcut(
-                $this->getData()->parent->componentClass,
-                $class
-            );
+            $recipientSource = $this->getRecipientModelShortcut($class);
 
             $m = $this->getChildModel();
         }
@@ -158,35 +155,28 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             .'_'.$this->_getHash($parameters);
     }
 
-    public static function getRecipientModelShortcut($recipientSourcesComponentClass, $recipientModelClass)
+    public function getRecipientModelShortcut($recipientModelClass)
     {
-        $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
+        $recipientSources = $this->getData()->parent->getComponent()->getRecipientSources();
         if (!in_array($recipientModelClass, $recipientSources)) {
-            throw new Kwf_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
+            throw new Kwf_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '{$this->getData()->parent->componentClass}'");
         }
 
         $recipientSource = array_keys($recipientSources, $recipientModelClass);
         if (count($recipientSource) >= 2) {
-            throw new Kwf_Exception("'$recipientModelClass' exists ".count($recipientSource)." times in setting 'recipientSources' in '$recipientSourcesComponentClass'. It may only have 1 shortcut.");
+            throw new Kwf_Exception("'$recipientModelClass' exists ".count($recipientSource)." times in setting 'recipientSources' in '{$this->getData()->parent->componentClass}'. It may only have 1 shortcut.");
         }
 
         return $recipientSource[0];
     }
 
-    public static function getRecipientModelClass($recipientSourcesComponentClass, $recipientShortcut)
+    protected function _getRecipientModelClass($recipientShortcut)
     {
-        $recipientSources = Kwc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
+        $recipientSources = $this->getData()->parent->getComponent()->getRecipientSources();
         if (!isset($recipientSources[$recipientShortcut])) {
             return null;
         }
         return $recipientSources[$recipientShortcut];
-    }
-
-    protected function _getRecipientModelClass($recipientShortcut)
-    {
-        return self::getRecipientModelClass(
-            $this->getData()->parent->componentClass, $recipientShortcut
-        );
     }
 
     private function _getHash(array $hashData)

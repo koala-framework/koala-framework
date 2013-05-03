@@ -7,6 +7,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
     {
         parent::_init();
         $this->_inherits = $this->_getChainedGenerator()->getInherits();
+        $this->_addUrlPart = $this->_getChainedGenerator()->getAddUrlPart();
     }
 
     protected function _getRows($ids)

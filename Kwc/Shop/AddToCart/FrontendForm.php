@@ -51,6 +51,8 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
 
     protected function _getCheckProductRowExistsSelect($row)
     {
+        if (!$row->shop_order_id) return false; //happens for replacements (babytuch)
+
         $select = $row->getModel()->select()
             ->whereEquals('shop_order_id', $row->shop_order_id)
             ->whereEquals('shop_product_price_id', $row->shop_product_price_id)

@@ -1,4 +1,7 @@
 <?php
+/**
+ * This model is a proxy model that proxies the master and adds additional columns as from trl (implemented in row)
+ */
 class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
 {
     protected $_rowClass = 'Kwc_Directories_Item_Directory_Trl_AdminModelRow';
@@ -9,6 +12,9 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
     {
         if (isset($config['proxyModel'])) $config['proxyModel'] = Kwf_Model_Abstract::getInstance($config['proxyModel']);
         if (isset($config['trlModel'])) $this->_trlModel = Kwf_Model_Abstract::getInstance($config['trlModel']);
+        if (!$this->_trlModel) {
+            throw new Kwf_Exception('Kwc_Directories_Item_Directory_Trl needs to be set a child model.');
+        }
         parent::__construct($config);
     }
 
@@ -23,7 +29,6 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
         foreach ($select->getPart(Kwf_Model_Select::WHERE_EQUALS) as $k=>$i) {
             if ($k == 'component_id') $componentId = $i;
         }
-        if (!$componentId) throw new Kwf_Exception_NotYetImplemented();
         return $componentId;
     }
 
@@ -56,23 +61,25 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
                 if ($k == 'id') $id = $i;
             }
         }
-        if ($id) {
+        $componentId = $this->_getComponentId($select);
+        if ($id && !$componentId) {
+            //only id passed, in detail form controller
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($id, array('ignoreVisible'=>true));
-            $proxyRow = $this->_proxyModel->getRow($c->chained->id);
-            return $this->getRowByProxiedRow($proxyRow, $c->parent->dbId);
-        }
-
-        $componentId = $this->_getComponentId($select);
-
-        if ($componentId) {
+            $select->whereEquals('component_id', $c->parent->chained->dbId);
+            $select->whereEquals('id', $c->id);
+        } else if ($componentId && $id) {
             $c = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
+                ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
+            $select->whereEquals('id', $id);
+        } else {
+            throw new Kwf_Exception("invalid select");
         }
         $proxyRow = $this->_proxyModel->getRow($select);
         return $this->getRowByProxiedRow($proxyRow, $componentId);
     }
+
     public function countRows($where = array())
     {
         $select = $this->select($where);

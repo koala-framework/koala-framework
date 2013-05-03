@@ -29,4 +29,9 @@ class Kwc_Favourites_UserModel extends Kwf_User_Model
     {
         $this->_authedUserId = $id;
     }
+
+    public function getAuthedUserId()
+    {
+        return $this->getAuthedUser()->id;
+    }
 }

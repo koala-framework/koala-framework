@@ -15,7 +15,7 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             $vars['componentWithMaster'] = $componentWithMaster;
             $vars['cssClass'] = Kwc_Abstract::getCssClass($component->componentClass);
             $vars['boxes'] = array();
-            foreach ($innerComponent->getChildBoxes() as $box) {
+            foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
                 $vars['boxes'][$box->box] = $box;
             }
 
@@ -24,7 +24,7 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             return $view->render($this->_getRenderer()->getTemplate($component, 'Master'));
         } else if ($last['type'] == 'component') {
             $plugins = self::_getGroupedViewPlugins($component->componentClass);
-            return '<div class="kwfMainContent" style="width: ' . $component->getComponent()->getContentWidth() . 'px">' . "\n    " .
+            return '<div class="kwfMainContent">' . "\n    " .
                 $this->_getRenderPlaceholder($component->componentId, array(), null, 'component', $plugins) . "\n" .
                 '</div>' . "\n";
         } else {

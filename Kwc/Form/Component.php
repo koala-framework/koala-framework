@@ -17,8 +17,15 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
         $ret['decorator'] = 'Kwc_Form_Decorator_Label';
-        $ret['viewCache'] = false;
+        $ret['viewCache'] = true;
         $ret['method'] = 'post';
+
+        $plugins = array('Kwc_Form_UseViewCachePlugin');
+        if (isset($ret['plugins'])) {
+            $ret['plugins'] = array_merge($ret['plugins'], $plugins);
+        } else {
+            $ret['plugins'] = $plugins;
+        }
 
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtElement';
@@ -223,7 +230,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret = Kwc_Abstract::getTemplateVars();
 
         if (!$this->_processed) {
-            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+            throw new Kwf_Exception("Form '{$this->getData()->componentClass}' with id '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
 
         $ret['isPosted'] = $this->_posted;

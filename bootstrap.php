@@ -1,6 +1,6 @@
 <?php
 chdir(dirname(__FILE__).'/tests');
-set_include_path(get_include_path().PATH_SEPARATOR.realpath(getcwd().'/..'));
+set_include_path('.'.PATH_SEPARATOR.realpath(getcwd().'/..'));
 
 require_once 'Kwf/Setup.php';
 Kwf_Setup::setUp();

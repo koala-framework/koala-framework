@@ -178,21 +178,9 @@ class Kwf_Component_Data
      *
      * @return string
      */
-    public function getAbsolutePreviewUrl()
+    public function getPreviewUrl()
     {
-        $ret = $this->url;
-        $data = $this;
-        do {
-            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
-                return 'http://'.$data->getComponent()->getPreviewDomain().$ret;
-            }
-        } while($data = $data->parent);
-
-        if (Kwf_Config::getValue('server.previewDomain')) {
-            return 'http://' . Kwf_Config::getValue('server.previewDomain') . $ret;
-        } else {
-            return 'http://' . Kwf_Config::getValue('server.domain') . $ret;
-        }
+        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?preview');
     }
 
     public function __get($var)
@@ -395,10 +383,11 @@ class Kwf_Component_Data
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
         $cacheId = 'recCCGen-'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $generators = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+
         if (!$success) {
             //get (statically=fast and cached) all generators that could create the component we are looking for
             $generators = $this->_getRecursiveGenerators(
-                        Kwc_Abstract::getChildComponentClasses($this, $childSelect),
+                        Kwc_Abstract::getChildComponentClasses($this, $childSelect), //all classes $this could create that match $childSelect
                         $genSelect, $childSelect, $selectHash);
             Kwf_Cache_SimpleStatic::add($cacheId, $generators);
         }
@@ -415,7 +404,12 @@ class Kwf_Component_Data
         foreach ($generators as $g) {
             if ($g['type'] == 'notStatic') {
                 $gen = Kwf_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
-                foreach ($gen->getChildData(null, clone $select) as $d) {
+                $s = clone $select;
+                if (!$noSubPages) {
+                    //unset limit as we may have filter away results
+                    $s->unsetPart('limitCount');
+                }
+                foreach ($gen->getChildData(null, $s) as $d) {
                     $add = true;
                     if (!$noSubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
                         $add = false;

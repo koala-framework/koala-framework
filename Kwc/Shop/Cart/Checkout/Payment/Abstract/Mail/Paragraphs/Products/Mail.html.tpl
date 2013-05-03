@@ -16,7 +16,7 @@
         <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
             <td class="product"><?=htmlspecialchars($item->text);?></td>
             <? foreach($item->additionalOrderData as $d) { ?>
-                <td class="<?=$d['class']?>"><?=htmlspecialchars($d['name']);?>: <?=htmlspecialchars($d['value']);?></td>
+                <td class="<?=$d['class']?>"><?=htmlspecialchars($this->data->trlStaticExecute($d['name']));?>: <?=htmlspecialchars($d['value']);?></td>
             <? } ?>
             <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>" align="right"><?=htmlspecialchars($this->money($item->price));?></td>
         </tr>
@@ -30,11 +30,11 @@
             <td align="right">
                 <?
                     if(isset($row['class']) && $row['class']=='valueOfGoods') {
-                        echo '<i>'.htmlspecialchars($row['text']).'</i>';
+                        echo '<i>'.htmlspecialchars($this->data->trlStaticExecute($row['text'])).'</i>';
                     } else if(isset($row['class']) && $row['class']=='totalAmount') {
-                        echo '<b>'.htmlspecialchars($row['text']).'</b>';
+                        echo '<b>'.htmlspecialchars($this->data->trlStaticExecute($row['text'])).'</b>';
                     } else {
-                        echo htmlspecialchars($row['text']);
+                        echo htmlspecialchars($this->data->trlStaticExecute($row['text']));
                     }
                 ?>
             </td>

@@ -11,7 +11,8 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Products_Compon
 
     protected function _getOrder()
     {
-        $ret = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getCartOrder();
+        $ret = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getCartOrder();
         if (!$ret || !$ret->data) {
             return null;
         }
@@ -23,12 +24,14 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Products_Compon
         $ret = parent::getTemplateVars();
 
         $order = $this->_getOrder();
+        $ret['order'] = $order;
         if ($order) {
             $ret['items'] = $order->getProductsData();
             $c = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component');
             $ret['sumRows'] = $c->getComponent()->getSumRows($order);
         }
+
+        $ret['tableFooterText'] = '';
         return $ret;
     }
-
 }

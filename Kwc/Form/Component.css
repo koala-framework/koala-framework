@@ -1,6 +1,10 @@
 .cssClass .kwfFieldError label { color: var(typo); }
 .cssClass .kwfFieldError input,
-.cssClass .kwfFieldError textarea {
+.cssClass .kwfFieldError input:hover,
+.cssClass .kwfFieldError input:focus,
+.cssClass .kwfFieldError textarea,
+.cssClass .kwfFieldError textarea:hover,
+.cssClass .kwfFieldError textarea:focus {
     color: var(typo);
     border: 1px solid var(errorBorder) ;
 }
@@ -184,16 +188,6 @@
 .cssClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; }
 .cssClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; }
 
-.ext-ie .cssClass .form_title {
-    margin-top: -5px;
-    padding-bottom: 5px;
-}
-.ext-ie .cssClass .form_title label {
-    margin-top: 5px;
-}
-.ext-ie .cssClass .form_title input {
-    margin-bottom: 0px;
-}
 .cssClass .kwcFormError {
     padding: 10px 10px 5px 10px;
     background: var(errorBg) url('/assets/kwf/images/stripes.png') repeat left 3px;

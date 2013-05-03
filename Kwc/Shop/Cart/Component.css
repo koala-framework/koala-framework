@@ -1,0 +1,9 @@
+.cssClass .submitWrapper .saving {
+    width: 24px;
+    height: 24px;
+    background-image: url(/assets/kwf/Kwc/Form/loading.gif);
+    visibility: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -12px;
+}

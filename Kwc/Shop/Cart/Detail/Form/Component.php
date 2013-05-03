@@ -5,6 +5,7 @@ class Kwc_Shop_Cart_Detail_Form_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = false;
+        $ret['viewCache'] = false;
         return $ret;
     }
 

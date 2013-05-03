@@ -147,7 +147,11 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
                     if ($name == 'id') continue;
                     $name = str_replace('_', '-', $name);
                     if ($name == 'additional') {
-                        $value = $value;
+                        foreach (explode(';', $value) as $i) {
+                            if (preg_match('#^\s*([a-z-]+)\s*:\s*(.*)\s*$#', $i, $m)) {
+                                $css[$m[1]] = $m[2];
+                            }
+                        }
                         continue;
                     } else if ($name == 'margin-top' || $name == 'margin-bottom'
                             || $name=='font-size') {

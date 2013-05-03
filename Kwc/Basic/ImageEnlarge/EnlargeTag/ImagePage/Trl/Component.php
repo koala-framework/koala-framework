@@ -18,6 +18,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Kwc_Chai
 
         $ret['imageUrl'] = $c->getImageUrl();
 
+        if (isset($ret['previous'])) {
+            $ret['previous'] = self::getChainedByMaster($ret['previous'], $this->getData());
+        }
+        if (isset($ret['next'])) {
+            $ret['next'] = self::getChainedByMaster($ret['next'], $this->getData());
+        }
         return $ret;
     }
 }

@@ -89,10 +89,11 @@ class Kwf_Util_ClearCache
 
     private function _refresh($type, $output)
     {
+        ini_set('memory_limit', '256M');
         if ($type == 'setup') {
 
-            file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
-            Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup.php'), Kwf_Util_Apc::SILENT);
+            file_put_contents('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
+            Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php'), Kwf_Util_Apc::SILENT);
 
         } else if ($type == 'config') {
 
@@ -296,7 +297,8 @@ class Kwf_Util_ClearCache
 
     protected function _clearCache(array $types, $output, $options)
     {
-        if (in_array('elastiCache', $types)) {
+        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
+        if (in_array('elastiCache', $types) && !$skipOtherServers) {
             //namespace used in Kwf_Cache_Simple
             $cache = Kwf_Cache_Simple::getZendCache();
             $mc = $cache->getBackend()->getMemcache();
@@ -319,9 +321,9 @@ class Kwf_Util_ClearCache
             $this->_callApcUtil('file', $output, $options);
         }
         if (in_array('setup', $types)) {
-            if (file_exists('cache/setup.php')) {
-                if ($output) echo "cleared:     cache/setup.php\n";
-                unlink('cache/setup.php');
+            if (file_exists('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php')) {
+                if ($output) echo "cleared:     cache/setup".Kwf_Setup::CACHE_SETUP_VERSION.".php\n";
+                unlink('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php');
             }
         }
         foreach ($this->getDbCacheTables() as $t) {

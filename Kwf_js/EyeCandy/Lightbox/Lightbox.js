@@ -58,6 +58,15 @@ Kwf.onContentReady(function(readyEl) {
 });
 
 Kwf.Utils.HistoryState.on('popstate', function() {
+    if (Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate) {
+        //onlyCloseOnPopstate is set in closeAndPushState
+        //if multiple lightboxes are in history and we close current one we go back in history until none is open
+        //so just close current one and don't show others (required to avoid flicker on closing)
+        if (Kwf.EyeCandy.Lightbox.currentOpen) {
+            Kwf.EyeCandy.Lightbox.currentOpen.close();
+        }
+        return;
+    }
     var lightbox = Kwf.Utils.HistoryState.currentState.lightbox;
     if (lightbox) {
         if (!Kwf.EyeCandy.Lightbox.allByUrl[lightbox]) return;
@@ -216,6 +225,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     closeAndPushState: function() {
         if (Kwf.Utils.HistoryState.entries > 0) {
+            Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = Kwf.Utils.HistoryState.entries;
             history.back();
             var closeLightbox = (function() {
@@ -227,8 +237,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 //check if there is still a lightbox open
                 //has to be defered because closing happens in 'popstate' event which is async in IE
                 if (Kwf.Utils.HistoryState.currentState.lightbox) {
+                    previousEntries = Kwf.Utils.HistoryState.entries;
                     history.back();
                     closeLightbox.defer(1, this);
+                } else {
+                    //last entry in history that had lightbox open
+                    Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = false;
                 }
             });
             closeLightbox.defer(1, this);

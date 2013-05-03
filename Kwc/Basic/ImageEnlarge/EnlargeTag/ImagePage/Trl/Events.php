@@ -1,0 +1,4 @@
+<?php
+class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Events extends Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events
+{
+}

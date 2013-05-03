@@ -16,7 +16,7 @@ class Kwf_Validate_NotNegative extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         if ($value < 0) {
-            $this->_error();
+            $this->_error(self::NEGATIVE);
             return false;
         }
         return true;

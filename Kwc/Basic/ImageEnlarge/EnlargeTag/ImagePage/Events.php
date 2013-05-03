@@ -5,7 +5,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
     {
         $ret = parent::getListeners();
         //find components that can create ourself ($this->_class)
-        foreach ($this->_getCreatingClasses($this->_class, 'Kwc_Abstract_Image_Component') as $class) {
+        foreach ($this->_getCreatingClasses($this->_class) as $class) {
 
             $ret[] = array(
                 'class' => $class,

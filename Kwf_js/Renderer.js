@@ -11,7 +11,7 @@ Ext.util.Format.booleanRtr = function(v, p, record) {
     return '<div class="x-grid3-check-col kwf-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
 };
 Ext.util.Format.booleanText = function(v, p, record) {
-    return v ? trlKwf('Yes') : trlKwf('No');
+    return v && v != '0' ? trlKwf('Yes') : trlKwf('No');
 };
 Ext.util.Format.booleanIcon = function(value, p, record, rowIndex, colIndex, store, column) {
     if (value) {
@@ -232,4 +232,19 @@ Ext.util.Format.image = function(v, p, record){
 Ext.util.Format.clickableLink = function(v, p, record){
     if (!v) return '';
     return '<a href="'+v+'" target="_blank">'+v+'</a>';
+};
+
+Ext.util.Format.clickableMailLink = function(v, p, record){
+    if (!v) return '';
+    return '<a href="mailto:'+v+'" target="_blank">'+v+'</a>';
+};
+
+Ext.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, column){
+    if (!v || v == '') {
+        v = record.data[column.dataIndex+'data'];
+        p.attr += 'style="background: url(/assets/silkicons/link.png) no-repeat right center; border: 1px solid #b4e889; padding-right: 20px;"';
+    } else {
+        p.attr += 'style="background: url(/assets/silkicons/link_break.png) no-repeat right center; border: 1px solid #f16565; padding-right: 20px;"';
+    }
+    return v;
 };

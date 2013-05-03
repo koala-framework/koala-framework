@@ -15,6 +15,7 @@ class Kwf_Model_Select
     const LIMIT_OFFSET = 'limitOffset';
     const EXPR = 'expr';
     const OTHER = 'other';
+    const UNION = 'union';
 
     const ORDER_RAND = 'orderRand';
 
@@ -183,6 +184,11 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
     {
         $this->_parts[self::EXPR][] = $field;
         return $this;
+    }
+
+    public function union(Kwf_Model_Select $select)
+    {
+        $this->_parts[self::UNION][] = $select;
     }
 
     public function merge(Kwf_Model_Select $other)

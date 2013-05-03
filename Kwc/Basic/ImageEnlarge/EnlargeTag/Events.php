@@ -3,14 +3,19 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Image_Events
 {
     private function _canCreateUsIndirectly($class)
     {
+        static $cache = array();
+        $cacheId = $this->_class.'-'.$class;
+        if (isset($cache[$cacheId])) return $cache[$cacheId];
         foreach (Kwc_Abstract::getChildComponentClasses($class, array('generatorFlags'=>array('static'=>true))) as $c) {
             if ($c == $this->_class) {
+                $cache[$cacheId] = true;
                 return true;
             }
             if ($this->_canCreateUsIndirectly($c)) {
                 return true;
             }
         }
+        $cache[$cacheId] = false;
         return false;
     }
 
@@ -34,6 +39,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Image_Events
         return $ret;
     }
 
+    //gets called when own row gets updated, weather component is visible or not
     protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
         //don't call parent, as it would fire Media_Changed which we don't need in that case (as our own image in the alternative preview image)

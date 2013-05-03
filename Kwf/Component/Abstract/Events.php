@@ -8,6 +8,9 @@ class Kwf_Component_Abstract_Events extends Kwf_Component_Events
         $this->_class = $this->_config['componentClass'];
     }
 
+    /**
+     * Returns all component classes that can create $createdClass. Optionally filtering instances of $createClass.
+     */
     protected function _getCreatingClasses($createdClass, $createClass = null)
     {
         $ret = array();

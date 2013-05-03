@@ -4,7 +4,7 @@ class Kwf_Uploads_S3Test extends Kwf_Test_TestCase
     public function setUp()
     {
         if (!Kwf_Config::getValue('aws.key') || !Kwf_Config::getValue('aws.secret')) {
-            $this->markTestIncomplete();
+            $this->markTestSkipped();
         }
         Kwf_Registry::get('config')->aws->uploadsBucket = 'kwf-test';
         Kwf_Config::deleteValueCache('aws.uploadsBucket');

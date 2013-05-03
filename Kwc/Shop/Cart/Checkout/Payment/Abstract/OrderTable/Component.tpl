@@ -36,9 +36,19 @@
                             <td class="price"><?=$this->money($row['amount'],'')?></td>
                         </tr>
                     <? } ?>
+                    <tr class="footer">
+                        <td colspan="2">
+                            <p><?=$this->tableFooterText?></p>
+                        </td>
+                    </tr>
                 </table>
                 <div class="clear"></div>
             </td>
         </tr>
     </table>
+    <? if ($this->footerText) { ?>
+        <div class="footer">
+            <?=$this->footerText?>
+        </div>
+    <? } ?>
 </div>

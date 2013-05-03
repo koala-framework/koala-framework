@@ -15,6 +15,11 @@ class Kwc_Basic_LinkTag_FirstChildPage_Data extends Kwf_Component_Data
         }
     }
 
+    public function getAbsoluteUrl()
+    {
+        return $this->_getFirstChildPage()->getAbsoluteUrl();
+    }
+
     public function _getFirstChildPage()
     {
         if ($this->_pageCache === false) {

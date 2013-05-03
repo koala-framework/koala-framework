@@ -14,17 +14,20 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
         $ret['flags']['subroot'] = 'domain';
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasDomain'] = true;
+        $ret['flags']['hasLanguage'] = true;
         return $ret;
+    }
+
+    public function getLanguage()
+    {
+        $domains = Kwf_Config::getValueArray('kwc.domains');
+        if (!isset($domains[$this->getData()->id]['language'])) return Kwf_Trl::getInstance()->getWebCodeLanguage();
+        return $domains[$this->getData()->id]['language'];
     }
 
     public function getDomain()
     {
         return $this->getData()->row->domain;
-    }
-
-    public function getPreviewDomain()
-    {
-        return $this->getData()->row->preview_domain;
     }
 
     public static function getComponentForHost($host)

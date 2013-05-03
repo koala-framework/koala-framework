@@ -44,9 +44,51 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $dataSelect = new Kwf_Model_Select();
         $dataSelect->whereEquals('visible', 1);
         $dataSelect->order('pos', 'ASC');
-        $ret['dataRows'] = $this->_getRow()->getChildRows('tableData', $dataSelect);
+        $ret['dataRows'] = array();
+        $rows = $this->_getRow()->getChildRows('tableData', $dataSelect);
+        foreach ($rows as $row) {
+            $rowData = array();
+            $rowData['cssStyle'] = $row->css_style;
+            for ($i = 1; $i <= $ret['columnCount']; $i++) {
+                $rowData['data']['column'.$i] = array('value'=>$row->{'column'.$i}, 'cssClass'=>'');
+            }
+            $ret['dataRows'][] = $rowData;
+        }
+        $ret['dataRows'] = Kwc_Basic_Table_Component::addDefaultCssClasses($ret['dataRows'], $this->_getSetting('rowStyles'));
+        return $ret;
+    }
 
-        $ret['rowStyles'] = $this->_getSetting('rowStyles');
+    /**
+     * used from Kwc_Basic_Table_Trl_Component
+     */
+    public static function addDefaultCssClasses($dataArray, $rowStyles)
+    {
+        $count = 0;
+        $ret = array();
+        foreach ($dataArray as $dataItem) {
+            if (!isset($dataItem['cssStyle'])) {
+                $dataItem['cssClass'] = $count%2 == 0 ? 'odd' : 'even';
+                $dataItem['htmlTag'] = 'td';
+            } else {
+                $dataItem['cssClass'] = $dataItem['cssStyle']. ' ' . ($count%2 == 0 ? 'odd' : 'even');
+                $dataItem['htmlTag'] = $rowStyles[$dataItem['cssStyle']]['tag'];
+            }
+            for ($i = 1; $i < count($dataItem['data'])+1; $i++) {
+                if (empty($dataItem['data']['column'.$i]['cssClass'])) {
+                    $dataItem['data']['column'.$i]['cssClass'] .= 'col'.$i;
+                } else {
+                    $dataItem['data']['column'.$i]['cssClass'] .= ' col'.$i;
+                }
+
+                if ($i == 1) {
+                    $dataItem['data']['column'.$i]['cssClass'] .= ' first';
+                } else if ($i == count($dataItem['data'])) {
+                    $dataItem['data']['column'.$i]['cssClass'] .= ' last';
+                }
+            }
+            $ret[] = $dataItem;
+            $count++;
+        }
         return $ret;
     }
 

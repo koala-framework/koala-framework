@@ -8,16 +8,20 @@ class Kwc_Root_TrlRoot_Model extends Kwf_Model_FnF
 
     public function __construct(array $values = array())
     {
-        $config['data'] = array();
-        $master = true;
-        foreach ($values as $key => $value) {
-            $config['data'][] = array(
-                'id' => $key,
-                'filename' => $key,
-                'name' => $value,
-                'master' => $master
-            );
-            $master = false;
+        if (!isset($values['data'])) {
+            $config['data'] = array();
+            $master = true;
+            foreach ($values as $key => $value) {
+                $config['data'][] = array(
+                    'id' => $key,
+                    'filename' => $key,
+                    'name' => $value,
+                    'master' => $master
+                );
+                $master = false;
+            }
+        } else {
+            $config = $values;
         }
         parent::__construct($config);
     }
