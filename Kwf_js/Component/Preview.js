@@ -3,7 +3,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
     autoScroll: true,
     initComponent: function() {
         this.previewMode = false;
-        if (decodeURIComponent(this.getParam('url')).indexOf('preview') !== -1) this.previewMode = true;
+        if (decodeURIComponent(this.getParam('url')).indexOf('kwcPreview') !== -1) this.previewMode = true;
         this.classNames = ['desktop', 'notebook', 'smartphonePortrait', 'smartphoneLandscape', 'tabletPortrait', 'tabletLandscape'];
         this.tbar = [];
 
@@ -18,7 +18,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
                         var regExp = /(http|https):\/\//;
                         var url = el.getValue();
                         if (!regExp.test(url)) url = 'http://' + url;
-                        if (url.indexOf('preview') === -1) {
+                        if (url.indexOf('kwcPreview') === -1) {
                             this.previewMode = false;
                         } else {
                             this.previewMode = true;
@@ -49,8 +49,8 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
                         if (this.previewMode) {
                             iframeUrl = this.buildPreviewLink(iframeUrl);
                         } else {
-                            if (iframeUrl.indexOf('preview') !== -1) {
-                                iframeUrl = iframeUrl.slice(0, iframeUrl.indexOf('preview')-1);
+                            if (iframeUrl.indexOf('kwcPreview') !== -1) {
+                                iframeUrl = iframeUrl.slice(0, iframeUrl.indexOf('kwcPreview')-1);
                             }
                         }
                     }
@@ -176,8 +176,8 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
                 if (this.previewMode) {
                     textfieldValue = this.buildPreviewLink(textfieldValue);
                 } else {
-                    if (textfieldValue.indexOf('preview') !== -1) {
-                        textfieldValue = textfieldValue.slice(0, textfieldValue.indexOf('preview')-1);
+                    if (textfieldValue.indexOf('kwcPreview') !== -1) {
+                        textfieldValue = textfieldValue.slice(0, textfieldValue.indexOf('kwcPreview')-1);
                     }
                 }
             }
@@ -189,7 +189,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
     buildPreviewLink: function(link) {
         var separator = '?';
         if (link.indexOf('?') !== -1) separator = '&';
-        if (link.indexOf('preview') === -1) link += separator + 'preview';
+        if (link.indexOf('kwcPreview') === -1) link += separator + 'kwcPreview';
         return link;
     },
 

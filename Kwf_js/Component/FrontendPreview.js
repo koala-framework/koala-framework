@@ -1,11 +1,11 @@
 Kwf.onContentReady(function(el) {
-    if (getParam('preview')) {
+    if (getParam('kwcPreview')) {
         Ext.get(el).select('a', true).each(function(a) {
             if (a.dom.href.indexOf(window.location.host) !== -1) { // intern
                 var separator = '?';
                 var link = a.dom.href;
                 if (link.indexOf('?') !== -1) separator = '&';
-                if (link.indexOf('preview') === -1) link += separator + 'preview';
+                if (link.indexOf('kwcPreview') === -1) link += separator + 'kwcPreview';
                 a.set({ href: link });
             }
         }, this);

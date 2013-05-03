@@ -354,7 +354,7 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Util_Pma::dispatch();\n";
         $ret .= "}\n";
 
-        $ret .= "if (isset(\$_GET['preview'])) {\n";
+        $ret .= "if (isset(\$_GET['kwcPreview'])) {\n";
         $ret .= "    \$role = Kwf_Registry::get('userModel')->getAuthedUserRole();\n";
         $ret .= "    if (!Kwf_Registry::get('acl')->isAllowed(\$role, 'kwf_component_preview', 'view')) {\n";
         $ret .= "        header('Location: /admin/component/preview/redirect/?url='.urlencode(\$_SERVER['REQUEST_URI']));\n";
