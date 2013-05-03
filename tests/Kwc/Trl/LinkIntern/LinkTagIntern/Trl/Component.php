@@ -1,0 +1,4 @@
+<?php
+class Kwc_Trl_LinkIntern_LinkTagIntern_Trl_Component extends Kwc_Basic_LinkTag_Intern_Trl_Component
+{
+}

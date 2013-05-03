@@ -1,22 +1,25 @@
 <?php
 class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
 {
-    private $_data;
+    private $_data = array();
 
-    protected function _getData()
+    protected function _getData($select = array())
     {
         $m = Kwc_Abstract::createModel($this->componentClass);
         $target = $m->fetchColumnByPrimaryId('target', $this->dbId);
         if ($target) {
             $ret = null;
+            $s = $select;
+            $s['subroot'] = $this;
+            $s['limit'] = 1;
             $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
                 $target,
-                array('subroot' => $this, 'limit' => 1)
+                $s
             );
             if ($components) $ret = $components[0];
             if (!$ret) {
                 $ret = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-                    $target
+                    $target, $select
                 );
             }
             return $ret;
@@ -24,13 +27,13 @@ class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
         return false;
     }
 
-    public final function getLinkedData()
+    public final function getLinkedData($select = array())
     {
-        if (!isset($this->_data)) {
-            $this->_data = $this->_getData();
-            if (!$this->_data) $this->_data = false;
+        $cacheId = serialize($select);
+        if (!array_key_exists($cacheId, $this->_data)) {
+            $this->_data[$cacheId] = $this->_getData($select);
         }
-        return $this->_data;
+        return $this->_data[$cacheId];
     }
 
     public function __get($var)
