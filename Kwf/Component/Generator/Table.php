@@ -14,7 +14,12 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
     {
         parent::_init();
         if (!isset($this->_useComponentId)) {
-            $this->_useComponentId = $this->_getModel()->hasColumn('component_id');
+            $cacheId = 'useCmpId-'.$this->_class.'-'.$this->_settings['generator']; //cache to delay model creation
+            $this->_useComponentId = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+            if (!$success) {
+                $this->_useComponentId = $this->_getModel()->hasColumn('component_id');
+                Kwf_Cache_SimpleStatic::add($cacheId, $this->_useComponentId);
+            }
         }
     }
 
