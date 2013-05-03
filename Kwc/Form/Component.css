@@ -17,45 +17,12 @@
 }
 
 .cssClass button {
-    height: auto ;
-    padding: 5px 10px ;
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    color: white;
-    line-height: 18px;
-    background: -moz-linear-gradient(top, #5bdf55, #26a31e);
-    background: -webkit-gradient(linear, left top, left bottom, from(#5bdf55), to(#26a31e));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bdf55', endColorstr='#26a31e');
-    border: 1px solid #09c900;
-    border-radius: 4px;
-    box-shadow: 1px 2px 2px #555;
-}
-
-.cssClass button:hover {
     cursor: pointer;
-}
-
-.cssClass button:active {
-    cursor: pointer;
-    padding: 6px 11px ;
-    border: none;
-    box-shadow: inset 1px 1px 2px #555;
-    margin-top: 1px;
-    margin-left: 1px;
 }
 
 .cssClass form .kwfField label,
 .cssClass form .kwfField span.fieldContent {
     line-height: 20px;
-}
-.cssClass .kwfButtonFlat button {
-    font-weight: bold;
-    border: 1px solid #000;
-    background-color: #fff;
-    padding: 4px;
-    cursor: pointer;
-    height: 25px;
-    overflow: visible;
 }
 .cssClass .submitWrapper {
     text-align: center;
