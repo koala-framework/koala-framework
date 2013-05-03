@@ -297,15 +297,6 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
-        if (Kwf_Config::getValue('showPlaceholder')) {
-            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath() && substr(Kwf_Setup::getRequestPath(), 0, 8)!='/assets/') {\n";
-            $ret .= "    $view = new Kwf_View();\n";
-            $ret .= "    echo $view->render('placeholder.tpl');\n";
-            $ret .= "    exit;\n";
-            $ret .= "}\n";
-        }
-
-
         if (Kwf_Config::getValue('preLogin')) {
             $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
             $ret .= "    \$ignore = false;\n";
