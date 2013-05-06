@@ -10,6 +10,9 @@ class Kwc_Trl_LinkIntern_Category_PagesModel extends Kwf_Model_FnF
             array('id'=>2, 'pos'=>2, 'visible'=>false, 'name'=>'Foo', 'filename' => 'foo2',
                 'parent_id'=>'root-master-cat1', 'component'=>'none', 'is_home'=>false, 'hide'=>false),
 
+            array('id'=>3, 'pos'=>3, 'visible'=>false, 'name'=>'Foo', 'filename' => 'foo3',
+                'parent_id'=>'root-master-cat1', 'component'=>'none', 'is_home'=>false, 'hide'=>false),
+
         );
         parent::__construct($config);
     }

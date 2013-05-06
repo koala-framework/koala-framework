@@ -112,4 +112,24 @@ class Kwc_Trl_LinkIntern_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-en_test1'); //links to now invisible
         $this->assertEquals('', $c->render());
     }
+
+    public function testEnInvisibleInMaster()
+    {
+        $c = $this->_root->getComponentById('root-en_test3');
+        $this->assertRegExp('#<a .*?href="/en/foo3en">#', $c->render());
+    }
+
+    public function testCacheShowEnPageInvisibleInMaster()
+    {
+        $c = $this->_root->getComponentById('root-en_test3');
+        $c->render();
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_LinkIntern_Category_Trl_PagesModel')->getRow('root-en-cat1_3');
+        $row->visible = false;
+        $row->save();
+        $this->_process();
+
+        $c = $this->_root->getComponentById('root-en_test3');
+        $this->assertEquals('', $c->render());
+    }
 }
