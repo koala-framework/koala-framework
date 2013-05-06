@@ -35,7 +35,6 @@ class Kwc_List_Gallery_Component extends Kwc_Abstract_List_Component
         $ret = parent::getTemplateVars();
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
-        $ret['downloadAll'] = $this->getData()->getChildComponent('-downloadAll');
         return $ret;
     }
 

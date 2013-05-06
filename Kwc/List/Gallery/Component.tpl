@@ -1,4 +1,3 @@
-<?=$this->component($this->downloadAll); ?>
 <div class="<?=$this->cssClass;?> kwfEnlargeNextPrevious">
     <? $i = 0; ?>
     <? foreach ($this->children as $child) { ?>
