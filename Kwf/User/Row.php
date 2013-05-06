@@ -310,8 +310,6 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     {
         if ($columnName == 'password1' || $columnName == 'password2') {
             return '';
-        } else if ($columnName == 'name') {
-            return $this->firstname . ' ' . $this->lastname;
         } else if ($columnName == 'nickname') {
             if (parent::__isset('nickname') && parent::__get('nickname') != '') {
                 return parent::__get('nickname');
