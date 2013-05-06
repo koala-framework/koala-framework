@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
 {
-    private $_pageIds;
+    private static $_pageIds;
 
     public function getListeners()
     {
@@ -86,23 +86,29 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdate($c, $event);
-        $this->_pageIds = null;
+        self::$_pageIds[$this->_class] = null;
     }
 
-    private function _getComponentsForTarget($targetId, $includeSubpages = true)
+    private function _getComponentsForTarget($targetId, $includeSubpages)
     {
-        if (!$this->_pageIds) {
+        return self::getComponentsForTarget($this->_class, $targetId, $includeSubpages);
+    }
+
+    //used in trl
+    public static function getComponentsForTarget($componentClass, $targetId, $includeSubpages)
+    {
+        if (!isset(self::$_pageIds[$componentClass])) {
             $ids = array();
-            $model = Kwc_Abstract::createOwnModel($this->_class);
+            $model = Kwc_Abstract::createOwnModel($componentClass);
             foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY) as $row) {
                 $target = $row['target'];
                 if (!isset($ids[$target])) $ids[$target] = array();
                 $ids[$target][] = $row['component_id'];
             }
-            $this->_pageIds = $ids;
+            self::$_pageIds[$componentClass] = $ids;
         }
         $ret = array();
-        foreach ($this->_pageIds as $targetPageId => $dbIds) {
+        foreach (self::$_pageIds[$componentClass] as $targetPageId => $dbIds) {
             $ids = array();
             if ($includeSubpages) {
                 if ((string)$targetPageId == (string)$targetId

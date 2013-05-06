@@ -87,7 +87,6 @@ class Kwc_Trl_LinkIntern_Test extends Kwc_TestAbstract
         $this->_process();
 
         $c = $this->_root->getComponentById('root-en_test2'); //links to invisible
-        $this->markTestIncomplete();
         $this->assertRegExp('#<a .*?href="/en/foo2en">#', $c->render());
     }
 
@@ -111,7 +110,6 @@ class Kwc_Trl_LinkIntern_Test extends Kwc_TestAbstract
         $this->_process();
 
         $c = $this->_root->getComponentById('root-en_test1'); //links to now invisible
-        $this->markTestIncomplete();
         $this->assertEquals('', $c->render());
     }
 }
