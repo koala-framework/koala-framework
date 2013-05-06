@@ -125,11 +125,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.fetched) return;
         this.fetched = true;
 
-        var url = '/kwf/util/kwc/render';
-        if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
         Ext.Ajax.request({
             params: { url: this.href },
-            url: url,
+            url: Kwf.getKwcRenderUrl(),
             success: function(response, options) {
                 this.contentEl = this.innerLightboxEl.createChild({
                     cls: 'kwfLightboxContent'
