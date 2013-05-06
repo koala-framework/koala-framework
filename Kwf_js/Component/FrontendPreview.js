@@ -20,4 +20,5 @@ Kwf.onContentReady(function(el) {
         }
         return false;
     }
-}, this);
+}, this, { priority: -10 });
+// priority because this code has to be load before every element uses a link in preview mode
