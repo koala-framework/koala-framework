@@ -33,7 +33,11 @@ class Kwf_Media
                 Kwf_Cache_Simple::add($cacheId, $time);
             }
         }
-        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
+        $preview = '';
+        if (Kwf_Component_Data_Root::getShowInvisible()) {
+            $preview = '?kwcPreview';
+        }
+        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename).$preview;
     }
 
     public static function getChecksum($class, $id, $type, $filename)
