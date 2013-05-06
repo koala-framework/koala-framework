@@ -245,8 +245,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($ret['showSuccess']) {
+            $ret['success'] = $this->getData()->getChildComponent('-success');
+        } else {
             foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
-                $ret[$c->id] = $c;
+                if ($c->id != 'success') {
+                    $ret[$c->id] = $c;
+                }
             }
         }
 
