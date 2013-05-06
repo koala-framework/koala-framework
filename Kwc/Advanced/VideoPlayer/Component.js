@@ -1,3 +1,10 @@
+Kwf.onContentReady(function(el){
+    Ext.get(el).select('.kwcAdvancedVideoPlayer', true).each(function(el) {
+        if (!el.isVisible(true)) {
+            if (el.mediaElement) el.mediaElement.stop();
+        }
+    }, this);
+}, this);
 Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
     $(el.dom).children('video').mediaelementplayer({
         //custom path to flash
@@ -44,6 +51,7 @@ Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
         keyActions: config.keyActions,
 
         success: function (mediaElement, domObject) {
+            el.mediaElement = mediaElement;
             if (config.autoPlay) {
                 mediaElement.play();
             }
