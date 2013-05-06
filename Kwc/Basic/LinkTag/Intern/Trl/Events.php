@@ -6,6 +6,11 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => null,
+            'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
+            'callback' => 'onRecursiveUrlChanged'
+        );
+        $ret[] = array(
+            'class' => null,
             'event' => 'Kwf_Component_Event_Page_Added',
             'callback' => 'onPageRemovedAdded'
         );
@@ -15,6 +20,24 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
             'callback' => 'onPageRemovedAdded'
         );
         return $ret;
+    }
+
+    public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
+    {
+        if (!isset($event->component->chained)) return;
+
+        $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
+            Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
+            $event->component->chained->dbId,
+            true
+        );
+        foreach ($masterDatas as $c) {
+            $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+            if ($c->isPage) {
+                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+            }
+        }
     }
 
     public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)

@@ -132,4 +132,18 @@ class Kwc_Trl_LinkIntern_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-en_test3');
         $this->assertEquals('', $c->render());
     }
+
+    public function testCacheChangeUrlEn()
+    {
+        $c = $this->_root->getComponentById('root-en_test1');
+        $c->render();
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_LinkIntern_Category_Trl_PagesModel')->getRow('root-en-cat1_1');
+        $row->filename = 'foo1en_mod';
+        $row->save();
+        $this->_process();
+
+        $c = $this->_root->getComponentById('root-en_test1');
+        $this->assertRegExp('#<a .*?href="/en/foo1en_mod">#', $c->render());
+    }
 }
