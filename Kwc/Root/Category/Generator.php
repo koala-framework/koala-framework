@@ -51,24 +51,30 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
      */
     public function getVisiblePageChildIds($parentId)
     {
+        return $this->getPageChildIds($parentId, true);
+    }
+
+    /**
+     * Returns all recursive children of a page
+     */
+    public function getPageChildIds($parentId, $onlyVisible = false)
+    {
         $ret = array();
         if (!is_numeric(substr($parentId, 0, 1))) {
             foreach ($this->_pageChilds as $pId=>$childs) {
                 if (substr($pId, 0, strlen($pId)) == $parentId) {
                     foreach ($childs as $id) {
-                        if ($this->_pageData[$id]['visible']) {
-                            $ret[] = $id;
-                            $ret = array_merge($ret, $this->getVisiblePageChildIds($id));
-                        }
+                        if ($onlyVisible && !$this->_pageData[$id]['visible']) continue;
+                        $ret[] = $id;
+                        $ret = array_merge($ret, $this->getPageChildIds($id, $onlyVisible));
                     }
                 }
             }
         } else if (isset($this->_pageChilds[$parentId])) {
             foreach ($this->_pageChilds[$parentId] as $id) {
-                if ($this->_pageData[$id]['visible']) {
-                    $ret[] = $id;
-                    $ret = array_merge($ret, $this->getVisiblePageChildIds($id));
-                }
+                if ($onlyVisible && !$this->_pageData[$id]['visible']) continue;
+                $ret[] = $id;
+                $ret = array_merge($ret, $this->getPageChildIds($id, $onlyVisible));
             }
         }
         return $ret;
