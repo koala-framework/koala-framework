@@ -68,12 +68,12 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
             ->getShopCartPlugins();
     }
 
-    public function getForms()
+    public function getFormComponents()
     {
         $ret = array();
         foreach ($this->getData()->getChildComponents(array('generator'=>'detail')) as $c) {
             $ret[] = $c->getChildComponent('-form')
-                ->getComponent()->getForm();
+                ->getComponent();
         }
         return $ret;
     }
