@@ -28,7 +28,6 @@ class Kwf_Model_DbWithConnection_ParentExprFieldProxyReference_Test extends Kwf_
         $s = new Kwf_Model_Select();
         $s->whereEquals('id', 1);
         $s->expr('foo');
-        $this->markTestIncomplete();
         $row = $this->_modelChild->getRow($s);
         $this->assertEquals($row->foo, 777);
     }
@@ -46,7 +45,6 @@ class Kwf_Model_DbWithConnection_ParentExprFieldProxyReference_Test extends Kwf_
         $s = new Kwf_Model_Select();
         $s->whereEquals('id', 1);
         $s->order('foo');
-        $this->markTestIncomplete();
         $row = $this->_modelChild->getRow($s);
         $this->assertEquals($row->foo, 555);
     }
