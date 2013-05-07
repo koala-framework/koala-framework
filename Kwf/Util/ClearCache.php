@@ -15,11 +15,6 @@ class Kwf_Util_ClearCache
         return $i;
     }
 
-    public final function getCacheDirs()
-    {
-        return $this->_getCacheDirs();
-    }
-
     protected function _getCacheDirs()
     {
         $ret = array();
@@ -46,7 +41,7 @@ class Kwf_Util_ClearCache
         return $ret;
     }
 
-    public function getDbCacheTables()
+    protected function _getDbCacheTables()
     {
         $ret = array();
         try {
@@ -76,8 +71,8 @@ class Kwf_Util_ClearCache
             $types[] = 'optcode';
         }
         $types[] = 'setup';
-        $types = array_merge($types, $this->getCacheDirs());
-        $types = array_merge($types, $this->getDbCacheTables());
+        $types = array_merge($types, $this->_getCacheDirs());
+        $types = array_merge($types, $this->_getDbCacheTables());
         if (Kwf_Config::getValue('assetsCacheUrl')) {
             $types[] = 'assetsServer';
         }
@@ -172,7 +167,7 @@ class Kwf_Util_ClearCache
         }
         $refreshTypes[] = 'trl';
         $refreshTypes[] = 'assets';
-        if (in_array('cache_component', $this->getDbCacheTables())
+        if (in_array('cache_component', $this->_getDbCacheTables())
             && (in_array('component', $types) || in_array('cache_component', $types))
         ) {
             $refreshTypes[] = 'events';
@@ -249,7 +244,7 @@ class Kwf_Util_ClearCache
 
         $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
         if (Kwf_Config::getValue('server.aws') && !$skipOtherServers) {
-            $otherHostsTypes = $this->getCacheDirs();
+            $otherHostsTypes = $this->_getCacheDirs();
             //add other types
             $otherHostsTypes[] = 'config';
             $otherHostsTypes[] = 'setup';
@@ -325,7 +320,7 @@ class Kwf_Util_ClearCache
                 unlink('cache/setup.php');
             }
         }
-        foreach ($this->getDbCacheTables() as $t) {
+        foreach ($this->_getDbCacheTables() as $t) {
             if (in_array($t, $types)) {
                 if ($t == 'cache_component') {
                     try {
@@ -340,7 +335,7 @@ class Kwf_Util_ClearCache
                 if ($output) echo "cleared db:  $t\n";
             }
         }
-        foreach ($this->getCacheDirs() as $d) {
+        foreach ($this->_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
                 if (is_dir("cache/$d")) {
                     $this->_removeDirContents("cache/$d");
