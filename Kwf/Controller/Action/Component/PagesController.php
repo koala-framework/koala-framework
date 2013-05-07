@@ -479,6 +479,8 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             0, Kwf_Util_Component::getDuplicateProgressSteps($source)
         );
 
+        ini_set('memory_limit', '256M');
+
         $newPage = Kwf_Util_Component::duplicate($source, $target, $progressBar);
 
         Kwf_Util_Component::afterDuplicate($source, $newPage);
