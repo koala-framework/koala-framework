@@ -23,7 +23,7 @@ class Kwf_Media_Output_Component
                     //preview im frontend
                     $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
                 } else if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $c->componentClass, Kwf_Registry::get('userModel')->getAuthedUser())) {
-                    //paragraphs vorschau im backend
+                    //paragraphs preview in backend
                     $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
                 } else if (Kwf_Registry::get('acl')->isAllowedUser(Kwf_Registry::get('userModel')->getAuthedUser(), 'kwf_component_preview', 'view')) {
                     //perview user in frontend
