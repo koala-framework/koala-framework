@@ -1,9 +1,6 @@
 <?php
 class Kwf_Util_ClearCache
 {
-    const MODE_CLEAR = 'clear';
-    const MODE_IMPORT = 'import';
-
     /**
      * @return Kwf_Util_ClearCache
      */
@@ -18,12 +15,12 @@ class Kwf_Util_ClearCache
         return $i;
     }
 
-    public final function getCacheDirs($mode = self::MODE_CLEAR)
+    public final function getCacheDirs()
     {
-        return $this->_getCacheDirs($mode);
+        return $this->_getCacheDirs();
     }
 
-    protected function _getCacheDirs($mode = self::MODE_CLEAR)
+    protected function _getCacheDirs()
     {
         $ret = array();
         foreach (new DirectoryIterator('cache') as $d) {
