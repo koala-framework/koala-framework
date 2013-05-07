@@ -25,6 +25,9 @@ class Kwf_Media_Output_Component
                 } else if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $c->componentClass, Kwf_Registry::get('userModel')->getAuthedUser())) {
                     //paragraphs vorschau im backend
                     $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
+                } else if (Kwf_Registry::get('acl')->isAllowedUser(Kwf_Registry::get('userModel')->getAuthedUser(), 'kwf_component_preview', 'view')) {
+                    //perview user in frontend
+                    $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
                 } else {
                     return Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
                 }
