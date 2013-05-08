@@ -30,11 +30,14 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
 
     public static function getHelpOptions()
     {
-        $types = Kwf_Util_ClearCache::getInstance()->getTypes();
+        $types = array();
+        foreach (Kwf_Util_ClearCache::getInstance()->getTypes() as $t) {
+            $types[] = $t->getTypeName();
+        }
         return array(
             array(
                 'param'=> 'type',
-                'value'=> $types,
+                'value'=> implode(',', $types),
                 'valueOptional' => true,
                 'help' => 'what to clear'
             )

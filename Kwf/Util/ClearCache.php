@@ -60,120 +60,47 @@ class Kwf_Util_ClearCache
 
     public function getTypes()
     {
-
-        $types = array('all');
+        $types = array();
         if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-            $types[] = 'elastiCache';
+            $types[] = new Kwf_Util_ClearCache_Types_ElastiCache();
         }
-        if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) $types[] = 'memcache';
-        if (extension_loaded('apc')) $types[] = 'apc';
+        if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) {
+            $types[] = new Kwf_Util_ClearCache_Types_Memcache();
+        }
         if (extension_loaded('apc')) {
-            $types[] = 'optcode';
+            $types[] = new Kwf_Util_ClearCache_Types_ApcUser();
+            $types[] = new Kwf_Util_ClearCache_Types_ApcOptcode();
         }
-        $types[] = 'setup';
-        $types = array_merge($types, $this->_getCacheDirs());
-        $types = array_merge($types, $this->_getDbCacheTables());
-        if (Kwf_Config::getValue('assetsCacheUrl')) {
-            $types[] = 'assetsServer';
-        }
-        return $types;
-    }
-
-    private function _refresh($type, $output)
-    {
-        if ($type == 'setup') {
-
-            file_put_contents('cache/setup.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
-            Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup.php'), Kwf_Util_Apc::SILENT);
-
-        } else if ($type == 'config') {
-
-            Kwf_Config_Web::reload();
-
-        } else if ($type == 'component') {
-
-            Kwf_Component_Settings::resetSettingsCache();
-            Kwf_Component_Settings::_getSettingsCached();
-
-        } else if ($type == 'assets') {
-
-            $loader = new Kwf_Assets_Loader();
-            $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem
-
-            $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
-            $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip';
-            $assets = Kwf_Registry::get('config')->assets->toArray();
-            $assetTypes = array();
-            foreach ($assets as $assetsType => $v) {
-                if ($assetsType == 'dependencies') continue;
-                if ($output) echo $assetsType.' ';
-                $urls = $loader->getDependencies()->getAssetUrls($assetsType, 'js', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage);
-                $urls = array_merge($urls, $loader->getDependencies()->getAssetUrls($assetsType, 'css', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage));
-                foreach ($urls as $url) {
-                    $url = preg_replace('#^/assets/#', '', $url);
-                    $url = preg_replace('#\\?v=\d+(&t=\d+)?$#', '', $url);
-                    $loader->getFileContents($url);
-                }
+        foreach ($this->_getCacheDirs() as $d) {
+            if ($d != 'config'    //handled in Types_Config
+                && $d != 'assets' //handled in Types_Assets
+                && $d != 'trl' //handled in Types_Trl
+            ) {
+                $types[] = new Kwf_Util_ClearCache_Types_Dir($d);
             }
-
-        } else if ($type == 'events') {
-
-            Kwf_Component_Events::getAllListeners();
-
-        } else if ($type == 'cache_users') {
-
-            Kwf_Registry::get('userModel')->getKwfModel()->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
-
-        } else if ($type == 'users cleanup') {
-
-            // alle zeilen löschen die zuviel sind in kwf_users
-            // nötig für lokale tests
-            $db = Kwf_Registry::get('db');
-            $dbRes = $db->query('SELECT COUNT(*) `cache_users_count` FROM `cache_users`')->fetchAll();
-            if ($dbRes[0]['cache_users_count'] >= 1) {
-                $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `kwf_users`
-                        WHERE NOT (SELECT cache_users.id
-                                    FROM cache_users
-                                    WHERE cache_users.id = kwf_users.id
-                                    )'
-                )->fetchAll();
-                $db->query('DELETE FROM `kwf_users`
-                        WHERE NOT (SELECT cache_users.id
-                                    FROM cache_users
-                                    WHERE cache_users.id = kwf_users.id
-                                    )'
-                );
-                return $dbRes[0]['sort_out_count']." rows cleared";
+        }
+        foreach ($this->_getDbCacheTables() as $t) {
+            if ($t == 'cache_component') {
+                $types[] = new Kwf_Util_ClearCache_Types_TableComponentView();
+            } else if ($t == 'cache_users') { //handled in Types_Users
+                 $types[] = new Kwf_Util_ClearCache_Types_Users();
             } else {
-                return "skipping: cache_users is empty";
-            }
-
-        } else if ($type == 'trl') {
-
-            $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
-            if ($webCodeLanguage != 'en') {
-                Kwf_Trl::getInstance()->trl('Login', array(), 'en', $webCodeLanguage);
+                $types[] = new Kwf_Util_ClearCache_Types_Table($t);
             }
         }
-    }
-
-    protected function _getRefreshTypes($types)
-    {
-        $refreshTypes = array();
-        $refreshTypes[] = 'config';
-        $refreshTypes[] = 'setup';
+        if (Kwf_Config::getValue('assetsCacheUrl')) {
+            $types[] = new Kwf_Util_ClearCache_Types_AssetsServer();
+        }
+ 
+        $types[] = new Kwf_Util_ClearCache_Types_Config();
+        $types[] = new Kwf_Util_ClearCache_Types_Setup();
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            $refreshTypes[] = 'component';
+            $types[] = new Kwf_Util_ClearCache_Types_ComonentSettings();
         }
-        $refreshTypes[] = 'trl';
-        $refreshTypes[] = 'assets';
-        if (in_array('cache_component', $this->_getDbCacheTables())
-            && (in_array('component', $types) || in_array('cache_component', $types))
-        ) {
-            $refreshTypes[] = 'events';
-        }
-        if (in_array('cache_users', $types)) {
-            $refreshTypes[] = 'cache_users';
+        $types[] = new Kwf_Util_ClearCache_Types_Trl();
+        $types[] = new Kwf_Util_ClearCache_Types_Assets();
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $types[] = new Kwf_Util_ClearCache_Types_Events();
         }
 
         try {
@@ -181,15 +108,15 @@ class Kwf_Util_ClearCache
         } catch (Exception $e) {
             $db = false;
         }
-        if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
+        if ($db) {
             $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
             if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
                 if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
-                    $refreshTypes[] = 'users cleanup';
+                    $types[] = new Kwf_Util_ClearCache_Types_UsersCleanup();
                 }
             }
         }
-        return $refreshTypes;
+        return $types;
     }
 
     /**
@@ -198,49 +125,86 @@ class Kwf_Util_ClearCache
      * @param bool if caches should be refreshed (warmed up)
      * @param array possible options: skipMaintenanceBootstrap, skipOtherServers
      */
-    public final function clearCache($types = 'all', $output = false, $refresh = true, $options = array())
+    public final function clearCache($typeNames = 'all', $output = false, $refresh = true, $options = array())
     {
         Kwf_Component_ModelObserver::getInstance()->disable();
 
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
             Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
         }
+        
 
-        $refreshTypes = array();
-        if ($types == 'all') {
+        if ($typeNames == 'all') {
             $types = $this->getTypes();
-            $refreshTypes = $this->_getRefreshTypes($types);
         } else {
-            if (!is_array($types)) {
-                $types = explode(',', $types);
+            if (!is_array($typeNames)) {
+                $typeNames = explode(',', $typeNames);
             }
-            $refreshTypes = $types;
+            $types = array();
+            foreach ($this->getTypes() as $t) {
+                if (in_array($t->getTypeName(), $typeNames)) {
+                    $types[] = $t;
+                }
+            }
         }
 
-        $this->_clearCache($types, $output, $options);
+        $maxTypeNameLength = 0;
+        $countSteps = 0;
+        foreach ($types as $type) {
+            $type->setVerbosity($output ? Kwf_Util_ClearCache_Types_Abstract::VERBOSE : Kwf_Util_ClearCache_Types_Abstract::SILENT);
+            $maxTypeNameLength = max($maxTypeNameLength, strlen($type->getTypeName()));
+            if ($type->doesClear()) $countSteps++;
+            if ($type->doesRefresh()) $countSteps++;
+        }
 
-        if ($refresh) {
-            if ($output) echo "\n";
-            foreach ($refreshTypes as $type) {
-                if ($output) echo "Refresh $type".str_repeat('.', 15-strlen($type));
+        $currentStep = 0;
+        foreach ($types as $type) {
+            if ($type->doesClear()) {
+                $currentStep++;
+                if ($output) {
+                    echo "[".str_repeat(' ', 2-strlen($currentStep))."$currentStep/$countSteps] ";
+                    echo "clearing ".$type->getTypeName()."...".str_repeat('.', $maxTypeNameLength - strlen($type->getTypeName()))." ";
+                }
                 $t = microtime(true);
                 try {
-                    $result = $this->_refresh($type, $output);
-                    if (!$result) $result= 'OK';
-                    $success = true;
+                    $type->clearCache($options);
                 } catch (Exception $e) {
                     if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
                     continue;
                 }
                 if ($output) {
-                    echo " [\033[00;32m".$result."\033[00m]";
-                    echo " ".round((microtime(true)-$t)*1000)."ms";
-                    echo "\n";
+                    echo "\033[00;32mOK\033[00m";
+                    echo " (".round((microtime(true)-$t)*1000)."ms)";
+                    echo "\n";;
                 }
             }
-
-            $this->_refreshCache($types, $output);
         }
+        if ($refresh) {
+            foreach ($types as $type) {
+                if ($type->doesRefresh()) {
+                    $currentStep++;
+                    if ($output) {
+                        echo "[$currentStep/$countSteps] refreshing ".$type->getTypeName().".".str_repeat('.', $maxTypeNameLength - strlen($type->getTypeName()))." ";
+                    }
+                    $t = microtime(true);
+                    try {
+                        $type->refreshCache($options);
+                    } catch (Exception $e) {
+                        if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
+                        continue;
+                    }
+                    if ($output) {
+                        echo "\033[00;32mOK\033[00m";
+                        echo " (".round((microtime(true)-$t)*1000)."ms)";
+                        echo "\n";;
+                    }
+                }
+            }
+        }
+/*
+        TODO re-enable this somehow
+          * required at all?
+          * own type? or should the different types each also clear the other servers (apc does that already)
 
         $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
         if (Kwf_Config::getValue('server.aws') && !$skipOtherServers) {
@@ -272,100 +236,11 @@ class Kwf_Util_ClearCache
                 }
             }
         }
-
+*/
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
             Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
         }
 
         Kwf_Component_ModelObserver::getInstance()->enable();
-    }
-
-    protected function _refreshCache($types, $output)
-    {
-    }
-
-    private function _callApcUtil($type, $output, $options)
-    {
-        Kwf_Util_Apc::callClearCacheByCli(array('type' => $type), $output ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT, $options);
-    }
-
-    protected function _clearCache(array $types, $output, $options)
-    {
-        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
-        if (in_array('elastiCache', $types) && !$skipOtherServers) {
-            //namespace used in Kwf_Cache_Simple
-            $cache = Kwf_Cache_Simple::getZendCache();
-            $mc = $cache->getBackend()->getMemcache();
-            if ($mc->get('cache_namespace')) {
-                $mc->increment('cache_namespace');
-            }
-        }
-        if (in_array('memcache', $types)) {
-            $cache = Kwf_Cache::factory('Core', 'Memcached', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-            $cache->clean();
-            if ($output) echo "cleared:     memcache\n";
-        }
-        if (in_array('apc', $types)) {
-            $this->_callApcUtil('user', $output, $options);
-        }
-        if (in_array('optcode', $types)) {
-            $this->_callApcUtil('file', $output, $options);
-        }
-        if (in_array('setup', $types)) {
-            if (file_exists('cache/setup.php')) {
-                if ($output) echo "cleared:     cache/setup.php\n";
-                unlink('cache/setup.php');
-            }
-        }
-        foreach ($this->_getDbCacheTables() as $t) {
-            if (in_array($t, $types)) {
-                if ($t == 'cache_component') {
-                    try {
-                        $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
-                        if ($cnt > 5000) {
-                            if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
-                            continue;
-                        }
-                    } catch (Exception $e) {}
-                }
-                Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
-                if ($output) echo "cleared db:  $t\n";
-            }
-        }
-        foreach ($this->_getCacheDirs() as $d) {
-            if (in_array($d, $types)) {
-                if (is_dir("cache/$d")) {
-                    $this->_removeDirContents("cache/$d");
-                } else if (is_dir($d)) {
-                    $this->_removeDirContents($d);
-                }
-                if ($output) echo "cleared dir: $d cache\n";
-            }
-        }
-        if (in_array('assetsServer', $types)) {
-            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&clear';
-            try {
-                $out = file_get_contents($url);
-                if ($output) echo "cleared:     assetsServer [".$out."]\n";
-            } catch (Exception $e) {
-                if ($output) echo "cleared:     assetsServer [ERROR] ".$e->getMessage()."\n";
-            }
-        }
-    }
-
-    private function _removeDirContents($path)
-    {
-        $dir = new DirectoryIterator($path);
-        foreach ($dir as $fileinfo) {
-            if ($fileinfo->isFile() && $fileinfo->getFilename() != '.gitignore' && substr($fileinfo->getFilename(), 0, 4) != '.nfs') {
-                unlink($fileinfo->getPathName());
-            } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
-                $this->_removeDirContents($fileinfo->getPathName());
-                @rmdir($fileinfo->getPathName());
-            }
-        }
     }
 }
