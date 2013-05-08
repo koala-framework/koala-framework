@@ -62,7 +62,6 @@ class Kwc_Trl_FirstChildPage_Test extends Kwc_TestAbstract
         $this->_process();
         
         $html = $c->render();
-        $this->markTestIncomplete();
         $this->assertRegExp('#<div class=\"link1\"><a .*?href="/en/foo1en/foo3en".*?></div>#', $html);
     }
 
@@ -97,7 +96,6 @@ class Kwc_Trl_FirstChildPage_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->markTestIncomplete();
         $this->assertRegExp('#<div class=\"link1\"></div>#', $html);
     }
 
@@ -126,7 +124,6 @@ class Kwc_Trl_FirstChildPage_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->markTestIncomplete();
         $this->assertRegExp('#<div class=\"link5\"><a .*?href="/en/foo5en/foo6en/foo7enx".*?></div>#', $html);
     }
 }
