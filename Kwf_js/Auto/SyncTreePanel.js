@@ -225,6 +225,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     {
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-node-data',
+            mask: this.body,
             params: Ext.apply({node:id}, this.getBaseParams()),
             success: function(response, options, result) {
                 this.onSaved(result.data);
@@ -252,6 +253,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
                 if (button == 'yes') {
                     Ext.Ajax.request({
                         url: this.controllerUrl + '/json-delete',
+                        mask: this.body,
                         params: Ext.apply({id:this.getSelectedId()}, this.getBaseParams()),
                         success: function(response, options, result) {
                             this.onDeleted(result);
@@ -271,6 +273,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         params.point = dropEvent.point;
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-move',
+            mask: this.body,
             params: params,
             success: function(response, options, result) {
             	this.onMoved(result);
@@ -306,6 +309,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     onVisible : function (o, e) {
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-visible',
+            mask: this.body,
             params: Ext.apply({id:this.getSelectedId()}, this.getBaseParams()),
             success: function(response, options, result) {
                 node = this.tree.getNodeById(result.id);
