@@ -300,8 +300,8 @@ class Kwf_Util_Setup
 
         if (Kwf_Config::getValue('showPlaceholder')) {
             $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath() && substr(Kwf_Setup::getRequestPath(), 0, 8)!='/assets/' && !Kwf_Component_Data_Root::getShowInvisible()) {\n";
-            $ret .= "    $view = new Kwf_View();\n";
-            $ret .= "    echo $view->render('placeholder.tpl');\n";
+            $ret .= "    \$view = new Kwf_View();\n";
+            $ret .= "    echo \$view->render('placeholder.tpl');\n";
             $ret .= "    exit;\n";
             $ret .= "}\n";
         }
