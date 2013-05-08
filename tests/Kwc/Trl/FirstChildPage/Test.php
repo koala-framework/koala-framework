@@ -34,7 +34,6 @@ class Kwc_Trl_FirstChildPage_Test extends Kwc_TestAbstract
         $html = $c->render();
         $this->assertRegExp('#<div class=\"link1\"><a .*?href="/en/foo1en/foo2en".*?></div>#', $html);
         $this->assertRegExp('#<div class=\"link5\"><a .*?href="/en/foo5en/foo6en/foo7en".*?></div>#', $html);
-        $this->markTestIncomplete();
         $this->assertRegExp('#<div class=\"link4\"></div>#', $html);
     }
 

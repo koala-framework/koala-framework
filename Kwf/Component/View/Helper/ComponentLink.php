@@ -27,10 +27,8 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
         $targetComponent = $this->_getComponentById($config['targetComponentId']);
         $targetPage = $targetComponent->getPage();
         if (!$targetPage) return '';
-        if (is_instance_of($targetPage->componentClass, 'Kwc_Basic_LinkTag_Abstract_Component')) {
-            if (!$targetPage->getComponent()->hasContent()) {
-                return '';
-            }
+        if (!$targetPage->url) {
+            return '';
         }
         $componentLinkModifiers = array();
         if (!isset($config['skipComponentLinkModifiers']) || !$config['skipComponentLinkModifiers']) {
