@@ -68,15 +68,18 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         if (!$value) $value = trlKwf('yyyy-mm-dd');
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
+        $class = '';
         if ($value != trlKwf('yyyy-mm-dd')) {
             $v = strtotime($value);
             if ($v) $value = date(trlKwf('Y-m-d'), $v);
+        } else {
+            $class = 'kwfClearOnFocus';
         }
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
-        $ret['html'] = "<input type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
+        $ret['html'] = "<input class=\"$class\" type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }
 }
