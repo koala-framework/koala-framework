@@ -64,6 +64,10 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     public function loadClass($className)
     {
+        // this control make it possible to add an own IndexController in web controllers
+        if ($this->_curModule == 'kwf_controller_action_component' && $className == 'IndexController' && class_exists('IndexController')) {
+            return $className;
+        }
         if (substr($className, 0, 5) == 'Vkwf_' || substr($className, 0, 5) == 'Vkwc_'
                 || substr($className, 0, 4) == 'Kwc_' || substr($className, 0, 4) == 'Kwf_'
                 || $this->_curModule == 'web_test'
