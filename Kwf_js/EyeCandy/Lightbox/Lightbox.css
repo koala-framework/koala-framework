@@ -23,7 +23,17 @@
     width: 42px;
     height: 42px;
     background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
+    z-index: 102;
 }
+
+.kwfLightbox.mobile .closeButton {
+    top: 0;
+    right: 0;
+}
+.kwfLightbox.mobile .kwfLightboxInner {
+    margin-bottom: 0;
+}
+
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
 .kwfLightbox .kwfLightboxContent { height: 100%; }

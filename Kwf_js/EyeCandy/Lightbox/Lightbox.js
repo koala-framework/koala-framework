@@ -339,6 +339,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
             }
         }, this);
 
+        this._updateMobile();
+
         //if content is larger than window, resize accordingly
         var originalSize = this.lightbox.innerLightboxEl.getSize();
         var maxSize = this._getMaxContentSize();
@@ -364,9 +366,22 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     _getOuterMargin: function()
     {
-        return 20;
+        var maxSize = this._getMaxContentSize(false);
+        if (maxSize.width <= 480 || maxSize.height <= 480) {
+            return 0;
+        } else {
+            return 20;
+        }
     },
-    _getMaxContentSize: function() {
+    _updateMobile: function()
+    {
+        if (this._getOuterMargin() == 0) {
+            this.lightbox.lightboxEl.addClass('mobile');
+        } else {
+            this.lightbox.lightboxEl.removeClass('mobile');
+        }
+    },
+    _getMaxContentSize: function(subtractOuterMargin) {
         var maxSize;
         if (typeof(window.innerHeight) == 'number') {
             maxSize = {
@@ -379,8 +394,10 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
                 height: document.documentElement.clientHeight
             };
         }
-        maxSize.width -= this._getOuterMargin()*2;
-        maxSize.height -= this._getOuterMargin()*2;
+        if (subtractOuterMargin !== false) {
+            maxSize.width -= this._getOuterMargin()*2;
+            maxSize.height -= this._getOuterMargin()*2;
+        }
         return maxSize;
     },
     _getContentSize: function()
@@ -480,6 +497,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
 
     onResizeWindow: function() {
+        this._updateMobile();
         this.lightbox.innerLightboxEl.setSize(this._getContentSize());
         this._center(false);
     }
