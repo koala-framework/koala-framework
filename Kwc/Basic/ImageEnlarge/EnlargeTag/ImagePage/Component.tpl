@@ -17,7 +17,7 @@
         <? } else { ?>
         <div class="nextBtnInactive"></div>
         <? } ?>
-        <div class="image" style="width:<?=$this->width?>px; height:<?=$this->height?>px">
+        <div class="image">
             <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
         </div>
     </div>

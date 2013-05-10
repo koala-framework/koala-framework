@@ -2,6 +2,8 @@
 /**
  * @group Basic_ImageEnlarge
  * @group Kwc_Image
+ *
+ * http://kwf.niko.vivid/kwf/kwctest/Kwc_Basic_ImageEnlarge_Root/foo1
  */
 class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 {

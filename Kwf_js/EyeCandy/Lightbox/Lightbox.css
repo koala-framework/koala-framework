@@ -6,8 +6,8 @@
     height: 100%; width: 100%;
 }
 .kwfLightbox .kwfLightboxInner {
-    min-width: 200px;
-    min-height: 200px;
+    min-width: 100px;
+    min-height: 100px;
     padding: 10px;
     background: #fff;
     margin-bottom: 40px;
@@ -26,6 +26,7 @@
 }
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
+.kwfLightbox .kwfLightboxContent { height: 100%; }
 .kwfLightbox .lightboxBody { position: relative; height: 100%; z-index: 101; }
 .kwfLightbox .lightboxBody .nextBtn,
 .kwfLightbox .lightboxBody .nextBtn a,
