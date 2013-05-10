@@ -119,6 +119,15 @@ class Kwf_Util_ClearCache
         return $types;
     }
 
+    public function getTypeNames()
+    {
+        $ret = array();
+        foreach ($this->getTypes() as $t) {
+            $ret[] = $t->getTypeName();
+        }
+        return $ret;
+    }
+
     /**
      * @param string types of caches that should be cleared
      * @param bool if output should shown (for cli)
@@ -132,7 +141,6 @@ class Kwf_Util_ClearCache
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
             Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
         }
-        
 
         if ($typeNames == 'all') {
             $types = $this->getTypes();
@@ -157,10 +165,16 @@ class Kwf_Util_ClearCache
             if ($type->doesRefresh()) $countSteps++;
         }
 
+        $progress = null;
+        if (isset($options['progressAdapter'])) {
+            $progress = new Zend_ProgressBar($options['progressAdapter'], 0, $countSteps);
+        }
+
         $currentStep = 0;
         foreach ($types as $type) {
             if ($type->doesClear()) {
                 $currentStep++;
+                if ($progress) $progress->next(1, "clearing ".$type->getTypeName());
                 if ($output) {
                     echo "[".str_repeat(' ', 2-strlen($currentStep))."$currentStep/$countSteps] ";
                     echo "clearing ".$type->getTypeName()."...".str_repeat('.', $maxTypeNameLength - strlen($type->getTypeName()))." ";
@@ -183,6 +197,7 @@ class Kwf_Util_ClearCache
             foreach ($types as $type) {
                 if ($type->doesRefresh()) {
                     $currentStep++;
+                    if ($progress) $progress->next(1, "refreshing ".$type->getTypeName());
                     if ($output) {
                         echo "[$currentStep/$countSteps] refreshing ".$type->getTypeName().".".str_repeat('.', $maxTypeNameLength - strlen($type->getTypeName()))." ";
                     }

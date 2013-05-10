@@ -3,6 +3,8 @@ class Kwf_Util_Maintenance
 {
     public static function writeMaintenanceBootstrapSelf($output = true)
     {
+        if (!is_writable('.') || !is_writable('bootstrap.php')) return;
+
         if (file_exists('bootstrap.php.backup')) {
             throw new Kwf_Exception("maintenance bootstrap already written");
         }
