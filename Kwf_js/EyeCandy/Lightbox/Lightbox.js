@@ -342,6 +342,16 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     afterContentShown: function() {
         this._center(false);
     },
+    _getContentSize: function()
+    {
+        var newSize = this.lightbox.contentEl.getSize();
+        newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
+        newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
+        if (this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter')) {
+            newSize['height'] -= this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter').getPadding('tb');
+        }
+        return newSize;
+    },
     updateContent: function(responseText) {
         var isVisible = this.lightbox.lightboxEl.isVisible();
         this.lightbox.lightboxEl.show(); //to mesaure
@@ -352,10 +362,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
         if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.dom.style.width = '';
-        var newSize = this.lightbox.contentEl.getSize();
-        newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
-        newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
-
+        var newSize = this._getContentSize();
         if (isVisible) {
             this.lightbox.innerLightboxEl.setSize(newSize);
             if (this.lightbox.innerLightboxEl.getColor('backgroundColor')) {
@@ -408,12 +415,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         if (!this.lightbox.contentEl) return;
 
         //adjust size if height changed
-        var newSize = this.lightbox.contentEl.getSize();
-        newSize['height'] += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
-        newSize['width'] += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
-        if (this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter')) {
-            newSize['height'] -= this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter').getPadding('tb');
-        }
+        var newSize = this._getContentSize();
         var originalSize = this.lightbox.innerLightboxEl.getSize();
         this.lightbox.innerLightboxEl.setSize(newSize); //set to new size so centering works (no animation)
         var centerXy = this._getCenterXy();
