@@ -80,6 +80,12 @@ Kwf.Utils.HistoryState.on('popstate', function() {
     }
 });
 
+Ext.fly(window).on('resize', function(ev) {
+    if (Kwf.EyeCandy.Lightbox.currentOpen) {
+        Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
+    }
+}, this);
+
 Ext.ns('Kwf.EyeCandy.Lightbox');
 Kwf.EyeCandy.Lightbox.currentOpen = null;
 Kwf.EyeCandy.Lightbox.allByUrl = {};
@@ -290,6 +296,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     onClose: Ext.emptyFn,
     afterClose: Ext.emptyFn,
     onContentReady: Ext.emptyFn,
+    onResizeWindow: Ext.emptyFn,
 
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
@@ -422,5 +429,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         //instead center unanimated
         this.lightbox.innerLightboxEl.setXY(xy);
+    },
+
+    onResizeWindow: function() {
+        this._center(false);
     }
 });
