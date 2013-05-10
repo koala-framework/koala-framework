@@ -37,8 +37,13 @@
 
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
-.kwfLightbox .kwfLightboxContent { height: 100%; }
-.kwfLightbox .lightboxBody { position: relative; height: 100%; z-index: 101; }
+.kwfLightbox .kwfLightboxContent { 
+    height: 100%;
+    overflow: auto;
+}
+.kwfLightbox .lightboxBody {
+    position: relative; height: 100%; z-index: 101;
+}
 .kwfLightbox .lightboxBody .nextBtn,
 .kwfLightbox .lightboxBody .nextBtn a,
 .kwfLightbox .lightboxBody .prevBtn,
