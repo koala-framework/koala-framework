@@ -382,18 +382,10 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         }
     },
     _getMaxContentSize: function(subtractOuterMargin) {
-        var maxSize;
-        if (typeof(window.innerHeight) == 'number') {
-            maxSize = {
-                width: window.innerWidth,
-                height: window.innerHeight
-            };
-        } else if (document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-            maxSize = {
-                width: document.documentElement.clientWidth,
-                height: document.documentElement.clientHeight
-            };
-        }
+        var maxSize = {
+            width: document.documentElement.clientWidth,
+            height: document.documentElement.clientHeight
+        };
         if (subtractOuterMargin !== false) {
             maxSize.width -= this._getOuterMargin()*2;
             maxSize.height -= this._getOuterMargin()*2;
@@ -458,7 +450,12 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this.unmask();
     },
     _getCenterXy: function() {
-        var xy = this.lightbox.innerLightboxEl.getAlignToXY(document, 'c-c');
+        var winSize = this._getMaxContentSize(false);
+        var contentSize = this.lightbox.innerLightboxEl.getSize();
+        var xy = [
+            (this._getMaxContentSize().width - this.lightbox.innerLightboxEl.getSize().width) / 2,
+            (this._getMaxContentSize().height - this.lightbox.innerLightboxEl.getSize().height) / 2
+        ];
 
         //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down
         var m = this._getOuterMargin();
