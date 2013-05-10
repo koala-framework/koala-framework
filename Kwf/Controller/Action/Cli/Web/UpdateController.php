@@ -49,7 +49,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
 
 
-        $doneNames = self::_getDoneNames();
+        $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
 
         if ($this->_getParam('class')) {
             $update = Kwf_Util_Update_Helper::createUpdate($this->_getParam('class'));
@@ -131,102 +131,5 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             echo "\n".count($updates)." update script(s) successfully executed.\n";
             exit(0);
         }
-    }
-
-    private static function _getDoneNames()
-    {
-        $db = Kwf_Registry::get('db');
-        try {
-            $q = $db->query("SELECT data FROM kwf_update");
-        } catch (Exception $e) {
-        }
-        $doneNames = false;
-        if (isset($q)) {
-            $doneNames = $q->fetchColumn();
-        }
-        if (!$doneNames) {
-            //fallback for older versions, update used to be a file
-            if (!file_exists('update')) {
-                $doneNames = array();
-                foreach (Kwf_Util_Update_Helper::getUpdates(0, 9999999) as $u) {
-                    $doneNames[] = $u->getUniqueName();
-                }
-                $db->query("UPDATE kwf_update SET data=?", serialize($doneNames));
-                echo "No update revision found, assuming up-to-date\n";
-                exit;
-            }
-            $doneNames = file_get_contents('update');
-        }
-
-        if (is_numeric(trim($doneNames))) {
-            //UPDATE applicaton/update format
-            $r = trim($doneNames);
-            $doneNames = array();
-            foreach (Kwf_Util_Update_Helper::getUpdates(0, $r) as $u) {
-                $doneNames[] = $u->getUniqueName();
-            }
-        } else {
-            $doneNames = unserialize($doneNames);
-            if (isset($doneNames['start'])) {
-                //UPDATE applicaton/update format
-                if (!isset($doneNames['done'])) {
-                    $doneNames['done'] = array();
-                    foreach (Kwf_Util_Update_Helper::getUpdates(0, $doneNames['start']) as $u) {
-                        $doneNames['done'][] = $u->getRevision();
-                    }
-                }
-                $doneNames = $doneNames['done'];
-            }
-            $doneNamesCpy = $doneNames;
-            $doneNames = array();
-            foreach ($doneNamesCpy as $i) {
-                if (is_numeric($i)) {
-                    //UPDATE applicaton/update format
-                    static $allUpdates;
-                    if (!isset($allUpdates)) {
-                        $allUpdates = array();
-                        foreach (Kwf_Util_Update_Helper::getUpdates(0, 9999999) as $u) {
-                            if (!isset($allUpdates[$u->getRevision()])) $allUpdates[$u->getRevision()] = array();
-                            $allUpdates[$u->getRevision()][] = $u;
-                        }
-                    }
-                    if (isset($allUpdates[$i])) {
-                        foreach ($allUpdates[$i] as $u) {
-                            $doneNames[] = $u->getUniqueName();
-                        }
-                    }
-                } else {
-                    $doneNames[] = $i;
-                }
-            }
-        }
-
-        //convert old updates from pre 3.0 times (where kwf was called vps)
-        foreach ($doneNames as &$i) {
-            if (substr($i, 0, 4) == 'Vpc_' || substr($i, 0, 4) == 'Vps_') {
-                $updateWithoutWebname = substr($i, strpos($i, '_', 4)+1);
-                if (class_exists($updateWithoutWebname)) {
-                    $i = $updateWithoutWebname;
-                    continue;
-                }
-                $updateSqlFile = str_replace('_', '/', $updateWithoutWebname).'.sql';
-                foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
-                    if (file_exists($ip.'/'.$updateSqlFile)) {
-                        $i = $updateWithoutWebname;
-                        continue;
-                    }
-                }
-
-                $i = str_replace('Vps_Update_', 'Vkwf_Update_', $i);
-
-                $i = str_replace('Vps_', 'Kwf_', $i);
-                $i = str_replace('Vpc_', 'Kwc_', $i);
-            }
-        }
-
-        if (!$doneNames) {
-            //it's ok to have no updates throw new Kwf_ClientException("Invalid update revision");
-        }
-        return $doneNames;
     }
 }
