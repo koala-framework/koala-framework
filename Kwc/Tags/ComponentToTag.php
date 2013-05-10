@@ -1,7 +1,7 @@
 <?php
 class Kwc_Tags_ComponentToTag extends Kwf_Model_Db
 {
-    protected $_table = 'kwc_component_to_tag';
+    protected $_table = 'kwc_tags_to_components';
 
     protected $_referenceMap = array(
         'Tag' => 'tag_id->Kwc_Tags_Model',
