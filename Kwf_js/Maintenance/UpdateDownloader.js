@@ -38,6 +38,7 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
                     },
                     progress: true,
                     scope: this,
+                    timeout: 10*60*1000,
                     success: function() {
                         alert('Download Finished, execute updates now');
                         location.href = '/kwf/maintenance/update';
