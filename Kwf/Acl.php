@@ -37,6 +37,7 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_maintenance_setup'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_update'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_clear-cache'));
+        $this->add(new Zend_Acl_Resource('kwf_maintenance_update-downloader'));
         $this->add(new Zend_Acl_Resource('edit_role'));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_admin', 'admin'), 'edit_role');
 
@@ -77,6 +78,7 @@ class Kwf_Acl extends Zend_Acl
         $this->allow(null, 'kwf_maintenance_setup'); //allow for everyone, as there are no users yet during setup
         $this->allow('admin', 'kwf_maintenance_update');
         $this->allow('admin', 'kwf_maintenance_clear-cache');
+        $this->allow('admin', 'kwf_maintenance_update-downloader');
     }
 
     public function isAllowed($role = null, $resource = null, $privilege = null)
