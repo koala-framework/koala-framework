@@ -86,8 +86,12 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
 
             } else {
                 $targetDir = false;
-                if ($target == 'library.tar.gz') $targetDir = 'library';
-                else if ($target == 'kwf.tar.gz') $targetDir = 'kwf-lib';
+                if ($target == 'library.tar.gz') {
+                    $targetDir = 'library';
+                } else if ($target == 'kwf.tar.gz') {
+                    $targetDir = 'kwf-lib';
+                    copy($targetDir.'/include_path', $dirs[0].'/include_path');
+                }
                 rename($targetDir, uniqid("backup").$targetDir);
                 rename("$dirs[0]",  $targetDir);
             }
