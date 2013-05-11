@@ -43,7 +43,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
     {
         $this->view->kwfVersion = Kwf_Config::getValue('application.kwf.name') . ' ' . trlKwf('Version') . ' ' . Kwf_Config::getValue('application.kwf.version');
         $this->view->appVersion = Kwf_Config::getValue('application.name');
-        $this->view->defaultDbNmae = Kwf_Config::getValue('application.id');
+        $this->view->defaultDbName = Kwf_Config::getValue('application.id');
         $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:Setup';
         $this->view->viewport = 'Kwf.Maintenance.Viewport';
         $this->view->xtype = 'kwf.maintenance.setup';

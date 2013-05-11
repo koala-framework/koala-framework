@@ -66,7 +66,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
                 xtype: 'textfield',
                 name: 'db_dbname',
                 fieldLabel: 'Database',
-                value: this.defaultDbNmae,
+                value: this.defaultDbName,
                 allowBlank: false
             }, {
                 xtype: 'textfield',
