@@ -1,5 +1,5 @@
 <?php
-class Kwf_Util_ClearCache_Types_ComonentSettings extends Kwf_Util_ClearCache_Types_Abstract
+class Kwf_Util_ClearCache_Types_ComponentSettings extends Kwf_Util_ClearCache_Types_Abstract
 {
     //TODO also clear cache?
 
