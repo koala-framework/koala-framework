@@ -15,8 +15,16 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['paragraphs'] = $this->getData()
-            ->getChildComponents(array('generator'=>'paragraphs'));
+        $ret['paragraphs'] = array();
+        foreach($this->getData()->getChildComponents(array('generator'=>'paragraphs')) as $paragraph) {
+            $cssClass = 'kwcParagraphItem';
+            $row = $paragraph->chained->getRow();
+            if (isset($row->device_visible) && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
+            $ret['paragraphs'][] = array(
+                'component' => $paragraph,
+                'cssClass' => $cssClass
+            );
+        }
         return $ret;
     }
 
