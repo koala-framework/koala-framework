@@ -8,8 +8,13 @@ class Kwc_ColumnsResponsive_Basic_GeneratorTest extends Kwc_TestAbstract
 
     public function testGetChildsFromParagraphs()
     {
-        $this->markTestIncomplete();
-        $components = Kwf_Component_Data_Root::getInstance()->getComponentsBySameClass('Kwc_ColumnsResponsive_Basic_Paragraphs_Component');
-        $this->assertEquals('Kwc_ColumnsResponsive_Basic_Paragraphs_Component', $components[0]);
+        $components = Kwf_Component_Data_Root::getInstance()
+            ->getComponentsBySameClass(
+                'Kwc_ColumnsResponsive_Basic_Paragraphs_Component',
+                array(
+                    'id' => 1
+                )
+            );
+        $this->assertEquals(0, count($components));
     }
 }
