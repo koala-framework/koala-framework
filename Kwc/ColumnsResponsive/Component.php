@@ -82,4 +82,16 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
         }
         return $ret;
     }
+
+    protected function _getChildContentWidth(Kwf_Component_Data $child)
+    {
+        $ownWidth = parent::_getChildContentWidth($child);
+
+        $component = $child->parent;
+        $columnTypes = $this->_getSetting('columns');
+        $columns = $columnTypes[$this->getRow()->type];
+
+        $widthCalc = $columns['colSpans'][$child->id - 1] / $columns['columns'];
+        return floor($ownWidth * $widthCalc);
+    }
 }
