@@ -31,6 +31,7 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
         }
 
         $config = $this->_getStandardConfig('kwc.paragraphs');
+        $config['showDeviceVisible'] = Kwc_Abstract::getSetting($this->_class, 'mobileBreakpoints');
         $config['components'] = $componentList;
         $config['componentIcons'] = $componentIcons;
         $config['needsComponentPanel'] = true;

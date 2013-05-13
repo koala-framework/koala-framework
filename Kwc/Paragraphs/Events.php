@@ -47,7 +47,7 @@ class Kwc_Paragraphs_Events extends Kwc_Abstract_Events
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                     $this->_class, $c
                 ));
-                if ($event->isDirty('visible')) {
+                if ($event->isDirty('visible') || $event->isDirty('device_visible')) {
                     $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
                         $this->_class, $c
                     ));

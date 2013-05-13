@@ -37,6 +37,7 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
             components: this.components,
             componentIcons: this.componentIcons,
             showDelete: this.showDelete,
+            showDeviceVisible: this.showDeviceVisible,
             showPosition: this.showPosition,
             showCopyPaste: this.showCopyPaste,
             listeners: {
@@ -44,6 +45,7 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
                 'delete': this.onDelete,
                 edit: this.onEdit,
                 changeVisible: this.onChangeVisible,
+                changeDeviceVisible: this.onChangeDeviceVisible,
                 changePos: this.onChangePos,
                 addParagraphMenuShow: this.onAddParagraphMenuShow,
                 addParagraph: this.onParagraphAdd,
@@ -313,6 +315,11 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
 
     onChangeVisible: function(record) {
         record.set('visible', !record.get('visible'));
+        this.submit();
+    },
+
+    onChangeDeviceVisible: function(record, value) {
+        record.set('device_visible', value);
         this.submit();
     },
 
