@@ -41,5 +41,6 @@ class Vps_Acl_Component_IsiWeb extends Vps_Acl_Component
         $this->allow('superuser', 'settings');
         $this->allow('superuser', 'vps_enquiries_enquiries');
         $this->deny('superuser', 'vps_component_clear-cache');
+        $this->deny(null, 'vkwf_project-timer_timer'); //deny by default, allow in web if required
     }
 }
