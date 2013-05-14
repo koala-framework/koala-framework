@@ -344,19 +344,22 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         //if content is larger than window, resize accordingly
         var originalSize = this.lightbox.innerLightboxEl.getSize();
         var maxSize = this._getMaxContentSize();
+
         if (originalSize.width > maxSize.width) {
             var ratio = originalSize.height / originalSize.width;
             var offs = originalSize.width-maxSize.width;
             originalSize.width -= offs;
-            originalSize.height -= offs*ratio;
+            if (this.lightbox.options.adaptHeight) originalSize.height -= offs*ratio;
         }
-        if (originalSize.height > maxSize.height) {
+        if (this.lightbox.options.adaptHeight && originalSize.height > maxSize.height) {
             var ratio = originalSize.width / originalSize.height;
             var offs = originalSize.height-maxSize.height;
             originalSize.height -= offs;
             originalSize.width -= offs*ratio;
         }
-        if (originalSize.height > maxSize.height) originalSize.height = maxSize.height;
+        if (!this.lightbox.options.adaptHeight && originalSize.height > maxSize.height) {
+            //delete originalSize.height;
+        }
         this.lightbox.innerLightboxEl.setSize(originalSize);
 
         this._center(false);
@@ -383,8 +386,10 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     _getMaxContentSize: function(subtractOuterMargin) {
         var maxSize = {
-            width: document.documentElement.clientWidth,
-            height: document.documentElement.clientHeight
+            //width: document.documentElement.clientWidth,
+            //height: document.documentElement.clientHeight
+            width: this.lightbox.lightboxEl.dom.clientWidth,
+            height: this.lightbox.lightboxEl.dom.clientHeight,
         };
         if (subtractOuterMargin !== false) {
             maxSize.width -= this._getOuterMargin()*2;
@@ -392,7 +397,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         }
         return maxSize;
     },
-    _getContentSize: function()
+
+    _getContentSize: function(dontDeleteHeight)
     {
         var newSize = this.lightbox.contentEl.getSize();
         newSize.height += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
@@ -402,7 +408,16 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         }
         var maxSize = this._getMaxContentSize();
         if (newSize.width > maxSize.width) newSize.width = maxSize.width;
-        if (newSize.height > maxSize.height) newSize.height = maxSize.height;
+
+        if (newSize.height > maxSize.height) {
+            if (this.lightbox.options.adaptHeight) {
+                newSize.height = maxSize.height;
+            } else {
+                if (!dontDeleteHeight) {
+                    delete newSize.height;
+                }
+            }
+        }
 
         return newSize;
     },
@@ -416,18 +431,24 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
         if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.dom.style.width = '';
-        var newSize = this._getContentSize();
         if (isVisible) {
+            var newSize = this._getContentSize(true);
             this.lightbox.innerLightboxEl.setSize(newSize);
             if (this.lightbox.innerLightboxEl.getColor('backgroundColor')) {
                 //animate size only if backgroundColor is set - else it doesn't make sense
                 this._center(true);
                 this.lightbox.innerLightboxEl.setSize(originalSize);
-                this.lightbox.innerLightboxEl.setSize(newSize, null, true);
+                this.lightbox.innerLightboxEl.setSize(newSize, null, {
+                    callback: function() {
+                        this.lightbox.innerLightboxEl.setSize(this._getContentSize());
+                    },
+                    scope: this
+                });
             } else {
                 this._center(false);
             }
         } else {
+            var newSize = this._getContentSize();
             this.lightbox.innerLightboxEl.setSize(newSize);
             this._center(false);
             this.lightbox.lightboxEl.hide();
@@ -479,6 +500,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         var originalSize = this.lightbox.innerLightboxEl.getSize();
         this.lightbox.innerLightboxEl.setSize(newSize); //set to new size so centering works (no animation)
         var centerXy = this._getCenterXy();
+
         var xy = this.lightbox.innerLightboxEl.getXY();
         xy[0] = centerXy[0];
         if (centerXy[1] < xy[1]) xy[1] = centerXy[1]; //move up, but not down
@@ -495,7 +517,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
     onResizeWindow: function() {
         this._updateMobile();
-        this.lightbox.innerLightboxEl.setSize(this._getContentSize());
+        var newSize = this._getContentSize();
+        this.lightbox.innerLightboxEl.setSize(newSize);
         this._center(false);
     }
 });

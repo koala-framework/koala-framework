@@ -1,14 +1,15 @@
 .kwfLightbox {
-    overflow: auto;
-    position: fixed;
+    position: absolute;
     z-index: 100;
     top: 0; left: 0;
-    height: 100%; width: 100%;
+    height: 100%;
+    width: 100%;
 }
 .kwfLightbox .kwfLightboxInner {
     min-width: 100px;
     min-height: 100px;
     padding: 10px;
+    box-sizing: border-box;
     background: #fff;
     margin-bottom: 40px;
 }
@@ -32,17 +33,20 @@
 }
 .kwfLightbox.mobile .kwfLightboxInner {
     margin-bottom: 0;
-    padding: 0;
 }
 
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
-.kwfLightbox .kwfLightboxContent { 
+.kwfLightbox .kwfLightboxContent {
+    overflow: hidden;
     height: 100%;
-    overflow: auto;
+    width: 100%;
 }
 .kwfLightbox .lightboxBody {
-    position: relative; height: 100%; z-index: 101;
+    position: relative;
+    height: 100%; 
+    width: 100%;
+    z-index: 101;
 }
 .kwfLightbox .lightboxBody .nextBtn,
 .kwfLightbox .lightboxBody .nextBtn a,
@@ -103,6 +107,8 @@
 }
 
 body.kwfLightboxTheaterMode {
-    /*overflow: hidden;
-    margin-right: 16px;*/
+    /*
+    overflow: hidden;
+    margin-right: 16px;
+    */
 }
