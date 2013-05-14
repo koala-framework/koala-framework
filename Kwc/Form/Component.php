@@ -13,6 +13,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
+        $ret['generators']['child']['component']['header'] = null;
+        $ret['generators']['child']['component']['footer'] = null;
         $ret['componentName'] = trlKwfStatic('Form');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
@@ -243,8 +245,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($ret['showSuccess']) {
+            $ret['success'] = $this->getData()->getChildComponent('-success');
+        } else {
             foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
-                $ret[$c->id] = $c;
+                if ($c->id != 'success') {
+                    $ret[$c->id] = $c;
+                }
             }
         }
 

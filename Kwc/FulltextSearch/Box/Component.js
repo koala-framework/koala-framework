@@ -115,14 +115,11 @@ Kwc.FulltextSearch.Box.Component.prototype =
         }, this.previousMainContent);
         this.loadingContent.enableDisplayMode('block');
 
-        var url = '/kwf/util/kwc/render';
-        if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
-
         var requestParams = this.searchForm.getValuesIncludingPost();
         requestParams.url = this.config.searchUrl;
         Ext.Ajax.request({
             params: requestParams,
-            url: url,
+            url: Kwf.getKwcRenderUrl(),
             success: function(response, options) {
                 this.loadingContent.remove();
                 this.searchMainContent = this.el.createChild({

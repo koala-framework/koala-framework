@@ -16,6 +16,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assets']['dep'][] = 'jQuery';
         $ret['assets']['dep'][] = 'mediaelement';
+        $ret['assets']['dep'][] = 'ExtCore';
 
         $ret['video'] = array(
             'defaultVideoWidth' =>  480,
@@ -103,12 +104,14 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_IsValidInterface::VALID;
+        return Kwf_Media_Output_Component::isValid($id);
     }
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $component =Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id);
+        $s = new Kwf_Component_Select();
+        $s->ignoreVisible(true);
+        $component =Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, $s);
         $row = $component->getComponent()->getRow();
         if ($type == 'webm') {
             $uploadRow = $row->getParentRow('FileWebm');

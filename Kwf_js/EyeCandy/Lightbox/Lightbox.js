@@ -100,8 +100,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     {
         if (this.lightboxEl) return;
 
+        var cls = 'kwfLightbox';
+        if (this.options.style) cls += ' kwfLightbox'+this.options.style;
+        if (this.options.cssClass) cls += ' '+this.options.cssClass;
         var lightbox = Ext.getBody().createChild({
-            cls: 'kwfLightbox' + (this.options.style ? ' kwfLightbox'+this.options.style : ''),
+            cls: cls,
             html: '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'
         });
         lightbox.dom.kwfLightbox = this; //don't initialize again in onContentReady
@@ -125,11 +128,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.fetched) return;
         this.fetched = true;
 
-        var url = '/kwf/util/kwc/render';
-        if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
         Ext.Ajax.request({
             params: { url: this.href },
-            url: url,
+            url: Kwf.getKwcRenderUrl(),
             success: function(response, options) {
                 this.contentEl = this.innerLightboxEl.createChild({
                     cls: 'kwfLightboxContent'

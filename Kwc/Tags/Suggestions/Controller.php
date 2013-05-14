@@ -31,7 +31,7 @@ class Kwc_Tags_Suggestions_Controller extends Kwf_Controller_Action
             $componentToTag->save();
 
             $r = Kwf_Model_Abstract::getInstance('Kwc_Tags_Suggestions_Model')->createRow();
-            $r->component_to_tag_id = $componentToTag->id;
+            $r->tags_to_components_id = $componentToTag->id;
             $r->date = date('Y-m-d H:i:s');
             $r->user_id = Kwf_Registry::get('userModel')->getAuthedUser()->id;
             $r->save();

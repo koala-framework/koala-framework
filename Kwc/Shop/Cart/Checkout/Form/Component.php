@@ -13,10 +13,7 @@ class Kwc_Shop_Cart_Checkout_Form_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $this->_form->setModel(
-            Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
-                ->getReferencedModel('Order')
-        );
+        $this->_form->setModel($this->getData()->parent->getComponent()->getOrderModel());
         $this->_form->setId(Kwc_Shop_Cart_Orders::getCartOrderId()); //can be null
 
         $this->_form->setPayments($this->_getFrontendPayments());
@@ -29,12 +26,9 @@ class Kwc_Shop_Cart_Checkout_Form_Component extends Kwc_Form_Component
         Kwc_Shop_Cart_Orders::setCartOrderId($row->id);
     }
 
-
     protected function _getFrontendPayments()
     {
-        $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
-            ->getReferencedModel('Order')
-            ->getCartOrder();
+        $order = $this->getData()->parent->getComponent()->getOrderModel()->getCartOrder();
         $totalAmount = $this->getData()->parent->getComponent()->getTotal($order);
         $cc = $this->getData()->parent->getComponent()->getPayments();
         $ret = array();

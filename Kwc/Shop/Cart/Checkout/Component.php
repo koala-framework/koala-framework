@@ -49,4 +49,10 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
     {
         return $this->getData()->getChildComponent('-'.$order->payment);
     }
+
+    public function getOrderModel()
+    {
+        return Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+                ->getReferencedModel('Order');
+    }
 }

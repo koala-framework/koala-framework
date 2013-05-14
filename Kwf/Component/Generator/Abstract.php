@@ -100,6 +100,9 @@ abstract class Kwf_Component_Generator_Abstract
                     throw new Kwf_Exception("Can't create model for generator '{$this->getGeneratorKey()}' in '$this->_class'");
                 }
             }
+            if (!$this->_model) {
+                throw new Kwf_Exception('model has to be set for table generator in '.$this->_class);
+            }
         }
         return $this->_model;
     }

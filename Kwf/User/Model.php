@@ -9,6 +9,16 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
 
     protected $_mailClass = 'Kwf_Mail_Template';
 
+    protected function _init()
+    {
+        parent::_init();
+        $this->_exprs['name'] = new Kwf_Model_Select_Expr_Concat(array(
+            new Kwf_Model_Select_Expr_Field('firstname'),
+            new Kwf_Model_Select_Expr_String(' '),
+            new Kwf_Model_Select_Expr_Field('lastname'),
+        ));
+    }
+
     protected $_dependentModels = array(
         'Messages' => 'Kwf_User_MessagesModel'
     );

@@ -615,7 +615,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                 $ref = $dbDepOf->getReferenceByModelClass($depOf->getParentModel(), null);
             }
-            $col1 = $dbDepOf->_formatField($ref['column'], null /* select fehlt - welches sollte das sein? */ , $tableNameAlias);
+
+            $col1 = $dbDepOf->_formatField($ref['column'], $dbSelect, $tableNameAlias);
             $col2 = $dbRefM->transformColumnName($dbRefM->getPrimaryKey());
 
             $refSelect->where("$refTableName.$col2=$col1");

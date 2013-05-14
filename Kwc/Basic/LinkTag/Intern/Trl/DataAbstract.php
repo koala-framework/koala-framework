@@ -7,7 +7,7 @@ abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwf_Component_D
     public final function getLinkedData()
     {
         if (!isset($this->_data)) {
-            $masterLinkData = $this->chained->getLinkedData();
+            $masterLinkData = $this->chained->getLinkedData(array('ignoreVisible'=>true));
             if (!$masterLinkData) $this->_data = false;
 
             if ($masterLinkData) {

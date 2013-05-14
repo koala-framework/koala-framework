@@ -39,6 +39,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['settingsRow'] = $this->_getRow();
+        $ret['tableStyle'] = $this->_getRow()->table_style;
         $ret['columnCount'] = $this->getColumnCount();
 
         $dataSelect = new Kwf_Model_Select();

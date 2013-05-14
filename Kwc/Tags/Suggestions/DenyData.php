@@ -6,7 +6,7 @@ class Kwc_Tags_Suggestions_DenyData extends Kwf_Data_Abstract
         if ($data) {
             $parentRow = $row->getParentRow('ComponentToTag');
             $row->status = 'denied';
-            $row->component_to_tag_id = null;
+            $row->tags_to_components_id = null;
             $row->save();
             $parentRow->delete();
         }
