@@ -43,10 +43,10 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         foreach($this->getData()->getChildComponents(array('generator'=>'paragraphs')) as $paragraph) {
             $cssClass = 'kwcParagraphItem';
             $row = $paragraph->getRow();
-            if (isset($row->device_visible) && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
+            if ($this->_getSetting('mobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
             $ret['paragraphs'][] = array(
-                'component' => $paragraph,
-                'cssClass' => $cssClass
+                'data' => $paragraph,
+                'class' => $cssClass
             );
         }
         return $ret;
