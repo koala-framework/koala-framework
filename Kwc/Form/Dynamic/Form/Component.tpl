@@ -30,7 +30,7 @@ if ($this->showSuccess) {
             <div class="button">
                 <div class="saving"></div>
                 <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit">
-                    <span><?= $this->placeholder['submitButton'] ?></span>
+                    <span><?=$this->submitCaption?></span>
                 </button>
             </div>
             <div class="afterButton"></div>

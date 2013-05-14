@@ -12,6 +12,10 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
     {
         $ret = parent::getTemplateVars();
         $ret['paragraphs'] = $this->getData()->parent->getChildComponent('-paragraphs');
+        $ret['submitCaption'] = $this->getData()->parent->getComponent()->getRow()->submit_caption;
+        if (!$ret['submitCaption']) {
+            $ret['submitCaption'] = $this->_getPlaceholder('submitButton');
+        }
         return $ret;
     }
 
