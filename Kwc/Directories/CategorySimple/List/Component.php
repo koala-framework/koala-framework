@@ -12,6 +12,9 @@ abstract class Kwc_Directories_CategorySimple_List_Component extends Kwc_Directo
     public function getSelect()
     {
         $select = parent::getSelect();
+        if (!$this->getRow()->category_id) {
+            throw new Kwf_Exception_Client(trlKwf('No category selected.'));
+        }
 
         $model = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(
             $this->_getSetting('categoryComponentClass'), 'categoryToItemModelName'
