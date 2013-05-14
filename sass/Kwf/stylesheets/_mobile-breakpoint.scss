@@ -1,0 +1,7 @@
+@mixin mobile-breakpoint {
+    @media only screen and 
+    (orientation : portrait) and (max-device-width: 480px), 
+    (orientation : landscape) and (max-device-height: 480px) {
+        @content;
+    }
+}
