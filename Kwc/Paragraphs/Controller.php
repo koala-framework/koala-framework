@@ -20,9 +20,11 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             ->setData(new Kwf_Data_Kwc_Frontend($this->_getParam('class')))
             ->setRenderer('component');
         $this->_columns->add(new Kwf_Grid_Column_Visible());
+        $this->_columns->add(new Kwf_Grid_Column('device_visible'))
+            ->setEditor(new Kwf_Form_Field_TextField());
         $this->_columns->add(new Kwf_Grid_Column('edit_components'))
             ->setData(new Kwf_Data_Kwc_EditComponents($this->_getParam('class')));
-     }
+    }
 
     public function jsonDataAction()
     {
@@ -65,6 +67,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $classes =$generators['paragraphs']['component'];
             $row->component = array_search($class, $classes);
             if (is_null($row->visible)) $row->visible = 0;
+            if (is_null($row->device_visible)) $row->device_visible = 'all';
             $row->pos = $this->_getParam('pos');
             $row->save();
             $id = $row->id;
