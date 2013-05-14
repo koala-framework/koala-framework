@@ -139,7 +139,11 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $c = $c->parent;
         }
 
-        if ($source->isPage && is_instance_of($source->componentClass, 'Kwc_Paragraphs_Component')) {
+        $sourceIsParagraphs = is_instance_of($source->componentClass, 'Kwc_Paragraphs_Component');
+        if ($source->isPage && $sourceIsParagraphs) {
+            //a whole paragraphs component is in clipboard
+            $sources = $source->getChildComponents(array('generator'=>'paragraphs', 'ignoreVisible'=>true));
+        } else if (!$source->isPage && !is_instance_of($source->parent->componentClass, 'Kwc_Paragraphs_Component')) {
             //a whole paragraphs component is in clipboard
             $sources = $source->getChildComponents(array('generator'=>'paragraphs', 'ignoreVisible'=>true));
         } else {
