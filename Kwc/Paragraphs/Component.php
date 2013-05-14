@@ -32,7 +32,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         }
         $ret['showCopyPaste'] = true;
         $ret['extConfig'] = 'Kwc_Paragraphs_ExtConfig';
-        $ret['mobileBreakpoints'] = Kwf_Config::getValue('kwc.mobileBreakpoints');
+        $ret['useMobileBreakpoints'] = Kwf_Config::getValue('kwc.mobileBreakpoints');
         return $ret;
     }
 
@@ -43,7 +43,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         foreach($this->getData()->getChildComponents(array('generator'=>'paragraphs')) as $paragraph) {
             $cssClass = 'kwcParagraphItem';
             $row = $paragraph->getRow();
-            if ($this->_getSetting('mobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
+            if ($this->_getSetting('useMobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
             $ret['paragraphs'][] = array(
                 'data' => $paragraph,
                 'class' => $cssClass
