@@ -37,5 +37,12 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
                 new Kwf_Model_Select_Expr_IsNull('expire_top_read_required'),
             ))
         ));
+        $this->_exprs['read_required_and_not_expired'] = new Kwf_Model_Select_Expr_And(array(
+            new Kwf_Model_Select_Expr_Field('read_required'),
+            new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Higher('expire_top_read_required', new Kwf_Date('now')),
+                new Kwf_Model_Select_Expr_IsNull('expire_top_read_required'),
+            ))
+        ));
     }
 }

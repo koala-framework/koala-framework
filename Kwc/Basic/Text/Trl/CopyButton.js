@@ -15,8 +15,13 @@ Kwc.Basic.Text.Trl.CopyButton = Ext.extend(Ext.form.Field, {
             enabled: false,
             handler: function() {
                 var masterHtml = this.ownerCt.findByType('showfield')[0].getRawValue();
-                this.ownerCt.ownerCt.findByType('htmleditor')[0].setValue(masterHtml);
-                this.ownerCt.ownerCt.findByType('htmleditor')[0].tidyHtml(); //damit link korrigiert werden
+                var editor = this.ownerCt.ownerCt.findByType('htmleditor')[0];
+                editor.setValue(masterHtml);
+                editor.plugins.each(function(p) {
+                    if (p instanceof Kwf.Form.HtmlEditor.Tidy) {
+                        p.tidyHtml(); //corrects links
+                    }
+                }, this);
             }
         });
     }

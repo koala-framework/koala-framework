@@ -1,0 +1,1 @@
+RENAME TABLE `kwc_component_to_tag` TO `kwc_tags_to_components` ;
