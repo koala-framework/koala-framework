@@ -63,7 +63,6 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
     {
         $this->_combobox = $box;
         $this->_combobox->setFormName($this->fields->getFormName());
-        $this->_combobox->setName($this->getName().'_combo');
         return $this;
     }
 
