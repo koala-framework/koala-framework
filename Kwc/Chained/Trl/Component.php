@@ -3,10 +3,6 @@ class Kwc_Chained_Trl_Component extends Kwc_Chained_Abstract_Component
 {
     public static function getSettings($masterComponentClass)
     {
-        if (is_instance_of($masterComponentClass, 'Kwc_Chained_Abstract_Component')) {
-            throw new Kwf_Exception("Cc of Cc shouldn't be used, called by '$masterComponentClass'");
-        }
-
         $ret = parent::getSettings();
         $copySettings = array('componentName', 'componentIcon', 'editComponents', 'viewCache', 'contentSender', 'plugins');
         $copyFlags = array('processInput', 'menuCategory', 'chainedType', 'subroot', 'hasAlternativeComponent');
