@@ -10,13 +10,11 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
     {
         $this->fields = new Kwf_Collection_FormFields(null, 'Kwf_Form_Container_Card');
 
-        $comboName = null;
-        if ($name) $comboName = $name.'_combo';
-        $this->_combobox = new Kwf_Form_Field_Select();
+        $this->_combobox = new Kwf_Form_Field_Select($name);
         $this->_combobox->setWidth(150)
             ->setListWidth(150);
 
-        parent::__construct($name);
+        parent::__construct($name.'_cards');
         $this->setFieldLabel($fieldLabel);
         $this->setBaseCls('x-plain');
         $this->setXtype('kwf.cards');
@@ -38,8 +36,8 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
 
     public function setName($v)
     {
-        parent::setName($v);
-        $this->_combobox->setName($v.'_combo');
+        parent::setName($v.'_cards');
+        $this->_combobox->setName($v);
         return $this;
     }
 
