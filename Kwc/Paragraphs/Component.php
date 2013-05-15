@@ -32,7 +32,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         }
         $ret['showCopyPaste'] = true;
         $ret['extConfig'] = 'Kwc_Paragraphs_ExtConfig';
-        $ret['useMobileBreakpoints'] = Kwf_Config::getValue('kwc.mobileBreakpoints');
+        $ret['useMobileBreakpoints'] = Kwf_Config::getValue('kwc.useMobileBreakpoints');
         return $ret;
     }
 
