@@ -160,7 +160,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 }
             }
         }, this);
-		this.relayEvents(this.store, ['load']);
+        this.relayEvents(this.store, ['load']);
         this.on('aftereditcomplete', function() {
             if (this.isDirty()) {
                 this.getAction('save').enable();
@@ -246,8 +246,8 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             if (column.header == null) continue;
 
             if (column['class'] && column['class'] != '') {
-            	var cl = eval(column['class']);
-            	column = new cl(Ext.apply({'header' : column.header}, column.config));
+                var cl = eval(column['class']);
+                column = new cl(Ext.apply({'header' : column.header}, column.config));
             } else if (typeof column.renderer == 'function') {
                 //do nothing
             } else if (Ext.util.Format[column.renderer]) {
@@ -262,16 +262,16 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 column.renderer = Ext.util.Format.showField(column.showDataIndex);
             }
             if (column.summaryRenderer) {
-	            if (Ext.util.Format[column.summaryRenderer]) {
-	                column.summaryRenderer = Ext.util.Format[column.summaryRenderer];
-	            } else {
-	                try {
-	                    column.summaryRenderer = eval(column.summaryRenderer);
-	                } catch(e) {
-	                    throw "invalid summaryRenderer: "+column.summaryRenderer;
-	                }
-	            }
-			}
+                if (Ext.util.Format[column.summaryRenderer]) {
+                    column.summaryRenderer = Ext.util.Format[column.summaryRenderer];
+                } else {
+                    try {
+                        column.summaryRenderer = eval(column.summaryRenderer);
+                    } catch(e) {
+                        throw "invalid summaryRenderer: "+column.summaryRenderer;
+                    }
+                }
+            }
 
             if (column.editor && column.editor.xtype == 'checkbox') {
                 delete column.editor;
@@ -496,7 +496,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             gridConfig.tbar.add(this.getAction('reload'));
         }
 
-		if (meta.helpText) {
+        if (meta.helpText) {
             gridConfig.tbar.add('->');
             gridConfig.tbar.add(new Ext.Action({
                 icon : '/assets/silkicons/information.png',
@@ -515,7 +515,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 },
                 scope: this
             }));
-		}
+        }
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
         if (gridConfig.tbar.length == 0 && !alwaysKeepTbar) {
             delete gridConfig.tbar;
@@ -654,7 +654,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
     submit : function(options)
     {
         this.grid.stopEditing(false); // blurs all open editor fields (when isset "allowBlur" (e.g. AbstractSelect))
-        
+
         if (!options) options = {};
 
         if (arguments[1]) options.params = arguments[1]; //backwards compatibility
@@ -790,7 +790,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 }
             }
         }
-		this.fireEvent('addaction', this);
+        this.fireEvent('addaction', this);
     },
 
     onDelete : function() {
