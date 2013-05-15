@@ -14,7 +14,7 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
         $this->_combobox->setWidth(150)
             ->setListWidth(150);
 
-        parent::__construct($name.'_cards');
+        parent::__construct($name);
         $this->setFieldLabel($fieldLabel);
         $this->setBaseCls('x-plain');
         $this->setXtype('kwf.cards');
