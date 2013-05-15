@@ -755,23 +755,6 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                     }
                 }
 
-                // check if value for pos-field should be set on add
-                var paging = this.metaData.paging;
-                var posColumnName = null;
-                if (!paging) {
-                    for (var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
-                        var cellEditor = this.getGrid().getColumnModel().getCellEditor(i,0);
-                        if (cellEditor && cellEditor.field.xtype == 'posfield') {
-                            posColumnName = cellEditor.field.name;
-                            break;
-                        }
-                    }
-                }
-                var autofillPos = true;
-                if (paging || posColumnName == null) {
-                    autofillPos = false;
-                }
-
                 this.getGrid().stopEditing();
 
                 var rowInsertPosition = 0;
@@ -779,14 +762,25 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                     rowInsertPosition = this.store.getCount();
                 }
 
-                // set value for pos-field if needed
-                if (autofillPos) {
-                    record.set(posColumnName, rowInsertPosition);
-                }
                 this.store.insert(rowInsertPosition, record);
                 this.store.newRecords.push(record);
                 if (record.dirty) {
                     this.getGrid().startEditing(rowInsertPosition, i);
+                }
+
+                // check if value for pos-field should be set on add. Only if no
+                // paging is enabled and a pos-field is existent
+                if (!this.metaData.paging) {
+                    for (var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
+                        // Get every cell-editor of the newly added row
+                        var cellEditor = this.getGrid().getColumnModel().getCellEditor(i,rowInsertPosition);
+                        // Check if cellEditor is a pos-field
+                        if (cellEditor && cellEditor.field instanceof Kwf.Form.PosField) {
+                            // set value for pos-field
+                            record.set(cellEditor.field.name, rowInsertPosition+1);
+                            break;
+                        }
+                    }
                 }
             }
         }
