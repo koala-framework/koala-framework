@@ -289,9 +289,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 Kwf.EyeCandy.Lightbox.Styles = {};
 Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
     this.lightbox = lightbox;
+    this.init();
 };
 Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
+    init: Ext.emptyFn,
     afterCreateLightboxEl: Ext.emptyFn,
     afterContentShown: Ext.emptyFn,
     updateContent: function(responseText) {
@@ -337,6 +339,10 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
 };
 
 Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
+    init: function()
+    {
+        this._previousWindowSize = Ext.getBody().getViewSize();
+    },
 
     afterCreateLightboxEl: function() {
         this.lightbox.lightboxEl.on('click', function(ev) {
@@ -521,7 +527,13 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this.lightbox.innerLightboxEl.setXY(xy);
     },
 
-    onResizeWindow: function() {
+    onResizeWindow: function(ev) {
+        var s = Ext.getBody().getViewSize();
+        if (s.width == this._previousWindowSize.width && s.height == this._previousWindowSize.height) {
+            return;
+        }
+        this._previousWindowSize = s;
+
         this._updateMobile();
         var newSize = this._getContentSize();
         this.lightbox.innerLightboxEl.setSize(newSize);
