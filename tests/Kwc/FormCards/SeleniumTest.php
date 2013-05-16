@@ -17,18 +17,18 @@ class Kwc_FormCards_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         $this->openKwc('/form');
 
-        $this->assertElementPresent('css=#root_form_form_type_cards_cards_foo_value');
+        $this->assertElementPresent('css=#root_form_form_type_cards_foo_value');
 
-        $this->assertTrue($this->isVisible('css=#root_form_form_type_cards_cards_foo_value'));
-        $this->assertFalse($this->isVisible('css=#root_form_form_type_cards_cards_bar_value'));
+        $this->assertTrue($this->isVisible('css=#root_form_form_type_cards_foo_value'));
+        $this->assertFalse($this->isVisible('css=#root_form_form_type_cards_bar_value'));
 
         $this->type('css=#root_form_form_fullname', 'myname');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
-        $this->assertElementPresent('css=.form_type_cards_cards_foo_value.kwfFieldError');
+        $this->assertElementPresent('css=.form_type_cards_foo_value.kwfFieldError');
 
-        $this->type('css=#root_form_form_type_cards_cards_foo_value', 'foo');
+        $this->type('css=#root_form_form_type_cards_foo_value', 'foo');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
@@ -40,31 +40,31 @@ class Kwc_FormCards_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         $this->openKwc('/form');
 
-        $this->assertTrue($this->isVisible('css=#root_form_form_type_cards_cards_foo_value'));
-        $this->assertFalse($this->isVisible('css=#root_form_form_type_cards_cards_bar_value'));
+        $this->assertTrue($this->isVisible('css=#root_form_form_type_cards_foo_value'));
+        $this->assertFalse($this->isVisible('css=#root_form_form_type_cards_bar_value'));
         
-        $this->select('css=#root_form_form_type_cards_cards_type_cards', 'Bar');
+        $this->select('css=#root_form_form_type_cards_type', 'Bar');
 
-        $this->assertFalse($this->isVisible('css=#root_form_form_type_cards_cards_foo_value'));
-        $this->assertTrue($this->isVisible('css=#root_form_form_type_cards_cards_bar_value'));
+        $this->assertFalse($this->isVisible('css=#root_form_form_type_cards_foo_value'));
+        $this->assertTrue($this->isVisible('css=#root_form_form_type_cards_bar_value'));
     }
 
     public function testRadioValidators()
     {
         $this->openKwc('/formradio');
 
-        $this->assertElementPresent('css=#root_formradio_form_type_cards_cards_foo_value');
+        $this->assertElementPresent('css=#root_formradio_form_type_cards_foo_value');
 
-        $this->assertTrue($this->isVisible('css=#root_formradio_form_type_cards_cards_foo_value'));
-        $this->assertFalse($this->isVisible('css=#root_formradio_form_type_cards_cards_bar_value'));
+        $this->assertTrue($this->isVisible('css=#root_formradio_form_type_cards_foo_value'));
+        $this->assertFalse($this->isVisible('css=#root_formradio_form_type_cards_bar_value'));
 
         $this->type('css=#root_formradio_form_fullname', 'myname');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
-        $this->assertElementPresent('css=.form_type_cards_cards_foo_value.kwfFieldError');
+        $this->assertElementPresent('css=.form_type_cards_foo_value.kwfFieldError');
 
-        $this->type('css=#root_formradio_form_type_cards_cards_foo_value', 'foo');
+        $this->type('css=#root_formradio_form_type_cards_foo_value', 'foo');
         $this->click('css=button');
         sleep(1);
         $this->waitForConnections();
@@ -76,12 +76,12 @@ class Kwc_FormCards_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         $this->openKwc('/formradio');
 
-        $this->assertTrue($this->isVisible('css=#root_formradio_form_type_cards_cards_foo_value'));
-        $this->assertFalse($this->isVisible('css=#root_formradio_form_type_cards_cards_bar_value'));
+        $this->assertTrue($this->isVisible('css=#root_formradio_form_type_cards_foo_value'));
+        $this->assertFalse($this->isVisible('css=#root_formradio_form_type_cards_bar_value'));
         
-        $this->click('css=#root_formradio_type_cards_cards_combo2');
+        $this->click('css=#root_formradio_type2');
 
-        $this->assertFalse($this->isVisible('css=#root_formradio_form_type_cards_cards_foo_value'));
-        $this->assertTrue($this->isVisible('css=#root_formradio_form_type_cards_cards_bar_value'));
+        $this->assertFalse($this->isVisible('css=#root_formradio_form_type_cards_foo_value'));
+        $this->assertTrue($this->isVisible('css=#root_formradio_form_type_cards_bar_value'));
     }
 }
