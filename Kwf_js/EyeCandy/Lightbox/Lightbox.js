@@ -398,12 +398,14 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         }
     },
     _getMaxContentSize: function(subtractOuterMargin) {
+        this.lightbox.lightboxEl.dom.style.overflow = 'hidden';
         var maxSize = {
             //width: document.documentElement.clientWidth,
             //height: document.documentElement.clientHeight
             width: this.lightbox.lightboxEl.dom.clientWidth,
             height: this.lightbox.lightboxEl.dom.clientHeight,
         };
+        this.lightbox.lightboxEl.dom.style.overflow = '';
         if (subtractOuterMargin !== false) {
             maxSize.width -= this._getOuterMargin()*2;
             maxSize.height -= this._getOuterMargin()*2;
