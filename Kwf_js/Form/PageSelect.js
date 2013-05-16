@@ -27,6 +27,12 @@ Kwf.Form.PageSelect = Ext.extend(Kwf.Form.AbstractSelect, {
             });
         }
         return this._windowItem;
+    },
+    setFormBaseParams: function(params) {
+        this.baseParams = params;
+        if (this._windowItem) {
+            this._windowItem.baseParams = params;
+        }
     }
 });
 
