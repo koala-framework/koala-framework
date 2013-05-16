@@ -81,6 +81,12 @@ Kwf.Utils.HistoryState.on('popstate', function() {
 });
 
 Ext.fly(window).on('resize', function(ev) {
+    if ('ontouchstart' in document.documentElement) return; //ignore resize on touch devices
+    if (Kwf.EyeCandy.Lightbox.currentOpen) {
+        Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
+    }
+}, this);
+Ext.fly(window).on('orientationchange', function(ev) {
     if (Kwf.EyeCandy.Lightbox.currentOpen) {
         Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
     }
