@@ -355,6 +355,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         //if content is larger than window, resize accordingly
         var originalSize = this.lightbox.innerLightboxEl.getSize();
+
         var maxSize = this._getMaxContentSize();
 
         if (originalSize.width > maxSize.width) {
@@ -382,7 +383,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     _getOuterMargin: function()
     {
         var maxSize = this._getMaxContentSize(false);
-        if (maxSize.width <= 480 || maxSize.height <= 480) {
+        if (maxSize.width <= 490 || maxSize.height <= 490) {
             return 0;
         } else {
             return 20;
