@@ -229,7 +229,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
-        $ret = Kwc_Abstract::getTemplateVars();
+        $ret = parent::getTemplateVars();
 
         if (!$this->_processed) {
             throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
