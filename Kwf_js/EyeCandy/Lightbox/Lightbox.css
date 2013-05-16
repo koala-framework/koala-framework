@@ -8,10 +8,9 @@
 .kwfLightbox .kwfLightboxInner {
     min-width: 100px;
     min-height: 100px;
-    padding: 10px;
-    box-sizing: border-box;
     background: #fff;
     margin-bottom: 40px;
+    padding: 0;
 }
 .ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
 
@@ -41,6 +40,10 @@
     overflow: hidden;
     height: 100%;
     width: 100%;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .kwfLightbox .lightboxBody {
     position: relative;
