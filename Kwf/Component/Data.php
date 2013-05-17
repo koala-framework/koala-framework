@@ -17,6 +17,9 @@
  */
 class Kwf_Component_Data
 {
+    const DEVICE_VISIBLE_ALL = 'all';
+    const DEVICE_VISIBLE_HIDE_ON_MOBILE = 'hideOnMobile';
+    const DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE = 'onlyShowOnMobile';
     /**
      * @var Kwc_Abstract
      */
