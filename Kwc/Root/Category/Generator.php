@@ -6,7 +6,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     protected $_loadTableFromComponent = false;
     protected $_inherits = true;
 
-    protected $_useMobileBreakpoints = false;
+    protected $_useMobileBreakpoints = NULL;
 
     protected $_pageDataLoaded = false;
     protected $_pageData = array();
@@ -23,7 +23,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     protected function _init()
     {
         parent::_init();
-        $this->_useMobileBreakpoints = Kwf_Config::getValue('kwc.mobileBreakpoints');
+        if (is_null($this->_useMobileBreakpoints)) {
+            $this->_useMobileBreakpoints = Kwf_Config::getValue('kwc.mobileBreakpoints');
+        }
     }
 
     protected function _loadPageData()
