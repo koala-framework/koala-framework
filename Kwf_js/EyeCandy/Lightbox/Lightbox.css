@@ -108,10 +108,3 @@
     z-index: 50 !important;
     position: fixed;
 }
-
-body.kwfLightboxTheaterMode {
-    /*
-    overflow: hidden;
-    margin-right: 16px;
-    */
-}
