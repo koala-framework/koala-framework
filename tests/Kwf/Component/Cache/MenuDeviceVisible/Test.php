@@ -26,6 +26,7 @@ class Kwf_Component_Cache_MenuDeviceVisible_Test extends Kwc_TestAbstract
 
         $html = $page->render(true, true);
         $this->assertEquals(1, substr_count($html, 'hideOnMobile'));
+        $this->assertEquals(0, substr_count($html, 'onlyShowOnMobile'));
         Kwf_Component_Data_Root::reset();
 
         $row = $this->_root->getGenerator('page')->getModel()->getRow(1);
@@ -35,6 +36,7 @@ class Kwf_Component_Cache_MenuDeviceVisible_Test extends Kwc_TestAbstract
 
         $html = $page->render(true, true);
 
+        $this->assertEquals(0, substr_count($html, 'hideOnMobile'));
         $this->assertEquals(1, substr_count($html, 'onlyShowOnMobile'));
     }
 
