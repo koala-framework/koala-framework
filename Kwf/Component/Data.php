@@ -1434,7 +1434,10 @@ class Kwf_Component_Data
     }
 
     /**
-     * Returns the getDeviceVisible function of his own Generator
+     * Returns on which devices this page should be visible
+     *
+     * DEVICE_VISIBLE_* constants are returned.
+     * Implement getDeviceVisible in generator to change behaviour.
      */
     final public function getDeviceVisible()
     {
