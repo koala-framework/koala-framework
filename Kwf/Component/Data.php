@@ -17,6 +17,9 @@
  */
 class Kwf_Component_Data
 {
+    const DEVICE_VISIBLE_ALL = 'all';
+    const DEVICE_VISIBLE_HIDE_ON_MOBILE = 'hideOnMobile';
+    const DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE = 'onlyShowOnMobile';
     /**
      * @var Kwc_Abstract
      */
@@ -1428,5 +1431,16 @@ class Kwf_Component_Data
         $this->_childComponentsCache = array();
         $this->_recursiveGeneratorsCache = array();
         if (isset($this->_languageCache)) unset($this->_languageCache);
+    }
+
+    /**
+     * Returns on which devices this page should be visible
+     *
+     * DEVICE_VISIBLE_* constants are returned.
+     * Implement getDeviceVisible in generator to change behaviour.
+     */
+    final public function getDeviceVisible()
+    {
+        return $this->generator->getDeviceVisible($this);
     }
 }
