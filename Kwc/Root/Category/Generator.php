@@ -526,4 +526,18 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         return new Kwc_Root_Category_GeneratorForm($componentOrParent, $this);
     }
+
+    public function getUseMobileBreakpoints()
+    {
+        return $this->_useMobileBreakpoints;
+    }
+
+    public function getDeviceVisible(Kwf_Component_Data $data)
+    {
+        if ($this->_useMobileBreakpoints) {
+            return $data->row->device_visible;
+        } else {
+            parent::getDeviceVisible($data);
+        }
+    }
 }

@@ -310,4 +310,9 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
     }
+
+    public function getDeviceVisible(Kwf_Component_Data $data)
+    {
+        return $data->chained->getDeviceVisible();
+    }
 }

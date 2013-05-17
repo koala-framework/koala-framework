@@ -937,4 +937,13 @@ abstract class Kwf_Component_Generator_Abstract
         return $ret;
     }
 
+    /**
+     * Returns for every Kwf_Component_Data the device visibility
+     *
+     * Can be overriten for every Generator if you want a specific device visibility
+     */
+    public function getDeviceVisible(Kwf_Component_Data $data)
+    {
+        return Kwf_Component_Data::DEVICE_VISIBLE_ALL;
+    }
 }

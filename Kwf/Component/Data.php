@@ -1432,4 +1432,12 @@ class Kwf_Component_Data
         $this->_recursiveGeneratorsCache = array();
         if (isset($this->_languageCache)) unset($this->_languageCache);
     }
+
+    /**
+     * Returns the getDeviceVisible function of his own Generator
+     */
+    final public function getDeviceVisible()
+    {
+        return $this->generator->getDeviceVisible($this);
+    }
 }
