@@ -539,7 +539,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         if ($this->_useMobileBreakpoints) {
             return $data->row->device_visible;
         } else {
-            parent::getDeviceVisible($data);
+            return parent::getDeviceVisible($data);
         }
     }
 }
