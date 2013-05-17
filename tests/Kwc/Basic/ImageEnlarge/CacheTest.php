@@ -35,7 +35,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":'.$largeImage['width'].',"height":'.$largeImage['height'].',"style":"CenterBox"}', (string)$a[0]['rel']);
+        $this->assertEquals('lightbox{"width":'.$largeImage['width'].',"height":'.$largeImage['height'].',"style":"CenterBox","adaptHeight":true}', (string)$a[0]['rel']);
         $this->assertEquals($largeImage['pageUrl'], (string)$a[0]['href']);
 
 
