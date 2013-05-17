@@ -1,0 +1,17 @@
+@import "kwf/mobile-breakpoint";
+
+.webStandard.cssClass ul.menu {
+    > li.onlyShowOnMobile {
+        display: none;
+    }
+
+    @include mobile-breakpoint {
+        > li.onlyShowOnMobile {
+            display: block;
+        }
+
+        > li.hideOnMobile {
+            display: none;
+        }
+    }
+}

@@ -5,7 +5,7 @@ class Kwc_Directories_CategorySimple_CategoriesModel extends Kwf_Model_Tree
     protected $_toStringField = 'name';
 
     protected $_dependentModels = array(
-        'Categories' => 'ArticleToCategory'
+        'Items' => 'Kwc_Directories_CategorySimple_CategoriesToItemsModel'
     );
 
     protected function _setupFilters()

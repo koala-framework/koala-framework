@@ -76,7 +76,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 var deviceVisibleMenu = {
                     menu: [{
                         text: trlKwf('show on all devices'),
-                        icon: '/assets/silkicons/eye.png',
+                        icon: '/assets/kwf/images/devices/showAll.png',
                         scope: this,
                         record: record,
                         handler: function(menu) {
@@ -84,7 +84,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                         }
                     },{
                         text: trlKwf('hide on mobile devices'),
-                        icon: '/assets/silkicons/monitor.png',
+                        icon: '/assets/kwf/images/devices/smartphoneHide.png',
                         scope: this,
                         record: record,
                         handler: function(menu) {
@@ -92,7 +92,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                         }
                     },{
                         text: trlKwf('only show on mobile devices'),
-                        icon: '/assets/silkicons/phone.png',
+                        icon: '/assets/kwf/images/devices/smartphone.png',
                         scope: this,
                         record: record,
                         handler: function(menu) {
@@ -102,11 +102,11 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                     cls  : 'x-btn-icon'
                 };
                 if (record.get('device_visible') == 'onlyShowOnMobile') {
-                    deviceVisibleMenu.icon = '/assets/silkicons/phone.png';
+                    deviceVisibleMenu.icon = '/assets/kwf/images/devices/smartphone.png';
                 } else if (record.get('device_visible') == 'hideOnMobile') {
-                    deviceVisibleMenu.icon = '/assets/silkicons/monitor.png';
+                    deviceVisibleMenu.icon = '/assets/kwf/images/devices/smartphoneHide.png';
                 } else if (record.get('device_visible') == 'all') {
-                    deviceVisibleMenu.icon = '/assets/silkicons/eye.png';
+                    deviceVisibleMenu.icon = '/assets/kwf/images/devices/showAll.png';
                 }
                 tb.add(deviceVisibleMenu);
             }

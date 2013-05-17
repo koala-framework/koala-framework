@@ -45,6 +45,10 @@ Kwc.Form.Component = function(form)
         }
     }, this);
 
+    this.fields.forEach(function(f) {
+        f.initField();
+    });
+
     if (this.config.hideForValue) {
         this.config.hideForValue.each(function(hideForValue) {
             var field = this.findField(hideForValue.field);

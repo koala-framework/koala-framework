@@ -320,9 +320,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $baseParams['componentId'] = $this->getData()->componentId;
 
         $fieldConfig = array();
-        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_RecursiveFormFields($this->_form->fields));
+        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_RecursiveFormFields($this->_form->fields), RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $field) {
-            $fieldConfig[$field->getFieldName()] = (object)$field->getFrontendMetaData();
+            if ($field->getFieldName()) {
+                $fieldConfig[$field->getFieldName()] = (object)$field->getFrontendMetaData();
+            }
         }
         $errorStyle = $this->_getSetting('errorStyle');
         if (!$errorStyle) $errorStyle = Kwf_Config::getValue('kwc.form.errorStyle');
