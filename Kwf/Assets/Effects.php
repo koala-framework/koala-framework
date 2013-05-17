@@ -47,6 +47,20 @@ class Kwf_Assets_Effects
         }
     }
 
+    public static function smartphone(Imagick $image, $params)
+    {
+        $overlay = new Imagick();
+        $overlay->readImage(KWF_PATH."/Kwf/Assets/Overlay/smartPhone.png");
+        $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 5, 2);
+    }
+
+    public static function smartphoneHide(Imagick $image, $params)
+    {
+        $overlay = new Imagick();
+        $overlay->readImage(KWF_PATH."/Kwf/Assets/Overlay/smartPhoneHide.png");
+        $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 5, 2);
+    }
+
     public static function adminIcon(Imagick $im)
     {
         while ($im->previousImage()) {
