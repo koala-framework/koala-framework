@@ -80,17 +80,20 @@ Kwf.Utils.HistoryState.on('popstate', function() {
     }
 });
 
-Ext.fly(window).on('resize', function(ev) {
-    if ('ontouchstart' in document.documentElement) return; //ignore resize on touch devices
-    if (Kwf.EyeCandy.Lightbox.currentOpen) {
-        Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
-    }
-}, this);
-Ext.fly(window).on('orientationchange', function(ev) {
-    if (Kwf.EyeCandy.Lightbox.currentOpen) {
-        Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
-    }
-}, this);
+if (!(Ext.isMac && 'ontouchstart' in document.documentElement)) {
+    Ext.fly(window).on('resize', function(ev) {
+        if (Kwf.EyeCandy.Lightbox.currentOpen) {
+            Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
+        }
+    }, this, {buffer: 100});
+} else {
+    //on iOS listen to orientationchange as resize event triggers randomly when scrolling
+    Ext.fly(window).on('orientationchange', function(ev) {
+        if (Kwf.EyeCandy.Lightbox.currentOpen) {
+            Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
+        }
+    }, this);
+}
 
 Ext.ns('Kwf.EyeCandy.Lightbox');
 Kwf.EyeCandy.Lightbox.currentOpen = null;
@@ -351,6 +354,10 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
             }
         }, this);
 
+        this._resizeContent();
+    },
+    _resizeContent: function()
+    {
         this._updateMobile();
 
         //if content is larger than window, resize accordingly
@@ -455,7 +462,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
                 this.lightbox.innerLightboxEl.setSize(originalSize);
                 this.lightbox.innerLightboxEl.setSize(newSize, null, {
                     callback: function() {
-                        this.lightbox.innerLightboxEl.setSize(this._getContentSize());
+                        var newSize = this._getContentSize();
+                        this.lightbox.innerLightboxEl.setSize(newSize);
                     },
                     scope: this
                 });
@@ -530,16 +538,23 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this.lightbox.innerLightboxEl.setXY(xy);
     },
 
-    onResizeWindow: function(ev) {
+    onResizeWindow: function(ev)
+    {
         var s = Ext.getBody().getViewSize();
         if (s.width == this._previousWindowSize.width && s.height == this._previousWindowSize.height) {
             return;
         }
         this._previousWindowSize = s;
 
-        this._updateMobile();
-        var newSize = this._getContentSize();
-        this.lightbox.innerLightboxEl.setSize(newSize);
-        this._center(false);
+        //reset to initial size so lightbox can grow
+        var initialSize = {
+            width: null,
+            height: null
+        };
+        if (this.lightbox.options.width) initialSize.width = this.lightbox.options.width;
+        if (this.lightbox.options.height) initialSize.height = this.lightbox.options.height;
+        this.lightbox.innerLightboxEl.setSize(initialSize);
+
+        this._resizeContent();
     }
 });
