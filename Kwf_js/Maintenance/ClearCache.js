@@ -27,7 +27,7 @@ Kwf.Maintenance.ClearCache = Ext.extend(Ext.Panel, {
                                 types.push(t.name);
                             }
                         }, this);
-                        Ext.Ajax.request({
+                        Kwf.Utils.BackgroundProcess.request({
                             url: '/kwf/maintenance/clear-cache/json-clear-cache',
                             progress: true,
                             params: {

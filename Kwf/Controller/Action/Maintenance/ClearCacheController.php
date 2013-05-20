@@ -10,15 +10,10 @@ class Kwf_Controller_Action_Maintenance_ClearCacheController extends Kwf_Control
 
     public function jsonClearCacheAction()
     {
-        $c = new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum'));
-        $options = array(
-            'progressAdapter' => $c
-        );
-        Kwf_Util_ClearCache::getInstance()->clearCache(
-            $this->_getParam('types'),
-            false, //output
-            true,  //refresh
-            $options
-        );
+        $cmd = "php bootstrap.php maintenance clear-cache ";
+        $cmd .= "--type=".escapeshellarg($this->_getParam('types'));
+        $cmd .= " --progressNum=".escapeshellarg($this->_getParam('progressNum'));
+        $procData = Kwf_Util_BackgroundProcess::start($cmd, $this->view);
+        $this->view->assign($procData);
     }
 }
