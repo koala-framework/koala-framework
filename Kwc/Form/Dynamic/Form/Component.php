@@ -53,6 +53,19 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $row->component_id = $this->getData()->parent->dbId;
     }
 
+    //don't use getRecursiveChildComponents as that won't return items in an defined order
+    private static function _findFormFields($data)
+    {
+        $ret = array();
+        foreach ($data->getChildComponents(array('page'=>false, 'pseudoPage'=>false)) as $c) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'formField')) {
+                $ret[] = $c;
+            }
+            $ret = array_merge($ret, self::_findFormFields($c));
+        }
+        return $ret;
+    }
+
     protected function _afterInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_afterInsert($row);
@@ -71,9 +84,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $row->addCc($settings['recipient_cc']);
         $row->setSubject($settings['subject']);
         $msg = '';
-        $formFieldComponents = $this->getData()->parent
-            ->getChildComponent('-paragraphs')
-            ->getRecursiveChildComponents(array('flags'=>array('formField'=>true)));
+        $formFieldComponents = self::_findFormFields($this->getData()->parent->getChildComponent('-paragraphs'));
         foreach ($formFieldComponents as $c) {
             $message = $c->getComponent()->getSubmitMessage($row);
             if ($message) {
