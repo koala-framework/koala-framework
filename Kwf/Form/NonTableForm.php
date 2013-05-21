@@ -60,7 +60,7 @@ class Kwf_Form_NonTableForm extends Kwf_Form_Container_Abstract
     public function setName($name)
     {
         $this->fields->setFormName($name); //damit prefixName der Felder nachträglich angepasst wird
-        parent::setName($name);
+        return parent::setName($name);
     }
 
     public function getId()
