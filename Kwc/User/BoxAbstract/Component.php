@@ -21,28 +21,6 @@ class Kwc_User_BoxAbstract_Component extends Kwc_Abstract_Composite_Component
                 }
             }
         }
-
-        if (isset($postData['logout'])) {
-
-            Kwf_Auth::getInstance()->clearIdentity();
-            setcookie('feAutologin', '', time() - 3600);
-
-            $url = Kwf_Setup::getRequestPath();
-
-            parse_str($_SERVER['QUERY_STRING'], $queryStr);
-            unset($queryStr['logout']);
-            $queryStr = http_build_query($queryStr);
-
-            //check if page still exists
-            Kwf_Component_Generator_Abstract::clearInstances(); //das ist notwendig da die generator ohne eingeloggten user was anderes zurück geben könnten und das aber im data->getChildComponents gecached ist
-            if (!Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].$url, null)) {
-                $url = '/';
-                $queryStr = '';
-            }
-
-            header('Location: '.$url. ($queryStr ? '?'.$queryStr : ''));
-            exit;
-        }
     }
 
     private function _getAuthenticateResult($identity, $credential)
