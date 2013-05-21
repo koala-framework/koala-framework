@@ -36,10 +36,10 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
     public function preProcessInput($postData)
     {
         // TODO: Kopie von Kwc_User_BoxAbstract_Component wie anderes auf dieser Seite
-        if (isset($postData['feAutologin'])
+        if (isset($_COOKIE['feAutologin'])
             && !Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser()
         ) {
-            list($cookieId, $cookieMd5) = explode('.', $postData['feAutologin']);
+            list($cookieId, $cookieMd5) = explode('.', $_COOKIE['feAutologin']);
             if (!empty($cookieId) && !empty($cookieMd5)) {
                 $this->_getAuthenticateResult($cookieId, $cookieMd5);
             }
