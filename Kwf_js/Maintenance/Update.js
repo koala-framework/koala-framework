@@ -9,12 +9,17 @@ Kwf.Maintenance.Update = Ext.extend(Ext.Panel, {
             buttons: [{
                 text: trlKwf('Update'),
                 handler: function() {
-                    Ext.Ajax.request({
+                    Kwf.Utils.BackgroundProcess.request({
                         url: '/kwf/maintenance/update/json-execute-updates',
                         progress: true,
                         scope: this,
-                        success: function() {
+                        success: function(response, options, r) {
                             this.grid.reload();
+                            if (r.errMsg) {
+                                Ext.Msg.alert(trlKwf('Error'), r.message+r.errMsg);
+                            } else if (r.message) {
+                                Ext.Msg.alert(trlKwf('Finished'), r.message);
+                            }
                         }
                     });
                 },
