@@ -29,7 +29,7 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
         this.buttons = [{
             text: trlKwf('Download Updates'),
             handler: function() {
-                Ext.Ajax.request({
+                Kwf.Utils.BackgroundProcess.request({
                     url: '/kwf/maintenance/update-downloader/json-download-updates',
                     params: {
                         libraryUrl: this.libraryUrl.getValue(),
