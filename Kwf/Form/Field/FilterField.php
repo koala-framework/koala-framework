@@ -14,6 +14,16 @@ class Kwf_Form_Field_FilterField extends Kwf_Form_Field_Abstract
     }
 
     /**
+     * Sets the name prefix for the filter/filtered fields
+     */
+    public function setNamePrefix($name)
+    {
+        $this->getFilterField()->setNamePrefix($name);
+        $this->getFilteredField()->setNamePrefix($name);
+        return $this;
+    }
+
+    /**
      * Sets the filter field (the one that filters the filtered field)
      */
     public function setFilterField(Kwf_Form_Field_Abstract $field)
