@@ -53,7 +53,6 @@ class Kwc_Trl_SwitchLanguage_Test extends Kwc_TestAbstract
 
         $html = $this->_root->getComponentById('2-switchLanguage')->render();
         $this->assertContains('href="/de/test"', $html);
-        $this->markTestIncomplete();
         $this->assertContains('href="/en/test_en"', $html);
     }
 
@@ -69,7 +68,6 @@ class Kwc_Trl_SwitchLanguage_Test extends Kwc_TestAbstract
 
         $html = $this->_root->getComponentById('4-switchLanguage')->render();
         $this->assertContains('href="/de/test3"', $html);
-        $this->markTestIncomplete();
         $this->assertContains('href="/en"', $html);
     }
 
@@ -85,7 +83,6 @@ class Kwc_Trl_SwitchLanguage_Test extends Kwc_TestAbstract
 
         $html = $this->_root->getComponentById('root-en-main_3-switchLanguage')->render();
         $this->assertContains('href="/en/test2_en"', $html);
-        $this->markTestIncomplete();
         $this->assertContains('href="/de/test2"', $html);
     }
 
@@ -101,7 +98,6 @@ class Kwc_Trl_SwitchLanguage_Test extends Kwc_TestAbstract
 
         $html = $this->_root->getComponentById('root-en-main_4-switchLanguage')->render();
         $this->assertContains('href="/en/test3_en"', $html);
-        $this->markTestIncomplete();
         $this->assertContains('href="/de"', $html);
     }
 }
