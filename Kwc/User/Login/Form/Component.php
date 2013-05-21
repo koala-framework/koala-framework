@@ -41,7 +41,10 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         ) {
             list($cookieId, $cookieMd5) = explode('.', $_COOKIE['feAutologin']);
             if (!empty($cookieId) && !empty($cookieMd5)) {
-                $this->_getAuthenticateResult($cookieId, $cookieMd5);
+                $result = $this->_getAuthenticateResult($feAutologin[0], $feAutologin[1]);
+                if ($result->isValid()) {
+                    $_COOKIE[session_name()] = true;
+                }
             }
         }
         $this->_processInput($postData);

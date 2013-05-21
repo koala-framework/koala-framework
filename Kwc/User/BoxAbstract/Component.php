@@ -16,6 +16,9 @@ class Kwc_User_BoxAbstract_Component extends Kwc_Abstract_Composite_Component
             $feAutologin = explode('.', $_COOKIE['feAutologin']);
             if (count($feAutologin) ==2 ) {
                 $result = $this->_getAuthenticateResult($feAutologin[0], $feAutologin[1]);
+                if ($result->isValid()) {
+                    $_COOKIE[session_name()] = true;
+                }
             }
         }
 
