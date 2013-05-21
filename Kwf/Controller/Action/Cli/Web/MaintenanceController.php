@@ -117,6 +117,8 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
                     if ($file->getFilename() == $backupDir) continue;
                     if ($file->getPathname() == $dir) continue;
                     if ($file->getFilename() == 'app.tar.gz') continue;
+                    if ($file->getFilename() == 'temp') continue;
+                    if ($file->getFilename() == 'log') continue;
                     rename($file->getPathname(), $backupDir.'/'.$file->getFilename());
                 }
 
@@ -124,6 +126,8 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
                 $it = new DirectoryIterator($dirs[0]);
                 foreach ($it as $file) {
                     if($file->isDot()) continue;
+                    if ($file->getFilename() == 'temp') continue;
+                    if ($file->getFilename() == 'log') continue;
                     rename($file->getPathname(), './'.$file->getFilename());
                 }
                 rmdir("$dirs[0]");
