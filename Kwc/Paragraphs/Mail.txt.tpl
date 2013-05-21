@@ -1,5 +1,5 @@
 <?php
 foreach ($this->paragraphs as $paragraph) {
-    echo $this->component($paragraph) . "\n";
+    echo $this->component($paragraph['data']) . "\n";
 }
 ?>
