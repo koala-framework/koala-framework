@@ -100,18 +100,6 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         if (Kwf_Component_Abstract::getFlag($data->componentClass, 'processInput')) {
             $process[] = $data;
         }
-
-        // TODO: Äußerst suboptimal
-        if (is_instance_of($data->componentClass, 'Kwc_Show_Component')) {
-            $process += $data->getComponent()->getShowComponent()
-                ->getRecursiveChildComponents(array(
-                    'page' => false,
-                    'flags' => array('processInput' => true)
-                ));
-            if (Kwf_Component_Abstract::getFlag(get_class($data->getComponent()->getShowComponent()->getComponent()), 'processInput')) {
-                $process[] = $data;
-            }
-        }
         return $process;
     }
 
