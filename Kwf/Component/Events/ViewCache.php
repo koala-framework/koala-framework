@@ -303,8 +303,8 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
         //get first parent that inherits (can be root)
         $i = $c;
-        while ($i->parent) {
-            if ($i->inherits) {
+        while ($i) {
+            if ($i->inherits || $i->componentId == 'root') {
                 $ret[] = $i;
                 break;
             }
