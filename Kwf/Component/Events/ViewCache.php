@@ -299,12 +299,24 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     private function _getParentComponentsForRecursive(Kwf_Component_Event_Component_RecursiveAbstract $event)
     {
         $c = $event->component;
-        $ret = array($c->getPageOrRoot());
+        $ret = array();
+
+        //get first parent that inherits (can be root)
+        $i = $c;
+        while ($i) {
+            if ($i->inherits || $i->componentId == 'root') {
+                $ret[] = $i;
+                break;
+            }
+            $i = $i->parent;
+        }
+
+        //get parent pages from created by pageGenerators
         foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            while ($c && !$c->isPage && !$c instanceof Kwf_Component_Data_Root && $c->componentClass !== $gen->getClass()) {
+            while ($c && !$c->inherits && !$c instanceof Kwf_Component_Data_Root && $c->componentClass !== $gen->getClass()) {
                 $c = $c->parent;
             }
-            if ($c) $ret[] = $c;
+            if ($c && !in_array($c, $ret, true)) $ret[] = $c;
         }
         return $ret;
     }
