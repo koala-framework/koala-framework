@@ -252,6 +252,13 @@ class Kwf_Setup
         setlocale(LC_NUMERIC, 'C');
     }
 
+    /**
+     * Check if user is logged in (fast than directly calling user model)
+     *
+     * Only asks user model (expensive) when there is something stored in the session
+     *
+     * @return boolean if user is logged in
+     */
     public static function hasAuthedUser()
     {
         if (!Zend_Session::isStarted() &&
