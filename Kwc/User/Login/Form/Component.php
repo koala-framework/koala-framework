@@ -9,12 +9,22 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    public function preProcessInput($postData)
+    {
+        $this->_processInput($postData);
+        parent::preProcessInput($postData);
+    }
+
+    public function processInput(array $postData)
+    {
+        // Already called in preProcessInput
+    }
+
     public function _getBaseParams()
     {
         $ret = parent::_getBaseParams();
         if (!empty($_GET['redirect'])) $ret['redirect'] = $_GET['redirect'];
         return $ret;
-
     }
 
     public function getTemplateVars()
@@ -26,29 +36,6 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
                             array('subroot' => $this->getData())
                         );
         return $ret;
-    }
-
-    public function processInput(array $postData)
-    {
-        // Leer, weil _processInput schon in proProcessInput aufgerufen wurde
-    }
-
-    public function preProcessInput($postData)
-    {
-        // TODO: Kopie von Kwc_User_BoxAbstract_Component wie anderes auf dieser Seite
-        if (isset($_COOKIE['feAutologin'])
-            && !Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser()
-        ) {
-            list($cookieId, $cookieMd5) = explode('.', $_COOKIE['feAutologin']);
-            if (!empty($cookieId) && !empty($cookieMd5)) {
-                $result = $this->_getAuthenticateResult($feAutologin[0], $feAutologin[1]);
-                if ($result->isValid()) {
-                    $_COOKIE[session_name()] = true;
-                }
-            }
-        }
-        $this->_processInput($postData);
-        parent::preProcessInput($postData);
     }
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)

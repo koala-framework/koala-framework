@@ -151,6 +151,25 @@ class Kwf_Setup
                 exit;
             }
             $root->setCurrentPage($data);
+
+            if (isset($_COOKIE['feAutologin']) &&
+                Kwf_Registry::get('userModel') &&
+                !Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser()
+            ) {
+                $feAutologin = explode('.', $_COOKIE['feAutologin']);
+                if (count($feAutologin) ==2 ) {
+                    $adapter = new Kwf_Auth_Adapter_Service();
+                    $adapter->setIdentity($feAutologin[0]);
+                    $adapter->setCredential($feAutologin[1]);
+                    $auth = Kwf_Auth::getInstance();
+                    $auth->clearIdentity();
+                    $result = $auth->authenticate($adapter);
+                    if ($result->isValid()) {
+                        $_COOKIE[session_name()] = true;
+                    }
+                }
+            }
+
             $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
             $contentSender = new $contentSender($data);
             $contentSender->sendContent(true);
