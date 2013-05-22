@@ -3,7 +3,7 @@ class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_T
 {
     public function __construct()
     {
-        parent::__construct('cache_comonent');
+        parent::__construct('cache_component');
     }
 
     public function clearCache($options)
