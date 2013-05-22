@@ -43,7 +43,6 @@ class Kwf_Auth extends Zend_Auth
         $ret = parent::clearIdentity();
         $userModel = Kwf_Registry::get('userModel');
         if ($userModel) $userModel->clearAuthedUser();
-        setcookie('feAutologin', '', time() - 3600);
         return $ret;
     }
 }

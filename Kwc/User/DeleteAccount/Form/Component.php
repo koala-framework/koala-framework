@@ -23,5 +23,6 @@ class Kwc_User_DeleteAccount_Form_Component extends Kwc_Form_Component
         $user->save();
 
         Kwf_Auth::getInstance()->clearIdentity();
+        setcookie('feAutologin', '', time() - 3600);
     }
 }
