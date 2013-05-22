@@ -6,6 +6,8 @@ class Kwf_Assets_Loader
      */
     private $_dep = null;
     private $_config = null;
+    private $_scssParser = null;
+    private $_scssParserOptions = null;
 
     static public function load()
     {
@@ -273,18 +275,22 @@ class Kwf_Assets_Loader
                         }
 
                         if (substr($file, -5)=='.scss') {
-                            $options = array(
-                                'style' => 'compact',
-                                'cache' => false,
-                                'syntax' => 'scss',
-                                'debug' => true,
-                                'debug_info' => false,
-                                'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
-                                'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
-                                'extensions' => array('Compass', 'Susy', 'Kwf')
-                            );
-                            $parser = new Kwf_Util_SassParser($options);
-                            $cacheData['contents'] = $parser->toCss($cacheData['contents'], false);
+                            if (!$this->_scssParserOptions) {
+                                $this->_scssParserOptions = array(
+                                    'style' => 'compact',
+                                    'cache' => false,
+                                    'syntax' => 'scss',
+                                    'debug' => true,
+                                    'debug_info' => false,
+                                    'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
+                                    'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
+                                    'extensions' => array('Compass', 'Susy', 'Kwf')
+                                );
+                            }
+                            if (!$this->_scssParser) {
+                                $this->_scssParser = new Kwf_Util_SassParser($this->_scssParserOptions);
+                            }
+                            $cacheData['contents'] = $this->_scssParser->toCss($cacheData['contents'], false);
                         }
                     }
 

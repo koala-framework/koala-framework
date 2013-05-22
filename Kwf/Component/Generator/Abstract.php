@@ -827,6 +827,11 @@ abstract class Kwf_Component_Generator_Abstract
 
         $data['icon'] = 'bullet_yellow';
         $data['iconEffects'] = array();
+        if ($component->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE) {
+            $data['iconEffects'][] = 'smartphoneHide';
+        } else if ($component->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE) {
+            $data['iconEffects'][] = 'smartphone';
+        }
         $data['allowDrag'] = false;
         $data['allowDrop'] = false;
 

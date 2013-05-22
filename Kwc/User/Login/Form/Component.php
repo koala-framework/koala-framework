@@ -36,12 +36,15 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
     public function preProcessInput($postData)
     {
         // TODO: Kopie von Kwc_User_BoxAbstract_Component wie anderes auf dieser Seite
-        if (isset($postData['feAutologin'])
+        if (isset($_COOKIE['feAutologin'])
             && !Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser()
         ) {
-            list($cookieId, $cookieMd5) = explode('.', $postData['feAutologin']);
+            list($cookieId, $cookieMd5) = explode('.', $_COOKIE['feAutologin']);
             if (!empty($cookieId) && !empty($cookieMd5)) {
-                $this->_getAuthenticateResult($cookieId, $cookieMd5);
+                $result = $this->_getAuthenticateResult($feAutologin[0], $feAutologin[1]);
+                if ($result->isValid()) {
+                    $_COOKIE[session_name()] = true;
+                }
             }
         }
         $this->_processInput($postData);
@@ -56,7 +59,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
             $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
             if ($row->auto_login) {
                 $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
-                setcookie('feAutologin', $cookieValue, time() + (100*24*60*60));
+                setcookie('feAutologin', $cookieValue, time() + (100*24*60*60), '/');
             }
             $this->_afterLogin($authedUser);
         } else {

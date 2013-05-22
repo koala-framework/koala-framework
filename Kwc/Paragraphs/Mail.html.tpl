@@ -2,7 +2,7 @@
     <? foreach ($this->paragraphs as $paragraph) { ?>
         <tr>
             <td>
-                <?=$this->component($paragraph);?>
+                <?=$this->component($paragraph['data']);?>
             </td>
         </tr>
     <? } ?>
