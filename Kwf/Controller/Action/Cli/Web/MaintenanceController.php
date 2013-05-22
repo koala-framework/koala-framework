@@ -130,7 +130,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
                     if ($file->getFilename() == 'log') continue;
                     rename($file->getPathname(), './'.$file->getFilename());
                 }
-                rmdir("$dirs[0]");
+                system("rm -r ".escapeshellarg($dirs[0]));
 
             } else {
                 $targetDir = false;
