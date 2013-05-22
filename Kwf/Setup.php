@@ -37,6 +37,14 @@ class Kwf_Setup
             }
             include('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
+
+        if (isset($_SERVER['REQUEST_URI']) &&
+            (substr($_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || $_SERVER['REQUEST_URI'] == '/kwf/pma')
+        ) {
+            Kwf_Util_Pma::dispatch();
+        }
+
+        Kwf_Benchmark::checkpoint('setUp');
     }
 
     public static function shutDown()
