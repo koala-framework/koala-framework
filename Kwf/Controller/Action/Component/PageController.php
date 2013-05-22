@@ -147,7 +147,14 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
             }
             foreach ($classesToCheckForPagePropertiesForm as $childComponentKey=>$childComponentClass) {
                 if (!array_key_exists($key.'_'.$childComponentKey, $componentForms)) {
-                    $f = Kwc_Admin::getInstance($childComponentClass)->getPagePropertiesForm();
+                    $config = array();
+                    $config['component'] = $componentOrParent;
+                    if ($this->_getParam('id')) {
+                        $config['mode'] = 'edit';
+                    } else {
+                        $config['mode'] = 'add';
+                    }
+                    $f = Kwc_Admin::getInstance($childComponentClass)->getPagePropertiesForm($config);
                     if ($f) {
                         $f->setName('cmp_'.$key.'_'.$childComponentKey);
                         if ($childComponentKey=='__pageComponent') {
