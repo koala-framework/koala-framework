@@ -46,8 +46,9 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
     public function isLoggedIn()
     {
         if (Kwf_Setup::hasAuthedUser()) {
-            if (!$this->_getSetting('validUserRoles')) return true;
             $user = Zend_Registry::get('userModel')->getAuthedUser();
+            if (!$user) return false;
+            if (!$this->_getSetting('validUserRoles')) return true;
             if (in_array($user->role, $this->_getSetting('validUserRoles'))) {
                 return true;
             }

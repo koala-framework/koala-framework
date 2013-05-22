@@ -260,9 +260,6 @@ class Kwf_Setup
         ) {
             return false;
         }
-        if (!Kwf_Auth::getInstance()->getStorage()->read()) {
-            return false;
-        }
-        return true;
+        return Kwf_Registry::get('userModel')->hasAuthedUser();
     }
 }
