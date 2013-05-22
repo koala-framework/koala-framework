@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Plugin_Login_Component extends Kwf_Component_Plugin_Password_Component
+class Kwf_Component_Plugin_Login_Component extends Kwf_Component_Plugin_LoginAbstract_Component
 {
     public static function getSettings()
     {
