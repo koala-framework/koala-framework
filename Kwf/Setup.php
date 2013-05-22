@@ -254,4 +254,18 @@ class Kwf_Setup
         setlocale(LC_ALL, explode(', ', trlcKwf('locale', 'C')));
         setlocale(LC_NUMERIC, 'C');
     }
+
+    public static function hasAuthedUser()
+    {
+        if (!Zend_Session::isStarted() &&
+            !Zend_Session::sessionExists() &&
+            !Kwf_Config::getValue('autologin')
+        ) {
+            return false;
+        }
+        if (!Kwf_Auth::getInstance()->getStorage()->read()) {
+            return false;
+        }
+        return true;
+    }
 }
