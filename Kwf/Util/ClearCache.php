@@ -307,8 +307,8 @@ class Kwf_Util_ClearCache
             //namespace used in Kwf_Cache_Simple
             $cache = Kwf_Cache_Simple::getZendCache();
             $mc = $cache->getBackend()->getMemcache();
-            if ($mc->get('cache_namespace')) {
-                $mc->increment('cache_namespace');
+            if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
+                $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
             }
         }
         if (in_array('memcache', $types)) {
