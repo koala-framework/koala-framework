@@ -30,19 +30,12 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
         }
 
         $this->_exprs['date_year'] = new Kwf_Model_Select_Expr_Date_Year('date');
-        $this->_exprs['is_top_and_not_expired'] = new Kwf_Model_Select_Expr_And(array(
-            new Kwf_Model_Select_Expr_Field('is_top'),
+        $this->_exprs['is_top'] = new Kwf_Model_Select_Expr_And(array(
+            new Kwf_Model_Select_Expr_Equal('is_top_checked', 1),
             new Kwf_Model_Select_Expr_Or(array(
-                new Kwf_Model_Select_Expr_Higher('expire_top_read_required', new Kwf_Date('now')),
-                new Kwf_Model_Select_Expr_IsNull('expire_top_read_required'),
-            ))
-        ));
-        $this->_exprs['read_required_and_not_expired'] = new Kwf_Model_Select_Expr_And(array(
-            new Kwf_Model_Select_Expr_Field('read_required'),
-            new Kwf_Model_Select_Expr_Or(array(
-                new Kwf_Model_Select_Expr_Higher('expire_top_read_required', new Kwf_Date('now')),
-                new Kwf_Model_Select_Expr_IsNull('expire_top_read_required'),
-            ))
+                new Kwf_Model_Select_Expr_IsNull('is_top_expire'),
+                new Kwf_Model_Select_Expr_HigherEqual('is_top_expire', new Kwf_Date(mktime())),
+            )),
         ));
     }
 }
