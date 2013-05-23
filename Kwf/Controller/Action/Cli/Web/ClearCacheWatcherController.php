@@ -300,9 +300,12 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 $cacheIds[] = $apcCacheId;
                 $cacheIds[] = $apcCacheId.'mtime';
 
-                self::_clearApcCache($cacheIds, array(
-                    'config-',
-                    'configAr-',
+                self::_clearApcCache(array(
+                    'cacheIds' => $cacheIds,
+                    'clearCacheSimpleStatic' => array(
+                        'config-',
+                        'configAr-',
+                    )
                 ));
                 echo "cleared apc config cache\n";
 
@@ -376,7 +379,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                        self::_endsWith($file, '/Component.printcss')
             ) {
                 if ($event == 'CREATE' || $event == 'DELETE') {
-                    echo "recalculate 'componentFiles' setting because Admin.php got removed/added...\n";
+                    echo "recalculate 'componentFiles' setting because comopnent file got removed/added...\n";
                     self::_clearComponentSettingsCache($matchingClasses, 'componentFiles');
                 }
             }
@@ -456,17 +459,13 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         }
     }
 
-    private static function _clearApcCache(array $cacheIds, array $prefix = array())
+    private static function _clearApcCache($params)
     {
         echo "APC: ";
-        Kwf_Cache_Simple::delete($cacheIds);
-        foreach ($prefix as $p) {
-            Kwf_Cache_Simple::clear($p);
+        if (isset($params['cacheIds']) && is_array($params['cacheIds'])) {
+            $params['cacheIds'] = implode(',', $params['cacheIds']);
         }
-        Kwf_Util_Apc::callClearCacheByCli(array(
-            'cacheIds'=>implode(',', $cacheIds),
-            'clearCacheSimple' => $prefix,
-        ), Kwf_Util_Apc::VERBOSE);
+        Kwf_Util_Apc::callClearCacheByCli($params, Kwf_Util_Apc::VERBOSE);
     }
 
     private static function _getComponentClassesFromGeneratorsSetting($generators)
@@ -529,7 +528,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             self::_clearAssetsAll();
         }
 
-        $clearCacheSimple = array(
+        $clearCacheSimple = array();
+        $clearCacheSimpleStatic = array(
             'has-', //Kwf_Component_Abstract::hasSetting
             'cs-', //Kwf_Component_Abstract::getSetting
             'flag-', //Kwf_Component_Abstract::getFlag
@@ -556,8 +556,10 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
         }
         echo "cleared component settings apc cache...\n";
-        self::_clearApcCache(array(), $clearCacheSimple);
-
+        self::_clearApcCache(array(
+            'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
+            '$clearCacheSimple' => $clearCacheSimple
+        ));
 
         if ($dimensionsChanged) {
             echo "dimensions changed...\n";

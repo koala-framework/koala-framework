@@ -159,6 +159,16 @@ class Kwf_Util_Apc
                     Kwf_Cache_Simple::delete($id);
                 }
             }
+            if (isset($_REQUEST['clearCacheSimpleStatic'])) {
+                foreach ($_REQUEST['clearCacheSimpleStatic'] as $id) {
+                    Kwf_Cache_SimpleStatic::clear($id);
+                }
+            }
+            if (isset($_REQUEST['deleteCacheSimpleStatic'])) {
+                foreach ($_REQUEST['deleteCacheSimpleStatic'] as $id) {
+                    Kwf_Cache_SimpleStatic::delete($id);
+                }
+            }
             if (isset($_REQUEST['cacheIds'])) {
                 foreach (explode(',', $_REQUEST['cacheIds']) as $cacheId) {
                     apc_delete($cacheId);
