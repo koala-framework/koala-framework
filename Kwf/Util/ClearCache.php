@@ -75,6 +75,10 @@ class Kwf_Util_ClearCache
         if ($simpleCache && $simpleCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
             $types[] = 'simpleCache';
         }
+        if (extension_loaded('apc') && extension_loaded('memcache')) {
+            //complete memcache, used by Cache_SimpleStatic
+            $types[] = 'memcache';
+        }
         if (extension_loaded('apc')) $types[] = 'apc';
         if (extension_loaded('apc')) {
             $types[] = 'optcode';
