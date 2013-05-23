@@ -23,15 +23,6 @@ class Kwf_Cache_Simple
                 $cache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
                     'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
                 )));
-
-                //namespace is incremented in Kwf_Util_ClearCache
-                //use memcache directly as Zend would not save the integer directly and we can't increment it then
-                $v = $cache->getBackend()->getMemcache()->get('cache_namespace');
-                if (!$v) {
-                    $v = time();
-                    $cache->getBackend()->getMemcache()->set('cache_namespace', $v);
-                }
-                $cache->setOption('cache_id_prefix', $v);
             } else {
                 if (!Kwf_Config::getValue('server.memcache.host') && extension_loaded('apc')) {
                     $cache = false;
@@ -51,6 +42,16 @@ class Kwf_Cache_Simple
                         )));
                     }
                 }
+            }
+            if ($cache && $cache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
+                //namespace is incremented in Kwf_Util_ClearCache
+                //use memcache directly as Zend would not save the integer directly and we can't increment it then
+                $v = $cache->getBackend()->getMemcache()->get('cache_namespace');
+                if (!$v) {
+                    $v = time();
+                    $cache->getBackend()->getMemcache()->set('cache_namespace', $v);
+                }
+                $cache->setOption('cache_id_prefix', $v);
             }
         }
         return $cache;

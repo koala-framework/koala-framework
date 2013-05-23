@@ -70,10 +70,11 @@ class Kwf_Util_ClearCache
     {
 
         $types = array('all');
-        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-            $types[] = 'elastiCache';
+
+        $simpleCache = Kwf_Cache_Simple::getZendCache();
+        if ($simpleCache && $simpleCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
+            $types[] = 'simpleCache';
         }
-        if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
         if (extension_loaded('apc')) {
             $types[] = 'optcode';
@@ -298,7 +299,7 @@ class Kwf_Util_ClearCache
     protected function _clearCache(array $types, $output, $options)
     {
         $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
-        if (in_array('elastiCache', $types) && !$skipOtherServers) {
+        if (in_array('simpleCache', $types) && !$skipOtherServers) {
             //namespace used in Kwf_Cache_Simple
             $cache = Kwf_Cache_Simple::getZendCache();
             $mc = $cache->getBackend()->getMemcache();
