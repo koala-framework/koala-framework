@@ -132,6 +132,13 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
                 }
                 system("rm -r ".escapeshellarg($dirs[0]));
 
+                $oldHtaccess = file_get_contents($backupDir.'/.htaccess');
+                if (!strpos('php_flag magic_quotes_gpc off', $oldHtaccess)) {
+                    $c = file_get_contents('.htaccess');
+                    $c = str_replace('php_flag magic_quotes_gpc off', '', $c);
+                    file_put_contents('.htaccess', $c);
+                }
+
             } else {
                 $targetDir = false;
                 if ($target == 'library.tar.gz') {
