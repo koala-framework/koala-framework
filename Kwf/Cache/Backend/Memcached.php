@@ -197,4 +197,8 @@ class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         return $ret;
     }
 
+    public function getMemcache()
+    {
+        return $this->_memcache;
+    }
 }
