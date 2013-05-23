@@ -1,15 +1,11 @@
 <?php
-class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstract
-    implements Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_SkipProcessInput
+class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_LoginAbstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['password'] = 'planet';
-        $ret['generators']['loginForm'] = array(
-            'class' => 'Kwf_Component_Generator_Static',
-            'component' => 'Kwf_Component_Plugin_Password_LoginForm_Component'
-        );
+        $ret['generators']['loginForm']['component'] = 'Kwf_Component_Plugin_Password_LoginForm_Component';
         return $ret;
     }
 
@@ -27,11 +23,6 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
     {
         setcookie(get_class($this), sha1($this->_getLoginPassword()), time()+60*60*24*365);
     }
-
-    /**
-     * @deprecated
-     */
-    public final function isLoggedId() { return $this->isLoggedIn(); }
 
     public function isLoggedIn()
     {
@@ -74,33 +65,9 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
     {
     }
 
-    public function getTemplateVars()
-    {
-        $templateVars = array();
-        $templateVars['loginForm'] = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($this->_componentId, array('ignoreVisible' => true))->getChildComponent('-loginForm');
-        $templateVars['wrongLogin'] = isset($_POST['login_password']);
-        $templateVars['placeholder'] = Kwc_Abstract::getSetting(get_class($this), 'placeholder');
-        return $templateVars;
-    }
-
-    public function replaceOutput()
-    {
-        if ($this->isLoggedIn()) {
-            return false;
-        }
-
-        $template = Kwc_Admin::getComponentFile($this, 'Component', 'tpl');
-
-        $renderer = new Kwf_Component_Renderer();
-        $view = new Kwf_Component_View($renderer);
-        $view->assign($this->getTemplateVars());
-        return $renderer->render($view->render($template));
-    }
-
     public function skipProcessInput()
     {
-        //!$this->isLoggedIn() would be correct here, but that makes a redirect on login which we don't want
+        // overwrite because parent call that makes a redirect on login which we don't want
         $session = new Zend_Session_Namespace('login_password');
         return (bool)$session->login;
     }

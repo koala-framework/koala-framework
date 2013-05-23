@@ -29,11 +29,10 @@ class Kwc_User_BoxWithoutLogin_LoggedIn_Component extends Kwc_Abstract
 
         $ret['links'] = $this->_getLinks();
         $ret['linkPostfix'] = $this->_getSetting('linkPostfix');
-        $ret['logoutLink'] = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-        if (strpos($ret['logoutLink'], '?')=== false ) {
-            $ret['logoutLink'] .= '?logout';
-        } else {
-            $ret['logoutLink'] .= '&logout';
+
+        $ret['logoutLink'] = '/kwf/user/logout';
+        if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI']) {
+            $ret['logoutLink'] .= '?redirect=' . $_SERVER['REQUEST_URI'];
         }
         return $ret;
     }

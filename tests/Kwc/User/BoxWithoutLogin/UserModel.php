@@ -12,6 +12,9 @@ class Kwc_User_BoxWithoutLogin_UserModel extends Kwf_User_Model
                     array('id'=>1, 'name'=>'User 1', 'email'=>'bh@vivid-planet.com'),
                 )
             ));
+        Kwf_Auth::getInstance()->getStorage()->write(array(
+            'userId' => 1
+        ));
         parent::__construct($config);
     }
 

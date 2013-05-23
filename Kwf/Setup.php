@@ -151,6 +151,22 @@ class Kwf_Setup
                 exit;
             }
             $root->setCurrentPage($data);
+
+            if (isset($_COOKIE['feAutologin']) && !Kwf_Auth::getInstance()->getStorage()->read()) {
+                $feAutologin = explode('.', $_COOKIE['feAutologin']);
+                if (count($feAutologin) == 2) {
+                    $adapter = new Kwf_Auth_Adapter_Service();
+                    $adapter->setIdentity($feAutologin[0]);
+                    $adapter->setCredential($feAutologin[1]);
+                    $auth = Kwf_Auth::getInstance();
+                    $auth->clearIdentity();
+                    $result = $auth->authenticate($adapter);
+                    if (!$result->isValid()) {
+                        setcookie('feAutologin', '', time() - 3600, '/');
+                    }
+                }
+            }
+
             $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
             $contentSender = new $contentSender($data);
             $contentSender->sendContent(true);
@@ -234,5 +250,26 @@ class Kwf_Setup
         */
         setlocale(LC_ALL, explode(', ', trlcKwf('locale', 'C')));
         setlocale(LC_NUMERIC, 'C');
+    }
+
+    /**
+     * Check if user is logged in (faster than directly calling user model)
+     *
+     * Only asks user model (expensive) when there is something stored in the session
+     *
+     * @return boolean if user is logged in
+     */
+    public static function hasAuthedUser()
+    {
+        if (!Zend_Session::isStarted() &&
+            !Zend_Session::sessionExists() &&
+            !Kwf_Config::getValue('autologin')
+        ) {
+            return false;
+        }
+        if (!Kwf_Auth::getInstance()->getStorage()->read()) {
+            return false;
+        }
+        return Kwf_Registry::get('userModel')->hasAuthedUser();
     }
 }
