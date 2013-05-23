@@ -11,9 +11,15 @@ class Kwf_Util_Check_Config
         if (php_sapi_name() == 'cli') {
             $quiet = isset($_SERVER['argv'][2]) && trim($_SERVER['argv'][2]) == 'quiet';
         } else {
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
-                header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Kwf_Exception_AccessDenied();
+            $role = false;
+            try {
+                $role = Kwf_Registry::get('userModel')->getAuthedUserRole();
+            } catch (Exception $e) {}
+            if ($role != 'admin') {
+                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                    header('WWW-Authenticate: Basic realm="Check Config"');
+                    throw new Kwf_Exception_AccessDenied();
+                }
             }
             $quiet = isset($_GET['quiet']);
         }
