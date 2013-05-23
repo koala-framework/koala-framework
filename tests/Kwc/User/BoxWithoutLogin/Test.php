@@ -6,8 +6,6 @@ class Kwc_User_BoxWithoutLogin_Test extends Kwc_TestAbstract
     {
         parent::setUp('Kwc_User_BoxWithoutLogin_Root');
 
-        Zend_Session::$_unitTestEnabled = true;
-
         //use custom user model
         $this->_previousUserModel = Kwf_Registry::get('config')->user->model;
         Kwf_Registry::get('config')->user->model = 'Kwc_User_BoxWithoutLogin_UserModel';

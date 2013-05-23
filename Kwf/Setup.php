@@ -253,7 +253,7 @@ class Kwf_Setup
     }
 
     /**
-     * Check if user is logged in (fast than directly calling user model)
+     * Check if user is logged in (faster than directly calling user model)
      *
      * Only asks user model (expensive) when there is something stored in the session
      *
@@ -265,6 +265,9 @@ class Kwf_Setup
             !Zend_Session::sessionExists() &&
             !Kwf_Config::getValue('autologin')
         ) {
+            return false;
+        }
+        if (!Kwf_Auth::getInstance()->getStorage()->read()) {
             return false;
         }
         return Kwf_Registry::get('userModel')->hasAuthedUser();
