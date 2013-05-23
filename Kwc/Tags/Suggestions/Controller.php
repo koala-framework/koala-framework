@@ -9,7 +9,9 @@ class Kwc_Tags_Suggestions_Controller extends Kwf_Controller_Action
     public function jsonSuggestAction()
     {
         $newTag = trim($this->_getParam('tag'));
-        $componentId = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'))->parent->getDbId();
+        $componentId = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible' => true))
+            ->parent->getDbId();
 
         $select = new Kwf_Model_Select();
         $select->whereEquals('name', $newTag);
