@@ -23,6 +23,7 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
     showDelete: true,
     showPosition: true,
     showCopyPaste: true,
+    _loadingCount: 0,
     initComponent : function()
     {
         this.addEvents('editcomponent', 'gotComponentConfigs');
@@ -65,15 +66,10 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
             handler: function(b) {
                 this.dataView.showToolbars = !b.pressed;
                 if (b.pressed) {
-                    this.applyBaseParams({
-                        filter_visible: 1
-                    });
+                    this.store.filterBy(function(r) { return !!r.get('visible'); }, this);
                 } else {
-                    this.applyBaseParams({
-                        filter_visible: null
-                    });
+                    this.store.filterBy(function(r) { return true }, this);
                 }
-                this.load();
             },
             scope: this
         });
@@ -169,6 +165,14 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
             }
         }
         this.tbar.push('->');
+        this._loading = new Ext.Button({
+            iconCls: "x-tbar-loading",
+            disabled: true,
+            text: trlKwf('Saving')
+        });
+        this.tbar.push(this._loading);
+        this._loading.hide();
+
         this.tbar.push(this.actions.makeAllVisible);
 
         Kwc.Paragraphs.Panel.superclass.initComponent.call(this);
@@ -226,7 +230,7 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
             proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
             reader: reader,
             sortInfo: meta.sortInfo,
-            remoteSort: true
+            remoteSort: false
         };
         this.store = new Ext.data.Store(storeConfig);
         if (this.baseParams) {
@@ -283,6 +287,18 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
         return params;
     },
 
+    _showLoading: function()
+    {
+        this._loadingCount++;
+        this._loading.show();
+    },
+    _hideLoading: function() {
+        this._loadingCount--;
+        if (this._loadingCount <= 0) {
+            this._loading.hide();
+        }
+    },
+
     submit : function()
     {
         var params = this.getSaveParams();
@@ -295,19 +311,33 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
         }
         if (empty) return;
 
-        this.el.mask(trlKwf('Saving...'));
+        this._loading.show();
+
+        if (!this._submitTask) {
+            this._submitTask = new Ext.util.DelayedTask(function(){
+                this._doSubmit();
+            }, this);
+        }
+        this._submitTask.delay(500);
+    },
+
+    _doSubmit: function() {
+
+        this._showLoading();
+
+        var params = this.getSaveParams();
+        this.store.modified = [];
+
 
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-save',
             params: params,
             success: function(response, options, r) {
                 //geänderte und neue zurücksetzen, damit isDirty false ist
-                this.store.modified = [];
-                this.reload();
                 this.fireEvent('datachange', r);
             },
             callback: function() {
-                this.el.unmask();
+                this._hideLoading();
             },
             scope  : this
         });
@@ -325,6 +355,25 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
 
     onChangePos: function(record, pos) {
         record.set('pos', pos);
+
+        var p = 1;
+        for (var i=0;i<this.store.getCount();i++, p++) {
+            var r = this.store.getAt(i);
+            if (p == pos) {
+                p++;
+                //set above
+            }
+            if (r == record) {
+                //already set
+                if (pos > p) p--;
+                continue;
+            } else {
+                if (r.get('pos') != p) {
+                    r.set('pos', p);
+                }
+            }
+        }
+        this.store.sort('pos', 'ASC');
         this.submit();
     },
 
@@ -336,17 +385,22 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
-                    this.el.mask(trlKwf('Deleting...'));
+                    this.store.remove(record);
+                    var pos = 1;
+                    this.store.each(function(r) {
+                        if (r.get('pos') != pos) r.set('pos', pos);
+                        pos++;
+                    }, this);
                     var params = this.getBaseParams();
                     params.id = record.get('id');
+                    this._showLoading();
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/json-delete',
                         params: params,
                         success: function(response, options, r) {
-                            this.reload();
                         },
                         callback: function() {
-                            this.el.unmask();
+                            this._hideLoading();
                         },
                         scope : this
                     });
