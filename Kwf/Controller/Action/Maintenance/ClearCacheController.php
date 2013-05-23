@@ -10,7 +10,7 @@ class Kwf_Controller_Action_Maintenance_ClearCacheController extends Kwf_Control
 
     public function jsonClearCacheAction()
     {
-        $cmd = "php bootstrap.php maintenance clear-cache ";
+        $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php maintenance clear-cache ";
         $cmd .= "--type=".escapeshellarg($this->_getParam('types'));
         $cmd .= " --progressNum=".escapeshellarg($this->_getParam('progressNum'));
         $procData = Kwf_Util_BackgroundProcess::start($cmd, $this->view);

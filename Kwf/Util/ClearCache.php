@@ -242,7 +242,7 @@ class Kwf_Util_ClearCache
                     if ($output) {
                         echo "executing clear-cache on $domain:\n";
                     }
-                    $cmd = "php bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes).' --skip-other-servers';
+                    $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes).' --skip-other-servers';
                     $cmd = "ssh -o 'StrictHostKeyChecking no' $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
                     passthru($cmd);
                     if ($output) {

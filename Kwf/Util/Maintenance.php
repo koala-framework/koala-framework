@@ -50,7 +50,7 @@ class Kwf_Util_Maintenance
                 if ($output) {
                     echo "executing clear-cache write-maintenance on $domain:\n";
                 }
-                $cmd = "php bootstrap.php clear-cache write-maintenance";
+                $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache write-maintenance";
                 $cmd = "ssh $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
                 passthru($cmd);
             }
@@ -81,7 +81,7 @@ class Kwf_Util_Maintenance
                 if ($output) {
                     echo "executing clear-cache restore-maintenance on $domain:\n";
                 }
-                $cmd = "php bootstrap.php clear-cache restore-maintenance";
+                $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache restore-maintenance";
                 $cmd = "ssh $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
                 passthru($cmd);
             }

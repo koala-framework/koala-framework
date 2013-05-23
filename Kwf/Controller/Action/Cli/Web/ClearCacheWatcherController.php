@@ -304,7 +304,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 ));
                 echo "cleared apc config cache\n";
 
-                $cmd = "php bootstrap.php clear-cache --type=setup";
+                $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache --type=setup";
                 exec($cmd, $out, $ret);
                 echo "cleared setup.php cache";
                 if ($ret) echo " [FAILED]";
@@ -342,7 +342,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 return;
             }
 /*
-            $cmd = "php bootstrap.php clear-cache-watcher class-exists --class=$cls";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache-watcher class-exists --class=$cls";
             system($cmd, $classExists);
             if ($classExists != 0) {
                 echo "parse error: $cls\n";

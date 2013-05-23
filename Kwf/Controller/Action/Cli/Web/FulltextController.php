@@ -20,12 +20,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         if ($this->_getParam('debug')) echo "check for invalid entries...\n";
         foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $subroot) {
             if ($this->_getParam('debug')) echo "$subroot\n";
-            $cmd = "php bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
             if ($this->_getParam('debug')) $cmd .= " --debug";
             system($cmd);
         }
 
-        $cmd = "php bootstrap.php fulltext optimize";
+        $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext optimize";
         if ($this->_getParam('debug')) $cmd .= " --debug";
         system($cmd);
 
@@ -125,7 +125,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     {
         ini_set('memory_limit', '512M');
         if (!$this->_getParam('skip-check-for-invalid')) {
-            $cmd = "php bootstrap.php fulltext check-for-invalid";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-for-invalid";
             if ($this->_getParam('debug')) $cmd .= " --debug";
             system($cmd);
         }
@@ -270,7 +270,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         }
 
         if (!$this->_getParam('skip-optimize')) {
-            $cmd = "php bootstrap.php fulltext optimize";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext optimize";
             if ($this->_getParam('debug')) $cmd .= " --debug";
             system($cmd);
         }
@@ -374,7 +374,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             }
         }
 
-        $cmd = "php bootstrap.php fulltext optimize";
+        $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext optimize";
         if ($this->_getParam('debug')) $cmd .= " --debug";
         system($cmd);
 
@@ -389,7 +389,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
             $t = time();
             if (!$this->_getParam('silent')) echo "\n[$subroot] check-for-invalid...\n";
-            $cmd = "php bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
             if ($this->_getParam('debug')) $cmd .= " --debug";
             if ($this->_getParam('silent')) $cmd .= " --silent";
             passthru($cmd, $ret);
@@ -398,7 +398,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
             $t = time();
             if (!$this->_getParam('silent')) echo "\n[$subroot] check-pages...\n";
-            $cmd = "php bootstrap.php fulltext check-pages-subroot ";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-pages-subroot ";
             if ($subroot) {
                 $cmd .= "--componentId=$subroot";
             } else {
@@ -412,7 +412,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
             $t = time();
             if (!$this->_getParam('silent')) echo "\n[$subroot] check-contents...\n";
-            $cmd = "php bootstrap.php fulltext check-contents-subroot --subroot=$subroot";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-contents-subroot --subroot=$subroot";
             if ($this->_getParam('debug')) $cmd .= " --debug";
             if ($this->_getParam('silent')) $cmd .= " --silent";
             passthru($cmd, $ret);

@@ -40,7 +40,7 @@ class Kwf_Util_Check_Config
             );
         }
 //         if (php_sapi_name()!= 'cli') {
-//             passthru("php bootstrap.php check-config quiet 2>&1", $ret);
+//             passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config quiet 2>&1", $ret);
 //             if ($ret) echo "\nFAILED CLI";
 //         }
         return $ret;
@@ -117,7 +117,7 @@ class Kwf_Util_Check_Config
                 }
             }
             if (php_sapi_name()!= 'cli') {
-                passthru("php bootstrap.php check-config quiet 2>&1", $ret);
+                passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config quiet 2>&1", $ret);
                 if ($ret) echo "\nFAILED CLI";
             }
         } else {
@@ -140,7 +140,7 @@ class Kwf_Util_Check_Config
             }
 
             if (php_sapi_name()!= 'cli') {
-                passthru("php bootstrap.php check-config 2>&1", $ret);
+                passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config 2>&1", $ret);
                 if ($ret) {
                     echo "<span style=\"background-color:red\">FAILED CLI: $ret</span>";
                 }
