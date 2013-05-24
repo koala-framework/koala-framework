@@ -49,7 +49,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
             }
         });
         ");
-        $this->type('css=input[name="component_extern_target"]', 'http://orf.at');
+        $this->type('css=input[name="component_component_cards_extern_target"]', 'http://orf.at');
         $this->click("css=.x-window button:contains('Save')");
         $this->waitForConnections();
 
@@ -90,8 +90,8 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->waitForConnections();
 
         //assert previously isnerted text
-        $this->assertVisible('css=input[name="component_extern_target"]');
-        $this->assertElementValueEquals('css=input[name="component_extern_target"]', 'http://orf.at');
+        $this->assertVisible('css=input[name="component_component_cards_extern_target"]');
+        $this->assertElementValueEquals('css=input[name="component_component_cards_extern_target"]', 'http://orf.at');
 
         sleep(5);
     }

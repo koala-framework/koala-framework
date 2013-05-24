@@ -2767,13 +2767,6 @@
 <sl>Domače strani ni možno skriti.</sl>
 </text>
 <text>
-<en>Can't delete page as there are child pages.</en>
-<de>Die Seite kann nicht gelöscht werden, da es Unterseiten dazu gibt.</de>
-<id>576</id>
-<ro>Pagina nu poate fi ştearsă pentru că are subpagini.</ro>
-<sl>Te strani ni možno izbrisati, ker vsebuje podstrani.</sl>
-</text>
-<text>
 <en>Hello</en>
 <de>Hallo</de>
 <id>577</id>
@@ -8230,12 +8223,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>ataşat</ro>
 </text>
 <text>
-<en>off</en>
-<id>1641</id>
-<de>Aus</de>
-<ro>dezactivat</ro>
-</text>
-<text>
 <en>Form.File Upload</en>
 <id>1642</id>
 <de>Form.Datei Upload</de>
@@ -8726,13 +8713,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>URL extern</ro>
 </text>
 <text>
-<en>+</en>
-<id>1749</id>
-<de>+</de>
-<ro>+</ro>
-<sl>+</sl>
-</text>
-<text>
 <en>Blank</en>
 <de>Leer</de>
 <id>1750</id>
@@ -8846,13 +8826,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Form Properties</en>
 <de>Formular-Eigenschaften</de>
 <id>1774</id>
-</text>
-<text>
-<en>Text on successful submit</en>
-<de>Text nach Abschicken</de>
-<id>1775</id>
-<en>Subtotal</en>
-<id>1771</id>
 </text>
 <text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
@@ -9039,11 +9012,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1817</id>
 </text>
 <text>
-<en>Hot topic</en>
-<de>Gefragtes Thema</de>
-<id>1818</id>
-</text>
-<text>
 <en>Required reading</en>
 <de>Lesen erforderlich</de>
 <id>1819</id>
@@ -9057,16 +9025,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>uses</en>
 <de>Häufigkeit</de>
 <id>1821</id>
-</text>
-<text>
-<en>delete favorite</en>
-<de>Favorit löschen</de>
-<id>1822</id>
-</text>
-<text>
-<en>save as favorite</en>
-<de>Als Favorit speichern</de>
-<id>1823</id>
 </text>
 <text>
 <en>Thumbnail</en>
@@ -9090,12 +9048,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Enter tag...</en>
-<de>Bestätigungsfrage eintragen...</de>
+<de>Schlagwort eintippen...</de>
 <id>1828</id>
 </text>
 <text>
 <en>Please enter a tag.</en>
-<de>Bitte tragen Sie eine Bestätigungsfrage ein</de>
+<de>Bitte tragen Sie ein Schlagwort ein</de>
 <id>1829</id>
 </text>
 <text>
@@ -9109,32 +9067,9 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1831</id>
 </text>
 <text>
-<en>Feedback for article</en>
-<de>Feedback für Artikel</de>
-<id>1832</id>
-</text>
-<text>
-<id>1833</id>
-</text>
-<text>
-<en>Write your feedback!</en>
-<de>Feedback schreiben!</de>
-<id>1834</id>
-</text>
-<text>
 <en>Feedback from</en>
 <de>Feedback von</de>
 <id>1835</id>
-</text>
-<text>
-<en>to article</en>
-<de>zu Artikel</de>
-<id>1836</id>
-</text>
-<text>
-<en>Feedback to article </en>
-<de>Feedback zu Artikel </de>
-<id>1837</id>
 </text>
 <text>
 <en>Plese enter in both fields the password which you want to use for your useraccount</en>
@@ -9145,6 +9080,200 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Account activation</en>
 <de>Account aktivierung</de>
 <id>1839</id>
+</text>
+<text>
+<en>Home</en>
+<id>1840</id>
+</text>
+<text>
+<en>Open Graph</en>
+<id>1841</id>
+</text>
+<text>
+<en>for child pages</en>
+<id>1842</id>
+</text>
+<text>
+<en>Amount of Money</en>
+<id>1843</id>
+</text>
+<text>
+<en>Mp3 File</en>
+<id>1844</id>
+</text>
+<text>
+<en>Width (px)</en>
+<id>1845</id>
+</text>
+<text>
+<en>Height (px)</en>
+<id>1846</id>
+</text>
+<text>
+<en>Repeat</en>
+<id>1847</id>
+</text>
+<text>
+<en>Auto play</en>
+<id>1848</id>
+</text>
+<text>
+<en>Audio</en>
+<id>1849</id>
+</text>
+<text>
+<en>Files</en>
+<id>1850</id>
+</text>
+<text>
+<en>Mp4 file</en>
+<id>1851</id>
+</text>
+<text>
+<en>Ogg File</en>
+<id>1852</id>
+</text>
+<text>
+<en>Webm file (optional)</en>
+<id>1853</id>
+</text>
+<text>
+<en>Hot-topic</en>
+<de>Top-Thema</de>
+<id>1856</id>
+</text>
+<text>
+<en>Ends at</en>
+<de>Endet am</de>
+<id>1857</id>
+</text>
+<text>
+<en>Priority</en>
+<de>Priorität</de>
+<id>1858</id>
+</text>
+<text>
+<en>For sorting articles if they have same date</en>
+<de>Sortiert Artikel des gleichen Datums</de>
+<id>1859</id>
+</text>
+<text>
+<en>show on all devices</en>
+<id>1861</id>
+</text>
+<text>
+<en>hide on mobile devices</en>
+<id>1862</id>
+</text>
+<text>
+<en>only show on mobile devices</en>
+<id>1863</id>
+</text>
+<text>
+<en>Large Image</en>
+<id>1864</id>
+</text>
+<text>
+<en>Favourites</en>
+<id>1865</id>
+</text>
+<text>
+<en>save as favourite</en>
+<id>1866</id>
+</text>
+<text>
+<en>delete favourite</en>
+<id>1867</id>
+</text>
+<text>
+<en>Label Width</en>
+<id>1868</id>
+</text>
+<text>
+<en>Column {0}, width {1}%</en>
+<id>1869</id>
+</text>
+<text>
+<en>2 Columns (50% - 50%)</en>
+<id>1870</id>
+</text>
+<text>
+<en>2 Columns (33% - 66%)</en>
+<id>1871</id>
+</text>
+<text>
+<en>2 Columns (66% - 33%)</en>
+<id>1872</id>
+</text>
+<text>
+<en>2 Columns (25% - 75%)</en>
+<id>1873</id>
+</text>
+<text>
+<en>2 Columns (75% - 25%)</en>
+<id>1874</id>
+</text>
+<text>
+<en>3 Columns (33% - 33% - 33%)</en>
+<id>1875</id>
+</text>
+<text>
+<en>3 Columns (50% - 25% - 25%)</en>
+<id>1876</id>
+</text>
+<text>
+<en>3 Columns (25% - 50% - 25%)</en>
+<id>1877</id>
+</text>
+<text>
+<en>3 Columns (25% - 25% - 50%)</en>
+<id>1878</id>
+</text>
+<text>
+<en>Columns type</en>
+<id>1879</id>
+</text>
+<text>
+<en>No category selected.</en>
+<id>1880</id>
+</text>
+<text>
+<en>Menu settings</en>
+<id>1881</id>
+</text>
+<text>
+<en>Hide</en>
+<id>1882</id>
+</text>
+<text>
+<en>Device visible</en>
+<id>1883</id>
+</text>
+<text>
+<en>to page</en>
+<id>1884</id>
+</text>
+<text>
+<en>Feedback to page </en>
+<id>1885</id>
+</text>
+<text>
+<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
+<id>1886</id>
+</text>
+<text>
+<en>id</en>
+<id>1887</id>
+</text>
+<text>
+<en>Show categories</en>
+<de>Kategories anzeigen</de>
+<id>1888</id>
+</text>
+<text>
+<en>Original Subject</en>
+<de>Originaltitel</de>
+<id>1889</id>
 </text>
 <text>
 <en>Home</en>

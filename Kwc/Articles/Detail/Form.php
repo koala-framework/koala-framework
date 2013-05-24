@@ -37,7 +37,14 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
 
         $this->add(Kwc_Abstract_Form::createComponentFormByDbIdTemplate('article_{0}-previewImage', 'previewImage'));
 
-        $this->add(new Kwf_Form_Field_Checkbox('is_top', trlKwf('Hot-topic')));
+        $columns = $this->add(new Kwf_Form_Container_Columns());
+        $col = $columns->add(new Kwf_Form_Container_Column());
+        $col->setStyle('margin-left: 0px');
+        $col->add(new Kwf_Form_Field_Checkbox('is_top_checked', trlKwf('Hot-topic')));
+        $col = $columns->add(new Kwf_Form_Container_Column());
+        $col->setLabelWidth(50);
+        $col->add(new Kwf_Form_Field_DateField('is_top_expire', trlKwf('Ends at')));
+
         $this->add(new Kwf_Form_Field_Checkbox('read_required', trlKwf('Required reading')));
         $this->add(new Kwf_Form_Field_Checkbox('only_intern', trlKwf('Only intern')));
 
