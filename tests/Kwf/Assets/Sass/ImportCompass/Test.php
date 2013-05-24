@@ -32,10 +32,10 @@ class Kwf_Assets_Sass_ImportCompass_Test extends Kwf_Test_TestCase
         );
         $this->assertEquals($expected, $files);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_ImportCompass:Test.css?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_ImportCompass:Test.css");
         $this->assertContains("body { height: 50px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; }\n", $c['contents']);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_ImportCompass:Test.css?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_ImportCompass:Test.css");
         $this->assertContains("body { height: 50px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; }\n", $c['contents']);
 
         Kwf_Component_Data_Root::setComponentClass(null);

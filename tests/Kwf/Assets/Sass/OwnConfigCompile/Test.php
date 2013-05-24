@@ -29,10 +29,10 @@ class Kwf_Assets_Sass_OwnConfigCompile_Test extends Kwf_Test_TestCase
         );
         $this->assertEquals($expected, $files);
 
-        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_Sass_OwnConfigCompile:Test.css?v='.$v);
+        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_Sass_OwnConfigCompile:Test.css');
         $this->assertContains("body { height: 50px; }\nbody { width: 100px; }\n", $c['contents']);
 
-        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_Sass_OwnConfigCompile:Test.css?v='.$v);
+        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_Sass_OwnConfigCompile:Test.css');
         $this->assertContains("body { height: 50px; }\nbody { width: 100px; }\n", $c['contents']);
     }
 }
