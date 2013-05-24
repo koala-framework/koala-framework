@@ -38,9 +38,16 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
         ) {
             $postData[$fieldName] = null;
         }
+        if (!isset($postData[$fieldName.'-format']) || $postData[$fieldName.'-format'] != 'fe') {
+            if (!is_numeric($postData[$fieldName])) $postData[$fieldName] = null;
+        }
         if (!is_null($postData[$fieldName])) {
             if ($this->getDecimalSeparator() != '.') {
                 $postData[$fieldName] = str_replace($this->getDecimalSeparator(), '.', $postData[$fieldName]);
+            }
+            if (!isset($postData[$fieldName.'-format']) || $postData[$fieldName.'-format'] != 'fe') {
+                $postData[$fieldName] = (float)$postData[$fieldName];
+                $postData[$fieldName] = round($postData[$fieldName], $this->getDecimalPrecision());
             }
         }
         return $postData[$fieldName];
@@ -59,5 +66,13 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
         return array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Number Field')
         ));
+    }
+
+    public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
+    {
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+        //add additional hidden input field for frontend forms so we know the posted value is from frontend and formatted like current locale
+        $ret['html'] .= "\n<input type=\"hidden\" name=\"".$this->getFieldName().$fieldNamePostfix."-format\" value=\"fe\" />";
+        return $ret;
     }
 }
