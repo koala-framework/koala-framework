@@ -226,12 +226,6 @@ class Kwf_Util_Setup
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
-        /*
-        if (isset($_COOKIE['unitTest'])) {
-            //$config->debug->benchmark = false;
-        }
-        */
-
         if (!Kwf_Config::getValue('server.domain')) {
             //hack to make clear-cache just work
             $ret .= "if (\$host) file_put_contents('cache/lastdomain', \$host);\n";
