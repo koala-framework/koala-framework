@@ -214,8 +214,10 @@ class Kwf_Util_Setup
         $ret .= " false,"; //secure
         $ret .= " true";   //httponly
         $ret .= ");\n";
-        $ret .= "Zend_Session::registerValidator(new Kwf_Session_Validator_HttpHost());\n";
-        $ret .= "Zend_Session::registerValidator(new Kwf_Session_Validator_RemoteAddr());\n";
+        $ret .= "if (isset(\$_COOKIE[session_name()])) {\n"; //only validate when session cookie is set
+        $ret .= "    Zend_Session::registerValidator(new Kwf_Session_Validator_HttpHost());\n";
+        $ret .= "    Zend_Session::registerValidator(new Kwf_Session_Validator_RemoteAddr());\n";
+        $ret .= "}\n";
 
         $ret .= "\n";
 
