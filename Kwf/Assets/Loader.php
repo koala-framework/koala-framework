@@ -89,7 +89,7 @@ class Kwf_Assets_Loader
             }
         } else if (substr($file, 0, 4) == 'all/') {
             $encoding = Kwf_Media_Output::getEncoding();
-            $cacheId = md5($file.$encoding.$this->_getHostForCacheId());
+            $cacheId = str_replace(array('/', '.'), '_', $file).$encoding.$this->_getHostForCacheId();
             $cache = Kwf_Assets_Cache::getInstance();
             $cacheData = $cache->load($cacheId);
             if ($cacheData) {

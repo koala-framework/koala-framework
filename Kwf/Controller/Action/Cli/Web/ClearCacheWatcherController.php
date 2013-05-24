@@ -685,10 +685,10 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             foreach ($fileTypes as $fileType) {
                 foreach (self::_getAssetsTypes() as $assetsType) {
                     foreach (array('none', 'gzip', 'deflate') as $encoding) {
-                        $allFile = "all/$section/"
-                                .($rootComponent?$rootComponent.'/':'')
-                                ."$language/$assetsType.$fileType";
-                        $cacheId = md5($allFile.$encoding.self::_getHostForCacheId());
+                        $allFile = "all_$section_"
+                                .($rootComponent?$rootComponent.'_':'')
+                                ."$language_$assetsType_$fileType";
+                        $cacheId = $allFile.$encoding.self::_getHostForCacheId();
                         echo "remove from assets cache: $cacheId (".$allFile.$encoding.self::_getHostForCacheId().")";
                         if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
                             echo " [DELETED]";
