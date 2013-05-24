@@ -207,6 +207,11 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $ret .= "Zend_Session::registerValidator(new Kwf_Session_Validator_HttpHost());\n";
+        $ret .= "Zend_Session::registerValidator(new Kwf_Session_Validator_RemoteAddr());\n";
+
+        $ret .= "\n";
+
         //store session data in memcache if avaliable
         if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
