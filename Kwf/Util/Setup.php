@@ -207,6 +207,13 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $ret .= "session_set_cookie_params(\n";
+        $ret .= " 0,";     //lifetime
+        $ret .= " '/',";   //path
+        $ret .= " null,";  //domain
+        $ret .= " false,"; //secure
+        $ret .= " true";   //httponly
+        $ret .= ");\n";
         $ret .= "Zend_Session::registerValidator(new Kwf_Session_Validator_HttpHost());\n";
         $ret .= "Zend_Session::registerValidator(new Kwf_Session_Validator_RemoteAddr());\n";
 
@@ -216,11 +223,6 @@ class Kwf_Util_Setup
         if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
-
-        $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";
-        $ret .= "    //für swfupload\n";
-        $ret .= "    Zend_Session::setId(\$_POST['PHPSESSID']);\n";
-        $ret .= "}\n";
 
         /*
         if (isset($_COOKIE['unitTest'])) {
