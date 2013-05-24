@@ -155,6 +155,10 @@ class Kwf_Assets_Loader
                 } else if ($fileType == 'css' || $fileType == 'printcss') {
                     $cacheData['mimeType'] = 'text/css; charset=utf8';
                 }
+
+                //store list of generated all caches for clear-cache-watcher
+                file_put_contents('cache/assets/generated-all', $cacheId."\n", FILE_APPEND);
+
                 $cache->save($cacheData, $cacheId);
             }
             $ret['mtime'] = time();

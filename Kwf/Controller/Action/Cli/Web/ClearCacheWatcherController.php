@@ -650,55 +650,39 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         return $hostForCacheId;
     }
 
-
-    private static function _getAssetsTypes()
-    {
-        $ret = array();
-        $assetsTypes = array_keys(Kwf_Registry::get('config')->assets->toArray());
-        foreach ($assetsTypes as $assetsType) {
-            if ($assetsType == 'dependencies') continue;
-            $ret[] = $assetsType;
-        }
-        return $ret;
-    }
-
     private static function _clearAssetsDependencies()
     {
-        $rootComponent = Kwf_Component_Data_Root::getComponentClass();
-        foreach (self::_getAssetsTypes() as $assetsType) {
-            $cacheId = 'dependencies'.str_replace(':', '_', $assetsType).$rootComponent;
-            echo "remove from assets cache: $cacheId";
-            if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
-                echo " [DELETED]";
+        if (file_exists('cache/assets/generated-dependencies')) {
+            foreach (file('cache/assets/generated-dependencies') as $cacheId) {
+                echo trim($cacheId);
+                if (Kwf_Assets_Cache::getInstance()->remove(trim($cacheId))) {
+                    echo " [DELETED]";
+                }
+                echo "\n";
             }
-            echo "\n";
+            unlink('cache/assets/generated-dependencies');
         }
     }
 
-    private static function _clearAssetsAll($fileTypes = null)
+    private static function _clearAssetsAll($fileType = null)
     {
-        if (is_null($fileTypes)) $fileTypes = array('js', 'css', 'printcss');
-        if (is_string($fileTypes)) $fileTypes = array($fileTypes);
-        
-        $section = 'web'; //TODO: where to get all possible sections?
-        $languages = Kwf_Trl::getInstance()->getLanguages();
-        $rootComponent = Kwf_Component_Data_Root::getComponentClass();
-        foreach($languages as $language) {
-            foreach ($fileTypes as $fileType) {
-                foreach (self::_getAssetsTypes() as $assetsType) {
-                    foreach (array('none', 'gzip', 'deflate') as $encoding) {
-                        $allFile = "all_$section_"
-                                .($rootComponent?$rootComponent.'_':'')
-                                ."$language_$assetsType_$fileType";
-                        $cacheId = $allFile.$encoding.self::_getHostForCacheId();
-                        echo "remove from assets cache: $cacheId (".$allFile.$encoding.self::_getHostForCacheId().")";
-                        if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
-                            echo " [DELETED]";
-                        }
-                        echo "\n";
+        if (file_exists('cache/assets/generated-all')) {
+            $notDeletedCacheIds = array();
+            foreach (file('cache/assets/generated-all') as $cacheId) {
+                $cacheId = trim($cacheId);
+                if ($fileType) {
+                    if (!preg_match('#_'.$fileType.'_enc#', $cacheId)) {
+                        $notDeletedCacheIds[] = $cacheId;
+                        continue;
                     }
                 }
+                echo $cacheId;
+                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
+                    echo " [DELETED]";
+                }
+                echo "\n";
             }
+            file_put_contents('cache/assets/generated-all', implode("\n", $notDeletedCacheIds)."\n");
         }
     }
 }
