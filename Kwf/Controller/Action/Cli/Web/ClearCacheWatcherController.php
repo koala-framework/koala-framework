@@ -254,7 +254,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 foreach($languages as $language) {
                     $cacheId = 'fileContents'.$language.$section.self::_getHostForCacheId();
                         $cacheId .= str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $section.'-'.$file);
-                        $cacheId .= Kwf_Component_Data_Root::getComponentClass();
                     echo "remove from assets cache: $cacheId";
                     if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
                         echo " [DELETED]";

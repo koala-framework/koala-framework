@@ -211,8 +211,7 @@ class Kwf_Assets_Loader
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
                 $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
-                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file).
-                    Kwf_Component_Data_Root::getComponentClass();
+                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file);
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
                     if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {
