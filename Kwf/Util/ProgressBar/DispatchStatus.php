@@ -28,6 +28,9 @@ class Kwf_Util_ProgressBar_DispatchStatus
                     $pbarStatus['bgError'] = $output;
                 } else {
                     $pbarStatus['bgResponse'] = $outputJson;
+                    $pbarStatus['bgError'] = file_get_contents('./temp/'.$_REQUEST['outputFile'].'.err');
+                    $pbarStatus['bgError'] = preg_replace('#^(PHP )?Deprecated: .*$#m', '', $pbarStatus['bgError']); //ignore errors from deprecated php.ini settings
+                    $pbarStatus['bgError'] = trim($pbarStatus['bgError']);
                 }
             }
         }

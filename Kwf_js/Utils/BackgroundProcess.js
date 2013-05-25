@@ -41,12 +41,12 @@ Kwf.Utils.BackgroundProcess = {
             success: function(response, o, r) {
                 if (r.bgFinished) {
                     o.bgOptions.progressBar.destroy();
-                    if (r.bgResponse) {
+                    if (r.bgError) Ext.Msg.alert(trlKwf('Error'), r.bgError);
+                    if (r.bgResponse && r.bgResponse.success) {
                         //call success cb
                         if (o.bgOptions.success) options.success.call(o.bgOptions.scope || window, response, null, r.bgResponse);
                     } else {
                         //call failure cb
-                        Ext.Msg.alert(trlKwf('Error'), r.bgError);
                         if (o.bgOptions.failure) o.bgOptions.failure.call(o.bgOptions.scope || window);
                     }
                     return;
