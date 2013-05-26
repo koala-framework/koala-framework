@@ -23,9 +23,14 @@ class Kwf_Cache_SimpleStatic
                 $cache->setBackend(new Kwf_Cache_Backend_Memcached());
             } else {
                 //fallback to file backend (NOT recommended!)
-                $cache->setBackend(new Kwf_Cache_Backend_File(array(
-                    'cache_dir' => 'cache/simple'
-                )));
+                try {
+                    $cache->setBackend(new Kwf_Cache_Backend_File(array(
+                        'cache_dir' => 'cache/simple'
+                    )));
+                } catch (Exception $e) {
+                    $cache->setBackend(new Zend_Cache_Backend_BlackHole());
+                    throw $e;
+                }
             }
         }
         return $cache;
