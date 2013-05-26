@@ -8,6 +8,7 @@ class Kwc_NewsletterCategory_CategoriesController extends Kwf_Controller_Action_
     {
         $this->_columns->add(new Kwf_Grid_Column('category', trlKwf('Category'), 200))
             ->setEditor(new Kwf_Form_Field_TextField());
+        $this->_columns->add(new Kwf_Grid_Column('id', trlKwf('id'), 40));
     }
 
     protected function _getSelect()

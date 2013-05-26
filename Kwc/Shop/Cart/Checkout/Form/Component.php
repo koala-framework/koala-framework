@@ -6,12 +6,14 @@ class Kwc_Shop_Cart_Checkout_Form_Component extends Kwc_Form_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Shop_Cart_Checkout_Form_Success_Component';
         $ret['placeholder']['submitButton'] = trlKwfStatic('Next');
+        $ret['viewCache'] = false;
         return $ret;
     }
 
     protected function _initForm()
     {
         parent::_initForm();
+        $this->_form->setModel($this->getData()->parent->getComponent()->getOrderModel());
         $this->_form->setId(Kwc_Shop_Cart_Orders::getCartOrderId()); //can be null
 
         $this->_form->setPayments($this->_getFrontendPayments());
@@ -24,11 +26,9 @@ class Kwc_Shop_Cart_Checkout_Form_Component extends Kwc_Form_Component
         Kwc_Shop_Cart_Orders::setCartOrderId($row->id);
     }
 
-
     protected function _getFrontendPayments()
     {
-        $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
-                            ->getCartOrder();
+        $order = $this->getData()->parent->getComponent()->getOrderModel()->getCartOrder();
         $totalAmount = $this->getData()->parent->getComponent()->getTotal($order);
         $cc = $this->getData()->parent->getComponent()->getPayments();
         $ret = array();

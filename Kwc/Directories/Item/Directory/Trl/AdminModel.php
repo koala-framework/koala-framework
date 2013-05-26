@@ -12,6 +12,9 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
     {
         if (isset($config['proxyModel'])) $config['proxyModel'] = Kwf_Model_Abstract::getInstance($config['proxyModel']);
         if (isset($config['trlModel'])) $this->_trlModel = Kwf_Model_Abstract::getInstance($config['trlModel']);
+        if (!$this->_trlModel) {
+            throw new Kwf_Exception('Kwc_Directories_Item_Directory_Trl needs to be set a child model.');
+        }
         parent::__construct($config);
     }
 
@@ -69,10 +72,7 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->chained->dbId);
-
-            $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('ignoreVisible'=>true));
-            $select->whereEquals('id', $c->id);
+            $select->whereEquals('id', $id);
         } else {
             throw new Kwf_Exception("invalid select");
         }

@@ -17,6 +17,9 @@
  */
 class Kwf_Component_Data
 {
+    const DEVICE_VISIBLE_ALL = 'all';
+    const DEVICE_VISIBLE_HIDE_ON_MOBILE = 'hideOnMobile';
+    const DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE = 'onlyShowOnMobile';
     /**
      * @var Kwc_Abstract
      */
@@ -178,21 +181,9 @@ class Kwf_Component_Data
      *
      * @return string
      */
-    public function getAbsolutePreviewUrl()
+    public function getPreviewUrl()
     {
-        $ret = $this->url;
-        $data = $this;
-        do {
-            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
-                return 'http://'.$data->getComponent()->getPreviewDomain().$ret;
-            }
-        } while($data = $data->parent);
-
-        if (Kwf_Config::getValue('server.previewDomain')) {
-            return 'http://' . Kwf_Config::getValue('server.previewDomain') . $ret;
-        } else {
-            return 'http://' . Kwf_Config::getValue('server.domain') . $ret;
-        }
+        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?kwcPreview');
     }
 
     public function __get($var)
@@ -416,7 +407,12 @@ class Kwf_Component_Data
         foreach ($generators as $g) {
             if ($g['type'] == 'notStatic') {
                 $gen = Kwf_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
-                foreach ($gen->getChildData(null, clone $select) as $d) {
+                $s = clone $select;
+                if (!$noSubPages) {
+                    //unset limit as we may have filter away results
+                    $s->unsetPart('limitCount');
+                }
+                foreach ($gen->getChildData(null, $s) as $d) {
                     $add = true;
                     if (!$noSubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
                         $add = false;
@@ -1435,5 +1431,16 @@ class Kwf_Component_Data
         $this->_childComponentsCache = array();
         $this->_recursiveGeneratorsCache = array();
         if (isset($this->_languageCache)) unset($this->_languageCache);
+    }
+
+    /**
+     * Returns on which devices this page should be visible
+     *
+     * DEVICE_VISIBLE_* constants are returned.
+     * Implement getDeviceVisible in generator to change behaviour.
+     */
+    final public function getDeviceVisible()
+    {
+        return $this->generator->getDeviceVisible($this);
     }
 }

@@ -6,6 +6,8 @@ class Kwf_Assets_Loader
      */
     private $_dep = null;
     private $_config = null;
+    private $_scssParser = null;
+    private $_scssParserOptions = null;
 
     static public function load()
     {
@@ -166,6 +168,10 @@ class Kwf_Assets_Loader
                 $ret['mimeType'] = 'image/png';
             } else if (substr($file, -4)=='.jpg') {
                 $ret['mimeType'] = 'image/jpeg';
+            } else if (substr($file, -4)=='.mp4') {
+                $ret['mimeType'] = 'video/mp4';
+            } else if (substr($file, -5)=='.webm') {
+                $ret['mimeType'] = 'video/webm';
             } else if (substr($file, -4)=='.css' || substr($file, -5)=='.scss') {
                 $ret['mimeType'] = 'text/css; charset=utf-8';
             } else if (substr($file, -9)=='.printcss') {
@@ -222,6 +228,11 @@ class Kwf_Assets_Loader
                     ) {
                         //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
                         $cacheData['contents'] = str_replace('../images/', '/assets/ext/resources/images/', $cacheData['contents']);
+                    } else if ((substr($file, 0, strlen($section)+14)==$section.'-mediaelement/' || substr($file, 0, 13)=='mediaelement/')
+                        && substr($ret['mimeType'], 0, 5) == 'text/'
+                    ) {
+                        //hack to get the correct paths for the mediaelement pictures
+                        $cacheData['contents'] = str_replace('url(', 'url(/assets/mediaelement/build/', $cacheData['contents']);
                     }
 
                     $cacheData['contents'] = self::expandAssetVariables($cacheData['contents'], $section, $cacheData['mtimeFiles']);
@@ -264,18 +275,22 @@ class Kwf_Assets_Loader
                         }
 
                         if (substr($file, -5)=='.scss') {
-                            $options = array(
-                                'style' => 'compact',
-                                'cache' => false,
-                                'syntax' => 'scss',
-                                'debug' => true,
-                                'debug_info' => false,
-                                'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
-                                'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
-                                'extensions' => array('Compass', 'Susy', 'Kwf')
-                            );
-                            $parser = new Kwf_Util_SassParser($options);
-                            $cacheData['contents'] = $parser->toCss($cacheData['contents'], false);
+                            if (!$this->_scssParserOptions) {
+                                $this->_scssParserOptions = array(
+                                    'style' => 'compact',
+                                    'cache' => false,
+                                    'syntax' => 'scss',
+                                    'debug' => true,
+                                    'debug_info' => false,
+                                    'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
+                                    'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
+                                    'extensions' => array('Compass', 'Susy', 'Kwf')
+                                );
+                            }
+                            if (!$this->_scssParser) {
+                                $this->_scssParser = new Kwf_Util_SassParser($this->_scssParserOptions);
+                            }
+                            $cacheData['contents'] = $this->_scssParser->toCss($cacheData['contents'], false);
                         }
                     }
 

@@ -15,6 +15,7 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
     protected function _init($componentClass)
     {
         Kwf_Component_Data_Root::setComponentClass($componentClass);
+        Zend_Session::$_unitTestEnabled = true;
         $this->_root = Kwf_Component_Data_Root::getInstance();
         $this->_root->setFilename('kwf/kwctest/'.$componentClass);
         apc_clear_cache('user');

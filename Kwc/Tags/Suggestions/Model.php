@@ -4,7 +4,7 @@ class Kwc_Tags_Suggestions_Model extends Kwf_Model_Db
     protected $_table = 'kwc_tag_suggestions';
 
     protected $_referenceMap = array(
-        'ComponentToTag' => 'component_to_tag_id->Kwc_Tags_ComponentToTag'
+        'ComponentToTag' => 'tags_to_components_id->Kwc_Tags_ComponentToTag'
     );
 
     protected function _init()

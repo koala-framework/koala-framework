@@ -10,6 +10,13 @@ class Kwc_Basic_LinkTag_Mail_Trl_Data extends Kwf_Component_Data
         }
         return $this->_linkRow;
     }
+    
+    public function getAbsoluteUrl()
+    {
+        $row = $this->_getLinkRow();
+        if (!$row || !$row->mail) return '';
+        return Kwc_Basic_LinkTag_Mail_Data::createHref($row, false);
+    }
 
     public function __get($var)
     {

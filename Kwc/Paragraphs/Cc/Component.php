@@ -5,14 +5,31 @@ class Kwc_Paragraphs_Cc_Component extends Kwc_Chained_Cc_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['editComponents'] = array('paragraphs');
+
+        //don't allow endless recursion
+        foreach ($ret['generators']['paragraphs']['component'] as $k=>$i) {
+            if (is_instance_of($i, 'Kwc_Chained_Cc_Component')
+                && is_instance_of(substr($i, strpos($i, '.')+1), 'Kwc_Chained_CopyTarget_Component')
+            ) {
+                unset($ret['generators']['paragraphs']['component'][$k]);
+            }
+        }
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['paragraphs'] = $this->getData()
-            ->getChildComponents(array('generator'=>'paragraphs'));
+        $paragraphs = $this->getData()->getChildComponents(array('generator'=>'paragraphs'));
+
+        $paragraphsById = array();
+        foreach ($paragraphs as $c) {
+            $paragraphsById[$c->id] = $c;
+        }
+
+        foreach(array_keys($ret['paragraphs']) as $key) {
+            $ret['paragraphs'][$key]['data'] = $paragraphsById[$ret['paragraphs'][$key]['data']->id];
+        }
         return $ret;
     }
 

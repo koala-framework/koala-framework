@@ -22,22 +22,33 @@ class Kwc_Root_TrlRoot_Component extends Kwc_Root_Abstract
 
     public function getPageByUrl($path, $acceptLanguage)
     {
+        return self::getChildPageByPath($this->getData(), $path, $acceptLanguage);
+    }
+
+    public static function getChildPageByPath($component, $path, $acceptLanguage)
+    {
         if ($path == '') {
-            $ret = null;
-            $lngs = array();
-            foreach ($this->getData()->getChildComponents(array('pseudoPage'=>true)) as $c) {
-                $lngs[$c->filename] = $c;
-            }
-            if(preg_match('#^([a-z]{2,3})#', $acceptLanguage, $m)) {
-                if (isset($lngs[$m[1]])) {
-                    $ret = $lngs[$m[1]];
-                }
-            }
-            if (!$ret) {
-                $ret = current($lngs);
-            }
-            return $ret->getChildPage(array('home' => true));
+            return self::getChildDataByAcceptLanguage($component, $acceptLanguage);
+        } else {
+            return parent::getChildPageByPath($component, $path);
         }
-        return parent::getPageByUrl($path, $acceptLanguage);
+    }
+
+    public static function getChildDataByAcceptLanguage($component, $acceptLanguage)
+    {
+        $ret = null;
+        $lngs = array();
+        foreach ($component->getChildComponents(array('pseudoPage'=>true)) as $c) {
+            $lngs[$c->filename] = $c;
+        }
+        if(preg_match('#^([a-z]{2,3})#', $acceptLanguage, $m)) {
+            if (isset($lngs[$m[1]])) {
+                $ret = $lngs[$m[1]];
+            }
+        }
+        if (!$ret) {
+            $ret = current($lngs);
+        }
+        return $ret->getChildPage(array('home' => true));
     }
 }

@@ -449,4 +449,24 @@ class Kwf_Model_FnF_ModelTest extends Kwf_Test_TestCase
         $this->assertEquals($row->getDirtyColumns(), array('value'));
         $this->assertEquals($row->isDirty(), true);
     }
+    
+    public function testUnion()
+    {
+        $model = new Kwf_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => 'bar'),
+        ));
+        
+        $s1 = new Kwf_Model_Select();
+        $s1->whereEquals('id', 1);
+
+        $s2 = new Kwf_Model_Select();
+        $s2->whereEquals('id', 2);
+        $s1->union($s2);
+        
+        $this->assertEquals($model->countRows($s1), 2);
+        $this->assertEquals(count($model->getRows($s1)), 2);
+        $this->assertEquals(count($model->export(Kwf_Model_Interface::FORMAT_ARRAY, $s1)), 2);
+    }
 }

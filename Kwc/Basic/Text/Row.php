@@ -12,7 +12,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
     }
 
     //für Component und Row
-    public function getContentParts($content = null)
+    public function getContentParts($content = null, $ignoreLinksWithClass = null)
     {
         $classes = $this->_classes;
 
@@ -72,10 +72,10 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                         $usedChildComponentNrs[] = 'l'.$nr;
                         $ret[] = array('type'=>'link', 'nr'=>$nr, 'html'=>$m[2]);
                     } else {
-                        $ret[] = array('type'=>'invalidLink',
-                                    'href'=>$m[4],
-                                    'componentId'=>$m2[1],
-                                    'html'=>$m[2]);
+                        $ret[] = $this->_checkIgnoreLinksWithClass(
+                            $ignoreLinksWithClass,
+                            array('type'=>'invalidLink', 'href'=>$m[4], 'componentId'=>$m2[1], 'html'=>$m[2])
+                        );
                     }
                 } else if (isset($classes['download'])
                         && substr($childComponentId, 0, strlen($componentId)+2)
@@ -85,26 +85,29 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                         $usedChildComponentNrs[] = 'd'.$nr;
                         $ret[] = array('type'=>'download', 'nr'=>$nr, 'html'=>$m[2]);
                     } else {
-                        $ret[] = array('type'=>'invalidDownload',
-                                    'href'=>$m[4],
-                                    'componentId'=>$m2[1],
-                                    'html'=>$m[2]);
+                        $ret[] = $this->_checkIgnoreLinksWithClass(
+                            $ignoreLinksWithClass,
+                            array('type'=>'invalidDownload', 'href'=>$m[4], 'componentId'=>$m2[1], 'html'=>$m[2])
+                        );
                     }
                 } else if (isset($classes['link']) && preg_match('#-l[0-9]+$#', $m2[1])) {
-                    $ret[] = array('type'=>'invalidLink',
-                                   'href'=>$m[4],
-                                   'componentId'=>$m2[1],
-                                   'html'=>$m[2]);
+                    $ret[] = $this->_checkIgnoreLinksWithClass(
+                        $ignoreLinksWithClass,
+                        array('type'=>'invalidLink', 'href'=>$m[4], 'componentId'=>$m2[1], 'html'=>$m[2])
+                    );
                 } else if (isset($classes['download']) && preg_match('#-d[0-9]+$#', $m2[1])) {
-                    $ret[] = array('type'=>'invalidDownload',
-                                   'href'=>$m[4],
-                                   'componentId'=>$m2[1],
-                                   'html'=>$m[2]);
+                    $ret[] = $this->_checkIgnoreLinksWithClass(
+                        $ignoreLinksWithClass,
+                        array('type'=>'invalidDownload', 'href'=>$m[4], 'componentId'=>$m2[1], 'html'=>$m[2])
+                    );
                 } else {
-                    $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
+                    $ret[] = $this->_checkIgnoreLinksWithClass(
+                        $ignoreLinksWithClass,
+                        array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2])
+                    );
                 }
             } else if (isset($classes['link']) && $m[4] != '') {
-                $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
+                $ret[] = $this->_checkIgnoreLinksWithClass($ignoreLinksWithClass, array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]));
             } else if ($m[4] != '') {
                 //kein link möglich
             }
@@ -113,6 +116,17 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
         }
         if(!$m) $ret[] = $content;
 
+        return $ret;
+    }
+
+    protected function _checkIgnoreLinksWithClass($ignoreLinksWithClass, $config = array())
+    {
+        $ret = null;
+        if ($ignoreLinksWithClass !== null && strpos($config['html'], $ignoreLinksWithClass)) {
+            $ret = $config['html'];
+        } else {
+            $ret = $config;
+        }
         return $ret;
     }
 
@@ -193,6 +207,9 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
 
         //delete zero width space, causes problems in Lotus Notes
         $html = str_replace(chr(0xE2).chr(0x80).chr(0x8B), '', $html);
+
+        //delete BOM that might have sneaked into the text (at any position)
+        $html = str_replace(chr(0xEF).chr(0xBB).chr(0xBF), '', $html);
 
         $config = array(
                     'indent'         => true,

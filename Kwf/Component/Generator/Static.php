@@ -30,6 +30,13 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
         $pData = $parentData;
 
         $ret = array();
+
+        if ($p = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+            if (!in_array(substr($p, 1), array_keys($this->_settings['component']))) {
+                return $ret;
+            }
+        }
+
         if (!$parentData) {
             if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
                 throw new Kwf_Exception("this must not happen");

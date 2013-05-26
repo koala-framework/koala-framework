@@ -89,8 +89,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             this.view.applyBaseParams(this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(f) {
-
-                if (f instanceof Kwf.FrontendForm.Field && f.getValue().length < 3) return; //minimum length
+                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < 3) return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
@@ -459,10 +458,8 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             style: 'width: ' + this.kwfMainContent.getStyle('width'),
             html: '<div class="loading"></div>'
         }, this.kwfMainContent);
-        var url = '/kwf/util/kwc/render';
-        if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
         Ext.Ajax.request({
-            url: url,
+            url: Kwf.getKwcRenderUrl(),
             params: { url: href },
             success: function(response, options) {
                 if (!this.detailEl) return;

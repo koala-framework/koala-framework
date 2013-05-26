@@ -29,6 +29,13 @@ class Kwc_Basic_LinkTag_Mail_Data extends Kwf_Component_Data
         return $ret;
     }
 
+    public function getAbsoluteUrl()
+    {
+        $row = $this->_getLinkRow();
+        if (!$row || !$row->mail) return '';
+        return self::createHref($row, false);
+    }
+
     public function __get($var)
     {
         if ($var == 'url') {

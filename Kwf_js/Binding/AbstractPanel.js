@@ -179,7 +179,7 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
                 }
             }, this);
 
-            if (Kwf.Auto.FormPanel && b.item instanceof Kwf.Auto.FormPanel) {
+            if (b.item.getSupportsAdd()) {
                 b.item.on('addaction', function(form) {
                     this.activeId = 0;
                     this.selectId(0);
@@ -304,5 +304,10 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
     },
     getAutoLoad: function() {
         return this.autoLoad;
+    },
+
+    // form returns there true because these can be shown
+    getSupportsAdd : function() {
+        return false;
     }
 });

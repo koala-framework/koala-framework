@@ -100,8 +100,8 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
         $masterGen = Kwc_Abstract::getSetting($masterCC, 'generators');
         $detailGen = $masterGen['detail'];
         if (isset($ret['chained']->name)) {
-            if (isset($detailGen['nameColumn'])) {
-                $ret['name'] = $ret['row']->{$detailGen['nameColumn']};
+            if ($this->hasSetting('nameColumn')) {
+                $ret['name'] = $ret['row']->{$this->getSetting('nameColumn')};
             } else {
                 $ret['name'] = $ret['chained']->name;
             }

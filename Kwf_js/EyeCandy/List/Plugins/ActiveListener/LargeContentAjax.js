@@ -23,12 +23,9 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this.largeContent[item.id].hide();
         }
 
-        var url = '/kwf/util/kwc/render';
-        if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
-
         Ext.Ajax.request({
             params: { url: item.el.child('a').dom.href },
-            url: url,
+            url: Kwf.getKwcRenderUrl(),
             success: function(response) {
 
                 var contentEl = this.largeContent[item.id].createChild();

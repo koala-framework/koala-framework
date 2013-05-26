@@ -5,6 +5,9 @@ class Kwf_Controller_Action_Redirects_RedirectsController extends Kwf_Controller
 
     protected $_defaultOrder = 'source';
     protected $_paging = 25;
+    protected $_filters = array(
+        'text' => true,
+    );
 
     public function indexAction()
     {

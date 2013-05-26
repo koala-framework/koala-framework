@@ -15,7 +15,7 @@ class Kwf_Trl_ChainedByMaster_Test extends Kwc_TestAbstract
         $this->assertEquals('root-en_1', $this->_getChainedId('1'));
         $this->assertEquals('root-en_2', $this->_getChainedId('2'));
         $this->assertEquals('root-en', $this->_getChainedId('root-master'));
-        $this->assertEquals('root', $this->_getChainedId('root'));
+        $this->assertEquals(null, $this->_getChainedId('root'));
         $this->assertEquals('root-en_1-switchLanguage', $this->_getChainedId('1-switchLanguage'));
         $this->assertEquals('root-en_2-switchLanguage', $this->_getChainedId('2-switchLanguage'));
         $this->assertEquals('root-en-99', $this->_getChainedId('root-master-99'));

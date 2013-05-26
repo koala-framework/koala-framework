@@ -40,10 +40,12 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
         if (Kwf_Registry::get('acl')->has('kwf_component_pages')) {
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
                 if (Kwc_Abstract::getFlag($c, 'hasDomain')) {
-                    foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($c, array('ignoreVisible'=>true)) as $domain)  {
+                    $domains = Kwf_Component_Data_Root::getInstance()
+                        ->getComponentsBySameClass($c, array('ignoreVisible'=>true));
+                    foreach ($domains as $domain)  {
                         if ($acl->getComponentAcl()->isAllowed($authData, $domain)) {
                             $this->view->frontendUrls[] = array(
-                                'href' => 'http://'.$domain->getComponent()->getDomain().'/',
+                                'href' => '/admin/component/preview?url='.urlencode($domain->getAbsoluteUrl()),
                                 'text' => $domain->name,
                             );
                         }
@@ -52,8 +54,8 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
             }
             if (!$this->view->frontendUrls) {
                 $this->view->frontendUrls[] = array(
-                    'href' => '/',
-                    'text' => trlKwf('Frontend'),
+                    'href' => '/admin/component/preview',
+                    'text' => trlKwf('Frontend')
                 );
             }
         }

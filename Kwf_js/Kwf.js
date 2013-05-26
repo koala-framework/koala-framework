@@ -212,12 +212,14 @@ if (!Kwf.isApp) {
  * @param element selector
  * @param callback function
  * @param scope
- * @param options see onContentReady options
+ * @param options see onContentReady options, additionally checkVisibility (boolean, only call onElementReady when element is visible)
  */
 Kwf.onElementReady = function(selector, fn, scope, options) {
     Kwf.onContentReady(function(addedEl, renderConfig) {
-        if (options && typeof options.newRender == 'boolean' && !options.newRender) return;
+        if (!options) { options = {}; }
+        if (typeof options.newRender == 'boolean' && !options.newRender) return;
         Ext.query(selector, addedEl).each(function(el) {
+            if (options.checkVisibility && !Ext.fly(el).isVisible(true)) return;
             if (el.initDone) return;
             el.initDone = true;
             el = Ext.get(el);
@@ -266,6 +268,13 @@ Kwf.onComponentEvent = function(evName, cb, scope) {
         scope: scope
     });
 };
+
+Kwf.getKwcRenderUrl = function() {
+    var url = '/kwf/util/kwc/render';
+    if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
+    if (location.search.match(/[\?&]kwcPreview/)) url += '?kwcPreview';
+    return url;
+}
 
 Kwf.include =  function(url, restart)
 {

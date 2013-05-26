@@ -1,7 +1,6 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
 {
-    protected $_modelName = 'Kwc_Shop_Cart_Orders';
     private $_payments;
 
     protected function _initFields()
@@ -87,14 +86,16 @@ class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
     public function validate($parentRow, array $postData = array())
     {
         $ret = parent::validate($parentRow, $postData);
-        $row = $this->getRow($parentRow);
-        if (!count($row->getChildRows('Products'))) {
-            $ret[] = array(
-                'field' => null,
-                'messages' => array(
-                    $this->getCartEmptyMessage()
-                )
-            );
+        if ($this->getAllowEmptyCart() !== true) {
+            $row = $this->getRow($parentRow);
+            if (!count($row->getChildRows('Products'))) {
+                $ret[] = array(
+                    'field' => null,
+                    'messages' => array(
+                        $this->getCartEmptyMessage()
+                    )
+                );
+            }
         }
         return $ret;
     }

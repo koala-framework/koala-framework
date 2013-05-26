@@ -33,7 +33,9 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
                 $componentValues = array_keys(array_intersect($this->_settings['component'], $cc));
                 if (!$componentValues) throw new Kwf_Exception("no component classes found in this generator, should not have been clled");
                 reset($this->_settings['component']);
-                if (in_array(current($this->_settings['component']), $cc)) throw new Kwf_Exception("can't get the first=default component without parentData as it can be not in the database");
+                if (in_array(current($this->_settings['component']), $cc)) {
+                    throw new Kwf_Exception("can't get the first=default component without parentData as it might be not in the database");
+                }
                 $s = new Kwf_Model_Select();
                 $s->whereEquals('component', $componentValues);
                 if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {

@@ -9,6 +9,7 @@ class Kwc_Shop_Box_CartLink_Component extends Kwc_Abstract
         $ret['assets']['dep'][] = 'ExtConnection';
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Box/CartLink/Component.js';
         $ret['placeholder']['toCart'] = trlKwfStatic('To cart');
+        $ret['ordersModel'] = 'Kwc_Shop_Cart_Orders';
         return $ret;
     }
 
@@ -21,7 +22,7 @@ class Kwc_Shop_Box_CartLink_Component extends Kwc_Abstract
 
         $ret['hasContent'] = $this->hasContent();
         
-        $ret['totalAmount'] = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
+        $ret['totalAmount'] = Kwf_Model_Abstract::getInstance($this->_getSetting('ordersModel'))
             ->getCartOrder()->getTotalAmount();
         
         return $ret;

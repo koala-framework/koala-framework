@@ -33,6 +33,7 @@ class Kwf_Update_Tags_Test extends Kwf_Test_TestCase
         Kwf_Registry::get('config')->server->updateTags = array(
             'kwf', 'foo'
         );
+        $this->assertEquals(array('kwf', 'foo'), Kwf_Update::getUpdateTags());
         $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/Tags', 1, 1100);
         $this->assertEquals(1, count($updates));
         $this->assertEquals(101, $updates[0]->getRevision());

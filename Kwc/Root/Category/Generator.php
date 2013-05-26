@@ -6,6 +6,8 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     protected $_loadTableFromComponent = false;
     protected $_inherits = true;
 
+    protected $_useMobileBreakpoints = NULL;
+
     protected $_pageDataLoaded = false;
     protected $_pageData = array();
     protected $_pageParent = array();
@@ -17,6 +19,14 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     private $_basesCache = array();
     protected $_eventsClass = 'Kwc_Root_Category_GeneratorEvents';
+
+    protected function _init()
+    {
+        parent::_init();
+        if (is_null($this->_useMobileBreakpoints)) {
+            $this->_useMobileBreakpoints = Kwf_Config::getValue('kwc.mobileBreakpoints');
+        }
+    }
 
     protected function _loadPageData()
     {
@@ -51,24 +61,30 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
      */
     public function getVisiblePageChildIds($parentId)
     {
+        return $this->getPageChildIds($parentId, true);
+    }
+
+    /**
+     * Returns all recursive children of a page
+     */
+    public function getPageChildIds($parentId, $onlyVisible = false)
+    {
         $ret = array();
         if (!is_numeric(substr($parentId, 0, 1))) {
             foreach ($this->_pageChilds as $pId=>$childs) {
                 if (substr($pId, 0, strlen($pId)) == $parentId) {
                     foreach ($childs as $id) {
-                        if ($this->_pageData[$id]['visible']) {
-                            $ret[] = $id;
-                            $ret = array_merge($ret, $this->getVisiblePageChildIds($id));
-                        }
+                        if ($onlyVisible && !$this->_pageData[$id]['visible']) continue;
+                        $ret[] = $id;
+                        $ret = array_merge($ret, $this->getPageChildIds($id, $onlyVisible));
                     }
                 }
             }
         } else if (isset($this->_pageChilds[$parentId])) {
             foreach ($this->_pageChilds[$parentId] as $id) {
-                if ($this->_pageData[$id]['visible']) {
-                    $ret[] = $id;
-                    $ret = array_merge($ret, $this->getVisiblePageChildIds($id));
-                }
+                if ($onlyVisible && !$this->_pageData[$id]['visible']) continue;
+                $ret[] = $id;
+                $ret = array_merge($ret, $this->getPageChildIds($id, $onlyVisible));
             }
         }
         return $ret;
@@ -511,5 +527,19 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     public function getPagePropertiesForm($componentOrParent)
     {
         return new Kwc_Root_Category_GeneratorForm($componentOrParent, $this);
+    }
+
+    public function getUseMobileBreakpoints()
+    {
+        return $this->_useMobileBreakpoints;
+    }
+
+    public function getDeviceVisible(Kwf_Component_Data $data)
+    {
+        if ($this->_useMobileBreakpoints) {
+            return $data->row->device_visible;
+        } else {
+            return parent::getDeviceVisible($data);
+        }
     }
 }

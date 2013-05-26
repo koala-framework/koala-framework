@@ -31,6 +31,10 @@ class Kwc_NewsletterCategory_Subscribe_FrontendForm extends Kwc_Newsletter_Subsc
         // Newsletterkategorien werden zum Newsletter gespeichert, welcher
         // Newsletter grade aktuell ist weiß nur die Komponente, deswegen
         // $this->_subscribeComponentId
+        // Kwc_Newsletter_EditSubscriber_Component calls without subscribeComponentId
+        if (!$this->_subscribeComponentId) {
+            return array();
+        }
         $model = Kwf_Component_Model::getInstance('Kwc_NewsletterCategory_Subscribe_CategoriesModel');
         $select = $model->select()
             ->whereEquals('component_id', $this->_subscribeComponentId)

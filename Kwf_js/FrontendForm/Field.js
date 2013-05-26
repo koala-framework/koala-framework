@@ -4,7 +4,6 @@ Kwf.FrontendForm.Field = function(fieldEl, form) {
     this.el = fieldEl;
     this.el.enableDisplayMode();
     this.form = form;
-    this.initField();
     this.addEvents('change');
     this.on('change', function(value) {
         this.form.errorStyle.hideFieldError(this);

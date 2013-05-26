@@ -89,10 +89,9 @@ Kwf.Form.MultiFields = Ext.extend(Ext.Panel, {
                 i.replaceTitle = i.title;
                 if (RegExp.$1 != 0) i.replaceTitleField = RegExp.$1;
             }
-            if (this.findParentByType('kwf.autoform')) {
-                if (i.setFormBaseParams) {
-                    i.setFormBaseParams(this.findParentByType('kwf.autoform').getBaseParams());
-                }
+            var form = this.findParentBy(function(p) { return (p instanceof Kwf.Auto.FormPanel); });
+            if (form && i.setFormBaseParams) {
+                i.setFormBaseParams(form.getBaseParams());
             }
         }, this);
 

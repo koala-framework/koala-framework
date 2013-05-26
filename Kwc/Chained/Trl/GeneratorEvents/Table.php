@@ -157,8 +157,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         return $class;
     }
 
-    //overrridden in Kwc_Root_Category_GeneratorEvents
-    protected function _getMasterComponentsFromMasterRow($row, $select)
+    private function _getMasterComponentsFromMasterRow($row, $select)
     {
         if ($this->_getChainedGenerator()->hasSetting('dbIdShortcut') && $this->_getChainedGenerator()->getSetting('dbIdShortcut')) {
             $dbId = $this->_getChainedGenerator()->getSetting('dbIdShortcut') .

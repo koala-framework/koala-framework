@@ -26,7 +26,8 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
 
     private function _getPaypalButton()
     {
-        $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getCartOrder();
+        $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->parent->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getCartOrder();
         $total = $this->getData()->parent->parent->getComponent()->getTotal($order);
         $paypalId =  Kwf_Registry::get('config')->paypalId;
         if (!$paypalId) {

@@ -12,7 +12,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     {
         this.componentConfigs = {};
 
-        this.addEvents('delete', 'edit', 'changeVisible', 'changePos',
+        this.addEvents('delete', 'edit', 'changeVisible', 'changeDeviceVisible', 'changePos',
             'addParagraphMenuShow', 'addParagraph', 'copyParagraph',
             'pasteParagraph', 'copyPasteMenuShow');
         this.tpl = new Ext.XTemplate(
@@ -72,6 +72,44 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 icon : '/assets/silkicons/'+(record.get('visible') ? 'tick' : 'cross') + '.png',
                 cls  : 'x-btn-icon'
             });
+            if (this.showDeviceVisible) {
+                var deviceVisibleMenu = {
+                    menu: [{
+                        text: trlKwf('show on all devices'),
+                        icon: '/assets/kwf/images/devices/showAll.png',
+                        scope: this,
+                        record: record,
+                        handler: function(menu) {
+                            this.fireEvent('changeDeviceVisible', menu.record, 'all');
+                        }
+                    },{
+                        text: trlKwf('hide on mobile devices'),
+                        icon: '/assets/kwf/images/devices/smartphoneHide.png',
+                        scope: this,
+                        record: record,
+                        handler: function(menu) {
+                            this.fireEvent('changeDeviceVisible', menu.record, 'hideOnMobile');
+                        }
+                    },{
+                        text: trlKwf('only show on mobile devices'),
+                        icon: '/assets/kwf/images/devices/smartphone.png',
+                        scope: this,
+                        record: record,
+                        handler: function(menu) {
+                            this.fireEvent('changeDeviceVisible', menu.record, 'onlyShowOnMobile');
+                        }
+                    }],
+                    cls  : 'x-btn-icon'
+                };
+                if (record.get('device_visible') == 'onlyShowOnMobile') {
+                    deviceVisibleMenu.icon = '/assets/kwf/images/devices/smartphone.png';
+                } else if (record.get('device_visible') == 'hideOnMobile') {
+                    deviceVisibleMenu.icon = '/assets/kwf/images/devices/smartphoneHide.png';
+                } else if (record.get('device_visible') == 'all') {
+                    deviceVisibleMenu.icon = '/assets/kwf/images/devices/showAll.png';
+                }
+                tb.add(deviceVisibleMenu);
+            }
 
             if (this.showPosition) {
                 var posCombo = new Kwf.Form.ComboBox({

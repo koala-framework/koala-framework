@@ -23,13 +23,13 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['placeholder']['checkout'] = trlKwfStatic('To checkout');
         $ret['placeholder']['headline'] = trlKwfStatic('Your cart contains');
 
+        $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Keepalive.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtConnection';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['contentSender'] = 'Kwc_Shop_Cart_ContentSender';
-        $ret['orderData'] = 'Kwc_Shop_Cart_OrderData';
 
         $ret['flags']['processInput'] = true;
 
@@ -63,16 +63,17 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
 
     public final function getShopCartPlugins()
     {
-        return Kwc_Shop_Cart_OrderData::getInstance($this->getData()->componentClass)
-                    ->getShopCartPlugins();
+        Kwf_Model_Abstract::getInstance($this->_getSetting('childModel'))
+            ->getReferencedModel('Order')
+            ->getShopCartPlugins();
     }
-    
-    public function getForms()
+
+    public function getFormComponents()
     {
         $ret = array();
         foreach ($this->getData()->getChildComponents(array('generator'=>'detail')) as $c) {
             $ret[] = $c->getChildComponent('-form')
-                ->getComponent()->getForm();
+                ->getComponent();
         }
         return $ret;
     }

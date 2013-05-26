@@ -34,7 +34,6 @@ class Kwc_Shop_Cart_Checkout_OrdersController_SumPrice extends Kwf_Data_Abstract
 class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('add');
-    protected $_modelName = 'Kwc_Shop_Cart_Orders';
     protected $_paging = 30;
     protected $_defaultOrder = array('field'=>'order_number', 'direction'=>'DESC');
     protected $_queryFields = array(
@@ -50,6 +49,9 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
 
     protected function _initColumns()
     {
+        $this->_model = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'))->parent->componentClass, 'childModel'))
+            ->getReferencedModel('Order');
+
         $cc = Kwc_Abstract::getChildComponentClasses($this->_getParam('class'), 'payment');
         $paymentsFilterData = array();
         $payments = array();
@@ -150,15 +152,15 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
     {
         $id = $this->_getParam('id');
         if (!$id) throw new Kwf_Exception("No id given");
-        $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($id);
+        $order = $this->_model->getRow($id);
         if (!$order->invoice_date) {
             $order->invoice_date = date('Y-m-d');
         }
         if (!$order->invoice_number) {
-            $s = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->select();
+            $s = $this->_model->select();
             $s->limit(1);
             $s->order('invoice_number', 'DESC');
-            $row = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($s);
+            $row = $this->_model->getRow($s);
             $maxNumber = 0;
             if ($row) $maxNumber = $row->invoice_number;
             $order->invoice_number = $maxNumber + 1;
@@ -179,7 +181,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
         $id = $this->_getParam('id');
         if (!$id) throw new Kwf_Exception("No id given");
 
-        $order = Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')->getRow($id);
+        $order = $this->_model->getRow($id);
         $order->shipped = date('Y-m-d');
         $order->save();
 

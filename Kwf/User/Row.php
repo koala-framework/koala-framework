@@ -310,14 +310,18 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     {
         if ($columnName == 'password1' || $columnName == 'password2') {
             return '';
-        } else if ($columnName == 'name') {
-            return $this->firstname . ' ' . $this->lastname;
         } else if ($columnName == 'nickname') {
             if (parent::__isset('nickname') && parent::__get('nickname') != '') {
                 return parent::__get('nickname');
             } else {
                 return trim($this->firstname . ' ' . substr($this->lastname, 0, 1));
             }
+        } else if ($columnName == 'email_gender') {
+            return $this->gender == 'male' ?
+                Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE :
+                Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
+        } else if ($columnName == 'email_format') {
+            return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
         } else {
             return parent::__get($columnName);
         }
@@ -329,7 +333,9 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
             $columnName == 'password1' ||
             $columnName == 'password2' ||
             $columnName == 'name' ||
-            $columnName == 'nickname'
+            $columnName == 'nickname' ||
+            $columnName == 'email_gender' ||
+            $columnName == 'email_format'
         ) {
             return true;
         } else {
@@ -353,9 +359,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     // interface Kwc_Mail_Recipient_Interface
     public function getMailGender()
     {
-        return $this->gender == 'male' ?
-            Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE :
-            Kwc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
+        return $this->email_gender;
     }
 
     public function getMailTitle()
@@ -380,6 +384,6 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
 
     public function getMailFormat()
     {
-        return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
+        return $this->email_format;
     }
 }

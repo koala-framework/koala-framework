@@ -20,10 +20,6 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
     protected function _beforeDelete()
     {
         parent::_beforeDelete();
-        if (count($this->getChildNodes())) {
-            throw new Kwf_ClientException(trlKwf("Can't delete page as there are child pages."));
-        }
-
         // Dranhängende Komponente löschen
         $generators = Kwf_Component_Data_Root::getInstance()->getPageGenerators();
         foreach ($generators as $generator) {

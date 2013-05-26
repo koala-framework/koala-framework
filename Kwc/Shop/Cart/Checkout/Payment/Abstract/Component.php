@@ -42,8 +42,8 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Com
 
     protected function _getOrder()
     {
-        return Kwf_Model_Abstract::getInstance('Kwc_Shop_Cart_Orders')
-                            ->getCartOrder();
+        return Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getCartOrder();
     }
 
     //kann überschrieben werden um zeilen pro payment zu ändern
@@ -73,7 +73,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Com
         $order->date = date('Y-m-d H:i:s');
         $order->save();
 
-        foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
+        $plugins = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getShopCartPlugins();
+        foreach ($plugins as $p) {
             $p->orderConfirmed($order);
         }
         foreach ($order->getChildRows('Products') as $p) {

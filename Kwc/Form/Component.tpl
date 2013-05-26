@@ -21,6 +21,7 @@ if ($this->showSuccess) {
     ?>
     <? if ($this->form) { ?>
     <div class="webStandard webForm kwcForm">
+    <? if ($this->header) echo $this->component($this->header)?>
     <form action="<?= htmlspecialchars($this->action) ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
         <?php $this->formField($this->form) ?>
         <div class="submitWrapper <?=$this->buttonClass?>">
@@ -49,6 +50,7 @@ if ($this->showSuccess) {
             <input type="hidden" name="<?= $this->formName ?>-idHash" value="<?= $this->formIdHash; ?>" />
         <? } ?>
     </form>
+    <? if ($this->footer) echo $this->component($this->footer)?>
     </div>
     <? } ?>
     <?php

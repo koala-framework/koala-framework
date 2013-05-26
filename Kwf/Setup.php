@@ -24,17 +24,19 @@ class Kwf_Setup
 {
     public static $configClass;
     public static $configSection;
+    const CACHE_SETUP_VERSION = 2; //increase version if incompatible changes to generated file are made
 
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
         error_reporting(E_ALL);
+        define('APP_PATH', getcwd());
         Kwf_Setup::$configClass = $configClass;
-        if (!@include('./cache/setup.php')) {
-            if (!file_exists('cache/setup.php')) {
+        if (!@include('./cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
+            if (!file_exists('cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
                 Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
             }
-            include('cache/setup.php');
+            include('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
     }
 
@@ -152,6 +154,22 @@ class Kwf_Setup
                 exit;
             }
             $root->setCurrentPage($data);
+
+            if (isset($_COOKIE['feAutologin']) && !Kwf_Auth::getInstance()->getStorage()->read()) {
+                $feAutologin = explode('.', $_COOKIE['feAutologin']);
+                if (count($feAutologin) == 2) {
+                    $adapter = new Kwf_Auth_Adapter_Service();
+                    $adapter->setIdentity($feAutologin[0]);
+                    $adapter->setCredential($feAutologin[1]);
+                    $auth = Kwf_Auth::getInstance();
+                    $auth->clearIdentity();
+                    $result = $auth->authenticate($adapter);
+                    if (!$result->isValid()) {
+                        setcookie('feAutologin', '', time() - 3600, '/');
+                    }
+                }
+            }
+
             $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
             $contentSender = new $contentSender($data);
             $contentSender->sendContent(true);
@@ -235,5 +253,26 @@ class Kwf_Setup
         */
         setlocale(LC_ALL, explode(', ', trlcKwf('locale', 'C')));
         setlocale(LC_NUMERIC, 'C');
+    }
+
+    /**
+     * Check if user is logged in (faster than directly calling user model)
+     *
+     * Only asks user model (expensive) when there is something stored in the session
+     *
+     * @return boolean if user is logged in
+     */
+    public static function hasAuthedUser()
+    {
+        if (!Zend_Session::isStarted() &&
+            !Zend_Session::sessionExists() &&
+            !Kwf_Config::getValue('autologin')
+        ) {
+            return false;
+        }
+        if (!Kwf_Auth::getInstance()->getStorage()->read()) {
+            return false;
+        }
+        return Kwf_Registry::get('userModel')->hasAuthedUser();
     }
 }

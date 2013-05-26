@@ -9,4 +9,9 @@ class Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent extends Kwc_Composite_Im
         $ret['ownModel'] = 'Kwc_Basic_Image_Cache_Root_ListOwnModel';
         return $ret;
     }
+
+    protected function _getMasterChildContentWidth($data)
+    {
+        return 200;
+    }
 }
