@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_ClearCache_Types_AssetsServer extends Kwf_Util_ClearCache_Types_Abstract
 {
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&clear';
         try {

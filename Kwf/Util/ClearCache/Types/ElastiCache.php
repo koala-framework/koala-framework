@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_ClearCache_Types_ElastiCache extends Kwf_Util_ClearCache_Types_Abstract
 {
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
         if (!$skipOtherServers) {

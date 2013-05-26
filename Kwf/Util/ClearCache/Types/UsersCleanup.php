@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_ClearCache_Types_UsersCleanup extends Kwf_Util_ClearCache_Types_Abstract
 {
-    public function refreshCache($options)
+    protected function _refreshCache($options)
     {
         // alle zeilen löschen die zuviel sind in kwf_users
         // nötig für lokale tests

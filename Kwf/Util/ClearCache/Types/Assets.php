@@ -1,12 +1,12 @@
 <?php
 class Kwf_Util_ClearCache_Types_Assets extends Kwf_Util_ClearCache_Types_Abstract
 {
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         Kwf_Assets_Cache::getInstance()->clean();
     }
 
-    public function refreshCache($options)
+    protected function _refreshCache($options)
     {
         $loader = new Kwf_Assets_Loader();
         $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem

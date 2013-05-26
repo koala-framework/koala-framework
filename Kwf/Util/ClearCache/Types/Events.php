@@ -3,7 +3,7 @@ class Kwf_Util_ClearCache_Types_Events extends Kwf_Util_ClearCache_Types_Abstrac
 {
     //TODO clear?
 
-    public function refreshCache($options)
+    protected function _refreshCache($options)
     {
         Kwf_Component_Events::getAllListeners();
     }

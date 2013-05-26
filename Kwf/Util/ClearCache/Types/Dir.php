@@ -7,7 +7,7 @@ class Kwf_Util_ClearCache_Types_Dir extends Kwf_Util_ClearCache_Types_Abstract
         $this->_dir = $dir;
     }
 
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         if (is_dir("cache/$this->_dir")) {
             $this->_removeDirContents("cache/$this->_dir");

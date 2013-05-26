@@ -6,7 +6,7 @@ class Kwf_Util_ClearCache_Types_Users extends Kwf_Util_ClearCache_Types_Table
         parent::__construct('cache_users');
     }
 
-    public function refreshCache($options)
+    protected function _refreshCache($options)
     {
         Kwf_Registry::get('userModel')->getKwfModel()->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
     }

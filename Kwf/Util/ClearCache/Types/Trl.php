@@ -7,7 +7,7 @@ class Kwf_Util_ClearCache_Types_Trl extends Kwf_Util_ClearCache_Types_Dir
         //TODO trl cached also in apc
     }
 
-    public function refreshCache($options)
+    protected function _refreshCache($options)
     {
         $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
         if ($webCodeLanguage != 'en') {

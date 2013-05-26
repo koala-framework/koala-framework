@@ -7,7 +7,7 @@ class Kwf_Util_ClearCache_Types_Config extends Kwf_Util_ClearCache_Types_Dir
         //TODO what about other caches (apc)?
     }
 
-    public function refreshCache($options)
+    protected function _refreshCache($options)
     {
         Kwf_Config_Web::reload();
     }

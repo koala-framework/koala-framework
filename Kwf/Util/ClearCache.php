@@ -180,16 +180,15 @@ class Kwf_Util_ClearCache
                     echo "clearing ".$type->getTypeName()."...".str_repeat('.', $maxTypeNameLength - strlen($type->getTypeName()))." ";
                 }
                 $t = microtime(true);
-                try {
-                    $type->clearCache($options);
-                } catch (Exception $e) {
-                    if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
-                    continue;
-                }
+                $type->clearCache($options);
                 if ($output) {
-                    echo "\033[00;32mOK\033[00m";
+                    if ($type->getSuccess()) {
+                        echo "\033[00;32mOK\033[00m";
+                    } else {
+                        echo " [\033[01;31mERROR\033[00m]";
+                    }
                     echo " (".round((microtime(true)-$t)*1000)."ms)";
-                    echo "\n";;
+                    echo "\n";
                 }
             }
         }
@@ -202,16 +201,15 @@ class Kwf_Util_ClearCache
                         echo "[$currentStep/$countSteps] refreshing ".$type->getTypeName().".".str_repeat('.', $maxTypeNameLength - strlen($type->getTypeName()))." ";
                     }
                     $t = microtime(true);
-                    try {
-                        $type->refreshCache($options);
-                    } catch (Exception $e) {
-                        if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
-                        continue;
-                    }
+                    $type->refreshCache($options);
                     if ($output) {
-                        echo "\033[00;32mOK\033[00m";
+                        if ($type->getSuccess()) {
+                            echo "\033[00;32mOK\033[00m";
+                        } else {
+                            echo " [\033[01;31mERROR\033[00m]";
+                        }
                         echo " (".round((microtime(true)-$t)*1000)."ms)";
-                        echo "\n";;
+                        echo "\n";
                     }
                 }
             }
@@ -257,5 +255,7 @@ class Kwf_Util_ClearCache
         }
 
         Kwf_Component_ModelObserver::getInstance()->enable();
+
+        return $types;
     }
 }

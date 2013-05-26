@@ -3,7 +3,7 @@ class Kwf_Util_ClearCache_Types_ComponentSettings extends Kwf_Util_ClearCache_Ty
 {
     //TODO also clear cache?
 
-    public function refreshCache($options)
+    protected function _refreshCache($options)
     {
         Kwf_Component_Settings::resetSettingsCache();
         Kwf_Component_Settings::_getSettingsCached();

@@ -6,7 +6,7 @@ class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_T
         parent::__construct('cache_component');
     }
 
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         try {
             $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();

@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_ClearCache_Types_ApcOptcode extends Kwf_Util_ClearCache_Types_Abstract
 {
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         Kwf_Util_Apc::callClearCacheByCli(array('type' => 'file'), $this->_verbosity == self::VERBOSE ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT, $options);
     }

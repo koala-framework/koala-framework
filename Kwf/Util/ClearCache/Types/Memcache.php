@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_ClearCache_Types_Memcache extends Kwf_Util_ClearCache_Types_Abstract
 {
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         $cache = Kwf_Cache::factory('Core', 'Memcached', array(
             'lifetime'=>null,

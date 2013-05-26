@@ -7,7 +7,7 @@ class Kwf_Util_ClearCache_Types_Table extends Kwf_Util_ClearCache_Types_Abstract
         $this->_table = $table;
     }
 
-    public function clearCache($options)
+    protected function _clearCache($options)
     {
         Zend_Registry::get('db')->query("TRUNCATE TABLE $this->_table");
     }
