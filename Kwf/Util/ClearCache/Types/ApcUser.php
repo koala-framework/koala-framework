@@ -1,9 +1,15 @@
 <?php
 class Kwf_Util_ClearCache_Types_ApcUser extends Kwf_Util_ClearCache_Types_Abstract
 {
+    public function outputFn($msg)
+    {
+        $this->_output($msg);
+    }
+
     protected function _clearCache($options)
     {
-        Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'), $this->_verbosity == self::VERBOSE ? Kwf_Util_Apc::VERBOSE : Kwf_Util_Apc::SILENT, $options);
+        $options['outputFn'] = array($this, 'outputFn');
+        Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'), $options);
     }
 
     public function getTypeName()

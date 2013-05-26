@@ -466,7 +466,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         Kwf_Util_Apc::callClearCacheByCli(array(
             'cacheIds'=>implode(',', $cacheIds),
             'clearCacheSimple' => $prefix,
-        ), Kwf_Util_Apc::VERBOSE);
+        ), array('outputFn' => 'printf'));
     }
 
     private static function _getComponentClassesFromGeneratorsSetting($generators)

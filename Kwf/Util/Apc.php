@@ -3,9 +3,6 @@
 //direkt in der cli ist das leider nicht möglich, da der speicher im webserver liegt
 class Kwf_Util_Apc
 {
-    const SILENT = 'silent';
-    const VERBOSE = 'verbose';
-
     public static function getHttpPassword()
     {
         if ($ret = Kwf_Config::getValue('apcUtilsPass')) {
@@ -20,7 +17,7 @@ class Kwf_Util_Apc
         }
     }
 
-    public static function callClearCacheByCli($params, $verbosity, $options = array())
+    public static function callClearCacheByCli($params, $options = array())
     {
         $outputType = '';
         if (isset($params['type']) && $params['type'] == 'user') {
@@ -40,10 +37,10 @@ class Kwf_Util_Apc
                 $d = file_get_contents('cache/lastdomain');
             }
             if (!$d) {
-                if ($verbosity == self::VERBOSE) {
-                    echo "error:       $outputType: domain not set\n";
+                if (isset($options['outputFn'])) {
+                    call_user_func($options['outputFn'], "error: $outputType: domain not set");
                 }
-                return;
+                return false;
             }
 
             $domains = array(
@@ -121,18 +118,18 @@ class Kwf_Util_Apc
                     $result = false;
                 }
             }
-            if ($verbosity == self::VERBOSE) {
+            if (isset($options['outputFn'])) {
                 $outputUrl = $url;
                 if ($url2) $outputUrl .= " / $url2";
-                $outputUrl = " ($outputUrl)";
                 $time = round((microtime(true)-$s)*1000);
                 if ($result) {
-                    echo "cleared:     $outputType $outputUrl\n    ({$time}ms) $body\n";
+                    call_user_func($options['outputFn'], "$outputUrl ({$time}ms) $body ");
                 } else {
-                    echo "error:       $outputType $outputUrl\n    $body\n\n";
+                    call_user_func($options['outputFn'], "error: $outputType $outputUrl $body\n\n");
                 }
             }
         }
+        return $result;
     }
 
     public static function dispatchUtils()
