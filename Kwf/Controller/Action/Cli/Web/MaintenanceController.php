@@ -163,6 +163,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
             unlink($target);
         }
 
+        Kwf_Util_ClearCache::getInstance()->clearCache('all', false, true);
 
         $out = array(
             'success' => true
