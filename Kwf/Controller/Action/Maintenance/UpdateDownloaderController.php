@@ -22,7 +22,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
             }
         }
         if ($errors) {
-            throw new Kwf_Exception_Client("Following directories are not writeable for ".`whoami`." user<br />".implode("<br />", $errors));
+            throw new Kwf_Exception_Client("Following directories are not writeable for ".`whoami`." user:<br />".implode("<br />", $errors));
         }
 
         $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php maintenance download-updates ";
