@@ -15,9 +15,16 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
 
         $c = new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum'));
         $options['progressAdapter'] = $c;
-        Kwf_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), false, true, $options);
+        $types = Kwf_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), false, true, $options);
+        $message = '';
+        foreach ($types as $t) {
+            if (!$t->getSuccess()) {
+                $message .= $t->getTypeName()." ERROR: ".$t->getOutput();
+            }
+        }
         $out = array(
-            'success' => true
+            'success' => true,
+            'message' => $message
         );
         echo json_encode($out);
         exit;

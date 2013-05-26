@@ -33,6 +33,12 @@ Kwf.Maintenance.ClearCache = Ext.extend(Ext.Panel, {
                             params: {
                                 types: types.join(',')
                             },
+                            success: function(response, options, r) {
+                                if (r.message) {
+                                    var msg = r.message.replace("\n", "<br />");
+                                    Ext.Msg.alert(trlKwf('Clear Cache'), msg);
+                                }
+                            },
                             scope: this
                         });
                     },
