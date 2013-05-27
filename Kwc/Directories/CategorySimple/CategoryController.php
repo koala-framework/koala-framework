@@ -2,7 +2,7 @@
 class Kwc_Directories_CategorySimple_CategoryController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_model = 'Kwc_Directories_CategorySimple_CategoriesModel';
-    protected $_permissions = array('add');
+    protected $_permissions = array('add', 'save');
 
     protected function _initFields()
     {
