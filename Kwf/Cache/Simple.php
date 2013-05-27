@@ -9,52 +9,58 @@
  */
 class Kwf_Cache_Simple
 {
+    private static $_zendCache = null;
+
+    public static function resetZendCache()
+    {
+        self::$_zendCache = null;
+    }
+
     public static function getZendCache()
     {
-        static $cache;
-        if (!isset($cache)) {
+        if (!isset(self::$_zendCache)) {
             if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-                $cache = new Zend_Cache_Core(array(
+                self::$_zendCache = new Zend_Cache_Core(array(
                     'lifetime' => null,
                     'write_control' => false,
                     'automatic_cleaning_factor' => 0,
                     'automatic_serialization' => true
                 ));
-                $cache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
+                self::$_zendCache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
                     'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
                 )));
             } else {
                 if (!Kwf_Config::getValue('server.memcache.host') && extension_loaded('apc')) {
-                    $cache = false;
+                    self::$_zendCache = false;
                 } else {
-                    $cache = new Zend_Cache_Core(array(
+                    self::$_zendCache = new Zend_Cache_Core(array(
                         'lifetime' => null,
                         'write_control' => false,
                         'automatic_cleaning_factor' => 0,
                         'automatic_serialization' => true
                     ));
                     if (Kwf_Config::getValue('server.memcache.host')) {
-                        $cache->setBackend(new Kwf_Cache_Backend_Memcached());
+                        self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
                     } else {
                         //fallback to file backend (NOT recommended!)
-                        $cache->setBackend(new Kwf_Cache_Backend_File(array(
+                        self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
                             'cache_dir' => 'cache/simple'
                         )));
                     }
                 }
             }
-            if ($cache && $cache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
+            if (self::$_zendCache && self::$_zendCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
                 //namespace is incremented in Kwf_Util_ClearCache
                 //use memcache directly as Zend would not save the integer directly and we can't increment it then
-                $v = $cache->getBackend()->getMemcache()->get(self::getUniquePrefix().'cache_namespace');
+                $v = self::$_zendCache->getBackend()->getMemcache()->get(self::getUniquePrefix().'cache_namespace');
                 if (!$v) {
                     $v = time();
-                    $cache->getBackend()->getMemcache()->set(self::getUniquePrefix().'cache_namespace', $v);
+                    self::$_zendCache->getBackend()->getMemcache()->set(self::getUniquePrefix().'cache_namespace', $v);
                 }
-                $cache->setOption('cache_id_prefix', $v);
+                self::$_zendCache->setOption('cache_id_prefix', $v);
             }
         }
-        return $cache;
+        return self::$_zendCache;
     }
 
     private static function _processId($cacheId)
