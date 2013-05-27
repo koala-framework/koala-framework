@@ -65,10 +65,10 @@ class Kwf_Assets_OwnConfig_Test extends Kwf_Test_TestCase
         );
         $this->assertEquals($expected, $files);
 
-        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_OwnConfig:Test.js?v='.$v);
+        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_OwnConfig:Test.js');
         $this->assertContains("file2\nfile1\n", $c['contents']);
 
-        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_OwnConfig:Test.js?v='.$v);
+        $c = $loader->getFileContents('all/web/'.Kwf_Trl::getInstance()->getTargetLanguage().'/Kwf_Assets_OwnConfig:Test.js');
         $this->assertContains("file2\nfile1\n", $c['contents']);
     }
 }
