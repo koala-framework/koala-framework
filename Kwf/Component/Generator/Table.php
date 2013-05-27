@@ -10,9 +10,8 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
     protected $_addUrlPart = true;
     protected $_useComponentId;
 
-    protected function _init()
+    protected function _getUseComponentId()
     {
-        parent::_init();
         if (!isset($this->_useComponentId)) {
             $cacheId = 'useCmpId-'.$this->_class.'-'.$this->_settings['generator']; //cache to delay model creation
             $this->_useComponentId = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
@@ -21,6 +20,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
                 Kwf_Cache_SimpleStatic::add($cacheId, $this->_useComponentId);
             }
         }
+        return $this->_useComponentId;
     }
 
     final public function getFormattedSelect($parentData)
@@ -97,7 +97,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         if (is_array($select)) $select = new Kwf_Component_Select($select);
         $ret = array();
         if (!$parentData && ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF))
-                && !$this->_useComponentId) {
+                && !$this->_getUseComponentId()) {
             $parentDatas = $p->getRecursiveChildComponents(array(
                 'componentClass' => $this->_class
             ));
@@ -145,7 +145,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
     protected function _getParentDataByRow($row, $select)
     {
-        if ($this->_useComponentId) {
+        if ($this->_getUseComponentId()) {
             $constraints = array('componentClass'=>$this->_class);
 
             if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
@@ -230,7 +230,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         $select = parent::_formatSelect($parentData, $select);
         if (is_null($select)) return null;
 
-        if ($this->_useComponentId) {
+        if ($this->_getUseComponentId()) {
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
             } else if ($p = $select->getPart(Kwf_Component_Select::WHERE_CHILD_OF)) {
@@ -350,7 +350,7 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         }
 
         $data = array();
-        if ($this->_useComponentId) { //only duplicate rows that are scoped to source component (using component_id)
+        if ($this->_getUseComponentId()) { //only duplicate rows that are scoped to source component (using component_id)
             $data['component_id'] = $parentTarget->dbId;
             $newRow = $source->row->duplicate($data);
         } else {

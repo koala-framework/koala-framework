@@ -4,7 +4,7 @@ require_once Kwf_Config::getValue('externLibraryPath.facebookPhpSdk').'/src/face
 class Kwf_Util_Facebook_FacebookZendSession extends Facebook
 {
   public function __construct($config) {
-    $this->session = new Zend_Session_Namespace('facebook');
+    $this->session = new Kwf_Session_Namespace('facebook');
     parent::__construct($config);
     if (!empty($config['sharedSession'])) {
       $this->initSharedSession();

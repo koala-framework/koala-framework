@@ -28,14 +28,14 @@ class Kwf_Component_Generator_Plugin_StatusUpdate_Backend_Twitter extends Kwf_Co
 
         $consumer = $this->_getOauthConsumer();
         $requestToken = $consumer->getRequestToken();
-        $session = new Zend_Session_Namespace('statusUpdate_OAuth');
+        $session = new Kwf_Session_Namespace('statusUpdate_OAuth');
         $session->requestToken = $requestToken;
         return $consumer->getRedirectUrl();
     }
 
     public function processCallback($queryData)
     {
-        $session = new Zend_Session_Namespace('statusUpdate_OAuth');
+        $session = new Kwf_Session_Namespace('statusUpdate_OAuth');
         if (!isset($session->requestToken)) {
             throw new Kwf_Exception("requestToken not in session");
         }

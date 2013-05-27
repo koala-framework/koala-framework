@@ -11,7 +11,7 @@ class Kwf_Component_Plugin_Facebook_ThirdPartyCookies extends Kwf_Component_Plug
         if (php_sapi_name() != 'cli' && !preg_match('#^/admin|^/kwf|^/assets#',
             $_SERVER['REQUEST_URI'])) {
             if (!isset($_COOKIE[session_name()])) {
-                Zend_Session::start();
+                Kwf_Session::start();
                 if (!isset($_COOKIE[session_name()])) {
                     $serverDomain = 'http://'.Kwf_Config::getValue('server.domain');
                     return "<script>top.location.href=\"{$serverDomain}/home\";</script>";

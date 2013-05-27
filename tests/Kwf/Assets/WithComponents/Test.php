@@ -88,10 +88,10 @@
         );
         $this->assertEquals($expected, $files);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_OwnConfig:Test.js?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_OwnConfig:Test.js");
         $this->assertContains("file2\nfile1\n", $c['contents']);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_OwnConfig:Test.js?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_OwnConfig:Test.js");
         $this->assertContains("file2\nfile1\n", $c['contents']);
 
         Kwf_Component_Data_Root::setComponentClass(null);
