@@ -25,7 +25,6 @@
     line-height: 18px;
     background: -moz-linear-gradient(top, #5bdf55, #26a31e);
     background: -webkit-gradient(linear, left top, left bottom, from(#5bdf55), to(#26a31e));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bdf55', endColorstr='#26a31e');
     border: 1px solid #09c900;
     border-radius: 4px;
     box-shadow: 1px 2px 2px #555;
