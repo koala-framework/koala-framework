@@ -7,11 +7,13 @@ class Kwc_Paragraphs_Cc_Component extends Kwc_Chained_Cc_Component
         $ret['editComponents'] = array('paragraphs');
 
         //don't allow endless recursion
-        foreach ($ret['generators']['paragraphs']['component'] as $k=>$i) {
-            if (is_instance_of($i, 'Kwc_Chained_Cc_Component')
-                && is_instance_of(substr($i, strpos($i, '.')+1), 'Kwc_Chained_CopyTarget_Component')
-            ) {
-                unset($ret['generators']['paragraphs']['component'][$k]);
+        if (isset($ret['generators']['paragraphs'])) {
+            foreach ($ret['generators']['paragraphs']['component'] as $k=>$i) {
+                if (is_instance_of($i, 'Kwc_Chained_Cc_Component')
+                    && is_instance_of(substr($i, strpos($i, '.')+1), 'Kwc_Chained_CopyTarget_Component')
+                ) {
+                    unset($ret['generators']['paragraphs']['component'][$k]);
+                }
             }
         }
         return $ret;
