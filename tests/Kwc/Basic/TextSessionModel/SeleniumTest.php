@@ -55,7 +55,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //assert inserted a tag
         $this->selectFrame('//iframe');
-        $this->assertAttribute('//p/a/@href', 'root_text-l1');
+        $this->assertAttribute('//a/@href', 'root_text-l1');
         $this->selectFrame('relative=top');
 
         //save everything
