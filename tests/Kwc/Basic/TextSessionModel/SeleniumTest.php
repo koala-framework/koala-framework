@@ -43,19 +43,20 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //select extern link
         $this->runScript("Ext.ComponentMgr.all.each(function(c) {
-            if (c instanceof Kwf.Form.ComboBox && c.name == 'component_component') {
+            if (c instanceof Kwf.Form.ComboBox && c.name == 'component_component_cards_component') {
                 c.setValue('extern');
                 c.fireEvent('select');
             }
         });
         ");
+
         $this->type('css=input[name="component_component_cards_extern_target"]', 'http://orf.at');
         $this->click("css=.x-window button:contains('Save')");
         $this->waitForConnections();
 
         //assert inserted a tag
         $this->selectFrame('//iframe');
-        $this->assertAttribute('//p/a/@href', 'root_text-l1');
+        $this->assertAttribute('//a/@href', 'root_text-l1');
         $this->selectFrame('relative=top');
 
         //save everything
