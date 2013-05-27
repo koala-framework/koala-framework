@@ -20,7 +20,7 @@ class Kwf_Model_Session extends Kwf_Model_Data_Abstract
             if (!isset($this->_namespace)) {
                 throw new Kwf_Exception("namespace is required for Model_Session");
             }
-            $ns = new Zend_Session_Namespace($this->_namespace);
+            $ns = new Kwf_Session_Namespace($this->_namespace);
             if (!isset($ns->data)) {
                 $this->_data = $this->_defaultData;
             } else {
@@ -43,7 +43,7 @@ class Kwf_Model_Session extends Kwf_Model_Data_Abstract
 
     protected function _afterDataUpdate()
     {
-        $ns = new Zend_Session_Namespace($this->_namespace);
+        $ns = new Kwf_Session_Namespace($this->_namespace);
         $ns->data = $this->_data;
     }
 

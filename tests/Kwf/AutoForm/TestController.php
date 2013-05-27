@@ -20,7 +20,7 @@ class Kwf_AutoForm_TestController extends Kwf_Controller_Action_Auto_Form
     public function jsonSaveAction()
     {
         parent::jsonSaveAction();
-        $session = new Zend_Session_Namespace('Kwf_AutoForm_Test');
+        $session = new Kwf_Session_Namespace('Kwf_AutoForm_Test');
         if ($session->count == 0) {
             $session->count++;
             $this->view->exception = "error";
@@ -30,7 +30,7 @@ class Kwf_AutoForm_TestController extends Kwf_Controller_Action_Auto_Form
 
     public function resetAction()
     {
-        $session = new Zend_Session_Namespace('Kwf_AutoForm_Test');
+        $session = new Kwf_Session_Namespace('Kwf_AutoForm_Test');
         $session->count = 0;
 
         $this->_form->getModel()->resetData();

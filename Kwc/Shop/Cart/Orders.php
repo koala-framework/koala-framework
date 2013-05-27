@@ -61,7 +61,7 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
         if (!$ret->status) {
             $ret->status = 'cart';
             $ret->save();
-            $session = new Zend_Session_Namespace('kwcShopCart');
+            $session = new Kwf_Session_Namespace('kwcShopCart');
             $session->orderId = $ret->id;
         }
         return $ret;
@@ -89,14 +89,14 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
         if (isset(self::$_cartOrderId)) {
             return self::$_cartOrderId;
         }
-        $session = new Zend_Session_Namespace('kwcShopCart');
+        $session = new Kwf_Session_Namespace('kwcShopCart');
         return $session->orderId;
     }
 
     public static function setCartOrderId($cartOrderId)
     {
         self::$_cartOrderId = $cartOrderId;
-        $session = new Zend_Session_Namespace('kwcShopCart');
+        $session = new Kwf_Session_Namespace('kwcShopCart');
         $session->orderId = $cartOrderId;
     }
 
@@ -107,7 +107,7 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
 
     public static function resetCartOrderId()
     {
-        $session = new Zend_Session_Namespace('kwcShopCart');
+        $session = new Kwf_Session_Namespace('kwcShopCart');
         
         //merken damit wir noch auf die order zugreifen können
         if (!isset(self::$_cartOrderId)) {

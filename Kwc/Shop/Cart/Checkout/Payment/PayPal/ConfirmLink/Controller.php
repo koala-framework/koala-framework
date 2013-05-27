@@ -17,7 +17,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Controller extends Zend_
             $order->status = 'ordered';
             $order->date = date('Y-m-d H:i:s');
             $order->save();
-            $session = new Zend_Session_Namespace('kwcShopCart');
+            $session = new Kwf_Session_Namespace('kwcShopCart');
             $session->paypalCartId = $order->id;
         }
     }
