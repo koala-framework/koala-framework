@@ -88,7 +88,7 @@ class Kwf_Util_Apc
         foreach ($domains as $d) {
             $s = microtime(true);
             $pwd = Kwf_Util_Apc::getHttpPassword();
-            $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
+            $urlPart = "http://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
             $url = "$urlPart$d[domain]/kwf/util/apc/clear-cache";
 
             $client = new Zend_Http_Client();
