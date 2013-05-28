@@ -50,15 +50,23 @@ class Kwf_Cache_Simple
                     }
                 }
             }
-            if (self::$_zendCache && self::$_zendCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
-                //namespace is incremented in Kwf_Util_ClearCache
-                //use memcache directly as Zend would not save the integer directly and we can't increment it then
-                $v = self::$_zendCache->getBackend()->getMemcache()->get(self::getUniquePrefix().'cache_namespace');
-                if (!$v) {
-                    $v = time();
-                    self::$_zendCache->getBackend()->getMemcache()->set(self::getUniquePrefix().'cache_namespace', $v);
+            if (self::$_zendCache) {
+                $be = self::$_zendCache->getBackend();
+                if ($be instanceof Zend_Cache_Backend_Memcached) {
+                    //namespace is incremented in Kwf_Util_ClearCache
+                    //use memcache directly as Zend would not save the integer directly and we can't increment it then
+                    $v = self::$_zendCache->getBackend()->getMemcache()->get(self::getUniquePrefix().'cache_namespace');
+                    if (!$v) {
+                        $v = time();
+                        self::$_zendCache->getBackend()->getMemcache()->set(self::getUniquePrefix().'cache_namespace', $v);
+                    }
+                    if ($be instanceof Kwf_Util_Aws_ElastiCache_CacheBackend) {
+                        //Kwf_Util_Aws_ElastiCache_CacheBackend doesn't use Kwf_Cache_Backend_Memcached, so we don't have a app prefix
+                        //set app prefix ourselves
+                        $v = Kwf_Config::getValue('application.id').Kwf_Setup::getConfigSection().$v;
+                    }
+                    self::$_zendCache->setOption('cache_id_prefix', $v);
                 }
-                self::$_zendCache->setOption('cache_id_prefix', $v);
             }
         }
         return self::$_zendCache;
@@ -66,9 +74,7 @@ class Kwf_Cache_Simple
 
     private static function _processId($cacheId)
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
-        $cacheId = str_replace('-', '__', $prefix.$cacheId);
+        $cacheId = str_replace('-', '__', $cacheId);
         $cacheId = preg_replace('#[^a-zA-Z0-9_]#', '_', $cacheId);
         return $cacheId;
     }

@@ -39,9 +39,7 @@ class Kwf_Cache_SimpleStatic
 
     private static function _processId($cacheId)
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
-        $cacheId = str_replace('-', '__', $prefix.$cacheId);
+        $cacheId = str_replace('-', '__', $cacheId);
         $cacheId = preg_replace('#[^a-zA-Z0-9_]#', '_', $cacheId);
         return $cacheId;
     }
