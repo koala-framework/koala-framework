@@ -136,12 +136,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
             activeEl.stopFx();
             nextEl.stopFx();
-            nextEl.fadeIn(Ext.applyIf({
-                callback: function() {
-                    activeEl.hide();
-                },
-                scope: this
-            }, this.transitionConfig));
+            activeEl.fadeOut(this.transitionConfig);
+            nextEl.fadeIn(this.transitionConfig);
         } else if (this.transition == 'slide') {
             activeEl.slideOut(
                 this.activeItem.listIndex < nextItem.listIndex ? 'l' : 'r',
