@@ -9,26 +9,32 @@
  */
 class Kwf_Cache_SimpleStatic
 {
+    private static $_zendCache = null;
+
+    public static function resetZendCache()
+    {
+        self::$_zendCache = null;
+    }
+
     private static function _getZendCache()
     {
-        static $cache;
-        if (!isset($cache)) {
-            $cache = new Zend_Cache_Core(array(
+        if (!isset(self::$_zendCache)) {
+            self::$_zendCache = new Zend_Cache_Core(array(
                 'lifetime' => null,
                 'write_control' => false,
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true
             ));
             if (extension_loaded('memcache')) {
-                $cache->setBackend(new Kwf_Cache_Backend_Memcached());
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
             } else {
                 //fallback to file backend (NOT recommended!)
-                $cache->setBackend(new Kwf_Cache_Backend_File(array(
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
                     'cache_dir' => 'cache/simple'
                 )));
             }
         }
-        return $cache;
+        return self::$_zendCache;
     }
 
     private static function _processId($cacheId)
