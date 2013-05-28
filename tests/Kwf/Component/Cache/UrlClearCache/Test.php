@@ -15,6 +15,7 @@ class Kwf_Component_Cache_UrlClearCache_Test extends Kwc_TestAbstract
         Kwf_Benchmark::enable();
         Kwf_Benchmark::reset();
         $d = Kwf_Registry::get('testDomain');
+
         $c = $this->_root->getPageByUrl("http://$d/foo", null); //uncached
         $this->assertEquals('1', $c->componentId);
         $this->assertEquals(1, Kwf_Benchmark::getCounterValue('componentDatas'));

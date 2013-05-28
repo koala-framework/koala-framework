@@ -20,6 +20,7 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
             'lifetime'=>null,
             'automatic_cleaning_factor' => false,
             'automatic_serialization'=>true))->clean();
+        Kwf_Cache_Simple::resetZendCache();
     }
 
     public function testC3()
