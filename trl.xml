@@ -8852,7 +8852,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Text nach Abschicken</de>
 <id>1775</id>
 <en>Subtotal</en>
-<id>1771</id>
 </text>
 <text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
@@ -9147,5 +9146,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Account activation</en>
 <de>Account aktivierung</de>
 <id>1839</id>
+</text>
+<text>
+<en>Download all images</en>
+<de>Alle Bilder herunterladen</de>
+<id>1840</id>
 </text>
 </trl>
