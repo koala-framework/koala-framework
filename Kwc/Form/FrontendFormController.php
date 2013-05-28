@@ -37,7 +37,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
         $this->view->successContent = null;
         if (!$this->view->errorMessages && !$this->view->errorFields) {
             $success = $component->getData()->getComponent()->getSuccessComponent();
-            if ($success) {
+            if ($success instanceof Kwf_Component_Data) {
                 if ($success->isPage) {
                     $this->view->successUrl = $success->url;
                 } else {
@@ -66,6 +66,8 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
                     $renderer = new Kwf_Component_Renderer();
                     $this->view->successContent = $renderer->renderComponent($success);
                 }
+            } else if (is_string($success)) {
+                $this->view->successUrl = $success;
             }
         }
         $this->view->errorFields = (object)$this->view->errorFields;

@@ -165,11 +165,19 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($this->isSaved() && !$this->_errors &&
-            $this->getSuccessComponent() && $this->getSuccessComponent()->isPage &&
             (!isset($postData['doNotRelocate']) || !$postData['doNotRelocate'])
         ) {
-            header('Location: ' . $this->getSuccessComponent()->url);
-            exit;
+            $success = $this->getSuccessComponent();
+            $url = null;
+            if ($success instanceof Kwf_Component_Data && $success->isPage) {
+                $url = $this->getSuccessComponent()->url;
+            } else if (is_string($success)) {
+                $url = $success;
+            }
+            if ($url) {
+                header('Location: ' . $url);
+                exit;
+            }
         }
     }
 
