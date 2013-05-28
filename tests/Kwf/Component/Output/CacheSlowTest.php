@@ -18,6 +18,7 @@ class Kwf_Component_Output_CacheSlowTest extends Kwf_Test_TestCase
             'lifetime'=>null,
             'automatic_cleaning_factor' => false,
             'automatic_serialization'=>true))->clean();
+        Kwf_Cache_Simple::resetZendCache();
 
 
         Kwf_Registry::get('config')->debug->componentCache->disable = false;
