@@ -21,6 +21,7 @@ class Kwf_Component_Cache_Fnf_Model extends Kwf_Component_Cache_Mysql_Model
     // zum Testen
     public function getContent($select = array())
     {
+        $ret = array();
         foreach ($this->getRows($select) as $row) {
             $ret[] = $row->component_id . '(' . $row->type . ' - ' . $row->value . ') ' . $row->component_class . ': ' . $row->deleted;
         }

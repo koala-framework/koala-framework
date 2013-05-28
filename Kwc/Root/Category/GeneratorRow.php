@@ -20,7 +20,7 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
         if ($this->is_home && !$this->visible) {
             throw new Kwf_ClientException(trlKwf('Cannot set Home Page invisible'));
         }
-        if (in_array('parent_id', $this->getDirtyColumns())) {
+        if (in_array('parent_id', $this->getDirtyColumns()) && $this->getCleanValue('parent_id')) {
             $oldSubroot = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($this->getCleanValue('parent_id'), array('ignoreVisible'=>true))
                 ->getSubroot();

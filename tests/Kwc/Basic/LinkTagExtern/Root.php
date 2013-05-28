@@ -5,11 +5,11 @@ class Kwc_Basic_LinkTagExtern_Root extends Kwf_Component_NoCategoriesRoot
     {
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(
-            array('id'=>1200, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+            array('id'=>1200, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo', 'custom_filename' => false,
                   'parent_id'=>'root', 'component'=>'link', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
-            array('id'=>1201, 'pos'=>2, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+            array('id'=>1201, 'pos'=>2, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo', 'custom_filename' => false,
                   'parent_id'=>'root', 'component'=>'link', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
-            array('id'=>1202, 'pos'=>3, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+            array('id'=>1202, 'pos'=>3, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo', 'custom_filename' => false,
                   'parent_id'=>'root', 'component'=>'link', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array('link' => 'Kwc_Basic_LinkTagExtern_TestComponent');

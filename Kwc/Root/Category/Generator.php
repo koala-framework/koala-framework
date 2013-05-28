@@ -24,8 +24,15 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     private function _getPageData($id)
     {
         if (!isset($this->_pageDataCache[$id])) {
-            $ret = $this->_getModel()->fetchColumnsByPrimaryId(array('id', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id'), $id);
-            if ($ret['is_home']) $ret['visible'] = 1;
+
+            $cols = array('id', 'pos', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id');
+            if ($this->_useMobileBreakpoints) $cols[] = 'device_visible';
+            $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
+            if ($ret) {
+                if ($ret['is_home']) $ret['visible'] = 1;
+            } else {
+                $ret = false;
+            }
             $this->_pageDataCache[$id] = $ret;
         }
         return $this->_pageDataCache[$id];
@@ -39,6 +46,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         } else {
             $s->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
         }
+        $s->order('pos');
         $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
         $pageIds = array();
         foreach ($rows as $row) {
@@ -153,7 +161,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             $parentId = $parentData->dbId;
             if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
 
-            
                 $s = new Kwf_Model_Select();
                 $s->whereEquals('is_home', true);
                 $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
@@ -162,7 +169,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                     $homePages[] = $row['id'];
                 }
 
-                //TODO very inefficient; should be done by sql
+                //TODO very inefficient
                 foreach ($homePages as $pageId) {
                     $pd = $this->_getPageData($pageId);
                     if (substr($pd['parent_id'], 0, strlen($parentId)) == $parentId) {
@@ -171,15 +178,16 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                         $id = $pageId;
                         while (true) {
                             $pd = $this->_getPageData($id);
+                            if (!$pd) break;
                             if ($pd['parent_id'] == $parentId) {
                                 $pageIds[] = $pageId;
                                 break;
                             }
                             $id = $pd['parent_id'];
-                            if (!isset($pd[$id])) break;
                         }
                     }
                 }
+
             } else if ($select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
                 $filename = $select->getPart(Kwf_Component_Select::WHERE_FILENAME);
                 $s = new Kwf_Model_Select();
@@ -193,22 +201,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 foreach ($rows as $row) {
                     $pageIds[] = $row['id'];
                 }
-                /*
-                if (isset($this->_pageFilename[$filename])) {
-                    foreach ($this->_pageFilename[$filename] as $pId => $pageId) {
-                        if (is_numeric($parentId)) {
-                            if ($pId == $parentId) {
-                                $pageIds[] = $pageId;
-                            }
-                        } else {
-                            //this is ugly. but we don't get the categories in the parentId
-                            if (substr($pId, 0, strlen($parentId)) == $parentId) {
-                                $pageIds[] = $pageId;
-                            }
-                        }
-                    }
-                }
-                */
             } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
                 $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
                 $keys = array();
@@ -228,136 +220,58 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 foreach ($rows as $row) {
                     $pageIds[] = $row['id'];
                 }
-                /*
-                foreach (array_unique($keys) as $key) {
-                    if (isset($this->_pageComponentParent[$key])) {
-                        foreach ($this->_pageComponentParent[$key] as $pId => $ids) {
-                            if ($parentId == $pId || substr($pId, 0, strlen($parentId)+1) == $parentId.'-') {
-                                $pageIds = array_merge($pageIds, $ids);
-                            }
-                        }
-                    }
-                }
-                */
+
             } else {
 
                 $pageIds = $this->_getChildPageIds($parentId);
-                /*
-                foreach ($this->_pageChilds as $pId => $ids) {
-                    if ($parentId == $pId || substr($pId, 0, strlen($parentId)+1) == $parentId.'-') {
-                        $pageIds = array_merge($pageIds, $ids);
-                    }
-                }
-                */
+
             }
 
         } else {
 
-            if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
-                //$pageIds = $this->_pageHome;
-
-                //TODO inefficient: dont filter below, instead filter in sql somehow
-                $s = new Kwf_Model_Select();
-                $s->whereEquals('is_home', true);
-                $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
-                foreach ($rows as $row) {
-                    $pageIds[] = $row['id'];
-                }
-
-            } else if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
-                if ($this->_getPageData($id)) {
-                    $accept = true;
-                    if ($parentData) {
-                        $accept = false;
-                        $i = $id;
-                        while ($pd = $this->_getPageData($i)) {
-                            $i = $pd['parent_id'];
-                            if ($i == $parentData->dbId) {
-                                $accept = true;
-                                break;
-                            }
-                        }
-                    }
-                    if ($accept) {
-                        $pd = $this->_getPageData($id);
-                        if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                            $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
-                            $class = $this->_settings['component'][$pd['component']];
-                            if (in_array($class, $selectClasses)) {
-                                $pageIds[] = $id;
-                            }
-                        } else {
-                            $pageIds[] = $id;
-                        }
-                    }
-                }
-            } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
-                $keys = array();
-                foreach ($selectClasses as $selectClass) {
-                    $key = array_search($selectClass, $this->_settings['component']);
-                    if ($key) $keys[] = $key;
-                }
-
-                $s = new Kwf_Model_Select();
-                $s->whereEquals('component', array_unique($keys));
-                $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
-                foreach ($rows as $row) {
-                    $pageIds[] = $row['id'];
-                }
-                /*
-                foreach ($keys as $key) {
-                    if (isset($this->_pageComponent[$key])) {
-                        $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
-                    }
-                }
-                */
-            } else {
-                throw new Kwf_Exception("This would return all pages. You don't want this.");
-            }
+            $pagesSelect = new Kwf_Model_Select();
 
             if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
 
                 $subroot = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
                 $subroot = $subroot[0];
-
-                if (!isset($this->_basesCache[$subroot->componentId])) {
-                    //alle category komponenten der aktuellen domain suchen
-                    $this->_basesCache[$subroot->componentId] = Kwf_Component_Data_Root::getInstance()->
-                        getComponentsBySameClass($this->getClass(), array('subroot' => $subroot));
-                }
-
-
-                $allowedPageIds = array();
-                foreach ($pageIds as $pageId) {
-                    $allowed = false;
-                    foreach ($this->_basesCache[$subroot->componentId] as $base) {
-                        $id = $pageId;
-                        while (!$allowed && ($pd = $this->_getPageData($id))) {
-                            $id = $pd['parent_id'];
-                            if ($id == $base->componentId) $allowed = true;
-                        }
-                        /*
-                        auskommentiert, das ist langsam
-                        und es muss mir erst wer zeigen *wo* das wirklich benötigt wird
-                        if (!$allowed) {
-                            $component = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentById($id)->parent;
-                            while (!$allowed && $component) {
-                                if ($component->componentId == $base->componentId) {
-                                    $allowed = true;
-                                }
-                                $component = $component->parent;
-                            }
-                        }
-                        */
-                    }
-                    if ($allowed) $allowedPageIds[] = $pageId;
-                }
-
-                $pageIds = $allowedPageIds;
+                $pagesSelect->whereEquals('parent_subroot_id', $subroot->dbId);
             }
 
+            if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
+                $pagesSelect->whereEquals('is_home', true);
+            }
+            if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+                //TODO don't query database if *only* id is set (in der luft hängende ids beachten)
+                $pagesSelect->whereEquals('id', $id);
+            }
+            /*
+            //TODO handle parent_id correctly (recursively!!)
+            //is only set together with where_id
+            if ($parentData) {
+                if (is_numeric($parentData->dbId)) {
+                    $pagesSelect->whereEquals('parent_id', $parentData->dbId);
+                } else {
+                    $pagesSelect->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentData->dbId.'%'));
+                }
+            }
+            */
+            if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
+                $keys = array();
+                foreach ($selectClasses as $selectClass) {
+                    $key = array_search($selectClass, $this->_settings['component']);
+                    if ($key && !in_array($key, $keys)) $keys[] = $key;
+                }
+                $pagesSelect->whereEquals('component', $keys);
+            }
+            $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $pagesSelect, array('columns'=>array('id')));
+
+            $pageIds = array();
+            foreach ($rows as $row) {
+                //TODO in der luft liegende page ids ignorieren
+                $pageIds[] = $row['id'];
+            }
         }
 
         return $pageIds;

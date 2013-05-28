@@ -39,6 +39,12 @@ class Kwc_Cc_PageTree_Test extends Kwc_TestAbstract
         $this->assertEquals('Test', $html);
     }
 
+    public function testFoo()
+    {
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_4');
+        $this->assertNotNull($c);
+    }
+
     public function testMenuCc()
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main-mainMenu');
