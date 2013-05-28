@@ -145,7 +145,7 @@ abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Aut
             }
 
             if ($insert) {
-                $sessionFormId = new Zend_Session_Namespace('avoid_reinsert_id');
+                $sessionFormId = new Kwf_Session_Namespace('avoid_reinsert_id');
 
                 if ($this->_getParam('avoid_reinsert_id') &&
                     isset($sessionFormId->avoid[$this->_getParam('avoid_reinsert_id')])
@@ -183,7 +183,7 @@ abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Aut
 
             $this->view->data = $data;
 
-            $sessionFormId = new Zend_Session_Namespace('avoid_reinsert_id');
+            $sessionFormId = new Kwf_Session_Namespace('avoid_reinsert_id');
             if (!isset($sessionFormId->avoid)) {
                 $avoid = array();
             } else {

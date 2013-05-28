@@ -12,6 +12,7 @@ class Kwf_Model_RowCache_Test extends Kwf_Test_TestCase
             'lifetime'=>null,
             'automatic_cleaning_factor' => false,
             'automatic_serialization'=>true))->clean();
+        Kwf_Cache_Simple::resetZendCache();
         parent::setUp();
     }
 

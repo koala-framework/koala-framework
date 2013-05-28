@@ -107,7 +107,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception("Component with id '$id' not found");
         }
-        $session = new Zend_Session_Namespace('Kwc_Paragraphs:copy');
+        $session = new Kwf_Session_Namespace('Kwc_Paragraphs:copy');
         $session->id = $id;
     }
 
@@ -117,13 +117,13 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception("Component with id '$id' not found");
         }
-        $session = new Zend_Session_Namespace('Kwc_Paragraphs:copy');
+        $session = new Kwf_Session_Namespace('Kwc_Paragraphs:copy');
         $session->id = $id;
     }
 
     public function jsonPasteAction()
     {
-        $session = new Zend_Session_Namespace('Kwc_Paragraphs:copy');
+        $session = new Kwf_Session_Namespace('Kwc_Paragraphs:copy');
         $id = $session->id;
         if (!$id || !Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception_Client(trlKwf('Clipboard is empty'));

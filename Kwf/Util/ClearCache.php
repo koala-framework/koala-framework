@@ -61,11 +61,14 @@ class Kwf_Util_ClearCache
     public function getTypes()
     {
         $types = array();
-        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-            $types[] = new Kwf_Util_ClearCache_Types_ElastiCache();
-        }
-        if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) {
-            $types[] = new Kwf_Util_ClearCache_Types_Memcache();
+        $simpleCache = Kwf_Cache_Simple::getZendCache();
+        if ($simpleCache && $simpleCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
+            $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
+        } else {
+            if (extension_loaded('apc') && extension_loaded('memcache')) {
+                //complete memcache, used by Cache_SimpleStatic
+                $types[] = new Kwf_Util_ClearCache_Types_Memcache();
+            }
         }
         if (extension_loaded('apc')) {
             $types[] = new Kwf_Util_ClearCache_Types_ApcUser();

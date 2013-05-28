@@ -496,10 +496,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     _getCenterXy: function() {
         var winSize = this._getMaxContentSize(false);
-        var contentSize = this.lightbox.innerLightboxEl.getSize();
         var xy = [
-            (this._getMaxContentSize().width - this.lightbox.innerLightboxEl.getSize().width) / 2,
-            (this._getMaxContentSize().height - this.lightbox.innerLightboxEl.getSize().height) / 2
+            (winSize.width - this.lightbox.innerLightboxEl.getSize().width) / 2,
+            (winSize.height - this.lightbox.innerLightboxEl.getSize().height) / 2
         ];
 
         //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down

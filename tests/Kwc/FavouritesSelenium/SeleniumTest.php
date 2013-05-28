@@ -15,6 +15,7 @@ class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
             'lifetime'=>null,
             'automatic_cleaning_factor' => false,
             'automatic_serialization'=>true))->clean();
+        Kwf_Cache_Simple::resetZendCache();
 
         Kwf_Component_Data_Root::setComponentClass('Kwc_FavouritesSelenium_Root');
 

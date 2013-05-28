@@ -43,8 +43,8 @@ class Kwc_Basic_DownloadTagBehindLogin_Test extends Kwf_Test_SeleniumTestCase
         $this->assertElementPresent("link=test");
 
         //ausloggen, link darf nicht mehr da sein
-        $this->deleteAllVisibleCookies();
-        $this->refreshAndWait();
+        $this->sessionRestart();
+        $this->openKwc('/test');
         $this->assertElementNotPresent("link=test");
 
         $ok = false;

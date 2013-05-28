@@ -1,5 +1,5 @@
 <?php
-class Kwf_Util_ClearCache_Types_ElastiCache extends Kwf_Util_ClearCache_Types_Abstract
+class Kwf_Util_ClearCache_Types_SimpleCache extends Kwf_Util_ClearCache_Types_Abstract
 {
     protected function _clearCache($options)
     {
@@ -8,15 +8,15 @@ class Kwf_Util_ClearCache_Types_ElastiCache extends Kwf_Util_ClearCache_Types_Ab
             //namespace used in Kwf_Cache_Simple
             $cache = Kwf_Cache_Simple::getZendCache();
             $mc = $cache->getBackend()->getMemcache();
-            if ($mc->get('cache_namespace')) {
-                $mc->increment('cache_namespace');
+            if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
+                $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
             }
         }
     }
 
     public function getTypeName()
     {
-        return 'elastiCache';
+        return 'simpleCache';
     }
     public function doesRefresh() { return false; }
     public function doesClear() { return true; }

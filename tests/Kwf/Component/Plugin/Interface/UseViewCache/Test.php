@@ -27,6 +27,7 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Test extends Kwc_TestAbstract
             'lifetime'=>null,
             'automatic_cleaning_factor' => false,
             'automatic_serialization'=>true))->clean();
+        Kwf_Cache_Simple::resetZendCache();
 
         Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = false;
         $html4 = $c->render();

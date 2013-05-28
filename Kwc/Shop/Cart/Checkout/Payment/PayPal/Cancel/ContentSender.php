@@ -3,7 +3,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Cancel_ContentSender extends Kwf_Com
 {
     public function sendContent($includeMaster)
     {
-        $session = new Zend_Session_Namespace('kwcShopCart');
+        $session = new Kwf_Session_Namespace('kwcShopCart');
         if ($session->paypalCartId) {
             Kwc_Shop_Cart_Orders::setCartOrderId($session->paypalCartId);
             $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_data->parent->parent->componentClass, 'childModel'))

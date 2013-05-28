@@ -89,7 +89,7 @@ class Kwf_Assets_Loader
             }
         } else if (substr($file, 0, 4) == 'all/') {
             $encoding = Kwf_Media_Output::getEncoding();
-            $cacheId = md5($file.$encoding.$this->_getHostForCacheId());
+            $cacheId = str_replace(array('/', '.', ':'), '_', $file).'_enc'.$encoding.$this->_getHostForCacheId();
             $cache = Kwf_Assets_Cache::getInstance();
             $cacheData = $cache->load($cacheId);
             if ($cacheData) {
@@ -155,6 +155,10 @@ class Kwf_Assets_Loader
                 } else if ($fileType == 'css' || $fileType == 'printcss') {
                     $cacheData['mimeType'] = 'text/css; charset=utf8';
                 }
+
+                //store list of generated all caches for clear-cache-watcher
+                file_put_contents('cache/assets/generated-all', $cacheId."\n", FILE_APPEND);
+
                 $cache->save($cacheData, $cacheId);
             }
             $ret['mtime'] = time();
@@ -211,8 +215,7 @@ class Kwf_Assets_Loader
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
                 $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
-                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file).
-                    Kwf_Component_Data_Root::getComponentClass();
+                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file);
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
                     if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {

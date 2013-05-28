@@ -6,7 +6,7 @@ class Kwf_Connection_TestController extends Kwf_Controller_Action
         $this->view->ext('Kwf.Test.ConnectionsError', array(
             'assetsType' => 'Kwf_Connection:Test'
         ), 'Kwf.Test.Viewport');
-        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts = new Kwf_Session_Namespace('test_connection_count');
         $connections_counts->timeouts = 0;
         $connections_counts->exceptions = 0;
 
@@ -15,7 +15,7 @@ class Kwf_Connection_TestController extends Kwf_Controller_Action
 
     public function jsonTimeoutAction()
     {
-        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts = new Kwf_Session_Namespace('test_connection_count');
         $connections_counts->timeouts++;
         session_write_close();
         sleep(2);
@@ -23,7 +23,7 @@ class Kwf_Connection_TestController extends Kwf_Controller_Action
 
     public function jsonExceptionAction()
     {
-        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts = new Kwf_Session_Namespace('test_connection_count');
         $connections_counts->exceptions++;
         $this->view->exception = "exceptionError";
         $this->view->success = false;
@@ -31,7 +31,7 @@ class Kwf_Connection_TestController extends Kwf_Controller_Action
 
     public function getTimeoutsAction()
     {
-        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts = new Kwf_Session_Namespace('test_connection_count');
         echo $connections_counts->timeouts;
         exit;
 
@@ -39,7 +39,7 @@ class Kwf_Connection_TestController extends Kwf_Controller_Action
 
     public function getExceptionsAction()
     {
-        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts = new Kwf_Session_Namespace('test_connection_count');
         echo  $connections_counts->exceptions;
         exit;
     }

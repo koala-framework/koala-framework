@@ -39,7 +39,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
         }
 
         $msg = '';
-        $session = new Zend_Session_Namespace('login_password');
+        $session = new Kwf_Session_Namespace('login_password');
         if (in_array($this->_getLoginPassword(), $pw)) {
             //this should not happen in herer (we are in isLoggedIn)
             //instead this should be in processInput of the LoginForm, just as Plugin_Login does it
@@ -61,14 +61,14 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
     /**
      * Override to add custom functionality after login
      */
-    protected function _afterLogin(Zend_Session_Namespace $session)
+    protected function _afterLogin(Kwf_Session_Namespace $session)
     {
     }
 
     public function skipProcessInput()
     {
         // overwrite because parent call that makes a redirect on login which we don't want
-        $session = new Zend_Session_Namespace('login_password');
+        $session = new Kwf_Session_Namespace('login_password');
         return (bool)$session->login;
     }
 }

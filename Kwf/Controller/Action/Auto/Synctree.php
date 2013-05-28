@@ -421,7 +421,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
 
     protected function _saveSessionNodeOpened($id, $activate)
     {
-        $session = new Zend_Session_Namespace('admin');
+        $session = new Kwf_Session_Namespace('admin');
         $key = 'treeNodes_' . get_class($this);
         if ($this->_getParam('openedId')) $session->$key = array();
         $ids = is_array($session->$key) ? $session->$key : array();
