@@ -467,4 +467,13 @@ class Kwf_Acl extends Zend_Acl
         }
         return false;
     }
+
+
+    public function allow($roles = null, $resources = null, $privileges = null, Zend_Acl_Assert_Interface $assert = null)
+    {
+        if ($resources == null) {
+            throw new Kwf_Exception("Don't be lazy, never allow all resources - you should whitelist");
+        }
+        return parent::allow($roles, $resources, $privileges, $assert);
+    }
 }
