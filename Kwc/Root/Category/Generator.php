@@ -25,6 +25,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         if (!isset($this->_pageDataCache[$id])) {
 
+            Kwf_Benchmark::count('GenPage: loadPageData');
             $cols = array('id', 'pos', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id');
             if ($this->_useMobileBreakpoints) $cols[] = 'device_visible';
             $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
