@@ -88,6 +88,11 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
         newContentEl.addClass('kwfTabsContentActive');
 
         var oldContentEl = Ext.get(this.contentEls[this._activeTabIdx]);
+
+        oldContentEl.stopFx();
+        newContentEl.stopFx();
+        this.tabsContents.stopFx();
+
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('kwfTabsLinkActive');
             oldContentEl.setStyle('position', 'absolute');
@@ -99,6 +104,10 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
         Kwf.callOnContentReady(this.contentEls[idx], {newRender: false});
         if (this._activeTabIdx !== null) {
             oldContentEl.setVisible(true);
+
+            newContentEl.fadeIn({
+                duration: this.fxDuration
+            });
             oldContentEl.fadeOut({
                 duration: this.fxDuration,
                 callback: function(el) {
