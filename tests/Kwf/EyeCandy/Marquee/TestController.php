@@ -3,6 +3,7 @@ class Kwf_EyeCandy_Marquee_TestController extends Kwf_Controller_Action
 {
     /**
      * ist kein unit test, muss per hand aufgerufen werden
+     * /kwf/test/kwf_eye-candy_marquee_test
      */
     public function indexAction()
     {
