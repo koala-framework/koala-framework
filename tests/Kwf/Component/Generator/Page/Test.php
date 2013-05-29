@@ -61,7 +61,7 @@ class Kwf_Component_Generator_Page_Test extends Kwc_TestAbstract
     {
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
         $home = $this->_root->getPageByUrl($domain.'/', null);
-        $this->assertNotNull($home);
+        $this->assertTrue(!!$home);
         $this->assertEquals($home->url, '/');
         $child = $home->getChildComponent('-foo');
         $this->assertNotNull($child);
