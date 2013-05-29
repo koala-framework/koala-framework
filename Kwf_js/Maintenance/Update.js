@@ -16,7 +16,7 @@ Kwf.Maintenance.Update = Ext.extend(Ext.Panel, {
                         success: function(response, options, r) {
                             this.grid.reload();
                             if (r.errMsg) {
-                                Ext.Msg.alert(trlKwf('Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />");
+                                Ext.Msg.alert(trlKwf('Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
                             } else if (r.message) {
                                 Ext.Msg.alert(trlKwf('Finished'), r.message);
                             }
