@@ -30,6 +30,24 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
             if ($ret) {
                 if ($ret['is_home']) $ret['visible'] = 1;
+                $ret['parent_visible'] = $ret['visible'];
+                $i = $ret['parent_id'];
+                $ret['parent_ids'] = array($i);
+                while (is_numeric($i)) {
+                    $pd = $this->_getPageData($i);
+                    if ($pd) {
+                        $ret['parent_ids'][] = $pd['parent_id'];
+                        if (count($ret['parent_ids']) > 20) {
+                            throw new Kwf_Exception('probably endless recursion with parents');
+                        }
+                        $ret['visible'] = $ret['parent_visible'] && $pd['visible'];
+                        $i = $pd['parent_id'];
+                    } else {
+                        //page seems to be floating (without parent)
+                        $ret = false;
+                        break;
+                    }
+                }
             } else {
                 $ret = false;
             }
@@ -37,7 +55,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         }
         return $this->_pageDataCache[$id];
     }
-    
+
     private function _getChildPageIds($parentId)
     {
         $s = new Kwf_Model_Select();
@@ -130,13 +148,14 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $ret = array();
         foreach ($pageIds as $pageId) {
             $page = $this->_getPageData($pageId);
+            if (!$page) continue; //can happen for floating page (without valid parent)
             if ($select->hasPart(Kwf_Component_Select::WHERE_SHOW_IN_MENU)) {
                 $menu = $select->getPart(Kwf_Component_Select::WHERE_SHOW_IN_MENU);
                 if ($menu == $page['hide']) continue;
             }
             if ($select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
             } else if (!Kwf_Component_Data_Root::getShowInvisible()) {
-                if (!$page['visible']) continue;
+                if (!$page['parent_visible']) continue;
             }
             $d = $this->_createData($parentData, $pageId, $select);
             if ($d) $ret[] = $d;
@@ -163,27 +182,23 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
                 $s = new Kwf_Model_Select();
                 $s->whereEquals('is_home', true);
+                $s->whereEquals('parent_subroot_id', $parentData->getSubroot()->dbId); //performance to look only in subroot - correct filterting done below
                 $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
                 $homePages = array();
                 foreach ($rows as $row) {
                     $homePages[] = $row['id'];
                 }
 
-                //TODO very inefficient
                 foreach ($homePages as $pageId) {
                     $pd = $this->_getPageData($pageId);
                     if (substr($pd['parent_id'], 0, strlen($parentId)) == $parentId) {
                         $pageIds[] = $pageId;
-                    } else {
-                        $id = $pageId;
-                        while (true) {
-                            $pd = $this->_getPageData($id);
-                            if (!$pd) break;
-                            if ($pd['parent_id'] == $parentId) {
-                                $pageIds[] = $pageId;
-                                break;
-                            }
-                            $id = $pd['parent_id'];
+                        continue;
+                    }
+                    foreach ($pd['parent_ids'] as $pageParentId) {
+                        if ($pageParentId == $parentId) {
+                            $pageIds[] = $pageId;
+                            break;
                         }
                     }
                 }
@@ -231,46 +246,65 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
             $pagesSelect = new Kwf_Model_Select();
 
-            if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
+            if (($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) &&
+                !$select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES) &&
+                !$select->hasPart(Kwf_Component_Select::WHERE_SUBROOT) &&
+                !$select->hasPart(Kwf_Component_Select::WHERE_HOME)
+            ) {
+                //query only by id, no db query required
+                $pageIds = array($id);
 
-                $subroot = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
-                $subroot = $subroot[0];
-                $pagesSelect->whereEquals('parent_subroot_id', $subroot->dbId);
+            } else {
+                if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
+
+                    $subroot = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
+                    $subroot = $subroot[0];
+                    $pagesSelect->whereEquals('parent_subroot_id', $subroot->dbId);
+                }
+
+                if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
+                    $pagesSelect->whereEquals('is_home', true);
+                }
+                if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+                    $pagesSelect->whereEquals('id', $id);
+                }
+                if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                    $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
+                    $keys = array();
+                    foreach ($selectClasses as $selectClass) {
+                        $key = array_search($selectClass, $this->_settings['component']);
+                        if ($key && !in_array($key, $keys)) $keys[] = $key;
+                    }
+                    $pagesSelect->whereEquals('component', $keys);
+                }
+                $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $pagesSelect, array('columns'=>array('id')));
+                $pageIds = array();
+                foreach ($rows as $row) {
+                    $pageIds[] = $row['id'];
+                }
             }
 
-            if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
-                $pagesSelect->whereEquals('is_home', true);
-            }
-            if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
-                //TODO don't query database if *only* id is set (in der luft hängende ids beachten)
-                $pagesSelect->whereEquals('id', $id);
-            }
-            /*
-            //TODO handle parent_id correctly (recursively!!)
-            //is only set together with where_id
             if ($parentData) {
-                if (is_numeric($parentData->dbId)) {
-                    $pagesSelect->whereEquals('parent_id', $parentData->dbId);
-                } else {
-                    $pagesSelect->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentData->dbId.'%'));
+                $parentId = $parentData->dbId;
+                foreach ($pageIds as $k=>$pageId) {
+                    $match = false;
+                    $pd = $this->_getPageData($pageId);
+                    if (!$pd) continue;
+                    if (substr($pd['parent_id'], 0, strlen($parentId)) == $parentId) {
+                        $match = true;
+                    }
+                    if (!$match) {
+                        foreach ($pd['parent_ids'] as $pageParentId) {
+                            if ($pageParentId == $parentId) {
+                                $match = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$match) {
+                        unset($pageIds[$k]);
+                    }
                 }
-            }
-            */
-            if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
-                $keys = array();
-                foreach ($selectClasses as $selectClass) {
-                    $key = array_search($selectClass, $this->_settings['component']);
-                    if ($key && !in_array($key, $keys)) $keys[] = $key;
-                }
-                $pagesSelect->whereEquals('component', $keys);
-            }
-            $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $pagesSelect, array('columns'=>array('id')));
-
-            $pageIds = array();
-            foreach ($rows as $row) {
-                //TODO in der luft liegende page ids ignorieren
-                $pageIds[] = $row['id'];
             }
         }
 
