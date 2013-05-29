@@ -1103,7 +1103,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             // if no data is recieved, quit
             if (!$data) return;
 
-            $tmpImportFolder = realpath('temp').'/modelcsvim'.uniqid();
+            $tmpImportFolder = tempnam('temp/', 'modelcsvim');
+            unlink($tmpImportFolder);
             mkdir($tmpImportFolder, 0777);
             $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);
