@@ -142,6 +142,11 @@ class Kwf_Util_Setup
 
         $ret .= "Zend_Registry::set('requestNum', ''.floor(Kwf_Benchmark::\$startTime*100));\n";
 
+        if (get_magic_quotes_gpc()) {
+            //this is *NOT* recommended but still works somehow
+            $ret .= "Kwf_Util_UndoMagicQuotes::undoMagicQuotes();\n";
+        }
+
         if (Kwf_Config::getValue('debug.firephp') || Kwf_Config::getValue('debug.querylog')) {
             $ret .= "if (php_sapi_name() != 'cli') {\n";
             if (Kwf_Config::getValue('debug.firephp')) {
