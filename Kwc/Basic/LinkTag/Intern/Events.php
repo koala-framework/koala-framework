@@ -44,7 +44,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         $ids = array($c->dbId);
         $c = $c->getPageOrRoot();
         foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $ids = array_merge($ids, $gen->getVisiblePageChildIds($c->dbId));
+            $ids = array_merge($ids, $gen->getRecursiveVisiblePageChildIds($c->dbId));
         }
         return $ids;
     }
