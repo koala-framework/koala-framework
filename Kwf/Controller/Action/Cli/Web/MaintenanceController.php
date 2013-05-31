@@ -34,8 +34,6 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
     {
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
         $updates = Kwf_Util_Update_Helper::getUpdates(0, 9999999);
-        $data = array();
-        $id = 0;
         foreach ($updates as $k=>$u) {
             if (in_array($u->getUniqueName(), $doneNames)) {
                 unset($updates[$k]);
