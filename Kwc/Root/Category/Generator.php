@@ -219,6 +219,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                     }
                     Kwf_Benchmark::count('GenPage::query', 'filename');
                     $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
+                    $pageIds = array();
                     foreach ($rows as $row) {
                         $pageIds[] = $row['id'];
                     }
