@@ -73,6 +73,10 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             Kwf_Cache_Simple::delete('pcIds-'.$oldParentId);
             Kwf_Cache_Simple::delete('pcIds-'.$newParentId);
         }
+        if ($event->isDirty('pos')) {
+            //cache is ordered by pos
+            Kwf_Cache_Simple::delete('pcIds-'.$event->row->parent_id);
+        }
         if ($event->isDirty(array('parent_id', 'filename'))) {
             Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->getCleanValue('parent_id').'-'.$event->row->getCleanValue('filename'));
         }
