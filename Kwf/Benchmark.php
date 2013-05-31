@@ -134,7 +134,6 @@ class Kwf_Benchmark
     {
         Kwf_Benchmark::checkpoint('shutDown');
 
-        if (isset($_COOKIE['unitTest'])) return;
         if (!self::$_enabled) return;
         self::disable();
         self::$_logEnabled = false;
