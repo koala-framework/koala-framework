@@ -45,7 +45,8 @@ class Kwf_Cache_Simple
                     } else {
                         //fallback to file backend (NOT recommended!)
                         self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
-                            'cache_dir' => 'cache/simple'
+                            'cache_dir' => 'cache/simple',
+                            'hashed_directory_level' => 2
                         )));
                     }
                 }
