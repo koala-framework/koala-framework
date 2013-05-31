@@ -80,7 +80,7 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
 
     private function _deletePageDataCacheRecursive($id)
     {
-        foreach ($this->_getGenerator()->getRecursivePageChildIds() as $i) {
+        foreach ($this->_getGenerator()->getRecursivePageChildIds($id) as $i) {
             Kwf_Cache_Simple::delete('pd-'.$i);
         }
     }
