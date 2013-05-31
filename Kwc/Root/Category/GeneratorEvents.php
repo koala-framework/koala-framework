@@ -64,7 +64,7 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             }
         }
 
-        if ($event->isDirty('parent_id', 'visible')) {
+        if ($event->isDirty(array('parent_id', 'visible'))) {
             $this->_deletePageDataCacheRecursive($event->row->id);
         }
         if ($event->isDirty('parent_id')) {
@@ -72,6 +72,9 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             $newParentId = $event->row->parent_id;
             Kwf_Cache_Simple::delete('pcIds-'.$oldParentId);
             Kwf_Cache_Simple::delete('pcIds-'.$newParentId);
+        }
+        if ($event->isDirty(array('parent_id', 'filename'))) {
+            Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->getCleanValue('parent_id').'-'.$event->row->getCleanValue('filename'));
         }
     }
 

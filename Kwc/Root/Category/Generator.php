@@ -207,17 +207,22 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
             } else if ($select->hasPart(Kwf_Component_Select::WHERE_FILENAME)) {
                 $filename = $select->getPart(Kwf_Component_Select::WHERE_FILENAME);
-                $s = new Kwf_Model_Select();
-                $s->whereEquals('filename', $filename);
-                if (is_numeric($parentId)) {
-                    $s->whereEquals('parent_id', $parentId);
-                } else {
-                    $s->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
-                }
-                Kwf_Benchmark::count('GenPage::query', 'filename');
-                $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
-                foreach ($rows as $row) {
-                    $pageIds[] = $row['id'];
+                $cacheId = 'pcFnIds-'.$parentId.'-'.$filename;
+                $pageIds = Kwf_Cache_Simple::fetch($cacheId);
+                if ($pageIds === false) {
+                    $s = new Kwf_Model_Select();
+                    $s->whereEquals('filename', $filename);
+                    if (is_numeric($parentId)) {
+                        $s->whereEquals('parent_id', $parentId);
+                    } else {
+                        $s->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
+                    }
+                    Kwf_Benchmark::count('GenPage::query', 'filename');
+                    $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
+                    foreach ($rows as $row) {
+                        $pageIds[] = $row['id'];
+                    }
+                    Kwf_Cache_Simple::add($cacheId, $pageIds);
                 }
             } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
                 $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
