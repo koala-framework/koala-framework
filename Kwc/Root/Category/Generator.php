@@ -64,16 +64,16 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         return $this->_pageDataCache[$id];
     }
 
-    private function _getChildPageIds($parentId)
+    private function _getChildPageIds($parentId, $select = null)
     {
-        $s = new Kwf_Model_Select();
+        if (!$select) $select = new Kwf_Model_Select();
         if (is_numeric($parentId)) {
-            $s->whereEquals('parent_id', $parentId);
+            $select->whereEquals('parent_id', $parentId);
         } else {
-            $s->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
+            $select->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
         }
-        $s->order('pos');
-        $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
+        $select->order('pos');
+        $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $select, array('columns'=>array('id')));
         $pageIds = array();
         foreach ($rows as $row) {
             $pageIds[] = $row['id'];
@@ -94,31 +94,11 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
      */
     public function getRecursivePageChildIds($parentId, $onlyVisible = false)
     {
-        $ret = array();
-        /*
-        if (!is_numeric(substr($parentId, 0, 1))) {
-            foreach ($this->_pageChilds as $pId=>$childs) {
-                if (substr($pId, 0, strlen($pId)) == $parentId) {
-                    foreach ($childs as $id) {
-                        $pd = $this->_getPageData($id);
-                        if ($onlyVisible && !$pd['visible']) continue;
-                        $ret[] = $id;
-                        $ret = array_merge($ret, $this->getRecursivePageChildIds($id, $onlyVisible));
-                    }
-                }
-            }
-        } else if (isset($this->_pageChilds[$parentId])) {
-            foreach ($this->_pageChilds[$parentId] as $id) {
-                $pd = $this->_getPageData($id);
-                if ($onlyVisible && !$pd['visible']) continue;
-                $ret[] = $id;
-                $ret = array_merge($ret, $this->getRecursivePageChildIds($id, $onlyVisible));
-            }
-        }
-        */
-        $ret = $this->_getChildPageIds($parentId);
+        $select = new Kwf_Model_Select();
+        if ($onlyVisible) $select->whereEquals('visible', true);
+        $ret = $this->_getChildPageIds($parentId, $select);
         foreach ($ret as $i) {
-            $ret = array_merge($ret, $this->_getChildPageIds($i));
+            $ret = array_merge($ret, $this->getRecursivePageChildIds($i, $onlyVisible));
         }
         return $ret;
     }
