@@ -29,7 +29,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             $ret = Kwf_Cache_Simple::fetch($cacheId);
             if ($ret === false) {
                 Kwf_Benchmark::count('GenPage::loadPageData');
-                $cols = array('id', 'pos', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id');
+                $cols = array('id', 'pos', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id', 'parent_subroot_id');
                 if ($this->_useMobileBreakpoints) $cols[] = 'device_visible';
                 $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
                 if ($ret) {
@@ -66,7 +66,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     private function _getChildPageIds($parentId, $select = null)
     {
-        Kwf_Benchmark::count('GenPage::query',  'childIds');
+        Kwf_Benchmark::count('GenPage::query',  'childIds('.$parentId.')');
 
         if (!$select) $select = new Kwf_Model_Select();
         if (is_numeric($parentId)) {
@@ -238,13 +238,36 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
             $pagesSelect = new Kwf_Model_Select();
 
-            if (($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) &&
-                !$select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES) &&
-                !$select->hasPart(Kwf_Component_Select::WHERE_SUBROOT) &&
-                !$select->hasPart(Kwf_Component_Select::WHERE_HOME)
-            ) {
+            if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
                 //query only by id, no db query required
                 $pageIds = array($id);
+
+                if ($sr = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT)) {
+                    $pd = $this->_getPageData($id);
+                    if ($pd['parent_subroot_id'] != $sr[0]->dbId) {
+                        $pageIds = array();
+                    }
+                }
+
+                if ($pageIds && $select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                    $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
+                    $keys = array();
+                    foreach ($selectClasses as $selectClass) {
+                        $key = array_search($selectClass, $this->_settings['component']);
+                        if ($key && !in_array($key, $keys)) $keys[] = $key;
+                    }
+                    $pd = $this->_getPageData($id);
+                    if (!in_array($pd['component'], $keys)) {
+                        $pageIds = array();
+                    }
+                }
+
+                if ($pageIds && $select->getPart(Kwf_Component_Select::WHERE_HOME)) {
+                    $pd = $this->_getPageData($id);
+                    if (!$pd['is_home']) {
+                        $pageIds = array();
+                    }
+                }
 
             } else {
                 $benchmarkType = '';
