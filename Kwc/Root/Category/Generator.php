@@ -28,7 +28,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             $cacheId = 'pd-'.$id;
             $ret = Kwf_Cache_Simple::fetch($cacheId);
             if ($ret === false) {
-                Kwf_Benchmark::count('GenPage: loadPageData');
+                Kwf_Benchmark::count('GenPage::loadPageData');
                 $cols = array('id', 'pos', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id');
                 if ($this->_useMobileBreakpoints) $cols[] = 'device_visible';
                 $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
@@ -66,6 +66,8 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     private function _getChildPageIds($parentId, $select = null)
     {
+        Kwf_Benchmark::count('GenPage::query',  'childIds');
+
         if (!$select) $select = new Kwf_Model_Select();
         if (is_numeric($parentId)) {
             $select->whereEquals('parent_id', $parentId);
@@ -170,6 +172,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $s = new Kwf_Model_Select();
                 $s->whereEquals('is_home', true);
                 $s->whereEquals('parent_subroot_id', $parentData->getSubroot()->dbId); //performance to look only in subroot - correct filterting done below
+                Kwf_Benchmark::count('GenPage::query', 'home');
                 $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
                 $homePages = array();
                 foreach ($rows as $row) {
@@ -199,6 +202,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 } else {
                     $s->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
                 }
+                Kwf_Benchmark::count('GenPage::query', 'filename');
                 $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
                 foreach ($rows as $row) {
                     $pageIds[] = $row['id'];
@@ -218,6 +222,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 } else {
                     $s->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
                 }
+                Kwf_Benchmark::count('GenPage::query', 'component');
                 $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
                 foreach ($rows as $row) {
                     $pageIds[] = $row['id'];
@@ -242,18 +247,22 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $pageIds = array($id);
 
             } else {
+                $benchmarkType = '';
                 if ($select->hasPart(Kwf_Component_Select::WHERE_SUBROOT)) {
 
                     $subroot = $select->getPart(Kwf_Component_Select::WHERE_SUBROOT);
                     $subroot = $subroot[0];
                     $pagesSelect->whereEquals('parent_subroot_id', $subroot->dbId);
+                    $benchmarkType .= 'subroot ';
                 }
 
                 if ($select->getPart(Kwf_Component_Select::WHERE_HOME)) {
                     $pagesSelect->whereEquals('is_home', true);
+                    $benchmarkType .= 'home ';
                 }
                 if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
                     $pagesSelect->whereEquals('id', $id);
+                    $benchmarkType .= 'id ';
                 }
                 if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
                     $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
@@ -263,7 +272,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                         if ($key && !in_array($key, $keys)) $keys[] = $key;
                     }
                     $pagesSelect->whereEquals('component', $keys);
+                    $benchmarkType .= 'component ';
                 }
+                Kwf_Benchmark::count('GenPage::query', "noparent(".trim($benchmarkType).")");
                 $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $pagesSelect, array('columns'=>array('id')));
                 $pageIds = array();
                 foreach ($rows as $row) {
