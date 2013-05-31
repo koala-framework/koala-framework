@@ -106,7 +106,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     //called by GeneratorEvents when model changes
     public function pageDataChanged()
     {
-        //$this->_pageDataLoaded = false;
         $this->_pageDataCache = array();
     }
 
