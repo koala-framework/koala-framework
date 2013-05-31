@@ -67,6 +67,12 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         if ($event->isDirty('parent_id', 'visible')) {
             $this->_deletePageDataCacheRecursive($event->row->id);
         }
+        if ($event->isDirty('parent_id')) {
+            $oldParentId = $event->row->getCleanValue('parent_id');
+            $newParentId = $event->row->parent_id;
+            Kwf_Cache_Simple::delete('pcIds-'.$oldParentId);
+            Kwf_Cache_Simple::delete('pcIds-'.$newParentId);
+        }
     }
 
     private function _deletePageDataCacheRecursive($id)
@@ -81,6 +87,9 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         Kwf_Cache_Simple::delete('pd-'.$event->row->id);
         if ($event instanceof Kwf_Component_Event_Row_Deleted) {
             $this->_deletePageDataCacheRecursive($event->row->id);
+            Kwf_Cache_Simple::delete('pcIds-'.$event->row->parent_id);
+        } else if ($event instanceof Kwf_Component_Event_Row_Inserted) {
+            Kwf_Cache_Simple::delete('pcIds-'.$event->row->parent_id);
         }
         $this->_getGenerator()->pageDataChanged();
     }

@@ -64,23 +64,36 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         return $this->_pageDataCache[$id];
     }
 
-    private function _getChildPageIds($parentId, $select = null)
+    private function _getChildPageIds($parentId, $onlyVisible = false)
     {
-        Kwf_Benchmark::count('GenPage::query',  'childIds('.$parentId.')');
+        $cacheId = 'pcIds-'.$parentId;
+        $ret = Kwf_Cache_Simple::fetch($cacheId);
+        if ($ret === false) {
+            Kwf_Benchmark::count('GenPage::query',  'childIds('.$parentId.')');
 
-        if (!$select) $select = new Kwf_Model_Select();
-        if (is_numeric($parentId)) {
-            $select->whereEquals('parent_id', $parentId);
-        } else {
-            $select->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
+            $select = new Kwf_Model_Select();
+            if (is_numeric($parentId)) {
+                $select->whereEquals('parent_id', $parentId);
+            } else {
+                $select->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
+            }
+            $select->order('pos');
+            $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $select, array('columns'=>array('id')));
+            $ret = array();
+            foreach ($rows as $row) {
+                $ret[] = $row['id'];
+            }
+            Kwf_Cache_Simple::add($cacheId, $ret);
         }
-        $select->order('pos');
-        $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $select, array('columns'=>array('id')));
-        $pageIds = array();
-        foreach ($rows as $row) {
-            $pageIds[] = $row['id'];
+
+        if ($onlyVisible) {
+            foreach ($ret as $k=>$i) {
+                $pd = $this->_getPageData($i);
+                if (!$pd['visible']) unset($ret[$k]);
+            }
+            $ret = array_values($ret);
         }
-        return $pageIds;
+        return $ret;
     }
 
     /**
@@ -97,8 +110,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     public function getRecursivePageChildIds($parentId, $onlyVisible = false)
     {
         $select = new Kwf_Model_Select();
-        if ($onlyVisible) $select->whereEquals('visible', true);
-        $ret = $this->_getChildPageIds($parentId, $select);
+        $ret = $this->_getChildPageIds($parentId, $onlyVisible);
         foreach ($ret as $i) {
             $ret = array_merge($ret, $this->getRecursivePageChildIds($i, $onlyVisible));
         }
