@@ -84,15 +84,15 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     /**
      * Returns all recursive children of a page (only visible ones)
      */
-    public function getVisiblePageChildIds($parentId)
+    public function getRecursiveVisiblePageChildIds($parentId)
     {
-        return $this->getPageChildIds($parentId, true);
+        return $this->getRecursivePageChildIds($parentId, true);
     }
 
     /**
      * Returns all recursive children of a page
      */
-    public function getPageChildIds($parentId, $onlyVisible = false)
+    public function getRecursivePageChildIds($parentId, $onlyVisible = false)
     {
         $ret = array();
         /*
@@ -103,7 +103,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                         $pd = $this->_getPageData($id);
                         if ($onlyVisible && !$pd['visible']) continue;
                         $ret[] = $id;
-                        $ret = array_merge($ret, $this->getPageChildIds($id, $onlyVisible));
+                        $ret = array_merge($ret, $this->getRecursivePageChildIds($id, $onlyVisible));
                     }
                 }
             }
@@ -112,7 +112,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $pd = $this->_getPageData($id);
                 if ($onlyVisible && !$pd['visible']) continue;
                 $ret[] = $id;
-                $ret = array_merge($ret, $this->getPageChildIds($id, $onlyVisible));
+                $ret = array_merge($ret, $this->getRecursivePageChildIds($id, $onlyVisible));
             }
         }
         */
