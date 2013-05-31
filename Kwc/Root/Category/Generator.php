@@ -25,32 +25,39 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         if (!isset($this->_pageDataCache[$id])) {
 
-            Kwf_Benchmark::count('GenPage: loadPageData');
-            $cols = array('id', 'pos', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id');
-            if ($this->_useMobileBreakpoints) $cols[] = 'device_visible';
-            $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
-            if ($ret) {
-                if ($ret['is_home']) $ret['visible'] = 1;
-                $ret['parent_visible'] = $ret['visible'];
-                $i = $ret['parent_id'];
-                $ret['parent_ids'] = array($i);
-                while (is_numeric($i)) {
-                    $pd = $this->_getPageData($i);
-                    if ($pd) {
-                        $ret['parent_ids'][] = $pd['parent_id'];
-                        if (count($ret['parent_ids']) > 20) {
-                            throw new Kwf_Exception('probably endless recursion with parents');
+            $cacheId = 'pd-'.$id;
+            $ret = Kwf_Cache_Simple::fetch($cacheId);
+            if ($ret === false) {
+                Kwf_Benchmark::count('GenPage: loadPageData');
+                $cols = array('id', 'pos', 'is_home', 'name', 'filename', 'visible', 'component', 'hide', 'custom_filename', 'parent_id');
+                if ($this->_useMobileBreakpoints) $cols[] = 'device_visible';
+                $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
+                if ($ret) {
+                    if ($ret['is_home']) $ret['visible'] = 1;
+                    $ret['parent_visible'] = $ret['visible'];
+                    $i = $ret['parent_id'];
+                    $ret['parent_ids'] = array($i);
+                    while (is_numeric($i)) {
+                        $pd = $this->_getPageData($i);
+                        if ($pd) {
+                            $ret['parent_ids'][] = $pd['parent_id'];
+                            if (count($ret['parent_ids']) > 20) {
+                                throw new Kwf_Exception('probably endless recursion with parents');
+                            }
+                            $ret['visible'] = $ret['parent_visible'] && $pd['visible'];
+                            $i = $pd['parent_id'];
+                        } else {
+                            //page seems to be floating (without parent)
+                            $ret = false;
+                            break;
                         }
-                        $ret['visible'] = $ret['parent_visible'] && $pd['visible'];
-                        $i = $pd['parent_id'];
-                    } else {
-                        //page seems to be floating (without parent)
-                        $ret = false;
-                        break;
                     }
+                } else {
+                    $ret = false;
                 }
+                Kwf_Cache_Simple::add($cacheId, $ret === false ? null : $ret);
             } else {
-                $ret = false;
+                if ($ret === null) $ret = false; //TODO, null vs. false??
             }
             $this->_pageDataCache[$id] = $ret;
         }

@@ -63,10 +63,25 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
                 );
             }
         }
+
+        if ($event->isDirty('parent_id', 'visible')) {
+            $this->_deletePageDataCacheRecursive($event->row->id);
+        }
+    }
+
+    private function _deletePageDataCacheRecursive($id)
+    {
+        foreach ($this->_getGenerator()->getPageChildIds() as $i) {
+            Kwf_Cache_Simple::delete('pd-'.$i);
+        }
     }
 
     public function onPageDataChanged(Kwf_Component_Event_Row_Abstract $event)
     {
+        Kwf_Cache_Simple::delete('pd-'.$event->row->id);
+        if ($event instanceof Kwf_Component_Event_Row_Deleted) {
+            $this->_deletePageDataCacheRecursive($event->row->id);
+        }
         $this->_getGenerator()->pageDataChanged();
     }
 
