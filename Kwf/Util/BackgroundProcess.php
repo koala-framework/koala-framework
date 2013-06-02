@@ -11,6 +11,7 @@ class Kwf_Util_BackgroundProcess
         $fi = pathinfo($outputFile);
 
         return array(
+            'backgroundProcessRunning' => true,
             'outputFile' => $fi['filename'],
             'pid' => $pid,
         );

@@ -9,15 +9,34 @@ Kwf.Utils.BackgroundProcess = {
             params: options.params,
             bgOptions: options,
             success: function(response, o, r) {
-                o.bgOptions.pid = r.pid;
-                o.bgOptions.outputFile = r.outputFile;
-                if (options.progress) {
-                    this._showProgress(options);
+                if (r.backgroundProcessRunning) {
+                    o.bgOptions.pid = r.pid;
+                    o.bgOptions.outputFile = r.outputFile;
+                } else {
+                    //no background process was started, request finished
+                    if (o.bgOptions.progressBar) o.bgOptions.progressBar.destroy();
+                    if (o.bgOptions.currentStatusRequest) {
+                        Ext.Ajax.abort(o.bgOptions.currentStatusRequest);
+                    }
+                    if (o.bgOptions.success) o.bgOptions.success.call(o.bgOptions.scope || window, response, o, r);
+                    o.bgOptions.finished = true;
                 }
-                this._doProgressStatusRequest.defer(1500, this, [ o.bgOptions ]); //do that in any case, even if we don't show progress dialog
+            },
+            failure: function() {
+                if (o.bgOptions.progressBar) o.bgOptions.progressBar.destroy();
+                if (o.bgOptions.currentStatusRequest) {
+                    Ext.Ajax.abort(o.bgOptions.currentStatusRequest);
+                }
+                if (o.bgOptions.failure) o.bgOptions.failure.call(o.bgOptions.scope || window);
+                o.bgOptions.finished = true;
             },
             scope: this
         });
+
+        if (options.progress) {
+            this._showProgress(options);
+        }
+        this._doProgressStatusRequest.defer(500, this, [ options ]); //do that in any case, even if we don't show progress dialog
     },
 
     _showProgress: function(options)
@@ -30,13 +49,15 @@ Kwf.Utils.BackgroundProcess = {
 
     _doProgressStatusRequest: function(options)
     {
-        Ext.Ajax.request({
+        if (options.finished) return;
+        var params = {
+            progressNum: options.progressNum
+        };
+        if (options.pid) params.pid = options.pid;
+        if (options.outputFile) params.outputFile = options.outputFile;
+        options.currentStatusRequest = Ext.Ajax.request({
             url: '/kwf/json-progress-status',
-            params: {
-                progressNum: options.progressNum,
-                pid: options.pid,
-                outputFile: options.outputFile
-            },
+            params: params,
             bgOptions: options,
             success: function(response, o, r) {
                 if (r.bgFinished) {
