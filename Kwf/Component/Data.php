@@ -1240,6 +1240,21 @@ class Kwf_Component_Data
         return $this->_languageCache;
     }
 
+    public function getSubroot()
+    {
+        $c = $this;
+        while (true) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'subroot')) {
+                break;
+            }
+            if ($c->componentId == 'root') {
+                break;
+            }
+            $c = $c->parent;
+        }
+        return $c;
+    }
+
     /**
      * Returns if this component is visible
      *
