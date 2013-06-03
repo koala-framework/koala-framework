@@ -199,6 +199,7 @@ class Kwf_Component_Abstract_Admin
 
         $cacheId = 'componentsWithDependsOnRow';
         if (!$componentsWithDependsOnRow = Kwf_Cache_SimpleStatic::fetch($cacheId)) {
+            $componentsWithDependsOnRow = array();
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
                 $a = Kwc_Admin::getInstance($c);
                 if ($a instanceof Kwf_Component_Abstract_Admin_Interface_DependsOnRow) {
