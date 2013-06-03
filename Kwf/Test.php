@@ -13,7 +13,7 @@ class Kwf_Test
         if (Zend_Registry::get('config')->debug->querylog) {
             $profiler = new Kwf_Db_Profiler(true);
             $db->setProfiler($profiler);
-        } else if (Zend_Registry::get('config')->debug->benchmark || Zend_Registry::get('config')->debug->benchmarkLog) {
+        } else if (Zend_Registry::get('config')->debug->benchmark || Zend_Registry::get('config')->debug->benchmarkCounter) {
             $profiler = new Kwf_Db_Profiler_Count(true);
             $db->setProfiler($profiler);
         }
