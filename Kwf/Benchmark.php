@@ -134,126 +134,202 @@ class Kwf_Benchmark
     {
         Kwf_Benchmark::checkpoint('shutDown');
 
-        if (isset($_COOKIE['unitTest'])) return;
         if (!self::$_enabled) return;
         self::disable();
         self::$_logEnabled = false;
-        if (PHP_SAPI != 'cli') {
+
+        $execTime = microtime(true) - self::$startTime;
+        if (function_exists('memory_get_peak_usage')) {
+            $memoryUsage = memory_get_peak_usage();
+        } else {
+            $memoryUsage = memory_get_usage();
+        }
+        $load = @file_get_contents('/proc/loadavg');
+        $load = explode(' ', $load);
+        $load = $load[0];
+
+        $benchmarkOutput = array();
+        if ($execTime < 1) {
+            $benchmarkOutput[] = round($execTime*1000)." msec";
+        } else {
+            $benchmarkOutput[] = round($execTime, 3)." sec";
+        }
+        if ($load) $benchmarkOutput[] = "Load: ". $load;
+        $benchmarkOutput[] = "Memory: ".round($memoryUsage/1024)." kb";
+        if (Zend_Registry::get('dao') && Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db')) {
+            if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+                $benchmarkOutput[] = "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount();
+            } else {
+                $benchmarkOutput[] = "DB-Queries: (no profiler used)";
+            }
+        } else {
+            $benchmarkOutput[] = "DB-Queries: (none)";
+        }
+        if (PHP_SAPI != 'cli' && Kwf_Config::getValue('debug.benchmark')) {
             echo '<div class="outerBenchmarkBox">';
             echo '<div class="innerBenchmarkBox">';
-            $t = microtime(true) - self::$startTime;
-            if ($t < 1) {
-                echo round($t*1000)." msec<br />\n";
-            } else {
-                echo round($t, 3)." sec<br />\n";
+            foreach ($benchmarkOutput as $line) {
+                echo "$line<br />\n";
             }
-            $load = @file_get_contents('/proc/loadavg');
-            $load = explode(' ', $load);
-            echo "Load: ". $load[0]."<br />\n";
-            if (function_exists('memory_get_peak_usage')) {
-                echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
-            } else {
-                echo "Memory: ".round(memory_get_usage()/1024)." kb<br />\n";
-            }
-            if (Zend_Registry::get('dao') && Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db')) {
-                if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
-                    echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
-                } else {
-                    echo "DB-Queries: (no profiler used)<br />\n";
+        }
+        if (Kwf_Config::getValue('debug.benchmarklog')) {
+            $out = date('Y-m-d H:i:s')."\n";
+            $out .= Kwf_Setup::getRequestPath()."\n";
+            $out .= implode("\n", $benchmarkOutput)."\n";
+            file_put_contents('benchmarklog', $out);
+        }
+
+        if (Kwf_Config::getValue('debug.benchmark') && PHP_SAPI != 'cli') {
+            echo self::_getCounterOutput(self::$_counter, true);
+            if (self::$benchmarks) {
+                echo "<br /><b>Benchmarks:</b><br/>";
+                foreach (self::$benchmarks as $i) {
+                    echo "<a style=\"display:block;\" href=\"#\" onclick=\"if(this.nextSibling.nextSibling.style.display=='none') { this.open=true; this.nextSibling.nextSibling.style.display='block'; this.nextSibling.style.display=''; } else { this.open=false; this.nextSibling.nextSibling.style.display='none';this.nextSibling.style.display='none'; } return(false); }\"
+                                                                onmouseover=\"if(!this.open) this.nextSibling.style.display=''\"
+                                                                onmouseout=\"if(!this.open) this.nextSibling.style.display='none'\">";
+                    echo "{$i->identifier} (".round($i->duration, 3)." sec)</a>";
+                    echo "<div style=\"display:none;margin-left:10px\">";
+                    echo $i->addInfo."<br/>";
+                    echo implode('<br />', $i->getOutput());
+                    echo "</div>";
+                    echo "<div style=\"display:none;margin-left:10px\">";
+                    echo self::_getCounterOutput($i->counter, true);
+                    echo "</div>";
                 }
-            } else {
-                echo "DB-Queries: (none)<br />\n";
             }
         }
-        self::_outputCounter(self::$_counter);
-        if (self::$benchmarks && PHP_SAPI != 'cli') {
-            echo "<br /><b>Benchmarks:</b><br/>";
-            foreach (self::$benchmarks as $i) {
-                echo "<a style=\"display:block;\" href=\"#\" onclick=\"if(this.nextSibling.nextSibling.style.display=='none') { this.open=true; this.nextSibling.nextSibling.style.display='block'; this.nextSibling.style.display=''; } else { this.open=false; this.nextSibling.nextSibling.style.display='none';this.nextSibling.style.display='none'; } return(false); }\"
-                                                            onmouseover=\"if(!this.open) this.nextSibling.style.display=''\"
-                                                            onmouseout=\"if(!this.open) this.nextSibling.style.display='none'\">";
-                echo "{$i->identifier} (".round($i->duration, 3)." sec)</a>";
-                echo "<div style=\"display:none;margin-left:10px\">";
-                echo $i->addInfo."<br/>";
-                echo implode('<br />', $i->getOutput());
-                echo "</div>";
-                echo "<div style=\"display:none;margin-left:10px\">";
-                self::_outputCounter($i->counter);
-                echo "</div>";
-            }
-        }
-        echo "<table style=\"font-size: 10px\">";
-        echo "<tr><th>ms</th><th>%</th><th>Checkpoint</th></tr>";
-        $sum = 0;
-        foreach (self::$_checkpoints as $checkpoint) {
-            $sum += $checkpoint[0];
-        }
-        foreach (self::$_checkpoints as $i=>$checkpoint) {
-            echo "<tr>";
-            echo "<td>".round($checkpoint[0]*1000)."</td>";
-            echo "<td>".round(($checkpoint[0]/$sum)*100)."</td>";
-            echo "<td>".$checkpoint[1]."</td>";
-            echo "</tr>";
-            if (isset(self::$_subCheckpoints[$i])) {
-                $subCheckpoints = array();
-                foreach (self::$_subCheckpoints[$i] as $cp) {
-                    $subCheckpoints[0][] = $cp[0];
-                    $subCheckpoints[1][] = $cp[1];
+
+        if (Kwf_Config::getValue('debug.benchmarklog')) {
+            $out = self::_getCounterOutput(self::$_counter, false);
+            if (self::$benchmarks) {
+                $out .= "\nBenchmarks:\n";
+                foreach (self::$benchmarks as $i) {
+                    $out .= "{$i->identifier} (".round($i->duration, 3)." sec)\n";
+                    $out .= "    ".$i->addInfo."\n";
+                    $out .= implode("\n    ", $i->getOutput());
+                    $out .= self::_getCounterOutput($i->counter, true);
+                    $out .= "\n";
                 }
-                array_multisort($subCheckpoints[0], SORT_DESC, SORT_NUMERIC, $subCheckpoints[1]);
-                foreach (array_keys($subCheckpoints[0]) as $k) {
-                    $percent = ($subCheckpoints[0][$k]/$sum)*100;
-                    if ($percent > 1) {
-                        echo "<tr>";
-                        echo "<td>".round($subCheckpoints[0][$k]*1000)."</td>";
-                        echo "<td>".round($percent)."</td>";
-                        echo "<td>&nbsp;&nbsp;".$subCheckpoints[1][$k]."</td>";
-                        echo "</tr>";
+            }
+            file_put_contents('benchmarklog', $out, FILE_APPEND);
+        }
+
+
+        if (Kwf_Config::getValue('debug.benchmark') && PHP_SAPI != 'cli') {
+            echo "<table style=\"font-size: 10px\">";
+            echo "<tr><th>ms</th><th>%</th><th>Checkpoint</th></tr>";
+            $sum = 0;
+            foreach (self::$_checkpoints as $checkpoint) {
+                $sum += $checkpoint[0];
+            }
+            foreach (self::$_checkpoints as $i=>$checkpoint) {
+                echo "<tr>";
+                echo "<td>".round($checkpoint[0]*1000)."</td>";
+                echo "<td>".round(($checkpoint[0]/$sum)*100)."</td>";
+                echo "<td>".$checkpoint[1]."</td>";
+                echo "</tr>";
+                if (isset(self::$_subCheckpoints[$i])) {
+                    $subCheckpoints = array();
+                    foreach (self::$_subCheckpoints[$i] as $cp) {
+                        $subCheckpoints[0][] = $cp[0];
+                        $subCheckpoints[1][] = $cp[1];
+                    }
+                    array_multisort($subCheckpoints[0], SORT_DESC, SORT_NUMERIC, $subCheckpoints[1]);
+                    foreach (array_keys($subCheckpoints[0]) as $k) {
+                        $percent = ($subCheckpoints[0][$k]/$sum)*100;
+                        if ($percent > 1) {
+                            echo "<tr>";
+                            echo "<td>".round($subCheckpoints[0][$k]*1000)."</td>";
+                            echo "<td>".round($percent)."</td>";
+                            echo "<td>&nbsp;&nbsp;".$subCheckpoints[1][$k]."</td>";
+                            echo "</tr>";
+                        }
                     }
                 }
             }
+            echo "</table>";
+            echo "</div>";
+            echo "</div>";
         }
-        echo "</table>";
-        if (PHP_SAPI != 'cli') {
-            echo "</div>";
-            echo "</div>";
+        if (Kwf_Config::getValue('debug.benchmarklog')) {
+            $out = "\n";
+            $out .= "  ms  % Checkpoint\n";
+            $sum = 0;
+            foreach (self::$_checkpoints as $checkpoint) {
+                $sum += $checkpoint[0];
+            }
+            foreach (self::$_checkpoints as $i=>$checkpoint) {
+                $ms = round($checkpoint[0]*1000);
+                $out .= str_pad(round($checkpoint[0]*1000), 4, ' ', STR_PAD_LEFT);
+                $out .= str_pad(round(($checkpoint[0]/$sum)*100), 3, ' ', STR_PAD_LEFT);
+                $out .= " ".$checkpoint[1]."";
+                $out .= "\n";
+                if (isset(self::$_subCheckpoints[$i])) {
+                    $subCheckpoints = array();
+                    foreach (self::$_subCheckpoints[$i] as $cp) {
+                        $subCheckpoints[0][] = $cp[0];
+                        $subCheckpoints[1][] = $cp[1];
+                    }
+                    array_multisort($subCheckpoints[0], SORT_DESC, SORT_NUMERIC, $subCheckpoints[1]);
+                    foreach (array_keys($subCheckpoints[0]) as $k) {
+                        $percent = ($subCheckpoints[0][$k]/$sum)*100;
+                        if ($percent > 1) {
+                            $out .= ' '.str_pad(round($subCheckpoints[0][$k]*1000), 4, ' ', STR_PAD_LEFT);
+                            $out .= str_pad(round($percent), 3, ' ', STR_PAD_LEFT);
+                            $out .= '  '.$subCheckpoints[1][$k];
+                            $out .= "\n";
+                        }
+                    }
+                }
+            }
+            file_put_contents('benchmarklog', $out, FILE_APPEND);
         }
     }
-    private static function _outputCounter($counter)
+
+    private static function _getCounterOutput($counter, $useHtml)
     {
-        echo "\n";
+        $ret = "\n";
         if (!is_array($counter)) return;
         foreach ($counter as $k=>$i) {
             if (is_array($i)) {
-                if (PHP_SAPI != 'cli') {
-                    echo "<a style=\"display:block;\" href=\"#\" onclick=\"if(this.nextSibling.style.display=='none') this.nextSibling.style.display='block'; else this.nextSibling.style.display='none';return(false);\">";
-                    echo "$k: ".count($i)."</a>";
-                    echo "<ul style=\"display:none\">";
+                if ($useHtml) {
+                    $ret .= "<a style=\"display:block;\" href=\"#\" onclick=\"if(this.nextSibling.style.display=='none') this.nextSibling.style.display='block'; else this.nextSibling.style.display='none';return(false);\">";
+                    $ret .= "$k: ".count($i)."</a>";
+                    $ret .= "<ul style=\"display:none\">";
                     foreach ($i as $j) {
-                        echo "<li>";
+                        $ret .= "<li>";
                         if ($j['bt']) {
-                            echo "<strong style=\"font-weight:bold\">{$j['value']}</strong><br />{$j['bt']}";
+                            $ret .= "<strong style=\"font-weight:bold\">{$j['value']}</strong><br />{$j['bt']}";
                         } else {
-                            echo $j['value'];
+                            $ret .= $j['value'];
                         }
-                        echo "</li>";
+                        $ret .= "</li>";
                     }
-                    echo "</ul>";
+                    $ret .= "</ul>";
                 } else {
-                    echo "$k: (".count($i).') ';
+                    $ret .= "$k: (".count($i).') ';
+                    $len = '';
                     foreach ($i as $j) {
-                        echo $j['value'].' ';
+                        $v = $j['value'].' ';
+                        $len += strlen($v);
+                        if ($len > 1000) {
+                            $ret .= "\n    ";
+                            $len = 0;
+                        }
+                        $ret .= $v;
                     }
-                    echo "\n";
+                    $ret = trim($ret);
+                    $ret .= "\n";
                 }
             } else {
-                if (PHP_SAPI != 'cli') {
-                    echo "$k: $i<br />\n";
+                if ($useHtml) {
+                    $ret .= "$k: $i<br />\n";
                 } else {
-                    echo "$k: $i\n";
+                    $ret .= "$k: $i\n";
                 }
             }
         }
+        return $ret;
     }
 
     public static function info($msg)
