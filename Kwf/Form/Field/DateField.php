@@ -16,8 +16,6 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         $this->setXtype('datefield');
     }
 
-    //setHideDatePicker in Frontend only
-
     protected function _getTrlProperties()
     {
         $ret = parent::_getTrlProperties();
@@ -65,8 +63,24 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
     public function getFrontendMetaData()
     {
         $ret = parent::getFrontendMetaData();
-        $ret['hideDatePicker'] = $this->getHideDatePicker();
+        $ret['hideTrigger'] = $this->getHideTrigger();
         return $ret;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function getHideDatePicker()
+    {
+        return $this->getHideTrigger();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function setHideDatePicker($enable)
+    {
+        return $this->setHideTrigger($enable);
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
@@ -89,5 +103,15 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input class=\"$class\" type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
+    }
+
+    /**
+     * Hides the date-picker icon next to textarea if set to false
+     * @param boolean
+     * @return $this
+     */
+    public function setHideTrigger($value)
+    {
+        return $this->setProperty('hideTrigger', $value);
     }
 }
