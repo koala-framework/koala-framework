@@ -115,7 +115,7 @@ class Kwf_Util_Setup
             }
             $ret .= "}\n";
         }
-        if (Kwf_Config::getValue('debug.benchmarkLog')) {
+        if (Kwf_Config::getValue('debug.benchmarkCounter')) {
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             $ret .= "Kwf_Benchmark::enableLog();\n";
         }

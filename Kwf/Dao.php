@@ -63,7 +63,7 @@ class Kwf_Dao
             } else if (Kwf_Config::getValue('debug.queryTimeout')) {
                 $profiler = new Kwf_Db_Profiler_Timeout(Kwf_Config::getValue('debug.queryTimeout'), true);
                 $this->_db[$db]->setProfiler($profiler);
-            } else if (Kwf_Config::getValue('debug.benchmark') || Kwf_Config::getValue('debug.benchmarkLog')) {
+            } else if (Kwf_Config::getValue('debug.benchmark') || Kwf_Config::getValue('debug.benchmarkCounter')) {
                 $profiler = new Kwf_Db_Profiler_Count(true);
                 $this->_db[$db]->setProfiler($profiler);
             }
