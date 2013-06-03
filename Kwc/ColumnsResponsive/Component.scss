@@ -2,7 +2,7 @@
 $gutter-width   : 0em;
 $grid-padding   : 0em;
 
-.cssClass {
+.cssClass.gt480 {
     &.col2col-50_50 {
         .listItem.span1 {
             @include span-columns(1, 2);
@@ -51,23 +51,5 @@ $grid-padding   : 0em;
 
     > .listItem.kwcLast {
         @include omega;
-    }
-
-    @media (max-width: 480px) {
-        &.col2col-50_50,
-        &.col2col-33_66,
-        &.col2col-66_33,
-        &.col2col-25_75,
-        &.col2col-75_25,
-        &.col3col-33_33_33,
-        &.col3col-50_25_25,
-        &.col3col-25_50_25,
-        &.col3col-25_25_50 {
-            .listItem.span1,
-            .listItem.span2,
-            .listItem.span3 {
-                @include span-columns(1, 1);
-            }
-        }
     }
 }

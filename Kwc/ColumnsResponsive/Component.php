@@ -7,6 +7,10 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
         $ret['componentName'] = trlKwfStatic('Columns');
         $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
 
+        $ret['assets']['files'][] = 'kwf/Kwc/ColumnsResponsive/Component.js';
+        $ret['assets']['dep'][] = 'jQuery';
+        $ret['assets']['dep'][] = 'KwfOnReady';
+
         $ret['needsParentComponentClass'] = true;
         $ret['generators']['child'] = array(
             'class' => 'Kwc_ColumnsResponsive_Generator',
