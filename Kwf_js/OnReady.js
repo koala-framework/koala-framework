@@ -1,4 +1,5 @@
 Kwf.contentReadyHandlers = [];
+Kwf.onElementReadyHandlers = [];
 
 /**
  * Register a function that will be called when content is loaded or shown
@@ -49,13 +50,28 @@ if (!Kwf.isApp) {
  * @param options see onContentReady options, additionally checkVisibility (boolean, only call onElementReady when element is visible)
  */
 Kwf.onElementReady = function(selector, fn, scope, options) {
-    Kwf.onContentReady(function(addedEl, renderConfig) {
-        if (!options) { options = {}; }
-        if (typeof options.newRender == 'boolean' && !options.newRender) return;
-        Ext.query(selector, addedEl).each(function(el) {
-            if (options.checkVisibility && !Ext.fly(el).isVisible(true)) return;
-            if (el.initDone) return;
-            el.initDone = true;
+    Kwf.onElementReadyHandlers.push({
+        selector: selector,
+        fn: fn,
+        scope: scope,
+        options: options || {},
+        num: Kwf.onElementReadyHandlers.length //unique number, used to mark in initDone
+    });
+};
+
+Kwf.onContentReady(function(addedEl, renderConfig) {
+    Kwf.onElementReadyHandlers.sort(function(a, b) {
+        return (a.options.priority || 0) - (b.options.priority || 0);
+    });
+    for (var i=0; i<Kwf.onElementReadyHandlers.length; i++) {
+        var hndl = Kwf.onElementReadyHandlers[i];
+        Ext.query(hndl.selector, addedEl).each(function(el) {
+            if (hndl.options.checkVisibility && !Ext.fly(el).isVisible(true)) return;
+
+            if (!el.initDone) el.initDone = {};
+            if (el.initDone[hndl.num]) return;
+            el.initDone[hndl.num] = true;
+
             el = Ext.get(el);
             var config = {};
             var configEl = el.child('> input[type="hidden"]')
@@ -64,7 +80,7 @@ Kwf.onElementReady = function(selector, fn, scope, options) {
                     config = Ext.decode(configEl.getValue());
                 } catch (err) {}
             }
-            fn.call(scope, el, config);
+            hndl.fn.call(hndl.scope, el, config);
         }, this);
-    }, this, options);
-};
+    }
+}, this);
