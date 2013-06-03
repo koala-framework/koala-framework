@@ -50,7 +50,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
         $ret['imageCaption'] = false;
-        $ret['altText'] = false;
+        $ret['altText'] = true;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['useDataUrl'] = false;
