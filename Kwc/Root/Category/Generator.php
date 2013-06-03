@@ -23,7 +23,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     private function _getPageData($id)
     {
-        if (!isset($this->_pageDataCache[$id])) {
+        if (!array_key_exists($id, $this->_pageDataCache)) {
 
             $cacheId = 'pd-'.$id;
             $ret = Kwf_Cache_Simple::fetch($cacheId);
@@ -48,16 +48,14 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                             $i = $pd['parent_id'];
                         } else {
                             //page seems to be floating (without parent)
-                            $ret = false;
+                            $ret = null;
                             break;
                         }
                     }
                 } else {
-                    $ret = false;
+                    $ret = null;
                 }
-                Kwf_Cache_Simple::add($cacheId, $ret === false ? null : $ret);
-            } else {
-                if ($ret === null) $ret = false; //TODO, null vs. false??
+                Kwf_Cache_Simple::add($cacheId, $ret);
             }
             $this->_pageDataCache[$id] = $ret;
         }
