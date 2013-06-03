@@ -12,10 +12,11 @@ class Kwf_Component_Generator_HomeNotTopLevel_Test extends Kwc_TestAbstract
 
     public function testFromRoot()
     {
+    /*
         $c = $this->_root->getChildPages(array('home'=>true), array());
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 3);
-
+    */
         $c = $this->_root->getChildPages(array('home'=>true));
         $this->assertEquals(count($c), 0);
     }

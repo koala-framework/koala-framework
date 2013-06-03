@@ -40,7 +40,7 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
         $ids = array($c->dbId);
         $c = $c->getPageOrRoot();
         foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $ids = array_merge($ids, $gen->getPageChildIds($c->dbId)); //similar to master, but also invisible ones
+            $ids = array_merge($ids, $gen->getRecursivePageChildIds($c->dbId)); //similar to master, but also invisible ones
         }
         return $ids;
     }

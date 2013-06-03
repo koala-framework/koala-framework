@@ -6,10 +6,10 @@ class Kwf_Component_Generator_Unique_Root extends Kwf_Component_NoCategoriesRoot
         $ret = parent::getSettings();
 
         $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(
-            array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Home', 'filename' => 'home',
-                  'parent_id'=>'root', 'component'=>'page1', 'is_home'=>true, 'category' =>'main', 'hide'=>false),
-            array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
-                  'parent_id'=>1, 'component'=>'page2', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Home', 'filename' => 'home', 'custom_filename' => false,
+                  'parent_id'=>'root', 'component'=>'page1', 'is_home'=>true, 'category' =>'main', 'hide'=>false, 'parent_subroot_id' => 'root'),
+            array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo', 'custom_filename' => false,
+                  'parent_id'=>1, 'component'=>'page2', 'is_home'=>false, 'category' =>'main', 'hide'=>false, 'parent_subroot_id' => 'root'),
         )));
         $ret['generators']['page']['component'] = array(
             'page1' => 'Kwf_Component_Generator_Unique_TablePage1',

@@ -21,11 +21,11 @@ class Kwf_Component_Cache_ParentContent_RootBoxSelect_Component extends Kwf_Comp
             ))
         );
         $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(
-            array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'1', 'filename' => '1',
-                'parent_id'=>'root', 'component'=>'empty', 'is_home'=>false, 'hide'=>false
+            array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'1', 'filename' => '1', 'custom_filename'=>false,
+                'parent_id'=>'root', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id' => 'root'
             ),
-            array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'2', 'filename' => '2',
-                'parent_id'=>1, 'component'=>'empty', 'is_home'=>false, 'hide'=>false
+            array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'2', 'filename' => '2', 'custom_filename'=>false,
+                'parent_id'=>1, 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id' => 'root'
             )
 
         )));

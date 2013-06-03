@@ -7,10 +7,10 @@ class Kwf_Component_Cache_ParentContent_RootAlternative_Component extends Kwf_Co
         
         $ret['generators']['box']['component']['box'] = 'Kwf_Component_Cache_ParentContent_RootAlternative_Box_Component';
         $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(
-            array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'1', 'filename' => '1',
+            array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'1', 'filename' => '1', 'custom_filename'=>false, 'parent_subroot_id' => 'root',
                 'parent_id'=>'root', 'component'=>'empty', 'is_home'=>false, 'hide'=>false
             ),
-            array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'2', 'filename' => '2',
+            array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'2', 'filename' => '2', 'custom_filename'=>false, 'parent_subroot_id' => 'root',
                 'parent_id'=>1, 'component'=>'empty', 'is_home'=>false, 'hide'=>false
             )
 
