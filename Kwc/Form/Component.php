@@ -37,6 +37,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['dep'][] = 'ExtDateMenu';
         $ret['assets']['dep'][] = 'KwfEvents';
         $ret['assets']['dep'][] = 'KwfClearOnFocus';
+        $ret['assets']['dep'][] = 'jQuery';
         $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Abstract.js';
