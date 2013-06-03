@@ -15,8 +15,21 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['paragraphs'] = $this->getData()
-            ->getChildComponents(array('generator'=>'paragraphs'));
+        $paragraphs = $this->getData()->getChildComponents(array('generator'=>'paragraphs'));
+
+        $paragraphsById = array();
+        foreach ($paragraphs as $c) {
+            $paragraphsById[$c->id] = $c;
+        }
+
+        foreach(array_keys($ret['paragraphs']) as $key) {
+            $id = $ret['paragraphs'][$key]['data']->id;
+            if (isset($paragraphsById[$id])) {
+                $ret['paragraphs'][$key]['data'] = $paragraphsById[$id];
+            } else {
+                unset($ret['paragraphs'][$key]);
+            }
+        }
         return $ret;
     }
 

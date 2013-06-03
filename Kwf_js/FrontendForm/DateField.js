@@ -1,6 +1,6 @@
 Kwf.FrontendForm.DateField = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
-        if (!this.form.getFieldConfig(this.getFieldName()).hideDatePicker) {
+        if (!this.form.getFieldConfig(this.getFieldName()).hideTrigger) {
             var icon = this.el.createChild({
                 tag: 'a',
                 cls: 'icon',

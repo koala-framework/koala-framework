@@ -50,7 +50,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
         $ret['imageCaption'] = false;
-        $ret['altText'] = false;
+        $ret['altText'] = true;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['useDataUrl'] = false;
@@ -59,7 +59,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
         $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Image/Component.js';
-        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
     }

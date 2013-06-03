@@ -157,8 +157,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         return $class;
     }
 
-    //overrridden in Kwc_Root_Category_GeneratorEvents
-    protected function _getMasterComponentsFromMasterRow($row, $select)
+    private function _getMasterComponentsFromMasterRow($row, $select)
     {
         if ($this->_getChainedGenerator()->hasSetting('dbIdShortcut') && $this->_getChainedGenerator()->getSetting('dbIdShortcut')) {
             $dbId = $this->_getChainedGenerator()->getSetting('dbIdShortcut') .
@@ -173,7 +172,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
             $cls = $this->_getMasterClassFromMasterRow($row);
             $select['id'] = $this->_getChainedGenerator()->getIdSeparator().$row->id;
             return Kwf_Component_Data_Root::getInstance()
-                ->getComponentsByClass($cls, $select);  // ignoreVisible is necessary to be able to fire Removed events when visibile got false
+                ->getComponentsBySameClass($cls, $select);  // ignoreVisible is necessary to be able to fire Removed events when visibile got false
         }
     }
 

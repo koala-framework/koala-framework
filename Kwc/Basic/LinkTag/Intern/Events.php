@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
 {
-    private $_pageIds;
+    private static $_pageIds;
 
     public function getListeners()
     {
@@ -44,7 +44,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         $ids = array($c->dbId);
         $c = $c->getPageOrRoot();
         foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $ids = array_merge($ids, $gen->getVisiblePageChildIds($c->dbId));
+            $ids = array_merge($ids, $gen->getRecursiveVisiblePageChildIds($c->dbId));
         }
         return $ids;
     }
@@ -52,35 +52,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
         foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            foreach ($this->_getDbIds($childPageId, true) as $dbId) {
-                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                    if ($c->isPage) {
-                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
-                    }
-                }
-            }
-        }
-    }
-
-    public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
-    {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            foreach ($this->_getDbIds($childPageId, true) as $dbId) {
-                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                    if ($c->isPage) {
-                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
-                    }
-                }
-            }
-        }
-    }
-
-    public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
-    {
-        foreach ($this->_getDbIds($event->component->dbId, false) as $dbId) {
-            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
+            foreach ($this->_getComponentsForTarget($childPageId, true) as $c) {
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
                 if ($c->isPage) {
                     $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
@@ -89,37 +61,69 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         }
     }
 
+    public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
+            foreach ($this->_getComponentsForTarget($childPageId, true) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+                if ($c->isPage) {
+                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                }
+            }
+        }
+    }
+
+    public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
+    {
+        foreach ($this->_getComponentsForTarget($event->component->dbId, false) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+            if ($c->isPage) {
+                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+            }
+        }
+    }
+
     protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdate($c, $event);
-        $this->_pageIds = null;
+        self::$_pageIds[$this->_class] = null;
     }
 
-    private function _getDbIds($targetId, $includeSubpages = true)
+    private function _getComponentsForTarget($targetId, $includeSubpages)
     {
-        if (!$this->_pageIds) {
+        return self::getComponentsForTarget($this->_class, $targetId, $includeSubpages);
+    }
+
+    //used in trl
+    public static function getComponentsForTarget($componentClass, $targetId, $includeSubpages)
+    {
+        if (!isset(self::$_pageIds[$componentClass])) {
             $ids = array();
-            $model = Kwc_Abstract::createOwnModel($this->_class);
+            $model = Kwc_Abstract::createOwnModel($componentClass);
             foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY) as $row) {
                 $target = $row['target'];
                 if (!isset($ids[$target])) $ids[$target] = array();
                 $ids[$target][] = $row['component_id'];
             }
-            $this->_pageIds = $ids;
+            self::$_pageIds[$componentClass] = $ids;
         }
         $ret = array();
-        foreach ($this->_pageIds as $targetPageId => $dbIds) {
+        foreach (self::$_pageIds[$componentClass] as $targetPageId => $dbIds) {
+            $ids = array();
             if ($includeSubpages) {
                 if ((string)$targetPageId == (string)$targetId
                     || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'-'
                     || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'_'
                 ) {
-                    $ret = array_merge($ret, $dbIds);
+                    $ids = $dbIds;
                 }
             } else {
                 if ((string)$targetPageId === (string)$targetId) {
-                    $ret = array_merge($ret, $dbIds);
+                    $ids = $dbIds;
                 }
+            }
+            foreach ($ids as $dbId) {
+                $ret = array_merge($ret, Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId));
             }
         }
         return $ret;

@@ -6,6 +6,8 @@ class Kwf_Assets_Loader
      */
     private $_dep = null;
     private $_config = null;
+    private $_scssParser = null;
+    private $_scssParserOptions = null;
 
     static public function load()
     {
@@ -87,7 +89,7 @@ class Kwf_Assets_Loader
             }
         } else if (substr($file, 0, 4) == 'all/') {
             $encoding = Kwf_Media_Output::getEncoding();
-            $cacheId = md5($file.$encoding.$this->_getHostForCacheId());
+            $cacheId = str_replace(array('/', '.', ':'), '_', $file).'_enc'.$encoding.$this->_getHostForCacheId();
             $cache = Kwf_Assets_Cache::getInstance();
             $cacheData = $cache->load($cacheId);
             if ($cacheData) {
@@ -153,6 +155,10 @@ class Kwf_Assets_Loader
                 } else if ($fileType == 'css' || $fileType == 'printcss') {
                     $cacheData['mimeType'] = 'text/css; charset=utf8';
                 }
+
+                //store list of generated all caches for clear-cache-watcher
+                file_put_contents('cache/assets/generated-all', $cacheId."\n", FILE_APPEND);
+
                 $cache->save($cacheData, $cacheId);
             }
             $ret['mtime'] = time();
@@ -209,8 +215,7 @@ class Kwf_Assets_Loader
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
                 $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
-                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file).
-                    Kwf_Component_Data_Root::getComponentClass();
+                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file);
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
                     if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {
@@ -273,18 +278,22 @@ class Kwf_Assets_Loader
                         }
 
                         if (substr($file, -5)=='.scss') {
-                            $options = array(
-                                'style' => 'compact',
-                                'cache' => false,
-                                'syntax' => 'scss',
-                                'debug' => true,
-                                'debug_info' => false,
-                                'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
-                                'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
-                                'extensions' => array('Compass', 'Susy', 'Kwf')
-                            );
-                            $parser = new Kwf_Util_SassParser($options);
-                            $cacheData['contents'] = $parser->toCss($cacheData['contents'], false);
+                            if (!$this->_scssParserOptions) {
+                                $this->_scssParserOptions = array(
+                                    'style' => 'compact',
+                                    'cache' => false,
+                                    'syntax' => 'scss',
+                                    'debug' => true,
+                                    'debug_info' => false,
+                                    'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
+                                    'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
+                                    'extensions' => array('Compass', 'Susy', 'Kwf')
+                                );
+                            }
+                            if (!$this->_scssParser) {
+                                $this->_scssParser = new Kwf_Util_SassParser($this->_scssParserOptions);
+                            }
+                            $cacheData['contents'] = $this->_scssParser->toCss($cacheData['contents'], false);
                         }
                     }
 

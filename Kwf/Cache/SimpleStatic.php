@@ -9,33 +9,37 @@
  */
 class Kwf_Cache_SimpleStatic
 {
+    private static $_zendCache = null;
+
+    public static function resetZendCache()
+    {
+        self::$_zendCache = null;
+    }
+
     private static function _getZendCache()
     {
-        static $cache;
-        if (!isset($cache)) {
-            $cache = new Zend_Cache_Core(array(
+        if (!isset(self::$_zendCache)) {
+            self::$_zendCache = new Zend_Cache_Core(array(
                 'lifetime' => null,
                 'write_control' => false,
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true
             ));
             if (extension_loaded('memcache')) {
-                $cache->setBackend(new Kwf_Cache_Backend_Memcached());
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
             } else {
                 //fallback to file backend (NOT recommended!)
-                $cache->setBackend(new Kwf_Cache_Backend_File(array(
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
                     'cache_dir' => 'cache/simple'
                 )));
             }
         }
-        return $cache;
+        return self::$_zendCache;
     }
 
     private static function _processId($cacheId)
     {
-        static $prefix;
-        if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
-        $cacheId = str_replace('-', '__', $prefix.$cacheId);
+        $cacheId = str_replace('-', '__', $cacheId);
         $cacheId = preg_replace('#[^a-zA-Z0-9_]#', '_', $cacheId);
         return $cacheId;
     }
@@ -61,6 +65,34 @@ class Kwf_Cache_SimpleStatic
             return apc_add($prefix.$cacheId, $data, $ttl);
         } else {
             return self::_getZendCache()->save($data, self::_processId($cacheId), array(), $ttl);
+        }
+    }
+
+    /**
+     * clear static cache with prefix, don't use except in clear-cache-watcher
+     *
+     * @internal
+     */
+    public static function clear($cacheIdPrefix)
+    {
+        if (extension_loaded('apc')) {
+            if (!class_exists('APCIterator')) {
+                throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
+            } else {
+                static $prefix;
+                if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+                $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
+                if ($it->getTotalCount() && !$it->current()) {
+                    //APCIterator is borked, delete everything
+                    //see https://bugs.php.net/bug.php?id=59938
+                    apc_clear_cache('user');
+                } else {
+                    //APCIterator seems to work, use it for deletion
+                    apc_delete($it);
+                }
+            }
+        } else {
+            throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
         }
     }
 

@@ -13,6 +13,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
+        $ret['generators']['child']['component']['header'] = null;
+        $ret['generators']['child']['component']['footer'] = null;
         $ret['componentName'] = trlKwfStatic('Form');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Submit');
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
@@ -34,6 +36,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['dep'][] = 'ExtConnection';
         $ret['assets']['dep'][] = 'ExtDateMenu';
         $ret['assets']['dep'][] = 'KwfEvents';
+        $ret['assets']['dep'][] = 'KwfClearOnFocus';
+        $ret['assets']['dep'][] = 'KwfOnReady';
+        $ret['assets']['dep'][] = 'jQuery';
         $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
         $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Abstract.js';
@@ -162,11 +167,19 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($this->isSaved() && !$this->_errors &&
-            $this->getSuccessComponent() && $this->getSuccessComponent()->isPage &&
             (!isset($postData['doNotRelocate']) || !$postData['doNotRelocate'])
         ) {
-            header('Location: ' . $this->getSuccessComponent()->url);
-            exit;
+            $success = $this->getSuccessComponent();
+            $url = null;
+            if ($success instanceof Kwf_Component_Data && $success->isPage) {
+                $url = $this->getSuccessComponent()->url;
+            } else if (is_string($success)) {
+                $url = $success;
+            }
+            if ($url) {
+                header('Location: ' . $url);
+                exit;
+            }
         }
     }
 
@@ -243,8 +256,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($ret['showSuccess']) {
+            $ret['success'] = $this->getData()->getChildComponent('-success');
+        } else {
             foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
-                $ret[$c->id] = $c;
+                if ($c->id != 'success') {
+                    $ret[$c->id] = $c;
+                }
             }
         }
 
@@ -278,7 +295,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         } else {
             $ret['action'] = $this->getData()->url;
         }
-        if (isset($_SERVER["QUERY_STRING"])) {
+        if (isset($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"]) {
             $ret['action'] .= '?' . $_SERVER["QUERY_STRING"];
         }
 
@@ -314,9 +331,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $baseParams['componentId'] = $this->getData()->componentId;
 
         $fieldConfig = array();
-        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_RecursiveFormFields($this->_form->fields));
+        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_RecursiveFormFields($this->_form->fields), RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $field) {
-            $fieldConfig[$field->getFieldName()] = (object)$field->getFrontendMetaData();
+            if ($field->getFieldName()) {
+                $fieldConfig[$field->getFieldName()] = (object)$field->getFrontendMetaData();
+            }
         }
         $errorStyle = $this->_getSetting('errorStyle');
         if (!$errorStyle) $errorStyle = Kwf_Config::getValue('kwc.form.errorStyle');

@@ -1,6 +1,9 @@
 <?php
 class Kwc_Favourites_Component extends Kwc_Abstract
 {
+    const LINK_TYPE_GRAPHICAL = 'graphical';
+    const LINK_TYPE_TEXTUAL = 'textual';
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -9,10 +12,12 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'ExtConnection';
+        $ret['assets']['dep'][] = 'KwfOnReady';
 
         $ret['placeholder']['saveFavourite'] = trlKwfStatic('save as favourite');
         $ret['placeholder']['deleteFavourite'] = trlKwfStatic('delete favourite');
         $ret['favouritesModel'] = 'Kwc_Favourites_Model';
+        $ret['linkType'] = self::LINK_TYPE_GRAPHICAL;
         return $ret;
     }
 
@@ -31,6 +36,10 @@ class Kwc_Favourites_Component extends Kwc_Abstract
             'deleteFavourite' => $this->_getPlaceholder('deleteFavourite'),
             'saveFavourite' => $this->_getPlaceholder('saveFavourite')
         );
+        $ret['linkType'] = $this->_getSetting('linkType');
+        if ($ret['linkType'] == self::LINK_TYPE_GRAPHICAL) {
+            $ret['cssClass'] .= ' kwfSwitchHoverFade';
+        }
         return $ret;
     }
 

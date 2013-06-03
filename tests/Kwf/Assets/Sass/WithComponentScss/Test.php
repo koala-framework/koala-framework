@@ -32,10 +32,10 @@ class Kwf_Assets_Sass_WithComponentScss_Test extends Kwf_Test_TestCase
         );
         $this->assertEquals($expected, $files);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_WithComponentScss:Test.css?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_WithComponentScss:Test.css");
         $this->assertContains("body { height: 50px; }\n", $c['contents']);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_WithComponentScss:Test.css?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Kwf_Trl::getInstance()->getTargetLanguage()."/Kwf_Assets_Sass_WithComponentScss:Test.css");
         $this->assertContains("body { height: 50px; }\n", $c['contents']);
 
         Kwf_Component_Data_Root::setComponentClass(null);

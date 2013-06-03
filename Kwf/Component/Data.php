@@ -17,6 +17,9 @@
  */
 class Kwf_Component_Data
 {
+    const DEVICE_VISIBLE_ALL = 'all';
+    const DEVICE_VISIBLE_HIDE_ON_MOBILE = 'hideOnMobile';
+    const DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE = 'onlyShowOnMobile';
     /**
      * @var Kwc_Abstract
      */
@@ -180,7 +183,7 @@ class Kwf_Component_Data
      */
     public function getPreviewUrl()
     {
-        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?preview');
+        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?kwcPreview');
     }
 
     public function __get($var)
@@ -1237,6 +1240,21 @@ class Kwf_Component_Data
         return $this->_languageCache;
     }
 
+    public function getSubroot()
+    {
+        $c = $this;
+        while (true) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'subroot')) {
+                break;
+            }
+            if ($c->componentId == 'root') {
+                break;
+            }
+            $c = $c->parent;
+        }
+        return $c;
+    }
+
     /**
      * Returns if this component is visible
      *
@@ -1428,5 +1446,16 @@ class Kwf_Component_Data
         $this->_childComponentsCache = array();
         $this->_recursiveGeneratorsCache = array();
         if (isset($this->_languageCache)) unset($this->_languageCache);
+    }
+
+    /**
+     * Returns on which devices this page should be visible
+     *
+     * DEVICE_VISIBLE_* constants are returned.
+     * Implement getDeviceVisible in generator to change behaviour.
+     */
+    final public function getDeviceVisible()
+    {
+        return $this->generator->getDeviceVisible($this);
     }
 }

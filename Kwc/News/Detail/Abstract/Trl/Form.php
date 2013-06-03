@@ -1,9 +1,9 @@
 <?php
 class Kwc_News_Detail_Abstract_Trl_Form extends Kwf_Form
 {
-    public function __construct($directoryClass = null)
+    public function __construct($name, $detailClass = null)
     {
-        $this->setDirectoryClass($directoryClass);
+        $this->setClass($detailClass);
         parent::__construct('details');
     }
 

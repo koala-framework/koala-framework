@@ -458,10 +458,8 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             style: 'width: ' + this.kwfMainContent.getStyle('width'),
             html: '<div class="loading"></div>'
         }, this.kwfMainContent);
-        var url = '/kwf/util/kwc/render';
-        if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
         Ext.Ajax.request({
-            url: url,
+            url: Kwf.getKwcRenderUrl(),
             params: { url: href },
             success: function(response, options) {
                 if (!this.detailEl) return;

@@ -63,6 +63,7 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
         if (!$this->_permissionFieldset) {
             $this->_permissionFieldset = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Permissions')));
             $this->_permissionFieldset->setLabelWidth(100);
+            $this->_permissionFieldset->setName('permissions');
         }
         return $this->_permissionFieldset;
     }

@@ -15,10 +15,11 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
     {
         $previous = null;
         $parent = $this->_data->parent;
-        while ($parent && !$parent->isPage) {
+        while ($parent && (!$parent->isPage || is_instance_of(Kwc_Abstract::getSetting($parent->componentClass, 'contentSender'), 'Kwf_Component_Abstract_ContentSender_Lightbox'))) {
             $previous = $parent;
             $parent = $parent->parent;
         }
+
         if (!$parent) {
             $parent = Kwf_Component_Data_Root::getInstance()->getChildPage(array('home' => true), array());
         }
@@ -61,6 +62,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             if (isset($options['height'])) $style .= "height: $options[height]px";
             $class = 'kwfLightbox';
             if (isset($options['style'])) $class .= " kwfLightbox$options[style]";
+            if (isset($options['cssClass'])) $class .= " $options[cssClass]";
             $options = htmlspecialchars(json_encode($options));
             $lightboxContent = "<div class=\"$class\">\n".
                 "<div class=\"kwfLightboxInner\" style=\"$style\">\n".

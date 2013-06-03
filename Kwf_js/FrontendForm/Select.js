@@ -1,7 +1,7 @@
 Kwf.FrontendForm.Select = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('select').each(function(input) {
-            input.on('click', function() {
+            input.on('change', function() {
                 this.fireEvent('change', this.getValue());
             }, this);
         }, this);

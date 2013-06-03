@@ -20,9 +20,11 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             ->setData(new Kwf_Data_Kwc_Frontend($this->_getParam('class')))
             ->setRenderer('component');
         $this->_columns->add(new Kwf_Grid_Column_Visible());
+        $this->_columns->add(new Kwf_Grid_Column('device_visible'))
+            ->setEditor(new Kwf_Form_Field_TextField());
         $this->_columns->add(new Kwf_Grid_Column('edit_components'))
             ->setData(new Kwf_Data_Kwc_EditComponents($this->_getParam('class')));
-     }
+    }
 
     public function jsonDataAction()
     {
@@ -65,6 +67,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $classes =$generators['paragraphs']['component'];
             $row->component = array_search($class, $classes);
             if (is_null($row->visible)) $row->visible = 0;
+            if (is_null($row->device_visible)) $row->device_visible = 'all';
             $row->pos = $this->_getParam('pos');
             $row->save();
             $id = $row->id;
@@ -104,7 +107,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception("Component with id '$id' not found");
         }
-        $session = new Zend_Session_Namespace('Kwc_Paragraphs:copy');
+        $session = new Kwf_Session_Namespace('Kwc_Paragraphs:copy');
         $session->id = $id;
     }
 
@@ -114,13 +117,13 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception("Component with id '$id' not found");
         }
-        $session = new Zend_Session_Namespace('Kwc_Paragraphs:copy');
+        $session = new Kwf_Session_Namespace('Kwc_Paragraphs:copy');
         $session->id = $id;
     }
 
     public function jsonPasteAction()
     {
-        $session = new Zend_Session_Namespace('Kwc_Paragraphs:copy');
+        $session = new Kwf_Session_Namespace('Kwc_Paragraphs:copy');
         $id = $session->id;
         if (!$id || !Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception_Client(trlKwf('Clipboard is empty'));
@@ -136,7 +139,11 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $c = $c->parent;
         }
 
-        if ($source->isPage && is_instance_of($source->componentClass, 'Kwc_Paragraphs_Component')) {
+        $sourceIsParagraphs = is_instance_of($source->componentClass, 'Kwc_Paragraphs_Component');
+        if ($source->isPage && $sourceIsParagraphs) {
+            //a whole paragraphs component is in clipboard
+            $sources = $source->getChildComponents(array('generator'=>'paragraphs', 'ignoreVisible'=>true));
+        } else if (!$source->isPage && !is_instance_of($source->parent->componentClass, 'Kwc_Paragraphs_Component')) {
             //a whole paragraphs component is in clipboard
             $sources = $source->getChildComponents(array('generator'=>'paragraphs', 'ignoreVisible'=>true));
         } else {

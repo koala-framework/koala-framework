@@ -100,6 +100,9 @@ abstract class Kwf_Component_Generator_Abstract
                     throw new Kwf_Exception("Can't create model for generator '{$this->getGeneratorKey()}' in '$this->_class'");
                 }
             }
+            if (!$this->_model) {
+                throw new Kwf_Exception('model has to be set for table generator in '.$this->_class);
+            }
         }
         return $this->_model;
     }
@@ -824,6 +827,11 @@ abstract class Kwf_Component_Generator_Abstract
 
         $data['icon'] = 'bullet_yellow';
         $data['iconEffects'] = array();
+        if ($component->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE) {
+            $data['iconEffects'][] = 'smartphoneHide';
+        } else if ($component->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE) {
+            $data['iconEffects'][] = 'smartphone';
+        }
         $data['allowDrag'] = false;
         $data['allowDrop'] = false;
 
@@ -934,4 +942,13 @@ abstract class Kwf_Component_Generator_Abstract
         return $ret;
     }
 
+    /**
+     * Returns for every Kwf_Component_Data the device visibility
+     *
+     * Can be overriten for every Generator if you want a specific device visibility
+     */
+    public function getDeviceVisible(Kwf_Component_Data $data)
+    {
+        return Kwf_Component_Data::DEVICE_VISIBLE_ALL;
+    }
 }

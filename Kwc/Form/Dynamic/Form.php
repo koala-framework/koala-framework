@@ -13,6 +13,8 @@ class Kwc_Form_Dynamic_Form extends Kwc_Abstract_Form
             ->setWidth(400);
         $fs->add(new Kwf_Form_Field_TextField('subject', trlKwf('E-Mail Subject')))
             ->setWidth(400);
+        $fs->add(new Kwf_Form_Field_TextField('submit_caption', trlKwf('Submit Caption')))
+            ->setWidth(400);
         $this->add($fs);
         $this->add(Kwc_Abstract_Form::createChildComponentForm($this->getClass(), '-form'));
     }

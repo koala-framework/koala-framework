@@ -13,6 +13,7 @@ class Kwc_Advanced_AudioPlayer_Component extends Kwc_Abstract_Composite_Componen
         ));
         $ret['assets']['files'][] = 'kwf/Kwc/Advanced/AudioPlayer/Component.js';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'jQuery';
         $ret['assets']['dep'][] = 'mediaelement';
 

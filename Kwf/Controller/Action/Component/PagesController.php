@@ -390,13 +390,13 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception("Component with id '$id' not found");
         }
-        $session = new Zend_Session_Namespace('PagesController:copy');
+        $session = new Kwf_Session_Namespace('PagesController:copy');
         $session->id = $id;
     }
 
     public function jsonPasteAction()
     {
-        $session = new Zend_Session_Namespace('PagesController:copy');
+        $session = new Kwf_Session_Namespace('PagesController:copy');
         $id = $session->id;
         if (!$id || !Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception_Client(trlKwf('Clipboard is empty'));
@@ -416,6 +416,8 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
             0, Kwf_Util_Component::getDuplicateProgressSteps($source)
         );
+
+        ini_set('memory_limit', '256M');
 
         $newPage = Kwf_Util_Component::duplicate($source, $target, $progressBar);
 

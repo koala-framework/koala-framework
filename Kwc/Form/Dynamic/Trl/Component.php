@@ -10,6 +10,8 @@ class Kwc_Form_Dynamic_Trl_Component extends Kwc_Chained_Trl_Component
         $ret['generators']['child']['component']['form'] = $g['child']['component']['form'];
         $ret['generators']['child']['masterComponentsMap'][$g['child']['component']['form']] = $g['child']['component']['form'];
 
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+
         return $ret;
     }
 

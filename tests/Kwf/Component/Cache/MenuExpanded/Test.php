@@ -85,6 +85,7 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
+
         $this->assertRegExp('#/test5".*/test1".*/test1/test2".*/test1/test4"#s', $html); //test order
     }
 
@@ -100,6 +101,7 @@ class Kwf_Component_Cache_MenuExpanded_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render(true, false);
+
         $this->assertRegExp('#/test1".*/test1/test4".*/test1/test2".*/test5"#s', $html); //test order
     }
 

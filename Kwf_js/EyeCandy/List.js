@@ -136,8 +136,10 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
                 previousItem.removeState(this.activeState, 'active');
                 previousItem.el.removeClass('active');
             }
-            this.activeItem.pushState(this.activeState, 'active');
-            this.activeItem.el.addClass('active');
+            if (this.activeItem) {
+                this.activeItem.pushState(this.activeState, 'active');
+                this.activeItem.el.addClass('active');
+            }
         }
     },
     getActiveItem: function() {

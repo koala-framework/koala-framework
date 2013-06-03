@@ -6,11 +6,9 @@ Kwf.onContentReady(function(readyEl, param) {
         form.shopBoxCartInitDone = true;
         form.kwcForm.on('submitSuccess', function(r) {
             Ext.select('.kwcShopBoxCart').each(function(el) {
-                var url = '/kwf/util/kwc/render';
-                if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
                 Ext.Ajax.request({
                     params: { componentId: el.dom.id },
-                    url: url,
+                    url: Kwf.getKwcRenderUrl(),
                     success: function(response, options) {
                         this.replaceWith({ html: response.responseText });
                         Kwf.callOnContentReady();

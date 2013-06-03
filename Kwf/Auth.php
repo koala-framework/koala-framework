@@ -31,6 +31,14 @@ class Kwf_Auth extends Zend_Auth
         return self::$_instance;
     }
 
+    public function getStorage()
+    {
+        if (null === $this->_storage) {
+            $this->setStorage(new Kwf_Auth_Storage_Session());
+        }
+        return $this->_storage;
+    }
+
     // do not user parent authenticate to prevent writing the identity into the storage
     // this is completely done by user model
     public function authenticate(Zend_Auth_Adapter_Interface $adapter)

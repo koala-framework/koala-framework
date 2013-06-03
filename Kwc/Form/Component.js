@@ -45,6 +45,10 @@ Kwc.Form.Component = function(form)
         }
     }, this);
 
+    this.fields.forEach(function(f) {
+        f.initField();
+    });
+
     if (this.config.hideForValue) {
         this.config.hideForValue.each(function(hideForValue) {
             var field = this.findField(hideForValue.field);
@@ -186,9 +190,29 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     document.location.href = r.successUrl;
                 }
 
+                var scrollTo = null;
                 if (!hasErrors) {
+                    // Scroll to top of form
+                    scrollTo = this.el.getY();
                     this.fireEvent('submitSuccess', this, r);
+                } else {
+                    // Get position of first error field
+                    for(var fieldName in r.errorFields) {
+                        var field = this.findField(fieldName);
+                        if (field) {
+                            var pos = field.el.getY();
+                            if (scrollTo == null || scrollTo > pos) {
+                                scrollTo = pos;
+                            }
+                        }
+                    }
                 }
+                if (scrollTo != null) {
+                    $('html, body').animate({
+                        scrollTop: scrollTo
+                    }, 2000);
+                }
+                this.fireEvent('submitSuccess', this, r);
             },
             scope: this
         });

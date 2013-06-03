@@ -2,9 +2,11 @@
 class Kwc_Root_Category_GeneratorForm extends Kwf_Form
 {
     private $_componentOrParent;
+    private $_generator;
     public function __construct($componentOrParent, $generator)
     {
         $this->_componentOrParent = $componentOrParent;
+        $this->_generator = $generator;
         $this->setModel($generator->getModel());
         parent::__construct();
     }
@@ -49,6 +51,27 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
             ->setPossibleComponentClasses($componentClasses) //just for PageController
             ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
             ->setAllowBlank(false);
-        $fields->add(new Kwf_Form_Field_Checkbox('hide',  trlKwf('Hide in Menu')));
+
+        $hideInMenuText = trlKwf('Hide in Menu');
+        $fs = $fields;
+        if ($this->_generator->getUseMobileBreakpoints()) {
+            $fs = $fields->add(new Kwf_Form_Container_FieldSet(trlKwf('Menu settings')));
+            $hideInMenuText = trlKwf('Hide');
+            $fs->add(new Kwf_Form_Field_Select('device_visible',  trlKwf('Device visible')))
+                ->setValues(array(
+                    Kwf_Component_Data::DEVICE_VISIBLE_ALL => trlKwf('show on all devices'),
+                    Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE => trlKwf('hide on mobile devices'),
+                    Kwf_Component_Data::DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE => trlKwf('only show on mobile devices')
+                ))
+                ->setTpl('<tpl for=".">
+                    <div class="x-combo-list-item">
+                        <tpl if="id==\''.Kwf_Component_Data::DEVICE_VISIBLE_ALL.'\'"><img src="/assets/kwf/images/devices/showAll.png" class="left"/></tpl>
+                        <tpl if="id==\''.Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE.'\'"><img src="/assets/kwf/images/devices/smartphoneHide.png" class="left"/></tpl>
+                        <tpl if="id==\''.Kwf_Component_Data::DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE.'\'"><img src="/assets/kwf/images/devices/smartphone.png" class="left"/></tpl>
+                        <p class="left" style="margin-left: 3px; line-height: 16px;">{name}</p>
+                    </div>
+                </tpl>');
+        }
+        $fs->add(new Kwf_Form_Field_Checkbox('hide',  $hideInMenuText));
     }
 }

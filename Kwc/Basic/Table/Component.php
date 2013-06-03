@@ -9,6 +9,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Table/TableGridPanel.js';
 
         $ret['componentName'] = trlKwfStatic('Table');
+        $ret['componentIcon'] = new Kwf_Asset('table');
         $ret['ownModel'] = 'Kwc_Basic_Table_Model';
         $ret['childModel'] = 'Kwc_Basic_Table_ModelData';
 
@@ -39,6 +40,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['settingsRow'] = $this->_getRow();
+        $ret['tableStyle'] = $this->_getRow()->table_style;
         $ret['columnCount'] = $this->getColumnCount();
 
         $dataSelect = new Kwf_Model_Select();

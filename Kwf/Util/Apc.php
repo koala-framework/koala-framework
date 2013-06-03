@@ -88,7 +88,7 @@ class Kwf_Util_Apc
         foreach ($domains as $d) {
             $s = microtime(true);
             $pwd = Kwf_Util_Apc::getHttpPassword();
-            $urlPart = "http".($config->server->https?'s':'')."://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
+            $urlPart = "http://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
             $url = "$urlPart$d[domain]/kwf/util/apc/clear-cache";
 
             $client = new Zend_Http_Client();
@@ -157,6 +157,16 @@ class Kwf_Util_Apc
             if (isset($_REQUEST['deleteCacheSimple'])) {
                 foreach ($_REQUEST['deleteCacheSimple'] as $id) {
                     Kwf_Cache_Simple::delete($id);
+                }
+            }
+            if (isset($_REQUEST['clearCacheSimpleStatic'])) {
+                foreach ($_REQUEST['clearCacheSimpleStatic'] as $id) {
+                    Kwf_Cache_SimpleStatic::clear($id);
+                }
+            }
+            if (isset($_REQUEST['deleteCacheSimpleStatic'])) {
+                foreach ($_REQUEST['deleteCacheSimpleStatic'] as $id) {
+                    Kwf_Cache_SimpleStatic::delete($id);
                 }
             }
             if (isset($_REQUEST['cacheIds'])) {

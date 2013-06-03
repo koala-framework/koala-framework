@@ -5,7 +5,9 @@ class Kwc_Columns_ColumnsInColumns_Paragraphs_Component extends Kwc_Paragraphs_C
     {
         $ret = parent::getSettings();
         $ret['childModel'] = 'Kwc_Columns_ColumnsInColumns_Paragraphs_TestModel';
-        $ret['generators']['paragraphs']['component']['columns'] = 'Kwc_Columns_ColumnsInColumns_Columns_Component';
+        $ret['generators']['paragraphs']['component'] = array(
+            'columns' => 'Kwc_Columns_ColumnsInColumns_Columns_Component'
+        );
         return $ret;
     }
 }

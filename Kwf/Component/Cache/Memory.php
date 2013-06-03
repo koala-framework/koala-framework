@@ -39,6 +39,7 @@ class Kwf_Component_Cache_Memory extends Zend_Cache_Core
                     $this->setBackend(new Kwf_Cache_Backend_Memcached(array(
                         'compression' => true,
                     )));
+                    //do *not* use cache_namespace for this cache (we don't want to delete it on clear-cache)
                 } else {
                     //fallback to file backend (NOT recommended!)
                     $this->setBackend(new Kwf_Cache_Backend_File(array(

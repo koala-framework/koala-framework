@@ -11,7 +11,7 @@ class Kwc_Box_DogearRandom_Dogear_Component extends Kwc_Abstract_Composite_Compo
         $ret['generators']['child']['component']['imageSmall'] = 'Kwc_Box_DogearRandom_Dogear_ImageSmall_Component';
         $ret['generators']['child']['component']['linkExtern'] = 'Kwc_Basic_LinkTag_Extern_Component';
 
-        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'SwfObject';
         $ret['assets']['files'][] = 'kwf/Kwc/Box/DogearRandom/Dogear/Component.js';
         return $ret;

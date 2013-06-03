@@ -12,10 +12,16 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
+        $this->setPlaceholderText(trlKwfStatic('yyyy-mm-dd'));
         $this->setXtype('datefield');
     }
 
-    //setHideDatePicker in Frontend only
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'placeholderText';
+        return $ret;
+    }
 
     protected function _processLoaded($v)
     {
@@ -34,7 +40,7 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        if ($ret == trlKwf('yyyy-mm-dd')) return null;
+        if ($ret == $this->getPlaceholderText()) return null;
         if (!$ret) return null;
 
         //format das von ext kommt
@@ -57,26 +63,55 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
     public function getFrontendMetaData()
     {
         $ret = parent::getFrontendMetaData();
-        $ret['hideDatePicker'] = $this->getHideDatePicker();
+        $ret['hideTrigger'] = $this->getHideTrigger();
         return $ret;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function getHideDatePicker()
+    {
+        return $this->getHideTrigger();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function setHideDatePicker($enable)
+    {
+        return $this->setHideTrigger($enable);
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
         $value = $this->_getOutputValueFromValues($values);
-        if (!$value) $value = trlKwf('yyyy-mm-dd');
+        if (!$value) $value = $this->getPlaceholderText();
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
-        if ($value != trlKwf('yyyy-mm-dd')) {
+        $class = '';
+        if ($value != $this->getPlaceholderText()) {
             $v = strtotime($value);
             if ($v) $value = date(trlKwf('Y-m-d'), $v);
+        } else {
+            $class = 'kwfClearOnFocus';
         }
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
-        $ret['html'] = "<input type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
+        $ret['html'] = "<input class=\"$class\" type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
+    }
+
+    /**
+     * Hides the date-picker icon next to textarea if set to false
+     * @param boolean
+     * @return $this
+     */
+    public function setHideTrigger($value)
+    {
+        return $this->setProperty('hideTrigger', $value);
     }
 }

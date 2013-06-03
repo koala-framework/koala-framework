@@ -156,6 +156,10 @@ class Kwf_Assets_Dependencies
                         throw new Kwf_Exception("Invalid asset file");
                     }
                 }
+
+                //store list of generated dependencies caches for clear-cache-watcher
+                file_put_contents('cache/assets/generated-dependencies', $cacheId."\n", FILE_APPEND);
+
                 $cache->save($this->_files[$assetsType], $cacheId);
             }
         }

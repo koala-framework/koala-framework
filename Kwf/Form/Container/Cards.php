@@ -14,7 +14,7 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
         $this->_combobox->setWidth(150)
             ->setListWidth(150);
 
-        parent::__construct();
+        parent::__construct($name);
         $this->setFieldLabel($fieldLabel);
         $this->setBaseCls('x-plain');
         $this->setXtype('kwf.cards');
@@ -31,6 +31,13 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
     {
         parent::setNamePrefix($v);
         $this->_combobox->setNamePrefix($this->fields->getFormName());
+        return $this;
+    }
+
+    public function setName($v)
+    {
+        parent::setName($v.'_cards');
+        $this->_combobox->setName($v);
         return $this;
     }
 
@@ -121,10 +128,17 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
         return $childField->getName() == $value;
     }
 
+    public function getFrontendMetaData()
+    {
+        $ret = parent::getFrontendMetaData();
+        $ret['combobox'] = $this->getCombobox()->getFieldName();
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = array();
-        
+
         $name = $this->getCombobox()->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : $this->getCombobox()->getDefaultValue();
         
@@ -137,14 +151,26 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
         $this->getCombobox()->setValues($comboboxData);
         $this->getCombobox()->setSubmitOnChange(true);
         $r = $this->getCombobox()->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
-        $ret['preHtml'] = $r['html'];
-        $ret['item'] = $r['item'];
-        
+
+        $ret['items'] = array(
+            $r
+        );
         foreach ($this->fields as $card) {
-            if ($card->getName() != $value) continue;
-            $ret['items'][] = $card->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+            $r = $card->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
+            $inactive = '';
+            if ($card->getName() != $value) {
+                $inactive = ' inactive';
+            }
+            if (!isset($r['preHtml'])) $r['preHtml'] = '';
+            if (!isset($r['postHtml'])) $r['postHtml'] = '';
+            $r['preHtml'] = '<div class="kwfFormCard'.$inactive.'">'.$r['preHtml'];
+            $r['postHtml'] = $r['postHtml'].'</div>';
+            $ret['items'][] = $r;
         }
-        
+
+        $ret['preHtml'] = '';
+        $ret['item'] = $this;
+
         return $ret;
     }
 }

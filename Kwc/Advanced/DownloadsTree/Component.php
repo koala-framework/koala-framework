@@ -13,6 +13,7 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
         $ret['assets']['dep'][] = 'KwfAutoGrid';
         $ret['assets']['dep'][] = 'ExtBorderLayout';
         $ret['assets']['dep'][] = 'ExtDate';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['projectsModel'] = 'Kwc_Advanced_DownloadsTree_Projects';
         $ret['downloadsModel'] = 'Kwc_Advanced_DownloadsTree_Downloads';
 

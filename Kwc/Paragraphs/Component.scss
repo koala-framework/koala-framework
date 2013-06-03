@@ -1,0 +1,17 @@
+@import "kwf/mobile-breakpoint";
+
+.cssClass {
+    .kwcParagraphItem.onlyShowOnMobile {
+        display: none;
+    }
+
+    @include mobile-breakpoint {
+        .kwcParagraphItem.onlyShowOnMobile {
+            display: block;
+        }
+
+        .kwcParagraphItem.hideOnMobile {
+            display: none;
+        }
+    }
+}

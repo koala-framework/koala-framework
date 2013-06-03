@@ -6,6 +6,7 @@
  */
 class Kwf_Form_Field_FilterField extends Kwf_Form_Field_Abstract
 {
+    private $_namePrefix;
     public function __construct()
     {
         parent::__construct();
@@ -14,11 +15,24 @@ class Kwf_Form_Field_FilterField extends Kwf_Form_Field_Abstract
     }
 
     /**
+     * Sets the name prefix for the filter/filtered fields
+     */
+    public function setNamePrefix($name)
+    {
+        $this->_namePrefix = $name;
+        if ($this->getFilterField()) $this->getFilterField()->setNamePrefix($name);
+        if ($this->getFilteredField()) $this->getFilteredField()->setNamePrefix($name);
+        return $this;
+    }
+
+    /**
      * Sets the filter field (the one that filters the filtered field)
      */
     public function setFilterField(Kwf_Form_Field_Abstract $field)
     {
-        return $this->setProperty('filterField', $field);
+        $property = $this->setProperty('filterField', $field);
+        $field->setNamePrefix($this->_namePrefix);
+        return $property;
     }
 
     /**
@@ -26,7 +40,9 @@ class Kwf_Form_Field_FilterField extends Kwf_Form_Field_Abstract
      */
     public function setFilteredField(Kwf_Form_Field_Abstract $field)
     {
-        return $this->setProperty('filteredField', $field);
+        $property = $this->setProperty('filteredField', $field);
+        $field->setNamePrefix($this->_namePrefix);
+        return $property;
     }
 
     /**

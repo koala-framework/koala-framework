@@ -615,7 +615,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                 $ref = $dbDepOf->getReferenceByModelClass($depOf->getParentModel(), null);
             }
-            $col1 = $dbDepOf->_formatField($ref['column'], null /* select fehlt - welches sollte das sein? */ , $tableNameAlias);
+
+            $col1 = $dbDepOf->_formatField($ref['column'], $dbSelect, $tableNameAlias);
             $col2 = $dbRefM->transformColumnName($dbRefM->getPrimaryKey());
 
             $refSelect->where("$refTableName.$col2=$col1");
@@ -820,15 +821,27 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         if ($limitCount || $limitOffset) {
             $dbSelect->limit($limitCount, $limitOffset);
         }
+
+        if ($select->hasPart(Kwf_Model_Select::UNION)) {
+            $unions = array($dbSelect);
+            foreach ($select->getPart(Kwf_Model_Select::UNION) as $unionSel) {
+                $unions[] = $this->_getDbSelect($unionSel);
+            }
+            $dbSelect = $this->getTable()->select()->union($unions);
+        }
+
         return $dbSelect;
     }
 
     public function countRows($select = array())
     {
-
         if (!is_object($select)) {
             $select = $this->select($select);
         }
+        if ($select->hasPart(Kwf_Model_Select::UNION)) {
+            throw new Kwf_Exception_NotYetImplemented();
+        }
+
         $dbSelect = $this->createDbSelect($select);
         $dbSelect->reset(Zend_Db_Select::COLUMNS);
         $dbSelect->setIntegrityCheck(false);
@@ -1018,9 +1031,29 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 if (is_string($select)) $select = array($select);
                 $select = $this->select($select);
             }
-            $dbSelect = $this->_createDbSelectWithColumns($select, $options);
-            if (!$dbSelect) return array();
-            return $dbSelect->query()->fetchAll();
+            if ($select->hasPart(Kwf_Model_Select::UNION)) {
+                $select = clone $select;
+                $unions = $select->getPart(Kwf_Model_Select::UNION);
+                $select->unsetPart(Kwf_Model_Select::UNION);
+                $selects = array($select);
+                $selects = array_merge($selects, $unions);
+                $ret = array();
+                while ($selects) {
+                    //split up into blocks of 150, mysql doesn't take more
+                    $curSelects = array_splice($selects, 0, min(150, count($selects)));
+                    $unions = array();
+                    foreach ($curSelects as $s) {
+                        $unions[] = $this->_createDbSelectWithColumns($s, $options);
+                    }
+                    $ret = array_merge($ret, $this->getAdapter()->query(implode(" UNION ", $unions))->fetchAll());
+                }
+                return $ret;
+            } else {
+                $dbSelect = $this->_createDbSelectWithColumns($select, $options);
+                if (!$dbSelect) return array();
+                return $this->getAdapter()->query($dbSelect)->fetchAll();
+            }
+
         } else {
             return parent::export($format, $select);
         }
@@ -1070,7 +1103,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             // if no data is recieved, quit
             if (!$data) return;
 
-            $tmpImportFolder = realpath('temp').'/modelcsvim'.uniqid();
+            $tmpImportFolder = tempnam('temp/', 'modelcsvim');
+            unlink($tmpImportFolder);
             mkdir($tmpImportFolder, 0777);
             $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);

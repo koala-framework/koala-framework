@@ -71,17 +71,13 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
-        $onchange = '';
-        if ($this->getSubmitOnChange())
-            $onchange= " onchange=\"this.form.submit();\"";
-
         //todo: escapen
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $style = '';
         if ($this->getWidth()) {
             $style = " style=\"width: ".$this->getWidth()."px\"";
         }
-        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\"$onchange$style>";
+        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\"$style>";
         //todo: andere values varianten ermöglichen
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.
@@ -96,7 +92,7 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
         }
         $ret['html'] .= "</select>\n";
         if ($this->getSubmitOnChange())
-            $ret['html'] .= '<input type="submit" value="»" />';
+            $ret['html'] .= '<input class="submit" type="submit" value="»" />';
         return $ret;
     }
 }

@@ -25,6 +25,10 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             if (!empty($this->_editDialog['height'])) $editDialog['height'] = $this->_editDialog['height'];
             $this->_editDialog = $editDialog;
         }
+
+        if ($this->_columns[0] instanceof Kwf_Grid_Column_Button) {
+            throw new Kwf_Exception("Override Controller and add at least one column (button must not be first)");
+        }
     }
 
     protected function _initColumns()

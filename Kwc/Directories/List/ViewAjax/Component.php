@@ -11,6 +11,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
         $ret['assets']['dep'][] = 'KwfAutoGrid'; //TODO: less dep
         $ret['assets']['dep'][] = 'KwfHistoryState';
         $ret['assets']['dep'][] = 'KwfStatistics';
+        $ret['assets']['dep'][] = 'KwfOnReady';
 
         return $ret;
     }

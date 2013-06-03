@@ -105,7 +105,7 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
         $ret .= "}\n";
 
-        if (Kwf_Config::getValue('debug.benchmark')) {
+        if (Kwf_Config::getValue('debug.benchmark') || Kwf_Config::getValue('debug.benchmarklog')) {
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             $ret .= "Kwf_Benchmark::enable();\n";
         } else {
@@ -115,7 +115,7 @@ class Kwf_Util_Setup
             }
             $ret .= "}\n";
         }
-        if (Kwf_Config::getValue('debug.benchmarkLog')) {
+        if (Kwf_Config::getValue('debug.benchmarkCounter')) {
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             $ret .= "Kwf_Benchmark::enableLog();\n";
         }
@@ -207,21 +207,20 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $ret .= "session_set_cookie_params(\n";
+        $ret .= " 0,";     //lifetime
+        $ret .= " '/',";   //path
+        $ret .= " null,";  //domain
+        $ret .= " false,"; //secure
+        $ret .= " true";   //httponly
+        $ret .= ");\n";
+
+        $ret .= "\n";
+
         //store session data in memcache if avaliable
         if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
-
-        $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";
-        $ret .= "    //für swfupload\n";
-        $ret .= "    Zend_Session::setId(\$_POST['PHPSESSID']);\n";
-        $ret .= "}\n";
-
-        /*
-        if (isset($_COOKIE['unitTest'])) {
-            //$config->debug->benchmark = false;
-        }
-        */
 
         if (!Kwf_Config::getValue('server.domain')) {
             //hack to make clear-cache just work
@@ -297,15 +296,6 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
-        if (Kwf_Config::getValue('showPlaceholder')) {
-            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath() && substr(Kwf_Setup::getRequestPath(), 0, 8)!='/assets/') {\n";
-            $ret .= "    $view = new Kwf_View();\n";
-            $ret .= "    echo $view->render('placeholder.tpl');\n";
-            $ret .= "    exit;\n";
-            $ret .= "}\n";
-        }
-
-
         if (Kwf_Config::getValue('preLogin')) {
             $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
             $ret .= "    \$ignore = false;\n";
@@ -347,14 +337,13 @@ class Kwf_Util_Setup
         $ret .= "setlocale(LC_ALL, explode(', ', '".$locale."'));\n";
         $ret .= "setlocale(LC_NUMERIC, 'C');\n";
 
-
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
         $ret .= "    (substr(\$_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || \$_SERVER['REQUEST_URI'] == '/kwf/pma')\n";
         $ret .= ") {\n";
         $ret .= "    Kwf_Util_Pma::dispatch();\n";
         $ret .= "}\n";
 
-        $ret .= "if (isset(\$_GET['preview'])) {\n";
+        $ret .= "if (isset(\$_GET['kwcPreview'])) {\n";
         $ret .= "    \$role = Kwf_Registry::get('userModel')->getAuthedUserRole();\n";
         $ret .= "    if (!Kwf_Registry::get('acl')->isAllowed(\$role, 'kwf_component_preview', 'view')) {\n";
         $ret .= "        header('Location: /admin/component/preview/redirect/?url='.urlencode(\$_SERVER['REQUEST_URI']));\n";

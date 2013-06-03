@@ -12,6 +12,10 @@ class Kwf_Form_DateField_Test extends Kwf_Test_TestCase
         $field1 = $form->add(new Kwf_Form_Field_DateField('test1'));
         $field2 = $form->add(new Kwf_Form_Field_DateField('test2'));
         $field3 = $form->add(new Kwf_Form_Field_DateField('test3'));
+        $form->trlStaticExecute();
+        $field1->trlStaticExecute();
+        $field2->trlStaticExecute();
+        $field3->trlStaticExecute();
 
         $post = array(
             $field1->getFieldName() => '"2009-12-01T00:00:00"', //format von ext

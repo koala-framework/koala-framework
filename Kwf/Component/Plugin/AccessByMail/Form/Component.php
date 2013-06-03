@@ -25,12 +25,12 @@ class Kwf_Component_Plugin_AccessByMail_Form_Component extends Kwc_Form_Componen
                     'message' => trlKwf("Invalid or expired Link. Please request a new one.")
                 );
             } else {
-                $session = new Zend_Session_Namespace('kwc_'.$this->getData()->parent->componentId);
+                $session = new Kwf_Session_Namespace('kwc_'.$this->getData()->parent->componentId);
                 $session->login = true;
                 $session->key = $postData['key'];
             }
         } else {
-            $session = new Zend_Session_Namespace('kwc_'.$this->getData()->parent->componentId);
+            $session = new Kwf_Session_Namespace('kwc_'.$this->getData()->parent->componentId);
             if ($session->login) {
                 $s = new Kwf_Model_Select();
                 $s->whereEquals('key', $session->key);

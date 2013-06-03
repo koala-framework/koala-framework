@@ -48,4 +48,9 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwf_Component_Data
             return parent::__get($var);
         }
     }
+
+    public function getAbsoluteUrl()
+    {
+        return $this->url;
+    }
 }

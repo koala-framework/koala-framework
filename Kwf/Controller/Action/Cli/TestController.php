@@ -65,7 +65,7 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
 
     public static function initForTests()
     {
-        Zend_Session::start();
+        Kwf_Session::start();
         ini_set('memory_limit', '512M');
 
         Kwf_Component_Data_Root::setComponentClass(false);
