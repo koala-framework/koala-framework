@@ -172,7 +172,7 @@ class Kwf_Benchmark
                 echo "$line<br />\n";
             }
         }
-        if (Kwf_Config::getValue('debug.benchmarklogfile')) {
+        if (Kwf_Config::getValue('debug.benchmarklog')) {
             $out = date('Y-m-d H:i:s')."\n";
             $out .= Kwf_Setup::getRequestPath()."\n";
             $out .= implode("\n", $benchmarkOutput)."\n";
@@ -199,7 +199,7 @@ class Kwf_Benchmark
             }
         }
 
-        if (Kwf_Config::getValue('debug.benchmarklogfile')) {
+        if (Kwf_Config::getValue('debug.benchmarklog')) {
             $out = self::_getCounterOutput(self::$_counter, false);
             if (self::$benchmarks) {
                 $out .= "\nBenchmarks:\n";
@@ -251,7 +251,7 @@ class Kwf_Benchmark
             echo "</div>";
             echo "</div>";
         }
-        if (Kwf_Config::getValue('debug.benchmarklogfile')) {
+        if (Kwf_Config::getValue('debug.benchmarklog')) {
             $out = "\n";
             $out .= "  ms  % Checkpoint\n";
             $sum = 0;
