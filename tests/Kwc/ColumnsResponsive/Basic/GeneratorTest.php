@@ -1,6 +1,7 @@
 <?php
 class Kwc_ColumnsResponsive_Basic_GeneratorTest extends Kwc_TestAbstract
 {
+    //also manual test: /kwf/kwctest/Kwc_ColumnsResponsive_Basic_Root/foo
     public function setUp()
     {
         parent::setUp('Kwc_ColumnsResponsive_Basic_Root');
