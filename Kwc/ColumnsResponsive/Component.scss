@@ -53,7 +53,7 @@ $grid-padding   : 0em;
         @include omega;
     }
 
-    @include at-breakpoint(1 480px) {
+    @media (max-width: 480px) {
         &.col2col-50_50,
         &.col2col-33_66,
         &.col2col-66_33,
@@ -70,5 +70,4 @@ $grid-padding   : 0em;
             }
         }
     }
-
 }
