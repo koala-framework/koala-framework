@@ -26,7 +26,7 @@ Kwf.callOnContentReady = function(el, options) {
 };
 
 if (!Kwf.isApp) {
-    Ext.onReady(function() {
+    $(document).ready(function() {
         if (!document.body) {
             //this happens if a redirect by changing location in JS is done
             //in that case no contentReady needs to be called
