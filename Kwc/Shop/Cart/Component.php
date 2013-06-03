@@ -25,7 +25,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
 
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Keepalive.js';
-        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'ExtConnection';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';

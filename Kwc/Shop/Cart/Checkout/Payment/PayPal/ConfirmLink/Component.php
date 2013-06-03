@@ -5,6 +5,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
     {
         $ret = parent::getSettings();
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Checkout/Payment/PayPal/ConfirmLink/Component.js';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['viewCache'] = false;
         return $ret;
     }
