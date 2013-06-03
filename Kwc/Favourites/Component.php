@@ -12,6 +12,7 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'ExtConnection';
+        $ret['assets']['dep'][] = 'KwfOnReady';
 
         $ret['placeholder']['saveFavourite'] = trlKwfStatic('save as favourite');
         $ret['placeholder']['deleteFavourite'] = trlKwfStatic('delete favourite');

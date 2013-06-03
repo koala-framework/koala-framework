@@ -13,7 +13,7 @@ abstract class Kwc_Abstract_Flash_Component extends Kwc_Abstract
         );
 
         $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Flash/Component.js';
-        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'SwfObject';
         $ret['assets']['dep'][] = 'ExtElement';

@@ -6,6 +6,7 @@ class Kwc_User_Login_Form_Success_Component extends Kwc_Form_Success_Component
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
         $ret['assets']['files'][] = 'kwf/Kwc/User/Login/Form/Success/Component.js';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         return $ret;
     }
     public function getTemplateVars()
