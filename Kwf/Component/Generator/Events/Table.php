@@ -134,7 +134,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             $cls = $this->_getClassFromRow($row);
             $select['id'] = $this->_getGenerator()->getIdSeparator().$row->id;
             $ret = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsByClass($cls, $select);
+                ->getComponentsBySameClass($cls, $select);
         }
         foreach ($ret as $k=>$i) {
             if ($i->generator !== $this->_getGenerator()) {

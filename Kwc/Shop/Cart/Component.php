@@ -63,7 +63,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
 
     public final function getShopCartPlugins()
     {
-        Kwf_Model_Abstract::getInstance($this->_getSetting('childModel'))
+        return Kwf_Model_Abstract::getInstance($this->_getSetting('childModel'))
             ->getReferencedModel('Order')
             ->getShopCartPlugins();
     }

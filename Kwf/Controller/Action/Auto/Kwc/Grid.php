@@ -62,7 +62,6 @@ abstract class Kwf_Controller_Action_Auto_Kwc_Grid extends Kwf_Controller_Action
             if (isset($firstConfig['title'])) unset($firstConfig['title']);
             $this->view->assign($firstConfig);
             $this->view->baseParams = array(
-                'id' => $this->_getParam('componentId'),
                 'componentId' => $this->_getParam('componentId')
             );
         }
@@ -70,13 +69,13 @@ abstract class Kwf_Controller_Action_Auto_Kwc_Grid extends Kwf_Controller_Action
 
     public function jsonInsertAction()
     {
-        //TODO: permissions überprüfen!
         Zend_Registry::get('db')->beginTransaction();
         $row = $this->_model->createRow();
-        $this->_beforeInsert($row);
-        $this->_beforeSave($row);
+        $this->_beforeInsert($row, null);
+        $this->_beforeSave($row, null);
         $this->view->id = $row->save();
-
+        $this->_afterInsert($row, null);
+        $this->_afterSave($row, null);
         Zend_Registry::get('db')->commit();
     }
 }

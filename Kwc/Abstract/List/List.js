@@ -86,7 +86,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
         
         // Alle Forms leeren wenn Seite neu geladen wird
         this.editPanels.each(function(panel) {
-            panel.setBaseParams({});
+            panel.setBaseParams(this.getBaseParams());
             if (panel.getForm) {
                 var f = panel.getForm();
                 if (f) {

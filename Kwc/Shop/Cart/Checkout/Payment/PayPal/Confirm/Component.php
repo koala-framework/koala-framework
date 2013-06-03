@@ -3,7 +3,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component extends Kwc_Shop_C
 {
     public function processInput($data)
     {
-        $custom = isset($data['custom']) ? $data['custom'] : null;
+        $custom = isset($data['custom']) ? rawurldecode($data['custom']) : null;
         $data = Kwf_Util_PayPal_Ipn_LogModel::decodeCallback($custom);
         if ($data) {
             $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->parent->componentClass, 'childModel'))

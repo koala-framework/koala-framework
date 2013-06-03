@@ -1,9 +1,14 @@
 <?php
-class Kwf_EyeCandy_Marquee_TestController extends Kwf_Controller_Action
+class Kwf_EyeCandy_Tabs_TestController extends Kwf_Controller_Action
 {
     /**
-     * ist kein unit test, muss per hand aufgerufen werden
-     * /kwf/test/kwf_eye-candy_marquee_test
+     * no unit test, has to be tested manually
+     * /kwf/test/kwf_eye-candy_tabs_test
+     *
+     * Important points to check:
+     *  1. fast switching between tabs.
+     *  2. Openening hidden region and check if tabs are resizing correctly,
+     *     moving content down
      */
     public function indexAction()
     {

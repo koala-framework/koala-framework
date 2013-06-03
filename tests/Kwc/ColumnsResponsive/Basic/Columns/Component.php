@@ -5,6 +5,7 @@ class Kwc_ColumnsResponsive_Basic_Columns_Component extends Kwc_ColumnsResponsiv
     {
         $ret = parent::getSettings($parentComponentClass);
         $ret['ownModel'] = 'Kwc_ColumnsResponsive_Basic_Columns_TestModel';
+        $ret['generators']['child']['component'] = 'Kwc_ColumnsResponsive_Basic_Columns_Column_Component';
         return $ret;
     }
 }

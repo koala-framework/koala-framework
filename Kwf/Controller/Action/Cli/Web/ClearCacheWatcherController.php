@@ -383,7 +383,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 }
             }
 
-            if (self::_endsWith($file, '/Component.php')) {
+            if (   self::_endsWith($file, '/Component.php') ||
+                self::_endsWith($file, '/FrontendForm.php') //viewCache for forms is enabled
+            ) {
                 if ($event == 'MODIFY') {
                     self::_clearComponentSettingsCache($matchingClasses);
 
