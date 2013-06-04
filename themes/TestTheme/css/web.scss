@@ -1,4 +1,6 @@
 @import "susy";
+@import "kwf/css3/border-radius";
+@import "kwf/css3/box-shadow";
 
 html {
     overflow-y: scroll;
@@ -20,17 +22,19 @@ $gutter-width   : 0px;
 $grid-padding   : 0px;
 
 #page {
-    #header {
-        @include container;
+    @include container;
 
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        background-color: #fff;
-        padding-top: 30px;
-        padding-bottom: 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #AAAAAA;
+
+    #header {
 
         #title {
-            @include span-columns(2 omega);
             h1 {
                 font-size: 30px;
                 color: #111;
@@ -42,50 +46,66 @@ $grid-padding   : 0px;
                 font-weight: normal;
             }
         }
-        #searchBox {
-            @include span-columns(2 omega);
-        }
-
-        @include at-breakpoint(4) {
-            @include set-container-width;
-            #title {
-                padding-left: 30px;
-                @include span-columns(2);
-            }
-            #searchBox {
-                @include span-columns(1 omega);
-            }
-        }
-    }
-    
-    #mainMenu {
-        @include container;
-        @include at-breakpoint(4) {
-            @include set-container-width;
-        }
     }
 
-    #content {
-        background-color: #eee;
-        @include container;
-
-        #innerContent {
-            @include span-columns(2);
-            margin: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: white;
-        }
-
-        @include at-breakpoint(4) {
-            @include set-container-width;
+    #outerContent {
+        clear: both;
+        #content {
+            background-color: #eee;
+            @include clearfix;
             #innerContent {
-                @include span-columns(3);
+                margin: 20px;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: white;
+                border-bottom: 2px solid #AAAAAA;
             }
         }
     }
+
+    #footer {
+        padding-top: 20px;
+        padding-left: 20px;
+        clear: both;
+    }
+
+    @include at-breakpoint(4) {
+        @include set-container-width;
+        #title {
+            padding-left: 30px;
+            @include span-columns(2);
+        }
+        #searchBox {
+            @include span-columns(1 omega);
+        }
+        #innerContent {
+            @include span-columns(3);
+        }
+    }
+
 }
 
 .webListNone ul { margin: 0px; }
 .webListNone,
 .webListNone li { margin-bottom: 0px; }
+
+.webForm {
+    button {
+        background: #222;
+        border: none;
+        @include border-radius-pie(3px);
+        @include box-shadow-pie(0px 1px 2px rgba(0,0,0,0.3));
+        color: #eee;
+        cursor: pointer;
+        margin: 20px 0;
+        padding: 5px;
+        position: relative;
+        left: 30px;
+        text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+        &:active {
+            background: #1982d1;
+            color: #bfddf3;
+        }
+    }
+}
+
