@@ -18,6 +18,14 @@ class Kwc_Basic_Image_Component extends Kwc_Abstract_Image_Component
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
         return $ret;
     }
+    protected function _getAltText()
+    {
+        if ($this->_getSetting('useParentImage')) {
+            return $this->getData()->parent->getComponent()->_getAltText();
+        } else {
+            return parent::_getAltText();
+        }
+    }
 
     public function getImageData()
     {
