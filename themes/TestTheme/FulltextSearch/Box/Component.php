@@ -4,6 +4,7 @@ class TestTheme_FulltextSearch_Box_Component extends Kwc_FulltextSearch_Box_Comp
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['hideSubmit'] = true;
         return $ret;
     }
 }
