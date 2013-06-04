@@ -141,7 +141,7 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
             while ($runningCount < $requiredCmd['count']) {
 
                 if (!$this->_getParam('silent')) echo "Process $requiredCmd[cmd] isn't running. Starting...\n";
-                $cmd = "php bootstrap.php $requiredCmd[cmd] ";
+                $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php $requiredCmd[cmd] ";
                 if ($this->_getParam('debug')) $cmd .= "--debug ";
                 $cmd .= " 2>>log/$requiredCmd[cmd].err";
                 $cmd .= " 1>>log/$requiredCmd[cmd].log";

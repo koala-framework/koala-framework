@@ -1,22 +1,58 @@
 <?php
 class Kwf_Util_Check_Config
 {
+    const RESULT_OK = 'ok';
+    const RESULT_FAILED = 'failed';
+    const RESULT_WARNING = 'warning';
+
     public static function dispatch()
     {
         Kwf_Loader::registerAutoload();
         if (php_sapi_name() == 'cli') {
-            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
+            $quiet = isset($_SERVER['argv'][2]) && trim($_SERVER['argv'][2]) == 'quiet';
         } else {
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
-                header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Kwf_Exception_AccessDenied();
+            $role = false;
+            try {
+                $role = Kwf_Registry::get('userModel')->getAuthedUserRole();
+            } catch (Exception $e) {}
+            if ($role != 'admin') {
+                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                    header('WWW-Authenticate: Basic realm="Check Config"');
+                    throw new Kwf_Exception_AccessDenied();
+                }
             }
             $quiet = isset($_GET['quiet']);
         }
-        Kwf_Util_Check_Config::check($quiet);
+        self::_check($quiet);
     }
 
-    public function check($quiet = false)
+    public static function getCheckResults()
+    {
+        $ret = array();
+        $checks = self::_getChecks();
+        foreach ($checks as $k=>$i) {
+            try {
+                $result = call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
+            } catch (Exception $e) {
+                $result = array(
+                    'status' => self::RESULT_FAILED,
+                    'message' => $e->getMessage(),
+                );
+            }
+            $ret[] = array(
+                'checkText' => str_replace('apache2handler', 'apache2', php_sapi_name()).' '.$i['name'],
+                'status' => $result['status'],
+                'message' => isset($result['message']) ? $result['message'] : '',
+            );
+        }
+//         if (php_sapi_name()!= 'cli') {
+//             passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config quiet 2>&1", $ret);
+//             if ($ret) echo "\nFAILED CLI";
+//         }
+        return $ret;
+    }
+
+    private static function _getChecks()
     {
         $checks = array();
         $checks['php'] = array(
@@ -28,11 +64,6 @@ class Kwf_Util_Check_Config
         $checks['exif'] = array(
             'name' => 'read EXIF data'
         );
-        /*
-        $checks['gd'] = array(
-            'name' => 'gd Php extension'
-        );
-        */
         $checks['fileinfo'] = array(
             'name' => 'fileinfo Php extension'
         );
@@ -48,23 +79,8 @@ class Kwf_Util_Check_Config
         $checks['system'] = array(
             'name' => 'executing system commands'
         );
-        $checks['log_write'] = array(
-            'name' => 'log write permissions'
-        );
-        $checks['temp_write'] = array(
-            'name' => 'temp write permissions'
-        );
-        $checks['cache_write'] = array(
-            'name' => 'cache write permissions'
-        );
-        $checks['root_write'] = array(
-            'name' => 'root write permissions'
-        );
-        $checks['imagick_functionality_1'] = array(
-            'name' => 'imagick functionality 1'
-        );
-        $checks['imagick_functionality_2'] = array(
-            'name' => 'imagick functionality 2'
+        $checks['write_perm'] = array(
+            'name' => 'write permissions'
         );
         $checks['memory_limit'] = array(
             'name' => 'memory_limit'
@@ -89,44 +105,48 @@ class Kwf_Util_Check_Config
         $checks['setlocale'] = array(
             'name' => 'setlocale'
         );
-        $checks['fileinfo_functionality'] = array(
-            'name' => 'fileinfo functionality'
-        );
         $checks['apc'] = array(
             'name' => 'apc'
         );
+        return $checks;
+    }
 
+    private static function _check($quiet = false)
+    {
+        $results = self::getCheckResults();
         if ($quiet) {
-            foreach ($checks as $k=>$i) {
-                try {
-                    call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
-                } catch (Exception $e) {
-                    echo "\nERROR: " . $e->getMessage();
+            foreach ($results as $i) {
+                if ($i['status'] == self::RESULT_FAILED) {
+                    echo "\nFAILED: ".$i['checkText'].' '.$i['message'];
+                } else if ($i['status'] == self::RESULT_WARNING) {
+                    echo "\nWARNING: ".$i['checkText'].' '.$i['message'];
                 }
             }
             if (php_sapi_name()!= 'cli') {
-                passthru("php bootstrap.php check-config silent 2>&1", $ret);
+                passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config quiet 2>&1", $ret);
                 if ($ret) echo "\nFAILED CLI";
             }
         } else {
-            if (php_sapi_name()!= 'cli') {
-                echo "<h3>Test Webserver...\n</h3>";
-            }
-            foreach ($checks as $k=>$i) {
+            foreach ($results as $i) {
                 echo "<p style=\"margin:0;\">";
-                echo $i['name'].': ';
-                try {
-                    call_user_func(array('Kwf_Util_Check_Config', '_'.$k));
+                echo $i['checkText'].': ';
+                if ($i['status'] == self::RESULT_OK) {
                     echo "<span style=\"background-color:green\">OK</span>";
-                } catch (Exception $e) {
-                    echo "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
+                } else if ($i['status'] == self::RESULT_WARNING) {
+                    echo "<span style=\"background-color:yellow\">WARNING</span>";
+                } else if ($i['status'] == self::RESULT_FAILED) {
+                    echo "<span style=\"background-color:red\">FAILED</span>";
+                } else {
+                    throw new Kwf_Exception("Unknown result");
+                }
+                if ($i['message']) {
+                    echo ': '.$i['message'];
                 }
                 echo "</p>";
             }
 
             if (php_sapi_name()!= 'cli') {
-                echo "<h3>Test Cli...\n</h3>";
-                passthru("php bootstrap.php check-config 2>&1", $ret);
+                passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config 2>&1", $ret);
                 if ($ret) {
                     echo "<span style=\"background-color:red\">FAILED CLI: $ret</span>";
                 }
@@ -142,28 +162,59 @@ class Kwf_Util_Check_Config
         if (version_compare(PHP_VERSION, '5.1.6') < 0) {
             throw new Kwf_Exception("Php version '".PHP_VERSION."' is too old");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _imagick()
     {
         //if (!extension_loaded('imagick')) {
         if (!class_exists('Imagick')) {
-            throw new Kwf_Exception("Extension 'imagick' is not loaded");
+            if (!extension_loaded('gd')) {
+                return array(
+                    'status' => self::RESULT_FAILED,
+                    'message' => "Extension 'imagick' is not loaded. Fallback extension 'gd' is also not loaded."
+                );
+            }
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Extension 'imagick' is not loaded. 'gd' is used as fallback."
+            );
         }
+
+        $im = new Imagick();
+        $im->readImage(dirname(__FILE__).'/Config/testImage.jpg');
+        $im->scaleImage(10, 10);
+        $im->setImagePage(0, 0, 0, 0);
+        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->getImageBlob();
+        $im->destroy();
+
+        $im = new Imagick();
+        $im->readImage(dirname(__FILE__).'/Config/testImage.png');
+        $im->scaleImage(10, 10);
+        $im->setImagePage(0, 0, 0, 0);
+        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->getImageBlob();
+        $im->destroy();
+
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _exif()
     {
         if (!function_exists('exif_read_data')) {
-            throw new Kwf_Exception("Function exif_read_data is not available");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Function exif_read_data is not available, rotating images according to exif data won't be possible"
+            );
         }
-    }
-
-    private static function _gd()
-    {
-        if (!extension_loaded('gd')) {
-            throw new Kwf_Exception("Extension 'gd' is not loaded");
-        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _fileinfo()
@@ -171,6 +222,24 @@ class Kwf_Util_Check_Config
         if (!function_exists('finfo_file')) {
             throw new Kwf_Exception("Extension 'fileinfo' is not loaded");
         }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
+        if ($mime != 'image/png') {
+            throw new Kwf_Exception("fileinfo returned wrong information: $mime");
+        }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
+        if ($mime != 'application/msword') {
+            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
+        }
+
+        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
+        if ($mime != 'application/vnd.oasis.opendocument.text') {
+            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
+        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _simplexml()
@@ -178,13 +247,22 @@ class Kwf_Util_Check_Config
         if (!class_exists('SimpleXMLElement')) {
             throw new Kwf_Exception("Extension 'simplexml' is not loaded");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _tidy()
     {
         if (!extension_loaded('tidy')) {
-            throw new Kwf_Exception("Extension 'tidy' is not loaded");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Extension 'tidy' is not loaded."
+            );
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _pdo_mysql()
@@ -192,6 +270,9 @@ class Kwf_Util_Check_Config
         if (!extension_loaded('pdo_mysql')) {
             throw new Kwf_Exception("Extension 'pdo_mysql' is not loaded");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _system()
@@ -200,22 +281,37 @@ class Kwf_Util_Check_Config
         if (!$out) {
             throw new Kwf_Exception("executing 'ls' returned nothing");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _setup_kwf()
     {
         Kwf_Registry::get('config');
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _db_connection()
     {
-        Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
+        if (Kwf_Registry::get('db')) {
+            Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
+        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
+
     private static function _git()
     {
         $gitVersion = exec("git --version", $out, $ret);
         if ($ret) {
-            throw new Kwf_Exception("Git command failed");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Git command is not available."
+            );
         }
         if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
             throw new Kwf_Exception("Invalid git --version response");
@@ -224,10 +320,14 @@ class Kwf_Util_Check_Config
         if (version_compare($gitVersion, "1.5.0") < 0) {
             throw new Kwf_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
-    private static function _log_write()
+    private static function _write_perm()
     {
+        //log folders
         if (file_exists('log/error/test-config-check')) {
             if (file_exists('log/error/test-config-check/test.log')) {
                 unlink('log/error/test-config-check/test.log');
@@ -237,24 +337,26 @@ class Kwf_Util_Check_Config
         mkdir('log/error/test-config-check');
         file_put_contents('log/error/test-config-check/test.log', 'blah');
         if (file_get_contents('log/error/test-config-check/test.log') != 'blah') {
-            throw new Kwf_Exception("reading test log failed");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "reading test log failed"
+            );
         }
         unlink('log/error/test-config-check/test.log');
         rmdir('log/error/test-config-check');
-    }
 
-    private static function _temp_write()
-    {
+        //temp folder
         if (!is_writeable('temp')) {
-            throw new Kwf_Exception("temp is not writeable");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "temp is not writeable"
+            );
         }
         if (file_exists('temp/checkconfig-test')) unlink('temp/checkconfig-test');
         touch('temp/checkconfig-test');
         unlink('temp/checkconfig-test');
-    }
 
-    private static function _cache_write()
-    {
+        //cache folders
         $dirs = array('cache');
         foreach (glob('cache/*') as $d) {
             if (is_dir($d)) {
@@ -263,54 +365,27 @@ class Kwf_Util_Check_Config
         }
         foreach ($dirs as $d) {
             if (!is_writeable($d)) {
-                throw new Kwf_Exception("$d is not writeable");
+                return array(
+                    'status' => self::RESULT_FAILED,
+                    'message' => "$d is not writeable"
+                );
             }
             if (file_exists($d.'/checkconfig-test')) unlink($d.'/checkconfig-test');
             touch($d.'/checkconfig-test');
             unlink($d.'/checkconfig-test');
         }
-    }
-
-    private static function _root_write()
-    {
-        if (!is_writeable(getcwd())) {
-            //needed for moving bootstrap.php when doing clear-cache from webinterface
-            throw new Kwf_Exception("root (".getcwd().") is not writeable");
-        }
-    }
-
-    private static function _imagick_functionality_1()
-    {
-        if (!class_exists('Imagick', false)) {
-            throw new Kwf_Exception("Imagick class doesn't exist");
-        }
-        $im = new Imagick();
-        $im->readImage(dirname(__FILE__).'/Config/testImage.jpg');
-        $im->scaleImage(10, 10);
-        $im->setImagePage(0, 0, 0, 0);
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-        $im->getImageBlob();
-        $im->destroy();
-    }
-
-    private static function _imagick_functionality_2()
-    {
-        if (!class_exists('Imagick', false)) {
-            throw new Kwf_Exception("Imagick class doesn't exist");
-        }
-        $im = new Imagick();
-        $im->readImage(dirname(__FILE__).'/Config/testImage.png');
-        $im->scaleImage(10, 10);
-        $im->setImagePage(0, 0, 0, 0);
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-        $im->getImageBlob();
-        $im->destroy();
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _memory_limit()
     {
         $m = ini_get('memory_limit');
         if ($m != -1 && (int)$m < 128) throw new Kwf_Exception("need 128M, got $m");
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _uploads()
@@ -318,11 +393,20 @@ class Kwf_Util_Check_Config
         $m = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
         $dir = $m->getUploadDir();
         if (!file_exists($dir)) {
-             throw new Kwf_Exception("Path for uploads does not eixst");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "Uploads path '$dir' does not exist"
+            );
         }
         if (!is_writable($dir)) {
-            throw new Kwf_Exception("Path for uploads is not writeable");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "Uploads path '$dir' is not writeable"
+            );
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _setlocale()
@@ -344,30 +428,18 @@ class Kwf_Util_Check_Config
         } else {
             setlocale(LC_ALL, $locale);
         }
-    }
-
-    private static function _fileinfo_functionality()
-    {
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
-        if ($mime != 'image/png') {
-            throw new Kwf_Exception("fileinfo returned wrong information: $mime");
-        }
-
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
-        if ($mime != 'application/msword') {
-            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
-        }
-
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
-        if ($mime != 'application/vnd.oasis.opendocument.text') {
-            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
-        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _apc()
     {
         if (!extension_loaded('apc')) {
-            throw new Kwf_Exception("apc extension not loaded");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Extension 'apc' not loaded"
+            );
         }
 
         if (php_sapi_name() == 'cli') {
@@ -378,7 +450,10 @@ class Kwf_Util_Check_Config
 
         $info = apc_sma_info(false);
         if ($info['num_seg'] * $info['seg_size'] < 128*1000*1000) {
-            throw new Kwf_Exception("apc memory size < 128");
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "apc memory size is < 128MB"
+            );
         }
         $value = uniqid();
         if (!apc_store('foobar', $value)) {
@@ -396,6 +471,9 @@ class Kwf_Util_Check_Config
         if (!apc_delete('foobar')) {
             throw new Kwf_Exception("apc_delete returned false");
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 
     private static function _magic_quotes_gpc()
@@ -403,7 +481,13 @@ class Kwf_Util_Check_Config
         if (php_sapi_name()!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
             && get_magic_quotes_gpc()
         ) {
-            throw new Kwf_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini");
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini"
+            );
         }
+        return array(
+            'status' => self::RESULT_OK,
+        );
     }
 }
