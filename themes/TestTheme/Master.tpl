@@ -13,8 +13,7 @@
             <div id="outerHeader">
                 <div id="header">
                     <div id="title">
-                        <h1>Lorem Ipsum</h1>
-                        <h2>Dolor Sit Amet</h2>
+                        <?=$this->component($this->boxes['headerTitle']);?>
                     </div>
                     <div id="searchBox">
                         <?=$this->component($this->boxes['searchBox']);?>

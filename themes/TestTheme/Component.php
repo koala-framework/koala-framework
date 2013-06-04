@@ -20,6 +20,12 @@ class TestTheme_Component extends Kwf_Component_Theme_Abstract
             ),
             'inherit' => true,
         );
+        $ret['generators']['headerTitle'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'TestTheme_Box_HeaderTitle_Component',
+            'inherit' => true,
+            'unique' => true,
+        );
         $ret['generators']['metaTags'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => 'Kwc_Box_MetaTagsContent_Component',

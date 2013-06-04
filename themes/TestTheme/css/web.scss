@@ -32,22 +32,6 @@ $grid-padding   : 0px;
     margin-bottom: 30px;
     border-bottom: 2px solid #AAAAAA;
 
-    #header {
-
-        #title {
-            h1 {
-                font-size: 30px;
-                color: #111;
-                font-weight: bold;
-            }
-            h2 {
-                font-size: 15px;
-                color: #7a7a7a;
-                font-weight: normal;
-            }
-        }
-    }
-
     #outerContent {
         clear: both;
         #content {
@@ -77,6 +61,7 @@ $grid-padding   : 0px;
         }
         #searchBox {
             @include span-columns(1 omega);
+            padding-right: 30px;
         }
         #innerContent {
             @include span-columns(3);
@@ -106,6 +91,12 @@ $grid-padding   : 0px;
             background: #1982d1;
             color: #bfddf3;
         }
+    }
+    input, textarea {
+        background: none repeat scroll 0 0 #FAFAFA;
+        border: 1px solid #CCCCCC;
+        @include box-shadow-pie(0 1px 1px rgba(0, 0, 0, 0.1) inset);
+        color: #888888;
     }
 }
 
