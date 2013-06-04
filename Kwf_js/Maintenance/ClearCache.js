@@ -31,7 +31,7 @@ Kwf.Maintenance.ClearCache = Ext.extend(Ext.Panel, {
                             url: '/kwf/maintenance/clear-cache/json-clear-cache',
                             progress: true,
                             params: {
-                                types: types.join(',')
+                                type: types.join(',')
                             },
                             success: function(response, options, r) {
                                 if (r.message) {
