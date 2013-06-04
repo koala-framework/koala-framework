@@ -7,6 +7,7 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
         $ret['assets']['files'][] = 'kwf/Kwc/FulltextSearch/Box/Component.js';
         $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['useLiveSearch'] = true;
+        $ret['hideSubmit'] = false;
         $ret['flags']['processInput'] = true;
         return $ret;
     }
@@ -30,7 +31,8 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
         $ret['config'] = array(
             'searchTitle' => $searchPage->getTitle(),
             'searchUrl' => $searchPage->getAbsoluteUrl(),
-            'useLiveSearch' => $this->_getSetting('useLiveSearch')
+            'useLiveSearch' => $this->_getSetting('useLiveSearch'),
+            'hideSubmit' => $this->_getSetting('hideSubmit'),
         );
         return $ret;
     }

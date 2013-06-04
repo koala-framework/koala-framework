@@ -9,6 +9,10 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
     this.el = el;
     this.config = config;
 
+    if (this.config.hideSubmit) {
+        this.el.select('.submitWrapper').remove();
+    }
+
     Kwf.Utils.HistoryState.on('popstate', function() {
         if (Kwf.Utils.HistoryState.currentState.searchVisible) {
             if (this.searchMainContent) {
