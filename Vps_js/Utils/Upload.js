@@ -72,7 +72,7 @@ Vps.Utils.Upload = {
         xhr.setRequestHeader('X-Upload-Size', file.size);
         xhr.setRequestHeader('X-Upload-Type', file.type);
         xhr.setRequestHeader('X-Upload-MaxResolution', config.maxResolution);
-        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        if (xhr.overrideMimeType) xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
         xhr.send(file);
 
         return xhr;
