@@ -13,6 +13,9 @@ Vps.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
         var container = this.body.createChild();
 
         if (!Vps.Utils.Upload.supportsHtml5Upload()) {
+            if (!this.maxResolution) {
+                this.maxResolution = 0;
+            }
             this.swfu = new Vps.Utils.SwfUpload({
                 fileSizeLimit: this.fileSizeLimit,
                 allowOnlyImages: this.allowOnlyImages,
