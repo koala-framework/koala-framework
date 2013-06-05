@@ -311,6 +311,7 @@ class Kwf_Util_ClearCache
             if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
                 $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
             }
+            Kwf_Cache_Simple::resetZendCache();
             if ($output) echo "cleared:     simpleCache\n";
         }
         if (in_array('memcache', $types)) {
