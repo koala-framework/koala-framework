@@ -26,12 +26,22 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         } else {
             $acl = $this->_getAcl();
             $resource = $this->getRequest()->getResourceName();
+            $aclResource = $acl->get($resource);
             if ($resource == 'kwf_user_changeuser') {
                 //spezielle berechtigungsabfrage für Benutzerwechsel
                 $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
                 $allowed = $acl->isAllowed($role, $resource, 'view');
             } else if ($resource == 'kwf_component') {
                 $allowed = $this->_isAllowedComponent(); // Bei Test ist niemand eingeloggt und deshalb keine Prüfung
+            } else if ($aclResource instanceof Kwf_Acl_Resource_ComponentId_Interface) {
+                if (!$this->_getParam('componentId')) throw new Kwf_Exception('componentId is not set');
+                $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
+                    $this->_getParam('componentId'), array('ignoreVisible' => true)
+                );
+                foreach($components as $component) {
+                    $allowed = $acl->getComponentAcl()->isAllowed($this->_getAuthData(), $component);
+                    if ($allowed) break;
+                }
             } else {
                 if (!$acl->has($resource)) {
                     throw new Kwf_Exception_NotFound();

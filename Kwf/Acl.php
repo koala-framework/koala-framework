@@ -459,4 +459,15 @@ class Kwf_Acl extends Zend_Acl
         }
         return false;
     }
+
+    public function addResource($resource, $parent = null)
+    {
+        $ret = parent::addResource($resource, $parent);
+        if ($resource instanceof Kwf_Acl_Resource_HasChildResources_Interface) {
+            foreach ($resource->getChildResources() as $childResource) {
+                $this->addResource($childResource, $resource);
+            }
+        }
+        return $ret;
+    }
 }
