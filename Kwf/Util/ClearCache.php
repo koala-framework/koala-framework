@@ -344,7 +344,7 @@ class Kwf_Util_ClearCache
                         }
                     } catch (Exception $e) {}
                 }
-                Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
+                Kwf_Component_Cache::getInstance()->deleteViewCache(new Kwf_Model_Select());
                 if ($output) echo "cleared db:  $t\n";
             }
         }
