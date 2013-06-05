@@ -8828,6 +8828,15 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1774</id>
 </text>
 <text>
+<<<<<<< HEAD
+=======
+<en>Text on successful submit</en>
+<de>Text nach Abschicken</de>
+<id>1775</id>
+<en>Subtotal</en>
+</text>
+<text>
+>>>>>>> 3.2
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
 <en>'%value%' contains characters which are not digits; but only digits are allowed</en>
 <id>1536</id>
@@ -9274,6 +9283,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Original Subject</en>
 <de>Originaltitel</de>
 <id>1889</id>
+</text>
+<text>
+<en>Download all images</en>
+<de>Alle Bilder herunterladen</de>
+<id>1840</id>
 </text>
 </trl>
 

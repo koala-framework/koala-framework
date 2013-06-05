@@ -49,7 +49,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
 
         $msg = '';
         $session = new Zend_Session_Namespace('login_password');
-        if (in_array($this->_getLoginPassword(), $pw)) {
+        if (!is_null($this->_getLoginPassword()) && in_array($this->_getLoginPassword(), $pw)) {
             //this should not happen in herer (we are in isLoggedIn)
             //instead this should be in processInput of the LoginForm, just as Plugin_Login does it
             $session->login = true;
