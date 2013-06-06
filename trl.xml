@@ -2481,7 +2481,7 @@
 <de>dd.mm.yyyy</de>
 <id>493</id>
 <ro>dd.mm.yyyy</ro>
-<sl>dd.mm.llll</sl>
+<sl>dd.mm.yyyy</sl>
 </text>
 <text>
 <en>Margin top</en>
@@ -8828,6 +8828,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1774</id>
 </text>
 <text>
+<en>Text on successful submit</en>
+<de>Text nach Abschicken</de>
+<id>1775</id>
+</text>
+<text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
 <en>'%value%' contains characters which are not digits; but only digits are allowed</en>
 <id>1536</id>
@@ -9277,59 +9282,59 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Home</en>
-<id>1840</id>
+<id>1890</id>
 </text>
 <text>
 <en>Open Graph</en>
-<id>1841</id>
+<id>1891</id>
 </text>
 <text>
 <en>Amount of Money</en>
-<id>1842</id>
+<id>1892</id>
 </text>
 <text>
 <en>Mp3 File</en>
-<id>1843</id>
+<id>1893</id>
 </text>
 <text>
 <en>Width (px)</en>
-<id>1844</id>
+<id>1894</id>
 </text>
 <text>
 <en>Height (px)</en>
-<id>1845</id>
+<id>1895</id>
 </text>
 <text>
 <en>Repeat</en>
-<id>1846</id>
+<id>1896</id>
 </text>
 <text>
 <en>Auto play</en>
-<id>1847</id>
+<id>1897</id>
 </text>
 <text>
 <en>Audio</en>
-<id>1848</id>
+<id>1898</id>
 </text>
 <text>
 <en>Files</en>
-<id>1849</id>
+<id>1899</id>
 </text>
 <text>
 <en>Mp4 file</en>
-<id>1850</id>
+<id>1900</id>
 </text>
 <text>
 <en>Ogg File</en>
-<id>1851</id>
+<id>1901</id>
 </text>
 <text>
 <en>Webm file (optional)</en>
-<id>1852</id>
+<id>1902</id>
 </text>
 <text>
 <en>Articles.Show categories</en>
-<id>1853</id>
+<id>1903</id>
 </text>
 <text>
 <en>Articles.Articles</en>
@@ -9341,19 +9346,19 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Priority</en>
-<id>1856</id>
+<id>1904</id>
 </text>
 <text>
 <en>For sorting articles if they have same date</en>
-<id>1857</id>
+<id>1905</id>
 </text>
 <text>
 <en>Original Subject</en>
-<id>1858</id>
+<id>1906</id>
 </text>
 <text>
 <en>Large Image</en>
-<id>1859</id>
+<id>1907</id>
 </text>
 <text>
 <en>Favourites</en>
@@ -9361,77 +9366,82 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>save as favourite</en>
-<id>1861</id>
+<id>1908</id>
 </text>
 <text>
 <en>delete favourite</en>
-<id>1862</id>
+<id>1909</id>
 </text>
 <text>
 <en>Label Width</en>
-<id>1863</id>
+<id>1910</id>
 </text>
 <text>
 <en>Submit Caption</en>
 <de>Button Text</de>
-<id>1864</id>
+<id>1911</id>
 </text>
 <text>
 <en>Column {0}, width {1}%</en>
-<id>1865</id>
+<id>1912</id>
 </text>
 <text>
 <en>2 Columns (50% - 50%)</en>
-<id>1866</id>
+<id>1913</id>
 </text>
 <text>
 <en>2 Columns (33% - 66%)</en>
-<id>1867</id>
+<id>1914</id>
 </text>
 <text>
 <en>2 Columns (66% - 33%)</en>
-<id>1868</id>
+<id>1915</id>
 </text>
 <text>
 <en>2 Columns (25% - 75%)</en>
-<id>1869</id>
+<id>1916</id>
 </text>
 <text>
 <en>2 Columns (75% - 25%)</en>
-<id>1870</id>
+<id>1917</id>
 </text>
 <text>
 <en>3 Columns (33% - 33% - 33%)</en>
-<id>1871</id>
+<id>1918</id>
 </text>
 <text>
 <en>3 Columns (50% - 25% - 25%)</en>
-<id>1872</id>
+<id>1919</id>
 </text>
 <text>
 <en>3 Columns (25% - 50% - 25%)</en>
-<id>1873</id>
+<id>1920</id>
 </text>
 <text>
 <en>3 Columns (25% - 25% - 50%)</en>
-<id>1874</id>
+<id>1921</id>
 </text>
 <text>
 <en>Columns type</en>
-<id>1875</id>
+<id>1922</id>
 </text>
 <text>
 <en>to page</en>
-<id>1876</id>
+<id>1923</id>
 </text>
 <text>
 <en>Feedback to page </en>
-<id>1877</id>
+<id>1924</id>
 </text>
 <text>
 <en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
 <de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?<br/>Senden Sie uns dazu Ihr Feedback!</de>
-<id>1878</id>
+<id>1925</id>
+</text>
+<text>
+<en>Download all images</en>
+<de>Alle Bilder herunterladen</de>
+<id>1926</id>
 </text>
 </trl>
 

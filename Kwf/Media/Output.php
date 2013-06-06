@@ -30,7 +30,7 @@ class Kwf_Media_Output
         if (isset($data['contents'])) {
             echo $data['contents'];
         } else if (isset($data['file'])) {
-            readfile($data['file']);
+            self::_readfileChunked($data['file']);
         }
         $ret = array(
             'responseCode' => $data['responseCode'],
@@ -239,4 +239,28 @@ class Kwf_Media_Output
         return $ret;
     }
 
+    /**
+     * @see http://php.net/manual/de/function.readfile.php#54295
+     */
+    private static function _readfileChunked($filename, $retbytes=true) {
+        $chunksize = 1*(1024*1024); // how many bytes per chunk
+        $buffer = '';
+        $cnt =0;
+        $handle = fopen($filename, 'rb');
+        if ($handle === false) { return false; }
+        while (!feof($handle)) {
+            $buffer = fread($handle, $chunksize);
+            echo $buffer;
+            ob_flush();
+            flush();
+            if ($retbytes) {
+                $cnt += strlen($buffer);
+            }
+        }
+        $status = fclose($handle);
+        if ($retbytes && $status) {
+            return $cnt; // return num. bytes delivered like readfile() does.
+        }
+        return $status;
+    }
 }

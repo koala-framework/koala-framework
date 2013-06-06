@@ -1,3 +1,4 @@
+<?=$this->component($this->downloadAll); ?>
 <div class="<?=$this->cssClass;?>">
     <? $i = 0; ?>
     <? foreach ($this->children as $child) { ?>
