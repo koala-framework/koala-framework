@@ -1,10 +1,10 @@
 <?php
 class Kwc_Blog_Directory_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'kwc_blog';
+    protected $_table = 'kwc_blog_posts';
     protected $_rowClass = 'Kwc_Blog_Directory_Row';
     protected $_dependentModels = array(
-        'Categories' => 'Kwc_Blog_Category_Directory_PostsToCategoriesModel'
+        'Categories' => 'Kwc_Blog_Category_Directory_BlogPostsToCategoriesModel'
     );
 
     protected function _init()
