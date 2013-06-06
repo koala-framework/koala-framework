@@ -14,6 +14,8 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
     public function testInsertEditLink()
     {
+        $this->sessionRestart();
+
         $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
@@ -99,6 +101,8 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
     public function testInlineStyle()
     {
+        $this->sessionRestart();
+
         $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
@@ -149,6 +153,8 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
     public function testBlockStyle()
     {
+        $this->sessionRestart();
+
         $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
@@ -192,6 +198,8 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
     public function testBlockStyleOnTwoParagraphs()
     {
+        $this->sessionRestart();
+
         $this->openKwcEdit('Kwc_Basic_TextSessionModel_TestComponent', 'root_text');
         $this->waitForConnections();
 
