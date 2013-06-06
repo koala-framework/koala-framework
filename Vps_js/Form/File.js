@@ -99,6 +99,9 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         if (this.infoPosition == 'south') this.createInfoContainer();
 
         if (!Vps.Utils.Upload.supportsHtml5Upload()) {
+            if (!this.maxResolution) {
+                this.maxResolution = 0;
+            }
             this.swfu = new Vps.Utils.SwfUpload({
                 fileSizeLimit: this.fileSizeLimit,
                 allowOnlyImages: this.allowOnlyImages,
