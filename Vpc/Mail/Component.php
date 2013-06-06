@@ -22,6 +22,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'from_email' => $sender['address'],
             'from_name' => $sender['name']
         );
+        $ret['returnPath'] = null;
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
         $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
@@ -103,6 +104,9 @@ class Vpc_Mail_Component extends Vpc_Abstract
         }
         if ($this->getRow()->reply_email) {
             $mail->addHeader('Reply-To', $this->getRow()->reply_email);
+        }
+        if ($this->_getSetting('returnPath')) {
+            $mail->setReturnPath($this->_getSetting('returnPath'));
         }
 
         if ($this->_images){

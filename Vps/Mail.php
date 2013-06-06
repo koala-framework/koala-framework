@@ -126,6 +126,10 @@ class Vps_Mail extends Zend_Mail
             $r->save();
         }
 
+        if ($this->getReturnPath() && !$transport) {
+            $transport = new Zend_Mail_Transport_Sendmail('-f ' . $this->getReturnPath());
+        }
+
         return parent::send($transport);
     }
 
