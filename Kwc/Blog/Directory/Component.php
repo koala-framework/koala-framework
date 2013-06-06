@@ -34,7 +34,7 @@ class Kwc_Blog_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
         //config fuer admin button oben
-        $ret['extConfigControllerIndex'] = 'Kwc_Directories_Item_Directory_ExtConfigEditButtons';
+        $ret['extConfigControllerIndex'] = 'Kwc_Directories_Item_Directory_ExtConfigTabs';
 
         return $ret;
     }
