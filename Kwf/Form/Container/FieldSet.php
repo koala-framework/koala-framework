@@ -79,9 +79,11 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
             }
         }
         $ret['preHtml'] = '<fieldset';
+        $cssClass = $this->getCls();
         if ($this->getCheckboxToggle() && $this->_checkboxHiddenField && !$value) {
-            $ret['preHtml'] .= ' class="kwfFormContainerFieldSetCollapsed"';
+            $cssClass .= ' kwfFormContainerFieldSetCollapsed';
         }
+        $ret['preHtml'] .= " class=\"{$cssClass}\"";
         $ret['preHtml'] .= '>';
         if ($this->getTitle()) {
             $ret['preHtml'] .= "<legend>";
