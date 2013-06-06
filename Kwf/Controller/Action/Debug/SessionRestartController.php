@@ -8,5 +8,4 @@ class Kwf_Controller_Action_Debug_SessionRestartController extends Kwf_Controlle
         header('Location: /');
         die();
     }
-
 }
