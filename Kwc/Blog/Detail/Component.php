@@ -18,9 +18,19 @@ class Kwc_Blog_Detail_Component extends Kwc_Directories_Item_Detail_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+
+        $ids = array();
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('blog_post_id', $this->getData()->row->id);
+        foreach (Kwf_Model_Abstract::getInstance('Kwc_Blog_Category_Directory_BlogPostsToCategoriesModel')
+            ->getRows($s) as $cat) {
+                $ids[] = $cat->category_id;
+        }
         $s = new Kwf_Component_Select();
         $s->whereGenerator('detail');
+        $s->whereEquals('id', $ids);
         $ret['categories'] = $this->getData()->parent->getChildComponent('-categories')->getChildComponents($s);
+
         $ret['title'] = $this->getData()->row->title;
         $ret['publish_date'] = $this->getData()->row->publish_date;
         $ret['author'] = $this->getData()->row->author_firstname.' '.$this->getData()->row->author_lastname;
