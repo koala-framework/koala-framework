@@ -264,13 +264,6 @@ class Kwf_Util_Model_Feed_Test extends Kwf_Test_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertEquals('Niko Sams', $entries->current()->author_name);
     }
-    public function testAuthorTwitterSearch()
-    {
-        $feed = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Feed_Feeds')
-            ->getRow('http://search.twitter.com/search.atom?q=vivid');
-        $entries = $feed->getChildRows('Entries');
-        $this->assertTrue(!!$entries->current()->author_name);
-    }
 
     public function testContentEncoded()
     {
