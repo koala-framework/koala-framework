@@ -320,5 +320,12 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $this->getData()->componentClass, $this->getData()->componentId, $this->getImageKey()
         );
         Vps_Media::getOutputCache()->remove($cacheId);
+        foreach ($this->getData()->getChildComponents(array('page' => false)) as $component) {
+            if (is_instance_of($component->componentClass, 'Vpc_Basic_Image_Component') &&
+                Vpc_Abstract::getSetting($component->componentClass, 'useParentImage')
+            ) {
+                $component->getComponent()->onCacheCallback($row);
+            }
+        }
     }
 }
