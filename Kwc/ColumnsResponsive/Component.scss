@@ -1,8 +1,18 @@
 @import "susy";
+@import "compass/css3/box-sizing";
 $gutter-width   : 0em;
 $grid-padding   : 0em;
 
 .cssClass.gt480 {
+    .listItem {
+        @include box-sizing(border-box);
+        padding-right: 20px;
+        
+        &.kwcLast {
+            padding: 0;
+        }
+    }
+    
     &.col2col-50_50 {
         .listItem.span1 {
             @include span-columns(1, 2);
