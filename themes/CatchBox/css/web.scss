@@ -39,10 +39,6 @@ $grid-padding   : 0px;
             @include clearfix;
             #innerContent {
                 margin: 20px;
-                padding: 10px;
-                border-radius: 5px;
-                background-color: white;
-                border-bottom: 2px solid #AAAAAA;
             }
         }
     }
