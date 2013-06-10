@@ -1,3 +1,5 @@
+@import "kwf/css3/border-radius";
+
 .catchBoxBlogDetail {
     .blogContent {
         padding: 10px;
@@ -7,5 +9,17 @@
     }
 
     .comments {
+        background: #ccc;
+        border: 1px solid #d3d3d3;
+        @include border-radius-pie(3px);
+        margin-top: 20px;
+        padding: 20px;
+
+        h3 {
+            color: #373737;
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 30px;
+        }
     }
 }
