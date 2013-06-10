@@ -1,10 +1,10 @@
 <?php
-class TestTheme_Component extends Kwf_Component_Theme_Abstract
+class CatchBox_Component extends Kwf_Component_Theme_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwfStatic('Test Theme');
+        $ret['componentName'] = trlKwfStatic('Catch Box');
         return $ret;
     }
 
@@ -14,15 +14,15 @@ class TestTheme_Component extends Kwf_Component_Theme_Abstract
         $ret['generators']['box'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => array(
-                'mainMenu' => 'TestTheme_Menu_Main_Component',
-                'subMenu' => 'TestTheme_Menu_Sub_Component',
-                'bottomMenu' => 'TestTheme_Menu_Bottom_Component',
+                'mainMenu' => 'CatchBox_Menu_Main_Component',
+                'subMenu' => 'CatchBox_Menu_Sub_Component',
+                'bottomMenu' => 'CatchBox_Menu_Bottom_Component',
             ),
             'inherit' => true,
         );
         $ret['generators']['headerTitle'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
-            'component' => 'TestTheme_Box_HeaderTitle_Component',
+            'component' => 'CatchBox_Box_HeaderTitle_Component',
             'inherit' => true,
             'unique' => true,
         );
@@ -48,14 +48,14 @@ class TestTheme_Component extends Kwf_Component_Theme_Abstract
 
         $ret['generators']['searchBox'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
-            'component' => 'TestTheme_FulltextSearch_Box_Component',
+            'component' => 'CatchBox_FulltextSearch_Box_Component',
             'unique' => true,
             'inherit' => true
         );
 
         $ret['generators']['search'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'TestTheme_FulltextSearch_Search_Directory_Component',
+            'component' => 'CatchBox_FulltextSearch_Search_Directory_Component',
             'name' => trlStatic('Suche')
         );
 
@@ -66,8 +66,8 @@ class TestTheme_Component extends Kwf_Component_Theme_Abstract
             'subMenu' => 200
         );
 
-        $ret['assets']['files'][] = 'kwf/themes/TestTheme/css/master.css';
-        $ret['assets']['files'][] = 'kwf/themes/TestTheme/css/web.scss';
+        $ret['assets']['files'][] = 'kwf/themes/CatchBox/css/master.css';
+        $ret['assets']['files'][] = 'kwf/themes/CatchBox/css/web.scss';
 
         return $ret;
     }

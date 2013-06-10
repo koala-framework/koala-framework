@@ -1,5 +1,5 @@
 <?php
-class TestTheme_FulltextSearch_Search_View_Component extends Kwc_FulltextSearch_Search_ViewAjax_Component
+class CatchBox_FulltextSearch_Search_View_Component extends Kwc_FulltextSearch_Search_ViewAjax_Component
 {
     public static function getSettings()
     {

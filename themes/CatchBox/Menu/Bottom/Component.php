@@ -1,10 +1,10 @@
 <?php
-class TestTheme_Menu_Sub_Component extends Kwc_Menu_Component
+class CatchBox_Menu_Bottom_Component extends Kwc_Menu_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['level'] = 2;
+        $ret['level'] = 'bottom';
         $ret['cssClass'] .= ' webListNone';
         return $ret;
     }

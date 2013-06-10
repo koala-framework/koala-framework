@@ -1,5 +1,5 @@
 <?php
-class TestTheme_Box_HeaderTitle_Component extends Kwc_Basic_Headlines_Component
+class CatchBox_Box_HeaderTitle_Component extends Kwc_Basic_Headlines_Component
 {
     public function getTemplateVars()
     {

@@ -1,5 +1,5 @@
 <?php
-class TestTheme_FulltextSearch_Search_Detail_Component extends Kwc_FulltextSearch_Search_Detail_Component
+class CatchBox_FulltextSearch_Search_Detail_Component extends Kwc_FulltextSearch_Search_Detail_Component
 {
     public static function getSettings()
     {

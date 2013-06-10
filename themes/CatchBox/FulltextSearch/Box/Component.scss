@@ -1,12 +1,12 @@
 @import "compass/css3/transition";
 @import "kwf/css3/border-radius";
 
-.testThemeFulltextSearchBox {
+.catchBoxFulltextSearchBox {
     .webForm input {
         float: right;
         @include transition(width 0.4s ease, background 0.4s ease);
         width: 80px;
-        background: url("/assets/kwf/themes/TestTheme/FulltextSearch/Box/search.png") no-repeat scroll 5px 6px #f0f0f0;
+        background: url("/assets/kwf/themes/CatchBox/FulltextSearch/Box/search.png") no-repeat scroll 5px 6px #f0f0f0;
         @include border-radius-pie(5px);
         font-size: 14px;
         height: 22px;

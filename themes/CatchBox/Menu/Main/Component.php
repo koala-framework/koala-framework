@@ -1,5 +1,5 @@
 <?php
-class TestTheme_Menu_Main_Component extends Kwc_Menu_Component
+class CatchBox_Menu_Main_Component extends Kwc_Menu_Component
 {
     public static function getSettings()
     {
