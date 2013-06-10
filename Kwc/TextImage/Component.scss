@@ -1,7 +1,9 @@
-.cssClass {
-    .noFlow .text,
-    .noFlow .image {
-        display: table-cell;
+.cssClass.largeText {
+    .noFlow.smallImage {
+        .image,
+        .text {
+            display: table-cell;
+        }
     }
 
     .center .image {
@@ -13,7 +15,26 @@
         }
     }
 
-    .positionLeft .image { float: left; margin-right: 18px; }
-    .positionRight .image { float: right; margin-left: 18px; }
+    .positionLeft .smallImage .image { float: left; margin-right: 18px; }
+    .positionRight .smallImage .image { float: right; margin-left: 18px; }
     .center .kwcTextImageImageEnlarge { padding: 0px; }
+
+    &.gt420 {
+        .noFlow {
+            .image,
+            .text {
+                display: table-cell;
+            }
+        }
+
+        .center {
+            .image,
+            .text {
+                display: inline;
+            }
+        }
+
+        .positionLeft .image { float: left; margin-right: 18px; }
+        .positionRight .image { float: right; margin-left: 18px; }
+    }
 }
