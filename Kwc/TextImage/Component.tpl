@@ -4,7 +4,7 @@
             <? if ($this->image) { ?>
                 <div class="image" <? if($this->center){?>style="margin-left: <?=$this->center?>px;margin-right: <?=$this->center?>px"<?}?>><?=$this->component($this->image)?></div>
             <? } ?>
-            <div class="text"<? if(!$this->row->flow && !$this->center) {?> style="margin-<?=$this->position?>: <?=$this->imageWidth?>px"<?}?>>
+            <div class="text">
             <?=$this->component($this->text)?>
             </div>
             <div class="clear"></div>
