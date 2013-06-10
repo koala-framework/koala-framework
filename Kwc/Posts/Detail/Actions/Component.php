@@ -58,4 +58,15 @@ class Kwc_Posts_Detail_Actions_Component extends Kwc_Abstract_Composite_Componen
     {
         return $this->mayEditPost();
     }
+    
+    public function hasContent()
+    {
+        $data = $this->getData();
+        if ($this->mayEditPost() || $this->mayDeletePost()
+            || $data->getChildComponent('_quote') 
+            || $data->getChildComponent('_report')) {
+            return true;
+        }
+        return false;
+    }
 }
