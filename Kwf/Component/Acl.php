@@ -74,7 +74,20 @@ class Kwf_Component_Acl
     //darum erstmal private gemacht
     private function _isAllowedComponentClass($userRow, $componentClass)
     {
-        $role = $this->_getRole($userRow);
+        if ($this->_isAllowedComponentClassByRole($this->_getRole($userRow), $componentClass)) {
+            return true;
+        }
+        foreach ($this->_getAdditionalRoles($userRow) as $role) {
+            if ($this->_isAllowedComponentClassByRole($role, $componentClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function _isAllowedComponentClassByRole($role, $componentClass)
+    {
+        $role = $this->_roleRegistry->get($role);
 
         $ret = $this->_isAllowedComponentClassNonRek('Component', $role, $componentClass);
         if (!is_null($ret)) return $ret;
@@ -92,7 +105,7 @@ class Kwf_Component_Acl
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             foreach (Kwc_Abstract::getChildComponentClasses($c) as $cc) {
                 if ($cc == $componentClass) {
-                    if ($this->_isAllowedComponentClass($userRow, $c)) {
+                    if ($this->_isAllowedComponentClassByRole($role, $c)) {
                         $this->_isAllowedComponentClassCache[$roleId][$componentClass] = true;
                         return true;
                     }
@@ -116,8 +129,20 @@ class Kwf_Component_Acl
 
     protected function _isAllowedComponentData($userRow, Kwf_Component_Data $component)
     {
-        $role = $this->_getRole($userRow);
+        if ($this->_isAllowedComponentDataByRole($this->_getRole($userRow), $component)) {
+            return true;
+        }
+        foreach ($this->_getAdditionalRoles($userRow) as $role) {
+            if ($this->_isAllowedComponentDataByRole($role, $component)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    protected function _isAllowedComponentDataByRole($role, Kwf_Component_Data $component)
+    {
+        $role = $this->_roleRegistry->get($role);
         $outsidePage = false;
         while ($component) { // irgendeine Komponente auf dem Weg nach oben muss allowed sein
             if (!$outsidePage) {
@@ -132,6 +157,23 @@ class Kwf_Component_Acl
             $component = $component->parent;
         }
         return false;
+    }
+
+    private function _getAdditionalRoles($user)
+    {
+        $ret = array();
+        if (!is_null($user) && !is_string($user)) {
+            $userAdditionalRoles = $user->getAdditionalRoles();
+            foreach ($this->_roleRegistry->getRoles() as $r) {
+                if ($r instanceof Kwf_Acl_Role_Additional &&
+                    $r->getParentRoleId() == $user->role &&
+                    in_array($r->getRoleId(), $userAdditionalRoles)
+                ) {
+                    $ret[] = $r->getRoleId();
+                }
+            }
+        }
+        return $ret;
     }
 
     /**
