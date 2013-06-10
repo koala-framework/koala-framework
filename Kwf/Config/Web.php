@@ -199,6 +199,18 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     protected function _mergeWebConfig($section, $webPath)
     {
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
+
+        //merge theme config.ini
+        $ini = new Zend_Config_Ini($webPath.'/config.ini', $webSection);
+        if ($ini->kwc && $t = $ini->kwc->theme) {
+            foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
+                if (file_exists($ip.'/'.str_replace('_', '/', $t).'.php')) {
+                    $dir = $ip.'/'.str_replace('_', '/', substr($t, 0, strpos($t, '_')));
+                    self::mergeConfigs($this, new Kwf_Config_Ini($dir.'/config.ini', 'production'));
+                }
+            }
+        }
+
         $this->_masterFiles[] = $webPath.'/config.ini';
         self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));
         if (file_exists($webPath.'/config.local.ini')) {
