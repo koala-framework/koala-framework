@@ -5,10 +5,11 @@ $grid-padding   : 0em;
 
 .cssClass {
     .listItem {
-        padding: 0 0 20px 0;
+        padding-bottom: 20px;
 
         &.kwcLast {
-            padding: 0;
+            padding-bottom: 0px;
+            padding-right: 0;
         }
     }
 }
@@ -16,7 +17,7 @@ $grid-padding   : 0em;
 .cssClass.gt480 {
     .listItem {
         @include box-sizing(border-box);
-        padding: 0 20px 0 0;
+        padding-right: 20px;
 
     }
 
