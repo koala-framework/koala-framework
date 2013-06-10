@@ -1,10 +1,10 @@
 <div class="<?=$this->cssClass?>">
     <h3><?= $this->title ?></h3>
     <div class="publishDate"><?=$this->date($this->row->publish_date)?>
-        <? if ($this->categories) { ?>
-            | <?=$this->data->trlpKwf('Category', 'Categories', count($this->categories));?>:
+        <? if ($this->item->categories) { ?>
+            | <?=$this->data->trlpKwf('Category', 'Categories', count($this->item->categories));?>:
             <? $nci = 0;
-            foreach ($this->categories as $nc) {
+            foreach ($this->item->categories as $nc) {
                 if ($nci++ >= 1) echo ', ';
                 echo $this->componentLink($nc);
             } ?>

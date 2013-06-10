@@ -39,6 +39,10 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
                     }
                 }
             }
+        } else {
+            if (isset($data->row->name)) {
+                $ret['user'] = $data->row->name;
+            }
         }
 
         $select = $data->parent->getGenerator('detail')->select($data->parent)
