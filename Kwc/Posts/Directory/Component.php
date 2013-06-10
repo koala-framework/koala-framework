@@ -18,6 +18,11 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
             'component' => 'Kwc_Posts_Write_Component',
             'name' => trlKwfStatic('Write'),
         );
+//         $ret['generators']['quickwrite'] = array(
+//             'class' => 'Kwf_Component_Generator_Static',
+//             'component' => 'Kwc_Posts_QuickWrite_Component',
+//             'name' => trlKwfStatic('QuickWrite'),
+//         );
         $ret['generators']['child']['component']['view'] = 'Kwc_Posts_Directory_View_Component';
         $ret['placeholder']['writeText'] = null;
         $ret['hasGlobalPosts'] = false;
@@ -29,6 +34,7 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
     {
         $ret = parent::getTemplateVars();
         $ret['write'] = $this->getData()->getChildComponent('_write');
+        $ret['quickwrite'] = $this->getData()->getChildComponent('-quickwrite');
         return $ret;
     }
     public function hasContent()
