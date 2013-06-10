@@ -7,3 +7,28 @@ if (window.devicePixelRatio && window.devicePixelRatio > 1) {
         }
     });
 }
+
+//resize image to 100% container width if image is larger than container
+(function() {
+
+var initEl = function(el) {
+    if (el.child('img')) {
+        if (el.getWidth() < el.child('img').dom.getAttribute('width')) {
+            el.addClass('autoWidth');
+        } else {
+            el.removeClass('autoWidth');
+        }
+    }
+};
+
+Kwf.onElementReady('.kwcAbstractImage', function(el) {
+    initEl(el);
+});
+
+Ext.fly(window).on('resize', function() {
+    Ext.select('.kwcAbstractImage').each(function(el) {
+        initEl(el);
+    }, this);
+});
+
+})();

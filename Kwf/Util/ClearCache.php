@@ -75,7 +75,7 @@ class Kwf_Util_ClearCache
         if ($simpleCache && $simpleCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
             $types[] = 'simpleCache';
         } else {
-            if (extension_loaded('apc') && extension_loaded('memcache')) {
+            if (Kwf_Config::getValue('server.memcache.host')) {
                 //complete memcache, used by Cache_SimpleStatic
                 $types[] = 'memcache';
             }
@@ -311,6 +311,8 @@ class Kwf_Util_ClearCache
             if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
                 $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
             }
+            Kwf_Cache_Simple::resetZendCache();
+            if ($output) echo "cleared:     simpleCache\n";
         }
         if (in_array('memcache', $types)) {
             $cache = Kwf_Cache::factory('Core', 'Memcached', array(
@@ -343,7 +345,7 @@ class Kwf_Util_ClearCache
                         }
                     } catch (Exception $e) {}
                 }
-                Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
+                Kwf_Component_Cache::getInstance()->deleteViewCache(new Kwf_Model_Select());
                 if ($output) echo "cleared db:  $t\n";
             }
         }

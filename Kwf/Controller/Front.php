@@ -46,6 +46,17 @@ class Kwf_Controller_Front extends Zend_Controller_Front
         $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Component',
                                         'kwf_controller_action_component');
 
+        if (is_dir('controllers')) {
+            //automatically add controller directories from web based on existing directories in filesystem in web
+            $iterator = new DirectoryIterator('controllers');
+            $filter = new Zend_Filter_Word_CamelCaseToDash();
+            foreach($iterator as $fileinfo) {
+                if (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getBasename() != 'Cli') {
+                    $this->addControllerDirectory($fileinfo->getPathname(), strtolower($filter->filter($fileinfo->getBasename())));
+                }
+            }
+        }
+
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('kwf_controller_action_error');

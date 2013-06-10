@@ -4,7 +4,6 @@ class Kwc_List_Gallery_Component extends Kwc_Abstract_List_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['dep'][] = 'KwfEnlargeNextPrevious';
         $ret['componentName'] = trlKwfStatic('Gallery');
         $ret['componentIcon'] = new Kwf_Asset('images.png');
         $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
@@ -35,6 +34,7 @@ class Kwc_List_Gallery_Component extends Kwc_Abstract_List_Component
         $ret = parent::getTemplateVars();
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
+        $ret['downloadAll'] = $this->getData()->getChildComponent('-downloadAll');
         return $ret;
     }
 

@@ -12,6 +12,11 @@ Kwf.Form.DateField = Ext.extend(Ext.form.DateField,
                 this.fireEvent('menuhidden', this);
             };
         }
+        this.on('render', function () {
+            if (this.hideDatePicker) {
+                this.container.child('img').setVisible(false);
+            }
+        }, this);
     }
 });
 Ext.reg('datefield', Kwf.Form.DateField);

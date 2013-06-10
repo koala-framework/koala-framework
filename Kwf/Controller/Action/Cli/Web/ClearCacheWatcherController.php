@@ -183,6 +183,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     private static function _handleEventFork($file, $event)
     {
+        Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
+
         $eventStart = microtime(true);
         $pid = pcntl_fork();
         if ($pid == -1) {

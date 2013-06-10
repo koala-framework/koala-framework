@@ -143,9 +143,16 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             }
         }
 
-        $ret['altText'] = '';
+        $ret['altText'] = $this->_getAltText();
+
+        return $ret;
+    }
+
+    protected function _getAltText()
+    {
+        $ret = '';
         if ($this->_getSetting('altText')) {
-            $ret['altText'] = $this->_getRow()->alt_text;
+            $ret = $this->_getRow()->alt_text;
         }
         return $ret;
     }

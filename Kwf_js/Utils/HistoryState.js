@@ -19,15 +19,18 @@ Ext.extend(Kwf.Utils.HistoryStateAbstract, Ext.util.Observable, {
 
 Kwf.Utils.HistoryStateHtml5 = function() {
     Kwf.Utils.HistoryStateHtml5.superclass.constructor.call(this);
-    Ext.EventManager.on(window, 'popstate', function(event) {
-        if (this.disabled) return;
-        this.entries--;
-        if (event.browserEvent.state) {
-            this.currentState = event.browserEvent.state;
-        } else {
-            this.currentState = {};
-        }
-        this.fireEvent('popstate');
+    Ext.onReady(function() {
+        //in onReady to avoid getting initial popstate event that chrome sends on load
+        Ext.EventManager.on(window, 'popstate', function(event) {
+            if (this.disabled) return;
+            this.entries--;
+            if (event.browserEvent.state) {
+                this.currentState = event.browserEvent.state;
+            } else {
+                this.currentState = {};
+            }
+            this.fireEvent('popstate');
+        }, this);
     }, this);
 };
 Ext.extend(Kwf.Utils.HistoryStateHtml5, Kwf.Utils.HistoryStateAbstract, {
