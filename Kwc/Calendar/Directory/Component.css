@@ -1,0 +1,57 @@
+.cssClass {
+    margin-left: 150px;
+}
+.cssClass .days {
+    margin-top: 20px;
+}
+.cssClass .days .eventText {
+    position: absolute;
+    width: 80px;
+    line-height: 12px;
+    margin-top: -20px;
+    text-align: center;
+    font-weight: bold;
+    color: var(light);
+}
+.cssClass .day {
+    width: 80px;
+    height: 80px;
+    background: var(mainColor);
+    color: var(light);
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+    background: var(light);
+    color: var(mainColor);
+    line-height: 80px;
+}
+.cssClass .day.first,
+.cssClass .day.firstInRow {
+    margin-left: 0;
+    clear: both;
+}
+.cssClass .day.firstRow {
+    margin-top: 0;
+}
+.cssClass .day.before,
+.cssClass .day.after {
+    background: var(secColor);
+    color: var(light);
+}
+.cssClass .day.hasEvent {
+    background: var(mainColor);
+}
+.cssClass .day.hasEvent a {
+    color: var(light);
+    line-height: 80px;
+    display: block;
+}
+.cssClass .dayNumber {
+    height: 100%;
+    text-align: center;
+    font-size: 28px;
+}
+
+.cssClass a.next {
+    display: block;
+}
