@@ -303,7 +303,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         if (!in_array($columnName, $noLog)) {
             $this->_logChangedUser = true;
         }
-        if ($columnName == 'email' && $value != $this->email) {
+        if ($columnName == 'email' && strtolower($value) != strtolower($this->email)) {
             $this->_changedOldMail = $this->email;
         }
         if ($columnName == 'deleted' && $value != $this->deleted && $value) {
