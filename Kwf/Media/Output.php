@@ -30,7 +30,8 @@ class Kwf_Media_Output
         if (isset($data['contents'])) {
             echo $data['contents'];
         } else if (isset($data['file'])) {
-            self::_readfileChunked($data['file']);
+            readfile($data['file']);
+            //self::_readfileChunked($data['file']);
         }
         $ret = array(
             'responseCode' => $data['responseCode'],
