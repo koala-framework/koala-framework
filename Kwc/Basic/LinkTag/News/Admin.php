@@ -90,13 +90,15 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
     public function afterDuplicate($rootSource, $rootTarget)
     {
         parent::afterDuplicate($rootSource, $rootTarget);
+        $prefix = $this->_prefix;
+        $column = "{$prefix}_id";
         foreach ($this->_duplicated as $d) {
             //modify duplicated links so they point to duplicated page
             //only IF link points to page below $rootSource
             $source = Kwf_Component_Data_Root::getInstance()->getComponentById($d['source'], array('ignoreVisible'=>true));
             $sourceRow = $source->getComponent()->getRow();
-            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId('news_'.$sourceRow->news_id, array('ignoreVisible'=>true)) as $sourceLinkTarget) {
-                $linkTargetIsBelowRootSource = false;
+            $linkTargetIsBelowRootSource = false;
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($prefix.'_'.$sourceRow->$column, array('ignoreVisible'=>true)) as $sourceLinkTarget) {
                 do {
                     if ($sourceLinkTarget->componentId == $rootSource->componentId) {
                         $linkTargetIsBelowRootSource = true;
@@ -107,16 +109,16 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
             if ($linkTargetIsBelowRootSource) {
                 //get duplicated link target id from duplicate log
                 $sql = "SELECT target_component_id FROM kwc_log_duplicate WHERE source_component_id = ? ORDER BY id DESC LIMIT 1";
-                $q = Kwf_Registry::get('db')->query($sql, 'news_'.$sourceRow->news_id);
+                $q = Kwf_Registry::get('db')->query($sql, $prefix.'_'.$sourceRow->$column);
                 $q = $q->fetchAll();
                 if (!$q) continue;
                 $linkTargetId =  $q[0]['target_component_id'];
                 $target = Kwf_Component_Data_Root::getInstance()->getComponentById($d['target'], array('ignoreVisible'=>true));
                 $targetRow = $target->getComponent()->getRow();
-                if (substr($linkTargetId, 0, 5) != 'news_') {
+                if (substr($linkTargetId, 0, 5) != $prefix.'_') {
                     throw new Kwf_Exception('invalid target_component_id');
                 }
-                $targetRow->news_id = substr($linkTargetId, 5);
+                $targetRow->$column = substr($linkTargetId, 5);
                 $targetRow->save();
             }
         }
