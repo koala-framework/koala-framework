@@ -163,13 +163,19 @@ class Kwf_Component_Acl
     {
         $ret = array();
         if (!is_null($user) && !is_string($user)) {
-            $userAdditionalRoles = $user->getAdditionalRoles();
+            $additionalRoles = array();
             foreach ($this->_roleRegistry->getRoles() as $r) {
                 if ($r instanceof Kwf_Acl_Role_Additional &&
-                    $r->getParentRoleId() == $user->role &&
-                    in_array($r->getRoleId(), $userAdditionalRoles)
+                    $r->getParentRoleId() == $this->_getRole($user)
                 ) {
-                    $ret[] = $r->getRoleId();
+                    $additionalRoles[] = $r->getRoleId();
+                }
+            }
+            if ($additionalRoles) {
+                foreach ($user->getAdditionalRoles() as $role) {
+                    if (in_array($role, $additionalRoles)) {
+                        $ret[] = $role;
+                    }
                 }
             }
         }
