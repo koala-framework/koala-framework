@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass;?>">
     <div class="blogContent">
-        <h1><?=$this->title;?></h1>
+        <h1><?=$this->componentLink($this->item, $this->title)?></h1>
         <div class="publishDate">
             <?=$this->date($this->row->publish_date);?>
         </div>
