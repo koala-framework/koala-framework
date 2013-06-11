@@ -3,9 +3,30 @@
 .catchBoxBlogDetail {
     .blogContent {
         padding: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-bottom: 20px;
         border-radius: 5px;
         background-color: white;
         border-bottom: 2px solid #AAAAAA;
+
+        h1.title {
+            font-size: 26px;
+            padding-bottom: 5px;
+            padding-top: 15px;
+        }
+        .postInfo,
+        .categories {
+            font-size: 12px;
+            color: #666;
+            a {
+                color: #1982d1;
+                font-weight: bold;
+            }
+        }
+        .content {
+            margin-top: 20px;
+        }
     }
 
     .comments {
