@@ -1,24 +1,23 @@
 <div class="<?=$this->cssClass;?>">
     <div class="blogContent">
-        <h1><?=$this->componentLink($this->item, $this->title)?></h1>
-        <div class="publishDate">
-            <?=$this->date($this->row->publish_date);?>
+        <h1 class="title"><?=$this->componentLink($this->item, $this->title)?></h1>
+        <div class="postInfo">
+            <?=$this->data->trlKwf('Posted on', $this->date($this->row->publish_date))?>
+            <?=$this->data->trlKwf('by {0}', $this->author)?>
         </div>
-        <div class="author">
-            <?=$this->author?>
-        </div>
-        <div class="infoContainer">
-        <?=$this->component($this->content);?>
+        <div class="content">
+            <?=$this->component($this->content);?>
         </div>
         <div class="categories">
             <? if ($this->item->categories) { ?>
-                <?=$this->data->trlpKwf('Category', 'Categories', count($this->item->categories));?>:
+                <?=$this->data->trlKwf('This entry was posted in');?>
                 <? $nci = 0;
                 foreach ($this->item->categories as $nc) {
                     if ($nci++ >= 1) echo ', ';
-                    echo $this->componentLink($nc);
+                    echo $this->componentLink($nc, null, array('skipAppendText'=>true));
                 } ?>
             <? } ?>
+            <?=$this->data->trlKwf('by {0}', $this->author)?>
         </div>
         <? if ($this->placeholder['backLink']) { ?>
             <div class="backLink">
