@@ -1,0 +1,21 @@
+.kwfSetupAbout .about {
+    width: 500px;
+    margin: 0 auto;
+}
+.kwfSetupAbout .about img { float: left; }
+.kwfSetupAbout .about h1 { font-size: 18px; margin-top: 20px;}
+.kwfSetupAbout .about h2 { font-size: 13px; }
+
+.kwfSetupSteps ul{ margin-left: 10px; }
+.kwfSetupSteps li { margin-top: 15px; }
+.kwfSetupSteps li span.num { padding: 5px; border: 1px solid black; border-radius: 5px; }
+.kwfSetupSteps li.current { font-weight: bold; }
+
+.kwfSetupWelcome h1, .kwfSetupFinished h1 { margin: 10px }
+.kwfSetupWelcome p, .kwfSetupFinished p { margin: 10px }
+
+.kwfSetupRequirements li { margin: 5px; border: 3px solid black; padding: 2px; }
+.kwfSetupRequirements li.ok { border-color: green; }
+.kwfSetupRequirements li.failed { border-color: red; }
+.kwfSetupRequirements li.warning { border-color: yellow; }
+
