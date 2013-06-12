@@ -1,0 +1,8 @@
+.defaultMenuBottom ul li {
+    float: left;
+    margin-right: 5px;
+    padding-top: 0px;
+}
+.defaultMenuBottom.webStandard ul.menu {
+    margin-bottom: 0px;
+}

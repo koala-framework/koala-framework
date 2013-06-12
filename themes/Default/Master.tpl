@@ -10,24 +10,47 @@
     <body class="frontend">
         <div id="page">
             <div id="outerHeader">
-                <div id="header">&nbsp;</div>
-            </div>
-            <div id="outerContent">
-                <div id="content">
-                    <div id="mainMenu">
-                        <?=$this->component($this->boxes['mainMenu']);?>
+                <div id="header">
+                    <div class="logo">
+                        
                     </div>
-                    <div id="innerContent">
-                        <?=$this->component($this->boxes['subMenu']);?>
-                        <div style="width: <?=$this->componentWidth($this->data)?>px">
-                            <?=$this->componentWithMaster($this->componentWithMaster);?>
-                        </div>
+                    <div class="searchBox"></div>
+                    <div class="mainMenu">
+                        <?=$this->component($this->boxes['mainMenu']);?>
                     </div>
                 </div>
             </div>
+            <div id="outerContent">
+                <div class="stage">
+                    <?=$this->component($this->boxes['listFade']);?>
+                </div>
+                <div id="content">
+                    <div id="innerContent">
+                        <div class="leftColumn">
+                            <?=$this->component($this->boxes['subMenu']);?>
+                        </div>
+                        <div class="centerColumn">
+                            <?=$this->component($this->boxes['breadcrumbs']);?>
+                            <div style="width: <?=$this->componentWidth($this->data)?>px">
+                                <?=$this->componentWithMaster($this->componentWithMaster);?>
+                            </div>
+                        </div>
+                        <div class="rightColumn">
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottomStage">
+                    <div class="bottomStageShadow"></div>
+            </div>
             <div id="outerFooter">
                 <div id="footer">
-                    <?=$this->component($this->boxes['bottomMenu']);?>
+                    <div class="loginButton"></div>
+                    <div class="bottomMenu">
+                        <?=$this->component($this->boxes['bottomMenu']);?>
+                    </div>
+                    <div class="leftArea"></div>
                 </div>
             </div>
         </div>

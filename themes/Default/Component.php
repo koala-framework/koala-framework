@@ -26,7 +26,11 @@ class Default_Component extends Kwf_Component_Theme_Abstract
             'component' => 'Kwc_Box_TitleEditable_Component',
             'inherit' => true,
         );
-        
+        $ret['generators']['breadcrumbs'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Default_Breadcrumbs_Component',
+            'inherit' => true,
+        );
         $ret['generators']['openGraph'] = array(
             'class' => 'Kwf_Component_Generator_Box_StaticSelect',
             'component' => array(
@@ -36,10 +40,18 @@ class Default_Component extends Kwf_Component_Theme_Abstract
             'inherit' => true,
             'boxName' => 'Open Graph'
         );
+        $ret['generators']['listFade'] = array(
+                'class' => 'Kwf_Component_Generator_Box_StaticSelect',
+                'component' => array(
+                        'parentContent' => 'Kwc_Basic_ParentContent_Component',
+                        'listFade' => 'Default_List_Fade_Component'
+                ),
+                'inherit' => true,
+                'boxName' => 'List Fade'
+        );
+        $ret['editComponents'] = array('title', 'metaTags', 'listFade');
 
-        $ret['editComponents'] = array('title', 'metaTags');
-
-        $ret['contentWidth'] = 980;
+        $ret['contentWidth'] = 480;
 
         $ret['assets']['files'][] = 'kwf/themes/Default/css/master.css';
         $ret['assets']['files'][] = 'kwf/themes/Default/css/web.css';

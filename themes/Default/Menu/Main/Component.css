@@ -1,0 +1,17 @@
+.defaultMenuMain ul li {
+    float: left;
+    margin-right: 5px;
+    padding: 10px 10px;
+    margin-bottom: 0px;
+}
+.defaultMenuMain ul li:hover,
+.defaultMenuMain ul li.current {
+    background: var(secColor);
+}
+.defaultMenuMain ul li:hover a,
+.defaultMenuMain ul li.current a {
+    color: var(light);
+}
+.defaultMenuMain.webStandard ul.menu {
+    margin-bottom: 0px;
+}

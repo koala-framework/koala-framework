@@ -1,9 +1,88 @@
 body.ext-ie6 { text-align: center; }
 
-#page #outerHeader #header,
-#page #outerContent #content,
-#page #outerFooter #footer { width: 900px; margin: 0px auto; text-align: left; }
+#page {
+    border-top: 5px solid var(secColor);
+}
 
+#page #outerHeader #header,
+#page #outerContent .stage,
+#page #outerContent #content,
+#page #outerFooter #footer { width: 980px; margin: 0px auto; text-align: left; }
+#page #outerHeader #header {
+    height: 100px;
+}
+#page #outerContent {
+    background: url("/assets/kwf/themes/Default/images/bgContent.jpg") repeat center -5px;;
+    padding-bottom: 170px;
+}
+#page #outerContent .stage {
+    height: 185px;
+    border-top: 5px solid #C80000
+}
+#page #outerHeader #header .logo {
+    width: 180px;
+    height: 100px;
+    background: red;
+    float: left;
+}
+#page #outerHeader #header .searchBox {
+    width: 180px;
+    height: 33px;
+    background: red;
+    float: right;
+    margin-top: 67px;
+}
+#page #outerHeader #header .mainMenu {
+    height: 33px;
+    float: right;
+    margin-top: 67px;
+}
+#page #outerContent #content #innerContent .leftColumn,
+#page #outerContent #content #innerContent .centerColumn,
+#page #outerContent #content #innerContent .rightColumn {
+    float: left;
+    min-height: 100px;
+    background: red;
+}
+#page #outerContent #content #innerContent .leftColumn {
+    width: 180px;
+    margin-right: 40px;
+    padding-top: 50px;
+}
+#page #outerContent #content #innerContent .centerColumn {
+    width: 480px;
+    margin-right: 40px;
+}
+#page #outerContent #content #innerContent .rightColumn {
+    width: 240px;
+}
+#page .bottomStage {
+    background: url("/assets/kwf/themes/Default/images/bottomStageBg.jpg") repeat center top;
+    min-height: 240px;
+    width: 100%;
+}
+#page .bottomStage .bottomStageShadow {
+    background: url("/assets/kwf/themes/Default/images/bottomStageShadow.png") repeat center top;
+    height: 10px;
+    width: 100%;
+}
+#page #outerFooter #footer {
+    margin-top: 40px;
+    min-height: 100px;
+    background: red;
+}
+#page #outerFooter #footer .loginButton {
+    float: right;
+    background: yellow;
+    width: 85px;
+    height: 20px;
+}
+#page #outerFooter #footer .bottomMenu {
+    float: right;
+}
+#page #outerFooter #footer .leftArea {
+    float: left;
+}
 .webListNone ul { margin: 0px; }
 .webListNone,
 .webListNone li { margin-bottom: 0px; }
