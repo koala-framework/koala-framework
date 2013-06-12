@@ -33,6 +33,7 @@ class Kwc_Blog_Detail_Component extends Kwc_Directories_Item_Detail_Component
     {
         parent::modifyItemData($new);
         $new->publish_date = $new->row->publish_date;
+        $new->author = $new->row->author_firstname.' '.$new->row->author_lastname;
     }
 
     public function getFulltextContent()

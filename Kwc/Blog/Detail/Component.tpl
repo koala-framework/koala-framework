@@ -3,7 +3,7 @@
         <h1 class="title"><?=$this->componentLink($this->item, $this->title)?></h1>
         <div class="postInfo">
             <?=$this->data->trlKwf('Posted on', $this->date($this->row->publish_date))?>
-            <?=$this->data->trlKwf('by {0}', $this->author)?>
+            <?=$this->data->trlKwf('by {0}', $this->item->author)?>
         </div>
         <div class="content">
             <?=$this->component($this->content);?>
@@ -17,7 +17,7 @@
                     echo $this->componentLink($nc, null, array('skipAppendText'=>true));
                 } ?>
             <? } ?>
-            <?=$this->data->trlKwf('by {0}', $this->author)?>
+            <?=$this->data->trlKwf('by {0}', $this->item->author)?>
         </div>
         <? if ($this->placeholder['backLink']) { ?>
             <div class="backLink">
