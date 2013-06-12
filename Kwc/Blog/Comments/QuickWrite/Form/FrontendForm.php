@@ -8,9 +8,10 @@ class Kwc_Blog_Comments_QuickWrite_Form_FrontendForm extends Kwc_Posts_Write_For
             ->setLabelWidth(150)
             ->setAllowBlank(false)
             ->setWidth(200);
-        $this->insertAfter('name', new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail (will not be published)')))
+        $this->insertAfter('name', new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
             ->setLabelWidth(150)
             ->setVtype('email')
             ->setWidth(200);
+        $this->fields['content']->setFieldLabel(trlKwfStatic('Comment'));
     }
 }
