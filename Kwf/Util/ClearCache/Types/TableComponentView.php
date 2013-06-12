@@ -15,7 +15,8 @@ class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_T
                 return;
             }
         } catch (Exception $e) {}
-        parent::_clearCache($options);
+
+        Kwf_Component_Cache::getInstance()->deleteViewCache(new Kwf_Model_Select());
     }
 
     public function getTypeName()
