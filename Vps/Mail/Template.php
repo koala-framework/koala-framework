@@ -186,7 +186,7 @@ class Vps_Mail_Template
 
         // html mail
         $bodyHtml = $this->_getHtmlMailContent();
-        if (!is_null($bodyHtml)) {
+        if ($bodyHtml) {
             $this->_mail->setBodyHtml($bodyHtml);
         }
 

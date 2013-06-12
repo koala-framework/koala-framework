@@ -81,6 +81,6 @@ class Vps_Mail_Template_View extends Vps_View_Mail
             $this->setMasterTemplate("mails/{$this->_mailTplViewMasterTemplate}.html.tpl");
             return $this->render($this->getHtmlTemplate());
         }
-        return '';
+        return null;
     }
 }
