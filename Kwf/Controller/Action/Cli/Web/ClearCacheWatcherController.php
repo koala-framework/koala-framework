@@ -82,7 +82,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
         }
 
-        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|cache|log|temp/|data/index' ".implode(' ', $watchPaths);
+        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index' ".implode(' ', $watchPaths);
         echo $cmd."\n";
         $descriptorspec = array(
             1 => array("pipe", "w"),
