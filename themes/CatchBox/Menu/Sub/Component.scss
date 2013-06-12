@@ -1,34 +1,32 @@
 @import "compass/css3/images";
 
-.catchBoxMenuMain.webStandard {
-    @include background(linear-gradient(#585858, #3d3d3d));
+.catchBoxMenuSub {
+    background-color: #e6e6e6;
+    margin-top: 2px;
     
     ul {
-        height: 42px;
-        margin-bottom: 0;
+        height: 32px;
     }
 
     li {
-        height: 42px;
+        height: 32px;
         border-right: 1px solid #444;
         float: left;
         display: block;
         font-size: 14px;
-        margin-bottom: 0;
         
         &.last {
             border-right: none;
         }
 
         a {
-            height: 42px;
+            height: 32px;
             padding: 0 10px;
             display: block;
-            line-height: 3em;
-            color: #eee;
+            line-height: 32px;
+            color: #373737;
 
             &:hover {
-                color: #373737;
                 @include background(linear-gradient(#f9f9f9, #e5e5e5));
             }
         }

@@ -25,8 +25,10 @@
                     <div id="mainMenu">
                         <?=$this->component($this->boxes['mainMenu']);?>
                     </div>
-                    <div id="innerContent">
+                    <div id="subMenu">
                         <?=$this->component($this->boxes['subMenu']);?>
+                    </div>
+                    <div id="innerContent">
                         <?=$this->componentWithMaster($this->componentWithMaster);?>
                     </div>
                 </div>
