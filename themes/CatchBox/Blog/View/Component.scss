@@ -1,6 +1,38 @@
 .catchBoxBlogView {
-    padding: 10px;
-    border-radius: 5px;
-    background-color: white;
-    border-bottom: 2px solid #AAAAAA;
+    .entry {
+        padding: 10px 30px;
+        border-radius: 5px;
+        background-color: white;
+        border-bottom: 2px solid #AAAAAA;
+
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        h1.title {
+            font-size: 26px;
+            padding-bottom: 5px;
+            padding-top: 15px;
+            a:hover {
+                color: #1982d1;
+            }
+        }
+        .postInfo,
+        .categories {
+            font-size: 12px;
+            color: #666;
+            a {
+                color: #1982d1;
+                font-weight: bold;
+                &:hover { text-decoration: underline; }
+            }
+        }
+        .teaser { margin: 10px 0px; padding: 10px; background: var(lightGray); }
+        .readMoreLink {
+            text-align: right;
+            a {
+                color: #1982d1;
+                &:hover { text-decoration: underline; }
+            }
+
+        }
+    }
 }
