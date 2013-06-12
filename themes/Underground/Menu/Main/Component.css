@@ -1,0 +1,22 @@
+.undergroundMenuMain {
+    height: 100px;
+    width: 700px;
+}
+.undergroundMenuMain ul {
+    height: 100px;
+    line-height: 100px;
+    vertical-align: middle;
+}
+.undergroundMenuMain ul li {
+    display: inline;
+    line-height: normal;
+    font-size: 14px;
+    padding: 5px 15px;
+    background-attachment: scroll;
+    background-origin: padding-box;
+}
+.undergroundMenuMain ul li:hover,
+.undergroundMenuMain ul li.current {
+    background: #444;
+    color: var(light)
+}
