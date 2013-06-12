@@ -1,0 +1,35 @@
+.defaultListBottomStage {
+    margin-right: -88px;
+}
+.defaultListBottomStage h1 {
+    font-size: 16px;
+    background: var(light);
+    color: var(highlightedText);
+    padding: 10px 15px;
+    width: 200px;
+}
+.defaultListBottomStage a {
+    text-decoration: none;
+}
+
+.defaultListBottomStage .listItem {
+    margin-right: 88px;
+    float: left;
+}
+.defaultListBottomStage .listItem .defaultListBottomStageItemImage img {
+    border: 3px solid var(light);
+    margin-left: 7px;
+    margin-top: -30px;
+}
+.defaultListBottomStage .kwcBasicHeadline {
+    position: relative;
+    z-index: 3;
+}
+.defaultListBottomStage .bottomStageHeadlineBg {
+    background: url("/assets/kwf/themes/Default/images/bottomStageHeadlineBg.png") no-repeat;
+    width: 7px;
+    height: 6px;
+    position: absolute;
+    left: 0px;
+    top: 40px;
+}

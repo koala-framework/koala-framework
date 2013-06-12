@@ -49,7 +49,16 @@ class Default_Component extends Kwf_Component_Theme_Abstract
                 'inherit' => true,
                 'boxName' => 'List Fade'
         );
-        $ret['editComponents'] = array('title', 'metaTags', 'listFade');
+        $ret['generators']['bottomStage'] = array(
+                'class' => 'Kwf_Component_Generator_Box_StaticSelect',
+                'component' => array(
+                        'parentContent' => 'Kwc_Basic_ParentContent_Component',
+                        'bottomStage' => 'Default_List_BottomStage_Component'
+                ),
+                'inherit' => true,
+                'boxName' => 'Bottom Stage'
+        );
+        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage');
 
         $ret['contentWidth'] = 480;
 

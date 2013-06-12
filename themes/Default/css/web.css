@@ -12,7 +12,7 @@ body.ext-ie6 { text-align: center; }
     height: 100px;
 }
 #page #outerContent {
-    background: url("/assets/kwf/themes/Default/images/bgContent.jpg") repeat center -5px;;
+    background: url("/assets/kwf/themes/Default/images/bgContent.jpg") repeat center -5px;
     padding-bottom: 170px;
 }
 #page #outerContent .stage {
@@ -58,8 +58,13 @@ body.ext-ie6 { text-align: center; }
 }
 #page .bottomStage {
     background: url("/assets/kwf/themes/Default/images/bottomStageBg.jpg") repeat center top;
-    min-height: 240px;
+    min-height: 230px;
     width: 100%;
+}
+#page .bottomStage .innerBottomStage {
+    width: 980px;
+    margin: 20px auto 0px;
+    position: relative;
 }
 #page .bottomStage .bottomStageShadow {
     background: url("/assets/kwf/themes/Default/images/bottomStageShadow.png") repeat center top;

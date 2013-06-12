@@ -42,7 +42,10 @@
                 </div>
             </div>
             <div class="bottomStage">
-                    <div class="bottomStageShadow"></div>
+                <div class="bottomStageShadow"></div>
+                <div class="innerBottomStage">
+                    <?=$this->component($this->boxes['bottomStage']);?>
+                </div>
             </div>
             <div id="outerFooter">
                 <div id="footer">
