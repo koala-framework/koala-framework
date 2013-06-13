@@ -1,8 +1,25 @@
 .defaultMenuMain ul li {
     float: left;
     margin-right: 5px;
-    padding: 10px 10px;
+    padding: 10px 10px 11px;
     margin-bottom: 0px;
+    background: #efefef;
+    position: relative;
+}
+.defaultMenuMain ul li:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    top: 0px;
+    left: 0px;
+    background: #f6f6f6;
+    z-index: 1;
+}
+.defaultMenuMain ul li a {
+    font-size: 16px;
+    z-index: 2;
+    position: relative;
 }
 .defaultMenuMain ul li:hover,
 .defaultMenuMain ul li.current {
@@ -14,4 +31,15 @@
 }
 .defaultMenuMain.webStandard ul.menu {
     margin-bottom: 0px;
+}
+.defaultMenuMain ul li:hover:before,
+.defaultMenuMain ul li.current:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    top: 0px;
+    left: 0px;
+    background: #e17373;
+    z-index: 1;
 }
