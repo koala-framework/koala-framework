@@ -24,6 +24,12 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
                 throw new Kwf_Exception("invalid getIncludeCode return type");
             }
         }
+
+        if ($position == 'header') {
+            if ($v = Kwf_Config::getValue('kwc.favicon')) {
+                $ret .= "<link rel=\"shortcut icon\" href=\"{$v}\" />\n";
+            }
+        }
         return $ret;
     }
 }
