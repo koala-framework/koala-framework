@@ -5,7 +5,7 @@
         <?=$this->debugData()?>
     </head>
     <body>
-        Default-Master, in Root-Komponente überschreiben!
+        Default-Master, override in Root-Komponente.
         <?
         foreach($this->boxes as $box) {
             echo $this->component($box);
