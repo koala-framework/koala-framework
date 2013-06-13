@@ -6,7 +6,8 @@ class Kwc_Calendar_Directory_Component extends Kwc_Directories_ItemPage_Director
         $ret = parent::getSettings();
         $ret['componentName'] = 'Calendar';
         $ret['cssClass'] = 'webStandard';
-        $ret['viewCache'] = false;
+//         $ret['viewCache'] = false;
+        $ret['generators']['child']['component']['view'] = 'Kwc_Calendar_Directory_CalendarView_Component';
         $ret['generators']['detail']['component'] = 'Kwc_Calendar_Detail_Component';
         $ret['childModel'] = 'Kwc_Calendar_Directory_Model';
         return $ret;
