@@ -1,12 +1,16 @@
 .defaultMenuMain ul li {
     float: left;
+    position: relative;
+    z-index: 0;
+}
+.defaultMenuMain ul li a {
     margin-right: 5px;
     padding: 10px 10px 11px;
     margin-bottom: 0px;
     background: #efefef;
     position: relative;
 }
-.defaultMenuMain ul li:before {
+.defaultMenuMain ul li a:after {
     content: '';
     position: absolute;
     width: 100%;
@@ -14,26 +18,27 @@
     top: 0px;
     left: 0px;
     background: #f6f6f6;
-    z-index: 1;
+    z-index: -1;
 }
 .defaultMenuMain ul li a {
     font-size: 16px;
     z-index: 2;
     position: relative;
+    display: block;
 }
-.defaultMenuMain ul li:hover,
-.defaultMenuMain ul li.current {
+.defaultMenuMain ul li a:hover,
+.defaultMenuMain ul li.current a {
     background: var(secColor);
 }
-.defaultMenuMain ul li:hover a,
+.defaultMenuMain ul li a:hover,
 .defaultMenuMain ul li.current a {
     color: var(light);
 }
 .defaultMenuMain.webStandard ul.menu {
     margin-bottom: 0px;
 }
-.defaultMenuMain ul li:hover:before,
-.defaultMenuMain ul li.current:before {
+.defaultMenuMain ul li a:hover:after,
+.defaultMenuMain ul li.current a:after {
     content: '';
     position: absolute;
     width: 100%;
@@ -41,5 +46,5 @@
     top: 0px;
     left: 0px;
     background: #e17373;
-    z-index: 1;
+    z-index: -1;
 }
