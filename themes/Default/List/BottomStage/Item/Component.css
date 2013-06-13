@@ -7,6 +7,7 @@
     color: var(highlightedText);
     padding: 10px 15px;
     width: 200px;
+    font-family: 'Myriad Pro';
 }
 .defaultListBottomStage a {
     text-decoration: none;
