@@ -10,6 +10,7 @@
 <ro>Vizibil</ro>
 <sl>Vidno</sl>
 <es>Visible</es>
+<es_CL>Visible</es_CL>
 </text>
 <text>
 <en>Error</en>
@@ -22,6 +23,7 @@
 <cz>Chyba</cz>
 <sl>Napaka</sl>
 <es>Error</es>
+<es_CL>Error</es_CL>
 </text>
 <text>
 <en>An Error ocurred. Please try again later.</en>
@@ -69,6 +71,7 @@
 <sl>Pozdravljeni, {0}!</sl>
 <es>Hola {0}!</es>
 <uk>Добрий день</uk>
+<es_CL>Hola {0}!</es_CL>
 </text>
 <text>
 <en>Your account at {0}
@@ -126,6 +129,7 @@ has just been created.</en>
 <uk>Місце відправки:поштовий код, місто, вулиця</uk>
 <mk>Место на тргнување: Поштенски број, Место, Улица</mk>
 <sl>Kraj odhoda: Poštna številka, kraj, ulica</sl>
+<es_CL>Place of departure: zip code, Town, Street</es_CL>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -136,6 +140,7 @@ has just been created.</en>
 <uk>Введене місце не було знайдено</uk>
 <mk>Внесенето место не може да се наоѓа!</mk>
 <sl>Vnesenega kraja ni bilo možno najti.</sl>
+<es_CL>Entered place could not been found!</es_CL>
 </text>
 <text>
 <en>Show Route</en>
@@ -145,6 +150,7 @@ has just been created.</en>
 <ro>Arată ruta</ro>
 <uk>Показати маршрут</uk>
 <sl>Prikaz poti</sl>
+<es_CL>Show Route</es_CL>
 </text>
 <text>
 <en>Suggestions</en>
@@ -182,6 +188,7 @@ has just been created.</en>
 <mk>Ширина</mk>
 <sl>Širina</sl>
 <es>Ancho</es>
+<es_CL>Ancho</es_CL>
 </text>
 <text>
 <en>Height</en>
@@ -192,6 +199,7 @@ has just been created.</en>
 <mk>Висина</mk>
 <sl>Višina</sl>
 <es>Altura</es>
+<es_CL>Altura</es_CL>
 </text>
 <text>
 <en>Move + Zoom</en>
@@ -261,6 +269,7 @@ has just been created.</en>
 <mk>Име на фајлот</mk>
 <sl>Ime datoteke</sl>
 <es>Nombre de archivo</es>
+<es_CL>Nombre de archivo</es_CL>
 </text>
 <text>
 <en>File</en>
@@ -271,6 +280,7 @@ has just been created.</en>
 <mk>Фајл</mk>
 <sl>Datoteka</sl>
 <es>Archivo</es>
+<es_CL>Archivo</es_CL>
 </text>
 <text>
 <en>Content</en>
@@ -289,6 +299,7 @@ has just been created.</en>
 <mk>Слика</mk>
 <sl>Slika</sl>
 <es>Imagen</es>
+<es_CL>Imagen</es_CL>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -298,6 +309,7 @@ has just been created.</en>
 <mk>Зголеми ја сликата</mk>
 <sl>Povečaj sliko</sl>
 <es>Imagen extendida</es>
+<es_CL>Imagen extendida</es_CL>
 </text>
 <text>
 <en>Comment</en>
@@ -307,6 +319,7 @@ has just been created.</en>
 <mk>Комент</mk>
 <sl>Komentar</sl>
 <es>Comentario</es>
+<es_CL>Comentario</es_CL>
 </text>
 <text>
 <en>Size</en>
@@ -316,6 +329,7 @@ has just been created.</en>
 <mk>Големина</mk>
 <sl>Velikost</sl>
 <es>Tamaño</es>
+<es_CL>Tamaño</es_CL>
 </text>
 <text>
 <en>Preview</en>
@@ -333,6 +347,7 @@ has just been created.</en>
 <mk>Текст</mk>
 <sl>Besedilo</sl>
 <es>Texto</es>
+<es_CL>Texto</es_CL>
 </text>
 <text>
 <en>Position of Image</en>
@@ -350,6 +365,7 @@ has just been created.</en>
 <mk>Лево</mk>
 <sl>Levo</sl>
 <es>Izquierda</es>
+<es_CL>Izquierda</es_CL>
 </text>
 <text>
 <en>Right</en>
@@ -359,6 +375,7 @@ has just been created.</en>
 <mk>Десно</mk>
 <sl>Desno</sl>
 <es>Derecha</es>
+<es_CL>Derecha</es_CL>
 </text>
 <text>
 <en>Default Value</en>
@@ -400,6 +417,7 @@ has just been created.</en>
 <sl>Pošlji</sl>
 <bg>Изпрати</bg>
 <hu>Küldés</hu>
+<es_CL>enviar</es_CL>
 </text>
 <text>
 <en>Validator</en>
@@ -419,6 +437,7 @@ has just been created.</en>
 <ro>E-mail</ro>
 <mk>E-Mail</mk>
 <sl>E-naslov</sl>
+<es_CL>E-Mail</es_CL>
 </text>
 <text>
 <en>Date</en>
@@ -428,6 +447,7 @@ has just been created.</en>
 <mk>Датум</mk>
 <sl>Datum</sl>
 <es>Fecha</es>
+<es_CL>Fecha</es_CL>
 </text>
 <text>
 <en>at</en>
@@ -436,6 +456,7 @@ has just been created.</en>
 <ro>la</ro>
 <sl>ob</sl>
 <es>en</es>
+<es_CL>en</es_CL>
 </text>
 <text>
 <en>Title</en>
@@ -448,6 +469,7 @@ has just been created.</en>
 <sl>Naziv</sl>
 <es>Título</es>
 <sq>Titulli</sq>
+<es_CL>Título</es_CL>
 </text>
 <text>
 <en>Firstname</en>
@@ -463,6 +485,7 @@ has just been created.</en>
 <sl>Ime</sl>
 <bg>Име</bg>
 <sq>Emri</sq>
+<es_CL>Nombre</es_CL>
 </text>
 <text>
 <en>Lastname</en>
@@ -478,6 +501,7 @@ has just been created.</en>
 <sl>Priimek</sl>
 <bg>Фамилия</bg>
 <sq>Mbiemri</sq>
+<es_CL>Apellido</es_CL>
 </text>
 <text>
 <en>Email</en>
@@ -488,6 +512,7 @@ has just been created.</en>
 <id>99</id>
 <ro>E-mail</ro>
 <sl>E-naslov</sl>
+<es_CL>E-Mail</es_CL>
 </text>
 <text>
 <en>Subject</en>
@@ -521,6 +546,7 @@ has just been created.</en>
 <mk>Име</mk>
 <sl>Ime in priimek</sl>
 <es>Nombre</es>
+<es_CL>Nombre</es_CL>
 </text>
 <text>
 <en>Latest online</en>
@@ -545,6 +571,7 @@ has just been created.</en>
 <mk>Потпис</mk>
 <sl>Podpis</sl>
 <es>Firma</es>
+<es_CL>Firma</es_CL>
 </text>
 <text>
 <en>Publish Date</en>
@@ -583,6 +610,7 @@ has just been created.</en>
 <ro>pentru a continua</ro>
 <sl>Nadaljuj</sl>
 <es>para continuar</es>
+<es_CL>para continuar</es_CL>
 </text>
 <text>
 <en>Product</en>
@@ -592,6 +620,7 @@ has just been created.</en>
 <mk>Производ</mk>
 <sl>Produkt</sl>
 <es>Producto</es>
+<es_CL>Producto</es_CL>
 </text>
 <text>
 <en>Activate Useraccount</en>
@@ -633,6 +662,7 @@ has just been created.</en>
 <bg>Жена </bg>
 <mk>Женски</mk>
 <sq>Femërore</sq>
+<es_CL>Femenino</es_CL>
 </text>
 <text>
 <en>Male</en>
@@ -646,6 +676,7 @@ has just been created.</en>
 <es>Masculino</es>
 <bg>Мъж</bg>
 <sq>Mashkullore</sq>
+<es_CL>Masculino</es_CL>
 </text>
 <text>
 <en>Gender</en>
@@ -659,6 +690,7 @@ has just been created.</en>
 <es>Género</es>
 <bg>Пол</bg>
 <sq>Gjinia</sq>
+<es_CL>Género</es_CL>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -731,6 +763,7 @@ has just been created.</en>
 <es>Nombre</es>
 <bg>Име</bg>
 <sq>Emri</sq>
+<es_CL>Nombre</es_CL>
 </text>
 <text>
 <en>Last name</en>
@@ -742,6 +775,7 @@ has just been created.</en>
 <es>Apellido</es>
 <bg>Фамилия</bg>
 <sq>Mbiemri</sq>
+<es_CL>Apellido</es_CL>
 </text>
 <text>
 <en>Advice</en>
@@ -860,6 +894,7 @@ has just been created.</en>
 <mk>Се копира...</mk>
 <sl>Kopiram ...</sl>
 <es>Proceso de copiar...</es>
+<es_CL>Proceso de copiar...</es_CL>
 </text>
 <text>
 <en>create</en>
@@ -868,6 +903,7 @@ has just been created.</en>
 <ro>creează</ro>
 <sl>Ustvari</sl>
 <es>crear</es>
+<es_CL>crear</es_CL>
 </text>
 <text>
 <en>File successfully created:</en>
@@ -907,6 +943,7 @@ has just been created.</en>
 <mk>Страна</mk>
 <sl>Stran</sl>
 <es>Página</es>
+<es_CL>Página</es_CL>
 </text>
 <text>
 <en>Page properties</en>
@@ -931,6 +968,7 @@ has just been created.</en>
 <mk>Избришија страната</mk>
 <sl>Izbriši stran</sl>
 <es>Eliminar la página</es>
+<es_CL>Eliminar la página</es_CL>
 </text>
 <text>
 <en>Show / Hide Page</en>
@@ -1012,6 +1050,7 @@ has just been created.</en>
 <ro>Introduceţi adresa.</ro>
 <sl>Vnesite naslov.</sl>
 <es>Introducir la dirección</es>
+<es_CL>Introducir la dirección</es_CL>
 </text>
 <text>
 <en>Example</en>
@@ -1021,6 +1060,7 @@ has just been created.</en>
 <ro>Exemplu</ro>
 <sl>Primer</sl>
 <es>Ejemplo</es>
+<es_CL>Ejemplo</es_CL>
 </text>
 <text>
 <en>Unknown address</en>
@@ -1194,6 +1234,7 @@ has just been created.</en>
 <mk>Се случи грешка</mk>
 <ro>A intervenit o eroare</ro>
 <sl>Prišlo je do napake.</sl>
+<es_CL>Ha ocurrido un error</es_CL>
 </text>
 <text>
 <en>Link cannot link to itself</en>
@@ -2422,6 +2463,7 @@ has just been created.</en>
 <ro>Culoare</ro>
 <sl>Barva</sl>
 <es>Color</es>
+<es_CL>Color</es_CL>
 </text>
 <text>
 <en>Font Weight</en>
@@ -2886,6 +2928,7 @@ has just been created.</en>
 <ro>Formularul a fost trimis cu succes.</ro>
 <sl>Obrazec je bil uspešno poslan.</sl>
 <hu>Az űrlapot sikeresen elküldtük</hu>
+<es_CL>El formulario es enviado con éxito.</es_CL>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -3231,6 +3274,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>Во молиме внесете текст во полето</mk>
 <hu>Kérjük töltse ki a mezőt</hu>
 <bg>Во молиме внесете текст во полето</bg>
+<es_CL>Por favor, rellene el campo</es_CL>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -3255,6 +3299,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>'%value%' некоректно введена адреса електронної пошти</uk>
 <ro>'%value%' nu este o adresă validă de e-mail.</ro>
 <sl>%value%' ni veljaven e-naslov.</sl>
+<es_CL>'%value%' no es una dirección válida de correo electrónico</es_CL>
 </text>
 <text>
 <en>'%hostname%' is not a valid hostname for email address '%value%'</en>
@@ -3509,6 +3554,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>,</es>
 <mk>,</mk>
 <cz>,</cz>
+<es_CL>,</es_CL>
 </text>
 <text>
 <en>Space</en>
@@ -3764,6 +3810,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>803</id>
 <ro>Strada</ro>
 <sl>Ulica</sl>
+<es_CL>Calle</es_CL>
 </text>
 <text>
 <en>ZIP</en>
@@ -3788,6 +3835,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>806</id>
 <ro>Ţara</ro>
 <sl>Država</sl>
+<es_CL>País</es_CL>
 </text>
 <text>
 <en>Phone</en>
@@ -3798,6 +3846,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>807</id>
 <ro>Telefon</ro>
 <sl>Telefon</sl>
+<es_CL>Teléfono</es_CL>
 </text>
 <text>
 <en>Checkout</en>
@@ -3905,6 +3954,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>829</id>
 <ro>Dl.</ro>
 <sl>Gospod</sl>
+<es_CL>Señor</es_CL>
 </text>
 <text>
 <en>Ms.</en>
@@ -3914,6 +3964,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>830</id>
 <ro>Dna.</ro>
 <sl>Gospa</sl>
+<es_CL>Señora</es_CL>
 </text>
 <text>
 <context>sex</context>
@@ -3924,6 +3975,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>832</id>
 <ro>Formula de adresare</ro>
 <sl>Nagovor</sl>
+<es_CL>Tratamiento</es_CL>
 </text>
 <text>
 <en>What type of payment do you wish?</en>
@@ -4056,6 +4108,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <it>indirizzo</it>
 <ro>Adrese</ro>
 <sl>Naslovi</sl>
+<es_CL>dirección</es_CL>
 </text>
 <text>
 <en>Abort</en>
@@ -4092,6 +4145,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Culori</ro>
 <sl>Barve</sl>
 <es>Colores</es>
+<es_CL>Colores</es_CL>
 </text>
 <text>
 <en>Color small 1</en>
@@ -4186,6 +4240,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>897</id>
 <ro>Fax</ro>
 <sl>Faks</sl>
+<es_CL>Fax</es_CL>
 </text>
 <text>
 <en>Website</en>
@@ -4768,6 +4823,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1004</id>
 <ro>Compania</ro>
 <sl>Podjetje</sl>
+<es_CL>Empresa</es_CL>
 </text>
 <text>
 <en>Address</en>
@@ -4919,6 +4975,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Copyright</ro>
 <sl>Impresum</sl>
 <uk>Контакти</uk>
+<es_CL>imprimir</es_CL>
 </text>
 <text>
 <en>Operating company / responsible person for the content</en>
@@ -5796,6 +5853,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1207</id>
 <ro>Mesaj</ro>
 <sl>Sporočilo</sl>
+<es_CL>Mensaje</es_CL>
 </text>
 <text>
 <en>Mr. {0}</en>
@@ -6897,6 +6955,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <cz>cz</cz>
 <sl>sl</sl>
 <es>es</es>
+<es_CL>es</es_CL>
 </text>
 <text>
 <en>hide</en>
@@ -7034,6 +7093,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1405</id>
 <ro>Citeşte mai departe »</ro>
 <sl>Več »</sl>
+<es_CL>Más »</es_CL>
 </text>
 <text>
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
@@ -7414,6 +7474,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1492</id>
 <ro>Citeşte mai departe</ro>
 <sl>Več</sl>
+<es_CL>Más</es_CL>
 </text>
 <text>
 <en>Original Category</en>
@@ -8214,6 +8275,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>.</es>
 <mk>.</mk>
 <cz>.</cz>
+<es_CL>.</es_CL>
 </text>
 <text>
 <en>old</en>
