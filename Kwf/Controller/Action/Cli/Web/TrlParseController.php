@@ -150,6 +150,7 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
 
     public function copyAction()
     {
+        Kwf_Component_ModelObserver::getInstance()->disable();
         $source = $this->_getParam('source');
         $target = $this->_getParam('target');
         if (!$source || !$target) throw new Kwf_Exception_Client("source/target parameter required");
