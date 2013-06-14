@@ -14,6 +14,7 @@ body.ext-ie6 { text-align: center; }
 #page #outerContent {
     background: url("/assets/kwf/themes/Default/images/bgContent.jpg") repeat center -5px;
     padding-bottom: 170px;
+    position: relative;
 }
 #page #outerContent .stage {
     height: 185px;
@@ -42,16 +43,15 @@ body.ext-ie6 { text-align: center; }
 #page #outerContent #content #innerContent .rightColumn {
     float: left;
     min-height: 100px;
-    background: red;
 }
 #page #outerContent #content #innerContent .leftColumn {
-    width: 180px;
-    margin-right: 40px;
+    width: 190px;
+    margin-right: 35px;
     padding-top: 50px;
 }
 #page #outerContent #content #innerContent .centerColumn {
     width: 480px;
-    margin-right: 40px;
+    margin-right: 35px;
 }
 #page #outerContent #content #innerContent .rightColumn {
     width: 240px;
