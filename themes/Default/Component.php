@@ -16,6 +16,7 @@ class Default_Component extends Kwf_Component_Theme_Abstract
             'component' => array(
                 'mainMenu' => 'Default_Menu_Main_Component',
                 'subMenu' => 'Default_Menu_Sub_Component',
+                'subSubMenu' => 'Default_Menu_SubSub_Component',
                 'bottomMenu' => 'Default_Menu_Bottom_Component',
             ),
             'inherit' => true,

@@ -21,7 +21,7 @@
     z-index: -1;
 }
 .defaultMenuMain ul li a {
-    font-size: 16px;
+    font-size: 15px;
     z-index: 2;
     position: relative;
     display: block;

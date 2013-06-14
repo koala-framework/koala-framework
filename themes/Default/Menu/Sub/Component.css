@@ -1,0 +1,19 @@
+.defaultMenuSub > ul > li {
+    padding-left: 15px;
+    margin-top: 10px;
+    border-bottom: 1px dashed var(highlightedText);
+    padding-bottom: 10px;
+}
+.defaultMenuSub > ul > li > a {
+    background: url("/assets/kwf/themes/Default/images/subMenuListItem.png") left 6px no-repeat; 
+    margin-left: -15px;
+    padding-left: 15px;
+    display: block;
+}
+.defaultMenuSub > ul > li.current.hasSubmenu > a {
+    background: url("/assets/kwf/themes/Default/images/subMenuListItemActive.png") left 6px no-repeat; 
+}
+.defaultMenuSub > ul > li > a {
+    font-size: 12px;
+    font-weight: bold;
+}
