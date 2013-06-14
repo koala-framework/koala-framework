@@ -45,16 +45,16 @@ body.ext-ie6 { text-align: center; }
     min-height: 100px;
 }
 #page #outerContent #content #innerContent .leftColumn {
-    width: 190px;
-    margin-right: 35px;
+    width: 185px;
+    margin-right: 50px;
     padding-top: 50px;
 }
 #page #outerContent #content #innerContent .centerColumn {
-    width: 480px;
-    margin-right: 35px;
+    width: 465px;
+    margin-right: 50px;
 }
 #page #outerContent #content #innerContent .rightColumn {
-    width: 240px;
+    width: 230px;
 }
 #page .bottomStage {
     background: url("/assets/kwf/themes/Default/images/bottomStageBg.jpg") repeat center top;
