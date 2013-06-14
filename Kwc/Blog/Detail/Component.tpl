@@ -26,6 +26,9 @@
         <? } ?>
     </div>
     <div class="comments">
+        <? if ($this->placeholder['commentHeadline']) { ?>
+            <h3><?=$this->placeholder['commentHeadline']?></h3>
+        <? } ?>
         <?=$this->component($this->comments)?>
     </div>
 </div>

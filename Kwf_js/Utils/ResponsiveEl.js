@@ -8,11 +8,9 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
     if (!widths instanceof Array) widths = [widths];
 
     var initEl = function(el) {
-        var matched = false;
         widths.each(function(w) {
-            if (el.getWidth() > w && !matched) {
+            if (el.getWidth() > w) {
                 el.addClass('gt'+w);
-                matched = true;
             } else {
                 el.removeClass('gt'+w);
             }

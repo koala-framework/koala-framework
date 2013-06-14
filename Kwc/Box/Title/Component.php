@@ -5,7 +5,13 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Title');
+        $ret['flags']['hasHeaderIncludeCode'] = true;
         return $ret;
+    }
+
+    public function getIncludeCode()
+    {
+        return $this->getData();
     }
 
     protected function _getTitle()

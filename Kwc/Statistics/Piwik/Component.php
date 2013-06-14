@@ -7,7 +7,13 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         $ret['assets']['files'][] = 'kwf/Kwc/Statistics/Piwik/Component.js';
         $ret['assets']['dep'][] = 'KwfStatistics';
         $ret['enableLinkTracking'] = true;
+        $ret['flags']['hasFooterIncludeCode'] = true;
         return $ret;
+    }
+
+    public function getIncludeCode()
+    {
+        return $this->getData();
     }
 
     public function getTemplateVars()

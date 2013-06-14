@@ -24,6 +24,8 @@ class Kwf_Util_Setup
         require_once 'Kwf/Registry.php';
         Zend_Registry::setClassName('Kwf_Registry');
 
+        error_reporting(E_ALL^E_STRICT);
+
         require_once 'Kwf/Trl.php';
 
         umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen
@@ -50,6 +52,7 @@ class Kwf_Util_Setup
             'Kwf_Registry',
             'Kwf_Benchmark',
             'Kwf_Loader',
+            'Kwf_Debug',
         );
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
@@ -84,6 +87,9 @@ class Kwf_Util_Setup
         $ret .= "\n";
         $ret .= "\n";
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
+        $ret .= "error_reporting(E_ALL^E_STRICT);\n";
+        $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL^E_STRICT);\n";
+        $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
@@ -123,19 +129,23 @@ class Kwf_Util_Setup
         $ret .= "Kwf_Loader::registerAutoload();\n";
 
         $ret .= "ini_set('memory_limit', '128M');\n";
-        $ret .= "error_reporting(E_ALL);\n";
+
         $ret .= "date_default_timezone_set('Europe/Berlin');\n";
+
         if (function_exists('mb_internal_encoding')) {
             $ret .= "mb_internal_encoding('UTF-8');\n";
         }
         if (function_exists('iconv_set_encoding')) {
             $ret .= "iconv_set_encoding('internal_encoding', 'utf-8');\n";
         }
-        $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL);\n";
-        $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen\n";
 
         $ret .= "Zend_Registry::set('requestNum', ''.floor(Kwf_Benchmark::\$startTime*100));\n";
+
+        if (get_magic_quotes_gpc()) {
+            //this is *NOT* recommended but still works somehow
+            $ret .= "Kwf_Util_UndoMagicQuotes::undoMagicQuotes();\n";
+        }
 
         if (Kwf_Config::getValue('debug.firephp') || Kwf_Config::getValue('debug.querylog')) {
             $ret .= "if (php_sapi_name() != 'cli') {\n";
@@ -156,7 +166,6 @@ class Kwf_Util_Setup
             'Kwf_Loader',
             'Kwf_Config',
             'Kwf_Cache_Simple',
-            'Kwf_Debug',
             'Kwf_Trl',
         );
         if (Kwf_Component_Data_Root::getComponentClass()) {

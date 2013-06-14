@@ -29,9 +29,14 @@ class Kwf_Cache_SimpleStatic
                 self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
             } else {
                 //fallback to file backend (NOT recommended!)
-                self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
-                    'cache_dir' => 'cache/simple'
-                )));
+                try {
+                    self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
+                        'cache_dir' => 'cache/simple'
+                    )));
+                } catch (Exception $e) {
+                    self::$_zendCache->setBackend(new Zend_Cache_Backend_BlackHole());
+                    throw $e;
+                }
             }
         }
         return self::$_zendCache;
@@ -123,7 +128,7 @@ class Kwf_Cache_SimpleStatic
             if (!$r) $ret = false;
         }
         if (!$cache && php_sapi_name() == 'cli' && $ids) {
-            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)), Kwf_Util_Apc::SILENT);
+            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
             if (!$result['result']) $ret = false;
         }
         return $ret;

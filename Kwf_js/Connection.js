@@ -58,6 +58,7 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
         }
         if (!options.params) options.params = {};
         options.params.application_max_assets_mtime = Kwf.application.maxAssetsMTime;
+        if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
             //wird benötigt wenn fkt über mozrepl aufgerufen wird

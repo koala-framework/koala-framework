@@ -80,12 +80,14 @@ class Kwf_Component_Abstract
     public static function validateSettings($settings, $componentClass)
     {
         if (isset($settings['ownModel']) && $settings['ownModel']) {
-            try {
-                $m = Kwf_Model_Abstract::getInstance($settings['ownModel']);
-                $pk = $m->getPrimaryKey();
-            } catch (Exception $e) {}
-            if (isset($pk) && $pk != 'component_id') {
-                throw new Kwf_Exception("ownModel for '$componentClass' must have 'component_id' as primary key");
+            if (Kwf_Setup::hasDb()) { //only check if db is set up correclty (might not during installation)
+                try {
+                    $m = Kwf_Model_Abstract::getInstance($settings['ownModel']);
+                    $pk = $m->getPrimaryKey();
+                } catch (Exception $e) {}
+                if (isset($pk) && $pk != 'component_id') {
+                    throw new Kwf_Exception("ownModel for '$componentClass' must have 'component_id' as primary key");
+                }
             }
         }
         if (isset($settings['modelname'])) {
