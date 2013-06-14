@@ -2,3 +2,9 @@
     margin-top: 20px;
     margin-bottom: 15px;
 }
+.defaultBreadcrumbs a {
+    font-size: 10px;
+}
+.defaultBreadcrumbs .last {
+    color: var(highlightedText);
+}
