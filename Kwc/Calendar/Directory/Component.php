@@ -9,6 +9,7 @@ class Kwc_Calendar_Directory_Component extends Kwc_Directories_ItemPage_Director
 //         $ret['viewCache'] = false;
         $ret['generators']['child']['component']['view'] = 'Kwc_Calendar_Directory_CalendarView_Component';
         $ret['generators']['detail']['component'] = 'Kwc_Calendar_Detail_Component';
+        $ret['extConfig'] = 'Kwc_Directories_Item_Directory_ExtConfigTabs';
         $ret['childModel'] = 'Kwc_Calendar_Directory_Model';
         return $ret;
     }
