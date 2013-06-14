@@ -1,6 +1,18 @@
 <?php
 class Kwc_Box_MetaTags_Component extends Kwc_Abstract
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['flags']['hasHeaderIncludeCode'] = true;
+        return $ret;
+    }
+
+    public function getIncludeCode()
+    {
+        return $this->getData();
+    }
+
     protected function _getMetaTagComponents()
     {
         $components = array();
