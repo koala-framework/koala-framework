@@ -1,11 +1,7 @@
 <?=$this->doctype('XHTML1_STRICT');?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->component($this->boxes['title']);?>
-        <?=$this->component($this->boxes['metaTags']);?>
-        <?=$this->assets('Frontend');?>
-        <?=$this->debugData();?>
-        <link rel="shortcut icon" href="/assets/web/images/favicon.ico" /> 
+        <?=$this->includeCode('header')?>
     </head>
     <body class="frontend">
         <div id="page">
@@ -57,6 +53,6 @@
                 </div>
             </div>
         </div>
-        <?=$this->statisticCode();?>
+        <?=$this->includeCode('footer')?>
     </body>
 </html>
