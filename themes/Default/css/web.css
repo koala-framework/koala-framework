@@ -9,7 +9,7 @@ body.ext-ie6 { text-align: center; }
 #page #outerContent #content,
 #page #outerFooter #footer { width: 980px; margin: 0px auto; text-align: left; }
 #page #outerHeader #header {
-    height: 100px;
+    height: 115px;
 }
 #page #outerContent {
     background: url("/assets/kwf/themes/Default/images/bgContent.jpg") repeat center -5px;
@@ -23,20 +23,21 @@ body.ext-ie6 { text-align: center; }
 #page #outerHeader #header .logo {
     width: 180px;
     height: 100px;
-    background: red;
     float: left;
+    margin-top: 7px;
+    margin-bottom: 8px;
 }
 #page #outerHeader #header .searchBox {
     width: 180px;
     height: 33px;
     background: red;
     float: right;
-    margin-top: 67px;
+    margin-top: 82px;
 }
 #page #outerHeader #header .mainMenu {
     height: 33px;
     float: right;
-    margin-top: 67px;
+    margin-top: 82px;
 }
 #page #outerContent #content #innerContent .leftColumn,
 #page #outerContent #content #innerContent .centerColumn,

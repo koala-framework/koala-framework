@@ -21,6 +21,14 @@ class Default_Component extends Kwf_Component_Theme_Abstract
             ),
             'inherit' => true,
         );
+        $ret['generators']['logo'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => array(
+                'logo' => 'Default_Box_Logo_Component'
+            ),
+            'inherit' => true,
+            'unique' => true
+        );
         $ret['generators']['box']['component']['metaTags'] = 'Kwc_Box_MetaTagsContent_Component';
         $ret['generators']['title'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
@@ -59,7 +67,7 @@ class Default_Component extends Kwf_Component_Theme_Abstract
                 'inherit' => true,
                 'boxName' => 'Bottom Stage'
         );
-        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage');
+        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo');
 
         $ret['contentWidth'] = 480;
 

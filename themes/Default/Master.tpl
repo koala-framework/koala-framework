@@ -12,7 +12,7 @@
             <div id="outerHeader">
                 <div id="header">
                     <div class="logo">
-                        
+                        <?=$this->component($this->boxes['logo']);?>
                     </div>
                     <div class="searchBox"></div>
                     <div class="mainMenu">
