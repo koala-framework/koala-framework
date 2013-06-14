@@ -48,6 +48,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             unlink('config.db.ini');
         }
 
+        $skipClearCache = $this->_getParam('skip-clear-cache');
 
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
 
@@ -57,7 +58,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $updates = array($update);
         } else {
             $rev = $this->_getParam('rev');
-            $skipClearCache = $this->_getParam('skip-clear-cache');
 
             if (!$skipClearCache) {
                 Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
