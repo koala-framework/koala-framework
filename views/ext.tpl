@@ -42,6 +42,9 @@
 
     <script type="text/javascript">
         Kwf.userRole = '<?= $this->ext['userRole'] ?>';
+        <? if (isset($this->sessionToken)) { ?>
+        Kwf.sessionToken = '<?= $this->sessionToken ?>';
+        <? } ?>
         Kwf.main = function() {
             <? if ($this->ext['class']) { ?>
             var panel = new <?= $this->ext['class'] ?>(<?= Zend_Json::encode($this->ext['config']) ?>);

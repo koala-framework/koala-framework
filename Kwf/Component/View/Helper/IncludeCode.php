@@ -49,6 +49,11 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
             }
 
             $ret .= Kwf_View_Helper_DebugData::debugData();
+
+            $helper = new Kwf_Component_View_Helper_Dynamic();
+            $helper->setView($this->_getView());
+            $ret .= $helper->dynamic('SessionToken');
+
         } else if ($position == 'footer') {
             if (!$statisticsBoxUsed) {
                 //if there was no statistics box output default code
