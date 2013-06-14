@@ -4,6 +4,7 @@ class Kwf_Component_Dynamic_SessionToken extends Kwf_Component_Dynamic_Abstract
 {
     public function getContent()
     {
+        $ret = '';
         if (Kwf_Util_SessionToken::getSessionToken()) {
             $ret  = "<script type=\"text/javascript\">\n";
             $ret .= "Kwf.sessionToken = '".Kwf_Util_SessionToken::getSessionToken()."';\n";
