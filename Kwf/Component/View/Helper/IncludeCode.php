@@ -1,8 +1,10 @@
 <?php
 class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Abstract
 {
-    public function includeCode($data, $position)
+    public function includeCode($position)
     {
+        $data = $this->_getView()->component;
+
         $ret = '';
 
         $flag = ($position == 'header') ? 'hasHeaderIncludeCode' : 'hasFooterIncludeCode';
