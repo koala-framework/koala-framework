@@ -57,9 +57,11 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
             );
             foreach ($masterDatas as $c) {
                 $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
-                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                if ($c->isPage) {
-                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                if ($c) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+                    if ($c->isPage) {
+                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                    }
                 }
             }
         }
@@ -77,9 +79,11 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
             );
             foreach ($masterDatas as $c) {
                 $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
-                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                if ($c->isPage) {
-                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                if ($c) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+                    if ($c->isPage) {
+                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                    }
                 }
             }
         }
