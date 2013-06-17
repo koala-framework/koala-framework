@@ -6,6 +6,7 @@
     <input type="hidden" name="fadeClass" class="fadeClass" value="<?= $this->fadeClass; ?>" />
 
     <? $i = 0; ?>
+    <div class="components">
     <? foreach ($this->children as $child) { ?>
         <?
             $class = '';
@@ -23,4 +24,5 @@
             <?=$this->component($child);?>
         </div>
     <? } ?>
+    </div>
 </div>
