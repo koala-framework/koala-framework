@@ -39,7 +39,7 @@ if (!Kwf.Fade) Kwf.Fade = {};
 Kwf.Fade.Elements = function(cfg) {
     this.selector = cfg.selector;
 
-    this.animationType = 'slide';
+    this.animationType = 'fade';
     this.elementAccessDirect = false; // optional: displays direct acces links to each image
     this.elementAccessPlayPause = false; // optional: displayes play / pause button
     this.elementAccessLinks = false; // optional, deprecated: displays both of above
