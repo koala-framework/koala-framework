@@ -7,6 +7,7 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
     {
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', $type);
+        $source = rtrim($source, '/');
         if ($type == 'domain' || $type == 'domainPath') {
             $sourceWithoutWww = preg_replace('#^www\\.#', '', $source);
             $sources = array(
@@ -19,10 +20,13 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
                 $sourceWithoutWww.'/',
                 'http://'.$sourceWithoutWww.'/',
             );
-            $s->whereEquals('source', $sources);
         } else {
-            $s->whereEquals('source', $source);
+            $sources = array(
+                $source,
+                $source.'/',
+            );
         }
+        $s->whereEquals('source', $sources);
         $s->whereEquals('active', true);
         if ($type == 'path') {
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
