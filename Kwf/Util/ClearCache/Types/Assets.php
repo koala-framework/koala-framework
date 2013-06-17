@@ -21,6 +21,9 @@ class Kwf_Util_ClearCache_Types_Assets extends Kwf_Util_ClearCache_Types_Abstrac
             $urls = $loader->getDependencies()->getAssetUrls($assetsType, 'js', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage);
             $urls = array_merge($urls, $loader->getDependencies()->getAssetUrls($assetsType, 'css', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage));
             foreach ($urls as $url) {
+                if (substr($url, 0, 7) == 'http://' || substr($url, 0, 8) == 'https://') {
+                    continue;
+                }
                 $url = preg_replace('#^/assets/#', '', $url);
                 $url = preg_replace('#\\?v=\d+(&t=\d+)?$#', '', $url);
                 $loader->getFileContents($url);

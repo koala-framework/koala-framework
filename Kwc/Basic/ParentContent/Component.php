@@ -69,4 +69,11 @@ class Kwc_Basic_ParentContent_Component extends Kwc_Abstract
     {
         return $this->_getParentContentData()->getComponent()->getContentWidth();
     }
+
+    public function getIncludeCode()
+    {
+        $c = $this->_getParentContentData();
+        if (!$c) return null;
+        return $c->getComponent()->getIncludeCode();
+    }
 }

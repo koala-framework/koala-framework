@@ -77,7 +77,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {Number} timeWidth Width of time field in pixels (defaults to 50)
      */
-    ,timeWidth:50
+    ,timeWidth:60
     /**
      * @cfg {Number} dateWidth Width of date field in pixels (defaults to 90)
      */
