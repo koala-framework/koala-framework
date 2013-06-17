@@ -67,7 +67,9 @@ Kwf.Utils.Upload = {
                 }
             }
         }
-        xhr.open('POST', '/kwf/media/upload/json-upload');
+        var url = '/kwf/media/upload/json-upload';
+        if (Kwf.sessionToken) url += '?kwfSessionToken='+Kwf.sessionToken;
+        xhr.open('POST', url);
         xhr.setRequestHeader('X-Upload-Name', file.name);
         xhr.setRequestHeader('X-Upload-Size', file.size);
         xhr.setRequestHeader('X-Upload-Type', file.type);

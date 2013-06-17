@@ -49,6 +49,7 @@ Ext.extend(Kwf.Utils.SwfUpload, Ext.util.Observable, {
         for (var i in params) {
             if (typeof params[i] == 'boolean') params[i] = params[i] ? 1 : 0;
         }
+        if (Kwf.sessionToken) params.kwfSessionToken = Kwf.sessionToken;
 
         this.swfu = new SWFUpload({
             minimum_flash_version : '9.0.28',
