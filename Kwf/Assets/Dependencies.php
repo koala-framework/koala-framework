@@ -195,7 +195,7 @@ class Kwf_Assets_Dependencies
         }
 
         foreach ($files as &$f) {
-            if (substr($f, 0, 8) != 'dynamic/') {
+            if (substr($f, 0, 8) != 'dynamic/' && substr($f, 0, 7) != 'http://' && substr($f, 0, 8) != 'https://') {
                 $f = $section . '-' . $f;
             }
         }
