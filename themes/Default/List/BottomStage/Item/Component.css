@@ -30,7 +30,7 @@
     background: url("/assets/kwf/themes/Default/images/bottomStageHeadlineBg.png") no-repeat;
     width: 7px;
     height: 6px;
-    position: absolute;
+    position: relative;
     left: 0px;
-    top: 40px;
+    top: -133px;
 }
