@@ -11,6 +11,7 @@ class Kwf_Assets_Cache extends Kwf_Cache_Core
             'cache_dir' => 'cache/assets',
             'cache_file_umask' => 0666,
             'hashed_directory_umask' => 0777,
+            'hashed_directory_level' => 2
         ));
         $this->setBackend($backend);
     }
