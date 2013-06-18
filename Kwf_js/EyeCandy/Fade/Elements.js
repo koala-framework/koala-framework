@@ -67,11 +67,12 @@ Kwf.Fade.Elements = function(cfg) {
     if (typeof cfg.fadeEvery != 'undefined') this.fadeEvery = cfg.fadeEvery;
     if (typeof cfg.startRandom != 'undefined') this.startRandom = cfg.startRandom;
 
-    var self = this;
-
     this._elementAccessLinkEls = [];
 
     this.fadeElements = $(this.selectorRoot).find(this.selector);
+
+    $(this.selectorRoot).append('<div class="components"></div>');
+    $(this.selectorRoot).children('.components').append(this.fadeElements);
 
     if (this.startRandom) {
         this.active = Math.floor(Math.random() * this.fadeElements.length);
@@ -134,25 +135,43 @@ Kwf.Fade.Elements.prototype = {
     _playPause: 'play',
     _playPauseButton: null,
     _template: null,
+    _isAnimating: false,
 
     start: function() {
         if (this.fadeElements.length <= 1) return;
         this._components = $(this.selectorRoot).children('.components');
+        this.fadeElements.each($.proxy(function(index, el) {
+            if ($(el).height() > this._components.height()) {
+                this._components.css('height', $(this.fadeElements[this.active]).height());
+            }
+        }, this));
+        $(window).resize($.proxy(function() {
+            this.fadeElements.each($.proxy(function(index, el) {
+                if ($(el).height() > this._components.height()) {
+                    this._components.css('height', $(this.fadeElements[this.active]).height());
+                }
+            }, this));
+        }, this));
+        $(this.fadeElements[this.active]).css('position', 'relative');
         this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
     },
 
     doFade: function(direction) {
-        if (this.fadeElements.length <= 1) return;
+        if (this.fadeElements.length <= 1 || this._isAnimating) return;
 
+        this.setAnimated(true);
         var activeEl = $(this.fadeElements[this.active]);
         if (!activeEl.is(':visible')) {
             this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
             return;
         }
         var nextEl = $(this.fadeElements[this.next]);
-        if (activeEl == nextEl) {
+        if (activeEl[0] == nextEl[0]) {
             return;
         }
+
+        nextEl.stop(true, false);
+        activeEl.stop(true, false);
         if(this.animationType == 'slide') { //TODO implement different animation-types
             // set default direction
             var width = this._components.width();
@@ -181,20 +200,16 @@ Kwf.Fade.Elements.prototype = {
                     zIndex: 10
                 });
                 if ($.support.transition || $.support.transform) {
-                    this._components.transition({ x: width }, this.fadeDuration * 1000, this.easingFadeIn, function() {
-                        $(this).css({ x: 0 });
+                    this._components.transition({ x: width }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
+                        this._components.css({ x: 0 });
                         nextEl.css('left', '0px');
                         activeEl.hide().css({
                             left: 0,
                             zIndex: 0
                         });
-                    });
+                        this.setAnimated(false);
+                    }, this));
                 } else {
-                    nextEl.animate({
-                        left: '+='+width
-                    }, this.fadeDuration * 1000, this.easingFadeIn, function() {
-                        $(this).css('left', '0px');
-                    });
                     activeEl.animate({
                         left: '+='+width
                     }, this.fadeDuration * 1000, this.easingFadeIn, function() {
@@ -203,6 +218,12 @@ Kwf.Fade.Elements.prototype = {
                             zIndex: 0
                         });
                     });
+                    nextEl.animate({
+                        left: '+='+width
+                    }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
+                        nextEl.css('left', '0px');
+                        this.setAnimated(false);
+                    }, this));
                 }
             } else if (dir == 't' || dir == 'b') {
                 $(nextEl).show().css({
@@ -210,20 +231,16 @@ Kwf.Fade.Elements.prototype = {
                     zIndex: 10
                 });
                 if ($.support.transition || $.support.transform) {
-                    this._components.transition({ y: height }, this.fadeDuration * 1000, this.easingFadeIn, function() {
-                        $(this).css({ y: 0 });
+                    this._components.transition({ y: height }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
+                        this._components.css({ y: 0 });
                         nextEl.css('top', '0px');
                         activeEl.hide().css({
                             top: 0,
                             zIndex: 0
                         });
-                    });
+                        this.setAnimated(false);
+                    }, this));
                 } else {
-                    nextEl.animate({
-                        top: '+='+height
-                    }, this.fadeDuration * 1000, this.easingFadeIn, function() {
-                        $(this).css('top', '0px');
-                    });
                     activeEl.animate({
                         top: '+='+height
                     }, this.fadeDuration * 1000, this.easingFadeOut, function() {
@@ -232,15 +249,46 @@ Kwf.Fade.Elements.prototype = {
                             zIndex: 0
                         });
                     });
+                    nextEl.animate({
+                        top: '+='+height
+                    }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
+                        nextEl.css('top', '0px');
+                        this.setAnimated(false);
+                    }, this));
                 }
             }
         } else {
+            nextEl.css({
+                position: 'absolute',
+                zIndex: 11,
+                opacity: 0
+            });
             if ($.support.transition || $.support.transform) {
-                nextEl.transition({ opacity: 1 }, this.fadeDuration * 1000, this.easingFadeIn);
-                activeEl.transition({ opacity: 0 }, this.fadeDuration * 1000, this.easingFadeOut);
+                activeEl.transition({ opacity: 0 }, this.fadeDuration * 500, this.easingFadeOut);
+                nextEl.transition({ opacity: 1 }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
+                    nextEl.css({
+                        position: 'relative',
+                        zIndex: 10
+                    });
+                    activeEl.css({
+                        position: 'absolute',
+                        zIndex: 0
+                    });
+                    this.setAnimated(false);
+                }, this));
             } else {
-                nextEl.fadeTo(this.fadeDuration * 1000, 1, this.easingFadeIn);
-                activeEl.fadeTo(this.fadeDuration * 1000, 0, this.easingFadeOut);
+                activeEl.fadeTo(this.fadeDuration * 500, 0, this.easingFadeOut);
+                nextEl.fadeTo(this.fadeDuration * 1000, 1, this.easingFadeIn, $.proxy(function() {
+                     nextEl.css({
+                        position: 'relative',
+                        zIndex: 10
+                    });
+                    activeEl.css({
+                        position: 'absolute',
+                        zIndex: 0
+                    });
+                    this.setAnimated(false);
+                }, this));
             }
         }
 
@@ -267,6 +315,11 @@ Kwf.Fade.Elements.prototype = {
             this._playPauseButton.addClass('elementAccessPlay');
         }
         this._playPause = 'pause';
+    },
+
+    setAnimated: function(b)
+    {
+        this._isAnimating = b;
     },
 
     play: function() {

@@ -9,7 +9,7 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
 
         // $ret['generators']['child']['component'] muss gesetzt werden
 
-        $ret['selector'] = '.components > div';
+        $ret['selector'] = '> div';
 
         // optional: wird ausgeblendet wenn nur ein fade-element existiert
         // und das hier angegebene element keinen inhalt hat
