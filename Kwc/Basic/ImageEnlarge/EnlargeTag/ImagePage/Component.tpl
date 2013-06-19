@@ -22,11 +22,6 @@
         </div>
     </div>
     <div class="lightboxFooter">
-        <? if(isset($this->options->imageCaption) && $this->options->imageCaption) { ?>
-            <p class="imageCaption<? if(isset($this->options->title) && $this->options->title) { ?>Title<? } ?>">
-                <strong><?=$this->options->imageCaption?></strong>
-            </p>
-        <? } ?>
         <? if(isset($this->options->title) && $this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>
         <? if(isset($this->options->fullSizeUrl)) { ?>
             <p class="fullSizeLink">

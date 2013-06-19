@@ -57,10 +57,6 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
                     $this->getData()->componentId, 'original', $data['filename']);
             }
         }
-
-        if (Kwc_Abstract::getSetting($this->_getImageEnlargeComponentData()->componentClass, 'imageCaption')) {
-            $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()->getRow()->image_caption;
-        }
         return $ret;
     }
 
