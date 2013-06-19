@@ -159,7 +159,7 @@ Kwf.Fade.Elements.prototype = {
     doFade: function(direction) {
         if (this.fadeElements.length <= 1 || this._isAnimating) return;
 
-        this.setAnimated(true);
+        this._isAnimating = true;
         var activeEl = $(this.fadeElements[this.active]);
         if (!activeEl.is(':visible')) {
             this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
@@ -207,7 +207,7 @@ Kwf.Fade.Elements.prototype = {
                             left: 0,
                             zIndex: 0
                         });
-                        this.setAnimated(false);
+                        this._isAnimating = false;
                     }, this));
                 } else {
                     activeEl.animate({
@@ -222,7 +222,7 @@ Kwf.Fade.Elements.prototype = {
                         left: '+='+width
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('left', '0px');
-                        this.setAnimated(false);
+                        this._isAnimating = false;
                     }, this));
                 }
             } else if (dir == 't' || dir == 'b') {
@@ -238,7 +238,7 @@ Kwf.Fade.Elements.prototype = {
                             top: 0,
                             zIndex: 0
                         });
-                        this.setAnimated(false);
+                        this._isAnimating = false;
                     }, this));
                 } else {
                     activeEl.animate({
@@ -253,7 +253,7 @@ Kwf.Fade.Elements.prototype = {
                         top: '+='+height
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('top', '0px');
-                        this.setAnimated(false);
+                        this._isAnimating = false;
                     }, this));
                 }
             }
@@ -274,7 +274,7 @@ Kwf.Fade.Elements.prototype = {
                         position: 'absolute',
                         zIndex: 0
                     });
-                    this.setAnimated(false);
+                    this._isAnimating = false;
                 }, this));
             } else {
                 activeEl.fadeTo(this.fadeDuration * 500, 0, this.easingFadeOut);
@@ -287,7 +287,7 @@ Kwf.Fade.Elements.prototype = {
                         position: 'absolute',
                         zIndex: 0
                     });
-                    this.setAnimated(false);
+                    this._isAnimating = false;
                 }, this));
             }
         }
@@ -315,11 +315,6 @@ Kwf.Fade.Elements.prototype = {
             this._playPauseButton.addClass('elementAccessPlay');
         }
         this._playPause = 'pause';
-    },
-
-    setAnimated: function(b)
-    {
-        this._isAnimating = b;
     },
 
     play: function() {
