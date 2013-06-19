@@ -319,7 +319,6 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         Ext.fly(window).on('scroll', function() {
             var height = this.el.getTop()+this.el.getHeight();
-            var scrollHeight = Ext.getBody().getScroll().top;
             height -= Ext.getBody().getViewSize().height;
             height = height - Ext.getBody().getScroll().top;
             if (height < 700) {

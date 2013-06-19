@@ -7,7 +7,6 @@
     <? } ?>
     <div class="viewContainer">
         <?=$this->partials($this->data);?>
-        <div class="linkToTop"></div>
     </div>
     <div class="clear"></div>
     <? if (isset($this->paging)) echo $this->component($this->paging); ?>
