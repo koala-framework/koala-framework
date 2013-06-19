@@ -21,6 +21,7 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/ListEditButton.js';
         $ret['extConfig'] = 'Kwc_Abstract_List_ExtConfigListUpload';
         $ret['hasVisible'] = true;
+        $ret['maxEntries'] = 100;
         return $ret;
     }
 

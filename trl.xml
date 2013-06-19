@@ -8896,5 +8896,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Eigenes Flash</de>
 <id>1803</id>
 </text>
+<text>
+<en>Can't create more than {0} entries.</en>
+<de>Nicht mehr als {0} Einträge können angelegt werden.</de>
+<id>1804</id>
+</text>
 </trl>
 

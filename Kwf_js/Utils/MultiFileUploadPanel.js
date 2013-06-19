@@ -6,6 +6,10 @@ Kwf.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
     maxResolution: 0,
     //baseParams: {},
     controllerUrl: '',
+    maxNumberOfFiles: null,
+    maxEntriesErrorMessage: '',
+
+    _maxEntriesAlertVisible: false,
     
     initComponent: function() {
         if (!this.baseParams) this.baseParams = {};
@@ -33,6 +37,17 @@ Kwf.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
             this.swfu.on('fileQueued', function(file) {
                 if (!this.numFiles) this.numFiles = 0;
                 this.numFiles++;
+
+                if (this.maxNumberOfFiles!==null && this.numFiles > this.maxNumberOfFiles) {
+                    this.running = false;
+                    if (this.progress) this.progress.hide();
+                    if (this._maxEntriesAlertVisible) return;
+                    this._maxEntriesAlertVisible = true;
+                    Ext.Msg.alert(trlKwf('Error'), this.maxEntriesErrorMessage, function() {
+                        this._maxEntriesAlertVisible = false;
+                    }, this);
+                    return;
+                }
 
                 if (this.running) {
                     return;
@@ -149,6 +164,11 @@ Kwf.Utils.MultiFileUploadPanel = Ext.extend(Ext.Panel,
     html5UploadFiles: function(files)
     {
         if (!files.length) return;
+
+        if (this.maxNumberOfFiles!==null && files.length > this.maxNumberOfFiles) {
+            Ext.Msg.alert(trlKwf('Error'), this.maxEntriesErrorMessage);
+            return;
+        }
 
         this.progress = Ext.MessageBox.show({
             title : trlKwf('Upload'),
