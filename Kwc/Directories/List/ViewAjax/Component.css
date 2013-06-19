@@ -27,3 +27,23 @@
     height: 66px;
     background: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
 }
+
+.cssClass .viewContainer .linkToTop {
+    display: none;
+    background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left top;
+    width: 58px;
+    height: 58px;
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -29px;
+}
+
+.cssClass .viewContainer .linkToTop:hover {
+    cursor: pointer;
+    background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left bottom;
+}
+
+.cssClass .viewContainer.scrolledDown .linkToTop {
+    display: block;
+}
