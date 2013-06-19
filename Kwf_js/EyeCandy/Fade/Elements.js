@@ -104,7 +104,10 @@ Kwf.Fade.Elements = function(cfg) {
             } else {
                 ee.css('opacity', 1);
             }
-            ee.css('display', 'block');
+            ee.css({
+                display: 'block',
+                position: 'absolute'
+            });
         }
         i += 1;
     }, this));
@@ -140,19 +143,10 @@ Kwf.Fade.Elements.prototype = {
     start: function() {
         if (this.fadeElements.length <= 1) return;
         this._components = $(this.selectorRoot).children('.components');
-        this.fadeElements.each($.proxy(function(index, el) {
-            if ($(el).height() > this._components.height()) {
-                this._components.css('height', $(this.fadeElements[this.active]).height());
-            }
-        }, this));
+        this.calculateMaxHeight();
         $(window).resize($.proxy(function() {
-            this.fadeElements.each($.proxy(function(index, el) {
-                if ($(el).height() > this._components.height()) {
-                    this._components.css('height', $(this.fadeElements[this.active]).height());
-                }
-            }, this));
+            this.calculateMaxHeight();
         }, this));
-        $(this.fadeElements[this.active]).css('position', 'relative');
         this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
     },
 
@@ -259,34 +253,21 @@ Kwf.Fade.Elements.prototype = {
             }
         } else {
             nextEl.css({
-                position: 'absolute',
                 zIndex: 11,
                 opacity: 0
             });
             if ($.support.transition || $.support.transform) {
                 activeEl.transition({ opacity: 0 }, this.fadeDuration * 500, this.easingFadeOut);
                 nextEl.transition({ opacity: 1 }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
-                    nextEl.css({
-                        position: 'relative',
-                        zIndex: 10
-                    });
-                    activeEl.css({
-                        position: 'absolute',
-                        zIndex: 0
-                    });
+                    nextEl.css({zIndex: 10});
+                    activeEl.css({zIndex: 0});
                     this._isAnimating = false;
                 }, this));
             } else {
                 activeEl.fadeTo(this.fadeDuration * 500, 0, this.easingFadeOut);
                 nextEl.fadeTo(this.fadeDuration * 1000, 1, this.easingFadeIn, $.proxy(function() {
-                     nextEl.css({
-                        position: 'relative',
-                        zIndex: 10
-                    });
-                    activeEl.css({
-                        position: 'absolute',
-                        zIndex: 0
-                    });
+                     nextEl.css({zIndex: 10});
+                    activeEl.css({zIndex: 0});
                     this._isAnimating = false;
                 }, this));
             }
@@ -306,6 +287,18 @@ Kwf.Fade.Elements.prototype = {
         }
 
         this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
+    },
+
+    /**
+     * Calculates the max height of the fadeElements and sets this to the _components container
+     * is useful for responsive webs
+     **/
+    calculateMaxHeight: function() {
+        this.fadeElements.each($.proxy(function(index, el) {
+            if ($(el).height() > this._components.height()) {
+                this._components.css('height', $(this.fadeElements[this.active]).height());
+            }
+        }, this));
     },
 
     pause: function() {
