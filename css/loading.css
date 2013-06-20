@@ -1,0 +1,39 @@
+.kwfLoadingAnimation .loading {
+    content: '',
+    display: block;
+    background-image: url("/assets/web/images/loadingbig.png");
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    -moz-animation: kwfLoadingSpin .5s infinite linear;
+    -webkit-animation: kwfLoadingSpin .5s infinite linear;
+    animation: kwfLoadingSpin .5s infinite linear;
+}
+
+.kwfLoadingAnimation.small .loading {
+    background-image: url("/assets/web/images/loadingbig.png");
+    width: 50px;
+    height: 50px;
+}
+
+@-moz-keyframes kwfLoadingSpin {
+    0% { -moz-transform:rotate(0deg); }
+    100% { -moz-transform:rotate(360deg); }
+}
+
+@-webkit-keyframes kwfLoadingSpin {
+    0% { -webkit-transform:rotate(0deg); }
+    100% { -webkit-transform:rotate(360deg); }
+}
+
+@keyframes kwfLoadingSpin {
+    0% { transform:rotate(0deg); }
+    100% { transform:rotate(360deg); }
+}
+
+body.ext-ie .kwfMainContent.loadingContent .loading {
+    width: 66px;
+    height: 66px;
+    background: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
+    animation: none;
+}
