@@ -25,9 +25,9 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
             $imageEnlargeClasses = array();
             foreach ($this->_getCreatingClasses($class) as $c) {
                 if (in_array('Kwc_Basic_LinkTag_Component', Kwc_Abstract::getParentClasses($c))) {
-                    $imageEnlargeClasses = $this->_getCreatingClasses($c);
+                    $imageEnlargeClasses = array_merge($imageEnlargeClasses, $this->_getCreatingClasses($c));
                 } else {
-                    $imageEnlargeClasses = array($c);
+                    $imageEnlargeClasses[] = $c;
                 }
             }
 
@@ -72,12 +72,14 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
             if (count($c) != 1) throw new Kwf_Exception("only a single component should exist");
             $c = $c[0];
             $i = $c->parent->parent;
+            if (is_instance_of($i->componentClass, 'Kwc_Basic_LinkTag_Component')) {
+                $i = $i->parent;
+            }
             while ($i != $event->component) {
                 $getChildren[] = $i->generator->getIdSeparator().$i->id;
                 $i = $i->parent;
             }
         }
-
         $result = call_user_func(
             array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $event->component, $getChildren, true
         );
