@@ -258,6 +258,8 @@ class Kwf_Acl extends Zend_Acl
     {
         if ($this->_kwcResourcesLoaded) return;
         $this->_kwcResourcesLoaded = true;
+
+        $t = microtime(true);
         $menuConfigs = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::getFlag($c, 'hasResources')) {
@@ -271,6 +273,7 @@ class Kwf_Acl extends Zend_Acl
         foreach ($menuConfigs as $cfg) {
             $cfg->addResources($this);
         }
+        Kwf_Benchmark::subCheckpoint('kwc resources', microtime(true)-$t);
     }
 
     public static function _compareMenuConfig(Kwf_Component_Abstract_MenuConfig_Abstract $a, Kwf_Component_Abstract_MenuConfig_Abstract $b)
