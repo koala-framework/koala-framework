@@ -12,6 +12,41 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         Kwf_Benchmark::checkpoint('Action::init');
     }
 
+    //copied from zend to insert benchmark checkpoints
+    public function dispatch($action)
+    {
+        // Notify helpers of action preDispatch state
+        $this->_helper->notifyPreDispatch();
+
+        $this->preDispatch();
+        Kwf_Benchmark::checkpoint('Action::preDispatch');
+
+        if ($this->getRequest()->isDispatched()) {
+            if (null === $this->_classMethods) {
+                $this->_classMethods = get_class_methods($this);
+            }
+
+            // preDispatch() didn't change the action, so we can continue
+            if ($this->getInvokeArg('useCaseSensitiveActions') || in_array($action, $this->_classMethods)) {
+                if ($this->getInvokeArg('useCaseSensitiveActions')) {
+                    trigger_error('Using case sensitive actions without word separators is deprecated; please do not rely on this "feature"');
+                }
+                $this->$action();
+            } else {
+                $this->__call($action, array());
+            }
+            Kwf_Benchmark::checkpoint('Action::action');
+
+            $this->postDispatch();
+            Kwf_Benchmark::checkpoint('Action::postDispatch');
+        }
+
+        // whats actually important here is that this action controller is
+        // shutting down, regardless of dispatching; notify the helpers of this
+        // state
+        $this->_helper->notifyPostDispatch();
+    }
+
     public function preDispatch()
     {
         Kwf_Util_Https::ensureHttps();
