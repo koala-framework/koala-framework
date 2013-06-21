@@ -22,6 +22,7 @@ class Kwf_Registry extends Zend_Registry
             return $v;
         } else if ($index == 'acl' && !parent::offsetExists($index)) {
             $t = microtime(true);
+            $m = memory_get_usage();
             $cacheId = 'acl';
             $v = Kwf_Cache_Simple::fetch($cacheId);
             if ($v === false) {
@@ -38,7 +39,7 @@ class Kwf_Registry extends Zend_Registry
                 Kwf_Cache_Simple::add($cacheId, $v);
                 Kwf_Benchmark::subCheckpoint('create Acl', microtime(true)-$t);
             } else {
-                Kwf_Benchmark::count('load cached Acl', microtime(true)-$t);
+                Kwf_Benchmark::subCheckpoint('load cached Acl '.round((memory_get_usage()-$m) / (1024*1024), 2).'MB', microtime(true)-$t);
             }
             $this->offsetSet('acl', $v);
             return $v;
