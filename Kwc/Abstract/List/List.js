@@ -66,7 +66,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
             westItems.push(this.multiFileUploadPanel);
         }
 
-        if (this.maxEntries) {
+        if (this.maxEntries && this.multiFileUploadPanel) {
             this.grid.on('load', function() {
                 if (this.maxEntries - this.grid.getStore().getCount()) {
                     this.multiFileUploadPanel.maxNumberOfFiles = this.maxEntries - this.grid.getStore().getCount();
