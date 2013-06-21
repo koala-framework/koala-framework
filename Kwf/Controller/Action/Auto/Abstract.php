@@ -9,6 +9,7 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
     {
         parent::init();
 
+
         if (!isset($this->_permissions)) {
             $this->_permissions = $this->_buttons;
         }
@@ -33,6 +34,7 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
         }
         $this->_permissions = $perms;
 
+        $t = microtime(true);
         //buttons/permissions abhängig von privileges in acl ausblenden/löschen
         $acl = $this->_getAcl();
         $authData = $this->_getAuthData();
@@ -48,6 +50,7 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
                 unset($this->_permissions[$k]);
             }
         }
+        Kwf_Benchmark::subCheckpoint('check acl (permissions, buttons)', microtime(true)-$t);
     }
 
     public final function setHelpText($helpText)

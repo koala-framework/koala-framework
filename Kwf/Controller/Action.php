@@ -14,8 +14,6 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        Kwf_Benchmark::checkpoint('Action::up to preDispatch');
-
         Kwf_Util_Https::ensureHttps();
 
         if ($this->_getParam('application_max_assets_mtime')
@@ -36,6 +34,8 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                 throw new Kwf_Exception("Invalid kwfSessionToken");
             }
         }
+
+        $t = microtime(true);
 
         $allowed = false;
         if ($this->_getUserRole() == 'cli') {
@@ -80,7 +80,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
             }
         }
 
-        Kwf_Benchmark::checkpoint('Action::preDispatch');
+        Kwf_Benchmark::subCheckpoint('check acl', microtime(true)-$t);
     }
 
     protected function _isAllowed($user)
@@ -106,10 +106,8 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     public function postDispatch()
     {
-        Kwf_Benchmark::checkpoint('Action::action');
         Kwf_Component_ModelObserver::getInstance()->process();
         Kwf_Component_Cache::getInstance()->writeBuffer();
-        Kwf_Benchmark::checkpoint('Action::postDispatch');
     }
 
     protected function _getUserRole()
