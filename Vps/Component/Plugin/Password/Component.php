@@ -51,13 +51,17 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
 
         $msg = '';
         $session = new Zend_Session_Namespace('login_password');
+        if (!$session->passwords) $session->passwords = array();
+        if (array_intersect($session->passwords, $pw)) {
+            return true;
+        }
         if (in_array($this->_getLoginPassword(), $pw)) {
-            $session->login = true;
+            $session->passwords[] = $this->_getLoginPassword();
             $currentPageUrl = Vps_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
             header('Location: '.$currentPageUrl);
             die();
         }
-        return $session->login;
+        return false;
     }
 
     public function getTemplateVars()
