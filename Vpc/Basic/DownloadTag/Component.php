@@ -73,7 +73,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
         while ($c) {
             foreach (Vpc_Abstract::getSetting($c->componentClass, 'plugins') as $plugin) {
                 if (is_instance_of($plugin, 'Vps_Component_Plugin_Interface_Login')) {
-                    $plugin = new $plugin($id);
+                    $plugin = new $plugin($c->componentId);
                     if ($plugin->isLoggedIn()) {
                         return self::VALID_DONT_CACHE;
                     } else {
