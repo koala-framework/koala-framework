@@ -21,7 +21,6 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         $ret['from'] = ''; // would be good if overwritten
 
         $ret['menuConfig'] = 'Kwc_Newsletter_Subscribe_MenuConfig';
-
         return $ret;
     }
 

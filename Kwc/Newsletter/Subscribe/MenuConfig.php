@@ -22,7 +22,7 @@ class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuCon
                     $menuConfig['text'] .= ' ('.$subRoot->name.')';
                 }
             }
-            $acl->add(new Kwc_Newsletter_Subscribe_MenuResource($this->_class.$c->dbId,
+            $acl->add(new Kwc_Newsletter_Subscribe_Resource($this->_class.$c->dbId,
                 $menuConfig,
                 Kwc_Admin::getInstance($this->_class)->getControllerUrl('Recipients').'?newsletterComponentId='.$c->dbId,
                 $this->_class, $c),

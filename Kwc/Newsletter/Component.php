@@ -30,7 +30,6 @@ class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Compon
         $ret['contentSender'] = 'Kwc_Newsletter_ContentSender';
 
         $ret['menuConfig'] = 'Kwc_Newsletter_MenuConfig';
-
         return $ret;
     }
 }
