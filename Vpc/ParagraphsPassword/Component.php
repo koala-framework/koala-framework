@@ -7,6 +7,7 @@ class Vpc_ParagraphsPassword_Component extends Vpc_Paragraphs_Component
         $ret['componentName'] = trlVps('Paragraphs passwordprotected');
         $ret['extConfig'] = 'Vpc_ParagraphsPassword_ExtConfig';
         $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['plugins'][] = 'Vpc_ParagraphsPassword_Plugin_Component';
         return $ret;
     }
 
