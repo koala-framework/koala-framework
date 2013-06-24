@@ -5,6 +5,6 @@ class Vpc_ParagraphsPassword_Plugin_Component extends Vps_Component_Plugin_Passw
     {
         $c = Vps_Component_Data_Root::getInstance()
             ->getComponentById($this->_componentId, array('ignoreVisible'=>true));
-        $c->getComponent()->getPassword();
+        return $c->getComponent()->getPassword();
     }
 }
