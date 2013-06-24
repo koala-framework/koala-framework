@@ -41,6 +41,15 @@ class Kwf_Benchmark_BufferedFileCounter
         $this->_readValuesCache = null;
     }
 
+    public function update($var, $value)
+    {
+        $this->_counters[$var] = $value;
+        if (!$this->_bufferTime || (time() - $this->_lastWrite) > $this->_bufferTime) {
+            $this->flush();
+        }
+        $this->_readValuesCache = null;
+    }
+
     public function flush()
     {
         $this->_lastWrite = time();
