@@ -36,6 +36,8 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
     public function isLoggedIn()
     {
         $pw = $this->_getPassword();
+        if (!$pw) return false; //no password defined
+
         if (!is_array($pw)) $pw = array($pw);
 
         if (isset($_COOKIE[get_class($this)])) {
