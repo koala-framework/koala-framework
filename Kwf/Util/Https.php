@@ -13,6 +13,18 @@ class Kwf_Util_Https
         }
     }
 
+    public static function ensureHttp()
+    {
+        if (php_sapi_name() != 'cli') {
+            if (isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
+                $redirect = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                header('Location: '.$redirect, true, 302);
+                Kwf_Benchmark::shutDown();
+                exit;
+            }
+        }
+    }
+
     /**
      * IE unter <=XP kann kein SNI
     private static function _supportsHttps()

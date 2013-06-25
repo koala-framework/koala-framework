@@ -162,9 +162,21 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             ) {
                 $foundRequestHttps = true;
             }
-            if ($foundRequestHttps) {
-                Kwf_Util_Https::ensureHttps();
+            if (isset($_SERVER['HTTPS'])) {
+                //we are on https
+                if (!$foundRequestHttps && isset($_COOKIE['kwcAutoHttps'])) {
+                    //we where auto-redirected to https but don't need https anymore
+                    setcookie('kwcAutoHttps', '', 0, '/'); //delete cookie
+                    Kwf_Util_Https::ensureHttp();
+                }
+            } else {
+                //we are on http
+                if ($foundRequestHttps) {
+                    setcookie('kwcAutoHttps', '1', 0, '/');
+                    Kwf_Util_Https::ensureHttps();
+                }
             }
+
             Kwf_Benchmark::checkpoint('check requestHttps');
         }
 
