@@ -89,6 +89,7 @@ class Kwf_Component_Acl
     {
         $role = $this->_roleRegistry->get($role);
 
+        //also check recursive as we allow editing child components of same page
         $ret = $this->_isAllowedComponentClassNonRek('Component', $role, $componentClass);
         if (!is_null($ret)) return $ret;
 
@@ -262,6 +263,9 @@ class Kwf_Component_Acl
         return $ret;
     }
 
+    /**
+     * Allow Component plus child components on same page
+     */
     public function allowComponent($role, $componentClass, $privilege = null)
     {
         if ($privilege) throw new Kwf_Exception("Not yet implemented");
@@ -281,6 +285,9 @@ class Kwf_Component_Acl
         return $this;
     }
 
+    /**
+     * Allow Component plus child components including all child pages
+     */
     public function allowComponentRecursive($role, $componentClass, $privilege = null)
     {
         if ($privilege) throw new Kwf_Exception("Not yet implemented");
