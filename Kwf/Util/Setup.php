@@ -220,7 +220,11 @@ class Kwf_Util_Setup
         $ret .= " 0,";     //lifetime
         $ret .= " '/',";   //path
         $ret .= " null,";  //domain
-        $ret .= " false,"; //secure
+        if (Kwf_Config::getValue('server.https')) {
+            $ret .= " true,"; //secure
+        } else {
+            $ret .= " false,"; //secure
+        }
         $ret .= " true";   //httponly
         $ret .= ");\n";
 
