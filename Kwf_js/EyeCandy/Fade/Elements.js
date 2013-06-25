@@ -3,7 +3,7 @@ Kwf.onContentReady(function()
     var fadeComponents = $('div.kwfFadeElements');
     fadeComponents.each(function(index, element) {
         var elementWrapper = $(element);
-        if (elementWrapper.fadeElementsObject) return; // nur einmal initialisieren
+        if (element.fadeElementsObject) return; // nur einmal initialisieren
 
         var fadeClass = elementWrapper.find('.fadeClass');
         var selector = elementWrapper.find('.fadeSelector')[0].value;
@@ -27,9 +27,9 @@ Kwf.onContentReady(function()
             delete fadeClass;
         }
 
-        elementWrapper.fadeElementsObject = new cls(config);
+        element.fadeElementsObject = new cls(config);
         if (config.autoStart == undefined || config.autoStart) {
-            elementWrapper.fadeElementsObject.start();
+            element.fadeElementsObject.start();
         }
     });
 });

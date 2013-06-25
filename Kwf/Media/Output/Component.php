@@ -38,7 +38,10 @@ class Kwf_Media_Output_Component
             while ($c) {
                 foreach (Kwc_Abstract::getSetting($c->componentClass, 'plugins') as $plugin) {
                     if (is_instance_of($plugin, 'Kwf_Component_Plugin_Interface_Login')) {
-                        $plugins[] = $plugin;
+                        $plugins[] = array(
+                            'plugin' => $plugin,
+                            'id' => $c->componentId
+                        );
                     }
                 }
                 if ($c->isPage) break;
@@ -51,8 +54,9 @@ class Kwf_Media_Output_Component
             }
         }
 
-        foreach ($plugins as $plugin) {
-            $plugin = new $plugin($id);
+        foreach ($plugins as $p) {
+            $plugin = $p['plugin'];
+            $plugin = new $plugin($p['id']);
             if ($plugin->isLoggedIn()) {
                 $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
             } else {

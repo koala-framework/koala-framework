@@ -25,6 +25,8 @@ class Kwc_Abstract_List_ExtConfigListUpload extends Kwc_Abstract_List_ExtConfigL
             Kwf_Cache_SimpleStatic::add($cacheId, $multiFileUpload);
         }
         $ret['list']['multiFileUpload'] = $multiFileUpload;
+        $ret['list']['maxEntries'] = Kwc_Abstract::getSetting($this->_class, 'maxEntries');
+        $ret['list']['maxEntriesErrorMessage'] = trlKwf("Can't create more than {0} entries.", $ret['list']['maxEntries']);
         return $ret;
     }
 
