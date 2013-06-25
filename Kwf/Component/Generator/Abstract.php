@@ -839,6 +839,7 @@ abstract class Kwf_Component_Generator_Abstract
         $data['editControllerComponentId'] = $component->componentId;
 
         $data['loadChildren'] = false;
+        $data['actions'] = array();
 
         return $data;
     }
