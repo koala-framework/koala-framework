@@ -67,6 +67,9 @@ Kwf.Fade.Elements = function(cfg) {
     if (typeof cfg.fadeEvery != 'undefined') this.fadeEvery = cfg.fadeEvery;
     if (typeof cfg.startRandom != 'undefined') this.startRandom = cfg.startRandom;
 
+    if ($(this.selectorRoot).hasClass('startedFade')) return;
+    $(this.selectorRoot).addClass('startedFade');
+
     this._elementAccessLinkEls = [];
 
     this.fadeElements = $(this.selectorRoot).find(this.selector);
