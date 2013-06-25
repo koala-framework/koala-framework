@@ -34,11 +34,23 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return substr(md5($this->password_salt), 0, 10);
     }
 
+    /**
+     * Overwrite to not use Activate- or Change Password-Component in Frontend
+     *
+     * e.g. some roles only see backend urls
+     *
+     * @return boolean
+     */
+    protected function _allowFrontendUrls()
+    {
+        return true;
+    }
+
     public function getActivationUrl()
     {
         $root = Kwf_Component_Data_Root::getInstance();
         $activateComponent = null;
-        if ($root) {
+        if ($root && $this->_allowFrontendUrls()) {
             // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
             // für den Benutzer auswählen
             // oder man leitet auf eine redirect seite um und schaut auf die
@@ -251,7 +263,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
 
         $root = Kwf_Component_Data_Root::getInstance();
         $lostPasswortComponent = null;
-        if ($root) {
+        if ($root && $this->_allowFrontendUrls()) {
             // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
             // für den Benutzer auswählen
             // oder man leitet auf eine redirect seite um und schaut auf die
@@ -291,7 +303,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         if (!in_array($columnName, $noLog)) {
             $this->_logChangedUser = true;
         }
-        if ($columnName == 'email' && $value != $this->email) {
+        if ($columnName == 'email' && strtolower($value) != strtolower($this->email)) {
             $this->_changedOldMail = $this->email;
         }
         if ($columnName == 'deleted' && $value != $this->deleted && $value) {

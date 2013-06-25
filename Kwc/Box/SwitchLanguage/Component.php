@@ -71,4 +71,9 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         }
         return $ret;
     }
+
+    public function hasContent()
+    {
+        return !(count($this->_getLanguages()) <= 1);
+    }
 }

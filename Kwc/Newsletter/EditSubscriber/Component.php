@@ -9,6 +9,7 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
         $ret['placeholder']['submitButton'] = trlKwfStatic('Save');
         $ret['generators']['child']['component']['success'] =
             'Kwc_Newsletter_EditSubscriber_Success_Component';
+        $ret['viewCache'] = false;
         return $ret;
     }
 

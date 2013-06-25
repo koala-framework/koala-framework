@@ -22,6 +22,8 @@ class Kwc_Abstract_Image_Trl_Form extends Kwc_Abstract_Form //nicht von Kwc_Abst
             'imageCaption'
         );
         if ($imageCaption) {
+            $this->add(new Kwf_Form_Field_ShowField('original_image_caption', trlKwf('Original Image caption')))
+                ->setData(new Kwf_Data_Trl_OriginalComponent('image_caption'));
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')));
         }
 

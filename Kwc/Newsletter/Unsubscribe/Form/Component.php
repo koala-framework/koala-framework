@@ -9,6 +9,7 @@ class Kwc_Newsletter_Unsubscribe_Form_Component extends Kwc_Form_Component
         $ret['generators']['child']['component']['success'] =
             'Kwc_Newsletter_Unsubscribe_Form_Success_Component';
         $ret['placeholder']['submitButton'] = trlKwfStatic('Unsubscribe newsletter');
+        $ret['viewCache'] = false;
         return $ret;
     }
 

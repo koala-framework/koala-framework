@@ -40,7 +40,7 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
     public function render($ignoreCli = false)
     {
         try {
-            if (isset($_SERVER['REQUEST_URI']) && Kwf_Setup::hasDb() && Kwf_Registry::get('dao')->hasDb()) {
+            if (isset($_SERVER['REQUEST_URI']) && Kwf_Setup::hasDb() && Kwf_Registry::get('dao')->getDbConfig()) {
                 $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
                 $target = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_Redirects')
                     ->findRedirectUrl('path', $_SERVER['REQUEST_URI'], $host);

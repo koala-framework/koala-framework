@@ -14,7 +14,7 @@ class Kwf_Controller_Action_Welcome_ContentController extends Kwf_Controller_Act
             //wenn tabelle nicht existiert fehler abfangen
             $row = null;
         }
-        if ($row) {
+        if ($row && $row->getParentRow('WelcomeImage')) {
             $this->view->image = Kwf_Media::getUrlByRow(
                 $row, 'WelcomeImage'
             );

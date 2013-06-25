@@ -53,7 +53,9 @@ class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $this->_form->setModel(new Kwf_Model_FnF());
+        if (!$this->_form->getModel()) {
+            $this->_form->setModel(new Kwf_Model_FnF());
+        }
     }
 
     protected function _afterInsert(Kwf_Model_Row_Interface $row)
