@@ -125,6 +125,8 @@ class Kwf_Component_Acl
         $rules = $this->_getRules($type, null, $role);
         if ($rules && $rules['type'] == Kwf_Acl::TYPE_ALLOW) return true;
         if ($rules && $rules['type'] == Kwf_Acl::TYPE_DENY) return false;
+
+        return null;
     }
 
     protected function _isAllowedComponentData($userRow, Kwf_Component_Data $component)
