@@ -25,6 +25,14 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
         $asciiFilter = new Kwf_Filter_Ascii();
         $uploadIds = explode(',', $this->_getParam('uploadIds'));
+
+        $max = Kwc_Abstract::getSetting($this->_getParam('class'), 'maxEntries');
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('component_id', $this->_getParam('componentId'));
+        if ($this->_model->countRows($s)+count($uploadIds) >= $max) {
+            throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
+        }
+
         foreach ($uploadIds as $uploadId) {
             $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($uploadId);
             $row = $this->_model->createRow();
@@ -102,8 +110,16 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!isset($this->_permissions['duplicate']) || !$this->_permissions['duplicate']) {
             throw new Kwf_Exception("Duplicate is not allowed.");
         }
+
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
+
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('component_id', $this->_getParam('componentId'));
+        $max = Kwc_Abstract::getSetting($this->_getParam('class'), 'maxEntries');
+        if ($this->_model->countRows($s)+count($ids) >= $max) {
+            throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
+        }
 
         $progressBar = null;
 
@@ -120,5 +136,17 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $this->view->data['duplicatedIds'][] = $newChild->id;
         }
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
+    }
+
+    public function jsonInsertAction()
+    {
+        $max = Kwc_Abstract::getSetting($this->_getParam('class'), 'maxEntries');
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('component_id', $this->_getParam('componentId'));
+        if ($this->_model->countRows($s)+1 >= $max) {
+            throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
+        }
+
+        parent::jsonInsertAction();
     }
 }
