@@ -36,6 +36,8 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
     public function isLoggedIn()
     {
         $pw = $this->_getPassword();
+        if (!$pw) return false; //no password defined
+
         if (!is_array($pw)) $pw = array($pw);
 
         if (isset($_COOKIE[get_class($this)])) {
@@ -49,8 +51,12 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
 
         $msg = '';
         $session = new Zend_Session_Namespace('login_password');
+        if (!$session->passwords) $session->passwords = array();
+        if (array_intersect($session->passwords, $pw)) {
+            return true;
+        }
         if (in_array($this->_getLoginPassword(), $pw)) {
-            $session->login = true;
+            $session->passwords[] = $this->_getLoginPassword();
             $currentPageUrl = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
             if ($_SERVER['QUERY_STRING'] && isset($_SERVER['QUERY_STRING'])) {
                 $currentPageUrl .= '?'.$_SERVER['QUERY_STRING'];
@@ -58,7 +64,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_View_
             header('Location: '.$currentPageUrl);
             die();
         }
-        return $session->login;
+        return false;
     }
 
     public function getTemplateVars()
