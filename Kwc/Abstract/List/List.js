@@ -57,12 +57,21 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
                 height: 50,
                 bodyStyle: 'padding-top: 15px; padding-left:80px;',
                 controllerUrl: this.controllerUrl,
-                baseParams: this.baseParams
+                baseParams: this.baseParams,
+                maxEntriesErrorMessage: this.maxEntriesErrorMessage
             }), this.multiFileUpload);
             this.multiFileUploadPanel.on('uploaded', function() {
                 this.grid.reload();
             }, this);
             westItems.push(this.multiFileUploadPanel);
+        }
+
+        if (this.maxEntries && this.multiFileUploadPanel) {
+            this.grid.on('load', function() {
+                if (this.maxEntries - this.grid.getStore().getCount()) {
+                    this.multiFileUploadPanel.maxNumberOfFiles = this.maxEntries - this.grid.getStore().getCount();
+                }
+            }, this);
         }
 
         this.westPanel = new Ext.Panel({
