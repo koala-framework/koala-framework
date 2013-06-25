@@ -361,7 +361,6 @@
 <mk>Големина</mk>
 <sl>Velikost</sl>
 <es>Tamaño</es>
-
 <ru>Размер</ru>
 <es_CL>Tamaño</es_CL>
 </text>
@@ -402,7 +401,6 @@
 <mk>Лево</mk>
 <sl>Levo</sl>
 <es>Izquierda</es>
-
 <ru>Лево</ru>
 <es_CL>Izquierda</es_CL>
 </text>
@@ -414,7 +412,6 @@
 <mk>Десно</mk>
 <sl>Desno</sl>
 <es>Derecha</es>
-
 <ru>Право</ru>
 <es_CL>Derecha</es_CL>
 </text>
@@ -492,7 +489,6 @@
 <mk>Датум</mk>
 <sl>Datum</sl>
 <es>Fecha</es>
-
 <ru>Дата</ru>
 <es_CL>Fecha</es_CL>
 </text>
@@ -503,7 +499,6 @@
 <ro>la</ro>
 <sl>ob</sl>
 <es>en</es>
-
 <ru>на</ru>
 <es_CL>en</es_CL>
 </text>
@@ -599,7 +594,6 @@
 <mk>Име</mk>
 <sl>Ime in priimek</sl>
 <es>Nombre</es>
-
 <ru>Название</ru>
 <es_CL>Nombre</es_CL>
 </text>
@@ -628,7 +622,6 @@
 <mk>Потпис</mk>
 <sl>Podpis</sl>
 <es>Firma</es>
-
 <ru>Подпись</ru>
 <es_CL>Firma</es_CL>
 </text>
@@ -673,7 +666,6 @@
 <ro>pentru a continua</ro>
 <sl>Nadaljuj</sl>
 <es>para continuar</es>
-
 <ru>для продолжения</ru>
 <es_CL>para continuar</es_CL>
 </text>
@@ -685,7 +677,6 @@
 <mk>Производ</mk>
 <sl>Produkt</sl>
 <es>Producto</es>
-
 <ru>Продукт</ru>
 <es_CL>Producto</es_CL>
 </text>
@@ -991,7 +982,6 @@
 <mk>Се копира...</mk>
 <sl>Kopiram ...</sl>
 <es>Proceso de copiar...</es>
-
 <ru>Копирование...</ru>
 <es_CL>Proceso de copiar...</es_CL>
 </text>
@@ -1002,7 +992,6 @@
 <ro>creează</ro>
 <sl>Ustvari</sl>
 <es>crear</es>
-
 <ru>создать</ru>
 <es_CL>crear</es_CL>
 </text>
@@ -1047,7 +1036,6 @@
 <mk>Страна</mk>
 <sl>Stran</sl>
 <es>Página</es>
-
 <ru>Страница</ru>
 <es_CL>Página</es_CL>
 </text>
@@ -1173,7 +1161,6 @@
 <ro>Exemplu</ro>
 <sl>Primer</sl>
 <es>Ejemplo</es>
-
 <ru>Пример</ru>
 <es_CL>Ejemplo</es_CL>
 </text>
@@ -9043,7 +9030,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1803</id>
 </text>
 <text>
-
 <en>No entries found</en>
 <de>Keine Einträge gefunden</de>
 <id>1804</id>
@@ -9189,8 +9175,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1832</id>
 </text>
 <text>
-<en>Do you have any questions, wishes or suggestions about this product?<br />Send us your feedback!</en>
-<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?<br />Senden Sie uns dazu Ihr Feedback!</de>
+<en>Do you have any questions, wishes or suggestions about this product?<br/>Send us your feedback!</en>
+<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?<br/>Senden Sie uns dazu Ihr Feedback!</de>
 <id>1833</id>
 </text>
 <text>
@@ -9228,8 +9214,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Alle Bilder herunterladen</de>
 <id>1840</id>
 </text>
+<text>
 <en>Can't create more than {0} entries.</en>
 <de>Nicht mehr als {0} Einträge können angelegt werden.</de>
-<id>1804</id>
+<id>1841</id>
 </text>
 </trl>
+
