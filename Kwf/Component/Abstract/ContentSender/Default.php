@@ -149,6 +149,25 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
 
     public function sendContent($includeMaster)
     {
+        if (Kwf_Config::getValue('server.https')) {
+            //TODO add cache
+            $foundRequestHttps = false;
+            if (Kwf_Component_Abstract::getFlag($this->_data->componentClass, 'requestHttps')) {
+                $foundRequestHttps = true;
+            }
+            if (!$foundRequestHttps && $this->_data->getRecursiveChildComponents(array(
+                    'page' => false,
+                    'flags' => array('requestHttps' => true)
+                ))
+            ) {
+                $foundRequestHttps = true;
+            }
+            if ($foundRequestHttps) {
+                Kwf_Util_Https::ensureHttps();
+            }
+            Kwf_Benchmark::checkpoint('check requestHttps');
+        }
+
         header('Content-Type: text/html; charset=utf-8');
         $startTime = microtime(true);
         $process = $this->_getProcessInputComponents($includeMaster);
