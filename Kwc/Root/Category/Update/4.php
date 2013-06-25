@@ -13,6 +13,10 @@ class Kwc_Root_Category_Update_4 extends Kwf_Update
         foreach (array_keys($parentIds) as $pageId) {
             $parent = $pageId;
             while (isset($parentIds[$parent])) {
+                if ($parent == $parentIds[$parent]) {
+                    //endless loop
+                    continue 2;
+                }
                 $parent = $parentIds[$parent];
             }
             if (is_numeric($parent)) {
