@@ -170,10 +170,11 @@ class Kwf_Component_Data
      *
      * @return string
      */
-    public function getAbsoluteUrl()
+    public function getAbsoluteUrl($useHttps = false)
     {
         $https = Kwf_Util_Https::domainSupportsHttps($this->getDomain());
-        if ($https) {
+        if ($https && !$useHttps) {
+            //if component requests https use it even if $useHttps is false
             $https = Kwf_Util_Https::doesComponentRequestHttps($this);
         }
         $protocol = $https ? 'https' : 'http';
@@ -187,7 +188,7 @@ class Kwf_Component_Data
      */
     public function getPreviewUrl()
     {
-        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?kwcPreview');
+        return '/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl(true).'?kwcPreview');
     }
 
     public function __get($var)
