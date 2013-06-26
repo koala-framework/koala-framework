@@ -151,8 +151,14 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     {
         if (Kwf_Util_Https::supportsHttps()) {
 
-            $cacheId = 'reqHttps-'.$this->_data->componentId;
-            $foundRequestHttps = Kwf_Cache_Simple::fetch($cacheId);
+            $showInvisible = Kwf_Component_Data_Root::getShowInvisible();
+
+            $foundRequestHttps = false;
+            if (!$showInvisible) { //don't cache in preview
+                $cacheId = 'reqHttps-'.$this->_data->componentId;
+                $foundRequestHttps = Kwf_Cache_Simple::fetch($cacheId);
+            }
+
             if ($foundRequestHttps === false) {
                 $foundRequestHttps = 0; //don't use false, false means not-cached
                 if (Kwf_Component_Abstract::getFlag($this->_data->componentClass, 'requestHttps')) {
@@ -165,7 +171,9 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                 ) {
                     $foundRequestHttps = true;
                 }
-                Kwf_Cache_Simple::add($cacheId, $foundRequestHttps);
+                if (!$showInvisible) { //don't cache in preview
+                    Kwf_Cache_Simple::add($cacheId, $foundRequestHttps);
+                }
             }
 
             if (isset($_SERVER['HTTPS'])) {
