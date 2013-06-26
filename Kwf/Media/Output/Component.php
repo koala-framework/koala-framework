@@ -60,8 +60,14 @@ class Kwf_Media_Output_Component
             if ($plugin->isLoggedIn()) {
                 $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
             } else {
-                $ret = Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
-                break;
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id);
+                if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $c->componentClass, Kwf_Registry::get('userModel')->getAuthedUser())) {
+                    //allow preview in backend always
+                    $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
+                } else {
+                    $ret = Kwf_Media_Output_IsValidInterface::ACCESS_DENIED;
+                     break;
+                }
             }
         }
 

@@ -141,12 +141,12 @@ Kwf.Fade.Elements.prototype = {
     _isAnimating: false,
 
     start: function() {
-        if (this.fadeElements.length <= 1) return;
         this._components = $(this.selectorRoot).children('.components');
         this.calculateMaxHeight();
         $(window).resize($.proxy(function() {
             this.calculateMaxHeight();
         }, this));
+        if (this.fadeElements.length <= 1) return;
         this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
     },
 
