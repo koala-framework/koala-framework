@@ -72,6 +72,8 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
                     } else {
                         $this->fireEvent(new Kwc_Abstract_List_EventItemDeleted($this->_class, $child));
                     }
+                } else {
+                    $this->fireEvent(new Kwc_Abstract_List_EventItemUpdated($this->_class, $child));
                 }
             }
         }

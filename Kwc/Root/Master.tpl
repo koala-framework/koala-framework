@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->includeCode($this->data, 'header')?>
+        <?=$this->includeCode('header')?>
     </head>
     <body>
         Default-Master, override in Root-Komponente.
@@ -11,6 +11,6 @@
         }
         echo $this->componentWithMaster($this->componentWithMaster);
         ?>
-        <?=$this->includeCode($this->data, 'footer')?>
+        <?=$this->includeCode('footer')?>
     </body>
 </html>

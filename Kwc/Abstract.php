@@ -503,7 +503,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
 
     /**
-     * Returns the view cache lifetime of this component
+     * Returns the view cache lifetime of this component (s)
      *
      * if null (the default) infinite lifetime
      *

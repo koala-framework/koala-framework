@@ -9,7 +9,7 @@ Kwf.Redirects.Index = Ext.extend(Ext.Panel, {
             controllerUrl: '/kwf/redirects/redirects',
             region: 'west',
             split: true,
-            width: 500,
+            width: 550,
             bindings: [ form ]
         });
 

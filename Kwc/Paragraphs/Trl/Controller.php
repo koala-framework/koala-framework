@@ -34,6 +34,9 @@ class Kwc_Paragraphs_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         parent::jsonDataAction();
         $this->view->componentConfigs = $this->_columns['edit_components']
                                 ->getData()->getComponentConfigs();
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'), array('limit'=>1, 'ignoreVisible'=>true));
+        $this->view->contentWidth = $c->getComponent()->getContentWidth();
     }
 
     protected function _getSelect()

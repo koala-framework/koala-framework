@@ -186,13 +186,13 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
         data.editComponents.each(function(editComponent) {
             var editKey = editComponent.componentId;
             var actionKey = editComponent.componentClass+'-'+editComponent.type;
-            if (!this.editActions[editKey]) {
-                this.editActions[editKey] = new Ext.Action({
+            if (!this.editActions[editKey+actionKey]) {
+                this.editActions[editKey+actionKey] = new Ext.Action({
                     text    : this.componentConfigs[actionKey].title,
                     handler : function (o, e) {
                         var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
                         node.attributes.editComponents.each(function(editComponent) {
-                            if (editComponent.componentId == o.editKey) {
+                            if (editComponent.componentId+editComponent.componentClass+'-'+editComponent.type == o.editKey+o.actionKey) {
                                 this.loadComponent({
                                     id: editComponent.componentId,
                                     componentClass: editComponent.componentClass,
@@ -213,9 +213,9 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                     editKey: editKey
                 });
             }
-            this.editActions[editKey].setDisabled(data.disabled);
-            this.contextMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey]));
-            this.pageButtonMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey]));
+            this.editActions[editKey+actionKey].setDisabled(data.disabled);
+            this.contextMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey+actionKey]));
+            this.pageButtonMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey+actionKey]));
             actionsAdded++;
         }, this);
     },

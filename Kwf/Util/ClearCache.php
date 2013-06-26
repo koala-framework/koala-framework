@@ -41,6 +41,12 @@ class Kwf_Util_ClearCache
         return $ret;
     }
 
+    //we use it internal for copy-data-to-git
+    public function getDbCacheTables()
+    {
+        return $this->_getDbCacheTables();
+    }
+
     protected function _getDbCacheTables()
     {
         $ret = array();
@@ -204,6 +210,7 @@ class Kwf_Util_ClearCache
                         echo "[$currentStep/$countSteps] refreshing ".$type->getTypeName().".".str_repeat('.', $maxTypeNameLength - strlen($type->getTypeName()))." ";
                     }
                     $t = microtime(true);
+                    $mem = memory_get_usage();
                     $type->refreshCache($options);
                     if ($output) {
                         if ($type->getSuccess()) {
@@ -211,8 +218,9 @@ class Kwf_Util_ClearCache
                         } else {
                             echo " [\033[01;31mERROR\033[00m]";
                         }
-                        echo " (".round((microtime(true)-$t)*1000)."ms)";
-                        echo "\n";
+                        echo " (".round((microtime(true)-$t)*1000)."ms";
+                        if (memory_get_usage()-$mem > 1024*1024) echo ", ".round((memory_get_usage()-$mem)/(1024*1024), 2)."MB";
+                        echo ")\n";
                     }
                 }
             }
