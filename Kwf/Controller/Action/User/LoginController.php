@@ -158,6 +158,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     public function logoutAction()
     {
         Kwf_Auth::getInstance()->clearIdentity();
+        Kwf_Session::destroy();
         $this->_onLogout();
     }
 
