@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <?=$this->includeCode('header')?>
+        <!--[if (gte IE 6)&(lte IE 8)]>
+        <script type="text/javascript" src="/assets/jquerySelectivizr/selectivizr.min.js"></script>
+        <![endif]-->
     </head>
     <body class="frontend">
         <div id="page">
