@@ -25,11 +25,27 @@ class Kwf_Util_Https
         }
     }
 
+    /**
+     * Returns if the current request would support https and ensureHttps() would redirect to https
+     */
     public static function supportsHttps()
     {
-        if (php_sapi_name() != 'cli' && Kwf_Config::getValue('server.https')) {
+        if (php_sapi_name() != 'cli') {
+            if (self::domainSupportsHttps($_SERVER['HTTP_HOST'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns if the current request would support https and ensureHttps() would redirect to https
+     */
+    public static function domainSupportsHttps($domain)
+    {
+        if (Kwf_Config::getValue('server.https')) {
             if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
-                if ($domains && !in_array($_SERVER['HTTP_HOST'], $domains)) {
+                if ($domains && !in_array($domain, $domains)) {
                     return false; //current host is not in server.httpsDomains, don't use https
                 }
             }
