@@ -196,7 +196,7 @@ class Kwf_Setup
                     $auth->clearIdentity();
                     $result = $auth->authenticate($adapter);
                     if (!$result->isValid()) {
-                        setcookie('feAutologin', '', time() - 3600, '/');
+                        setcookie('feAutologin', '', time() - 3600, '/', null, !!Kwf_Config::getValue('server.https'), true);
                     }
                 }
             }
