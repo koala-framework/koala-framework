@@ -5,8 +5,8 @@ Kwf.onContentReady(function() {
     var els = Ext.query('div.kwfSwitchDisplay');
     els.forEach(function(el) {
         el = Ext.get(el);
-        if (!el.switchDisplayObject) {
-            el.switchDisplayObject = new Kwf.Switch.Display(el);
+        if (!el.dom.switchDisplayObject) {
+            el.dom.switchDisplayObject = new Kwf.Switch.Display(el);
         }
     });
 });
