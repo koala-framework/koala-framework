@@ -178,7 +178,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
 
             if (isset($_SERVER['HTTPS'])) {
                 //we are on https
-                if (!$foundRequestHttps && isset($_COOKIE['kwcAutoHttps'])) {
+                if (!$foundRequestHttps && isset($_COOKIE['kwcAutoHttps']) && !Zend_Session::sessionExists() && !Zend_Session::isStarted()) {
                     //we where auto-redirected to https but don't need https anymore
                     setcookie('kwcAutoHttps', '', 0, '/'); //delete cookie
                     Kwf_Util_Https::ensureHttp();
