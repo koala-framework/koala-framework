@@ -39,6 +39,41 @@ class Kwf_Util_Https
     }
 
     /**
+     * Returns if the given component requests https
+     *
+     * Return value is cached.
+     */
+    public static function doesComponentRequestHttps(Kwf_Component_Data $data)
+    {
+        $showInvisible = Kwf_Component_Data_Root::getShowInvisible();
+
+        $foundRequestHttps = false;
+        if (!$showInvisible) { //don't cache in preview
+            $cacheId = 'reqHttps-'.$data->componentId;
+            $foundRequestHttps = Kwf_Cache_Simple::fetch($cacheId);
+        }
+
+        if ($foundRequestHttps === false) {
+            $foundRequestHttps = 0; //don't use false, false means not-cached
+            if (Kwf_Component_Abstract::getFlag($data->componentClass, 'requestHttps')) {
+                $foundRequestHttps = true;
+            }
+            if (!$foundRequestHttps && $data->getRecursiveChildComponents(array(
+                    'page' => false,
+                    'flags' => array('requestHttps' => true)
+                ))
+            ) {
+                $foundRequestHttps = true;
+            }
+            if (!$showInvisible) { //don't cache in preview
+                Kwf_Cache_Simple::add($cacheId, $foundRequestHttps);
+            }
+        }
+
+        return $foundRequestHttps;
+    }
+
+    /**
      * IE unter <=XP kann kein SNI
     private static function _supportsHttps()
     {
