@@ -3,12 +3,7 @@ class Kwf_Util_Https
 {
     public static function ensureHttps()
     {
-        if (php_sapi_name() != 'cli' && Kwf_Config::getValue('server.https')) {
-            if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
-                if ($domains && !in_array($_SERVER['HTTP_HOST'], $domains)) {
-                    return; //current host is not in server.httpsDomains, don't use https
-                }
-            }
+        if (self::supportsHttps()) {
             if (!isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
@@ -28,6 +23,19 @@ class Kwf_Util_Https
                 exit;
             }
         }
+    }
+
+    public static function supportsHttps()
+    {
+        if (php_sapi_name() != 'cli' && Kwf_Config::getValue('server.https')) {
+            if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
+                if ($domains && !in_array($_SERVER['HTTP_HOST'], $domains)) {
+                    return false; //current host is not in server.httpsDomains, don't use https
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

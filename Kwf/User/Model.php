@@ -168,7 +168,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
 
     public function login($identity, $credential)
     {
-        if (Kwf_Config::getValue('server.https') && !isset($_SERVER['HTTPS'])) {
+        if (Kwf_Util_Https::supportsHttps() && !isset($_SERVER['HTTPS'])) {
             throw new Kwf_Exception('not on https');
         }
         if ($credential == 'test' && Kwf_Registry::get('config')->debug->testPasswordAllowed) {

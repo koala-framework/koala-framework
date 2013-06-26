@@ -149,7 +149,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
 
     public function sendContent($includeMaster)
     {
-        if (Kwf_Config::getValue('server.https')) {
+        if (Kwf_Util_Https::supportsHttps()) {
             //TODO add cache
             $foundRequestHttps = false;
             if (Kwf_Component_Abstract::getFlag($this->_data->componentClass, 'requestHttps')) {
