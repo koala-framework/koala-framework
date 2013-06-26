@@ -1,13 +1,30 @@
-/*body.ext-ie6 { text-align: center; }
+@import "susy";
+// @import "compass/utilities/general/clearfix";
+
+$total-columns: 4;
+$column-width: 830px / 4;
+$gutter-width: 50px;
+$grid-padding: 0px;
+
+$container-style: magic;
+
 
 #page {
     border-top: 5px solid var(secColor);
+     width: 100%;
 }
 
+#page #outerHeader,
+#page #outerContent .stage,
+#page #outerContent #content,
+#page .bottomStage .innerBottomStage,
+#page #outerFooter #footer {
+    @include container;
+}
 #page #outerHeader #header,
 #page #outerContent .stage,
 #page #outerContent #content,
-#page #outerFooter #footer { margin: 0px auto; text-align: left; }
+#page #outerFooter #footer { text-align: left; }
 #page #outerHeader #header {
     height: 115px;
 }
@@ -17,8 +34,8 @@
     position: relative;
 }
 #page #outerContent .stage {
+    border-top: 5px solid #C80000;
     height: 185px;
-    border-top: 5px solid #C80000
 }
 #page #outerHeader #header .logo {
     width: 180px;
@@ -39,23 +56,44 @@
     float: right;
     margin-top: 82px;
 }
+
+#page #outerContent #content #innerContent {
+    margin: 0 20px;
+}
+
+@include at-breakpoint(4) {
+    #page #outerHeader,
+    #page #outerContent .stage,
+    #page #outerContent #content,
+    #page .bottomStage .innerBottomStage,
+    #page #outerFooter #footer {
+    }
+    
+    #page #outerContent #content #innerContent {
+        margin: 0px;
+    }
+    #page #outerContent #content #innerContent .leftColumn {
+        @include span-columns(1);
+    }
+    #page #outerContent #content #innerContent .centerColumn {
+        @include span-columns(2);
+    }
+    #page #outerContent #content #innerContent .rightColumn {
+        @include span-columns(1 omega);
+    }
+}
+
+
 #page #outerContent #content #innerContent .leftColumn,
 #page #outerContent #content #innerContent .centerColumn,
 #page #outerContent #content #innerContent .rightColumn {
-    float: left;
     min-height: 100px;
 }
 #page #outerContent #content #innerContent .leftColumn {
-    width: 185px;
-    margin-right: 50px;
     padding-top: 50px;
 }
-#page #outerContent #content #innerContent .centerColumn {
-    width: 465px;
-    margin-right: 50px;
-}
 #page #outerContent #content #innerContent .rightColumn {
-    width: 230px;
+    background: red;
 }
 #page .bottomStage {
     background: url("/assets/kwf/themes/Default/images/bottomStageBg.jpg") repeat center top;
@@ -74,7 +112,6 @@
 #page #outerFooter #footer {
     margin-top: 40px;
     min-height: 100px;
-    background: red;
 }
 #page #outerFooter #footer .loginButton {
     float: right;
@@ -87,4 +124,4 @@
 }
 #page #outerFooter #footer .leftArea {
     float: left;
-}*/
+}

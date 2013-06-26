@@ -27,9 +27,7 @@
                         </div>
                         <div class="centerColumn">
                             <?=$this->component($this->boxes['breadcrumbs']);?>
-                            <div style="width: <?=$this->componentWidth($this->data)?>px">
-                                <?=$this->componentWithMaster($this->componentWithMaster);?>
-                            </div>
+                            <?=$this->componentWithMaster($this->componentWithMaster);?>
                         </div>
                         <div class="rightColumn">
                         </div>

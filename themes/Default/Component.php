@@ -69,10 +69,10 @@ class Default_Component extends Kwf_Component_Theme_Abstract
         );
         $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo');
 
-        $ret['contentWidth'] = 480;
 
         $ret['assets']['files'][] = 'kwf/themes/Default/css/master.css';
         $ret['assets']['files'][] = 'kwf/themes/Default/css/web.css';
+        $ret['assets']['files'][] = 'kwf/themes/Default/css/web.scss';
 
         return $ret;
     }
