@@ -13,7 +13,8 @@ class Kwf_Benchmark_BufferedFileCounter
     private $_file;
     private $_bufferTime = false;
 
-    private $_counters = array();
+    private $_increments = array();
+    private $_updates = array();
     private $_lastWrite;
     private $_readValuesCache = null;
 
@@ -31,10 +32,19 @@ class Kwf_Benchmark_BufferedFileCounter
 
     public function increment($var, $value = 1)
     {
-        if (!isset($this->_counters[$var])) {
-            $this->_counters[$var] = 0;
+        if (!isset($this->_increments[$var])) {
+            $this->_increments[$var] = 0;
         }
-        $this->_counters[$var] += $value;
+        $this->_increments[$var] += $value;
+        if (!$this->_bufferTime || (time() - $this->_lastWrite) > $this->_bufferTime) {
+            $this->flush();
+        }
+        $this->_readValuesCache = null;
+    }
+
+    public function update($var, $value)
+    {
+        $this->_updates[$var] = $value;
         if (!$this->_bufferTime || (time() - $this->_lastWrite) > $this->_bufferTime) {
             $this->flush();
         }
@@ -45,7 +55,7 @@ class Kwf_Benchmark_BufferedFileCounter
     {
         $this->_lastWrite = time();
 
-        if (!$this->_counters) return;
+        if (!$this->_increments && !$this->_updates) return;
 
         $fp = fopen($this->_file, "c+");
         if (flock($fp, LOCK_EX)) {
@@ -55,7 +65,10 @@ class Kwf_Benchmark_BufferedFileCounter
             } else {
                 $contents = array();
             }
-            foreach ($this->_counters as $k=>$i) {
+            foreach ($this->_updates as $k=>$i) {
+                $contents[$k] = $i;
+            }
+            foreach ($this->_increments as $k=>$i) {
                 if (!isset($contents[$k])) $contents[$k] = 0;
                 $contents[$k] += $i;
             }
@@ -63,7 +76,7 @@ class Kwf_Benchmark_BufferedFileCounter
             fseek($fp, SEEK_SET, 0);
             fwrite($fp, json_encode($contents));
             flock($fp, LOCK_UN);
-            $this->_counters = array();
+            $this->_increments = array();
         }
         fclose($fp);
     }

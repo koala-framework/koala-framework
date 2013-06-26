@@ -102,7 +102,7 @@ class Kwf_Assets_Loader
                 if (strpos($file, '?') !== false) {
                     $file = substr($file, 0, strpos($file, '?'));
                 }
-                if (!preg_match('#^all/([a-z0-9]+)/(([a-z0-9_]+)/)?([a-z]+)/([a-z0-9_:]+)\\.(printcss|js|css)$#i', $file, $m)) {
+                if (!preg_match('#^all/([a-z0-9]+)/(([a-z0-9_]+)/)?([a-zA-Z_]+)/([a-z0-9_:]+)\\.(printcss|js|css)$#i', $file, $m)) {
                     throw new Kwf_Exception_NotFound("Invalid Url '$file'");
                 }
                 $section = $m[1];

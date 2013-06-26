@@ -27,6 +27,8 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
     public function isLoggedIn()
     {
         $pw = $this->_getPassword();
+        if (!$pw) return false; //no password defined
+
         if (!is_array($pw)) $pw = array($pw);
 
         if (isset($_COOKIE[get_class($this)])) {
@@ -38,12 +40,15 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
             }
         }
 
-        $msg = '';
         $session = new Kwf_Session_Namespace('login_password');
+        if (!$session->passwords) $session->passwords = array();
+        if (array_intersect($session->passwords, $pw)) {
+            return true;
+        }
         if (!is_null($this->_getLoginPassword()) && in_array($this->_getLoginPassword(), $pw)) {
             //this should not happen in herer (we are in isLoggedIn)
             //instead this should be in processInput of the LoginForm, just as Plugin_Login does it
-            $session->login = true;
+            $session->passwords[] = $this->_getLoginPassword();
             $this->_afterLogin($session);
             $currentPageUrl = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
             if ($_SERVER['QUERY_STRING'] && isset($_SERVER['QUERY_STRING'])) {
@@ -55,7 +60,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
             header('Location: '.$currentPageUrl);
             die();
         }
-        return $session->login;
+        return false;
     }
 
     /**

@@ -1,5 +1,5 @@
-Kwf._contentReadyHandlers = [];
-Kwf._onElementReadyHandlers = [];
+Kwf._contentJReadyHandlers = [];
+Kwf._onJElementReadyHandlers = [];
 
 /**
  * Register a function that will be called when content is loaded or shown
@@ -7,24 +7,23 @@ Kwf._onElementReadyHandlers = [];
  * @param scope for callback
  * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
  */
-Kwf.onContentReady = function(fn, scope, options) {
-    Kwf._contentReadyHandlers.push({
+Kwf.onJContentReady = function(fn, scope, options) {
+    Kwf._contentJReadyHandlers.push({
         fn: fn,
         scope: scope,
         options: options || {}
     });
 };
 
-Kwf.callOnContentReady = function(el, options) {
-    if (!options) options = {};
-    Kwf._contentReadyHandlers.sort(function(a, b) {
+Kwf.callOnContentReadyJQuery = function(el, options) {
+    Kwf._contentJReadyHandlers.sort(function(a, b) {
         return (a.options.priority || 0) - (b.options.priority || 0);
     });
-    if (el instanceof Ext.Element) el = el.dom;
-    Ext.each(Kwf._contentReadyHandlers, function(i) {
-        i.fn.call(i.scope || window, (el || document.body), options);
-    }, this);
+    $.each(Kwf._contentJReadyHandlers, function(i, v) {
+        v.fn.call(v.scope || window, (el || document.body), options);
+    });
 };
+
 
 if (!Kwf.isApp) {
     $(document).ready(function() {
@@ -41,7 +40,7 @@ if (!Kwf.isApp) {
  * Add a callback function that gets called once for every element that appears
  * in the dom tree
  *
- * If ainput type="hidden" is found directly under the element it's value gets passed
+ * If an input type="hidden" is found directly under the element it's value gets passed
  * as config (json decoded)
  *
  * @param element selector
@@ -49,38 +48,35 @@ if (!Kwf.isApp) {
  * @param scope
  * @param options see onContentReady options, additionally checkVisibility (boolean, only call onElementReady when element is visible)
  */
-Kwf.onElementReady = function(selector, fn, scope, options) {
-    Kwf._onElementReadyHandlers.push({
+Kwf.onJElementReady = function(selector, fn, scope, options) {
+    Kwf._onJElementReadyHandlers.push({
         selector: selector,
         fn: fn,
         scope: scope,
         options: options || {},
-        num: Kwf._onElementReadyHandlers.length //unique number, used to mark in initDone
+        num: Kwf._onJElementReadyHandlers.length //unique number, used to mark in initDone
     });
 };
-
-Kwf.onContentReady(function(addedEl, renderConfig) {
-    Kwf._onElementReadyHandlers.sort(function(a, b) {
+Kwf.onJContentReady(function(addedEl, renderConfig) {
+    Kwf._onJElementReadyHandlers.sort(function(a, b) {
         return (a.options.priority || 0) - (b.options.priority || 0);
     });
-    for (var i=0; i<Kwf._onElementReadyHandlers.length; i++) {
-        var hndl = Kwf._onElementReadyHandlers[i];
-        Ext.query(hndl.selector, addedEl).each(function(el) {
-            if (hndl.options.checkVisibility && !Ext.fly(el).isVisible(true)) return;
-
+    for (var i=0; i<Kwf._onJElementReadyHandlers.length; i++) {
+        var hndl = Kwf._onJElementReadyHandlers[i];
+        $.each($(hndl.selector), function(i, el) {
+            if (hndl.options.checkVisibility && !$(v).is(':visible')) return;
             if (!el.initDone) el.initDone = {};
             if (el.initDone[hndl.num]) return;
             el.initDone[hndl.num] = true;
-
-            el = Ext.get(el);
+            el = $(el);
             var config = {};
-            var configEl = el.child('> input[type="hidden"]')
+            var configEl = el.children('input[type="hidden"]');
             if (configEl) {
                 try {
-                    config = Ext.decode(configEl.getValue());
+                    config = $.parseJSON(configEl.val());
                 } catch (err) {}
             }
             hndl.fn.call(hndl.scope, el, config);
-        }, this);
+        });
     }
 }, this);

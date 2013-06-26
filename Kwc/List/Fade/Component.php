@@ -22,8 +22,8 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
             'elementAccessNextPrevious' => false, // a previous and next button to switch pictures
             'fadeDuration'       => 1.5,
             'fadeEvery'          => 7,
-            'easingFadeOut'      => 'easeIn',
-            'easingFadeIn'       => 'easeIn',
+            'easingFadeOut'      => 'easeInQuad',
+            'easingFadeIn'       => 'easeOutQuad',
             'startRandom'        => true,
             'autoStart'          => true,
             'template' => false
