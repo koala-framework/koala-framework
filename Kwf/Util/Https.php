@@ -4,6 +4,11 @@ class Kwf_Util_Https
     public static function ensureHttps()
     {
         if (php_sapi_name() != 'cli' && Kwf_Config::getValue('server.https')) {
+            if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
+                if ($domains && !in_array($_SERVER['HTTP_HOST'], $domains)) {
+                    return; //current host is not in server.httpsDomains, don't use https
+                }
+            }
             if (!isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
