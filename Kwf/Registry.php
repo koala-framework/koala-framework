@@ -21,26 +21,7 @@ class Kwf_Registry extends Zend_Registry
             $this->offsetSet('dao', $v);
             return $v;
         } else if ($index == 'acl' && !parent::offsetExists($index)) {
-            $t = microtime(true);
-            $m = memory_get_usage();
-            $cacheId = 'acl';
-            $v = Kwf_Cache_Simple::fetch($cacheId);
-            if ($v === false) {
-                $class = Kwf_Config::getValue('aclClass');
-                if (!$class) {
-                    $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
-                    if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
-                        throw new Kwf_Exception("'aclClass' has to exist in web-config and the web must have an own acl-class for media output rights check (NOT CREATED IN BOOTSTRAP!)");
-                    }
-                    $class = 'Kwf_Acl';
-                }
-                $v = new $class();
-                $v->loadKwcResources();
-                Kwf_Cache_Simple::add($cacheId, $v);
-                Kwf_Benchmark::subCheckpoint('create Acl', microtime(true)-$t);
-            } else {
-                Kwf_Benchmark::subCheckpoint('load cached Acl '.round((memory_get_usage()-$m) / (1024*1024), 2).'MB', microtime(true)-$t);
-            }
+            $v = Kwf_Acl::getInstance();
             $this->offsetSet('acl', $v);
             return $v;
         } else if ($index == 'userModel' && !parent::offsetExists($index)) {

@@ -19,6 +19,6 @@ class Kwf_Component_Abstract_MenuConfig_SameClass_Events extends Kwf_Component_A
 
     public function onComponentAddedRemoved(Kwf_Component_Event_Component_AbstractFlag $ev)
     {
-        Kwf_Cache_Simple::delete('acl');
+        Kwf_Acl::clearCache();
     }
 }

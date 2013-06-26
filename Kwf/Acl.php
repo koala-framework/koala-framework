@@ -9,6 +9,34 @@ class Kwf_Acl extends Zend_Acl
     protected $_componentAcl;
     protected $_kwcResourcesLoaded = false;
 
+
+    public static function getInstance()
+    {
+        static $i;
+        if (!isset($i)) {
+            $t = microtime(true);
+            $m = memory_get_usage();
+            $cacheId = 'acl';
+            $i = Kwf_Cache_Simple::fetch($cacheId);
+            if ($i === false) {
+                $class = Kwf_Config::getValue('aclClass');
+                $i = new $class();
+                $i->loadKwcResources();
+                Kwf_Cache_Simple::add($cacheId, $i);
+                Kwf_Benchmark::subCheckpoint('create Acl', microtime(true)-$t);
+            } else {
+                Kwf_Benchmark::subCheckpoint('load cached Acl '.round((memory_get_usage()-$m) / (1024*1024), 2).'MB', microtime(true)-$t);
+            }
+        }
+        return $i;
+    }
+
+    public static function clearCache()
+    {
+        $cacheId = 'acl';
+        Kwf_Cache_Simple::delete($cacheId);
+    }
+
     public function __construct()
     {
         $this->addRole(new Zend_Acl_Role('guest'));
