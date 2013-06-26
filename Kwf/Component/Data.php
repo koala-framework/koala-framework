@@ -181,7 +181,7 @@ class Kwf_Component_Data
     }
 
     /**
-     * Returns absolute url including preview domain and protocol (http://)
+     * Returns preview url
      *
      * @return string
      */
