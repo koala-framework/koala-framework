@@ -31,13 +31,15 @@ Kwf.Switch.Display = function(el) {
         this.kwfSwitchCloseLink = false;
     }
 
-    // durch unterbinden von flackern (ganz oben) muss das auf block
-    // gesetzt werden, damit die hoehe gemessen werden kann
-    this.switchContent.setStyle('display', 'block');
-    this.switchContent.scaleHeight = this.switchContent.getHeight();
-    this.switchContent.setHeight(0);
-    // und schnell wieder auf 'none' bevors wer merkt :)
-    this.switchContent.setStyle('display', 'none');
+    if (!this.switchContent.scaleHeight) {
+        // durch unterbinden von flackern (ganz oben) muss das auf block
+        // gesetzt werden, damit die hoehe gemessen werden kann
+        this.switchContent.setStyle('display', 'block');
+        this.switchContent.scaleHeight = this.switchContent.getHeight();
+        this.switchContent.setHeight(0);
+        // und schnell wieder auf 'none' bevors wer merkt :)
+        this.switchContent.setStyle('display', 'none');
+    }
 
     // if it is important, show on startup
     if (this.switchContent.child('.kwfImportant')) {
