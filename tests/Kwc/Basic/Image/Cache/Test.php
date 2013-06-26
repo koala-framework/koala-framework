@@ -75,7 +75,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
         $row = $model->createRow(array(
             'id' => $id,
             'component_id'=>'root',
-            'pos'=>1,
+            'pos'=>$id,
             'visible' => 1
         ));
         $row->save();
@@ -88,7 +88,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
             'width' => null,
             'height' => null,
             'enlarge' => 0,
-            'kwf_upload_id'=>null,
+            'kwf_upload_id'=>1,
             'dimension' => 'default'
         ));
         $row->save();
