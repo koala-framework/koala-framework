@@ -56,6 +56,8 @@ class Kwf_Benchmark
     public static function reset()
     {
         self::$_counter = array();
+        self::$_checkpoints = array();
+        self::$_subCheckpoints = array();
     }
     public static function getCounterValue($name)
     {
