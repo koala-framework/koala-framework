@@ -81,7 +81,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
             }
         }
         $result = call_user_func(
-            array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $event->component, $getChildren, true
+            array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $event->component, $getChildren
         );
 
         foreach ($result as $r) {

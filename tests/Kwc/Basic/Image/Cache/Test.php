@@ -51,8 +51,8 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
         $this->assertNotContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent', $html);
 
         // Add second image, there should be a next link in first image lightbox
-        $this->_addImage(2);
         $this->_process();
+        $this->_addImage(2);
         $this->_process();
         $html = $this->_root->getChildComponent('-1')->getChildComponent('-linkTag')
             ->getChildComponent('_imagePage')->render();
@@ -88,7 +88,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
             'width' => null,
             'height' => null,
             'enlarge' => 0,
-            'kwf_upload_id'=>1,
+            'kwf_upload_id'=>null,
             'dimension' => 'default'
         ));
         $row->save();
