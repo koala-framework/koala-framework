@@ -137,7 +137,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $this->_postData = $postData;
         if (isset($postData[$this->getData()->componentId])) {
             ignore_user_abort(true);
-            $this->_errors = array_merge($this->_errors, $this->_form->validate(null, $postData));
+            $this->_errors = array_merge($this->_errors, $this->_validate($postData));
             if (!$this->_errors) {
                 try {
                     $this->_form->prepareSave(null, $postData);
@@ -179,6 +179,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
                 exit;
             }
         }
+    }
+
+    //can be overriden to implement custom validation logic
+    protected function _validate($postData)
+    {
+        return $this->_form->validate(null, $postData);
     }
 
     //can be overriden to *not* log specific exceptions or adapt error
