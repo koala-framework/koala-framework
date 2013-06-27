@@ -37,4 +37,8 @@ class Kwc_NewsletterCategory_MenuConfig extends Kwc_Newsletter_MenuConfig
         parent::addResources($acl);
     }
 
+    public function getEventsClass()
+    {
+        return 'Kwf_Component_Abstract_MenuConfig_SameClass_Events';
+    }
 }

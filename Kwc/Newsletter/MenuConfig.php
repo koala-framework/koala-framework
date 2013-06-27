@@ -27,4 +27,9 @@ class Kwc_Newsletter_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstra
             $acl->add(new Kwf_Acl_Resource_Component_MenuUrl($c, $menuConfig), 'kwc_newsletter');
         }
     }
+
+    public function getEventsClass()
+    {
+        return 'Kwf_Component_Abstract_MenuConfig_SameClass_Events';
+    }
 }

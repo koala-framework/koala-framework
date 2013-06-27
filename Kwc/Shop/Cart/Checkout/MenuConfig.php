@@ -23,4 +23,8 @@ class Kwc_Shop_Cart_Checkout_MenuConfig extends Kwf_Component_Abstract_MenuConfi
         }
     }
 
+    public function getEventsClass()
+    {
+        return 'Kwf_Component_Abstract_MenuConfig_SameClass_Events';
+    }
 }

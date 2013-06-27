@@ -29,4 +29,8 @@ class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuCon
             'kwc_newsletter');
         }
     }
+    public function getEventsClass()
+    {
+        return 'Kwc_Newsletter_Subscribe_MenuConfigEvents';
+    }
 }

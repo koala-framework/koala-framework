@@ -15,7 +15,7 @@ class Kwf_Component_Abstract_MenuConfig_SameClass_Events extends Kwf_Component_A
             'callback' => 'onComponentAddedRemoved'
         );
         $ret[] = array(
-            'class' => null,
+            'class' => $this->_class,
             'event' => 'Kwf_Component_Event_Component_InvisibleAdded',
             'callback' => 'onComponentAddedRemoved'
         );
