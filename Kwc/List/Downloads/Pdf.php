@@ -1,5 +1,5 @@
 <?php
-class Kwc_Composite_Downloads_Pdf extends Kwc_Abstract_Pdf
+class Kwc_List_Downloads_Pdf extends Kwc_Abstract_Pdf
 {
     public function writeContent()
     {
