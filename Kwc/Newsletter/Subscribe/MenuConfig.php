@@ -1,22 +1,18 @@
 <?php
-class Kwc_Newsletter_Admin extends Kwc_Directories_Item_Directory_Admin
+class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstract
 {
     public function addResources(Kwf_Acl $acl)
     {
-        parent::addResources($acl);
-
         if (!$acl->has('kwc_newsletter')) {
             $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter',
                 array('text'=>trlKwf('Newsletter'), 'icon'=>'email_open_image.png')), 'kwf_component_root');
         }
 
-        $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
-        $menuConfig = array('icon'=>$icon);
-
+        $menuConfig = array('icon'=>new Kwf_Asset('group.png'));
         $components = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
+                ->getComponentsByClass('Kwc_Newsletter_Component', array('ignoreVisible'=>true));
         foreach ($components as $c) {
-            $menuConfig['text'] = trlKwf('Edit {0}', trlKwf('Newsletter'));
+            $menuConfig['text'] = trlKwf('Recipients');
             if (count($components) > 1) {
                 $subRoot = $c;
                 while($subRoot = $subRoot->parent) {
@@ -26,7 +22,11 @@ class Kwc_Newsletter_Admin extends Kwc_Directories_Item_Directory_Admin
                     $menuConfig['text'] .= ' ('.$subRoot->name.')';
                 }
             }
-            $acl->add(new Kwf_Acl_Resource_Component_MenuUrl($c, $menuConfig), 'kwc_newsletter');
+            $acl->add(new Kwc_Newsletter_Subscribe_MenuResource($this->_class.$c->dbId,
+                $menuConfig,
+                Kwc_Admin::getInstance($this->_class)->getControllerUrl('Recipients').'?newsletterComponentId='.$c->dbId,
+                $this->_class, $c),
+            'kwc_newsletter');
         }
     }
 }
