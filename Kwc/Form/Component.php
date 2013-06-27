@@ -49,6 +49,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['hideFormOnSuccess'] = true; // works only when useAjaxRequest==true
 
         $ret['flags']['processInput'] = true;
+        $ret['flags']['requestHttps'] = true;
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 

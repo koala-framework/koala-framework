@@ -220,7 +220,7 @@ class Kwf_Util_Setup
         $ret .= " 0,";     //lifetime
         $ret .= " '/',";   //path
         $ret .= " null,";  //domain
-        $ret .= " false,"; //secure
+        $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
         $ret .= " true";   //httponly
         $ret .= ");\n";
 
