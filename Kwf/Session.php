@@ -3,6 +3,8 @@ class Kwf_Session extends Zend_Session
 {
     public static function start($options = false)
     {
+        Kwf_Util_Https::ensureHttps();
+
         parent::start($options);
         self::afterStart();
     }

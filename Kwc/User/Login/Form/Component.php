@@ -46,7 +46,8 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
             $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
             if ($row->auto_login) {
                 $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
-                setcookie('feAutologin', $cookieValue, time() + (100*24*60*60), '/');
+                setcookie('feAutologin', $cookieValue, time() + (100*24*60*60), '/', null, Kwf_Util_Https::supportsHttps(), true);
+                setcookie('hasFeAutologin', '1', time() + (100*24*60*60), '/', null, false, true);
             }
             $this->_afterLogin($authedUser);
         } else {
