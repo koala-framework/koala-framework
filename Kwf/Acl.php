@@ -33,6 +33,10 @@ class Kwf_Acl extends Zend_Acl
 
     public static function clearCache()
     {
+        static $cleared = false;
+        if ($cleared) return; //only clear single time
+        $cleared = true;
+
         $cacheId = 'acl';
         Kwf_Cache_Simple::delete($cacheId);
     }
