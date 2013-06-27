@@ -50,6 +50,9 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             // Schlafen bis errechnet Zeit
             $sleep = $start + 60/$mailsPerMinute * $count - microtime(true);
             if ($sleep > 0) usleep($sleep * 1000000);
+            if ($debugOutput) {
+                //echo "sleeping {$sleep}s\n";
+            }
 
             // Zeile aus queue holen, falls nichts gefunden, Newsletter fertig
             $row = $this->getNextRow($this->id);
@@ -74,7 +77,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                     $status = 'usernotfound';
                 } else {
                     try {
-                        $this->_sendMail($recipient);
+                        $this->_sendMail($recipient, $debugOutput);
                         $count++;
                         if ($debugOutput) echo '.';
                         $status = 'sent';
@@ -137,9 +140,16 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         }
     }
 
-    protected function _sendMail($recipient)
+    protected function _sendMail($recipient, $debugOutput = false)
     {
-        $this->getMailComponent()->send($recipient);
+        $mc = $this->getMailComponent();
+        $t = microtime(true);
+        $mail = $mc->createMail($recipient);
+        //if ($debugOutput) echo "createMail: ".round((microtime(true)-$t)*1000)."ms\n";
+
+        $t = microtime(true);
+        $mail->send();
+        //if ($debugOutput) echo "send: ".round((microtime(true)-$t)*1000)."ms\n";
     }
 
     public function getNextRow()
