@@ -69,15 +69,17 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
         $getChildren = array();
         if ($c->componentClass != $this->_class) {
             $c = $c->getRecursiveChildComponents(array('componentClass'=>$this->_class));
-            if (count($c) != 1) throw new Kwf_Exception("only a single component should exist");
-            $c = $c[0];
-            $i = $c->parent->parent;
-            if (is_instance_of($i->componentClass, 'Kwc_Basic_LinkTag_Component')) {
-                $i = $i->parent;
-            }
-            while ($i != $event->component) {
-                $getChildren[] = $i->generator->getIdSeparator().$i->id;
-                $i = $i->parent;
+            if (count($c) > 1) throw new Kwf_Exception("only a single component should exist");
+            if (isset($c[0])) {
+                $c = $c[0];
+                $i = $c->parent->parent;
+                if (is_instance_of($i->componentClass, 'Kwc_Basic_LinkTag_Component')) {
+                    $i = $i->parent;
+                }
+                while ($i != $event->component) {
+                    $getChildren[] = $i->generator->getIdSeparator().$i->id;
+                    $i = $i->parent;
+                }
             }
         }
         $result = call_user_func(
