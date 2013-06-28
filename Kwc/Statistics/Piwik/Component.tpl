@@ -1,25 +1,25 @@
 <? if ($this->domain && $this->id) { ?>
 <!-- Piwik -->
 <script type="text/javascript">
-    var pkBaseURL = (("https:" == document.location.protocol) ? "https://<?=$this->domain?>/" : "http://<?=$this->domain?>/");
-    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+  var _paq = _paq || [];
+  <? foreach ($this->customVariables as $cv) { ?>
+  _paq.push(["setCustomVariable", <?=$cv['index']?>, "<?=$cv['name']?>", "<?=$cv['value']?>", "<?=$cv['scope']?>"]);
+  <? } ?>
+  _paq.push(["trackPageView"]);
+  <? if ($this->enableLinkTracking) { ?>
+  _paq.push(["enableLinkTracking"]);
+  <? } ?>
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://<?=$this->domain?>/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "<?=$this->id?>"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
 </script>
-<script type="text/javascript">
-    try {
-        Kwc.Statistics.Piwik.url = pkBaseURL + "piwik.php";
-        Kwc.Statistics.Piwik.idSite = <?=$this->id?>;
-        var piwikTracker = Kwc.Statistics.Piwik.getTracker();
-        if (piwikTracker) {
-            <? foreach ($this->customVariables as $cv) { ?>
-            piwikTracker.setCustomVariable(<?=$cv['index']?>, '<?=$cv['name']?>', '<?=$cv['value']?>', '<?=$cv['scope']?>');
-            <? } ?>
-            piwikTracker.trackPageView();
-            <? if ($this->enableLinkTracking) { ?>
-            piwikTracker.enableLinkTracking();
-            <? } ?>
-        }
-    } catch( err ) {}
-</script>
-<noscript><p><img src="http://<?=$this->domain?>/piwik.php?idsite=<?=$this->id?>" style="border:0" alt="" /></p></noscript>
-<!-- End Piwik Tracking Code -->
+<noscript>
+    <img src="https://<?=$this->domain?>/piwik.php?idsite=<?=$this->id?>&amp;rec=1" style="border:0" alt="" />
+</noscript>
+<!-- End Piwik Code -->
 <? } ?>

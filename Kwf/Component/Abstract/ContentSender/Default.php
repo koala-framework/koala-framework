@@ -161,7 +161,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
 
     public function sendContent($includeMaster)
     {
-        header('Content-Type: text/html; charset=utf-8');
+        $this->_sendHeader();
         $startTime = microtime(true);
         $process = $this->_getProcessInputComponents($includeMaster);
         Kwf_Benchmark::subCheckpoint('getProcessInputComponents', microtime(true)-$startTime);
@@ -171,5 +171,10 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         Kwf_Benchmark::checkpoint('render');
         self::_callPostProcessInput($process);
         Kwf_Benchmark::checkpoint('postProcessInput');
+    }
+
+    protected function _sendHeader()
+    {
+        header('Content-Type: text/html; charset=utf-8');
     }
 }
