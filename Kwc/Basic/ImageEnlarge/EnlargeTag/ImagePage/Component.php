@@ -56,7 +56,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $previous = null;
         $previousWasImageEnlarge = false;
         foreach ($allImages as $c) {
-            $cVisible = !isset($c->row) || $c->row->visible;
+            $cVisible = !isset($c->row) || !isset($c->row->visible) || $c->row->visible;
             if ($c === $imageEnlarge) {
                 $ret['previous'] = self::_getImagePage($previous, $getChildren);
                 $previousWasImageEnlarge = true;
