@@ -1,5 +1,5 @@
 <?php
-class Kwc_Composite_Images_Pdf extends Kwc_Abstract_Pdf
+class Kwc_List_Images_Pdf extends Kwc_Abstract_Pdf
 {
     public function writeContent()
     {
@@ -7,7 +7,8 @@ class Kwc_Composite_Images_Pdf extends Kwc_Abstract_Pdf
         $nr = 0;
         $components = $this->_component->getData()->getChildComponents(array('generator' => 'child'));
         $count = sizeof($components);
-        $columns = Kwc_Abstract::getSetting(get_class($this->_component), 'pdfColumns');
+        $columns = $this->_getGalleryColumns();
+        if ($columns == 0) { $columns = 1; }
         foreach ($components as $component) {
             // immer y vor x setzen, weil sety setzt x auf leftmargin"
             $image = $component->getComponent()->getPdfWriter($this->_pdf);
@@ -33,4 +34,8 @@ class Kwc_Composite_Images_Pdf extends Kwc_Abstract_Pdf
         }
     }
 
+    protected function _getGalleryColumns()
+    {
+        return Kwc_Abstract::getSetting(get_class($this->_component), 'pdfColumns');
+    }
 }

@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent extends Kwc_Composite_ImagesEnlarge_Component
+class Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent extends Kwc_List_Gallery_Component
 {
     public static function getSettings()
     {
