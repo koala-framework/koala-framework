@@ -188,11 +188,15 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     Kwf.callOnContentReady(el.dom, {newRender: true});
                 } else if (r.successUrl) {
                     document.location.href = r.successUrl;
+                } else {
+                    //errors are shown, lightbox etc needs to resize
+                    Kwf.callOnContentReady(this.el.dom);
                 }
 
                 if (!hasErrors) {
                     this.fireEvent('submitSuccess', this, r);
                 }
+
             },
             scope: this
         });
