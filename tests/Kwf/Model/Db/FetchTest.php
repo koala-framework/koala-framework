@@ -47,18 +47,6 @@ class Kwf_Model_Db_FetchTest extends Kwf_Test_TestCase
         $this->assertEquals(null, $this->_model->getRows()->current()->bar);
     }
 
-    public function testGetIds()
-    {
-        $this->_table->expects($this->exactly(2))
-            ->method('_fetch')
-            ->will($this->returnValue(array(
-                    array('id'=>1, 'foo'=>'foo', 'bar'=>null),
-                    array('id'=>2, 'foo'=>'bar', 'bar'=>'foo')
-            )));
-        $this->assertEquals(2, count($this->_model->getIds()));
-        $this->assertEquals(array(1, 2), $this->_model->getIds());
-    }
-
     public function testUniqueRowObject()
     {
         $this->_table->expects($this->any())
