@@ -1,9 +1,10 @@
 @import "susy";
-// @import "compass/utilities/general/clearfix";
+@import "compass/utilities/general/clearfix";
+@import "compass/css3/box-sizing";
 
-$total-columns: 4;
-$column-width: 830px / 4;
-$gutter-width: 50px;
+$total-columns: 8;
+$column-width: 980px / 8;
+$gutter-width: 0px;
 $grid-padding: 0px;
 
 $container-style: magic;
@@ -25,9 +26,6 @@ $container-style: magic;
 #page #outerContent .stage,
 #page #outerContent #content,
 #page #outerFooter #footer { text-align: left; }
-#page #outerHeader #header {
-    height: 115px;
-}
 #page #outerContent {
     background: url("/assets/kwf/themes/Default/images/bgContent.jpg") repeat center -5px;
     padding-bottom: 170px;
@@ -37,31 +35,52 @@ $container-style: magic;
     border-top: 5px solid #C80000;
     height: 185px;
 }
+#page #outerHeader #header {
+  @include clearfix;
+}
 #page #outerHeader #header .logo {
-    width: 180px;
-    height: 100px;
-    float: left;
-    margin-top: 7px;
-    margin-bottom: 8px;
+    display: block;
+    text-align: center;
+    
+    img {
+      display: inline;
+    }
 }
 #page #outerHeader #header .searchBox {
-    width: 180px;
-    height: 33px;
     background: red;
-    float: right;
-    margin-top: 82px;
+    width: 100%;
+    height: 40px;
 }
 #page #outerHeader #header .mainMenu {
-    height: 33px;
-    float: right;
-    margin-top: 82px;
+}
+
+@include at-breakpoint(4) {
+    #page #outerHeader #header .logo {
+        height: auto;
+        margin: auto;
+        padding: 20px;
+        text-align: left;
+        
+        img {
+            display: block;
+        }
+    }
+}
+@include at-breakpoint(8) {
+    #page #outerHeader #header .searchBox {
+        @include span-columns(2 omega);
+    }
+    #page #outerHeader #header .mainMenu {
+        @include span-columns(6);
+        margin-right: 0px;
+    }
 }
 
 #page #outerContent #content #innerContent {
     margin: 0 20px;
 }
 
-@include at-breakpoint(4) {
+@include at-breakpoint(8) {
     #page #outerHeader,
     #page #outerContent .stage,
     #page #outerContent #content,
@@ -73,13 +92,17 @@ $container-style: magic;
         margin: 0px;
     }
     #page #outerContent #content #innerContent .leftColumn {
-        @include span-columns(1);
+        @include span-columns(2);
+        @include box-sizing(border-box);
+        padding-right: 50px;
     }
     #page #outerContent #content #innerContent .centerColumn {
-        @include span-columns(2);
+        @include span-columns(4);
+        @include box-sizing(border-box);
+        padding-right: 50px
     }
     #page #outerContent #content #innerContent .rightColumn {
-        @include span-columns(1 omega);
+        @include span-columns(2 omega);
     }
 }
 

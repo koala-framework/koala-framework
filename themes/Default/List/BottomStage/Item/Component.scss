@@ -14,10 +14,6 @@
         font-family: 'Myriad Pro';
     }
     
-    a {
-        text-decoration: none;
-    }
-    
     .listItem {
         margin-bottom: 20px;
         padding-right: 20px;
@@ -29,6 +25,10 @@
             margin-top: -30px;
             width: 100%;
             height: auto;
+        }
+        a {
+            position: relative;
+            text-decoration: none;
         }
     }
     
@@ -42,8 +42,8 @@
         width: 7px;
         height: 6px;
         position: absolute;
-        left: 20px;
-        top: 59px;
+        left: 0px;
+        top: 51px;
     }
     
     &.gt700 {

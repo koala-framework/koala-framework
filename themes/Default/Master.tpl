@@ -5,18 +5,19 @@
         <!--[if (gte IE 6)&(lte IE 8)]>
         <script type="text/javascript" src="/assets/jquerySelectivizr/selectivizr.min.js"></script>
         <![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body class="frontend">
         <div id="page">
             <div id="outerHeader">
+                <div class="logo">
+                    <?=$this->component($this->boxes['logo']);?>
+                </div>
                 <div id="header">
-                    <div class="logo">
-                        <?=$this->component($this->boxes['logo']);?>
-                    </div>
-                    <div class="searchBox"></div>
                     <div class="mainMenu">
                         <?=$this->component($this->boxes['mainMenu']);?>
                     </div>
+                    <div class="searchBox"></div>
                 </div>
             </div>
             <div id="outerContent">

@@ -9,6 +9,7 @@ class Default_List_BottomStage_Item_Component extends Kwc_Abstract_Composite_Com
         $ret['generators']['child']['component']['image'] = 'Default_List_BottomStage_Item_Image_Component';
         $ret['generators']['child']['component']['linkTag'] = 'Kwc_Basic_LinkTag_Component';
         $ret['assets']['files'][] = 'kwf/themes/Default/List/BottomStage/Item/Component.js';
+        $ret['assets']['dep'][] = 'KwfResponsiveEl';
         return $ret;
     }
 }

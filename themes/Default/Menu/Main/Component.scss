@@ -1,0 +1,78 @@
+@import "compass/css3/box-sizing";
+@import "susy";
+
+.defaultMenuMain {
+    &.gt440 {
+        ul {
+            float: right;
+
+            li {
+                float: left;
+            }
+        }
+    }
+    &.gt700 {
+        ul li {
+            float: left;
+        }
+    }
+    ul li {
+        position: relative;
+        z-index: 0;
+        
+        a {
+            padding: 10px 10px 11px;
+            margin-bottom: 0px;
+            background: #efefef;
+            position: relative;
+            font-size: 15px;
+            z-index: 2;
+            position: relative;
+            display: block;
+            
+            &:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 50%;
+                top: 0px;
+                left: 0px;
+                background: #f6f6f6;
+                z-index: -1;
+            }
+            &:hover {
+                background: var(secColor);
+                color: var(light);
+                
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 50%;
+                    top: 0px;
+                    left: 0px;
+                    background: #e17373;
+                    z-index: -1;
+                }
+            }
+        }
+        &.current a {
+            background: var(secColor);
+            color: var(light);
+            
+            &:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 50%;
+                top: 0px;
+                left: 0px;
+                background: #e17373;
+                z-index: -1;
+            }
+        }
+    }
+    &.webStandard ul.menu {
+        margin-bottom: 0px;
+    }
+}
