@@ -65,7 +65,7 @@ class CatchBox_Component extends Kwf_Component_Theme_Abstract
             'name' => trlStatic('Suche')
         );
 
-        $ret['editComponents'] = array('title', 'metaTags', 'openGraph');
+        $ret['editComponents'] = array('title', 'metaTags', 'openGraph', 'headerTitle');
 
         $ret['contentWidth'] = 800;
         $ret['contentWidthBoxSubtract'] = array(

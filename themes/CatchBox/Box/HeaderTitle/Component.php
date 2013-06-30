@@ -1,6 +1,13 @@
 <?php
 class CatchBox_Box_HeaderTitle_Component extends Kwc_Basic_Headlines_Component
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlKwfStatic('Header Title');
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
