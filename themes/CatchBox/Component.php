@@ -45,6 +45,12 @@ class CatchBox_Component extends Kwf_Component_Theme_Abstract
             'component' => 'Kwc_Box_TitleEditable_Component',
             'inherit' => true,
         );
+        $ret['generators']['rssFeeds'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Kwc_Box_RssFeeds_Component',
+            'inherit' => true,
+            'unique' => true
+        );
 
         $ret['generators']['searchBox'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
