@@ -22,7 +22,7 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
 
         $ret['generateInvoices'] = true;
 
-        $ret['flags']['hasResources'] = true;
+        $ret['menuConfig'] = 'Kwc_Shop_Cart_Checkout_MenuConfig';
 
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Shop/Cart/Checkout/OrdersPanel.js';

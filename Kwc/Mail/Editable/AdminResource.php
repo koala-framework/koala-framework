@@ -15,16 +15,3 @@ class Kwc_Mail_Editable_AdminResource extends Kwf_Acl_Resource_MenuUrl
         return $this->_componentClass;
     }
 }
-
-class Kwc_Mail_Editable_Admin extends Kwc_Abstract_Admin
-{
-    public function addResources(Kwf_Acl $acl)
-    {
-        parent::addResources($acl);
-        if (!$acl->has('kwc_Kwc_Mail_Editable')) {
-            $acl->add(new Kwc_Mail_Editable_AdminResource($this->_class,
-                    array('text'=>trlKwf('Mail Texts'), 'icon'=>'email_open.png'),
-                    $this->getControllerUrl('Mails')), 'kwf_component_root');
-        }
-    }
-}

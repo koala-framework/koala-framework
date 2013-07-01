@@ -35,4 +35,9 @@ abstract class Kwf_Component_Abstract_MenuConfig_Abstract
     }
 
     abstract public function addResources(Kwf_Acl $acl);
+
+    public function getEventsClass()
+    {
+        return null;
+    }
 }

@@ -1,9 +1,8 @@
 <?php
-class Kwc_Shop_Cart_Checkout_Admin extends Kwc_Admin
+class Kwc_Shop_Cart_Checkout_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstract
 {
     public function addResources(Kwf_Acl $acl)
     {
-        parent::addResources($acl);
         if (!$acl->has('kwc_shop')) {
             $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_shop',
                     array('text'=>trlKwf('Shop'), 'icon'=>'cart.png')), 'kwf_component_root');
@@ -22,5 +21,10 @@ class Kwc_Shop_Cart_Checkout_Admin extends Kwc_Admin
                     array('text'=>$text, 'icon'=>$icon),
                     Kwc_Admin::getInstance($c->componentClass)->getControllerUrl('Orders').'?componentId='.$c->dbId), 'kwc_shop');
         }
+    }
+
+    public function getEventsClass()
+    {
+        return 'Kwf_Component_Abstract_MenuConfig_SameClass_Events';
     }
 }

@@ -11,6 +11,8 @@ class Kwc_NewsletterCategory_Component extends Kwc_Newsletter_Component
         $ret['generators']['editSubscriber']['component'] =
             'Kwc_NewsletterCategory_EditSubscriber_Component';
 
+        $ret['menuConfig'] = 'Kwc_NewsletterCategory_MenuConfig';
+
         return $ret;
     }
 }

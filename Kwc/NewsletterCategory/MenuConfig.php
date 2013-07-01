@@ -1,5 +1,5 @@
 <?php
-class Kwc_NewsletterCategory_Admin extends Kwc_Newsletter_Admin
+class Kwc_NewsletterCategory_MenuConfig extends Kwc_Newsletter_MenuConfig
 {
     public function addResources(Kwf_Acl $acl)
     {
@@ -27,12 +27,18 @@ class Kwc_NewsletterCategory_Admin extends Kwc_Newsletter_Admin
                 new Kwf_Acl_Resource_Component_MenuUrl(
                     'kwc_'.$c->dbId.'-categories',
                     $menuConfig,
-                    $this->getControllerUrl('Categories').'?componentId='.$c->dbId,
+                    Kwc_Admin::getInstance($this->_class)->getControllerUrl('Categories').'?componentId='.$c->dbId,
                     $c
                 ),
                 'kwc_newsletter'
             );
         }
+
         parent::addResources($acl);
+    }
+
+    public function getEventsClass()
+    {
+        return 'Kwf_Component_Abstract_MenuConfig_SameClass_Events';
     }
 }

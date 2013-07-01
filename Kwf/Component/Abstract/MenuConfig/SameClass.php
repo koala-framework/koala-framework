@@ -43,4 +43,9 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
             );
         }
     }
+
+    public function getEventsClass()
+    {
+        return 'Kwf_Component_Abstract_MenuConfig_SameClass_Events';
+    }
 }
