@@ -393,6 +393,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $this;
     }
 
+    protected function _setIsSaved()
+    {
+        $this->_isSaved = true;
+        return $this;
+    }
+
     public function hasContent()
     {
         return true;
