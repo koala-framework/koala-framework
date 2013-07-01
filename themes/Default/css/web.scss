@@ -80,6 +80,61 @@ $container-style: magic;
     margin: 0 20px;
 }
 
+
+
+
+
+
+.webStandard.defaultMenuSubHorizontal {
+    display: none;
+}
+
+@include at-breakpoint(6) {
+    .webStandard.defaultMenuSubHorizontal {
+        display: block;
+        position: relative;
+        background: none #f6f6f6;
+        z-index: 2;
+
+        ul.menu {
+            line-height: 37px;
+            overflow-x: scroll;
+            white-space: nowrap;
+            margin-left: 0px;
+            padding: 0 17px 0 17px;
+
+            li {
+                display: inline-block;
+                padding: 0 17px 0 17px;
+                list-style: none;
+                color: white;
+
+                &.current {
+                    background: #C80000;
+
+                    a {
+                        color: white;
+                    }
+                }
+
+                a {
+                    color: #000;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    .defaultMenuSub {
+        display: none;
+    }
+}
+
+
+
+
+
+
+
 @include at-breakpoint(8) {
     #page #outerHeader,
     #page #outerContent .stage,
@@ -104,7 +159,26 @@ $container-style: magic;
     #page #outerContent #content #innerContent .rightColumn {
         @include span-columns(2 omega);
     }
+    .defaultMenuSub {
+        display: block;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #page #outerContent #content #innerContent .leftColumn,

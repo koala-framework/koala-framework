@@ -18,6 +18,9 @@
                         <?=$this->component($this->boxes['mainMenu']);?>
                     </div>
                     <div class="searchBox"></div>
+                    <div class="subMenuHorizonal">
+                        <?=$this->component($this->boxes['subMenuHorizontal']);?>
+                    </div>
                 </div>
             </div>
             <div id="outerContent">

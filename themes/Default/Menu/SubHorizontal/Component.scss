@@ -1,0 +1,22 @@
+.defaultMenuSubHorizontal {
+    height: 38px;
+    overflow: hidden;
+    
+    > a {
+        position: absolute;
+        display: block;
+        width: 62px;
+        height: 37px;
+        top: 0;
+        
+        &.arrowLeft {
+            background: url("/assets/web/images/subMenuArrowLeft.png") no-repeat scroll left center transparent;
+            left: 0;
+        }
+        
+        &.arrowRight {
+            background: url("/assets/web/images/subMenuArrowRight.png") no-repeat scroll left center transparent;
+            right: 0;
+        }
+    }
+}
