@@ -1,24 +1,8 @@
 <?php
-class Kwc_Newsletter_Subscribe_Admin_Resouce extends Kwf_Acl_Resource_ComponentClass_MenuUrl
-    implements Kwf_Acl_Resource_Component_Interface
-{
-    private $_component;
-    public function __construct($resourceId, $menuConfig, $menuUrl, $componentClass, $component)
-    {
-        parent::__construct($resourceId, $menuConfig, $menuUrl, $componentClass);
-        $this->_component = $component;
-    }
-    public function getComponent() {
-        return $this->_component;
-    }
-}
-
-class Kwc_Newsletter_Subscribe_Admin extends Kwc_Abstract_Composite_Admin
+class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstract
 {
     public function addResources(Kwf_Acl $acl)
     {
-        parent::addResources($acl);
-
         if (!$acl->has('kwc_newsletter')) {
             $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter',
                 array('text'=>trlKwf('Newsletter'), 'icon'=>'email_open_image.png')), 'kwf_component_root');
@@ -38,11 +22,15 @@ class Kwc_Newsletter_Subscribe_Admin extends Kwc_Abstract_Composite_Admin
                     $menuConfig['text'] .= ' ('.$subRoot->name.')';
                 }
             }
-            $acl->add(new Kwc_Newsletter_Subscribe_Admin_Resouce($this->_class.$c->dbId,
+            $acl->add(new Kwc_Newsletter_Subscribe_MenuResource($this->_class.$c->dbId,
                 $menuConfig,
-                $this->getControllerUrl('Recipients').'?newsletterComponentId='.$c->dbId,
+                Kwc_Admin::getInstance($this->_class)->getControllerUrl('Recipients').'?newsletterComponentId='.$c->dbId,
                 $this->_class, $c),
             'kwc_newsletter');
         }
+    }
+    public function getEventsClass()
+    {
+        return 'Kwc_Newsletter_Subscribe_MenuConfigEvents';
     }
 }

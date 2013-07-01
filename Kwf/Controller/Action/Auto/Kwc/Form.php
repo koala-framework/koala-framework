@@ -7,6 +7,8 @@ abstract class Kwf_Controller_Action_Auto_Kwc_Form extends Kwf_Controller_Action
 
     public function preDispatch()
     {
+        $t = microtime(true);
+
         if (!isset($this->_form)) {
             if (isset($this->_formName)) {
                 $this->_form = new $this->_formName(null, $this->_getParam('class'));
@@ -14,6 +16,7 @@ abstract class Kwf_Controller_Action_Auto_Kwc_Form extends Kwf_Controller_Action
                 $this->_form = Kwc_Abstract_Form::createComponentForm($this->_getParam('class'), 'component');
             }
         }
+        Kwf_Benchmark::subCheckpoint('create component form', microtime(true)-$t);
         
         $this->_form->setBodyStyle('padding: 10px');
         $this->_form->setId($this->_getParam('componentId'));

@@ -9,6 +9,7 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
     {
         parent::init();
 
+
         if (!isset($this->_permissions)) {
             $this->_permissions = $this->_buttons;
         }
@@ -32,22 +33,6 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
             }
         }
         $this->_permissions = $perms;
-
-        //buttons/permissions abhängig von privileges in acl ausblenden/löschen
-        $acl = $this->_getAcl();
-        $authData = $this->_getAuthData();
-        $resource = $this->getRequest()->getResourceName();
-
-        foreach ($this->_buttons as $k=>$i) {
-            if (!$acl->isAllowedUser($authData, $resource, $k) && !$acl->isAllowed($this->_getUserRole(), $resource, $k)) {
-                unset($this->_buttons[$k]);
-            }
-        }
-        foreach ($this->_permissions as $k=>$i) {
-            if (!$acl->isAllowedUser($authData, $resource, $k) && !$acl->isAllowed($this->_getUserRole(), $resource, $k)) {
-                unset($this->_permissions[$k]);
-            }
-        }
     }
 
     public final function setHelpText($helpText)

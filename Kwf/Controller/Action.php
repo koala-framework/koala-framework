@@ -6,6 +6,47 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         $this->indexAction();
     }
 
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
+    {
+        parent::__construct($request, $response, $invokeArgs);
+        Kwf_Benchmark::checkpoint('Action::init');
+    }
+
+    //copied from zend to insert benchmark checkpoints
+    public function dispatch($action)
+    {
+        // Notify helpers of action preDispatch state
+        $this->_helper->notifyPreDispatch();
+
+        $this->preDispatch();
+        Kwf_Benchmark::checkpoint('Action::preDispatch');
+
+        if ($this->getRequest()->isDispatched()) {
+            if (null === $this->_classMethods) {
+                $this->_classMethods = get_class_methods($this);
+            }
+
+            // preDispatch() didn't change the action, so we can continue
+            if ($this->getInvokeArg('useCaseSensitiveActions') || in_array($action, $this->_classMethods)) {
+                if ($this->getInvokeArg('useCaseSensitiveActions')) {
+                    trigger_error('Using case sensitive actions without word separators is deprecated; please do not rely on this "feature"');
+                }
+                $this->$action();
+            } else {
+                $this->__call($action, array());
+            }
+            Kwf_Benchmark::checkpoint('Action::action');
+
+            $this->postDispatch();
+            Kwf_Benchmark::checkpoint('Action::postDispatch');
+        }
+
+        // whats actually important here is that this action controller is
+        // shutting down, regardless of dispatching; notify the helpers of this
+        // state
+        $this->_helper->notifyPostDispatch();
+    }
+
     public function preDispatch()
     {
         Kwf_Util_Https::ensureHttps();
@@ -28,6 +69,8 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                 throw new Kwf_Exception("Invalid kwfSessionToken");
             }
         }
+
+        $t = microtime(true);
 
         $allowed = false;
         if ($this->_getUserRole() == 'cli') {
@@ -71,6 +114,8 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                                     'kwf_controller_action_user', $params);
             }
         }
+
+        Kwf_Benchmark::subCheckpoint('check acl', microtime(true)-$t);
     }
 
     protected function _isAllowed($user)
