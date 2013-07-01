@@ -1,5 +1,5 @@
 <?php
-class Kwc_User_Detail_Gallery_Component extends Kwc_Composite_ImagesEnlarge_Component
+class Kwc_User_Detail_Gallery_Component extends Kwc_Basic_Gallery_Component
 {
     public static function getSettings()
     {

@@ -180,6 +180,11 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
         this.initialLoadingEl = this.el.createChild({cls:'initialLoading'});
         this.initialLoadingEl.enableDisplayMode();
+        this.linkToTop = this.el.createChild({cls:'linkToTop'});
+        this.linkToTop.enableDisplayMode();
+        this.linkToTop.on('click', function() {
+            window.scrollTo(0, 0);
+        });
 
         this.onMenuItemChanged();
     },
@@ -320,6 +325,15 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 this.loadMore();
             }
         }, this, { buffer: 50 });
+
+        Ext.fly(window).on('scroll', function() {
+            var scrollHeight = Ext.getBody().getScroll().top;
+            if (scrollHeight >= 1700) {
+                this.el.up('.viewContainer').addClass('scrolledDown');
+            } else {
+                this.el.up('.viewContainer').removeClass('scrolledDown');
+            }
+        }, this);
     },
 
     afterRender: function() {

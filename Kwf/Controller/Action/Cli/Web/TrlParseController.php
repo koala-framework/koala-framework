@@ -147,5 +147,28 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
         }
         exit;
     }
+
+    public function copyAction()
+    {
+        Kwf_Component_ModelObserver::getInstance()->disable();
+        $source = $this->_getParam('source');
+        $target = $this->_getParam('target');
+        if (!$source || !$target) throw new Kwf_Exception_Client("source/target parameter required");
+
+        $models = array(
+            Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Kwf'),
+            Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Web'),
+        );
+        foreach ($models as $m) {
+            foreach ($m->getRows() as $row) {
+                if (!$row->$target && $row->$source) {
+                    echo $row->$source."\n";
+                    $row->$target = $row->$source;
+                    $row->save();
+                }
+            }
+        }
+        exit;
+    }
 }
 

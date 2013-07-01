@@ -89,6 +89,7 @@ class Kwf_Component_Acl
     {
         $role = $this->_roleRegistry->get($role);
 
+        //also check recursive as we allow editing child components of same page
         $ret = $this->_isAllowedComponentClassNonRek('Component', $role, $componentClass);
         if (!is_null($ret)) return $ret;
 
@@ -125,6 +126,8 @@ class Kwf_Component_Acl
         $rules = $this->_getRules($type, null, $role);
         if ($rules && $rules['type'] == Kwf_Acl::TYPE_ALLOW) return true;
         if ($rules && $rules['type'] == Kwf_Acl::TYPE_DENY) return false;
+
+        return null;
     }
 
     protected function _isAllowedComponentData($userRow, Kwf_Component_Data $component)
@@ -163,13 +166,19 @@ class Kwf_Component_Acl
     {
         $ret = array();
         if (!is_null($user) && !is_string($user)) {
-            $userAdditionalRoles = $user->getAdditionalRoles();
+            $additionalRoles = array();
             foreach ($this->_roleRegistry->getRoles() as $r) {
                 if ($r instanceof Kwf_Acl_Role_Additional &&
-                    $r->getParentRoleId() == $user->role &&
-                    in_array($r->getRoleId(), $userAdditionalRoles)
+                    $r->getParentRoleId() == $this->_getRole($user)
                 ) {
-                    $ret[] = $r->getRoleId();
+                    $additionalRoles[] = $r->getRoleId();
+                }
+            }
+            if ($additionalRoles) {
+                foreach ($user->getAdditionalRoles() as $role) {
+                    if (in_array($role, $additionalRoles)) {
+                        $ret[] = $role;
+                    }
                 }
             }
         }
@@ -260,6 +269,9 @@ class Kwf_Component_Acl
         return $ret;
     }
 
+    /**
+     * Allow Component plus child components on same page
+     */
     public function allowComponent($role, $componentClass, $privilege = null)
     {
         if ($privilege) throw new Kwf_Exception("Not yet implemented");
@@ -279,6 +291,9 @@ class Kwf_Component_Acl
         return $this;
     }
 
+    /**
+     * Allow Component plus child components including all child pages
+     */
     public function allowComponentRecursive($role, $componentClass, $privilege = null)
     {
         if ($privilege) throw new Kwf_Exception("Not yet implemented");

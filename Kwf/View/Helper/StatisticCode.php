@@ -37,18 +37,20 @@ class Kwf_View_Helper_StatisticCode
         $piwikDomain = isset($cfg['piwikDomain']) ? $cfg['piwikDomain'] : false;
         $piwikId = isset($cfg['piwikId']) ? $cfg['piwikId'] : false;
         if ($piwikDomain && $piwikId && !$cfg['ignorePiwikCode']) {
-            $ret .= "<!-- Piwik -->";
-            $ret .= "<script type=\"text/javascript\">";
-            $ret .= "var pkBaseURL = ((\"https:\" == document.location.protocol) ? \"https://$piwikDomain/\" : \"http://$piwikDomain/\");";
-            $ret .= "document.write(unescape(\"%3Cscript src='\" + pkBaseURL + \"piwik.js' type='text/javascript'%3E%3C/script%3E\"));";
-            $ret .= "</script><script type=\"text/javascript\">";
-            $ret .= "try {";
-            $ret .= "var piwikTracker = Piwik.getTracker(pkBaseURL + \"piwik.php\", $piwikId);";
-            $ret .= "piwikTracker.trackPageView();";
-            $ret .= "piwikTracker.enableLinkTracking();";
-            $ret .= "} catch( err ) {}";
-            $ret .= "</script><noscript><p><img src=\"http://$piwikDomain/piwik.php?idsite=$piwikId\" style=\"border:0\" alt=\"\" /></p></noscript>";
-            $ret .= "<!-- End Piwik Tracking Code -->";
+            $ret .= '<!-- Piwik -->';
+            $ret .= '<script type="text/javascript">';
+            $ret .= '  var _paq = _paq || [];';
+            $ret .= '  _paq.push(["trackPageView"]);';
+            $ret .= '  _paq.push(["enableLinkTracking"]);';
+            $ret .= '  (function() {';
+            $ret .= '    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://'.$piwikDomain.'/";';
+            $ret .= '    _paq.push(["setTrackerUrl", u+"piwik.php"]);';
+            $ret .= '    _paq.push(["setSiteId", "'.$piwikId.'"]);';
+            $ret .= '    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";';
+            $ret .= '    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);';
+            $ret .= '  })();';
+            $ret .= '</script><noscript><p><img src="http://'.$piwikDomain.'/piwik.php?idsite='.$piwikId.'" style="border:0" alt="" /></p></noscript>';
+            $ret .= '<!-- End Piwik Code -->';
         }
 
         return $ret;

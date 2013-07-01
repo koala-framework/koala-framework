@@ -205,8 +205,8 @@ class Kwf_Util_Setup
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
 
-        if (Kwf_Config::getValue('debug.checkBranch')) {
-            $ret .= "if (is_file('kwf_branch') && trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
+        if (Kwf_Config::getValue('debug.checkBranch') && is_file('kwf_branch')) {
+            $ret .= "if (trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
             $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
             $ret .= "    if (php_sapi_name() != 'cli' || !isset(\$_SERVER['argv'][1]) || !in_array(\$_SERVER['argv'][1], \$validCommands)) {\n";
             $ret .= "        \$required = trim(file_get_contents('kwf_branch'));\n";
@@ -220,7 +220,7 @@ class Kwf_Util_Setup
         $ret .= " 0,";     //lifetime
         $ret .= " '/',";   //path
         $ret .= " null,";  //domain
-        $ret .= " false,"; //secure
+        $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
         $ret .= " true";   //httponly
         $ret .= ");\n";
 

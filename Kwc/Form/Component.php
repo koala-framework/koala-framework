@@ -49,6 +49,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['hideFormOnSuccess'] = true; // works only when useAjaxRequest==true
 
         $ret['flags']['processInput'] = true;
+        $ret['flags']['requestHttps'] = true;
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
@@ -139,7 +140,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $this->_postData = $postData;
         if (isset($postData[$this->getData()->componentId])) {
             ignore_user_abort(true);
-            $this->_errors = array_merge($this->_errors, $this->_form->validate(null, $postData));
+            $this->_errors = array_merge($this->_errors, $this->_validate($postData));
             if (!$this->_errors) {
                 try {
                     $this->_form->prepareSave(null, $postData);
@@ -183,6 +184,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
+    //can be overriden to implement custom validation logic
+    protected function _validate($postData)
+    {
+        return $this->_form->validate(null, $postData);
+    }
+
     //can be overriden to *not* log specific exceptions or adapt error
     protected function _handleProcessException(Exception $e)
     {
@@ -205,6 +212,17 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
         return $this->_postData;
+    }
+
+    /**
+     * Returns if the form was posted in the current request
+     */
+    public function isPosted()
+    {
+        if (!$this->_processed) {
+            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+        }
+        return $this->_posted;
     }
 
     public function getErrors()
@@ -256,7 +274,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($ret['showSuccess']) {
-            $ret['success'] = $this->getData()->getChildComponent('-success');
+            $ret['success'] = $this->getSuccessComponent();
         } else {
             foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
                 if ($c->id != 'success') {

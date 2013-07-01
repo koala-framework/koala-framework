@@ -100,19 +100,6 @@ class Kwf_Model_Field_Test extends Kwf_Test_TestCase
         ));
     }
 
-    public function testGetIds()
-    {
-        $model = new Kwf_Model_FnF(array(
-            'columns' => array('id', 'foo'),
-            'data'=>array(
-                array('id'=>1, 'foo'=>'bar'),
-                array('id'=>2, 'foo'=>'bar')
-            )
-        ));
-        $this->assertEquals(2, count($model->getIds()));
-        $this->assertEquals(array(1, 2), $model->getIds());
-    }
-
     public function testDefaultValues()
     {
         $model = new Kwf_Model_FnF(array(

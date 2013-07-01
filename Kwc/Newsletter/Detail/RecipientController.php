@@ -16,6 +16,13 @@ class Kwc_Newsletter_Detail_RecipientController extends Kwc_Newsletter_Subscribe
         return Kwf_Controller_Action::_isAllowedComponent();
     }
 
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
+    {
+        parent::_beforeInsert($row);
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+        $row->newsletter_component_id = $c->parent->dbId;
+    }
+
     protected function _hasPermissions($row, $action)
     {
         $ret = Kwf_Controller_Action_Auto_Form::_hasPermissions($row, $action);

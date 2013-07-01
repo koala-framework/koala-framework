@@ -45,20 +45,19 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
     {
         // Add 1 image and check that there is no link in lightbox
         $this->_addImage(1);
-        $this->_process();
         $html = $this->_root->getChildComponent('-1')->getChildComponent('-linkTag')
             ->getChildComponent('_imagePage')->render();
-        $this->assertNotContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent"', $html);
+        $this->assertNotContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent', $html);
 
         // Add second image, there should be a next link in first image lightbox
+        $this->_process();
         $this->_addImage(2);
-        $this->_process();
-        $this->_process();
         $html = $this->_root->getChildComponent('-1')->getChildComponent('-linkTag')
             ->getChildComponent('_imagePage')->render();
         $this->assertContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent/2:image"', $html);
 
         // Hide second image, next link in first image lightbox should disappear
+        $this->_process();
         $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_Cache_Root_ListModel');
         $row = $model->getRow(2);
         $row->visible = 0;
@@ -66,7 +65,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
         $this->_process();
         $html = $this->_root->getChildComponent('-1')->getChildComponent('-linkTag')
             ->getChildComponent('_imagePage')->render();
-        $this->assertNotContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent"', $html);
+        $this->assertNotContains('href="/kwf/kwctest/Kwc_Basic_Image_Cache_Root_ImagesEnlargeComponent', $html);
     }
 
     private function _addImage($id)
@@ -75,7 +74,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
         $row = $model->createRow(array(
             'id' => $id,
             'component_id'=>'root',
-            'pos'=>1,
+            'pos'=>$id,
             'visible' => 1
         ));
         $row->save();

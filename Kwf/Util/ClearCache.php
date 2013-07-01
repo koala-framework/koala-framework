@@ -41,6 +41,12 @@ class Kwf_Util_ClearCache
         return $ret;
     }
 
+    //we use it internal for copy-data-to-git
+    public function getDbCacheTables()
+    {
+        return $this->_getDbCacheTables();
+    }
+
     protected function _getDbCacheTables()
     {
         $ret = array();

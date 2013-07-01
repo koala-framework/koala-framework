@@ -1,5 +1,5 @@
 <?php
-class Kwc_Advanced_CommunityVideo_Trl_Component extends Kwc_Chained_Trl_Component
+class Kwc_Advanced_CommunityVideo_Trl_Component extends Kwc_Abstract_Flash_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
