@@ -136,6 +136,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             if ($c->dbId == $source->dbId) {
                 throw new Kwf_Exception_Client(trlKwf("You can't paste a paragraph into itself."));
             }
+            if ($c->isPage) break;
             $c = $c->parent;
         }
 
