@@ -9,8 +9,21 @@ class Kwc_Form_Dynamic_Form extends Kwc_Abstract_Form
             ->setVtype('email');
         $fs->add(new Kwf_Form_Field_TextField('recipient_cc', trlKwf('E-Mail CC')))
             ->setVtype('email');
-        $fs->add(new Kwf_Form_Field_TextField('subject', trlKwf('E-Mail Subject')));
+        $fs->add(new Kwf_Form_Field_TextField('subject', trlKwf('E-Mail Subject')))
+            ->setWidth(300);
         $this->add($fs);
+
+        $fs = new Kwf_Form_Container_FieldSet(trlKwf('Send copy to User'));
+        $this->add($fs)
+            ->setCheckboxToggle(true)
+            ->setCheckboxName('send_confirm_mail');
+        $fs->add(new Kwf_Form_Field_Select('confirm_field_component_id', trlKwf('E-Mail Field')))
+            ->setAllowBlank(false)
+            ->setValues(Kwc_Admin::getInstance($this->getClass())->getControllerUrl('EmailFields').'/json-data');
+        $fs->add(new Kwf_Form_Field_TextField('confirm_subject', trlKwf('Betreff')))
+            ->setWidth(300)
+            ->setAllowBlank(false);
+
         $this->add(Kwc_Abstract_Form::createChildComponentForm($this->getClass(), '-form'));
     }
 }
