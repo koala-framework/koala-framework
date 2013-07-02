@@ -20,7 +20,7 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
         }
 
         $ret['form'] = array_merge($ret['form'], array(
-            'xtype' => 'kwf.tabpanel',
+            'xtype' => 'kwc.newsletter.detail.tabpanel',
             'tabs' => array(
                 'mail' => array(
                     'xtype'                 => 'kwf.component',
