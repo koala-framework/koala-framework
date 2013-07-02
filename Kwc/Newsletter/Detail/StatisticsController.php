@@ -25,6 +25,24 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
 
         if (!$total) { return array(); }
 
+        $newsletterComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId') . '-mail',
+            array('ignoreVisible' => true)
+        );
+        $trackViews = Kwc_Abstract::getSetting($newsletterComponent->componentClass, 'trackViews');
+        if ($trackViews) {
+            $sql = "
+                SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
+                FROM kwc_mail_views WHERE mail_component_id=?";
+            $count = $db->fetchOne($sql, $this->_getParam('componentId') . '-mail');
+            $ret[] = array(
+                'pos' => $pos++,
+                'link' => '<b>' . trlKwf('view rate') . '</b> (' . trlKwf('percentage of users which opened the html newsletter') . ')',
+                'count' => $count,
+                'percent' => number_format(($count / $total)*100, 2) . '%'
+            );
+        }
+
         $sql = "
             SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
