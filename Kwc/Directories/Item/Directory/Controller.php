@@ -41,9 +41,11 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
         }
         if ($extConfigType) {
             //shows editDialog
-            $this->_columns->add(new Kwf_Grid_Column_Button('properties', ' ', 20))
-                ->setButtonIcon('/assets/silkicons/newspaper.png')
-                ->setTooltip(trlKwf('Properties'));
+            if ($this->_editDialog) {
+                $this->_columns->add(new Kwf_Grid_Column_Button('properties', ' ', 20))
+                    ->setButtonIcon('/assets/silkicons/newspaper.png')
+                    ->setTooltip(trlKwf('Properties'));
+            }
 
             $extConfig = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
                         ->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
