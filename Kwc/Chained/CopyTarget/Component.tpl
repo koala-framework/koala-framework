@@ -1,1 +1,1 @@
-<?=$this->component($this->data->getChildComponent('-target'))?>
+<?=$this->component($this->target)?>
