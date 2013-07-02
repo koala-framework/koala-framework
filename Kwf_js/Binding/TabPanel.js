@@ -3,11 +3,12 @@ Kwf.Binding.TabPanel = Ext.extend(Kwf.Binding.AbstractPanel,
     layout: 'fit',
     initComponent : function()
     {
-        this.tabPanel = new Ext.TabPanel({
+        if (!this.tabPanelSettings) this.tabPanelSettings = {};
+        this.tabPanel = new Ext.TabPanel(Ext.applyIf(this.tabPanelSettings, {
             deferredRender: false,
             activeTab: this.activeTab || 0,
             enableTabScroll: this.enableTabScroll || false
-        });
+        }));
         this.tabItems = [];
         
         for (var i in this.tabs) {
