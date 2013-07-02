@@ -158,6 +158,12 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
     public function getRecipientModelShortcut($recipientModelClass)
     {
         $recipientSources = $this->getData()->parent->getComponent()->getRecipientSources();
+        foreach ($recipientSources as $key=>$value) {
+            if (is_array($value)) {
+                $recipientSources[$key] = $value['model'];
+            }
+        }
+
         if (!in_array($recipientModelClass, $recipientSources)) {
             throw new Kwf_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '{$this->getData()->parent->componentClass}'");
         }
@@ -173,6 +179,11 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
     protected function _getRecipientModelClass($recipientShortcut)
     {
         $recipientSources = $this->getData()->parent->getComponent()->getRecipientSources();
+        foreach ($recipientSources as $key=>$value) {
+            if (is_array($value)) {
+                $recipientSources[$key] = $value['model'];
+            }
+        }
         if (!isset($recipientSources[$recipientShortcut])) {
             return null;
         }

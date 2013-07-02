@@ -17,6 +17,7 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Newsletter_Detail_Mail_Component'
         );
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/PreviewPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/MailingPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsAction.js';
