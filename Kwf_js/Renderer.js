@@ -72,7 +72,7 @@ Ext.util.Format.money = function(v, p)
 
 Ext.util.Format.percent = function(v)
 {
-    return v + "%";
+    return Number(v).toFixed(1) + "%";
 };
 
 Ext.util.Format.showField = function(fieldName) {
