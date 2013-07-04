@@ -606,6 +606,29 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $col1);
             return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Child_First) {
+            $depM = $depOf->getDependentModel($expr->getChild());
+            $dbDepM = self::_getInnerDbModel($depM);
+            $dbDepOf = self::_getInnerDbModel($depOf);
+
+            $depTableName = $dbDepM->getTableName();
+            $ref = $depM->getReferenceByModelClass(get_class($depOf), null/*todo*/);
+            $depSelect = $expr->getSelect();
+            if (!$depSelect) {
+                $depSelect = $dbDepM->select();
+            } else {
+                //wir führen unten ein where aus, das darf nicht im original select bleiben
+                $depSelect = clone $depSelect;
+            }
+            $col1 = $dbDepM->transformColumnName($ref['column']);
+            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
+            $depSelect->where("$depTableName.$col1={$dbDepOf->getTableName()}.$col2");
+            $depDbSelect = $dbDepM->_getDbSelect($depSelect);
+            $exprStr = $dbDepM->_formatField($expr->getField(), $depDbSelect);
+            $depDbSelect->reset(Zend_Db_Select::COLUMNS);
+            $depDbSelect->from(null, $exprStr);
+            $depDbSelect->limit(1);
+            return "($depDbSelect)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Parent) {
             $dbRefM = self::_getInnerDbModel($depOf->getReferencedModel($expr->getParent()));
             $dbDepOf = self::_getInnerDbModel($depOf);
