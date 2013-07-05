@@ -1,6 +1,7 @@
 <?php
 class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_Auto_Grid
 {
+    protected $_buttons = array();
     protected $_position = 'pos';
 
     protected function _initColumns()
