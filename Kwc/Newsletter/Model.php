@@ -16,6 +16,7 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
         $select = $this->select()
             ->where(new Kwf_Model_Select_Expr_Or(array(
                 new Kwf_Model_Select_Expr_Equal('status', 'start'),
+                new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
                 new Kwf_Model_Select_Expr_Equal('status', 'sending')
             )))
             ->order('RAND()');
@@ -23,6 +24,11 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
         $id = 0;
         foreach ($this->getRows($select) as $r) {
             $row = $r->getNextRow($r->id);
+
+            if ($r->status == 'startLater' && time()>=strtotime($r->start_date)) {
+                $r->status = 'start';
+                $r->save();
+            }
             // Wenn Newsletter auf "sending" ist, aber seit mehr als 5 Minuten
             // nichts mehr gesendet wurde, auf "start" stellen
             if ($r->status == 'sending' && time() - strtotime($r->last_sent_date) > 5*60) {

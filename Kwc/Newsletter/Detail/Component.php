@@ -19,11 +19,13 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         );
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/TabPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/PreviewPanel.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/MailingPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsAction.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/Recipients.css';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/StartNewsletterPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/StartNewsletterPanel.scss';
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
+        $ret['assetsAdmin']['dep'][] = 'KwfFormDateTimeField';
         $ret['componentName'] = 'Newsletter';
         $ret['checkRtrList'] = !!Kwf_Config::getValue('service.rtrlist.url');
         $ret['flags']['skipFulltext'] = true;

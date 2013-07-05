@@ -175,6 +175,17 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $ret['total']    = $queue->countRows($select) + $this->count_sent;
         $ret['queued']   = $queue->countRows($select->whereEquals('status', 'queued'));
         $ret['lastSentDate'] = strtotime($this->last_sent_date);
+        $ret['speed'] = $this->mails_per_minute;
+
+        $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
+        $select = new Kwf_Model_Select();
+
+        $seconds = ($ret['queued'] / $this->_getCountOfMailsPerMinute()) * 60;
+        $hours = floor($seconds / 3600);
+        $seconds -= $hours * 3600;
+        $minutes = floor($seconds / 60);
+        $seconds -= $minutes * 60;
+        $ret['remainingTime'] = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 
         $text = '';
         switch ($this->status) {
