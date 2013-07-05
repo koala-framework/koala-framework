@@ -18,10 +18,14 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
             );
             if (!$mainType) $mainType = $key;
         }
-
         $ret['form'] = array_merge($ret['form'], array(
             'xtype' => 'kwc.newsletter.detail.tabpanel',
             'tabs' => array(
+                'settings' => array(
+                    'xtype'                 => 'kwf.autoform',
+                    'controllerUrl'         => $this->getControllerUrl(),
+                    'title'                 => trlKwf('Settings')
+                ),
                 'mail' => array(
                     'xtype'                 => 'kwf.component',
                     'componentEditUrl'      => '/admin/component/edit',
