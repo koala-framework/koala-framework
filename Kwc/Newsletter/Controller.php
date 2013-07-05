@@ -72,6 +72,7 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
     {
         parent::_beforeInsert($row, $submitRow);
         $row->component_id = $this->_getParam('componentId');
+        $row->mails_per_minute = 'normal';
         $row->create_date = date('Y-m-d H:i:s');
     }
 

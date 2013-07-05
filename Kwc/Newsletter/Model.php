@@ -10,7 +10,7 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
         'Mail' => 'Kwc_Mail_Model'
     );
 
-    public function send($timeLimit = 60, $mailsPerMinute = 20, $debugOutput = false)
+    public function send($timeLimit = 60, $debugOutput = false)
     {
         // select random newsletter to send
         $select = $this->select()
@@ -42,6 +42,6 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
             return;
         }
 
-        $nlRow->send($timeLimit, $mailsPerMinute, $debugOutput);
+        $nlRow->send($timeLimit, $debugOutput);
     }
 }
