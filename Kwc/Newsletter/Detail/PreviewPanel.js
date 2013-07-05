@@ -1,8 +1,6 @@
 Ext.ns('Kwc.Newsletter.Detail');
 Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
-    layout: 'fit',
     border: false,
-    region: 'center',
     autoScroll: true,
     bodyCssClass: 'mailPreviewPanel',
     button: [],
@@ -19,7 +17,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             text    : trlKwf('HTML'),
             enableToggle: true,
             toggleGroup: 'format',
-            pressed : false,
+            pressed : true,
             toggleHandler: this.toggleButton,
             scope: this,
             name : 'html'
