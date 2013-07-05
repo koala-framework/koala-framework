@@ -11,6 +11,7 @@ Kwc.Newsletter.Detail.RecipientsPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         });
         this.recipientsGridPanel.on('queueChanged', function() {
             this.recipientsQueuePanel.reload();
+            this.mailingPanel.load();
         }, this);
 
         this.recipientsQueuePanel = new Kwc.Newsletter.Detail.RecipientsQueuePanel({
