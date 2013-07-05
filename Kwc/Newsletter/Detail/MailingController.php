@@ -32,16 +32,12 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
             'width' => 85
         );
 
+        $this->_columns->add(new Kwf_Grid_Column('email', trlKwf('E-Mail'), 200))
+            ->setData(new Kwc_Newsletter_Detail_UserData('email'));
         $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('Firstname'), 140))
             ->setData(new Kwc_Newsletter_Detail_UserData('firstname'));
         $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Lastname'), 140))
             ->setData(new Kwc_Newsletter_Detail_UserData('lastname'));
-        $this->_columns->add(new Kwf_Grid_Column('email', trlKwf('E-Mail'), 200))
-            ->setData(new Kwc_Newsletter_Detail_UserData('email'));
-        $this->_columns->add(new Kwf_Grid_Column('format', trlKwf('Format'), 60))
-            ->setData(new Kwc_Newsletter_Detail_UserData('format'));
-        $this->_columns->add(new Kwf_Grid_Column_Button('show'))
-            ->setButtonIcon(new Kwf_Asset('email_open.png'));
     }
 
     protected function _getSelect()

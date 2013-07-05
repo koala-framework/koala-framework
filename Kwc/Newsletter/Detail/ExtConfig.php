@@ -42,20 +42,9 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                     'xtype'                 => 'kwc.newsletter.recipients',
                     'controllerUrl'         => $this->getControllerUrl('Recipients'),
                     'formControllerUrl'     => $this->getControllerUrl('Recipient'),
+                    'mailControllerUrl'     => $this->getControllerUrl('Mailing'),
+                    'mailFormControllerUrl' => $this->getControllerUrl('MailingForm'),
                     'title'                 => trlKwf('Recipients')
-                ),
-                'mailing' => array(
-                    'xtype'                 => 'kwc.newsletter.mailing',
-                    'controllerUrl'         => $this->getControllerUrl('Mailing'),
-                    'title'                 => trlKwf('Mailing'),
-                    'tbar'                  => array()
-                ),
-                'preview' => array(
-                    'xtype'                 => 'kwc.newsletter.detail.preview',
-                    'controllerUrl'         => $this->getControllerUrl('Preview'),
-                    'subscribersControllerUrl' => $this->getControllerUrl('Subscribers'),
-                    'title'                 => trlKwf('Preview'),
-                    'tbar'                  => array()
                 ),
                 'statistics' => array(
                     'xtype'                 => 'kwf.autogrid',
