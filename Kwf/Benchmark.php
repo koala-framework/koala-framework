@@ -56,6 +56,8 @@ class Kwf_Benchmark
     public static function reset()
     {
         self::$_counter = array();
+        self::$_checkpoints = array();
+        self::$_subCheckpoints = array();
     }
     public static function getCounterValue($name)
     {
@@ -165,7 +167,7 @@ class Kwf_Benchmark
         } else {
             $benchmarkOutput[] = "DB-Queries: (none)";
         }
-        if (PHP_SAPI != 'cli' && Kwf_Config::getValue('debug.benchmark')) {
+        if (PHP_SAPI != 'cli' && (Kwf_Config::getValue('debug.benchmark') || isset($_REQUEST['KWF_BENCHMARK']))) {
             echo '<div class="outerBenchmarkBox">';
             echo '<div class="innerBenchmarkBox">';
             foreach ($benchmarkOutput as $line) {
@@ -179,7 +181,7 @@ class Kwf_Benchmark
             file_put_contents('benchmarklog', $out);
         }
 
-        if (Kwf_Config::getValue('debug.benchmark') && PHP_SAPI != 'cli') {
+        if ((Kwf_Config::getValue('debug.benchmark') || isset($_REQUEST['KWF_BENCHMARK'])) && PHP_SAPI != 'cli') {
             echo self::_getCounterOutput(self::$_counter, true);
             if (self::$benchmarks) {
                 echo "<br /><b>Benchmarks:</b><br/>";
@@ -215,7 +217,7 @@ class Kwf_Benchmark
         }
 
 
-        if (Kwf_Config::getValue('debug.benchmark') && PHP_SAPI != 'cli') {
+        if ((Kwf_Config::getValue('debug.benchmark') || isset($_REQUEST['KWF_BENCHMARK'])) && PHP_SAPI != 'cli') {
             echo "<table style=\"font-size: 10px\">";
             echo "<tr><th>ms</th><th>%</th><th>Checkpoint</th></tr>";
             $sum = 0;

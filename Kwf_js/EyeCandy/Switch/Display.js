@@ -5,8 +5,10 @@ Kwf.onContentReady(function() {
     var els = Ext.query('div.kwfSwitchDisplay');
     els.forEach(function(el) {
         el = Ext.get(el);
-        if (!el.switchDisplayObject) {
-            el.switchDisplayObject = new Kwf.Switch.Display(el);
+        // Attach Switch.Display-Object to dom because ext-element is still existent even though
+        // it's no part of dom anymore when html is changed e.g. because of ajax-view
+        if (!el.dom.switchDisplayObject) {
+            el.dom.switchDisplayObject = new Kwf.Switch.Display(el);
         }
     });
 });
@@ -31,13 +33,15 @@ Kwf.Switch.Display = function(el) {
         this.kwfSwitchCloseLink = false;
     }
 
-    // durch unterbinden von flackern (ganz oben) muss das auf block
-    // gesetzt werden, damit die hoehe gemessen werden kann
-    this.switchContent.setStyle('display', 'block');
-    this.switchContent.scaleHeight = this.switchContent.getHeight();
-    this.switchContent.setHeight(0);
-    // und schnell wieder auf 'none' bevors wer merkt :)
-    this.switchContent.setStyle('display', 'none');
+    if (!this.switchContent.scaleHeight) {
+        // durch unterbinden von flackern (ganz oben) muss das auf block
+        // gesetzt werden, damit die hoehe gemessen werden kann
+        this.switchContent.setStyle('display', 'block');
+        this.switchContent.scaleHeight = this.switchContent.getHeight();
+        this.switchContent.setHeight(0);
+        // und schnell wieder auf 'none' bevors wer merkt :)
+        this.switchContent.setStyle('display', 'none');
+    }
 
     // if it is important, show on startup
     if (this.switchContent.child('.kwfImportant')) {

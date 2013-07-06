@@ -7,7 +7,6 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender';
         $ret['assets']['dep'][] = 'KwfLightbox';
         $ret['cssClass'] = 'webStandard';
-        $ret['showNextPreviousLinks'] = true;
         return $ret;
     }
 
@@ -19,67 +18,64 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $size = $c->getImageDimensions();
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];
-
         $ret['imageUrl'] = $c->getImageUrl();
-
         $ret['options'] = (object)$c->getOptions();
 
-        $enlargeTag = $this->getData()->parent;
-        $imageEnlarge = $enlargeTag->parent;
-        if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_LinkTag_Component')) {
-            $imageEnlarge = $imageEnlarge->parent;
+        // Next-Previous Links
+        $imageEnlarge = $this->getData()->parent->parent;
+        if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_ImageEnlarge_Component')) {
+            // Only show links when it's an ImageEnlarge (no LinkTag)
+            $parent = $imageEnlarge->parent;
+            $getChildren = array();
+            if (is_instance_of($parent->componentClass, 'Kwc_Abstract_List_Component')) {
+                //it's in an List_Gallery
+            } else if ($parent->parent &&
+                is_instance_of($parent->parent->componentClass, 'Kwc_Abstract_List_Component')
+            ) {
+                //it's in an List_Switch with ImageEnlarge as large component (we have to go up one more level)
+                $getChildren = array('-'.$imageEnlarge->id);
+                $imageEnlarge = $imageEnlarge->parent;
+            }
+            $links = self::getPreviousAndNextImagePage(
+                $this->getData()->componentClass, $imageEnlarge, $getChildren
+            );
+            $ret = array_merge($ret, $links);
+        } else {
+            $ret['next'] = null;
+            $ret['previous'] = null;
         }
-        $parent = $imageEnlarge->parent;
-
-        $getChildren = array();
-        if (is_instance_of($parent->componentClass, 'Kwc_Abstract_List_Component')) {
-            //it's in an List_Gallery
-        } else if ($parent->parent && is_instance_of($parent->parent->componentClass, 'Kwc_Abstract_List_Component')) {
-            //it's in an List_Switch with ImageEnlarge as large component (we have to go up one more level)
-            $getChildren = array('-'.$imageEnlarge->id);
-            $imageEnlarge = $imageEnlarge->parent;
-        }
-
-        $ret = array_merge($ret, self::getPreviousAndNextImagePage($this->getData()->componentClass, $imageEnlarge, $getChildren));
 
         return $ret;
     }
 
-    public static function getPreviousAndNextImagePage($componentClass, $imageEnlarge, $getChildren, $ignoreVisible = false)
+    public static function getPreviousAndNextImagePage($componentClass, $imageEnlarge, $getChildren, $ignoreOwnVisible = false)
     {
         $ret = array();
         $parent = $imageEnlarge->parent;
         //TODO optimize in generator using something like whereNextSiblingOf / wherePreviousSiblingOf
         $allImages = $imageEnlarge->parent->getChildComponents(
-            array('componentClass'=>$imageEnlarge->componentClass, 'ignoreVisible' => $ignoreVisible)
+            array('componentClass'=>$imageEnlarge->componentClass, 'ignoreVisible'=>$ignoreOwnVisible)
         );
         $previous = null;
+        $previousWasImageEnlarge = false;
         foreach ($allImages as $c) {
+            $cVisible = !isset($c->row) || !isset($c->row->visible) || $c->row->visible;
             if ($c === $imageEnlarge) {
                 $ret['previous'] = self::_getImagePage($previous, $getChildren);
-            }
-            if ($previous === $imageEnlarge) {
+                $previousWasImageEnlarge = true;
+            } else if ($previousWasImageEnlarge && $cVisible) {
                 $ret['next'] = self::_getImagePage($c, $getChildren);
                 break;
             }
-            $previous = $c;
+            if ($cVisible) { $previous = $c; }
         }
-
         return $ret;
     }
 
     private static function _getImagePage($data, $getChildren)
     {
         if (!$data) return null;
-        $ret = $data;
-        foreach ($getChildren as $c) {
-            $ret = $ret->getChildComponent($c);
-        }
-        $ret = $ret->getChildComponent('-linkTag');
-        if (is_instance_of($ret->componentClass, 'Kwc_Basic_LinkTag_Component')) {
-            $ret = $ret->getChildComponent('-child');
-        }
-        $ret = $ret->getChildComponent('_imagePage');
-        return $ret;
+        foreach ($getChildren as $c) $data = $data->getChildComponent($c);
+        return $data->getChildComponent('-linkTag')->getChildComponent('_imagePage');
     }
 }

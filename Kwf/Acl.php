@@ -9,6 +9,38 @@ class Kwf_Acl extends Zend_Acl
     protected $_componentAcl;
     protected $_kwcResourcesLoaded = false;
 
+
+    public static function getInstance()
+    {
+        static $i;
+        if (!isset($i)) {
+            $t = microtime(true);
+            $m = memory_get_usage();
+            $cacheId = 'acl';
+            $i = Kwf_Cache_Simple::fetch($cacheId);
+            if ($i === false) {
+                $class = Kwf_Config::getValue('aclClass');
+                $i = new $class();
+                $i->loadKwcResources();
+                Kwf_Cache_Simple::add($cacheId, $i);
+                Kwf_Benchmark::subCheckpoint('create Acl', microtime(true)-$t);
+            } else {
+                Kwf_Benchmark::subCheckpoint('load cached Acl '.round((memory_get_usage()-$m) / (1024*1024), 2).'MB', microtime(true)-$t);
+            }
+        }
+        return $i;
+    }
+
+    public static function clearCache()
+    {
+        static $cleared = false;
+        if ($cleared) return; //only clear single time
+        $cleared = true;
+
+        $cacheId = 'acl';
+        Kwf_Cache_Simple::delete($cacheId);
+    }
+
     public function __construct()
     {
         $this->addRole(new Zend_Acl_Role('guest'));
@@ -258,6 +290,8 @@ class Kwf_Acl extends Zend_Acl
     {
         if ($this->_kwcResourcesLoaded) return;
         $this->_kwcResourcesLoaded = true;
+
+        $t = microtime(true);
         $menuConfigs = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::getFlag($c, 'hasResources')) {
@@ -271,6 +305,7 @@ class Kwf_Acl extends Zend_Acl
         foreach ($menuConfigs as $cfg) {
             $cfg->addResources($this);
         }
+        Kwf_Benchmark::subCheckpoint('kwc resources', microtime(true)-$t);
     }
 
     public static function _compareMenuConfig(Kwf_Component_Abstract_MenuConfig_Abstract $a, Kwf_Component_Abstract_MenuConfig_Abstract $b)

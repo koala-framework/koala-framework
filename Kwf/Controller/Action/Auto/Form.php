@@ -27,6 +27,8 @@ abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Aut
     {
         parent::preDispatch();
 
+        $t = microtime(true);
+
         if (!isset($this->_form)) {
             if (isset($this->_formName)) {
                 $this->_form = new $this->_formName();
@@ -80,6 +82,8 @@ abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Aut
                 $this->_form->setId($this->_getParam($this->_form->getPrimaryKey()));
             }
         }
+
+        Kwf_Benchmark::subCheckpoint('init form', microtime(true)-$t);
     }
 
     public function jsonLoadAction()

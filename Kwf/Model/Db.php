@@ -739,11 +739,15 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function getIds($where = array(), $order=null, $limit=null, $start=null)
     {
-        $dbSelect = $this->_getDbSelect($where, $order, $limit, $start);
-        $id = $this->getPrimaryKey();
+        $select = $this->select($where, $order, $limit, $start);
+        $rows = $this->export(
+            Kwf_Model_Abstract::FORMAT_ARRAY,
+            $select,
+            array('columns'=>array($this->getPrimaryKey()))
+        );
         $ret = array();
-        foreach ($this->getTable()->fetchAll($dbSelect) as $row) {
-            $ret[] = $row->$id;
+        foreach ($rows as $i) {
+            $ret[] = $i['id'];
         }
         return $ret;
     }
