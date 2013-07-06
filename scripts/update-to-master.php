@@ -9,6 +9,8 @@ echo "Changed $file to master\n";
 function glob_recursive($pattern, $flags = 0) {
     $files = glob($pattern, $flags);
     foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+        if (dirname($dir) == './kwf-lib') continue;
+        if (dirname($dir) == './library') continue;
         $files = array_merge($files, glob_recursive($dir.'/'.basename($pattern), $flags));
     }
     return $files;
