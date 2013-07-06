@@ -737,9 +737,11 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         ));
     }
 
-    public function getIds($where = array(), $order=null, $limit=null, $start=null)
+    public function getIds($select = array(), $order=null, $limit=null, $start=null)
     {
-        $select = $this->select($where, $order, $limit, $start);
+        if (!is_object($select)) {
+            $select = $this->select($select, $order, $limit, $start);
+        }
         $rows = $this->export(
             Kwf_Model_Abstract::FORMAT_ARRAY,
             $select,
