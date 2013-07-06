@@ -90,10 +90,23 @@ class Kwf_Component_Events
             if (Kwc_Abstract::getFlag($componentClass, 'usesFulltext')) {
                 $hasFulltext = true;
             }
+            if (Kwc_Abstract::hasSetting($componentClass, 'menuConfig')) {
+                $mc = Kwf_Component_Abstract_MenuConfig_Abstract::getInstance($componentClass);
+                $eventsClass = $mc->getEventsClass();
+                if ($eventsClass) {
+                    $eventObjects[] = Kwf_Component_Abstract_MenuConfig_Events::getInstance(
+                            $eventsClass,
+                            array(
+                                'componentClass' => $componentClass
+                            )
+                    );
+                }
+            }
         }
         $eventObjects[] = self::getInstance('Kwf_Component_Events_ViewCache');
         $eventObjects[] = self::getInstance('Kwf_Component_Events_UrlCache');
         $eventObjects[] = self::getInstance('Kwf_Component_Events_ProcessInputCache');
+        $eventObjects[] = self::getInstance('Kwf_Component_Events_RequestHttpsCache');
         if ($hasFulltext) {
             $eventObjects[] = self::getInstance('Kwf_Component_Events_Fulltext');
         }

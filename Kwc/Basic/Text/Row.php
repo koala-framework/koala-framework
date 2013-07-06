@@ -241,7 +241,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
         if ($enableFontSize){
             $config['drop-font-tags'] = false;
         }
-        if ($enableTidy && class_exists('tidy')) {
+        if ($enableTidy) {
 
             //woraround für tidy bug wo er zwei class-attribute in einen
             //tag schreibt wenn eins davon leer ist
@@ -252,12 +252,18 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             //html kommentare löschen, löscht auch word schas mit
             $html = preg_replace('#<!--.*?-->#s', '', $html);
 
-            $tidy = new tidy;
             $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
-            $tidy->parseString($html, $config, 'utf8');
-            $tidy->cleanRepair();
-            $html = $tidy->value;
+
+            if (class_exists('tidy')) {
+                $tidy = new tidy;
+                $tidy->parseString($html, $config, 'utf8');
+                $tidy->cleanRepair();
+                $html = $tidy->value;
+            } else {
+                require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
+                $html = htmLawed($html);
+            }
             if (!$parser) {
                 $parser = new Kwc_Basic_Text_Parser($this->componentId, $this->getModel());
                 $parser->setMasterStyles(Kwc_Basic_Text_StylesModel::getMasterStyles());
@@ -266,12 +272,19 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $parser->setEnableTagsWhitelist(Kwc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
             $parser->setEnableStyles(Kwc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
             $html = $parser->parse($html);
-            $tidy->parseString($html, $config, 'utf8');
-            $tidy->cleanRepair();
-            $html = $tidy->value;
+            if (class_exists('tidy')) {
+                $tidy->parseString($html, $config, 'utf8');
+                $tidy->cleanRepair();
+                $html = $tidy->value;
+            } else {
+                require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
+                $html = htmLawed($html);
+            }
             $html = str_replace('class="_mce_type-bookmark"', '_mce_type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
+
+
 
         $classes = $this->_classes;
 

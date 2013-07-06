@@ -76,16 +76,25 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
 
     public function onRowAdd(Kwf_Component_Event_Row_Inserted $event)
     {
-        foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
-            $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+        foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {
+            if ($c->isVisible()) {
+                $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+            } else {
+                $this->fireEvent(new Kwf_Component_Event_Component_InvisibleAdded($c->componentClass, $c));
+            }
         }
     }
 
     public function onRowDelete(Kwf_Component_Event_Row_Deleted $event)
     {
-        foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
-            $this->_fireComponentEvent('Removed', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+        foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {
+            if ($c->isVisible()) {
+                $this->_fireComponentEvent('Removed', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+            } else {
+                $this->fireEvent(new Kwf_Component_Event_Component_InvisibleRemoved($c->componentClass, $c));
+            }
         }
+
     }
 
     public function onModelUpdate(Kwf_Component_Event_Model_Updated $event)

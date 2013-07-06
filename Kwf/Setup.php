@@ -24,7 +24,7 @@ class Kwf_Setup
 {
     public static $configClass;
     public static $configSection;
-    const CACHE_SETUP_VERSION = 2; //increase version if incompatible changes to generated file are made
+    const CACHE_SETUP_VERSION = 3; //increase version if incompatible changes to generated file are made
 
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
@@ -187,6 +187,7 @@ class Kwf_Setup
             $root->setCurrentPage($data);
 
             if (isset($_COOKIE['feAutologin']) && !Kwf_Auth::getInstance()->getStorage()->read()) {
+                Kwf_Util_Https::ensureHttp();
                 $feAutologin = explode('.', $_COOKIE['feAutologin']);
                 if (count($feAutologin) == 2) {
                     $adapter = new Kwf_Auth_Adapter_Service();
@@ -196,9 +197,15 @@ class Kwf_Setup
                     $auth->clearIdentity();
                     $result = $auth->authenticate($adapter);
                     if (!$result->isValid()) {
-                        setcookie('feAutologin', '', time() - 3600, '/');
+                        setcookie('feAutologin', '', time() - 3600, '/', null, Kwf_Util_Https::supportsHttps(), true);
+                        setcookie('hasFeAutologin', '', time() - 3600, '/', null, false, true);
                     }
                 }
+            }
+            if (isset($_COOKIE['hasFeAutologin'])) {
+                //feAutologin cookie is set with https-only (for security reasons)
+                //hasFeAutologin is seth without https-only
+                Kwf_Util_Https::ensureHttp();
             }
 
             $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
