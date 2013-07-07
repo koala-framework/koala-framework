@@ -5,6 +5,10 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
     {
         $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:UpdateDownloader';
         $this->view->xtype = 'kwf.maintenance.updateDownloader';
+
+        $this->view->defaultLibraryUrl = 'https://github.com/vivid-planet/library/archive/master.tar.gz';
+        $this->view->defaultKwfUrl = 'https://github.com/vivid-planet/koala-framework/archive/3.3-installer.tar.gz';
+        $this->view->defaultAppUrl = 'https://github.com/vivid-planet/kwf-cms-demo/archive/master.tar.gz';
     }
 
     public function jsonDownloadUpdatesAction()
