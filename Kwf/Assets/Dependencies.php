@@ -124,7 +124,7 @@ class Kwf_Assets_Dependencies
                         $configPath = str_replace('_', '/', substr($assetsType, 0, strpos($assetsType, ':')));
                         foreach(explode(PATH_SEPARATOR, get_include_path()) as $dir) {
                             if (file_exists($dir.'/'.$configPath.'/config.ini')) {
-                                $sect = 'vivid';
+                                $sect = 'production';
                                 $configFull = new Zend_Config_Ini($dir.'/'.$configPath.'/config.ini', null);
                                 if (isset($configFull->{Kwf_Setup::getConfigSection()})) {
                                     $sect = Kwf_Setup::getConfigSection();
