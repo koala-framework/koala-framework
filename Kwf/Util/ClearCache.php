@@ -76,7 +76,17 @@ class Kwf_Util_ClearCache
                 $types[] = new Kwf_Util_ClearCache_Types_Memcache();
             }
         }
-        if (extension_loaded('apc')) {
+        $hasApc = extension_loaded('apc');
+        if (!$hasApc) {
+            //apc might be enabled in webserver only, not in cli
+            $d = Kwf_Config::getValue('server.domain');
+            if (!$d && file_exists('cache/lastdomain')) {
+                //this file gets written in Kwf_Setup to make it "just work"
+                $d = file_get_contents('cache/lastdomain');
+            }
+            $hasApc = @file_get_contents("http://apcutils:".Kwf_Util_Apc::getHttpPassword()."@$d/kwf/util/apc/is-loaded") == '1';
+        }
+        if ($hasApc) {
             $types[] = new Kwf_Util_ClearCache_Types_ApcUser();
             $types[] = new Kwf_Util_ClearCache_Types_ApcOptcode();
         }
