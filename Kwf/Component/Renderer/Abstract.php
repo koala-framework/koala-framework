@@ -2,24 +2,27 @@
 abstract class Kwf_Component_Renderer_Abstract
 {
     protected $_enableCache = null;
-    private $_renderComponent;
+    protected $_renderComponent;
+
+    public function __construct()
+    {
+        $this->_enableCache = !Kwf_Config::getValue('debug.componentCache.disable');
+        if (Kwf_Component_Data_Root::getShowInvisible()) {
+            $this->_enableCache = false;
+        }
+    }
 
     public function setEnableCache($enableCache)
     {
+        if ($enableCache === null) throw new Kwf_Exception('expected boolean parameter');
         $this->_enableCache = $enableCache;
     }
 
     public function renderComponent($component)
     {
-        if (is_null($this->_enableCache)) {
-            $this->_enableCache = !Kwf_Config::getValue('debug.componentCache.disable');
-            if (Kwf_Component_Data_Root::getShowInvisible()) {
-                $this->_enableCache = false;
-            }
-        }
         $this->_renderComponent = $component;
         $content = $this->_renderComponentContent($component);
-        $ret = $this->render($content);
+        $ret = $this->_render(2, $content);
         Kwf_Component_Cache::getInstance()->writeBuffer();
         return $ret;
     }
@@ -40,7 +43,21 @@ abstract class Kwf_Component_Renderer_Abstract
         return $masterHelper->component($component);
     }
 
-    public function render($ret = null)
+    //TODO: where is this used?
+    public function render($ret)
+    {
+        $ret = $this->_render(2, $ret);
+        return $ret;
+    }
+
+    /**
+     * Render components (ie. expand {cc ...})
+     *
+     * @param int render pass; 1 or 2: 1 for content that can be stored in fullPage cache,
+                                       2 for everything else. 2 includes 1, so calling just with 2 also works
+     * @param string render content
+     */
+    protected function _render($pass, $ret)
     {
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
@@ -48,8 +65,24 @@ abstract class Kwf_Component_Renderer_Abstract
         $pluginNr = 0;
         $helpers = array();
 
-        //                  {cc type    : componentId (value)      {plugins}    config}
-        while (preg_match('/{cc ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?({[^}]+})?( [^}]*)}/i', $ret, $matches)) {
+        if ($pass == 2) {
+            //in second pass execute all EXECUTE_BEFORE plugins
+            while (preg_match('/{pluginB (\d) ([^}]*) ([^}]*)}(.*){\/pluginB \\1}/s', $ret, $matches)) {
+                $plugin = Kwf_Component_Plugin_Abstract::getInstance($matches[2], $matches[3]);
+                $content = $plugin->processOutput($matches[4]);
+                $ret = str_replace($matches[0], $content, $ret);
+            }
+        }
+
+        if ($pass == 1) {
+            $passExp = '1';
+        } else if ($pass == 2) {
+            $passExp = '[12]';
+        } else {
+            throw new Kwf_Exception("Invalid pass");
+        }
+        //                  {cc1 type    : componentId (value)      {plugins}    config}
+        while (preg_match('/{cc'.$passExp.' ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?({[^}]+})?( [^}]*)}/i', $ret, $matches)) {
             if ($benchmarkEnabled) $startTime = microtime(true);
             $type = $matches[1];
             $componentId = trim($matches[2]);
@@ -136,15 +169,23 @@ abstract class Kwf_Component_Renderer_Abstract
 
             if (isset($plugins['before'])) {
                 foreach ($plugins['before'] as $pluginClass) {
-                    $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
-                    $content = $plugin->processOutput($content);
+                    if ($pass == 2) {
+                        //in second pass it can be done now (won't be cached)
+                        $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
+                        $content = $plugin->processOutput($content);
+                    } else {
+                        //in first pass the result will be cached, so we have to defer that to the second pass
+                        $pluginNr++;
+                        $content = "{pluginB $pluginNr $pluginClass $componentId}$content{/pluginB $pluginNr}";
+                    }
                 }
             }
 
             if (isset($plugins['after'])) {
                 foreach ($plugins['after'] as $pluginClass) {
+                    //always has to be done last in second pass
                     $pluginNr++;
-                    $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
+                    $content = "{pluginA $pluginNr $pluginClass $componentId}$content{/pluginA $pluginNr}";
                 }
             }
 
@@ -153,11 +194,14 @@ abstract class Kwf_Component_Renderer_Abstract
 
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' '.$type, microtime(true)-$startTime);
         }
-        while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/s', $ret, $matches)) {
-            $pluginClass = $matches[2];
-            $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $matches[3]);
-            $content = $plugin->processOutput($matches[4]);
-            $ret = str_replace($matches[0], $content, $ret);
+
+        if ($pass == 2) {
+            //execute plugins only in second pass, to not get cached
+            while (preg_match('/{pluginA (\d) ([^}]*) ([^}]*)}(.*){\/pluginA \\1}/s', $ret, $matches)) {
+                $plugin = Kwf_Component_Plugin_Abstract::getInstance($matches[2], $matches[3]);
+                $content = $plugin->processOutput($matches[4]);
+                $ret = str_replace($matches[0], $content, $ret);
+            }
         }
 
         return $ret;

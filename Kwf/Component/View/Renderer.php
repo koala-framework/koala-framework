@@ -22,11 +22,39 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
 
     protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $type = null, $plugins = array())
     {
+        //is caching possible for this type?
+        if (!$type) {
+            $canBeIncludedInFullPageCache = $this->enableCache();
+        } else {
+            $class = 'Kwf_Component_View_Helper_' . ucfirst($type);
+            $helper = new $class();
+            $canBeIncludedInFullPageCache = $helper->enableCache();
+        }
+
         if (!$type) $type = $this->_getType();
+
+        if ($canBeIncludedInFullPageCache) {
+            //is the view cache enabled for this component?
+            //same list as in Cache_Mysql; TODO: the helper should return this eventually?
+            if ($type == 'componentLink' || $type == 'master' || $type == 'page') {
+                //always enable
+            } else {
+                //$viewCacheSettings = $this->_getComponentById($componentId)->getComponent()->getViewCacheSettings();
+                $viewCacheSettings = array('enabled'=>true);
+                if (!$viewCacheSettings['enabled']) {
+                    $canBeIncludedInFullPageCache = false;
+                }
+            }
+        }
+
         if (!is_null($value)) $componentId .= '(' . $value . ')';
         if ($plugins) $componentId .= json_encode((object)$plugins);
         $config = base64_encode(serialize($config));
-        return '{cc ' . "$type: $componentId $config" . '}';
+        if ($canBeIncludedInFullPageCache) {
+            return '{cc1 ' . "$type: $componentId $config" . '}';
+        } else {
+            return '{cc2 ' . "$type: $componentId $config" . '}';
+        }
     }
 
     protected function _getComponentById($componentId)

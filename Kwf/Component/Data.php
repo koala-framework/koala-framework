@@ -1364,7 +1364,7 @@ class Kwf_Component_Data
     public function render($enableCache = null, $renderMaster = false)
     {
         $output = new Kwf_Component_Renderer();
-        $output->setEnableCache($enableCache);
+        if ($enableCache !== null) $output->setEnableCache($enableCache);
         if ($renderMaster) {
             return $output->renderMaster($this);
         } else {
