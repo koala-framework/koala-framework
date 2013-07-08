@@ -18,7 +18,7 @@ class Kwf_Filter_Random implements Zend_Filter_Interface
 
     private function _generateRandStr($length)
     {
-        $letters = '1234567890qwertyuiopasdfghjklzxcvbnm';
+        $letters = '23456789qwertyupasdfghjkzxcvbnm';
 
         $s = '';
         $lettersLength = strlen($letters)-1;
