@@ -9,7 +9,7 @@ class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_T
     protected function _clearCache($options)
     {
         if (!Kwf_Config::getValue('debug.componentCache.clearOnClearCache')) {
-            $this->_output("skipped: (won't delete $cnt entries, use clear-view-cache to clear)\n");
+            $this->_output("skipped: (won't delete, use clear-view-cache to clear)\n");
             return;
         }
         Kwf_Component_Cache::getInstance()->deleteViewCache(new Kwf_Model_Select());
