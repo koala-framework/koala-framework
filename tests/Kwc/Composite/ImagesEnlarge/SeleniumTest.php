@@ -15,8 +15,8 @@ class Kwc_Composite_ImagesEnlarge_SeleniumTest extends Kwf_Test_SeleniumTestCase
     public function testNextPrevLink()
     {
         $this->openKwc('/foo');
-        $this->assertElementPresent('css=.kwcCompositeImagesEnlarge a img');
-        $this->click('css=a');
+        $this->assertElementPresent('css=.kwcCompositeImagesEnlargeImageEnlargeTestComponent a img');
+        $this->click('css=.kwcCompositeImagesEnlargeImageEnlargeTestComponent a');
         $this->waitForConnections();
         sleep(1);
         $this->assertElementPresent('css=.kwfLightboxOpen');
