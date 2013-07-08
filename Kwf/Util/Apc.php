@@ -196,7 +196,7 @@ class Kwf_Util_Apc
             } else {
                 echo '0';
             }
-            exit
+            exit;
         }
         throw new Kwf_Exception_NotFound();
     }
