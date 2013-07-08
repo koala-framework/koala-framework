@@ -328,14 +328,9 @@ class Kwf_Util_ClearCache
         }
         foreach ($this->getDbCacheTables() as $t) {
             if (in_array($t, $types)) {
-                if ($t == 'cache_component') {
-                    try {
-                        $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM $t WHERE deleted=0")->fetchColumn();
-                        if ($cnt > 5000) {
-                            if ($output) echo "skipped:     $t (won't delete $cnt entries, use clear-view-cache to clear)\n";
-                            continue;
-                        }
-                    } catch (Exception $e) {}
+                if ($t == 'cache_component' && !Kwf_Config::getValue('debug.componentCache.clearOnClearCache')) {
+                    if ($output) echo "skipped:     $t (won't delete, use clear-view-cache to clear)\n";
+                    continue;
                 }
                 Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
                 if ($output) echo "cleared db:  $t\n";
