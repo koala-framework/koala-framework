@@ -5,6 +5,29 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
     {
         $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:UpdateDownloader';
         $this->view->xtype = 'kwf.maintenance.updateDownloader';
+
+        $this->view->defaultLibraryUrl = 'https://github.com/vivid-planet/library/archive/master.tar.gz';
+
+        if (Kwf_Config::getValue('updateDownloader.app.github.repository')) {
+            $branch = Kwf_Config::getValue('updateDownloader.app.github.branch');
+            if (!$branch) $branch = 'master';
+            $ghPath = Kwf_Config::getValue('updateDownloader.app.github.user').'/'.
+                      Kwf_Config::getValue('updateDownloader.app.github.repository');
+            $kwfBranch = trim(file_get_contents('https://raw.github.com/'.$ghPath.'/'.$branch.'/kwf_branch'));
+            $this->view->defaultAppUrl = "https://github.com/$ghPath/archive/$branch.tar.gz";
+        } else if (!file_exists('kwf_branch')) {
+            $kwfBranch = trim(file_get_contents('kwf_branch'));
+        } else {
+            $kwfBranch = 'master';
+        }
+
+        if (Kwf_Config::getValue('updateDownloader.kwf.github.repository')) {
+            $ghPath = Kwf_Config::getValue('updateDownloader.kwf.github.user').'/'.
+                      Kwf_Config::getValue('updateDownloader.kwf.github.repository');
+            $this->view->defaultKwfUrl = "https://github.com/$ghPath/archive/$kwfBranch.tar.gz";
+        } else {
+            $this->view->defaultKwfUrl = 'https://github.com/vivid-planet/koala-framework/archive/'.$kwfBranch.'.tar.gz';
+        }
     }
 
     public function jsonDownloadUpdatesAction()

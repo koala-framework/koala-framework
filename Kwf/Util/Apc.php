@@ -190,6 +190,13 @@ class Kwf_Util_Apc
             self::stats();
         } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/iterate') {
             self::iterate();
+        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/is-loaded') {
+            if (extension_loaded('apc')) {
+                echo '1';
+            } else {
+                echo '0';
+            }
+            exit;
         }
         throw new Kwf_Exception_NotFound();
     }

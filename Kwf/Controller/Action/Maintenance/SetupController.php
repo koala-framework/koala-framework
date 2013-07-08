@@ -151,7 +151,34 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
             $db->query('SET names UTF8');
         } catch (Exception $e) {
-            throw new Kwf_Exception_Client($e->getMessage());
+            $dbConfigNoDbname = $dbConfig;
+            $dbConfigNoDbname['dbname'] = false;
+
+            //try to get list of databases
+            try {
+                $db2 = Zend_Db::factory('PDO_MYSQL', $dbConfigNoDbname);
+                $databases = $db2->fetchCol('SHOW DATABASES');
+            } catch (Exception $e2) {
+                //if that fails show above error
+                throw new Kwf_Exception_Client($e2->getMessage());
+            }
+            if (!in_array($this->_getParam('db_dbname'), $databases)) {
+                //database does not exist, try creating it (maybe we have permissions)
+                try {
+                    $db2->query("CREATE DATABASE ". $db2->quoteIdentifier($this->_getParam('db_dbname')));
+                } catch (Exception $e2) {
+                    //if that fails show above error
+                    throw new Kwf_Exception_Client($e2->getMessage());
+                }
+            }
+
+            //re-try connection
+            try {
+                $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
+                $db->query('SET names UTF8');
+            } catch (Exception $e) {
+                throw new Kwf_Exception_Client($e->getMessage());
+            }
         }
 
         try {

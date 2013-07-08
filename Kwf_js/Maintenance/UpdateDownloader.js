@@ -5,19 +5,19 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
         this.libraryUrl = new Ext.form.TextField({
             name: 'libraryUrl',
             fieldLabel: 'Library Url',
-            value: 'https://github.com/vivid-planet/library/archive/master.tar.gz',
+            value: this.defaultLibraryUrl,
             width: 600
         });
         this.kwfUrl = new Ext.form.TextField({
             name: 'kwfUrl',
             fieldLabel: 'Kwf Url',
-            value: 'https://github.com/vivid-planet/koala-framework/archive/3.3-installer.tar.gz',
+            value: this.defaultKwfUrl,
             width: 600
         });
         this.appUrl = new Ext.form.TextField({
             name: 'appUrl',
             fieldLabel: 'App Url',
-            value: 'https://github.com/vivid-planet/kwf-cms-demo/archive/master.tar.gz',
+            value: this.defaultAppUrl,
             width: 600
         });
         this.layout = 'form',

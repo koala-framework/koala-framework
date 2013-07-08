@@ -8,14 +8,10 @@ class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_T
 
     protected function _clearCache($options)
     {
-        try {
-            $cnt = Zend_Registry::get('db')->query("SELECT COUNT(*) FROM cache_component WHERE deleted=0")->fetchColumn();
-            if ($cnt > 5000) {
-                $this->_output("skipped: (won't delete $cnt entries, use clear-view-cache to clear)\n");
-                return;
-            }
-        } catch (Exception $e) {}
-
+        if (!Kwf_Config::getValue('debug.componentCache.clearOnClearCache')) {
+            $this->_output("skipped: (won't delete $cnt entries, use clear-view-cache to clear)\n");
+            return;
+        }
         Kwf_Component_Cache::getInstance()->deleteViewCache(new Kwf_Model_Select());
     }
 

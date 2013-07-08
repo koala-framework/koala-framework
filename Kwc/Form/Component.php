@@ -283,41 +283,43 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             }
         }
 
-        $values = $this->getForm()->load(null, $this->_postData);
-        $ret['form'] = $this->getForm()->getTemplateVars($values, '', $this->getData()->componentId.'_');
+        if (!$ret['showSuccess']) {
+            $values = $this->getForm()->load(null, $this->_postData);
+            $ret['form'] = $this->getForm()->getTemplateVars($values, '', $this->getData()->componentId.'_');
 
-        $dec = $this->_getSetting('decorator');
-        if ($dec && is_string($dec)) {
-            $dec = new $dec();
-            $ret['form'] = $dec->processItem($ret['form'], $this->getErrors());
-        }
+            $dec = $this->_getSetting('decorator');
+            if ($dec && is_string($dec)) {
+                $dec = new $dec();
+                $ret['form'] = $dec->processItem($ret['form'], $this->getErrors());
+            }
 
-        $ret['formName'] = $this->getData()->componentId;
-        $ret['buttonClass'] = $this->_getSetting('buttonClass');
+            $ret['formName'] = $this->getData()->componentId;
+            $ret['buttonClass'] = $this->_getSetting('buttonClass');
 
-        $ret['formId'] = $this->getForm()->getId();
-        if ($ret['formId']) {
-            $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
-        }
+            $ret['formId'] = $this->getForm()->getId();
+            if ($ret['formId']) {
+                $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
+            }
 
-        $page = $this->getData()->getPage();
-        if (!$page) {
-            throw new Kwf_Exception('Form must have an url so it must be on a page but is on "' . $this->getData()->componentId . '". (If component is a box it must not be unique)');
-        }
-        $cachedContent = Kwf_Component_Cache::getInstance()->load(
-            $page->componentId, 'componentLink'
-        );
-        if ($cachedContent) {
-            $targetPage = unserialize($cachedContent);
-            $ret['action'] = $targetPage[0];
-        } else {
-            $ret['action'] = $this->getData()->url;
-        }
-        if (isset($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"]) {
-            $ret['action'] .= '?' . $_SERVER["QUERY_STRING"];
-        }
+            $page = $this->getData()->getPage();
+            if (!$page) {
+                throw new Kwf_Exception('Form must have an url so it must be on a page but is on "' . $this->getData()->componentId . '". (If component is a box it must not be unique)');
+            }
+            $cachedContent = Kwf_Component_Cache::getInstance()->load(
+                $page->componentId, 'componentLink'
+            );
+            if ($cachedContent) {
+                $targetPage = unserialize($cachedContent);
+                $ret['action'] = $targetPage[0];
+            } else {
+                $ret['action'] = $this->getData()->url;
+            }
+            if (isset($_SERVER["QUERY_STRING"])) {
+                $ret['action'] .= '?' . $_SERVER["QUERY_STRING"];
+            }
 
-        $ret['method'] = $this->_getSetting('method');
+            $ret['method'] = $this->_getSetting('method');
+        }
 
         $ret['isUpload'] = false;
         foreach (new RecursiveIteratorIterator(
@@ -328,6 +330,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
                 break;
             }
         }
+
         $ret['message'] = null;
 
         $cacheId = 'kwcFormCu-'.get_class($this);
@@ -390,6 +393,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     protected function _setProcessed()
     {
         $this->_processed = true;
+        return $this;
+    }
+
+    protected function _setIsSaved()
+    {
+        $this->_isSaved = true;
         return $this;
     }
 

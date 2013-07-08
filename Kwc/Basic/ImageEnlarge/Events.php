@@ -18,9 +18,7 @@ class Kwc_Basic_ImageEnlarge_Events extends Kwc_Basic_Image_Events
             $component = $component->parent;
         }
         if ($component->componentClass == $this->_class) {
-            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $component
-            ));
+            $this->_fireMediaChanged($component);
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                 $this->_class, $component
             ));
