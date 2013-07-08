@@ -5,6 +5,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Kwc_User_Login_Form_Component';
+//         $ret['generators']['child']['component']['facebook'] = 'Kwc_User_Login_Facebook_Component';
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }
