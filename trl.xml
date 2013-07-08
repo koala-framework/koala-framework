@@ -9219,5 +9219,15 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Nicht mehr als {0} Einträge können angelegt werden.</de>
 <id>1841</id>
 </text>
+<text>
+<en>Send copy to User</en>
+<de>Sende Kopie an Benutzer</de>
+<id>1866</id>
+</text>
+<text>
+<en>Thank you for your inquiry, it will be processed as soon as posible.</en>
+<de>Danke für Ihre Anfrage. Wir werden uns bemühen, diese so schnell wie möglich zu bearbeiten.</de>
+<id>1869</id>
+</text>
 </trl>
 
