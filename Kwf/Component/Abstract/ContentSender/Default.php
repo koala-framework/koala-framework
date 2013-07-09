@@ -97,10 +97,27 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                     'page' => false,
                     'flags' => array('processInput' => true)
                 ));
+        $process = array_merge($process, $data
+            ->getRecursiveChildComponents(array(
+                    'page' => false,
+                    'flags' => array('forwardProcessInput' => true)
+                )));
         if (Kwf_Component_Abstract::getFlag($data->componentClass, 'processInput')) {
             $process[] = $data;
         }
-        return $process;
+        if (Kwf_Component_Abstract::getFlag($data->componentClass, 'forwardProcessInput')) {
+            $process[] = $data;
+        }
+        $ret = array();
+        foreach ($process as $i) {
+            if (Kwf_Component_Abstract::getFlag($i->componentClass, 'processInput')) {
+                $ret[] = $i;
+            }
+            if (Kwf_Component_Abstract::getFlag($i->componentClass, 'forwardProcessInput')) {
+                $ret = array_merge($ret, $i->getComponent()->getForwardProcessInputComponents());
+            }
+        }
+        return $ret;
     }
 
     protected static function _callProcessInput($process)
