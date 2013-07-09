@@ -114,6 +114,16 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
         $this->_setProcessed();
 
+        $this->_postData = $postData;
+
+        if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
+            $postData = array();
+            $this->_posted = false;
+            return;
+        } else {
+            $this->_posted = true;
+        }
+
         if (!$this->getForm()) return;
 
         if ($this->_getIdFromPostData($postData)) {
@@ -125,17 +135,10 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $m = $m->getProxyModel();
         }
 
-        if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
-            $postData = array();
-            $this->_posted = false;
-        } else {
-            $this->_posted = true;
-        }
         if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
             Kwf_Registry::get('db')->beginTransaction();
         }
         $postData = $this->_form->processInput(null, $postData);
-        $this->_postData = $postData;
         if (isset($postData[$this->getData()->componentId])) {
             ignore_user_abort(true);
             $this->_errors = array_merge($this->_errors, $this->_validate($postData));
