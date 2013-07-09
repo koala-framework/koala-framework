@@ -102,9 +102,13 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
                         }
                     }
                     $msg .= $f->getFieldLabel().': '.implode(', ', $valuesText)."\n";
-
+                } else if ($f instanceof Kwf_Form_Field_DateField) {
+                    if ($f->getFieldLabel()) $msg .= $f->getFieldLabel().': ';
+                    $t = strtotime($row->{$f->getName()});
+                    $msg .= date($this->getData()->trlKwf('Y-m-d'), $t)."\n";
                 } else {
-                    $msg .= $f->getFieldLabel().': '.$row->{$f->getName()}."\n";
+                    if ($f->getFieldLabel()) $msg .= $f->getFieldLabel().': ';
+                    $msg .= $row->{$f->getName()}."\n";
                 }
             }
         }
