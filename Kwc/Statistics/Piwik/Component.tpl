@@ -2,6 +2,9 @@
 <!-- Piwik -->
 <script type="text/javascript">
   var _paq = _paq || [];
+  <? if ($this->disableCookies) { ?>
+  _paq.push(['disableCookies']);
+  <? } ?>
   <? foreach ($this->customVariables as $cv) { ?>
   _paq.push(["setCustomVariable", <?=$cv['index']?>, "<?=$cv['name']?>", "<?=$cv['value']?>", "<?=$cv['scope']?>"]);
   <? } ?>
