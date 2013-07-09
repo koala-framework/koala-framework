@@ -38,7 +38,11 @@ class Vps_Controller_Action_Enquiries_EnquiriesController
         $row = $this->_getModel()->getRow($id);
 
         $view = new Vps_View();
-        $view->mailContent = $row->getMailContent();
+
+        $mc = $row->getMailContent(Vps_Model_Mail_Row::MAIL_CONTENT_HTML);
+        if (!$mc) $mc = nl2br($row->getMailContent(Vps_Model_Mail_Row::MAIL_CONTENT_TEXT));
+        $view->mailContent = $mc;
+
         $view->subject = $row->subject;
         $view->send_date = $row->save_date;
         $view->cc = $row->getCc();
