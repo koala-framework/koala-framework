@@ -26,6 +26,8 @@ class Vps_Setup
 
     public static function setUpZend()
     {
+        error_reporting(E_ALL ^ E_STRICT);
+
         if (file_exists(VPS_PATH.'/include_path')) {
             $zendPath = trim(file_get_contents(VPS_PATH.'/include_path'));
             $zendPath = str_replace(
@@ -110,11 +112,11 @@ class Vps_Setup
 
 
         ini_set('memory_limit', '128M');
-        error_reporting(E_ALL);
+        error_reporting(E_ALL ^ E_STRICT);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
         iconv_set_encoding('internal_encoding', 'utf-8');
-        set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
+        set_error_handler(array('Vps_Debug', 'handleError'), E_ALL ^ E_STRICT);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
 
