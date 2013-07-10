@@ -280,10 +280,7 @@ class Kwf_Acl extends Zend_Acl
         foreach ($resources as $resource) {
             if ($resource instanceof Kwf_Acl_Resource_Component_Interface) {
                 if (!$this->getComponentAcl()->isAllowed($user, $resource->getComponent())) continue;
-            } else {
-                if (!$this->isAllowedUser($user, $resource, 'view')) continue;
-            }
-            if ($resource instanceof Kwf_Acl_Resource_ComponentClass_Interface) {
+            } else if ($resource instanceof Kwf_Acl_Resource_ComponentClass_Interface) {
                 if (!$this->getComponentAcl()->isAllowed($user, $resource->getComponentClass())) continue;
             } else {
                 if (!$this->isAllowedUser($user, $resource, 'view')) continue;
