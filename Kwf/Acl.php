@@ -513,4 +513,50 @@ class Kwf_Acl extends Zend_Acl
         }
         return parent::allow($roles, $resources, $privileges, $assert);
     }
+
+    public function setParentResource($resource, $parent)
+    {
+        if (is_string($resource)) {
+            $resource = new Zend_Acl_Resource($resource);
+        }
+
+        if (!$resource instanceof Zend_Acl_Resource_Interface) {
+            require_once 'Zend/Acl/Exception.php';
+            throw new Zend_Acl_Exception('addResource() expects $resource to be of type Zend_Acl_Resource_Interface');
+        }
+
+        $resourceId = $resource->getResourceId();
+
+        if (!$this->has($resourceId)) {
+            require_once 'Zend/Acl/Exception.php';
+            throw new Zend_Acl_Exception("Resource id '$resourceId' doesn't exists in the ACL");
+        }
+
+        //unset children of previous parent
+        $previousParent = $this->_resources[$resourceId]['parent'];
+        if ($previousParent) {
+            unset($this->_resources[$previousParent->getResourceId()]['children'][$resourceId]);
+        }
+
+        $resourceParent = null;
+
+        if (null !== $parent) {
+            try {
+                if ($parent instanceof Zend_Acl_Resource_Interface) {
+                    $resourceParentId = $parent->getResourceId();
+                } else {
+                    $resourceParentId = $parent;
+                }
+                $resourceParent = $this->get($resourceParentId);
+            } catch (Zend_Acl_Exception $e) {
+                require_once 'Zend/Acl/Exception.php';
+                throw new Zend_Acl_Exception("Parent Resource id '$resourceParentId' does not exist", 0, $e);
+            }
+            $this->_resources[$resourceParentId]['children'][$resourceId] = $resource;
+        }
+
+        $this->_resources[$resourceId]['parent'] = $resourceParent;
+
+        return $this;
+    }
 }
