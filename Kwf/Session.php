@@ -40,6 +40,8 @@ class Kwf_Session extends Zend_Session
         }
     }
 
+    //similar to implementation in Zend_Session but don't throw exception (how stupid is that?)
+    //instead empty session
     private static function _processValidators()
     {
         foreach ($_SESSION['__KWF']['VALID'] as $validator_name => $valid_data) {
