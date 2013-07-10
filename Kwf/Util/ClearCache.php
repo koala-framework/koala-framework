@@ -346,6 +346,10 @@ class Kwf_Util_ClearCache
                 if ($output) echo "cleared dir: $d cache\n";
             }
         }
+        if (in_array('assets', $types)) {
+            Kwf_Assets_Cache::getInstance()->clean();
+                if ($output) echo "cleared:     assets cache\n";
+        }
         if (in_array('assetsServer', $types)) {
             $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&clear';
             try {
