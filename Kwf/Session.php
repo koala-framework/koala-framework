@@ -3,6 +3,7 @@ class Kwf_Session extends Zend_Session
 {
     public static function start($options = false)
     {
+        //code added here won't be called by Kwf_Session_Namespace -> afterStart
         parent::start($options);
         self::afterStart();
     }
