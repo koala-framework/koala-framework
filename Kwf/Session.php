@@ -13,11 +13,10 @@ class Kwf_Session extends Zend_Session
     {
         static $validatorsRegistered = false;
         if (!$validatorsRegistered) {
-            if (!isset($_SESSION['__ZF']['VALID'])) {
-                Zend_Session::registerValidator(new Kwf_Session_Validator_HttpHost());
-                Zend_Session::registerValidator(new Kwf_Session_Validator_RemoteAddr());
+
+            if (isset($_SESSION['__KWF']['VALID'])) {
+                self::_processValidators();
             }
-            $validatorsRegistered = true;
 
             //sessions timeout after 15-20 minutes of inactivity
             //this is in addition to gc_maxlifetime (which isn't reliable enough)
@@ -27,10 +26,29 @@ class Kwf_Session extends Zend_Session
             } else if ($_SESSION['kwfTimeout'] - time() < ($sessionTimeout-5*60)) {
                 //extend timeout every 5 minutes (not in every request for better performance)
                 $_SESSION['kwfTimeout'] = time() + $sessionTimeout;
-            }else if ($_SESSION['kwfTimeout'] - time() < 0) {
+            } else if ($_SESSION['kwfTimeout'] - time() < 0) {
+                $_SESSION = array();
+                $_SESSION['kwfTimeout'] = time() + $sessionTimeout;
                 Zend_Session::regenerateId();
             }
 
+            if (!isset($_SESSION['__KWF']['VALID'])) {
+                Zend_Session::registerValidator(new Kwf_Session_Validator_HttpHost());
+                Zend_Session::registerValidator(new Kwf_Session_Validator_RemoteAddr());
+            }
+            $validatorsRegistered = true;
+        }
+    }
+
+    private static function _processValidators()
+    {
+        foreach ($_SESSION['__KWF']['VALID'] as $validator_name => $valid_data) {
+            $validator = new $validator_name;
+            if ($validator->validate() === false) {
+                $_SESSION = array();
+                Zend_Session::regenerateId();
+                break;
+            }
         }
     }
 }
