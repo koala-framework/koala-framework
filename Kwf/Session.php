@@ -3,8 +3,6 @@ class Kwf_Session extends Zend_Session
 {
     public static function start($options = false)
     {
-        Kwf_Util_Https::ensureHttps();
-
         parent::start($options);
         self::afterStart();
     }
@@ -13,6 +11,8 @@ class Kwf_Session extends Zend_Session
     {
         static $validatorsRegistered = false;
         if (!$validatorsRegistered) {
+
+            Kwf_Util_Https::ensureHttps();
 
             if (isset($_SESSION['__KWF']['VALID'])) {
                 self::_processValidators();
