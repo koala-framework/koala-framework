@@ -19,8 +19,7 @@ class Kwc_Form_Dynamic_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abst
                 $mc = $all->getMenuConfig();
                 $mc['text'] = trlKwf('All Enquiries');
                 $all->setMenuConfig($mc);
-                $acl->remove($all);
-                $acl->addResource($all, 'kwf_enquiries_dropdown');
+                $acl->setParentResource($all, 'kwf_enquiries_dropdown');
             }
         }
 

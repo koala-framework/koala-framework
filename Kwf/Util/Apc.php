@@ -3,9 +3,9 @@
 //direkt in der cli ist das leider nicht möglich, da der speicher im webserver liegt
 class Kwf_Util_Apc
 {
-    public static function getHttpPassword()
+    public static function getHttpPassword($useCache = true)
     {
-        if ($ret = Kwf_Config::getValue('apcUtilsPass')) {
+        if ($useCache && ($ret = Kwf_Config::getValue('apcUtilsPass'))) {
             //optional, required if multiple webservers
             return $ret;
         } else {
@@ -196,6 +196,9 @@ class Kwf_Util_Apc
             } else {
                 echo '0';
             }
+            exit;
+        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/get-hostname') {
+            echo php_uname('n');
             exit;
         }
         throw new Kwf_Exception_NotFound();

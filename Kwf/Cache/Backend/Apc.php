@@ -46,10 +46,10 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     {
         switch ($mode) {
             case Zend_Cache::CLEANING_MODE_ALL:
-                if (class_exists('APCIterator')) {
-                    $prefix = Kwf_Cache::getUniquePrefix().$this->_options['cache_id_prefix'];
-                    apc_delete_file(new APCIterator('user', '#^'.$prefix.'#'));
-                    return true;
+                if (php_sapi_name() == 'cli') {
+                    return Kwf_Util_Apc::callClearCacheByCli(array(
+                        'type' => 'user'
+                    ));
                 } else {
                     return apc_clear_cache('user');
                 }
