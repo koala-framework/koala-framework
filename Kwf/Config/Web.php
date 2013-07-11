@@ -158,7 +158,11 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                 //this file gets written in Kwf_Setup to make it "just work"
                 $d = file_get_contents('cache/lastdomain');
             }
-            $this->server->memcache->host = file_get_contents("http://apcutils:".Kwf_Util_Apc::getHttpPassword(false)."@$d/kwf/util/apc/get-hostname");
+            if (php_sapi_name() == 'cli') {
+                $this->server->memcache->host = file_get_contents("http://apcutils:".Kwf_Util_Apc::getHttpPassword(false)."@$d/kwf/util/apc/get-hostname");
+            } else {
+                $this->server->memcache->host = php_uname('n');
+            }
         }
 
     }
