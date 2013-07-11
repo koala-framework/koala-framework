@@ -84,7 +84,7 @@ class Kwf_Util_ClearCache
                 //this file gets written in Kwf_Setup to make it "just work"
                 $d = file_get_contents('cache/lastdomain');
             }
-            $hasApc = @file_get_contents("http://apcutils:".Kwf_Util_Apc::getHttpPassword()."@$d/kwf/util/apc/is-loaded") == '1';
+            $hasApc = @file_get_contents("http://apcutils:".Kwf_Util_Apc::getHttpPassword(false)."@$d/kwf/util/apc/is-loaded") == '1';
         }
         if ($hasApc) {
             $types[] = new Kwf_Util_ClearCache_Types_ApcUser();
