@@ -4,6 +4,16 @@ abstract class Kwf_Component_Renderer_Abstract
     protected $_enableCache = null;
     protected $_renderComponent;
 
+    protected $_includedComponents = array();
+
+    public function includedComponent($targetComponentId, $targetType)
+    {
+        $this->_includedComponents[] = array(
+            'target_id' => $targetComponentId,
+            'target_type' => $targetType
+        );
+    }
+
     public function __construct()
     {
         $this->_enableCache = !Kwf_Config::getValue('debug.componentCache.disable');
@@ -155,6 +165,29 @@ abstract class Kwf_Component_Renderer_Abstract
                     }
                 }
                 if ($saveCache) {
+
+                    $m = Kwf_Component_Cache::getInstance()->getModel('includes');
+                    $s = $m->select()
+                        ->whereEquals('component_id', $componentId)
+                        ->whereEquals('type', $type);
+                    $m->deleteRows($s);
+                    if ($this->_includedComponents) {
+                        $data = array();
+                        foreach ($this->_includedComponents as $c) {
+                            $cmp = Kwf_Component_Data_Root::getInstance()
+                                ->getComponentById($componentId, array('ignoreVisible' => true));
+                            $targetCmp = Kwf_Component_Data_Root::getInstance()
+                                ->getComponentById($c['target_id'], array('ignoreVisible' => true));
+                            if ($cmp->getPage() != $targetCmp->getPage()) {
+                                $c['type'] = $type;
+                                $c['component_id'] = $componentId;
+                                $data[] = $c;
+                            }
+                        }
+                        $m->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
+                        $this->_includedComponents = array();
+                    }
+
                     //save rendered contents into view cache
                     //if viewCache=false Kwf_Component_Cache_Mysql saves Kwf_Component_Cache::NO_CACHE
                     $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content);

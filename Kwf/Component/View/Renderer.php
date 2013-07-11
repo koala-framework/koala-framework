@@ -49,6 +49,9 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
             }
         }
 
+
+        $this->_getRenderer()->includedComponent($componentId, $type);
+
         if (!is_null($value)) $componentId .= '(' . $value . ')';
         if ($plugins) $componentId .= json_encode((object)$plugins);
         $config = base64_encode(serialize($config));

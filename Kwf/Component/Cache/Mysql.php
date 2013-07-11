@@ -8,6 +8,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $this->_models = array (
             'cache' => 'Kwf_Component_Cache_Mysql_Model',
             'url' => 'Kwf_Component_Cache_Mysql_UrlModel',
+            'includes' => 'Kwf_Component_Cache_Mysql_IncludesModel',
         );
     }
 
