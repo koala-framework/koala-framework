@@ -24,22 +24,6 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
                 $masterHelper->setRenderer($this);
                 $content = $masterHelper->master($component);
                 if ($this->_enableCache) {
-                    $m = Kwf_Component_Cache::getInstance()->getModel('includes');
-                    $s = $m->select()
-                        ->whereEquals('component_id', $component->componentId)
-                        ->whereEquals('type', 'page');
-                    $m->deleteRows($s);
-                    if ($this->_includedComponents) {
-                        $data = array();
-                        foreach ($this->_includedComponents as $c) {
-                            $c['component_id'] = $component->componentId;
-                            $c['type'] = 'page';
-                            $data[] = $c;
-                        }
-                        $m->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
-                        $this->_includedComponents = array();
-                    }
-
                     Kwf_Component_Cache::getInstance()
                         ->save($component, $content, 'component', 'page');
 
