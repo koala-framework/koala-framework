@@ -50,12 +50,12 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
 
         if (isset($postData['code'])) {
             $code = $postData['code'];
-            $this->_form->getRow()->code = $code;
+            $this->getForm()->getRow()->code = $code;
         } else if (isset($postData['form_code'])) {
             $code = $postData['form_code'];
-            $this->_form->getRow()->code = $code;
+            $this->getForm()->getRow()->code = $code;
         } else {
-            $code = $this->_form->getRow()->code;
+            $code = $this->getForm()->getRow()->code;
         }
         $code = explode('-', $code);
         if (count($code) != 2 || empty($code[0]) || empty($code[1])) {
