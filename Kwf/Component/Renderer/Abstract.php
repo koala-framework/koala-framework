@@ -60,8 +60,27 @@ abstract class Kwf_Component_Renderer_Abstract
         return $ret;
     }
 
+    private function _executePlugins($ret, $pluginType)
+    {
+        static $benchmarkEnabled;
+        if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
+
+        while (($start = strpos($ret, '<plugin'.$pluginType.' ')) !== false) {
+            $startEnd = strpos($ret, '>', $start);
+            $args = explode(' ', substr($ret, $start+9, $startEnd-$start-9));
+            $end = strpos($ret, '</plugin'.$pluginType.' '.$args[0].'>');
+            $content = substr($ret, $startEnd+1, $end-$startEnd-1);
+            if ($benchmarkEnabled) $startTime = microtime(true);
+            $plugin = Kwf_Component_Plugin_Abstract::getInstance($args[1], $args[2]);
+            $content = $plugin->processOutput($content);
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('plugin '.$args[1], microtime(true)-$startTime);
+            $ret = substr($ret, 0, $start).$content.substr($ret, $end+11+strlen($args[0]));
+        }
+        return $ret;
+    }
+
     /**
-     * Render components (ie. expand {cc ...})
+     * Render components (ie. expand <cc ...>)
      *
      * @param int render pass; 1 or 2: 1 for content that can be stored in fullPage cache,
                                        2 for everything else. 2 includes 1, so calling just with 2 also works
@@ -77,30 +96,25 @@ abstract class Kwf_Component_Renderer_Abstract
 
         if ($pass == 2) {
             //in second pass execute all EXECUTE_BEFORE plugins
-            while (preg_match('/{pluginB (\d) ([^}]*) ([^}]*)}(.*){\/pluginB \\1}/s', $ret, $matches)) {
-                $plugin = Kwf_Component_Plugin_Abstract::getInstance($matches[2], $matches[3]);
-                $content = $plugin->processOutput($matches[4]);
-                $ret = str_replace($matches[0], $content, $ret);
-            }
+            $ret = $this->_executePlugins($ret, 'B');
         }
 
-        if ($pass == 1) {
-            $passExp = '1';
-        } else if ($pass == 2) {
-            $passExp = '[12]';
-        } else {
-            throw new Kwf_Exception("Invalid pass");
-        }
-        //                  {cc1 type    : componentId (value)      {plugins}    config}
-        while (preg_match('/{cc'.$passExp.' ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?({[^}]+})?( [^}]*)}/i', $ret, $matches)) {
+        $offset = 0;
+        while (($start = strpos($ret, '<kwc', $offset)) !== false) {
+            $p = substr($ret, $start+4, 1);
+            if ($pass == 1 && $p == 2) {
+                $offset = $start+1;
+                continue; //matches $pass? (first char after {cc)
+            }
             if ($benchmarkEnabled) $startTime = microtime(true);
-            $type = $matches[1];
-            $componentId = trim($matches[2]);
-            $value = (string)trim($matches[3]); // Bei Partial partialId oder bei master component_id zu der das master gehört
-            if ($value) $value = substr($value, 1, -1);
-            $plugins = json_decode($matches[4], true);
-            if (!$plugins) $plugins = array();
-            $config = trim($matches[5]);
+            $end = strpos($ret, '>', $start);
+
+            $args = explode(' ', substr($ret, $start+6, $end-$start-6));
+            $type = $args[0];
+            $componentId = $args[1];
+            $value = (string)$args[2]; // Bei Partial partialId oder bei master component_id zu der das master gehört
+            $plugins = json_decode($args[3], true);
+            $config = $args[4];
             $config = $config != '' ? unserialize(base64_decode($config)) : array();
 
             if (isset($plugins['replace'])) {
@@ -109,7 +123,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     $content = $plugin->replaceOutput();
                     if ($content !== false) {
                         if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' plugin', microtime(true)-$startTime);
-                        $ret = str_replace($matches[0], $content, $ret);
+                        $ret = substr($ret, 0, $start).$content.substr($ret, $end+1);
                         continue 2;
                     }
                 }
@@ -209,7 +223,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     } else {
                         //in first pass the result will be cached, so we have to defer that to the second pass
                         $pluginNr++;
-                        $content = "{pluginB $pluginNr $pluginClass $componentId}$content{/pluginB $pluginNr}";
+                        $content = "<pluginB $pluginNr $pluginClass $componentId>$content</pluginB $pluginNr>";
                     }
                 }
             }
@@ -218,23 +232,21 @@ abstract class Kwf_Component_Renderer_Abstract
                 foreach ($plugins['after'] as $pluginClass) {
                     //always has to be done last in second pass
                     $pluginNr++;
-                    $content = "{pluginA $pluginNr $pluginClass $componentId}$content{/pluginA $pluginNr}";
+                    $content = "<pluginA $pluginNr $pluginClass $componentId>$content</pluginA $pluginNr>";
                 }
             }
 
             if ($statType) Kwf_Benchmark::count("rendered $statType", $statId);
-            $ret = str_replace($matches[0], $content, $ret);
+
+            $ret = substr($ret, 0, $start).$content.substr($ret, $end+1);
+
 
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' '.$type, microtime(true)-$startTime);
         }
 
         if ($pass == 2) {
             //execute plugins only in second pass, to not get cached
-            while (preg_match('/{pluginA (\d) ([^}]*) ([^}]*)}(.*){\/pluginA \\1}/s', $ret, $matches)) {
-                $plugin = Kwf_Component_Plugin_Abstract::getInstance($matches[2], $matches[3]);
-                $content = $plugin->processOutput($matches[4]);
-                $ret = str_replace($matches[0], $content, $ret);
-            }
+            $ret = $this->_executePlugins($ret, 'A');
         }
 
         return $ret;

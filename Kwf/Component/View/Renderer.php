@@ -49,17 +49,16 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
             }
         }
 
-
         $this->_getRenderer()->includedComponent($componentId, $type);
 
-        if (!is_null($value)) $componentId .= '(' . $value . ')';
-        if ($plugins) $componentId .= json_encode((object)$plugins);
-        $config = base64_encode(serialize($config));
         if ($canBeIncludedInFullPageCache) {
-            return '{cc1 ' . "$type: $componentId $config" . '}';
+            $pass = 1;
         } else {
-            return '{cc2 ' . "$type: $componentId $config" . '}';
+            $pass = 2;
         }
+        $plugins = $plugins ? json_encode((object)$plugins) : '';
+        $config = $config ? base64_encode(serialize($config)) : '';
+        return "<kwc$pass $type $componentId $value $plugins $config>";
     }
 
     protected function _getComponentById($componentId)
