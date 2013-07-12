@@ -275,15 +275,22 @@ class Kwf_Setup
      */
     public static function hasAuthedUser()
     {
+        static $benchmarkEnabled;
+        if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
+        if ($benchmarkEnabled) $t = microtime(true);
         if (!Zend_Session::isStarted() &&
             !Zend_Session::sessionExists() &&
             !Kwf_Config::getValue('autologin')
         ) {
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: no session', microtime(true)-$t);
             return false;
         }
         if (!Kwf_Auth::getInstance()->getStorage()->read()) {
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: storage empty', microtime(true)-$t);
             return false;
         }
-        return Kwf_Registry::get('userModel')->hasAuthedUser();
+        $ret = Kwf_Registry::get('userModel')->hasAuthedUser();
+        if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: asked model', microtime(true)-$t);
+        return $ret;
     }
 }
