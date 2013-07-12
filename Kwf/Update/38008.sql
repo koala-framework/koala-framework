@@ -1,5 +1,5 @@
 #tags: kwc
-ALTER TABLE  `cache_component` CHANGE  `type`  `type` ENUM(  'page',  'component',  'master',  'partial',  'componentLink',  'fullPage' ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL
+ALTER TABLE  `cache_component` CHANGE  `type`  `type` ENUM(  'page',  'component',  'master',  'partial',  'componentLink',  'fullPage' ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;
 
 CREATE TABLE  `cache_component_includes` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
