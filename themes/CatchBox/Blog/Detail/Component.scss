@@ -36,11 +36,7 @@
     }
 
     > .comments {
-        background: #ccc;
-        border: 1px solid #d3d3d3;
-        @include border-radius-pie(3px);
         margin-top: 20px;
-        padding: 20px;
 
         h3 {
             color: #373737;

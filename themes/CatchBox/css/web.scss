@@ -12,7 +12,7 @@ body.frontend {
 }
 
 #page {
-    border-radius: 5px;
+    @include border-radius-pie(5px);
     padding-top: 20px;
 }
 
@@ -24,7 +24,7 @@ $grid-padding   : 0px;
 #page {
     @include container;
 
-    border-radius: 5px;
+    @include border-radius-pie(5px);
     background-color: #fff;
     padding-top: 30px;
     padding-bottom: 20px;
