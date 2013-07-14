@@ -1,19 +1,8 @@
 .cssClass .kwfFieldError label { color: var(typo); }
 .cssClass .kwfFieldError input,
-.cssClass .kwfFieldError input:hover,
-.cssClass .kwfFieldError input:focus,
-.cssClass .kwfFieldError textarea,
-.cssClass .kwfFieldError textarea:hover,
-.cssClass .kwfFieldError textarea:focus {
+.cssClass .kwfFieldError textarea {
     color: var(typo);
-    border: 1px solid var(errorBorder) ;
-}
-
-.cssClass .kwfFieldError input:hover,
-.cssClass .kwfFieldError textarea:hover,
-.cssClass .kwfFieldError input:focus,
-.cssClass .kwfFieldError textarea:focus {
-    border: 1px solid var(errorBorder) ;
+    border-color: var(errorBorder) ;
 }
 
 .cssClass button {
