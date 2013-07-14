@@ -62,7 +62,7 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                      */
                     $preHtml .= '<span class="requiredSign">*</span>';
                 }
-                $preHtml .= $item['item']->getLabelSeparator();
+                $preHtml .= '<span class="labelSeparator">'.$item['item']->getLabelSeparator().'</span>';
                 $preHtml .= '</label>';
             }
             $postHtml = '';
