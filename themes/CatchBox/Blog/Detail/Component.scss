@@ -6,7 +6,7 @@
         padding-left: 30px;
         padding-right: 30px;
         padding-bottom: 20px;
-        border-radius: 5px;
+        @include border-radius-pie(5px);
         background-color: white;
         border-bottom: 2px solid #AAAAAA;
 

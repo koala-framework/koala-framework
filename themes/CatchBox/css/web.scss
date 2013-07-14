@@ -1,6 +1,7 @@
 @import "susy";
 @import "kwf/css3/border-radius";
 @import "kwf/css3/box-shadow";
+@import "compass/css3/box-sizing"
 
 html {
     overflow-y: scroll;
@@ -70,7 +71,10 @@ $grid-padding   : 0px;
 .webListNone,
 .webListNone li { margin-bottom: 0px; }
 
-.webForm {
+.webForm.kwcForm {
+    .submitWrapper .button {
+        float: right;
+    }
     button {
         background: #222;
         border: none;
@@ -79,20 +83,56 @@ $grid-padding   : 0px;
         color: #eee;
         cursor: pointer;
         margin: 20px 0;
-        padding: 5px;
+        padding: 5px 42px 5px 22px;
+        line-height: 1.625;
         position: relative;
-        left: 30px;
+        left: 20px;
         text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
         &:active {
             background: #1982d1;
             color: #bfddf3;
         }
     }
-    input, textarea {
-        background: none repeat scroll 0 0 #FAFAFA;
-        border: 1px solid #CCCCCC;
-        @include box-shadow-pie(0 1px 1px rgba(0, 0, 0, 0.1) inset);
-        color: #888888;
+    .kwfField {
+        position: relative;
+        padding-top: 20px;
+        input, textarea {
+            background: #fff;
+            border: 4px solid #eee;
+            @include border-radius-pie(5px);
+            @include box-shadow-pie(inset 0 1px 3px rgba(204,204,204,0.95));
+            padding: 10px;
+            text-indent: 80px;
+            font-size: inherit;
+            color: #888;
+            line-height: 1.625;
+            @include box-sizing(border-box);
+            &:focus {
+                text-indent: 0;
+                z-index: 1;
+                color: #000;
+            }
+        }
+        label {
+            background: #eee;
+            @include box-shadow-pie(1px 2px 2px rgba(204,204,204,0.8));
+            color: #555;
+            display: inline-block;
+            font-size: 13px;
+            left: 4px;
+            width: auto;
+            text-align: left;
+            min-width: 60px;
+            padding: 4px 10px;
+            position: absolute;
+            top: 24px;
+            z-index: 1;
+            .labelSeparator { display: none; }
+        }
+        &.kwfFieldError {
+            input, textarea {
+            }
+        }
     }
 }
 
