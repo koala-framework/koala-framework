@@ -24,7 +24,7 @@ class Kwf_Cache_Simple
         if (!$ret) {
             if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
                 $ret = 'elastiCache';
-            } else if (Kwf_Config::getValue('server.memcache.host')) {
+            } else if (Kwf_Util_Memcache::getHost()) {
                 $ret = 'memcache';
             } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
                 $ret = 'apc';

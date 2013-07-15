@@ -151,20 +151,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                                             array($this->libraryPath, $kwfPath),
                                             $i);
         }
-
-        if ($this->server->memcache->host == '%webserverHostname%') {
-            $d = $this->server->domain;
-            if (!$d && file_exists('cache/lastdomain')) {
-                //this file gets written in Kwf_Setup to make it "just work"
-                $d = file_get_contents('cache/lastdomain');
-            }
-            if (php_sapi_name() == 'cli') {
-                $this->server->memcache->host = file_get_contents("http://apcutils:".Kwf_Util_Apc::getHttpPassword(false)."@$d/kwf/util/apc/get-hostname");
-            } else {
-                $this->server->memcache->host = php_uname('n');
-            }
-        }
-
     }
 
     public function getMasterFiles()
