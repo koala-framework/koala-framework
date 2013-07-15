@@ -53,7 +53,6 @@
             </div>
             <div id="outerFooter">
                 <div id="footer">
-                    <div class="loginButton"></div>
                     <div class="bottomMenu">
                         <?=$this->component($this->boxes['bottomMenu']);?>
                     </div>
