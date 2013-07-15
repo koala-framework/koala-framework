@@ -173,6 +173,8 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     private function _fetchIncludesTree($componentId)
     {
+        $ret = array();
+
         $ids = array();
         $i = $componentId;
         $ids[] = $i;
@@ -180,23 +182,24 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             $i = substr($i, 0, strrpos($i, '-'));
             $ids[] = $i;
         }
-
+        if ($i != 'root') {
+            $ret[] = $i;
+        }
         $s = new Kwf_Model_Select();
         $s->whereEquals('target_id', $ids);
         $imports = Kwf_Component_Cache::getInstance()
             ->getModel('includes')
             ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
         foreach ($imports as $row) {
-            if (!in_array($row['component_id'], $ids)) {
-                $ids[] = $row['component_id'];
+            if (!in_array($row['component_id'], $ret)) {
                 foreach ($this->_fetchIncludesTree($row['component_id']) as $i) {
-                    if (!in_array($i, $ids)) {
-                        $ids[] = $i;
+                    if (!in_array($i, $ret)) {
+                        $ret[] = $i;
                     }
                 }
             }
         }
-        return $ids;
+        return $ret;
     }
 
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
