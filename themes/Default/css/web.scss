@@ -47,11 +47,15 @@ $container-style: magic;
     }
 }
 #page #outerHeader #header .searchBox {
-    background: red;
-    width: 100%;
-    height: 39px;
+    height: 40px;
+    position: relative;
+    margin-left: 3px;
+    top: 3px;
 }
 #page #outerHeader #header .mainMenu {
+    position: relative;
+    margin-left: 3px;
+    top: 2px;
 }
 
 @include at-breakpoint(4) {
@@ -68,11 +72,15 @@ $container-style: magic;
 }
 @include at-breakpoint(8) {
     #page #outerHeader #header .searchBox {
-        @include span-columns(2 omega);
+        float: right;
     }
     #page #outerHeader #header .mainMenu {
-        @include span-columns(6);
         margin-right: 0px;
+        float: right;
+        
+        ul li {
+            float: left;
+        }
     }
 }
 
@@ -80,14 +88,6 @@ $container-style: magic;
     margin: 0 20px;
 }
 
-
-
-
-
-
-.webStandard.defaultMenuSubHorizontal {
-    display: none;
-}
 
 @include at-breakpoint(6) {
     
@@ -127,7 +127,11 @@ $container-style: magic;
         display: none;
     }
 }
-
+@include at-breakpoint(8) {
+    .webStandard.defaultMenuSubHorizontal {
+        display: none;
+    }
+}
 
 
 

@@ -14,10 +14,13 @@
                     <?=$this->component($this->boxes['logo']);?>
                 </div>
                 <div id="header">
+                    <div class="searchBox">
+                        <?=$this->component($this->boxes['searchBox']);?>
+                    </div>
                     <div class="mainMenu">
                         <?=$this->component($this->boxes['mainMenu']);?>
                     </div>
-                    <div class="searchBox"></div>
+                    <div class="clear"></div>
                     <div class="subMenuHorizonal">
                         <?=$this->component($this->boxes['subMenuHorizontal']);?>
                     </div>

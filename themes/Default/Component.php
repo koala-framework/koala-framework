@@ -68,6 +68,18 @@ class Default_Component extends Kwf_Component_Theme_Abstract
                 'inherit' => true,
                 'boxName' => 'Bottom Stage'
         );
+        $ret['generators']['searchBox'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Default_FulltextSearch_Box_Component',
+            'unique' => true,
+            'inherit' => true
+        );
+
+        $ret['generators']['search'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Default_FulltextSearch_Search_Directory_Component',
+            'name' => trlStatic('Suche')
+        );
         $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo');
 
 
