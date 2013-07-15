@@ -1,6 +1,8 @@
 .defaultMenuSubHorizontal {
     height: 38px;
     overflow: hidden;
+    width: 100%;
+    margin: auto;
 
     
         ul li {
@@ -64,17 +66,19 @@
         position: absolute;
         display: block;
         width: 62px;
-        height: 37px;
+        height: 38px;
         top: 0;
         
         &.arrowLeft {
-            background: url("/assets/web/images/subMenuArrowLeft.png") no-repeat scroll left center transparent;
+            background: url("/assets/kwf/themes/Default/images/subMenuArrowLeft.png") no-repeat scroll left center transparent;
             left: 0;
+            z-index: 2;
         }
         
         &.arrowRight {
-            background: url("/assets/web/images/subMenuArrowRight.png") no-repeat scroll left center transparent;
+            background: url("/assets/kwf/themes/Default/images/subMenuArrowRight.png") no-repeat scroll left center transparent;
             right: 0;
+            z-index: 2;
         }
     }
 }

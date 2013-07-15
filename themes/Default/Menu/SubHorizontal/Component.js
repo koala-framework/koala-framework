@@ -1,4 +1,4 @@
-Kwf.onElementReady('.menuSubHorizontal', function(el) {
+Kwf.onElementReady('.defaultMenuSubHorizontal', function(el) {
     var menu = el.child('.menu').dom;
     if (menu.scrollWidth - $(menu).innerWidth() == 0) return false;
     $(menu).before('<a class="arrowLeft"></a>').before('<a class="arrowRight"></a>');

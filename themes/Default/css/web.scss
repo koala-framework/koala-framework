@@ -88,6 +88,9 @@ $container-style: magic;
     margin: 0 20px;
 }
 
+.webStandard.defaultMenuSubHorizontal {
+    display: none;
+}
 
 @include at-breakpoint(6) {
     
@@ -127,16 +130,12 @@ $container-style: magic;
         display: none;
     }
 }
+
 @include at-breakpoint(8) {
     .webStandard.defaultMenuSubHorizontal {
         display: none;
     }
 }
-
-
-
-
-
 
 @include at-breakpoint(8) {
     #page #outerHeader,
@@ -166,22 +165,6 @@ $container-style: magic;
         display: block;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #page #outerContent #content #innerContent .leftColumn,
