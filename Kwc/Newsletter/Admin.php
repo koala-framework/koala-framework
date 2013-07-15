@@ -16,7 +16,7 @@ class Kwc_Newsletter_Admin extends Kwc_Directories_Item_Directory_Admin
         $components = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         foreach ($components as $c) {
-            $menuConfig['text'] = trlKwf('Edit {0}', trlKwf('Newsletter'));
+            $menuConfig['text'] = trlKwf('Edit {0}', Kwc_Abstract::getSetting($this->_class, 'componentName'));
             if (count($components) > 1) {
                 $subRoot = $c;
                 while($subRoot = $subRoot->parent) {
