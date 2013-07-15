@@ -49,7 +49,7 @@ $container-style: magic;
 #page #outerHeader #header .searchBox {
     background: red;
     width: 100%;
-    height: 40px;
+    height: 39px;
 }
 #page #outerHeader #header .mainMenu {
 }
@@ -90,27 +90,25 @@ $container-style: magic;
 }
 
 @include at-breakpoint(6) {
+    
     .webStandard.defaultMenuSubHorizontal {
         display: block;
         position: relative;
-        background: none #f6f6f6;
         z-index: 2;
 
         ul.menu {
-            line-height: 37px;
+            line-height: 38px;
             overflow-x: scroll;
             white-space: nowrap;
             margin-left: 0px;
-            padding: 0 17px 0 17px;
 
             li {
                 display: inline-block;
-                padding: 0 17px 0 17px;
                 list-style: none;
                 color: white;
+                margin-right: -4px;
 
                 &.current {
-                    background: #C80000;
 
                     a {
                         color: white;
@@ -120,6 +118,7 @@ $container-style: magic;
                 a {
                     color: #000;
                     font-size: 14px;
+                    padding: 0px 17px;
                 }
             }
         }

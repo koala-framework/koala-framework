@@ -1,6 +1,64 @@
 .defaultMenuSubHorizontal {
     height: 38px;
     overflow: hidden;
+
+    
+        ul li {
+        position: relative;
+        z-index: 0;
+        padding: 0px;
+        
+        a {
+            background: #efefef;
+            position: relative;
+            z-index: 2;
+            position: relative;
+            display: block;
+            
+            &:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 50%;
+                top: 0px;
+                left: 0px;
+                background: #f6f6f6;
+                z-index: -1;
+            }
+            &:hover {
+                background: var(secColor);
+                color: var(light);
+                
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 50%;
+                    top: 0px;
+                    left: 0px;
+                    background: #e17373;
+                    z-index: -1;
+                }
+            }
+        }
+        &.current a,
+        a:hover {
+            background: var(secColor);
+            color: var(light) !important;
+            
+            &:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 50%;
+                top: 0px;
+                left: 0px;
+                background: #e17373;
+                z-index: -1;
+            }
+        }
+    }
+    
     
     > a {
         position: absolute;
