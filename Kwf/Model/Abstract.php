@@ -782,7 +782,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (!$ret) $ret = 0;
             return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_Equals) {
-            return ($row->{$expr->getField()} == $expr->getValue());
+            $value = $expr->getValue();
+            if ($value instanceof Kwf_Model_Select_Expr_Interface) {
+                $value = $this->getExprValue($row, $value);
+            }
+            return ($row->{$expr->getField()} == $value);
         } else if ($expr instanceof Kwf_Model_Select_Expr_And) {
             foreach ($expr->getExpressions() as $e) {
                 if (!$this->getExprValue($row, $e)) { return false; }

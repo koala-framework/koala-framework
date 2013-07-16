@@ -373,6 +373,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
         if ($expr instanceof Kwf_Model_Select_Expr_CompareField_Abstract) {
             $quotedValue = $expr->getValue();
+            if ($quotedValue instanceof Kwf_Model_Select_Expr_Interface) {
+                $quotedValue = $this->_createDbSelectExpression($quotedValue, $dbSelect);
+            }
             if (is_array($quotedValue)) {
                 foreach ($quotedValue as &$v) {
                     $v = $this->_fixStupidQuoteBug($v);
