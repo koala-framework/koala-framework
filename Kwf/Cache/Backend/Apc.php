@@ -27,7 +27,11 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     public function remove($id)
     {
         $id = $this->_processId($id);
-        return parent::remove($id);
+        if (php_sapi_name() == 'cli') {
+            return Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => $id));
+        } else {
+            return parent::remove($id);
+        }
     }
 
     public function getMetadatas($id)
