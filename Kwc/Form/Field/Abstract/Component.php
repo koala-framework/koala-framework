@@ -73,9 +73,10 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
     {
         $message = '';
         if ($this->getFormField()->getFieldLabel()) {
-            $message = $this->getFormField()->getFieldLabel().': '
-                        .$row->{$this->getFormField()->getName()};
+            $message .= $this->getFormField()->getFieldLabel().': ';
         }
+
+        $message .= $row->{$this->getFormField()->getName()};
         return $message;
     }
 }

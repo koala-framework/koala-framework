@@ -81,6 +81,20 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $this->_beforeSendMail($row);
 
         $row->sendMail(); //manuell aufrufen weils beim speichern nicht automatisch gemacht wird (da da der content nocht nicht vorhanden ist)
+
+        if ($settings['send_confirm_mail']) {
+            $c = Kwf_Component_Data_Root::getInstance()->getComponentById($settings['confirm_field_component_id']);
+            if ($c && ($recipient = $row->{$c->getComponent()->getFormField()->getName()})) {
+                $mail = new Kwf_Mail();
+                $body = $this->getData()->trlKwf('Thank you for your inquiry, it will be processed as soon as posible.');
+                $body .= "\n\n";
+                $body .= $msg;
+                $mail->setSubject($settings['confirm_subject']);
+                $mail->setBodyText($body);
+                $mail->addTo($recipient);
+                $mail->send();
+            }
+        }
     }
 
     protected function _beforeSendMail(Kwf_Model_Row_Interface $row)

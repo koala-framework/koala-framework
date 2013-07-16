@@ -22,11 +22,13 @@ class Kwc_Form_Field_File_Component extends Kwc_Form_Field_Abstract_Component
     public function getSubmitMessage($row)
     {
         $message = '';
+        if ($this->getFormField()->getFieldLabel()) {
+            $message .= $this->getFormField()->getFieldLabel().': ';
+        }
         $uploadRow = $row->getParentRow($this->getFormField()->getName());
         if ($uploadRow) {
             $row->addAttachment($uploadRow);
-            $message = $this->getFormField()->getFieldLabel()
-                .": {$uploadRow->filename}.{$uploadRow->extension} "
+            $message .= "{$uploadRow->filename}.{$uploadRow->extension} "
                         .$this->getData()->trlKwf('attached');
         }
         return $message;
