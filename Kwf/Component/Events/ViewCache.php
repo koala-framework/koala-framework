@@ -171,7 +171,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         }
     }
 
-    private function _fetchIncludesTree($componentId)
+    private function _fetchIncludesTree($componentId, &$checkedIds = array())
     {
         $ret = array();
 
@@ -180,8 +180,14 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         $ids[] = $i;
         while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
             $i = substr($i, 0, strrpos($i, '-'));
-            $ids[] = $i;
+            if ($i != 'root') {
+                if (!in_array($i, $checkedIds)) {
+                    $checkedIds[] = $i;
+                    $ids[] = $i;
+                }
+            }
         }
+
         if ($i != 'root') {
             $ret[] = $i;
         }
@@ -192,7 +198,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
         foreach ($imports as $row) {
             if (!in_array($row['component_id'], $ret)) {
-                foreach ($this->_fetchIncludesTree($row['component_id']) as $i) {
+                foreach ($this->_fetchIncludesTree($row['component_id'], $checkedIds) as $i) {
                     if (!in_array($i, $ret)) {
                         $ret[] = $i;
                     }
