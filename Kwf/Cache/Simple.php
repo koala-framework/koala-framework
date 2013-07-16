@@ -144,8 +144,7 @@ class Kwf_Cache_Simple
             if (!$r) $ret = false;
         }
         if (!self::$_zendCache && php_sapi_name() == 'cli' && $ids) {
-            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
-            if (!$result['result']) $ret = false;
+            $ret = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
         }
         return $ret;
     }
