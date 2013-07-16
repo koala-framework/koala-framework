@@ -105,8 +105,12 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         );
         $partialIds = array();
         $deleteIds = array();
+        $checkIncludeIds = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
+            if ($row['type'] != 'master' && $row['type'] != 'fullPage') {
+                $checkIncludeIds[] = $row['component_id'];
+            }
             if ($log) {
                 $log->log("delete view cache $row[component_id] $row[renderer] $row[type] $row[value]", Zend_Log::INFO);
             }
@@ -145,11 +149,70 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             Kwf_Component_Cache_Memory::getInstance()->remove($cacheId);
         }
 
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('type', 'fullPage');
+        $ids = $this->_fetchIncludesTree($checkIncludeIds);
+        if ($ids) {
+            $s->whereEquals('component_id', $ids);
+            if ($log) {
+                foreach ($ids as $id) {
+                    $log->log("type=fullPage component_id={$id}", Zend_Log::INFO);
+                }
+            }
+            $this->deleteViewCache($s);
+        }
+
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
-        
+
         return count($cacheIds);
     }
 
+    private function _fetchIncludesTree($componentIds, &$checkedIds = array())
+    {
+
+        $ret = array();
+        $ids = array();
+
+        foreach ($componentIds as $componentId) {
+
+            $i = $componentId;
+            $ids[] = $i;
+            while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
+                $i = substr($i, 0, strrpos($i, '-'));
+                if ($i != 'root') {
+                    if (!in_array($i, $checkedIds)) {
+                        $checkedIds[] = $i;
+                        $ids[] = $i;
+                    }
+                }
+            }
+
+            if ($i != 'root') {
+                $ret[] = $i;
+            }
+
+        }
+
+        if (!$ids) return $ret;
+
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('target_id', $ids);
+        $imports = Kwf_Component_Cache::getInstance()
+            ->getModel('includes')
+            ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
+        $childIds = array();
+        foreach ($imports as $row) {
+            if (!in_array($row['component_id'], $ret)) {
+                $childIds[] = $row['component_id'];
+            }
+        }
+        foreach ($this->_fetchIncludesTree($childIds, $checkedIds) as $i) {
+            if (!in_array($i, $ret)) {
+                $ret[] = $i;
+            }
+        }
+        return $ret;
+    }
     protected static function _getCacheId($componentId, $renderer, $type, $value)
     {
         return "cc_".str_replace('-', '__', $componentId)."_{$renderer}_{$type}_{$value}";

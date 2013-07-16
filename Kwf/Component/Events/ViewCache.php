@@ -162,50 +162,6 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     {
         $this->_updates['db_id'][] = $event->component->dbId;
         $this->_log("db_id={$event->component->dbId} type=component");
-        foreach ($this->_fetchIncludesTree($event->component->componentId) as $componentId) {
-            $this->_updates[] = array(
-                'type' => 'fullPage',
-                'component_id' => $componentId,
-            );
-            $this->_log("type=fullPage component_id={$componentId}");
-        }
-    }
-
-    private function _fetchIncludesTree($componentId, &$checkedIds = array())
-    {
-        $ret = array();
-
-        $ids = array();
-        $i = $componentId;
-        $ids[] = $i;
-        while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
-            $i = substr($i, 0, strrpos($i, '-'));
-            if ($i != 'root') {
-                if (!in_array($i, $checkedIds)) {
-                    $checkedIds[] = $i;
-                    $ids[] = $i;
-                }
-            }
-        }
-
-        if ($i != 'root') {
-            $ret[] = $i;
-        }
-        $s = new Kwf_Model_Select();
-        $s->whereEquals('target_id', $ids);
-        $imports = Kwf_Component_Cache::getInstance()
-            ->getModel('includes')
-            ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
-        foreach ($imports as $row) {
-            if (!in_array($row['component_id'], $ret)) {
-                foreach ($this->_fetchIncludesTree($row['component_id'], $checkedIds) as $i) {
-                    if (!in_array($i, $ret)) {
-                        $ret[] = $i;
-                    }
-                }
-            }
-        }
-        return $ret;
     }
 
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
@@ -253,14 +209,6 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'db_id' => $event->component->dbId
         );
         $this->_log("type=componentLink db_id={$event->component->dbId}");
-
-        foreach ($this->_fetchIncludesTree($event->component->componentId) as $componentId) {
-            $this->_updates[] = array(
-                'type' => 'fullPage',
-                'component_id' => $componentId,
-            );
-            $this->_log("type=fullPage component_id={$componentId}");
-        }
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
