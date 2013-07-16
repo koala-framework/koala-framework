@@ -192,7 +192,7 @@ abstract class Kwf_Component_Renderer_Abstract
                                 ->getComponentById($componentId, array('ignoreVisible' => true));
                             $targetCmp = Kwf_Component_Data_Root::getInstance()
                                 ->getComponentById($c['target_id'], array('ignoreVisible' => true));
-                            if ($cmp->getPage() != $targetCmp->getPage()) {
+                            if ($cmp->getPage() !== $targetCmp->getPage()) {
                                 $c['type'] = $type;
                                 $c['component_id'] = $componentId;
                                 $data[] = $c;
