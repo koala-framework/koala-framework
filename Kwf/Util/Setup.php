@@ -150,11 +150,11 @@ class Kwf_Util_Setup
         $ret .= "        ini_set('memory_limit', '128M');\n";
         $ret .= "    }\n";
         $ret .= "}\n";
-        $ret .= "error_reporting(E_ALL);\n";
+        $ret .= "error_reporting(E_ALL & ~E_STRICT);\n";
         $ret .= "date_default_timezone_set('Europe/Berlin');\n";
         $ret .= "mb_internal_encoding('UTF-8');\n";
         $ret .= "iconv_set_encoding('internal_encoding', 'utf-8');\n";
-        $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL);\n";
+        $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
         $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen\n";
 
