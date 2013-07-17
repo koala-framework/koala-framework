@@ -53,13 +53,20 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
             foreach ($ret as $id) {
                 $ids[] = $prefix . $id;
             }
+
             $select = $m->select()
                 ->whereEquals('visible', true)
                 ->whereEquals('component_id', $ids);
             $ret = array();
             $len = strlen($prefix);
+
+            $visibleIds = array();
             foreach ($m->getIds($select) as $id) {
-                $ret[] = substr($id, $len);
+                $visibleIds[$id] = true;
+            }
+
+            foreach($ids as $id) {
+                if (isset($visibleIds[$id])) $ret[] = substr($id, $len);
             }
         }
         return $ret;

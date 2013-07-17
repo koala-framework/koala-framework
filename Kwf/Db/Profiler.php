@@ -60,7 +60,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
             }
         }
 
-        $this->_lastQuery = new Kwf_Db_Profiler_Query($queryText, $queryType);
+        $this->_lastQuery = new Zend_Db_Profiler_Query($queryText, $queryType);
 
 
         $this->_count++;
@@ -111,7 +111,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
             /*
             $d = array();
             $d['query'] = $this->_lastQuery->getQuery();
-            $d['backtrace'] = $this->_lastQuery->getBacktrace();
+            if ($this->_lastQuery instanceof Kwf_Db_Profiler_Query) $d['backtrace'] = $this->_lastQuery->getBacktrace();
             $d['time'] = $this->_lastQuery->getElapsedSecs();
             $d['type'] = $this->_lastQuery->getQueryType();
             $d['params'] = $this->_lastQuery->getQueryParams();
