@@ -12,7 +12,7 @@ $container-style: magic;
 
 #page {
     border-top: 5px solid var(secColor);
-     width: 100%;
+    width: 100%;
 }
 
 #page #outerHeader,
@@ -32,15 +32,15 @@ $container-style: magic;
     position: relative;
 }
 #page #outerHeader #header {
-  @include clearfix;
-  border-bottom: 5px solid #C80000;
+    @include clearfix;
+    border-bottom: 5px solid #C80000;
 }
 #page #outerHeader #header .logo {
     display: block;
     text-align: center;
-    
+
     img {
-      display: inline;
+        display: inline;
     }
 }
 #page #outerHeader #header .searchBox {
@@ -52,31 +52,31 @@ $container-style: magic;
 }
 #page #outerHeader #header .mainMenu {
     position: relative;
-    margin-left: 3px;
     top: 2px;
 }
 
 @include at-breakpoint(4) {
-        #page #outerHeader #header {
-            .logo {
-                height: auto;
-                margin: auto;
-                padding: 20px;
-                text-align: left;
-            }
-        
-            img {
-                display: block;
-            }
+    #page #outerHeader #header {
+        .logo {
+            height: auto;
+            margin: auto;
+            padding: 20px;
+            text-align: left;
+        }
+        .searchBox {
+        }
+        img {
+            display: block;
+        }
     }
 }
 @include at-breakpoint(8) {
     #page #outerHeader #header {
-            
+
         .mainMenu {
-        margin-right: 0px;
-        float: right;
-        
+            margin-right: 0px;
+            float: right;
+
             ul li {
                 float: left;
             }
@@ -98,7 +98,7 @@ $container-style: magic;
         .searchBox {
             float: right;
             background: #EFEFEF;
-            
+
             &:after {
                 content: '';
                 position: absolute;
@@ -125,7 +125,7 @@ $container-style: magic;
             position: relative;
         }
     }
-   
+
     .webStandard.defaultMenuSubHorizontal {
         display: block;
         position: relative;
@@ -170,11 +170,11 @@ $container-style: magic;
     #page .bottomStage .innerBottomStage,
     #page #outerFooter #footer {
     }
-    
+
     #page #outerHeader #header {
         border-bottom: 5px solid #C80000;
     }
-    
+
     #page #outerContent #content #innerContent {
         margin: 0px;
     }
