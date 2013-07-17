@@ -179,17 +179,13 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $ids[] = $i;
             while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
                 $i = substr($i, 0, strrpos($i, '-'));
-                if ($i != 'root') {
-                    if (!in_array($i, $checkedIds)) {
-                        $checkedIds[] = $i;
-                        $ids[] = $i;
-                    }
+                if (!in_array($i, $checkedIds)) {
+                    $checkedIds[] = $i;
+                    $ids[] = $i;
                 }
             }
 
-            if ($i != 'root') {
-                $ret[] = $i;
-            }
+            $ret[] = $i;
 
         }
 
