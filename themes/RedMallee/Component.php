@@ -1,0 +1,92 @@
+<?php
+class RedMallee_Component extends Kwf_Component_Theme_Abstract
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlKwfStatic('RedMallee');
+        return $ret;
+    }
+
+    public static function getRootSettings()
+    {
+        $ret = array();
+        $ret['generators']['box'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => array(
+                'mainMenu' => 'RedMallee_Menu_Main_Component',
+                'subMenu' => 'RedMallee_Menu_Sub_Component',
+                'subMenuHorizontal' => 'RedMallee_Menu_SubHorizontal_Component',
+                'subSubMenu' => 'RedMallee_Menu_SubSub_Component',
+                'bottomMenu' => 'RedMallee_Menu_Bottom_Component',
+            ),
+            'inherit' => true,
+        );
+        $ret['generators']['logo'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => array(
+                'logo' => 'RedMallee_Box_Logo_Component'
+            ),
+            'inherit' => true,
+            'unique' => true
+        );
+        $ret['generators']['box']['component']['metaTags'] = 'Kwc_Box_MetaTagsContent_Component';
+        $ret['generators']['title'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Kwc_Box_TitleEditable_Component',
+            'inherit' => true,
+        );
+        $ret['generators']['breadcrumbs'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'RedMallee_Breadcrumbs_Component',
+            'inherit' => true,
+        );
+        $ret['generators']['openGraph'] = array(
+            'class' => 'Kwf_Component_Generator_Box_StaticSelect',
+            'component' => array(
+                    'parentContent' => 'Kwc_Basic_ParentContent_Component',
+                    'openGraph' => 'Kwc_Box_OpenGraph_Component'
+            ),
+            'inherit' => true,
+            'boxName' => 'Open Graph'
+        );
+        $ret['generators']['listFade'] = array(
+                'class' => 'Kwf_Component_Generator_Box_StaticSelect',
+                'component' => array(
+                        'parentContent' => 'Kwc_Basic_ParentContent_Component',
+                        'listFade' => 'RedMallee_List_Fade_Component'
+                ),
+                'inherit' => true,
+                'boxName' => 'List Fade'
+        );
+        $ret['generators']['bottomStage'] = array(
+                'class' => 'Kwf_Component_Generator_Box_StaticSelect',
+                'component' => array(
+                        'parentContent' => 'Kwc_Basic_ParentContent_Component',
+                        'bottomStage' => 'RedMallee_List_BottomStage_Component'
+                ),
+                'inherit' => true,
+                'boxName' => 'Bottom Stage'
+        );
+        $ret['generators']['searchBox'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'RedMallee_FulltextSearch_Box_Component',
+            'unique' => true,
+            'inherit' => true
+        );
+
+        $ret['generators']['search'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'RedMallee_FulltextSearch_Search_Directory_Component',
+            'name' => trlStatic('Suche')
+        );
+        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo');
+
+
+        $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/master.css';
+        $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/web.css';
+        $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/web.scss';
+
+        return $ret;
+    }
+}

@@ -1,0 +1,10 @@
+.redMalleeBreadcrumbs {
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+.redMalleeBreadcrumbs a {
+    font-size: 10px;
+}
+.redMalleeBreadcrumbs .last {
+    color: var(highlightedText);
+}
