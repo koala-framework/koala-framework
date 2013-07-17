@@ -31,12 +31,9 @@ $container-style: magic;
     padding-bottom: 170px;
     position: relative;
 }
-#page #outerContent .stage {
-    border-top: 5px solid #C80000;
-    height: 185px;
-}
 #page #outerHeader #header {
   @include clearfix;
+  border-bottom: 5px solid #C80000;
 }
 #page #outerHeader #header .logo {
     display: block;
@@ -49,8 +46,9 @@ $container-style: magic;
 #page #outerHeader #header .searchBox {
     height: 40px;
     position: relative;
-    margin-left: 3px;
-    top: 3px;
+    top: 2px;
+    padding-top: 3px;
+    margin-bottom: -3px;
 }
 #page #outerHeader #header .mainMenu {
     position: relative;
@@ -59,27 +57,29 @@ $container-style: magic;
 }
 
 @include at-breakpoint(4) {
-    #page #outerHeader #header .logo {
-        height: auto;
-        margin: auto;
-        padding: 20px;
-        text-align: left;
+        #page #outerHeader #header {
+            .logo {
+                height: auto;
+                margin: auto;
+                padding: 20px;
+                text-align: left;
+            }
         
-        img {
-            display: block;
-        }
+            img {
+                display: block;
+            }
     }
 }
 @include at-breakpoint(8) {
-    #page #outerHeader #header .searchBox {
-        float: right;
-    }
-    #page #outerHeader #header .mainMenu {
+    #page #outerHeader #header {
+            
+        .mainMenu {
         margin-right: 0px;
         float: right;
         
-        ul li {
-            float: left;
+            ul li {
+                float: left;
+            }
         }
     }
 }
@@ -92,15 +92,47 @@ $container-style: magic;
     display: none;
 }
 
+@include at-breakpoint(5) {
+    #page #outerHeader #header {
+
+        .searchBox {
+            float: right;
+            background: #EFEFEF;
+            
+            &:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 50%;
+                top: 0px;
+                left: 0px;
+                background: #f6f6f6;
+                z-index: 0;
+            }
+            input {
+                z-index: 1;
+            }
+        }
+    }
+}
 @include at-breakpoint(6) {
-    
+    #page #outerHeader #header {
+        border-bottom: none;
+
+        .subMenuHorizontal {
+            background: #C80000;
+            top: 0px;
+            position: relative;
+        }
+    }
+   
     .webStandard.defaultMenuSubHorizontal {
         display: block;
         position: relative;
         z-index: 2;
 
         ul.menu {
-            line-height: 38px;
+            line-height: 30px;
             overflow-x: scroll;
             white-space: nowrap;
             margin-left: 0px;
@@ -126,13 +158,7 @@ $container-style: magic;
             }
         }
     }
-    .defaultMenuSub {
-        display: none;
-    }
-}
-
-@include at-breakpoint(8) {
-    .webStandard.defaultMenuSubHorizontal {
+    .leftColumn {
         display: none;
     }
 }
@@ -143,6 +169,10 @@ $container-style: magic;
     #page #outerContent #content,
     #page .bottomStage .innerBottomStage,
     #page #outerFooter #footer {
+    }
+    
+    #page #outerHeader #header {
+        border-bottom: 5px solid #C80000;
     }
     
     #page #outerContent #content #innerContent {
@@ -164,6 +194,9 @@ $container-style: magic;
     .defaultMenuSub {
         display: block;
     }
+    .webStandard.defaultMenuSubHorizontal {
+        display: none;
+    }
 }
 
 
@@ -176,7 +209,6 @@ $container-style: magic;
     padding-top: 50px;
 }
 #page #outerContent #content #innerContent .rightColumn {
-    background: red;
 }
 #page .bottomStage {
     background: url("/assets/kwf/themes/Default/images/bottomStageBg.jpg") repeat center top;

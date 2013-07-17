@@ -1,1 +1,1 @@
-Kwf.Utils.ResponsiveEl('.defaultMenuMain', [700, 440]);
+Kwf.Utils.ResponsiveEl('.defaultMenuMain', [700, 500]);

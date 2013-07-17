@@ -6,7 +6,7 @@
         float: right;
         @include transition(width 0.4s ease, background 0.4s ease);
         width: 80px;
-        background: url("/assets/kwf/themes/Default/FulltextSearch/Box/search.png") no-repeat scroll 5px 6px #f0f0f0;
+        background: url("/assets/kwf/themes/Default/FulltextSearch/Box/search.png") no-repeat scroll 5px 6px #F6F6F6 !important;
         @include border-radius-pie(5px);
         font-size: 14px;
         height: 22px;

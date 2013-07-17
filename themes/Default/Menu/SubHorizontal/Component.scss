@@ -1,5 +1,5 @@
 .defaultMenuSubHorizontal {
-    height: 38px;
+    height: 30px;
     overflow: hidden;
     width: 100%;
     margin: auto;
@@ -11,53 +11,21 @@
         padding: 0px;
         
         a {
-            background: #efefef;
+            background: #C80000;
             position: relative;
             z-index: 2;
             position: relative;
             display: block;
             
-            &:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 50%;
-                top: 0px;
-                left: 0px;
-                background: #f6f6f6;
-                z-index: -1;
-            }
             &:hover {
                 background: var(secColor);
                 color: var(light);
-                
-                &:after {
-                    content: '';
-                    position: absolute;
-                    width: 100%;
-                    height: 50%;
-                    top: 0px;
-                    left: 0px;
-                    background: #e17373;
-                    z-index: -1;
-                }
             }
         }
         &.current a,
         a:hover {
             background: var(secColor);
             color: var(light) !important;
-            
-            &:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 50%;
-                top: 0px;
-                left: 0px;
-                background: #e17373;
-                z-index: -1;
-            }
         }
     }
     
@@ -70,13 +38,13 @@
         top: 0;
         
         &.arrowLeft {
-            background: url("/assets/kwf/themes/Default/images/subMenuArrowLeft.png") no-repeat scroll left center transparent;
+            background: url("/assets/kwf/themes/Default/images/subMenuArrowLeft.png") no-repeat scroll left -4px transparent;
             left: 0;
             z-index: 2;
         }
         
         &.arrowRight {
-            background: url("/assets/kwf/themes/Default/images/subMenuArrowRight.png") no-repeat scroll left center transparent;
+            background: url("/assets/kwf/themes/Default/images/subMenuArrowRight.png") no-repeat scroll left -4px transparent;
             right: 0;
             z-index: 2;
         }

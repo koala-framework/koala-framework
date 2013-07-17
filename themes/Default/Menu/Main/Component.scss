@@ -2,7 +2,7 @@
 @import "susy";
 
 .defaultMenuMain {
-    &.gt440 {
+    &.gt500 {
         ul {
             float: right;
 
@@ -19,7 +19,7 @@
     ul li {
         position: relative;
         z-index: 0;
-        
+
         a {
             padding: 10px 10px 11px;
             margin-bottom: 0px;

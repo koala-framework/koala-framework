@@ -21,7 +21,7 @@
                         <?=$this->component($this->boxes['mainMenu']);?>
                     </div>
                     <div class="clear"></div>
-                    <div class="subMenuHorizonal">
+                    <div class="subMenuHorizontal">
                         <?=$this->component($this->boxes['subMenuHorizontal']);?>
                     </div>
                 </div>
