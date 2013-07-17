@@ -138,6 +138,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             Kwf_Registry::get('db')->beginTransaction();
         }
         $postData = $this->_form->processInput(null, $postData);
+        $this->_postData = $postData;
         if (isset($postData[$this->getData()->componentId])) {
             ignore_user_abort(true);
             $this->_errors = array_merge($this->_errors, $this->_validate($postData));
