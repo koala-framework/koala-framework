@@ -33,6 +33,10 @@ class Kwc_Form_Field_MultiCheckbox_Component extends Kwc_Form_Field_Abstract_Com
     public function getSubmitMessage($row)
     {
         $message = '';
+        if ($this->getFormField()->getFieldLabel()) {
+            $message .= $this->getFormField()->getFieldLabel().': ';
+        }
+
         $values = array();
         foreach ($row->getChildRows($this->getFormField()->getName()) as $r) {
             if (substr($r->value_id, 0, strlen($this->getFormField()->getName()))
@@ -46,7 +50,7 @@ class Kwc_Form_Field_MultiCheckbox_Component extends Kwc_Form_Field_Abstract_Com
                 $valuesText[] = $i;
             }
         }
-        $message = $this->getFormField()->getFieldLabel().': '.implode(', ', $valuesText);
+        $message .= implode(', ', $valuesText);
 
         return $message;
     }

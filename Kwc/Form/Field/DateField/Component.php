@@ -20,4 +20,21 @@ class Kwc_Form_Field_DateField_Component extends Kwc_Form_Field_Abstract_Compone
         $ret->setHideLabel($this->getRow()->hide_label);
         return $ret;
     }
+
+    /**
+     * This function is used to return a human-readable string for this field
+     * depending on submited data.
+     * @param Kwc_Form_Dynamic_Form_MailRow $row
+     * @return string
+     */
+    public function getSubmitMessage($row)
+    {
+        $message = '';
+        if ($this->getFormField()->getFieldLabel()) {
+            $message .= $this->getFormField()->getFieldLabel().': ';
+        }
+        $t = strtotime($row->{$f->getName()});
+        $message .= date($this->getData()->trlKwf('Y-m-d'), $t);
+        return $message;
+    }
 }

@@ -225,7 +225,7 @@ class Kwf_Util_Setup
         $ret .= "\n";
 
         //store session data in memcache if avaliable
-        if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        if ((Kwf_Util_Memcache::getHost() || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
