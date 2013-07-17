@@ -27,11 +27,11 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     public function remove($id)
     {
         $id = $this->_processId($id);
+        $ret = true;
         if (php_sapi_name() == 'cli') {
-            return Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => $id));
-        } else {
-            return parent::remove($id);
+            $ret = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => $id));
         }
+        return $ret && parent::remove($id);
     }
 
     public function getMetadatas($id)
@@ -50,13 +50,13 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     {
         switch ($mode) {
             case Zend_Cache::CLEANING_MODE_ALL:
+                $ret = true;
                 if (php_sapi_name() == 'cli') {
-                    return Kwf_Util_Apc::callClearCacheByCli(array(
+                    $ret = Kwf_Util_Apc::callClearCacheByCli(array(
                         'type' => 'user'
                     ));
-                } else {
-                    return apc_clear_cache('user');
                 }
+                return $ret && apc_clear_cache('user');
                 break;
             case Zend_Cache::CLEANING_MODE_OLD:
                 $this->_log("Zend_Cache_Backend_Apc::clean() : CLEANING_MODE_OLD is unsupported by the Apc backend");
