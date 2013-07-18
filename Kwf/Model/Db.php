@@ -811,8 +811,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function deleteRows($where)
     {
-        return $this->getTable()->delete($this->_getTableUpdateWhere($where));
+        $ret = $this->getTable()->delete($this->_getTableUpdateWhere($where));
         $this->_afterDeleteRows($where);
+        return $ret;
     }
 
     public function updateRows($data, $where)
