@@ -74,6 +74,12 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
             'unique' => true,
             'inherit' => true
         );
+        $ret['generators']['rightBox'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Kwc_Basic_Empty_Component',
+            'unique' => true,
+            'inherit' => true
+        );
 
         $ret['generators']['search'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',

@@ -40,6 +40,7 @@
                             <?=$this->componentWithMaster($this->componentWithMaster);?>
                         </div>
                         <div class="rightColumn">
+                            <?=$this->component($this->boxes['rightBox']);?>
                         </div>
                         <div class="clear"></div>
                     </div>
