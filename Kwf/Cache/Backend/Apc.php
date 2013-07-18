@@ -78,4 +78,12 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
         if (!isset($cacheIdPrefix)) $cacheIdPrefix = Kwf_Cache::getUniquePrefix();
         return $cacheIdPrefix.$this->_options['cache_id_prefix'].$id;
     }
+
+    public function getFillingPercentage()
+    {
+        if (php_sapi_name() == 'cli') {
+            return 0;
+        }
+        return parent::getFillingPercentage();
+    }
 }
