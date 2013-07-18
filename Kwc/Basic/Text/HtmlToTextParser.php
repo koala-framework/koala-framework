@@ -141,8 +141,10 @@ class Kwc_Basic_Text_HtmlToTextParser
                 $this->_parser,
                 '_characterData'
         );
-        $this->_ret = '';
 
+        $html = preg_replace('#<kwc(.*?)>#', '{kwc$1}', $html);
+
+        $this->_ret = '';
         $result = xml_parse($this->_parser,
                 "<BODY>".$html."</BODY>",
                 true);
@@ -154,26 +156,31 @@ class Kwc_Basic_Text_HtmlToTextParser
             $ex = new Kwf_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode));
             $ex->logOrThrow();
         }
+
         //replace spaces in links (otherwise there would be a linebreak inside the link after wordwrap)
         $this->_ret = preg_replace_callback(
-                '/{cc[^}]+}/',
+                '/{kwc[^}]+}/',
                 create_function(
                       '$data',
                      'return str_replace(" ", "*kwfSpace*", $data[0]);'
                 ),
                 $this->_ret
         );
+
         //make a linebreak after 72 chars
         $this->_ret = wordwrap($this->_ret, 75, "\n", false);
         //reconstruct spaces inside links
         $this->_ret = preg_replace_callback(
-                '/{cc[^}]+}/',
+                '/{kwc[^}]+}/',
                 create_function(
                         '$data',
                         'return str_replace("*kwfSpace*", " ", $data[0]);'
                 ),
                 $this->_ret
         );
+
+        $this->_ret = preg_replace('#{kwc(.*?)}#', '<kwc$1>', $this->_ret);
+
         return $this->_ret;
     }
 }
