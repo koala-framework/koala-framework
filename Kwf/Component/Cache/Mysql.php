@@ -151,15 +151,17 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', 'fullPage');
-        $ids = $this->_fetchIncludesTree($checkIncludeIds);
-        if ($ids) {
-            $s->whereEquals('component_id', $ids);
-            if ($log) {
-                foreach ($ids as $id) {
-                    $log->log("type=fullPage component_id={$id}", Zend_Log::INFO);
+        if ($checkIncludeIds) {
+            $ids = $this->_fetchIncludesTree($checkIncludeIds);
+            if ($ids) {
+                $s->whereEquals('component_id', $ids);
+                if ($log) {
+                    foreach ($ids as $id) {
+                        $log->log("type=fullPage component_id={$id}", Zend_Log::INFO);
+                    }
                 }
+                $this->deleteViewCache($s);
             }
-            $this->deleteViewCache($s);
         }
 
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
@@ -176,7 +178,10 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         foreach ($componentIds as $componentId) {
 
             $i = $componentId;
-            $ids[] = $i;
+            if (!in_array($i, $checkedIds)) {
+                $checkedIds[] = $i;
+                $ids[] = $i;
+            }
             while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
                 $i = substr($i, 0, strrpos($i, '-'));
                 if (!in_array($i, $checkedIds)) {
