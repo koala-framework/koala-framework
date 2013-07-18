@@ -155,4 +155,17 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
 
         Kwf_Util_ClearCache::getInstance()->clearCache('all', false, true);
     }
+
+    public function jsonExecuteUpdatesAction()
+    {
+
+        if (Kwf_Config::getValue('server.phpCli')) {
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php maintenance update ";
+            $cmd .= " --progressNum=".escapeshellarg($this->_getParam('progressNum'));
+            $procData = Kwf_Util_BackgroundProcess::start($cmd, $this->view);
+            $this->view->assign($procData);
+        } else {
+            Kwf_Controller_Action_Maintenance_UpdateController::executeUpdates($this->getRequest(), $this->view);
+        }
+    }
 }
