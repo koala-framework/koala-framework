@@ -2,7 +2,7 @@
 class Kwc_List_Switch_FirstLargeContentPlugin extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewBeforeCache
 {
-    public function processOutput($output)
+    public function processOutput($output, $renderer)
     {
         $child = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_componentId, array('ignoreVisible'=>true))

@@ -4,7 +4,7 @@ class Kwf_Component_Plugin_Facebook_ThirdPartyCookies extends Kwf_Component_Plug
     //NOTE: if RedirectToPagetab plugin is also used in same component, you have to implement
     //thirdpartycookies first!
 {
-    public function replaceOutput()
+    public function replaceOutput($renderer)
     {
         $facebook = Kwf_Util_Facebook_Api::getInstance();
         //no redirect if cli, or address contains assets, admin or kwf

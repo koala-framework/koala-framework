@@ -2,7 +2,7 @@
 class Kwc_Menu_Abstract_HideInvisibleDynamicPlugin extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewBeforeChildRender
 {
-    public function processOutput($output)
+    public function processOutput($output, $renderer)
     {
         if (!$output) return $output;
         if (strpos('<!-- start ', $output)=== false) return $output;

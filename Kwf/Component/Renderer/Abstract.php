@@ -72,7 +72,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $content = substr($ret, $startEnd+1, $end-$startEnd-1);
             if ($benchmarkEnabled) $startTime = microtime(true);
             $plugin = Kwf_Component_Plugin_Abstract::getInstance($args[1], $args[2]);
-            $content = $plugin->processOutput($content);
+            $content = $plugin->processOutput($content, $this);
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('plugin '.$args[1], microtime(true)-$startTime);
             $ret = substr($ret, 0, $start).$content.substr($ret, $end+11+strlen($args[0]));
         }
@@ -120,7 +120,7 @@ abstract class Kwf_Component_Renderer_Abstract
             if (isset($plugins['replace'])) {
                 foreach ($plugins['replace'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
-                    $content = $plugin->replaceOutput();
+                    $content = $plugin->replaceOutput($this);
                     if ($content !== false) {
                         if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' plugin', microtime(true)-$startTime);
                         $ret = substr($ret, 0, $start).$content.substr($ret, $end+1);
@@ -147,7 +147,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 foreach ($plugins['useCache'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                     // if one of the plugins return false no cache is used
-                    $useViewCache = $plugin->useViewCache() && $useViewCache;
+                    $useViewCache = $plugin->useViewCache($this) && $useViewCache;
                 }
             }
 
@@ -175,7 +175,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 if (isset($plugins['beforeCache'])) {
                     foreach ($plugins['beforeCache'] as $pluginClass) { //Plugins get possibility to manipulate html
                         $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
-                        $content = $plugin->processOutput($content);
+                        $content = $plugin->processOutput($content, $this);
                     }
                 }
                 if ($saveCache) {
@@ -219,7 +219,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     if ($pass == 2) {
                         //in second pass it can be done now (won't be cached)
                         $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
-                        $content = $plugin->processOutput($content);
+                        $content = $plugin->processOutput($content, $this);
                     } else {
                         //in first pass the result will be cached, so we have to defer that to the second pass
                         $pluginNr++;
