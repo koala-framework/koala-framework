@@ -108,7 +108,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $checkIncludeIds = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
-            if ($row['type'] != 'master' && $row['type'] != 'fullPage') {
+            if ($row['type'] != 'fullPage' && !in_array($row['component_id'], $checkIncludeIds)) {
                 $checkIncludeIds[] = $row['component_id'];
             }
             if ($log) {
