@@ -84,7 +84,6 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
 
 
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/master.css';
-        $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/web.css';
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/web.scss';
 
         return $ret;
