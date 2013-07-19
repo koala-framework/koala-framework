@@ -41,7 +41,9 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
                     'number' => $number++,
                 )
             );
+
             $content = $helper->partial($componentId, $config, $id, $partialsConfig['viewCacheEnabled']);
+
             if (isset($params['tpl'])) {
                 $tpl = $params['tpl'];
             } else {
@@ -55,8 +57,17 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         return $ret;
     }
 
-    public function enableCache()
+
+    public function getViewCacheSettings($componentId)
     {
-        return false;
+        $component = $this->_getComponentById($componentId);
+        $componentClass = $component->componentClass;
+        $c = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
+        $partialClass = call_user_func(array($c, 'getPartialClass'), $componentClass);
+        $useViewCache = call_user_func(array($partialClass, 'useViewCache'));
+        return array(
+            'enabled' => $useViewCache,
+            'lifetime' => null
+        );
     }
 }

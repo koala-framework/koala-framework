@@ -23,4 +23,9 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
         $view->assign($vars);
         return $view->render($renderer->getTemplate($component, 'Component'));
     }
+
+    public function getViewCacheSettings($componentId)
+    {
+        return $this->_getComponentById($componentId)->getComponent()->getViewCacheSettings();
+    }
 }

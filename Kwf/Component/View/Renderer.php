@@ -20,16 +20,20 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         return $plugins;
     }
 
-    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $plugins = array(), $viewCacheEnabled = true)
+    protected function _canBeIncludedInFullPageCache($componentId, $viewCacheEnabled)
     {
         //is caching possible for this type? and is view cache enabled?
-        $canBeIncludedInFullPageCache = $this->enableCache() && $viewCacheEnabled;
+        $settings = $this->getViewCacheSettings($componentId);
+        return $settings['enabled'] && $viewCacheEnabled;
+    }
 
+    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $plugins = array(), $viewCacheEnabled = true)
+    {
         $type = $this->_getType();
 
         $this->_getRenderer()->includedComponent($componentId, $type);
 
-        if ($canBeIncludedInFullPageCache) {
+        if ($this->_canBeIncludedInFullPageCache($componentId, $viewCacheEnabled)) {
             $pass = 1;
         } else {
             $pass = 2;
@@ -71,8 +75,8 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         $component = $this->_getComponentById($componentId);
         $type = $this->_getType();
 
-        $settings = $component->getComponent()->getViewCacheSettings();
-        if ($type != 'componentLink' && $type != 'master' && $type != 'page' && $type != 'fullPage' && !$settings['enabled']) {
+        $settings = $this->getViewCacheSettings($componentId);
+        if (!$settings['enabled']) {
             $content = Kwf_Component_Cache::NO_CACHE;
         }
 
@@ -100,8 +104,11 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         return $cachedContent;
     }
 
-    public function enableCache()
+    public function getViewCacheSettings($componentId)
     {
-        return true;
+        return array(
+            'enabled' => true,
+            'lifetime' => null
+        );
     }
 }

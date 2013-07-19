@@ -6,6 +6,11 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         return $this->_getRenderPlaceholder($componentId, $config, $id, array(), $viewCacheEnabled);
     }
 
+    protected function _canBeIncludedInFullPageCache($componentId, $viewCacheEnabled)
+    {
+        return $viewCacheEnabled;
+    }
+
     public function render($componentId, $config)
     {
         $component = $this->_getComponentById($componentId);
@@ -46,4 +51,8 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         return $cachedContent;
     }
 
+    public function getViewCacheSettings($componentId)
+    {
+        return $this->_getComponentById($componentId)->getComponent()->getViewCacheSettings();
+    }
 }

@@ -158,7 +158,7 @@ abstract class Kwf_Component_Renderer_Abstract
             if ($this->_enableCache) {
                 $saveCache = true;
                 $content = Kwf_Component_Cache::NO_CACHE;
-                if ($helper->enableCache() && $useViewCache) { /* checks if cache is enabled
+                if ($useViewCache) { /* checks if cache is enabled
                                                                (not for eg. dynamic, partials or thru UseCache plugin) */
                     $content = Kwf_Component_Cache::getInstance()->load($componentId, $this->_getCacheName(), $type, $value);
                     $statType = 'cache'; //for statistic: was cached
@@ -203,7 +203,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     }
 
                     //save rendered contents into view cache
-                    //if viewCache=false Kwf_Component_Cache_Mysql saves Kwf_Component_Cache::NO_CACHE
+                    //if viewCache=false helper saves Kwf_Component_Cache::NO_CACHE
                     $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content);
                     $statType = 'nocache'; //for statistic: was not cached
                 } else {
