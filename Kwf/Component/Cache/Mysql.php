@@ -24,7 +24,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         return $this->_models[$type];
     }
 
-    public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '')
+    public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '', $lifetime = null)
     {
         // MySQL
         $data = array(
@@ -36,7 +36,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'renderer' => $renderer,
             'type' => $type,
             'value' => (string)$value,
-            'expire' => is_null($settings['lifetime']) ? null : time() + $settings['lifetime'],
+            'expire' => is_null($lifetime) ? null : time() + $lifetime,
             'deleted' => false,
             'content' => $content
         );
@@ -50,7 +50,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         // APC
         $cacheId = $this->_getCacheId($component->componentId, $renderer, $type, $value);
         $ttl = 0;
-        if ($settings['lifetime']) $ttl = $settings['lifetime'];
+        if ($lifetime) $ttl = $lifetime;
         Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
 
         return true;

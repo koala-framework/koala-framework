@@ -82,7 +82,8 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
             $content,
             $renderer,
             $type,
-            $value
+            $value,
+            isset($settings['lifetime']) ? $settings['lifetime'] : null
         );
 
         return true;
