@@ -31,7 +31,11 @@ abstract class Kwf_Component_Renderer_Abstract
     public function renderComponent($component)
     {
         $this->_renderComponent = $component;
-        $content = $this->_renderComponentContent($component);
+
+        $helper = new Kwf_Component_View_Helper_Component();
+        $helper->setRenderer($this);
+        $content = $helper->component($component);
+
         $ret = $this->_render(2, $content);
         Kwf_Component_Cache::getInstance()->writeBuffer();
         return $ret;
@@ -44,13 +48,6 @@ abstract class Kwf_Component_Renderer_Abstract
         $template = Kwc_Abstract::getTemplateFile($component->componentClass, $type);
         if (!$template) throw new Kwf_Exception("No $type-Template found for '{$component->componentClass}'");
         return $template;
-    }
-
-    protected function _renderComponentContent($component)
-    {
-        $masterHelper = new Kwf_Component_View_Helper_Component();
-        $masterHelper->setRenderer($this);
-        return $masterHelper->component($component);
     }
 
     //TODO: where is this used?
@@ -98,7 +95,6 @@ abstract class Kwf_Component_Renderer_Abstract
             //in second pass execute all EXECUTE_BEFORE plugins
             $ret = $this->_executePlugins($ret, 'B');
         }
-
         $offset = 0;
         while (($start = strpos($ret, '<kwc', $offset)) !== false) {
             $p = substr($ret, $start+4, 1);
