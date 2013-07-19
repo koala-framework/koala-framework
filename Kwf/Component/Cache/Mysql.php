@@ -27,7 +27,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '')
     {
         $settings = $component->getComponent()->getViewCacheSettings();
-        if ($type != 'componentLink' && $type != 'master' && $type != 'page' && !$settings['enabled']) {
+        if ($type != 'componentLink' && $type != 'master' && $type != 'page' && $type != 'fullPage' && !$settings['enabled']) {
             $content = self::NO_CACHE;
         }
 
