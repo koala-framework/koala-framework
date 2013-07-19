@@ -20,18 +20,12 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         return $plugins;
     }
 
-    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $type = null, $plugins = array())
+    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $plugins = array())
     {
         //is caching possible for this type?
-        if (!$type) {
-            $canBeIncludedInFullPageCache = $this->enableCache();
-        } else {
-            $class = 'Kwf_Component_View_Helper_' . ucfirst($type);
-            $helper = new $class();
-            $canBeIncludedInFullPageCache = $helper->enableCache();
-        }
+        $canBeIncludedInFullPageCache = $this->enableCache();
 
-        if (!$type) $type = $this->_getType();
+        $type = $this->_getType();
 
         if ($canBeIncludedInFullPageCache) {
             //is the view cache enabled for this component?
