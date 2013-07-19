@@ -181,7 +181,7 @@ abstract class Kwf_Component_Renderer_Abstract
                         ->whereEquals('component_id', $componentId)
                         ->whereEquals('type', $type);
                     $m->deleteRows($s);
-                    if ($this->_includedComponents) {
+                    if ($this->_includedComponents && $pass==1) {
                         $data = array();
                         foreach ($this->_includedComponents as $c) {
                             $cmp = Kwf_Component_Data_Root::getInstance()
