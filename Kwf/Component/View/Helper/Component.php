@@ -5,8 +5,9 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
     {
         if (!$component) return '';
         $plugins = self::_getGroupedViewPlugins($component->componentClass);
+        $viewCacheSettings = $component->getComponent()->getViewCacheSettings();
         return $this->_getRenderPlaceholder(
-            $component->componentId, array(), null, $plugins
+            $component->componentId, array(), null, $plugins, $viewCacheSettings['enabled']
         );
     }
 

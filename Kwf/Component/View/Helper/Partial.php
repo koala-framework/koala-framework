@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
 {
-    public function partial($componentId, $config, $id)
+    public function partial($componentId, $config, $id, $viewCacheEnabled)
     {
-        return $this->_getRenderPlaceholder($componentId, $config, $id);
+        return $this->_getRenderPlaceholder($componentId, $config, $id, array(), $viewCacheEnabled);
     }
 
     public function render($componentId, $config)

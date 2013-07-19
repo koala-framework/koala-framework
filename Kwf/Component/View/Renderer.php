@@ -20,25 +20,12 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         return $plugins;
     }
 
-    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $plugins = array())
+    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $plugins = array(), $viewCacheEnabled = true)
     {
-        //is caching possible for this type?
-        $canBeIncludedInFullPageCache = $this->enableCache();
+        //is caching possible for this type? and is view cache enabled?
+        $canBeIncludedInFullPageCache = $this->enableCache() && $viewCacheEnabled;
 
         $type = $this->_getType();
-
-        if ($canBeIncludedInFullPageCache) {
-            //is the view cache enabled for this component?
-            //same list as in Cache_Mysql; TODO: the helper should return this eventually?
-            if ($type == 'componentLink' || $type == 'master' || $type == 'page') {
-                //always enable
-            } else {
-                $viewCacheSettings = $this->_getComponentById($componentId)->getComponent()->getViewCacheSettings();
-                if (!$viewCacheSettings['enabled']) {
-                    $canBeIncludedInFullPageCache = false;
-                }
-            }
-        }
 
         $this->_getRenderer()->includedComponent($componentId, $type);
 

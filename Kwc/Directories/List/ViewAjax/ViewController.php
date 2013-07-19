@@ -26,7 +26,12 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
         $renderer->setEnableCache(null);
         $helper = new Kwf_Component_View_Helper_Partial();
         $helper->setRenderer($renderer);
-        $ret = $helper->partial($this->_componentId, $config, $primaryKeyValue);
+        $ret = $helper->partial(
+            $this->_componentId,
+            $config,
+            $primaryKeyValue,
+            true //always enable view cache, only used to decide pass1 vs. 2 (which doesn't matter here)
+        );
         return $renderer->render($ret);
 
     }

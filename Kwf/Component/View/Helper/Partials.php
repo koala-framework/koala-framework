@@ -12,17 +12,19 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         if (method_exists($component->getComponent(), 'getPartialParams')) {
             $params = array_merge($component->getComponent()->getPartialParams(), $params);
         }
+        $viewCacheSettings = $component->getComponent()->getViewCacheSettings();
         $config = array(
             'class' => $partialClass,
-            'params' => $params
+            'params' => $params,
+            'viewCacheEnabled' => $viewCacheSettings['enabled']
         );
         return $this->_getRenderPlaceholder($component->componentId, $config);
     }
 
-    public function render($componentId, $config)
+    public function render($componentId, $partialsConfig)
     {
-        $partialClass = $config['class'];
-        $params = $config['params'];
+        $partialClass = $partialsConfig['class'];
+        $params = $partialsConfig['params'];
         $partial = new $partialClass($params);
         $ids = $partial->getIds();
         $number = 0; $count = count($ids);
@@ -39,7 +41,7 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
                     'number' => $number++,
                 )
             );
-            $content = $helper->partial($componentId, $config, $id);
+            $content = $helper->partial($componentId, $config, $id, $partialsConfig['viewCacheEnabled']);
             if (isset($params['tpl'])) {
                 $tpl = $params['tpl'];
             } else {
