@@ -71,6 +71,11 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         $component = $this->_getComponentById($componentId);
         $type = $this->_getType();
 
+        $settings = $component->getComponent()->getViewCacheSettings();
+        if ($type != 'componentLink' && $type != 'master' && $type != 'page' && $type != 'fullPage' && !$settings['enabled']) {
+            $content = Kwf_Component_Cache::NO_CACHE;
+        }
+
         // Content-Cache
         Kwf_Component_Cache::getInstance()->save(
             $component,
