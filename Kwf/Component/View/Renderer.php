@@ -33,10 +33,7 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
             if ($type == 'componentLink' || $type == 'master' || $type == 'page') {
                 //always enable
             } else {
-                //$viewCacheSettings = $this->_getComponentById($componentId)->getComponent()->getViewCacheSettings();
-                //TODO: dynamically get if enabled
-                //TODO: check useViewCache plugin
-                $viewCacheSettings = array('enabled'=>true);
+                $viewCacheSettings = $this->_getComponentById($componentId)->getComponent()->getViewCacheSettings();
                 if (!$viewCacheSettings['enabled']) {
                     $canBeIncludedInFullPageCache = false;
                 }
