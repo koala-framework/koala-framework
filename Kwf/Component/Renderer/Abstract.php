@@ -69,7 +69,15 @@ abstract class Kwf_Component_Renderer_Abstract
             $content = substr($ret, $startEnd+1, $end-$startEnd-1);
             if ($benchmarkEnabled) $startTime = microtime(true);
             $plugin = Kwf_Component_Plugin_Abstract::getInstance($args[1], $args[2]);
-            $content = $plugin->processOutput($content, $this);
+            if ($pluginType == 'C') {
+                if (!$plugin->useViewCache($this)) {
+                    $c = Kwf_Component_Data_Root::getInstance()->getComponentById($args[2], array('ignoreVisible'=>true));
+                    $content = $this->renderComponent($c);
+                }
+            } else if ($pluginType == 'A' || $pluginType == 'B') {
+                $content = $plugin->processOutput($content, $this);
+            }
+
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('plugin '.$args[1], microtime(true)-$startTime);
             $ret = substr($ret, 0, $start).$content.substr($ret, $end+11+strlen($args[0]));
         }
@@ -139,7 +147,7 @@ abstract class Kwf_Component_Renderer_Abstract
             }
 
             $useViewCache = true;
-            if (isset($plugins['useCache'])) {
+            if (isset($plugins['useCache']) && $pass==2) { //in pass 2 decide here not to use view cache; pass 1 handled below
                 foreach ($plugins['useCache'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                     // if one of the plugins return false no cache is used
@@ -232,6 +240,15 @@ abstract class Kwf_Component_Renderer_Abstract
                 }
             }
 
+            if (isset($plugins['useCache']) && $pass==1) { //in pass 1 wrap into <pluginC to replace with non-cached content if plugin decides so
+                foreach ($plugins['useCache'] as $pluginClass) {
+                    //always has to be done last in second pass
+                    $pluginNr++;
+                    $content = "<pluginC $pluginNr $pluginClass $componentId>$content</pluginC $pluginNr>";
+                }
+            }
+
+
             if ($statType) Kwf_Benchmark::count("rendered $statType", $statId);
 
             $ret = substr($ret, 0, $start).$content.substr($ret, $end+1);
@@ -243,6 +260,9 @@ abstract class Kwf_Component_Renderer_Abstract
         if ($pass == 2) {
             //execute plugins only in second pass, to not get cached
             $ret = $this->_executePlugins($ret, 'A');
+
+            //replace content where useCache plugin return false with uncached content
+            $ret = $this->_executePlugins($ret, 'C');
         }
 
         return $ret;

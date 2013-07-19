@@ -63,8 +63,6 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Test extends Kwc_TestAbstract
             'automatic_serialization'=>true))->clean();
         Kwf_Cache_Simple::resetZendCache();
 
-        $this->markTestIncomplete(true);
-
         Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = false;
         $html4 = $c->render(true, true);
         $html5 = $c->render(true, true);
