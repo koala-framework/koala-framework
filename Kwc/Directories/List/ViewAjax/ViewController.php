@@ -24,9 +24,9 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
         );
         $renderer = new Kwf_Component_Renderer();
         $renderer->setEnableCache(null);
-        $helper = new Kwf_Component_View_Helper_Partials();
+        $helper = new Kwf_Component_View_Helper_Partial();
         $helper->setRenderer($renderer);
-        $ret = $helper->singlePartial($this->_componentId, $config, $primaryKeyValue);
+        $ret = $helper->partial($this->_componentId, $config, $primaryKeyValue);
         return $renderer->render($ret);
 
     }

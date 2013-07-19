@@ -19,16 +19,6 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         return $this->_getRenderPlaceholder($component->componentId, $config);
     }
 
-    /**
-     * Helper method not used in standard rendering process
-     *
-     * Used to render a single partial
-     */
-    public function singlePartial($componentId, $config, $id)
-    {
-        return $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
-    }
-
     public function render($componentId, $config)
     {
         $partialClass = $config['class'];
@@ -37,6 +27,8 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         $ids = $partial->getIds();
         $number = 0; $count = count($ids);
         $ret = '';
+        $helper = new Kwf_Component_View_Helper_Partial();
+        $helper->setRenderer($this->_getRenderer());
         foreach ($ids as $id) {
             $config = array(
                 'id' => $id,
@@ -47,7 +39,7 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
                     'number' => $number++,
                 )
             );
-            $content = $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
+            $content = $helper->partial($componentId, $config, $id);
             if (isset($params['tpl'])) {
                 $tpl = $params['tpl'];
             } else {
