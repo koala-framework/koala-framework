@@ -44,4 +44,40 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Test extends Kwc_TestAbstract
         $this->assertEquals($html7, $html3);
         $this->assertEquals($html8, $html3);
     }
+
+    public function testPluginWithMaster()
+    {
+        $c = $this->_root->getComponentByClass('Kwf_Component_Plugin_Interface_UseViewCache_Component');
+        Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = true;
+        $html1 = $c->render(true, true);
+        $html2 = $c->render(true, true);
+        $html3 = $c->render(true, true);
+
+        $this->assertEquals($html1, $html2);
+        $this->assertEquals($html1, $html3);
+
+        apc_clear_cache('user');
+        Kwf_Cache::factory('Core', 'Memcached', array(
+            'lifetime'=>null,
+            'automatic_cleaning_factor' => false,
+            'automatic_serialization'=>true))->clean();
+        Kwf_Cache_Simple::resetZendCache();
+
+        $this->markTestIncomplete(true);
+
+        Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = false;
+        $html4 = $c->render(true, true);
+        $html5 = $c->render(true, true);
+        $html6 = $c->render(true, true);
+        $this->assertNotEquals($html3, $html4);
+        $this->assertNotEquals($html4, $html5);
+        $this->assertNotEquals($html4, $html6);
+        $this->assertNotEquals($html5, $html6);
+
+        Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = true;
+        $html7 = $c->render(true, true);
+        $html8 = $c->render(true, true);
+        $this->assertEquals($html7, $html3);
+        $this->assertEquals($html8, $html3);
+    }
 }
