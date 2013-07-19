@@ -57,7 +57,7 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
         return $content;
     }
 
-    protected function _getCacheName()
+    protected function _getRendererName()
     {
         return 'component';
     }

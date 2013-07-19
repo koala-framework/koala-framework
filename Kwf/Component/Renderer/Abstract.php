@@ -41,7 +41,7 @@ abstract class Kwf_Component_Renderer_Abstract
         return $ret;
     }
 
-    protected abstract function _getCacheName();
+    protected abstract function _getRendererName();
 
     public function getTemplate(Kwf_Component_Data $component, $type)
     {
@@ -156,7 +156,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 $content = Kwf_Component_Cache::NO_CACHE;
                 if ($useViewCache) { /* checks if cache is enabled
                                                                (not for eg. dynamic, partials or thru UseCache plugin) */
-                    $content = Kwf_Component_Cache::getInstance()->load($componentId, $this->_getCacheName(), $type, $value);
+                    $content = Kwf_Component_Cache::getInstance()->load($componentId, $this->_getRendererName(), $type, $value);
                     $statType = 'cache'; //for statistic: was cached
                 }
                 if ($content == Kwf_Component_Cache::NO_CACHE) { /* if loaded cache was NO_CACHE or cache disabled
@@ -200,7 +200,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
                     //save rendered contents into view cache
                     //if viewCache=false helper saves Kwf_Component_Cache::NO_CACHE
-                    $helper->saveCache($componentId, $this->_getCacheName(), $config, $value, $content);
+                    $helper->saveCache($componentId, $this->_getRendererName(), $config, $value, $content);
                     $statType = 'nocache'; //for statistic: was not cached
                 } else {
                     $statType = 'noviewcache'; //for statistic: view cache is disabled
