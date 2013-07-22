@@ -142,7 +142,6 @@
     line-height: 18px;
 }
 .cssClass .kwfFieldRequired label { font-weight: normal; }
-.webForm .kwfFieldRequired label .requiredSign { display: none; }
 .cssClass .kwfFieldRequired span label { font-weight: normal; }
 .cssClass .kwfFieldLabelAlignTop label {
     width: auto;
