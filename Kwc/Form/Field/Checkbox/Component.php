@@ -18,6 +18,9 @@ class Kwc_Form_Field_Checkbox_Component extends Kwc_Form_Field_Abstract_Componen
         $ret->setDefaultValue($this->getRow()->default_value);
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);
+        if ($this->getRow()->label_position_above) {
+            $ret->setLabelPosition('above');
+        }
         return $ret;
     }
 
