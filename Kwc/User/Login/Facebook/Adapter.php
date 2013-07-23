@@ -59,6 +59,7 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
                 $userRow->setSendMails(false);
                 $userRow->firstname = $user['first_name'];
                 $userRow->lastname = $user['last_name'];
+                $userRow->gender = $user['gender'];
                 $userRow->facebook_id = $user['id'];
                 $userRow->role = 'user';
                 $userRow->save();
