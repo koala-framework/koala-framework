@@ -166,9 +166,8 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         return $row ? true : false;
     }
     
-    public function loginUserRow($row, $identity = null)
+    public function loginUserRow($row)
     {
-        if (!$identity) $identity = $row->id;
         if ($row->locked) {
             $this->writeLog(array(
                 'user_id' => $row->id,
@@ -176,7 +175,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
             ));
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
-                'identity'           => $identity,
+                'identity'           => $row->email,
                 'messages'           => array(trlKwf('Account is locked'))
             );
         }
@@ -188,7 +187,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
 
         return array(
             'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
-            'identity'           => $identity,
+            'identity'           => $row->email,
             'messages'           => array(trlKwf('Authentication successful')),
             'userId'             => $row->id
         );
