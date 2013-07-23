@@ -16,6 +16,9 @@ class Kwc_Form_Field_File_Component extends Kwc_Form_Field_Abstract_Component
         if ($this->getRow()->label_width) $ret->setLabelWidth($this->getRow()->label_width);
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);
+        if ($this->getRow()->label_position_above) {
+            $ret->setLabelPosition('above');
+        }
         return $ret;
     }
 

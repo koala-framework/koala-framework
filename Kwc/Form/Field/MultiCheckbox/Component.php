@@ -27,6 +27,9 @@ class Kwc_Form_Field_MultiCheckbox_Component extends Kwc_Form_Field_Abstract_Com
             $values[$ret->getName().'_'.$i->id] = $i->value;
         }
         $ret->setValues($values);
+        if ($this->getRow()->label_position_above) {
+            $ret->setLabelPosition('above');
+        }
         return $ret;
     }
 

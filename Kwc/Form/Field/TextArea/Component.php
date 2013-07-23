@@ -18,6 +18,9 @@ class Kwc_Form_Field_TextArea_Component extends Kwc_Form_Field_TextField_Compone
         $ret->setDefaultValue($this->getRow()->default_value);
         $ret->setHideLabel($this->getRow()->hide_label);
         $ret->setAllowBlank(!$this->getRow()->required);
+        if ($this->getRow()->label_position_above) {
+            $ret->setLabelPosition('above');
+        }
         return $ret;
     }
 }
