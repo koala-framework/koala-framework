@@ -8,7 +8,7 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
                 if (response.status === 'connected') {
                     Ext.Ajax.request({
                         params: {
-                            code: response.authResponse.accessToken
+                            accessToken: response.authResponse.accessToken
                         },
                         url: config.controllerUrl + '/json-auth',
                         success: function(response, options, r) {
