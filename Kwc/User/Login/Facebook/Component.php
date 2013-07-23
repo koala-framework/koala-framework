@@ -13,7 +13,8 @@ class Kwc_User_Login_Facebook_Component extends Kwc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['config']['controllerUrl'] = Kwc_Admin::getInstance(get_class($this))->getControllerUrl('Component');
+        $ret['config']['controllerUrl'] = Kwc_Admin::getInstance($this
+            ->getData()->componentClass)->getControllerUrl('Component');
         return $ret;
     }
 }
