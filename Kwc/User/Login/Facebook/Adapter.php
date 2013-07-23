@@ -25,7 +25,10 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
         $facebook->setAccessToken($this->_token);
         $userId = $facebook->getUser();
         if (!$userId) {
-            throw new Kwf_Exception('no user id');
+            $ret = new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_UNCATEGORIZED, null, array(trlKwf('no user id'))
+            );
+            return $ret;
         }
         $user = $facebook->api('/me', 'GET');
         $users = Zend_Registry::get('userModel')->getKwfModel();
