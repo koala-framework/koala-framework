@@ -40,16 +40,6 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
             $s->whereEquals('email', $user['email']);
             $userRow = $users->getRow($s);
             if ($userRow) {
-                if ($userRow->locked) {
-                    $this->writeLog(array(
-                        'user_id' => $userRow->id,
-                        'message_type' => 'wrong_login_locked'
-                    ));
-                    $ret = new Zend_Auth_Result(
-                        Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_userId, array(trlKwf('Account is locked'))
-                    );
-                    return $ret;
-                }
                 //save facebook_id to userRow
                 $userRow->facebook_id = $user['id'];
                 $userRow->save();
@@ -65,18 +55,10 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
                 $userRow->save();
             }
         }
-
         $this->_userId = $userRow->id;
-        Kwf_Auth::getInstance()->getStorage()->write(array(
-            'userId' => $this->_userId
-        ));
-
-        if (!$userRow->logins) $userRow->logins = 0;
-        $userRow->logins = $userRow->logins + 1;
-        $userRow->last_login = date('Y-m-d H:i:s');
-        $userRow->save();
+        $result = $users->loginUserRow($userRow);
         $ret = new Zend_Auth_Result(
-            Zend_Auth_Result::SUCCESS, $this->_userId, array(trlKwf('Authentication successful'))
+            $result['zendAuthResultCode'], $result['identity'], $result['messages']
         );
         return $ret;
 
