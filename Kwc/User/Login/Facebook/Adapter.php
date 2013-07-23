@@ -31,43 +31,43 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
         $users = Zend_Registry::get('userModel')->getKwfModel();
         $s = new Kwf_Model_Select();
         $s->whereEquals('facebook_id', $user['id']);
-        $result = $users->getRow($s);
-        if (!$result) {
+        $userRow = $users->getRow($s);
+        if (!$userRow) {
             //user has not allready logged in before via facebook
             $s = new Kwf_Model_Select();
             $s->whereEquals('email', $user['email']);
-            $result = $users->getRow($s);
-            if ($result) {
-                if ($result->locked) {
+            $userRow = $users->getRow($s);
+            if ($userRow) {
+                if ($userRow->locked) {
                     $this->writeLog(array(
-                        'user_id' => $result->id,
+                        'user_id' => $userRow->id,
                         'message_type' => 'wrong_login_locked'
                     ));
                     return null;
                 }
                 //save facebook_id to userRow
-                $result->facebook_id = $user['id'];
-                $result->save();
+                $userRow->facebook_id = $user['id'];
+                $userRow->save();
             } else {
                 //we have to create a new user
-                $result = $users->createUserRow($user['email']);
-                $result->firstname = $user['first_name'];
-                $result->lastname = $user['last_name'];
-                $result->facebook_id = $user['id'];
-                $result->role = 'user';
-                $result->save();
+                $userRow = $users->createUserRow($user['email']);
+                $userRow->firstname = $user['first_name'];
+                $userRow->lastname = $user['last_name'];
+                $userRow->facebook_id = $user['id'];
+                $userRow->role = 'user';
+                $userRow->save();
             }
         }
 
-        $this->_userId = $result->id;
+        $this->_userId = $userRow->id;
         Kwf_Auth::getInstance()->getStorage()->write(array(
             'userId' => $this->_userId
         ));
 
-        if (!$result->logins) $result->logins = 0;
-        $result->logins = $result->logins + 1;
-        $result->last_login = date('Y-m-d H:i:s');
-        $result->save();
+        if (!$userRow->logins) $userRow->logins = 0;
+        $userRow->logins = $userRow->logins + 1;
+        $userRow->last_login = date('Y-m-d H:i:s');
+        $userRow->save();
 
     }
 }
