@@ -30,11 +30,13 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
         $user = $facebook->api('/me', 'GET');
         $users = Zend_Registry::get('userModel')->getKwfModel();
         $s = new Kwf_Model_Select();
+        $s->whereEquals('deleted', false);
         $s->whereEquals('facebook_id', $user['id']);
         $userRow = $users->getRow($s);
         if (!$userRow) {
             //user has not allready logged in before via facebook
             $s = new Kwf_Model_Select();
+            $s->whereEquals('deleted', false);
             $s->whereEquals('email', $user['email']);
             $userRow = $users->getRow($s);
             if ($userRow) {
