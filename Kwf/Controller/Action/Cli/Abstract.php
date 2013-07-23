@@ -37,6 +37,8 @@ class Kwf_Controller_Action_Cli_Abstract extends Kwf_Controller_Action
                 }
             }
         }
+
+        $this->_helper->viewRenderer->setNoRender();
     }
 
     public static function getHelp()
