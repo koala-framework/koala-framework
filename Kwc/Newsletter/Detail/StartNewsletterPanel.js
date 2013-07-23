@@ -208,3 +208,4 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         }
     }
 });
+Ext.reg('kwc.newsletter.startNewsletter', Kwc.Newsletter.Detail.StartNewsletterPanel);

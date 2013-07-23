@@ -44,11 +44,27 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                 ),
                 'mailing' => array(
                     'xtype'                 => 'kwc.newsletter.recipients',
-                    'controllerUrl'         => $this->getControllerUrl('Recipients'),
-                    'formControllerUrl'     => $this->getControllerUrl('Recipient'),
-                    'mailControllerUrl'     => $this->getControllerUrl('Mailing'),
-                    'mailFormControllerUrl' => $this->getControllerUrl('MailingForm'),
-                    'title'                 => trlKwf('Mailing')
+                    'title'                 => trlKwf('Mailing'),
+                    'recipientsPanel' => array(
+                        'title' => trlKwf('Add/Remove Subscriber to Queue'),
+                        'controllerUrl' => $this->getControllerUrl('Recipients'),
+                        'region' => 'center',
+                        'xtype' => 'kwc.newsletter.recipients.grid'
+                    ),
+                    'recipientsQueuePanel' => array(
+                        'title' => trlKwf('Queue'),
+                        'controllerUrl' => $this->getControllerUrl('Mailing'),
+                        'region' => 'east',
+                        'width' => 500,
+                        'xtype' => 'kwc.newsletter.recipients.queue'
+                    ),
+                    'mailingPanel' => array(
+                        'title' => trlKwf('Mailing'),
+                        'region' => 'south',
+                        'controllerUrl' => $this->getControllerUrl('Mailing'),
+                        'formControllerUrl' => $this->getControllerUrl('MailingForm'),
+                        'xtype' => 'kwc.newsletter.startNewsletter'
+                    )
                 ),
                 'statistics' => array(
                     'xtype'                 => 'kwf.autogrid',

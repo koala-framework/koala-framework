@@ -14,3 +14,4 @@ Kwc.Newsletter.Detail.RecipientsGridPanel = Ext.extend(Kwf.Auto.GridPanel, {
         Kwc.Newsletter.Detail.RecipientsGridPanel.superclass.initComponent.call(this);
     }
 });
+Ext.reg('kwc.newsletter.recipients.grid', Kwc.Newsletter.Detail.RecipientsGridPanel);

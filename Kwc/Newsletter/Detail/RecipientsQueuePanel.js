@@ -31,3 +31,4 @@ Kwc.Newsletter.Detail.RecipientsQueuePanel = Ext.extend(Kwf.Auto.GridPanel, {
         Kwc.Newsletter.Detail.RecipientsQueuePanel.superclass.initComponent.call(this);
     }
 });
+Ext.reg('kwc.newsletter.recipients.queue', Kwc.Newsletter.Detail.RecipientsQueuePanel);
