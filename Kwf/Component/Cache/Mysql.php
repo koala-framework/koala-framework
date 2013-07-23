@@ -58,12 +58,19 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function load($componentId, $renderer='component', $type = 'component', $value = '')
     {
+        $data = $this->loadWithMetadata($componentId, $renderer, $type, $value);
+        if ($data === null) return $data;
+        return $data['contents'];
+    }
+
+    public function loadWithMetadata($componentId, $renderer='component', $type = 'component', $value = '')
+    {
         if ($componentId instanceof Kwf_Component_Data) {
             $componentId = $componentId->componentId;
         }
         $cacheId = $this->_getCacheId($componentId, $renderer, $type, $value);
-        $content = Kwf_Component_Cache_Memory::getInstance()->load($cacheId);
-        if ($content === false) {
+        $data = Kwf_Component_Cache_Memory::getInstance()->loadWithMetaData($cacheId);
+        if ($data === false) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
                 ->whereEquals('component_id', $componentId)
@@ -79,14 +86,24 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 'columns' => array('content', 'expire'),
             );
             $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select, $options);
-            $content = isset($row[0]) ? $row[0]['content'] : null;
             if (isset($row[0])) {
                 $ttl = 0;
-                if ($row[0]['expire']) $ttl = $row[0]['expire']-time();
-                Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
+                if ($row[0]['expire']) {
+                    $ttl = $row[0]['expire']-time();
+                }
+                Kwf_Component_Cache_Memory::getInstance()->save($row[0]['content'], $cacheId, array(), $ttl);
+                $data = array(
+                    'contents' => $row[0]['content'],
+                    'expire' => $row[0]['expire']
+                );
+            } else {
+                $data = null;
             }
+        } else {
+            $data = null;
         }
-        return $content;
+
+        return $data;
     }
 
     public function deleteViewCache($select)

@@ -5,6 +5,7 @@ abstract class Kwf_Component_Renderer_Abstract
     protected $_renderComponent;
 
     protected $_includedComponents = array();
+    protected $_minLifetime;
 
     public function includedComponent($targetComponentId, $targetType)
     {
@@ -50,7 +51,6 @@ abstract class Kwf_Component_Renderer_Abstract
         return $template;
     }
 
-    //TODO: where is this used?
     public function render($ret)
     {
         $ret = $this->_render(2, $ret);
@@ -164,9 +164,27 @@ abstract class Kwf_Component_Renderer_Abstract
                 $content = Kwf_Component_Cache::NO_CACHE;
                 if ($useViewCache) { /* checks if cache is enabled
                                                                (not for eg. dynamic, partials or thru UseCache plugin) */
-                    $content = Kwf_Component_Cache::getInstance()->load($componentId, $this->_getRendererName(), $type, $value);
+                    $data = Kwf_Component_Cache::getInstance()->loadWithMetadata($componentId, $this->_getRendererName(), $type, $value);
+                    if ($data) {
+                        if ($data['expire']) {
+                            $lifetime = $data['expire']-time();
+                            if ($lifetime < 0) {
+                                throw new Kwf_Exception("invalid lifetime: $lifetime");
+                            }
+                            if (is_null($this->_minLifetime)) {
+                                $this->_minLifetime = $lifetime;
+                            } else {
+                                $this->_minLifetime = min($this->_minLifetime, $lifetime);
+                            }
+                        }
+                        $content = $data['contents'];
+                    } else {
+                        $content = null;
+                    }
+
                     $statType = 'cache'; //for statistic: was cached
                 }
+
                 if ($content == Kwf_Component_Cache::NO_CACHE) { /* if loaded cache was NO_CACHE or cache disabled
                                                                  (NO_CACHE is also default if not allowed to load):
                                                                  content is set to null => has to be rendered */
@@ -174,6 +192,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     $saveCache = false;
                 }
             }
+
             if (is_null($content)) {
                 $content = $helper->render($componentId, $config); //Component default gets rendered
                 if (isset($plugins['beforeCache'])) {
@@ -207,8 +226,32 @@ abstract class Kwf_Component_Renderer_Abstract
                     }
 
                     //save rendered contents into view cache
-                    //if viewCache=false helper saves Kwf_Component_Cache::NO_CACHE
-                    $helper->saveCache($componentId, $this->_getRendererName(), $config, $value, $content);
+                    $cacheContent = $content;
+                    $component = Kwf_Component_Data_Root::getInstance()
+                        ->getComponentById($componentId, array('ignoreVisible' => true));
+                    if (!$component) throw new Kwf_Exception("Can't find component '$componentId' for rendering");
+
+                    $settings = $helper->getViewCacheSettings($componentId);
+                    if (!$settings['enabled']) {
+                        $cacheContent = Kwf_Component_Cache::NO_CACHE;
+                    }
+                    // Content-Cache
+                    Kwf_Component_Cache::getInstance()->save(
+                        $component,
+                        $cacheContent,
+                        $this->_getRendererName(),
+                        $type,
+                        $value,
+                        isset($settings['lifetime']) ? $settings['lifetime'] : null
+                    );
+                    if ($settings['lifetime']) {
+                        if (is_null($this->_minLifetime)) {
+                            $this->_minLifetime = $settings['lifetime'];
+                        } else {
+                            $this->_minLifetime = min($this->_minLifetime, $settings['lifetime']);
+                        }
+                    }
+
                     $statType = 'nocache'; //for statistic: was not cached
                 } else {
                     $statType = 'noviewcache'; //for statistic: view cache is disabled

@@ -46,4 +46,35 @@ class Kwf_Component_Output_CacheSlowTest extends Kwf_Test_TestCase
         $this->_root->render();
         $this->assertNotEquals($content, $row->content);
     }
+
+    public function testC4FullPage()
+    {
+        $this->_setup('Kwf_Component_Output_C4_Component');
+
+        //sleep until right after the start of a new second
+        //to avoid race conditions in test
+        $mt = explode(" ", microtime());
+        usleep((1-$mt[0])*1000*1000);
+
+        $t = time();
+
+        //render first time
+        $html = $this->_root->render(true, true);
+        $this->assertContains('c4 '.$t, $html);
+
+        //render again - still same cache content
+        $html = $this->_root->render(true, true);
+        $this->assertContains('c4 '.$t, $html);
+
+        //render after 1sec - still same cache content
+        sleep(1);
+        $html = $this->_root->render(true, true);
+        $this->assertContains('c4 '.$t, $html);
+
+        //render after 2 more sec, cache must be expired now
+        sleep(2);
+        $t = time();
+        $html = $this->_root->render(true, true);
+        $this->assertContains('c4 '.$t, $html);
+    }
 }

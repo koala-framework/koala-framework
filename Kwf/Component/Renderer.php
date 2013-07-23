@@ -11,6 +11,7 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
         $content = false;
         if ($this->_enableCache) {
             $content = Kwf_Component_Cache::getInstance()->load($component->componentId, 'component', 'fullPage');
+            $this->_minLifetime = null;
         }
 
         Kwf_Benchmark::checkpoint('load fullPage cache');
@@ -44,7 +45,7 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
             }
             $content = $this->_render(1, $content);
             Kwf_Benchmark::checkpoint('render pass 1');
-            Kwf_Component_Cache::getInstance()->save($component, $content, 'component', 'fullPage');
+            Kwf_Component_Cache::getInstance()->save($component, $content, 'component', 'fullPage', '', $this->_minLifetime);
         } else {
         }
 
