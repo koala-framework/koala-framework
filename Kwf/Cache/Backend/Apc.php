@@ -12,7 +12,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
         return parent::load($id, $doNotTestCacheValidity);
     }
 
-    public function loadWithMetadatas($id, $doNotTestCacheValidity = false)
+    public function loadWithMetadata($id, $doNotTestCacheValidity = false)
     {
         $id = $this->_processId($id);
 
