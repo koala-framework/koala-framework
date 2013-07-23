@@ -45,7 +45,10 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
                         'user_id' => $userRow->id,
                         'message_type' => 'wrong_login_locked'
                     ));
-                    return null;
+                    $ret = new Zend_Auth_Result(
+                        Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_userId, array(trlKwf('Account is locked'))
+                    );
+                    return $ret;
                 }
                 //save facebook_id to userRow
                 $userRow->facebook_id = $user['id'];
@@ -71,6 +74,10 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
         $userRow->logins = $userRow->logins + 1;
         $userRow->last_login = date('Y-m-d H:i:s');
         $userRow->save();
+        $ret = new Zend_Auth_Result(
+            Zend_Auth_Result::SUCCESS, $this->_userId, array(trlKwf('Authentication successful'))
+        );
+        return $ret;
 
     }
 }
