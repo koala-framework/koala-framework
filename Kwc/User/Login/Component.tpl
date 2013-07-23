@@ -13,7 +13,6 @@
     <? } ?>
     <? if ($this->facebook) { ?>
         <?=$this->component($this->facebook)?>.
-        </p>
     <? } ?>
     <?=$this->component($this->form)?>
 </div>
