@@ -19,6 +19,9 @@ class Kwc_Form_Field_TextField_Component extends Kwc_Form_Field_Abstract_Compone
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);
         $ret->setVtype($this->getRow()->vtype);
+        if ($this->getRow()->label_position_above) {
+            $ret->setLabelPosition('above');
+        }
         return $ret;
     }
 }

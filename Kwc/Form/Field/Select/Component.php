@@ -24,6 +24,9 @@ class Kwc_Form_Field_Select_Component extends Kwc_Form_Field_Abstract_Component
             $values[$i->value] = $i->value;
         }
         $ret->setValues($values);
+        if ($this->getRow()->label_position_above) {
+            $ret->setLabelPosition('above');
+        }
         return $ret;
     }
 }

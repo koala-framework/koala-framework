@@ -12,5 +12,6 @@ class Kwc_Form_Field_Abstract_Form extends Kwc_Abstract_Form
             ->setAllowDecimal(false);
         $this->fields->add(new Kwf_Form_Field_Checkbox('required', trlKwf('Required')));
         $this->fields->add(new Kwf_Form_Field_Checkbox('hide_label', trlKwf('Hide Label')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('label_position_above', trlKwf('Label above field')));
     }
 }
