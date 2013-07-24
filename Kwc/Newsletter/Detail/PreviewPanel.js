@@ -41,6 +41,8 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             handler : function(a, b, c) {
                 Ext.Ajax.request({
                     url : this.controllerUrl + '/json-send-mail',
+                    mask: this.el,
+                    maskText: trlKwf('Sending...'),
                     params: Ext.apply(this.baseParams, {
                         address: this.addressField.getValue(),
                         format: this.button['html'].pressed ? 'html' : 'text'
@@ -74,19 +76,17 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     load: function(params, options) {
         this.getRecipientSources();
-        if (this.html && this.text) return;
-        this.el.mask(trlKwf('Loading...'));
         this.body.dom.style.backgroundColor = '#FFFFFF';
         this.body.dom.innerHTML = '';
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-data',
             params:  this.baseParams,
+            mask: this.el,
             success: function(r, options, data) {
                 this.html = data.html;
                 this.text = data.text;
                 this.body.dom.innerHTML = this.html;
                 this.button[data.format].toggle(true);
-                this.el.unmask();
             },
             scope: this
         });
