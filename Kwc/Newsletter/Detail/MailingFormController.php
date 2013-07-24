@@ -10,11 +10,11 @@ class Kwc_Newsletter_Detail_MailingFormController extends Kwf_Controller_Action_
         $form = $this->_form;
         $form->setLabelWidth(120);
 
-        $combobox = new Kwf_Form_Field_Radio('status', trlKwf('Start newsletter'));
-        $combobox->setAllowBlank(false);
-        $combobox->setWidth(150);
         $cards = $form->add(new Kwf_Form_Container_Cards());
-        $cards->setCombobox($combobox);
+        $cards->setCombobox(new Kwf_Form_Field_Radio('status', trlKwf('Start newsletter')));
+        $cards->getCombobox()
+            ->setAllowBlank(false)
+            ->setWidth(150);
 
         $card = $cards->add();
         $card->setTitle(trlKwf('Now'));
@@ -23,7 +23,7 @@ class Kwc_Newsletter_Detail_MailingFormController extends Kwf_Controller_Action_
         $card = $cards->add();
         $card->setTitle(trlKwf('Later'));
         $card->setName('startLater');
-        $card->add(new Kwf_Form_Field_DateTimeField('start_date', trlKwf('Date')));
+        $card->fields->add(new Kwf_Form_Field_DateTimeField('start_date', trlKwf('Date')));
 
         $form->add(new Kwf_Form_Field_Select('mails_per_minute', trlKwf('Sending speed')))
             ->setValues(array(
