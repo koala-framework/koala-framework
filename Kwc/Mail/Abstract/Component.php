@@ -226,8 +226,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
                 'mimeType' => 'image/gif',
                 'lifetime' => false
             );
-            Kwf_Media_Output::output($file);
-            exit;
+            return $file;
         }
     }
 }
