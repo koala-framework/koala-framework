@@ -32,7 +32,7 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                 $class .= ' '.$item['item']->getCls();
             }
 
-            $labelPos = null;
+            $labelPos = 'left';
             if ($item['item']) {
                 $c = get_class($item['item']);
                 $classParts = array();
@@ -45,13 +45,12 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                     if ($c == 'Kwf_Form_Field_Abstract' || $c == 'Kwf_Form_Field_SimpleAbstract') break;
                 }
                 $class .= implode(' ', array_reverse($classParts));
+                if ($item['item']->getLabelPosition()) {
+                    $labelPos = $item['item']->getLabelPosition();
+                }
+                $class .= ' kwcLabelPosition'.ucfirst($labelPos);
                 $class .= ' '.$item['item']->getFieldName();
-
-                $labelPos = $item['item']->getLabelPosition();
             }
-
-            if (!$labelPos) $labelPos = 'left';
-            $class .= ' kwcLabelPosition'.ucfirst($labelPos);
 
             $preHtml = '<div class="'.$class.'">';
             if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getFieldLabel()) {
