@@ -40,6 +40,7 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                     'xtype'                 => 'kwc.newsletter.detail.preview',
                     'controllerUrl'         => $this->getControllerUrl('Preview'),
                     'subscribersControllerUrl' => $this->getControllerUrl('Subscribers'),
+                    'email'                 => Kwf_Registry::get('userModel')->getAuthedUser()->email,
                     'title'                 => trlKwf('Preview')
                 ),
                 'mailing' => array(

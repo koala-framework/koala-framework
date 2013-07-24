@@ -57,6 +57,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         this.addressField = new Ext.form.TextField({
             width: 200,
             emptyText: trlKwf('Send testmail to...'),
+            value: this.email,
             vtype: 'email'
         });
 
