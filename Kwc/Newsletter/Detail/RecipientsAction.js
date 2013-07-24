@@ -26,7 +26,7 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
                         msgText += ':<div class="recipientsStatusRtr">'+r.rtrExcluded.join('<br />')+'</div>';
                     }
                     Ext.MessageBox.alert(trlKwf('Status'), msgText, function() {
-                        this.fireEvent('queueChanged');
+                        this.findParentByType('kwc.newsletter.recipients').fireEvent('queueChanged');
                     }, this);
                 },
                 progress: true,
@@ -59,7 +59,7 @@ Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext.extend(Ext.Action, {
                 success: function(response, options, r) {
                     var msgText = trlKwf('{0} recipients removed, total {1} recipients.', [r.removed, r.after]);
                     Ext.MessageBox.alert(trlKwf('Status'), msgText, function() {
-                        this.fireEvent('queueChanged');
+                        this.findParentByType('kwc.newsletter.recipients').fireEvent('queueChanged');
                     }, this);
                 },
                 progress: true,

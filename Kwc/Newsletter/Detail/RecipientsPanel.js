@@ -6,7 +6,7 @@ Kwc.Newsletter.Detail.RecipientsPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         this.layout = 'border';
 
         this.recipientsPanel = Ext.ComponentMgr.create(this.recipientsPanel);
-        this.recipientsPanel.on('queueChanged', function() {
+        this.on('queueChanged', function() {
             this.recipientsQueuePanel.reload();
             this.mailingPanel.load();
         }, this);
