@@ -99,8 +99,6 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             } else {
                 $data = null;
             }
-        } else {
-            $data = null;
         }
 
         return $data;
