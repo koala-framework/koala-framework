@@ -71,7 +71,15 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
         //page, master, 1 component, 1 fullPage
         $this->assertEquals(4, $model->countRows());
 
-        $row = $model->getRows()->current();
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('type', 'component');
+        $row = $model->getRows($s)->current();
+        $this->assertTrue($row->expire > (time() + 1));
+        $this->assertTrue($row->expire < (time() + 5));
+
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('type', 'fullPage');
+        $row = $model->getRows($s)->current();
         $this->assertTrue($row->expire > (time() + 1));
         $this->assertTrue($row->expire < (time() + 5));
     }
