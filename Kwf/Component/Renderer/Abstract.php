@@ -162,8 +162,7 @@ abstract class Kwf_Component_Renderer_Abstract
             if ($this->_enableCache) {
                 $saveCache = true;
                 $content = Kwf_Component_Cache::NO_CACHE;
-                if ($useViewCache) { /* checks if cache is enabled
-                                                               (not for eg. dynamic, partials or thru UseCache plugin) */
+                if ($useViewCache) { //checks if cache is enabled (not thru UseCache plugin)
                     $data = Kwf_Component_Cache::getInstance()->loadWithMetadata($componentId, $this->_getRendererName(), $type, $value);
                     if ($data) {
                         if ($data['expire']) {
