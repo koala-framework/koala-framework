@@ -2,7 +2,7 @@
 class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controller
 {
     protected $_defaultOrder = array('field' => 'create_date', 'direction' => 'DESC');
-    protected $_buttons = array('add');
+    protected $_buttons = array('add', 'duplicate');
 
     protected function _initColumns()
     {
