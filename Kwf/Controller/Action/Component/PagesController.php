@@ -313,6 +313,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (!$page) {
             throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
+        Kwf_Component_Data_Root::setShowInvisible(true); //required to get correct url for eg. FirstChildPage with invisible children
         header('Location: '.$page->getPreviewUrl());
         exit;
     }
@@ -390,13 +391,13 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception("Component with id '$id' not found");
         }
-        $session = new Zend_Session_Namespace('PagesController:copy');
+        $session = new Kwf_Session_Namespace('PagesController:copy');
         $session->id = $id;
     }
 
     public function jsonPasteAction()
     {
-        $session = new Zend_Session_Namespace('PagesController:copy');
+        $session = new Kwf_Session_Namespace('PagesController:copy');
         $id = $session->id;
         if (!$id || !Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
             throw new Kwf_Exception_Client(trlKwf('Clipboard is empty'));
