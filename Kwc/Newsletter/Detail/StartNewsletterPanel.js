@@ -15,12 +15,16 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         });
 
         this.newsletterButtonsContainer = new Ext.Element(document.createElement('div'));
-        this.newsletterButtonsContainer.addClass('kwcNewsletterButtons hidePauseButton');
+        this.newsletterButtonsContainer.addClass('kwcNewsletterButtons');
 
         this.newsletterPauseButtonContainer = this.newsletterButtonsContainer.createChild({
             tag: 'div',
-            cls: 'kwcNewsletterButton pause'
+            cls: 'kwcNewsletterButton pause',
+            style: {
+                display: 'none'
+            }
         });
+        this.newsletterPauseButtonContainer.enableDisplayMode('block');
         this.newsletterPauseButton = this.newsletterPauseButtonContainer.createChild({
             tag: 'button',
             cls: 'kwcNewsletterButtonPause',
@@ -34,6 +38,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             tag: 'div',
             cls: 'kwcNewsletterButton start'
         });
+        this.newsletterStartButtonContainer.enableDisplayMode('block');
         this.newsletterStartButton = this.newsletterStartButtonContainer.createChild({
             tag: 'button',
             cls: 'kwcNewsletterButtonStart',
@@ -194,15 +199,19 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
     checkButtons: function(info)
     {
         if (info.state == 'start' || info.state == 'startLater') {
-            this.newsletterButtonsContainer.removeClass('hidePauseButton');
+            this.newsletterStartButtonContainer.hide();
+            this.newsletterPauseButtonContainer.show();
             this.newsletterStartButton.update(trlKwf('Waiting for start...'));
         } else if (info.state == 'pause') {
-            this.newsletterButtonsContainer.addClass('hidePauseButton');
+            this.newsletterStartButtonContainer.show();
+            this.newsletterPauseButtonContainer.hide();
         } else  if (info.state == 'sending') {
-            this.newsletterButtonsContainer.removeClass('hidePauseButton');
+            this.newsletterStartButtonContainer.hide();
+            this.newsletterPauseButtonContainer.show();
             this.newsletterStartButton.update(trlKwf('Edit newsletter'));
         } else if (info.state == 'finished') {
-            this.newsletterButtonsContainer.addClass('hidePauseButton');
+            this.newsletterStartButtonContainer.show();
+            this.newsletterPauseButtonContainer.hide();
             this.newsletterStartButton.update(trlKwf('Newsletter finished'));
             this.newsletterStartButton.dom.disabled = 'disabled';
         }
