@@ -47,8 +47,23 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
         return $select;
     }
 
+    public function jsonDeleteAction()
+    {
+        $newsletter = $this->_getNewsletterRow();
+        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
+            throw new Kwf_ClientException(trlKwf('Can only remove users from a paused newsletter'));
+        }
+
+        parent::jsonDeleteAction();
+    }
+
     public function jsonDeleteAllAction()
     {
+        $newsletter = $this->_getNewsletterRow();
+        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
+            throw new Kwf_ClientException(trlKwf('Can only remove users from a paused newsletter'));
+        }
+
         $select = $this->_model->select()
             ->whereEquals('newsletter_id', $this->_getNewsletterRow()->id);
         $count = $this->_model->countRows($select);
