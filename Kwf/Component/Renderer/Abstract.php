@@ -167,7 +167,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     if ($data) {
                         if ($data['expire']) {
                             $lifetime = $data['expire']-time();
-                            if ($lifetime < 0) {
+                            if ($lifetime < -1) {
                                 throw new Kwf_Exception("invalid lifetime: $lifetime");
                             }
                             if (is_null($this->_minLifetime)) {
