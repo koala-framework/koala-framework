@@ -53,6 +53,7 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
             }
 
             $preHtml = '<div class="'.$class.'">';
+            $hasLabel = false;
             if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getFieldLabel()) {
                 $preHtml .= '<label for="'
                     .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName()).'"'
@@ -71,13 +72,14 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                 }
                 $preHtml .= $item['item']->getLabelSeparator();
                 $preHtml .= '</label>';
+                $hasLabel = true;
             }
             $postHtml = '';
             $style = '';
-            if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getLabelWidth() && $labelPos != 'above') {
+            if ($hasLabel && $item['item']->getLabelWidth() && $labelPos != 'above') {
                 $style = 'margin-left:'.$item['item']->getLabelWidth().'px';
             }
-            $preHtml = $preHtml . '<div class="kwfFormFieldWrapper" style="'.$style.'">';
+            $preHtml = $preHtml . '<div class="kwfFormFieldWrapper'.($hasLabel ? ' hasLabel' : '').'" style="'.$style.'">';
             $postHtml = '</div>'.$postHtml;
 
             if ($item['item'] && $item['item']->getComment()) {
