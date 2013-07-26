@@ -16,6 +16,20 @@ abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf
         return $select;
     }
 
+    private function _getRecipientsSelect()
+    {
+        $select = $this->_getSelect();
+        if (is_null($select)) return null;
+        if (!is_null($this->_getParam('ids'))) {
+            if ($this->_getParam('ids')) {
+                $select->whereEquals('id', explode(',', $this->_getParam('ids')));
+            } else {
+                throw new Kwf_Exception_Client(trlKwf('Please select recipients.'));
+            }
+        }
+        return $select;
+    }
+
     public function jsonRemoveRecipientsAction()
     {
         set_time_limit(60*10);
@@ -25,7 +39,7 @@ abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf
             $this->_getParam('componentId'), array('ignoreVisible'=>true)
         );
 
-        $select = $this->_getSelect();
+        $select = $this->_getRecipientsSelect();
         if (is_null($select)) return null;
         $count = $this->_model->countRows($select);
         $progressBar = new Zend_ProgressBar(
@@ -66,7 +80,7 @@ abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf
             $this->_getParam('componentId'), array('ignoreVisible'=>true)
         );
 
-        $select = $this->_getSelect();
+        $select = $this->_getRecipientsSelect();
         if (is_null($select)) return null;
 
         $count = $this->_model->countRows($select);

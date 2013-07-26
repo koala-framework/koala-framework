@@ -9,11 +9,14 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
         tooltip : trlKwf('Adds the currently shown recipients to the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
-            var params;
-            if (this.getStore().lastOptions) {
-                params = this.getStore().lastOptions.params;
+            if (this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
+                var selectedRows = this.getGrid().getSelectionModel().getSelections();
+                var ids = [];
+                selectedRows.each(function(selectedRow) { ids.push(selectedRow.id); }, this);
+                var params = this.getStore().baseParams;
+                params.ids = ids.join(',');
             } else {
-                params = this.getStore().baseParams;
+                var params = this.getStore().lastOptions.params;
             }
             Ext.Ajax.request({
                 url : this.controllerUrl + '/json-save-recipients',
@@ -45,11 +48,14 @@ Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext.extend(Ext.Action, {
         tooltip : trlKwf('Removes the currently shown recipients to the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
-            var params;
-            if (this.getStore().lastOptions) {
-                params = this.getStore().lastOptions.params;
+            if (this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
+                var selectedRows = this.getGrid().getSelectionModel().getSelections();
+                var ids = [];
+                selectedRows.each(function(selectedRow) { ids.push(selectedRow.id); }, this);
+                var params = this.getStore().baseParams;
+                params.ids = ids.join(',');
             } else {
-                params = this.getStore().baseParams;
+                var params = this.getStore().lastOptions.params;
             }
             Ext.Ajax.request({
                 url : this.controllerUrl + '/json-remove-recipients',
