@@ -69,7 +69,9 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
     private function _getNewsletterRow()
     {
         if (!$this->_newsletterRow) {
-            $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'));
+            $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+                $this->_getParam('componentId')
+            );
             $this->_newsletterRow = $component->row;
         }
         return $this->_newsletterRow;
