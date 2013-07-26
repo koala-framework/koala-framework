@@ -31,12 +31,12 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
         $this->view->data = array('duplicatedIds' => array());
 
         $parentTarget = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($this->_getParam('componentId'));
+            ->getComponentByDbId($this->_getParam('componentId'));
 
         foreach ($ids as $id) {
             $sourceId = $this->_getParam('componentId').'_'.$id;
             $source = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($sourceId);
+                ->getComponentByDbId($sourceId);
 
             // Switch off observer due to performance - it's not necessary here
             Kwf_Component_ModelObserver::getInstance()->disable();
