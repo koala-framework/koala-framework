@@ -104,7 +104,7 @@ class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             if (is_array($tmp) && isset($tmp[0])) {
                 return array(
                     'contents' => $tmp[0],
-                    'expire' => $tmp[1] + $tmp[2], //mtime + lifetime
+                    'expire' => $tmp[2] ? ($tmp[1] + $tmp[2]) : null, //mtime + lifetime
                 );
             }
             return false;
