@@ -56,7 +56,7 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
             $ret .= str_replace(array('{id}', '{content}'), array($id, $content), $tpl);
         }
         if (empty($ids) && isset($params['noEntriesFound']) && $params['noEntriesFound']) {
-            $ret .= '<span class="noEntriesFound">' . $params['noEntriesFound'] . '<span>';
+            $ret .= '<span class="noEntriesFound">' . $params['noEntriesFound'] . '</span>';
         }
         return $ret;
     }
