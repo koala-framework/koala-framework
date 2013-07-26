@@ -1,35 +1,38 @@
 .redMalleeMenuSubHorizontal {
     height: 30px;
-    overflow: hidden;
     width: 100%;
     margin: auto;
+    overflow: hidden;
 
-    
-        ul li {
+    ul {
+
+        position: relative;
+
+        li {
         position: relative;
         z-index: 0;
         padding: 0px;
-        
-        a {
-            background: #C80000;
-            position: relative;
-            z-index: 2;
-            position: relative;
-            display: block;
-            
-            &:hover {
-                background: var(secColor);
-                color: var(light);
+
+            a {
+                background: #C80000;
+                position: relative;
+                z-index: 15;
+                position: relative;
+                display: block;
+
+                &:hover {
+                    background: var(secColor);
+                    color: var(light);
+                }
+            }
+            &.current a,
+            a:hover {
+                background: #a70000;
+                color: var(light) !important;
             }
         }
-        &.current a,
-        a:hover {
-            background: var(secColor);
-            color: var(light) !important;
-        }
     }
-    
-    
+
     > a {
         position: absolute;
         display: block;
@@ -40,13 +43,18 @@
         &.arrowLeft {
             background: url("/assets/kwf/themes/RedMallee/images/subMenuArrowLeft.png") no-repeat scroll left -4px transparent;
             left: 0;
-            z-index: 2;
+            z-index: 15;
         }
         
         &.arrowRight {
             background: url("/assets/kwf/themes/RedMallee/images/subMenuArrowRight.png") no-repeat scroll left -4px transparent;
             right: 0;
-            z-index: 2;
+            z-index: 15;
         }
+    }
+
+    .dropdown {
+        display: block;
+        bottom: -19px;
     }
 }

@@ -24,6 +24,9 @@
                     <div class="subMenuHorizontal">
                         <?=$this->component($this->boxes['subMenuHorizontal']);?>
                     </div>
+                    <div class="subSubMenuHorizontal">
+                        <?=$this->component($this->boxes['subSubMenuHorizontal']);?>
+                    </div>
                 </div>
             </div>
             <div id="outerContent">

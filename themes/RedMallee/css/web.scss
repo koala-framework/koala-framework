@@ -44,6 +44,7 @@ $container-style: magic;
         }
 
         #header {
+            overflow: visible;
              @include clearfix;
              border-bottom: 5px solid #C80000;
 
@@ -51,19 +52,20 @@ $container-style: magic;
                  height: 40px;
                  position: relative;
                  top: 2px;
-                 padding-top: 3px;
+                 border-bottom: none;
                  margin-bottom: -3px;
              }
 
              .mainMenu {
                  position: relative;
-                 top: 2px;
+                 top: 0px;
              }
 
 
-             .webStandard.redMalleeMenuSubHorizontal {
-                 display: none;
-             }
+            .subMenuHorizontal .webStandard.redMalleeMenuSubHorizontal,
+            .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
+                display: none;
+            }
          }
     }
 
@@ -89,6 +91,14 @@ $container-style: magic;
             img {
                 display: block;
             }
+
+            .searchBox {
+                border-bottom: none;
+            }
+            .mainMenu {
+                position: relative;
+                top: 0px;
+            }
         }
     }
 }
@@ -99,6 +109,7 @@ $container-style: magic;
         .searchBox {
             float: right;
             background: #EFEFEF;
+            border-bottom: 5px solid #C80000;
 
             &:after {
                 content: '';
@@ -113,6 +124,10 @@ $container-style: magic;
             input {
                 z-index: 1;
             }
+        }
+        .mainMenu {
+            position: relative;
+            top: 3px;
         }
     }
 }
@@ -129,11 +144,49 @@ $container-style: magic;
             .webStandard.redMalleeMenuSubHorizontal {
                 display: block;
                 position: relative;
-                z-index: 2;
+                z-index: 15;
 
                 ul.menu {
                     line-height: 30px;
                     overflow-x: scroll;
+                    white-space: nowrap;
+                    margin-left: 0px;
+
+                    li {
+                        display: inline-block;
+                        list-style: none;
+                        color: white;
+                        margin-right: -4px;
+
+                        &.current {
+
+                            a {
+                                color: white;
+                            }
+                        }
+
+                        a {
+                            color: #000;
+                            font-size: 14px;
+                            padding: 0px 17px;
+                        }
+                    }
+                }
+            }
+        }
+        .subSubMenuHorizontal {
+            background: #F6F6F6;
+            top: 0px;
+            position: relative;
+            z-index: 15;
+
+            .webStandard.redMalleeMenuSubSubHorizontal {
+                  display: block;
+                  position: relative;
+                  z-index: 15;
+
+                ul.menu {
+                    line-height: 30px;
                     white-space: nowrap;
                     margin-left: 0px;
 
@@ -171,7 +224,17 @@ $container-style: magic;
     #page #outerHeader #header {
         border-bottom: 5px solid #C80000;
 
+        .searchBox {
+            height: 40px;
+            position: relative;
+            top: 2px;
+            border-bottom: 5px solid #C80000;
+            margin-bottom: -3px;
+        }
+
         .mainMenu {
+            position: relative;
+            top: 3px;
             margin-right: 0px;
             float: right;
 
@@ -180,7 +243,8 @@ $container-style: magic;
             }
         }
 
-        .webStandard.redMalleeMenuSubHorizontal {
+        .subMenuHorizontal .webStandard.redMalleeMenuSubHorizontal,
+        .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
             display: none;
         }
     }
@@ -255,5 +319,9 @@ $container-style: magic;
             float: left;
         }
     }
+}
+
+#page #outerHeader #header {
+    overflow: visible;
 }
 

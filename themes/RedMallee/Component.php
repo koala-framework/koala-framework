@@ -17,6 +17,7 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
                 'mainMenu' => 'RedMallee_Menu_Main_Component',
                 'subMenu' => 'RedMallee_Menu_Sub_Component',
                 'subMenuHorizontal' => 'RedMallee_Menu_SubHorizontal_Component',
+                'subSubMenuHorizontal' => 'RedMallee_Menu_SubSubHorizontal_Component',
                 'subSubMenu' => 'RedMallee_Menu_SubSub_Component',
                 'bottomMenu' => 'RedMallee_Menu_Bottom_Component',
             ),
