@@ -76,6 +76,11 @@ abstract class Kwf_Component_Renderer_Abstract
                 }
             } else if ($pluginType == 'A' || $pluginType == 'B') {
                 $content = $plugin->processOutput($content, $this);
+            } else if ($pluginType == 'R') {
+                $c = $plugin->replaceOutput($this);
+                if ($c !== false) {
+                    $content = $c;
+                }
             }
 
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('plugin '.$args[1], microtime(true)-$startTime);
@@ -121,7 +126,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $config = $args[4];
             $config = $config != '' ? unserialize(base64_decode($config)) : array();
 
-            if (isset($plugins['replace'])) {
+            if (isset($plugins['replace']) && $pass==2) {
                 foreach ($plugins['replace'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                     $content = $plugin->replaceOutput($this);
@@ -290,6 +295,14 @@ abstract class Kwf_Component_Renderer_Abstract
                 }
             }
 
+            if (isset($plugins['replace']) && $pass==1) { //in pass 1 wrap into <pluginR to replace with plugin output
+                foreach ($plugins['replace'] as $pluginClass) {
+                    //always has to be done last in second pass
+                    $pluginNr++;
+                    $content = "<pluginR $pluginNr $pluginClass $componentId>$content</pluginR $pluginNr>";
+                }
+            }
+
 
             if ($statType) Kwf_Benchmark::count("rendered $statType", $statId);
 
@@ -305,6 +318,9 @@ abstract class Kwf_Component_Renderer_Abstract
 
             //replace content where useCache plugin return false with uncached content
             $ret = $this->_executePlugins($ret, 'C');
+
+            //replace content with plugin output
+            $ret = $this->_executePlugins($ret, 'R');
         }
 
         return $ret;
