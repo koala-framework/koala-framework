@@ -3,6 +3,7 @@ class Kwf_Component_Cache_ComponentLinkModifierCallback_Test extends Kwc_TestAbs
 {
     public function setUp()
     {
+        Kwf_Component_Cache_ComponentLinkModifierCallback_LinkTargetPage_Component::$linkModifierContent = 'foo';
         parent::setUp('Kwf_Component_Cache_ComponentLinkModifierCallback_Root_Component');
     }
 
