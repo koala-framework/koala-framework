@@ -25,8 +25,7 @@ class Kwc_Newsletter_Detail_StatisticsClicksController extends Kwf_Controller_Ac
         ";
         $ret = array();
         foreach (Kwf_Registry::get('db')->fetchAll($sql) as $row) {
-            $modelName = $recipientSources[$row['recipient_model_shortcut']];
-            if (is_array($modelName)) $modelName = $recipientSources[$row['recipient_model_shortcut']]['model'];
+            $modelName = $recipientSources[$row['recipient_model_shortcut']]['model'];
             $model = Kwf_Model_Abstract::getInstance($modelName);
             $recipient = $model->getRow($row['recipient_id']);
             $name = $recipient ? $recipient->email : '';

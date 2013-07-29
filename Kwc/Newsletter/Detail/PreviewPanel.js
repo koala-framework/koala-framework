@@ -11,6 +11,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     initComponent : function()
     {
+        this.getRecipientSources();
         this.button['html'] = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/html.png',
             cls     : 'x-btn-text-icon',
@@ -75,7 +76,6 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     },
 
     load: function(params, options) {
-        this.getRecipientSources();
         this.body.dom.style.backgroundColor = '#FFFFFF';
         this.body.dom.innerHTML = '';
         Ext.Ajax.request({
@@ -98,20 +98,21 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             url: this.subscribersControllerUrl + '/json-get-recipient-sources',
             params:  this.baseParams,
             success: function(r, options, data) {
+                Ext.apply(this.baseParams, {
+                    recipientId: data.recipientId
+                });
                 for (var key in data.sources) {
-                    if (data.sources[key].model) {
+                    if (data.sources[key].title) {
                         this.recipientSources.push([data.sources[key].model, data.sources[key].title]);
                     } else {
-                        this.recipientSources.push([data.sources[key], data.sources[key]]);
+                        this.recipientSources.push([data.sources[key].model, data.sources[key].model]);
                     }
                 }
 
                 if (this.recipientSources.length == 1) {
                     for (var key in data.sources) {
-                        var model = data.sources[key];
-                        if (data.sources[key].model) model = data.sources[key].model;
                         Ext.apply(this.baseParams, {
-                            subscribeModel: model
+                            subscribeModel: data.sources[key].model
                         });
                     }
                 } else {
@@ -159,6 +160,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
                     selectOnFocus: true,
                     forceSelection: true,
                     loadingText: trlKwf('Searching...'),
+                    value: data.recipientId,
                     tpl: new Ext.XTemplate(
                         '<tpl for=".">',
                             '<div class="x-combo-list-item changeuser-list-item">',
