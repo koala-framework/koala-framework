@@ -15,7 +15,7 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             ->getControllerUrl('Recipient');
 
         $this->view->formControllerUrl = $formControllerUrl;
-        $this->view->xtype = 'kwc.newsletter.recipients';
+        $this->view->xtype = 'kwf.autogrid';
         $this->view->model = get_class($this->_model);
         $this->view->baseParams = array(
             'newsletterComponentId' => $this->_getParam('newsletterComponentId')
