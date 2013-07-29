@@ -11,5 +11,8 @@
         <?=$this->componentLink($this->lostPassword, $this->data->trlKwf('request a new one here'))?>.
         </p>
     <? } ?>
+    <? if ($this->facebook) { ?>
+        <?=$this->component($this->facebook)?>.
+    <? } ?>
     <?=$this->component($this->form)?>
 </div>
