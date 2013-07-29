@@ -1,0 +1,11 @@
+@mixin background-image-dpr2($path, $file, $width, $height) {
+  background-image: url($path + '/' + $file);
+
+  @media (min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.1) {
+    & {
+      background-image: url($path + '/dpr2/' + $file);
+      background-size: $width $height;
+      -webkit-background-size: $width $height;
+    }
+  }
+}

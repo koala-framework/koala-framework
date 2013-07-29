@@ -152,6 +152,7 @@ class Kwf_Util_ClearCache
     {
         Kwf_Component_ModelObserver::getInstance()->disable();
 
+        ini_set('memory_limit', '512M');
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
             Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
         }
