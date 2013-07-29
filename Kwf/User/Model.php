@@ -166,7 +166,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         return $row ? true : false;
     }
     
-    public function loginUserRow($row)
+    public function loginUserRow($row, $logLogin)
     {
         if ($row->locked) {
             $this->writeLog(array(
@@ -182,8 +182,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         Kwf_Auth::getInstance()->getStorage()->write(array(
             'userId' => $row->id
         ));
-
-        $this->_realLoginModifyRow($row);
+        if ($logLogin) {
+            $this->_logLogin($row);
+        }
 
         return array(
             'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
@@ -251,18 +252,10 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
             if ($credential == md5($row->$passCol)
                 || $row->encodePassword($credential) == $row->$passCol
             ) {
-                $this->_realLoginModifyRow($row);
+                $this->loginUserRow($row, true);
+            } else {
+                $this->loginUserRow($row, false);
             }
-
-            Kwf_Auth::getInstance()->getStorage()->write(array(
-                'userId' => $row->id
-            ));
-            return array(
-                'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
-                'identity'           => $identity,
-                'messages'           => array(trlKwf('Authentication successful')),
-                'userId'             => $row->id
-            );
         } else {
             $this->writeLog(array(
                 'user_id' => $row->id,
@@ -276,15 +269,12 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         }
     }
 
-    // wird nur aufgerufen, wenn man sich mit den richtigen Daten eingeloggt hat
-    protected function _realLoginModifyRow($row)
+    // if the login didn't happen with the test credentials this function has to be called
+    protected function _logLogin($row)
     {
         if (!$row->logins) $row->logins = 0;
         $row->logins = $row->logins + 1;
         $row->last_login = date('Y-m-d H:i:s');
-        if (isset($userRow->last_login_web)) {
-            $userRow->last_login_web = date('Y-m-d H:i:s');
-        }
         $row->save();
     }
 

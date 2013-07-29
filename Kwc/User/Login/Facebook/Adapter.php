@@ -59,7 +59,7 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
             }
         }
         $this->_userId = $userRow->id;
-        $result = $users->loginUserRow($userRow);
+        $result = $users->loginUserRow($userRow, true);
         $ret = new Zend_Auth_Result(
             $result['zendAuthResultCode'], $result['identity'], $result['messages']
         );
