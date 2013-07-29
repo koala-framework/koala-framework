@@ -1,6 +1,6 @@
 @import "compass/css3/box-sizing";
 @import "susy";
-// @import "compass/utilities/general/clearfix";
+@import "kwf/background-image-dpr2";
 
 .redMalleeListBottomStage {
     margin-right: 0px;
@@ -40,6 +40,7 @@
     
     .bottomStageHeadlineBg {
         background: url("/assets/kwf/themes/RedMallee/images/bottomStageHeadlineBg.png") no-repeat;
+        @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'bottomStageHeadlineBg.png', 7px, 6px);
         width: 7px;
         height: 6px;
         position: absolute;

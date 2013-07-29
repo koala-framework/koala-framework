@@ -1,0 +1,25 @@
+@import "kwf/background-image-dpr2";
+
+.redMalleeMenuSub > ul > li {
+    padding-left: 15px;
+    margin-top: 10px;
+    border-bottom: 1px dashed var(highlightedText);
+    padding-bottom: 10px;
+
+    a {
+        background: url("/assets/kwf/themes/RedMallee/images/arrowSmallRight.png") left 6px no-repeat;
+        @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRight.png', 6px, 6px);
+        margin-left: -15px;
+        padding-left: 15px;
+        display: block;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    &.current.hasSubmenu > a {
+        background: url("/assets/kwf/themes/RedMallee/images/arrowSmallRightActive.png") left 6px no-repeat;
+        @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRightActive.png', 6px, 6px);
+    }
+}
+
+
