@@ -162,7 +162,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', 'fullPage');
         if ($checkIncludeIds) {
-            $ids = $this->_fetchIncludesTree($checkIncludeIds);
+            $ids = array_keys($this->_fetchIncludesTree($checkIncludeIds));
             if ($ids) {
                 $s->whereEquals('component_id', $ids);
                 if ($log) {
@@ -181,30 +181,31 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     private function _fetchIncludesTree($componentIds, &$checkedIds = array())
     {
-
         $ret = array();
         $ids = array();
 
         foreach ($componentIds as $componentId) {
 
             $i = $componentId;
-            if (!in_array($i, $checkedIds)) {
-                $checkedIds[] = $i;
+            if (!isset($checkedIds[$i])) {
+                $checkedIds[$i] = true;
                 $ids[] = $i;
             }
             while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
                 $i = substr($i, 0, strrpos($i, '-'));
-                if (!in_array($i, $checkedIds)) {
-                    $checkedIds[] = $i;
+                if (!isset($checkedIds[$i])) {
+                    $checkedIds[$i] = true;
                     $ids[] = $i;
                 }
             }
 
-            $ret[] = $i;
+            $ret[$i] = true;
 
         }
 
-        if (!$ids) return $ret;
+        if (!$ids) {
+            return $ret;
+        }
 
         $s = new Kwf_Model_Select();
         $s->whereEquals('target_id', $ids);
@@ -213,15 +214,16 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
         $childIds = array();
         foreach ($imports as $row) {
-            if (!in_array($row['component_id'], $ret)) {
-                $childIds[] = $row['component_id'];
+            $childIds[] = $row['component_id'];
+        }
+        $childIds = array_unique($childIds);
+
+        foreach ($this->_fetchIncludesTree($childIds, $checkedIds) as $i=>$nop) {
+            if (!isset($ret[$i])) {
+                $ret[$i] = true;
             }
         }
-        foreach ($this->_fetchIncludesTree($childIds, $checkedIds) as $i) {
-            if (!in_array($i, $ret)) {
-                $ret[] = $i;
-            }
-        }
+
         return $ret;
     }
     protected static function _getCacheId($componentId, $renderer, $type, $value)
