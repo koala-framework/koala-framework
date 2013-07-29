@@ -20,6 +20,8 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
             } else if (is_array($data)) {
                 if ($ret[$this->getName()] === false || $ret[$this->getName()] === null) {
                     $ret[$this->getName()] = null;
+                } else if (!$ret[$this->getName()]) {
+                    $ret[$this->getName()] = null;
                 } else {
                     $ret[$this->getName()] = $data[$ret[$this->getName()]];
                 }
