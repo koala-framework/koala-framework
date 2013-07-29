@@ -39,24 +39,24 @@ class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
     public function testJavaScriptAndPersistence()
     {
         $this->openKwc('/selenium');
-        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '2');
+        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '0');
 
         // click on fav-icon to favourise
         $this->click("css=.switchLink > a");
         sleep(1);
-        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '3');
+        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '1');
 
         //reload to check if persistent
         $this->openKwc('/selenium');
-        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '3');
+        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '1');
 
         // click on fav-icon to defavourise
         $this->click("css=.switchLink > a");
         sleep(1);
-        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '2');
+        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '0');
 
         //reload to check if persistent
         $this->openKwc('/selenium');
-        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '2');
+        $this->assertText('css=.kwcFavouritesPageComponentFavouritesCount', '0');
     }
 }
