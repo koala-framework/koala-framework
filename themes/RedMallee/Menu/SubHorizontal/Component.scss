@@ -14,7 +14,7 @@
         padding: 0px;
 
             a {
-                background: #C80000;
+                background: #ccc;
                 position: relative;
                 z-index: 15;
                 position: relative;
@@ -27,7 +27,7 @@
             }
             &.current a,
             a:hover {
-                background: #a70000;
+                background: #C80000;
                 color: var(light) !important;
             }
         }
