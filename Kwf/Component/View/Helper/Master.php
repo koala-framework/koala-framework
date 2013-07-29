@@ -17,17 +17,18 @@ class Kwf_Component_View_Helper_Master extends Kwf_Component_View_Renderer
         );
         $c = $component;
         while ($c) {
-            if (Kwc_Abstract::getTemplateFile($c->componentClass, 'Master')) {
+            if (Kwc_Abstract::getTemplateFile($c->componentClass, 'Master')
+                || Kwc_Abstract::hasSetting($c->componentClass, 'masterTemplate')
+            ) {
                 $componentWithMaster[] = array(
                     'type' => 'master',
                     'data' => $c
                 );
             }
             if (Kwc_Abstract::getFlag($c->componentClass, 'resetMaster')) {
-                $c = null;
-            } else {
-                $c = $c->parent;
+                break;
             }
+            $c = $c->parent;
         }
         $helper = new Kwf_Component_View_Helper_ComponentWithMaster();
         $helper->setRenderer($this->_getRenderer());

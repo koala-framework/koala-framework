@@ -100,6 +100,7 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
 
         $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo', 'background');
 
+        $ret['masterTemplate'] = KWF_PATH.'/themes/RedMallee/Master.tpl';
 
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/master.css';
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/web.scss';

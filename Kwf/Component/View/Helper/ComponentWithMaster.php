@@ -21,7 +21,12 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
 
             $view = new Kwf_Component_View($this->_getRenderer());
             $view->assign($vars);
-            return $view->render($this->_getRenderer()->getTemplate($component, 'Master'));
+            if (Kwc_Abstract::hasSetting($component->componentClass, 'masterTemplate')) {
+                $masterTemplate = Kwc_Abstract::getSetting($component->componentClass, 'masterTemplate');
+            } else {
+                $masterTemplate = $this->_getRenderer()->getTemplate($component, 'Master');
+            }
+            return $view->render($masterTemplate);
         } else if ($last['type'] == 'component') {
             $plugins = self::_getGroupedViewPlugins($component->componentClass);
             return '<div class="kwfMainContent">' . "\n    " .
