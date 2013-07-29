@@ -15,10 +15,10 @@ $container-style: magic;
     width: 100%;
 }
 
-#page #outerHeader,
+#page #outerHeader #header,
 #page #outerContent .stage,
-#page #outerContent #content,
-#page .bottomStage .innerBottomStage,
+#page #outerContent,
+#page .bottomStage,
 #page #outerFooter #footer {
     @include container;
 }
@@ -33,10 +33,12 @@ $container-style: magic;
 }
 #page {
     #outerHeader {
+        background: var(light);
 
         .logo {
             display: block;
             text-align: center;
+            max-height: 100px;
 
             img {
                 display: inline;
@@ -136,8 +138,12 @@ $container-style: magic;
     #page #outerHeader #header {
         border-bottom: none;
 
+        .logo {
+            max-height: 50px;
+        }
+
         .subMenuHorizontal {
-            background: #C80000;
+            background: #ccc;
             top: 0px;
             position: relative;
 
@@ -175,10 +181,6 @@ $container-style: magic;
             }
         }
         .subSubMenuHorizontal {
-            background: #F6F6F6;
-            top: 0px;
-            position: relative;
-            z-index: 15;
 
             .webStandard.redMalleeMenuSubSubHorizontal {
                   display: block;
@@ -186,28 +188,9 @@ $container-style: magic;
                   z-index: 15;
 
                 ul.menu {
-                    line-height: 30px;
-                    white-space: nowrap;
-                    margin-left: 0px;
 
                     li {
                         display: inline-block;
-                        list-style: none;
-                        color: white;
-                        margin-right: -4px;
-
-                        &.current {
-
-                            a {
-                                color: white;
-                            }
-                        }
-
-                        a {
-                            color: #000;
-                            font-size: 14px;
-                            padding: 0px 17px;
-                        }
                     }
                 }
             }
@@ -221,56 +204,96 @@ $container-style: magic;
 
 @include at-breakpoint(8) {
 
-    #page #outerHeader #header {
-        border-bottom: 5px solid #C80000;
+    #page {
 
-        .searchBox {
-            height: 40px;
-            position: relative;
-            top: 2px;
-            border-bottom: 5px solid #C80000;
-            margin-bottom: -3px;
-        }
+        #outerHeader {
 
-        .mainMenu {
-            position: relative;
-            top: 3px;
-            margin-right: 0px;
-            float: right;
+            #header {
+                border-bottom: 5px solid #C80000;
 
-            ul li {
-                float: left;
+                .logo {
+                    max-height: 50px;
+                }
+
+                .searchBox {
+                    height: 40px;
+                    position: relative;
+                    top: 2px;
+                    border-bottom: 5px solid #C80000;
+                    margin-bottom: -3px;
+                }
+
+                .mainMenu {
+                    position: relative;
+                    top: 3px;
+                    margin-right: 0px;
+                    float: right;
+
+                    ul li {
+                        float: left;
+                    }
+                }
+
+                .subMenuHorizontal .webStandard.redMalleeMenuSubHorizontal,
+                .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
+                    display: none;
+                }
+            }
+            &.sticky {
+
+                background: var(light);
+                position: fixed;
+                width: 100%;
+                z-index: 50;
+                top: -93px;
+
+                .logo {
+                    padding-top: 49px;
+                    position: relative;
+                    top: 44px;
+                }
             }
         }
 
-        .subMenuHorizontal .webStandard.redMalleeMenuSubHorizontal,
-        .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
-            display: none;
-        }
-    }
-
-    #page #outerContent #content #innerContent {
-        margin: 0px;
-
-        .leftColumn {
-            @include span-columns(2);
+        #outerContent #content {
             @include box-sizing(border-box);
-            padding-right: 50px;
+            padding: 0 15px;
 
-            .redMalleeMenuSub {
-                display: block;
+            #innerContent {
+                margin: 0px;
+
+                .leftColumn {
+                    @include span-columns(2);
+                    @include box-sizing(border-box);
+                    padding-right: 50px;
+
+                    .redMalleeMenuSub {
+                        display: block;
+                    }
+                }
+                .centerColumn {
+                    @include span-columns(4);
+                    @include box-sizing(border-box);
+                    padding-right: 50px
+                }
+                .rightColumn {
+                    @include span-columns(2 omega);
+                }
             }
         }
-        .centerColumn {
-            @include span-columns(4);
-            @include box-sizing(border-box);
-            padding-right: 50px
-        }
-        .rightColumn {
-            @include span-columns(2 omega);
+
+        &.sticky {
+
+            #outerContent,
+            .bottomStage,
+            #outerFooter {
+                position: relative;
+                top: 138px;
+            }
         }
     }
 }
+
 
 #page {
 

@@ -87,11 +87,24 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
             'component' => 'RedMallee_FulltextSearch_Search_Directory_Component',
             'name' => trlStatic('Suche')
         );
-        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo');
+
+        $ret['generators']['background'] = array(
+            'class' => 'Kwf_Component_Generator_Box_StaticSelect',
+            'component' => array(
+                'parentContent' => 'Kwc_Basic_ParentContent_Component',
+                'background'        => 'RedMallee_Box_BackgroundImage_Component',
+            ),
+            'inherit' => true,
+            'boxName' => trlStatic('Hintergrundbild')
+        );
+
+        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo', 'background');
 
 
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/master.css';
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/css/web.scss';
+        $ret['assets']['files'][] = 'kwf/themes/RedMallee/js/stickyHeader.js';
+        $ret['assets']['dep'][] = 'jQuery';
 
         return $ret;
     }

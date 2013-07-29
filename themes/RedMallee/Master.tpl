@@ -8,12 +8,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body class="frontend">
+        <div id="outerBg">
+            <?=$this->component($this->boxes['background']);?>
+        </div>
         <div id="page">
             <div id="outerHeader">
-                <div class="logo">
-                    <?=$this->component($this->boxes['logo']);?>
-                </div>
                 <div id="header">
+                    <div class="logo">
+                        <?=$this->component($this->boxes['logo']);?>
+                    </div>
                     <div class="searchBox">
                         <?=$this->component($this->boxes['searchBox']);?>
                     </div>

@@ -4,6 +4,8 @@
 
 .redMalleeListBottomStage {
     margin-right: 0px;
+    @include box-sizing(border-box);
+    padding: 0 15px;
     
     h1 {
         font-size: 16px;
