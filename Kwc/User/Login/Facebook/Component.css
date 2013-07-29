@@ -1,0 +1,6 @@
+/* will be displayed in js, so we have to hide it
+ * we need the success component for redirect in login redirect component
+ */
+.cssClass .success {
+    display: none;
+}
