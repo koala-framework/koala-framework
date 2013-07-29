@@ -2,228 +2,113 @@
 @import "compass/utilities/general/clearfix";
 @import "compass/css3/box-sizing";
 
-$total-columns: 8;
-$column-width: 980px / 8;
+$total-columns: 10;
+$column-width: 1100px / $total-columns;
 $gutter-width: 0px;
 $grid-padding: 0px;
+$container-width: 980px;
 
 $container-style: magic;
 
-
 #page {
+
     border-top: 5px solid var(secColor);
     width: 100%;
-}
 
-#page #outerHeader #header,
-#page #outerContent .stage,
-#page #outerContent,
-#page .bottomStage,
-#page #outerFooter #footer {
-    @include container;
-}
-#page #outerHeader #header,
-#page #outerContent .stage,
-#page #outerContent #content,
-#page #outerFooter #footer { text-align: left; }
-#page #outerContent {
-    background: url("/assets/kwf/themes/RedMallee/images/bgContent.jpg") repeat center -5px;
-    padding-bottom: 170px;
-    position: relative;
-}
-#page {
     #outerHeader {
         background: var(light);
 
-        .logo {
-            display: block;
-            text-align: center;
-            max-height: 100px;
-
-            img {
-                display: inline;
-            }
-        }
 
         #header {
             overflow: visible;
-             @include clearfix;
-             border-bottom: 5px solid #C80000;
-
-             .searchBox {
-                 height: 40px;
-                 position: relative;
-                 top: 2px;
-                 border-bottom: none;
-                 margin-bottom: -3px;
-             }
-
-             .mainMenu {
-                 position: relative;
-                 top: 0px;
-             }
-
-
-            .subMenuHorizontal .webStandard.redMalleeMenuSubHorizontal,
-            .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
-                display: none;
-            }
-         }
-    }
-
-    #outerContent #content {
-
-        #innerContent {
-            margin: 0 20px;
-        }
-    }
-}
-
-@include at-breakpoint(4) {
-    #page #outerHeader {
-
-        .logo {
-            height: auto;
-            margin: auto;
-            padding: 20px;
-            text-align: left;
-        }
-
-        #header {
-            img {
-                display: block;
-            }
-
-            .searchBox {
-                border-bottom: none;
-            }
-            .mainMenu {
-                position: relative;
-                top: 0px;
-            }
-        }
-    }
-}
-
-@include at-breakpoint(5) {
-    #page #outerHeader #header {
-
-        .searchBox {
-            float: right;
-            background: #EFEFEF;
+            @include clearfix;
+            @include container;
             border-bottom: 5px solid #C80000;
 
-            &:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 50%;
-                top: 0px;
-                left: 0px;
-                background: #f6f6f6;
-                z-index: 0;
+            @include at-breakpoint(6 no-mediaqueries) {
+                border-bottom: none;
             }
-            input {
-                z-index: 1;
-            }
-        }
-        .mainMenu {
-            position: relative;
-            top: 3px;
-        }
-    }
-}
-
-@include at-breakpoint(6) {
-    #page #outerHeader #header {
-        border-bottom: none;
-
-        .logo {
-            max-height: 50px;
-        }
-
-        .subMenuHorizontal {
-            background: #ccc;
-            top: 0px;
-            position: relative;
-
-            .webStandard.redMalleeMenuSubHorizontal {
-                display: block;
-                position: relative;
-                z-index: 15;
-
-                ul.menu {
-                    line-height: 30px;
-                    overflow-x: scroll;
-                    white-space: nowrap;
-                    margin-left: 0px;
-
-                    li {
-                        display: inline-block;
-                        list-style: none;
-                        color: white;
-                        margin-right: -4px;
-
-                        &.current {
-
-                            a {
-                                color: white;
-                            }
-                        }
-
-                        a {
-                            color: #000;
-                            font-size: 14px;
-                            padding: 0px 17px;
-                        }
-                    }
-                }
-            }
-        }
-        .subSubMenuHorizontal {
-
-            .webStandard.redMalleeMenuSubSubHorizontal {
-                  display: block;
-                  position: relative;
-                  z-index: 15;
-
-                ul.menu {
-
-                    li {
-                        display: inline-block;
-                    }
-                }
-            }
-        }
-    }
-
-    .leftColumn {
-        display: none;
-    }
-}
-
-@include at-breakpoint(8) {
-
-    #page {
-
-        #outerHeader {
-
-            #header {
+            @include at-breakpoint(8 no-mediaqueries) {
                 border-bottom: 5px solid #C80000;
+            }
 
-                .logo {
+            .logo {
+                display: block;
+                text-align: center;
+                max-height: 100px;
+
+                @include at-breakpoint(4 no-mediaqueries) {
+                    height: auto;
+                    margin: auto;
+                    padding: 20px;
+                    text-align: left;
+                }
+                @include at-breakpoint(6 no-mediaqueries) {
+                    max-height: 50px;
+                }
+                @include at-breakpoint(8 no-mediaqueries) {
                     max-height: 50px;
                 }
 
-                .searchBox {
+                img {
+                    @include at-breakpoint(4 no-mediaqueries) {
+                        display: block;
+                    }
+
+                    display: inline;
+                }
+            }
+
+            .searchBox {
+                height: 40px;
+                position: relative;
+                top: 2px;
+                border-bottom: none;
+                margin-bottom: -3px;
+                @include at-breakpoint(4 no-mediaqueries) {
+                    border-bottom: none;
+                }
+                @include at-breakpoint(5 no-mediaqueries) {
+                    float: right;
+                    background: #EFEFEF;
+                    border-bottom: 5px solid #C80000;
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: 50%;
+                        top: 0px;
+                        left: 0px;
+                        background: #f6f6f6;
+                        z-index: 0;
+                    }
+                    input {
+                        z-index: 1;
+                    }
+                }
+                @include at-breakpoint(8 no-mediaqueries) {
                     height: 40px;
                     position: relative;
                     top: 2px;
                     border-bottom: 5px solid #C80000;
                     margin-bottom: -3px;
                 }
+            }
 
-                .mainMenu {
+            .mainMenu {
+                position: relative;
+                top: 0px;
+
+                @include at-breakpoint(4 no-mediaqueries) {
+                    position: relative;
+                    top: 0px;
+                }
+                @include at-breakpoint(5 no-mediaqueries) {
+                    position: relative;
+                    top: 3px;
+                }
+                @include at-breakpoint(8 no-mediaqueries) {
                     position: relative;
                     top: 3px;
                     margin-right: 0px;
@@ -233,87 +118,135 @@ $container-style: magic;
                         float: left;
                     }
                 }
+            }
 
-                .subMenuHorizontal .webStandard.redMalleeMenuSubHorizontal,
-                .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
+            .subMenuHorizontal {
+
+                @include at-breakpoint(6 no-mediaqueries) {
+                    background: #ccc;
+                    top: 0px;
+                    position: relative;
+                }
+
+                .webStandard.redMalleeMenuSubHorizontal {
                     display: none;
+
+                    @include at-breakpoint(6 no-mediaqueries) {
+                        display: block;
+                        position: relative;
+                        z-index: 15;
+
+                        ul.menu {
+                            line-height: 30px;
+                            overflow-x: scroll;
+                            white-space: nowrap;
+                            margin-left: 0px;
+
+                            li {
+                                display: inline-block;
+                                list-style: none;
+                                color: white;
+                                margin-right: -4px;
+
+                                &.current {
+
+                                    a {
+                                        color: white;
+                                    }
+                                }
+
+                                a {
+                                    color: #000;
+                                    font-size: 14px;
+                                    padding: 0px 17px;
+                                }
+                            }
+                        }
+                    }
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        display: none;
+                    }
                 }
             }
-            &.sticky {
+            .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
+                display: none;
 
-                background: var(light);
-                position: fixed;
-                width: 100%;
-                z-index: 50;
-                top: -93px;
-
-                .logo {
-                    padding-top: 49px;
+                @include at-breakpoint(6 no-mediaqueries) {
+                    display: block;
                     position: relative;
-                    top: 44px;
+                    z-index: 15;
+
+                    ul.menu {
+
+                        li {
+                            display: inline-block;
+                        }
+                    }
                 }
+                @include at-breakpoint(8 no-mediaqueries) {
+                    display: none;
+                    }
             }
         }
+    }
 
-        #outerContent #content {
+    #outerContent {
+
+        @include container;
+        background: url("/assets/kwf/themes/RedMallee/images/bgContent.jpg") repeat center -5px;
+        padding-bottom: 170px;
+        position: relative;
+
+        .stage {
+            @include container;
+        }
+        #content {
             @include box-sizing(border-box);
             padding: 0 15px;
 
             #innerContent {
-                margin: 0px;
+                margin: 0 20px;
+
+                @include at-breakpoint(8 no-mediaqueries) {
+                    margin: 0px;
+                }
 
                 .leftColumn {
-                    @include span-columns(2);
-                    @include box-sizing(border-box);
-                    padding-right: 50px;
+                    @include at-breakpoint(6 no-mediaqueries) {
+                        display: none;
+                    }
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        @include span-columns(2);
+                        @include box-sizing(border-box);
+                        padding-right: 50px;
 
-                    .redMalleeMenuSub {
-                        display: block;
+                        .redMalleeMenuSub {
+                            display: block;
+                        }
+                    }
+
+                }
+
+                .centerColumn {
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        @include span-columns(4);
+                        @include box-sizing(border-box);
+                        padding-right: 50px
                     }
                 }
-                .centerColumn {
-                    @include span-columns(4);
-                    @include box-sizing(border-box);
-                    padding-right: 50px
-                }
+
                 .rightColumn {
-                    @include span-columns(2 omega);
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        @include span-columns(2 omega);
+                    }
+
                 }
-            }
-        }
-
-        &.sticky {
-
-            #outerContent,
-            .bottomStage,
-            #outerFooter {
-                position: relative;
-                top: 138px;
-            }
-        }
-    }
-}
-
-
-#page {
-
-    #outerContent {
-
-        #content #innerContent {
-
-            .leftColumn,
-            .centerColumn,
-            .rightColumn {
-                min-height: 100px;
-            }
-
-            .leftColumn {
-                padding-top: 50px;
             }
         }
     }
 
     .bottomStage {
+        @include container;
         background: url("/assets/kwf/themes/RedMallee/images/bottomStageBg.jpg") repeat center top;
         min-height: 230px;
         width: 100%;
@@ -331,6 +264,7 @@ $container-style: magic;
     }
 
     #outerFooter #footer {
+        @include container;
         margin-top: 40px;
         min-height: 100px;
 
@@ -342,9 +276,33 @@ $container-style: magic;
             float: left;
         }
     }
-}
 
-#page #outerHeader #header {
-    overflow: visible;
+    /* Sticky Header for desktop version */
+
+    &.sticky {
+        @include at-breakpoint(10 no-mediaqueries) {
+            #outerContent,
+            .bottomStage,
+            #outerFooter {
+                position: relative;
+                top: 138px;
+            }
+
+            #outerHeader {
+
+                background: var(light);
+                position: fixed;
+                width: 100%;
+                z-index: 50;
+                top: -63px;
+
+                .logo {
+                    padding-top: 49px;
+                    position: relative;
+                    top: 44px;
+                }
+            }
+        }
+    }
 }
 
