@@ -28,7 +28,6 @@ class Kwf_Component_Cache_ComponentLinkModifierCallback_Test extends Kwc_TestAbs
 
         //callback is dynamic, must change without clearing cache
         $html = $c->render(true, true);
-        $this->markTestIncomplete();
         $this->assertContains('linkTarget</a>bar', $html);
     }
 }

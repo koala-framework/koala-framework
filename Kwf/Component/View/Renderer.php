@@ -51,7 +51,7 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         return $ret;
     }
 
-    private function _getType()
+    protected function _getType()
     {
         $ret = substr(strrchr(get_class($this), '_'), 1);
         $ret = strtolower(substr($ret, 0, 1)).substr($ret, 1); //anfangsbuchstaben klein

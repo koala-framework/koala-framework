@@ -321,6 +321,30 @@ abstract class Kwf_Component_Renderer_Abstract
 
             //replace content with plugin output
             $ret = $this->_executePlugins($ret, 'R');
+
+
+            //execute Render Cached Dynamic, used eg for callback link modifier in componentLink
+            while (($start = strpos($ret, '<rcd ')) !== false) {
+                $startEnd = strpos($ret, '>', $start);
+                $args = explode(' ', substr($ret, $start+5, $startEnd-$start-5));
+                $end = strpos($ret, '</rcd '.$args[0].'>');
+                $content = substr($ret, $startEnd+1, $end-$startEnd-1);
+                if ($benchmarkEnabled) $startTime = microtime(true);
+                $componentId = $args[0];
+                $type = $args[1];
+                $settings = json_decode($args[2], true);
+                if (!isset($helpers[$type])) {
+                    $class = 'Kwf_Component_View_Helper_' . ucfirst($type);
+                    $helper = new $class();
+                    $helper->setRenderer($this);
+                    $helpers[$type] = $helper;
+                } else {
+                    $helper = $helpers[$type];
+                }
+                $content = $helper->renderCachedDynamic($content, $componentId, $settings);
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint("renderCachedDynamic $type $componentId", microtime(true)-$startTime);
+                $ret = substr($ret, 0, $start).$content.substr($ret, $end+7+strlen($args[0]));
+            }
         }
 
         return $ret;
