@@ -1,5 +1,8 @@
 <?=$this->doctype('XHTML1_STRICT');?>
+<!--[if lt IE 9 ]><html xmlns="http://www.w3.org/1999/xhtml" class="no-mediaqueries"> <![endif]-->
+<!-- [if !(lt IE 9)]> -->
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!-- <![endif] -->
     <head>
         <?=$this->includeCode('header')?>
         <!--[if (gte IE 6)&(lte IE 8)]>
