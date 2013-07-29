@@ -194,6 +194,12 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         this.fireEvent('changevalue', this.value, this);
     },
 
+    getParams : function(q){
+        var ret = Kwf.Form.ComboBox.superclass.getParams.call(this, q);
+        ret.current_value = this.getValue();
+        return ret;
+    },
+
     onRender : function(ct, position)
     {
         Kwf.Form.ComboBox.superclass.onRender.call(this, ct, position);

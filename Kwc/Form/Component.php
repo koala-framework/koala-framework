@@ -5,8 +5,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     private $_processed = false;
     private $_isSaved = false;
     private $_initialized = false;
-    private $_posted;
-    private $_postData;
+    private $_posted = false;
+    private $_postData = array();
     protected $_errors = array();
 
     public static function getSettings()
@@ -114,6 +114,16 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
         $this->_setProcessed();
 
+        $this->_postData = $postData;
+
+        if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
+            $postData = array();
+            $this->_posted = false;
+            return;
+        } else {
+            $this->_posted = true;
+        }
+
         if (!$this->getForm()) return;
 
         if ($this->_getIdFromPostData($postData)) {
@@ -125,14 +135,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $m = $m->getProxyModel();
         }
 
-        $this->getForm()->initFields();
-
-        if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
-            $postData = array();
-            $this->_posted = false;
-        } else {
-            $this->_posted = true;
-        }
         if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
             Kwf_Registry::get('db')->beginTransaction();
         }
@@ -206,11 +208,16 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    public function getPostData()
+    protected function _checkWasProcessed()
     {
-        if (!$this->_processed) {
+        if (!$this->_processed && isset($_REQUEST[$this->getData()->componentId.'-post'])) {
             throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
+    }
+
+    public function getPostData()
+    {
+        $this->_checkWasProcessed();
         return $this->_postData;
     }
 
@@ -219,25 +226,19 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
      */
     public function isPosted()
     {
-        if (!$this->_processed) {
-            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
-        }
+        $this->_checkWasProcessed();
         return $this->_posted;
     }
 
     public function getErrors()
     {
-        if (!$this->_processed) {
-            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
-        }
+        $this->_checkWasProcessed();
         return $this->_errors;
     }
 
     public function getFormRow()
     {
-        if (!$this->_processed) {
-            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
-        }
+        $this->_checkWasProcessed();
         return $this->getForm()->getRow();
     }
 
@@ -246,6 +247,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if (!$this->_initialized) {
             $this->_initialized = true;
             $this->_initForm();
+
+            $this->_form->initFields();
+
             if ($this->_form) $this->_form->trlStaticExecute($this->getData()->getLanguage());
         }
         return $this->_form;
@@ -260,9 +264,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = Kwc_Abstract::getTemplateVars();
 
-        if (!$this->_processed) {
-            throw new Kwf_Exception("Form '{$this->getData()->componentClass}' with id '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
-        }
+        $this->_checkWasProcessed();
 
         $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;

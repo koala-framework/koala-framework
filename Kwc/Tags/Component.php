@@ -4,7 +4,7 @@ class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Tags');
+        $ret['componentName'] = trlKwfStatic('Tags');
         $ret['flags']['hasFulltext'] = true;
         $ret['generators']['child']['component']['suggestions'] = 'Kwc_Tags_Suggestions_Component';
         $ret['menuConfig'] = 'Kwc_Tags_MenuConfig';
@@ -24,6 +24,7 @@ class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
         foreach ($model->getRows($select) as $tag) {
             $ret['tags'][] = $tag->tag_name;
         }
+        $ret['headline'] = $this->getData()->trlStaticExecute($this->_getSetting('componentName'));
         return $ret;
     }
 

@@ -21,6 +21,10 @@ class Kwc_Form_Dynamic_Component extends Kwc_Abstract_Composite_Component
             'recipient' => $row->recipient,
             'recipient_cc' => $row->recipient_cc,
             'subject' => $row->subject,
+
+            'send_confirm_mail' => $row->send_confirm_mail,
+            'confirm_field_component_id' => $row->confirm_field_component_id,
+            'confirm_subject' => $row->confirm_subject,
         );
     }
 }

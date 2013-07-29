@@ -44,8 +44,9 @@ class Kwf_Util_PayPal_Ipn
                 throw new Kwf_Exception("Http error in Ipn validation");
             } else {
                 fputs ($fp, $header . $req);
+                $res = '';
                 while (!feof($fp)) {
-                    $res = fgets ($fp, 1024);
+                    $res .= fgets ($fp, 1024);
                 }
                 fclose ($fp);
             }
@@ -53,7 +54,7 @@ class Kwf_Util_PayPal_Ipn
             $res = 'VERIFIED';
         }
 
-        if (stripos($res, "VERIFIED") !== false) {
+        if (trim($res) == "VERIFIED") {
             // TODO:
             // Check the payment_status is Completed
             // Check that txn_id has not been previously processed
@@ -69,7 +70,7 @@ class Kwf_Util_PayPal_Ipn
             }
             $row->save();
 
-        } else if (strcmp ($res, "INVALID") == 0) {
+        } else if (trim($res) == "INVALID") {
             throw new Kwf_Exception("Ipn validation received INVALID $domain");
         } else {
             throw new Kwf_Exception("Ipn validation received something strange: $res");

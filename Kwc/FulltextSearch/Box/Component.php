@@ -8,18 +8,20 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
         $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['useLiveSearch'] = true;
         $ret['hideSubmit'] = false;
-        $ret['flags']['processInput'] = true;
+        $ret['flags']['forwardProcessInput'] = true;
         return $ret;
     }
 
-    public function processInput($postData)
+    public function getForwardProcessInputComponents()
     {
-        Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Component',
-                                   array('subroot'=>$this->getData()))
-            ->getChildComponent('-view')->getChildComponent('-searchForm')
-            ->getComponent()->processInput($postData);
+        return array(
+            Kwf_Component_Data_Root::getInstance()
+                ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Component',
+                                    array('subroot'=>$this->getData()))
+                ->getChildComponent('-view')->getChildComponent('-searchForm')
+            );
     }
+
 
     public function getTemplateVars()
     {

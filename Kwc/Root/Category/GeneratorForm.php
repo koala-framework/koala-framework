@@ -58,6 +58,8 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
             $fs = $fields->add(new Kwf_Form_Container_FieldSet(trlKwf('Menu settings')));
             $hideInMenuText = trlKwf('Hide');
             $fs->add(new Kwf_Form_Field_Select('device_visible',  trlKwf('Device visible')))
+                ->setListWidth(250)
+                ->setDefaultValue(Kwf_Component_Data::DEVICE_VISIBLE_ALL)
                 ->setValues(array(
                     Kwf_Component_Data::DEVICE_VISIBLE_ALL => trlKwf('show on all devices'),
                     Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE => trlKwf('hide on mobile devices'),

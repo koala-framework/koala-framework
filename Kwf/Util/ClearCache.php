@@ -71,7 +71,7 @@ class Kwf_Util_ClearCache
         if ($simpleCache && $simpleCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         } else {
-            if (Kwf_Config::getValue('server.memcache.host')) {
+            if (Kwf_Util_Memcache::getHost()) {
                 //complete memcache, used by Cache_SimpleStatic
                 $types[] = new Kwf_Util_ClearCache_Types_Memcache();
             }
@@ -79,12 +79,7 @@ class Kwf_Util_ClearCache
         $hasApc = extension_loaded('apc');
         if (!$hasApc) {
             //apc might be enabled in webserver only, not in cli
-            $d = Kwf_Config::getValue('server.domain');
-            if (!$d && file_exists('cache/lastdomain')) {
-                //this file gets written in Kwf_Setup to make it "just work"
-                $d = file_get_contents('cache/lastdomain');
-            }
-            $hasApc = @file_get_contents("http://apcutils:".Kwf_Util_Apc::getHttpPassword()."@$d/kwf/util/apc/is-loaded") == '1';
+            $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 1;
         }
         if ($hasApc) {
             $types[] = new Kwf_Util_ClearCache_Types_ApcUser();
@@ -157,6 +152,7 @@ class Kwf_Util_ClearCache
     {
         Kwf_Component_ModelObserver::getInstance()->disable();
 
+        ini_set('memory_limit', '512M');
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
             Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
         }

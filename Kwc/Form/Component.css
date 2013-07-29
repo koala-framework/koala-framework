@@ -71,7 +71,7 @@
 }
 .cssClass label {
     float: left;
-    width: 120px;
+    width: 120px; /* set as inline style if setLabelWidth is used */
     margin-right: 20px;
     text-align: right;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -79,8 +79,15 @@
     color: var(typo);
     line-height: 18px;
 }
+.cssClass .kwfFormFieldWrapper.hasLabel {
+    margin-left: 120px; /* set as inline style if setLabelWidth is used */
+    padding-left: 20px;
+}
+.cssClass .kwcLabelPositionAbove .kwfFormFieldWrapper.hasLabel {
+    margin-left: 0;
+    padding-left: 0;
+}
 .cssClass .kwfFieldRequired label { font-weight: normal; }
-.webForm .kwfFieldRequired label .requiredSign { display: none; }
 .cssClass .kwfFieldRequired span label { font-weight: normal; }
 .cssClass .kwfFieldLabelAlignTop label {
     width: auto;
@@ -107,7 +114,6 @@
     margin-left: -10px;
 }
 .cssClass form .kwfFormFieldRadio label {
-    margin-left: 10px;
     margin-right: 20px;
     clear: none;
 }
@@ -147,3 +153,9 @@
 }
 .cssClass span.comment { margin-left: 10px; color: #999; }
 .cssClass .kwfField { clear: both; position: relative; }
+
+.cssClass .kwcLabelPositionAbove label {
+    margin-left: 0px;
+    text-align: left;
+    width: 100%;
+}

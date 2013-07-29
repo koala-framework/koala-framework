@@ -1,12 +1,6 @@
 <?php
-class Kwc_News_Detail_Abstract_Trl_Form extends Kwf_Form
+class Kwc_News_Detail_Abstract_Trl_Form extends Kwc_Directories_Item_Detail_Form
 {
-    public function __construct($name, $detailClass = null)
-    {
-        $this->setClass($detailClass);
-        parent::__construct('details');
-    }
-
     protected function _initFields()
     {
         parent::_initFields();

@@ -2,7 +2,7 @@
 .kwfFieldErrorIconBubble { 
     position: absolute; 
     width: 16px; height: 16px;
-    z-index: 1000;
+    z-index: 30;
     background: url("/assets/silkicons/exclamation.png") no-repeat scroll left center transparent;
 }
 .kwfFieldErrorIconBubble .message {

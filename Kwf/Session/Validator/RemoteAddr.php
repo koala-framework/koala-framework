@@ -1,5 +1,5 @@
 <?php
-class Kwf_Session_Validator_RemoteAddr extends Zend_Session_Validator_Abstract
+class Kwf_Session_Validator_RemoteAddr extends Kwf_Session_Validator_Abstract
 {
     public function setup()
     {

@@ -38,7 +38,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         $this->add($image);
 
         if (Kwc_Abstract::getSetting($this->getClass(), 'showHelpText')) {
-            $dimensions = Kwc_Abstract::getSetting($this->getClass(), 'dimensions');
+            $dimensions = array_values(Kwc_Abstract::getSetting($this->getClass(), 'dimensions'));
             $helptext = trlKwf('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['height'] . 'px';
             $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
             $this->getByName('Image')->setHelpText($helptext);
