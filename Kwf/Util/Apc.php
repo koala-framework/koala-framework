@@ -3,7 +3,7 @@
 //direkt in der cli ist das leider nicht möglich, da der speicher im webserver liegt
 class Kwf_Util_Apc
 {
-    public static function getHttpPassword()
+    private static function _getHttpPassword()
     {
         if ($ret = Kwf_Config::getValue('apcUtilsPass')) {
             //optional, required if multiple webservers
@@ -19,12 +19,19 @@ class Kwf_Util_Apc
 
     public static function callClearCacheByCli($params, $options = array())
     {
+        return self::callUtil('clear-cache', $params, $options);
+    }
+
+    public static function callUtil($method, $params, $options = array())
+    {
         $outputType = '';
         if (isset($params['type']) && $params['type'] == 'user') {
             $outputType = 'apc user';
         } else if (isset($params['type']) && $params['type'] == 'file') {
             $outputType = 'optcode';
         }
+
+        $params['password'] = self::_getHttpPassword();
 
         $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
 
@@ -84,9 +91,8 @@ class Kwf_Util_Apc
 
         foreach ($domains as $d) {
             $s = microtime(true);
-            $pwd = Kwf_Util_Apc::getHttpPassword();
-            $urlPart = "http://apcutils:".Kwf_Util_Apc::getHttpPassword()."@";
-            $url = "$urlPart$d[domain]/kwf/util/apc/clear-cache";
+            $urlPart = "http://";
+            $url = "$urlPart$d[domain]/kwf/util/apc/$method";
 
             $client = new Zend_Http_Client();
             $client->setMethod(Zend_Http_Client::POST);
@@ -97,23 +103,26 @@ class Kwf_Util_Apc
             ));
 
             $client->setUri($url);
-            $body = 'could not reach web per http';
+            $body = null;
+            $outputMessage = 'could not reach web per http';
             try {
                 $response = $client->request();
                 $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
                 $body = $response->getBody();
+                $outputMessage = $body;
             } catch (Exception $e) {
                 $result = false;
             }
             $url2 = null;
             if (!$result && isset($d['alternative'])) {
-                $url2 = "$urlPart$d[alternative]/kwf/util/apc/clear-cache";
+                $url2 = "$urlPart$d[alternative]/kwf/util/apc/$method";
                 try {
                     $client->setUri($url2);
                     $client->setParameterPost($params);
                     $response = $client->request();
                     $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
                     $body = $response->getBody();
+                    $outputMessage = $body;
                 } catch (Exception $e) {
                     $result = false;
                 }
@@ -123,24 +132,23 @@ class Kwf_Util_Apc
                 if ($url2) $outputUrl .= " / $url2";
                 $time = round((microtime(true)-$s)*1000);
                 if ($result) {
-                    call_user_func($options['outputFn'], "$outputUrl ({$time}ms) $body ");
+                    call_user_func($options['outputFn'], "$outputUrl ({$time}ms) $outputMessage ");
                 } else {
-                    call_user_func($options['outputFn'], "error: $outputType $outputUrl $body\n\n");
+                    call_user_func($options['outputFn'], "error: $outputType $outputUrl $outputMessage\n\n");
                 }
             }
         }
-        return $result;
+        if (isset($options['returnBody']) && $options['returnBody']) {
+            return $body;
+        } else {
+            return $result;
+        }
     }
 
     public static function dispatchUtils()
     {
 
-        if (empty($_SERVER['PHP_AUTH_USER']) ||
-            empty($_SERVER['PHP_AUTH_PW']) ||
-            $_SERVER['PHP_AUTH_USER']!='apcutils' ||
-            $_SERVER['PHP_AUTH_PW']!=self::getHttpPassword())
-        {
-            header('WWW-Authenticate: Basic realm="APC Utils"');
+        if ($_POST['password']!=self::_getHttpPassword()) {
             throw new Kwf_Exception_AccessDenied();
         }
 
@@ -190,6 +198,16 @@ class Kwf_Util_Apc
             self::stats();
         } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/iterate') {
             self::iterate();
+        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/is-loaded') {
+            if (extension_loaded('apc')) {
+                echo '1';
+            } else {
+                echo '0';
+            }
+            exit;
+        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/get-hostname') {
+            echo php_uname('n');
+            exit;
         }
         throw new Kwf_Exception_NotFound();
     }

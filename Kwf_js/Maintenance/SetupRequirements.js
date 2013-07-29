@@ -17,7 +17,11 @@ Kwf.Maintenance.SetupRequirements = Ext.extend(Ext.Panel, {
         this.continueButton = new Ext.Button({
             text: 'Continue',
             handler: function() {
-                this.fireEvent('continue');
+                if (this.hasFailedCheck) {
+                    Ext.Msg.alert('Error', 'Please fix all failed (red) checks before continuing, else the setup will fail.');
+                } else {
+                    this.fireEvent('continue');
+                }
             },
             scope: this
         });
@@ -36,6 +40,12 @@ Kwf.Maintenance.SetupRequirements = Ext.extend(Ext.Panel, {
             mask: this.body,
             success: function(response, options, result) {
                 this.resultTemplate.overwrite(this.body, result);
+                this.hasFailedCheck = false;
+                result.checks.each(function(c) {
+                    if (c.status == 'failed') {
+                        this.hasFailedCheck = true;
+                    }
+                }, this);
             },
             scope: this
         });

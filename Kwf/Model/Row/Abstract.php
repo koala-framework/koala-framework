@@ -580,6 +580,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
                 if ($f->filterAfterSave() != $filterAfterSave) continue;
                 $this->$k = $f->filter($this);
             } else {
+                if ($filterAfterSave) continue;
                 $this->$k = $f->filter($this->__toString());
             }
             if ($filterAfterSave) {

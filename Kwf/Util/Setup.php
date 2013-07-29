@@ -142,10 +142,8 @@ class Kwf_Util_Setup
 
         $ret .= "Zend_Registry::set('requestNum', ''.floor(Kwf_Benchmark::\$startTime*100));\n";
 
-        if (get_magic_quotes_gpc()) {
-            //this is *NOT* recommended but still works somehow
-            $ret .= "Kwf_Util_UndoMagicQuotes::undoMagicQuotes();\n";
-        }
+        //this is *NOT* recommended but still works somehow
+        $ret .= "if (get_magic_quotes_gpc()) Kwf_Util_UndoMagicQuotes::undoMagicQuotes();\n";
 
         if (Kwf_Config::getValue('debug.firephp') || Kwf_Config::getValue('debug.querylog')) {
             $ret .= "if (php_sapi_name() != 'cli') {\n";
@@ -227,7 +225,7 @@ class Kwf_Util_Setup
         $ret .= "\n";
 
         //store session data in memcache if avaliable
-        if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        if ((Kwf_Util_Memcache::getHost() || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
@@ -344,6 +342,26 @@ class Kwf_Util_Setup
 
         $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, Kwf_Trl::getInstance()->getWebCodeLanguage());
         $ret .= "setlocale(LC_ALL, explode(', ', '".$locale."'));\n";
+        /*
+            Das LC_NUMERIC wird absichtlich ausgenommen weil:
+            Wenn locale auf DE gesetzt ist und man aus der DB Kommazahlen
+            ausliest, dann kommen die als string mit Beistrich (,) an und mit
+            dem lässt sich nicht weiter rechnen.
+            PDO oder Zend machen da wohl den Fehler und ändern irgendwo die
+            PHP-Float repräsentation in einen String um und so steht er dann mit
+            Beistrich drin.
+            Beispiel:
+                setlocale(LC_ALL, 'de_DE');
+                $a = 2.3;
+                echo $a; // gibt 2,3 aus
+                echo $a * 2; // gibt 4,6 aus
+            Problem ist es dann, wenn die kommazahl in string gecastet wird:
+                setlocale(LC_ALL, 'de_DE');
+                $a = 2.3;
+                $b = "$a";
+                echo $b; // gibt 2,3 aus
+                echo $b * 2; // gibt 4 aus -> der teil hinterm , wird einfach ignoriert
+        */
         $ret .= "setlocale(LC_NUMERIC, 'C');\n";
 
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";

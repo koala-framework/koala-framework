@@ -627,6 +627,18 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
             $ret = (bool)$row->countChildRows($expr->getChild(), $expr->getSelect());
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Child_First) {
+            if (!$row instanceof Kwf_Model_Row_Interface) {
+                $row = $this->getRow($row[$this->getPrimaryKey()]);
+            }
+            $s = clone $expr->getSelect();
+            $s->limit(1);
+            $childRows = $row->getChildRows($expr->getChild(), $s);
+            if (count($childRows)) {
+                return $childRows[0]->{$expr->getField()};
+            } else {
+                return null;
+            }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child) {
             if (!$row instanceof Kwf_Model_Row_Interface) {
                 $row = $this->getRow($row[$this->getPrimaryKey()]);
@@ -781,7 +793,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
             if (!$ret) $ret = 0;
             return $ret;
-        } else if ($expr instanceof Kwf_Model_Select_Expr_Equals) {
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
             return ($row->{$expr->getField()} == $expr->getValue());
         } else if ($expr instanceof Kwf_Model_Select_Expr_And) {
             foreach ($expr->getExpressions() as $e) {

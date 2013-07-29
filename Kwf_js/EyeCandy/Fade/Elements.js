@@ -294,11 +294,13 @@ Kwf.Fade.Elements.prototype = {
      * is useful for responsive webs
      **/
     calculateMaxHeight: function() {
+        var maxHeight = 0;
         this.fadeElements.each($.proxy(function(index, el) {
-            if ($(el).height() > this._components.height()) {
-                this._components.css('height', $(this.fadeElements[this.active]).height());
+            if ($(el).height() > maxHeight) {
+                maxHeight = $(el).height();
             }
         }, this));
+        this._components.css('height', maxHeight);
     },
 
     pause: function() {

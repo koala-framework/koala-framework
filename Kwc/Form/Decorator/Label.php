@@ -31,6 +31,8 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
             if ($item['item'] && $item['item']->getCls()) {
                 $class .= ' '.$item['item']->getCls();
             }
+
+            $labelPos = 'left';
             if ($item['item']) {
                 $c = get_class($item['item']);
                 $classParts = array();
@@ -43,8 +45,13 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                     if ($c == 'Kwf_Form_Field_Abstract' || $c == 'Kwf_Form_Field_SimpleAbstract') break;
                 }
                 $class .= implode(' ', array_reverse($classParts));
+                if ($item['item']->getLabelPosition()) {
+                    $labelPos = $item['item']->getLabelPosition();
+                }
+                $class .= ' kwcLabelPosition'.ucfirst($labelPos);
                 $class .= ' '.$item['item']->getFieldName();
             }
+
             $preHtml = '<div class="'.$class.'">';
             if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getFieldLabel()) {
                 $preHtml .= '<label for="'
@@ -66,6 +73,13 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                 $preHtml .= '</label>';
             }
             $postHtml = '';
+            $style = '';
+            if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getLabelWidth() && $labelPos != 'above') {
+                $style = 'margin-left:'.$item['item']->getLabelWidth().'px';
+            }
+            $preHtml = $preHtml . '<div class="kwfFormFieldWrapper" style="'.$style.'">';
+            $postHtml = '</div>'.$postHtml;
+
             if ($item['item'] && $item['item']->getComment()) {
                 $postHtml .= '<span class="comment">'.$item['item']->getComment().'</span>';
             }

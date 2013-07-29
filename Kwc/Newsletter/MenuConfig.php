@@ -14,7 +14,9 @@ class Kwc_Newsletter_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstra
         $components = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         foreach ($components as $c) {
-            $menuConfig['text'] = trlKwf('Edit {0}', trlKwf('Newsletter'));
+            $componentName = Kwc_Abstract::getSetting($this->_class, 'componentName');
+            $componentName = Kwf_Trl::getInstance()->trlStaticExecute($componentName);
+            $menuConfig['text'] = trlKwf('Edit {0}', $componentName);
             if (count($components) > 1) {
                 $subRoot = $c;
                 while($subRoot = $subRoot->parent) {

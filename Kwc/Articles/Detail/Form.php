@@ -37,7 +37,7 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
 
         $this->add(Kwc_Abstract_Form::createComponentFormByDbIdTemplate('article_{0}-previewImage', 'previewImage'));
 
-        $columns = $this->add(new Kwf_Form_Container_Columns());
+        $columns = $this->add(new Kwf_Form_Container_Columns('is_top'));
         $col = $columns->add(new Kwf_Form_Container_Column());
         $col->setStyle('margin-left: 0px');
         $col->add(new Kwf_Form_Field_Checkbox('is_top_checked', trlKwf('Hot-topic')));

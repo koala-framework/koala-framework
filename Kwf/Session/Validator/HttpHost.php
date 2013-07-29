@@ -1,5 +1,5 @@
 <?php
-class Kwf_Session_Validator_HttpHost extends Zend_Session_Validator_Abstract
+class Kwf_Session_Validator_HttpHost extends Kwf_Session_Validator_Abstract
 {
     public function setup()
     {

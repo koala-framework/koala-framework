@@ -6,8 +6,9 @@ class Kwf_Cache extends Zend_Cache
     /**
      * @return Zend_Cache_Core
      */
-    public static function factory($frontend, $backend, $frontendOptions = array(), $backendOptions = array())
+    public static function factory($frontend, $backend, $frontendOptions = array(), $backendOptions = array(), $customFrontendNaming = false, $customBackendNaming = false, $autoload = false)
     {
+        //parameters $customFrontendNaming, $customBackendNaming, $autoload are not used at the moment
         $frontendClass = 'Zend_Cache_' . ($frontend != 'Core' ? 'Frontend_' : '') . $frontend;
         $backendClass = 'Zend_Cache_Backend_' . $backend;
         if ($backend == 'Memcached' || $backend == 'File' || $backend == 'TwoLevels' || $backend == 'Apc') {

@@ -25,29 +25,27 @@ class Kwf_Component_Cache_Memory extends Zend_Cache_Core
         );
         parent::__construct($options);
 
-        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
+        $be = Kwf_Cache_Simple::getBackend();
+
+        if ($be == 'elastiCache') {
             $this->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
                 'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
                 'compression' => true,
             )));
             //do *not* use cache_namespace for this cache (we don't want to delete it on clear-cache)
+        } else if ($be == 'memcache') {
+            $this->setBackend(new Kwf_Cache_Backend_Memcached(array(
+                'compression' => true,
+            )));
+            //do *not* use cache_namespace for this cache (we don't want to delete it on clear-cache)
+        } else if ($be == 'apc') {
+            $this->setBackend(new Kwf_Cache_Backend_Apc());
         } else {
-            if (!Kwf_Config::getValue('server.memcache.host') && extension_loaded('apc')) {
-                $this->setBackend(new Kwf_Cache_Backend_Apc());
-            } else {
-                if (Kwf_Config::getValue('server.memcache.host')) {
-                    $this->setBackend(new Kwf_Cache_Backend_Memcached(array(
-                        'compression' => true,
-                    )));
-                    //do *not* use cache_namespace for this cache (we don't want to delete it on clear-cache)
-                } else {
-                    //fallback to file backend (NOT recommended!)
-                    $this->setBackend(new Kwf_Cache_Backend_File(array(
-                        'cache_dir' => 'cache/view',
-                        'hashed_directory_level' => 2,
-                    )));
-                }
-            }
+            //fallback to file backend (NOT recommended!)
+            $this->setBackend(new Kwf_Cache_Backend_File(array(
+                'cache_dir' => 'cache/view',
+                'hashed_directory_level' => 2,
+            )));
         }
     }
 }

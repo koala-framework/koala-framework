@@ -34,6 +34,7 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
     {
         $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
         $limitOffset = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
+        if ($limitOffset === null) $limitOffset = 0;
 
         $queryString = '';
         $params = array();

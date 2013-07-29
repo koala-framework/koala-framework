@@ -40,9 +40,7 @@ class Kwc_Basic_Image_Events extends Kwc_Abstract_Image_Events
         $components = $event->component
             ->getChildComponents(array('componentClass' => $this->_class));
         foreach ($components as $component) {
-            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $component
-            ));
+            $this->_fireMediaChanged($component);
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                 $this->_class, $component
             ));
