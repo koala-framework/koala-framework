@@ -215,7 +215,7 @@ abstract class Kwf_Component_Renderer_Abstract
                         $existingTargetIds[] = $i['target_id'];
                     }
                     $newTargetIds = array();
-                    if ($this->_includedComponents && $pass==1) {
+                    if ($this->_includedComponents) {
                         $data = array();
                         foreach ($this->_includedComponents as $c) {
                             $cmp = Kwf_Component_Data_Root::getInstance()
