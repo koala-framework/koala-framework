@@ -7,3 +7,6 @@ CREATE TABLE  `cache_component_includes` (
     `target_id` VARCHAR( 255 ) NOT NULL
 ) ENGINE = MYISAM ;
 ALTER TABLE  `cache_component_includes` ADD  `type` VARCHAR( 50 ) NOT NULL;
+
+ALTER TABLE `cache_component_includes` ADD INDEX  `source` (  `component_id` ,  `type` );
+ALTER TABLE  `cache_component_includes` ADD INDEX (  `target_id` );
