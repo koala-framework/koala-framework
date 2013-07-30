@@ -10,8 +10,7 @@ abstract class Kwf_Component_Renderer_Abstract
     public function includedComponent($targetComponentId, $targetType)
     {
         $this->_includedComponents[] = array(
-            'target_id' => $targetComponentId,
-            'target_type' => $targetType
+            'target_id' => $targetComponentId
         );
     }
 
