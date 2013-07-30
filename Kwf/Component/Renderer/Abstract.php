@@ -9,9 +9,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
     public function includedComponent($targetComponentId, $targetType)
     {
-        $this->_includedComponents[] = array(
-            'target_id' => $targetComponentId
-        );
+        $this->_includedComponents[] = $targetComponentId;
     }
 
     public function __construct()
@@ -217,16 +215,21 @@ abstract class Kwf_Component_Renderer_Abstract
                     $newTargetIds = array();
                     if ($this->_includedComponents) {
                         $data = array();
-                        foreach ($this->_includedComponents as $c) {
+                        foreach ($this->_includedComponents as $includedComponentId) {
                             $cmp = Kwf_Component_Data_Root::getInstance()
                                 ->getComponentById($componentId, array('ignoreVisible' => true));
                             $targetCmp = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentById($c['target_id'], array('ignoreVisible' => true));
+                                ->getComponentById($includedComponentId, array('ignoreVisible' => true));
                             if ($cmp->getPage() !== $targetCmp->getPage()) {
-                                $c['type'] = $type;
-                                $c['component_id'] = $componentId;
-                                $newTargetIds[] = $c['target_id'];
-                                $data[] = $c;
+                                if (!in_array($includedComponentId, $existingTargetIds)) {
+                                    $c = array(
+                                        'target_id' => $includedComponentId,
+                                        'type' => $type,
+                                        'component_id' => $componentId,
+                                    );
+                                    $data[] = $c;
+                                }
+                                $newTargetIds[] = $includedComponentId;
                             }
                         }
                         $m->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
