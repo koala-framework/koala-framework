@@ -2,7 +2,7 @@
 @import "susy";
 @import "kwf/background-image-dpr2";
 
-.redMalleeListBottomStage {
+.cssClass {
     margin-right: 0px;
     @include box-sizing(border-box);
     padding: 0 15px;
@@ -55,11 +55,13 @@
                 @include omega;
             }
         }
-    &.gt979 {
-        .listItem {
-            @include span-columns(1,3);
-            &:nth-child(3n+3) {
-                @include omega;
+
+        &.gt979 {
+            .listItem {
+                @include span-columns(1,3);
+                &:nth-child(3n+3) {
+                    @include omega;
+                }
             }
         }
     }

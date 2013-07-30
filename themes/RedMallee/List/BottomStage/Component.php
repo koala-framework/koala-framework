@@ -5,6 +5,7 @@ class RedMallee_List_BottomStage_Component extends Kwc_Abstract_List_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlStatic('Stage unten');
+        $ret['cssClass'] = ' webStandard';
         $ret['generators']['child']['component'] = 'RedMallee_List_BottomStage_Item_Component';
         return $ret;
     }
