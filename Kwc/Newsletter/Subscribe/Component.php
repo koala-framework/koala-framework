@@ -24,13 +24,15 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
 
         $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Subscribe/RecipientsPanel.js';
+
+        $ret['subscribeToNewsletterClass'] = 'Kwc_Newsletter_Component';
         return $ret;
     }
 
     public function getSubscribeToNewsletterComponent()
     {
         $nlData = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_Newsletter_Component', array('subroot'=>$this->getData()));
+            ->getComponentByClass($this->_getSetting('subscribeToNewsletterClass'), array('subroot'=>$this->getData()));
         if (!$nlData) {
             throw new Kwf_Exception('Cannot find newsletter component');
         }
