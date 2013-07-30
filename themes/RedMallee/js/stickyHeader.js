@@ -3,7 +3,7 @@ $(function(){
     $(window).scroll(function(){
         if( $(window).scrollTop() > (mainMenu-30) ) {
             $('#outerHeader').addClass("sticky");
-            $('#page').addClass("sticky");
+            $('body').addClass("sticky");
             $('#outerHeader').removeClass("notSticky");
             $('.sticky .logo img').attr({
                 width: 100,
@@ -11,7 +11,7 @@ $(function(){
             });
         } else {
             $('#outerHeader').removeClass("sticky");
-            $('#page').removeClass("sticky");
+            $('body').removeClass("sticky");
             $('#outerHeader').addClass("notSticky");
             $('.notSticky .logo img').attr({
                 width: 180,

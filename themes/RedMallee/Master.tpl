@@ -55,19 +55,21 @@
                     </div>
                 </div>
             </div>
-            <div class="bottomStage">
-                <div class="bottomStageShadow"></div>
-                <div class="innerBottomStage">
-                    <?=$this->component($this->boxes['bottomStage']);?>
+            <div id="outerBottomStage">
+                <div id="bottomStage">
+                    <div class="bottomStageShadow"></div>
+                    <div class="innerBottomStage">
+                        <?=$this->component($this->boxes['bottomStage']);?>
+                    </div>
                 </div>
             </div>
-            <div id="outerFooter">
-                <div id="footer">
-                    <div class="bottomMenu">
-                        <?=$this->component($this->boxes['bottomMenu']);?>
-                    </div>
-                    <div class="leftArea"></div>
+        </div>
+        <div id="outerFooter">
+            <div id="footer">
+                <div class="bottomMenu">
+                    <?=$this->component($this->boxes['bottomMenu']);?>
                 </div>
+                <div class="leftArea"></div>
             </div>
         </div>
         <?=$this->includeCode('footer')?>

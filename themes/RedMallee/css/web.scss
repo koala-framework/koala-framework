@@ -10,27 +10,51 @@ $container-width: 980px;
 
 $container-style: magic;
 
-#page {
+/* Sticky Header for desktop version */
+html, body {
+    height: 100%;
+}
+body.sticky {
+    @include at-breakpoint(10 no-mediaqueries) {
+        #outerContent,
+        #bottomStage,
+        #outerFooter {
+            position: relative;
+            top: 138px;
+        }
 
-    border-top: 5px solid var(secColor);
+        #outerHeader {
+
+            background: var(light);
+            position: fixed;
+            width: 100%;
+            z-index: 50;
+            top: -63px;
+
+            .logo {
+                padding-top: 49px;
+                position: relative;
+                top: 44px;
+            }
+        }
+    }
+}
+
+#page {
+    height: auto;
+    min-height: 100%;
+    position: relative;
     width: 100%;
 
     #outerHeader {
         background: var(light);
-
+        border-top: 5px solid var(secColor);
 
         #header {
             overflow: visible;
             @include clearfix;
             @include container;
             border-bottom: 5px solid #C80000;
-
-            @include at-breakpoint(6 no-mediaqueries) {
-                border-bottom: none;
-            }
-            @include at-breakpoint(8 no-mediaqueries) {
-                border-bottom: 5px solid #C80000;
-            }
 
             .logo {
                 display: block;
@@ -65,13 +89,10 @@ $container-style: magic;
                 top: 2px;
                 border-bottom: none;
                 margin-bottom: -3px;
-                @include at-breakpoint(4 no-mediaqueries) {
-                    border-bottom: none;
-                }
+
                 @include at-breakpoint(5 no-mediaqueries) {
-                    float: right;
                     background: #EFEFEF;
-                    border-bottom: 5px solid #C80000;
+                    float: right;
 
                     &:after {
                         content: '';
@@ -91,7 +112,6 @@ $container-style: magic;
                     height: 40px;
                     position: relative;
                     top: 2px;
-                    border-bottom: 5px solid #C80000;
                     margin-bottom: -3px;
                 }
             }
@@ -194,7 +214,7 @@ $container-style: magic;
 
         @include container;
         background: url("/assets/kwf/themes/RedMallee/images/bgContent.jpg") repeat center -5px;
-        padding-bottom: 170px;
+        padding-bottom: 100px;
         position: relative;
 
         #content {
@@ -209,6 +229,8 @@ $container-style: magic;
                 }
 
                 .leftColumn {
+                    margin-top: 10px;
+
                     @include at-breakpoint(6 no-mediaqueries) {
                         display: none;
                     }
@@ -241,29 +263,42 @@ $container-style: magic;
             }
         }
     }
+    #outerBottomStage {
 
-    .bottomStage {
-        @include container;
-        background: url("/assets/kwf/themes/RedMallee/images/bottomStageBg.jpg") repeat center top;
-        min-height: 230px;
-        width: 100%;
-
-        .innerBottomStage {
-            margin: 20px auto 0px;
-            position: relative;
-        }
-
-        .bottomStageShadow {
-            background: url("/assets/kwf/themes/RedMallee/images/bottomStageShadow.png") repeat center top;
-            height: 10px;
+        padding-bottom: 150px;
+        #bottomStage {
+            @include container;
+            background: url("/assets/kwf/themes/RedMallee/images/bottomStageBg.jpg") repeat center top;
+            min-height: 230px;
             width: 100%;
+
+            .innerBottomStage {
+                margin: 20px auto 0px;
+                position: relative;
+            }
+
+            .bottomStageShadow {
+                background: url("/assets/kwf/themes/RedMallee/images/bottomStageShadow.png") repeat center top;
+                height: 10px;
+                width: 100%;
+            }
         }
     }
 
-    #outerFooter #footer {
+}
+
+#outerFooter {
+
+    height: 100px;
+    margin-top: -105px;
+    width: 100%;
+    background: white;
+    bottom: 0px;
+    border-top: 5px solid var(secColor);
+
+    #footer {
         @include container;
-        margin-top: 40px;
-        min-height: 100px;
+        margin-top: 20px;
 
         .bottomMenu {
             float: right;
@@ -271,34 +306,6 @@ $container-style: magic;
 
         .leftArea {
             float: left;
-        }
-    }
-
-    /* Sticky Header for desktop version */
-
-    &.sticky {
-        @include at-breakpoint(10 no-mediaqueries) {
-            #outerContent,
-            .bottomStage,
-            #outerFooter {
-                position: relative;
-                top: 138px;
-            }
-
-            #outerHeader {
-
-                background: var(light);
-                position: fixed;
-                width: 100%;
-                z-index: 50;
-                top: -63px;
-
-                .logo {
-                    padding-top: 49px;
-                    position: relative;
-                    top: 44px;
-                }
-            }
         }
     }
 }
