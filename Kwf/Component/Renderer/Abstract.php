@@ -210,7 +210,11 @@ abstract class Kwf_Component_Renderer_Abstract
                     $s = $m->select()
                         ->whereEquals('component_id', $componentId)
                         ->whereEquals('type', $type);
-                    $m->deleteRows($s);
+                    $existingTargetIds = array();
+                    foreach ($m->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('target_id'))) as $i) {
+                        $existingTargetIds[] = $i['target_id'];
+                    }
+                    $newTargetIds = array();
                     if ($this->_includedComponents && $pass==1) {
                         $data = array();
                         foreach ($this->_includedComponents as $c) {
@@ -221,11 +225,22 @@ abstract class Kwf_Component_Renderer_Abstract
                             if ($cmp->getPage() !== $targetCmp->getPage()) {
                                 $c['type'] = $type;
                                 $c['component_id'] = $componentId;
+                                $newTargetIds[] = $c['target_id'];
                                 $data[] = $c;
                             }
                         }
                         $m->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
-                        $this->_includedComponents = array();
+                    }
+                    $this->_includedComponents = array();
+                    $diffTargetIds = array_diff($existingTargetIds, $newTargetIds);
+                    if ($diffTargetIds) {
+                        //delete not anymore included
+                        $m = Kwf_Component_Cache::getInstance()->getModel('includes');
+                        $s = $m->select()
+                            ->whereEquals('component_id', $componentId)
+                            ->whereEquals('type', $type)
+                            ->whereEquals('target_id', $diffTargetIds);
+                        $m->deleteRows($s);
                     }
 
                     //save rendered contents into view cache
