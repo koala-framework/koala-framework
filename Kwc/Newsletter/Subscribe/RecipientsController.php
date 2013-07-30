@@ -15,7 +15,7 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             ->getControllerUrl('Recipient');
 
         $this->view->formControllerUrl = $formControllerUrl;
-        $this->view->xtype = 'kwf.autogrid';
+        $this->view->xtype = 'kwc.newsletter.subscribe.recipients';
         $this->view->model = get_class($this->_model);
         $this->view->baseParams = array(
             'newsletterComponentId' => $this->_getParam('newsletterComponentId')
@@ -36,6 +36,13 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
 
     protected function _initColumns()
     {
+        if ($formControllerUrl = $this->_getParam('formControllerUrl')) {
+            $this->_editDialog = array(
+                'controllerUrl' => $formControllerUrl,
+                'width' => 500,
+                'height' => 250
+            );
+        }
         parent::_initColumns();
         $this->_filters['text'] = array(
             'type'=>'TextField',

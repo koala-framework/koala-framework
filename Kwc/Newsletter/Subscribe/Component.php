@@ -22,6 +22,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
 
         $ret['menuConfig'] = 'Kwc_Newsletter_Subscribe_MenuConfig';
 
+        $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Subscribe/RecipientsPanel.js';
         return $ret;
     }
