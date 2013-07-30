@@ -197,9 +197,6 @@ $container-style: magic;
         padding-bottom: 170px;
         position: relative;
 
-        .stage {
-            @include container;
-        }
         #content {
             @include box-sizing(border-box);
             padding: 0 15px;
