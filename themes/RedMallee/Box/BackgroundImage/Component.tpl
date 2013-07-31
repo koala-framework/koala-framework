@@ -1,0 +1,1 @@
+<div id="background" style="background: url(<?=$this->imageUrl?>) no-repeat; background-size: cover;"></div>

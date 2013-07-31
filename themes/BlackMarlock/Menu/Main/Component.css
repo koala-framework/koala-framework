@@ -1,0 +1,22 @@
+.BlackMarlockMenuMain {
+    height: 100px;
+    width: 700px;
+}
+.BlackMarlockMenuMain ul {
+    height: 100px;
+    line-height: 100px;
+    vertical-align: middle;
+}
+.BlackMarlockMenuMain ul li {
+    display: inline;
+    line-height: normal;
+    font-size: 14px;
+    padding: 5px 15px;
+    background-attachment: scroll;
+    background-origin: padding-box;
+}
+.BlackMarlockMenuMain ul li:hover,
+.BlackMarlockMenuMain ul li.current {
+    background: #444;
+    color: var(light)
+}

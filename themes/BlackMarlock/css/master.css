@@ -1,0 +1,20 @@
+.webStandard { font-family: sans-serif; font-size: 14px; color: var(typo); line-height: 23px; }
+.webStandard strong { font-weight: bold; }
+.webStandard em { font-style: italic; }
+
+.webStandard p { color: var(typo); margin-bottom: 10px; }
+
+.webStandard h1 { font-size: 25px; margin-bottom: 15px; color: var(dark); } /* Überschrift 1 */
+.webStandard h2 { font-size: 22px; margin-bottom: 10px; color: var(dark); } /* Überschrift 2 */
+.webStandard h3 { font-size: 18px; margin-bottom: 5px; color: var(dark); } /* Überschrift 3 */
+.webStandard h4 { font-size: 16px; margin-bottom: 5px; color: var(dark); } /* Überschrift 4 */
+.webStandard h5 { font-size: 14px; margin-bottom: 5px; color: var(dark); } /* Überschrift 5 */
+
+.webStandard a { text-decoration: none; color: var(light); outline: none; }
+.webStandard a:hover { text-decoration: none; }
+
+.webStandard ol { margin-bottom: 10px; margin-left: 30px; }
+.webStandard ul { margin-bottom: 10px; margin-left: 20px; }
+.webStandard li { margin-bottom: 5px; color: var(typo); }
+.webStandard ol li { list-style-type: decimal; }
+.webStandard ul li { list-style-type: disc; }

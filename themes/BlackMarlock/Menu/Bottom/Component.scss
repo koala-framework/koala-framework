@@ -1,0 +1,23 @@
+@import "compass/utilities/general/clearfix";
+
+.BlackMarlockMenuBottom.webListNone ul {
+    height: 80px;
+    line-height: 80px;
+    display: table;
+    margin: auto;
+    @include pie-clearfix;
+}
+.BlackMarlockMenuBottom.webStandard ul li {
+    float: left;
+    list-style-type: none;
+    margin-right: 5px;
+}
+.BlackMarlockMenuBottom ul li a:after {
+    content : '    |';
+}
+.BlackMarlockMenuBottom ul li.last a:after {
+    content : '';
+}
+.BlackMarlockMenuBottom ul li a:hover {
+    color: var(light);
+}

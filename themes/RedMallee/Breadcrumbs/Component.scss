@@ -1,0 +1,24 @@
+@import "compass/css3/box-sizing";
+@import "kwf/background-image-dpr2";
+
+.cssClass {
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+.cssClass a {
+    font-size: 10px;
+}
+.cssClass .last {
+    color: var(highlightedText);
+}
+.cssClass a:after {
+    content: ' ';
+    background-repeat: no-repeat;
+    background-position: center center;
+    @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRight.png', 6px, 6px);
+    padding: 0px 5px;
+}
+.cssClass a.last:after {
+    color: var(highlightedText);
+    background: none;
+}

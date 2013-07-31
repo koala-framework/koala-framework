@@ -10,7 +10,7 @@ class Kwc_NewsCategory_Component extends Kwc_News_Directory_Component
         $ret['generators']['categories'] = array(
             'class' => 'Kwf_Component_Generator_PseudoPage_Static',
             'component' => 'Kwc_NewsCategory_Category_Directory_Component',
-            'name' => trlKwf('Categories'),
+            'name' => trlKwfStatic('Categories'),
             'showInMenu' => false
         );
         return $ret;

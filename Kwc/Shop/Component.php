@@ -10,7 +10,7 @@ class Kwc_Shop_Component extends Kwc_Abstract_Composite_Component
         $ret['generators']['cart'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Shop_Cart_Component',
-            'name' => trlKwf('Cart'),
+            'name' => trlKwfStatic('Cart'),
             'showInMenu' => true
         );
 

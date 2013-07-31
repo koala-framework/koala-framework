@@ -1,0 +1,9 @@
+.cssClass {
+    .entry {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        h2, p { margin-bottom: 0px; }
+        .teaser { margin: 10px 0px; padding: 10px; background: var(lightGray); }
+        .readMoreLink { text-align: right; }
+    }
+}

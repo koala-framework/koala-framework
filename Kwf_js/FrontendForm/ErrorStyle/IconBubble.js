@@ -21,27 +21,27 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 field.errorEl.child('.message').hide();
                 field.errorEl.child('.arrow').hide();
                 if (field instanceof Kwf.FrontendForm.TextArea) {
-                    field.errorEl.alignTo(field.el.child('textarea'), 'tr', [-20, 2]);
+                    field.errorEl.alignTo(field.el.child('textarea'), 'tr', [-20-field.el.child('textarea').getBorderWidth("r"), 2+field.el.child('textarea').getBorderWidth("t")]);
                 } else if (field instanceof Kwf.FrontendForm.Radio) {
-                    field.errorEl.alignTo(field.el.child('.kwfFormFieldRadio span:last'), 'tr', [0, 0]);
+                    field.errorEl.alignTo(field.el.child('.kwfFormFieldRadio span:last'), 'r-r', [0, 0]);
                 } else if (field instanceof Kwf.FrontendForm.MultiCheckbox) {
-                    field.errorEl.alignTo(field.el.child('input'), 'tr', [-6, -8]);
+                    field.errorEl.alignTo(field.el.child('input'), 'r-r', [10-field.el.child('input').getBorderWidth("r"), 0]);
                 } else if (field instanceof Kwf.FrontendForm.Checkbox) {
-                    field.errorEl.alignTo(field.el.child('input'), 'tr', [-6, -8]);
+                    field.errorEl.alignTo(field.el.child('input'), 'r-r', [-6-field.el.child('input').getBorderWidth("r"), 0]);
                 } else if (field.el.child('input')) {
                     if (field.el.child('input').getWidth() < 40) {
-                        field.errorEl.alignTo(field.el.child('input'), 'tr', [-10, 2]);
+                        field.errorEl.alignTo(field.el.child('input'), 'r-r', [10-field.el.child('input').getBorderWidth("r"), 0]);
                     } else {
-                        field.errorEl.alignTo(field.el.child('input'), 'tr', [-20, 2]);
+                        field.errorEl.alignTo(field.el.child('input'), 'r-r', [-10-field.el.child('input').getBorderWidth("r"), 0]);
                     }
                 } else if (field.el.child('select')) {
                     if (field.el.child('select').getWidth() < 60) {
-                        field.errorEl.alignTo(field.el.child('select'), 'tr', [-8, 2]);
+                        field.errorEl.alignTo(field.el.child('select'), 'r-r', [10-field.el.child('select').getBorderWidth("r"), 0]);
                     } else {
-                        field.errorEl.alignTo(field.el.child('select'), 'tr', [-35, 2]);
+                        field.errorEl.alignTo(field.el.child('select'), 'r-r', [-10-field.el.child('select').getBorderWidth("r"), 0]);
                     }
                 } else {
-                    field.errorEl.alignTo(field.el, 'r', [-40, 2]);
+                    field.errorEl.alignTo(field.el, 'r-r', [-10, 0]);
                 }
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();

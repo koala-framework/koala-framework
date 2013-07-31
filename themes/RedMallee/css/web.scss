@@ -1,0 +1,322 @@
+@import "susy";
+@import "compass/utilities/general/clearfix";
+@import "compass/css3/box-sizing";
+
+$total-columns: 10;
+$column-width: 1100px / $total-columns;
+$gutter-width: 0px;
+$grid-padding: 0px;
+$container-width: 980px;
+
+$container-style: magic;
+
+/* Sticky Header for desktop version */
+html, body {
+    height: 100%;
+}
+body.sticky {
+    @include at-breakpoint(10 no-mediaqueries) {
+        #outerContent,
+        #bottomStage,
+        #outerFooter {
+            position: relative;
+            top: 138px;
+        }
+
+        #outerHeader {
+
+            background: var(light);
+            position: fixed;
+            width: 100%;
+            z-index: 50;
+            top: -63px;
+
+            #header .logo {
+                padding-top: 49px;
+                position: relative;
+                top: 44px;
+            }
+        }
+    }
+}
+
+#page {
+    height: auto;
+    min-height: 100%;
+    position: relative;
+    width: 100%;
+
+    #outerHeader {
+        background: var(light);
+        border-top: 5px solid var(secColor);
+
+        #header {
+            overflow: visible;
+            @include clearfix;
+            @include container;
+            border-bottom: 5px solid #C80000;
+
+            .logo {
+                display: block;
+                text-align: center;
+                max-height: 100px;
+
+                @include at-breakpoint(4 no-mediaqueries) {
+                    height: auto;
+                    margin: auto;
+                    padding: 20px;
+                    text-align: left;
+                }
+                @include at-breakpoint(6 no-mediaqueries) {
+                    max-height: 50px;
+                }
+                @include at-breakpoint(8 no-mediaqueries) {
+                    max-height: 50px;
+                }
+
+                img {
+                    @include at-breakpoint(4 no-mediaqueries) {
+                        display: block;
+                    }
+
+                    display: inline;
+                }
+            }
+
+            .searchBox {
+                height: 40px;
+                position: relative;
+                top: 2px;
+                border-bottom: none;
+                margin-bottom: -3px;
+
+                @include at-breakpoint(5 no-mediaqueries) {
+                    background: #EFEFEF;
+                    float: right;
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: 50%;
+                        top: 0px;
+                        left: 0px;
+                        background: #f6f6f6;
+                        z-index: 0;
+                    }
+                    input {
+                        z-index: 1;
+                    }
+                }
+                @include at-breakpoint(8 no-mediaqueries) {
+                    height: 40px;
+                    position: relative;
+                    top: 2px;
+                    margin-bottom: -3px;
+                }
+            }
+
+            .mainMenu {
+                position: relative;
+                top: 0px;
+
+                @include at-breakpoint(4 no-mediaqueries) {
+                    position: relative;
+                    top: 0px;
+                }
+                @include at-breakpoint(5 no-mediaqueries) {
+                    position: relative;
+                    top: 3px;
+                }
+                @include at-breakpoint(8 no-mediaqueries) {
+                    position: relative;
+                    top: 3px;
+                    margin-right: 0px;
+                    float: right;
+
+                    ul li {
+                        float: left;
+                    }
+                }
+            }
+
+            .subMenuHorizontal {
+
+                @include at-breakpoint(6 no-mediaqueries) {
+                    background: #ccc;
+                    top: 0px;
+                    position: relative;
+                }
+
+                .webStandard.redMalleeMenuSubHorizontal {
+                    display: none;
+
+                    @include at-breakpoint(6 no-mediaqueries) {
+                        display: block;
+                        position: relative;
+                        z-index: 15;
+
+                        ul.menu {
+                            line-height: 30px;
+                            overflow-x: scroll;
+                            white-space: nowrap;
+                            margin-left: 0px;
+
+                            li {
+                                display: inline-block;
+                                list-style: none;
+                                color: white;
+                                margin-right: -4px;
+
+                                &.current {
+
+                                    a {
+                                        color: white;
+                                    }
+                                }
+
+                                a {
+                                    color: #000;
+                                    font-size: 14px;
+                                    padding: 0px 17px;
+                                }
+                            }
+                        }
+                    }
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        display: none;
+                    }
+                }
+            }
+            .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
+                display: none;
+
+                @include at-breakpoint(6 no-mediaqueries) {
+                    display: block;
+                    position: relative;
+                    z-index: 15;
+
+                    ul.menu {
+
+                        li {
+                            display: inline-block;
+                        }
+                    }
+                }
+                @include at-breakpoint(8 no-mediaqueries) {
+                    display: none;
+                    }
+            }
+        }
+    }
+
+    #outerContent {
+
+        @include container;
+        background: url("/assets/kwf/themes/RedMallee/images/bgContent.jpg") repeat center -5px;
+        padding-bottom: 100px;
+        position: relative;
+
+        #content {
+            @include box-sizing(border-box);
+            padding: 0 15px;
+
+            .breadcrumbs {
+                margin-left: 5px;
+                @include at-breakpoint(8 no-mediaqueries) {
+                    margin-left: 25%;
+                }
+            }
+            #innerContent {
+                margin: 0px 5px;
+
+                @include at-breakpoint(6 no-mediaqueries) {
+                    margin-top: 0px;
+                }
+
+                .leftColumn {
+                    @include at-breakpoint(6 no-mediaqueries) {
+                        display: none;
+                    }
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        @include span-columns(2);
+                        @include box-sizing(border-box);
+                        padding-right: 50px;
+
+                        .redMalleeMenuSub {
+                            display: block;
+                        }
+                    }
+
+                }
+
+                .centerColumn {
+                    margin-top: 20px;
+                    @include at-breakpoint(6 no-mediaqueries) {
+                        margin-top: 0px;
+                    }
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        @include span-columns(4);
+                        @include box-sizing(border-box);
+                        padding-right: 50px
+                    }
+                }
+
+                .rightColumn {
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        @include span-columns(2 omega);
+                    }
+
+                }
+            }
+        }
+    }
+    #outerBottomStage {
+
+        padding-bottom: 150px;
+        #bottomStage {
+            @include container;
+            background: url("/assets/kwf/themes/RedMallee/images/bottomStageBg.jpg") repeat center top;
+            min-height: 230px;
+            width: 100%;
+
+            .innerBottomStage {
+                margin: 20px auto 0px;
+                position: relative;
+            }
+
+            .bottomStageShadow {
+                background: url("/assets/kwf/themes/RedMallee/images/bottomStageShadow.png") repeat center top;
+                height: 10px;
+                width: 100%;
+            }
+        }
+    }
+
+}
+
+#outerFooter {
+
+    height: 100px;
+    margin-top: -105px;
+    width: 100%;
+    background: white;
+    bottom: 0px;
+    border-top: 5px solid var(secColor);
+
+    #footer {
+        @include container;
+        margin-top: 20px;
+
+        .bottomMenu {
+            float: right;
+            position: relative;
+            z-index: 3;
+        }
+
+        .leftArea {
+            float: left;
+        }
+    }
+}
+

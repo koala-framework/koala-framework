@@ -18,7 +18,7 @@ class Kwc_News_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
         $ret['generators']['feed'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_News_List_Feed_Component',
-            'name' => trlKwf('Feed')
+            'name' => trlKwfStatic('Feed')
         );
 
         $ret['enableExpireDate'] = false;
