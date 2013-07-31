@@ -321,7 +321,10 @@ abstract class Kwf_Component_Renderer_Abstract
             }
 
 
-            if ($statType) Kwf_Benchmark::count("rendered $statType", $statId);
+            if ($statType) {
+                if ($benchmarkEnabled) Kwf_Benchmark::count("rendered $statType", $statId);
+                Kwf_Benchmark::countLog('render-'.$statType);
+            }
 
             $ret = substr($ret, 0, $start).$content.substr($ret, $end+1);
 

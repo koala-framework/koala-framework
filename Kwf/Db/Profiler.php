@@ -39,6 +39,8 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
             return null;
         }
 
+        Kwf_Benchmark::countLog('dbqueries');
+
         // make sure we have a query type
         if (null === $queryType) {
             switch (strtolower(substr($queryText, 0, 6))) {

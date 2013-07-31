@@ -4,6 +4,7 @@ class Kwf_Benchmark
     private static $_enabled = false;
     private static $_logEnabled = false;
     protected static $_counter = array();
+    protected static $_counterLog = array();
     public static $benchmarks = array();
     private static $_checkpoints = array();
     private static $_subCheckpoints = array();
@@ -48,6 +49,11 @@ class Kwf_Benchmark
         self::$_logEnabled = true;
     }
 
+    public static function isLogEnabled()
+    {
+        return self::$_logEnabled;
+    }
+
     public static function isEnabled()
     {
         return self::$_enabled;
@@ -56,6 +62,7 @@ class Kwf_Benchmark
     public static function reset()
     {
         self::$_counter = array();
+        self::$_counterLog = array();
         self::$_checkpoints = array();
         self::$_subCheckpoints = array();
     }
@@ -68,7 +75,7 @@ class Kwf_Benchmark
     }
     public static function count($name, $value = null)
     {
-        if (!self::$_enabled && !self::$_logEnabled) return false;
+        if (!self::$_enabled) return false;
 
         self::_countArray(self::$_counter, $name, $value);
 
@@ -81,7 +88,7 @@ class Kwf_Benchmark
 
     public static function countBt($name, $value = null)
     {
-        if (!self::$_enabled && !self::$_logEnabled) return false;
+        if (!self::$_enabled) return false;
 
         self::_countArray(self::$_counter, $name, $value, true);
 
@@ -90,6 +97,13 @@ class Kwf_Benchmark
                 self::_countArray($b->counter, $name, $value, true);
             }
         }
+    }
+
+    public static function countLog($name)
+    {
+        if (!self::$_logEnabled) return;
+
+        self::_countArray(self::$_counterLog, $name, null);
     }
 
     private static function _countArray(&$counter, $name, $value, $backtrace = false)
@@ -389,15 +403,12 @@ class Kwf_Benchmark
 
     protected function _shutDown()
     {
-        if ($this->_getUrlType() == 'asset' && !self::$_counter) return;
+        if ($this->_getUrlType() == 'asset' && !self::$_counterLog) return;
         $prefix = $this->_getUrlType().'-';
         $this->_memcacheCount($prefix.'requests', 1);
-        foreach (self::$_counter as $name=>$value) {
-            if (is_array($value)) $value = count($value);
-            $this->_memcacheCount($prefix.$name, $value);
+        foreach (self::$_counterLog as $name=>$value) {
+            $this->_memcacheCount($name, $value);
         }
-        $value = (int)((microtime(true) - self::$startTime)*1000);
-        $this->_memcacheCount($prefix.'duration', $value);
     }
 
     private function _memcacheCount($name, $value)

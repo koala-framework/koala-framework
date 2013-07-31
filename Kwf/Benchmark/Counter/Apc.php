@@ -13,7 +13,13 @@ class Kwf_Benchmark_Counter_Apc implements Kwf_Benchmark_Counter_Interface
 
     public function getValue($name)
     {
-        return (int)Kwf_Util_Apc::callUtil('get-counter-value', array('name'=>$name), array('returnBody'=>true));
+        if (php_sapi_name() == 'cli') {
+            return (int)Kwf_Util_Apc::callUtil('get-counter-value', array('name'=>$name), array('returnBody'=>true));
+        } else {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache::getUniquePrefix().'bench-';
+            return (int)apc_fetch($prefix.$name);
+        }
     }
 
 }
