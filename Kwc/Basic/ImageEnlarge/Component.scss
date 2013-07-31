@@ -1,0 +1,87 @@
+@import "compass/css3/transition";
+
+.cssClass {
+    position: relative;
+
+    a {
+        display: block;
+
+        &.kwcEnlargeTag,
+        &.kwcBasicDownloadTag,
+        &.kwcBasicLinkTagIntern,
+        &.kwcBasicLinkTagExtern,
+        &.kwcBasicLinkTagMail { position: relative; display: block; }
+
+        img {
+            display: block;
+        }
+    }
+}
+
+/* ----------------------------------------- HOVERICONS ----------------------------------------- */
+
+.cssClass {
+    a {
+        .outerHoverIcon {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: none;
+            box-shadow: inset 0 0 16px 1px #eee;
+            zoom: 1;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            @include transition(opacity 0.25s ease-in-out);
+
+            .innerHoverIcon {
+                display: block;
+                width: 38px;
+                height: 38px;
+                position: absolute;
+                left: 50%;
+                margin-left: -19px;
+                top: 50%;
+                margin-top: -19px;
+            }
+        }
+
+        &:hover .outerHoverIcon {
+            opacity: 0.9;
+        }
+
+        &.kwcEnlargeTag .outerHoverIcon .innerHoverIcon {
+            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/enlargeIcon.png) no-repeat 0 0;
+        }
+
+        &.kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
+            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkInternIcon.png) no-repeat 0 0;
+        }
+
+        &.kwcBasicLinkTagExtern .outerHoverIcon .innerHoverIcon {
+            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkExternIcon.png) no-repeat 0 0;
+        }
+
+        &.kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
+            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/downloadIcon.png) no-repeat 0 0;
+        }
+
+        &.kwcBasicLinkTagMail .outerHoverIcon .innerHoverIcon {
+            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/mailIcon.png) no-repeat 0 0;
+        }
+    }
+}
+
+.showHoverIcon.cssClass a .outerHoverIcon {
+    display: block;
+}
+
+body.ext-ie8 .cssClass a {
+    .outerHoverIcon {
+        display: none;
+    }
+
+    &:hover .outerHoverIcon {
+        display: block;
+    }
+}
