@@ -1,13 +1,13 @@
-.undergroundMenuMain {
+.BlackMarlockMenuMain {
     height: 100px;
     width: 700px;
 }
-.undergroundMenuMain ul {
+.BlackMarlockMenuMain ul {
     height: 100px;
     line-height: 100px;
     vertical-align: middle;
 }
-.undergroundMenuMain ul li {
+.BlackMarlockMenuMain ul li {
     display: inline;
     line-height: normal;
     font-size: 14px;
@@ -15,8 +15,8 @@
     background-attachment: scroll;
     background-origin: padding-box;
 }
-.undergroundMenuMain ul li:hover,
-.undergroundMenuMain ul li.current {
+.BlackMarlockMenuMain ul li:hover,
+.BlackMarlockMenuMain ul li.current {
     background: #444;
     color: var(light)
 }

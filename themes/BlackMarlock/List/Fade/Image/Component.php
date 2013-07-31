@@ -1,5 +1,5 @@
 <?php
-class Underground_List_Fade_Image_Component extends Kwc_Basic_Image_Component
+class BlackMarlock_List_Fade_Image_Component extends Kwc_Basic_Image_Component
 {
     public static function getSettings()
     {

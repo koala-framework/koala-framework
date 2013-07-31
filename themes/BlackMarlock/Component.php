@@ -1,10 +1,10 @@
 <?php
-class Underground_Component extends Kwf_Component_Theme_Abstract
+class BlackMarlock_Component extends Kwf_Component_Theme_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwfStatic('Underground');
+        $ret['componentName'] = trlKwfStatic('BlackMarlock');
         return $ret;
     }
 
@@ -14,8 +14,8 @@ class Underground_Component extends Kwf_Component_Theme_Abstract
         $ret['generators']['box'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => array(
-                'mainMenu' => 'Underground_Menu_Main_Component',
-                'bottomMenu' => 'Underground_Menu_Bottom_Component',
+                'mainMenu' => 'BlackMarlock_Menu_Main_Component',
+                'bottomMenu' => 'BlackMarlock_Menu_Bottom_Component',
                 'title' => 'Kwc_Box_TitleEditable_Component'
             ),
             'inherit' => true,
@@ -36,7 +36,7 @@ class Underground_Component extends Kwf_Component_Theme_Abstract
                 'class' => 'Kwf_Component_Generator_Box_StaticSelect',
                 'component' => array(
                         'parentContent' => 'Kwc_Basic_ParentContent_Component',
-                        'listFade' => 'Underground_List_Fade_Component'
+                        'listFade' => 'BlackMarlock_List_Fade_Component'
                 ),
                 'inherit' => true,
                 'boxName' => 'List Fade'
@@ -46,8 +46,8 @@ class Underground_Component extends Kwf_Component_Theme_Abstract
 
         $ret['contentWidth'] = 660;
 
-        $ret['assets']['files'][] = 'kwf/themes/Underground/css/master.css';
-        $ret['assets']['files'][] = 'kwf/themes/Underground/css/web.scss';
+        $ret['assets']['files'][] = 'kwf/themes/BlackMarlock/css/master.css';
+        $ret['assets']['files'][] = 'kwf/themes/BlackMarlock/css/web.scss';
         return $ret;
     }
 }

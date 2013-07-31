@@ -1,10 +1,10 @@
 <?php
-class Underground_Menu_Bottom_Component extends Kwc_Menu_Component
+class BlackMarlock_Menu_Main_Component extends Kwc_Menu_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['level'] = 'bottom';
+        $ret['level'] = 'main';
         $ret['cssClass'] .= ' webListNone';
         return $ret;
     }
