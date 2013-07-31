@@ -6,7 +6,7 @@
     border-bottom: 1px dashed var(highlightedText);
     padding-bottom: 10px;
 
-    a {
+    > a {
         background: url("/assets/kwf/themes/RedMallee/images/arrowSmallRight.png") left 6px no-repeat;
         @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRight.png', 6px, 6px);
         margin-left: -15px;

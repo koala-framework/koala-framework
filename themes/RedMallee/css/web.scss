@@ -221,16 +221,20 @@ body.sticky {
             @include box-sizing(border-box);
             padding: 0 15px;
 
-            #innerContent {
-                margin: 0 20px;
-
+            .breadcrumbs {
+                margin-left: 5px;
                 @include at-breakpoint(8 no-mediaqueries) {
-                    margin: 0px;
+                    margin-left: 25%;
+                }
+            }
+            #innerContent {
+                margin: 0px 5px;
+
+                @include at-breakpoint(6 no-mediaqueries) {
+                    margin-top: 0px;
                 }
 
                 .leftColumn {
-                    margin-top: 10px;
-
                     @include at-breakpoint(6 no-mediaqueries) {
                         display: none;
                     }
@@ -247,6 +251,10 @@ body.sticky {
                 }
 
                 .centerColumn {
+                    margin-top: 20px;
+                    @include at-breakpoint(6 no-mediaqueries) {
+                        margin-top: 0px;
+                    }
                     @include at-breakpoint(8 no-mediaqueries) {
                         @include span-columns(4);
                         @include box-sizing(border-box);
@@ -302,6 +310,8 @@ body.sticky {
 
         .bottomMenu {
             float: right;
+            position: relative;
+            z-index: 3;
         }
 
         .leftArea {

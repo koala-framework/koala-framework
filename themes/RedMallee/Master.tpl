@@ -40,12 +40,14 @@
                     <?=$this->component($this->boxes['listFade']);?>
                 </div>
                 <div id="content">
+                    <div class="breadcrumbs">
+                        <?=$this->component($this->boxes['breadcrumbs']);?>
+                    </div>
                     <div id="innerContent">
                         <div class="leftColumn">
                             <?=$this->component($this->boxes['subMenu']);?>
                         </div>
                         <div class="centerColumn">
-                            <?=$this->component($this->boxes['breadcrumbs']);?>
                             <?=$this->componentWithMaster($this->componentWithMaster);?>
                         </div>
                         <div class="rightColumn">
