@@ -28,6 +28,9 @@ class Kwf_Util_Model_Amazon_Nodes extends Kwf_Model_Abstract
     }
     public function getRow($select)
     {
+        if (!$select) {
+            throw new Kwf_Exception('getRow needs a parameter, null is not allowed.');
+        }
         if (!is_object($select)) {
             $select = $this->select($select);
         }

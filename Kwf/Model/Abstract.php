@@ -184,6 +184,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getRow($select)
     {
+        if (!$select) {
+            throw new Kwf_Exception('getRow needs a parameter, null is not allowed.');
+        }
         if (!is_object($select)) {
             $select = $this->select($select);
         } else {

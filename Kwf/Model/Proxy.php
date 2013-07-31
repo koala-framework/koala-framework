@@ -153,6 +153,9 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function getRow($select)
     {
+        if (!$select) {
+            throw new Kwf_Exception('getRow needs a parameter, null is not allowed.');
+        }
         $proxyRow = $this->getProxyModel()->getRow($select);
         if (!$proxyRow) return $proxyRow;
         return $this->getRowByProxiedRow($proxyRow);
