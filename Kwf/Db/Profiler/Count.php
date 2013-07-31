@@ -8,6 +8,7 @@ class Kwf_Db_Profiler_Count extends Zend_Db_Profiler
             return null;
         }
         $this->_count++;
+        Kwf_Benchmark::countLog('dbqueries');
         return null;
     }
 

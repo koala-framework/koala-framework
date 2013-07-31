@@ -87,6 +87,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             );
             $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select, $options);
             if (isset($row[0])) {
+                Kwf_Benchmark::countLog('viewcache-db');
                 $ttl = 0;
                 if ($row[0]['expire']) {
                     $ttl = $row[0]['expire']-time();
@@ -97,8 +98,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                     'expire' => $row[0]['expire']
                 );
             } else {
+                Kwf_Benchmark::countLog('viewcache-miss');
                 $data = null;
             }
+        } else {
+            Kwf_Benchmark::countLog('viewcache-mem');
         }
 
         return $data;
@@ -118,6 +122,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $checkIncludeIds = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
+            Kwf_Benchmark::countLog('viewcache-delete-'.$row['type']);
             if ($row['type'] != 'fullPage' && !in_array($row['component_id'], $checkIncludeIds)) {
                 $checkIncludeIds[] = $row['component_id'];
             }
