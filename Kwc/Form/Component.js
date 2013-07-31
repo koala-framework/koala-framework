@@ -212,13 +212,32 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                 }
                 if (scrollTo != null) {
                     //if scrollto is already on screen
-                    var height = this.getWindowHeight();
-                    var scrollPosY = this.getScrollPosY();
+                    var height = $(window).height();
+                    var scrollPosY = $(window).scrollTop();
                     if (scrollTo < scrollPosY || scrollTo > scrollPosY + height) {
                         scrollTo -= 20;
+                        var stopAnimationFunction = function(e) {
+                            if ( e.which > 0 || e.type == "mousedown"
+                                || e.type == "mousewheel"
+                                || e.type == 'touchstart'){
+                                $("html, body").stop();
+                                $('body,html')
+                                    .unbind('scroll mousedown DOMMouseScroll mousewheel keyup touchstart',
+                                    stopAnimationFunction);
+                            }
+                        };
                         $('html, body').animate({
                             scrollTop: scrollTo
-                        }, 2000);
+                        }, 2000, 'swing', function () {
+                            $('body,html')
+                                .unbind('scroll mousedown DOMMouseScroll mousewheel keyup touchstart',
+                                stopAnimationFunction);
+                        });
+                        //This is a fix for the problem that it's not possible to
+                        //scroll while the animation is running. This stops the
+                        //animation on scroll, click or key-down
+                        //http://stackoverflow.com/questions/2834667/how-can-i-differentiate-a-manual-scroll-via-mousewheel-scrollbar-from-a-javasc?answertab=oldest#tab-top
+                        $('body,html').bind('scroll mousedown DOMMouseScroll mousewheel keyup touchstart', stopAnimationFunction);
                     }
                 }
 
@@ -228,39 +247,5 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         });
 
         e.stopEvent();
-    },
-
-    getWindowHeight: function ()
-    {
-        var myHeight = 0;
-
-        if( typeof( window.innerWidth ) == 'number' ) {
-            //Non-IE
-            myHeight = window.innerHeight;
-        } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-            //IE 6+ in 'standards compliant mode'
-            myHeight = document.documentElement.clientHeight;
-        } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-            //IE 4 compatible
-            myHeight = document.body.clientHeight;
-        }
-        return myHeight;
-    },
-
-    getScrollPosY: function ()
-    {
-        var scrOfY = 0;
-
-        if( typeof( window.pageYOffset ) == 'number' ) {
-            //Netscape compliant
-            scrOfY = window.pageYOffset;
-        } else if( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
-            //DOM compliant
-            scrOfY = document.body.scrollTop;
-        } else if( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
-            //IE6 standards compliant mode
-            scrOfY = document.documentElement.scrollTop;
-        }
-        return scrOfY;
     }
 });
