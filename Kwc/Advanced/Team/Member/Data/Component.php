@@ -8,7 +8,7 @@ class Kwc_Advanced_Team_Member_Data_Component extends Kwc_Abstract
         $ret['generators']['vcard'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Advanced_Team_Member_Data_Vcard_Component',
-            'name' => trlKwf('vCard')
+            'name' => trlKwfStatic('vCard')
         );
 
         $ret['componentName'] = trlKwfStatic('Team member data');

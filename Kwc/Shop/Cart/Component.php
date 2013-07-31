@@ -14,7 +14,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['generators']['checkout'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Shop_Cart_Checkout_Component',
-            'name' => trlKwf('Checkout')
+            'name' => trlKwfStatic('Checkout')
         );
         $ret['viewCache'] = false;
         $ret['cssClass'] = 'webStandard webForm';

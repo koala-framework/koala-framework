@@ -10,7 +10,7 @@ class Kwc_ArticlesCategory_Directory_Component extends Kwc_Articles_Directory_Co
         $ret['generators']['categories'] = array(
             'class' => 'Kwf_Component_Generator_PseudoPage_Static',
             'component' => 'Kwc_ArticlesCategory_Category_Directory_Component',
-            'name' => trlKwf('Categories'),
+            'name' => trlKwfStatic('Categories'),
             'showInMenu' => false
         );
         return $ret;

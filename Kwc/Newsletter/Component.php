@@ -10,13 +10,13 @@ class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Compon
         $ret['generators']['unsubscribe'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Newsletter_Unsubscribe_Component',
-            'name' => trlKwf('Unsubscribe')
+            'name' => trlKwfStatic('Unsubscribe')
         );
         // wird von der Mail_Redirect gerendered
         $ret['generators']['editSubscriber'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Newsletter_EditSubscriber_Component',
-            'name' => trlKwf('Edit subscriber')
+            'name' => trlKwfStatic('Edit subscriber')
         );
 
         $ret['childModel'] = 'Kwc_Newsletter_Model';

@@ -13,7 +13,7 @@ class Kwc_Advanced_Amazon_Nodes_Component extends Kwc_Directories_ItemPage_Direc
 
         $ret['generators']['products'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'name' => trlKwf('Products'),
+            'name' => trlKwfStatic('Products'),
             'component' => 'Kwc_Advanced_Amazon_Nodes_ProductsDirectory_Component'
         );
 

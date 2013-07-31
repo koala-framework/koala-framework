@@ -13,27 +13,27 @@ class Kwc_User_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
         $ret['generators']['register'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_User_Register_Component',
-            'name' => trlKwf('Register')
+            'name' => trlKwfStatic('Register')
         );
         $ret['generators']['edit'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_User_Edit_Component',
-            'name' => trlKwf('Edit Profile')
+            'name' => trlKwfStatic('Edit Profile')
         );
         $ret['generators']['login'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_User_Login_Component',
-            'name' => trlKwf('Login')
+            'name' => trlKwfStatic('Login')
         );
         $ret['generators']['lostPassword'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_User_LostPassword_Component',
-            'name' => trlKwf('Lost Password')
+            'name' => trlKwfStatic('Lost Password')
         );
         $ret['generators']['activate'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_User_Activate_Component',
-            'name' => trlKwf('Activate')
+            'name' => trlKwfStatic('Activate')
         );
         return $ret;
     }
