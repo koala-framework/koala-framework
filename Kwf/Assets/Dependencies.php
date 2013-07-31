@@ -290,7 +290,7 @@ class Kwf_Assets_Dependencies
     private function _addAbsoluteFiles($assetsType, $files)
     {
         foreach ($files as $f) {
-            if (substr($f, 0, strlen(KWF_PATH)+1) == KWF_PATH.'/') { //zuerst, da kwf in web liegen kann
+            if (substr($f, 0, strlen(KWF_PATH)+1) == KWF_PATH.'/') { //first, kwf can be below web
                 //kann nur aus kwf
                 $f = 'kwf'.substr($f, strlen(KWF_PATH));
             } else if (defined('VKWF_PATH') && substr($f, 0, strlen(VKWF_PATH)+1) == VKWF_PATH.'/') {
