@@ -5,8 +5,9 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
     {
         if (!$component) return '';
         $plugins = self::_getGroupedViewPlugins($component->componentClass);
+        $viewCacheSettings = $component->getComponent()->getViewCacheSettings();
         return $this->_getRenderPlaceholder(
-            $component->componentId, array(), null, 'component', $plugins
+            $component->componentId, array(), null, $plugins, $viewCacheSettings['enabled']
         );
     }
 
@@ -21,5 +22,10 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
         $view = new Kwf_Component_View($renderer);
         $view->assign($vars);
         return $view->render($renderer->getTemplate($component, 'Component'));
+    }
+
+    public function getViewCacheSettings($componentId)
+    {
+        return $this->_getComponentById($componentId)->getComponent()->getViewCacheSettings();
     }
 }

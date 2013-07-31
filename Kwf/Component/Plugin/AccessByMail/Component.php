@@ -25,7 +25,7 @@ class Kwf_Component_Plugin_AccessByMail_Component extends Kwf_Component_Plugin_A
         return $ret;
     }
 
-    public function replaceOutput()
+    public function replaceOutput($renderer)
     {
         if ($this->isLoggedIn()) {
             return false;

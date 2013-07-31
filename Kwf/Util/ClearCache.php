@@ -96,6 +96,8 @@ class Kwf_Util_ClearCache
         foreach ($this->_getDbCacheTables() as $t) {
             if ($t == 'cache_component') {
                 $types[] = new Kwf_Util_ClearCache_Types_TableComponentView();
+            } else if ($t == 'cache_component_includes') {
+                //never completely clear that table as it would break clearing fullPage cache
             } else if ($t == 'cache_users') { //handled in Types_Users
                  $types[] = new Kwf_Util_ClearCache_Types_Users();
             } else {

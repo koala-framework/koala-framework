@@ -12,7 +12,7 @@ class Kwf_Component_Output_Plugin_Plugin_Component extends Kwf_Component_Plugin_
         return $ret;
     }
 
-    public function processOutput($output)
+    public function processOutput($output, $renderer)
     {
         // Da das Plugin nach dem Rendern ausgeführt wird, muss schon der
         // fertige Content hier reinkommen

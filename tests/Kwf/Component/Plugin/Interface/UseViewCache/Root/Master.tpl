@@ -1,0 +1,1 @@
+<?=$this->componentWithMaster($this->componentWithMaster)?>

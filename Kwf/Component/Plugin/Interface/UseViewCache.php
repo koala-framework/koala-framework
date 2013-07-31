@@ -5,5 +5,5 @@
  */
 interface Kwf_Component_Plugin_Interface_UseViewCache
 {
-    public function useViewCache();
+    public function useViewCache($renderer);
 }

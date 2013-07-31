@@ -211,21 +211,21 @@ class Kwc_Basic_Text_MailParserTest extends Kwc_TestAbstract
     public function testCC() //no linebreak because the email url won't be valide anymore
     {
         $mailParser = new Kwc_Basic_Text_HtmlToTextParser(null);
-        $mailOut = $mailParser->parse("{cc mail: root-at_newsletter_14-mail-content-2647-text-l2YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}");
-        $this->assertEquals("{cc mail: root-at_newsletter_14-mail-content-2647-text-l2YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}", $mailOut);
+        $mailOut = $mailParser->parse("<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l2YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>");
+        $this->assertEquals("<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l2YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>", $mailOut);
     }
 
     public function testLink()
     {
         $mailParser = new Kwc_Basic_Text_HtmlToTextParser(null);
-        $mailOut = $mailParser->parse('<a href="{cc mail: root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}">Hier gehts zur VW Pkw Modellpalette</a>');
-        $this->assertEquals("Hier gehts zur VW Pkw Modellpalette:\n{cc mail: root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}\n", $mailOut);
+        $mailOut = $mailParser->parse('<a href="<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>">Hier gehts zur VW Pkw Modellpalette</a>');
+        $this->assertEquals("Hier gehts zur VW Pkw Modellpalette:\n<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>\n", $mailOut);
         $mailParser = new Kwc_Basic_Text_HtmlToTextParser(null);
-        $mailOut = $mailParser->parse('  <a href="{cc mail: root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}">'.
+        $mailOut = $mailParser->parse('  <a href="<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>">'.
             'Hier gehts zur VW Pkw Modellpalette</a><br />'.
-            '<a href="{cc mail: root-at_newsletter_14-mail-content-2647-text-l2 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}">Hier gehts zur VW '.
+            '<a href="<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l2 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>">Hier gehts zur VW '.
                 'Nutzfahrzeuge Modellpalette</a>');
-        $this->assertEquals("Hier gehts zur VW Pkw Modellpalette:\n{cc mail: root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}\n\nHier gehts zur VW Nutzfahrzeuge Modellpalette:\n{cc mail: root-at_newsletter_14-mail-content-2647-text-l2 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9}\n", $mailOut);
+        $this->assertEquals("Hier gehts zur VW Pkw Modellpalette:\n<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l1 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>\n\nHier gehts zur VW Nutzfahrzeuge Modellpalette:\n<kwc2 mail root-at_newsletter_14-mail-content-2647-text-l2 YToxOntzOjQ6InR5cGUiO3M6MzoidHh0Ijt9>\n", $mailOut);
         return;
     }
 }
