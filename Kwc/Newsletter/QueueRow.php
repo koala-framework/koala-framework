@@ -16,4 +16,14 @@ class Kwc_Newsletter_QueueRow extends Kwf_Model_Proxy_Row
         }
         return $row;
     }
+
+    protected function _beforeDelete()
+    {
+        $newsletter = $this->getParentRow('Newsletter');
+        if (in_array($newsletter->status, array('start', 'stop', 'finished'))) {
+            throw new Kwf_ClientException(trlKwf('Can only add users to a paused newsletter'));
+        }
+
+        parent::_beforeDelete();
+    }
 }

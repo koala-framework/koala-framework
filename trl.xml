@@ -5786,8 +5786,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Вы уверены?</ru>
 </text>
 <text>
-<en>Do you really want to delete all receivers with status "queued"?.</en>
-<de>Möchten Sie wirklich alle Empfänger aus der Warteschlange entfernen?.</de>
+<en>Do you really want to delete all receivers with status "queued"?</en>
+<de>Möchten Sie wirklich alle Empfänger aus der Warteschlange entfernen?</de>
 <id>1163</id>
 <ro>Doriţi într-adevăr să ştergeţi toţi destinatarii aflaţi în aşteptare?</ro>
 <sl>Ali ste prepričani, da želite izbrisati vse prejemnike v čakalni vrsti?</sl>
@@ -9376,5 +9376,218 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Danke für Ihre Anfrage. Wir werden uns bemühen, diese so schnell wie möglich zu bearbeiten.</de>
 <id>1869</id>
 </text>
+<text>
+<en>Rebuild</en>
+<en>Neuaufbau</en>
+<id>1928</id>
+</text>
+<text>
+<en>Setup</en>
+<de>Installation</de>
+<id>1929</id>
+</text>
+<text>
+<en>Download Updates</en>
+<de>Updates herunterladen</de>
+<id>1930</id>
+</text>
+<text>
+<en>Update Error</en>
+<de>Update fehler</de>
+<id>1931</id>
+</text>
+<text>
+<en>Updates Finished</en>
+<de>Updates fertig</de>
+<id>1932</id>
+</text>
+<text>
+<en>Original Image caption</en>
+<de>Originale Bild Beschriftung</de>
+<id>1933</id>
+</text>
+<text>
+<en>Add new newsletter</en>
+<de>Neuen Newsletter hinzufügen</de>
+<id>1934</id>
+</text>
+<text>
+<en>Adding...</en>
+<de>Hinzufügen...</de>
+<id>1935</id>
+</text>
+<text>
+<en>Start newsletter</en>
+<de>Start Newsletter</de>
+<id>1936</id>
+</text>
+<text>
+<en>Newsletter sending settings</en>
+<de>Newsletter Sendeeinstellungen</de>
+<id>1937</id>
+</text>
+<text>
+<en>Newsletter speed: &lt;b&gt;{0}&lt;/b&gt;</en>
+<de>Newsletter Geschwindigkeit: &lt;b&gt;{0}&lt;/b&gt;</de>
+<id>1938</id>
+</text>
+<text>
+<en>Remaining time: &lt;b&gt;{0}&lt;/b&gt;</en>
+<de>Verbleibende Zeit: &lt;b&gt;{0}&lt;/b&gt;</de>
+<id>1939</id>
+</text>
+<text>
+<en>Waiting for start...</en>
+<de>Warten auf Start...</de>
+<id>1940</id>
+</text>
+<text>
+<en>Edit newsletter</en>
+<de>Newsletter bearbeiten</de>
+<id>1941</id>
+</text>
+<text>
+<en>Newsletter finished</en>
+<de>Newsletter fertig</de>
+<id>1942</id>
+</text>
+<text>
+<en>Add/Remove Subscriber to Queue</en>
+<de>Hinzufügen/Entfernen von Empfängern zur Warteschlange</de>
+<id>1946</id>
+</text>
+<text>
+<en>Queue</en>
+<de>Warteschlange</de>
+<id>1947</id>
+</text>
+<text>
+<en>Sending...</en>
+<de>Sende...</de>
+<id>1948</id>
+</text>
+<text>
+<en>Send testmail to...</en>
+<de>Sende Testmail an...</de>
+<id>1949</id>
+</text>
+<text>
+<en>Select an subscriber pool...</en>
+<de>Wählen Sie einen Empfänger Pool...</de>
+<id>1950</id>
+</text>
+<text>
+<en>Subscriber</en>
+<de>Empfänger</de>
+<id>1951</id>
+</text>
+<text>
+<en>Select an subscriber...</en>
+<de>Wählen Sie einen Empfänger...</de>
+<id>1952</id>
+</text>
+<text>
+<en>Searching...</en>
+<de>Suchen...</de>
+<id>1953</id>
+</text>
+<text>
+<en>view rate</en>
+<de>Öffnungsrate</de>
+<id>1954</id>
+</text>
+<text>
+<en>percentage of users which opened the html newsletter</en>
+<de>prozentanzahl der user welche den html Newsletter geöffnet haben</de>
+<id>1955</id>
+</text>
+<text>
+<en>Now</en>
+<de>Jetzt</de>
+<id>1956</id>
+</text>
+<text>
+<en>Later</en>
+<de>Später</de>
+<id>1957</id>
+</text>
+<text>
+<en>Sending speed</en>
+<de>Sendegeschwindigkeit</de>
+<id>1958</id>
+</text>
+<text>
+<en>Slow</en>
+<de>Langsam</de>
+<id>1959</id>
+</text>
+<text>
+<en>Fast</en>
+<de>Schnell</de>
+<id>1960</id>
+</text>
+<text>
+<en>Paragraphs passwordprotected</en>
+<de>Absätze Passwortgeschützt</de>
+<id>1961</id>
+</text>
+<text>
+<en>Saving</en>
+<de>Speichern</de>
+<id>1962</id>
+</text>
+<text>
+<en>QuickWrite</en>
+<de>SchnellSchreiben</de>
+<id>1963</id>
+</text>
+<text>
+<en>Label above field</en>
+<de>Bezeichnung über Feld</de>
+<id>1964</id>
+</text>
+<text>
+<en>E-Mail Field</en>
+<de>E-Mail Feld</de>
+<id>1965</id>
+</text>
+<text>
+<en>Fulltext Search</en>
+<de>Volltextsuche</de>
+<id>1967</id>
+</text>
+<text>
+<en>New Tags</en>
+<de>Neue Tags</de>
+<id>1968</id>
+</text>
+<text>
+<en>Can't move Page to other Subroot</en>
+<de>Seite in andere Unterseite verschieben nicht möglich</de>
+<id>1969</id>
+</text>
+<text>
+<en>Original Title</en>
+<de>Original Titel</de>
+<id>1970</id>
+</text>
+<text>
+<en>Blog.Show categories</en>
+<de>Blog.Kategorien anzeigen</de>
+<id>1971</id>
+</text>
+<text>
+<en>E-Mail (will not be published)</en>
+<de>E-Mail (wird nicht veröffentlicht)</de>
+<id>1972</id>
+</text>
+<text>
+<en>Blog.Blog</en>
+<id>1973</id>
+</text>
+<text>
+<en>Leave a Reply</en>
+<de>Hinterlassen Sie eine Antwork</de>
+<id>1974</id>
+</text>
 </trl>
-

@@ -15,6 +15,13 @@
     cursor: pointer;
 }
 
+.kwf-cell-button-text div.x-grid3-cell-inner {
+    cursor: pointer;
+    padding: 3px 4px 3px 18px;
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
 a.xlsExportLink {
     background: url(/assets/silkicons/page_excel.png) 0px 0px no-repeat;
     padding-left: 21px; font-size: 16px; font-weight: bold;

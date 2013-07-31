@@ -18,10 +18,14 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
             );
             if (!$mainType) $mainType = $key;
         }
-
         $ret['form'] = array_merge($ret['form'], array(
-            'xtype' => 'kwf.tabpanel',
+            'xtype' => 'kwc.newsletter.detail.tabpanel',
             'tabs' => array(
+                'settings' => array(
+                    'xtype'                 => 'kwf.autoform',
+                    'controllerUrl'         => $this->getControllerUrl(),
+                    'title'                 => trlKwf('Settings')
+                ),
                 'mail' => array(
                     'xtype'                 => 'kwf.component',
                     'componentEditUrl'      => '/admin/component/edit',
@@ -32,17 +36,36 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                     'mainType'              => $mainType,
                     'title'                 => trlKwf('Mail')
                 ),
-                'recipients' => array(
-                    'xtype'                 => 'kwc.newsletter.recipients',
-                    'controllerUrl'         => $this->getControllerUrl('Recipients'),
-                    'formControllerUrl'     => $this->getControllerUrl('Recipient'),
-                    'title'                 => trlKwf('Recipients')
+                'preview' => array(
+                    'xtype'                 => 'kwc.newsletter.detail.preview',
+                    'controllerUrl'         => $this->getControllerUrl('Preview'),
+                    'subscribersControllerUrl' => $this->getControllerUrl('Subscribers'),
+                    'authedUserEmail'       => Kwf_Registry::get('userModel')->getAuthedUser()->email,
+                    'title'                 => trlKwf('Preview')
                 ),
                 'mailing' => array(
-                    'xtype'                 => 'kwc.newsletter.mailing',
-                    'controllerUrl'         => $this->getControllerUrl('Mailing'),
+                    'xtype'                 => 'kwc.newsletter.recipients',
                     'title'                 => trlKwf('Mailing'),
-                    'tbar'                  => array()
+                    'recipientsPanel' => array(
+                        'title' => trlKwf('Add/Remove Subscriber to Queue'),
+                        'controllerUrl' => $this->getControllerUrl('Recipients'),
+                        'region' => 'center',
+                        'xtype' => 'kwc.newsletter.recipients.grid'
+                    ),
+                    'recipientsQueuePanel' => array(
+                        'title' => trlKwf('Queue'),
+                        'controllerUrl' => $this->getControllerUrl('Mailing'),
+                        'region' => 'east',
+                        'width' => 500,
+                        'xtype' => 'kwc.newsletter.recipients.queue'
+                    ),
+                    'mailingPanel' => array(
+                        'title' => trlKwf('Mailing'),
+                        'region' => 'south',
+                        'controllerUrl' => $this->getControllerUrl('Mailing'),
+                        'formControllerUrl' => $this->getControllerUrl('MailingForm'),
+                        'xtype' => 'kwc.newsletter.startNewsletter'
+                    )
                 ),
                 'statistics' => array(
                     'xtype'                 => 'kwf.autogrid',
