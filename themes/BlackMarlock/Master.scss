@@ -1,9 +1,6 @@
 @import "kwf/css3/border-radius";
 @import "compass/utilities/general/clearfix";
 
-html {
-    overflow-y: scroll;
-}
 #absoluteBg {
     background: var(dark); width: 100%; height: 100%; position: fixed; z-index: -1;
 }
@@ -11,10 +8,6 @@ html {
 #page #outerHeader,
 #page #outerContent,
 #page #outerContent #footer { width: 910px; margin: 0px auto; text-align: left; }
-
-.webListNone ul { margin: 0px; }
-.webListNone,
-.webListNone li { margin-bottom: 0px; }
 
 #page #outerContent {
     @include border-radius(10px);
