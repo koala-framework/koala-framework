@@ -1,4 +1,3 @@
-@import "susy";
 @import "kwf/css3/border-radius";
 @import "kwf/css3/box-shadow";
 @import "compass/css3/box-sizing"
@@ -32,61 +31,6 @@ html {
 
 body.frontend {
     background-color: #ccc;
-}
-
-#page {
-    @include border-radius-pie(5px);
-    padding-top: 20px;
-}
-
-$total-columns  : 4;
-$column-width   : 1024px / 4;
-$gutter-width   : 0px;
-$grid-padding   : 0px;
-
-#page {
-    @include container;
-
-    @include border-radius-pie(5px);
-    background-color: #fff;
-    padding-top: 30px;
-    padding-bottom: 20px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #AAAAAA;
-
-    #outerContent {
-        clear: both;
-        #content {
-            background-color: #eee;
-            @include clearfix;
-            #innerContent {
-                margin: 20px;
-            }
-        }
-    }
-
-    #footer {
-        padding-top: 20px;
-        padding-left: 20px;
-        clear: both;
-    }
-
-    @include at-breakpoint(4) {
-        @include set-container-width;
-        #title {
-            padding-left: 30px;
-            @include span-columns(2);
-        }
-        #searchBox {
-            @include span-columns(1 omega);
-            padding-right: 30px;
-        }
-        #innerContent {
-            @include span-columns(3);
-        }
-    }
-
 }
 
 .webListNone ul { margin: 0px; }
