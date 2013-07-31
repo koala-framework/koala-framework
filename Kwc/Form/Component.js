@@ -215,6 +215,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     var height = this.getWindowHeight();
                     var scrollPosY = this.getScrollPosY();
                     if (scrollTo < scrollPosY || scrollTo > scrollPosY + height) {
+                        scrollTo -= 20;
                         $('html, body').animate({
                             scrollTop: scrollTo
                         }, 2000);
