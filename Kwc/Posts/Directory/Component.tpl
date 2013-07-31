@@ -1,11 +1,17 @@
 <div class="<?=$this->cssClass?>">
-    <div class="newEntry">
-        <?if ($this->write) {?>
-        <?=$this->componentLink($this->write, $this->placeholder['writeText'])?>
-        <?}?>
-        <?if ($this->quickwrite) {?>
-        <?=$this->component($this->quickwrite)?>
-        <?}?>
+    <? if ($this->write) { ?>
+        <div class="write">
+            <?=$this->componentLink($this->write, $this->placeholder['writeText'])?>
+        </div>
+    <? } ?>
+
+    <div class="comments">
+        <?=$this->component($this->view)?>
     </div>
-    <?=$this->component($this->view)?>
+
+    <? if ($this->quickwrite) { ?>
+        <div class="quickwrite">
+            <?=$this->component($this->quickwrite)?>
+        </div>
+    <? } ?>
 </div>

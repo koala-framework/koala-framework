@@ -1,0 +1,15 @@
+.catchBoxMenuBottom.webStandard {
+    ul {
+        margin: 0;
+        li {
+            display: inline;
+            &:after {
+                content: '|';
+            }
+            &.last:after {
+                content: '';
+            }
+        }
+    }
+}
+

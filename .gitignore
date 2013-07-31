@@ -9,3 +9,4 @@ eventlog
 .tmp*
 nbproject
 automagic-checkout.log
+.idea/

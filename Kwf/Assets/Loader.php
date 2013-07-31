@@ -255,6 +255,9 @@ class Kwf_Assets_Loader
                         if (substr($cssClass, 0, 11) == 'components/') {
                             $cssClass = substr($cssClass, 11);
                         }
+                        if (substr($cssClass, 0, 7) == 'themes/') {
+                            $cssClass = substr($cssClass, 7);
+                        }
                         if (substr($cssClass, -4) == '.css') {
                             $cssClass = substr($cssClass, 0, -4);
                         }

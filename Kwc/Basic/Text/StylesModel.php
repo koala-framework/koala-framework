@@ -21,6 +21,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
     public static function parseMasterStyles($masterContent)
     {
         $styles = array();
+        if (strpos($masterContent, '.webStandard')===false) return $styles;
         preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{([^}]*)} */\\* +(.*?) +\\*/#m', $masterContent, $m);
         foreach (array_keys($m[1]) as $i) {
             $tagName = $m[2][$i];
@@ -37,10 +38,25 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
     public static function getMasterStyles()
     {
-        if (file_exists('css/master.css')) {
-            return self::parseMasterStyles(file_get_contents('css/master.css'));
+        $cacheId = 'textMasterSyles';
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+        if ($ret !== false) return $ret;
+
+        $loader = new Kwf_Assets_Loader();
+        $dep = $loader->getDependencies();
+        $files = $dep->getAssetFiles('Frontend', 'css', 'web', Kwf_Component_Data_Root::getComponentClass());
+        unset($files['mtime']);
+        $ret = array();
+        foreach ($files as $file) {
+            if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
+            } else if (substr($file, 0, 8) == 'dynamic/') {
+            } else {
+                $c = $loader->getFileContents($file);
+                $ret = array_merge($ret, self::parseMasterStyles($c['contents']));
+            }
         }
-        return array();
+        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        return $ret;
     }
 
     public function getStyles($ownStyles = false)

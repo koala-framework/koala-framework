@@ -5,6 +5,7 @@ class Kwc_Posts_Directory_View_Component extends Kwc_Directories_List_View_Compo
     {
         $ret = parent::getSettings();
         $ret['partialClass'] = 'Kwf_Component_Partial_Id';
+        $ret['placeholder']['noEntriesFound'] = false;
         return $ret;
     }
 }

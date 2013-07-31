@@ -37,7 +37,7 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
     {
     
         if (Kwf_Config::getValue('server.phpCli')) {
-            $cmd = Kwf_Config::getValue('server.phpCli')." boottstrap.php maintenance update ";
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php maintenance update ";
             $cmd .= " --progressNum=".escapeshellarg($this->_getParam('progressNum'));
             $procData = Kwf_Util_BackgroundProcess::start($cmd, $this->view);
             $this->view->assign($procData);

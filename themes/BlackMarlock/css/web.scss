@@ -1,0 +1,85 @@
+@import "kwf/css3/border-radius";
+@import "compass/utilities/general/clearfix";
+
+html {
+    overflow-y: scroll;
+}
+#absoluteBg {
+    background: var(dark); width: 100%; height: 100%; position: fixed; z-index: -1;
+}
+#page { }
+#page #outerHeader,
+#page #outerContent,
+#page #outerContent #footer { width: 910px; margin: 0px auto; text-align: left; }
+
+.webListNone ul { margin: 0px; }
+.webListNone,
+.webListNone li { margin-bottom: 0px; }
+
+#page #outerContent {
+    @include border-radius(10px);
+}
+#page #outerHeader #header {
+    height: 100px;
+    margin: 0px 35px;
+    @include pie-clearfix;
+}
+#page #outerHeader #header #mainMenu {
+    width: 600px;
+    float: left;
+}
+#page #outerHeader #header #social {
+    float: right;
+    @include pie-clearfix;
+    height: 48px;
+    margin-top: 30px;
+}
+#page #outerHeader #header #social #twitter,
+#page #outerHeader #header #social #facebook,
+#page #outerHeader #header #social #linkedin {
+    float: left;
+    width: 48px;
+    height: 48px;
+    margin-right: 5px;
+}
+#page #outerHeader #header #social {
+    #twitter {
+      background: url(/assets/web/images/twitter.png);
+    }
+    #facebook {
+      background: url(/assets/web/images/facebook.png);
+    }
+    #linkedin {
+      background: url(/assets/web/images/linkedin.png);
+    }
+}
+
+#page #outerContent {
+    background: var(light);
+    padding: 20px;
+    width: 910px;
+}
+#page #outerContent #content #innerContent {
+    padding-top: 20px;
+    @include pie-clearfix;
+    position: relative;
+}
+#page #outerContent #content #innerContent #leftColumn {
+    width: 660px;
+    margin-right: 20px;
+    float: left;
+    min-height: 300px;
+}
+#page #outerContent #content #innerContent #rightColumn {
+    width: 230px;
+    float: left;
+    min-height: 300px;
+    height: 100%;
+    background: var(dark);
+    margin-bottom: 20px;
+}
+#page #outerContent #footer {
+  background: var(dark);
+  height: 80px;
+    @include border-radius(0px 0px 10px 10px);
+}

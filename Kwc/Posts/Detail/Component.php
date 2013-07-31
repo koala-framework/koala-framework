@@ -6,6 +6,7 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['actions'] = 'Kwc_Posts_Detail_Actions_Component';
         $ret['generators']['child']['component']['signature'] = 'Kwc_Posts_Detail_Signature_Component';
+        $ret['useGravatar'] = true;
         return $ret;
     }
 
@@ -43,8 +44,10 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
             if (isset($data->row->name)) {
                 $ret['user'] = $data->row->name;
             }
+            if (isset($data->row->email) && $data->row->email && $this->_getSetting('useGravatar')) {
+                $ret['avatar'] = 'http://www.gravatar.com/avatar/'.md5(trim(strtolower($data->row->email))).'?s=68&d=mm';
+            }
         }
-
         $select = $data->parent->getGenerator('detail')->select($data->parent)
             ->where('create_time <= ?', $data->row->create_time);
         $ret['postNumber'] = $data->parent->countChildComponents($select);

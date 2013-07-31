@@ -1,0 +1,35 @@
+@import "compass/css3/images";
+
+.catchBoxMenuSub {
+    background-color: #e6e6e6;
+    margin-top: 2px;
+    
+    ul {
+        height: 32px;
+    }
+
+    li {
+        height: 32px;
+        border-right: 1px solid #444;
+        float: left;
+        display: block;
+        font-size: 14px;
+        
+        &.last {
+            border-right: none;
+        }
+
+        a {
+            height: 32px;
+            padding: 0 10px;
+            display: block;
+            line-height: 32px;
+            color: #373737;
+
+            &:hover {
+                @include background(linear-gradient(#f9f9f9, #e5e5e5));
+            }
+        }
+    }
+}
+

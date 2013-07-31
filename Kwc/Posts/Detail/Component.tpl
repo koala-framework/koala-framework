@@ -3,10 +3,14 @@
         <div class="postInfo">
             <? if ($this->avatar) { ?>
                 <div class="avatar">
-                    <?= $this->componentLink(
-                            $this->user,
-                            $this->component($this->avatar)
-                    ) ?>
+                    <? if ($this->avatar instanceof Kwf_Component_Data) { ?>
+                        <?= $this->componentLink(
+                                $this->user,
+                                $this->component($this->avatar)
+                        ) ?>
+                    <? } else { ?>
+                        <img src="<?=$this->avatar?>" width="68" height="68" alt="" />
+                    <? } ?>
                 </div>
             <? } ?>
             <? if ($this->user) { ?>

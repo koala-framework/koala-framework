@@ -5,12 +5,11 @@ class Kwc_Blog_Comments_QuickWrite_Form_FrontendForm extends Kwc_Posts_Write_For
     {
         parent::_init();
         $this->insertBefore('content', new Kwf_Form_Field_TextField('name', trlKwfStatic('Name')))
-            ->setLabelWidth(150)
             ->setAllowBlank(false)
-            ->setWidth(200);
-        $this->insertAfter('name', new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail (will not be published)')))
-            ->setLabelWidth(150)
+            ->setWidth(300);
+        $this->insertAfter('name', new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
             ->setVtype('email')
-            ->setWidth(200);
+            ->setWidth(300);
+        $this->fields['content']->setFieldLabel(trlKwfStatic('Comment'));
     }
 }
