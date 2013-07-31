@@ -269,11 +269,18 @@ class Kwf_Assets_Loader
                         }
                         if (substr($cssClass, -10) == '/Component') {
                             $cssClass = substr($cssClass, 0, -10);
+                        } else if (substr($cssClass, -7) == '/Master') {
+                            $cssClass = substr($cssClass, 0, -7);
+                            $cssClass = 'master'.$cssClass;
+                        } else {
+                            $cssClass = false;
                         }
-                        $cssClass = str_replace('/', '', $cssClass);
-                        $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
-                        $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
-                        $cacheData['contents'] = str_replace('.cssClass', '.'.$cssClass, $cacheData['contents']);
+                        if ($cssClass) {
+                            $cssClass = str_replace('/', '', $cssClass);
+                            $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
+                            $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
+                            $cacheData['contents'] = str_replace('.cssClass', '.'.$cssClass, $cacheData['contents']);
+                        }
                         if (Kwf_Config::getValue('assetsCacheUrl')) {
                             $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&url=';
                             $cacheData['contents'] = str_replace('url(\'/assets/', 'url(\''.$url.'assets/', $cacheData['contents']);

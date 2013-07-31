@@ -293,7 +293,9 @@ class Kwf_Component_Settings
                     //verwendet bei dependencies
                     'css' => array('filename'=>'Component', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
                     'printcss' => array('filename'=>'Component', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
-                    'scss' => array('filename'=>'Component', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true)
+                    'scss' => array('filename'=>'Component', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
+                    'masterCss' => array('filename'=>'Master', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
+                    'masterScss' => array('filename'=>'Master', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
                 ));
             } else {
 

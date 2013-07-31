@@ -238,6 +238,17 @@ class Kwf_Assets_Dependencies
         $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
             if ($rootComponent) {
+                if ($dependency == 'Components') {
+                    $files = Kwf_Component_Abstract_Admin::getComponentFiles($rootComponent, array(
+                        'css' => array('filename'=>'Web', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
+                        'printcss' => array('filename'=>'Web', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
+                        'scss' => array('filename'=>'Web', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
+                    ));
+                    foreach ($files as $i) {
+                        $this->_addAbsoluteFiles($assetsType, $i);
+                    }
+                }
+
                 $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
             }
             return;
@@ -275,6 +286,26 @@ class Kwf_Assets_Dependencies
         */
     }
 
+
+    private function _addAbsoluteFiles($assetsType, $files)
+    {
+        foreach ($files as $f) {
+            if (substr($f, 0, strlen(KWF_PATH)+1) == KWF_PATH.'/') { //zuerst, da kwf in web liegen kann
+                //kann nur aus kwf
+                $f = 'kwf'.substr($f, strlen(KWF_PATH));
+            } else if (defined('VKWF_PATH') && substr($f, 0, strlen(VKWF_PATH)+1) == VKWF_PATH.'/') {
+                //TODO: this should not be here
+                $f = 'vkwf'.substr($f, strlen(VKWF_PATH));
+            } else {
+                //oder web kommen
+                $f = 'web'.substr($f, strlen(getcwd()));
+            }
+            if (!$this->_hasFile($assetsType, $f)) {
+                $this->_files[$assetsType][] = $f;
+            }
+        }
+    }
+
     private function _processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets)
     {
         if (in_array($assetsType.$class.$includeAdminAssets, $this->_processedComponents)) return;
@@ -309,24 +340,13 @@ class Kwf_Assets_Dependencies
         //alle css-dateien der vererbungshierache includieren
         $files = Kwc_Abstract::getSetting($class, 'componentFiles');
         $componentCssFiles = array();
-        foreach (array_merge($files['css'], $files['printcss'], $files['scss']) as $f) {
-            if (substr($f, 0, strlen(KWF_PATH)+1) == KWF_PATH.'/') { //zuerst, da kwf in web liegen kann
-                //kann nur aus kwf
-                $f = 'kwf'.substr($f, strlen(KWF_PATH));
-            } else if (defined('VKWF_PATH') && substr($f, 0, strlen(VKWF_PATH)+1) == VKWF_PATH.'/') {
-                //TODO: this should not be here
-                $f = 'vkwf'.substr($f, strlen(VKWF_PATH));
-            } else {
-                //oder web kommen
-                $f = 'web'.substr($f, strlen(getcwd()));
-            }
-            if (!$this->_hasFile($assetsType, $f)) {
-                $componentCssFiles[] = $f;
-            }
+        foreach (array_merge($files['css'], $files['printcss'], $files['scss'], $files['masterCss'], $files['masterScss']) as $f) {
+            $componentCssFiles[] = $f;
         }
-
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
-        $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));
+        $componentCssFiles = array_reverse($componentCssFiles);
+
+        $this->_addAbsoluteFiles($assetsType, $componentCssFiles);
 
         $classes = Kwc_Abstract::getChildComponentClasses($class);
         $classes = array_merge($classes, Kwc_Abstract::getSetting($class, 'plugins'));
@@ -335,6 +355,7 @@ class Kwf_Assets_Dependencies
                 $classes = array_merge($classes, $g['plugins']);
             }
         }
+
 
         foreach ($classes as $class) {
             if ($class) {
