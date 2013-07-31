@@ -11,6 +11,7 @@ class Kwc_List_Switch_FirstLargeContentPlugin extends Kwf_Component_Plugin_Abstr
             $firstItem = $child->getChildComponent('-large');
             if ($firstItem) {
                 $helper = new Kwf_Component_View_Helper_Component();
+                $helper->setRenderer($renderer);
                 $html = $helper->component($firstItem);
                 $output = str_replace(
                     '<div class="listSwitchLargeContent"></div>',
