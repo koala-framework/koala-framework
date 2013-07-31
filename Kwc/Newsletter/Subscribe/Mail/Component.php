@@ -1,11 +1,9 @@
 <?php
-class Kwc_Newsletter_Subscribe_Mail_Component extends Kwc_Mail_Component
+class Kwc_Newsletter_Subscribe_Mail_Component extends Kwc_Mail_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        unset($ret['generators']['content']);
-
         $ret['recipientSources'] = array(
             'sub' => 'Kwc_Newsletter_Subscribe_Model'
         );

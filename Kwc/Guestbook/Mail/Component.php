@@ -1,11 +1,10 @@
 <?php
-// Kwc_Mail_Component nötig, weil sich komponenten-links in der mail befinden
-class Kwc_Guestbook_Mail_Component extends Kwc_Mail_Component
+// Kwc_Mail_Abstract_Component nötig, weil sich komponenten-links in der mail befinden
+class Kwc_Guestbook_Mail_Component extends Kwc_Mail_Abstract_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        unset($ret['generators']['content']);
         $ret['recipientSources'] = array(
             'u' => get_class(Kwf_Registry::get('userModel'))
         );
