@@ -7,7 +7,7 @@ class Kwf_Component_Plugin_Password extends Kwf_Component_Plugin_Abstract
 {
     protected $_password = 'planet';
 
-    public function replaceOutput($output)
+    public function replaceOutput($output, $renderer)
     {
         if (!is_array($this->_password)) $this->_password = array($this->_password);
 

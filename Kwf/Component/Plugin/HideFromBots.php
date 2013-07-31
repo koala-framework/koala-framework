@@ -2,7 +2,7 @@
 class Kwf_Component_Plugin_HideFromBots extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewReplace
 {
-    public function replaceOutput()
+    public function replaceOutput($renderer)
     {
         $bots = array(
         'AdsBot-Google',

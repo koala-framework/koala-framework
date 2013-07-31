@@ -20,4 +20,9 @@ class Kwf_Component_Partial_Abstract
         if (!isset($this->_params[$param])) return null;
         return $this->_params[$param];
     }
+
+    public static function useViewCache()
+    {
+        return false;
+    }
 }

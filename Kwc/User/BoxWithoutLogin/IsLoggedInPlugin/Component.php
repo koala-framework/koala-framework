@@ -5,7 +5,7 @@
 class Kwc_User_BoxWithoutLogin_IsLoggedInPlugin_Component extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewBeforeChildRender
 {
-    public function processOutput($output)
+    public function processOutput($output, $renderer)
     {
         $parts = explode('{kwfappendboxdata}', $output);
         if (count($parts) != 2) {

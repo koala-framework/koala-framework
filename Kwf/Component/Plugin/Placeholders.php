@@ -8,7 +8,7 @@ class Kwf_Component_Plugin_Placeholders extends Kwf_Component_Plugin_Abstract
             ->getComponent()->getPlaceholders();
     }
 
-    public function processOutput($output)
+    public function processOutput($output, $renderer)
     {
         foreach ($this->_getPlaceholders() as $p=>$v) {
             $output = str_replace("%$p%", $v, $output);

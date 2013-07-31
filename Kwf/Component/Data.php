@@ -46,6 +46,7 @@ class Kwf_Component_Data
     private $_childComponentsCache = array();
     private $_recursiveGeneratorsCache = array();
     private $_languageCache;
+    private $_expandedComponentIdCache;
 
     //public static $objectsCount;
     //public static $objectsById = array();
@@ -139,14 +140,19 @@ class Kwf_Component_Data
      */
     public function getExpandedComponentId()
     {
+        if ($this->_expandedComponentIdCache) {
+            return $this->_expandedComponentIdCache;
+        }
         $generator = $this->generator;
         if ($generator instanceof Kwc_Root_Category_Generator) {
             $separator = '_';
         } else {
             $separator = $generator->getIdSeparator();
         }
-        return $this->parent->getExpandedComponentId() .
+        $this->_expandedComponentIdCache = $this->parent->getExpandedComponentId() .
             $separator . $this->id;
+
+        return $this->_expandedComponentIdCache;
     }
 
     /**
@@ -1364,7 +1370,7 @@ class Kwf_Component_Data
     public function render($enableCache = null, $renderMaster = false)
     {
         $output = new Kwf_Component_Renderer();
-        $output->setEnableCache($enableCache);
+        if ($enableCache !== null) $output->setEnableCache($enableCache);
         if ($renderMaster) {
             return $output->renderMaster($this);
         } else {
@@ -1377,7 +1383,8 @@ class Kwf_Component_Data
      */
     public function kwfSerialize()
     {
-        $this->getLanguage(); //um _languageCache zu befüllen
+        $this->getLanguage(); //fill _languageCache
+        $this->getExpandedComponentId(); //fill _expandedComponentIdCache
 
         $ret = array();
         $ret['class'] = get_class($this);

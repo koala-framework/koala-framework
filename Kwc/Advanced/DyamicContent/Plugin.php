@@ -2,7 +2,7 @@
 class Kwc_Advanced_DyamicContent_Plugin extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewAfterChildRender
 {
-    public function processOutput($output)
+    public function processOutput($output, $renderer)
     {
         if (!preg_match('#{dynamicContent ([^}]*)}#', $output, $m)) {
             throw new Kwf_Exception("didn't find {dynamicContent");

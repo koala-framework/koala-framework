@@ -96,6 +96,28 @@ class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         }
     }
 
+    public function loadWithMetadata($id, $doNotTestCacheValidity = false)
+    {
+        $id = $this->_processId($id);
+        try {
+            $tmp = $this->_memcache->get($id);
+            if (is_array($tmp) && isset($tmp[0])) {
+                return array(
+                    'contents' => $tmp[0],
+                    'expire' => $tmp[2] ? ($tmp[1] + $tmp[2]) : null, //mtime + lifetime
+                );
+            }
+            return false;
+        } catch (ErrorException $e) {
+            if ($e->getSeverity() == E_NOTICE) {
+                $e = new Kwf_Exception_Other($e);
+                $e->logOrThrow();
+                return false;
+            }
+            throw $e;
+        }
+    }
+
     public function test($id)
     {
         $id = $this->_processId($id);

@@ -2,7 +2,7 @@
 class Kwf_Component_Plugin_Facebook_CheckFanRedirect extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewReplace
 {
-    public function replaceOutput()
+    public function replaceOutput($renderer)
     {
         if (!Kwf_Config::getValue('kwc.fbAppData.siteId')) {
             throw new Kwf_Exception('kwc.fbAppData.siteId has to be set in config');

@@ -6,7 +6,7 @@
 class Kwf_Component_Plugin_Facebook_RedirectToPagetab extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewReplace
 {
-    public function replaceOutput()
+    public function replaceOutput($renderer)
     {
         if (!Kwf_Config::getValue('kwc.fbAppData.pageTabUrl')) {
             throw new Kwf_Exception('kwc.fbAppData.pageTabUrl has to be set in config');

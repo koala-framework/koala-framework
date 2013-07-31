@@ -9,5 +9,5 @@ interface Kwf_Component_Plugin_Interface_ViewReplace
     /**
      * @return string|bool false to use component output, string to replace output
      */
-    public function replaceOutput();
+    public function replaceOutput($renderer);
 }

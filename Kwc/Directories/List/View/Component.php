@@ -23,8 +23,10 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         $generators = Kwc_Abstract::getSetting($componentClass, 'generators');
         if (isset($generators['child']['component']['searchForm'])) {
             return 'Kwf_Component_Partial_Id';
-        } else {
+        } else if (isset($generators['child']['component']['paging'])) {
             return 'Kwf_Component_Partial_Paging';
+        } else {
+            return 'Kwf_Component_Partial_Stateless';
         }
     }
 

@@ -8,6 +8,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $this->_models = array (
             'cache' => 'Kwf_Component_Cache_Mysql_Model',
             'url' => 'Kwf_Component_Cache_Mysql_UrlModel',
+            'includes' => 'Kwf_Component_Cache_Mysql_IncludesModel',
         );
     }
 
@@ -23,13 +24,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         return $this->_models[$type];
     }
 
-    public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '')
+    public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '', $lifetime = null)
     {
-        $settings = $component->getComponent()->getViewCacheSettings();
-        if ($type != 'componentLink' && $type != 'master' && $type != 'page' && !$settings['enabled']) {
-            $content = self::NO_CACHE;
-        }
-
         // MySQL
         $data = array(
             'component_id' => (string)$component->componentId,
@@ -40,7 +36,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'renderer' => $renderer,
             'type' => $type,
             'value' => (string)$value,
-            'expire' => is_null($settings['lifetime']) ? null : time() + $settings['lifetime'],
+            'expire' => is_null($lifetime) ? null : time() + $lifetime,
             'deleted' => false,
             'content' => $content
         );
@@ -54,7 +50,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         // APC
         $cacheId = $this->_getCacheId($component->componentId, $renderer, $type, $value);
         $ttl = 0;
-        if ($settings['lifetime']) $ttl = $settings['lifetime'];
+        if ($lifetime) $ttl = $lifetime;
         Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
 
         return true;
@@ -62,12 +58,19 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function load($componentId, $renderer='component', $type = 'component', $value = '')
     {
+        $data = $this->loadWithMetadata($componentId, $renderer, $type, $value);
+        if ($data === null) return $data;
+        return $data['contents'];
+    }
+
+    public function loadWithMetadata($componentId, $renderer='component', $type = 'component', $value = '')
+    {
         if ($componentId instanceof Kwf_Component_Data) {
             $componentId = $componentId->componentId;
         }
         $cacheId = $this->_getCacheId($componentId, $renderer, $type, $value);
-        $content = Kwf_Component_Cache_Memory::getInstance()->load($cacheId);
-        if ($content === false) {
+        $data = Kwf_Component_Cache_Memory::getInstance()->loadWithMetaData($cacheId);
+        if ($data === false) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
                 ->whereEquals('component_id', $componentId)
@@ -83,14 +86,22 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 'columns' => array('content', 'expire'),
             );
             $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select, $options);
-            $content = isset($row[0]) ? $row[0]['content'] : null;
             if (isset($row[0])) {
                 $ttl = 0;
-                if ($row[0]['expire']) $ttl = $row[0]['expire']-time();
-                Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
+                if ($row[0]['expire']) {
+                    $ttl = $row[0]['expire']-time();
+                }
+                Kwf_Component_Cache_Memory::getInstance()->save($row[0]['content'], $cacheId, array(), $ttl);
+                $data = array(
+                    'contents' => $row[0]['content'],
+                    'expire' => $row[0]['expire']
+                );
+            } else {
+                $data = null;
             }
         }
-        return $content;
+
+        return $data;
     }
 
     public function deleteViewCache($select)
@@ -104,8 +115,12 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         );
         $partialIds = array();
         $deleteIds = array();
+        $checkIncludeIds = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
+            if ($row['type'] != 'fullPage' && !in_array($row['component_id'], $checkIncludeIds)) {
+                $checkIncludeIds[] = $row['component_id'];
+            }
             if ($log) {
                 $log->log("delete view cache $row[component_id] $row[renderer] $row[type] $row[value]", Zend_Log::INFO);
             }
@@ -144,11 +159,73 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             Kwf_Component_Cache_Memory::getInstance()->remove($cacheId);
         }
 
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('type', 'fullPage');
+        if ($checkIncludeIds) {
+            $ids = array_keys($this->_fetchIncludesTree($checkIncludeIds));
+            if ($ids) {
+                $s->whereEquals('component_id', $ids);
+                if ($log) {
+                    foreach ($ids as $id) {
+                        $log->log("type=fullPage component_id={$id}", Zend_Log::INFO);
+                    }
+                }
+                $this->deleteViewCache($s);
+            }
+        }
+
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
-        
+
         return count($cacheIds);
     }
 
+    private function _fetchIncludesTree($componentIds, &$checkedIds = array())
+    {
+        $ret = array();
+        $ids = array();
+
+        foreach ($componentIds as $componentId) {
+
+            $i = $componentId;
+            if (!isset($checkedIds[$i])) {
+                $checkedIds[$i] = true;
+                $ids[] = $i;
+            }
+            while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
+                $i = substr($i, 0, strrpos($i, '-'));
+                if (!isset($checkedIds[$i])) {
+                    $checkedIds[$i] = true;
+                    $ids[] = $i;
+                }
+            }
+
+            $ret[$i] = true;
+
+        }
+
+        if (!$ids) {
+            return $ret;
+        }
+
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('target_id', $ids);
+        $imports = Kwf_Component_Cache::getInstance()
+            ->getModel('includes')
+            ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
+        $childIds = array();
+        foreach ($imports as $row) {
+            $childIds[] = $row['component_id'];
+        }
+        $childIds = array_unique($childIds);
+
+        foreach ($this->_fetchIncludesTree($childIds, $checkedIds) as $i=>$nop) {
+            if (!isset($ret[$i])) {
+                $ret[$i] = true;
+            }
+        }
+
+        return $ret;
+    }
     protected static function _getCacheId($componentId, $renderer, $type, $value)
     {
         return "cc_".str_replace('-', '__', $componentId)."_{$renderer}_{$type}_{$value}";
