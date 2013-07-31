@@ -4,7 +4,7 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwfStatic('RedMallee');
+        $ret['componentName'] = 'RedMallee';
         return $ret;
     }
 

@@ -8,7 +8,7 @@ class RedMallee_List_Fade_Image_Component extends Kwc_Basic_Image_Component
 
         $ret['dimensions'] = array(
             'customcrop'=>array(
-                'text' => trlKwf('user-defined'),
+                'text' => trlKwfStatic('user-defined'),
                 'width' => 980,
                 'height' => 185,
                 'scale' => Kwf_Media_Image::SCALE_CROP
