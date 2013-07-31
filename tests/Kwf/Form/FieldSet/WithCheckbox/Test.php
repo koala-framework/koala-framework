@@ -34,7 +34,7 @@ class Kwf_Form_FieldSet_WithCheckbox_Test extends Kwf_Test_TestCase
         $form->save(null, $post);
         $form->afterSave(null, $post);
 
-        $row = $form->getModel()->getRow(array());
+        $row = $form->getModel()->getRow(new Kwf_Model_Select());
         $this->assertEquals(false, $row->fs);
         $this->assertEquals(null, $row->text);
     }
@@ -66,7 +66,7 @@ class Kwf_Form_FieldSet_WithCheckbox_Test extends Kwf_Test_TestCase
         $form->save(null, $post);
         $form->afterSave(null, $post);
 
-        $row = $form->getModel()->getRow(array());
+        $row = $form->getModel()->getRow(new Kwf_Model_Select());
         $this->assertEquals(true, (bool)$row->fs);
         $this->assertEquals('foo', $row->text);
     }
@@ -85,7 +85,7 @@ class Kwf_Form_FieldSet_WithCheckbox_Test extends Kwf_Test_TestCase
         $form->save(null, $post);
         $form->afterSave(null, $post);
 
-        $row = $form->getModel()->getRow(array());
+        $row = $form->getModel()->getRow(new Kwf_Model_Select());
         $this->assertEquals(false, $row->fs);
         $this->assertEquals(null, $row->text);
     }
