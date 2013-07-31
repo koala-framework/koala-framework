@@ -4,7 +4,7 @@
         <?=$this->includeCode('header')?>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
-    <body class="frontend">
+    <body class="<?=$this->cssClass?>">
         <div id="page">
             <div id="outerHeader">
                 <div id="header">

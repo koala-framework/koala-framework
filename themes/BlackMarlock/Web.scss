@@ -18,3 +18,13 @@
 .webStandard li { margin-bottom: 5px; color: var(typo); }
 .webStandard ol li { list-style-type: decimal; }
 .webStandard ul li { list-style-type: disc; }
+
+
+html {
+    overflow-y: scroll;
+}
+
+.webListNone ul { margin: 0px; }
+.webListNone,
+.webListNone li { margin-bottom: 0px; }
+
