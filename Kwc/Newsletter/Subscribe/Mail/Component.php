@@ -7,6 +7,7 @@ class Kwc_Newsletter_Subscribe_Mail_Component extends Kwc_Mail_Abstract_Componen
         $ret['recipientSources'] = array(
             'sub' => 'Kwc_Newsletter_Subscribe_Model'
         );
+        $ret['viewCache'] = false;
 
         return $ret;
     }

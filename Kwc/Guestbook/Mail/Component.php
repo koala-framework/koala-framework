@@ -8,6 +8,7 @@ class Kwc_Guestbook_Mail_Component extends Kwc_Mail_Abstract_Component
         $ret['recipientSources'] = array(
             'u' => get_class(Kwf_Registry::get('userModel'))
         );
+        $ret['viewCache'] = false;
 
         return $ret;
     }

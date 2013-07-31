@@ -19,8 +19,6 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
             'filename' => 'r'
         );
 
-        $ret['viewCache'] = false;
-
         $ret['mailHtmlStyles'] = array();
         $ret['plugins']['placeholders'] = 'Kwc_Mail_PlaceholdersPlugin';
 
