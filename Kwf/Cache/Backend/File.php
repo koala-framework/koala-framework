@@ -22,7 +22,7 @@ class Kwf_Cache_Backend_File extends Zend_Cache_Backend_File
         return $ret;
     }
 
-    public function loadWithMetadatas($id, $doNotTestCacheValidity = false)
+    public function loadWithMetadata($id, $doNotTestCacheValidity = false)
     {
         $contents = $this->load($id, $doNotTestCacheValidity);
         if ($contents === false) return false;
