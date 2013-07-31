@@ -3,7 +3,7 @@
     <head>
         <?=$this->includeCode('header')?>
     </head>
-    <body class="frontend">
+    <body class="<?=$this->cssClass?>">
         <div id="absoluteBg"></div>
         <div id="page">
             <div id="outerHeader">

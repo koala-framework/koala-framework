@@ -13,10 +13,14 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             $vars['component'] = $innerComponent;
             $vars['data'] = $innerComponent;
             $vars['componentWithMaster'] = $componentWithMaster;
-            $vars['cssClass'] = Kwc_Abstract::getCssClass($component->componentClass);
             $vars['boxes'] = array();
             foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
                 $vars['boxes'][$box->box] = $box;
+            }
+            $vars['cssClass'] = 'frontend';
+            $cls = Kwc_Abstract::getSetting($component->componentClass, 'processedCssClass');
+            foreach (explode(' ', $cls) as $i) {
+                 $vars['cssClass'] .= ' master'.ucfirst($i);
             }
 
             $view = new Kwf_Component_View($this->_getRenderer());

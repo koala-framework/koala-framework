@@ -46,8 +46,8 @@ class BlackMarlock_Component extends Kwf_Component_Theme_Abstract
 
         $ret['contentWidth'] = 660;
 
-        $ret['assets']['files'][] = 'kwf/themes/BlackMarlock/css/master.css';
-        $ret['assets']['files'][] = 'kwf/themes/BlackMarlock/css/web.scss';
+        $ret['assets']['files'][] = 'kwf/themes/BlackMarlock/Master.scss';
+        $ret['assets']['files'][] = 'kwf/themes/BlackMarlock/Web.scss';
         return $ret;
     }
 }
