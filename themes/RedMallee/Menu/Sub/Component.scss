@@ -7,7 +7,8 @@
     padding-bottom: 10px;
 
     > a {
-        background: url("/assets/kwf/themes/RedMallee/images/arrowSmallRight.png") left 6px no-repeat;
+        background-repeat: no-repeat;
+        background-position: left 6px;
         @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRight.png', 6px, 6px);
         margin-left: -15px;
         padding-left: 15px;
@@ -17,7 +18,8 @@
     }
 
     &.current.hasSubmenu > a {
-        background: url("/assets/kwf/themes/RedMallee/images/arrowSmallRightActive.png") left 6px no-repeat;
+        background-repeat: no-repeat;
+        background-position: left 6px;
         @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRightActive.png', 6px, 6px);
     }
 }
