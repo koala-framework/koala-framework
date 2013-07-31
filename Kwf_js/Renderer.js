@@ -171,6 +171,26 @@ Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, stor
     return '';
 };
 
+Ext.util.Format.cellButtonText = function(value, p, record, rowIndex, colIndex, store, column) {
+    var name = '';
+    if (value != 'invisible') {
+        if (column && column.noIconWhenNew && !record.data.id) {
+            p.attr += 'style="background-image:none;" ';
+        } else {
+            p.css += 'kwf-cell-button-text';
+            if (column && column.buttonIcon) {
+                p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
+            }
+            if (column && column.tooltip) {
+                p.attr += ' ext:qtip="'+column.tooltip+'"';
+                name = column.tooltip;
+            }
+        }
+    }
+    if (column && column.editName) name = column.editName;
+    return name;
+};
+
 Ext.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, store, column) {
     p.css += 'kwf-cell-button';
     if (value == 'male') {

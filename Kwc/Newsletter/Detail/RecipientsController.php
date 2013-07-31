@@ -1,7 +1,13 @@
 <?php
 class Kwc_Newsletter_Detail_RecipientsController extends Kwc_Newsletter_Subscribe_RecipientsController
 {
-    protected $_buttons = array('add', 'delete', 'saveRecipients', 'removeRecipients');
+    protected $_buttons = array('saveRecipients', 'removeRecipients');
+
+    protected function _initColumns()
+    {
+        parent::_initColumns();
+        unset($this->_columns['edit']);
+    }
 
     protected function _isAllowedComponent()
     {
@@ -11,9 +17,22 @@ class Kwc_Newsletter_Detail_RecipientsController extends Kwc_Newsletter_Subscrib
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        if ($this->_model->hasColumn('unsubscribed')) {
-            $ret->whereEquals('unsubscribed', false);
+        $mailComponent = $this->_getMailComponent();
+        $rs = $mailComponent->getComponent()->getRecipientSources();
+        foreach(array_keys($rs) as $key) {
+            if (isset($rs[$key]['select']) && ($rs[$key]['model'] == get_class($this->_getModel()))) {
+                $ret->merge($rs[$key]['select']);
+            }
         }
         return $ret;
+    }
+
+    protected function _getMailComponent()
+    {
+        $mailComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId') . '-mail',
+            array('ignoreVisible' => true)
+        );
+        return $mailComponent;
     }
 }

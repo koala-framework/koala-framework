@@ -1,19 +1,20 @@
 <?php
 class Kwc_Newsletter_Detail_PreviewController extends Kwc_Mail_PreviewController
 {
-    private function _getQueueRow()
-    {
-        $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_QueueModel');
-        return $model->getRow($this->_getParam('id'));
-    }
-
     protected function _getRecipient()
     {
-        return $this->_getQueueRow()->getRecipient();
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('id', $this->_getParam('recipientId'));
+        $row = Kwf_Model_Abstract::getInstance($this->_getParam('subscribeModel'))->getRow($select);
+        return $row;
     }
 
     protected function _getMailComponent()
     {
-        return $this->_getQueueRow()->getParentRow('Newsletter')->getMailComponent();
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId') . '-mail', 
+            array('ignoreVisible' => true)
+        );
+        return $component->getComponent();
     }
 }

@@ -26,13 +26,15 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
     }
 
 
-    public function send($timeLimit = 60, $mailsPerMinute = 20, $debugOutput = false)
+    public function send($timeLimit = 60, $debugOutput = false)
     {
         if ($timeLimit) {
             set_time_limit($timeLimit + 10);
         } else {
             set_time_limit(0);
         }
+
+        $mailsPerMinute = $this->_getCountOfMailsPerMinute();
 
         // Newsletter senden initialisieren
         $this->status = 'sending';
@@ -173,6 +175,17 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $ret['total']    = $queue->countRows($select) + $this->count_sent;
         $ret['queued']   = $queue->countRows($select->whereEquals('status', 'queued'));
         $ret['lastSentDate'] = strtotime($this->last_sent_date);
+        $ret['speed'] = $this->mails_per_minute;
+
+        $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
+        $select = new Kwf_Model_Select();
+
+        $seconds = ($ret['queued'] / $this->_getCountOfMailsPerMinute()) * 60;
+        $hours = floor($seconds / 3600);
+        $seconds -= $hours * 3600;
+        $minutes = floor($seconds / 60);
+        $seconds -= $minutes * 60;
+        $ret['remainingTime'] = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 
         $text = '';
         switch ($this->status) {
@@ -206,5 +219,18 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         return Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($componentId, array('ignoreVisible' => true))
             ->getComponent();
+    }
+
+    protected function _getCountOfMailsPerMinute()
+    {
+        $mailsPerMinute = 30;
+        if ($this->mails_per_minute == 'fast') {
+            $mailsPerMinute = 100;
+        } else if ($this->mails_per_minute == 'normal') {
+            $mailsPerMinute = 40;
+        } else if ($this->mails_per_minute == 'slow') {
+            $mailsPerMinute = 20;
+        }
+        return $mailsPerMinute;
     }
 }

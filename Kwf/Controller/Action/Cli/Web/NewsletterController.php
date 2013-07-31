@@ -18,12 +18,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 'param'=> 'timeLimit',
                 'value'=> 55,
                 'valueOptional' => true,
-            ),
-            array(
-                'param'=> 'mailsPerMinute',
-                'value'=> 20,
-                'valueOptional' => true,
-            ),
+            )
         );
     }
 
@@ -33,7 +28,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
         $components = Kwf_Component_Data_Root::getInstance()->getComponentsByClass('Kwc_Newsletter_Component');
         if (empty($components)) return;
         $model = $components[0]->getComponent()->getChildModel();
-        $model->send($this->_getParam('timeLimit'), $this->_getParam('mailsPerMinute'), $this->_getParam('debug'));
+        $model->send($this->_getParam('timeLimit'), $this->_getParam('debug'));
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }

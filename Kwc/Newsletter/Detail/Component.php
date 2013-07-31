@@ -17,11 +17,17 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Newsletter_Detail_Mail_Component'
         );
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/MailingPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/TabPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/PreviewPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsGridPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsQueuePanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/RecipientsAction.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/Recipients.css';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/StartNewsletterPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/StartNewsletterPanel.scss';
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
+        $ret['assetsAdmin']['dep'][] = 'KwfFormDateTimeField';
         $ret['componentName'] = 'Newsletter';
         $ret['checkRtrList'] = !!Kwf_Config::getValue('service.rtrlist.url');
         $ret['flags']['skipFulltext'] = true;
@@ -42,11 +48,8 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
     public function removeFromQueue($model = '', $ids = array())
     {
         $ret = array();
-        $newsletter = $this->getData()->row;
-        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
-            throw new Kwf_ClientException(trlKwf('Can only remove users from a paused newsletter'));
-        }
 
+        $newsletter = $this->getData()->row;
         $queueModel = $this->getData()->parent->getComponent()->getChildModel()->getDependentModel('Queue');
         $select = $queueModel->select()
             ->whereEquals('recipient_model', $model)
@@ -58,10 +61,6 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
     public function importToQueue(Kwf_Model_Abstract $model, Kwf_Model_Select $select)
     {
         $ret = array('rtrExcluded' => array());
-        $newsletter = $this->getData()->row;
-        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
-            throw new Kwf_ClientException(trlKwf('Can only add users to a paused newsletter'));
-        }
 
         // check if the necessary modelShortcut is set in 'mail' childComponent
         // this function checks if everything neccessary is set
@@ -81,6 +80,7 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         if ($model->hasColumn('activated')) {
             $select->whereEquals('activated', 1);
         }
+        $newsletter = $this->getData()->row;
         $mapping = $model->getColumnMappings('Kwc_Mail_Recipient_Mapping');
         $import = array();
         $emails = array();
