@@ -143,7 +143,8 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
             if ($recipient->id) $params['recipientId'] = urlencode($recipient->id);
             if ($shortcut = $redirectComponent->getRecipientModelShortcut(get_class($recipient->getModel())))
                 $params['recipientModelShortcut'] = urlencode($shortcut);
-            $protocol = Kwf_Config::getValue('server.https') ? 'https' : 'http';
+            $https = Kwf_Util_Https::domainSupportsHttps($this->getData()->getDomain());
+            $protocol = $https ? 'https' : 'http';
             $imgUrl = $protocol . '://'.$this->getData()->getDomain() .
                 Kwf_Media::getUrl($this->getData()->componentClass, $this->getData()->componentId,
                     'views', 'blank.gif');
