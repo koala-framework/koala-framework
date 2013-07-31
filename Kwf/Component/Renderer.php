@@ -39,10 +39,6 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($component->componentId.' page', microtime(true)-$startTime);
             Kwf_Benchmark::checkpoint('render page');
 
-            if ($content == Kwf_Component_Cache::NO_CACHE) {
-                //TODO: entfernen wenn nie auftritt
-                throw new Kwf_Exception("something is very wrong");
-            }
             $content = $this->_render(1, $content);
             Kwf_Benchmark::checkpoint('render pass 1');
             Kwf_Component_Cache::getInstance()->save($component, $content, 'component', 'fullPage', '', $this->_minLifetime);
