@@ -6,7 +6,7 @@ class RedMallee_List_BottomStage_Item_Image_Component extends Kwc_Basic_Image_Co
         $ret = parent::getSettings();
         $ret['dimensions'] = array(
             array(
-                'text' => trlKwf('user-defined'),
+                'text' => trlKwfStatic('user-defined'),
                 'width' => '255',
                 'height' => '147',
                 'scale' => Kwf_Media_Image::SCALE_CROP

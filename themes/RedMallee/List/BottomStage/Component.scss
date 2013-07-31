@@ -39,7 +39,8 @@
     }
     
     .bottomStageHeadlineBg {
-        background: url("/assets/kwf/themes/RedMallee/images/bottomStageHeadlineBg.png") no-repeat;
+        background-repeat: no-repeat;
+        background-position: center center;
         @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'bottomStageHeadlineBg.png', 7px, 6px);
         width: 7px;
         height: 6px;
