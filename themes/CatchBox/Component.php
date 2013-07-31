@@ -4,7 +4,7 @@ class CatchBox_Component extends Kwf_Component_Theme_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwfStatic('Catch Box');
+        $ret['componentName'] = 'Catch Box';
         return $ret;
     }
 
