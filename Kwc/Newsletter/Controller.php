@@ -75,12 +75,4 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
         $row->mails_per_minute = 'normal';
         $row->create_date = date('Y-m-d H:i:s');
     }
-
-    protected function _afterInsert(Kwf_Model_Row_Interface $row, $submitRow)
-    {
-        parent::_afterInsert($row, $submitRow);
-        Kwf_Model_Abstract::getInstance('Kwc_Mail_Model')->createRow(array(
-            'component_id' => $row->component_id . '_' . $row->id . '-mail'
-        ))->save();
-    }
 }

@@ -117,11 +117,9 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             url: this.controllerUrl + '/json-status',
             params : this.getBaseParams(),
             success: function(response, options, r) {
-                this.askOnStart = false; // HACK, aber das ganze ist sowieso ein bisschen unübersichtlich...
                 var info = r.info;
                 this.checkButtons(info);
                 if (info.state == 'sending') info.state = 'start';
-                this.askOnStart = true;
                 if (this.setProgress(info)) {
                     this.startTimer();
                 }
