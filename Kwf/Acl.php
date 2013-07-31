@@ -65,6 +65,7 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_debug_apc'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_assets-dependencies'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_benchmark-counter'));
         $this->add(new Zend_Acl_Resource('kwf_media_upload'));
         $this->add(new Zend_Acl_Resource('kwf_test'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_setup'));
@@ -115,6 +116,7 @@ class Kwf_Acl extends Zend_Acl
         $this->allow('admin', 'kwf_maintenance_clear-cache');
         $this->allow('admin', 'kwf_maintenance_update-downloader');
         $this->allow('admin', 'kwf_maintenance_fulltext');
+        $this->allow(null, 'kwf_debug_benchmark-counter'); //allow for everyone we do additional permissions check in there
     }
 
     public function isAllowed($role = null, $resource = null, $privilege = null)
