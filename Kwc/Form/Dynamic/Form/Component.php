@@ -65,7 +65,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $settings = $this->getData()->parent->getComponent()->getMailSettings();
         $row->addTo($settings['recipient']);
         $row->addCc($settings['recipient_cc']);
-        $row->setSubject($settings['subject']);
+        $row->setSubject(str_replace('%number%', $row->id, $settings['subject']));
         $msg = '';
         $formFieldComponents = $this->getData()->parent
             ->getChildComponent('-paragraphs')
@@ -89,7 +89,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
                 $body = $this->getData()->trlKwf('Thank you for your inquiry, it will be processed as soon as posible.');
                 $body .= "\n\n";
                 $body .= $msg;
-                $mail->setSubject($settings['confirm_subject']);
+                $mail->setSubject(str_replace('%number%', $row->id, $settings['confirm_subject']));
                 $mail->setBodyText($body);
                 $mail->addTo($recipient);
                 $mail->send();
