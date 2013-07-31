@@ -1,0 +1,4 @@
+<?php
+class Kwf_Component_Cache_CrossPageClearCacheRecursiveContentChanged_Box_Component extends Kwc_Abstract
+{
+}

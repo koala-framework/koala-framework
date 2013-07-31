@@ -2,7 +2,7 @@
 class Kwc_Form_UseViewCachePlugin extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_UseViewCache, Kwf_Component_Plugin_Interface_SkipProcessInput
 {
-    public function useViewCache()
+    public function useViewCache($renderer)
     {
         // Checking for specific post-data because there could be more forms on
         // one page and only one gets submited

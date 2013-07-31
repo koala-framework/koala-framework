@@ -9,7 +9,7 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
         return $ret;
     }
 
-    public function replaceOutput()
+    public function replaceOutput($renderer)
     {
         if (!$this->isLoggedIn()) {
             $url = $this->_getRedirectUrl();

@@ -22,6 +22,17 @@ class Kwf_Cache_Backend_File extends Zend_Cache_Backend_File
         return $ret;
     }
 
+    public function loadWithMetadata($id, $doNotTestCacheValidity = false)
+    {
+        $contents = $this->load($id, $doNotTestCacheValidity);
+        if ($contents === false) return false;
+        $md = $this->getMetadatas($id);
+        return array(
+            'contents' => $contents,
+            'expire' => $md['expire']
+        );
+    }
+
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         if ($this->_options['compression']) $data = gzdeflate($data);

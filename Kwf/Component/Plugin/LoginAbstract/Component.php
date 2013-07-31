@@ -22,7 +22,7 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
         return $templateVars;
     }
 
-    public function replaceOutput()
+    public function replaceOutput($renderer)
     {
         if ($this->isLoggedIn()) {
             return false;

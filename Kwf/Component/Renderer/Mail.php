@@ -27,7 +27,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
         $this->_recipient = $recipient;
     }
 
-    protected function _getCacheName()
+    protected function _getRendererName()
     {
         return 'mail_' . $this->_renderFormat;
     }

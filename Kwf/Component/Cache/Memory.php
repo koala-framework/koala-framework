@@ -48,4 +48,23 @@ class Kwf_Component_Cache_Memory extends Zend_Cache_Core
             )));
         }
     }
+
+    public function loadWithMetaData($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
+    {
+        if (!$this->_options['caching']) {
+            return false;
+        }
+        $id = $this->_id($id); // cache id may need prefix
+        self::_validateIdOrTag($id);
+        $data = $this->_backend->loadWithMetaData($id, $doNotTestCacheValidity);
+        if ($data===false) {
+            // no cache available
+            return false;
+        }
+        if ((!$doNotUnserialize) && $this->_options['automatic_serialization']) {
+            // we need to unserialize before sending the result
+            $data['contents'] = unserialize($data['contents']);
+        }
+        return $data;
+    }
 }

@@ -53,6 +53,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
             $ret .= Kwf_View_Helper_DebugData::debugData();
 
             $helper = new Kwf_Component_View_Helper_Dynamic();
+            $helper->setRenderer($this->_getRenderer());
             $helper->setView($this->_getView());
             $ret .= $helper->dynamic('SessionToken');
 

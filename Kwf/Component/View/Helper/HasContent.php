@@ -3,6 +3,6 @@ class Kwf_Component_View_Helper_HasContent extends Kwf_Component_View_Helper_Abs
 {
     public function hasContent(Kwf_Component_Data $target)
     {
-        return $target->getComponent()->hasContent();
+        return $target->hasContent();
     }
 }

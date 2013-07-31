@@ -25,8 +25,12 @@ class Kwf_Component_View_Helper_Dynamic extends Kwf_Component_View_Renderer
         return $dynamic->getContent();
     }
 
-    public function enableCache()
+
+    public function getViewCacheSettings($componentId)
     {
-        return false;
+        return array(
+            'enabled' => false,
+            'lifetime' => null
+        );
     }
 }

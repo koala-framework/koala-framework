@@ -12,31 +12,25 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         if (method_exists($component->getComponent(), 'getPartialParams')) {
             $params = array_merge($component->getComponent()->getPartialParams(), $params);
         }
+        $viewCacheSettings = $component->getComponent()->getViewCacheSettings();
         $config = array(
             'class' => $partialClass,
-            'params' => $params
+            'params' => $params,
+            'viewCacheEnabled' => $viewCacheSettings['enabled']
         );
         return $this->_getRenderPlaceholder($component->componentId, $config);
     }
 
-    /**
-     * Helper method not used in standard rendering process
-     *
-     * Used to render a single partial
-     */
-    public function singlePartial($componentId, $config, $id)
+    public function render($componentId, $partialsConfig)
     {
-        return $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
-    }
-
-    public function render($componentId, $config)
-    {
-        $partialClass = $config['class'];
-        $params = $config['params'];
+        $partialClass = $partialsConfig['class'];
+        $params = $partialsConfig['params'];
         $partial = new $partialClass($params);
         $ids = $partial->getIds();
         $number = 0; $count = count($ids);
         $ret = '';
+        $helper = new Kwf_Component_View_Helper_Partial();
+        $helper->setRenderer($this->_getRenderer());
         foreach ($ids as $id) {
             $config = array(
                 'id' => $id,
@@ -47,7 +41,9 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
                     'number' => $number++,
                 )
             );
-            $content = $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
+
+            $content = $helper->partial($componentId, $config, $id, $partialsConfig['viewCacheEnabled']);
+
             if (isset($params['tpl'])) {
                 $tpl = $params['tpl'];
             } else {
@@ -61,8 +57,17 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         return $ret;
     }
 
-    public function enableCache()
+
+    public function getViewCacheSettings($componentId)
     {
-        return false;
+        $component = $this->_getComponentById($componentId);
+        $componentClass = $component->componentClass;
+        $c = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
+        $partialClass = call_user_func(array($c, 'getPartialClass'), $componentClass);
+        $useViewCache = call_user_func(array($partialClass, 'useViewCache'));
+        return array(
+            'enabled' => $useViewCache,
+            'lifetime' => null
+        );
     }
 }
