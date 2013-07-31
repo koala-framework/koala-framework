@@ -211,9 +211,14 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     }
                 }
                 if (scrollTo != null) {
-                    $('html, body').animate({
-                        scrollTop: scrollTo
-                    }, 2000);
+                    //if scrollto is already on screen
+                    var height = this.getWindowHeight();
+                    var scrollPosY = this.getScrollPosY();
+                    if (scrollTo < scrollPosY || scrollTo > scrollPosY + height) {
+                        $('html, body').animate({
+                            scrollTop: scrollTo
+                        }, 2000);
+                    }
                 }
 
                 this.fireEvent('submitSuccess', this, r);
@@ -222,5 +227,39 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         });
 
         e.stopEvent();
+    },
+
+    getWindowHeight: function ()
+    {
+        var myHeight = 0;
+
+        if( typeof( window.innerWidth ) == 'number' ) {
+            //Non-IE
+            myHeight = window.innerHeight;
+        } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+            //IE 6+ in 'standards compliant mode'
+            myHeight = document.documentElement.clientHeight;
+        } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+            //IE 4 compatible
+            myHeight = document.body.clientHeight;
+        }
+        return myHeight;
+    },
+
+    getScrollPosY: function ()
+    {
+        var scrOfY = 0;
+
+        if( typeof( window.pageYOffset ) == 'number' ) {
+            //Netscape compliant
+            scrOfY = window.pageYOffset;
+        } else if( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
+            //DOM compliant
+            scrOfY = document.body.scrollTop;
+        } else if( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
+            //IE6 standards compliant mode
+            scrOfY = document.documentElement.scrollTop;
+        }
+        return scrOfY;
     }
 });
