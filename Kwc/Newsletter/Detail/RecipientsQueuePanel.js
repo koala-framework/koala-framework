@@ -9,7 +9,7 @@ Kwc.Newsletter.Detail.RecipientsQueuePanel = Ext.extend(Kwf.Auto.GridPanel, {
             handler: function(){
                 Ext.Msg.confirm(
                     trlKwf('Are you sure?'),
-                    trlKwf('Do you really want to delete all receivers with status "queued"?.'),
+                    trlKwf('Do you really want to delete all receivers with status "queued"?'),
                     function(result) {
                         if (result == 'yes') {
                             Ext.Ajax.request({
