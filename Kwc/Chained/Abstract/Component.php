@@ -47,7 +47,11 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 
     public static function createChainedGenerator($class, $key, $prefix)
     {
-        $s = call_user_func(array($class, 'getSettings'));
+        if (strpos($class, '.')) {
+            $s = call_user_func(array(substr($class, 0, strpos($class, '.')), 'getSettings'), substr($class, strpos($class, '.')+1));
+        } else {
+            $s = call_user_func(array($class, 'getSettings'));
+        }
         $g = $s['generators'][$key];
         if (!isset($g['class'])) throw new Kwf_Exception("generator class is not set for component '$class' generator '$key'");
         if (!is_array($g['component'])) $g['component'] = array($key => $g['component']);
