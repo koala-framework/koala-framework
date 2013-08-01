@@ -255,9 +255,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
             if ($credential == md5($row->$passCol)
                 || $row->encodePassword($credential) == $row->$passCol
             ) {
-                $this->loginUserRow($row, true);
+                return $this->loginUserRow($row, true);
             } else {
-                $this->loginUserRow($row, false);
+                return $this->loginUserRow($row, false);
             }
         } else {
             $this->writeLog(array(
