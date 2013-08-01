@@ -70,6 +70,36 @@ function updateMasterCssClass()
     }
 }
 
+function moveCssFiles()
+{
+    if (file_exists('css/master.css') && file_exists('css/web.css')) {
+        $c = file_get_contents('css/master.css')."\n\n".file_get_contents('css/web.css');
+        file_put_contents("css/web.css", $c);
+        echo "moved css/master.css contents into css/web.css\n";
+    }
+    if (file_exists('css/web.css') && file_exists('components/Root/Component.php')) {
+        rename('css/web.css', 'components/Root/Web.css');
+        echo "moved css/web.css to components/Root/Web.css\n";
+        file_put_contents('components/Root/Master.scss', '/* move styling relevant for Master.tpl from Web.css in here*/');
+        echo "created components/Root/Master.scss\n";
+    }
+    if (file_exists('css/web.scss') && file_exists('components/Root/Component.php')) {
+        rename('css/web.scss', 'components/Root/Web.scss');
+        echo "moved css/web.scss to components/Root/Web.scss\n";
+    }
+    if (file_exists('css/web.printcss') && file_exists('components/Root/Component.php')) {
+        rename('css/web.printcss', 'components/Root/Web.printcss');
+        echo "moved css/web.printcss to components/Root/Web.printcss\n";
+    }
+    $c = file_get_contents('dependencies.ini');
+    $c = str_replace("Frontend.files[] = web/css/master.css\n", '', $c);
+    $c = str_replace("Frontend.files[] = web/css/web.css\n", '', $c);
+    $c = str_replace("Frontend.files[] = web/css/web.scss\n", '', $c);
+    $c = str_replace("Frontend.files[] = web/css/web.printcss\n", '', $c);
+    file_put_contents('dependencies.ini', $c);
+    echo "updated dependencies.ini\n";
+}
+
 $files = glob_recursive('Component.php');
 $files[] = 'config.ini';
 replaceFiles($files, 'Kwc_Composite_Images_Component', 'Kwc_List_Images_Component');
@@ -80,29 +110,4 @@ replaceFiles($files, 'Kwc_Composite_Links_Component', 'Kwc_List_Links_Component'
 checkGallery($files);
 updateIncludeCode();
 updateMasterCssClass();
-if (file_exists('css/master.css') && file_exists('css/web.css')) {
-    $c = file_get_contents('css/master.css')."\n\n".file_get_contents('css/web.css');
-    file_put_contents("css/web.css", $c);
-    echo "moved css/master.css contents into css/web.css\n";
-}
-if (file_exists('css/web.css') && file_exists('components/Root/Component.php')) {
-    rename('css/web.css', 'components/Root/Web.css');
-    echo "moved css/web.css to components/Root/Web.css\n";
-    file_put_contents('components/Root/Master.scss', '/* move styling relevant for Master.tpl from Web.css in here*/');
-    echo "created components/Root/Master.scss\n";
-}
-if (file_exists('css/web.scss') && file_exists('components/Root/Component.php')) {
-    rename('css/web.scss', 'components/Root/Web.scss');
-    echo "moved css/web.scss to components/Root/Web.scss\n";
-}
-if (file_exists('css/web.printcss') && file_exists('components/Root/Component.php')) {
-    rename('css/web.printcss', 'components/Root/Web.printcss');
-    echo "moved css/web.printcss to components/Root/Web.printcss\n";
-}
-$c = file_get_contents('dependencies.ini');
-$c = str_replace("Frontend.files[] = web/css/master.css\n", '', $c);
-$c = str_replace("Frontend.files[] = web/css/web.css\n", '', $c);
-$c = str_replace("Frontend.files[] = web/css/web.scss\n", '', $c);
-$c = str_replace("Frontend.files[] = web/css/web.printcss\n", '', $c);
-file_put_contents('dependencies.ini', $c);
-echo "updated dependencies.ini\n";
+moveCssFiles();
