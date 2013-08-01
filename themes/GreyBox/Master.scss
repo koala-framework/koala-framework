@@ -6,7 +6,7 @@ $column-width   : 1024px / 4;
 $gutter-width   : 0px;
 $grid-padding   : 0px;
 
-.cssClass #page {
+.masterRoot #page {
     @include container;
 
     @include border-radius-pie(5px);
