@@ -72,8 +72,8 @@ class GreyBox_Component extends Kwf_Component_Theme_Abstract
             'subMenu' => 200
         );
 
-        $ret['assets']['files'][] = 'kwf/themes/GrayBox/Web.scss';
-        $ret['assets']['files'][] = 'kwf/themes/GrayBox/Master.scss';
+        $ret['assets']['files'][] = 'kwf/themes/GreyBox/Web.scss';
+        $ret['assets']['files'][] = 'kwf/themes/GreyBox/Master.scss';
 
         return $ret;
     }
