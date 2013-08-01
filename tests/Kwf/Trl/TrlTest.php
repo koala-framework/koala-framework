@@ -389,4 +389,10 @@ class Kwf_Trl_TrlTest extends Kwf_Test_TestCase
 
     }
 
+    public function testStaticInStatic()
+    {
+        $t = trlKwfStatic('Edit {0}', trlKwfStatic('Visible'));
+        $this->assertEquals('Edit Visible', Kwf_Trl::getInstance()->trlStaticExecute($t, 'en'));
+        $this->assertEquals('Sichtbar bearbeiten', Kwf_Trl::getInstance()->trlStaticExecute($t, 'de'));
+    }
 }

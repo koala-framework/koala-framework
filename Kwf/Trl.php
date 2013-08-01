@@ -325,25 +325,23 @@ class Kwf_Trl
     {
         $ret = $trlStaticData;
 
-        if (preg_match_all('/\*trlserialized-(.+?)-trlserialized\*/ms', $trlStaticData, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $k => $match) {
-                $trlStaticData = unserialize($match[1]);
-                if (strtolower(substr($trlStaticData['type'], -3)) == 'kwf') {
-                    $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
-                    $source = Kwf_Trl::SOURCE_KWF;
-                } else {
-                    $source = Kwf_Trl::SOURCE_WEB;
-                }
-
-                $args = $trlStaticData['args'];
-                $args[] = $source;
-                $args[] = $language;
-
-                $replaceString = call_user_func_array(
-                    array($this, $trlStaticData['type']), $args
-                );
-                $ret = str_replace($match[0], $replaceString, $ret);
+        while (preg_match('/\*trlserialized-(.+)-trlserialized\*/ms', $ret, $match)) {
+            $trlStaticData = unserialize($match[1]);
+            if (strtolower(substr($trlStaticData['type'], -3)) == 'kwf') {
+                $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
+                $source = Kwf_Trl::SOURCE_KWF;
+            } else {
+                $source = Kwf_Trl::SOURCE_WEB;
             }
+
+            $args = $trlStaticData['args'];
+            $args[] = $source;
+            $args[] = $language;
+
+            $replaceString = call_user_func_array(
+                array($this, $trlStaticData['type']), $args
+            );
+            $ret = str_replace($match[0], $replaceString, $ret);
         }
 
         return $ret;
