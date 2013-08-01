@@ -5,7 +5,7 @@ class Kwc_Articles_Category_Directory_MenuConfig extends Kwf_Component_Abstract_
     {
         $acl->add(
             new Kwf_Acl_Resource_ComponentClass_MenuUrl(
-                'kwc_article_category', array('text'=>trlKwf('Categories'), 'icon'=>'application_side_tree'),
+                'kwc_article_category', array('text'=>trlKwfStatic('Categories'), 'icon'=>'application_side_tree'),
                 Kwc_Admin::getInstance($this->_class)->getControllerUrl('Categories'),
                 $this->_class
             ),

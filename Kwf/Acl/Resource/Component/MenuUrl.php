@@ -17,7 +17,7 @@ class Kwf_Acl_Resource_Component_MenuUrl extends Kwf_Acl_Resource_MenuUrl
             $name = Kwc_Abstract::getSetting($component->componentClass, 'componentName');
             $icon = Kwc_Abstract::getSetting($component->componentClass, 'componentIcon');
             if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
-            $menuConfig = array('text'=>trlKwf('Edit {0}', $name), 'icon'=>$icon);
+            $menuConfig = array('text'=>trlKwfStatic('Edit {0}', $name), 'icon'=>$icon);
         }
         if (!$menuUrl) {
             $menuUrl = Kwc_Admin::getInstance($component->componentClass)
