@@ -344,6 +344,7 @@ class Kwf_Acl extends Zend_Acl
             if (is_string($menu['menuConfig'])) {
                 $menu['menuConfig'] = array('text' => $menu['menuConfig']);
             }
+            $menu['menuConfig']['text'] = Kwf_Trl::getInstance()->trlStaticExecute($menu['menuConfig']['text']);
 
             if (isset($menu['menuConfig']['icon'])) {
                 if (is_string($menu['menuConfig']['icon'])) {

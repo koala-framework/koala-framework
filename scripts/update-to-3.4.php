@@ -100,6 +100,13 @@ function moveCssFiles()
     echo "updated dependencies.ini\n";
 }
 
+function updateAclTrl()
+{
+    $c = file_get_contents('app/Acl.php');
+    $c = preg_replace('#(trl[cp]?(Kwf)?)\\(#', '\1Static(', $c);
+    file_put_contents('app/Acl.php', $c);
+    echo "updated app/Acl.php to use trlStatic\n";
+}
 $files = glob_recursive('Component.php');
 $files[] = 'config.ini';
 replaceFiles($files, 'Kwc_Composite_Images_Component', 'Kwc_List_Images_Component');
@@ -111,3 +118,4 @@ checkGallery($files);
 updateIncludeCode();
 updateMasterCssClass();
 moveCssFiles();
+updateAclTrl();

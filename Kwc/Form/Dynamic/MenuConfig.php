@@ -8,7 +8,7 @@ class Kwc_Form_Dynamic_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abst
         if (!$acl->has('kwf_enquiries_dropdown')) {
             $acl->addResource(
                 new Kwf_Acl_Resource_MenuDropdown(
-                    'kwf_enquiries_dropdown', array('text'=>trlKwf('Enquiries'), 'icon'=>'email.png')
+                    'kwf_enquiries_dropdown', array('text'=>trlKwfStatic('Enquiries'), 'icon'=>'email.png')
                 )
             );
         }
@@ -23,7 +23,7 @@ class Kwc_Form_Dynamic_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abst
             }
         }
 
-        $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->_class, 'componentName'));
+        $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
         foreach ($components as $c) {

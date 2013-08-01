@@ -5,7 +5,7 @@ class Kwc_Newsletter_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstra
     {
         if (!$acl->has('kwc_newsletter')) {
             $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter',
-                array('text'=>trlKwf('Newsletter'), 'icon'=>'email_open_image.png')), 'kwf_component_root');
+                array('text'=>trlKwfStatic('Newsletter'), 'icon'=>'email_open_image.png')), 'kwf_component_root');
         }
 
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
@@ -15,8 +15,7 @@ class Kwc_Newsletter_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstra
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         foreach ($components as $c) {
             $componentName = Kwc_Abstract::getSetting($this->_class, 'componentName');
-            $componentName = Kwf_Trl::getInstance()->trlStaticExecute($componentName);
-            $menuConfig['text'] = trlKwf('Edit {0}', $componentName);
+            $menuConfig['text'] = trlKwfStatic('Edit {0}', $componentName);
             if (count($components) > 1) {
                 $subRoot = $c;
                 while($subRoot = $subRoot->parent) {

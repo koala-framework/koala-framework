@@ -5,10 +5,10 @@ class Kwc_Shop_Cart_Plugins_Voucher_MenuConfig extends Kwf_Component_Abstract_Me
     {
         if (!$acl->has('kwc_shop')) {
             $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_shop',
-                    array('text'=>trlKwf('Shop'), 'icon'=>'cart.png')), 'kwf_component_root');
+                    array('text'=>trlKwfStatic('Shop'), 'icon'=>'cart.png')), 'kwf_component_root');
         }
             $acl->add(new Kwf_Acl_Resource_ComponentClass_MenuUrl($this->_class,
-                    array('text'=>trlKwf('Vouchers'), 'icon'=>'application_view_list.png'),
+                    array('text'=>trlKwfStatic('Vouchers'), 'icon'=>'application_view_list.png'),
                     Kwc_Admin::getInstance($this->_class)->getControllerUrl('Vouchers')), 'kwc_shop');
     }
 }
