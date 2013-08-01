@@ -10,7 +10,7 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
         if (empty($menus) && $this->_getUserRole() == 'guest') {
             $menu = array();
             $menu['type'] = 'commandDialog';
-            $menu['menuConfig']['text'] = 'Login';
+            $menu['menuConfig']['text'] = trlKwf('Login');
             $menu['commandClass'] = 'Kwf.User.Login.Dialog';
             $menus[] = $menu;
             $showLogout = false;
