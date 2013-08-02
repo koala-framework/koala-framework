@@ -5,6 +5,7 @@ class Kwc_News_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('News.News');
+        $ret['componentNameShort'] = trlKwfStatic('News');
         $ret['componentIcon'] = new Kwf_Asset('newspaper');
         $ret['childModel'] = 'Kwc_News_Directory_Model';
 

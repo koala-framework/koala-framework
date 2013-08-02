@@ -13,8 +13,12 @@ class Kwc_Directories_TopChoose_Form extends Kwc_Abstract_Form
         $values = array();
         foreach ($directories as $directory) {
             $title = $directory->getTitle();
-            $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($directory->componentClass, 'componentName'));
-            if (strpos($name, '.') !== false) $name = substr(strrchr($name, '.'), 1);
+            if (Kwc_Abstract::hasSetting($this->_class, 'componentNameShort')) {
+                $name = Kwc_Abstract::getSetting($this->_class, 'componentNameShort');
+            } else {
+                $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
+            }
+            $name = Kwf_Trl::getInstance()->trlStaticExecute($name);
             if ($title != $name) $title .= ' - ' . $name;
             $values[$directory->dbId] = $title;
         }

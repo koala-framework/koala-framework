@@ -23,8 +23,11 @@ class Kwc_Form_Dynamic_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abst
             }
         }
 
-        $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
-        if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
+        if (Kwc_Abstract::hasSetting($this->_class, 'componentNameShort')) {
+            $name = Kwc_Abstract::getSetting($this->_class, 'componentNameShort');
+        } else {
+            $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
+        }
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
         foreach ($components as $c) {
             $t = $c->getTitle();

@@ -20,6 +20,7 @@ class Kwc_Shop_Products_Directory_Component extends Kwc_Directories_ItemPage_Dir
         $ret['childModel'] = 'Kwc_Shop_Products';
 
         $ret['componentName'] = trlKwfStatic('Shop.Products');
+        $ret['componentNameShort'] = trlKwfStatic('Products');
         $ret['flags']['hasResources'] = true;
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
