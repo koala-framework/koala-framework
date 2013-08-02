@@ -1,4 +1,7 @@
 Kwf.Statistics.onCount(function(url, config) {
+
+    if (typeof(_paq) == 'undefined') return;
+
     if (config.customVariables) {
         for (var x = 0; x < config.customVariables.length; x++) {
             var cv = config.customVariables[x];
