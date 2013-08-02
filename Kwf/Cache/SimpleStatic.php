@@ -25,21 +25,25 @@ class Kwf_Cache_SimpleStatic
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true
             ));
-            /*
-            //don't use memcache, as that needs to access config
-            //if one needs that it could be implemented (but if you have memcache you should have apc anyway)
-            if (extension_loaded('memcache')) {
-                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
+            if (extension_loaded('apcu')) {
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Apcu());
             } else {
-            */
-            //fallback to file backend (NOT recommended!)
-            try {
-                self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
-                    'cache_dir' => 'cache/simple'
-                )));
-            } catch (Exception $e) {
-                self::$_zendCache->setBackend(new Zend_Cache_Backend_BlackHole());
-                throw $e;
+                /*
+                //don't use memcache, as that needs to access config
+                //if one needs that it could be implemented (but if you have memcache you should have apc anyway)
+                if (extension_loaded('memcache')) {
+                    self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
+                } else {
+                */
+                //fallback to file backend (NOT recommended!)
+                try {
+                    self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
+                        'cache_dir' => 'cache/simple'
+                    )));
+                } catch (Exception $e) {
+                    self::$_zendCache->setBackend(new Zend_Cache_Backend_BlackHole());
+                    throw $e;
+                }
             }
         }
         return self::$_zendCache;
