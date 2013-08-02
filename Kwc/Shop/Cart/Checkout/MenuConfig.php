@@ -11,7 +11,7 @@ class Kwc_Shop_Cart_Checkout_MenuConfig extends Kwf_Component_Abstract_MenuConfi
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
         foreach ($components as $c) {
-            $text = trlKwf('Orders');
+            $text = trlKwfStatic('Orders');
             if (count($components) > 1) {
                 if ($domain = $c->getParentByClass('Kwc_Root_DomainRoot_Domain_Component')) {
                     $text .= " ($domain->name)";

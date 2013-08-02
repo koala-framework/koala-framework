@@ -30,7 +30,7 @@
             z-index: 2;
             position: relative;
             display: block;
-            
+
             &:after {
                 content: '';
                 position: absolute;
@@ -44,7 +44,7 @@
             &:hover {
                 background: var(secColor);
                 color: var(light);
-                
+
                 &:after {
                     content: '';
                     position: absolute;
@@ -60,7 +60,7 @@
         &.current a {
             background: var(secColor);
             color: var(light);
-            
+
             &:after {
                 content: '';
                 position: absolute;

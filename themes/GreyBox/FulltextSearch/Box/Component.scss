@@ -1,0 +1,24 @@
+@import "compass/css3/transition";
+@import "kwf/css3/border-radius";
+@import "kwf/css3/box-shadow";
+
+.cssClass {
+    .webForm .kwfField input {
+        float: right;
+        @include transition(width 0.4s ease, background 0.4s ease);
+        width: 100px;
+        background: url("/assets/kwf/themes/GreyBox/FulltextSearch/Box/search.png") no-repeat scroll 5px 6px #f0f0f0;
+        @include border-radius-pie(5px);
+        font-size: 14px;
+        padding: 4px 10px 4px 28px;
+        border: 1px solid #CCCCCC;
+        @include box-shadow-pie(0 1px 1px rgba(0, 0, 0, 0.1) inset);
+        color: #888888;
+        text-indent: 0px;
+
+        &:focus {
+            width: 200px;
+            background-color: #f9f9f9;
+        }
+    }
+}

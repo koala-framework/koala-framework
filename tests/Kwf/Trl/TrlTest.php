@@ -389,4 +389,24 @@ class Kwf_Trl_TrlTest extends Kwf_Test_TestCase
 
     }
 
+    public function testStaticInStatic1()
+    {
+        $t = trlKwfStatic('Edit {0}', trlKwfStatic('Visible'));
+        $this->assertEquals('Edit Visible', Kwf_Trl::getInstance()->trlStaticExecute($t, 'en'));
+        $this->assertEquals('Sichtbar bearbeiten', Kwf_Trl::getInstance()->trlStaticExecute($t, 'de'));
+    }
+
+    public function testStaticConcat()
+    {
+        $t = trlKwfStatic('Company').'-'.trlKwfStatic('Lastname');
+        $this->assertEquals('Company-Lastname', Kwf_Trl::getInstance()->trlStaticExecute($t, 'en'));
+        $this->assertEquals('Firma-Nachname', Kwf_Trl::getInstance()->trlStaticExecute($t, 'de'));
+    }
+
+    public function testStaticInStaticConcat()
+    {
+        $t = $t = trlKwfStatic('Edit {0}', trlKwfStatic('Visible')).'-'.trlKwfStatic('Lastname');
+        $this->assertEquals('Edit Visible-Lastname', Kwf_Trl::getInstance()->trlStaticExecute($t, 'en'));
+        $this->assertEquals('Sichtbar bearbeiten-Nachname', Kwf_Trl::getInstance()->trlStaticExecute($t, 'de'));
+    }
 }

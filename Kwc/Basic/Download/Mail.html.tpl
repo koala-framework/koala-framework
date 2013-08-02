@@ -6,11 +6,11 @@
     echo ' ';
     echo $this->component($this->downloadTag);
     echo $this->mailEncodeText($this->infotext);
-    echo $this->ifHasContent($this->downloadTag);
-    echo '</a>';
-    if ($this->filesize) {
-        echo ' <span>(' . $this->fileSize($this->filesize) . ')</span>';
+    if ($this->hasContent($this->downloadTag)) {
+        echo '</a>';
+        if ($this->filesize) {
+            echo ' <span>(' . $this->fileSize($this->filesize) . ')</span>';
+        }
     }
-    echo $this->ifHasContent();
     ?>
 </div>

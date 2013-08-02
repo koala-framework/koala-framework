@@ -2,7 +2,15 @@
     width: 130px;
     height: auto;
 }
+.sticky .cssClass.gt875 img {
+    widht: 100px;
+    height: 67px;
+}
+.notSticky .cssClass img {
+    widht: auto;
+    height: auto;
+}
 .cssClass.gt875 img {
     width: auto;
-    height: auto;
+    height: 100px;
 }

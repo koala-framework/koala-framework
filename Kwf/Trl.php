@@ -101,7 +101,7 @@ function trlcpKwf($context, $single, $plural, $text = array()) {
  * @package Trl
  */
 function trlStatic($string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trl', 'args' => array($string, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trl', 'args' => array($string, $text))).'-/trlserialized*';
 }
 
 /**
@@ -109,7 +109,7 @@ function trlStatic($string, $text = array()) {
  * @package Trl
  */
 function trlcStatic($context, $string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlc', 'args' => array($context, $string, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trlc', 'args' => array($context, $string, $text))).'-/trlserialized*';
 }
 
 /**
@@ -117,7 +117,7 @@ function trlcStatic($context, $string, $text = array()) {
  * @package Trl
  */
 function trlpStatic($single, $plural, $text =  array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlp', 'args' => array($single, $plural, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trlp', 'args' => array($single, $plural, $text))).'-/trlserialized*';
 }
 
 /**
@@ -125,7 +125,7 @@ function trlpStatic($single, $plural, $text =  array()) {
  * @package Trl
  */
 function trlcpStatic($context, $single, $plural, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text))).'-/trlserialized*';
 }
 
 /**
@@ -133,7 +133,7 @@ function trlcpStatic($context, $single, $plural, $text = array()) {
  * @package Trl
  */
 function trlKwfStatic($string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlKwf', 'args' => array($string, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trlKwf', 'args' => array($string, $text))).'-/trlserialized*';
 }
 
 /**
@@ -141,7 +141,7 @@ function trlKwfStatic($string, $text = array()) {
  * @package Trl
  */
 function trlcKwfStatic($context, $string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcKwf', 'args' => array($context, $string, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trlcKwf', 'args' => array($context, $string, $text))).'-/trlserialized*';
 }
 
 /**
@@ -149,7 +149,7 @@ function trlcKwfStatic($context, $string, $text = array()) {
  * @package Trl
  */
 function trlpKwfStatic($single, $plural, $text =  array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlpKwf', 'args' => array($single, $plural, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trlpKwf', 'args' => array($single, $plural, $text))).'-/trlserialized*';
 }
 
 /**
@@ -157,7 +157,7 @@ function trlpKwfStatic($single, $plural, $text =  array()) {
  * @package Trl
  */
 function trlcpKwfStatic($context, $single, $plural, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcpKwf', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
+    return '*trlserialized-'.serialize(array('type' => 'trlcpKwf', 'args' => array($context, $single, $plural, $text))).'-/trlserialized*';
 }
 
 
@@ -325,27 +325,62 @@ class Kwf_Trl
     {
         $ret = $trlStaticData;
 
-        if (preg_match_all('/\*trlserialized-(.+?)-trlserialized\*/ms', $trlStaticData, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $k => $match) {
-                $trlStaticData = unserialize($match[1]);
-                if (strtolower(substr($trlStaticData['type'], -3)) == 'kwf') {
-                    $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
-                    $source = Kwf_Trl::SOURCE_KWF;
-                } else {
-                    $source = Kwf_Trl::SOURCE_WEB;
+        $stack = array();
+        $locations = array();
+        $offset = 0;
+        while (true) {
+            $nextStart = strpos($ret, '*trlserialized-', $offset);
+            $nextEnd = strpos($ret, '-/trlserialized*', $offset);
+            if ($nextStart === false && $nextEnd === false) break;
+            if ($nextStart === false || $nextEnd < $nextStart) {
+                //next token is end
+                if (!$stack) {
+                    throw new Kwf_Exception("unexpected end");
                 }
+                $start = array_pop($stack);
 
-                $args = $trlStaticData['args'];
-                $args[] = $source;
-                $args[] = $language;
+                if (!$stack) {
+                    //if outer replace with translated content
+                    $l = array(
+                        'start' => $start,
+                        'end' => $nextEnd
+                    );
+                    $trlStaticData = substr($ret, $l['start']+15, $l['end']-$l['start']-15);
+                    $trlStaticData = unserialize($trlStaticData);
+                    if (strtolower(substr($trlStaticData['type'], -3)) == 'kwf') {
+                        $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
+                        $source = Kwf_Trl::SOURCE_KWF;
+                    } else {
+                        $source = Kwf_Trl::SOURCE_WEB;
+                    }
 
-                $replaceString = call_user_func_array(
-                    array($this, $trlStaticData['type']), $args
-                );
-                $ret = str_replace($match[0], $replaceString, $ret);
+                    $args = $trlStaticData['args'];
+                    if ($args[1]) {
+                        if (is_string($args[1])) {
+                            $args[1] = $this->trlStaticExecute($args[1], $language);
+                        } else {
+                            foreach ($args[1] as $k=>$i) {
+                                $args[1][$k] = $this->trlStaticExecute($i, $language);
+                            }
+                        }
+                    }
+                    $args[] = $source;
+                    $args[] = $language;
+                    $replace = call_user_func_array(
+                        array($this, $trlStaticData['type']), $args
+                    );
+                    $ret = substr($ret, 0, $l['start']).$replace.substr($ret, $l['end']+16);
+                    $offset = $start+strlen($replace);
+                } else {
+                    //if second is inner ignore it, will get replaced thru recursion
+                    $offset = $nextEnd+16;
+                }
+            } else {
+                //next token is start
+                $stack[] = $nextStart;
+                $offset = $nextStart+15;
             }
         }
-
         return $ret;
     }
 

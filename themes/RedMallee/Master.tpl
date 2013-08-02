@@ -18,7 +18,9 @@
             <div id="outerHeader">
                 <div id="header">
                     <div class="logo">
-                        <?=$this->component($this->boxes['logo']);?>
+                        <a href="/">
+                            <?=$this->component($this->boxes['logo']);?>
+                        </a>
                     </div>
                     <div class="searchBox">
                         <?=$this->component($this->boxes['searchBox']);?>

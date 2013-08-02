@@ -521,6 +521,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
 
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
+        } else {
+            $select = clone $select;
         }
         $select->whereComponentClasses($lookingForChildClasses);
 

@@ -20,7 +20,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
         if (is_array($tmp)) {
             return array(
                 'contents' => $tmp[0],
-                'expire' => $tmp[1] + $tmp[2], //mtime + lifetime
+                'expire' => $tmp[2] ? $tmp[1] + $tmp[2] : null, //mtime + lifetime
             );
         }
         return false;

@@ -6,6 +6,9 @@
     border-bottom: 1px dashed var(highlightedText);
     padding-bottom: 10px;
 
+    &.first {
+        margin-top: 0px;
+    }
     > a {
         background-repeat: no-repeat;
         background-position: left 6px;

@@ -1,0 +1,36 @@
+@import "kwf/css3/border-radius";
+.kwcPostsDetail.cssClass {
+    position: relative;
+    background: #f6f6f6;
+    border: 1px solid #ccc;
+    @include border-radius-pie(3px);
+    padding: 20px;
+    padding-left: 120px;
+    min-height: 60px;
+
+    .postData .postInfo {
+        color: #666666;
+        padding: 0;
+        .avatar {
+            position: absolute;
+            left: 20px;
+            img {
+                @include border-radius-pie(3px);
+            }
+        }
+        .user {
+            float: none;
+            text-align: inherit;
+            display: inline;
+        }
+        a {
+            font-weight: bold;
+            color: #1982d1;
+        }
+    }
+
+    .text {
+        background-color: transparent;
+        padding: 0;
+    }
+}

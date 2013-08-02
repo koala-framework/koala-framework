@@ -44,5 +44,5 @@
     </div>
 
 
-    <div class="message"><?= nl2br($this->mailContent); ?></div>
+    <div class="message"><?= $this->mailContent; ?></div>
 </div>

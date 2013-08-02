@@ -31,6 +31,7 @@ body.sticky {
             width: 100%;
             z-index: 50;
             top: -63px;
+            box-shadow: 0 1px 7px #595959;
 
             #header .logo {
                 padding-top: 49px;
@@ -55,7 +56,6 @@ body.sticky {
             overflow: visible;
             @include clearfix;
             @include container;
-            border-bottom: 5px solid #C80000;
 
             .logo {
                 display: block;
@@ -214,7 +214,7 @@ body.sticky {
     #outerContent {
 
         @include container;
-        background: url("/assets/kwf/themes/RedMallee/images/bgContent.jpg") repeat center -5px;
+        background: #fff;
         padding-bottom: 100px;
         position: relative;
 
@@ -277,7 +277,7 @@ body.sticky {
         padding-bottom: 150px;
         #bottomStage {
             @include container;
-            background: url("/assets/kwf/themes/RedMallee/images/bottomStageBg.jpg") repeat center top;
+            background: #fff;
             min-height: 230px;
             width: 100%;
 
@@ -287,7 +287,6 @@ body.sticky {
             }
 
             .bottomStageShadow {
-                background: url("/assets/kwf/themes/RedMallee/images/bottomStageShadow.png") repeat center top;
                 height: 10px;
                 width: 100%;
             }
