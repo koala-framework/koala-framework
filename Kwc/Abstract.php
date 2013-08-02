@@ -177,7 +177,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             Kwf_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
         }
-        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+        $ret = Kwf_Cache_SimpleStatic::fetch($currentCacheId, $success);
         if ($success) {
             $ccc[$class.$cacheId] = $ret;
             Kwf_Benchmark::count('iccc cache semi-hit');

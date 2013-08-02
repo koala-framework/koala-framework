@@ -15,6 +15,7 @@ class Kwc_Form_Dynamic_EnquiriesController extends Kwf_Controller_Action_Auto_Gr
             'mailerClass' => 'Kwf_Mail'
         ));
 
+        $this->_columns->add(new Kwf_Grid_Column('id', trlKwf('Number'), 50));
         $this->_columns->add(new Kwf_Grid_Column_Datetime('save_date', trlKwf('Date')));
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
         foreach ($c->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {

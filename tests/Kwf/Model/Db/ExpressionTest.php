@@ -201,4 +201,20 @@ class Kwf_Model_Db_ExpressionTest extends Kwf_Test_TestCase
             $this->_model->createDbSelect($select)->__toString());
 
     }
+
+    public function testExprEqualExpr()
+    {
+        $expr = new Kwf_Model_Select_Expr_Equals('foo', new Kwf_Model_Select_Expr_Field('bar'));
+        $select = $this->_model->select()->where($expr);
+        $sql = $this->_model->createDbSelect($select)->__toString($select);
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo = testtable.bar)", $sql);
+    }
+
+    public function testExprHigherExpr()
+    {
+        $expr = new Kwf_Model_Select_Expr_HigherEqual('foo', new Kwf_Model_Select_Expr_Field('bar'));
+        $select = $this->_model->select()->where($expr);
+        $sql = $this->_model->createDbSelect($select)->__toString($select);
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo >= testtable.bar)", $sql);
+    }
 }

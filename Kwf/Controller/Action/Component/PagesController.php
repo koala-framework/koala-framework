@@ -313,6 +313,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         if (!$page) {
             throw new Kwf_Exception_Client(trlKwf('Page not found'));
         }
+        Kwf_Component_Data_Root::setShowInvisible(true); //required to get correct url for eg. FirstChildPage with invisible children
         header('Location: '.$page->getPreviewUrl());
         exit;
     }

@@ -49,11 +49,13 @@ abstract class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_
     public function toArray()
     {
         $field = $this->_field;
+        $value = $this->_value;
         if ($field instanceof Kwf_Model_Select_Expr_Interface) $field = $field->toArray();
+        if ($value instanceof Kwf_Model_Select_Expr_Interface) $value = $value->toArray();
         return array(
             'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'field' => $field,
-            'value' => $this->_value,
+            'value' => $value,
         );
     }
 
@@ -61,9 +63,13 @@ abstract class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_
     {
         $cls = 'Kwf_Model_Select_Expr_'.$data['exprType'];
         $field = $data['field'];
+        $value = $data['value'];
         if (is_array($field)) {
             $field = Kwf_Model_Select_Expr::fromArray($field);
         }
-        return new $cls($field, $data['value']);
+        if (is_array($value)) {
+            $value = Kwf_Model_Select_Expr::fromArray($value);
+        }
+        return new $cls($field, $value);
     }
 }

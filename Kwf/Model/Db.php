@@ -378,6 +378,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                     $v = $this->_fixStupidQuoteBug($v);
                     $v = $this->getTable()->getAdapter()->quote($v);
                 }
+            } else if ($quotedValue instanceof Kwf_Model_Select_Expr_Interface) {
+                $quotedValue = $this->_createDbSelectExpression($quotedValue, $dbSelect);
             } else {
                 if ($quotedValue instanceof Kwf_DateTime) {
                     $quotedValue = $quotedValue->format('Y-m-d H:i:s');

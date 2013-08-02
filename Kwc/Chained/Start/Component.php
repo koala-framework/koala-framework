@@ -20,7 +20,7 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
     {
         if (Kwc_Abstract::getFlag($componentClass, 'chainedType') != $chainedType) return array();
         $ret = array();
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($componentClass) as $chainedStart) {
+        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($componentClass, $parentDataSelect) as $chainedStart) {
             $i = Kwc_Chained_Abstract_Component::getChainedByMaster($master, $chainedStart, $chainedType, $parentDataSelect);
             if ($i) $ret[] = $i;
         }
