@@ -28,7 +28,7 @@ class Kwf_Setup
 
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
-        error_reporting(E_ALL);
+        error_reporting(E_ALL & ~E_STRICT);
         define('APP_PATH', getcwd());
         Kwf_Setup::$configClass = $configClass;
         if (!@include('./cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {

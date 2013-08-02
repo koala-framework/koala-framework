@@ -277,4 +277,32 @@ class Kwf_Model_FnF_ModelExprSelectTest extends Kwf_Test_TestCase
             ->where(new Kwf_Model_Select_Expr_StartsWith('value', 'kla')));
         $this->assertEquals(0, $rows->count());
     }
+
+    public function testExprEqualExpr()
+    {
+        $model = new Kwf_Model_FnF(array(
+            'exprs' => array(
+                'test' => new Kwf_Model_Select_Expr_Equals('value',
+                            new Kwf_Model_Select_Expr_Field('value'))
+            )
+        ));
+        $model->setData(array(
+            array('id' => 1, 'value' => 10),
+            array('id' => 2, 'value' => 20),
+            array('id' => 3, 'value' => 30),
+            array('id' => 4, 'value' => 40),
+            array('id' => 5, 'value' => 50),
+            array('id' => 6, 'value' => 60)
+        ));
+
+        $this->assertTrue($model->getRow(1)->test);
+
+        $rows = $model->getRows($model->select()
+            ->where(new Kwf_Model_Select_Expr_Equals(
+                'value',
+                new Kwf_Model_Select_Expr_Field('value')
+            ))
+        );
+        $this->assertEquals(count($rows), $model->countRows());
+    }
 }

@@ -282,6 +282,9 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
         if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
             $v = $this->_rowValue($expr->getField(), $data);
             $values = $expr->getValue();
+            if ($values instanceof Kwf_Model_Select_Expr_Interface) {
+                $values = $this->getExprValue($data, $values);
+            }
             if (!is_array($values)) $values = array($values);
             if (!in_array($v, $values)) {
                 return false;
