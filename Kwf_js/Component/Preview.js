@@ -162,14 +162,13 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             tag: 'div',
             cls: 'device'
         });
-        var iframeUrl = window.location.protocol + '//' + window.location.host;
-        if (this.getParam('url')) iframeUrl = decodeURIComponent(this.getParam('url'));
         var kwfComponentPreviewIframe = kwfComponentPreviewDevice.createChild({
             tag: 'iframe',
             name: 'kwfComponentPreviewIframe',
-            src: iframeUrl,
+            src: this.initialUrl,
             cls: 'kwfComponentPreviewIframe'
         });
+        this.kwfComponentPreviewUrl.setValue(this.initialUrl);
         kwfComponentPreviewIframe.on('load', function() {
             var textfieldValue = window.frames['kwfComponentPreviewIframe'].location.href;
             if (textfieldValue.indexOf(window.location.host)) {

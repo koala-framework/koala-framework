@@ -192,6 +192,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                 } else {
                     $path = substr($path, strlen($urlPrefix));
                 }
+                if ($parsedUrl['path'] == $urlPrefix.'/') {
+                    $parsedUrl['path'] = substr($parsedUrl['path'], 0, -1);
+                }
             }
             $path = trim($path, '/');
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);

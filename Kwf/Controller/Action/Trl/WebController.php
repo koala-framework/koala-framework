@@ -9,7 +9,7 @@ class Kwf_Controller_Action_Trl_WebController extends Kwf_Controller_Action_Trl_
     public function indexAction()
     {
         $config = array(
-            'controllerUrl' => $this->getRequest()->getPathInfo()
+            'controllerUrl' => $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo()
         );
         $this->view->ext('Kwf.Trl.Grid', $config);
     }

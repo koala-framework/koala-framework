@@ -74,9 +74,9 @@ class Kwf_Asset
         if ($effects) {
             $str = 'fx';
             foreach ($effects as $effect) $str .= '_' . $effect;
-            return '/assets/'.$str.'/'.$d['type'].'/'.$d['icon'];
+            return Kwf_Config::getValue('kwc.urlPrefix').'/assets/'.$str.'/'.$d['type'].'/'.$d['icon'];
         } else {
-            return '/assets/'.$d['type'].'/'.$d['icon'];
+            return Kwf_Config::getValue('kwc.urlPrefix').'/assets/'.$d['type'].'/'.$d['icon'];
         }
     }
 

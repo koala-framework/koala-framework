@@ -7,7 +7,7 @@
     <body>
 
         <div class="x-panel-bwrap" id="ext-gen12">
-            <form id="ext-gen34" method="post" class="x-form" action="/kwf/user/login/show-form">
+            <form id="ext-gen34" method="post" class="x-form" action="<?=$this->action?>">
                 <div class="x-panel-mc" style="padding: 10px; height:100%">
                     <div tabindex="-1" class="x-form-item">
                         <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= trlKwf('E-Mail') ?>:</label>

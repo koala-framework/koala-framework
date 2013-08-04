@@ -20,7 +20,6 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
         $this->preDispatch();
         Kwf_Benchmark::checkpoint('Action::preDispatch');
-
         if ($this->getRequest()->isDispatched()) {
             if (null === $this->_classMethods) {
                 $this->_classMethods = get_class_methods($this);
@@ -71,7 +70,6 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         }
 
         $t = microtime(true);
-
         $allowed = false;
         if ($this->_getUserRole() == 'cli') {
             $allowed = true;
@@ -109,7 +107,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                 $this->_forward('json-login', 'login',
                                     'kwf_controller_action_user', $params);
             } else {
-                $params = array('location' => $this->getRequest()->getPathInfo());
+                $params = array('location' => $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo());
                 $this->_forward('index', 'login',
                                     'kwf_controller_action_user', $params);
             }

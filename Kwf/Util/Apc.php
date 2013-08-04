@@ -92,7 +92,8 @@ class Kwf_Util_Apc
         foreach ($domains as $d) {
             $s = microtime(true);
             $urlPart = "http://";
-            $url = "$urlPart$d[domain]/kwf/util/apc/$method";
+            $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
+            $url = "$urlPart$d[domain]$urlPrefix/kwf/util/apc/$method";
 
             $client = new Zend_Http_Client();
             $client->setMethod(Zend_Http_Client::POST);
@@ -115,7 +116,7 @@ class Kwf_Util_Apc
             }
             $url2 = null;
             if (!$result && isset($d['alternative'])) {
-                $url2 = "$urlPart$d[alternative]/kwf/util/apc/$method";
+                $url2 = "$urlPart$d[alternative]$urlPrefix/kwf/util/apc/$method";
                 try {
                     $client->setUri($url2);
                     $client->setParameterPost($params);
@@ -147,12 +148,16 @@ class Kwf_Util_Apc
 
     public static function dispatchUtils()
     {
-
         if ($_POST['password']!=self::_getHttpPassword()) {
             throw new Kwf_Exception_AccessDenied();
         }
 
-        if (substr($_SERVER['REQUEST_URI'], 0, 25) == '/kwf/util/apc/clear-cache') {
+        $uri = $_SERVER['REQUEST_URI'];
+        $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
+        if ($urlPrefix && substr($uri, 0, strlen($urlPrefix)) == $urlPrefix) {
+            $uri = substr($uri, strlen($urlPrefix));
+        }
+        if (substr($uri, 0, 25) == '/kwf/util/apc/clear-cache') {
             $s = microtime(true);
             if (isset($_REQUEST['clearCacheSimple'])) {
                 foreach ($_REQUEST['clearCacheSimple'] as $id) {
@@ -190,22 +195,22 @@ class Kwf_Util_Apc
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
             exit;
-        } else if (substr($_SERVER['REQUEST_URI'], 0, 31) == '/kwf/util/apc/get-counter-value') {
+        } else if (substr($uri, 0, 31) == '/kwf/util/apc/get-counter-value') {
             $prefix = Kwf_Cache::getUniquePrefix().'bench-';
             echo apc_fetch($prefix.$_GET['name']);
             exit;
-        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/stats') {
+        } else if ($uri == '/kwf/util/apc/stats') {
             self::stats();
-        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/iterate') {
+        } else if ($uri == '/kwf/util/apc/iterate') {
             self::iterate();
-        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/is-loaded') {
+        } else if ($uri == '/kwf/util/apc/is-loaded') {
             if (extension_loaded('apc')) {
                 echo '1';
             } else {
                 echo '0';
             }
             exit;
-        } else if ($_SERVER['REQUEST_URI'] == '/kwf/util/apc/get-hostname') {
+        } else if ($uri == '/kwf/util/apc/get-hostname') {
             echo php_uname('n');
             exit;
         }

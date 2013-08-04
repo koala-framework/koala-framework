@@ -45,7 +45,7 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
                     foreach ($domains as $domain)  {
                         if ($acl->getComponentAcl()->isAllowed($authData, $domain)) {
                             $this->view->frontendUrls[] = array(
-                                'href' => '/admin/component/preview?url='.urlencode($domain->getAbsoluteUrl()),
+                                'href' => Kwf_Config::getValue('kwc.urlPrefix').'/admin/component/preview?url='.urlencode($domain->getAbsoluteUrl()),
                                 'text' => $domain->name,
                             );
                         }
@@ -54,7 +54,7 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
             }
             if (!$this->view->frontendUrls) {
                 $this->view->frontendUrls[] = array(
-                    'href' => '/admin/component/preview',
+                    'href' => Kwf_Config::getValue('kwc.urlPrefix').'/admin/component/preview',
                     'text' => trlKwf('Frontend')
                 );
             }

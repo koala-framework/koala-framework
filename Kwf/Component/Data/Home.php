@@ -11,7 +11,8 @@ class Kwf_Component_Data_Home extends Kwf_Component_Data
                 }
                 $c = $c->parent;
             }
-            return '/';
+            $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
+            return $urlPrefix ? $urlPrefix : '/';
         }
         return parent::__get($var);
     }
