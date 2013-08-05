@@ -20,7 +20,8 @@ class Kwc_NewsletterCategory_Subscribe_CategoriesController extends Kwf_Controll
             $values[$row->id] = $row->category;
         }
         $select = new Kwf_Form_Field_Select();
-        $select->setValues($values);
+        $select->setValues($values)
+            ->setAllowBlank(false);
         $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Label'), 200))
             ->setEditor(new Kwf_Form_Field_TextField());
         $this->_columns->add(new Kwf_Grid_Column('category'))
