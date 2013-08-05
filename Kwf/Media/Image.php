@@ -6,6 +6,21 @@ class Kwf_Media_Image
     const SCALE_DEFORM = 'deform';
     const SCALE_ORIGINAL = 'original';
 
+    public static function getHandyScaleFactor($originalPath)
+    {
+        $targetSize = array(600, 600, Kwf_Media_Image::SCALE_BESTFIT);
+        $original = @getimagesize($originalPath);
+        $original['width'] = $original[0];
+        $original['height'] = $original[1];
+        $target = Kwf_Media_Image::calculateScaleDimensions($originalPath, $targetSize);
+
+        if ($original['width'] <= $target['width'] && $original['height'] <= $target['height']) {
+            return 1;
+        } else {
+            return $original['width'] / $target['width'];
+        }
+    }
+
     /**
      * targetSize options: width, height, scale, aspectRatio (if SCALE_CROP and width or height is 0)
      */
