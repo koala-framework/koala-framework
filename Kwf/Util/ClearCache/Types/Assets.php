@@ -24,7 +24,7 @@ class Kwf_Util_ClearCache_Types_Assets extends Kwf_Util_ClearCache_Types_Abstrac
                 if (substr($url, 0, 7) == 'http://' || substr($url, 0, 8) == 'https://') {
                     continue;
                 }
-                $url = preg_replace('#^'.Kwf_Config::getValue('server.basePath').'/assets/#', '', $url);
+                $url = preg_replace('#^'.Kwf_Config::getValue('server.baseUrl').'/assets/#', '', $url);
                 $url = preg_replace('#\\?v=\d+(&t=\d+)?$#', '', $url);
                 $loader->getFileContents($url);
             }

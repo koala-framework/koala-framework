@@ -122,8 +122,8 @@ class Kwf_Component_Data
             }
         } while ($data = $data->parent);
 
-        $basePath = Kwf_Config::getValue('server.basePath'); //TODO basePath vs. root filename: both do the same
-        return ($basePath ? $basePath : '').'/'.$filename;
+        $baseUrl = Kwf_Config::getValue('server.baseUrl'); //TODO baseUrl vs. root filename: both do the same
+        return ($baseUrl ? $baseUrl : '').'/'.$filename;
     }
 
     /**
@@ -194,7 +194,7 @@ class Kwf_Component_Data
      */
     public function getPreviewUrl()
     {
-        return Kwf_Config::getValue('server.basePath').'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl(true).'?kwcPreview');
+        return Kwf_Config::getValue('server.baseUrl').'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl(true).'?kwcPreview');
     }
 
     public function __get($var)

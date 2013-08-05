@@ -223,7 +223,7 @@ class Kwf_Util_Setup
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
-        $ret .= " '".Kwf_Config::getValue('server.basePath')."/',";   //path
+        $ret .= " '".Kwf_Config::getValue('server.baseUrl')."/',";   //path
         $ret .= " null,";  //domain
         $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
         $ret .= " true";   //httponly
@@ -237,10 +237,10 @@ class Kwf_Util_Setup
         }
 
         //up here to have less dependencies or broken redirect
-        $basePath = Kwf_Config::getValue('server.basePath');
+        $baseUrl = Kwf_Config::getValue('server.baseUrl');
         $ret .= "\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen($basePath)+14).") == '$basePath/kwf/util/apc/'\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen($baseUrl)+14).") == '$baseUrl/kwf/util/apc/'\n";
         $ret .= ") {\n";
         $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";

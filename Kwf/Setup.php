@@ -136,12 +136,12 @@ class Kwf_Setup
         $fullRequestPath = $requestPath;
 
         $data = null;
-        $basePath = Kwf_Config::getValue('server.basePath');
-        if ($basePath) {
-            if (substr($requestPath, 0, strlen($basePath)) != $basePath) {
+        $baseUrl = Kwf_Config::getValue('server.baseUrl');
+        if ($baseUrl) {
+            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
                 throw new Kwf_Exception_NotFound();
             }
-            $requestPath = substr($requestPath, strlen($basePath));
+            $requestPath = substr($requestPath, strlen($baseUrl));
         }
         $uri = substr($requestPath, 1);
         $i = strpos($uri, '/');
