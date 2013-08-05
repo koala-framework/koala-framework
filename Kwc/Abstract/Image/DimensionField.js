@@ -127,8 +127,8 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                         preserveRatio = true;
                     }
 
-                    //TODO call controller to create image with nice size to work with
-                    var imageURL = '/kwf/media/upload/downloadHandy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey;
+                    // call controller to create image with nice size to work with
+                    var imageURL = '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey;
 
                     var cw = new Kwc.Abstract.Image.CropWindow({
                         imageUrl: imageURL,

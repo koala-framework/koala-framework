@@ -126,4 +126,43 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension
         ));
     }
+
+    public static function getHandyScaleFactor($originalId)
+    {
+        $targetSize = array(600, 600, Kwf_Media_Image::SCALE_BESTFIT);
+        $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($originalId);
+        $original = Kwf_Media_Image::calculateScaleDimensions($fileRow->getFileSource(),
+                                    array(0, 0, Kwf_Media_Image::SCALE_ORIGINAL));
+        $target = Kwf_Media_Image::calculateScaleDimensions($fileRow->getFileSource(), $targetSize);
+
+        if ($original['width'] <= $target['width'] && $original['height'] <= $target['height']) {
+            return 1;
+        } else {
+            return $original['width'] / $target['width'];
+        }
+    }
+
+    public function downloadHandyAction()
+    {
+        $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
+            ->getRow($this->_getParam('uploadId'));
+        if (!$fileRow) throw new Kwf_Exception("Can't find upload");
+
+        if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
+            throw new Kwf_Exception_AccessDenied();
+        }
+
+        $scaleFactor = Kwf_Controller_Action_Media_UploadController::getHandyScaleFactor($fileRow->id);
+        if ($scaleFactor == 1) {
+            return downloadAction();
+        } else {
+            $targetSize = array(600, 600, Kwf_Media_Image::SCALE_BESTFIT);
+            $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize);
+            Kwf_Media_Output::output(array(
+                'contents' => $image,
+                'mimeType' => $fileRow->mime_type,
+                'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension
+            ));
+        }
+    }
 }
