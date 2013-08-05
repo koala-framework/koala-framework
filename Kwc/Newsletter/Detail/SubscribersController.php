@@ -46,7 +46,9 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
         if (!isset($rs['select'])) $rs['select'] = array();
         $row = Kwf_Model_Abstract::getInstance($rs['model'])->getRow($rs['select']);
         $this->view->subscribeModel = $rs['model'];
-        $this->view->recipientId = $row->id;
+        if ($row) {
+            $this->view->recipientId = $row->id;
+        }
     }
 
     protected function _getMailComponent()

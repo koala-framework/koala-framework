@@ -27,6 +27,8 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
             throw new Kwf_Exception_Client("required parameter: --all, --id, --dbId, --expandedId or --class");
         }
 
+        $select->whereEquals('deleted', false);
+
         $model = Kwf_Component_Cache::getInstance()->getModel();
         $entries = $model->countRows($select);
         if (!$entries) {

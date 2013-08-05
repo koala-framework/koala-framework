@@ -103,6 +103,7 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
         if ($this->_getParam('class')) {
             $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
         }
+        $select->whereEquals('deleted', false);
 
         $model = Kwf_Component_Cache::getInstance()->getModel();
         $this->view->entries = $model->countRows($select);

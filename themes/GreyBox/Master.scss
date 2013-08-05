@@ -34,16 +34,24 @@ $grid-padding   : 0px;
         clear: both;
     }
 
-    @include at-breakpoint(4) {
-        @include set-container-width;
+    #title {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    @include at-breakpoint(2) {
         #title {
-            padding-left: 30px;
-            @include span-columns(2);
-        }
-        #searchBox {
-            @include span-columns(1 omega);
             padding-right: 30px;
         }
+        #searchBox {
+            width: 200px;
+            position: absolute;
+            top: 0; right: 30px;
+        }
+    }
+
+    @include at-breakpoint(4) {
+        @include set-container-width;
         #innerContent {
             @include span-columns(3);
         }

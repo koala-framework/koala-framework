@@ -39,7 +39,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
         var previewButton = new Ext.Button({
             cls: 'x-btn-text',
             enableToggle: true,
-            text: 'Preview Modus',
+            text: trlKwf('Preview Modus'),
             pressed: this.previewMode,
             listeners: {
                 toggle: function(button, pressed) {
@@ -81,7 +81,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             new Ext.Button({
                 cls: 'x-btn-text',
                 enableToggle: true,
-                text: 'Desktop',
+                text: trlKwf('Desktop'),
                 handler: function() {
                     var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('desktop');
@@ -91,7 +91,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             new Ext.Button({
                 cls: 'x-btn-text',
                 enableToggle: true,
-                text: 'Notebook',
+                text: trlKwf('Notebook'),
                 handler: function() {
                     var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('notebook');
@@ -101,7 +101,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             new Ext.Button({
                 cls: 'x-btn-text',
                 enableToggle: true,
-                text: 'Tablet Hochformat',
+                text: trlKwf('Tablet Portrait'),
                 handler: function() {
                     var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('tabletPortrait');
@@ -111,7 +111,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             new Ext.Button({
                 cls: 'x-btn-text',
                 enableToggle: true,
-                text: 'Tablet Querformat',
+                text: trlKwf('Tablet Landscape'),
                 handler: function() {
                     var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('tabletLandscape');
@@ -121,7 +121,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             new Ext.Button({
                 cls: 'x-btn-text',
                 enableToggle: true,
-                text: 'Smartphone Hochformat',
+                text: trlKwf('Smartphone Portrait'),
                 handler: function() {
                     var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('smartphonePortrait');
@@ -131,7 +131,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             new Ext.Button({
                 cls: 'x-btn-text',
                 enableToggle: true,
-                text: 'Smartphone Querformat',
+                text: trlKwf('Smartphone Landscape'),
                 handler: function() {
                     var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('smartphoneLandscape');
