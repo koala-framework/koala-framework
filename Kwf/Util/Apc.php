@@ -39,10 +39,6 @@ class Kwf_Util_Apc
 
         if (!$config->server->aws || $skipOtherServers) {
             $d = $config->server->domain;
-            if (!$d && file_exists('cache/lastdomain')) {
-                //this file gets written in Kwf_Setup to make it "just work"
-                $d = file_get_contents('cache/lastdomain');
-            }
             if (!$d) {
                 if (isset($options['outputFn'])) {
                     call_user_func($options['outputFn'], "error: $outputType: domain not set");

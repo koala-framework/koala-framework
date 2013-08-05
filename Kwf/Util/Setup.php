@@ -236,11 +236,6 @@ class Kwf_Util_Setup
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
-        if (!Kwf_Config::getValue('server.domain')) {
-            //hack to make clear-cache just work
-            $ret .= "if (\$host) file_put_contents('cache/lastdomain', \$host);\n";
-        }
-
         //up here to have less dependencies or broken redirect
         $basePath = Kwf_Config::getValue('server.basePath');
         $ret .= "\n";
