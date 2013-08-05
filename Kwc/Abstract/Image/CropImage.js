@@ -58,8 +58,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             renderTo: this.el,
             constrainTo: this.el,
             src: Ext.BLANK_IMAGE_URL,
-            x: this.cropX,
-            y: this.cropY,
+            x: this.cropX +7,//to be correct placed.
+            y: this.cropY, //no problems in y-direction
             height: this.height,
             width: this.width,
             style:{
