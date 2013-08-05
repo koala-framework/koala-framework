@@ -88,7 +88,7 @@ class Kwf_Util_Apc
         foreach ($domains as $d) {
             $s = microtime(true);
             $urlPart = "http://";
-            $baseUrl = Kwf_Config::getValue('server.baseUrl');
+            $baseUrl = Kwf_Setup::getBaseUrl();
             $url = "$urlPart$d[domain]$baseUrl/kwf/util/apc/$method";
 
             $client = new Zend_Http_Client();
@@ -149,7 +149,7 @@ class Kwf_Util_Apc
         }
 
         $uri = $_SERVER['REQUEST_URI'];
-        $baseUrl = Kwf_Config::getValue('server.baseUrl');
+        $baseUrl = Kwf_Setup::getBaseUrl();
         if ($baseUrl && substr($uri, 0, strlen($baseUrl)) == $baseUrl) {
             $uri = substr($uri, strlen($baseUrl));
         }

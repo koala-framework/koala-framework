@@ -129,6 +129,15 @@ class Kwf_Setup
         return $requestPath;
     }
 
+    public static function getBaseUrl()
+    {
+        $ret = Kwf_Config::getValue('server.baseUrl');
+        if ($ret === null && isset($_SERVER['PHP_SELF'])) {
+            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+        }
+        return $ret;
+    }
+
     public static function dispatchKwc()
     {
         $requestPath = self::getRequestPath();
@@ -136,7 +145,7 @@ class Kwf_Setup
         $fullRequestPath = $requestPath;
 
         $data = null;
-        $baseUrl = Kwf_Config::getValue('server.baseUrl');
+        $baseUrl = Kwf_Setup::getBaseUrl();
         if ($baseUrl) {
             if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
                 throw new Kwf_Exception_NotFound();

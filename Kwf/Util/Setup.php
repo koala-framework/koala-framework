@@ -93,7 +93,7 @@ class Kwf_Util_Setup
         $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 25) == '/kwf/json-progress-status'\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen(Kwf_Setup::getBaseUrl())+25).") == '".Kwf_Setup::getBaseUrl()."/kwf/json-progress-status'\n";
         $ret .= ") {\n";
         $ret .= "    require_once('Kwf/Util/ProgressBar/DispatchStatus.php');\n";
         $ret .= "    Kwf_Util_ProgressBar_DispatchStatus::dispatch();\n";
@@ -101,7 +101,7 @@ class Kwf_Util_Setup
         $ret .= "\n";
         $ret .= "//here to have less dependencies\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 17) == '/kwf/check-config'\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen(Kwf_Setup::getBaseUrl())+17).") == '".Kwf_Setup::getBaseUrl()."/kwf/check-config'\n";
         $ret .= ") {\n";
         $ret .= "    require_once('Kwf/Util/Check/Config.php');\n";
         $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
@@ -223,7 +223,7 @@ class Kwf_Util_Setup
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
-        $ret .= " '".Kwf_Config::getValue('server.baseUrl')."/',";   //path
+        $ret .= " '".Kwf_Setup::getBaseUrl()."/',";   //path
         $ret .= " null,";  //domain
         $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
         $ret .= " true";   //httponly
@@ -237,7 +237,7 @@ class Kwf_Util_Setup
         }
 
         //up here to have less dependencies or broken redirect
-        $baseUrl = Kwf_Config::getValue('server.baseUrl');
+        $baseUrl = Kwf_Setup::getBaseUrl();
         $ret .= "\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
         $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen($baseUrl)+14).") == '$baseUrl/kwf/util/apc/'\n";

@@ -3,11 +3,11 @@ class Kwf_Session_Validator_BasePath extends Kwf_Session_Validator_Abstract
 {
     public function setup()
     {
-        $this->setValidData( Kwf_Config::getValue('server.baseUrl') );
+        $this->setValidData( Kwf_Setup::getBaseUrl() );
     }
 
     public function validate()
     {
-        return Kwf_Config::getValue('server.baseUrl') === $this->getValidData();
+        return Kwf_Setup::getBaseUrl() === $this->getValidData();
     }
 }

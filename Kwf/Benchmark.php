@@ -384,7 +384,7 @@ class Kwf_Benchmark
 
     protected function _getUrlType()
     {
-        $prefixLen = strlen(Kwf_Config::getValue('server.baseUrl'));
+        $prefixLen = strlen(Kwf_Setup::getBaseUrl());
         if (!isset($_SERVER['REQUEST_URI'])) {
             if (php_sapi_name() == 'cli') $urlType = 'cli';
             else $urlType = 'unknown';
