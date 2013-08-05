@@ -220,9 +220,10 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
-        $ret .= " '/',";   //path
+        $ret .= " '".Kwf_Config::getValue('server.basePath')."/',";   //path
         $ret .= " null,";  //domain
         $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
         $ret .= " true";   //httponly
