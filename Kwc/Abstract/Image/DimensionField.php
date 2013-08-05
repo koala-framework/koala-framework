@@ -21,6 +21,12 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             'width' => $row->width,
             'height' => $row->height,
             'scale' => $d['scale'],
+            'cropData' => array(
+                'x' => $row->crop_x,
+                'y' => $row->crop_y,
+                'width' => $row->crop_width,
+                'height' => $row->crop_height
+            )
         );
         return array($this->getFieldName() => $value);
     }
@@ -36,6 +42,16 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $row->dimension = isset($value['dimension']) ? $value['dimension'] : null;
         $row->width = (isset($value['width']) && $value['width']) ? $value['width'] : null;
         $row->height = (isset($value['height']) && $value['height']) ? $value['height'] : null;
+        if (isset($value['cropData'])) {
+            $row->crop_x = (isset($value['cropData']['x']) && $value['cropData']['x'])
+                ? $value['cropData']['x'] : null;
+            $row->crop_y = (isset($value['cropData']['y']) && $value['cropData']['y'])
+                ? $value['cropData']['y'] : null;
+            $row->crop_width = (isset($value['cropData']['width']) && $value['cropData']['width'])
+                ? $value['cropData']['width'] : null;
+            $row->crop_height = (isset($value['cropData']['height']) && $value['cropData']['height'])
+                ? $value['cropData']['height'] : null;
+        }
     }
 
     protected function _getValueFromPostData($postData)
