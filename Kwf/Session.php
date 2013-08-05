@@ -35,7 +35,9 @@ class Kwf_Session extends Zend_Session
 
             if (!isset($_SESSION['__KWF']['VALID'])) {
                 Zend_Session::registerValidator(new Kwf_Session_Validator_HttpHost());
-                Zend_Session::registerValidator(new Kwf_Session_Validator_BasePath());
+                if (Kwf_Config::getValue('server.basePath')) {
+                    Zend_Session::registerValidator(new Kwf_Session_Validator_BasePath());
+                }
                 Zend_Session::registerValidator(new Kwf_Session_Validator_RemoteAddr());
             }
             $validatorsRegistered = true;
