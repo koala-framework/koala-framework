@@ -19,7 +19,7 @@ class Kwf_Acl_Resource_MenuUrl extends Kwf_Acl_Resource_Abstract
         if (!$this->_menuUrl) {
             $id = $this->getResourceId();
             $id = str_replace('_', '/', $id);
-            return Kwf_Config::getValue('kwc.urlPrefix').'/'.$id;
+            return Kwf_Config::getValue('server.basePath').'/'.$id;
         }
         return $this->_menuUrl;
     }

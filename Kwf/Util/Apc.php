@@ -92,8 +92,8 @@ class Kwf_Util_Apc
         foreach ($domains as $d) {
             $s = microtime(true);
             $urlPart = "http://";
-            $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
-            $url = "$urlPart$d[domain]$urlPrefix/kwf/util/apc/$method";
+            $basePath = Kwf_Config::getValue('server.basePath');
+            $url = "$urlPart$d[domain]$basePath/kwf/util/apc/$method";
 
             $client = new Zend_Http_Client();
             $client->setMethod(Zend_Http_Client::POST);
@@ -116,7 +116,7 @@ class Kwf_Util_Apc
             }
             $url2 = null;
             if (!$result && isset($d['alternative'])) {
-                $url2 = "$urlPart$d[alternative]$urlPrefix/kwf/util/apc/$method";
+                $url2 = "$urlPart$d[alternative]$basePath/kwf/util/apc/$method";
                 try {
                     $client->setUri($url2);
                     $client->setParameterPost($params);
@@ -153,9 +153,9 @@ class Kwf_Util_Apc
         }
 
         $uri = $_SERVER['REQUEST_URI'];
-        $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
-        if ($urlPrefix && substr($uri, 0, strlen($urlPrefix)) == $urlPrefix) {
-            $uri = substr($uri, strlen($urlPrefix));
+        $basePath = Kwf_Config::getValue('server.basePath');
+        if ($basePath && substr($uri, 0, strlen($basePath)) == $basePath) {
+            $uri = substr($uri, strlen($basePath));
         }
         if (substr($uri, 0, 25) == '/kwf/util/apc/clear-cache') {
             $s = microtime(true);

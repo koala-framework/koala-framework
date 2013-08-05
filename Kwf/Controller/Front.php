@@ -67,7 +67,7 @@ class Kwf_Controller_Front extends Zend_Controller_Front
         }
         $this->registerPlugin($plugin);
 
-        $this->setBaseUrl(Kwf_Config::getValue('kwc.urlPrefix'));
+        $this->setBaseUrl(Kwf_Config::getValue('server.basePath'));
     }
 
     public static function getInstance()

@@ -241,10 +241,10 @@ class Kwf_Util_Setup
         }
 
         //up here to have less dependencies or broken redirect
-        $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
+        $basePath = Kwf_Config::getValue('server.basePath');
         $ret .= "\n";
         $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen($urlPrefix)+14).") == '$urlPrefix/kwf/util/apc/'\n";
+        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen($basePath)+14).") == '$basePath/kwf/util/apc/'\n";
         $ret .= ") {\n";
         $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";

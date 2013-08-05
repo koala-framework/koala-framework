@@ -13,9 +13,9 @@ class Kwf_Assets_Loader
     {
         if (!isset($_SERVER['REQUEST_URI'])) return;
         require_once 'Kwf/Loader.php';
-        $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
-        if (substr($_SERVER['REQUEST_URI'], 0, strlen($urlPrefix)+8)==$urlPrefix.'/assets/') {
-            $url = substr($_SERVER['REQUEST_URI'], strlen($urlPrefix)+8);
+        $basePath = Kwf_Config::getValue('server.basePath');
+        if (substr($_SERVER['REQUEST_URI'], 0, strlen($basePath)+8)==$basePath.'/assets/') {
+            $url = substr($_SERVER['REQUEST_URI'], strlen($basePath)+8);
             if (strpos($url, '?') !== false) {
                 $url = substr($url, 0, strpos($url, '?'));
             }
@@ -305,8 +305,8 @@ class Kwf_Assets_Loader
                             $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&url=';
                             $cacheData['contents'] = str_replace('url(\'/assets/', 'url(\''.$url.'assets/', $cacheData['contents']);
                             $cacheData['contents'] = str_replace('url(/assets/', 'url('.$url.'assets/', $cacheData['contents']);
-                        } else if ($urlPrefix = Kwf_Config::getValue('kwc.urlPrefix')) {
-                            $cacheData['contents'] = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$urlPrefix.'/assets/', $cacheData['contents']);
+                        } else if ($basePath = Kwf_Config::getValue('server.basePath')) {
+                            $cacheData['contents'] = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$basePath.'/assets/', $cacheData['contents']);
                         }
                     }
 
@@ -330,9 +330,9 @@ class Kwf_Assets_Loader
                         $cacheData['contents'] = $this->_getJsLoader()->trlLoad($cacheData['contents'], $language);
                         $cacheData['contents'] = $this->_hlp($cacheData['contents'], $language);
 
-                        if ($urlPrefix = Kwf_Config::getValue('kwc.urlPrefix')) {
-                            $cacheData['contents'] = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$urlPrefix.'/assets/', $cacheData['contents']);
-                            $cacheData['contents'] = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$urlPrefix.'/$2/', $cacheData['contents']);
+                        if ($basePath = Kwf_Config::getValue('server.basePath')) {
+                            $cacheData['contents'] = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$basePath.'/assets/', $cacheData['contents']);
+                            $cacheData['contents'] = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$basePath.'/$2/', $cacheData['contents']);
                         }
                     }
                     $cache->save($cacheData, $cacheId);
