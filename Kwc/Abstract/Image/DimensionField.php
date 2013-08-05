@@ -16,16 +16,30 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             $dimension = current(array_keys($dimensions));
         }
         $d = $dimensions[$dimension];
+
+        $cropX = $row->crop_x;
+        $cropY = $row->crop_y;
+        $cropWidth = $row->crop_width;
+        $cropHeight = $row->crop_height;
+
+        $scaleFactor = Kwf_Controller_Action_Media_UploadController::getHandyScaleFactor($row->kwf_upload_id);
+        if ($scaleFactor != 1) {
+            $cropX = $row->crop_x / $scaleFactor;
+            $cropY = $row->crop_y / $scaleFactor;
+            $cropWidth = $row->crop_width / $scaleFactor;
+            $cropHeight = $row->crop_height / $scaleFactor;
+        }
+
         $value = array(
             'dimension' => $dimension,
             'width' => $row->width,
             'height' => $row->height,
             'scale' => $d['scale'],
             'cropData' => array(
-                'x' => $row->crop_x,
-                'y' => $row->crop_y,
-                'width' => $row->crop_width,
-                'height' => $row->crop_height
+                'x' => $cropX,
+                'y' => $cropY,
+                'width' => $cropWidth,
+                'height' => $cropHeight
             )
         );
         return array($this->getFieldName() => $value);
@@ -51,6 +65,14 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
                 ? $value['cropData']['width'] : null;
             $row->crop_height = (isset($value['cropData']['height']) && $value['cropData']['height'])
                 ? $value['cropData']['height'] : null;
+
+            $scaleFactor = Kwf_Controller_Action_Media_UploadController::getHandyScaleFactor($row->kwf_upload_id);
+            if ($scaleFactor != 1) {
+                $row->crop_x = $row->crop_x * $scaleFactor;
+                $row->crop_y = $row->crop_y * $scaleFactor;
+                $row->crop_width = $row->crop_width * $scaleFactor;
+                $row->crop_height = $row->crop_height * $scaleFactor;
+            }
         }
     }
 
