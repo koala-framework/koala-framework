@@ -21,8 +21,7 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $cropY = $row->crop_y;
         $cropWidth = $row->crop_width;
         $cropHeight = $row->crop_height;
-
-        $scaleFactor = Kwf_Controller_Action_Media_UploadController::getHandyScaleFactor($row->kwf_upload_id);
+        $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
         if ($scaleFactor != 1) {
             $cropX = $row->crop_x / $scaleFactor;
             $cropY = $row->crop_y / $scaleFactor;
@@ -66,7 +65,7 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             $row->crop_height = (isset($value['cropData']['height']) && $value['cropData']['height'])
                 ? $value['cropData']['height'] : null;
 
-            $scaleFactor = Kwf_Controller_Action_Media_UploadController::getHandyScaleFactor($row->kwf_upload_id);
+            $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
             if ($scaleFactor != 1) {
                 $row->crop_x = $row->crop_x * $scaleFactor;
                 $row->crop_y = $row->crop_y * $scaleFactor;
