@@ -185,12 +185,12 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
-            $urlPrefix = Kwf_Config::getValue('kwc.urlPrefix');
-            if ($urlPrefix) {
-                if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
+            $baseUrl = Kwf_Setup::getBaseUrl();
+            if ($baseUrl) {
+                if (substr($path, 0, strlen($baseUrl)) != $baseUrl) {
                     return null;
                 } else {
-                    $path = substr($path, strlen($urlPrefix));
+                    $path = substr($path, strlen($baseUrl));
                 }
             }
             $path = trim($path, '/');

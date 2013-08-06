@@ -13,12 +13,12 @@ class Kwf_Assets_Loader
     {
         if (!isset($_SERVER['REQUEST_URI'])) return;
         require_once 'Kwf/Loader.php';
-        if (substr($_SERVER['REQUEST_URI'], 0, 8)=='/assets/') {
-            $url = substr($_SERVER['REQUEST_URI'], 8);
+        $baseUrl = Kwf_Setup::getBaseUrl();
+        if (substr($_SERVER['REQUEST_URI'], 0, strlen($baseUrl)+8)==$baseUrl.'/assets/') {
+            $url = substr($_SERVER['REQUEST_URI'], strlen($baseUrl)+8);
             if (strpos($url, '?') !== false) {
                 $url = substr($url, 0, strpos($url, '?'));
             }
-
             try {
                 $l = new self();
                 $out = $l->getFileContents($url);
@@ -281,11 +281,6 @@ class Kwf_Assets_Loader
                             $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
                             $cacheData['contents'] = str_replace('.cssClass', '.'.$cssClass, $cacheData['contents']);
                         }
-                        if (Kwf_Config::getValue('assetsCacheUrl')) {
-                            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&url=';
-                            $cacheData['contents'] = str_replace('url(\'/assets/', 'url(\''.$url.'assets/', $cacheData['contents']);
-                            $cacheData['contents'] = str_replace('url(/assets/', 'url('.$url.'assets/', $cacheData['contents']);
-                        }
 
                         if (substr($file, -5)=='.scss') {
                             if (!$this->_scssParserOptions) {
@@ -304,6 +299,14 @@ class Kwf_Assets_Loader
                                 $this->_scssParser = new Kwf_Util_SassParser($this->_scssParserOptions);
                             }
                             $cacheData['contents'] = $this->_scssParser->toCss($cacheData['contents'], false);
+                        }
+
+                        if (Kwf_Config::getValue('assetsCacheUrl')) {
+                            $url = Kwf_Config::getValue('assetsCacheUrl').'?web='.Kwf_Config::getValue('application.id').'&section='.Kwf_Setup::getConfigSection().'&url=';
+                            $cacheData['contents'] = str_replace('url(\'/assets/', 'url(\''.$url.'assets/', $cacheData['contents']);
+                            $cacheData['contents'] = str_replace('url(/assets/', 'url('.$url.'assets/', $cacheData['contents']);
+                        } else if ($baseUrl = Kwf_Setup::getBaseUrl()) {
+                            $cacheData['contents'] = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $cacheData['contents']);
                         }
                     }
 
@@ -326,6 +329,11 @@ class Kwf_Assets_Loader
 
                         $cacheData['contents'] = $this->_getJsLoader()->trlLoad($cacheData['contents'], $language);
                         $cacheData['contents'] = $this->_hlp($cacheData['contents'], $language);
+
+                        if ($baseUrl = Kwf_Setup::getBaseUrl()) {
+                            $cacheData['contents'] = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $cacheData['contents']);
+                            $cacheData['contents'] = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $cacheData['contents']);
+                        }
                     }
                     $cache->save($cacheData, $cacheId);
                 }

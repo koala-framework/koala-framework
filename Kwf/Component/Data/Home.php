@@ -11,7 +11,8 @@ class Kwf_Component_Data_Home extends Kwf_Component_Data
                 }
                 $c = $c->parent;
             }
-            return '/';
+            $baseUrl = Kwf_Setup::getBaseUrl();
+            return $baseUrl . '/';
         }
         return parent::__get($var);
     }

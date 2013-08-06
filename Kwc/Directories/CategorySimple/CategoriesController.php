@@ -4,7 +4,6 @@ class Kwc_Directories_CategorySimple_CategoriesController extends Kwf_Controller
     protected $_model = 'Kwc_Directories_CategorySimple_CategoriesModel';
     protected $_textField = 'name';
     protected $_editDialog = array(
-        'controllerUrl' => '/admin/component/edit/Articles_Directory_Component/Category',
         'width' => 400,
         'height' => 200
     );

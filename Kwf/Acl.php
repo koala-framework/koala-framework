@@ -56,6 +56,7 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_user_about'));
         $this->add(new Zend_Acl_Resource('kwf_welcome_index'));
         $this->add(new Zend_Acl_Resource('kwf_welcome_content'));
+        $this->add(new Zend_Acl_Resource('kwf_welcome_welcome'));
         $this->add(new Zend_Acl_Resource('kwf_debug'));
         $this->add(new Zend_Acl_Resource('kwf_debug_sql'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_assets'), 'kwf_debug');
@@ -102,6 +103,7 @@ class Kwf_Acl extends Zend_Acl
         $this->allow(null, 'kwf_user_about');
         $this->allow(null, 'kwf_welcome_index');
         $this->allow(null, 'kwf_welcome_content');
+        $this->allow(null, 'kwf_welcome_welcome');
         $this->deny('guest', 'kwf_welcome_index');
         $this->allow(null, 'kwf_user_self');
         $this->deny('guest', 'kwf_user_self');

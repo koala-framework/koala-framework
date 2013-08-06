@@ -43,6 +43,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
     {
         $this->view->kwfVersion = Kwf_Config::getValue('application.kwf.name') . ' ' . trlKwf('Version') . ' ' . Kwf_Config::getValue('application.kwf.version');
         $this->view->appVersion = Kwf_Config::getValue('application.name');
+        $this->view->baseUrl = Kwf_Setup::getBaseUrl();
         $this->view->defaultDbName = Kwf_Config::getValue('application.id');
         $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:Setup';
         $this->view->viewport = 'Kwf.Maintenance.Viewport';
@@ -76,6 +77,11 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         $cfg .= "database.web.password = ".$this->_getParam('db_password')."\n";
         $cfg .= "database.web.dbname = ".$this->_getParam('db_dbname')."\n";
         $cfg .= "database.web.host = ".$this->_getParam('db_host')."\n";
+        $cfg .= "\n";
+        $cfg .= "server.domain = ".$this->getRequest()->getHttpHost()."\n";
+        if ($this->getRequest()->getBaseUrl()) {
+            $cfg .= "server.baseUrl = ".$this->getRequest()->getBaseUrl()."\n";
+        }
         $cfg .= "\n";
         $cfg .= "debug.error.log = ".(!$this->_getParam('display_errors') ? 'true' : 'false')."\n";
         file_put_contents('config.local.ini', $cfg);

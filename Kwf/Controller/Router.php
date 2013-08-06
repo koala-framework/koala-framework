@@ -26,17 +26,17 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     array('module'     => 'kwf_controller_action_pool',
                           'controller' => 'pools',
                           'action'     => 'index')));
-        $this->AddRoute('trl', new Zend_Controller_Router_Route(
+        $this->AddRoute('kwf_trl', new Zend_Controller_Router_Route(
                     '/kwf/trl/:controller/:action',
                     array('module'     => 'kwf_controller_action_trl',
                           'controller' => 'index',
                           'action'     => 'index')));
-        $this->AddRoute('debug', new Zend_Controller_Router_Route(
+        $this->AddRoute('kwf_debug', new Zend_Controller_Router_Route(
                     '/kwf/debug/:controller/:action',
                     array('module'     => 'kwf_controller_action_debug',
                           'controller' => 'index',
                           'action'     => 'index')));
-        $this->AddRoute('media', new Zend_Controller_Router_Route(
+        $this->AddRoute('kwf_media', new Zend_Controller_Router_Route(
                     '/kwf/media/:controller/:action',
                     array('module'     => 'kwf_controller_action_media',
                           'controller' => 'index',
@@ -49,17 +49,21 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/kwf/enquiries/:controller/:action',
                     array('module'     => 'kwf_controller_action_enquiries',
                           'action'     =>'index')));
-        $this->AddRoute('kwfredirects', new Zend_Controller_Router_Route(
+        $this->AddRoute('kwf_redirects', new Zend_Controller_Router_Route(
                     '/kwf/redirects/:controller/:action',
                     array('module'     => 'kwf_controller_action_redirects',
                           'action'     =>'index')));
-        $this->AddRoute('kwfutil', new Zend_Controller_Router_Route(
+        $this->AddRoute('kwf_util', new Zend_Controller_Router_Route(
                     '/kwf/util/:controller/:action',
                     array('module'     => 'kwf_controller_action_util',
                           'action'     =>'index')));
-        $this->AddRoute('kwfmaintenance', new Zend_Controller_Router_Route(
+        $this->AddRoute('kwf_maintenance', new Zend_Controller_Router_Route(
                     '/kwf/maintenance/:controller/:action',
                     array('module'     => 'kwf_controller_action_maintenance',
+                          'action'     =>'index')));
+        $this->AddRoute('kwf_component', new Zend_Controller_Router_Route(
+                    '/kwf/component/:controller/:action',
+                    array('module'     => 'kwf_controller_action_component',
                           'action'     =>'index')));
 
         if (Kwf_Registry::get('config')->includepath->kwfTests) {
@@ -95,8 +99,14 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
             $prefix = '/'.$prefix;
             $this->AddRoute('admin', new Zend_Controller_Router_Route(
                     $prefix.'/:module/:controller/:action',
-                    array('module'=>'kwf_controller_action_component',
+                    array('module'=>'index',
                           'controller' => 'index',
+                          'action' => 'index')));
+
+            $this->AddRoute('admin', new Zend_Controller_Router_Route(
+                    $prefix.'',
+                    array('module'=>'kwf_controller_action_welcome',
+                          'controller' => 'welcome',
                           'action' => 'index')));
         }
         $this->AddRoute('component', new Zend_Controller_Router_Route(

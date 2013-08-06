@@ -14,6 +14,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     public function preDispatch()
     {
         $this->_model = Zend_Registry::get('userModel')->getKwfModel();
+        $this->_editDialog['controllerUrl'] = $this->getRequest()->getBaseUrl().$this->_editDialog['controllerUrl'];
         parent::preDispatch();
     }
 
@@ -27,7 +28,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $this->_filters['lockedtoo'] = array(
             'type'      => 'Button',
             'skipWhere' => true,
-            'icon'      => '/assets/silkicons/user_red.png',
+            'icon'      => $this->getRequest()->getBaseUrl().'/assets/silkicons/user_red.png',
             'cls'       => 'x-btn-text-icon',
             'text'      => trlKwf('Show locked users'),
             'tooltip'   => trlKwf('Show locked users too')
@@ -199,13 +200,13 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     public function indexAction()
     {
         $config = array(
-            'controllerUrl' => $this->getRequest()->getPathInfo()
+            'controllerUrl' => $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo()
         );
         if (Kwf_Registry::get('acl')->has('kwf_user_log')) {
-            $config['logControllerUrl'] = '/kwf/user/log';
+            $config['logControllerUrl'] = $this->getRequest()->getBaseUrl().'/kwf/user/log';
         }
         if (Kwf_Registry::get('acl')->has('kwf_user_comments')) {
-            $config['commentsControllerUrl'] = '/kwf/user/comments';
+            $config['commentsControllerUrl'] = $this->getRequest()->getBaseUrl().'/kwf/user/comments';
         }
         $this->view->ext('Kwf.User.Grid.Index', $config);
     }
