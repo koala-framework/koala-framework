@@ -132,7 +132,7 @@ class Kwf_Setup
     public static function getBaseUrl()
     {
         $ret = Kwf_Config::getValue('server.baseUrl');
-        if ($ret === null && isset($_SERVER['PHP_SELF'])) {
+        if ($ret === null && isset($_SERVER['PHP_SELF']) && php_sapi_name() != 'cli') {
             return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
         }
         return $ret;
