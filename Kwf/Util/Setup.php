@@ -251,7 +251,7 @@ class Kwf_Util_Setup
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {
-            $ret .= "if (\$host) {\n";
+            $ret .= "if (\$host && substr(\$requestUri, 0, 17) != '/kwf/maintenance/' && substr(\$requestUri, 0, 8) != '/assets/') {\n";
             $ret .= "    \$redirect = false;\n";
             if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
                 $ret .= "    \$domainMatches = false;\n";
