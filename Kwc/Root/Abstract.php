@@ -90,6 +90,8 @@ class Kwc_Root_Abstract extends Kwc_Abstract
     {
         if ($propertyName == 'language') {
             return Kwf_Trl::getInstance()->getWebCodeLanguage();
+        } else if ($propertyName == 'domain') {
+            return Kwf_Config::getValue('server.domain');
         } else {
             return Kwf_Config::getValue($propertyName);
         }

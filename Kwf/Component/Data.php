@@ -162,13 +162,7 @@ class Kwf_Component_Data
      */
     public function getDomain()
     {
-        $data = $this;
-        do {
-            if (Kwc_Abstract::getFlag($data->componentClass, 'hasDomain')) {
-                return $data->getComponent()->getDomain();
-            }
-        } while($data = $data->parent);
-        return Kwf_Config::getValue('server.domain');
+        return $this->getBaseProperty('domain');
     }
 
     /**

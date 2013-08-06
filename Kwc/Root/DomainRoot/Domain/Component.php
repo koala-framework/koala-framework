@@ -13,15 +13,9 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Domain');
         $ret['flags']['subroot'] = 'domain';
         $ret['flags']['hasHome'] = true;
-        $ret['flags']['hasDomain'] = true;
         $ret['flags']['hasBaseProperties'] = true;
-        $ret['baseProperties'] = array('language');
+        $ret['baseProperties'] = array('language', 'domain');
         return $ret;
-    }
-
-    public function getDomain()
-    {
-        return $this->getData()->row->domain;
     }
 
     public static function getComponentForHost($host)

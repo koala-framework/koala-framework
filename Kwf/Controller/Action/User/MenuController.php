@@ -39,7 +39,9 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
         $this->view->frontendUrls = array();
         if (Kwf_Registry::get('acl')->has('kwf_component_pages')) {
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'hasDomain')) {
+                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
+                    in_array('domain', Kwc_Abstract::getSetting($c, 'baseProperties'))
+                ) {
                     $domains = Kwf_Component_Data_Root::getInstance()
                         ->getComponentsBySameClass($c, array('ignoreVisible'=>true));
                     foreach ($domains as $domain)  {
