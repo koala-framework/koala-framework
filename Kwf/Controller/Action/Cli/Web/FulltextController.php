@@ -451,6 +451,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
             if (!$page) continue;
             if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
+            if (!$page) continue; //should not happen
             if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltextRecursive')) $page = null;
             if (!$page) continue; //should not happen
             $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
@@ -461,7 +462,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 if ($row) $row->delete();
                 continue;
             }
-            if ($newDoc['content'] != $doc['content']) {
+            if (trim($newDoc['content']) != trim($doc['content'])) {
                 $stats['diffPages']++;
                 if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
                     $stats['indexedPages']++;
