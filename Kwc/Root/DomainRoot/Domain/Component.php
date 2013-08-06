@@ -15,6 +15,8 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasDomain'] = true;
         $ret['flags']['hasLanguage'] = true;
+        $ret['flags']['hasBaseProperties'] = true;
+        $ret['baseProperties'] = array('language');
         return $ret;
     }
 
@@ -54,5 +56,10 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
             $component = $component->parent;
         }
         return $component;
+    }
+
+    public function getBaseProperty($propertyName)
+    {
+        return Kwf_Config::getValue('kwc.domains.' . $this->getData()->id . '.' . $propertyName);
     }
 }

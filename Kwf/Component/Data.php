@@ -1251,6 +1251,20 @@ class Kwf_Component_Data
         return $this->_languageCache;
     }
 
+    public function getBaseProperty($propertyName)
+    {
+        $ret = null;
+        $c = $this;
+        while (!$ret && $c) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'hasBaseProperties')) {
+                $ret = $c->getComponent()->getBaseProperty($propertyName);
+            }
+            $c = $c->parent;
+        }
+        return $ret;
+    }
+
+
     public function getSubroot()
     {
         $c = $this;

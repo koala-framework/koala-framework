@@ -19,6 +19,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract
         $ret['componentName'] = trlKwf('Root');
         $ret['contentWidth'] = 600;
         $ret['contentWidthBoxSubtract'] = array();
+        $ret['flags']['hasBaseProperties'] = true;
         return $ret;
     }
 
@@ -83,5 +84,10 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             }
         }
         return $ret;
+    }
+
+    public function getBaseProperty($propertyName)
+    {
+        return Kwf_Config::getValue($propertyName);
     }
 }
