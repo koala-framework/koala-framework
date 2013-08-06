@@ -9,8 +9,8 @@ class Kwc_Basic_Image_Crop_TestModel extends Kwc_Abstract_Image_Model
                 'columns' => array(),
                 'primaryKey' => 'component_id',
                 'data'=> array(
-                    array('component_id'=>'root_page', 'kwf_upload_id'=>1,
-                        'crop_x' => 50, 'crop_y' => 50, 'crop_width' => 50, 'crop_height' => 50)
+                    array('component_id'=>'root_page', 'kwf_upload_id'=>1
+                        ,'crop_x' => 14, 'crop_y' => 820, 'crop_width' => 2012, 'crop_height' => 450)
                 )
             ));
         parent::__construct($config);
