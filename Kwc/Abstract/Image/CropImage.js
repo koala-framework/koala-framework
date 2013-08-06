@@ -63,9 +63,9 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             height: this.height,
             width: this.width,
             style:{
-              cursor: 'move',
-              position: 'absolute',
-              background: 'url('+this.src+') no-repeat left top'
+                cursor: 'move',
+                position: 'absolute',
+                background: 'url('+this.src+') no-repeat left top'
             }
         });
         this.getCropData();

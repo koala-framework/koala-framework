@@ -77,6 +77,9 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 vertical: false,
                 items: radios
             });
+            this.dimensionField.on('change', function () {
+                //TODO implement disable crop-button if 'original' is selected
+            }, this);
             this.widthField = new Ext.form.NumberField({
                 fieldLabel: trlKwf('Width'),
                 width: 50,

@@ -29,6 +29,10 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
         Kwc.Abstract.Image.CropWindow.superclass.initComponent.call(this);
 
         var imgLoad = new Image();
+        imgLoad.onerror = (function() {
+            //TODO implement user-error-notification
+            //TODO implement mask while loading
+        }).bind(this);
         imgLoad.onload = (function(){
             this.setSize(imgLoad.width+14, imgLoad.height + 69);
             var cropWidth, cropHeight, cropX = 0, cropY = 0;
