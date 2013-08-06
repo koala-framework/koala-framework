@@ -5,6 +5,6 @@ class Kwc_Basic_Image_Crop_UploadsModel extends Kwf_Test_Uploads_Model
     {
         parent::__construct($config);
 
-        $this->createRow()->copyFile(KWF_PATH.'/images/colorpicker/map-blue-max.png', 'foo2', 'png', 'image/png');
+        $this->createRow()->copyFile(KWF_PATH.'/images/devices/macBook.jpg', 'foo2', 'jpg', 'image/jpg');
     }
 }

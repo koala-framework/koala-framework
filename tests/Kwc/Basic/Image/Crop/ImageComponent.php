@@ -7,9 +7,9 @@ class Kwc_Basic_Image_Crop_ImageComponent extends Kwc_Basic_Image_Component
         $ret['ownModel'] = 'Kwc_Basic_Image_Crop_TestModel';
         $ret['dimensions'] = array(
             array(
-                'width' => 50,
-                'height' => 50,
-                'scale' => Kwf_Media_Image::SCALE_CROP
+                'width' => 500,
+                'height' => 500,
+                'scale' => Kwf_Media_Image::SCALE_BESTFIT
             )
         );
         $ret['viewCache'] = false;
