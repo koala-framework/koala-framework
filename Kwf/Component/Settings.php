@@ -360,17 +360,16 @@ class Kwf_Component_Settings
                         if (is_array($g['component'])) {
                             foreach ($g['component'] as $l=>$cc) {
                                 if (!$cc) continue;
-                                if (Kwc_Abstract::hasSetting($cc, 'needsParentComponentClass')
-                                    && Kwc_Abstract::getSetting($cc, 'needsParentComponentClass')
-                                ) {
+                                $cc = strpos($cc, '.') ? substr($cc, 0, strpos($cc, '.')) : $cc;
+                                if (isset($cc::$needsParentComponentClass) && $cc::$needsParentComponentClass) {
                                     $g['component'][$l] .= '.'.$class;
                                 }
                             }
                         } else {
                             if (!$g['component']) continue;
-                            if (Kwc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
-                                && Kwc_Abstract::getSetting($g['component'], 'needsParentComponentClass')
-                            ) {
+                            $cc = $g['component'];
+                            $cc = strpos($cc, '.') ? substr($cc, 0, strpos($cc, '.')) : $cc;
+                            if (isset($cc::$needsParentComponentClass) && $cc::$needsParentComponentClass) {
                                 $g['component'] .= '.'.$class;
                             }
                         }
