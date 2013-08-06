@@ -25,6 +25,6 @@
         <? } else { ?>
             <h2><?= $this->application->kwf->name . ' ' . trlKwf('Version') . ' ' . $this->application->kwf->version ?></h2>
         <? } ?>
-        <img id="enteWelcome" src="/assets/kwf/images/welcome/ente.jpg" alt="" height="30" width="54" />
+        <?=$this->image('/assets/kwf/images/welcome/ente.jpg', '', array('id'=>'enteWelcome'))?>
     </div>
 </div>

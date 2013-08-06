@@ -129,16 +129,32 @@ class Kwf_Setup
         return $requestPath;
     }
 
+    public static function getBaseUrl()
+    {
+        $ret = Kwf_Config::getValue('server.baseUrl');
+        if ($ret === null && isset($_SERVER['PHP_SELF']) && php_sapi_name() != 'cli') {
+            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+        }
+        return $ret;
+    }
+
     public static function dispatchKwc()
     {
         $requestPath = self::getRequestPath();
         if ($requestPath === false) return;
+        $fullRequestPath = $requestPath;
 
         $data = null;
+        $baseUrl = Kwf_Setup::getBaseUrl();
+        if ($baseUrl) {
+            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
+                throw new Kwf_Exception_NotFound();
+            }
+            $requestPath = substr($requestPath, strlen($baseUrl));
+        }
         $uri = substr($requestPath, 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
-        $urlPrefix = Kwf_Config::getValue('kwc.UrlPrefix');
 
         if ($uri == 'robots.txt') {
             Kwf_Media_Output::output(array(
@@ -151,14 +167,11 @@ class Kwf_Setup
             $sitemap = new Kwf_Component_Sitemap();
             $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
         }
-
-        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf'))
-            && (!$urlPrefix || substr($requestPath, 0, strlen($urlPrefix)) == $urlPrefix)
-        ) {
+        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf'))) {
             if (!isset($_SERVER['HTTP_HOST'])) {
-                $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$requestPath;
+                $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$fullRequestPath;
             } else {
-                $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$requestPath;
+                $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$fullRequestPath;
             }
 
             Kwf_Trl::getInstance()->setUseUserLanguage(false);
@@ -172,7 +185,7 @@ class Kwf_Setup
                 throw new Kwf_Exception_NotFound();
             }
             if (!$exactMatch) {
-                if (rawurldecode($data->url) == $requestPath) {
+                if (rawurldecode($data->url) == $fullRequestPath) {
                     throw new Kwf_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
                 }
                 $url = $data->url;

@@ -16,7 +16,7 @@ abstract class Kwf_Controller_Plugin_Acl_Abstract extends Zend_Controller_Plugin
         if (substr($request->getActionName(), 0, 4) == 'json') {
             $request->setActionName('json-login');
         } else {
-            $params = array('location' => $request->getPathInfo());
+            $params = array('location' => $request->getBaseUrl().$request->getPathInfo());
             $request->setParams($params);
             $request->setActionName('index');
         }

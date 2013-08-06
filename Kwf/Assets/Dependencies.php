@@ -70,7 +70,7 @@ class Kwf_Assets_Dependencies
         if (!$assets[$fileType] || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->getMaxFileMTime();
             if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
-            $ret[] = "/assets/all/$section/"
+            $ret[] = Kwf_Setup::getBaseUrl()."/assets/all/$section/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType?v=$v";
             $allUsed = true;
@@ -87,7 +87,7 @@ class Kwf_Assets_Dependencies
                     $a = new $assetClass($this->_loader, $assetsType, $rootComponent, $arguments);
                     if (!$allUsed || !$a->getIncludeInAll()) {
                         $v = $this->getMaxFileMTime();
-                        $f = "/assets/dynamic/$assetsType/"
+                        $f = Kwf_Setup::getBaseUrl()."/assets/dynamic/$assetsType/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$file?v=$v";
                         if ($a->getMTime()) {
@@ -97,7 +97,7 @@ class Kwf_Assets_Dependencies
                     }
                 } else {
                     if (!$allUsed) {
-                        $ret[] = "/assets/$file";
+                        $ret[] = Kwf_Setup::getBaseUrl()."/assets/$file";
                     }
                 }
             }

@@ -3,7 +3,14 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
     autoScroll: true,
     initComponent: function() {
         this.previewMode = false;
-        if (decodeURIComponent(this.getParam('url')).indexOf('kwcPreview') !== -1) this.previewMode = true;
+
+        var params = Ext.urlDecode(location.search.substr(1));
+        if (params && params.url) {
+            if (params.url.indexOf('kwcPreview') !== -1) {
+                this.previewMode = true;
+            }
+        }
+
         this.classNames = ['desktop', 'notebook', 'smartphonePortrait', 'smartphoneLandscape', 'tabletPortrait', 'tabletLandscape'];
         this.tbar = [];
 
@@ -162,14 +169,13 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             tag: 'div',
             cls: 'device'
         });
-        var iframeUrl = window.location.protocol + '//' + window.location.host;
-        if (this.getParam('url')) iframeUrl = decodeURIComponent(this.getParam('url'));
         var kwfComponentPreviewIframe = kwfComponentPreviewDevice.createChild({
             tag: 'iframe',
             name: 'kwfComponentPreviewIframe',
-            src: iframeUrl,
+            src: this.initialUrl,
             cls: 'kwfComponentPreviewIframe'
         });
+        this.kwfComponentPreviewUrl.setValue(this.initialUrl);
         kwfComponentPreviewIframe.on('load', function() {
             var textfieldValue = window.frames['kwfComponentPreviewIframe'].location.href;
             if (textfieldValue.indexOf(window.location.host)) {
@@ -191,19 +197,6 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
         if (link.indexOf('?') !== -1) separator = '&';
         if (link.indexOf('kwcPreview') === -1) link += separator + 'kwcPreview';
         return link;
-    },
-
-    getParam: function(param) {
-        var query = window.location.search.substring(1);
-        if (query == param) return true;
-        var params = query.split("&");
-        for (var i=0; i<params.length; i++) {
-            var pair = params[i].split("=");
-            if (pair[0] == param) return pair[1];
-
-            if (params[i] == param) return true;
-        }
-        return false;
     }
 });
 Ext.reg('kwf.component.preview', Kwf.Component.Preview);

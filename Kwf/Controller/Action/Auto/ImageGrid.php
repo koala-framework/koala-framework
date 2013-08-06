@@ -27,7 +27,7 @@ abstract class Kwf_Controller_Action_Auto_ImageGrid extends Kwf_Controller_Actio
 
     public function indexAction()
     {
-        $this->view->controllerUrl = $this->getRequest()->getPathInfo();
+        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo();
         $this->view->xtype = 'kwf.imagegrid';
     }
 

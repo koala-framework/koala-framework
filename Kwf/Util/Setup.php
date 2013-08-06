@@ -91,17 +91,23 @@ class Kwf_Util_Setup
         $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
         $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "\n";
+        $ret .= "\$requestUri = isset(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : null;\n";
+        if (Kwf_Setup::getBaseUrl()) {
+            $ret .= "if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
+            $ret .= "    throw new Exception('Invalid baseUrl');\n";
+            $ret .= "}\n";
+            $ret .= "\$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
+        }
+        $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 25) == '/kwf/json-progress-status'\n";
+        $ret .= "if (\$requestUri == '/kwf/json-progress-status'\n";
         $ret .= ") {\n";
         $ret .= "    require_once('Kwf/Util/ProgressBar/DispatchStatus.php');\n";
         $ret .= "    Kwf_Util_ProgressBar_DispatchStatus::dispatch();\n";
         $ret .= "}\n";
         $ret .= "\n";
         $ret .= "//here to have less dependencies\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 17) == '/kwf/check-config'\n";
+        $ret .= "if (\$requestUri == '/kwf/check-config'\n";
         $ret .= ") {\n";
         $ret .= "    require_once('Kwf/Util/Check/Config.php');\n";
         $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
@@ -220,9 +226,10 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
-        $ret .= " '/',";   //path
+        $ret .= " '".Kwf_Setup::getBaseUrl()."/',";   //path
         $ret .= " null,";  //domain
         $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
         $ret .= " true";   //httponly
@@ -235,22 +242,16 @@ class Kwf_Util_Setup
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
-        if (!Kwf_Config::getValue('server.domain')) {
-            //hack to make clear-cache just work
-            $ret .= "if (\$host) file_put_contents('cache/lastdomain', \$host);\n";
-        }
-
         //up here to have less dependencies or broken redirect
         $ret .= "\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, 14) == '/kwf/util/apc/'\n";
+        $ret .= "if (substr(\$requestUri, 0, 14) == '/kwf/util/apc/'\n";
         $ret .= ") {\n";
         $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {
-            $ret .= "if (\$host) {\n";
+            $ret .= "if (\$host && substr(\$requestUri, 0, 17) != '/kwf/maintenance/' && substr(\$requestUri, 0, 8) != '/assets/') {\n";
             $ret .= "    \$redirect = false;\n";
             if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
                 $ret .= "    \$domainMatches = false;\n";
@@ -370,9 +371,7 @@ class Kwf_Util_Setup
         */
         $ret .= "setlocale(LC_NUMERIC, 'C');\n";
 
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    (substr(\$_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || \$_SERVER['REQUEST_URI'] == '/kwf/pma')\n";
-        $ret .= ") {\n";
+        $ret .= "if (substr(\$requestUri, 0, 9) == '/kwf/pma/' || \$requestUri == '/kwf/pma') {\n";
         $ret .= "    Kwf_Util_Pma::dispatch();\n";
         $ret .= "}\n";
 
