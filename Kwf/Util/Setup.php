@@ -91,17 +91,23 @@ class Kwf_Util_Setup
         $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
         $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "\n";
+        $ret .= "\$requestUri = isset(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : null;\n";
+        if (Kwf_Setup::getBaseUrl()) {
+            $ret .= "if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
+            $ret .= "    throw new Exception('Invalid baseUrl');\n";
+            $ret .= "}\n";
+            $ret .= "\$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
+        }
+        $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen(Kwf_Setup::getBaseUrl())+25).") == '".Kwf_Setup::getBaseUrl()."/kwf/json-progress-status'\n";
+        $ret .= "if (\$requestUri == '/kwf/json-progress-status'\n";
         $ret .= ") {\n";
         $ret .= "    require_once('Kwf/Util/ProgressBar/DispatchStatus.php');\n";
         $ret .= "    Kwf_Util_ProgressBar_DispatchStatus::dispatch();\n";
         $ret .= "}\n";
         $ret .= "\n";
         $ret .= "//here to have less dependencies\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen(Kwf_Setup::getBaseUrl())+17).") == '".Kwf_Setup::getBaseUrl()."/kwf/check-config'\n";
+        $ret .= "if (\$requestUri == '/kwf/check-config'\n";
         $ret .= ") {\n";
         $ret .= "    require_once('Kwf/Util/Check/Config.php');\n";
         $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
@@ -237,10 +243,8 @@ class Kwf_Util_Setup
         }
 
         //up here to have less dependencies or broken redirect
-        $baseUrl = Kwf_Setup::getBaseUrl();
         $ret .= "\n";
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    substr(\$_SERVER['REQUEST_URI'], 0, ".(strlen($baseUrl)+14).") == '$baseUrl/kwf/util/apc/'\n";
+        $ret .= "if (substr(\$requestUri, 0, 14) == '/kwf/util/apc/'\n";
         $ret .= ") {\n";
         $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";
@@ -367,9 +371,7 @@ class Kwf_Util_Setup
         */
         $ret .= "setlocale(LC_NUMERIC, 'C');\n";
 
-        $ret .= "if (isset(\$_SERVER['REQUEST_URI']) &&\n";
-        $ret .= "    (substr(\$_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || \$_SERVER['REQUEST_URI'] == '/kwf/pma')\n";
-        $ret .= ") {\n";
+        $ret .= "if (substr(\$requestUri, 0, 9) == '/kwf/pma/' || \$requestUri == '/kwf/pma') {\n";
         $ret .= "    Kwf_Util_Pma::dispatch();\n";
         $ret .= "}\n";
 
