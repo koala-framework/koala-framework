@@ -19,6 +19,11 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
         }
     }
 
+    protected function _idMatches($id)
+    {
+        return in_array(substr($id, 1), array_keys($this->_settings['component']));
+    }
+
     public function getChildData($parentData, $select = array())
     {
         Kwf_Benchmark::count('GenStatic::getChildData');
@@ -32,7 +37,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
         $ret = array();
 
         if ($p = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
-            if (!in_array(substr($p, 1), array_keys($this->_settings['component']))) {
+            if (!$this->_idMatches($p)) {
                 return $ret;
             }
         }
