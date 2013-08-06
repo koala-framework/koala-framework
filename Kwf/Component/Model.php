@@ -47,6 +47,7 @@ class Kwf_Component_Model extends Kwf_Model_Abstract
         $parts = $select->getPart(Kwf_Model_Select::WHERE_NULL);
 
         if ($select->hasPart(Kwf_Model_Select::WHERE_EXPRESSION)) { // Suchfeld
+            return array(); // TODO: fix, didn't work before neither
             $model = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel');
             $rowset = array();
             $languages = null;

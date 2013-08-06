@@ -35,7 +35,7 @@ class Kwf_Component_Abstract_MenuConfig_Trl_SameClass extends Kwf_Component_Abst
         foreach ($masterComponents as $c) {
             $resource = $acl->get('kwc_'.$c->dbId);
             $mc = $resource->getMenuConfig();
-            $mc['text'] .= ' ('.$c->getLanguageData()->name.')';
+            $mc['text'] .= ' ('.$c->getBaseProperty('language').')';
             $resource->setMenuConfig($mc);
         }
         if (count($masterComponents) > 1) {
@@ -57,7 +57,7 @@ class Kwf_Component_Abstract_MenuConfig_Trl_SameClass extends Kwf_Component_Abst
             if ($domain = $c->getParentByClass('Kwc_Root_DomainRoot_Domain_Component')) {
                 $t .= " ($domain->name)";
             }
-            $t .= ' ('.$c->getLanguageData()->name.')';
+            $t .= ' ('.$c->getBaseProperty('language').')';
             $acl->add(
                 new Kwf_Acl_Resource_Component_MenuUrl(
                     $c, array('text'=>$t, 'icon'=>$icon)

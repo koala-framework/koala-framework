@@ -88,6 +88,10 @@ class Kwc_Root_Abstract extends Kwc_Abstract
 
     public function getBaseProperty($propertyName)
     {
-        return Kwf_Config::getValue($propertyName);
+        if ($propertyName == 'language') {
+            return Kwf_Trl::getInstance()->getWebCodeLanguage();
+        } else {
+            return Kwf_Config::getValue($propertyName);
+        }
     }
 }

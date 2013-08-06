@@ -1210,29 +1210,6 @@ class Kwf_Component_Data
     }
 
     /**
-     * Returns the data resposible for the language
-     *
-     * (has a hasLanguage flag)
-     *
-     * might be null if only a single language is used
-     *
-     * @return Kwf_Component_Data
-     */
-    public function getLanguageData()
-    {
-        // search parents for flag hasLanguage
-        $c = $this;
-        do {
-            if (Kwc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
-                break;
-            }
-        } while (($c = $c->parent));
-
-        if (!$c) return null;
-        return $c;
-    }
-
-    /**
      * Returns the language used by this data
      *
      * @return string
@@ -1240,17 +1217,24 @@ class Kwf_Component_Data
     public function getLanguage()
     {
         if (!isset($this->_languageCache)) { //cache ist vorallem für bei kwfUnserialize nützlich
-            if (Kwc_Abstract::getFlag($this->componentClass, 'hasLanguage')) {
-                $this->_languageCache = $this->getComponent()->getLanguage();
-            } else if ($this->parent) {
-                $this->_languageCache = $this->parent->getLanguage();
-            } else {
-                $this->_languageCache = Kwf_Trl::getInstance()->getWebCodeLanguage();
-            }
+            $this->_languageCache = $this->getBaseProperty('language');
         }
         return $this->_languageCache;
     }
 
+    /**
+     * Retrieves a base Property for a component
+     *
+     * Any component can add a flag called 'hasBaseProperties' and implement
+     * getBaseProperties($propertyName) to return a property specific for this component and all
+     * child components (e.g. language, domain, id for analytics...)
+     * It's also possible to specify the returned property by adding an array "baseProperties"
+     * to the settings. This may help some to exclude components to be asked for base Properties
+     * which they actually don't return.
+     *
+     * @param string $propertyName
+     * @return string Property
+     */
     public function getBaseProperty($propertyName)
     {
         $ret = null;
