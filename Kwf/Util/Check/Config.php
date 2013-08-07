@@ -494,7 +494,7 @@ class Kwf_Util_Check_Config
             && get_magic_quotes_gpc()
         ) {
             return array(
-                'status' => self::RESULT_FAILED,
+                'status' => self::RESULT_WARNING,
                 'message' => "magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini"
             );
         }
