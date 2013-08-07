@@ -79,14 +79,14 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         if ($this->_updates) {
             $or = array();
             foreach ($this->_updates as $key => $values) {
-                if ($key === 'db_id') {
+                if ($key === 'component_id') {
                     $or[] = new Kwf_Model_Select_Expr_And(array(
-                        new Kwf_Model_Select_Expr_Equal('db_id', array_unique($values)),
+                        new Kwf_Model_Select_Expr_Equal('component_id', array_unique($values)),
                         new Kwf_Model_Select_Expr_Equal('type', 'component'),
                     ));
-                } else if ($key === 'master-db_id') {
+                } else if ($key === 'master-component_id') {
                     $or[] = new Kwf_Model_Select_Expr_And(array(
-                        new Kwf_Model_Select_Expr_Equal('db_id', array_unique($values)),
+                        new Kwf_Model_Select_Expr_Equal('component_id', array_unique($values)),
                         new Kwf_Model_Select_Expr_Equal('type', 'master'),
                     ));
                 } else {
@@ -160,8 +160,8 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        $this->_updates['db_id'][] = $event->component->dbId;
-        $this->_log("db_id={$event->component->dbId} type=component");
+        $this->_updates['component_id'][] = $event->component->componentId;
+        $this->_log("component_id={$event->component->componentId} type=component");
     }
 
     public function onRecursiveContentChange(Kwf_Component_Event_Component_RecursiveContentChanged $event)
@@ -178,8 +178,8 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onMasterContentChange(Kwf_Component_Event_Component_MasterContentChanged $event)
     {
-        $this->_updates['master-db_id'][] = $event->component->dbId;
-        $this->_log("db_id={$event->component->dbId} type=master");
+        $this->_updates['master-component_id'][] = $event->component->componentId;
+        $this->_log("component_id={$event->component->componentId} type=master");
     }
 
     public function onRecursiveMasterContentChange(Kwf_Component_Event_Component_RecursiveMasterContentChanged $event)
@@ -206,9 +206,9 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
-            'db_id' => $event->component->dbId
+            'component_id' => $event->component->componentId
         );
-        $this->_log("type=componentLink db_id={$event->component->dbId}");
+        $this->_log("type=componentLink component_id={$event->component->componentId}");
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
