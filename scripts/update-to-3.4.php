@@ -25,6 +25,21 @@ function checkGallery($files) {
     }
 }
 
+function checkBaseProperties($files) {
+    foreach ($files as $f) {
+        $content = file_get_contents($f);
+        if (strpos($content, 'hasDomain')) {
+            echo "\033[45mPlease change setting hasDomain to BaseProperties\033[00m\n";
+        }
+        if (strpos($content, 'hasLanguage')) {
+            echo "\033[45mPlease change setting hasLanguage to BaseProperties\033[00m\n";
+        }
+        if (strpos($content, 'hasMoneyFormat')) {
+            echo "\033[45mPlease change setting hasMoneyFormat to BaseProperties\033[00m\n";
+        }
+    }
+}
+
 function replaceFiles($files, $from, $to) {
     foreach ($files as $f) {
         $content = file_get_contents($f);
@@ -115,6 +130,7 @@ replaceFiles($files, 'Kwc_Composite_Downloads_Component', 'Kwc_List_Downloads_Co
 replaceFiles($files, 'Kwc_Composite_ImagesEnlarge_Component', 'Kwc_List_Gallery_Component');
 replaceFiles($files, 'Kwc_Composite_Links_Component', 'Kwc_List_Links_Component');
 checkGallery($files);
+checkBaseProperties($files);
 updateIncludeCode();
 updateMasterCssClass();
 moveCssFiles();
