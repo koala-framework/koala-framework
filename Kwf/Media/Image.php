@@ -117,25 +117,25 @@ class Kwf_Media_Image
             $calculateHeight = $crop['height'];
         }
 
-        if ($outputWidth == 0) {
-            if (isset($targetSize['aspectRatio'])) {
-                $outputWidth = round($outputHeight * $targetSize['aspectRatio']);
-            } else {
-                $outputWidth = round($outputHeight * ($calculateWidth / $calculateHeight));
-            }
-            if ($outputWidth <= 0) $outputWidth = 1;
-        }
-        if ($outputHeight == 0) {
-            if (isset($targetSize['aspectRatio']) && $targetSize['aspectRatio']) {
-                $outputHeight = round($outputWidth * $targetSize['aspectRatio']);
-            } else {
-                $outputHeight = round($outputWidth * ($calculateHeight / $calculateWidth));
-            }
-            if ($outputHeight <= 0) $outputHeight = 1;
-        }
-
 
         if (!$bestfit) { // image will always have defined size
+            if ($outputWidth == 0) {
+                if (isset($targetSize['aspectRatio'])) {
+                    $outputWidth = round($outputHeight * $targetSize['aspectRatio']);
+                } else {
+                    $outputWidth = round($outputHeight * ($calculateWidth / $calculateHeight));
+                }
+                if ($outputWidth <= 0) $outputWidth = 1;
+            }
+            if ($outputHeight == 0) {
+                if (isset($targetSize['aspectRatio']) && $targetSize['aspectRatio']) {
+                    $outputHeight = round($outputWidth * $targetSize['aspectRatio']);
+                } else {
+                    $outputHeight = round($outputWidth * ($calculateHeight / $calculateWidth));
+                }
+                if ($outputHeight <= 0) $outputHeight = 1;
+            }
+
             if (!$crop) { // crop from complete image
                 $crop = array();
                 // calculate crop depending on target-size
