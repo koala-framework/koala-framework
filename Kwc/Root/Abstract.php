@@ -19,6 +19,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract
         $ret['componentName'] = trlKwf('Root');
         $ret['contentWidth'] = 600;
         $ret['contentWidthBoxSubtract'] = array();
+        $ret['flags']['hasBaseProperties'] = true;
         return $ret;
     }
 
@@ -83,5 +84,16 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             }
         }
         return $ret;
+    }
+
+    public function getBaseProperty($propertyName)
+    {
+        if ($propertyName == 'language') {
+            return Kwf_Trl::getInstance()->getWebCodeLanguage();
+        } else if ($propertyName == 'domain') {
+            return Kwf_Config::getValue('server.domain');
+        } else {
+            return Kwf_Config::getValue($propertyName);
+        }
     }
 }

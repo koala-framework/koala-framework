@@ -30,7 +30,9 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
         $s->whereEquals('active', true);
         if ($type == 'path') {
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'hasDomain')) {
+                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
+                    in_array('domain', Kwc_Abstract::getSetting($c, 'baseProperties'))
+                ) {
                     $domain = call_user_func(array($c, 'getComponentForHost'), $host);
                     $s->whereEquals('domain_component_id', $domain->dbId);
                     break;

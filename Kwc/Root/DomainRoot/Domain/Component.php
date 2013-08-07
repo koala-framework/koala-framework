@@ -13,21 +13,9 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Domain');
         $ret['flags']['subroot'] = 'domain';
         $ret['flags']['hasHome'] = true;
-        $ret['flags']['hasDomain'] = true;
-        $ret['flags']['hasLanguage'] = true;
+        $ret['flags']['hasBaseProperties'] = true;
+        $ret['baseProperties'] = array('language', 'domain');
         return $ret;
-    }
-
-    public function getLanguage()
-    {
-        $domains = Kwf_Config::getValueArray('kwc.domains');
-        if (!isset($domains[$this->getData()->id]['language'])) return Kwf_Trl::getInstance()->getWebCodeLanguage();
-        return $domains[$this->getData()->id]['language'];
-    }
-
-    public function getDomain()
-    {
-        return $this->getData()->row->domain;
     }
 
     public static function getComponentForHost($host)
@@ -54,5 +42,10 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
             $component = $component->parent;
         }
         return $component;
+    }
+
+    public function getBaseProperty($propertyName)
+    {
+        return Kwf_Config::getValue('kwc.domains.' . $this->getData()->id . '.' . $propertyName);
     }
 }
