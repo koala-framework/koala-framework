@@ -1233,7 +1233,7 @@ class Kwf_Component_Data
     {
         $ret = null;
         $c = $this;
-        while (!$ret && $c) {
+        while (is_null($ret) && $c) {
             if (Kwc_Abstract::getFlag($c->componentClass, 'hasBaseProperties')) {
                 $ret = $c->getComponent()->getBaseProperty($propertyName);
             }
