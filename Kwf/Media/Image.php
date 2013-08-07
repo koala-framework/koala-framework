@@ -22,10 +22,11 @@ class Kwf_Media_Image
     }
 
     /**
-     * targetSize options: width, height, scale, aspectRatio (if SCALE_CROP and width or height is 0)
+     * targetSize options: width, height, bestfit, aspectRatio (if SCALE_CROP and width or height is 0)
      */
     public static function calculateScaleDimensions($source, $targetSize)
     {
+        // Get size of image (handle different param-possibilities)
         if (is_string($source)) {
             $sourceSize = @getimagesize($source);
         } else if ($source instanceof Imagick) {
@@ -37,29 +38,36 @@ class Kwf_Media_Image
         }
 
         if (!$sourceSize) return false;
+
         $w = null;
         if (isset($sourceSize['width'])) $w = $sourceSize['width'];
         if (isset($sourceSize[0])) $w = $sourceSize[0];
+
         $h = null;
         if (isset($sourceSize['height'])) $h = $sourceSize['height'];
         if (isset($sourceSize[1])) $h = $sourceSize[1];
-        $size = array($w, $h);
+
+        $originalSize = array($w, $h);
+
+
+        // Check if image has to be rotated
         $rotate = null;
-        if (Kwf_Registry::get('config')->image->autoExifRotate &&
-            $source &&
-            function_exists('exif_read_data') &&
-            isset($sourceSize['mime']) &&
-            ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
+        if (Kwf_Registry::get('config')->image->autoExifRotate
+            && $source
+            && function_exists('exif_read_data')
+            && isset($sourceSize['mime'])
+            && ($sourceSize['mime'] == 'image/jpg'
+                || $sourceSize['mime'] == 'image/jpeg')
         ) {
             try {
                 $exif = exif_read_data($source);
                 if (isset($exif['Orientation'])) {
                     switch ($exif['Orientation']) {
                         case 6:
-                            $size = array($h, $w);
+                            $originalSize = array($h, $w);
                             $rotate = 90;
                         case 8:
-                            $size = array($h, $w);
+                            $originalSize = array($h, $w);
                             $rotate = -90;
                     }
                 }
@@ -67,141 +75,137 @@ class Kwf_Media_Image
                 $rotate = null;
             }
         }
-        if (!$size[0] || !$size[1]) return false;
 
-        if (isset($targetSize['width'])) $width = $targetSize['width'];
-        else if (isset($targetSize[0])) $width = $targetSize[0];
-        else $width = 0;
+        if (!$originalSize[0] || !$originalSize[1]) return false;
 
-        if (isset($targetSize['height'])) $height = $targetSize['height'];
-        else if (isset($targetSize[1])) $height = $targetSize[1];
-        else $height = 0;
 
-        if (isset($targetSize['scale'])) $scale = $targetSize['scale'];
-        else if (isset($targetSize[2])) $scale = $targetSize[2];
-        else $scale = self::SCALE_BESTFIT;
-        if (!$scale) $scale = self::SCALE_BESTFIT;
+        // get output-width
+        if (isset($targetSize['width'])) $outputWidth = $targetSize['width'];
+        else if (isset($targetSize[0])) $outputWidth = $targetSize[0];
+        else $outputWidth = 0;
 
-        if ($width == 0 && $height == 0 && $scale != self::SCALE_ORIGINAL) {
-            return false;
+        // get output-height
+        if (isset($targetSize['height'])) $outputHeight = $targetSize['height'];
+        else if (isset($targetSize[1])) $outputHeight = $targetSize[1];
+        else $outputHeight = 0;
+
+        // get crop-data
+        if (isset($targetSize['crop'])) $crop = $targetSize['crop'];
+        else $crop = null;
+
+        // get bestfit
+        if (isset($targetSize['bestfit'])) $bestfit = $targetSize['bestfit'];
+        else $bestfit = false;
+
+        if ($outputWidth == 0 && $outputHeight == 0) {
+            // Handle keep original
+            return array(
+                'width' => $originalSize[0],
+                'height' => $originalSize[1],
+                'bestfit' => true,
+                'rotate' => null
+           );
         }
 
-        if ($scale != self::SCALE_ORIGINAL && $scale != self::SCALE_BESTFIT) {
-            if ($width == 0) {
-                if (isset($targetSize['aspectRatio'])) {
-                    $width = round($height * $targetSize['aspectRatio']);
-                } else {
-                    $width = round($height * ($size[0]/$size[1]));
-                }
-                if ($width <= 0) $width = 1;
-            }
-            if ($height == 0) {
-                if (isset($targetSize['aspectRatio']) && $targetSize['aspectRatio']) {
-                    $height = round($width * $targetSize['aspectRatio']);
-                } else {
-                    $height = round($width * ($size[1]/$size[0]));
-                }
-                if ($height <= 0) $height = 1;
-            }
+
+
+        // Calculate missing dimension
+        $calculateWidth = $originalSize[0];
+        $calculateHeight = $originalSize[1];
+        if ($crop) {
+            $calculateWidth = $crop['width'];
+            $calculateHeight = $crop['height'];
         }
 
-        if ($scale == self::SCALE_CROP) {
-            // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
-
-            if (!$width || !$height) {
-                throw new Kwf_Exception("width and height must be set higher than 0 "
-                    ."if Kwf_Media_Image::SCALE_CROP is used. Maybe "
-                    ."Kwf_Media_Image::SCALE_BESTFIT would be better?");
-            }
-
-            if (($width / $height) >= ($size[0] / $size[1])) {
-                $resizeWidth  = $width;
-                $resizeHeight = 0;
-                $cropFromWidth  = $resizeWidth;
-                $cropFromHeight = $size[1] * ($width / $size[0]);
+        if ($outputWidth == 0) {
+            if (isset($targetSize['aspectRatio'])) {
+                $outputWidth = round($outputHeight * $targetSize['aspectRatio']);
             } else {
-                $resizeWidth  = 0;
-                $resizeHeight = $height;
-                $cropFromWidth  = $size[0] * ($height / $size[1]);
-                $cropFromHeight = $resizeHeight;
+                $outputWidth = round($outputHeight * ($calculateWidth / $calculateHeight));
             }
-
-            if ($cropFromWidth > $width) { // Wenn hochgeladenes Bild breiter als anzuzeigendes Bild ist
-                $x = ($cropFromWidth - $width) / 2; // Ursprungs-X berechnen
+            if ($outputWidth <= 0) $outputWidth = 1;
+        }
+        if ($outputHeight == 0) {
+            if (isset($targetSize['aspectRatio']) && $targetSize['aspectRatio']) {
+                $outputHeight = round($outputWidth * $targetSize['aspectRatio']);
             } else {
-                $x = 0; // Bei 0 mit Beschneiden beginnen
-                $width = $cropFromWidth; // Breite auf Originalgröße begrenzen
+                $outputHeight = round($outputWidth * ($calculateHeight / $calculateWidth));
             }
-            if ($cropFromHeight > $height) {
-                $y = ($cropFromHeight - $height) / 2;
-            } else {
-                $y = 0;
-                $height = $cropFromHeight;
-            }
+            if ($outputHeight <= 0) $outputHeight = 1;
+        }
 
-            return array('width'        => round($width),
-                         'height'       => round($height),
-                         'x'            => round($x),
-                         'y'            => round($y),
-                         'resizeWidth'  => $resizeWidth,
-                         'resizeHeight' => $resizeHeight,
-                         'scale'        => $scale,
-                         'rotate'       => $rotate
-            );
 
-        } elseif ($scale == self::SCALE_BESTFIT) {
-
-            // Bild wird auf größte Maximale Ausdehnung skaliert
-            // Bild wird NICHT vergrößert! (kann also auch kleiner ausgegeben werden als angefordert)
-
-            // $width / $height => target size
-            // $size => original size
-
-            // 3 if abfragen um zu verhindern, dass das bild vergrößert wird
-            if ($size[0] <= $width && $size[1] <= $height) {
-                $width = $size[0];
-                $height = $size[1];
-            } else {
-                if ($size[0] < $width) {
-                    $width = $size[0];
+        if (!$bestfit) { // image will always have defined size
+            if (!$crop) { // crop from complete image
+                $crop = array();
+                // calculate crop depending on target-size
+                if (($outputWidth / $outputHeight) >= ($originalSize[0] / $originalSize[1])) {
+                    $crop['width'] = $originalSize[0];
+                    $crop['height'] = $originalSize[0] * ($outputHeight / $outputWidth);
+                } else {
+                    $crop['height'] = $originalSize[1];
+                    $crop['width'] = $originalSize[1] * ($outputWidth / $outputHeight);
                 }
-                if ($size[1] < $height) {
-                    $height = $size[1];
+                // calculate x and y of crop
+                $xDiff = $originalSize[0] - $crop['width'];
+                $yDiff = $originalSize[1] - $crop['height'];
+                if ($xDiff > 0) {
+                    $crop['x'] = $xDiff / 2;
+                } else {
+                    $crop['x'] = 0;
+                }
+                if ($yDiff > 0) {
+                    $crop['y'] = $yDiff / 2;
+                } else {
+                    $crop['y'] = 0;
                 }
             }
+        } elseif ($bestfit) { // image keeps aspectratio and will not be scaled up
+            // calculateWidth is cropWidth if existing else originalWidth.
+            // prevent image scale up
+            if (!$crop) {
+                $crop = array(
+                    'x' => 0,
+                    'y' => 0,
+                    'width' => $originalSize[0],
+                    'height' => $originalSize[1]
+                );
+            }
 
-            $widthRatio = $width ? $size[0] / $width : null;
-            $heightRatio = $height ? $size[1] / $height : null;
+            if ($calculateWidth <= $outputWidth && $calculateHeight <= $outputHeight) {
+                $outputWidth = $calculateWidth;
+                $outputHeight = $calculateHeight;
+            } else {
+                if ($calculateWidth < $outputWidth) {
+                    $outputWidth = $calculateWidth;
+                }
+                if ($calculateHeight < $outputHeight) {
+                    $outputHeight = $calculateHeight;
+                }
+            }
 
+            $widthRatio = $outputWidth ? $calculateWidth / $outputWidth : null;
+            $heightRatio = $outputHeight ? $calculateHeight / $outputHeight : null;
             if ($widthRatio > $heightRatio) {
-                $width = $size[0] / $widthRatio;
-                $height = $size[1] / $widthRatio;
+                $outputWidth = $calculateWidth / $widthRatio;
+                $outputHeight = $calculateHeight / $widthRatio;
             } else if ($heightRatio > $widthRatio) {
-                $width = $size[0] / $heightRatio;
-                $height = $size[1] / $heightRatio;
+                $outputWidth = $calculateWidth / $heightRatio;
+                $outputHeight = $calculateHeight / $heightRatio;
             }
-
-        } elseif ($scale == self::SCALE_DEFORM) {
-
-            //width und height sind schon korrekt gesetzt
-
-        } elseif ($scale == self::SCALE_ORIGINAL) {
-
-            $width = $size[0];
-            $height = $size[1];
-
-        } else {
-            return false;
         }
-        $width = round($width);
-        $height = round($height);
-        if ($width <= 0) $width = 1;
-        if ($height <= 0) $height = 1;
+
+        $outputWidth = round($outputWidth);
+        if ($outputWidth <= 0) $outputWidth = 1;
+        $outputHeight = round($outputHeight);
+        if ($outputHeight <= 0) $outputHeight = 1;
+
         return array(
-            'width' => $width,
-            'height' => $height,
-            'scale' => $scale,
-            'rotate' => $rotate
+            'width' => round($outputWidth),
+            'height' => round($outputHeight),
+            'bestfit' => $bestfit,
+            'rotate' => $rotate,
+            'crop' => $crop
         );
     }
 
