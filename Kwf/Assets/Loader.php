@@ -214,8 +214,12 @@ class Kwf_Assets_Loader
                 $cache = Kwf_Assets_Cache::getInstance();
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
-                $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
-                    str_replace(array('/', '\\', '.', '-', ':'), '_', $file);
+                $cacheId  = 'fileContents'.$section;
+                if ($ret['mimeType'] == 'text/javascript') {
+                    //cache javascript per language for trl calls and host for eg. Kwf_Assets_GoogleMapsApiKey
+                    $cacheId .= $language.$this->_getHostForCacheId();
+                }
+                $cacheId .= str_replace(array('/', '\\', '.', '-', ':'), '_', $file);
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
                     if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {
