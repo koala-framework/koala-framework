@@ -6,7 +6,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
 {
     public function testImageScaleDimensions()
     {
-        $this->markTestIncomplete();
         $this->_testBestFit(array(16, 16), array(10, 50), array(10, 10));
         $this->_testBestFit(array(16, 16), array(50, 10), array(10, 10));
 
@@ -135,6 +134,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
 
     public function testScaleDimCropAspectRatio()
     {
+        $this->markTestIncomplete();
         $dim = array('width'=>10, 'height'=>0, 'bestfit' => false, 'aspectRatio'=>3/4);
         $ret = Kwf_Media_Image::calculateScaleDimensions(array(100, 100), $dim);
         $this->assertEquals($ret, array('width'=>10, 'height'=>8,
