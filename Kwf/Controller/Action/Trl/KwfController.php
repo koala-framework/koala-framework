@@ -68,7 +68,9 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
         if (Kwf_Component_Data_Root::getComponentClass()) {
             $lngClasses = array();
             foreach(Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'hasLanguage')) {
+                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
+                    in_array('language', Kwc_Abstract::getSetting($c, 'baseProperties'))
+                ) {
                     $lngClasses[] = $c;
                 }
             }
@@ -76,7 +78,7 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
                 ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
             foreach ($lngs as $c) {
                 if (Kwf_Registry::get('acl')->getComponentAcl()->isAllowed($userModel->getAuthedUser(), $c)) {
-                    $langs[] = $c->getComponent()->getLanguage();
+                    $langs[] = $c->getLanguage();
                 }
             }
         }

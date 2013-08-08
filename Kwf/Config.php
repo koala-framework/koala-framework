@@ -34,7 +34,7 @@ class Kwf_Config
 
         $cfg = Kwf_Registry::get('config');
         foreach (explode('.', $var) as $i) {
-            if (!$cfg->$i) {
+            if (!isset($cfg->$i)) {
                 $cfg = null;
                 break;
             }

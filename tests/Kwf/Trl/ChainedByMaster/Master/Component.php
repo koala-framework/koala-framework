@@ -18,7 +18,6 @@ class Kwf_Trl_ChainedByMaster_Master_Component extends Kwc_Abstract
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Basic_None_Component'
         );
-        $ret['flags']['hasLanguage'] = true;
         $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
