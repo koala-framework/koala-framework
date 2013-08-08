@@ -12,12 +12,16 @@ class Kwc_Root_LanguageRoot_Language_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Language');
         $ret['flags']['subroot'] = 'language';
         $ret['flags']['hasHome'] = true;
-        $ret['flags']['hasLanguage'] = true;
+        $ret['flags']['hasBaseProperties'] = true;
+        $ret['baseProperties'] = array('language');
         return $ret;
     }
 
-    public function getLanguage()
+    public function getBaseProperty($propertyName)
     {
-        return $this->getData()->id;
+        if ($propertyName == 'language') {
+            return $this->getData()->id;
+        }
+        return null;
     }
 }

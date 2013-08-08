@@ -30,7 +30,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         $ret['languages'] = array();
         foreach ($languages as $l) {
             if (!$this->_getSetting('showCurrent')) {
-                if ($this->getData()->getLanguageData()->componentId == $l->componentId) {
+                if ($this->getData()->getLanguage() == $l->getLanguage()) {
                     continue;
                 }
             }
@@ -62,7 +62,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
                     'page' => $page ? $page : $home,
                     'flag' => $l->getChildComponent('-flag'),
                     'name' => $l->name,
-                    'current' => $this->getData()->getLanguageData()->componentId == $l->componentId
+                    'current' => $this->getData()->getLanguage() == $l->getLanguage()
                 );
             }
         }

@@ -8,13 +8,17 @@ class Kwc_Root_TrlRoot_Chained_Component extends Kwc_Chained_Start_Component
         $copyFlags = array('subroot');
         $ret = Kwc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Trl', $copySettings, $copyFlags);
         $ret['flags']['hasHome'] = true;
-        $ret['flags']['hasLanguage'] = true;
         $ret['flags']['chainedType'] = 'Trl';
+        $ret['flags']['hasBaseProperties'] = true;
+        $ret['baseProperties'] = array('language');
         return $ret;
     }
 
-    public function getLanguage()
+    public function getBaseProperty($propertyName)
     {
-        return $this->getData()->language;
+        if ($propertyName == 'language') {
+            return $this->getData()->language;
+        }
+        return null;
     }
 }
