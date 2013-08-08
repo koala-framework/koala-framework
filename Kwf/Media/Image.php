@@ -198,12 +198,26 @@ class Kwf_Media_Image
         $outputHeight = round($outputHeight);
         if ($outputHeight <= 0) $outputHeight = 1;
 
-        return array(
+        $ret = array(
             'width' => round($outputWidth),
             'height' => round($outputHeight),
             'rotate' => $rotate,
             'crop' => $crop
         );
+
+        //Set values to match original-parameters when original won't change
+        if ($ret['crop']['x'] == 0
+            && $ret['crop']['y'] == 0
+            && $ret['crop']['width'] == $originalSize[0]
+            && $ret['crop']['height'] == $originalSize[1]
+            && $ret['width'] == $originalSize[0]
+            && $ret['height'] == $originalSize[1]
+        ) {
+            $ret['rotate'] = null;
+            unset($ret['crop']);
+        }
+
+        return $ret;
     }
 
     public static function scale($source, $size)
