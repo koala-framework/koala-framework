@@ -361,7 +361,8 @@ class Kwf_Component_Settings
                             foreach ($g['component'] as $l=>$cc) {
                                 if (!$cc) continue;
                                 $cc = strpos($cc, '.') ? substr($cc, 0, strpos($cc, '.')) : $cc;
-                                if (isset($cc::$needsParentComponentClass) && $cc::$needsParentComponentClass) {
+                                $vars = get_class_vars($cc);
+                                if (isset($vars['needsParentComponentClass']) && $vars['needsParentComponentClass']) {
                                     $g['component'][$l] .= '.'.$class;
                                 }
                             }
@@ -369,7 +370,8 @@ class Kwf_Component_Settings
                             if (!$g['component']) continue;
                             $cc = $g['component'];
                             $cc = strpos($cc, '.') ? substr($cc, 0, strpos($cc, '.')) : $cc;
-                            if (isset($cc::$needsParentComponentClass) && $cc::$needsParentComponentClass) {
+                            $vars = get_class_vars($cc);
+                            if (isset($vars['needsParentComponentClass']) && $vars['needsParentComponentClass']) {
                                 $g['component'] .= '.'.$class;
                             }
                         }
