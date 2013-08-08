@@ -221,6 +221,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         );
     }
 
+    public final function getImageDataOrEmptyImageData()
+    {
+        return $this->_getImageDataOrEmptyImageData();
+    }
+
     private function _getImageDataOrEmptyImageData()
     {
         if (!isset($this->_imageDataOrEmptyImageData)) {

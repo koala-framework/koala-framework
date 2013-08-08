@@ -13,10 +13,6 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
         if (is_string($image)) {
             $url = parent::_getImageUrl($image);
         } else {
-            if (!$image instanceof Kwf_Component_Data ||
-                !is_instance_of($image->componentClass, 'Kwc_Abstract_Image_Component')
-            ) throw new Kwf_Exception("No Kwc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
-
             $url = $image->getComponent()->getImageUrl();
         }
         return $url;
