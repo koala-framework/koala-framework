@@ -18,7 +18,6 @@ class Kwf_Cache_Backend_Yac extends Zend_Cache_Backend
 
     public function load($id, $doNotTestCacheValidity = false)
     {
-        Kwf_Benchmark::count('yac load', $id);
         $id = $this->_processId($id);
         $tmp = $this->_yac->get($id);
         if (is_array($tmp)) {
@@ -29,7 +28,6 @@ class Kwf_Cache_Backend_Yac extends Zend_Cache_Backend
 
     public function loadWithMetadata($id, $doNotTestCacheValidity = false)
     {
-        Kwf_Benchmark::count('yac load', $id);
         $id = $this->_processId($id);
         $tmp = $this->_yac->get($id);
         if (is_array($tmp)) {
