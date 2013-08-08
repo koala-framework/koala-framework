@@ -85,6 +85,9 @@ class Kwf_Util_ClearCache
             $types[] = new Kwf_Util_ClearCache_Types_ApcUser();
             $types[] = new Kwf_Util_ClearCache_Types_ApcOptcode();
         }
+        if (extension_loaded('yac')) {
+            $types[] = new Kwf_Util_ClearCache_Types_Yac();
+        }
         if (extension_loaded('apcu')) {
             $types[] = new Kwf_Util_ClearCache_Types_Apcu();
         }
