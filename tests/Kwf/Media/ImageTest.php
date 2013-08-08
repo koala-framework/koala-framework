@@ -162,13 +162,13 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
      *    -> bigger
      *      -> wider: scale down, adjust width to given size
      *      -> higher: scale down, adjust higher to given size
-     *      -> matches: scale down
+     *      -> matches aspectratio: scale down
      *    -> smaller: no changes
      *  -> crop
      *    -> bigger:
      *      -> wider: scale down, adjust width to given size
      *      -> higher: scale down, adjust height to given size
-     *      -> matches: scale down
+     *      -> matches aspectratio: scale down
      *    -> smaller: no changes
      *
      * width/height
@@ -185,7 +185,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = $this->_testBestFit(array('width' => 500, 'height' => 500), array(300, 200), array(200, 200));
         //test: width + height, no-crop, bigger, higher: adjust to given size
         $ret = $this->_testBestFit(array('width' => 500, 'height' => 500), array(200, 300), array(200, 200));
-        //test: width + height, no-crop, bigger, matches: scale down
+        //test: width + height, no-crop, bigger, matches aspectratio: scale down
         $ret = $this->_testBestFit(array('width' => 500, 'height' => 500), array(200, 200), array(200, 200));
         //test: width + height, no-crop, smaller: no changes
         $ret = $this->_testBestFit(array('width' => 300, 'height' => 300), array(500, 500), array(300, 300));
@@ -198,7 +198,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = $this->_testBestFitWithCrop(array('width' => 500, 'height' => 500),
                         array(200, 200, 0, 0, 200, 400),
                         array(100, 200, 0, 0, 200, 400));
-        //test: width + height, crop, bigger, matches: scale down
+        //test: width + height, crop, bigger, matches aspectratio: scale down
         $ret = $this->_testBestFitWithCrop(array('width' => 500, 'height' => 500),
                         // width, height, cropX, cropY, cropWidth, cropHeight
                         array(100, 200, 0, 0, 200, 400),
@@ -259,7 +259,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
             'height' => 100,
             'rotate' => null
        ));
-        //test: every parameter set but output still normal
+        //test: every parameter set but output still original
         $imageSize = array('width' => 100, 'height' => 100);
         $dimension = array('width' => 0, 'height' => 0, 'bestfit' => true,
             'crop' => array(
@@ -284,15 +284,15 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
      *    -> bigger
      *      -> wider: scales down, crops left and right
      *      -> higher: scales down, crops top and bottom
-     *      -> matches: scales down
+     *      -> matches aspectratio: scales down
      *    -> smaller
      *      -> wider: scales up and crops left and right
      *      -> higher: scales up and crops top and bottom
-     *      -> matches: scale up
+     *      -> matches aspectratio: scale up
      *  -> crop
      *    -> bigger: scales down
      *    -> smaller: scales up
-     *    -> matches: no changes
+     *    -> matches aspectratio: no changes
      *
      * width/height
      *  -> no-crop
@@ -304,7 +304,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
      */
     public function testBestFitFalse()
     {
-        //test: width + height, no-crop, bigger, matches: scale down
+        //test: width + height, no-crop, bigger, matches aspectratio: scale down
         $imageSize = array('width' => 200, 'height' => 200);
         $dimension = array('width' => 100, 'height' => 100, 'bestfit' => false);
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
@@ -349,7 +349,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
                 'height' => 200
             )
         ));
-        //test: width + height, no-crop, smaller, matches: scale up
+        //test: width + height, no-crop, smaller, matches aspectratio: scale up
         $imageSize = array('width' => 50, 'height' => 50);
         $dimension = array('width' => 100, 'height' => 100, 'bestfit' => false);
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
@@ -437,7 +437,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
                 'height' => 100
             )
         ));
-        //test width + height, crop, matches: nothing
+        //test width + height, crop, matches aspectratio: nothing
         $imageSize = array('width' => 200, 'height' => 200);
         $dimension = array('width' => 100, 'height' => 100, 'bestfit' => false,
             'crop' => array(
