@@ -232,97 +232,60 @@ class Kwf_Media_Image
         $size = self::calculateScaleDimensions($source, $size);
         if ($size === false) return false;
 
-        // wenn bild schon der angeforderten größe entspricht, original ausgeben
-        // nötig für zB animierte gifs, da sonst die animation verloren geht
-        if (($size['scale'] == self::SCALE_CROP || $size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM)) {
-            if ($source instanceof Imagick) {
-                $originalSize = array($source->getImageWidth(), $source->getImageHeight());
-            } else {
-                $originalSize = getimagesize($source);
-            }
-            if ($originalSize[0] == $size['width'] && $originalSize[1] == $size['height']) {
-                $size['scale'] = self::SCALE_ORIGINAL;
-            }
-        }
-
-        if ($size['scale'] == self::SCALE_CROP) {
-
-            // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
-            if (class_exists('Imagick')) {
-                if ($source instanceof Imagick) {
-                    $im = $source;
-                } else {
-                    $im = new Imagick();
-                    $im->readImage($source);
-                }
-                $im = self::_processCommonImagickSettings($im);
-                if (isset($size['rotate']) && $size['rotate']) {
-                    $im->rotateImage('#FFF', $size['rotate']);
-                }
-                $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
-                $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
-                $im->setImagePage(0, 0, 0, 0);
-    //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
-                $ret = $im->getImageBlob();
-                $im->destroy();
-            }
-
-        } elseif ($size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM) {
-
-            if (class_exists('Imagick')) {
-                if ($source instanceof Imagick) {
-                    $im = $source;
-                } else {
-                    $im = new Imagick();
-                    $im->readImage($source);
-                }
-                $im = self::_processCommonImagickSettings($im);
-                if (isset($size['rotate']) && $size['rotate']) {
-                    $im->rotateImage('#FFF', $size['rotate']);
-                }
-                $im->thumbnailImage($size['width'], $size['height']);
-                $ret = $im->getImageBlob();
-                $im->destroy();
-            } else {
-                $srcSize = getimagesize($source);
-                if ($srcSize[2] == 1) {
-                    $source = imagecreatefromgif($source);
-                } elseif ($srcSize[2] == 2) {
-                    $source = imagecreatefromjpeg($source);
-                } elseif ($srcSize[2] == 3) {
-                    $source = imagecreatefrompng($source);
-                }
-                if (isset($size['rotate']) && $size['rotate']) {
-                    $source = imagerotate($source, $size['rotate'], 0);
-                }
-                $destination = imagecreatetruecolor($size['width'], $size['height']);
-                imagecopyresampled($destination, $source, 0, 0, 0, 0,
-                                    $size['width'], $size['height'],
-                                    $srcSize[0], $srcSize[1]);
-                ob_start();
-                if ($srcSize[2] == 1) {
-                    $source = imagegif($destination);
-                } elseif ($srcSize[2] == 2) {
-                    $source = imagejpeg($destination);
-                } elseif ($srcSize[2] == 3) {
-                    $source = imagepng($destination);
-                }
-                $ret = ob_get_contents();
-                ob_end_clean();
-            }
-
-        } elseif ($size['scale'] == self::SCALE_ORIGINAL) {
-
+        // if image already has the correct size return original
+        // needed e.g. for animated gifs because they will lose animation if changed
+        if (!isset($size['crop'])) {
             if ($source instanceof Imagick) {
                 $ret = $source->getImageBlob();
             } else {
                 $ret = file_get_contents($source);
             }
+            return $ret;
+        }
 
+        if (class_exists('Imagick')) {
+            if ($source instanceof Imagick) {
+                $im = $source;
+            } else {
+                $im = new Imagick();
+                $im->readImage($source);
+            }
+            $im = self::_processCommonImagickSettings($im);
+            if (isset($size['rotate']) && $size['rotate']) {
+                $im->rotateImage('#FFF', $size['rotate']);
+            }
+            $im->cropImage($size['crop']['width'], $size['crop']['height'], $size['crop']['x'], $size['crop']['y']);
+            $im->resizeImage($size['width'], $size['height'], Imagick::FILTER_LANCZOS, 1);
+            $im->setImagePage(0, 0, 0, 0);
+//             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
+            $ret = $im->getImageBlob();
+            $im->destroy();
         } else {
-
-            return false;
-
+            $srcSize = getimagesize($source);
+            if ($srcSize[2] == 1) {
+                $source = imagecreatefromgif($source);
+            } elseif ($srcSize[2] == 2) {
+                $source = imagecreatefromjpeg($source);
+            } elseif ($srcSize[2] == 3) {
+                $source = imagecreatefrompng($source);
+            }
+            if (isset($size['rotate']) && $size['rotate']) {
+                $source = imagerotate($source, $size['rotate'], 0);
+            }
+            $destination = imagecreatetruecolor($size['width'], $size['height']);
+            imagecopyresampled($destination, $source, 0, 0, $size['crop']['x'], $size['crop']['y'],
+                                $size['width'], $size['height'],
+                                $size['crop']['width'], $size['crop']['width']);
+            ob_start();
+            if ($srcSize[2] == 1) {
+                $source = imagegif($destination);
+            } elseif ($srcSize[2] == 2) {
+                $source = imagejpeg($destination);
+            } elseif ($srcSize[2] == 3) {
+                $source = imagepng($destination);
+            }
+            $ret = ob_get_contents();
+            ob_end_clean();
         }
         return $ret;
     }
