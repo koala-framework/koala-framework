@@ -28,16 +28,6 @@
 <es_CL>Error</es_CL>
 </text>
 <text>
-<en>An Error ocurred. Please try again later.</en>
-<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.</de>
-<id>8</id>
-<uk>Сталася помилка. Будь ласка, спробуйте пізніше.</uk>
-<ro>A intervenit o eroare. Vă rugăm să încercaţi din nou mai târziu.</ro>
-<mk>Се појави грешка. Ве молиме пробајте подоцна.</mk>
-<sl>Prišlo je do napake. Poskusite ponovno kasneje.</sl>
-<ru>Произошла ошибка. Пожалуйста, повторите снова чуть позже.</ru>
-</text>
-<text>
 <en>Page not found</en>
 <de>Seite wurde nicht gefunden.</de>
 <id>9</id>
@@ -2406,13 +2396,6 @@
 <sl>Ta uporabnik žal ne obstaja.</sl>
 </text>
 <text>
-<en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
-<de>Bitte bleibt in den Beiträgen bei einem freundlichen Umgangston. Jeder Verfasser haftet für sämtliche von ihm veröffentlichte Beiträge selbst. Beleidigende oder verletzende Beiträge werden von uns ohne Kommentar gelöscht.</de>
-<id>468</id>
-<ro>Vă rugăm să formulaţi comentariile într-un ton politicos. Fiecare autor răspunde de conţinutul tuturor comentariilor sale. Comentariile ofensatoare vor fi şterse fără niciun comentariu. </ro>
-<sl>Vaši prispevki naj bodo spoštljivi. Vsak uporabnik sam jamči za vse prispevke, ki jih je objavil. Prispevke, ki bodo vsebovali nespoštljive in žaljive izjave, bomo brez opozorila odstranili.</sl>
-</text>
-<text>
 <en>Upload</en>
 <de>Hochladen</de>
 <id>476</id>
@@ -2708,13 +2691,6 @@
 <id>535</id>
 <ro>Link text imagine</ro>
 <sl>Povezava na besedilo in sliko</sl>
-</text>
-<text>
-<en>Links Images</en>
-<de>Bilder Links</de>
-<id>536</id>
-<ro>Imagini stânga</ro>
-<sl>Povezave na slike</sl>
 </text>
 <text>
 <en>Months</en>
@@ -3166,13 +3142,6 @@
 <id>667</id>
 <ro>Sunteţi sigur că doriţi să ştergeţi această postare?</ro>
 <sl>Ali ste prepričani, da želite izbrisati vnos?</sl>
-</text>
-<text>
-<en>&lt;strong&gt;Create Post: &lt;/strong&gt;&lt;br /&gt;Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
-<de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
-<id>668</id>
-<ro>&lt;strong&gt;Creează mesaj: &lt;/strong&gt;&lt;br /&gt;Vă rugăm să introduceţi textul dorit. HTML nu este permis şi va fi filtrat. Link-urile de forma http://... sau www.... vor fi recunoscute automat şi va fi creată legătura automat.</ro>
-<sl>&lt;strong&gt;Napišite sporočilo: &lt;/strong&gt;&lt;br /&gt;Vnesite želeno besedilo. HTML ni dovoljen in bo filtriran. Sistem avtomatsko zazna povezave v obliki http://... ali www.... in vzpostavi povezavo do njih.</sl>
 </text>
 <text>
 <en>Last Posts</en>
@@ -4453,13 +4422,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>912</id>
 <ro>Domeniu</ro>
 <sl>Domena</sl>
-</text>
-<text>
-<en>Show Component</en>
-<de>Komponente anzeigen</de>
-<id>913</id>
-<ro>Afişează component</ro>
-<sl>Prikaži komponento</sl>
 </text>
 <text>
 <en>Size of Target Image</en>
@@ -5752,22 +5714,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Neznan status.</sl>
 </text>
 <text>
-<en>Stop</en>
-<id>1158</id>
-<de>Stopp</de>
-<ro>Stop</ro>
-</text>
-<text>
 <en>Pause</en>
 <id>1159</id>
 <de>Pause</de>
 <ro>Pauză</ro>
-</text>
-<text>
-<en>Start</en>
-<id>1160</id>
-<de>Start</de>
-<ro>Start</ro>
 </text>
 <text>
 <en>Delete All</en>
@@ -5791,13 +5741,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1163</id>
 <ro>Doriţi într-adevăr să ştergeţi toţi destinatarii aflaţi în aşteptare?</ro>
 <sl>Ali ste prepričani, da želite izbrisati vse prejemnike v čakalni vrsti?</sl>
-</text>
-<text>
-<en>If you press yes, the mailing will be stopped an can\'t be restarted again.</en>
-<de>Wenn Sie "Ja" wählen, wird das Versenden gestoppt und kann nicht mehr gestartet werden.</de>
-<id>1164</id>
-<ro>Dacă selectaţi "da", expedierea va fi întreruptă şi nu mai poate fi repornită.</ro>
-<sl>Če boste kliknili "Da", se bo pošiljanje prekinilo in ga ne boste mogli ponovno aktivirati.</sl>
 </text>
 <text>
 <en>Mail</en>
@@ -6030,27 +5973,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Mesaj</ro>
 <sl>Sporočilo</sl>
 <es_CL>Mensaje</es_CL>
-</text>
-<text>
-<en>Mr. {0}</en>
-<de>Herr {0}</de>
-<id>1210</id>
-<ro>Domnule {0}</ro>
-<sl>Gospod {0}</sl>
-</text>
-<text>
-<en>Mrs. {0}</en>
-<de>Frau {0}</de>
-<id>1211</id>
-<ro>Doamnă {0}</ro>
-<sl>Gospa {0}</sl>
-</text>
-<text>
-<en>Mrs.</en>
-<de>Frau</de>
-<id>1212</id>
-<ro>Dnă</ro>
-<sl>Gospa</sl>
 </text>
 <text>
 <en>Your message to {0}</en>
@@ -7538,26 +7460,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Omogoči celozaslonsko sliko</sl>
 </text>
 <text>
-<en>Start Newsletter sending</en>
-<id>1469</id>
-<de>Newsletter versenden starten</de>
-<ro>Start trimitere Newsletter</ro>
-<sl>Pošiljanje novice</sl>
-</text>
-<text>
-<en>The newsletter will be sent in the background. You can leave this page or close the browser window. Start sending?</en>
-<id>1470</id>
-<de>Der Newsletter wird im Hintergrund versendet. Sie können diese Seite verlassen oder das Browserfenster schließen. Versenden starten?</de>
-<ro>Newsletter-ul se va timite în background. Puteţi să părăsiţi această pagină sau să închideţi browser-ul. Iniţiază trimiterea?</ro>
-</text>
-<text>
-<en>Sending</en>
-<de>Senden</de>
-<id>1471</id>
-<ro>Se trimite</ro>
-<sl>Pošlji</sl>
-</text>
-<text>
 <en>Search: </en>
 <de>Suche: </de>
 <id>1472</id>
@@ -7768,13 +7670,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1529</id>
 <de>Rechte Spalte</de>
 <ro>Coloană dreapta</ro>
-</text>
-<text>
-<en>Dear Sir or Madam</en>
-<de>Sehr geehrte Damen und Herren</de>
-<id>1549</id>
-<ro>Stimate doamne, stimaţi domni</ro>
-<sl>Spoštovani!</sl>
 </text>
 <text>
 <en>Copy of</en>
@@ -8404,13 +8299,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es_CL>.</es_CL>
 </text>
 <text>
-<en>old</en>
-<de>alt</de>
-<id>1701</id>
-<ro>vechi</ro>
-<sl>Staro</sl>
-</text>
-<text>
 <en>Back to overview</en>
 <de>Zurück zur Übersicht</de>
 <id>1702</id>
@@ -8905,27 +8793,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1537</id>
 </text>
 <text>
-<en>Dear {0}</en>
-<context>salutation firstname male</context>
-<de>Lieber {0}</de>
-<id>1604</id>
-<sl>Dragi {0}</sl>
-</text>
-<text>
-<en>Dear {0}</en>
-<context>salutation firstname female</context>
-<de>Liebe {0}</de>
-<id>1785</id>
-<sl>Dragi {0}</sl>
-</text>
-<text>
-<en>Dear {0}</en>
-<context>salutation firstname unknown gender</context>
-<de>Hallo {0}</de>
-<id>1786</id>
-<sl>Pozdravljeni, {0} </sl>
-</text>
-<text>
 <en>en_US</en>
 <de>de_DE</de>
 <context>facebook js-sdk locale</context>
@@ -8974,11 +8841,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>{0} recipients removed, total {1} recipients.</en>
 <de>{0} Empfänger entfernt, insgesamt {1} Empfänger.</de>
 <id>1797</id>
-</text>
-<text>
-<en>Can only remove users from a paused newsletter</en>
-<de>Empfänger können nur von einem pausierten Newsletter entfernt werden</de>
-<id>1798</id>
 </text>
 <text>
 <en>WARNING: untagged</en>
@@ -9042,11 +8904,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Authors</en>
 <de>Autoren</de>
 <id>1811</id>
-</text>
-<text>
-<en>New tags</en>
-<de>Neue Tags</de>
-<id>1812</id>
 </text>
 <text>
 <en>Articles</en>
@@ -9137,11 +8994,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>Bitte tragen Sie in beide Felder das Passwort ein, das Sie für Ihren Zugang verwenden wollen</de>
 <id>1838</id>
-</text>
-<text>
-<en>Do you have any questions, wishes or suggestions about this product?<br/>Send us your feedback!</en>
-<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?<br/>Senden Sie uns dazu Ihr Feedback!</de>
-<id>1833</id>
 </text>
 <text>
 <en>Account activation</en>
@@ -9267,14 +9119,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1902</id>
 </text>
 <text>
-<en>Articles.Show categories</en>
-<id>1903</id>
-</text>
-<text>
-<en>Articles.Articles</en>
-<id>1854</id>
-</text>
-<text>
 <en>Large Image</en>
 <id>1907</id>
 </text>
@@ -9375,11 +9219,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Thank you for your inquiry, it will be processed as soon as posible.</en>
 <de>Danke für Ihre Anfrage. Wir werden uns bemühen, diese so schnell wie möglich zu bearbeiten.</de>
 <id>1869</id>
-</text>
-<text>
-<en>Rebuild</en>
-<en>Neuaufbau</en>
-<id>1928</id>
 </text>
 <text>
 <en>Setup</en>
@@ -9577,11 +9416,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1971</id>
 </text>
 <text>
-<en>E-Mail (will not be published)</en>
-<de>E-Mail (wird nicht veröffentlicht)</de>
-<id>1972</id>
-</text>
-<text>
 <en>Blog.Blog</en>
 <id>1973</id>
 </text>
@@ -9590,4 +9424,139 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Hinterlassen Sie eine Antwork</de>
 <id>1974</id>
 </text>
+<text>
+<en>Rebuild</en>
+<id>1975</id>
+</text>
+<text>
+<en>Preview Modus</en>
+<id>1976</id>
+</text>
+<text>
+<en>Desktop</en>
+<id>1977</id>
+</text>
+<text>
+<en>Notebook</en>
+<id>1978</id>
+</text>
+<text>
+<en>Tablet Portrait</en>
+<id>1979</id>
+</text>
+<text>
+<en>Tablet Landscape</en>
+<id>1980</id>
+</text>
+<text>
+<en>Smartphone Portrait</en>
+<id>1981</id>
+</text>
+<text>
+<en>Smartphone Landscape</en>
+<id>1982</id>
+</text>
+<text>
+<en>Allow the use of cookies</en>
+<id>1983</id>
+<de>Erlaube die Verwendung von Cookies</de>
+</text>
+<text>
+<en>Do not allow the use of cookies</en>
+<id>1984</id>
+<de>Erlaube die Verwendung von Cookies nicht</de>
+</text>
+<text>
+<en>Header Title</en>
+<id>1985</id>
+</text>
+<text>
+<en>Continue reading</en>
+<id>1986</id>
+</text>
+<text>
+<en>said</en>
+<id>1987</id>
+</text>
+<text>
+<en>BlackMarlock</en>
+<id>1988</id>
+</text>
+<text>
+<en>Hintergrundbild</en>
+<id>1989</id>
+</text>
+<text>
+<en>Logo</en>
+<id>1990</id>
+</text>
+<text>
+<en>Please select recipients.</en>
+<id>1991</id>
+</text>
+<text>
+<en>Create Post</en>
+<id>1992</id>
+</text>
+<text>
+<en>Number</en>
+<id>1993</id>
+</text>
+<text>
+<en>no user id</en>
+<id>1994</id>
+</text>
+<text>
+<en>Original headline</en>
+<id>1995</id>
+</text>
+<text>
+<en>Your email address will not be published.</en>
+<id>1996</id>
+</text>
+<text>
+<en>Post Comment</en>
+<id>1997</id>
+</text>
+<text>
+<en>Blog</en>
+<id>1998</id>
+</text>
+<text>
+<en>Posted on {0}</en>
+<id>1999</id>
+</text>
+<text>
+<en>by {0}</en>
+<id>2000</id>
+</text>
+<text>
+<en>This entry was posted in</en>
+<id>2001</id>
+</text>
+<text>
+<en>This website uses cookies to help us give you the best experience when you visit our website.</en>
+<id>2002</id>
+<de>Wir verwenden Cookies, um diese Webseite zu betrieben und ihre Benutzerfreundlichkeit zu verbessern.</de>
+</text>
+<text>
+<en>More information about the use of cookies</en>
+<id>2003</id>
+<de>Mehr über die Verwendung von Cookies</de>
+</text>
+<text>
+<en>Accept and continue</en>
+<id>2004</id>
+<de>Akzeptieren und Fortfahren</de>
+</text>
+<text>
+<en>Cookie Setting</en>
+<id>2005</id>
+<de>Cookie Einstellung</de>
+</text>
+<text>
+<en>Cookie Opt In / Opt Out</en>
+<id>2006</id>
+</text>
 </trl>
+
