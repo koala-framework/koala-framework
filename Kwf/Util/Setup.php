@@ -93,10 +93,12 @@ class Kwf_Util_Setup
         $ret .= "\n";
         $ret .= "\$requestUri = isset(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : null;\n";
         if (Kwf_Setup::getBaseUrl()) {
-            $ret .= "if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
-            $ret .= "    throw new Exception('Invalid baseUrl');\n";
+            $ret .= "if (\$requestUri !== null) {\n";
+            $ret .= "    if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
+            $ret .= "        throw new Exception('Invalid baseUrl');\n";
+            $ret .= "    }\n";
+            $ret .= "    \$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
             $ret .= "}\n";
-            $ret .= "\$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
         }
         $ret .= "\n";
         $ret .= "//here to be as fast as possible (and have no session)\n";

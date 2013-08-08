@@ -79,9 +79,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         $cfg .= "database.web.host = ".$this->_getParam('db_host')."\n";
         $cfg .= "\n";
         $cfg .= "server.domain = ".$this->getRequest()->getHttpHost()."\n";
-        if ($this->getRequest()->getBaseUrl()) {
-            $cfg .= "server.baseUrl = ".$this->getRequest()->getBaseUrl()."\n";
-        }
+        $cfg .= "server.baseUrl = \"".$this->getRequest()->getBaseUrl()."\"\n";
         $cfg .= "\n";
         $cfg .= "debug.error.log = ".(!$this->_getParam('display_errors') ? 'true' : 'false')."\n";
         file_put_contents('config.local.ini', $cfg);
