@@ -22,10 +22,6 @@ class Kwf_Cache_Backend_Yac extends Zend_Cache_Backend
         $id = $this->_processId($id);
         $tmp = $this->_yac->get($id);
         if (is_array($tmp)) {
-            //lifetime
-            if ($tmp[2] && time() > $tmp[1]+$tmp[2]) {
-                return false;
-            }
             return $tmp[0];
         }
         return false;
@@ -49,7 +45,7 @@ class Kwf_Cache_Backend_Yac extends Zend_Cache_Backend
     {
         $id = $this->_processId($id);
         $lifetime = $this->getLifetime($specificLifetime);
-        return $this->_yac->set($id, array($data, time(), $lifetime));
+        return $this->_yac->set($id, array($data, time(), $lifetime), $lifetime);
     }
 
     public function remove($id)
