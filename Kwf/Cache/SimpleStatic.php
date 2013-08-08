@@ -64,7 +64,7 @@ class Kwf_Cache_SimpleStatic
         } else if (extension_loaded('yac')) {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             $id = $prefix.$cacheId;
-            if (strlen($id) > 48) {
+            if (strlen($id) > Yac::YAC_MAX_KEY_LEN) {
                 $id = md5($id);
             }
             $yac = new Yac();
@@ -102,7 +102,7 @@ class Kwf_Cache_SimpleStatic
         } else if (extension_loaded('yac')) {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             $id = $prefix.$cacheId;
-            if (strlen($id) > 48) {
+            if (strlen($id) > Yac::YAC_MAX_KEY_LEN) {
                 $id = md5($id);
             }
             $yac = new Yac();
@@ -184,7 +184,7 @@ class Kwf_Cache_SimpleStatic
             if (is_string($cache)) {
                 if ($cache == 'yac') {
                     $id = $prefix.$cacheId;
-                    if (strlen($id) > 48) {
+                    if (strlen($id) > Yac::YAC_MAX_KEY_LEN) {
                         $id = md5($id);
                     }
                     $yac = new Yac();

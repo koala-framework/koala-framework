@@ -75,7 +75,7 @@ class Kwf_Cache_Backend_Yac extends Zend_Cache_Backend
         static $cacheIdPrefix;
         if (!isset($cacheIdPrefix)) $cacheIdPrefix = Kwf_Cache::getUniquePrefix();
         $id = $cacheIdPrefix.$this->_options['cache_id_prefix'].$id;
-        if (strlen($id) > 48) {
+        if (strlen($id) > Yac::YAC_MAX_KEY_LEN) {
             $id = md5($id);
         }
         return $id;
