@@ -16,7 +16,11 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
                 var params = this.getStore().baseParams;
                 params.ids = ids.join(',');
             } else {
-                var params = this.getStore().lastOptions.params;
+                if (this.getStore().lastOptions) {
+                    var params = this.getStore().lastOptions.params;
+                } else {
+                    var params = this.getStore().baseParams;
+                }
             }
             Ext.Ajax.request({
                 url : this.controllerUrl + '/json-save-recipients',
@@ -55,7 +59,11 @@ Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext.extend(Ext.Action, {
                 var params = this.getStore().baseParams;
                 params.ids = ids.join(',');
             } else {
-                var params = this.getStore().lastOptions.params;
+                if (this.getStore().lastOptions) {
+                    var params = this.getStore().lastOptions.params;
+                } else {
+                    var params = this.getStore().baseParams;
+                }
             }
             Ext.Ajax.request({
                 url : this.controllerUrl + '/json-remove-recipients',
