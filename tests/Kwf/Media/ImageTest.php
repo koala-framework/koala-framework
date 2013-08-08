@@ -68,7 +68,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => $expectedSize[0],
             'height' => $expectedSize[1],
-            'bestfit' => true,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -95,7 +94,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => $expectedSize[0],
             'height' => $expectedSize[1],
-            'bestfit' => true,
             'rotate' => null,
             'crop' => array(
                 'x' => $expectedSize[2],
@@ -109,17 +107,16 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
 
     public function testImageScale()
     {
-        $this->markTestIncomplete();
-        $this->_testScale(array(10, 10, false));
-        $this->_testScale(array(10, 16, false));
-        $this->_testScale(array(16, 10, false));
+        $this->_testScale(array(10, 10, 'bestfit' => false));
+        $this->_testScale(array(10, 16, 'bestfit' => false));
+        $this->_testScale(array(16, 10, 'bestfit' => false));
 
         $this->_testScale(array(10, 10, true));
-        $this->_testScale(array(16, 10, true), array(10, 10));
-        $this->_testScale(array(10, 16, true), array(10, 10));
+        $this->_testScale(array(16, 10, 'bestfit' => true), array(10, 10));
+        $this->_testScale(array(10, 16, 'bestfit' => true), array(10, 10));
 
-        $this->_testScale(array(0, 0, true), array(16, 16));
-        $this->_testScale(array(0, 0, false), array(16, 16));
+        $this->_testScale(array(0, 0, 'bestfit' => true), array(16, 16));
+        $this->_testScale(array(0, 0, 'bestfit' => false), array(16, 16));
     }
 
     private function _testScale($size, $expectedSize = null)
@@ -134,11 +131,9 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
 
     public function testScaleDimCropAspectRatio()
     {
-        $this->markTestIncomplete();
         $dim = array('width'=>10, 'height'=>0, 'bestfit' => false, 'aspectRatio'=>3/4);
         $ret = Kwf_Media_Image::calculateScaleDimensions(array(100, 100), $dim);
         $this->assertEquals($ret, array('width'=>10, 'height'=>8,
-            'bestfit' => false,
             'rotate'=>null,
             'crop' => array(
                 'x' => 0,
@@ -147,13 +142,12 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
                 'height' => 80
             )
         ));
-        $dim = array('width'=>00, 'height'=>10, 'bestfit' => false, 'aspectRatio'=>3/4);
+        $dim = array('width'=>0, 'height'=>10, 'bestfit' => false, 'aspectRatio'=>3/4);
         $ret = Kwf_Media_Image::calculateScaleDimensions(array(100, 100), $dim);
         $this->assertEquals($ret, array('width'=>8, 'height'=>10,
-            'bestfit' => false,
             'rotate'=>null,
             'crop' => array(
-                'x' => 0,
+                'x' => 10,
                 'y' => 0,
                 'width' => 80,
                 'height' => 100
@@ -254,7 +248,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => true,
             'rotate' => null
        ));
         //test: standard parameter set and output normal, bestfit = false
@@ -264,7 +257,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => true,
             'rotate' => null
        ));
         //test: every parameter set but output still normal
@@ -281,7 +273,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => true,
             'rotate' => null
        ));
     }
@@ -320,7 +311,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -336,7 +326,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 50,
@@ -352,7 +341,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -368,7 +356,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -384,7 +371,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 25,
@@ -400,7 +386,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -422,7 +407,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 100, 'height' => 100, 'bestfit' => false,
+            'width' => 100, 'height' => 100,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -443,7 +428,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 50, 'height' => 50, 'bestfit' => false,
+            'width' => 50, 'height' => 50,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -464,7 +449,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 100, 'height' => 100, 'bestfit' => false,
+            'width' => 100, 'height' => 100,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -481,7 +466,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -497,7 +481,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -513,7 +496,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -529,7 +511,6 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'bestfit' => false,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -551,7 +532,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 50, 'height' => 25, 'bestfit' => false,
+            'width' => 50, 'height' => 25,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -572,7 +553,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 25, 'height' => 50, 'bestfit' => false,
+            'width' => 25, 'height' => 50,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -594,7 +575,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 100, 'height' => 200, 'bestfit' => false,
+            'width' => 100, 'height' => 200,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
@@ -615,7 +596,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 200, 'height' => 100, 'bestfit' => false,
+            'width' => 200, 'height' => 100,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,

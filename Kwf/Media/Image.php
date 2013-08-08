@@ -8,7 +8,7 @@ class Kwf_Media_Image
 
     public static function getHandyScaleFactor($originalPath)
     {
-        $targetSize = array(600, 600, Kwf_Media_Image::SCALE_BESTFIT);
+        $targetSize = array(600, 600, 'bestfit' => true);
         $original = @getimagesize($originalPath);
         $original['width'] = $original[0];
         $original['height'] = $original[1];
@@ -102,7 +102,6 @@ class Kwf_Media_Image
             return array(
                 'width' => $originalSize[0],
                 'height' => $originalSize[1],
-                'bestfit' => true,
                 'rotate' => null
            );
         }
@@ -183,7 +182,6 @@ class Kwf_Media_Image
                     $outputHeight = $calculateHeight;
                 }
             }
-
             $widthRatio = $outputWidth ? $calculateWidth / $outputWidth : null;
             $heightRatio = $outputHeight ? $calculateHeight / $outputHeight : null;
             if ($widthRatio > $heightRatio) {
@@ -203,7 +201,6 @@ class Kwf_Media_Image
         return array(
             'width' => round($outputWidth),
             'height' => round($outputHeight),
-            'bestfit' => $bestfit,
             'rotate' => $rotate,
             'crop' => $crop
         );
