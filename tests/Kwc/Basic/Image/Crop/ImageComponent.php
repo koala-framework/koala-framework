@@ -12,7 +12,6 @@ class Kwc_Basic_Image_Crop_ImageComponent extends Kwc_Basic_Image_Component
                 'scale' => Kwf_Media_Image::SCALE_BESTFIT
             )
         );
-        $ret['viewCache'] = false;
         return $ret;
     }
 }
