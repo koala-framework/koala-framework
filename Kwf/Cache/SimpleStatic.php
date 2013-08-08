@@ -25,27 +25,21 @@ class Kwf_Cache_SimpleStatic
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true
             ));
-            if (extension_loaded('yac')) {
-                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Yac());
-            } else if (extension_loaded('apcu')) {
-                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Apcu());
+            /*
+            //don't use memcache, as that needs to access config
+            //if one needs that it could be implemented (but if you have memcache you should have apc anyway)
+            if (extension_loaded('memcache')) {
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
             } else {
-                /*
-                //don't use memcache, as that needs to access config
-                //if one needs that it could be implemented (but if you have memcache you should have apc anyway)
-                if (extension_loaded('memcache')) {
-                    self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
-                } else {
-                */
-                //fallback to file backend (NOT recommended!)
-                try {
-                    self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
-                        'cache_dir' => 'cache/simple'
-                    )));
-                } catch (Exception $e) {
-                    self::$_zendCache->setBackend(new Zend_Cache_Backend_BlackHole());
-                    throw $e;
-                }
+            */
+            //fallback to file backend (NOT recommended!)
+            try {
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
+                    'cache_dir' => 'cache/simple'
+                )));
+            } catch (Exception $e) {
+                self::$_zendCache->setBackend(new Zend_Cache_Backend_BlackHole());
+                throw $e;
             }
         }
         return self::$_zendCache;
@@ -61,7 +55,13 @@ class Kwf_Cache_SimpleStatic
     public static function fetch($cacheId, &$success = true)
     {
         static $prefix;
-        if (extension_loaded('yac')) {
+        if (false && extension_loaded('apcu')) {
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            return apcu_fetch($prefix.$cacheId, $success);
+        } else if (extension_loaded('apc')) {
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            return apc_fetch($prefix.$cacheId, $success);
+        } else if (extension_loaded('yac')) {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             $id = $prefix.$cacheId;
             if (strlen($id) > 48) {
@@ -78,9 +78,6 @@ class Kwf_Cache_SimpleStatic
                 $ret = false;
             }
             return $ret;
-        } else if (extension_loaded('apc')) {
-            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
-            return apc_fetch($prefix.$cacheId, $success);
         } else {
             $ret = self::_getZendCache()->load(self::_processId($cacheId));
             $success = $ret !== false;
@@ -96,7 +93,13 @@ class Kwf_Cache_SimpleStatic
             $data = 'kwfFalse';
         }
         static $prefix;
-        if (extension_loaded('yac')) {
+        if (false && extension_loaded('apcu')) {
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            return apc_add($prefix.$cacheId, $data, $ttl);
+        } else if (extension_loaded('apc')) {
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            return apc_add($prefix.$cacheId, $data, $ttl);
+        } else if (extension_loaded('yac')) {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             $id = $prefix.$cacheId;
             if (strlen($id) > 48) {
@@ -104,9 +107,6 @@ class Kwf_Cache_SimpleStatic
             }
             $yac = new Yac();
             return $yac->set($id, $data, $ttl);
-        } else if (extension_loaded('apc')) {
-            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
-            return apc_add($prefix.$cacheId, $data, $ttl);
         } else {
             return self::_getZendCache()->save($data, self::_processId($cacheId), array(), $ttl);
         }
@@ -119,9 +119,22 @@ class Kwf_Cache_SimpleStatic
      */
     public static function clear($cacheIdPrefix)
     {
-        if (extension_loaded('apc')) {
-//             $yac = new Yac();
-//             $yac->flush();
+        if (false && extension_loaded('apcu')) {
+            if (!class_exists('APCUIterator')) {
+                throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
+            } else {
+                static $prefix;
+                if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+                $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
+                if ($it->getTotalCount() && !$it->current()) {
+                    //APCIterator is borked, delete everything
+                    //see https://bugs.php.net/bug.php?id=59938
+                    apcu_clear_cache();
+                } else {
+                    //APCIterator seems to work, use it for deletion
+                    apcu_delete($it);
+                }
+            }
         } else if (extension_loaded('apc')) {
             if (!class_exists('APCIterator')) {
                 throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
@@ -138,6 +151,9 @@ class Kwf_Cache_SimpleStatic
                     apc_delete($it);
                 }
             }
+        } else if (extension_loaded('yac')) {
+            $yac = new Yac();
+            $yac->flush();
         } else {
             throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
         }
@@ -152,10 +168,12 @@ class Kwf_Cache_SimpleStatic
     {
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
 
-        if (extension_loaded('yac')) {
-            $cache = 'yac';
+        if (false && extension_loaded('apcu')) {
+            $cache = 'apcu';
         } else if (extension_loaded('apc')) {
             $cache = 'apc';
+        } else if (extension_loaded('yac')) {
+            $cache = 'yac';
         } else {
             $cache = self::_getZendCache();
         }
@@ -174,6 +192,9 @@ class Kwf_Cache_SimpleStatic
                     $ids[] = $id;
                 } else if ($cache == 'apc') {
                     $r = apc_delete($prefix.$cacheId);
+                    $ids[] = $prefix.$cacheId;
+                } else if ($cache == 'apcu') {
+                    $r = apcu_delete($prefix.$cacheId);
                     $ids[] = $prefix.$cacheId;
                 }
             } else {

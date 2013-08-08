@@ -24,14 +24,14 @@ class Kwf_Cache_Simple
         if (!$ret) {
             if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
                 $ret = 'elastiCache';
-            } else if (extension_loaded('yac')) {
-                $ret = 'yac';
             } else if (Kwf_Util_Memcache::getHost()) {
                 $ret = 'memcache';
             } else if (extension_loaded('apcu')) {
                 $ret = 'apcu';
             } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
                 $ret = 'apc';
+            } else if (extension_loaded('yac')) {
+                $ret = 'yac';
             } else {
                 $ret = 'file';
             }
