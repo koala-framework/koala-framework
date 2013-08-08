@@ -141,6 +141,14 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
     }
 
+    public function testDeImageEnlargeDimensions()
+    {
+        $c = $this->_root->getComponentById('root-master_test2-linkTag');
+        $dim = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(560, $dim['width']);
+        $this->assertEquals(560, $dim['height']);
+    }
+
     public function testDeClearCacheCustomPreviewImage()
     {
         $c = $this->_root->getComponentById('root-master_test2');
