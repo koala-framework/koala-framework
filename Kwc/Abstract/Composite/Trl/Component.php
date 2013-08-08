@@ -24,4 +24,15 @@ class Kwc_Abstract_Composite_Trl_Component extends Kwc_Chained_Trl_Component
         }
         return false;
     }
+
+    public function getExportData()
+    {
+        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+        if (!count($children)) return array();
+        $ret = array('composite' => array());
+        foreach ($children as $child) {
+            $ret['composite'][$child->id] = $child->getComponent()->getExportData();
+        }
+        return $ret;
+    }
 }

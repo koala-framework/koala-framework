@@ -11,11 +11,6 @@ class Kwf_Component_View_Helper_Image extends Kwf_View_Helper_Image
     protected function _getImageUrl($image)
     {
         if (is_string($image)) return parent::_getImageUrl($image);
-
-        if (!$image instanceof Kwf_Component_Data ||
-            !is_instance_of($image->componentClass, 'Kwc_Abstract_Image_Component')
-        ) throw new Kwf_Exception("No Kwc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
-
         return $image->getComponent()->getImageUrl();
     }
 
