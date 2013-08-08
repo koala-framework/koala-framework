@@ -40,6 +40,23 @@ function checkBaseProperties($files) {
     }
 }
 
+function updateStatisticsConfig()
+{
+    $content = file_get_contents('config.ini');
+    $original = $content;
+    $content = str_replace('statistic.', 'statistics.', $content);
+    $content = str_replace('moneyFormat', 'money.format', $content);
+    $content = str_replace('moneyDecimals', 'money.decimals', $content);
+    $content = str_replace('moneyDecimalSeparator', 'money.decimalSeparator', $content);
+    $content = str_replace('moneyThousandSeparator', 'money.thousandSeparator', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.piwikId/', 'kwc.domains.$1.statistics.piwikId', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.twynCustomerId/', 'kwc.domains.$1.statistics.twynCustomerId', $content);
+    if ($original != $content) {
+        file_put_contents('config.ini', $content);
+        echo "Updated statistics config\n";
+    }
+}
+
 function replaceFiles($files, $from, $to) {
     foreach ($files as $f) {
         $content = file_get_contents($f);
@@ -131,6 +148,7 @@ replaceFiles($files, 'Kwc_Composite_ImagesEnlarge_Component', 'Kwc_List_Gallery_
 replaceFiles($files, 'Kwc_Composite_Links_Component', 'Kwc_List_Links_Component');
 checkGallery($files);
 checkBaseProperties($files);
+updateStatisticsConfig();
 updateIncludeCode();
 updateMasterCssClass();
 moveCssFiles();

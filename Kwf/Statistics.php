@@ -9,9 +9,9 @@ class Kwf_Statistics
 
     public static function getOptType(Kwf_Component_Data $data)
     {
-        $ret = $data->getBaseProperty('statistic.optType');
+        $ret = $data->getBaseProperty('statistics.optType');
         if ($ret != self::OPT_TYPE_IN && $ret != self::OPT_TYPE_OUT) {
-            throw new Kwf_Exception('statistic.optType must be ' . self::OPT_TYPE_IN . ' or ' . self::OPT_TYPE_OUT);
+            throw new Kwf_Exception('statistics.optType must be ' . self::OPT_TYPE_IN . ' or ' . self::OPT_TYPE_OUT);
         }
         return $ret;
     }
