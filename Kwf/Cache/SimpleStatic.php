@@ -55,7 +55,7 @@ class Kwf_Cache_SimpleStatic
     public static function fetch($cacheId, &$success = true)
     {
         static $prefix;
-        if (false && extension_loaded('apcu')) {
+        if (extension_loaded('apcu')) {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apcu_fetch($prefix.$cacheId, $success);
         } else if (extension_loaded('apc')) {
@@ -93,7 +93,7 @@ class Kwf_Cache_SimpleStatic
             $data = 'kwfFalse';
         }
         static $prefix;
-        if (false && extension_loaded('apcu')) {
+        if (extension_loaded('apcu')) {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
         } else if (extension_loaded('apc')) {
@@ -119,7 +119,7 @@ class Kwf_Cache_SimpleStatic
      */
     public static function clear($cacheIdPrefix)
     {
-        if (false && extension_loaded('apcu')) {
+        if (extension_loaded('apcu')) {
             if (!class_exists('APCUIterator')) {
                 throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
             } else {
