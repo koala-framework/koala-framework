@@ -14,6 +14,7 @@ class Kwc_Basic_Image_Crop_Test extends Kwc_TestAbstract
 
     public function testUrl()
     {
+        $this->markTestIncomplete();
 //         $rows = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_UploadsModel')->getRows();
 //         d($rows);
 //         d($this->_root->getChildComponent('_page')->getComponent()->getImageUrl());
