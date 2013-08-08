@@ -11,11 +11,6 @@ class Vps_Component_View_Helper_Image extends Vps_View_Helper_Image
     protected function _getImageUrl($image)
     {
         if (is_string($image)) return parent::_getImageUrl($image);
-
-        if (!$image instanceof Vps_Component_Data ||
-            !is_instance_of($image->componentClass, 'Vpc_Abstract_Image_Component')
-        ) throw new Vps_Exception("No Vpc_Abstract_Image_Component Component given (is '".$image->componentClass."')");
-
         return $image->getComponent()->getImageUrl();
     }
 
