@@ -37,18 +37,16 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
     _validateSizes: function()
     {
         var dim = this.dimensionField.getValue();
-        if (this.dimensions[dim].scale == 'crop' || this.dimensions[dim].scale == 'bestfit') {
-            if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
-                && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
-            ) {
-                if (this.widthField.getValue() < 1) {
-                    this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
-                }
-                if (this.heightField.getValue() < 1) {
-                    this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
-                }
-                return false;
+        if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
+            && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
+        ) {
+            if (this.widthField.getValue() < 1) {
+                this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
             }
+            if (this.heightField.getValue() < 1) {
+                this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
+            }
+            return false;
         }
 
         this.widthField.clearInvalid();
@@ -126,7 +124,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                         //TODO throw exception no value set
                     }
 
-                    if (dimension.scale == 'crop') {
+                    if (dimension.bestfit == false) {
                         preserveRatio = true;
                     }
 
@@ -274,14 +272,10 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 ret += '?';
             }
             ret += ' ';
-            var scaleModes = {
-                bestfit: trlKwf('Bestfit'),
-                crop: trlKwf('Crop'),
-                deform: trlKwf('Deform'),
-                original: trlKwf('Original')
-            };
-            if (d.scale && scaleModes[d.scale]) {
-                ret += scaleModes[d.scale];
+            if (d.bestfit) {
+                ret += trlKwf('Bestfit');
+            } else {
+                ret += trlKwf('Crop');
             }
             ret = ret.trim() + ')';
         }

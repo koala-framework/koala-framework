@@ -8,7 +8,7 @@ class Kwc_News_Detail_PreviewImage_Component extends Kwc_Basic_Image_Component
             array(
                 'width' => 120,
                 'height' => 90,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'bestfit' => true,
             )
         );
         return $ret;

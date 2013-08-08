@@ -7,7 +7,7 @@ class Kwc_Basic_Image_FixDimensionComponent extends Kwc_Basic_Image_Component
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwc_Basic_Image_TestModel';
         $ret['dimensions'] = array(array(
-            'width' => 100, 'height' => 100, 'scale' => Kwf_Media_Image::SCALE_DEFORM));
+            'width' => 100, 'height' => 100, 'bestfit' => false));
         $ret['editFilename'] = true;
         return $ret;
     }

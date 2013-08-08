@@ -10,7 +10,7 @@ class Kwc_Basic_Image_CacheParentImage_Image_Component extends Kwc_Basic_Image_C
                 'text' => 'default',
                 'width' => 10,
                 'height' => 0,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'bestfit' => false,
             ),
         );
 

@@ -10,7 +10,7 @@ class Kwc_Box_OpenGraph_Image_Component extends Kwc_Abstract_Image_Component
                 'text' => trlKwf('default'),
                 'width' => 200,
                 'height' => 200,
-                'scale' => Kwf_Media_Image::SCALE_CROP
+                'bestfit' => false,
             ),
         );
         $ret['altText'] = false;

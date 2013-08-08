@@ -7,7 +7,7 @@ class Kwc_Box_DogearRandom_Dogear_ImageSmall_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Image small');
         $ret['dimensions'] = array(
-            array('width'=>140, 'height'=>140, 'scale'=>Kwf_Media_Image::SCALE_CROP)
+            array('width'=>140, 'height'=>140, 'bestfit' => false)
         );
         return $ret;
     }

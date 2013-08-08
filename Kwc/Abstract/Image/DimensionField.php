@@ -33,7 +33,7 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             'dimension' => $dimension,
             'width' => $row->width,
             'height' => $row->height,
-            'scale' => $d['scale'],
+            'bestfit' => $d['bestfit'],
             'cropData' => array(
                 'x' => $cropX,
                 'y' => $cropY,
@@ -109,19 +109,6 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             $dimension = $dimensions[$data['dimension']];
         } else {
             $dimension = current($dimensions);
-        }
-        if ($dimension) {
-            if (($dimension['scale'] == Kwf_Media_Image::SCALE_BESTFIT ||
-                $dimension['scale'] == Kwf_Media_Image::SCALE_CROP ||
-                $dimension['scale'] == Kwf_Media_Image::SCALE_DEFORM) &&
-                (empty($data['width']) && empty($dimension['width'])) &&
-                (empty($data['height']) && empty($dimension['height']))
-            ) {
-                $ret[] = array(
-                    'message' => trlKwf('Dimension: At least width or height must be set higher than 0.'),
-                    'field' => $this
-                );
-            }
         }
 
         return $ret;
