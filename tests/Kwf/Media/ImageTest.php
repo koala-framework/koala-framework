@@ -10,26 +10,26 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->_testBestFit(array(16, 16), array(50, 10), array(10, 10));
 
         $dimension = array(100, 100);
-        $this->_testBestFit(array(100, 100), $dimension, array(100, 100));
+        $this->_testBestFit(array(100, 100), $dimension, array(100, 100), false);
         $this->_testBestFit(array(200, 200), $dimension, array(100, 100));
-        $this->_testBestFit(array(80, 80), $dimension, array(80, 80));
-        $this->_testBestFit(array(95, 60), $dimension, array(95, 60));
-        $this->_testBestFit(array(60, 95), $dimension, array(60, 95));
+        $this->_testBestFit(array(80, 80), $dimension, array(80, 80), false);
+        $this->_testBestFit(array(95, 60), $dimension, array(95, 60), false);
+        $this->_testBestFit(array(60, 95), $dimension, array(60, 95), false);
         $this->_testBestFit(array(200, 100), $dimension, array(100, 50));
         $this->_testBestFit(array(100, 200), $dimension, array(50, 100));
-        $this->_testBestFit(array(100, 80), $dimension, array(100, 80));
-        $this->_testBestFit(array(80, 100), $dimension, array(80, 100));
+        $this->_testBestFit(array(100, 80), $dimension, array(100, 80), false);
+        $this->_testBestFit(array(80, 100), $dimension, array(80, 100), false);
         $dimension = array(100, 50);
         $this->_testBestFit(array(100, 100), $dimension, array(50, 50));
         $this->_testBestFit(array(200, 200), $dimension, array(50, 50));
-        $this->_testBestFit(array(40, 40), $dimension, array(40, 40));
-        $this->_testBestFit(array(45, 30), $dimension, array(45, 30));
-        $this->_testBestFit(array(30, 45), $dimension, array(30, 45));
+        $this->_testBestFit(array(40, 40), $dimension, array(40, 40), false);
+        $this->_testBestFit(array(45, 30), $dimension, array(45, 30), false);
+        $this->_testBestFit(array(30, 45), $dimension, array(30, 45), false);
         $this->_testBestFit(array(200, 100), $dimension, array(100, 50));
         $this->_testBestFit(array(100, 200), $dimension, array(25, 50));
-        $this->_testBestFit(array(100, 30), $dimension, array(100, 30));
+        $this->_testBestFit(array(100, 30), $dimension, array(100, 30), false);
         $dimension = array(100, 0);
-        $this->_testBestFit(array(100, 30), $dimension, array(100, 30));
+        $this->_testBestFit(array(100, 30), $dimension, array(100, 30), false);
         $this->_testBestFit(array(101, 30), $dimension, array(100, 30));
         $this->_testBestFit(array(102, 30), $dimension, array(100, 29));//
         $this->_testBestFit(array(103, 30), $dimension, array(100, 29));
@@ -55,7 +55,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, false);
     }
 
-    private function _testBestFit($imageSize, $dimension, $expectedSize)
+    private function _testBestFit($imageSize, $dimension, $expectedSize, $hasCrop = true)
     {
         if (!isset($imageSize['width'])) {
             $imageSize['width'] = $imageSize[0];
@@ -65,17 +65,20 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         }
         $dimension = array('width' => $dimension[0], 'height' => $dimension[1], 'bestfit' => true);
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
-        $this->assertEquals($ret, array(
+        $asserted = array(
             'width' => $expectedSize[0],
             'height' => $expectedSize[1],
-            'rotate' => null,
-            'crop' => array(
+            'rotate' => null
+        );
+        if ($hasCrop) {
+            $asserted['crop'] =  array(
                 'x' => 0,
                 'y' => 0,
                 'width' => $imageSize['width'],
                 'height' => $imageSize['height']
-            )
-        ));
+            );
+        }
+        $this->assertEquals($ret, $asserted);
         return $ret;
     }
 
