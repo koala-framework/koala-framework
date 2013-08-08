@@ -1,11 +1,6 @@
 <?php
 class Kwf_Media_Image
 {
-    const SCALE_BESTFIT = 'bestfit';
-    const SCALE_CROP = 'crop';
-    const SCALE_DEFORM = 'deform';
-    const SCALE_ORIGINAL = 'original';
-
     public static function getHandyScaleFactor($originalPath)
     {
         $targetSize = array(600, 600, 'bestfit' => true);
@@ -22,7 +17,7 @@ class Kwf_Media_Image
     }
 
     /**
-     * targetSize options: width, height, bestfit, aspectRatio (if SCALE_CROP and width or height is 0)
+     * targetSize options: width, height, bestfit, aspectRatio
      */
     public static function calculateScaleDimensions($source, $targetSize)
     {

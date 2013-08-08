@@ -8,7 +8,7 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Image_Component extends Kwc_Basic_I
             'text' => trlKwf('default'),
             'width' => 100,
             'height' => 75,
-            'scale' => Kwf_Media_Image::SCALE_BESTFIT
+            'bestfit' => true,
         );
         return $ret;
     }

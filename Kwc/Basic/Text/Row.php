@@ -362,7 +362,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                 $destRow->width = $size[0];
                 $destRow->height = $size[1];
                 $destRow->filename = $srcFileName;
-                $destRow->scale = '';
+                $destRow->bestfit = false;
                 $childComponentRow = $this->addChildComponentRow('image', $destRow);
                 $destRow->save();
                 $imageComponent = Kwf_Component_Data_Root::getInstance()

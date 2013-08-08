@@ -9,7 +9,7 @@ class Kwc_Basic_Image_Crop_ImageComponent extends Kwc_Basic_Image_Component
             array(
                 'width' => 500,
                 'height' => 500,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'bestfit' => true,
             )
         );
         return $ret;

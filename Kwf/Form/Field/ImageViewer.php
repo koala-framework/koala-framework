@@ -43,7 +43,7 @@ class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
             $size = array(
                 'width' => 150,
                 'height' => 200,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'bestfit' => true,
             );
             return array(
                 'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size),
