@@ -7,16 +7,20 @@ class Kwf_Statistics
     const OPT_TYPE_OUT = 'opt-out';
     private static $_cookieName = 'cookieOpt';
 
-    public static function getOptType(Kwf_Component_Data $data)
+    public static function getOptType($data)
     {
-        $ret = $data->getBaseProperty('statistics.optType');
+        if ($data instanceof Kwf_Component_Data) {
+            $ret = $data->getBaseProperty('statistics.optType');
+        } else {
+            $ret = (string)$data;
+        }
         if ($ret != self::OPT_TYPE_IN && $ret != self::OPT_TYPE_OUT) {
             throw new Kwf_Exception('statistics.optType must be ' . self::OPT_TYPE_IN . ' or ' . self::OPT_TYPE_OUT);
         }
         return $ret;
     }
 
-    public static function isOptedIn(Kwf_Component_Data $data)
+    public static function isOptedIn($data)
     {
         if (!self::hasOpted()) {
             return self::getOptType($data) == self::OPT_TYPE_OUT;
