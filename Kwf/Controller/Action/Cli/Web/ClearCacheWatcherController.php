@@ -257,9 +257,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $cacheId  = 'fileContents'.$section;
                     if (substr($file, -3) == '.js') {
                         //cache javascript per language for trl calls and host for eg. Kwf_Assets_GoogleMapsApiKey
-                        $cacheId .= $language.$this->_getHostForCacheId();
+                        $cacheId .= $language.self::_getHostForCacheId();
                     }
-                    $cacheId .= str_replace(array('/', '\\', '.', '-', ':'), '_', $file);
+                    $cacheId .= str_replace(array('/', '\\', '.', '-', ':'), '_', $section.'-'.$file);
                     echo "remove from assets cache: $cacheId";
                     if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
                         echo " [DELETED]";

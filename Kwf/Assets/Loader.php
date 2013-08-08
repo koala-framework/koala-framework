@@ -215,7 +215,7 @@ class Kwf_Assets_Loader
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
                 $cacheId  = 'fileContents'.$section;
-                if ($ret['mimeType'] == 'text/javascript') {
+                if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {
                     //cache javascript per language for trl calls and host for eg. Kwf_Assets_GoogleMapsApiKey
                     $cacheId .= $language.$this->_getHostForCacheId();
                 }
