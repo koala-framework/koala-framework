@@ -13,26 +13,26 @@ Kwf.Statistics.count = function(url, config) {
     }, this);
 };
 
-Kwf.Statistics.getOptType = function() {
-    if (Kwf.Statistics.optType == 'undefined') {
-        Kwf.Statistics.optType = 'opt-out';
+Kwf.Statistics.getDefaultOptValue = function() {
+    if (typeof Kwf.Statistics.defaultOptValue == 'undefined') {
+        Kwf.Statistics.defaultOptValue = 'opt-out';
     }
-    return Kwf.Statistics.optType;
+    return Kwf.Statistics.defaultOptValue;
 };
 
-Kwf.Statistics.hasOpted = function() {
-    return Kwf.Statistics.getOptedValue() != null;
+Kwf.Statistics.issetUserOptValue = function() {
+    return Kwf.Statistics.getUserOptValue() != null;
 };
 
-Kwf.Statistics.isOptedIn = function() {
-    if (!Kwf.Statistics.hasOpted()) {
-        return Kwf.Statistics.getOptType() == 'opt-out';
+Kwf.Statistics.isUserOptIn = function() {
+    if (!Kwf.Statistics.issetUserOptValue()) {
+        return Kwf.Statistics.getDefaultOptValue() == 'out';
     } else {
-        return Kwf.Statistics.getOptedValue() == 'in';
+        return Kwf.Statistics.getUserOptValue() == 'in';
     }
 };
 
-Kwf.Statistics.getOptedValue = function() {
+Kwf.Statistics.getUserOptValue = function() {
     var opt = null;
     var cookieName = "cookieOpt=";
     var cookies = document.cookie.split(';');

@@ -1,4 +1,10 @@
 <?php
+/**
+ * OptIn-Component when a website requires Cookie Opt In
+ *
+ * Shows a layer with cookie informations
+ * Set the default value for opt-in for JavaScript
+ */
 class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
@@ -14,19 +20,24 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     public function processInput($postData)
     {
         if (isset($postData['accept'])) {
-            Kwf_Statistics::setOptedValue(Kwf_Statistics::OPT_VALUE_IN);
+            Kwf_Statistics::setUserOptValue(Kwf_Statistics::OPT_IN);
             header('Location: ' . $this->getData()->url);
             exit;
         }
     }
 
+    /**
+     * Puts a JavaScript Variable used in Kwf_js/Statistics.js
+     *
+     * @return string
+     */
     public function getIncludeCode()
     {
-        $optType = Kwf_Statistics::getOptType($this->getData());
+        $value = Kwf_Statistics::getDefaultOptValue($this->getData());
         $ret = '<script type="text/javascript">';
         $ret .= "if (Kwf == 'undefined') Kwf = {};";
         $ret .= "if (Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
-        $ret .= "Kwf.Statistics.optType = '$optType';";
+        $ret .= "Kwf.Statistics.defaultOptValue = '$value';";
         $ret .= '</script>';
         return $ret;
     }
