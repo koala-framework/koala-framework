@@ -446,7 +446,11 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
      *      -> matches size: return original
      *    -> part of image
      *      -> bigger: scales down
+     *        -> wider: scales down, crops left and right
+     *        -> higher: scales down, crops top and bottom
      *      -> smaller: scales up
+     *        -> wider: scales down, crops left and right
+     *        -> higher: scales down, crops top and bottom
      *      -> matches size: no changes
      *
      * width/height
@@ -614,7 +618,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
             'rotate' => null
         ));
 
-        //test: width + height, crop, smaller: scales up
+        //test: width + height, crop, part of image, smaller: scales up
         $imageSize = array('width' => 200, 'height' => 200);
         $dimension = array('width' => 100, 'height' => 100, 'bestfit' => false,
             'crop' => array(
@@ -635,7 +639,51 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
                 'height' => 50
             )
         ));
-        //test width + height, crop, bigger: scales down
+
+        //test: width + height, crop, part of image, smaller, wider: scales up, crops left and right
+        $imageSize = array('width' => 200, 'height' => 200);
+        $dimension = array('width' => 100, 'height' => 100, 'bestfit' => false,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 50,
+                'height' => 25
+            )
+        );
+        $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
+        $this->assertEquals($ret, array(
+            'width' => 100, 'height' => 100,
+            'rotate' => null,
+            'crop' => array(
+                'x' => 12.5,
+                'y' => 0,
+                'width' => 25,
+                'height' => 25
+            )
+        ));
+        //test: width + height, crop, part of image, smaller, higher: scales up, crops top and bottom
+        $imageSize = array('width' => 200, 'height' => 200);
+        $dimension = array('width' => 100, 'height' => 100, 'bestfit' => false,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 25,
+                'height' => 50
+            )
+        );
+        $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
+        $this->assertEquals($ret, array(
+            'width' => 100, 'height' => 100,
+            'rotate' => null,
+            'crop' => array(
+                'x' => 0,
+                'y' => 12.5,
+                'width' => 25,
+                'height' => 25
+            )
+        ));
+
+        //test width + height, crop, part of image, bigger: scales down
         $imageSize = array('width' => 200, 'height' => 200);
         $dimension = array('width' => 50, 'height' => 50, 'bestfit' => false,
             'crop' => array(
@@ -656,7 +704,50 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
                 'height' => 100
             )
         ));
-        //test width + height, crop, matches size: nothing
+        //test: width + height, crop, part of image, bigger, wider: scales down, crops left and right
+        $imageSize = array('width' => 300, 'height' => 300);
+        $dimension = array('width' => 50, 'height' => 50, 'bestfit' => false,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 200,
+                'height' => 100
+            )
+        );
+        $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
+        $this->assertEquals($ret, array(
+            'width' => 50, 'height' => 50,
+            'rotate' => null,
+            'crop' => array(
+                'x' => 50,
+                'y' => 0,
+                'width' => 100,
+                'height' => 100
+            )
+        ));
+        //test: width + height, crop, part of image, bigger, higher: scales down, crops top and bottom
+        $imageSize = array('width' => 300, 'height' => 300);
+        $dimension = array('width' => 50, 'height' => 50, 'bestfit' => false,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 100,
+                'height' => 200
+            )
+        );
+        $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
+        $this->assertEquals($ret, array(
+            'width' => 50, 'height' => 50,
+            'rotate' => null,
+            'crop' => array(
+                'x' => 0,
+                'y' => 50,
+                'width' => 100,
+                'height' => 100
+            )
+        ));
+
+        //test width + height, crop, part of image, matches size: nothing
         $imageSize = array('width' => 200, 'height' => 200);
         $dimension = array('width' => 100, 'height' => 100, 'bestfit' => false,
             'crop' => array(
