@@ -14,20 +14,16 @@ class Kwf_Statistics
     const OPT_OUT = 'out';
     private static $_cookieName = 'cookieOpt';
 
-    public static function getDefaultOptValue($data)
+    public static function getDefaultOptValue(Kwf_Component_Data $data)
     {
-        if ($data instanceof Kwf_Component_Data) {
-            $ret = $data->getBaseProperty('statistics.defaultOptValue');
-        } else {
-            $ret = (string)$data;
-        }
+        $ret = $data->getBaseProperty('statistics.defaultOptValue');
         if ($ret != self::OPT_IN && $ret != self::OPT_OUT) {
             throw new Kwf_Exception('statistics.defaultOptValue must be ' . self::OPT_IN . ' or ' . self::OPT_OUT);
         }
         return $ret;
     }
 
-    public static function isUserOptIn($data)
+    public static function isUserOptIn(Kwf_Component_Data $data)
     {
         if (!self::issetUserOptValue()) {
             return self::getDefaultOptValue($data) == self::OPT_OUT;

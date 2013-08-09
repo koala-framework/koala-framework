@@ -14,7 +14,10 @@ class Kwc_Statistics_CookieAfterPlugin extends Kwf_Component_Plugin_Abstract
         $pos = strpos($output, '{/kwcOptType}');
         if ($pos) {
             $optType = substr($output, 12, $pos - 12);
-            if (Kwf_Statistics::isUserOptIn($optType)) {
+            if (
+                (!Kwf_Statistics::issetUserOptValue() && $optType == Kwf_Statistics::OPT_OUT) ||
+                Kwf_Statistics::getUserOptValue() == Kwf_Statistics::OPT_IN
+            ) {
                 return substr($output, $pos + 13);
             }
         }
