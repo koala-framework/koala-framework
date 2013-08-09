@@ -32,7 +32,7 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
         imgLoad.onerror = (function() {
             //TODO implement user-error-notification
             //TODO implement mask while loading
-        }).bind(this);
+        }).bind(this);//TODO change to createDelegate
         imgLoad.onload = (function(){
             this.setSize(imgLoad.width+14, imgLoad.height + 69);
             var cropWidth, cropHeight, cropX = 0, cropY = 0;
@@ -81,7 +81,7 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
             }, this);
             this.add(crop);
             this.doLayout();
-        }).bind(this);
+        }).bind(this);//TODO change to createDelegate
         imgLoad.src = this.imageUrl;
     }
 });
