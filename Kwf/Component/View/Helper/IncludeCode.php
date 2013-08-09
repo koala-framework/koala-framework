@@ -24,7 +24,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
                 $componentHelper->setView($this->_getView());
                 $ret .= $componentHelper->component($includeCode);
 
-                if (is_instance_of($includeCode->componentClass, 'Kwc_Box_Analytics_Component') ||
+                if (is_instance_of($includeCode->componentClass, 'Kwc_Statistics_Analytics_Component') ||
                     is_instance_of($includeCode->componentClass, 'Kwc_Statistics_Piwik_Component')
                 ) {
                     $statisticsBoxUsed = true;
