@@ -34,7 +34,8 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
             $data = $this->getData()->chained->getComponent()->getImageDataOrEmptyImageData();
             if ($data && $data['filename']) {
                 $id = $this->getData()->componentId;
-                return Kwf_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
+                $type = $this->getData()->chained->getComponent()->getImageUrlType();
+                return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
             }
         }
         return null;
