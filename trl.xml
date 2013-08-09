@@ -5144,7 +5144,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es_CL>imprimir</es_CL>
 </text>
 <text>
-<en>Operating company / responsible person for the content</en>
+<en>Operating company / Responsible for content</en>
 <de>Betreiber / Verantwortlicher für den Inhalt</de>
 <id>1033</id>
 <ro>Administrator / Responsabil pentru conţinut</ro>
@@ -5158,14 +5158,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izključitev jamstva</sl>
 </text>
 <text>
-<en>Purchase tax-identification number</en>
+<en>VAT identification number</en>
 <de>Umsatzsteuer-Identifikationsnummer</de>
 <id>1037</id>
 <ro>Cod unic de înregistrare</ro>
 <sl>ID-DDV </sl>
 </text>
 <text>
-<en>DVR-Number</en>
+<en>Data handling register number</en>
 <de>DVR-Nummer</de>
 <id>1039</id>
 <ro>Cod autorizare prelucrare date personale</ro>
