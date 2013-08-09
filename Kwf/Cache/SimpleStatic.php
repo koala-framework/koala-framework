@@ -168,7 +168,7 @@ class Kwf_Cache_SimpleStatic
     {
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
 
-        if (false && extension_loaded('apcu')) {
+        if (extension_loaded('apcu')) {
             $cache = 'apcu';
         } else if (extension_loaded('apc')) {
             $cache = 'apc';
