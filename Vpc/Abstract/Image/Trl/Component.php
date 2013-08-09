@@ -90,18 +90,18 @@ class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
     public static function getMediaOutput($id, $type, $className)
     {
         $c = Vps_Component_Data_Root::getInstance()->getComponentById($id);
-
-        $data = $c->chained->getComponent()->getImageDataOrEmptyImageData();
-        if (isset($data['row'])) {
-            Vps_Component_Cache::getInstance()->saveMeta(
-                get_class($data['row']->getModel()), $data['row']->component_id, $id, Vps_Component_Cache::META_CALLBACK
-            );
-        }
-
         return call_user_func(
             array(get_class($c->chained->getComponent()), 'getMediaOutput'),
             $c->chained->componentId, $type, $c->chained->componentClass
         );
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $model = Vpc_Abstract::getSetting(Vpc_Abstract::getSetting($componentClass, 'masterComponentClass'), 'ownModel');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model);
+        return $ret;
     }
 
     public function onCacheCallback($row)
