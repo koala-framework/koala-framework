@@ -45,9 +45,9 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             $helptext .= "<br />" . trlKwf('or larger');
             $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
 
-            $scaleMethod = 'Crop';
+            $scaleMethod = trlKwf('Crop');
             if ($dimensions[0]['bestfit']) {
-                $scaleMethod = 'Bestfit';
+                $scaleMethod = trlKwf('Bestfit');
             }
             $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $scaleMethod;
             $this->getByName('Image')->setHelpText($helptext);
