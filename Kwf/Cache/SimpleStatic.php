@@ -74,12 +74,16 @@ class Kwf_Cache_SimpleStatic
                 $ret = false;
             } else if ($ret === 'kwfNull') {
                 $ret = null;
-            } else if ($ret === 'kwfFalse') {
-                $ret = false;
             }
             return $ret;
         } else {
             $ret = self::_getZendCache()->load(self::_processId($cacheId));
+            if ($ret === false) { //ZendCache returns false if nothing was found in cache
+                $success = false;
+                $ret = false;
+            } else if ($ret === 'kwfFalse') {
+                $ret = false;
+            }
             $success = $ret !== false;
             return $ret;
         }
@@ -87,13 +91,12 @@ class Kwf_Cache_SimpleStatic
 
     public static function add($cacheId, $data, $ttl = null)
     {
-        if ($data === null) {
-            $data = 'kwfNull';
-        } else if ($data === false) {
-            $data = 'kwfFalse';
-        }
+
         static $prefix;
         if (extension_loaded('apcu')) {
+            if ($data === null) {
+                $data = 'kwfNull';
+            }
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
         } else if (extension_loaded('apc')) {
@@ -108,6 +111,9 @@ class Kwf_Cache_SimpleStatic
             $yac = new Yac();
             return $yac->set($id, $data, $ttl);
         } else {
+            if ($data === false) {
+                $data = 'kwfFalse';
+            }
             return self::_getZendCache()->save($data, self::_processId($cacheId), array(), $ttl);
         }
     }
