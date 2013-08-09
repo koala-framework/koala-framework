@@ -152,6 +152,7 @@ replaceFiles($files, 'Kwc_Composite_ImagesEnlarge_Component', 'Kwc_List_Gallery_
 replaceFiles($files, 'Kwc_Composite_Links_Component', 'Kwc_List_Links_Component');
 replaceFiles($files, 'Kwc_Box_Analytics_Component', 'Kwc_Statistics_Analytics_Component');
 replaceFiles($files, 'Kwc_Root_DomainRoot_Domain_Analytics_Component', 'Kwc_Statistics_Analytics_Component');
+replaceFiles($files, 'Kwc_Root_DomainRoot_Domain_AdsenseAnalytics_Component', 'Kwc_Statistics_Adsense_Component');
 checkGallery($files);
 checkBaseProperties($files);
 updateStatisticsConfig();
