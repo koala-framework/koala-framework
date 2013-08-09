@@ -77,6 +77,9 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             if (!is_array($d)) {
                 throw new Kwf_Exception('Dimension setting must contain array of arrays');
             }
+            if (isset($d['scale'])) {
+                throw new Kwf_Exception('Scale does not exist anymore. Use bestfit = false|true instead.');
+            }
         }
     }
 
