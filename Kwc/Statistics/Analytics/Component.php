@@ -1,10 +1,11 @@
 <?php
-class Kwc_Box_Analytics_Component extends Kwc_Abstract
+class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['flags']['hasFooterIncludeCode'] = true;
+        $ret['plugins'] = array('Kwc_Statistics_CookieBeforePlugin', 'Kwc_Statistics_CookieAfterPlugin');
         return $ret;
     }
 
@@ -15,7 +16,7 @@ class Kwc_Box_Analytics_Component extends Kwc_Abstract
 
     protected function _getAnalyticsCode()
     {
-        return Kwf_Registry::get('config')->statistic->analyticsCode;
+        return $this->getData()->getBaseProperty('statistics.analyticsCode');
     }
 
     public function getTemplateVars()

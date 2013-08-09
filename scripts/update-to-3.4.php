@@ -50,7 +50,11 @@ function updateStatisticsConfig()
     $content = str_replace('moneyDecimalSeparator', 'money.decimalSeparator', $content);
     $content = str_replace('moneyThousandSeparator', 'money.thousandSeparator', $content);
     $content = preg_replace('/kwc\.domains\.([a-z]*)\.piwikId/', 'kwc.domains.$1.statistics.piwikId', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.piwikDomain/', 'kwc.domains.$1.statistics.piwikDomain', $content);
     $content = preg_replace('/kwc\.domains\.([a-z]*)\.twynCustomerId/', 'kwc.domains.$1.statistics.twynCustomerId', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.analyticsCode/', 'kwc.domains.$1.statistics.analyticsCode', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.ignoreAnalyticsCode/', 'kwc.domains.$1.statistics.ignoreAnalyticsCode', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.ignorePiwikCode/', 'kwc.domains.$1.statistics.ignorePiwikCode', $content);
     if ($original != $content) {
         file_put_contents('config.ini', $content);
         echo "Updated statistics config\n";
@@ -146,6 +150,8 @@ replaceFiles($files, 'Kwc_Composite_LinksImages_Component', 'Kwc_List_ImagesLink
 replaceFiles($files, 'Kwc_Composite_Downloads_Component', 'Kwc_List_Downloads_Component');
 replaceFiles($files, 'Kwc_Composite_ImagesEnlarge_Component', 'Kwc_List_Gallery_Component');
 replaceFiles($files, 'Kwc_Composite_Links_Component', 'Kwc_List_Links_Component');
+replaceFiles($files, 'Kwc_Box_Analytics_Component', 'Kwc_Statistics_Analytics_Component');
+replaceFiles($files, 'Kwc_Root_DomainRoot_Domain_Analytics_Component', 'Kwc_Statistics_Analytics_Component');
 checkGallery($files);
 checkBaseProperties($files);
 updateStatisticsConfig();
