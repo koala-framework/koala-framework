@@ -153,6 +153,24 @@ class Kwf_Media_Image
                 } else {
                     $crop['y'] = 0;
                 }
+            } else {
+                $oldCrop['width'] = $crop['width'];
+                $oldCrop['height'] = $crop['height'];
+                if (($outputWidth / $outputHeight) >= ($crop['width'] / $crop['height'])) {
+                    $crop['width'] = $crop['width'];
+                    $crop['height'] = $crop['width'] * ($outputHeight / $outputWidth);
+                } else {
+                    $crop['height'] = $crop['height'];
+                    $crop['width'] = $crop['height'] * ($outputWidth / $outputHeight);
+                }
+                $xDiff = $oldCrop['width'] - $crop['width'];
+                $yDiff = $oldCrop['height'] - $crop['height'];
+                if ($xDiff > 0) {
+                    $crop['x'] += $xDiff / 2;
+                }
+                if ($yDiff > 0) {
+                    $crop['y'] += $yDiff / 2;
+                }
             }
         } elseif ($bestfit) { // image keeps aspectratio and will not be scaled up
             // calculateWidth is cropWidth if existing else originalWidth.
