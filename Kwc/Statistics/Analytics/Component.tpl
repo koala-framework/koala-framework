@@ -1,8 +1,8 @@
-<? if($this->analyticsCode) { ?>
+<? if($this->code) { ?>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '<?=$this->analyticsCode?>']);
+  _gaq.push(['_setAccount', '<?=$this->code?>']);
   _gaq.push(['_trackPageview']);
 
   (function() {

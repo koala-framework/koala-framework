@@ -55,6 +55,12 @@ function updateStatisticsConfig()
     $content = preg_replace('/kwc\.domains\.([a-z]*)\.analyticsCode/', 'kwc.domains.$1.statistics.analyticsCode', $content);
     $content = preg_replace('/kwc\.domains\.([a-z]*)\.ignoreAnalyticsCode/', 'kwc.domains.$1.statistics.ignoreAnalyticsCode', $content);
     $content = preg_replace('/kwc\.domains\.([a-z]*)\.ignorePiwikCode/', 'kwc.domains.$1.statistics.ignorePiwikCode', $content);
+    $content = str_replace('piwikId', 'piwik.id', $content);
+    $content = str_replace('piwikDomain', 'piwik.domain', $content);
+    $content = str_replace('ignorePiwikCode', 'piwik.ignore', $content);
+    $content = str_replace('twynCustomerId', 'twin.customerId', $content);
+    $content = str_replace('analyticsCode', 'analytics.code', $content);
+    $content = str_replace('ignoreAnalyticsCode', 'analytics.ignore', $content);
     if ($original != $content) {
         file_put_contents('config.ini', $content);
         echo "Updated statistics config\n";
