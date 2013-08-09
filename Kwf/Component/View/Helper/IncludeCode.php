@@ -61,7 +61,13 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
             if (!$statisticsBoxUsed) {
                 //if there was no statistics box output default code
                 //box is required for eg. multidomains
-                $ret .= Kwf_View_Helper_StatisticCode::statisticCode();
+                $cfg = Kwf_Config::getValueArray('statistic');
+                if (isset($cfg['analyticsCode']) && $cfg['analyticsCode']) {
+                    throw new Kwf_Exception('To support analytics add Kwc_Statistics_Analytics_Component as a box.');
+                }
+                if (isset($cfg['piwikId']) && $cfg['piwikId']) {
+                    throw new Kwf_Exception('To support piwik add Kwc_Statistics_Piwik_Component as a box.');
+                }
             }
         }
         return $ret;
