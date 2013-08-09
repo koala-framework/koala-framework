@@ -8,6 +8,10 @@ class Kwc_Basic_Image_Crop_Root extends Kwc_Root_Abstract
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Basic_Image_Crop_ImageComponent'
         );
+        $ret['generators']['page1'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Basic_Image_Crop_ImageFixDimensionComponent'
+        );
         return $ret;
     }
 }
