@@ -95,4 +95,20 @@ class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
             $c->chained->componentId, $type, $c->chained->componentClass
         );
     }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $model = Vpc_Abstract::getSetting(Vpc_Abstract::getSetting($componentClass, 'masterComponentClass'), 'ownModel');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model);
+        return $ret;
+    }
+
+    public function onCacheCallback($row)
+    {
+        $cacheId = Vps_Media::createCacheId(
+            $this->getData()->componentClass, $this->getData()->componentId, 'default'
+        );
+        Vps_Media::getOutputCache()->remove($cacheId);
+    }
 }
