@@ -7,7 +7,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         $this->_fileName = $fileName;
     }
 
-    public function getContents()
+    public function getContents($language)
     {
         $f = substr($this->_fileName, strpos($this->_fileName, '/'));
         if (substr($this->_fileName, 0, strpos($this->_fileName, '/')) == 'kwf') {

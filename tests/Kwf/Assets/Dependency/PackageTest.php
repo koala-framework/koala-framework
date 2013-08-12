@@ -27,7 +27,7 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
     {
         $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test');
 
-        $contents = $package->getPackageContents('text/javascript; charset=utf-8');
+        $contents = $package->getPackageContents('text/javascript; charset=utf-8', 'en');
         $contents = trim($contents);
         $contents = str_replace("\n\n", "\n", $contents);
         $this->assertEquals("foo2;\nbar2;\nfoo;\nbar;", $contents);
@@ -50,7 +50,7 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
     {
         $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test3');
 
-        $contents = $package->getPackageContents('text/javascript; charset=utf-8');
+        $contents = $package->getPackageContents('text/javascript; charset=utf-8', 'en');
         $contents = trim($contents);
         $contents = str_replace("\n\n", "\n", $contents);
         $this->assertEquals("foo2;\nbar2;\nfoo;\nbar;", $contents);
@@ -59,7 +59,7 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
     public function testDynamicSameDepTwice()
     {
         $package = new Kwf_Assets_Dependency_Package($this->_list, 'TestWithDynamic2');
-        $urls = $package->getPackageUrls('text/javascript; charset=utf-8');
+        $urls = $package->getPackageUrls('text/javascript; charset=utf-8', 'en');
         $this->assertEquals(2, count($urls));
     }
 

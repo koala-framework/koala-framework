@@ -5,7 +5,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
     {
         $f = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
         $this->assertEquals('text/javascript; charset=utf-8', $f->getMimeType());
-        $this->assertContains('Kwf.log', $f->getContents());
+        $this->assertContains('Kwf.log', $f->getContents('en'));
         $this->assertEquals(array(), $f->getDependencies());
     }
 
@@ -14,7 +14,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
         $f = Kwf_Assets_Dependency_File::createDependency('kwf/Kwf_js/Kwf.js');
         $this->assertTrue($f instanceof Kwf_Assets_Dependency_File_Js);
         $this->assertEquals('text/javascript; charset=utf-8', $f->getMimeType());
-        $this->assertContains('Kwf.log', $f->getContents());
+        $this->assertContains('Kwf.log', $f->getContents('en'));
         $this->assertEquals(array(), $f->getDependencies());
     }
 
@@ -24,7 +24,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
         $dep = array();
         $d = new Kwf_Assets_Dependency_Dependencies($files);
         $this->assertEquals($files, $d->getDependencies());
-        $this->assertEquals(null, $d->getContents());
+        $this->assertEquals(null, $d->getContents('en'));
     }
 
     public function testRecursiveIterator()

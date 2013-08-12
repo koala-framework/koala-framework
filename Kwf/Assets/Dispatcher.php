@@ -23,7 +23,8 @@ class Kwf_Assets_Dispatcher
         $param = explode('/', $url);
         $dependencyClass = $param[0];
         $dependencyParams = $param[1];
-        $extension = $param[2];
+        $language = $param[2];
+        $extension = $param[3];
         if (!is_instance_of($dependencyClass, 'Kwf_Assets_Dependency_UrlResolvableInterface')) {
             throw new Kwf_Exception("invalid dependency class");
         }
@@ -33,9 +34,9 @@ class Kwf_Assets_Dispatcher
         else if ($extension == 'css') $mimeType = 'text/css';
         else throw new Kwf_Exception_NotYetImplemented();
         if ($dependency instanceof Kwf_Assets_Dependency_Package) {
-            $contents = $dependency->getPackageContents($mimeType);
+            $contents = $dependency->getPackageContents($mimeType, $language);
         } else {
-            $contents = $dependency->getContents();
+            $contents = $dependency->getContents($language);
         }
 
         return array(

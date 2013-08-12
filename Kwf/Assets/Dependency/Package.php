@@ -23,7 +23,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         return array($this->_dependency);
     }
 
-    public function getPackageContents($mimeType)
+    public function getPackageContents($mimeType, $language)
     {
         $it = new Kwf_Assets_Dependency_RecursiveIterator($this);
         $it = new RecursiveIteratorIterator($it);
@@ -36,7 +36,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                     //include dependency only once
                     continue;
                 }
-                if ($c = $i->getContents()) {
+                if ($c = $i->getContents($language)) {
                     $includesDependencies[] = $i;
                     $ret .= $c."\n";
                 }
@@ -57,14 +57,14 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         return new $class(new $providerList, $param[1]);
     }
 
-    public function getPackageUrls($mimeType)
+    public function getPackageUrls($mimeType, $language)
     {
         if ($mimeType == 'text/javascript; charset=utf-8') $ext = 'js';
         else if ($mimeType == 'text/css') $ext = 'css';
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();
-        $ret[] = '/assets/'.get_class($this).'/'.$this->toUrlParameter().'/'.$ext;
+        $ret[] = '/assets/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
         $it = new Kwf_Assets_Dependency_RecursiveIterator($this);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
@@ -79,7 +79,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                 if (!$i instanceof Kwf_Assets_Dependency_UrlResolvableInterface) {
                     throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
                 }
-                $ret[] = '/assets/'.get_class($i).'/'.$i->toUrlParameter().'/'.$ext;
+                $ret[] = '/assets/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext;
             }
         }
         return $ret;
