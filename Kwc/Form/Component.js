@@ -1,3 +1,5 @@
+Kwf.Utils.ResponsiveEl('.kwcForm', [350]);
+
 Kwf.onContentReady(function(el, param) {
     if (!param.newRender) return false;
     Ext.select('.kwcForm > form', true, el).each(function(form) {
