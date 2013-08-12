@@ -25,4 +25,12 @@ class Vpc_Basic_ImageEnlarge_Trl_Component extends Vpc_Abstract_Image_Trl_Compon
         return $ret;
     }
 
+    public function onCacheCallback($row)
+    {
+        $img = $this->getData()->getChildComponent('-image');
+        $cacheId = Vps_Media::createCacheId(
+            $img->componentClass, $img->componentId, 'default'
+        );
+        Vps_Media::getOutputCache()->remove($cacheId);
+    }
 }
