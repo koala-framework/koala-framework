@@ -44,6 +44,11 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
         return $ret;
     }
 
+    public function hasContent()
+    {
+        return count($this->_getNetworks($this->getData())) > 0;
+    }
+
     public function getTemplateVarsWithNetworks($currentPage)
     {
         $ret = parent::getTemplateVars();
