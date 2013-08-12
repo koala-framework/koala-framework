@@ -1,11 +1,16 @@
 <?php
-class Kwc_Basic_LinkTag_Trl_Form_ComponentData extends Kwf_Data_Abstract
+class Kwc_Abstract_Cards_Trl_Form_ComponentData extends Kwf_Data_Abstract
 {
     public function load($row)
     {
         $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($row->id, array('ignoreVisible'=>true));
-        return $c->chained->getComponent()->getRow()->component;
+
+        if ($c && is_instance_of($c->chained->componentClass, 'Kwc_Abstract_Cards_Component')) {
+            return $c->chained->getComponent()->getRow()->component;
+        } else {
+            return '';
+        }
     }
 
     public function save(Kwf_Model_Row_Interface $row, $data)
@@ -13,7 +18,7 @@ class Kwc_Basic_LinkTag_Trl_Form_ComponentData extends Kwf_Data_Abstract
     }
 }
 
-class Kwc_Basic_LinkTag_Trl_Form extends Kwc_Abstract_Form
+class Kwc_Abstract_Cards_Trl_Form extends Kwc_Abstract_Form
 {
     protected function _init()
     {
@@ -22,11 +27,11 @@ class Kwc_Basic_LinkTag_Trl_Form extends Kwc_Abstract_Form
 
         $gen = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $gen['child']['component'];
-        $cards = $this->add(new Kwf_Form_Container_Cards('component', trlKwf('Link type')))
+        $cards = $this->add(new Kwf_Form_Container_Cards('component', trlKwf('Type')))
             ->setDefaultValue(key($classes));
 
         $hidden = new Kwf_Form_Field_Hidden('component');
-        $hidden->setData(new Kwc_Basic_LinkTag_Trl_Form_ComponentData());
+        $hidden->setData(new Kwc_Abstract_Cards_Trl_Form_ComponentData());
         $cards->setCombobox($hidden);
 
         foreach ($classes as $name => $class) {

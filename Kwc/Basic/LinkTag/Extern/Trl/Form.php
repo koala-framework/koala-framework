@@ -7,7 +7,7 @@ class Kwc_Basic_LinkTag_Extern_Trl_Form_OriginalData extends Kwf_Data_Abstract
         // das ist nötig weil bei der übersetzung bei den link-cards
         // natürlich gleich alle geladen werden und im chained dann zB ein
         // download-tag drin ist und kein externer / etc.
-        if (is_instance_of($c->chained->componentClass, 'Kwc_Basic_LinkTag_Extern_Component')) {
+        if ($c && is_instance_of($c->chained->componentClass, 'Kwc_Basic_LinkTag_Extern_Component')) {
             return $c->chained
                 ->getComponent()
                 ->getRow()
