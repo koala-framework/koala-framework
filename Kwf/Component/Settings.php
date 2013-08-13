@@ -554,6 +554,7 @@ class Kwf_Component_Settings
         }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {
+                self::_verifyComponentClass($c);
                 if (!class_exists(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c)) {
                     throw new Kwf_Exception("Component Class '$c' does not exist, used in '$class'");
                 }
