@@ -25,8 +25,8 @@ class Kwc_Basic_LinkTag_Extern_Trl_Form extends Kwc_Abstract_Form
         parent::_initFields();
         $enableTranslation = $this->add(new Kwf_Form_Container_FieldSet(
                         trlStatic('Own Link')));
-        $enableTranslation->setCollapsible(true);
-        $enableTranslation->setCollapsed(true);
+        $enableTranslation->setCheckboxToggle(true);
+        $enableTranslation->setCheckboxName('override_master');
 
         $enableTranslation->add(new Kwf_Form_Field_TextField('target', trlKwf('Url')))
             ->setWidth(450)
