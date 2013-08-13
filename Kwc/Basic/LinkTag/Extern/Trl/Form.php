@@ -23,9 +23,13 @@ class Kwc_Basic_LinkTag_Extern_Trl_Form extends Kwc_Abstract_Form
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Kwf_Form_Field_TextField('target', trlKwf('Url')))
+        $enableTranslation = $this->add(new Kwf_Form_Container_FieldSet(
+                        trlStatic('Own Link')));
+        $enableTranslation->setCheckboxToggle(true);
+        $enableTranslation->setCheckboxName('own_target');
+
+        $enableTranslation->add(new Kwf_Form_Field_TextField('target', trlKwf('Url')))
             ->setWidth(450)
-            ->setAllowBlank(false)
             ->setVtype('url');
         $this->add(new Kwf_Form_Field_ShowField('original', trlKwf('Original')))
             ->setData(new Kwc_Basic_LinkTag_Extern_Trl_Form_OriginalData());
