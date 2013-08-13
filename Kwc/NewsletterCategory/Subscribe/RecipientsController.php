@@ -1,9 +1,10 @@
 <?php
 class Kwc_NewsletterCategory_Subscribe_RecipientsController extends Kwc_Newsletter_Subscribe_RecipientsController
 {
+    protected $_modelName = 'Kwc_NewsletterCategory_Subscribe_Model';
     protected function _initColumns()
     {
-        $this->_model = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_Model');
+        $this->_model = Kwf_Model_Abstract::getInstance($this->_modelName);
         parent::_initColumns();
 
         if ($this->_getParam('newsletterComponentId')) {
