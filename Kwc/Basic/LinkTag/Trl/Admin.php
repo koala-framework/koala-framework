@@ -1,5 +1,5 @@
 <?php
-class Kwc_Abstract_Cards_Trl_Admin extends Kwc_Basic_LinkTag_Admin
+class Kwc_Basic_LinkTag_Trl_Admin extends Kwc_Basic_LinkTag_Admin
 {
     public function getPagePropertiesForm()
     {
