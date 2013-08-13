@@ -1,16 +1,4 @@
 <?php
-class Kwc_Basic_Link_Trl_Form_OriginalText extends Kwf_Data_Abstract
-{
-    public function load($row)
-    {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
-        return $c->chained
-            ->getComponent()
-            ->getRow()
-            ->text;
-    }
-}
-
 class Kwc_Basic_Link_Trl_Form extends Kwc_Abstract_Composite_Form
 {
     protected $_createFieldsets = false;
