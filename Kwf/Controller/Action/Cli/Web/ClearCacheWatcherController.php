@@ -262,16 +262,16 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 self::_clearAssetsAll(substr($file, strrpos($file, '.')+1));
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
+            }
 
-            } else if (self::_endsWith($file, '/dependencies.ini')) {
-                if ($event == 'MODIFY') {
+        } else if (self::_endsWith($file, '/dependencies.ini')) {
+            if ($event == 'MODIFY') {
 
-                    self::_clearAssetsDependencies();
+                self::_clearAssetsDependencies();
 
-                    self::_clearAssetsAll();
+                self::_clearAssetsAll();
 
-                    echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
-                }
+                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
         } else if (preg_match('#/config([^/]*)?\.ini$#', $file)) { //config.ini, configPoi.ini, config.local.ini (in any directory)
             if ($event == 'MODIFY') {
