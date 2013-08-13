@@ -1,13 +1,19 @@
 <?php
 class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstract
 {
-    public function addResources(Kwf_Acl $acl)
+    protected function _getParentResource(Kwf_Acl $acl, $type)
     {
         if (!$acl->has('kwc_newsletter')) {
-            $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter',
-                array('text'=>trlKwfStatic('Newsletter'), 'icon'=>'email_open_image.png')), 'kwf_component_root');
+            $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter', array(
+                'text' => trlKwfStatic('Newsletter'),
+                'icon' => 'email_open_image.png')
+            ), 'kwf_component_root');
         }
+        return 'kwc_newsletter';
+    }
 
+    public function addResources(Kwf_Acl $acl)
+    {
         $menuConfig = array('icon'=>new Kwf_Asset('group.png'));
         $components = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsByClass(
@@ -29,7 +35,8 @@ class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuCon
                 $menuConfig,
                 Kwc_Admin::getInstance($this->_class)->getControllerUrl('Recipients').'?newsletterComponentId='.$c->dbId,
                 $this->_class, $c),
-            'kwc_newsletter');
+                $this->_getParentResource($acl, 'subscribe')
+            );
         }
     }
     public function getEventsClass()

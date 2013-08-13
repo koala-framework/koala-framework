@@ -1,13 +1,19 @@
 <?php
 class Kwc_Newsletter_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstract
 {
-    public function addResources(Kwf_Acl $acl)
+    protected function _getParentResource(Kwf_Acl $acl, $type)
     {
         if (!$acl->has('kwc_newsletter')) {
-            $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter',
-                array('text'=>trlKwfStatic('Newsletter'), 'icon'=>'email_open_image.png')), 'kwf_component_root');
+            $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter', array(
+                'text' => trlKwfStatic('Newsletter'),
+                'icon' => 'email_open_image.png')
+            ), 'kwf_component_root');
         }
+        return 'kwc_newsletter';
+    }
 
+    public function addResources(Kwf_Acl $acl)
+    {
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
         $menuConfig = array('icon'=>$icon);
 
@@ -25,7 +31,10 @@ class Kwc_Newsletter_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abstra
                     $menuConfig['text'] .= ' ('.$subRoot->name.')';
                 }
             }
-            $acl->add(new Kwf_Acl_Resource_Component_MenuUrl($c, $menuConfig), 'kwc_newsletter');
+            $acl->add(
+                new Kwf_Acl_Resource_Component_MenuUrl($c, $menuConfig),
+                $this->_getParentResource($acl, 'newsletter')
+            );
         }
     }
 
