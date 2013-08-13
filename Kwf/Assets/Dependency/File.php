@@ -9,15 +9,24 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public function getContents($language)
     {
+        return file_get_contents($this->getFileName());
+    }
+
+    public function getFileName()
+    {
+        static $paths;
+        if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
+
+        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
         $f = substr($this->_fileName, strpos($this->_fileName, '/'));
-        if (substr($this->_fileName, 0, strpos($this->_fileName, '/')) == 'kwf') {
-            $f = KWF_PATH.$f;
+        if (isset($paths[$pathType])) {
+            $f = $paths[$pathType].$f;
         } else if (file_exists($this->_fileName)) {
             $f = $this->_fileName;
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
-        return file_get_contents($f);
+        return $f;
     }
 
     public function getMTime()

@@ -30,11 +30,20 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
         $ret = '';
         $includesDependencies = array();
+        $fileNames = array();
         foreach ($it as $i) {
             if ($i->getIncludeInPackage()) {
                 if (in_array($i, $includesDependencies, true)) {
                     //include dependency only once
                     continue;
+                }
+                if ($i instanceof Kwf_Assets_Dependency_File) {
+                    if ($i->getFileName()) {
+                        if (in_array($fileNames, $i->getFileName())) {
+                            throw new Kwf_Exception("Duplicate file: ".$i->getFileName());
+                        }
+                        $fileNames[] = $i->getFileName();
+                    }
                 }
                 if ($c = $i->getContents($language)) {
                     $includesDependencies[] = $i;
