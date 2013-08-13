@@ -3,6 +3,7 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
 {
     public function jsonUploadAction()
     {
+        ini_set('memory_limit', '512M');
         $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
             ->createRow();
 
