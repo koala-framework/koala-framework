@@ -671,7 +671,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         if (is_null($fileTypes)) $fileTypes = array('js', 'css', 'printcss');
         if (is_string($fileTypes)) $fileTypes = array($fileTypes);
-        
+
         $section = 'web'; //TODO: where to get all possible sections?
         $language = Kwf_Trl::getInstance()->getTargetLanguage(); //TODO: all possible languages
         $rootComponent = Kwf_Component_Data_Root::getComponentClass();
