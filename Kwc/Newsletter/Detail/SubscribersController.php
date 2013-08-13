@@ -12,6 +12,14 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
+        if ($this->_model->hasColumn('newsletter_component_id')) {
+            if ($this->_getParam('newsletterComponentId')) {
+                $ret->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'));
+            } else {
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+                $ret->whereEquals('newsletter_component_id', $c->parent->dbId);
+            }
+        }
         $mailComponent = $this->_getMailComponent();
         $rs = $mailComponent->getComponent()->getRecipientSources();
         foreach(array_keys($rs) as $key) {
@@ -43,7 +51,18 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
         $this->view->sources = $rs;
 
         $rs = reset($rs);
-        if (!isset($rs['select'])) $rs['select'] = array();
+        if (!isset($rs['select'])) $rs['select'] = new Kwf_Model_Select();
+        $model = Kwf_Model_Abstract::getInstance($rs['model']);
+        if ($model->hasColumn('newsletter_component_id')) {
+            $select = new Kwf_Model_Select();
+            if ($this->_getParam('newsletterComponentId')) {
+                $select->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'));
+            } else {
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+                $select->whereEquals('newsletter_component_id', $c->parent->dbId);
+            }
+            $rs['select']->merge($select);
+        }
         $row = Kwf_Model_Abstract::getInstance($rs['model'])->getRow($rs['select']);
         $this->view->subscribeModel = $rs['model'];
         if ($row) {
