@@ -75,7 +75,8 @@ class Kwc_Trl_LinkTag_Test extends Kwc_TestAbstract
         $model = Kwf_Model_Abstract::getInstance('Kwc_Trl_LinkTag_LinkTag_Extern_Trl_TestModel');
         $model->createRow(array(
             'component_id'=>'root-en_test3-child',
-            'target'=>'http://www.test.de/en'
+            'target'=>'http://www.test.de/en',
+            'own_target' => true
         ))->save();
 
         $this->_process();
