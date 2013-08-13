@@ -6,8 +6,8 @@ class Kwf_Assets_Dispatcher
         if (!isset($_SERVER['REQUEST_URI'])) return;
         require_once 'Kwf/Loader.php';
         $baseUrl = Kwf_Setup::getBaseUrl();
-        if (substr($_SERVER['REQUEST_URI'], 0, strlen($baseUrl)+8)==$baseUrl.'/assets/') {
-            $url = substr($_SERVER['REQUEST_URI'], strlen($baseUrl)+8);
+        if (substr($_SERVER['REQUEST_URI'], 0, strlen($baseUrl)+21)==$baseUrl.'/assets/dependencies/') {
+            $url = substr($_SERVER['REQUEST_URI'], strlen($baseUrl));
             if (strpos($url, '?') !== false) {
                 $url = substr($url, 0, strpos($url, '?'));
             }
@@ -18,8 +18,8 @@ class Kwf_Assets_Dispatcher
 
     static public function getOutputForUrl($url)
     {
-        if (substr($url, 0, 8) != '/assets/') throw new Kwf_Exception("invalid url");
-        $url = substr($url, 8);
+        if (substr($url, 0, 21) != '/assets/dependencies/') throw new Kwf_Exception("invalid url: '$url'");
+        $url = substr($url, 21);
         $param = explode('/', $url);
         $dependencyClass = $param[0];
         $dependencyParams = $param[1];

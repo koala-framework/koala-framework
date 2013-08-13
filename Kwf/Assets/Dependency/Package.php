@@ -73,7 +73,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();
-        $ret[] = '/assets/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
+        $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
         $it = new Kwf_Assets_Dependency_RecursiveIterator($this);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
@@ -88,7 +88,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                 if (!$i instanceof Kwf_Assets_Dependency_UrlResolvableInterface) {
                     throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
                 }
-                $ret[] = '/assets/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext;
+                $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext;
             }
         }
         return $ret;
