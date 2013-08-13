@@ -14,7 +14,7 @@ class Kwc_Basic_LinkTag_Extern_Trl_Data extends Kwf_Component_Data
     {
         if ($var == 'url') {
             $row = $this->_getLinkRow();
-            if (!$row) return '';
+            if (!$row) return $this->chained->url;
             return $row->target;
         } else if ($var == 'rel') {
             return $this->chained->rel;
