@@ -44,11 +44,10 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     private function _hlp($contents, $language)
     {
-        //TODO 1902 $language verwenden
         $matches = array();
         preg_match_all("#hlp\(['\"](.+?)['\"]\)#", $contents, $matches);
         foreach ($matches[0] as $key => $search) {
-            $r = hlp($matches[1][$key]);
+            $r = Zend_Registry::get('hlp')->hlp($matches[1][$key], $language);
             $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
             $contents = str_replace($search, "'" . $r . "'", $contents);
         }
