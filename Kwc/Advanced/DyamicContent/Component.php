@@ -14,7 +14,8 @@ abstract class Kwc_Advanced_DyamicContent_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['dynamicPlaceholder'] = '{dynamicContent '.$this->getData()->componentClass.'}';
+        $language = $this->getData()->getLanguage();
+        $ret['dynamicPlaceholder'] = '{dynamicContent '.$this->getData()->componentClass.' '. $language .'}';
         return $ret;
     }
 
