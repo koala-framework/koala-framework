@@ -25,6 +25,7 @@ class Kwf_Assets_Dispatcher
 
         if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
         else if ($extension == 'css') $mimeType = 'text/css';
+        else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
         else throw new Kwf_Exception_NotYetImplemented();
         if ($dependency instanceof Kwf_Assets_Dependency_Package) {
             $contents = $dependency->getPackageContents($mimeType, $language);

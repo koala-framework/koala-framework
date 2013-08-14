@@ -66,7 +66,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
     {
         if ($mimeType == 'text/javascript; charset=utf-8') $ext = 'js';
         else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; media=print') $ext = 'css';
+        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();
