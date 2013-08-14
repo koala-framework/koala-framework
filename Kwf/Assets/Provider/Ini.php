@@ -18,9 +18,27 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract
                 $ret[] = trim($i);
             }
         }
+
+        $files = array();
         if (isset($dep->files)) {
             foreach ($dep->files as $i) {
-                $ret[] = Kwf_Assets_Dependency_File::createDependency(trim($i));
+                $i = Kwf_Assets_Dependency_File::createDependency(trim($i));
+                if ($i instanceof Kwf_Assets_Dependency_File && $i->getFileName()) {
+                    $files[] = $i->getFileName();
+                } else if ($i instanceof Kwf_Assets_Dependency_Dependencies) {
+                    //filter out dependencies that are already returned as individual files
+                    //happens when using *
+                    $deps = $i->getDependencies();
+                    foreach ($deps as $k=>$j) {
+                        if ($j instanceof Kwf_Assets_Dependency_File && $j->getFileName()) {
+                            if (in_array($j->getFileName(), $files)) {
+                                unset($deps[$k]);
+                            }
+                        }
+                    }
+                    $i->setDependencies($deps);
+                }
+                $ret[] = $i;
             }
         }
         return $ret;

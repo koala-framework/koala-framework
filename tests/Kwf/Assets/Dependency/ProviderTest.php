@@ -24,4 +24,19 @@ class Kwf_Assets_Dependency_ProviderTest extends Kwf_Test_TestCase
         $d = $this->_list->findDependency('Invalid');
         $this->assertEquals(null, $d);
     }
+
+    public function testStar()
+    {
+        $d = $this->_list->findDependency('TestWithStar');
+        $this->assertTrue($d instanceof Kwf_Assets_Dependency_Dependencies);
+
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($d));
+        $array = iterator_to_array($it, false);
+
+        //foo2.js must be only once in array (not added again thru *)
+        $this->assertEquals(4, count($array));
+
+        //foo2.js must be first
+        $this->assertContains('foo2.js', $array[0]->getFileName()); //foo2 must be first
+    }
 }
