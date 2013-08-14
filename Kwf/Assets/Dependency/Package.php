@@ -26,20 +26,16 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
     public function getPackageContents($mimeType, $language)
     {
         $it = new Kwf_Assets_Dependency_RecursiveIterator($this);
+        $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
         $ret = '';
-        $includesDependencies = array();
         $fileNames = array();
         foreach ($it as $i) {
             if ($i->getIncludeInPackage()) {
-                if (in_array($i, $includesDependencies, true)) {
-                    //include dependency only once
-                    continue;
-                }
                 if ($i instanceof Kwf_Assets_Dependency_File) {
                     if ($i->getFileName()) {
-                        if (in_array($fileNames, $i->getFileName())) {
+                        if (in_array($i->getFileName(), $fileNames)) {
                             throw new Kwf_Exception("Duplicate file: ".$i->getFileName());
                         }
                         $fileNames[] = $i->getFileName();
@@ -76,6 +72,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         $ret = array();
         $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
         $it = new Kwf_Assets_Dependency_RecursiveIterator($this);
+        $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
         $includesDependencies = array();
