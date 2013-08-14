@@ -12,4 +12,10 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
     {
         return $this->_dependencies;
     }
+
+    public function addDependency(Kwf_Assets_Dependency_Abstract $dep)
+    {
+        $this->_dependencies[] = $dep;
+        return $this;
+    }
 }

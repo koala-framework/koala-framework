@@ -20,18 +20,23 @@ class Kwf_Assets_ProviderList_Abstract
             $d = $p->getDependency($dependencyName);
             if ($d !== null) {
                 if (is_object($d)) {
+                    $this->_dependencies[$dependencyName] = $d;
                     return $d;
                 }
-                $dependencies = array();
+                $ret = new Kwf_Assets_Dependency_Dependencies(array());
+                $this->_dependencies[$dependencyName] = $ret;
                 foreach ($d as $i) {
                     if (is_object($i)) {
-                        $dependencies[] = $i;
+                        $ret->addDependency($i);
                     } else {
-                        $dependencies[] = $this->findDependency($i);
+                        $d = $this->findDependency($i);
+                        if (!$d) {
+                            throw new Kwf_Exception("Can't find dependency '$i'");
+                        }
+                        $ret->addDependency($d);
                     }
                 }
-                $this->_dependencies[$dependencyName] = new Kwf_Assets_Dependency_Dependencies($dependencies);
-                return $this->_dependencies[$dependencyName];
+                return $ret;
             }
         }
         return null;
