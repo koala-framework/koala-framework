@@ -58,7 +58,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
 
         $ret['cssClass'] = 'webStandard kwcText';
 
-        $ret['assets']['files']['styles'] = 'dynamic/Kwc_Basic_Text_StylesAsset:Kwc_Basic_Text_StylesModel';
+        $ret['assets']['files']['styles'] = new Kwc_Basic_Text_StylesAsset('Kwc_Basic_Text_StylesModel');
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

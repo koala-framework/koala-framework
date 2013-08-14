@@ -31,7 +31,10 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
             $ret[] = $i;
         }
         foreach ($assets['files'] as $i) {
-            $ret[] = Kwf_Assets_Dependency_File::createDependency($i);
+            if (!is_object($i)) {
+                $i = Kwf_Assets_Dependency_File::createDependency($i);
+            }
+            $ret[] = $i;
         }
 
         //alle css-dateien der vererbungshierache includieren
