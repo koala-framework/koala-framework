@@ -19,6 +19,8 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
         }
 
+        $ret = Kwf_Assets_Loader::expandAssetVariables($ret);
+
 
         $cssClass = $this->_fileName;
         if (defined('VKWF_PATH') && substr($cssClass, 0, strlen(VKWF_PATH)) == VKWF_PATH) {

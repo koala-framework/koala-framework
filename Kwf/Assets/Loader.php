@@ -387,7 +387,7 @@ class Kwf_Assets_Loader
         return $ret;
     }
 
-    public static function expandAssetVariables($contents, $section, &$mtimeFiles = array())
+    public static function expandAssetVariables($contents, $section = 'web', &$mtimeFiles = array())
     {
         static $assetVariables = array();
         if (!isset($assetVariables[$section])) {
