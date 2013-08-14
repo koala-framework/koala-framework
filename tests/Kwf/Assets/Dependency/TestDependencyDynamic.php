@@ -9,7 +9,7 @@ class Kwf_Assets_Dependency_TestDependencyDynamic extends Kwf_Assets_Dependency_
 
     public function getMimeType()
     {
-        return 'text/javascript; charset=utf-8';
+        return 'text/javascript';
     }
 
     public function getIncludeInPackage()

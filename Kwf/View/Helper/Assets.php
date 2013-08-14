@@ -26,7 +26,7 @@ class Kwf_View_Helper_Assets
             }
             $ret .= "/>\n";
         }
-        foreach ($assetsPackage->getPackageUrls('text/javascript; charset=utf-8', $language) as $file) {
+        foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
             $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($file)."\"></script>\n";
         }
         return $ret;

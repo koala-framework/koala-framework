@@ -8,7 +8,7 @@ class Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys extends Kwf_Assets_Depende
 
     public function getMimeType()
     {
-        return 'text/javascript; charset=utf-8';
+        return 'text/javascript';
     }
 
     public function getContents($language)

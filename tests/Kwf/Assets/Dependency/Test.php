@@ -4,7 +4,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
     public function testFileJs()
     {
         $f = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
-        $this->assertEquals('text/javascript; charset=utf-8', $f->getMimeType());
+        $this->assertEquals('text/javascript', $f->getMimeType());
         $this->assertContains('Kwf.log', $f->getContents('en'));
         $this->assertEquals(array(), $f->getDependencies());
     }
@@ -13,7 +13,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
     {
         $f = Kwf_Assets_Dependency_File::createDependency('kwf/Kwf_js/Kwf.js');
         $this->assertTrue($f instanceof Kwf_Assets_Dependency_File_Js);
-        $this->assertEquals('text/javascript; charset=utf-8', $f->getMimeType());
+        $this->assertEquals('text/javascript', $f->getMimeType());
         $this->assertContains('Kwf.log', $f->getContents('en'));
         $this->assertEquals(array(), $f->getDependencies());
     }
@@ -69,7 +69,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
         $array = iterator_to_array($filterIt, false);
         $this->assertEquals(array($file2), $array);
 
-        $filterIt = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, 'text/javascript; charset=utf-8');
+        $filterIt = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, 'text/javascript');
 
         $array = iterator_to_array($filterIt, false);
         $this->assertEquals(array($file1), $array);

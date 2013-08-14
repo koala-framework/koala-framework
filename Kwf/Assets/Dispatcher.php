@@ -23,7 +23,7 @@ class Kwf_Assets_Dispatcher
         }
         $dependency = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
 
-        if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
+        if ($extension == 'js') $mimeType = 'text/javascript';
         else if ($extension == 'css') $mimeType = 'text/css';
         else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
         else throw new Kwf_Exception_NotYetImplemented();
@@ -33,6 +33,8 @@ class Kwf_Assets_Dispatcher
             $contents = $dependency->getContents($language);
         }
 
+        if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
+        else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
         return array(
             'contents' => $contents,
             'mimeType' => $mimeType

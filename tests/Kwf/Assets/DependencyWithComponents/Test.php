@@ -21,7 +21,7 @@ class Kwf_Assets_DependencyWithComponents_Test extends Kwc_TestAbstract
     {
         $package = new Kwf_Assets_Dependency_Package($this->_list, 'Frontend');
 
-        $contents = $package->getPackageContents('text/javascript; charset=utf-8', 'en');
+        $contents = $package->getPackageContents('text/javascript', 'en');
         $contents = trim($contents);
         $contents = str_replace("\n\n", "\n", $contents);
         $this->assertEquals("foo;\nbar;", $contents);
