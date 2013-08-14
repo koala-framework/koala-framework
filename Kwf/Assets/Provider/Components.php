@@ -10,15 +10,18 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
     public function getDependency($dependencyName)
     {
-        if ($dependencyName == 'Components' || $dependencyName = 'ComponentsAdmin') {
-            return $this->_process($this->_rootComponentClass, $dependencyName);
+        if ($dependencyName == 'Components' || $dependencyName == 'ComponentsAdmin') {
+            $processed = array();
+            $ret = $this->_process($this->_rootComponentClass, $dependencyName, $processed);
+            return $ret;
         } else {
             return null;
         }
     }
 
-    private function _process($class, $dependencyName)
+    private function _process($class, $dependencyName, &$processed)
     {
+        $processed[] = $class;
         $assets = Kwc_Abstract::getSetting($class, 'assets');
         if ($dependencyName = 'ComponentsAdmin') {
             $aa = Kwc_Abstract::getSetting($class, 'assetsAdmin');
@@ -58,8 +61,8 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
         }
 
         foreach ($classes as $i) {
-            if ($i) {
-                $ret = array_merge($ret, $this->_process($i, $dependencyName));
+            if ($i && !in_array($i, $processed)) {
+                $ret = array_merge($ret, $this->_process($i, $dependencyName, $processed));
             }
         }
 
