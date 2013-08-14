@@ -70,8 +70,17 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                     $files[] = self::createDependency($f);
                 }
             }
-            return new Kwf_Assets_Dependency_Dependencies($files);
+            return new Kwf_Assets_Dependency_Dependencies($files, $fileName.'*');
         }
         throw new Kwf_Exception("unknown file type: ".$fileName);
+    }
+
+    public function __toString()
+    {
+        $ret = $this->_fileName;
+        if (!$ret) {
+            $ret = parent::__toString();
+        }
+        return $ret;
     }
 }

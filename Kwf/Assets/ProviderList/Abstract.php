@@ -23,7 +23,7 @@ class Kwf_Assets_ProviderList_Abstract
                     $this->_dependencies[$dependencyName] = $d;
                     return $d;
                 }
-                $ret = new Kwf_Assets_Dependency_Dependencies(array());
+                $ret = new Kwf_Assets_Dependency_Dependencies(array(), $dependencyName);
                 $this->_dependencies[$dependencyName] = $ret;
                 foreach ($d as $i) {
                     if (is_object($i)) {

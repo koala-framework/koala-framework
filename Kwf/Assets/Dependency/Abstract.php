@@ -29,4 +29,9 @@ abstract class Kwf_Assets_Dependency_Abstract
     {
         return null;
     }
+
+    public function __toString()
+    {
+        return get_class($this);
+    }
 }
