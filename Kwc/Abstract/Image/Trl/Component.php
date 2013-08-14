@@ -76,7 +76,7 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
     //if own_image getMediaOutput of image child component is used
     public static function getMediaOutput($id, $type, $className)
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id);
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         return call_user_func(
             array(get_class($c->chained->getComponent()), 'getMediaOutput'),
             $c->chained->componentId, $type, $c->chained->componentClass
