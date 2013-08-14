@@ -41,12 +41,36 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     {
         if (substr($fileName, -3) == '.js') {
             return new Kwf_Assets_Dependency_File_Js($fileName);
-        }else if (substr($fileName, -4) == '.css') {
+        } else if (substr($fileName, -4) == '.css') {
             return new Kwf_Assets_Dependency_File_Css($fileName);
-        }else if (substr($fileName, -9) == '.printcss') {
+        } else if (substr($fileName, -9) == '.printcss') {
             return new Kwf_Assets_Dependency_File_PrintCss($fileName);
-        }else if (substr($fileName, -4) == '.scss') {
+        } else if (substr($fileName, -5) == '.scss') {
             return new Kwf_Assets_Dependency_File_Scss($fileName);
+        } else if (substr($fileName, -2) == '/*') {
+            $pathType = substr($fileName, 0, strpos($fileName, '/'));
+            $fileName = substr($fileName, strpos($fileName, '/')); //pathtype abschneiden
+            $fileName = substr($fileName, 0, -1); // /* abschneiden
+
+            static $paths;
+            if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
+            $path = $paths[$pathType].$fileName;
+            if (!file_exists($path)) {
+                throw new Kwf_Exception("Path '$path' does not exist.");
+            }
+            $files = array();
+            $dirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
+            foreach ($dirIterator as $file) {
+                if (!preg_match('#/\\.svn/#', $file->getPathname())
+                    && (substr($file->getPathname(), -3) == '.js'
+                        || substr($file->getPathname(), -4) == '.css')) {
+                    $f = $file->getPathname();
+                    $f = substr($f, strlen($paths[$pathType]));
+                    $f = $pathType . $f;
+                    $files[] = self::createDependency($f);
+                }
+            }
+            return new Kwf_Assets_Dependency_Dependencies($files);
         }
         throw new Kwf_Exception("unknown file type: ".$fileName);
     }
