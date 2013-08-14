@@ -22,6 +22,10 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
         $ret = parent::_getSelect();
         if ($this->_model->hasColumn('newsletter_component_id')) {
             if ($this->_getParam('newsletterComponentId')) {
+                // check if newsletterComponentId is allowed for user
+                $acl = Kwf_Registry::get('acl')->getComponentAcl();
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('newsletterComponentId'), array('ignoreVisible'=>true, 'limit'=>1));
+                if (!$acl->isAllowed(Kwf_Registry::get('userModel')->getAuthedUser(), $c)) throw new Kwf_Exception_AccessDenied();
                 $ret->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'));
             } else {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
