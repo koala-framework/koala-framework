@@ -13,6 +13,9 @@ class Kwf_Assets_Dispatcher
     {
         if (substr($url, 0, 21) != '/assets/dependencies/') throw new Kwf_Exception("invalid url: '$url'");
         $url = substr($url, 21);
+        if (strpos($url, '?') !== false) {
+            $url = substr($url, 0, strpos($url, '?'));
+        }
         $param = explode('/', $url);
         $dependencyClass = $param[0];
         $dependencyParams = $param[1];

@@ -42,7 +42,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                     }
                 }
                 if ($c = $i->getContents($language)) {
-                    $ret .= "/* *** ".$i->getFileName()." */\n";
+                    //$ret .= "/* *** ".$i->getFileName()." */\n";
                     $ret .= $c."\n";
                 }
             }
@@ -76,6 +76,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
         $includesDependencies = array();
+        $maxMTime = 0;
         foreach ($it as $i) {
             if (!$i->getIncludeInPackage()) {
                 if (in_array($i, $includesDependencies, true)) {
@@ -86,9 +87,15 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                 if (!$i instanceof Kwf_Assets_Dependency_UrlResolvableInterface) {
                     throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
                 }
-                $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext;
+                $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
+            } else {
+                $mTime = $i->getMTime();
+                if ($mTime) {
+                    $maxMTime = max($maxMTime, $mTime);
+                }
             }
         }
+        $ret[0] .= '?t='.$maxMTime;
         return $ret;
     }
 }
