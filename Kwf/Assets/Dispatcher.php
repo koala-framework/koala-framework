@@ -1,16 +1,9 @@
 <?php
 class Kwf_Assets_Dispatcher
 {
-    static public function dispatch()
+    static public function dispatch($url)
     {
-        if (!isset($_SERVER['REQUEST_URI'])) return;
-        require_once 'Kwf/Loader.php';
-        $baseUrl = Kwf_Setup::getBaseUrl();
-        if (substr($_SERVER['REQUEST_URI'], 0, strlen($baseUrl)+21)==$baseUrl.'/assets/dependencies/') {
-            $url = substr($_SERVER['REQUEST_URI'], strlen($baseUrl));
-            if (strpos($url, '?') !== false) {
-                $url = substr($url, 0, strpos($url, '?'));
-            }
+        if (substr($url, 0, 21)=='/assets/dependencies/') {
             $out = self::getOutputForUrl($url);
             Kwf_Media_Output::output($out);
         }

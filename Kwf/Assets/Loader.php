@@ -14,6 +14,7 @@ class Kwf_Assets_Loader
         if (strpos($url, '?') !== false) {
             $url = substr($url, 0, strpos($url, '?'));
         }
+        Kwf_Assets_Dispatcher::dispatch($url);
         try {
             $l = new self();
             $out = $l->getFileContents(substr($url, 8));
