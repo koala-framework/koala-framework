@@ -79,8 +79,14 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         $process = array();
         foreach ($datas as $d) {
             foreach ($d['plugins'] as $p) {
-                $p = Kwf_Component_Plugin_Abstract::getInstance($p['pluginClass'], $p['componentId']);
-                if ($p->skipProcessInput()) {
+                $plugin = Kwf_Component_Plugin_Abstract::getInstance($p['pluginClass'], $p['componentId']);
+                $result = $plugin->skipProcessInput();
+                if ($result === Kwf_Component_Plugin_Interface_SkipProcessInput::SKIP_SELF_AND_CHILDREN) {
+                    continue 2;
+                }
+                if ($result === Kwf_Component_Plugin_Interface_SkipProcessInput::SKIP_SELF &&
+                    $p['componentId'] == $d['data']->componentId
+                ) {
                     continue 2;
                 }
             }

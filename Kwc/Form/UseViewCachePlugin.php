@@ -16,9 +16,9 @@ class Kwc_Form_UseViewCachePlugin extends Kwf_Component_Plugin_Abstract
     public function skipProcessInput()
     {
         if (isset($_REQUEST[$this->_componentId.'-post'])) {
-            return false;
+            return self::SKIP_NONE;
         } else {
-            return true;
+            return self::SKIP_SELF;
         }
     }
 }
