@@ -34,11 +34,10 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
             foreach ($componentClasses as $class) {
 
-                $assets = Kwc_Abstract::getSetting($class, 'assets');
-                if ($dependencyName = 'ComponentsAdmin') {
-                    $aa = Kwc_Abstract::getSetting($class, 'assetsAdmin');
-                    $assets['files'] = array_merge($assets['files'], $aa['files']);
-                    $assets['dep'] = array_merge($assets['dep'], $aa['dep']);
+                if ($dependencyName == 'ComponentsAdmin') {
+                    $assets = Kwc_Abstract::getSetting($class, 'assetsAdmin');
+                } else {
+                    $assets = Kwc_Abstract::getSetting($class, 'assets');
                 }
                 foreach ($assets['dep'] as $i) {
                     if (!in_array($i, $addedDep)) {
@@ -56,18 +55,20 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                     }
                 }
 
-                //alle css-dateien der vererbungshierache includieren
-                $files = Kwc_Abstract::getSetting($class, 'componentFiles');
-                $componentCssFiles = array();
-                foreach (array_merge($files['css'], $files['printcss'], $files['scss'], $files['masterCss'], $files['masterScss']) as $f) {
-                    $componentCssFiles[] = $f;
-                }
-                //reverse damit css von weiter unten in der vererbungshierachie überschreibt
-                $componentCssFiles = array_reverse($componentCssFiles);
-                foreach ($componentCssFiles as $i) {
-                    if (!in_array($i, $addedFiles)) {
-                        $addedFiles[] = $i;
-                        $ret[] = Kwf_Assets_Dependency_File::createDependency($i);
+                if ($dependencyName == 'Components') {
+                    //alle css-dateien der vererbungshierache includieren
+                    $files = Kwc_Abstract::getSetting($class, 'componentFiles');
+                    $componentCssFiles = array();
+                    foreach (array_merge($files['css'], $files['printcss'], $files['scss'], $files['masterCss'], $files['masterScss']) as $f) {
+                        $componentCssFiles[] = $f;
+                    }
+                    //reverse damit css von weiter unten in der vererbungshierachie überschreibt
+                    $componentCssFiles = array_reverse($componentCssFiles);
+                    foreach ($componentCssFiles as $i) {
+                        if (!in_array($i, $addedFiles)) {
+                            $addedFiles[] = $i;
+                            $ret[] = Kwf_Assets_Dependency_File::createDependency($i);
+                        }
                     }
                 }
             }
