@@ -15,7 +15,6 @@ class Kwf_View_Helper_Money
         ) {
             $component = $this->_view->data;
         }
-
         if ($component) {
             $format = $component->getBaseProperty('money.format');
             $decimals = $component->getBaseProperty('money.decimals');

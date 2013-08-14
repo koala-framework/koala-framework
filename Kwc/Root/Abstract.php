@@ -92,6 +92,12 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             return Kwf_Trl::getInstance()->getWebCodeLanguage();
         } else if ($propertyName == 'domain') {
             return Kwf_Config::getValue('server.domain');
+        } else if ($propertyName == 'money.decimals') {
+            return 2;
+        } else if ($propertyName == 'money.decimalSeparator') {
+            return trlcKwf('decimal separator', ".");
+        } else if ($propertyName == 'money.thousandSeparator') {
+            return trlcKwf('thousands separator', ",");
         } else {
             return Kwf_Config::getValue($propertyName);
         }
