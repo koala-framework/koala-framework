@@ -202,6 +202,7 @@ class Kwf_Assets_Loader
             }
 
             if (substr($ret['mimeType'], 0, 5) == 'text/') { //nur texte cachen
+/*
                 if (!$language) {
                     $language = Kwf_Trl::getInstance()->getTargetLanguage();
                 }
@@ -338,7 +339,7 @@ class Kwf_Assets_Loader
                 }
                 $ret['contents'] = $cacheData['contents'];
                 $ret['mtime'] = time();
-
+*/
             } else {
                 $fx = substr($file, 0, strpos($file, '/'));
                 if (substr($fx, 0, 3) == 'fx_') {
