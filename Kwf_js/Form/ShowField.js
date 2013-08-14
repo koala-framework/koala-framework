@@ -28,7 +28,7 @@ Kwf.Form.ShowField = Ext.extend(Ext.form.Field,
     },
     getValue : function()
     {
-        return null;
+        return this.value;
     },
     setValue : function(value)
     {
