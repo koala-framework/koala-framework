@@ -440,7 +440,7 @@ class Kwf_Assets_Loader
         return $contents;
     }
 
-    public function pack($contents, $fileType)
+    public static function pack($contents, $fileType)
     {
         if ($fileType == 'js') {
             $contents = str_replace("\r", "\n", $contents);

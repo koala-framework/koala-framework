@@ -63,6 +63,25 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
         }
 
+
         return $ret;
+    }
+
+    public function getContentsPacked($language)
+    {
+        $contents = $this->getContents($language);
+
+        $contents = str_replace("\r", "\n", $contents);
+
+        // remove comments
+        $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+
+        // multiple whitespaces
+        $contents = str_replace("\t", " ", $contents);
+        $contents = preg_replace('/(\n)\n+/', '$1', $contents);
+        $contents = preg_replace('/(\n)\ +/', '$1', $contents);
+        $contents = preg_replace('/(\ )\ +/', '$1', $contents);
+
+        return $contents;
     }
 }

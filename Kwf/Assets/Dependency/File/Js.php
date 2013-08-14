@@ -54,4 +54,26 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         }
         return $contents;
     }
+
+    public function getContentsPacked($language)
+    {
+        $contents = $this->getContents($language);
+
+        $contents = str_replace("\r", "\n", $contents);
+
+        // remove comments
+        $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+        // deaktiviert wg. urls mit http:// in hilfetexten $contents = preg_replace('!//[^\n]*!', '', $contents);
+
+        // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
+        //$contents = str_replace(array("\r", "\n", "\t"), "", $contents);
+
+        // multiple whitespaces
+        $contents = str_replace("\t", " ", $contents);
+        $contents = preg_replace('/(\n)\n+/', '$1', $contents);
+        $contents = preg_replace('/(\n)\ +/', '$1', $contents);
+        $contents = preg_replace('/(\ )\ +/', '$1', $contents);
+
+        return $contents;
+    }
 }

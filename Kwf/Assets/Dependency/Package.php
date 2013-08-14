@@ -41,7 +41,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                         $fileNames[] = $i->getFileName();
                     }
                 }
-                if ($c = $i->getContents($language)) {
+                if ($c = $i->getContentsPacked($language)) {
                     //$ret .= "/* *** ".$i->getFileName()." */\n";
                     $ret .= $c."\n";
                 }

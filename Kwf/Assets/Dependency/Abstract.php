@@ -6,6 +6,11 @@ abstract class Kwf_Assets_Dependency_Abstract
         return null;
     }
 
+    public function getContentsPacked($language)
+    {
+        return $this->getContents($language);
+    }
+
     public function getDependencies()
     {
         return array();
