@@ -42,7 +42,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                     }
                 }
                 if ($c = $i->getContents($language)) {
-                    $includesDependencies[] = $i;
+                    //$ret .= "/* *** ".$i->getFileName()." */\n";
                     $ret .= $c."\n";
                 }
             }
