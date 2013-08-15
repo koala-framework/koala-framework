@@ -31,7 +31,13 @@
             </div>
             <div id="outerFooter">
                 <div id="footer">
-                    <?=$this->component($this->boxes['bottomMenu']);?>
+                    <div class="bottomMenu">
+                        <?=$this->component($this->boxes['bottomMenu']);?>
+                    </div>
+                    <p class="webStandard poweredBy">
+                        Powered by <a href="http://www.koala-framework.org/" rel="popup_blank">Koala Framework</a>
+                        | Theme: Grey Box, based on <a href="http://catchthemes.com/themes/catch-box/" rel="popup_blank">Catch Box</a>
+                    </p>
                 </div>
             </div>
         </div>
